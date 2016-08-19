@@ -17,8 +17,6 @@ public class ImageHelper{
         return newTex;
     }
 
-    //Screen.width
-
     class GUITextureState{
         public Texture2D tex;
         public int x;
@@ -35,9 +33,6 @@ public class ImageHelper{
 
     public void drawGUI()
     {
-        //foreach(GUITextureState t in drawList)
-          //  if(t.visible)
-            //    GUI.DrawTexture(t.rect(), t.tex);
     }
 
     public void drawImage(string path, int x, int y)
