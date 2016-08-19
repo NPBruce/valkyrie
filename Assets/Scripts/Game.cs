@@ -4,18 +4,21 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
     ImageHelper ih;
+    public ContentData cd;
 
 	// Use this for initialization
-	void Start () {
-        ih = new ImageHelper();
-
-        ih.drawImage("GamePacks/D2E/img/DJ01_CoreSet.png", 0, 0);
+	void Awake () {
+        cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
+        foreach(string pack in cd.GetPacks())
+        {
+            cd.LoadContent(pack);
+        }
     }
-	
+
     void OnGUI()
     {
         //GUI.DrawTexture(new Rect(0, 0, 100, 100), d2e);
-        ih.drawGUI();
+        //ih.drawGUI();
     }
 	// Update is called once per frame
 	void Update () {

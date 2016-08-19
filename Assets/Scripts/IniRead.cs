@@ -13,7 +13,7 @@ public static class IniRead{
 
         foreach (string l in lines)
         {
-            if (l.Trim()[0] == '[')
+            if (l.Length > 0 && l.Trim()[0] == '[')
             {
                 if (entryName != "")
                 {
@@ -22,11 +22,14 @@ public static class IniRead{
                 entryData = new Dictionary<string, string>();
                 entryName = l.Trim().Trim(charsToTrim);
             }
-            int equalsLocation = l.IndexOf('=');
-            if (equalsLocation == -1)
-                entryData.Add(l.Trim(), "");
-            else
-                entryData.Add(l.Substring(0, equalsLocation).Trim(), l.Substring(equalsLocation + 1).Trim());
+            else if (l.Length > 0 && l.Trim()[0] != ';')
+            {
+                int equalsLocation = l.IndexOf('=');
+                if (equalsLocation == -1)
+                    entryData.Add(l.Trim(), "");
+                else
+                    entryData.Add(l.Substring(0, equalsLocation).Trim(), l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+            }
         }
 
         if (entryName != "")

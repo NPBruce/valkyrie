@@ -6,7 +6,10 @@ public class test : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        string imagePath = @"file://" + Application.dataPath + "/../../" + "GamePacks/D2E/img/tiles/001A.png";
+
+        Game game = FindObjectOfType<Game>();
+
+        string imagePath = @"file://" + game.cd.tileSides["1A"].image;
 
         UnityEngine.UI.Image image;
         Sprite testSprite;
