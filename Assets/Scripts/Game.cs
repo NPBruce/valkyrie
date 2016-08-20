@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Game : MonoBehaviour {
 
-    ImageHelper ih;
     public ContentData cd;
 
 	// Use this for initialization
