@@ -115,7 +115,7 @@ public class TileSideData : GenericData
 
         if (content.ContainsKey("left"))
         {
-            priority = int.Parse(content["left"]);
+            left = int.Parse(content["left"]);
         }
         else
         {

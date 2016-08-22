@@ -10,31 +10,31 @@ public class CameraController : MonoBehaviour {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// FixedUpdate is not tied to frame rate
+	void FixedUpdate () {
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
-            gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * 50));
+            gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * 600));
         }
 
         if(Input.GetKey(KeyCode.UpArrow))
         {
-            gameObject.transform.Translate(new Vector3(0, 3, 0));
+            gameObject.transform.Translate(new Vector3(0, 30, 0));
         }
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            gameObject.transform.Translate(new Vector3(0, -3, 0));
+            gameObject.transform.Translate(new Vector3(0, -30, 0));
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            gameObject.transform.Translate(new Vector3(-3, 0, 0));
+            gameObject.transform.Translate(new Vector3(-30, 0, 0));
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            gameObject.transform.Translate(new Vector3(3, 0, 0));
+            gameObject.transform.Translate(new Vector3(30, 0, 0));
         }
 
         mouseLast = Input.mousePosition;

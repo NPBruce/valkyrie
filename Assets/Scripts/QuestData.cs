@@ -65,21 +65,23 @@ public class QuestData
 
     public class QuestComponent
     {
-        public int x = 0;
-        public int y = 0;
+        public float x = 0;
+        public float y = 0;
         public static string type = "";
         public bool visible = false;
+        public string name;
 
-        public QuestComponent(string name, Dictionary<string, string> data)
+        public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
+            name = nameIn;
             if (data.ContainsKey("xposition"))
             {
-                x = int.Parse(data["xposition"]);
+                x = float.Parse(data["xposition"]);
             }
 
             if (data.ContainsKey("yposition"))
             {
-                y = int.Parse(data["yposition"]);
+                y = float.Parse(data["yposition"]);
             }
         }
     }
