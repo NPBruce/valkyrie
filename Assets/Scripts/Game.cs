@@ -4,14 +4,18 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
     public ContentData cd;
+    public QuestData qd;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake () {
         cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
         foreach(string pack in cd.GetPacks())
         {
             cd.LoadContent(pack);
         }
+
+        qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini", this);
+
     }
 
     void OnGUI()

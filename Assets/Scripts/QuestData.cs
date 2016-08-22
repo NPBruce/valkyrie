@@ -5,7 +5,8 @@ using System.IO;
 
 public class QuestData
 {
-    public List<Tile> tiles;
+    public Dictionary<string, QuestComponent> components;
+    public Event start;
     List<string> files;
     Game game;
 
@@ -15,7 +16,7 @@ public class QuestData
 
         game = game_set;
 
-        tiles = new List<Tile>();
+        components = new Dictionary<string, QuestComponent>();
 
         IniData d = IniRead.ReadFromIni(path);
         files = new List<string>();
@@ -40,7 +41,14 @@ public class QuestData
         if (name.IndexOf(Tile.type) == 0)
         {
             Tile c = new Tile(name, content, game);
-            tiles.Add(c);
+            components.Add(name, c);
+        }
+        if (name.IndexOf(Event.type) == 0)
+        {
+            Event c = new Event(name, content);
+            components.Add(name, c);
+            if (name.Equals("EventStart"))
+                start = c;
         }
     }
 
@@ -72,8 +80,16 @@ public class QuestData
 
             GameObject tile = new GameObject(name);
 
-            Canvas canvas = GameObject.FindObjectOfType<Canvas>();
-            tile.transform.parent = canvas.transform;
+            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+            Canvas board = canvii[0];
+            foreach(Canvas c in canvii)
+            {
+                if(c.name.Equals("BoardCanvas"))
+                {
+                    board = c;
+                }
+            }
+            tile.transform.parent = board.transform;
 
             image = tile.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
@@ -87,6 +103,53 @@ public class QuestData
             tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
             tile.transform.Translate(new Vector3(x, y, 0) * 105, Space.World);
             //image.color = Color.white;
+        }
+    }
+
+    public class Event : QuestComponent
+    {
+        new public static string type = "Event";
+        public string text = "";
+        public string nextEvent = "";
+        public string failEvent = "";
+        public int gold = 0;
+        public string[] addComponents;
+        public string[] removeComponents;
+
+        public Event(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            if (data.ContainsKey("text"))
+            {
+                text = data["text"];
+            }
+            if (data.ContainsKey("event"))
+            {
+                nextEvent = data["event"];
+            }
+            if (data.ContainsKey("failevent"))
+            {
+                failEvent = data["failevent"];
+            }
+            if (data.ContainsKey("failevent"))
+            {
+                gold = int.Parse(data["failevent"]);
+            }
+            if (data.ContainsKey("add"))
+            {
+                addComponents = data["add"].Split(' ');
+            }
+            else
+            {
+                addComponents = new string[0];
+            }
+            if (data.ContainsKey("remove"))
+            {
+                removeComponents = data["removeComponents"].Split(' ');
+            }
+            else
+            {
+                removeComponents = new string[0];
+            }
         }
     }
 

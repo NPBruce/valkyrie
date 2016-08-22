@@ -7,12 +7,14 @@ public class ContentData {
 
     List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
+    public Dictionary<string, HeroData> heros;
 
     public ContentData(string path)
     {
         Debug.Log("Searching for content in: \"" + path + "\"");
         string[] contentDirectories = Directory.GetDirectories(path);
         tileSides = new Dictionary<string, TileSideData>();
+        heros = new Dictionary<string, HeroData>();
 
         allPacks = new List<ContentPack>();
         foreach(string p in contentDirectories)
@@ -85,6 +87,20 @@ public class ContentData {
                 tileSides.Add(d.name, d);
             }
         }
+
+        if (name.IndexOf(HeroData.type) == 0)
+        {
+            HeroData d = new HeroData(name, content, path);
+            if (!heros.ContainsKey(d.name))
+            {
+                heros.Add(d.name, d);
+            }
+            else if (heros[d.name].priority < d.priority)
+            {
+                heros.Remove(d.name);
+                heros.Add(d.name, d);
+            }
+        }
     }
 
     class ContentPack
@@ -124,6 +140,19 @@ public class TileSideData : GenericData
     }
 }
 
+public class HeroData : GenericData
+{
+    public string archetype = "warrior";
+    public static new string type = "Hero";
+
+    public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        if (content.ContainsKey("archetype"))
+        {
+            archetype = content["archetype"];
+        }
+    }
+}
 
 public class GenericData
 {
