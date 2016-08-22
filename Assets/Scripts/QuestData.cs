@@ -60,6 +60,33 @@ public class QuestData
             {
                 tileType = game.cd.tileSides[data["side"]];
             }
+
+
+            string imagePath = @"file://" + tileType.image;
+
+            Sprite tileSprite;
+
+            WWW www = new WWW(imagePath);
+            Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
+            www.LoadImageIntoTexture(newTex);
+
+            GameObject tile = new GameObject(name);
+
+            Canvas canvas = GameObject.FindObjectOfType<Canvas>();
+            tile.transform.parent = canvas.transform;
+
+            image = tile.AddComponent<UnityEngine.UI.Image>();
+            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.color = Color.clear;
+            image.sprite = tileSprite;
+            tile.transform.Translate(Vector3.right * ((newTex.width / 2) - tileType.left), Space.World);
+            tile.transform.Translate(Vector3.down * ((newTex.height / 2) - tileType.top), Space.World);
+            tile.transform.Translate(new Vector3((float)0.5, (float)0.5, 0) * 105, Space.World);
+            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+
+            tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
+            tile.transform.Translate(new Vector3(x, y, 0) * 105, Space.World);
+            //image.color = Color.white;
         }
     }
 
@@ -68,8 +95,8 @@ public class QuestData
         public float x = 0;
         public float y = 0;
         public static string type = "";
-        public bool visible = false;
         public string name;
+        public UnityEngine.UI.Image image;
 
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
@@ -83,6 +110,25 @@ public class QuestData
             {
                 y = float.Parse(data["yposition"]);
             }
+        }
+
+        public void setVisible(bool vis)
+        {
+            if (image == null)
+                return;
+            if (vis)
+                image.color = Color.white;
+            else
+                image.color = Color.clear;
+        }
+
+        public bool getVisible()
+        {
+            if (image == null)
+                return false;
+            if (image.color.a == 0)
+                return false;
+            return true;
         }
     }
 }
