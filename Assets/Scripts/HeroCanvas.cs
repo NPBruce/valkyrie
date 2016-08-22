@@ -32,7 +32,7 @@ public class HeroCanvas : MonoBehaviour {
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
         heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+        image.rectTransform.sizeDelta = new Vector2(100000, 100000);
 
     }
 
