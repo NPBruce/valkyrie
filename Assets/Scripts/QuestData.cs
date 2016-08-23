@@ -48,6 +48,11 @@ public class QuestData
             Door c = new Door(name, content, game);
             components.Add(name, c);
         }
+        if (name.IndexOf(Token.type) == 0)
+        {
+            Token c = new Token(name, content, game);
+            components.Add(name, c);
+        }
         if (name.IndexOf(Event.type) == 0)
         {
             Event c = new Event(name, content);
@@ -187,15 +192,15 @@ public class QuestData
         {
             cancelable = true;
 
-            string typeName = "";
+            string typeName = "search-token";
             if (data.ContainsKey("type"))
             {
-                typeName = data["type"];
+                typeName = data["type"].ToLower();
             }
 
             Sprite tileSprite;
 
-            Texture2D newTex = Resources.Load("sprites/" + typeName) as Texture2D;
+            Texture2D newTex = Resources.Load("sprites/tokens/" + typeName) as Texture2D;
 
             gameObject = new GameObject(name);
 
@@ -246,9 +251,9 @@ public class QuestData
             {
                 failEvent = data["failevent"];
             }
-            if (data.ContainsKey("failevent"))
+            if (data.ContainsKey("gold"))
             {
-                gold = int.Parse(data["failevent"]);
+                gold = int.Parse(data["gold"]);
             }
             if (data.ContainsKey("add"))
             {

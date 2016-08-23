@@ -162,7 +162,7 @@ public class DialogWindow {
 
         UnityEngine.UI.Button button = pass.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
-        button.onClick.AddListener(delegate { onConfirm(); });
+        button.onClick.AddListener(delegate { onPass(); });
 
         UnityEngine.UI.Text text = pass.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.green;
@@ -199,7 +199,7 @@ public class DialogWindow {
 
         UnityEngine.UI.Button button = fail.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
-        button.onClick.AddListener(delegate { onConfirm(); });
+        button.onClick.AddListener(delegate { onFail(); });
 
         UnityEngine.UI.Text text = fail.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.red;
@@ -222,6 +222,11 @@ public class DialogWindow {
     public void onFail()
     {
         destroy();
+        if (!eventData.failEvent.Equals(""))
+        {
+            Game game = GameObject.FindObjectOfType<Game>();
+            game.triggerEvent(eventData.failEvent);
+        }
     }
 
     public void onConfirm()
