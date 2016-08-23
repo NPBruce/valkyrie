@@ -78,6 +78,7 @@ public class DialogWindow {
         GameObject confirm = new GameObject("confirm");
         confirm.tag = "dialog";
 
+        
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
         Canvas canvas = canvii[0];
         foreach (Canvas c in canvii)
@@ -96,6 +97,10 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
 
         CanvasRenderer cr = confirm.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Button button = confirm.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        button.onClick.AddListener(delegate { onConfirm(); });
 
         UnityEngine.UI.Text text = confirm.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.white;
