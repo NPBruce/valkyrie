@@ -30,8 +30,8 @@ public class HeroCanvas : MonoBehaviour {
         heroImg.transform.parent = canvas.transform;
 
         RectTransform trans = heroImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 5, 50);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 5, 50);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30, 50);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 30, 50);
         heroImg.AddComponent<CanvasRenderer>();
 
 

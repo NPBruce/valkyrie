@@ -11,6 +11,7 @@ public class test : MonoBehaviour {
         QuestData.Event CurrentEvent = game.qd.start;
 
         Debug.Log(CurrentEvent.text);
+        DialogWindow dw = new DialogWindow(CurrentEvent);
         while (!CurrentEvent.nextEvent.Equals(""))
         {
             CurrentEvent = (QuestData.Event)game.qd.components[CurrentEvent.nextEvent];
