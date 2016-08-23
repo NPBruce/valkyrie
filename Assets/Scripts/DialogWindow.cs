@@ -6,7 +6,6 @@ using UnityEngine.Events;
 
 public class DialogWindow {
 
-    public bool cancelable = false;
     public QuestData.Event eventData;
     public bool active = true;
 
@@ -47,7 +46,7 @@ public class DialogWindow {
         text.text = eventData.text.Replace("\\n", "\n");
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-        if (cancelable)
+        if (eventData.cancelable)
         {
             createCancel();
         }
@@ -64,6 +63,38 @@ public class DialogWindow {
 
     public void createCancel()
     {
+        GameObject confirm = new GameObject("confirm");
+        confirm.tag = "dialog";
+
+
+        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+        Canvas canvas = canvii[0];
+        foreach (Canvas c in canvii)
+        {
+            if (c.name.Equals("UICanvas"))
+            {
+                canvas = c;
+            }
+        }
+
+
+        confirm.transform.parent = canvas.transform;
+
+        RectTransform trans = confirm.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
+
+        CanvasRenderer cr = confirm.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Button button = confirm.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        button.onClick.AddListener(delegate { onCancel(); });
+
+        UnityEngine.UI.Text text = confirm.AddComponent<UnityEngine.UI.Text>();
+        text.color = Color.white;
+        text.text = "Cancel";
+        text.alignment = TextAnchor.MiddleCenter;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
     }
 

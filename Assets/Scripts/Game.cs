@@ -37,6 +37,10 @@ public class Game : MonoBehaviour {
         {
             qd.components[s].setVisible(true);
         }
+        foreach (string s in e.removeComponents)
+        {
+            qd.components[s].setVisible(false);
+        }
 
         if (e.location != null)
         {

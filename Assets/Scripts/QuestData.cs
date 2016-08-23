@@ -111,10 +111,12 @@ public class QuestData
         }
     }
 
-    public class Door : QuestComponent
+    public class Door : Event
     {
         new public static string type = "Door";
         public int rotation = 0;
+        public GameObject gameObject;
+        new public bool cancelable = true;
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
@@ -131,11 +133,16 @@ public class QuestData
                 colour[2] = System.Convert.ToInt32(data["color"].Substring(5, 2), 16);
             }
 
+            if (text.Equals(""))
+            {
+                text = "You can open this door with an \"Open Door\" action.";
+            }
+
             Sprite tileSprite;
 
             Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
 
-            GameObject tile = new GameObject(name);
+            gameObject = new GameObject(name);
 
             Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
             Canvas board = canvii[0];
@@ -146,20 +153,27 @@ public class QuestData
                     board = c;
                 }
             }
-            tile.transform.parent = board.transform;
+            gameObject.transform.parent = board.transform;
 
-            image = tile.AddComponent<UnityEngine.UI.Image>();
+            image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = new Color(colour[0], colour[1], colour[2], 0);
             image.sprite = tileSprite;
-            //tile.transform.Translate(Vector3.right * ((newTex.width / 2) - tileType.left), Space.World);
-            //tile.transform.Translate(Vector3.down * ((newTex.height / 2) - tileType.top), Space.World);
-            tile.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            //tile.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            //tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
 
-            tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
-            tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+            //RectTransform trans = tile.AddComponent<RectTransform>();
+            //trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
+            //trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
+
+
+            gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
+            gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             //image.color = Color.white;
+            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
+            tc.add(this);
         }
     }
 
@@ -172,6 +186,7 @@ public class QuestData
         public int gold = 0;
         public string[] addComponents;
         public string[] removeComponents;
+        public bool cancelable = false;
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
@@ -201,7 +216,7 @@ public class QuestData
             }
             if (data.ContainsKey("remove"))
             {
-                removeComponents = data["removeComponents"].Split(' ');
+                removeComponents = data["remove"].Split(' ');
             }
             else
             {
