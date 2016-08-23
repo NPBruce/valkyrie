@@ -1,10 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+/*
+hero section
+monster events (point)
+event triggers
+event conditions
+event flags
+monster UI
+moster activations
+hero activations
+mouse scroll
+comments
+error handling
+packaging
+camera jump bug
+text background
+
+specific place monsters
+unique monsters
+extra event types
+threat
+content selection
+
+    */
 
 public class Game : MonoBehaviour {
 
     public ContentData cd;
     public QuestData qd;
+    public List<Hero> heros;
+    public List<Monster> monsters;
 
     // Use this for initialization
     void Awake () {
@@ -15,7 +42,8 @@ public class Game : MonoBehaviour {
         }
 
         qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini", this);
-
+        //heros.Add(new Hero(cd.heros["HeroSyndrael"]));
+        //heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
     }
 
     void OnGUI()
@@ -47,5 +75,22 @@ public class Game : MonoBehaviour {
             Camera cam = FindObjectOfType<Camera>();
             cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, cam.transform.position.z);
         }
+    }
+
+    public class Hero
+    {
+        public HeroData heroData;
+        public bool activated = false;
+        public bool defeated = false;
+
+        public Hero(HeroData h)
+        {
+            heroData = h;
+        }
+    }
+
+    public class Monster
+    {
+
     }
 }

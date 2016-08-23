@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HeroCanvas : MonoBehaviour {
 
+
 	// Use this for initialization
 	void Start () {
         Game game = FindObjectOfType<Game>();

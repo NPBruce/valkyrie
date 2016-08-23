@@ -98,7 +98,7 @@ public class ContentData {
             else if (heros[d.name].priority < d.priority)
             {
                 heros.Remove(d.name);
-                heros.Add(d.name, d);
+                heros.Add(name, d);
             }
         }
     }
