@@ -6,7 +6,7 @@ public class HeroCanvas : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Game game = FindObjectOfType<Game>();
-        string imagePath = @"file://" + game.cd.heros["HeroSyndrael"].image;
+        string imagePath = @"file://" + game.cd.heros["Syndrael"].image;
 
         Sprite heroSprite;
 
@@ -20,7 +20,7 @@ public class HeroCanvas : MonoBehaviour {
         Canvas canvas = canvii[0];
         foreach (Canvas c in canvii)
         {
-            if (c.name.Equals("HeroCanvas"))
+            if (c.name.Equals("UICanvas"))
             {
                 canvas = c;
             }
@@ -29,10 +29,16 @@ public class HeroCanvas : MonoBehaviour {
 
         heroImg.transform.parent = canvas.transform;
 
+        RectTransform trans = heroImg.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 5, 50);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 5, 50);
+        heroImg.AddComponent<CanvasRenderer>();
+
+
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
         heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(100000, 100000);
+        image.rectTransform.sizeDelta = new Vector2(80, 80);
 
     }
 
