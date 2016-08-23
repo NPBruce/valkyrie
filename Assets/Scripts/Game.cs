@@ -28,4 +28,20 @@ public class Game : MonoBehaviour {
         if (Input.GetKey("escape"))
            Application.Quit();
     }
+
+    public void triggerEvent(string name)
+    {
+        QuestData.Event e = (QuestData.Event)qd.components[name];
+        DialogWindow dw = new DialogWindow(e);
+        foreach (string s in e.addComponents)
+        {
+            qd.components[s].setVisible(true);
+        }
+
+        if (e.location != null)
+        {
+            Camera cam = FindObjectOfType<Camera>();
+            cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, cam.transform.position.z);
+        }
+    }
 }

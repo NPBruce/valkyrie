@@ -8,27 +8,10 @@ public class test : MonoBehaviour {
 
         Game game = FindObjectOfType<Game>();
 
-        QuestData.Event CurrentEvent = game.qd.start;
+        //QuestData.Event CurrentEvent = game.qd.start;
 
-        Debug.Log(CurrentEvent.text);
-        DialogWindow dw = new DialogWindow(CurrentEvent);
-        while (!CurrentEvent.nextEvent.Equals(""))
-        {
-            CurrentEvent = (QuestData.Event)game.qd.components[CurrentEvent.nextEvent];
-            Debug.Log(CurrentEvent.text);
-            foreach(string s in CurrentEvent.addComponents)
-            {
-                game.qd.components[s].setVisible(true);
-            }
-            Camera cam = FindObjectOfType<Camera>();
-            if(CurrentEvent.location != null)
-                cam.transform.position = new Vector3(CurrentEvent.location.x * 105, CurrentEvent.location.y * 105, cam.transform.position.z);
-        }
+        game.triggerEvent("EventStart");
 
-        foreach(KeyValuePair<string, HeroData> h in game.cd.heros)
-        {
-            Debug.Log(h.Value.name);
-        }
     }
 
     // Update is called once per frame
