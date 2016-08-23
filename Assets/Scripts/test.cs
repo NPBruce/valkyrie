@@ -7,9 +7,6 @@ public class test : MonoBehaviour {
     void Start () {
 
         Game game = FindObjectOfType<Game>();
-
-        //QuestData.Event CurrentEvent = game.qd.start;
-
         game.triggerEvent("EventStart");
 
     }

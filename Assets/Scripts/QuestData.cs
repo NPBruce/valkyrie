@@ -43,6 +43,11 @@ public class QuestData
             Tile c = new Tile(name, content, game);
             components.Add(name, c);
         }
+        if (name.IndexOf(Door.type) == 0)
+        {
+            Door c = new Door(name, content, game);
+            components.Add(name, c);
+        }
         if (name.IndexOf(Event.type) == 0)
         {
             Event c = new Event(name, content);
@@ -93,11 +98,63 @@ public class QuestData
 
             image = tile.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = Color.clear;
+            image.color = new Color(255, 255, 255, 0);
             image.sprite = tileSprite;
             tile.transform.Translate(Vector3.right * ((newTex.width / 2) - tileType.left), Space.World);
             tile.transform.Translate(Vector3.down * ((newTex.height / 2) - tileType.top), Space.World);
-            tile.transform.Translate(new Vector3((float)0.5, (float)0.5, 0) * 105, Space.World);
+            tile.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+
+            tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
+            tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+            //image.color = Color.white;
+        }
+    }
+
+    public class Door : QuestComponent
+    {
+        new public static string type = "Door";
+        public int rotation = 0;
+
+        public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        {
+            if (data.ContainsKey("rotation"))
+            {
+                rotation = int.Parse(data["rotation"]);
+            }
+
+            int[] colour = { 255, 255, 255 };
+            if (data.ContainsKey("color"))
+            {
+                colour[0] = System.Convert.ToInt32(data["color"].Substring(1, 2), 16);
+                colour[1] = System.Convert.ToInt32(data["color"].Substring(3, 2), 16);
+                colour[2] = System.Convert.ToInt32(data["color"].Substring(5, 2), 16);
+            }
+
+            Sprite tileSprite;
+
+            Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
+
+            GameObject tile = new GameObject(name);
+
+            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+            Canvas board = canvii[0];
+            foreach (Canvas c in canvii)
+            {
+                if (c.name.Equals("TokenCanvas"))
+                {
+                    board = c;
+                }
+            }
+            tile.transform.parent = board.transform;
+
+            image = tile.AddComponent<UnityEngine.UI.Image>();
+            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.color = new Color(colour[0], colour[1], colour[2], 0);
+            image.sprite = tileSprite;
+            //tile.transform.Translate(Vector3.right * ((newTex.width / 2) - tileType.left), Space.World);
+            //tile.transform.Translate(Vector3.down * ((newTex.height / 2) - tileType.top), Space.World);
+            tile.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
 
             tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
@@ -187,9 +244,9 @@ public class QuestData
             if (image == null)
                 return;
             if (vis)
-                image.color = Color.white;
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 255);
             else
-                image.color = Color.clear;
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         }
 
         public bool getVisible()
