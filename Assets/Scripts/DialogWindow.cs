@@ -47,13 +47,6 @@ public class DialogWindow {
         text.text = eventData.text.Replace("\\n", "\n");
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-        /*GameObject dialogEventHolder = new GameObject("dialogEventHolder");
-        dialogEventHolder.tag = "dialog";
-        dialogEventHolder.transform.SetParent(canvas.transform);
-        Game game = GameObject.FindObjectOfType<Game>();
-        EventSystem events = dialogEventHolder.AddComponent<EventSystem>();
-        dialogEventHolder.AddComponent<StandaloneInputModule>();*/
-
         if (cancelable)
         {
             createCancel();
@@ -138,12 +131,12 @@ public class DialogWindow {
 
     public void onConfirm()
     {
-        if(!eventData.nextEvent.Equals(""))
+        destroy();
+        if (!eventData.nextEvent.Equals(""))
         {
             Game game = GameObject.FindObjectOfType<Game>();
             game.triggerEvent(eventData.nextEvent);
         }
-        destroy();
     }
 
     public void destroy()
