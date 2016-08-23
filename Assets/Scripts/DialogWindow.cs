@@ -63,8 +63,8 @@ public class DialogWindow {
 
     public void createCancel()
     {
-        GameObject confirm = new GameObject("confirm");
-        confirm.tag = "dialog";
+        GameObject cancel = new GameObject("cancel");
+        cancel.tag = "dialog";
 
 
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
@@ -78,19 +78,19 @@ public class DialogWindow {
         }
 
 
-        confirm.transform.parent = canvas.transform;
+        cancel.transform.parent = canvas.transform;
 
-        RectTransform trans = confirm.AddComponent<RectTransform>();
+        RectTransform trans = cancel.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
 
-        CanvasRenderer cr = confirm.AddComponent<CanvasRenderer>();
+        CanvasRenderer cr = cancel.AddComponent<CanvasRenderer>();
 
-        UnityEngine.UI.Button button = confirm.AddComponent<UnityEngine.UI.Button>();
+        UnityEngine.UI.Button button = cancel.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
         button.onClick.AddListener(delegate { onCancel(); });
 
-        UnityEngine.UI.Text text = confirm.AddComponent<UnityEngine.UI.Text>();
+        UnityEngine.UI.Text text = cancel.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.white;
         text.text = "Cancel";
         text.alignment = TextAnchor.MiddleCenter;
@@ -137,11 +137,75 @@ public class DialogWindow {
 
     public void createPass()
     {
+        GameObject pass = new GameObject("pass");
+        pass.tag = "dialog";
+
+
+        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+        Canvas canvas = canvii[0];
+        foreach (Canvas c in canvii)
+        {
+            if (c.name.Equals("UICanvas"))
+            {
+                canvas = c;
+            }
+        }
+
+
+        pass.transform.parent = canvas.transform;
+
+        RectTransform trans = pass.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 600, 50);
+
+        CanvasRenderer cr = pass.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Button button = pass.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        button.onClick.AddListener(delegate { onConfirm(); });
+
+        UnityEngine.UI.Text text = pass.AddComponent<UnityEngine.UI.Text>();
+        text.color = Color.green;
+        text.text = "Pass";
+        text.alignment = TextAnchor.MiddleCenter;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
     }
 
     public void createFail()
     {
+        GameObject fail = new GameObject("fail");
+        fail.tag = "dialog";
+
+
+        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+        Canvas canvas = canvii[0];
+        foreach (Canvas c in canvii)
+        {
+            if (c.name.Equals("UICanvas"))
+            {
+                canvas = c;
+            }
+        }
+
+
+        fail.transform.parent = canvas.transform;
+
+        RectTransform trans = fail.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
+
+        CanvasRenderer cr = fail.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Button button = fail.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        button.onClick.AddListener(delegate { onConfirm(); });
+
+        UnityEngine.UI.Text text = fail.AddComponent<UnityEngine.UI.Text>();
+        text.color = Color.red;
+        text.text = "Fail";
+        text.alignment = TextAnchor.MiddleCenter;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
     }
 

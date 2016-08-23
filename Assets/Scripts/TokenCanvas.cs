@@ -15,6 +15,11 @@ public class TokenCanvas : MonoBehaviour {
         tc.Add(new TokenControl(d));
     }
 
+    public void add(QuestData.Token t)
+    {
+        tc.Add(new TokenControl(t));
+    }
+
     public class TokenControl
     {
         QuestData.Event e;
@@ -25,6 +30,14 @@ public class TokenCanvas : MonoBehaviour {
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent();  });
             e = d;
+        }
+
+        public TokenControl(QuestData.Token t)
+        {
+            UnityEngine.UI.Button button = t.gameObject.AddComponent<UnityEngine.UI.Button>();
+            button.interactable = true;
+            button.onClick.AddListener(delegate { startEvent(); });
+            e = t;
         }
 
         public void startEvent()

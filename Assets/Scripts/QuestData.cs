@@ -116,10 +116,11 @@ public class QuestData
         new public static string type = "Door";
         public int rotation = 0;
         public GameObject gameObject;
-        new public bool cancelable = true;
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            cancelable = true;
+
             if (data.ContainsKey("rotation"))
             {
                 rotation = int.Parse(data["rotation"]);
@@ -172,6 +173,49 @@ public class QuestData
             gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             //image.color = Color.white;
+            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
+            tc.add(this);
+        }
+    }
+
+    public class Token : Event
+    {
+        new public static string type = "Token";
+        public GameObject gameObject;
+
+        public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        {
+            cancelable = true;
+
+            string typeName = "";
+            if (data.ContainsKey("type"))
+            {
+                typeName = data["type"];
+            }
+
+            Sprite tileSprite;
+
+            Texture2D newTex = Resources.Load("sprites/" + typeName) as Texture2D;
+
+            gameObject = new GameObject(name);
+
+            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+            Canvas board = canvii[0];
+            foreach (Canvas c in canvii)
+            {
+                if (c.name.Equals("TokenCanvas"))
+                {
+                    board = c;
+                }
+            }
+            gameObject.transform.parent = board.transform;
+
+            image = gameObject.AddComponent<UnityEngine.UI.Image>();
+            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.color = new Color(255, 255, 255, 0);
+            image.sprite = tileSprite;
+            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+            gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
             tc.add(this);
         }
