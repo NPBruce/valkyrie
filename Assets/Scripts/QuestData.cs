@@ -101,7 +101,7 @@ public class QuestData
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
 
             tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
-            tile.transform.Translate(new Vector3(x, y, 0) * 105, Space.World);
+            tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             //image.color = Color.white;
         }
     }
@@ -155,23 +155,30 @@ public class QuestData
 
     public class QuestComponent
     {
-        public float x = 0;
-        public float y = 0;
+        public Vector2 location;
         public static string type = "";
         public string name;
         public UnityEngine.UI.Image image;
 
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
+            float x = 0, y = 0;
+            bool locGiven = false;
             name = nameIn;
             if (data.ContainsKey("xposition"))
             {
+                locGiven = true;
                 x = float.Parse(data["xposition"]);
             }
 
             if (data.ContainsKey("yposition"))
             {
+                locGiven = true;
                 y = float.Parse(data["yposition"]);
+            }
+            if(locGiven)
+            {
+                location = new Vector2(x, y);
             }
         }
 

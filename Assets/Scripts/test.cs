@@ -19,6 +19,9 @@ public class test : MonoBehaviour {
             {
                 game.qd.components[s].setVisible(true);
             }
+            Camera cam = FindObjectOfType<Camera>();
+            if(CurrentEvent.location != null)
+                cam.transform.position = new Vector3(CurrentEvent.location.x * 105, CurrentEvent.location.y * 105, cam.transform.position.z);
         }
 
         foreach(KeyValuePair<string, HeroData> h in game.cd.heros)
