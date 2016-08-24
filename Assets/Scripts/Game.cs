@@ -69,6 +69,11 @@ public class Game : MonoBehaviour {
     public void triggerEvent(string name)
     {
         QuestData.Event e = (QuestData.Event)qd.components[name];
+
+        // If a dialog window is open we force it closed (this shouldn't happen)
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
+
         new DialogWindow(e);
         foreach (string s in e.addComponents)
         {

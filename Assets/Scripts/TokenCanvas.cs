@@ -51,11 +51,13 @@ public class TokenCanvas : MonoBehaviour {
         public void startEvent()
         {
             // If we aren't visible ignore the click
-            if (e.getVisible())
-            {
-                // Spawn a window with the door/token info
-                new DialogWindow(e);
-            }
+            if (!e.getVisible())
+                return;
+            // If a dialog is open ignore
+            if (GameObject.FindGameObjectWithTag("dialog") != null)
+                return;
+            // Spawn a window with the door/token info
+            new DialogWindow(e);
         }
 
     }

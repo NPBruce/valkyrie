@@ -177,7 +177,7 @@ public class QuestData
             // Create sprite from texture
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set to transparent initially
-            image.color = new Color(255, 255, 255, 0);
+            image.color = new Color(1, 1, 1, 0);
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
@@ -213,7 +213,7 @@ public class QuestData
             }
 
             // Default doors are white, but can be any colour
-            int[] colour = { 255, 255, 255 };
+            float[] colour = { 255, 255, 255 };
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
@@ -262,7 +262,7 @@ public class QuestData
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
-            image.color = new Color(colour[0], colour[1], colour[2], 0);
+            image.color = new Color(colour[0] / 255, colour[1] / 255, colour[2] / 255, 0);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Rotate as required
@@ -329,7 +329,7 @@ public class QuestData
             // Create the image
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = new Color(255, 255, 255, 0);
+            image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Move to square (105 units per square)
@@ -442,7 +442,7 @@ public class QuestData
             if (image == null)
                 return;
             if (vis)
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 255);
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
             else
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         }

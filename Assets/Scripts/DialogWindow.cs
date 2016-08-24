@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
+// Class for creation of a dialog window with buttons and handling button press
 public class DialogWindow {
-
+    // The even that raises this dialog
     public QuestData.Event eventData;
-    public bool active = true;
 
     public DialogWindow(QuestData.Event e)
     {
@@ -17,9 +17,12 @@ public class DialogWindow {
 
     public void CreateWindow()
     {
+        // holding object
         GameObject dialog = new GameObject("dialog");
+        // All things are tagged dialog so we can clean up
         dialog.tag = "dialog";
 
+        // Find the UI canvas
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
         Canvas canvas = canvii[0];
         foreach (Canvas c in canvii)
@@ -29,189 +32,45 @@ public class DialogWindow {
                 canvas = c;
             }
         }
-
-
         dialog.transform.parent = canvas.transform;
 
+        // Position the dialog text
         RectTransform trans = dialog.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30, 50);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 500);
-
         dialog.AddComponent<CanvasRenderer>();
 
+        // Add the text to the component
         UnityEngine.UI.Text text = dialog.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.white;
         text.text = eventData.text.Replace("\\n", "\n");
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
+        // Do we have a cancel button?
         if (eventData.cancelable)
         {
-            createCancel();
+            new TextButton(new Vector2(400, 90), new Vector2(50, 20), "Cancel", delegate { onCancel(); });
         }
+        // If there isn't a fail event we have a confirm button
         if(eventData.failEvent.Equals(""))
         {
-            createConfirm();
+            new TextButton(new Vector2(600, 90), new Vector2(50, 20), "Confirm", delegate { onConfirm(); });
         }
+        // Otherwise we have pass and fail buttons
         else
         {
-            createPass();
-            createFail();
+            new TextButton(new Vector2(500, 90), new Vector2(50, 20), "Fail", delegate { onFail(); }, Color.red);
+            new TextButton(new Vector2(600, 90), new Vector2(50, 20), "Pass", delegate { onPass(); }, Color.green);
         }
     }
 
-    public void createCancel()
-    {
-        GameObject cancel = new GameObject("cancel");
-        cancel.tag = "dialog";
-
-
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-
-
-        cancel.transform.parent = canvas.transform;
-
-        RectTransform trans = cancel.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
-
-        cancel.AddComponent<CanvasRenderer>();
-
-        UnityEngine.UI.Button button = cancel.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
-        button.onClick.AddListener(delegate { onCancel(); });
-
-        UnityEngine.UI.Text text = cancel.AddComponent<UnityEngine.UI.Text>();
-        text.color = Color.white;
-        text.text = "Cancel";
-        text.alignment = TextAnchor.MiddleCenter;
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-    }
-
-    public void createConfirm()
-    {
-        GameObject confirm = new GameObject("confirm");
-        confirm.tag = "dialog";
-
-        
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-
-
-        confirm.transform.parent = canvas.transform;
-
-        RectTransform trans = confirm.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
-
-        confirm.AddComponent<CanvasRenderer>();
-
-        UnityEngine.UI.Button button = confirm.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
-        button.onClick.AddListener(delegate { onConfirm(); });
-
-        UnityEngine.UI.Text text = confirm.AddComponent<UnityEngine.UI.Text>();
-        text.color = Color.white;
-        text.text = "Confirm";
-        text.alignment = TextAnchor.MiddleCenter;
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-    }
-
-    public void createPass()
-    {
-        GameObject pass = new GameObject("pass");
-        pass.tag = "dialog";
-
-
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-
-
-        pass.transform.parent = canvas.transform;
-
-        RectTransform trans = pass.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 600, 50);
-
-        pass.AddComponent<CanvasRenderer>();
-
-        UnityEngine.UI.Button button = pass.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
-        button.onClick.AddListener(delegate { onPass(); });
-
-        UnityEngine.UI.Text text = pass.AddComponent<UnityEngine.UI.Text>();
-        text.color = Color.green;
-        text.text = "Pass";
-        text.alignment = TextAnchor.MiddleCenter;
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-    }
-
-    public void createFail()
-    {
-        GameObject fail = new GameObject("fail");
-        fail.tag = "dialog";
-
-
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-
-
-        fail.transform.parent = canvas.transform;
-
-        RectTransform trans = fail.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
-
-        fail.AddComponent<CanvasRenderer>();
-
-        UnityEngine.UI.Button button = fail.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
-        button.onClick.AddListener(delegate { onFail(); });
-
-        UnityEngine.UI.Text text = fail.AddComponent<UnityEngine.UI.Text>();
-        text.color = Color.red;
-        text.text = "Fail";
-        text.alignment = TextAnchor.MiddleCenter;
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-    }
-
+    // Pass and confirm are the same
     public void onPass()
     {
         onConfirm();
     }
 
+    // Cancel cleans up
     public void onCancel()
     {
         destroy();
@@ -219,7 +78,9 @@ public class DialogWindow {
 
     public void onFail()
     {
+        // Destroy this dialog to close
         destroy();
+        // Trigger failure event
         if (!eventData.failEvent.Equals(""))
         {
             Game game = GameObject.FindObjectOfType<Game>();
@@ -229,7 +90,9 @@ public class DialogWindow {
 
     public void onConfirm()
     {
+        // Destroy this dialog to close
         destroy();
+        // Trigger next event
         if (!eventData.nextEvent.Equals(""))
         {
             Game game = GameObject.FindObjectOfType<Game>();
@@ -239,8 +102,8 @@ public class DialogWindow {
 
     public void destroy()
     {
+        // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
-        active = false;
     }
 }

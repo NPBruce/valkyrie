@@ -54,46 +54,10 @@ public class HeroCanvas : MonoBehaviour {
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
-        //button.onClick.AddListener(delegate { HeroDiag(h.heroData.name); });
+        button.onClick.AddListener(delegate { HeroDiag(h.heroData.name); });
     }
 
-   /* void HeroDiag(string name)
-    {
-        GameObject activated = new GameObject("activated");
-        activated.tag = "dialog";
-
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-
-
-        activated.transform.parent = canvas.transform;
-
-        RectTransform trans = activated.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
-
-        CanvasRenderer cr = activated.AddComponent<CanvasRenderer>();
-
-        UnityEngine.UI.Button button = activated.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
-        button.onClick.AddListener(delegate { onActive(); });
-
-        UnityEngine.UI.Text text = activated.AddComponent<UnityEngine.UI.Text>();
-        text.color = Color.white;
-        text.text = "Cancel";
-        text.alignment = TextAnchor.MiddleCenter;
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-    }*/
-
-    void UpdateStatus()
+    public void UpdateStatus()
     {
         Game game = GameObject.FindObjectOfType<Game>();
         foreach(Game.Hero h in game.heros)
@@ -104,15 +68,29 @@ public class HeroCanvas : MonoBehaviour {
             {
                 image.color = Color.red;
             }
-            else if (h.activated)
+            if (h.activated)
             {
-                image.color = new Color(50, 50, 50, 255);
+                image.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
-            else if (h.defeated && h.activated)
+            if (h.defeated && h.activated)
             {
-                image.color = new Color(50, 0, 0, 255);
+                image.color = new Color((float) 0.2, 0, 0, 1);
             }
 
+        }
+    }
+
+    void HeroDiag(string name)
+    {
+        // If there are any other dialogs open just finish
+        if (GameObject.FindGameObjectWithTag("dialog") != null)
+            return;
+
+        Game game = GameObject.FindObjectOfType<Game>();
+        foreach (Game.Hero h in game.heros)
+        {
+            if (name.Equals(h.heroData.name))
+                new HeroDialog(h);
         }
     }
 }
