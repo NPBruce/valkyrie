@@ -406,6 +406,8 @@ public class QuestData
     {
         // location on the board in squares
         public Vector2 location;
+        // Has a location been speficied?
+        public bool locationSpecified;
         // type for sub classes
         public static string type = "";
         // name of section in ini file
@@ -419,23 +421,18 @@ public class QuestData
             name = nameIn;
 
             // Default to 0, 0 unless specified
-            float x = 0, y = 0;
-            bool locGiven = false;
+            location = new Vector2(0, 0);
+            locationSpecified = false;
             if (data.ContainsKey("xposition"))
             {
-                locGiven = true;
-                x = float.Parse(data["xposition"]);
+                locationSpecified = true;
+                location.x = float.Parse(data["xposition"]);
             }
 
             if (data.ContainsKey("yposition"))
             {
-                locGiven = true;
-                y = float.Parse(data["yposition"]);
-            }
-            // location is null if x and y not specified
-            if(locGiven)
-            {
-                location = new Vector2(x, y);
+                locationSpecified = true;
+                location.y = float.Parse(data["yposition"]);
             }
         }
 

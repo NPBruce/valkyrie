@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 /*
+Dump list of things to to:
+
 hero section
 monster events (point)
 event triggers
@@ -15,7 +17,6 @@ mouse scroll
 comments
 error handling
 packaging
-camera jump bug
 text background
 bigtokens
 dialog interlock
@@ -29,6 +30,8 @@ content selection
 
     */
 
+
+// General controller for the game
 public class Game : MonoBehaviour {
 
     public ContentData cd;
@@ -38,26 +41,27 @@ public class Game : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
+        // This will load content, need to work out where this should be stored, and how it should be packed
         cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
+
+        // In the future this is where you select which packs to load
         foreach(string pack in cd.GetPacks())
         {
             cd.LoadContent(pack);
         }
 
+        // In the future this is where you select a quest, need to work out where this should be stored, and how it should be delivered
         qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini");
 
+        // Working on Hero selection here (currently hard coded)
         heros = new List<Hero>();
         heros.Add(new Hero(cd.heros["HeroSyndrael"]));
         heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
     }
 
-    void OnGUI()
-    {
-        //GUI.DrawTexture(new Rect(0, 0, 100, 100), d2e);
-        //ih.drawGUI();
-    }
 	// Update is called once per frame
 	void Update () {
+        // Escape will quit because we don't have a proper UI yet
         if (Input.GetKey("escape"))
            Application.Quit();
     }
@@ -65,7 +69,7 @@ public class Game : MonoBehaviour {
     public void triggerEvent(string name)
     {
         QuestData.Event e = (QuestData.Event)qd.components[name];
-        DialogWindow dw = new DialogWindow(e);
+        new DialogWindow(e);
         foreach (string s in e.addComponents)
         {
             qd.components[s].setVisible(true);
@@ -75,13 +79,14 @@ public class Game : MonoBehaviour {
             qd.components[s].setVisible(false);
         }
 
-        if (e.location != null)
+        if (e.locationSpecified)
         {
             Camera cam = FindObjectOfType<Camera>();
             cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, -800);
         }
     }
 
+    // Class for holding current hero status
     public class Hero
     {
         public HeroData heroData;
@@ -94,6 +99,7 @@ public class Game : MonoBehaviour {
         }
     }
 
+    // Class for holding current monster status
     public class Monster
     {
 
