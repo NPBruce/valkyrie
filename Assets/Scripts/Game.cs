@@ -17,6 +17,7 @@ error handling
 packaging
 camera jump bug
 text background
+bigtokens
 
 specific place monsters
 unique monsters
@@ -42,8 +43,10 @@ public class Game : MonoBehaviour {
         }
 
         qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini", this);
-        //heros.Add(new Hero(cd.heros["HeroSyndrael"]));
-        //heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
+
+        heros = new List<Hero>();
+        heros.Add(new Hero(cd.heros["HeroSyndrael"]));
+        heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
     }
 
     void OnGUI()

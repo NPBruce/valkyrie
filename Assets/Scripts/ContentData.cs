@@ -93,7 +93,7 @@ public class ContentData {
             HeroData d = new HeroData(name, content, path);
             if (!heros.ContainsKey(d.name))
             {
-                heros.Add(d.name, d);
+                heros.Add(name, d);
             }
             else if (heros[d.name].priority < d.priority)
             {
