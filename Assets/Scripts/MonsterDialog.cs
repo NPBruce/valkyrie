@@ -31,13 +31,13 @@ public class MonsterDialog
     {
     }
 
-    // Null function for activated hero
+    // Defeated monsters
     public void defeated()
     {
+        destroy();
         Game game = GameObject.FindObjectOfType<Game>();
         game.monsters.Remove(monster);
         updateDisplay();
-        destroy();
     }
 
     // Cancel cleans up

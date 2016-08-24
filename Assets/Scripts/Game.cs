@@ -65,6 +65,22 @@ public class Game : MonoBehaviour {
            Application.Quit();
     }
 
+    public void eventTriggerType(string type)
+    {
+        foreach (KeyValuePair<string, QuestData.QuestComponent> k in qd.components)
+        {
+            QuestData.QuestComponent c = k.Value;
+
+            // Check if it is an event
+            if (c is QuestData.Event)
+            {
+                QuestData.Event e = (QuestData.Event)c;
+                if (e.trigger.Equals(type))
+                    triggerEvent(e.name);
+            }
+        }
+    }
+
     public void triggerEvent(string name)
     {
         // Check if the event doesn't exists - quest fault
@@ -93,10 +109,9 @@ public class Game : MonoBehaviour {
         // Remove clear flags
         foreach (string s in e.clearFlags)
         {
-            if (!qd.flags.Contains(s))
+            if (qd.flags.Contains(s))
                 qd.flags.Remove(s);
         }
-
 
         // If this is a monster event then add the monster group
         if (e is QuestData.Monster)
@@ -165,6 +180,8 @@ public class Game : MonoBehaviour {
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
         {
+            eventTriggerType("EndRound");
+
             foreach (Hero h in heros)
             {
                 h.activated = false;

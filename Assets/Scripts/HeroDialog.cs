@@ -45,22 +45,23 @@ public class HeroDialog{
     // Null function for activated hero
     public void defeated()
     {
+        destroy();
         hero.defeated = true;
         updateDisplay();
-        destroy();
     }
 
     // Null function for activated hero
     public void restored()
     {
+        destroy();
         hero.defeated = false;
         updateDisplay();
-        destroy();
     }
 
     // Null function for activated hero
     public void activated()
     {
+        destroy();
         hero.activated = true;
 
         // Let the game know that a hero has activated
@@ -68,7 +69,6 @@ public class HeroDialog{
         game.heroActivated();
 
         updateDisplay();
-        destroy();
     }
 
     // Cancel cleans up
