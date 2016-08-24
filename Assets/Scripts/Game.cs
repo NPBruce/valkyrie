@@ -18,6 +18,7 @@ packaging
 camera jump bug
 text background
 bigtokens
+dialog interlock
 
 specific place monsters
 unique monsters
@@ -76,7 +77,7 @@ public class Game : MonoBehaviour {
         if (e.location != null)
         {
             Camera cam = FindObjectOfType<Camera>();
-            cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, cam.transform.position.z);
+            cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, -800);
         }
     }
 

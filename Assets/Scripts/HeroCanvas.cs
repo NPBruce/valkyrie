@@ -52,11 +52,50 @@ public class HeroCanvas : MonoBehaviour {
         image.sprite = heroSprite;
         image.rectTransform.sizeDelta = new Vector2(80, 80);
 
+        UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        //button.onClick.AddListener(delegate { HeroDiag(h.heroData.name); });
     }
+
+   /* void HeroDiag(string name)
+    {
+        GameObject activated = new GameObject("activated");
+        activated.tag = "dialog";
+
+        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+        Canvas canvas = canvii[0];
+        foreach (Canvas c in canvii)
+        {
+            if (c.name.Equals("UICanvas"))
+            {
+                canvas = c;
+            }
+        }
+
+
+        activated.transform.parent = canvas.transform;
+
+        RectTransform trans = activated.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
+
+        CanvasRenderer cr = activated.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Button button = activated.AddComponent<UnityEngine.UI.Button>();
+        button.interactable = true;
+        button.onClick.AddListener(delegate { onActive(); });
+
+        UnityEngine.UI.Text text = activated.AddComponent<UnityEngine.UI.Text>();
+        text.color = Color.white;
+        text.text = "Cancel";
+        text.alignment = TextAnchor.MiddleCenter;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+
+    }*/
 
     void UpdateStatus()
     {
-        Game game = FindObjectOfType<Game>();
+        Game game = GameObject.FindObjectOfType<Game>();
         foreach(Game.Hero h in game.heros)
         {
             UnityEngine.UI.Image image = icons[h.heroData.name];
