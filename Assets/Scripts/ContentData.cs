@@ -178,6 +178,7 @@ public class ContentData {
     }
 }
 
+// Class for tile specific data
 public class TileSideData : GenericData
 {
     public int top;
@@ -186,6 +187,7 @@ public class TileSideData : GenericData
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+        // Get location of top left square in tile image, default 0
         if (content.ContainsKey("top"))
         {
             top = int.Parse(content["top"]);
@@ -206,6 +208,7 @@ public class TileSideData : GenericData
     }
 }
 
+// Class for Hero specific data
 public class HeroData : GenericData
 {
     public string archetype = "warrior";
@@ -213,6 +216,7 @@ public class HeroData : GenericData
 
     public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+        // Get archetype
         if (content.ContainsKey("archetype"))
         {
             archetype = content["archetype"];
