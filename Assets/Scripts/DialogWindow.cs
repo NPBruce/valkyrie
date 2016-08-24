@@ -17,8 +17,6 @@ public class DialogWindow {
 
     public void CreateWindow()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
-
         GameObject dialog = new GameObject("dialog");
         dialog.tag = "dialog";
 
@@ -39,7 +37,7 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30, 50);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 500);
 
-        CanvasRenderer cr = dialog.AddComponent<CanvasRenderer>();
+        dialog.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Text text = dialog.AddComponent<UnityEngine.UI.Text>();
         text.color = Color.white;
@@ -84,7 +82,7 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 400, 50);
 
-        CanvasRenderer cr = cancel.AddComponent<CanvasRenderer>();
+        cancel.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Button button = cancel.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
@@ -121,7 +119,7 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
 
-        CanvasRenderer cr = confirm.AddComponent<CanvasRenderer>();
+        confirm.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Button button = confirm.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
@@ -158,7 +156,7 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 600, 50);
 
-        CanvasRenderer cr = pass.AddComponent<CanvasRenderer>();
+        pass.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Button button = pass.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
@@ -195,7 +193,7 @@ public class DialogWindow {
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 90, 20);
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 500, 50);
 
-        CanvasRenderer cr = fail.AddComponent<CanvasRenderer>();
+        fail.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Button button = fail.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
