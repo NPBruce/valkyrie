@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Class for managing token and door operation
+// One object is created and attached to the token canvas
 public class TokenCanvas : MonoBehaviour {
 
     public List<TokenControl> tc;
@@ -10,20 +12,24 @@ public class TokenCanvas : MonoBehaviour {
         tc = new List<TokenControl>();
 	}
 
+    // Add a door
     public void add(QuestData.Door d)
     {
         tc.Add(new TokenControl(d));
     }
 
+    // Add a token
     public void add(QuestData.Token t)
     {
         tc.Add(new TokenControl(t));
     }
 
+    // Class for tokens and doors that will get the onClick event
     public class TokenControl
     {
         QuestData.Event e;
 
+        // Initialise from a door
         public TokenControl(QuestData.Door d)
         {
             UnityEngine.UI.Button button = d.gameObject.AddComponent<UnityEngine.UI.Button>();
@@ -32,6 +38,7 @@ public class TokenCanvas : MonoBehaviour {
             e = d;
         }
 
+        // Initialise from a token
         public TokenControl(QuestData.Token t)
         {
             UnityEngine.UI.Button button = t.gameObject.AddComponent<UnityEngine.UI.Button>();
@@ -40,11 +47,14 @@ public class TokenCanvas : MonoBehaviour {
             e = t;
         }
 
+        // On click the tokens start an event
         public void startEvent()
         {
+            // If we aren't visible ignore the click
             if (e.getVisible())
             {
-                DialogWindow dw = new DialogWindow(e);
+                // Spawn a window with the door/token info
+                new DialogWindow(e);
             }
         }
 

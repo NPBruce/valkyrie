@@ -20,6 +20,7 @@ text background
 bigtokens
 dialog interlock
 
+tokens/doors in the same space
 specific place monsters
 unique monsters
 extra event types
