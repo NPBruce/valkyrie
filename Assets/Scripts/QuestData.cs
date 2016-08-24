@@ -8,6 +8,10 @@ public class QuestData
 {
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
+
+    // A list of flags that have been set during the quest
+    public List<string> flags;
+
     // List of ini files containing quest data
     List<string> files;
     Game game;
@@ -18,6 +22,7 @@ public class QuestData
         Debug.Log("Loading quest from: \"" + path + "\"");
         game = GameObject.FindObjectOfType<Game>();
         components = new Dictionary<string, QuestComponent>();
+        flags = new List<string>();
 
         // Read the main quest file
         IniData d = IniRead.ReadFromIni(path);
@@ -386,11 +391,15 @@ public class QuestData
     {
         new public static string type = "Event";
         public string text = "";
+        public string trigger = "";
         public string nextEvent = "";
         public string failEvent = "";
         public int gold = 0;
         public string[] addComponents;
         public string[] removeComponents;
+        public string[] flags;
+        public string[] setFlags;
+        public string[] clearFlags;
         public bool cancelable = false;
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
@@ -437,6 +446,42 @@ public class QuestData
             else
             {
                 removeComponents = new string[0];
+            }
+
+            // trigger event on condition
+            if (data.ContainsKey("trigger"))
+            {
+                trigger = data["trigger"];
+            }
+
+            // Flags required to trigger (space separated list)
+            if (data.ContainsKey("flags"))
+            {
+                flags = data["flags"].Split(' ');
+            }
+            else
+            {
+                flags = new string[0];
+            }
+
+            // Flags to set trigger (space separated list)
+            if (data.ContainsKey("set"))
+            {
+                setFlags = data["set"].Split(' ');
+            }
+            else
+            {
+                setFlags = new string[0];
+            }
+
+            // Flags to clear trigger (space separated list)
+            if (data.ContainsKey("clear"))
+            {
+                clearFlags = data["clear"].Split(' ');
+            }
+            else
+            {
+                clearFlags = new string[0];
             }
         }
     }

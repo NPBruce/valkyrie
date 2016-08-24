@@ -5,12 +5,12 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
+UI positons/scale
 hero section
-monster events (point)
 event triggers
 event conditions
 event flags
-monster UI
+monster Info
 moster activations
 mouse pan
 packaging
@@ -75,6 +75,28 @@ public class Game : MonoBehaviour {
         }
 
         QuestData.Event e = (QuestData.Event)qd.components[name];
+
+        // If the flags are not set do not trigger event
+        foreach (string s in e.flags)
+        {
+            if (!qd.flags.Contains(s))
+                return;
+        }
+
+        // Add set flags
+        foreach (string s in e.setFlags)
+        {
+            if (!qd.flags.Contains(s))
+                qd.flags.Add(s);
+        }
+
+        // Remove clear flags
+        foreach (string s in e.clearFlags)
+        {
+            if (!qd.flags.Contains(s))
+                qd.flags.Remove(s);
+        }
+
 
         // If this is a monster event then add the monster group
         if (e is QuestData.Monster)
