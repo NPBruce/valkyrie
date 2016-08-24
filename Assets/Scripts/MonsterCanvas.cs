@@ -95,9 +95,7 @@ public class MonsterCanvas : MonoBehaviour
         foreach (Game.Monster m in game.monsters)
         {
             if (name.Equals(m.monsterData.name))
-                return;
-                    // NOt done yet!
-                //new MonsterDialog(h);
+                new MonsterDialog(m);
         }
     }
 }

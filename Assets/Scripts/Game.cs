@@ -161,7 +161,6 @@ public class Game : MonoBehaviour {
     public bool activateMonster()
     {
         List<int> notActivated = new List<int>();
-        Debug.Log("A");
         // Get the index of all monsters that haven't activated
         for(int i = 0; i < monsters.Count; i++)
         {
@@ -169,12 +168,11 @@ public class Game : MonoBehaviour {
                 notActivated.Add(i);
         }
 
-        Debug.Log(notActivated.Count);
         // If no monsters are found return true
         if (notActivated.Count == 0)
             return true;
 
-        Debug.Log("C");
+        // Todo: proper activation
         monsters[notActivated[Random.Range(0, notActivated.Count)]].activated = true;
         MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
         mc.UpdateStatus();
@@ -183,7 +181,6 @@ public class Game : MonoBehaviour {
         if (notActivated.Count == 1)
             return true;
 
-        Debug.Log("D");
         // More groups unactivated
         return false;
     }
