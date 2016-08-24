@@ -76,7 +76,11 @@ public class QuestData
             }
             if (data.ContainsKey("side"))
             {
-                tileType = game.cd.tileSides[data["side"]];
+                // 'TileSide' prefix is optional
+                if (game.cd.tileSides.ContainsKey(data["side"]))
+                    tileType = game.cd.tileSides[data["side"]];
+                else if (game.cd.tileSides.ContainsKey("TileSide" + data["side"]))
+                    tileType = game.cd.tileSides["TileSide" + data["side"]];
             }
 
 
