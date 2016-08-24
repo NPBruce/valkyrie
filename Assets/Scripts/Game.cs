@@ -12,14 +12,10 @@ event conditions
 event flags
 monster UI
 moster activations
-hero activations
-mouse scroll
-comments
-error handling
+mouse pan
 packaging
 text background
-bigtokens
-dialog interlock
+big tokens
 
 tokens/doors in the same space
 specific place monsters
@@ -38,6 +34,7 @@ public class Game : MonoBehaviour {
     public QuestData qd;
     public List<Hero> heros;
     public List<Monster> monsters;
+    public int round = 0;
 
     // Use this for initialization
     void Awake () {
@@ -57,6 +54,8 @@ public class Game : MonoBehaviour {
         heros = new List<Hero>();
         heros.Add(new Hero(cd.heros["HeroSyndrael"]));
         heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
+
+        monsters = new List<Monster>();
     }
 
 	// Update is called once per frame
@@ -91,6 +90,48 @@ public class Game : MonoBehaviour {
         }
     }
 
+    // A hero has finished their turn
+    public void heroActivated()
+    {
+        // Check if all heros have finished
+        bool herosActivated = true;
+        foreach (Hero h in heros)
+        {
+            if (!h.activated)
+                herosActivated = false;
+        }
+
+        // activate a monster group
+        bool monstersActivated = activateMonster();
+
+        // If all heros have finished activate all other monster groups
+        if(herosActivated)
+        {
+            while(!monstersActivated)
+                monstersActivated = activateMonster();
+        }
+
+        // If everyone has finished move to next round
+        if (monstersActivated && herosActivated)
+        {
+            foreach (Hero h in heros)
+            {
+                h.activated = false;
+            }
+            foreach (Monster m in monsters)
+            {
+                m.activated = false;
+            }
+            round++;
+        }
+    }
+
+    // Activate a monster (if any left) and return true if all monsters activated
+    public bool activateMonster()
+    {
+        return true;
+    }
+
     // Class for holding current hero status
     public class Hero
     {
@@ -107,6 +148,6 @@ public class Game : MonoBehaviour {
     // Class for holding current monster status
     public class Monster
     {
-
+        public bool activated = false;
     }
 }

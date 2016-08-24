@@ -62,6 +62,11 @@ public class HeroDialog{
     public void activated()
     {
         hero.activated = true;
+
+        // Let the game know that a hero has activated
+        Game game  = GameObject.FindObjectOfType<Game>();
+        game.heroActivated();
+
         updateDisplay();
         destroy();
     }
