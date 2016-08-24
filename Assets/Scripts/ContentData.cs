@@ -170,6 +170,26 @@ public class ContentData {
                 heros.Add(name, d);
             }
         }
+
+        // Is this a "Monster" entry?
+        if (name.IndexOf(MonsterData.type) == 0)
+        {
+            MonsterData d = new MonsterData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!monsters.ContainsKey(d.name))
+            {
+                monsters.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (monsters[d.name].priority < d.priority)
+            {
+                monsters.Remove(name);
+                monsters.Add(name, d);
+            }
+        }
     }
 
     // Holding class for contentpack data
@@ -231,15 +251,15 @@ public class HeroData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public string archetype = "warrior";
-    public static new string type = "Hero";
+    public string info = "-";
+    public static new string type = "Monster";
 
     public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
-        // Get archetype
-        if (content.ContainsKey("archetype"))
+        // Get usage info
+        if (content.ContainsKey("info"))
         {
-            archetype = content["archetype"];
+            info = content["info"];
         }
     }
 }

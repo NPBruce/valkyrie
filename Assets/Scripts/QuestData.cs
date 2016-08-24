@@ -96,6 +96,11 @@ public class QuestData
             Event c = new Event(name, content);
             components.Add(name, c);
         }
+        if (name.IndexOf(Monster.type) == 0)
+        {
+            Monster c = new Monster(name, content, game);
+            components.Add(name, c);
+        }
         // If not known ignore
     }
 
@@ -350,18 +355,28 @@ public class QuestData
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Monster type must exist
+            // Monster type must be specified
             if (!data.ContainsKey("monster"))
             {
                 Debug.Log("Error: No monster type specified in event: " + name);
                 Application.Quit();
             }
-            if(!game.cd.monsters.ContainsKey(data["monster"]))
+
+            // Monster type must exist in content packs, 'Monster' is optional
+            if (game.cd.monsters.ContainsKey(data["monster"]))
+            {
+                mData = game.cd.monsters[data["monster"]];
+            }
+            if (game.cd.monsters.ContainsKey("Monster"+data["monster"]))
+            {
+                mData = game.cd.monsters["Monster" + data["monster"]];
+            }
+            // Not found, throw error
+            if(mData == null)
             {
                 Debug.Log("Error: Unknown monster type: " + data["monster"] + " specified in event: " + name);
                 Application.Quit();
             }
-            mData = game.cd.monsters[data["monster"]];
         }
     }
 

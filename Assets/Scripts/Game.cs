@@ -67,7 +67,34 @@ public class Game : MonoBehaviour {
 
     public void triggerEvent(string name)
     {
+        // Check if the event doesn't exists - quest fault
+        if(!qd.components.ContainsKey(name))
+        {
+            Debug.Log("Warning: Missing event called: " + name);
+            return;
+        }
+
         QuestData.Event e = (QuestData.Event)qd.components[name];
+
+        // If this is a monster event then add the monster group
+        if (e is QuestData.Monster)
+        {
+            QuestData.Monster qm = (QuestData.Monster)e;
+
+            // Is this type new?
+            bool newMonster = true;
+            foreach(Monster m in monsters)
+            {
+                if (m.monsterData.name.Equals(qm.mData.name))
+                    newMonster = false;
+            }
+
+            // Add the new type
+            if (newMonster)
+            {
+                monsters.Add(new Monster(qm.mData));
+            }
+        }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -148,6 +175,12 @@ public class Game : MonoBehaviour {
     // Class for holding current monster status
     public class Monster
     {
+        public MonsterData monsterData;
         public bool activated = false;
+
+        public Monster(MonsterData m)
+        {
+            monsterData = m;
+        }
     }
 }
