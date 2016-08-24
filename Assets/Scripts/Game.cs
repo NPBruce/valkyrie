@@ -93,6 +93,8 @@ public class Game : MonoBehaviour {
             if (newMonster)
             {
                 monsters.Add(new Monster(qm.mData));
+                MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
+                mc.UpdateList();
             }
         }
 
@@ -150,13 +152,40 @@ public class Game : MonoBehaviour {
                 m.activated = false;
             }
             round++;
+            MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
+            mc.UpdateStatus();
         }
     }
 
     // Activate a monster (if any left) and return true if all monsters activated
     public bool activateMonster()
     {
-        return true;
+        List<int> notActivated = new List<int>();
+        Debug.Log("A");
+        // Get the index of all monsters that haven't activated
+        for(int i = 0; i < monsters.Count; i++)
+        {
+            if (!monsters[i].activated)
+                notActivated.Add(i);
+        }
+
+        Debug.Log(notActivated.Count);
+        // If no monsters are found return true
+        if (notActivated.Count == 0)
+            return true;
+
+        Debug.Log("C");
+        monsters[notActivated[Random.Range(0, notActivated.Count)]].activated = true;
+        MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
+        mc.UpdateStatus();
+
+        // If there was one group left return true
+        if (notActivated.Count == 1)
+            return true;
+
+        Debug.Log("D");
+        // More groups unactivated
+        return false;
     }
 
     // Class for holding current hero status

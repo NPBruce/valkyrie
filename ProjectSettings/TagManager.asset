@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - dialog
+  - monsters
   layers:
   - Default
   - TransparentFX

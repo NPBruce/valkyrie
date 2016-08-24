@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1237340d66ee57244b6a118b3f0ac9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  round: 0
 --- !u!4 &1438429548
 Transform:
   m_ObjectHideFlags: 0
@@ -511,6 +512,7 @@ GameObject:
   - 114: {fileID: 1867481422}
   - 114: {fileID: 1867481421}
   - 114: {fileID: 1867481420}
+  - 114: {fileID: 1867481425}
   m_Layer: 5
   m_Name: UICanvas
   m_TagString: Untagged
@@ -529,6 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3a6f64170ca25d42862f13edfb40f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offset: 0
 --- !u!114 &1867481421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,3 +606,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1867481425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1867481419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f49cb98f933a564448b6a3166b9c736c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 0
