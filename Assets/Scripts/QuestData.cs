@@ -3,41 +3,79 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+// Class to manage all data for the current quest
 public class QuestData
 {
+    // All components in the quest
     public Dictionary<string, QuestComponent> components;
-    public Event start;
+    // List of ini files containing quest data
     List<string> files;
     Game game;
 
-    public QuestData(string path, Game game_set)
+    // Read all data files and populate components for quest
+    public QuestData(string path)
     {
         Debug.Log("Loading quest from: \"" + path + "\"");
-
-        game = game_set;
-
+        game = GameObject.FindObjectOfType<Game>();
         components = new Dictionary<string, QuestComponent>();
 
+        // Read the main quest file
         IniData d = IniRead.ReadFromIni(path);
-        files = new List<string>();
-        files.Add(path);
-        foreach (string file in d.Get("QuestData").Keys)
+        // Failure to read quest is fatal
+        if(d == null)
         {
-            files.Add(Path.GetDirectoryName(path) + "/" + file);
+            Debug.Log("Failed to load quest from: \"" + path + "\"");
+            Application.Quit();
+        }
+
+        // List of data files
+        files = new List<string>();
+        // The main data file is included
+        files.Add(path);
+
+        // Find others (no addition files is not fatal)
+        if(d.Get("QuestData") == null)
+        {
+            Debug.Log("QuestData section missing in: \"" + path + "\"");
+        }
+        else
+        {
+            foreach (string file in d.Get("QuestData").Keys)
+            {
+                // path is relative to the main file (absolute not supported)
+                files.Add(Path.GetDirectoryName(path) + "/" + file);
+            }
         }
 
         foreach (string f in files)
         {
+            // Read each file
             d = IniRead.ReadFromIni(f);
+            // Failure to read a file is fatal
+            if (d == null)
+            {
+                Debug.Log("Unable to read quest file: \"" + f + "\"");
+                Application.Quit();
+            }
             foreach (KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
+                // Add the section to our quest data
                 AddData(section.Key, section.Value, Path.GetDirectoryName(f));
             }
         }
     }
 
+    // Add a section from an ini file to the quest data.  Duplicates are not allowed
     void AddData(string name, Dictionary<string, string> content, string path)
     {
+        // Fatal error on duplicates
+        if(components.ContainsKey(name))
+        {
+            Debug.Log("Duplicate component in quest: " + name);
+            Application.Quit();
+        }
+
+        // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
             Tile c = new Tile(name, content, game);
@@ -57,9 +95,8 @@ public class QuestData
         {
             Event c = new Event(name, content);
             components.Add(name, c);
-            if (name.Equals("EventStart"))
-                start = c;
         }
+        // If not known ignore
     }
 
     public class Tile : QuestComponent
@@ -278,11 +315,16 @@ public class QuestData
         }
     }
 
+    // Super class for all quest components
     public class QuestComponent
     {
+        // location on the board in squares
         public Vector2 location;
+        // type for sub classes
         public static string type = "";
+        // name of section in ini file
         public string name;
+        // image for display
         public UnityEngine.UI.Image image;
 
         public QuestComponent(string nameIn, Dictionary<string, string> data)

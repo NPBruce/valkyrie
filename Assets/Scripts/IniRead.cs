@@ -38,7 +38,10 @@ public static class IniRead{
                 // If not first section, add the last section of data
                 if (entryName != "")
                 {
-                    output.Add(entryName, entryData);
+                    if (!output.Add(entryName, entryData))
+                    {
+                        Debug.Log("Warning: duplicate section in " + path + " will be ignored.");
+                    }
                 }
                 // create new data for new section
                 entryData = new Dictionary<string, string>();
@@ -59,7 +62,17 @@ public static class IniRead{
                     entryData.Add(l.Trim(), "");
                 // If there is an = add data as key and value
                 else
-                    entryData.Add(l.Substring(0, equalsLocation).Trim(), l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                {
+                    string key = l.Substring(0, equalsLocation).Trim();
+                    if(entryData.ContainsKey(key))
+                    {
+                        Debug.Log("Warning: duplicate data in " + path + " will be ignored.");
+                    }
+                    else
+                    {
+                        entryData.Add(key, l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                    }
+                }
                 // This won't go anywhere if we don't have a section
                 if (entryName.Equals(""))
                 {
@@ -68,17 +81,23 @@ public static class IniRead{
             }
         }
 
+        // Add the last section
         if (entryName != "")
         {
-            output.Add(entryName, entryData);
+            if (!output.Add(entryName, entryData))
+            {
+                Debug.Log("Warning: duplicate section in " + path + " will be ignored.");
+            }
         }
 
         return output;
     }
 }
 
+// Class to store data read from ini
 public class IniData
 {
+    // Dict of Dict to hold all data
     public Dictionary<string, Dictionary<string, string>> data;
 
     public IniData()
@@ -86,18 +105,30 @@ public class IniData
         data = new Dictionary<string, Dictionary<string, string>>();
     }
 
-    public void Add(string name, Dictionary<string, string> dict)
+    // Add new data returns 0 on collision
+    public bool Add(string name, Dictionary<string, string> dict)
     {
+        if (data.ContainsKey(name))
+            return false;
         data.Add(name, dict);
+        return true;
     }
 
+    // Get section data, returns null if not found
     public Dictionary<string, string> Get(string section)
     {
+        if (!data.ContainsKey(section))
+            return null;
         return data[section];
     }
 
+    // Get string by section and item, "" if not found
     public string Get(string section, string item)
     {
+        if (!data.ContainsKey(section))
+            return "";
+        if (!data[section].ContainsKey(item))
+            return "";
         return data[section][item];
     }
 }

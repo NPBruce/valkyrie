@@ -43,7 +43,7 @@ public class Game : MonoBehaviour {
             cd.LoadContent(pack);
         }
 
-        qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini", this);
+        qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini");
 
         heros = new List<Hero>();
         heros.Add(new Hero(cd.heros["HeroSyndrael"]));
