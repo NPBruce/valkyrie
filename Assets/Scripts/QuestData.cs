@@ -341,6 +341,31 @@ public class QuestData
         }
     }
 
+
+    // Monster items are monster group placement events
+    public class Monster : Event
+    {
+        new public static string type = "Monster";
+        public MonsterData mData;
+
+        public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        {
+            // Monster type must exist
+            if (!data.ContainsKey("monster"))
+            {
+                Debug.Log("Error: No monster type specified in event: " + name);
+                Application.Quit();
+            }
+            if(!game.cd.monsters.ContainsKey(data["monster"]))
+            {
+                Debug.Log("Error: Unknown monster type: " + data["monster"] + " specified in event: " + name);
+                Application.Quit();
+            }
+            mData = game.cd.monsters[data["monster"]];
+        }
+    }
+
+
     // Events are used to create dialogs that control the quest
     public class Event : QuestComponent
     {

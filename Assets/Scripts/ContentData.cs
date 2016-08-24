@@ -9,6 +9,7 @@ public class ContentData {
     List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
+    public Dictionary<string, MonsterData> monsters;
 
     // Constructor takes a path in which to look for content
     public ContentData(string path)
@@ -20,6 +21,9 @@ public class ContentData {
 
         // Available heros
         heros = new Dictionary<string, HeroData>();
+
+        // Available monsters
+        monsters = new Dictionary<string, MonsterData>();
 
         //This has the game game and all expansions, general info
         allPacks = new List<ContentPack>();
@@ -215,6 +219,22 @@ public class HeroData : GenericData
     public static new string type = "Hero";
 
     public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get archetype
+        if (content.ContainsKey("archetype"))
+        {
+            archetype = content["archetype"];
+        }
+    }
+}
+
+// Class for Hero specific data
+public class MonsterData : GenericData
+{
+    public string archetype = "warrior";
+    public static new string type = "Hero";
+
+    public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
         // Get archetype
         if (content.ContainsKey("archetype"))
