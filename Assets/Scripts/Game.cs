@@ -33,7 +33,7 @@ public class Game : MonoBehaviour {
     public List<Monster> monsters;
     public int round = 0;
 
-    // Use this for initialization
+    // Use this for initialization (before Start)
     void Awake () {
         // This will load content, need to work out where this should be stored, and how it should be packed
         cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
@@ -55,8 +55,14 @@ public class Game : MonoBehaviour {
         monsters = new List<Monster>();
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization (things are set up, ready to start)
+    void Start()
+    {
+        EventHelper.triggerEvent("EventStart");
+    }
+
+    // Update is called once per frame
+    void Update () {
         // Escape will quit because we don't have a proper UI yet
         if (Input.GetKey("escape"))
            Application.Quit();
