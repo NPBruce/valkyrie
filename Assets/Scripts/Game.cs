@@ -64,75 +64,7 @@ public class Game : MonoBehaviour {
         if (Input.GetKey("escape"))
            Application.Quit();
     }
-
-    // A hero has finished their turn
-    public void heroActivated()
-    {
-        // Check if all heros have finished
-        bool herosActivated = true;
-        foreach (Hero h in heros)
-        {
-            if (!h.activated)
-                herosActivated = false;
-        }
-
-        // activate a monster group
-        bool monstersActivated = activateMonster();
-
-        // If all heros have finished activate all other monster groups
-        if(herosActivated)
-        {
-            while(!monstersActivated)
-                monstersActivated = activateMonster();
-        }
-
-        // If everyone has finished move to next round
-        if (monstersActivated && herosActivated)
-        {
-            EventHelper.eventTriggerType("EndRound");
-
-            foreach (Hero h in heros)
-            {
-                h.activated = false;
-            }
-            foreach (Monster m in monsters)
-            {
-                m.activated = false;
-            }
-            round++;
-            MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
-            mc.UpdateStatus();
-        }
-    }
-
-    // Activate a monster (if any left) and return true if all monsters activated
-    public bool activateMonster()
-    {
-        List<int> notActivated = new List<int>();
-        // Get the index of all monsters that haven't activated
-        for(int i = 0; i < monsters.Count; i++)
-        {
-            if (!monsters[i].activated)
-                notActivated.Add(i);
-        }
-
-        // If no monsters are found return true
-        if (notActivated.Count == 0)
-            return true;
-
-        // Todo: proper activation
-        monsters[notActivated[Random.Range(0, notActivated.Count)]].activated = true;
-        MonsterCanvas mc = FindObjectOfType<MonsterCanvas>();
-        mc.UpdateStatus();
-
-        // If there was one group left return true
-        if (notActivated.Count == 1)
-            return true;
-
-        // More groups unactivated
-        return false;
-    }
-
+    
     // Class for holding current hero status
     public class Hero
     {

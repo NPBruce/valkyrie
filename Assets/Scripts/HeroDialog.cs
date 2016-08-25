@@ -66,7 +66,7 @@ public class HeroDialog{
 
         // Let the game know that a hero has activated
         Game game  = GameObject.FindObjectOfType<Game>();
-        game.heroActivated();
+        RoundHelper.heroActivated();
 
         updateDisplay();
     }
