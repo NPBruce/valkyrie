@@ -56,7 +56,17 @@ public class RoundHelper {
                 ParticalActivationComplete(m);
                 return;
             }
+
+            // If both started then it is complete
+            if (m.minionStarted && m.masterStarted)
+            {
+                m.activated = true;
+            }
         }
+
+        // Full activation, update display
+        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
+        mc.UpdateStatus();
 
         // Check if all heros have finished
         bool herosActivated = true;

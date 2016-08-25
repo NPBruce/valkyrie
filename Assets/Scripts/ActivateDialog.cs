@@ -75,12 +75,7 @@ public class ActivateDialog {
         // Destroy this dialog to close
         destroy();
 
-        // Set monster activated
-        monster.activated = true;
-
-        // Update monster list
-        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-        mc.UpdateStatus();
+        RoundHelper.monsterActivated();
     }
 
     public void destroy()
