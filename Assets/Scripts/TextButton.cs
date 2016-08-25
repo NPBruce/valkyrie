@@ -15,10 +15,12 @@ public class TextButton {
 
     void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour)
     {
-        // Create an object
+        // Create a object
         GameObject button = new GameObject("button" + text);
+        GameObject background = new GameObject("buttonBg" + text);
         // Mark it as dialog
         button.tag = "dialog";
+        background.tag = "dialog";
 
         // Find the UI canvas
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
@@ -30,17 +32,29 @@ public class TextButton {
                 canvas = c;
             }
         }
-        button.transform.parent = canvas.transform;
+        background.transform.parent = canvas.transform;
 
-        RectTransform trans = button.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x, size.x);
+        RectTransform transBg = background.AddComponent<RectTransform>();
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x, size.x);
+
+        button.transform.parent = background.transform;
+
+        RectTransform transBt = button.AddComponent<RectTransform>();
+        transBt.SetParent(transBg);
+
+        transBt.localPosition = Vector2.zero;
+        transBt.localScale = transBg.localScale;
+        transBt.sizeDelta = transBg.sizeDelta;
 
         button.AddComponent<CanvasRenderer>();
+        background.AddComponent<CanvasRenderer>();
 
-        UnityEngine.UI.Button uiButton = button.AddComponent<UnityEngine.UI.Button>();
+        UnityEngine.UI.Image uiImage = background.AddComponent<UnityEngine.UI.Image>();
+        uiImage.color = new Color(0, 0, 0, (float)0.7);
+
+        UnityEngine.UI.Button uiButton = background.AddComponent<UnityEngine.UI.Button>();
         uiButton.interactable = true;
-        //uiButton.onClick.AddListener(delegate { onPress(); });
         uiButton.onClick.AddListener(call);
 
         UnityEngine.UI.Text uiText = button.AddComponent<UnityEngine.UI.Text>();

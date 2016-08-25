@@ -11,6 +11,7 @@ more event triggers
 mouse pan
 packaging
 text background
+quit button (remove esc)
 
 Hero selection on events
 Hero names / highlights in events
