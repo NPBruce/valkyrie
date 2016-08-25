@@ -58,7 +58,7 @@ public class ActivateDialog {
         // Add the ability text to the component
         UnityEngine.UI.Text textAb = ability.AddComponent<UnityEngine.UI.Text>();
         textAb.color = Color.white;
-        textAb.text = monster.currentActivation.ability.Replace("\\n", "\n");
+        textAb.text = monster.monsterData.name + ":\n\n" + monster.currentActivation.ability.Replace("\\n", "\n");
         textAb.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // Add the actions text to the component
@@ -66,11 +66,11 @@ public class ActivateDialog {
         textAc.color = Color.white;
         if(!master)
         {
-            textAc.text = "Minion:\n" + monster.currentActivation.minionActions.Replace("\\n", "\n");
+            textAc.text = "Minion:\n\n" + monster.currentActivation.minionActions.Replace("\\n", "\n");
         }
         else
         {
-            textAc.text = "Master:\n" + monster.currentActivation.masterActions.Replace("\\n", "\n");
+            textAc.text = "Master:\n\n" + monster.currentActivation.masterActions.Replace("\\n", "\n");
         }
         textAc.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
