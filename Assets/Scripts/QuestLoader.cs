@@ -8,7 +8,7 @@ public class QuestLoader {
     public static Dictionary<string, Quest> GetQuests()
     {
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
-        string questLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string questLocation = dataLocation + "/Quests";
 
         if (!Directory.Exists(dataLocation))
         {
@@ -44,8 +44,7 @@ public class QuestLoader {
             if (File.Exists(p + "/quest.ini"))
             {
                 Quest q = new Quest(p);
-
-                if (q.name.Equals(""))
+                if (!q.name.Equals(""))
                 {
                     quests.Add(p, q);
                 }

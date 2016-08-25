@@ -37,7 +37,14 @@ public class Game : MonoBehaviour {
     // Use this for initialization (before Start)
     void Awake () {
         // This will load content, need to work out where this should be stored, and how it should be packed
-        cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
+        if (Application.isEditor)
+        {
+            cd = new ContentData(Application.dataPath + "/../../valkyrie-contentpacks/");
+        }
+        else
+        {
+            cd = new ContentData(Application.dataPath + "/valkyrie-contentpacks/");
+        }
 
         // In the future this is where you select which packs to load
         foreach(string pack in cd.GetPacks())
@@ -45,10 +52,19 @@ public class Game : MonoBehaviour {
             cd.LoadContent(pack);
         }
 
-        QuestLoader.GetQuests();
+        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
-        // In the future this is where you select a quest, need to work out where this should be stored, and how it should be delivered
-        qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini");
+        // FIXME Don't load all!!
+        foreach(KeyValuePair<string, QuestLoader.Quest> q in ql)
+        {
+            qd = new QuestData(q.Value);
+        }
+
+        if(qd == null)
+        {
+            Debug.Log("Error: No quests found.");
+            Application.Quit();
+        }
 
         // Working on Hero selection here (currently hard coded)
         heros = new List<Hero>();
