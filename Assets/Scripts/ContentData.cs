@@ -322,6 +322,8 @@ public class GenericData
 {
     // name from section title or data
     public string name;
+    // section name
+    public string sectionName;
     // List of traits
     public string[] traits;
     // Path to image
@@ -334,6 +336,8 @@ public class GenericData
     // generic constructor gets common things
     public GenericData(string name_ini, Dictionary<string, string> content, string path, string type)
     {
+        sectionName = name_ini;
+
         // Has the name been specified?
         if (content.ContainsKey("name"))
         {

@@ -341,7 +341,7 @@ public class QuestData
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+            image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
 

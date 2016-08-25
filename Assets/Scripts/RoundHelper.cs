@@ -112,9 +112,8 @@ public class RoundHelper {
         // Find all possible activations
         foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
         {
-            // Is this activation for this monster type?
-            // Fixme - bugged on some names
-            if (kv.Key.IndexOf("MonsterActivation" + toActivate.monsterData.name) == 0)
+            // Is this activation for this monster type? (replace "Monster" with "MonsterActivation", ignore specific variety)
+            if (kv.Key.IndexOf("MonsterActivation" + toActivate.monsterData.sectionName.Substring("Monster".Length)) == 0)
             {
                 adList.Add(kv.Value);
             }

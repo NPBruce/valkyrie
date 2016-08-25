@@ -5,20 +5,15 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-Monster activation name lookup bugged
-
 UI positons/scale
 hero section
-event triggers
-event conditions
-event flags
-monster Info
-moster activations
+more event triggers
 mouse pan
 packaging
 text background
-big tokens
 
+Hero selection on events
+Hero names / highlights in events
 tokens/doors in the same space
 specific place monsters
 unique monsters
