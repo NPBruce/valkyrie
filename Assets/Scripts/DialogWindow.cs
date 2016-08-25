@@ -84,7 +84,7 @@ public class DialogWindow {
         if (!eventData.failEvent.Equals(""))
         {
             Game game = GameObject.FindObjectOfType<Game>();
-            game.triggerEvent(eventData.failEvent);
+            EventHelper.triggerEvent(eventData.failEvent);
         }
     }
 
@@ -96,7 +96,7 @@ public class DialogWindow {
         if (!eventData.nextEvent.Equals(""))
         {
             Game game = GameObject.FindObjectOfType<Game>();
-            game.triggerEvent(eventData.nextEvent);
+            EventHelper.triggerEvent(eventData.nextEvent);
         }
     }
 

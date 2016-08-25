@@ -9,7 +9,7 @@ public class test : MonoBehaviour {
     void Start () {
 
         Game game = FindObjectOfType<Game>();
-        game.triggerEvent("EventStart");
+        EventHelper.triggerEvent("EventStart");
 
     }
 
