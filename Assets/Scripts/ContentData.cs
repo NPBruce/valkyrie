@@ -10,6 +10,7 @@ public class ContentData {
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, MonsterData> monsters;
+    public Dictionary<string, ActivationData> activations;
 
     // Constructor takes a path in which to look for content
     public ContentData(string path)
@@ -27,6 +28,9 @@ public class ContentData {
 
         //This has the game game and all expansions, general info
         allPacks = new List<ContentPack>();
+
+        // This has all monster activations
+        activations = new Dictionary<string, ActivationData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentDirectories = Directory.GetDirectories(path);
@@ -190,6 +194,25 @@ public class ContentData {
                 monsters.Add(name, d);
             }
         }
+        // Is this a "Activation" entry?
+        if (name.IndexOf(ActivationData.type) == 0)
+        {
+            ActivationData d = new ActivationData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!activations.ContainsKey(d.name))
+            {
+                activations.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (activations[d.name].priority < d.priority)
+            {
+                activations.Remove(name);
+                activations.Add(name, d);
+            }
+        }
     }
 
     // Holding class for contentpack data
@@ -261,6 +284,36 @@ public class MonsterData : GenericData
         {
             info = content["info"];
         }
+    }
+}
+
+// Class for Activation specific data
+public class ActivationData : GenericData
+{
+    public string ability = "-";
+    public string minionsActions = "-";
+    public string masterActions = "-";
+    public static new string type = "MonsterActivation";
+
+    public ActivationData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get ability
+        if (content.ContainsKey("ability"))
+        {
+            ability = content["ability"];
+        }
+        // Get minion activation info
+        if (content.ContainsKey("minions"))
+        {
+            minionsActions = content["minions"];
+        }
+        // Get master activation info
+        if (content.ContainsKey("master"))
+        {
+            masterActions = content["master"];
+        }
+
+
     }
 }
 

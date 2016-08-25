@@ -65,8 +65,35 @@ public class RoundHelper {
         // Find a random unactivated monster
         Game.Monster toActivate = game.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
+        List<ActivationData> adList = new List<ActivationData>();
+        
+        // Find all possible activations
+        foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
+        {
+            // Is this activation for this monster type?
+            // Fixme - bugged on some names
+            if (kv.Key.IndexOf("MonsterActivation" + toActivate.monsterData.name) == 0)
+            {
+                adList.Add(kv.Value);
+            }
+        }
+
+        // Check for no activations
+        if(adList.Count == 0)
+        {
+            Debug.Log("Error: Unable to find any activation data for monster type: " + toActivate.monsterData.name);
+            Application.Quit();
+        }
+
+
+        // Pick a random activation
+        ActivationData activation = adList[Random.Range(0, adList.Count)];
+
+        // Pick Minion of master
+        bool master = Random.Range(0, 1) < 0.5;
+
         // Create activation window
-        new ActivateDialog(toActivate);
+        new ActivateDialog(toActivate, activation, master);
 
         // If there was one group left return true
         if (notActivated.Count == 1)

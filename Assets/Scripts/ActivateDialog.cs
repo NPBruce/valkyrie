@@ -6,7 +6,7 @@ public class ActivateDialog {
     // The even that raises this dialog
     public Game.Monster monster;
 
-    public ActivateDialog(Game.Monster m)
+    public ActivateDialog(Game.Monster m, ActivationData a, bool master)
     {
         monster = m;
         CreateWindow();
