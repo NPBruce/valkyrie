@@ -10,30 +10,8 @@ public class QuestLoader {
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         string questLocation = dataLocation + "/Quests";
 
-        if (!Directory.Exists(dataLocation))
-        {
-            try
-            {
-                Directory.CreateDirectory(dataLocation);
-            }
-            catch (System.Exception)
-            {
-                Debug.Log("Error: Unable to create directory: " + dataLocation);
-                Application.Quit();
-            }
-        }
-        if (!Directory.Exists(questLocation))
-        {
-            try
-            {
-                Directory.CreateDirectory(questLocation);
-            }
-            catch (System.Exception)
-            {
-                Debug.Log("Error: Unable to create directory: " + questLocation);
-                Application.Quit();
-            }
-        }
+        mkDir(dataLocation);
+        mkDir(questLocation);
 
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
@@ -51,7 +29,39 @@ public class QuestLoader {
             }
         }
 
+        string[] questZip = Directory.GetFiles(questLocation, "*.d2q");
+        foreach (string f in questZip)
+        {
+            mkDir(Path.GetTempPath() + "/Valkyrie");
+            string extractedPath = Path.GetTempPath() + "/Valkyrie/" + Path.GetFileName(f);
+            mkDir(extractedPath);
+            if (Directory.Exists(extractedPath))
+            {
+                // Fixme Error handling
+                Directory.Delete(extractedPath, true);
+            }
+            mkDir(extractedPath);
+
+        }
+
+
         return quests;
+    }
+
+    public static void mkDir(string p)
+    {
+        if (!Directory.Exists(p))
+        {
+            try
+            {
+                Directory.CreateDirectory(p);
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("Error: Unable to create directory: " + p);
+                Application.Quit();
+            }
+        }
     }
 
     public class Quest
