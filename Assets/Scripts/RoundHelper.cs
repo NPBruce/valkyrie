@@ -62,10 +62,11 @@ public class RoundHelper {
         if (notActivated.Count == 0)
             return true;
 
-        // Todo: proper activation
-        game.monsters[notActivated[Random.Range(0, notActivated.Count)]].activated = true;
-        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-        mc.UpdateStatus();
+        // Find a random unactivated monster
+        Game.Monster toActivate = game.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+
+        // Create activation window
+        new ActivateDialog(toActivate);
 
         // If there was one group left return true
         if (notActivated.Count == 1)
