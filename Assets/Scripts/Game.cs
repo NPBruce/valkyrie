@@ -45,6 +45,8 @@ public class Game : MonoBehaviour {
             cd.LoadContent(pack);
         }
 
+        QuestLoader.GetQuests();
+
         // In the future this is where you select a quest, need to work out where this should be stored, and how it should be delivered
         qd = new QuestData(Application.dataPath + "/../../valkyrie-quests/roag-intro/quest.ini");
 

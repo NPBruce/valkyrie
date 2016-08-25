@@ -16,8 +16,18 @@ public class QuestData
     List<string> files;
     Game game;
 
+    public QuestData(QuestLoader.Quest q)
+    {
+        LoadQuestData(q.path + "/quest.ini");
+    }
+
     // Read all data files and populate components for quest
     public QuestData(string path)
+    {
+        LoadQuestData(path);
+    }
+
+    public void LoadQuestData(string path)
     {
         Debug.Log("Loading quest from: \"" + path + "\"");
         game = GameObject.FindObjectOfType<Game>();
