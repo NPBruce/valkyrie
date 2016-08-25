@@ -83,6 +83,9 @@ public class Game : MonoBehaviour {
     {
         public MonsterData monsterData;
         public bool activated = false;
+        public bool minionStarted = false;
+        public bool masterStarted = false;
+        public ActivationData currentActivation;
 
         public Monster(MonsterData m)
         {

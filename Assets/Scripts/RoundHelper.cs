@@ -16,7 +16,7 @@ public class RoundHelper {
                 herosActivated = false;
         }
 
-        // activate a monster group
+        // activate a monster group (returns if all activated, does nothing if none left)
         bool monstersActivated = activateMonster();
 
         // If all heros have finished activate all other monster groups
@@ -29,19 +29,51 @@ public class RoundHelper {
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
         {
-            EventHelper.eventTriggerType("EndRound");
+            EndRound();
+        }
+    }
 
-            foreach (Game.Hero h in game.heros)
+    // Finish the other half of monster activation
+    public static void ParticalActivationComplete(Game.Monster m)
+    {
+        // Start the other half of the activation
+        new ActivateDialog(m, m.currentActivation, m.minionStarted);
+        m.minionStarted = true;
+        m.masterStarted= true;
+    }
+
+
+    public static void monsterActivated()
+    {
+        Game game = GameObject.FindObjectOfType<Game>();
+
+        // Check for any partial monster activations
+        foreach (Game.Monster m in game.monsters)
+        {
+            if (m.minionStarted ^ m.masterStarted)
             {
-                h.activated = false;
+                // Half activated group, complete then return;
+                ParticalActivationComplete(m);
+                return;
             }
-            foreach (Game.Monster m in game.monsters)
+        }
+
+        // Check if all heros have finished
+        bool herosActivated = true;
+        foreach (Game.Hero h in game.heros)
+        {
+            if (!h.activated)
+                herosActivated = false;
+        }
+
+        // If there no heros left activate another monster
+        if(herosActivated)
+        {
+            if (activateMonster())
             {
-                m.activated = false;
+                // Evenyone has finished, move to next round
+                EndRound();
             }
-            game.round++;
-            MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-            mc.UpdateStatus();
         }
     }
 
@@ -89,17 +121,39 @@ public class RoundHelper {
         // Pick a random activation
         ActivationData activation = adList[Random.Range(0, adList.Count)];
 
-        // Pick Minion of master
-        bool master = Random.Range(0, 1) < 0.5;
+        // Pick Minion or master
+        toActivate.minionStarted = Random.Range(0, 1) < 0.5;
+        toActivate.masterStarted = !toActivate.minionStarted;
 
         // Create activation window
-        new ActivateDialog(toActivate, activation, master);
-
-        // If there was one group left return true
-        if (notActivated.Count == 1)
-            return true;
+        new ActivateDialog(toActivate, activation, toActivate.masterStarted);
 
         // More groups unactivated
         return false;
+    }
+
+    public static void EndRound()
+    {
+        Game game = GameObject.FindObjectOfType<Game>();
+
+        EventHelper.eventTriggerType("EndRound");
+
+        foreach (Game.Hero h in game.heros)
+        {
+            h.activated = false;
+        }
+        foreach (Game.Monster m in game.monsters)
+        {
+            m.activated = false;
+            m.minionStarted = false;
+            m.masterStarted = false;
+        }
+        game.round++;
+
+        // Update monster and hero display
+        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
+        mc.UpdateStatus();
+        HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
+        hc.UpdateStatus();
     }
 }
