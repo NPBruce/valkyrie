@@ -37,7 +37,7 @@ public class RoundHelper {
     public static void ParticalActivationComplete(Game.Monster m)
     {
         // Start the other half of the activation
-        new ActivateDialog(m, m.currentActivation, m.minionStarted);
+        new ActivateDialog(m, m.minionStarted);
         m.minionStarted = true;
         m.masterStarted= true;
     }
@@ -130,13 +130,14 @@ public class RoundHelper {
 
         // Pick a random activation
         ActivationData activation = adList[Random.Range(0, adList.Count)];
+        toActivate.currentActivation = activation;
 
         // Pick Minion or master
         toActivate.minionStarted = Random.Range(0, 1) < 0.5;
         toActivate.masterStarted = !toActivate.minionStarted;
 
         // Create activation window
-        new ActivateDialog(toActivate, activation, toActivate.masterStarted);
+        new ActivateDialog(toActivate, toActivate.masterStarted);
 
         // More groups unactivated
         return false;

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
+Monster activation name lookup bugged
+Always minion first why?
+
 UI positons/scale
 hero section
 event triggers

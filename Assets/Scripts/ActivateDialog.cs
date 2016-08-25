@@ -5,10 +5,12 @@ using System.Collections;
 public class ActivateDialog {
     // The even that raises this dialog
     public Game.Monster monster;
+    public bool master;
 
-    public ActivateDialog(Game.Monster m, ActivationData a, bool master)
+    public ActivateDialog(Game.Monster m, bool masterIn)
     {
         monster = m;
+        master = masterIn;
         CreateWindow();
     }
 
@@ -56,15 +58,20 @@ public class ActivateDialog {
         // Add the ability text to the component
         UnityEngine.UI.Text textAb = ability.AddComponent<UnityEngine.UI.Text>();
         textAb.color = Color.white;
-        //textAb.text = eventData.text.Replace("\\n", "\n");
-        textAb.text = "Temp.";
+        textAb.text = monster.currentActivation.ability.Replace("\\n", "\n");
         textAb.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         // Add the actions text to the component
         UnityEngine.UI.Text textAc = actions.AddComponent<UnityEngine.UI.Text>();
         textAc.color = Color.white;
-        //textAc.text = eventData.text.Replace("\\n", "\n");
-        textAc.text = "Temp2.";
+        if(!master)
+        {
+            textAc.text = "Minion:\n" + monster.currentActivation.minionActions.Replace("\\n", "\n");
+        }
+        else
+        {
+            textAc.text = "Master:\n" + monster.currentActivation.masterActions.Replace("\\n", "\n");
+        }
         textAc.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
         new TextButton(new Vector2(500, 250), new Vector2(50, 20), "Activated", delegate { activated(); });

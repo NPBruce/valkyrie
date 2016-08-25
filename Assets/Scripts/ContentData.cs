@@ -291,7 +291,7 @@ public class MonsterData : GenericData
 public class ActivationData : GenericData
 {
     public string ability = "-";
-    public string minionsActions = "-";
+    public string minionActions = "-";
     public string masterActions = "-";
     public static new string type = "MonsterActivation";
 
@@ -303,9 +303,9 @@ public class ActivationData : GenericData
             ability = content["ability"];
         }
         // Get minion activation info
-        if (content.ContainsKey("minions"))
+        if (content.ContainsKey("minion"))
         {
-            minionsActions = content["minions"];
+            minionActions = content["minion"];
         }
         // Get master activation info
         if (content.ContainsKey("master"))
