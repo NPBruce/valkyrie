@@ -74,7 +74,14 @@ public class ActivateDialog {
         }
         textAc.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-        new TextButton(new Vector2(500, 250), new Vector2(50, 20), "Activated", delegate { activated(); });
+        if (master)
+        {
+            new TextButton(new Vector2(500, 250), new Vector2(120, 20), "Masters Activated", delegate { activated(); });
+        }
+        else
+        {
+            new TextButton(new Vector2(500, 250), new Vector2(120, 20), "Minions Activated", delegate { activated(); });
+        }
     }
 
     public void activated()

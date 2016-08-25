@@ -133,7 +133,7 @@ public class RoundHelper {
         toActivate.currentActivation = activation;
 
         // Pick Minion or master
-        toActivate.minionStarted = Random.Range(0, 1) < 0.5;
+        toActivate.minionStarted = Random.Range(0, 2) == 0;
         toActivate.masterStarted = !toActivate.minionStarted;
 
         // Create activation window
