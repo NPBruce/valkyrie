@@ -7,15 +7,22 @@ public class QuestLoader {
 
     public static Dictionary<string, Quest> GetQuests()
     {
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
-        string questLocation = dataLocation + "/Quests";
-
-        mkDir(dataLocation);
-        mkDir(questLocation);
-
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
-        List<string> questDirectories = GetQuests(questLocation);
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        mkDir(dataLocation);
+        List<string> questDirectories = GetQuests(dataLocation);
+
+
+        if (Application.isEditor)
+        {
+            dataLocation = Application.dataPath + "/../../valkyrie-questdata/";
+        }
+        else
+        {
+            dataLocation = Application.dataPath + "/valkyrie-questdata/";
+        }
+        questDirectories.AddRange(GetQuests(dataLocation));
 
         foreach (string p in questDirectories)
         {

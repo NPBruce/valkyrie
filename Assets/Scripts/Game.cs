@@ -67,6 +67,8 @@ public class Game : MonoBehaviour {
         heros = new List<Hero>();
         heros.Add(new Hero(cd.heros["HeroSyndrael"]));
         heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
+        HeroCanvas hc = FindObjectOfType<HeroCanvas>();
+        hc.SetupUI();
 
         monsters = new List<Monster>();
 

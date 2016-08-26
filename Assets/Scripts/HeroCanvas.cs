@@ -7,8 +7,7 @@ public class HeroCanvas : MonoBehaviour {
     public int offset = 0;
     public Dictionary<string, UnityEngine.UI.Image> icons;
 
-    // Use this for initialization
-    void Start() {
+    public void SetupUI() {
         icons = new Dictionary<string, UnityEngine.UI.Image>();
 
         Game game = FindObjectOfType<Game>();

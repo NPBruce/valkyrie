@@ -20,9 +20,16 @@ public class DialogBox {
 
     void createDialog(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
     {
-        // Create a object
-        GameObject textObj = new GameObject("text" + text.Substring(0, 10));
-        GameObject background = new GameObject("buttonBg" + text);
+        // Object name includes first 10 chars of text
+        string objName = text;
+        if (objName.Length > 10)
+        {
+            objName = objName.Substring(0, 10);
+        }
+        // Create an object
+
+        GameObject textObj = new GameObject("text" + objName);
+        GameObject background = new GameObject("buttonBg" + objName);
         // Mark it as dialog
         textObj.tag = "dialog";
         background.tag = "dialog";
