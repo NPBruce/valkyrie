@@ -228,8 +228,8 @@ public class ContentData {
 // Class for tile specific data
 public class TileSideData : GenericData
 {
-    public int top;
-    public int left;
+    public float top;
+    public float left;
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -237,7 +237,7 @@ public class TileSideData : GenericData
         // Get location of top left square in tile image, default 0
         if (content.ContainsKey("top"))
         {
-            top = int.Parse(content["top"]);
+            top = float.Parse(content["top"]);
         }
         else
         {
@@ -246,7 +246,7 @@ public class TileSideData : GenericData
 
         if (content.ContainsKey("left"))
         {
-            left = int.Parse(content["left"]);
+            left = float.Parse(content["left"]);
         }
         else
         {
