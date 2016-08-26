@@ -77,10 +77,10 @@ public class Game : MonoBehaviour {
         // Working on Hero selection here (currently hard coded)
         heros = new List<Hero>();
 
-        heros.Add(new Hero(null, 1));
-        heros.Add(new Hero(null, 2));
-        heros.Add(new Hero(cd.heros["HeroSyndrael"], 3));
-        heros.Add(new Hero(cd.heros["HeroJainFairwood"], 4));
+        for (int i = 1; i < 5; i++)
+        {
+            heros.Add(new Hero(null, i));
+        }
         HeroCanvas hc = FindObjectOfType<HeroCanvas>();
         hc.SetupUI();
 

@@ -11,28 +11,35 @@ public class HeroSelection {
         int x = 200;
         int y = 100;
 
+        HeroSelectButton(new Vector2(x, y), null, h.id);
         foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
         {
-            HeroSelectButton(new Vector2(x, y), hd.Value, h.id);
             x += 120;
             if (x > 900)
             {
                 x = 200;
                 y += 120;
             }
+            HeroSelectButton(new Vector2(x, y), hd.Value, h.id);
         }
 	}
 
     public void HeroSelectButton(Vector2 position, HeroData hd, int id)
     {
         Sprite heroSprite;
+        Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
+        string name = "";
 
-        string imagePath = @"file://" + hd.image;
-        WWW www = new WWW(imagePath);
-        Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-        www.LoadImageIntoTexture(newTex);
+        if (hd != null)
+        {
+            string imagePath = @"file://" + hd.image;
+            WWW www = new WWW(imagePath);
+            newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
+            www.LoadImageIntoTexture(newTex);
+            name = hd.name;
+        }
 
-        GameObject heroImg = new GameObject("heroImg" + hd.name);
+        GameObject heroImg = new GameObject("heroImg" + name);
         heroImg.tag = "dialog";
 
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
@@ -59,7 +66,7 @@ public class HeroSelection {
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
-        button.onClick.AddListener(delegate { SelectHero(id, hd.name); });
+        button.onClick.AddListener(delegate { SelectHero(id, name); });
     }
 
     public void SelectHero(int id, string name)

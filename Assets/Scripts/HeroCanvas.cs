@@ -82,7 +82,10 @@ public class HeroCanvas : MonoBehaviour {
             {
                 image.color = new Color((float) 0.2, 0, 0, 1);
             }
-
+            if (h.heroData == null)
+            {
+                image.color = Color.clear;
+            }
         }
     }
 
@@ -135,7 +138,7 @@ public class HeroCanvas : MonoBehaviour {
 
     public void EndSection()
     {
-        bool allNull = true;
+        int heroCount = 0;
 
         if (GameObject.FindGameObjectWithTag("dialog") != null)
             return;
@@ -143,13 +146,15 @@ public class HeroCanvas : MonoBehaviour {
         Game game = GameObject.FindObjectOfType<Game>();
         foreach (Game.Hero h in game.heros)
         {
-            if (h.heroData != null) allNull = false;
+            if (h.heroData != null) heroCount++;
         }
 
-        if (allNull) return;
+        if (heroCount < 2) return;
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
+
+        UpdateStatus();
 
         game.heroesSelected = true;
         EventHelper.triggerEvent("EventStart");
