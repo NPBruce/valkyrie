@@ -75,8 +75,8 @@ public class Game : MonoBehaviour {
 
         // Working on Hero selection here (currently hard coded)
         heros = new List<Hero>();
-        heros.Add(new Hero(cd.heros["HeroSyndrael"]));
-        heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
+        heros.Add(new Hero(cd.heros["HeroSyndrael"], 1));
+        heros.Add(new Hero(cd.heros["HeroJainFairwood"], 2));
         HeroCanvas hc = FindObjectOfType<HeroCanvas>();
         hc.SetupUI();
 
@@ -105,10 +105,12 @@ public class Game : MonoBehaviour {
         public HeroData heroData;
         public bool activated = false;
         public bool defeated = false;
+        public int id = 0;
 
-        public Hero(HeroData h)
+        public Hero(HeroData h, int i)
         {
             heroData = h;
+            id = i;
         }
     }
 

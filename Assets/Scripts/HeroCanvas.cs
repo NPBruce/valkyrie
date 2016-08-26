@@ -17,15 +17,22 @@ public class HeroCanvas : MonoBehaviour {
 
     void AddHero(Game.Hero h, Game game)
     {
-        string imagePath = @"file://" + h.heroData.image;
 
         Sprite heroSprite;
 
-        WWW www = new WWW(imagePath);
-        Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-        www.LoadImageIntoTexture(newTex);
+        string heroName = "null";
+        Texture2D newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
 
-        GameObject heroImg = new GameObject("heroImg" + h.heroData.name);
+        if (h != null)
+        {
+            string imagePath = @"file://" + h.heroData.image;
+            WWW www = new WWW(imagePath);
+            newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
+            www.LoadImageIntoTexture(newTex);
+            heroName = h.heroData.name;
+        }
+
+        GameObject heroImg = new GameObject("heroImg" + heroName);
 
         Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
         Canvas canvas = canvii[0];
@@ -46,14 +53,14 @@ public class HeroCanvas : MonoBehaviour {
 
 
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
-        icons.Add(h.heroData.name, image);
+        icons.Add(heroName, image);
         heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = heroSprite;
         image.rectTransform.sizeDelta = new Vector2(80, 80);
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
-        button.onClick.AddListener(delegate { HeroDiag(h.heroData.name); });
+        button.onClick.AddListener(delegate { HeroDiag(h.id); });
     }
 
     public void UpdateStatus()
@@ -79,7 +86,7 @@ public class HeroCanvas : MonoBehaviour {
         }
     }
 
-    void HeroDiag(string name)
+    void HeroDiag(int id)
     {
         // If there are any other dialogs open just finish
         if (GameObject.FindGameObjectWithTag("dialog") != null)
@@ -88,7 +95,7 @@ public class HeroCanvas : MonoBehaviour {
         Game game = GameObject.FindObjectOfType<Game>();
         foreach (Game.Hero h in game.heros)
         {
-            if (name.Equals(h.heroData.name))
+            if (h.id == id)
                 new HeroDialog(h);
         }
     }
