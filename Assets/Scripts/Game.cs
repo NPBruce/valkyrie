@@ -51,18 +51,15 @@ public class Game : MonoBehaviour {
         {
             cd.LoadContent(pack);
         }
+    }
 
-        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+    public void StartQuest(QuestLoader.Quest q)
+    {
+        qd = new QuestData(q);
 
-        // FIXME Don't load all!!
-        foreach(KeyValuePair<string, QuestLoader.Quest> q in ql)
+        if (qd == null)
         {
-            qd = new QuestData(q.Value);
-        }
-
-        if(qd == null)
-        {
-            Debug.Log("Error: No quests found.");
+            Debug.Log("Error: Invalid Quest.");
             Application.Quit();
         }
 
@@ -72,12 +69,16 @@ public class Game : MonoBehaviour {
         heros.Add(new Hero(cd.heros["HeroJainFairwood"]));
 
         monsters = new List<Monster>();
+
+        EventHelper.triggerEvent("EventStart");
     }
 
     // Use this for initialization (things are set up, ready to start)
     void Start()
     {
-        EventHelper.triggerEvent("EventStart");
+        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+
+        new QuestSelection(ql);
     }
 
     // Update is called once per frame
