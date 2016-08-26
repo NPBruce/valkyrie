@@ -3,6 +3,9 @@ using System.Collections;
 
 public class TextButton {
 
+    public GameObject button;
+    public GameObject background;
+
     public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call)
     {
         createButton(location, size, text, call, Color.white);
@@ -15,9 +18,9 @@ public class TextButton {
 
     void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour)
     {
-        // Create a object
-        GameObject button = new GameObject("button" + text);
-        GameObject background = new GameObject("buttonBg" + text);
+        // Create objects
+        button = new GameObject("button" + text);
+        background = new GameObject("buttonBg" + text);
         // Mark it as dialog
         button.tag = "dialog";
         background.tag = "dialog";

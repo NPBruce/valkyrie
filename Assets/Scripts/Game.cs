@@ -53,6 +53,16 @@ public class Game : MonoBehaviour {
         }
     }
 
+    // Use this for initialization (things are set up, ready to start)
+    void Start()
+    {
+        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+
+        new QuitButton();
+
+        new QuestSelection(ql);
+    }
+
     public void StartQuest(QuestLoader.Quest q)
     {
         qd = new QuestData(q);
@@ -73,14 +83,6 @@ public class Game : MonoBehaviour {
         monsters = new List<Monster>();
 
         EventHelper.triggerEvent("EventStart");
-    }
-
-    // Use this for initialization (things are set up, ready to start)
-    void Start()
-    {
-        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
-
-        new QuestSelection(ql);
     }
 
     // Update is called once per frame

@@ -9,6 +9,10 @@ public class QuestSelection {
     {
         questList = ql;
 
+        // If a dialog window is open we force it closed (this shouldn't happen)
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
+
         new DialogBox(new Vector2(300, 50), new Vector2(100, 40), "Quest:");
 
         int offset = 100;
@@ -22,6 +26,9 @@ public class QuestSelection {
     public void Selection(string key)
     {
         Game game = GameObject.FindObjectOfType<Game>();
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
 
         game.StartQuest(questList[key]);
     }
