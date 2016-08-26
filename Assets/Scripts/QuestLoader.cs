@@ -15,35 +15,53 @@ public class QuestLoader {
 
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
-        string[] questDirectories = Directory.GetDirectories(questLocation);
+        List<string> questDirectories = GetQuests(questLocation);
+
+        foreach (string p in questDirectories)
+        {
+            Quest q = new Quest(p);
+            if (!q.name.Equals(""))
+            {
+                quests.Add(p, q);
+            }
+        }
+
+        return quests;
+    }
+
+    public static List<string> GetQuests(string path)
+    {
+        List<string> quests = new List<string>();
+
+        List<string> questDirectories = DirList(path);
         foreach (string p in questDirectories)
         {
             // All packs must have a quest.ini, otherwise ignore
             if (File.Exists(p + "/quest.ini"))
             {
-                Quest q = new Quest(p);
-                if (!q.name.Equals(""))
-                {
-                    quests.Add(p, q);
-                }
+                    quests.Add(p);
             }
         }
 
-        string[] questZip = Directory.GetFiles(questLocation, "*.d2q");
-        foreach (string f in questZip)
+        string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
+        foreach (string f in archives)
         {
             mkDir(Path.GetTempPath() + "/Valkyrie");
             string extractedPath = Path.GetTempPath() + "/Valkyrie/" + Path.GetFileName(f);
-            mkDir(extractedPath);
             if (Directory.Exists(extractedPath))
             {
-                // Fixme Error handling
-                Directory.Delete(extractedPath, true);
+                try
+                {
+                    Directory.Delete(extractedPath, true);
+                }
+                catch (System.Exception)
+                {
+                    Debug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
+                }
             }
             mkDir(extractedPath);
-
+            // Stipid licence issues using zip, need to look into!
         }
-
 
         return quests;
     }
@@ -61,6 +79,42 @@ public class QuestLoader {
                 Debug.Log("Error: Unable to create directory: " + p);
                 Application.Quit();
             }
+        }
+    }
+
+    public static List<string> DirList(string path)
+    {
+        return DirList(path, new List<string>());
+    }
+
+    public static List<string> DirList(string path, List<string> l)
+    {
+        List<string> list = new List<string>(l);
+
+        foreach (string s in Directory.GetDirectories(path))
+        {
+            list = DirList(s, list);
+            list.Add(s);
+        }
+
+        return list;
+    }
+
+    public static void CleanTemp()
+    {
+        // Nothing to do if no temporary files
+        if(!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+        {
+            return;
+        }
+
+        try
+        {
+            Directory.Delete(Path.GetTempPath() + "/Valkyrie", true);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Warning: Unable to remove temporary files.");
         }
     }
 

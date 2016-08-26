@@ -86,6 +86,13 @@ public class Game : MonoBehaviour {
         if (Input.GetKey("escape"))
            Application.Quit();
     }
+
+    // On quitting
+    void onApplicationQuit ()
+    {
+        // Clean up temporary files
+        QuestLoader.CleanTemp();
+    }
     
     // Class for holding current hero status
     public class Hero
