@@ -33,6 +33,7 @@ public class Game : MonoBehaviour {
     public List<Hero> heros;
     public List<Monster> monsters;
     public int round = 0;
+    public bool heroesSelected = false;
 
     // Use this for initialization (before Start)
     void Awake () {
@@ -75,14 +76,26 @@ public class Game : MonoBehaviour {
 
         // Working on Hero selection here (currently hard coded)
         heros = new List<Hero>();
-        heros.Add(new Hero(cd.heros["HeroSyndrael"], 1));
-        heros.Add(new Hero(cd.heros["HeroJainFairwood"], 2));
+
+        heros.Add(new Hero(null, 1));
+        heros.Add(new Hero(null, 2));
+        heros.Add(new Hero(cd.heros["HeroSyndrael"], 3));
+        heros.Add(new Hero(cd.heros["HeroJainFairwood"], 4));
         HeroCanvas hc = FindObjectOfType<HeroCanvas>();
         hc.SetupUI();
 
-        monsters = new List<Monster>();
+        TextButton endSelection = new TextButton(new Vector2(50, 550), new Vector2(100, 40), "Finished", delegate { EndSelection(); });
+        // Untag as dialog so this isn't cleared away
+        endSelection.background.tag = "heroselect";
+        endSelection.button.tag = "heroselect";
 
-        EventHelper.triggerEvent("EventStart");
+        monsters = new List<Monster>();
+    }
+
+    public void EndSelection()
+    {
+        HeroCanvas hc = FindObjectOfType<HeroCanvas>();
+        hc.EndSection();
     }
 
     // Update is called once per frame

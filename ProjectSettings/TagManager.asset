@@ -6,6 +6,7 @@ TagManager:
   tags:
   - dialog
   - monsters
+  - heroselect
   layers:
   - Default
   - TransparentFX
