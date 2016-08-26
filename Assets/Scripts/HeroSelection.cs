@@ -20,11 +20,20 @@ public class HeroSelection {
                 x = 200;
                 y += 120;
             }
-            HeroSelectButton(new Vector2(x, y), hd.Value, h.id);
+
+            bool disabled = false;
+            foreach (Game.Hero hIt in game.heros)
+            {
+                if ((hIt.heroData == hd.Value) && (hIt.id != h.id))
+                {
+                    disabled = true;
+                }
+            }
+            HeroSelectButton(new Vector2(x, y), hd.Value, h.id, disabled);
         }
 	}
 
-    public void HeroSelectButton(Vector2 position, HeroData hd, int id)
+    public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
     {
         Sprite heroSprite;
         Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
@@ -65,7 +74,7 @@ public class HeroSelection {
         image.rectTransform.sizeDelta = new Vector2(80, 80);
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = true;
+        button.interactable = !disabled;
         button.onClick.AddListener(delegate { SelectHero(id, name); });
     }
 

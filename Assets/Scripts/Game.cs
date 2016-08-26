@@ -98,13 +98,6 @@ public class Game : MonoBehaviour {
         hc.EndSection();
     }
 
-    // Update is called once per frame
-    void Update () {
-        // Escape will quit because we don't have a proper UI yet
-        if (Input.GetKey("escape"))
-           Application.Quit();
-    }
-
     // On quitting
     void onApplicationQuit ()
     {
