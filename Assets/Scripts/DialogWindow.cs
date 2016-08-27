@@ -15,7 +15,7 @@ public class DialogWindow {
         eventData = e;
         heroList = new List<Game.Hero>();
         Game game = GameObject.FindObjectOfType<Game>();
-        game.currentDialog = this;
+        game.eventList.Add(eventData);
 
         if (!eventData.heroListName.Equals(""))
         {
@@ -106,6 +106,10 @@ public class DialogWindow {
             h.selected = false;
         }
 
+        if (game.qd.heroSelection.ContainsKey(eventData.name))
+        {
+            game.qd.heroSelection.Remove(eventData.name);
+        }
         game.qd.heroSelection.Add(eventData.name, heroList);
 
         HeroCanvas hc= GameObject.FindObjectOfType<HeroCanvas>();
@@ -128,6 +132,6 @@ public class DialogWindow {
             Object.Destroy(go);
 
         Game game = GameObject.FindObjectOfType<Game>();
-        game.currentDialog = null;
+        game.eventList.RemoveAt(0);
     }
 }

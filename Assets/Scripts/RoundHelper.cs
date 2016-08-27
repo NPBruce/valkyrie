@@ -72,7 +72,7 @@ public class RoundHelper {
         bool herosActivated = true;
         foreach (Game.Hero h in game.heros)
         {
-            if (!h.activated)
+            if (!h.activated && h.heroData != null)
                 herosActivated = false;
         }
 

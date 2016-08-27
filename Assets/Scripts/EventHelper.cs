@@ -55,6 +55,11 @@ public class EventHelper {
                 game.qd.flags.Remove(s);
         }
 
+        // If a dialog window is open we force it closed (this shouldn't happen)
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
+
+
         // If this is a monster event then add the monster group
         if (e is QuestData.Monster)
         {
@@ -75,11 +80,11 @@ public class EventHelper {
                 MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
                 mc.UpdateList();
             }
-        }
 
-        // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+            // Display the location
+            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
+            tc.AddMonster(qm);
+        }
 
         new DialogWindow(e);
         foreach (string s in e.addComponents)

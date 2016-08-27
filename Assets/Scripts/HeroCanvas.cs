@@ -132,7 +132,7 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
-            if (game.currentDialog != null && game.currentDialog.eventData.maxHeroes != 0)
+            if (game.eventList.Count > 0 && game.eventList[0].maxHeroes != 0)
             {
                 target.selected = !target.selected;
                 UpdateStatus();

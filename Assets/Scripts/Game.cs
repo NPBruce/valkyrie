@@ -11,11 +11,10 @@ packaging
 Quest documentation
 example quest
 review: errors/comments
-Bing
-color from name
 EventHeroPlaceFall text bug
+Event Stack
 
-tokens/doors in the same space
+color from name
 specific place monsters
 unique monsters
 extra event types
@@ -34,10 +33,13 @@ public class Game : MonoBehaviour {
     public List<Monster> monsters;
     public int round = 0;
     public bool heroesSelected = false;
-    public DialogWindow currentDialog;
+    public List<QuestData.Event> eventList;
 
     // Use this for initialization (before Start)
     void Awake () {
+
+        eventList = new List<QuestData.Event>();
+
         // This will load content, need to work out where this should be stored, and how it should be packed
         if (Application.isEditor)
         {
