@@ -17,12 +17,12 @@ public class EventHelper {
             {
                 QuestData.Event e = (QuestData.Event)c;
                 if (e.trigger.Equals(type))
-                    triggerEvent(e.name);
+                    QueueEvent(e.name);
             }
         }
     }
 
-    public static void triggerEvent(string name)
+    public static void QueueEvent(string name)
     {
         Game game = GameObject.FindObjectOfType<Game>();
         // Check if the event doesn't exists - quest fault
@@ -33,6 +33,27 @@ public class EventHelper {
         }
 
         QuestData.Event e = (QuestData.Event)game.qd.components[name];
+
+        if (game.eventList.Count == 0)
+        {
+            game.eventList.Push(e);
+            TriggerEvent();
+        }
+        else
+        {
+            QuestData.Event ce = game.eventList.Pop();
+            game.eventList.Push(e);
+            game.eventList.Push(ce);
+        }
+    }
+
+    public static void TriggerEvent()
+    {
+
+        Game game = GameObject.FindObjectOfType<Game>();
+        if (game.eventList.Count == 0) return;
+
+        QuestData.Event e = game.eventList.Pop();
 
         // If the flags are not set do not trigger event
         foreach (string s in e.flags)

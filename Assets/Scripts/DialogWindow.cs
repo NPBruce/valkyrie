@@ -15,7 +15,7 @@ public class DialogWindow {
         eventData = e;
         heroList = new List<Game.Hero>();
         Game game = GameObject.FindObjectOfType<Game>();
-        game.eventList.Add(eventData);
+        game.eventList.Push(eventData);
 
         if (!eventData.heroListName.Equals(""))
         {
@@ -69,6 +69,7 @@ public class DialogWindow {
     public void onCancel()
     {
         destroy();
+        EventHelper.TriggerEvent();
     }
 
     public void onFail()
@@ -80,8 +81,9 @@ public class DialogWindow {
         foreach (string e in eventData.failEvent)
         {
             if (EventHelper.IsEnabled(e))
-                EventHelper.triggerEvent(e);
+                EventHelper.QueueEvent(e);
         }
+        EventHelper.TriggerEvent();
     }
 
     public void onConfirm()
@@ -121,8 +123,9 @@ public class DialogWindow {
         foreach (string e in eventData.nextEvent)
         {
             if (EventHelper.IsEnabled(e))
-               EventHelper.triggerEvent(e);
+               EventHelper.QueueEvent(e);
         }
+        EventHelper.TriggerEvent();
     }
 
     public void destroy()
@@ -132,6 +135,6 @@ public class DialogWindow {
             Object.Destroy(go);
 
         Game game = GameObject.FindObjectOfType<Game>();
-        game.eventList.RemoveAt(0);
+        game.eventList.Pop();
     }
 }

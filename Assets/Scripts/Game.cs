@@ -33,12 +33,12 @@ public class Game : MonoBehaviour {
     public List<Monster> monsters;
     public int round = 0;
     public bool heroesSelected = false;
-    public List<QuestData.Event> eventList;
+    public Stack<QuestData.Event> eventList;
 
     // Use this for initialization (before Start)
     void Awake () {
 
-        eventList = new List<QuestData.Event>();
+        eventList = new Stack<QuestData.Event>();
 
         // This will load content, need to work out where this should be stored, and how it should be packed
         if (Application.isEditor)
