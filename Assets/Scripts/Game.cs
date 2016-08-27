@@ -13,6 +13,7 @@ example quest
 review: errors/comments
 Bing
 color from name
+EventHeroPlaceFall text bug
 
 tokens/doors in the same space
 specific place monsters

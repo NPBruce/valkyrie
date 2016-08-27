@@ -84,11 +84,25 @@ public class EventHelper {
         new DialogWindow(e);
         foreach (string s in e.addComponents)
         {
-            game.qd.components[s].setVisible(true);
+            if (game.qd.components.ContainsKey(s))
+            {
+                game.qd.components[s].setVisible(true);
+            }
+            else
+            {
+                Debug.Log("Warning: Attempting to show missing item: " + s);
+            }
         }
         foreach (string s in e.removeComponents)
         {
-            game.qd.components[s].setVisible(false);
+            if (game.qd.components.ContainsKey(s))
+            {
+                game.qd.components[s].setVisible(false);
+            }
+            else
+            {
+                Debug.Log("Warning: Attempting to hide missing item: " + s);
+            }
         }
 
         if (e.locationSpecified)
