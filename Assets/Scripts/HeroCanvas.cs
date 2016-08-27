@@ -86,6 +86,10 @@ public class HeroCanvas : MonoBehaviour {
             {
                 image.color = Color.clear;
             }
+            if (h.selected)
+            {
+                image.color = Color.green;
+            }
         }
     }
 
@@ -114,25 +118,36 @@ public class HeroCanvas : MonoBehaviour {
 
     void HeroDiag(int id)
     {
-        // If there are any other dialogs open just finish
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
-            return;
-
         Game game = GameObject.FindObjectOfType<Game>();
+        Game.Hero target = null;
+
         foreach (Game.Hero h in game.heros)
         {
             if (h.id == id)
             {
-                if (game.heroesSelected && h.heroData != null)
-                {
-                    new HeroDialog(h);
-                }
-                if (!game.heroesSelected)
-                {
-                    icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
-                    new HeroSelection(h);
-                }
+                target = h;
             }
+        }
+
+        // If there are any other dialogs
+        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        {
+            if (game.currentDialog != null && game.currentDialog.eventData.maxHeroes != 0)
+            {
+                target.selected = !target.selected;
+                UpdateStatus();
+            }
+            return;
+        }
+
+        if (game.heroesSelected && target.heroData != null)
+        {
+            new HeroDialog(target);
+        }
+        if (!game.heroesSelected)
+        {
+            icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
+            new HeroSelection(target);
         }
     }
 

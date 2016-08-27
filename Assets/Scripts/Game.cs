@@ -6,22 +6,21 @@ using System.Collections.Generic;
 Dump list of things to to:
 
 UI positons/scale
-hero section
-more event triggers
 mouse pan
 packaging
-text background
-quit button (remove esc)
-
 Hero selection on events
 Hero names / highlights in events
+Quest documentation
+example quest
+review: errors/comments
+
 tokens/doors in the same space
 specific place monsters
 unique monsters
 extra event types
 threat
 content selection
-
+symbols in text
     */
 
 
@@ -34,6 +33,7 @@ public class Game : MonoBehaviour {
     public List<Monster> monsters;
     public int round = 0;
     public bool heroesSelected = false;
+    public DialogWindow currentDialog;
 
     // Use this for initialization (before Start)
     void Awake () {
@@ -112,6 +112,7 @@ public class Game : MonoBehaviour {
         public bool activated = false;
         public bool defeated = false;
         public int id = 0;
+        public bool selected;
 
         public Hero(HeroData h, int i)
         {

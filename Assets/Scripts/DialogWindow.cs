@@ -8,10 +8,32 @@ using UnityEngine.Events;
 public class DialogWindow {
     // The even that raises this dialog
     public QuestData.Event eventData;
+    public List<Game.Hero> heroList;
 
     public DialogWindow(QuestData.Event e)
     {
         eventData = e;
+        heroList = new List<Game.Hero>();
+        Game game = GameObject.FindObjectOfType<Game>();
+        game.currentDialog = this;
+
+        if (!eventData.heroListName.Equals(""))
+        {
+            if (!game.qd.heroSelection.ContainsKey(eventData.heroListName))
+            {
+                Debug.Log("Warning: Hero selection in event: " + eventData.name + " from event " + eventData.heroListName + " with no data.");
+            }
+            else
+            {
+                foreach (Game.Hero h in game.qd.heroSelection[eventData.heroListName])
+                {
+                    h.selected = true;
+                }
+                HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
+                hc.UpdateStatus();
+            }
+        }
+
         CreateWindow();
     }
 
@@ -62,6 +84,34 @@ public class DialogWindow {
 
     public void onConfirm()
     {
+        Game game = GameObject.FindObjectOfType<Game>();
+
+        heroList = new List<Game.Hero>();
+
+        foreach (Game.Hero h in game.heros)
+        {
+            if (h.selected)
+            {
+                heroList.Add(h);
+            }
+        }
+
+        if (eventData.heroListName.Equals(""))
+        {
+            if (eventData.maxHeroes < heroList.Count) return;
+            if (eventData.minHeroes > heroList.Count) return;
+        }
+
+        foreach (Game.Hero h in game.heros)
+        {
+            h.selected = false;
+        }
+
+        game.qd.heroSelection.Add(eventData.name, heroList);
+
+        HeroCanvas hc= GameObject.FindObjectOfType<HeroCanvas>();
+        hc.UpdateStatus();
+
         // Destroy this dialog to close
         destroy();
         // Trigger next event
@@ -76,5 +126,8 @@ public class DialogWindow {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
+
+        Game game = GameObject.FindObjectOfType<Game>();
+        game.currentDialog = null;
     }
 }

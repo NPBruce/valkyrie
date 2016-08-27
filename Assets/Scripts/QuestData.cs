@@ -12,6 +12,9 @@ public class QuestData
     // A list of flags that have been set during the quest
     public List<string> flags;
 
+    // A dictionary of heros that have been selected in events
+    public Dictionary<string, List<Game.Hero>> heroSelection;
+
     // List of ini files containing quest data
     List<string> files;
     Game game;
@@ -31,8 +34,10 @@ public class QuestData
     {
         Debug.Log("Loading quest from: \"" + path + "\"");
         game = GameObject.FindObjectOfType<Game>();
+
         components = new Dictionary<string, QuestComponent>();
         flags = new List<string>();
+        heroSelection = new Dictionary<string, List<Game.Hero>>();
 
         // Read the main quest file
         IniData d = IniRead.ReadFromIni(path);
@@ -404,7 +409,10 @@ public class QuestData
         public string trigger = "";
         public string nextEvent = "";
         public string failEvent = "";
+        public string heroListName = "";
         public int gold = 0;
+        public int minHeroes = 0;
+        public int maxHeroes = 0;
         public string[] addComponents;
         public string[] removeComponents;
         public string[] flags;
@@ -432,10 +440,28 @@ public class QuestData
                 failEvent = data["failevent"];
             }
 
+            // Heros from another event can be hilighted
+            if (data.ContainsKey("hero"))
+            {
+                heroListName = data["hero"];
+            }
+
             // alter party gold (currently unused)
             if (data.ContainsKey("gold"))
             {
                 gold = int.Parse(data["gold"]);
+            }
+            
+            // minimum heros required to be selected for event
+            if (data.ContainsKey("minhero"))
+            {
+                minHeroes = int.Parse(data["minhero"]);
+            }
+
+            // maximum heros selectable for event (0 disables)
+            if (data.ContainsKey("maxhero"))
+            {
+                maxHeroes = int.Parse(data["maxhero"]);
             }
 
             // Display hidden components (space separated list)
