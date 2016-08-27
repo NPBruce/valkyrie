@@ -54,7 +54,7 @@ public class TextButton {
         background.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Image uiImage = background.AddComponent<UnityEngine.UI.Image>();
-        uiImage.color = new Color(0, 0, 0, (float)0.7);
+        uiImage.color = new Color(0, 0, 0, (float)0.9);
 
         UnityEngine.UI.Button uiButton = background.AddComponent<UnityEngine.UI.Button>();
         uiButton.interactable = true;

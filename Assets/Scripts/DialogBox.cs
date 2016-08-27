@@ -5,12 +5,12 @@ public class DialogBox {
 
     public DialogBox(Vector2 location, Vector2 size, string text)
     {
-        createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.7));
+        createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
     public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour)
     {
-        createDialog(location, size, text, fgColour, new Color(0, 0, 0, (float)0.7));
+        createDialog(location, size, text, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
     public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)

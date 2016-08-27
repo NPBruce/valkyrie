@@ -12,7 +12,7 @@ public class RoundHelper {
         bool herosActivated = true;
         foreach (Game.Hero h in game.heros)
         {
-            if (!h.activated)
+            if (!h.activated && h.heroData != null)
                 herosActivated = false;
         }
 
@@ -147,6 +147,29 @@ public class RoundHelper {
         Game game = GameObject.FindObjectOfType<Game>();
 
         EventHelper.eventTriggerType("EndRound");
+
+        CheckNewRound();
+    }
+
+    public static void CheckNewRound()
+    {
+
+        Game game = GameObject.FindObjectOfType<Game>();
+
+        if (game.eventList.Count != 0)
+            return;
+
+        // Check if all heros have finished
+        foreach (Game.Hero h in game.heros)
+        {
+            if (!h.activated && h.heroData != null) return;
+        }
+
+        // Check if all heros have finished
+        foreach (Game.Monster m in game.monsters)
+        {
+            if (!m.activated) return;
+        }
 
         foreach (Game.Hero h in game.heros)
         {

@@ -44,18 +44,18 @@ public class DialogWindow {
         // Do we have a cancel button?
         if (eventData.cancelable)
         {
-            new TextButton(new Vector2(400, 170), new Vector2(50, 20), "Cancel", delegate { onCancel(); });
+            new TextButton(new Vector2(400, 170), new Vector2(80, 20), "Cancel", delegate { onCancel(); });
         }
         // If there isn't a fail event we have a confirm button
         if(eventData.failEvent.Length == 0)
         {
-            new TextButton(new Vector2(600, 170), new Vector2(50, 20), "Confirm", delegate { onConfirm(); });
+            new TextButton(new Vector2(600, 170), new Vector2(80, 20), "Confirm", delegate { onConfirm(); });
         }
         // Otherwise we have pass and fail buttons
         else
         {
-            new TextButton(new Vector2(500, 170), new Vector2(50, 20), "Fail", delegate { onFail(); }, Color.red);
-            new TextButton(new Vector2(600, 170), new Vector2(50, 20), "Pass", delegate { onPass(); }, Color.green);
+            new TextButton(new Vector2(500, 170), new Vector2(80, 20), "Fail", delegate { onFail(); }, Color.red);
+            new TextButton(new Vector2(600, 170), new Vector2(80, 20), "Pass", delegate { onPass(); }, Color.green);
         }
     }
 

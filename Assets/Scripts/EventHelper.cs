@@ -51,6 +51,9 @@ public class EventHelper {
     {
 
         Game game = GameObject.FindObjectOfType<Game>();
+
+        RoundHelper.CheckNewRound();
+
         if (game.eventList.Count == 0) return;
 
         QuestData.Event e = game.eventList.Pop();
