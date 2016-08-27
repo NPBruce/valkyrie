@@ -8,11 +8,11 @@ Dump list of things to to:
 UI positons/scale
 mouse pan
 packaging
-Hero selection on events
-Hero names / highlights in events
 Quest documentation
 example quest
 review: errors/comments
+Bing
+color from name
 
 tokens/doors in the same space
 specific place monsters

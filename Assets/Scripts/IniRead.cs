@@ -40,7 +40,7 @@ public static class IniRead{
                 {
                     if (!output.Add(entryName, entryData))
                     {
-                        Debug.Log("Warning: duplicate section in " + path + " will be ignored.");
+                        Debug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
                     }
                 }
                 // create new data for new section
@@ -66,7 +66,7 @@ public static class IniRead{
                     string key = l.Substring(0, equalsLocation).Trim();
                     if(entryData.ContainsKey(key))
                     {
-                        Debug.Log("Warning: duplicate data in " + path + " will be ignored.");
+                        Debug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
                     }
                     else
                     {
@@ -86,7 +86,7 @@ public static class IniRead{
         {
             if (!output.Add(entryName, entryData))
             {
-                Debug.Log("Warning: duplicate section in " + path + " will be ignored.");
+                Debug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
             }
         }
 

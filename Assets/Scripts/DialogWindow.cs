@@ -96,11 +96,8 @@ public class DialogWindow {
             }
         }
 
-        if (eventData.heroListName.Equals(""))
-        {
-            if (eventData.maxHeroes < heroList.Count) return;
-            if (eventData.minHeroes > heroList.Count) return;
-        }
+        if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return;
+        if (eventData.minHeroes > heroList.Count) return;
 
         foreach (Game.Hero h in game.heros)
         {
