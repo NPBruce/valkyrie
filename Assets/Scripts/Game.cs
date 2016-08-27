@@ -12,9 +12,8 @@ Quest documentation
 review: errors/comments
 defeat trigger
 activations for zombies/fm
-camera pan limit
 fix token set visible like door
-u/d pan also zooms
+Review object finds
 
 CleanUp quest at end
 color from name
@@ -38,6 +37,11 @@ public class Game : MonoBehaviour {
     public int round = 0;
     public bool heroesSelected = false;
     public Stack<QuestData.Event> eventList;
+
+    public static Game Get()
+    {
+        return FindObjectOfType<Game>();
+    }
 
     // Use this for initialization (before Start)
     void Awake () {

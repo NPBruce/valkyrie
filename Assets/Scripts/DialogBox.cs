@@ -35,15 +35,7 @@ public class DialogBox {
         background.tag = "dialog";
 
         // Find the UI canvas
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
+        Canvas canvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         background.transform.parent = canvas.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();

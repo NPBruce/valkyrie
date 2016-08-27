@@ -19,13 +19,6 @@ public class RoundHelper {
         // activate a monster group (returns if all activated, does nothing if none left)
         bool monstersActivated = activateMonster();
 
-        // If all heros have finished activate all other monster groups
-        if (herosActivated)
-        {
-            while (!monstersActivated)
-                monstersActivated = activateMonster();
-        }
-
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
         {

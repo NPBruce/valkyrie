@@ -323,6 +323,7 @@ public class QuestData
     {
         new public static string type = "Token";
         public GameObject gameObject;
+        public string spriteName;
 
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
@@ -330,18 +331,33 @@ public class QuestData
             cancelable = true;
 
             // default token type is search, this is the image asset name
-            string typeName = "search-token";
+            spriteName = "search-token";
             if (data.ContainsKey("type"))
             {
-                typeName = data["type"].ToLower();
+                spriteName = data["type"].ToLower();
+            }
+        }
+
+
+        public override void SetVisible(bool vis)
+        {
+            if (!vis)
+            {
+                GameObject go = GameObject.Find("Object" + name);
+                if (go != null)
+                {
+                    Object.Destroy(go);
+                }
+                return;
             }
 
+
             Sprite tileSprite;
-            Texture2D newTex = Resources.Load("sprites/tokens/" + typeName) as Texture2D;
+            Texture2D newTex = Resources.Load("sprites/tokens/" + spriteName) as Texture2D;
             // Check if we can find the token image
             if (newTex == null)
             {
-                Debug.Log("Warning: Quest component " + name + " is using missing token type: " + typeName);
+                Debug.Log("Warning: Quest component " + name + " is using missing token type: " + spriteName);
                 // Use search token instead
                 newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
                 // If we still can't load it then fatal error
@@ -353,7 +369,7 @@ public class QuestData
             }
 
             // Create object
-            gameObject = new GameObject(name);
+            gameObject = new GameObject("Object" + name);
 
             // Find the token canvas to add to
             Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
@@ -367,10 +383,14 @@ public class QuestData
             }
             gameObject.transform.parent = board.transform;
 
+
+
+
+
             // Create the image
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = new Color(1, 1, 1, 0);
+            image.color = Color.white;
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
             // Move to square (105 units per square)
