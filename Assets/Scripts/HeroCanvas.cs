@@ -169,6 +169,12 @@ public class HeroCanvas : MonoBehaviour {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
+        /*for(int i = 0; i < game.heros.Count; i++)
+        {
+            game.heros[i].id = 0;
+        }*/
+
+        UpdateImages();
         UpdateStatus();
 
         game.heroesSelected = true;

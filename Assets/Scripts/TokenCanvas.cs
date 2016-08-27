@@ -51,7 +51,7 @@ public class TokenCanvas : MonoBehaviour {
         public void startEvent()
         {
             // If we aren't visible ignore the click
-            if (!e.getVisible())
+            if (!e.GetVisible())
                 return;
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag("dialog") != null)

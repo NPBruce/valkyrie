@@ -86,7 +86,7 @@ public class EventHelper {
         {
             if (game.qd.components.ContainsKey(s))
             {
-                game.qd.components[s].setVisible(true);
+                game.qd.components[s].SetVisible(true);
             }
             else
             {
@@ -97,7 +97,7 @@ public class EventHelper {
         {
             if (game.qd.components.ContainsKey(s))
             {
-                game.qd.components[s].setVisible(false);
+                game.qd.components[s].SetVisible(false);
             }
             else
             {

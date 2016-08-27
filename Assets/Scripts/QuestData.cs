@@ -225,6 +225,7 @@ public class QuestData
     {
         new public static string type = "Door";
         public int rotation = 0;
+        public float[] colour = { 1f, 1f, 1f };
         public GameObject gameObject;
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
@@ -237,8 +238,6 @@ public class QuestData
                 rotation = int.Parse(data["rotation"]);
             }
 
-            // Default doors are white, but can be any colour
-            float[] colour = { 255, 255, 255 };
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
@@ -258,6 +257,19 @@ public class QuestData
             {
                 text = "You can open this door with an \"Open Door\" action.";
             }
+        }
+
+        public override void SetVisible(bool vis)
+        {
+            if(!vis)
+            {
+                GameObject go = GameObject.Find("Object" + name);
+                if (go != null)
+                {
+                    Object.Destroy(go);
+                }
+                return;
+            }
 
             Sprite tileSprite;
             Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
@@ -269,7 +281,7 @@ public class QuestData
             }
 
             // Create object
-            gameObject = new GameObject(name);
+            gameObject = new GameObject("Object" + name);
 
             // Find the token canvas to add to
             Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
@@ -287,7 +299,7 @@ public class QuestData
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
-            image.color = new Color(colour[0] / 255, colour[1] / 255, colour[2] / 255, 0);
+            image.color = new Color(colour[0] / 255, colour[1] / 255, colour[2] / 255, 1);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Rotate as required
@@ -566,7 +578,7 @@ public class QuestData
         }
 
         // items are invisible by default, can toggle visibility
-        public void setVisible(bool vis)
+        virtual public void SetVisible(bool vis)
         {
             if (image == null)
                 return;
@@ -577,7 +589,7 @@ public class QuestData
         }
 
         // return visibility of image
-        public bool getVisible()
+        virtual public bool GetVisible()
         {
             if (image == null)
                 return false;
