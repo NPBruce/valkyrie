@@ -10,16 +10,18 @@ mouse pan
 packaging
 Quest documentation
 review: errors/comments
-EventHeroPlaceFall text bug
-Event end
-Bing event
 defeat trigger
+activations for zombies/fm
+camera pan limit
+fix token set visible like door
 
+CleanUp quest at end
 color from name
 specific place monsters
 unique monsters
 extra event types
 threat
+morale
 content selection
 symbols in text
     */

@@ -93,7 +93,7 @@ public class TokenCanvas : MonoBehaviour {
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         // Set door colour
-        image.color = Color.cyan;
+        image.color = Color.red;
         image.sprite = tileSprite;
         image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
         // Move to square (105 units per square)
@@ -131,7 +131,7 @@ public class TokenCanvas : MonoBehaviour {
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         // Set door colour
-        image.color = Color.red;
+        image.color = Color.cyan;
         image.sprite = tileSprite;
         image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
         // Move to square (105 units per square)

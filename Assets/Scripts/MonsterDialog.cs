@@ -24,11 +24,13 @@ public class MonsterDialog
     // Todo
     public void info()
     {
+
     }
 
     // Todo
     public void activate()
     {
+
     }
 
     // Defeated monsters
@@ -38,6 +40,7 @@ public class MonsterDialog
         Game game = GameObject.FindObjectOfType<Game>();
         game.monsters.Remove(monster);
         updateDisplay();
+        EventHelper.eventTriggerType("Defeated" + monster.monsterData.sectionName);
     }
 
     // Cancel cleans up

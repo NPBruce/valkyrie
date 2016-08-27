@@ -12,8 +12,13 @@ public class CameraController : MonoBehaviour {
     // Max zoom out
     static int minZoom = -2500;
 
-	// FixedUpdate is not tied to frame rate
-	void FixedUpdate () {
+    public int minPanX = -5000;
+    public int minPanY = -5000;
+    public int maxPanX = 5000;
+    public int maxPanY = 5000;
+
+    // FixedUpdate is not tied to frame rate
+    void FixedUpdate () {
         // Check if the scroll wheel has moved
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
@@ -46,5 +51,13 @@ public class CameraController : MonoBehaviour {
         }
 
         // Mouse edge of screen scrolling and/or click-drag should go here
+
+        // Limit camera movement
+        Vector3 pos = gameObject.transform.position;
+        if (pos.x < minPanX) pos.x = minPanX;
+        if (pos.y < minPanY) pos.y = minPanY;
+        if (pos.x > maxPanX) pos.x = maxPanX;
+        if (pos.y > maxPanY) pos.y = maxPanY;
+        gameObject.transform.position = pos;
     }
 }

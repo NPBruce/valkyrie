@@ -132,6 +132,11 @@ public class DialogWindow {
             }
         }
         EventHelper.TriggerEvent();
+
+        if (eventData.name.Equals("EventEnd"))
+        {
+            Application.Quit();
+        }
     }
 
     public void destroy()

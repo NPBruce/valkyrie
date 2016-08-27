@@ -95,6 +95,10 @@ public class QuestData
             Application.Quit();
         }
 
+        if (name.Equals("Quest"))
+        {
+            new Quest(content);
+        }
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
@@ -603,6 +607,31 @@ public class QuestData
             if (image.color.a == 0)
                 return false;
             return true;
+        }
+    }
+
+    public class Quest
+    {
+        public Quest(Dictionary<string, string> data)
+        {
+            CameraController cc = GameObject.FindObjectOfType<CameraController>();
+
+            if (data.ContainsKey("maxpanx"))
+            {
+                cc.maxPanX = int.Parse(data["maxpanx"]) * 105;
+            }
+            if (data.ContainsKey("maxpany"))
+            {
+                cc.maxPanY = int.Parse(data["maxpany"]) * 105;
+            }
+            if (data.ContainsKey("minpanx"))
+            {
+                cc.minPanX = int.Parse(data["minpanx"]) * 105;
+            }
+            if (data.ContainsKey("minpany"))
+            {
+                cc.minPanY = int.Parse(data["minpany"]) * 105;
+            }
         }
     }
 }
