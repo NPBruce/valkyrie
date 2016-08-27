@@ -97,4 +97,27 @@ public class EventHelper {
             cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, -800);
         }
     }
+
+
+    public static bool IsEnabled(string name)
+    {
+        Game game = GameObject.FindObjectOfType<Game>();
+        // Check if the event doesn't exists - quest fault
+        if (!game.qd.components.ContainsKey(name))
+        {
+            Debug.Log("Warning: Missing event called: " + name);
+            return false;
+        }
+
+        QuestData.Event e = (QuestData.Event)game.qd.components[name];
+
+        // If the flags are not set do not trigger event
+        foreach (string s in e.flags)
+        {
+            if (!game.qd.flags.Contains(s))
+                return false;
+        }
+
+        return true;
+    }
 }

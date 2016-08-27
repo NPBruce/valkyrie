@@ -47,7 +47,7 @@ public class DialogWindow {
             new TextButton(new Vector2(400, 170), new Vector2(50, 20), "Cancel", delegate { onCancel(); });
         }
         // If there isn't a fail event we have a confirm button
-        if(eventData.failEvent.Equals(""))
+        if(eventData.failEvent.Length == 0)
         {
             new TextButton(new Vector2(600, 170), new Vector2(50, 20), "Confirm", delegate { onConfirm(); });
         }
@@ -76,9 +76,11 @@ public class DialogWindow {
         // Destroy this dialog to close
         destroy();
         // Trigger failure event
-        if (!eventData.failEvent.Equals(""))
+        // Trigger next event
+        foreach (string e in eventData.failEvent)
         {
-            EventHelper.triggerEvent(eventData.failEvent);
+            if (EventHelper.IsEnabled(e))
+                EventHelper.triggerEvent(e);
         }
     }
 
@@ -112,9 +114,10 @@ public class DialogWindow {
         // Destroy this dialog to close
         destroy();
         // Trigger next event
-        if (!eventData.nextEvent.Equals(""))
+        foreach (string e in eventData.nextEvent)
         {
-            EventHelper.triggerEvent(eventData.nextEvent);
+            if (EventHelper.IsEnabled(e))
+               EventHelper.triggerEvent(e);
         }
     }
 

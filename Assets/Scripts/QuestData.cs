@@ -407,8 +407,8 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string trigger = "";
-        public string nextEvent = "";
-        public string failEvent = "";
+        public string[] nextEvent;
+        public string[] failEvent;
         public string heroListName = "";
         public int gold = 0;
         public int minHeroes = 0;
@@ -428,16 +428,24 @@ public class QuestData
                 text = data["text"];
             }
 
-            // Event to trigger on confirm or success
+            // Events to trigger on confirm or success
             if (data.ContainsKey("event"))
             {
-                nextEvent = data["event"];
+                nextEvent = data["event"].Split(' ');
+            }
+            else
+            {
+                nextEvent = new string[0];
             }
 
-            // Event to trigger on fail, this property will provide pass/fail buttons
+            // Events to trigger on confirm or success
             if (data.ContainsKey("failevent"))
             {
-                failEvent = data["failevent"];
+                failEvent = data["failevent"].Split(' ');
+            }
+            else
+            {
+                failEvent = new string[0];
             }
 
             // Heros from another event can be hilighted
