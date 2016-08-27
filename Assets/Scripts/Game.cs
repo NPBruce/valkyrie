@@ -12,6 +12,8 @@ Quest documentation
 review: errors/comments
 EventHeroPlaceFall text bug
 Event end
+Bing event
+defeat trigger
 
 color from name
 specific place monsters

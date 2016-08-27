@@ -431,6 +431,7 @@ public class QuestData
         public string[] setFlags;
         public string[] clearFlags;
         public bool cancelable = false;
+        public bool highlight = false;
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
@@ -438,6 +439,12 @@ public class QuestData
             if (data.ContainsKey("text"))
             {
                 text = data["text"];
+            }
+
+            // Should the target location by highlighted?
+            if (data.ContainsKey("highlight"))
+            {
+                highlight = bool.Parse(data["highlight"]);
             }
 
             // Events to trigger on confirm or success

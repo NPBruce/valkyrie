@@ -144,10 +144,7 @@ public class RoundHelper {
 
     public static void EndRound()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
-
         EventHelper.eventTriggerType("EndRound");
-
         CheckNewRound();
     }
 

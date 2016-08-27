@@ -93,10 +93,48 @@ public class TokenCanvas : MonoBehaviour {
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         // Set door colour
-        image.color = Color.red;
+        image.color = Color.cyan;
         image.sprite = tileSprite;
         image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
         // Move to square (105 units per square)
         gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0) * 105, Space.World);
+    }
+
+    public void AddHighlight(QuestData.Event e)
+    {
+        Sprite tileSprite;
+        Texture2D newTex = Resources.Load("sprites/tokens/search-token-special") as Texture2D;
+        // Check load worked
+        if (newTex == null)
+        {
+            Debug.Log("Error: Cannot load monster image");
+            Application.Quit();
+        }
+
+        // Create object
+        GameObject gameObject = new GameObject("MonsterSpawn");
+        gameObject.tag = "dialog";
+
+        // Find the token canvas to add to
+        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
+        Canvas board = canvii[0];
+        foreach (Canvas c in canvii)
+        {
+            if (c.name.Equals("TokenCanvas"))
+            {
+                board = c;
+            }
+        }
+        gameObject.transform.parent = board.transform;
+
+        // Create the image
+        UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
+        tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        // Set door colour
+        image.color = Color.red;
+        image.sprite = tileSprite;
+        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        // Move to square (105 units per square)
+        gameObject.transform.Translate(new Vector3(e.location.x, e.location.y, 0) * 105, Space.World);
     }
 }

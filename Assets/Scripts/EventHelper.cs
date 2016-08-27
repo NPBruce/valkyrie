@@ -110,6 +110,12 @@ public class EventHelper {
             tc.AddMonster(qm);
         }
 
+        if (e.highlight)
+        {
+            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
+            tc.AddHighlight(e);
+        }
+
         new DialogWindow(e);
         foreach (string s in e.addComponents)
         {

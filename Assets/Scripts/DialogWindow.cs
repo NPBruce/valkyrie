@@ -81,7 +81,10 @@ public class DialogWindow {
         foreach (string e in eventData.failEvent)
         {
             if (EventHelper.IsEnabled(e))
+            {
                 EventHelper.QueueEvent(e);
+                return;
+            }
         }
         EventHelper.TriggerEvent();
     }
@@ -123,7 +126,10 @@ public class DialogWindow {
         foreach (string e in eventData.nextEvent)
         {
             if (EventHelper.IsEnabled(e))
-               EventHelper.QueueEvent(e);
+            {
+                EventHelper.QueueEvent(e);
+                return;
+            }
         }
         EventHelper.TriggerEvent();
     }
