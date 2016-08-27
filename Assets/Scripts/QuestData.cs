@@ -620,17 +620,36 @@ public class QuestData
             {
                 cc.maxPanX = int.Parse(data["maxpanx"]) * 105;
             }
+            else
+            {
+                cc.maxPanX = 20 * 105;
+            }
+
             if (data.ContainsKey("maxpany"))
             {
                 cc.maxPanY = int.Parse(data["maxpany"]) * 105;
             }
+            else
+            {
+                cc.maxPanY = 20 * 105;
+            }
+
             if (data.ContainsKey("minpanx"))
             {
                 cc.minPanX = int.Parse(data["minpanx"]) * 105;
             }
+            else
+            {
+                cc.minPanX = -20 * 105;
+            }
+
             if (data.ContainsKey("minpany"))
             {
                 cc.minPanY = int.Parse(data["minpany"]) * 105;
+            }
+            else
+            {
+                cc.minPanY = -20 * 105;
             }
         }
     }

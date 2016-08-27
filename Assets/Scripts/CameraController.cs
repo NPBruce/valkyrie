@@ -35,19 +35,19 @@ public class CameraController : MonoBehaviour {
         // Check for arrow keys and move camera around
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            gameObject.transform.Translate(new Vector3(0, keyScrollRate, 0));
+            gameObject.transform.Translate(new Vector3(0, keyScrollRate, 0), Space.World);
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            gameObject.transform.Translate(new Vector3(0, -keyScrollRate, 0));
+            gameObject.transform.Translate(new Vector3(0, -keyScrollRate, 0), Space.World);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            gameObject.transform.Translate(new Vector3(-keyScrollRate, 0, 0));
+            gameObject.transform.Translate(new Vector3(-keyScrollRate, 0, 0), Space.World);
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            gameObject.transform.Translate(new Vector3(keyScrollRate, 0, 0));
+            gameObject.transform.Translate(new Vector3(keyScrollRate, 0, 0), Space.World);
         }
 
         // Mouse edge of screen scrolling and/or click-drag should go here

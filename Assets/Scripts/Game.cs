@@ -14,6 +14,7 @@ defeat trigger
 activations for zombies/fm
 camera pan limit
 fix token set visible like door
+u/d pan also zooms
 
 CleanUp quest at end
 color from name
