@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class RoundHelper {
 
     // A hero has finished their turn
-    public static void heroActivated()
+    public static void HeroActivated()
     {
         Game game = Game.Get();
         // Check if all heros have finished
@@ -17,7 +17,7 @@ public class RoundHelper {
         }
 
         // activate a monster group (returns if all activated, does nothing if none left)
-        bool monstersActivated = activateMonster();
+        bool monstersActivated = ActivateMonster();
 
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
@@ -36,7 +36,7 @@ public class RoundHelper {
     }
 
 
-    public static void monsterActivated()
+    public static void MonsterActivated()
     {
         Game game = Game.Get();
 
@@ -71,7 +71,7 @@ public class RoundHelper {
         // If there no heros left activate another monster
         if(herosActivated)
         {
-            if (activateMonster())
+            if (ActivateMonster())
             {
                 // Evenyone has finished, move to next round
                 EndRound();
@@ -80,7 +80,7 @@ public class RoundHelper {
     }
 
     // Activate a monster (if any left) and return true if all monsters activated
-    public static bool activateMonster()
+    public static bool ActivateMonster()
     {
         Game game = Game.Get();
 
@@ -99,13 +99,19 @@ public class RoundHelper {
         // Find a random unactivated monster
         Game.Monster toActivate = game.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
+        return ActivateMonster(toActivate);
+    }
+
+    public static bool ActivateMonster(Game.Monster m)
+    {
         List<ActivationData> adList = new List<ActivationData>();
-        
+        Game game = Game.Get();
+
         // Find all possible activations
         foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
         {
             // Is this activation for this monster type? (replace "Monster" with "MonsterActivation", ignore specific variety)
-            if (kv.Key.IndexOf("MonsterActivation" + toActivate.monsterData.sectionName.Substring("Monster".Length)) == 0)
+            if (kv.Key.IndexOf("MonsterActivation" + m.monsterData.sectionName.Substring("Monster".Length)) == 0)
             {
                 adList.Add(kv.Value);
             }
@@ -114,21 +120,23 @@ public class RoundHelper {
         // Check for no activations
         if(adList.Count == 0)
         {
-            Debug.Log("Error: Unable to find any activation data for monster type: " + toActivate.monsterData.name);
+            Debug.Log("Error: Unable to find any activation data for monster type: " + m.monsterData.name);
             Application.Quit();
         }
 
-
-        // Pick a random activation
-        ActivationData activation = adList[Random.Range(0, adList.Count)];
-        toActivate.currentActivation = activation;
+        if (m.currentActivation == null)
+        {
+            // Pick a random activation
+            ActivationData activation = adList[Random.Range(0, adList.Count)];
+            m.currentActivation = activation;
+        }
 
         // Pick Minion or master
-        toActivate.minionStarted = Random.Range(0, 2) == 0;
-        toActivate.masterStarted = !toActivate.minionStarted;
+        m.minionStarted = Random.Range(0, 2) == 0;
+        m.masterStarted = !m.minionStarted;
 
         // Create activation window
-        new ActivateDialog(toActivate, toActivate.masterStarted);
+        new ActivateDialog(m, m.masterStarted);
 
         // More groups unactivated
         return false;
@@ -169,6 +177,7 @@ public class RoundHelper {
             m.activated = false;
             m.minionStarted = false;
             m.masterStarted = false;
+            m.currentActivation = null;
         }
         game.round++;
 

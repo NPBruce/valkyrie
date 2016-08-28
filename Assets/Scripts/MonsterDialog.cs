@@ -30,7 +30,7 @@ public class MonsterDialog
     // Todo
     public void activate()
     {
-
+        RoundHelper.ActivateMonster(monster);
     }
 
     // Defeated monsters

@@ -12,10 +12,8 @@ Quest documentation
 review: errors/comments
 defeat trigger
 activations for zombies/fm
-zip files
-licence stuff
+licence info
 Monster info/force
-Quest selection bug
 
 CleanUp quest at end
 color from name

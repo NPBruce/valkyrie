@@ -52,7 +52,7 @@ public class ActivateDialog {
         // Destroy this dialog to close
         destroy();
 
-        RoundHelper.monsterActivated();
+        RoundHelper.MonsterActivated();
     }
 
     public void destroy()
