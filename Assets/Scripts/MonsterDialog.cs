@@ -15,10 +15,10 @@ public class MonsterDialog
     public void CreateWindow()
     {
         // Not done yet
-        new TextButton(new Vector2(800, 100), new Vector2(160, 40), "Infomation", delegate { info(); });
-        new TextButton(new Vector2(800, 130), new Vector2(160, 40), "Force Activate", delegate { activate(); });
-        new TextButton(new Vector2(800, 160), new Vector2(160, 40), "Defeated", delegate { defeated(); });
-        new TextButton(new Vector2(800, 190), new Vector2(160, 40), "Cancel", delegate { onCancel(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), 2), new Vector2(10, 2), "Infomation", delegate { info(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), 4.5f), new Vector2(10, 2), "Force Activate", delegate { activate(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), 7), new Vector2(10, 2), "Defeated", delegate { defeated(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), 9.5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
     // Todo

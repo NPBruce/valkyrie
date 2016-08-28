@@ -42,6 +42,7 @@ public class Game : MonoBehaviour {
     public TokenBoard tokenBoard;
     public HeroCanvas heroCanvas;
     public MonsterCanvas monsterCanvas;
+    public UIScaler uiScaler;
 
     public static Game Get()
     {
@@ -58,6 +59,8 @@ public class Game : MonoBehaviour {
         tokenBoard = GameObject.FindObjectOfType<TokenBoard>();
         heroCanvas = GameObject.FindObjectOfType<HeroCanvas>();
         monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
+
+        uiScaler = new UIScaler(uICanvas);
 
         // This will load content, need to work out where this should be stored, and how it should be packed
         if (Application.isEditor)
@@ -101,7 +104,7 @@ public class Game : MonoBehaviour {
         }
         heroCanvas.SetupUI();
 
-        TextButton endSelection = new TextButton(new Vector2(50, 550), new Vector2(200, 40), "Finished", delegate { EndSelection(); });
+        TextButton endSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(12, 2), "Finished", delegate { EndSelection(); }, Color.green);
         // Untag as dialog so this isn't cleared away
         endSelection.background.tag = "heroselect";
         endSelection.button.tag = "heroselect";

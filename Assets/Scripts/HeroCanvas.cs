@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class HeroCanvas : MonoBehaviour {
 
-    public int offset = 0;
+    public float offset = 0;
     public Dictionary<int, UnityEngine.UI.Image> icons;
 
     public void SetupUI() {
@@ -37,17 +37,17 @@ public class HeroCanvas : MonoBehaviour {
         heroImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = heroImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30 + offset, 50);
-        offset += 100;
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 30, 50);
-        heroImg.AddComponent<CanvasRenderer>();
 
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
+        offset += 3.5f;
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
+        heroImg.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
         icons.Add(h.id, image);
         heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(80, 80);
+        image.rectTransform.sizeDelta = new Vector2(3 * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;

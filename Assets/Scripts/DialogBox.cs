@@ -3,6 +3,9 @@ using System.Collections;
 
 public class DialogBox {
 
+    public GameObject textObj;
+    public GameObject background;
+
     public DialogBox(Vector2 location, Vector2 size, string text)
     {
         createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
@@ -28,8 +31,8 @@ public class DialogBox {
         }
         // Create an object
 
-        GameObject textObj = new GameObject("text" + objName);
-        GameObject background = new GameObject("buttonBg" + objName);
+        textObj = new GameObject("text" + objName);
+        background = new GameObject("buttonBg" + objName);
         // Mark it as dialog
         textObj.tag = "dialog";
         background.tag = "dialog";
@@ -38,8 +41,8 @@ public class DialogBox {
         background.transform.parent = game.uICanvas.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x, size.x);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
         textObj.transform.parent = background.transform;
 
@@ -61,6 +64,6 @@ public class DialogBox {
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        uiText.fontSize = 32;
+        uiText.fontSize = UIScaler.GetSmallFont();
     }
 }

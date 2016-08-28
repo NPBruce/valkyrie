@@ -17,24 +17,24 @@ public class HeroDialog{
         if (hero.activated)
         {
             // Grey button with no action
-            new TextButton(new Vector2(100, 100), new Vector2(160, 40), "Activated", delegate { noAction(); }, Color.gray);
+            new TextButton(new Vector2(4, 2), new Vector2(10, 2), "Activated", delegate { noAction(); }, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(100, 100), new Vector2(160, 40), "Activated", delegate { activated(); });
+            new TextButton(new Vector2(4, 2), new Vector2(10, 2), "Activated", delegate { activated(); });
         }
 
         // Is this hero defeated?
         if (hero.defeated)
         {
-            new TextButton(new Vector2(100, 130), new Vector2(160, 40), "Restored", delegate { restored(); });
+            new TextButton(new Vector2(4, 4.5f), new Vector2(10, 2), "Restored", delegate { restored(); });
         }
         else
         {
-            new TextButton(new Vector2(100, 130), new Vector2(160, 40), "Defeated", delegate { defeated(); });
+            new TextButton(new Vector2(4, 4.5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
         }
 
-        new TextButton(new Vector2(100, 160), new Vector2(160, 40), "Cancel", delegate { onCancel(); });
+        new TextButton(new Vector2(4, 7), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
     // Null function for activated hero

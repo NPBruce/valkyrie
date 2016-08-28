@@ -13,14 +13,18 @@ public class QuestSelection {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        new DialogBox(new Vector2(300, 50), new Vector2(100, 40), "Quest:");
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select Quest");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
-        int offset = 100;
+        int offset = 5;
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
             string key = q.Key;
-            new TextButton(new Vector2(300, offset), new Vector2(500, 40), q.Value.name, delegate { Selection(key); }, Color.white, offset);
-            offset += 50;
+            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1), q.Value.name, delegate { Selection(key); }, Color.white, offset);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+            offset += 2;
         }
     }
 

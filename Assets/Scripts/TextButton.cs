@@ -29,8 +29,8 @@ public class TextButton {
         background.transform.parent = game.uICanvas.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x, size.x);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
         button.transform.parent = background.transform;
 
@@ -56,6 +56,6 @@ public class TextButton {
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        uiText.fontSize = 32;
+        uiText.fontSize = UIScaler.GetMediumFont();
     }
 }

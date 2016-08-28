@@ -22,7 +22,7 @@ public class ActivateDialog {
 
         // ability box
         string abiltiyText = monster.monsterData.name + ":\n\n" + monster.currentActivation.ability.Replace("\\n", "\n");
-        new DialogBox(new Vector2(300, 30), new Vector2(500, 120), abiltiyText);
+        new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 5), abiltiyText);
 
         // Activation box
         string activationText = "";
@@ -35,15 +35,15 @@ public class ActivateDialog {
         {
             activationText = "Minion:\n\n" + monster.currentActivation.minionActions.Replace("\\n", "\n");
         }
-        new DialogBox(new Vector2(300, 180), new Vector2(500, 120), activationText);
+        new DialogBox(new Vector2(10, 6), new Vector2(UIScaler.GetWidthUnits() - 20, 5), activationText);
 
         if (master)
         {
-            new TextButton(new Vector2(500, 330), new Vector2(300, 40), "Masters Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, 11.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); });
         }
         else
         {
-            new TextButton(new Vector2(500, 330), new Vector2(300, 40), "Minions Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, 11.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
         }
     }
 
