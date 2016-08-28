@@ -78,8 +78,8 @@ public class HeroDialog{
 
     public void updateDisplay()
     {
-        HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
-        hc.UpdateStatus();
+        Game game = Game.Get();
+        game.heroCanvas.UpdateStatus();
     }
 
     public void destroy()

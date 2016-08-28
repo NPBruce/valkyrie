@@ -33,7 +33,7 @@ public class QuestData
     public void LoadQuestData(string path)
     {
         Debug.Log("Loading quest from: \"" + path + "\"");
-        game = GameObject.FindObjectOfType<Game>();
+        game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
         flags = new List<string>();
@@ -189,17 +189,7 @@ public class QuestData
 
             GameObject tile = new GameObject(name);
 
-            // Locate board canvas to add tile
-            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-            Canvas board = canvii[0];
-            foreach(Canvas c in canvii)
-            {
-                if(c.name.Equals("BoardCanvas"))
-                {
-                    board = c;
-                }
-            }
-            tile.transform.parent = board.transform;
+            tile.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
             image = tile.AddComponent<UnityEngine.UI.Image>();
@@ -287,17 +277,8 @@ public class QuestData
             // Create object
             gameObject = new GameObject("Object" + name);
 
-            // Find the token canvas to add to
-            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-            Canvas board = canvii[0];
-            foreach (Canvas c in canvii)
-            {
-                if (c.name.Equals("TokenCanvas"))
-                {
-                    board = c;
-                }
-            }
-            gameObject.transform.parent = board.transform;
+            Game game = Game.Get();
+            gameObject.transform.parent = game.tokenCanvas.transform;
 
             // Create the image
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -312,9 +293,7 @@ public class QuestData
             gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
             
-            // Find the token canvas script object and add this as a button
-            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
-            tc.add(this);
+            game.tokenBoard.add(this);
         }
     }
 
@@ -371,21 +350,8 @@ public class QuestData
             // Create object
             gameObject = new GameObject("Object" + name);
 
-            // Find the token canvas to add to
-            Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-            Canvas board = canvii[0];
-            foreach (Canvas c in canvii)
-            {
-                if (c.name.Equals("TokenCanvas"))
-                {
-                    board = c;
-                }
-            }
-            gameObject.transform.parent = board.transform;
-
-
-
-
+            Game game = Game.Get();
+            gameObject.transform.parent = game.tokenCanvas.transform;
 
             // Create the image
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -396,9 +362,7 @@ public class QuestData
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
 
-            // Find the token canvas script object and add this as a button
-            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
-            tc.add(this);
+            game.tokenBoard.add(this);
         }
     }
 

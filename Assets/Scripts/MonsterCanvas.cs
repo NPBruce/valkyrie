@@ -19,7 +19,7 @@ public class MonsterCanvas : MonoBehaviour
         offset = 0;
         icons = new Dictionary<string, UnityEngine.UI.Image>();
 
-        Game game = FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Monster m in game.monsters)
             AddMonster(m, game);
 
@@ -39,16 +39,7 @@ public class MonsterCanvas : MonoBehaviour
         GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
         mImg.tag = "monsters";
 
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-        mImg.transform.parent = canvas.transform;
+        mImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = mImg.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30 + offset, 50);
@@ -70,7 +61,7 @@ public class MonsterCanvas : MonoBehaviour
 
     public void UpdateStatus()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Monster m in game.monsters)
         {
             UnityEngine.UI.Image image = icons[m.monsterData.name];
@@ -91,7 +82,7 @@ public class MonsterCanvas : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("dialog") != null)
             return;
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Monster m in game.monsters)
         {
             if (name.Equals(m.monsterData.name))

@@ -105,12 +105,12 @@ public class EventHelper {
             }
 
             // Display the location
-            game.tokenCanvas.AddMonster(qm);
+            game.tokenBoard.AddMonster(qm);
         }
 
         if (e.highlight)
         {
-            game.tokenCanvas.AddHighlight(e);
+            game.tokenBoard.AddHighlight(e);
         }
 
         new DialogWindow(e);

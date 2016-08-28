@@ -86,7 +86,7 @@ public class HeroCanvas : MonoBehaviour {
 
     public void UpdateImages()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Hero h in game.heros)
         {
             UnityEngine.UI.Image image = icons[h.id];
@@ -109,7 +109,7 @@ public class HeroCanvas : MonoBehaviour {
 
     void HeroDiag(int id)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         Game.Hero target = null;
 
         foreach (Game.Hero h in game.heros)
@@ -149,7 +149,7 @@ public class HeroCanvas : MonoBehaviour {
         if (GameObject.FindGameObjectWithTag("dialog") != null)
             return;
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Hero h in game.heros)
         {
             if (h.heroData != null) heroCount++;

@@ -39,7 +39,8 @@ public class Game : MonoBehaviour {
     public Stack<QuestData.Event> eventList;
     public Canvas uICanvas;
     public Canvas boardCanvas;
-    public TokenCanvas tokenCanvas;
+    public Canvas tokenCanvas;
+    public TokenBoard tokenBoard;
     public HeroCanvas heroCanvas;
     public MonsterCanvas monsterCanvas;
 
@@ -54,7 +55,8 @@ public class Game : MonoBehaviour {
         eventList = new Stack<QuestData.Event>();
         uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         boardCanvas = GameObject.Find("BoardCanvas").GetComponent<Canvas>();
-        tokenCanvas = GameObject.FindObjectOfType<TokenCanvas>();
+        tokenCanvas = GameObject.Find("TokenCanvas").GetComponent<Canvas>();
+        tokenBoard = GameObject.FindObjectOfType<TokenBoard>();
         heroCanvas = GameObject.FindObjectOfType<HeroCanvas>();
         monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
 

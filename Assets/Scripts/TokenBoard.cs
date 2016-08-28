@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 // Class for managing token and door operation
 // One object is created and attached to the token canvas
-public class TokenCanvas : MonoBehaviour {
+public class TokenBoard : MonoBehaviour {
 
     public List<TokenControl> tc;
 	// Use this for initialization
@@ -77,17 +77,8 @@ public class TokenCanvas : MonoBehaviour {
         GameObject gameObject = new GameObject("MonsterSpawn");
         gameObject.tag = "dialog";
 
-        // Find the token canvas to add to
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas board = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("TokenCanvas"))
-            {
-                board = c;
-            }
-        }
-        gameObject.transform.parent = board.transform;
+        Game game = Game.Get();
+        gameObject.transform.parent = game.tokenCanvas.transform;
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -125,7 +116,8 @@ public class TokenCanvas : MonoBehaviour {
                 board = c;
             }
         }
-        gameObject.transform.parent = board.transform;
+        Game game = Game.Get();
+        gameObject.transform.parent = game.tokenCanvas.transform;
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();

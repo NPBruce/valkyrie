@@ -37,7 +37,7 @@ public class MonsterDialog
     public void defeated()
     {
         destroy();
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         game.monsters.Remove(monster);
         updateDisplay();
         EventHelper.eventTriggerType("Defeated" + monster.monsterData.sectionName);
@@ -51,8 +51,8 @@ public class MonsterDialog
 
     public void updateDisplay()
     {
-        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-        mc.UpdateList();
+        Game game = Game.Get();
+        game.monsterCanvas.UpdateList();
     }
 
     public void destroy()

@@ -6,7 +6,7 @@ public class HeroSelection {
 
 	public HeroSelection(Game.Hero h)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         int x = 200;
         int y = 100;
@@ -51,16 +51,8 @@ public class HeroSelection {
         GameObject heroImg = new GameObject("heroImg" + name);
         heroImg.tag = "dialog";
 
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-        heroImg.transform.parent = canvas.transform;
+        Game game = Game.Get();
+        heroImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = heroImg.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, position.y, 50);
@@ -83,7 +75,7 @@ public class HeroSelection {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         HeroData hData = null;
         foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
         {
@@ -100,7 +92,6 @@ public class HeroSelection {
             }
         }
 
-        HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
-        hc.UpdateImages();
+        game.heroCanvas.UpdateImages();
     }
 }
