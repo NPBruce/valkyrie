@@ -5,13 +5,12 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-UI positons/scale
 mouse pan
-
 packaging
 Quest documentation
 review: errors/comments
 activations for zombies/fm
+info for zombies/fm
 licence info
 
 Monster info

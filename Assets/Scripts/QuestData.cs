@@ -188,7 +188,6 @@ public class QuestData
             }
 
             GameObject tile = new GameObject(name);
-
             tile.transform.parent = game.boardCanvas.transform;
 
             // Add image to object

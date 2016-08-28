@@ -17,6 +17,15 @@ public class CameraController : MonoBehaviour {
     public int maxPanX = 5000;
     public int maxPanY = 5000;
 
+    public Vector3 mouseDownCamPosition;
+    public Vector2 mouseDownMousePosition;
+
+    void Awake()
+    {
+        mouseDownCamPosition = gameObject.transform.position;
+        mouseDownMousePosition = Vector2.zero;
+    }
+
     // FixedUpdate is not tied to frame rate
     void FixedUpdate () {
         // Check if the scroll wheel has moved
@@ -59,5 +68,20 @@ public class CameraController : MonoBehaviour {
         if (pos.x > maxPanX) pos.x = maxPanX;
         if (pos.y > maxPanY) pos.y = maxPanY;
         gameObject.transform.position = pos;
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            mouseDownCamPosition = gameObject.transform.position;
+            mouseDownMousePosition = Input.mousePosition;
+        }
+        if (Input.GetMouseButton(0))
+        {
+            // Scaling??
+            gameObject.transform.position = new Vector3(mouseDownCamPosition.x + mouseDownMousePosition.x - Input.mousePosition.x,
+                mouseDownCamPosition.y + mouseDownMousePosition.y - Input.mousePosition.y, mouseDownCamPosition.z);
+        }
     }
 }
