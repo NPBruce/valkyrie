@@ -40,7 +40,7 @@ public class MonsterDialog
         Game game = Game.Get();
         game.monsters.Remove(monster);
         updateDisplay();
-        EventHelper.eventTriggerType("Defeated" + monster.monsterData.sectionName);
+        EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
     }
 
     // Cancel cleans up

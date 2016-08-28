@@ -144,7 +144,7 @@ public class RoundHelper {
 
     public static void EndRound()
     {
-        EventHelper.eventTriggerType("EndRound");
+        EventHelper.EventTriggerType("EndRound");
         CheckNewRound();
     }
 

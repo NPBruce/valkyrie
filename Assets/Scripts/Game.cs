@@ -10,11 +10,10 @@ mouse pan
 packaging
 Quest documentation
 review: errors/comments
-defeat trigger
 activations for zombies/fm
 licence info
-Monster info/force
 
+Monster info
 CleanUp quest at end
 color from name
 specific place monsters

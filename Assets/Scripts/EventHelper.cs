@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class EventHelper {
 
 
-    public static void eventTriggerType(string type)
+    public static void EventTriggerType(string type)
     {
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> k in game.qd.components)
