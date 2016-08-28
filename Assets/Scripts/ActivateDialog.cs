@@ -36,16 +36,15 @@ public class ActivateDialog {
         // Create header
         if (master)
         {
-            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master");
+            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
             activationText = monster.currentActivation.masterActions.Replace("\\n", "\n");
-            db.AddBorder(Color.red);
         }
         else
         {
             db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
             activationText = monster.currentActivation.minionActions.Replace("\\n", "\n");
-            db.AddBorder();
         }
+        db.AddBorder();
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         // Create ability text box

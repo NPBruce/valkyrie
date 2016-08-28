@@ -5,12 +5,11 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-test unzip in build
-packaging
 Quest documentation
 review: errors/comments
 licence info
 
+build script
 Monster info
 CleanUp quest at end
 color from name
@@ -26,6 +25,7 @@ symbols in text
 // General controller for the game
 public class Game : MonoBehaviour {
 
+    public static string version = "0.1.0";
     public ContentData cd;
     public QuestData qd;
     public List<Hero> heros;
