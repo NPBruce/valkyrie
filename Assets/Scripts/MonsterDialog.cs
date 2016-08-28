@@ -24,7 +24,8 @@ public class MonsterDialog
     // Todo
     public void info()
     {
-
+        destroy();
+        new InfoDialog(monster.monsterData);
     }
 
     // Todo

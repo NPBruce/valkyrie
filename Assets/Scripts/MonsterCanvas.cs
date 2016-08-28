@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MonsterCanvas : MonoBehaviour
 {
 
-    public int offset = 0;
+    public float offset = 0;
     public Dictionary<string, UnityEngine.UI.Image> icons;
 
     // Call to update list of monsters
@@ -42,17 +42,16 @@ public class MonsterCanvas : MonoBehaviour
         mImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = mImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30 + offset, 50);
-        offset += 100;
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 30, 50);
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
+        offset += 3.5f;
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
         mImg.AddComponent<CanvasRenderer>();
-
 
         UnityEngine.UI.Image image = mImg.AddComponent<UnityEngine.UI.Image>();
         icons.Add(m.monsterData.name, image);
         mSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = mSprite;
-        image.rectTransform.sizeDelta = new Vector2(80, 80);
+        image.rectTransform.sizeDelta = new Vector2(3 * UIScaler.GetPixelsPerUnit(), 3 * UIScaler.GetPixelsPerUnit());
 
         UnityEngine.UI.Button button = mImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
