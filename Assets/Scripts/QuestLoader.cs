@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Ionic.Zip;
 
 public class QuestLoader {
 
@@ -24,6 +25,8 @@ public class QuestLoader {
         }
         questDirectories.AddRange(GetQuests(dataLocation));
 
+        questDirectories.AddRange(GetQuests(Path.GetTempPath() + "/Valkyrie"));
+
         foreach (string p in questDirectories)
         {
             Quest q = new Quest(p);
@@ -39,6 +42,11 @@ public class QuestLoader {
     public static List<string> GetQuests(string path)
     {
         List<string> quests = new List<string>();
+
+        if (!Directory.Exists(path))
+        {
+            return quests;
+        }
 
         List<string> questDirectories = DirList(path);
         foreach (string p in questDirectories)
@@ -67,7 +75,16 @@ public class QuestLoader {
                 }
             }
             mkDir(extractedPath);
-            // Stipid licence issues using zip, need to look into!
+
+            try
+            {
+                ZipFile zip = ZipFile.Read(f);
+                zip.ExtractAll(extractedPath);
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("Warning: Unable to read file: " + extractedPath);
+            }
         }
 
         return quests;

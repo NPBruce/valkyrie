@@ -12,8 +12,8 @@ Quest documentation
 review: errors/comments
 defeat trigger
 activations for zombies/fm
-fix token set visible like door
-Review object finds
+zip files
+licence stuff
 
 CleanUp quest at end
 color from name
@@ -25,7 +25,6 @@ morale
 content selection
 symbols in text
     */
-
 
 // General controller for the game
 public class Game : MonoBehaviour {
