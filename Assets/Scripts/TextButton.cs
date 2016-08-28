@@ -8,19 +8,19 @@ public class TextButton {
 
     public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call)
     {
-        createButton(location, size, text, call, Color.white);
+        createButton(location, size, text, call, Color.white, 0);
     }
 
-    public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour)
+    public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour, int id = 0)
     {
-        createButton(location, size, text, call, colour);
+        createButton(location, size, text, call, colour, id);
     }
 
-    void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour)
+    void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour, int id)
     {
         // Create objects
-        button = new GameObject("button" + text);
-        background = new GameObject("buttonBg" + text);
+        button = new GameObject("button" + text + id);
+        background = new GameObject("buttonBg" + text + id);
         // Mark it as dialog
         button.tag = "dialog";
         background.tag = "dialog";

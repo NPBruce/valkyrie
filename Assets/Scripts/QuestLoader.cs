@@ -25,7 +25,7 @@ public class QuestLoader {
         }
         questDirectories.AddRange(GetQuests(dataLocation));
 
-        questDirectories.AddRange(GetQuests(Path.GetTempPath() + "/Valkyrie"));
+        questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
 
         foreach (string p in questDirectories)
         {
@@ -62,7 +62,7 @@ public class QuestLoader {
         foreach (string f in archives)
         {
             mkDir(Path.GetTempPath() + "/Valkyrie");
-            string extractedPath = Path.GetTempPath() + "/Valkyrie/" + Path.GetFileName(f);
+            string extractedPath = Path.GetTempPath() + "Valkyrie/" + Path.GetFileName(f);
             if (Directory.Exists(extractedPath))
             {
                 try

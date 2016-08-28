@@ -18,7 +18,8 @@ public class QuestSelection {
         int offset = 100;
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
-            new TextButton(new Vector2(300, offset), new Vector2(100, 40), q.Value.name, delegate { Selection(q.Key); });
+            string key = q.Key;
+            new TextButton(new Vector2(300, offset), new Vector2(500, 40), q.Value.name, delegate { Selection(key); }, Color.white, offset);
             offset += 50;
         }
     }
