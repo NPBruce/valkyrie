@@ -37,6 +37,11 @@ public class Game : MonoBehaviour {
     public int round = 0;
     public bool heroesSelected = false;
     public Stack<QuestData.Event> eventList;
+    public Canvas uICanvas;
+    public Canvas boardCanvas;
+    public TokenCanvas tokenCanvas;
+    public HeroCanvas heroCanvas;
+    public MonsterCanvas monsterCanvas;
 
     public static Game Get()
     {
@@ -44,9 +49,14 @@ public class Game : MonoBehaviour {
     }
 
     // Use this for initialization (before Start)
-    void Awake () {
+    void Start () {
 
         eventList = new Stack<QuestData.Event>();
+        uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
+        boardCanvas = GameObject.Find("BoardCanvas").GetComponent<Canvas>();
+        tokenCanvas = GameObject.FindObjectOfType<TokenCanvas>();
+        heroCanvas = GameObject.FindObjectOfType<HeroCanvas>();
+        monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
 
         // This will load content, need to work out where this should be stored, and how it should be packed
         if (Application.isEditor)
@@ -63,11 +73,7 @@ public class Game : MonoBehaviour {
         {
             cd.LoadContent(pack);
         }
-    }
 
-    // Use this for initialization (things are set up, ready to start)
-    void Start()
-    {
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         new QuitButton();
@@ -92,8 +98,7 @@ public class Game : MonoBehaviour {
         {
             heros.Add(new Hero(null, i));
         }
-        HeroCanvas hc = FindObjectOfType<HeroCanvas>();
-        hc.SetupUI();
+        heroCanvas.SetupUI();
 
         TextButton endSelection = new TextButton(new Vector2(50, 550), new Vector2(100, 40), "Finished", delegate { EndSelection(); });
         // Untag as dialog so this isn't cleared away
@@ -105,8 +110,7 @@ public class Game : MonoBehaviour {
 
     public void EndSelection()
     {
-        HeroCanvas hc = FindObjectOfType<HeroCanvas>();
-        hc.EndSection();
+        heroCanvas.EndSection();
     }
 
     // On quitting

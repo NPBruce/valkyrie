@@ -14,7 +14,7 @@ public class DialogWindow {
     {
         eventData = e;
         heroList = new List<Game.Hero>();
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         game.eventList.Push(eventData);
 
         if (!eventData.heroListName.Equals(""))
@@ -29,8 +29,7 @@ public class DialogWindow {
                 {
                     h.selected = true;
                 }
-                HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
-                hc.UpdateStatus();
+                game.heroCanvas.UpdateStatus();
             }
         }
 
@@ -91,7 +90,7 @@ public class DialogWindow {
 
     public void onConfirm()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         heroList = new List<Game.Hero>();
 
@@ -117,8 +116,7 @@ public class DialogWindow {
         }
         game.qd.heroSelection.Add(eventData.name, heroList);
 
-        HeroCanvas hc= GameObject.FindObjectOfType<HeroCanvas>();
-        hc.UpdateStatus();
+        game.heroCanvas.UpdateStatus();
 
         // Destroy this dialog to close
         destroy();
@@ -145,7 +143,7 @@ public class DialogWindow {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         game.eventList.Pop();
     }
 }

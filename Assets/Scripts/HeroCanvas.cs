@@ -10,7 +10,7 @@ public class HeroCanvas : MonoBehaviour {
     public void SetupUI() {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
 
-        Game game = FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (Game.Hero h in game.heros)
             AddHero(h, game);
     }
@@ -34,16 +34,7 @@ public class HeroCanvas : MonoBehaviour {
 
         GameObject heroImg = new GameObject("heroImg" + heroName);
 
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-        heroImg.transform.parent = canvas.transform;
+        heroImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = heroImg.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 30 + offset, 50);
@@ -65,7 +56,7 @@ public class HeroCanvas : MonoBehaviour {
 
     public void UpdateStatus()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach(Game.Hero h in game.heros)
         {
             UnityEngine.UI.Image image = icons[h.id];

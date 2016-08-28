@@ -7,7 +7,7 @@ public class EventHelper {
 
     public static void eventTriggerType(string type)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> k in game.qd.components)
         {
             QuestData.QuestComponent c = k.Value;
@@ -24,7 +24,7 @@ public class EventHelper {
 
     public static void QueueEvent(string name)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         // Check if the event doesn't exists - quest fault
         if (!game.qd.components.ContainsKey(name))
         {
@@ -50,7 +50,7 @@ public class EventHelper {
     public static void TriggerEvent()
     {
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         RoundHelper.CheckNewRound();
 
@@ -101,19 +101,16 @@ public class EventHelper {
             if (newMonster)
             {
                 game.monsters.Add(new Game.Monster(qm.mData));
-                MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-                mc.UpdateList();
+                game.monsterCanvas.UpdateList();
             }
 
             // Display the location
-            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
-            tc.AddMonster(qm);
+            game.tokenCanvas.AddMonster(qm);
         }
 
         if (e.highlight)
         {
-            TokenCanvas tc = GameObject.FindObjectOfType<TokenCanvas>();
-            tc.AddHighlight(e);
+            game.tokenCanvas.AddHighlight(e);
         }
 
         new DialogWindow(e);
@@ -150,7 +147,7 @@ public class EventHelper {
 
     public static bool IsEnabled(string name)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         // Check if the event doesn't exists - quest fault
         if (!game.qd.components.ContainsKey(name))
         {

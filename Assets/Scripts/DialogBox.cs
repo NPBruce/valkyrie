@@ -34,9 +34,8 @@ public class DialogBox {
         textObj.tag = "dialog";
         background.tag = "dialog";
 
-        // Find the UI canvas
-        Canvas canvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
-        background.transform.parent = canvas.transform;
+        Game game = Game.Get();
+        background.transform.parent = game.uICanvas.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
