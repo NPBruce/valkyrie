@@ -106,16 +106,6 @@ public class TokenBoard : MonoBehaviour {
         GameObject gameObject = new GameObject("MonsterSpawn");
         gameObject.tag = "dialog";
 
-        // Find the token canvas to add to
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas board = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("TokenCanvas"))
-            {
-                board = c;
-            }
-        }
         Game game = Game.Get();
         gameObject.transform.parent = game.tokenCanvas.transform;
 

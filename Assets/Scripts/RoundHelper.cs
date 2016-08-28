@@ -7,7 +7,7 @@ public class RoundHelper {
     // A hero has finished their turn
     public static void heroActivated()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
         // Check if all heros have finished
         bool herosActivated = true;
         foreach (Game.Hero h in game.heros)
@@ -38,7 +38,7 @@ public class RoundHelper {
 
     public static void monsterActivated()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         // Check for any partial monster activations
         foreach (Game.Monster m in game.monsters)
@@ -58,8 +58,7 @@ public class RoundHelper {
         }
 
         // Full activation, update display
-        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-        mc.UpdateStatus();
+        game.monsterCanvas.UpdateStatus();
 
         // Check if all heros have finished
         bool herosActivated = true;
@@ -83,7 +82,7 @@ public class RoundHelper {
     // Activate a monster (if any left) and return true if all monsters activated
     public static bool activateMonster()
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         List<int> notActivated = new List<int>();
         // Get the index of all monsters that haven't activated
@@ -144,7 +143,7 @@ public class RoundHelper {
     public static void CheckNewRound()
     {
 
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         if (game.eventList.Count != 0)
             return;
@@ -174,9 +173,7 @@ public class RoundHelper {
         game.round++;
 
         // Update monster and hero display
-        MonsterCanvas mc = GameObject.FindObjectOfType<MonsterCanvas>();
-        mc.UpdateStatus();
-        HeroCanvas hc = GameObject.FindObjectOfType<HeroCanvas>();
-        hc.UpdateStatus();
+        game.monsterCanvas.UpdateStatus();
+        game.heroCanvas.UpdateStatus();
     }
 }

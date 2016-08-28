@@ -25,7 +25,7 @@ public class QuestSelection {
 
     public void Selection(string key)
     {
-        Game game = GameObject.FindObjectOfType<Game>();
+        Game game = Game.Get();
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);

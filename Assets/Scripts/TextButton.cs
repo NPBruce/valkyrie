@@ -25,17 +25,8 @@ public class TextButton {
         button.tag = "dialog";
         background.tag = "dialog";
 
-        // Find the UI canvas
-        Canvas[] canvii = GameObject.FindObjectsOfType<Canvas>();
-        Canvas canvas = canvii[0];
-        foreach (Canvas c in canvii)
-        {
-            if (c.name.Equals("UICanvas"))
-            {
-                canvas = c;
-            }
-        }
-        background.transform.parent = canvas.transform;
+        Game game = Game.Get();
+        background.transform.parent = game.uICanvas.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y, size.y);
