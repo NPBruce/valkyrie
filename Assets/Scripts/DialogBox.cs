@@ -69,7 +69,12 @@ public class DialogBox {
 
     public void AddBorder()
     {
+        AddBorder(textObj.GetComponent<UnityEngine.UI.Text>().color);
+    }
+
+    public void AddBorder(Color c)
+    {
         UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
-        new RectangleBorder(background.transform, textObj.GetComponent<UnityEngine.UI.Text>().color, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
     }
 }

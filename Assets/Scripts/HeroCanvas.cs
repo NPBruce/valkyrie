@@ -161,10 +161,17 @@ public class HeroCanvas : MonoBehaviour {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
-        /*for(int i = 0; i < game.heros.Count; i++)
+        for(int i = 0; i < game.heros.Count - 1; i++)
         {
-            game.heros[i].id = 0;
-        }*/
+            int j = i;
+
+            while(game.heros[i].heroData == null && j < game.heros.Count)
+            {
+                game.heros[i].heroData = game.heros[j].heroData;
+                game.heros[j].heroData = null;
+                j++;
+            }
+        }
 
         UpdateImages();
         UpdateStatus();

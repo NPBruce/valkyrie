@@ -20,7 +20,7 @@ public class QuestSelection {
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
             string key = q.Key;
-            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), q.Value.name, delegate { Selection(key); }, Color.white, offset);
+            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.white, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);

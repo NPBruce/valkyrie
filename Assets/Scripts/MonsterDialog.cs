@@ -14,11 +14,22 @@ public class MonsterDialog
 
     public void CreateWindow()
     {
-        // Not done yet
-        new TextButton(new Vector2(UIScaler.GetRight(-14), 2), new Vector2(10, 2), "Infomation", delegate { info(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-14), 4.5f), new Vector2(10, 2), "Force Activate", delegate { activate(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-14), 7), new Vector2(10, 2), "Defeated", delegate { defeated(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-14), 9.5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
+        Game game = Game.Get();
+        int index = 0;
+        for (int i = 0; i < game.monsters.Count; i++)
+        {
+            if (game.monsters[i] == monster)
+            {
+                index = i;
+            }
+        }
+
+        float offset = (index + 0.1f) * (MonsterCanvas.monsterSize + 0.5f);
+
+        new TextButton(new Vector2(UIScaler.GetRight(-14), offset), new Vector2(10, 2), "Infomation", delegate { info(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), offset + 2.5f), new Vector2(10, 2), "Force Activate", delegate { activate(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), offset + 5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-14), offset + 7.5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
     // Todo

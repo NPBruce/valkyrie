@@ -13,28 +13,29 @@ public class HeroDialog{
 
     public void CreateWindow()
     {
+        float offset = (hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f);
         // Has this hero been activated?
         if (hero.activated)
         {
             // Grey button with no action
-            new TextButton(new Vector2(4, 2), new Vector2(10, 2), "Activated", delegate { noAction(); }, Color.gray);
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "Activated", delegate { noAction(); }, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(4, 2), new Vector2(10, 2), "Activated", delegate { activated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "Activated", delegate { activated(); });
         }
 
         // Is this hero defeated?
         if (hero.defeated)
         {
-            new TextButton(new Vector2(4, 4.5f), new Vector2(10, 2), "Restored", delegate { restored(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Restored", delegate { restored(); });
         }
         else
         {
-            new TextButton(new Vector2(4, 4.5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
         }
 
-        new TextButton(new Vector2(4, 7), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
+        new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
     // Null function for activated hero
