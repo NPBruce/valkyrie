@@ -7,6 +7,7 @@ Dump list of things to to:
 
 UI positons/scale
 mouse pan
+
 packaging
 Quest documentation
 review: errors/comments
@@ -100,7 +101,7 @@ public class Game : MonoBehaviour {
         }
         heroCanvas.SetupUI();
 
-        TextButton endSelection = new TextButton(new Vector2(50, 550), new Vector2(100, 40), "Finished", delegate { EndSelection(); });
+        TextButton endSelection = new TextButton(new Vector2(50, 550), new Vector2(200, 40), "Finished", delegate { EndSelection(); });
         // Untag as dialog so this isn't cleared away
         endSelection.background.tag = "heroselect";
         endSelection.button.tag = "heroselect";

@@ -69,14 +69,20 @@ public class EventHelper {
         foreach (string s in e.setFlags)
         {
             if (!game.qd.flags.Contains(s))
+            {
+                Debug.Log("Notice: Setting quest flag: " + s);
                 game.qd.flags.Add(s);
+            }
         }
 
         // Remove clear flags
         foreach (string s in e.clearFlags)
         {
             if (game.qd.flags.Contains(s))
+            {
+                Debug.Log("Notice: Clearing quest flag: " + s);
                 game.qd.flags.Remove(s);
+            }
         }
 
         // If a dialog window is open we force it closed (this shouldn't happen)

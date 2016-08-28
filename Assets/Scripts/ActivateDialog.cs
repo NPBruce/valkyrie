@@ -39,11 +39,11 @@ public class ActivateDialog {
 
         if (master)
         {
-            new TextButton(new Vector2(500, 330), new Vector2(150, 20), "Masters Activated", delegate { activated(); });
+            new TextButton(new Vector2(500, 330), new Vector2(300, 40), "Masters Activated", delegate { activated(); });
         }
         else
         {
-            new TextButton(new Vector2(500, 330), new Vector2(150, 20), "Minions Activated", delegate { activated(); });
+            new TextButton(new Vector2(500, 330), new Vector2(300, 40), "Minions Activated", delegate { activated(); });
         }
     }
 

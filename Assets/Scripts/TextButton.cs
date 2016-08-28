@@ -56,5 +56,6 @@ public class TextButton {
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        uiText.fontSize = 32;
     }
 }
