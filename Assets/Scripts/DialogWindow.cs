@@ -38,7 +38,8 @@ public class DialogWindow {
 
     public void CreateWindow()
     {
-        new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.text.Replace("\\n", "\n"));
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.text.Replace("\\n", "\n"));
+        db.AddBorder();
 
         // Do we have a cancel button?
         if (eventData.cancelable)

@@ -21,29 +21,42 @@ public class ActivateDialog {
             Object.Destroy(go);
 
         // ability box
-        string abiltiyText = monster.monsterData.name + ":\n\n" + monster.currentActivation.ability.Replace("\\n", "\n");
-        new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 5), abiltiyText);
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+        string abiltiyText = monster.currentActivation.ability.Replace("\\n", "\n");
+        db = new DialogBox(new Vector2(10, 2.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 4), abiltiyText);
+        db.AddBorder();
 
         // Activation box
         string activationText = "";
 
         if (master)
         {
-            activationText = "Master:\n\n" + monster.currentActivation.masterActions.Replace("\\n", "\n");
+            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master");
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db.textObj.GetComponent<UnityEngine.UI.Text>().color = Color.red;
+            db.AddBorder();
+            activationText = monster.currentActivation.masterActions.Replace("\\n", "\n");
+            db = new DialogBox(new Vector2(10, 9), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
         }
         else
         {
-            activationText = "Minion:\n\n" + monster.currentActivation.minionActions.Replace("\\n", "\n");
+            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db.AddBorder();
+            activationText = monster.currentActivation.minionActions.Replace("\\n", "\n");
+            db = new DialogBox(new Vector2(10, 9), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
         }
-        new DialogBox(new Vector2(10, 6), new Vector2(UIScaler.GetWidthUnits() - 20, 5), activationText);
+        db.AddBorder();
 
         if (master)
         {
-            new TextButton(new Vector2(15, 11.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, 16.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
         }
         else
         {
-            new TextButton(new Vector2(15, 11.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, 16.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
         }
     }
 

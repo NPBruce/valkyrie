@@ -62,10 +62,10 @@ public class UIScaler {
     }
     public static int GetMediumFont()
     {
-        return 2 * GetSmallFont();
+        return Mathf.RoundToInt(GetPixelsPerUnit() * 1.2f);
     }
     public static int GetLargeFont()
     {
-        return 3 * GetSmallFont();
+        return Mathf.RoundToInt(GetPixelsPerUnit() * 2.4f);
     }
 }

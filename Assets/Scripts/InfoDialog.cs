@@ -11,7 +11,8 @@ public class InfoDialog {
             return;
         }
 
-        new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), md.info.Replace("\\n", "\n"));
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), md.info.Replace("\\n", "\n"));
+        db.AddBorder();
 
         new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), "Close", delegate { onClose(); });
     }

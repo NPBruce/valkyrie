@@ -5,7 +5,6 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-mouse pan
 packaging
 Quest documentation
 review: errors/comments
@@ -105,8 +104,7 @@ public class Game : MonoBehaviour {
 
         TextButton endSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(12, 2), "Finished", delegate { EndSelection(); }, Color.green);
         // Untag as dialog so this isn't cleared away
-        endSelection.background.tag = "heroselect";
-        endSelection.button.tag = "heroselect";
+        endSelection.ApplyTag("heroselect");
 
         monsters = new List<Monster>();
     }

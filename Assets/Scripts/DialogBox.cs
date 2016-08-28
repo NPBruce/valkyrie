@@ -66,4 +66,10 @@ public class DialogBox {
         uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         uiText.fontSize = UIScaler.GetSmallFont();
     }
+
+    public void AddBorder()
+    {
+        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
+        new RectangleBorder(background.transform, textObj.GetComponent<UnityEngine.UI.Text>().color, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+    }
 }

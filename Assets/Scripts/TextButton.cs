@@ -5,6 +5,14 @@ public class TextButton {
 
     public GameObject button;
     public GameObject background;
+    public RectangleBorder border;
+
+    public void ApplyTag(string tag)
+    {
+        button.tag = tag;
+        background.tag = tag;
+        border.SetTag(tag);
+    }
 
     public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call)
     {
@@ -21,6 +29,8 @@ public class TextButton {
         // Create objects
         button = new GameObject("button" + text + id);
         background = new GameObject("buttonBg" + text + id);
+        border = new RectangleBorder(background.transform, colour, size);
+
         // Mark it as dialog
         button.tag = "dialog";
         background.tag = "dialog";
@@ -59,3 +69,4 @@ public class TextButton {
         uiText.fontSize = UIScaler.GetMediumFont();
     }
 }
+
