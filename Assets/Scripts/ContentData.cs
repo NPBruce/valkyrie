@@ -275,6 +275,7 @@ public class HeroData : GenericData
 public class MonsterData : GenericData
 {
     public string info = "-";
+    public string imagePlace;
     public static new string type = "Monster";
 
     public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -284,6 +285,16 @@ public class MonsterData : GenericData
         {
             info = content["info"];
         }
+
+        if (content.ContainsKey("imageplace"))
+        {
+            imagePlace = path + "/" + content["imageplace"];
+        }
+        else // No image is a valid condition
+        {
+            imagePlace = image;
+        }
+
     }
 }
 

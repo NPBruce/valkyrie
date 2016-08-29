@@ -8,7 +8,6 @@ Dump list of things to to:
 system menu (end quest, quit, about)
 CleanUp quest at end
 unique monsters
-monster placement stretched images
 
 import from RtL
 > activations

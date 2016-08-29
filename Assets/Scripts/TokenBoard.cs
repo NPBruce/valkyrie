@@ -83,7 +83,7 @@ public class TokenBoard : MonoBehaviour {
 
     public void AddPlacedMonsters(QuestData.Monster m, int count)
     {
-        string imagePath = @"file://" + m.mData.image;
+        string imagePath = @"file://" + m.mData.imagePlace;
 
         WWW www = new WWW(imagePath);
         Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
@@ -131,13 +131,6 @@ public class TokenBoard : MonoBehaviour {
 
         QuestData.MPlace mp = game.qd.components[place] as QuestData.MPlace;
 
-        if(mp.rotate)
-        {
-            int temp = x;
-            x = y;
-            y = temp;
-        }
-
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
         gameObject.tag = "dialog";
@@ -152,9 +145,17 @@ public class TokenBoard : MonoBehaviour {
             image.color = Color.red;
         }
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8 * (float)x), (int)((float)newTex.height * (float)0.8 * (float)y));
+        image.rectTransform.sizeDelta = new Vector2((105f * x), (105f * y));
+        // Move to get the top left square corner at 0,0
+        gameObject.transform.Translate(Vector3.right * 105f * (float)(x - 1) / 2f, Space.World);
+        gameObject.transform.Translate(Vector3.down * 105f * (float)(y - 1) / 2f, Space.World);
+
+        if (mp.rotate)
+        {
+            gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
+        }
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(mp.location.x + ((float)(x - 1) / 2f), mp.location.y - ((float)(y - 1) / 2f), 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0) * 105, Space.World);
     }
 
 
@@ -215,3 +216,4 @@ public class TokenBoard : MonoBehaviour {
         gameObject.transform.Translate(new Vector3(e.location.x, e.location.y, 0) * 105, Space.World);
     }
 }
+
