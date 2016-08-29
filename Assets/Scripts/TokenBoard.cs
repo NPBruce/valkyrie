@@ -7,10 +7,10 @@ using System.Collections.Generic;
 public class TokenBoard : MonoBehaviour {
 
     public List<TokenControl> tc;
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake() {
         tc = new List<TokenControl>();
-	}
+    }
 
     // Add a door
     public void add(QuestData.Door d)
@@ -61,9 +61,84 @@ public class TokenBoard : MonoBehaviour {
         }
 
     }
-     
+
     public void AddMonster(QuestData.Monster m)
     {
+        Game game = Game.Get();
+        int count = 0;
+        foreach (Game.Hero h in game.heros)
+        {
+            if (h.heroData != null) count++;
+        }
+
+        if (m.placement[count].Length == 0)
+        {
+            AddAreaMonster(m);
+        }
+        else
+        {
+            AddPlacedMonsters(m, count);
+        }
+    }
+
+    public void AddPlacedMonsters(QuestData.Monster m, int count)
+    {
+        Game game = Game.Get();
+        string imagePath = @"file://" + m.mData.image;
+
+        WWW www = new WWW(imagePath);
+        Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
+        www.LoadImageIntoTexture(newTex);
+
+        // Check load worked
+        if (newTex == null)
+        {
+            Debug.Log("Error: Cannot load monster image");
+            Application.Quit();
+        }
+
+        foreach (string s in m.placement[count])
+        {
+            AddPlacedMonsterImg(s, newTex);
+        }
+    }
+
+    public void AddPlacedMonsterImg(string place, Texture2D newTex)
+    {
+        Game game = Game.Get();
+        Sprite tileSprite;
+
+        if (!game.qd.components.ContainsKey(place))
+        {
+            Debug.Log("Error: Invalid moster place: " + place);
+            Application.Quit();
+        }
+
+        QuestData.MPlace mp = game.qd.components[place] as QuestData.MPlace;
+
+        // Create object
+        GameObject gameObject = new GameObject("MonsterSpawn" + place);
+        gameObject.tag = "dialog";
+
+        gameObject.transform.parent = game.tokenCanvas.transform;
+
+        // Create the image
+        UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
+        tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        if (mp.master)
+        {
+            image.color = Color.red;
+        }
+        image.sprite = tileSprite;
+        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        // Move to square (105 units per square)
+        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0) * 105, Space.World);
+    }
+
+
+    public void AddAreaMonster(QuestData.Monster m)
+    {
+        Game game = Game.Get();
         Sprite tileSprite;
         Texture2D newTex = Resources.Load("sprites/tokens/villager-token-man") as Texture2D;
         // Check load worked
@@ -77,13 +152,11 @@ public class TokenBoard : MonoBehaviour {
         GameObject gameObject = new GameObject("MonsterSpawn");
         gameObject.tag = "dialog";
 
-        Game game = Game.Get();
         gameObject.transform.parent = game.tokenCanvas.transform;
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        // Set door colour
         image.color = Color.red;
         image.sprite = tileSprite;
         image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));

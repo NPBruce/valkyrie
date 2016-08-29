@@ -7,7 +7,6 @@ Dump list of things to to:
 
 system menu (end quest, quit, about)
 CleanUp quest at end
-specific place monsters
 unique monsters
 
 import from RtL

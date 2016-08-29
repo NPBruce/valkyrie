@@ -125,6 +125,11 @@ public class QuestData
             Monster c = new Monster(name, content, game);
             components.Add(name, c);
         }
+        if (name.IndexOf(MPlace.type) == 0)
+        {
+            MPlace c = new MPlace(name, content);
+            components.Add(name, c);
+        }
         // If not known ignore
     }
 
@@ -372,7 +377,8 @@ public class QuestData
     {
         new public static string type = "Monster";
         public MonsterData mData;
-
+        public string[][] placement;
+        
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             string[] types;
@@ -443,6 +449,16 @@ public class QuestData
                 mData = list[Random.Range(0, list.Count)];
             }
             text = text.Replace("<type>", mData.name);
+
+            placement = new string[5][];
+            for (int i = 0; i < placement.Length; i++)
+            {
+                placement[i] = new string[0];
+                if (data.ContainsKey("placement" + i))
+                {
+                    placement[i] = data["placement" + i].Split(' ');
+                }
+            }
         }
     }
 
@@ -579,6 +595,25 @@ public class QuestData
             else
             {
                 clearFlags = new string[0];
+            }
+        }
+    }
+
+
+
+
+    // Events are used to create dialogs that control the quest
+    public class MPlace : QuestComponent
+    {
+        public bool master;
+        new public static string type = "MPlace";
+
+        public MPlace(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            master = false;
+            if (data.ContainsKey("master"))
+            {
+                master = bool.Parse(data["master"]);
             }
         }
     }
