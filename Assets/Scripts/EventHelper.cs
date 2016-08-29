@@ -96,18 +96,25 @@ public class EventHelper {
             QuestData.Monster qm = (QuestData.Monster)e;
 
             // Is this type new?
-            bool newMonster = true;
+            Game.Monster oldMonster = null;
             foreach (Game.Monster m in game.monsters)
             {
                 if (m.monsterData.name.Equals(qm.mData.name))
-                    newMonster = false;
+                {
+                    oldMonster = m;
+                }
             }
-
             // Add the new type
-            if (newMonster)
+            if (oldMonster == null)
             {
-                game.monsters.Add(new Game.Monster(qm.mData));
+                game.monsters.Add(new Game.Monster(qm));
                 game.monsterCanvas.UpdateList();
+            }
+            else if(qm.unique)
+            {
+                oldMonster.unique = true;
+                oldMonster.uniqueText = qm.uniqueText;
+                oldMonster.uniqueTitle = qm.uniqueTitle;
             }
 
             // Display the location

@@ -7,7 +7,7 @@ Dump list of things to to:
 
 system menu (end quest, quit, about)
 CleanUp quest at end
-unique monsters
+unique monsters - test
 
 import from RtL
 > activations
@@ -143,7 +143,6 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         morale = count;
-        moraleDisplay = new MoraleDisplay();
         heroCanvas.EndSection();
     }
 
@@ -179,6 +178,9 @@ public class Game : MonoBehaviour {
         public bool activated = false;
         public bool minionStarted = false;
         public bool masterStarted = false;
+        public bool unique = false;
+        public string uniqueText = "";
+        public string uniqueTitle = "";
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
         public ActivationData currentActivation;
 
@@ -186,5 +188,14 @@ public class Game : MonoBehaviour {
         {
             monsterData = m;
         }
+
+        public Monster(QuestData.Monster m)
+        {
+            monsterData = m.mData;
+            unique = m.unique;
+            uniqueTitle = m.uniqueTitle;
+            uniqueText = m.uniqueText;
+        }
     }
 }
+

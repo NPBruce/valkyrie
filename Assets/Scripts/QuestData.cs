@@ -378,7 +378,10 @@ public class QuestData
         new public static string type = "Monster";
         public MonsterData mData;
         public string[][] placement;
-        
+        public bool unique = false;
+        public string uniqueTitle = "";
+        public string uniqueText = "";
+
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             string[] types;
@@ -405,7 +408,7 @@ public class QuestData
                     mData = game.cd.monsters["Monster" + t];
                 }
             }
-            
+
             // If we didn't find anything try by trait
             if (mData == null)
             {
@@ -438,7 +441,7 @@ public class QuestData
                         list.Add(kv.Value);
                     }
                 }
-                
+
                 // Not found, throw error
                 if (list.Count == 0)
                 {
@@ -458,6 +461,23 @@ public class QuestData
                 {
                     placement[i] = data["placement" + i].Split(' ');
                 }
+            }
+
+            if (data.ContainsKey("unique"))
+            {
+                unique = bool.Parse(data["unique"]);
+            }
+            if (data.ContainsKey("uniquetitle"))
+            {
+                uniqueTitle = data["uniquetitle"];
+            }
+            else
+            {
+                uniqueTitle = "Master " + mData.name;
+            }
+            if (data.ContainsKey("uniquetext"))
+            {
+                uniqueText = data["uniquetext"];
             }
         }
     }

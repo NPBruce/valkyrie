@@ -26,39 +26,51 @@ public class MonsterDialog
 
         float offset = (index + 0.1f) * (MonsterCanvas.monsterSize + 0.5f);
 
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Information", delegate { info(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Force Activate", delegate { activate(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Information", delegate { Info(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Force Activate", delegate { Activate(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), "Defeated", delegate { Defeated(); });
+        if (monster.unique)
+        {
+            offset += 3.5f;
+            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3), "Unique\nDefeated", delegate { UniqueDefeated(); });
+        }
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
     }
 
     // Todo
-    public void info()
+    public void Info()
     {
-        destroy();
-        new InfoDialog(monster.monsterData);
+        Destroy();
+        new InfoDialog(monster);
     }
 
     // Todo
-    public void activate()
+    public void Activate()
     {
         RoundHelper.ActivateMonster(monster);
     }
 
     // Defeated monsters
-    public void defeated()
+    public void Defeated()
     {
-        destroy();
+        Destroy();
         Game game = Game.Get();
         game.monsters.Remove(monster);
         updateDisplay();
         EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
     }
 
-    // Cancel cleans up
-    public void onCancel()
+    // Unique Defeated (others still around)
+    public void UniqueDefeated()
     {
-        destroy();
+        Destroy();
+        EventHelper.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+    }
+
+    // Cancel cleans up
+    public void OnCancel()
+    {
+        Destroy();
     }
 
     public void updateDisplay()
@@ -67,7 +79,7 @@ public class MonsterDialog
         game.monsterCanvas.UpdateList();
     }
 
-    public void destroy()
+    public void Destroy()
     {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

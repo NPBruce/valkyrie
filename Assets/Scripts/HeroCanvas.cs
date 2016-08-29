@@ -177,6 +177,7 @@ public class HeroCanvas : MonoBehaviour {
         UpdateStatus();
 
         game.heroesSelected = true;
+        game.moraleDisplay = new MoraleDisplay();
         EventHelper.QueueEvent("EventStart");
     }
 }

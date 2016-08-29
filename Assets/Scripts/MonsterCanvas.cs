@@ -65,9 +65,17 @@ public class MonsterCanvas : MonoBehaviour
         foreach (Game.Monster m in game.monsters)
         {
             UnityEngine.UI.Image image = icons[m.monsterData.name];
-            if (m.activated)
+            if (m.activated && m.unique)
+            {
+                image.color = new Color(0f, 0.3f, 0f, 1);
+            }
+            else if (m.activated)
             {
                 image.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
+            }
+            else if (m.unique)
+            {
+                image.color = new Color(0.7f, 1f, 0.7f, 1);
             }
             else
             {
