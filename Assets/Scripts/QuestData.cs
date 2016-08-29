@@ -234,15 +234,16 @@ public class QuestData
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
-                if ((data["color"].Length != 7) || (data["color"][0] != '#'))
+                string colorRGB = ColorUtil.FromName(data["color"]);
+                if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
                 {
-                    Debug.Log("Warning: Door color must be in #RRGGBB format in: " + name);
+                    Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
                 }
                 else
                 {
-                    colour[0] = System.Convert.ToInt32(data["color"].Substring(1, 2), 16);
-                    colour[1] = System.Convert.ToInt32(data["color"].Substring(3, 2), 16);
-                    colour[2] = System.Convert.ToInt32(data["color"].Substring(5, 2), 16);
+                    colour[0] = System.Convert.ToInt32(colorRGB.Substring(1, 2), 16);
+                    colour[1] = System.Convert.ToInt32(colorRGB.Substring(3, 2), 16);
+                    colour[2] = System.Convert.ToInt32(colorRGB.Substring(5, 2), 16);
                 }
             }
 

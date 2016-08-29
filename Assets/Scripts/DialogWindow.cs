@@ -132,7 +132,7 @@ public class DialogWindow {
         }
         EventHelper.TriggerEvent();
 
-        if (eventData.name.Equals("EventEnd"))
+        if (eventData.name.IndexOf("EventEnd") == 0)
         {
             Application.Quit();
         }

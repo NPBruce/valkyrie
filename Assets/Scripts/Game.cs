@@ -5,21 +5,19 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-Quest documentation
-review: errors/comments
-licence info
-
-build script
-Monster info
+system menu (end quest, quit, about)
 CleanUp quest at end
-color from name
 specific place monsters
 unique monsters
-extra event types
-threat
 morale
-content selection
-symbols in text
+
+import from RtL
+> activations
+> symbols in text
+> Threat
+> Add expansions
+> > conent selection
+
     */
 
 // General controller for the game
@@ -40,6 +38,8 @@ public class Game : MonoBehaviour {
     public HeroCanvas heroCanvas;
     public MonsterCanvas monsterCanvas;
     public UIScaler uiScaler;
+    public int morale;
+    public MoraleDisplay moraleDisplay;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -124,9 +124,28 @@ public class Game : MonoBehaviour {
         monsters = new List<Monster>();
     }
 
+    public void AdjustMorale(int m)
+    {
+        morale += m;
+        if(morale < 0)
+        {
+            morale = 0;
+            moraleDisplay.Update();
+            EventHelper.EventTriggerType("NoMorale");
+        }
+        moraleDisplay.Update();
+    }
+
     // HeroCanvas validates selection and starts quest if everything is good
     public void EndSelection()
     {
+        int count = 0;
+        foreach (Hero h in heros)
+        {
+            if (h.heroData != null) count++;
+        }
+        morale = count;
+        moraleDisplay = new MoraleDisplay();
         heroCanvas.EndSection();
     }
 
