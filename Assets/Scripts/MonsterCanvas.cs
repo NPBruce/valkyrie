@@ -75,7 +75,7 @@ public class MonsterCanvas : MonoBehaviour
             }
             else if (m.unique)
             {
-                image.color = new Color(0.7f, 1f, 0.7f, 1);
+                image.color = new Color(0.6f, 1f, 0.6f, 1);
             }
             else
             {
