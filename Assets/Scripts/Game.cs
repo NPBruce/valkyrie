@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /*
 Dump list of things to to:
 
-system menu (end quest, quit, about)
+system menu (editor, end quest, quit, about)
 CleanUp quest at end
 unique monsters - test
 
