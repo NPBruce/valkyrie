@@ -13,7 +13,7 @@ public class HeroDialog{
 
     public void CreateWindow()
     {
-        float offset = (hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f);
+        float offset = ((hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f)) + HeroCanvas.offsetStart;
         // Has this hero been activated?
         if (hero.activated)
         {
@@ -49,6 +49,8 @@ public class HeroDialog{
         destroy();
         hero.defeated = true;
         updateDisplay();
+        Game game = Game.Get();
+        game.AdjustMorale(-1);
     }
 
     // Null function for activated hero

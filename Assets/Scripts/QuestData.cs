@@ -125,6 +125,11 @@ public class QuestData
             Monster c = new Monster(name, content, game);
             components.Add(name, c);
         }
+        if (name.IndexOf(MPlace.type) == 0)
+        {
+            MPlace c = new MPlace(name, content);
+            components.Add(name, c);
+        }
         // If not known ignore
     }
 
@@ -234,15 +239,16 @@ public class QuestData
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
-                if ((data["color"].Length != 7) || (data["color"][0] != '#'))
+                string colorRGB = ColorUtil.FromName(data["color"]);
+                if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
                 {
-                    Debug.Log("Warning: Door color must be in #RRGGBB format in: " + name);
+                    Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
                 }
                 else
                 {
-                    colour[0] = System.Convert.ToInt32(data["color"].Substring(1, 2), 16);
-                    colour[1] = System.Convert.ToInt32(data["color"].Substring(3, 2), 16);
-                    colour[2] = System.Convert.ToInt32(data["color"].Substring(5, 2), 16);
+                    colour[0] = System.Convert.ToInt32(colorRGB.Substring(1, 2), 16);
+                    colour[1] = System.Convert.ToInt32(colorRGB.Substring(3, 2), 16);
+                    colour[2] = System.Convert.ToInt32(colorRGB.Substring(5, 2), 16);
                 }
             }
 
@@ -371,30 +377,107 @@ public class QuestData
     {
         new public static string type = "Monster";
         public MonsterData mData;
+        public string[][] placement;
+        public bool unique = false;
+        public string uniqueTitle = "";
+        public string uniqueText = "";
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Monster type must be specified
-            if (!data.ContainsKey("monster"))
+            string[] types;
+            //First try to a list of specific types
+            if (data.ContainsKey("monster"))
             {
-                Debug.Log("Error: No monster type specified in event: " + name);
-                Application.Quit();
+                types = data["monster"].Split(' ');
+            }
+            else
+            {
+                types = new string[0];
             }
 
-            // Monster type must exist in content packs, 'Monster' is optional
-            if (game.cd.monsters.ContainsKey(data["monster"]))
+            // Next try to find a type that is valid
+            foreach (string t in types)
             {
-                mData = game.cd.monsters[data["monster"]];
+                // Monster type must exist in content packs, 'Monster' is optional
+                if (game.cd.monsters.ContainsKey(t) && mData == null)
+                {
+                    mData = game.cd.monsters[t];
+                }
+                else if (game.cd.monsters.ContainsKey("Monster" + t) && mData == null)
+                {
+                    mData = game.cd.monsters["Monster" + t];
+                }
             }
-            if (game.cd.monsters.ContainsKey("Monster"+data["monster"]))
+
+            // If we didn't find anything try by trait
+            if (mData == null)
             {
-                mData = game.cd.monsters["Monster" + data["monster"]];
+                string[] traits = new string[0];
+                if (data.ContainsKey("traits"))
+                {
+                    traits = data["traits"].Split(' ');
+                }
+                else
+                {
+                    Debug.Log("Error: Cannot find monster and no traits provided: " + data["monster"] + " specified in event: " + name);
+                    Application.Quit();
+                }
+
+                List<MonsterData> list = new List<MonsterData>();
+                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+                {
+                    bool allFound = true;
+                    foreach (string t in traits)
+                    {
+                        bool found = false;
+                        foreach (string mt in kv.Value.traits)
+                        {
+                            if (mt.Equals(t)) found = true;
+                        }
+                        if (found == false) allFound = false;
+                    }
+                    if (allFound)
+                    {
+                        list.Add(kv.Value);
+                    }
+                }
+
+                // Not found, throw error
+                if (list.Count == 0)
+                {
+                    Debug.Log("Error: Unable to find monster of traits specified in event: " + name);
+                    Application.Quit();
+                }
+
+                mData = list[Random.Range(0, list.Count)];
             }
-            // Not found, throw error
-            if(mData == null)
+            text = text.Replace("<type>", mData.name);
+
+            placement = new string[5][];
+            for (int i = 0; i < placement.Length; i++)
             {
-                Debug.Log("Error: Unknown monster type: " + data["monster"] + " specified in event: " + name);
-                Application.Quit();
+                placement[i] = new string[0];
+                if (data.ContainsKey("placement" + i))
+                {
+                    placement[i] = data["placement" + i].Split(' ');
+                }
+            }
+
+            if (data.ContainsKey("unique"))
+            {
+                unique = bool.Parse(data["unique"]);
+            }
+            if (data.ContainsKey("uniquetitle"))
+            {
+                uniqueTitle = data["uniquetitle"];
+            }
+            else
+            {
+                uniqueTitle = "Master " + mData.name;
+            }
+            if (data.ContainsKey("uniquetext"))
+            {
+                uniqueText = data["uniquetext"];
             }
         }
     }
@@ -532,6 +615,30 @@ public class QuestData
             else
             {
                 clearFlags = new string[0];
+            }
+        }
+    }
+
+
+
+
+    // Events are used to create dialogs that control the quest
+    public class MPlace : QuestComponent
+    {
+        public bool master;
+        new public static string type = "MPlace";
+        public bool rotate;
+
+        public MPlace(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            master = false;
+            if (data.ContainsKey("master"))
+            {
+                master = bool.Parse(data["master"]);
+            }
+            if (data.ContainsKey("rotate"))
+            {
+                rotate = bool.Parse(data["rotate"]);
             }
         }
     }

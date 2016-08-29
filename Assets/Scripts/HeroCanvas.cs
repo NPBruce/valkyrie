@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 public class HeroCanvas : MonoBehaviour {
 
-    public float offset = 0;
+    public float offset;
     public Dictionary<int, UnityEngine.UI.Image> icons;
     public static float heroSize = 4;
+    public static float offsetStart = 3.75f;
 
     public void SetupUI() {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
-
+        offset = offsetStart;
         Game game = Game.Get();
         foreach (Game.Hero h in game.heros)
             AddHero(h, game);
@@ -18,7 +19,6 @@ public class HeroCanvas : MonoBehaviour {
 
     void AddHero(Game.Hero h, Game game)
     {
-
         Sprite heroSprite;
 
         string heroName = h.id.ToString();
@@ -177,6 +177,7 @@ public class HeroCanvas : MonoBehaviour {
         UpdateStatus();
 
         game.heroesSelected = true;
+        game.moraleDisplay = new MoraleDisplay();
         EventHelper.QueueEvent("EventStart");
     }
 }

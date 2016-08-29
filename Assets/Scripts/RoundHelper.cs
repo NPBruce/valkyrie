@@ -116,9 +116,21 @@ public class RoundHelper {
                 adList.Add(kv.Value);
             }
         }
+        // Search for additional common activations
+        foreach (string s in m.monsterData.activations)
+        {
+            if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+            {
+                adList.Add(game.cd.activations["MonsterActivation" + s]);
+            }
+            else
+            {
+                Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+            }
+        }
 
         // Check for no activations
-        if(adList.Count == 0)
+        if (adList.Count == 0)
         {
             Debug.Log("Error: Unable to find any activation data for monster type: " + m.monsterData.name);
             Application.Quit();
@@ -133,6 +145,15 @@ public class RoundHelper {
 
         // Pick Minion or master
         m.minionStarted = Random.Range(0, 2) == 0;
+        if(m.currentActivation.masterFirst)
+        {
+            m.minionStarted = false;
+        }
+        if (m.currentActivation.minionFirst)
+        {
+            m.minionStarted = true;
+        }
+
         m.masterStarted = !m.minionStarted;
 
         // Create activation window

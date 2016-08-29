@@ -275,7 +275,9 @@ public class HeroData : GenericData
 public class MonsterData : GenericData
 {
     public string info = "-";
+    public string imagePlace;
     public static new string type = "Monster";
+    public string[] activations;
 
     public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -283,6 +285,19 @@ public class MonsterData : GenericData
         if (content.ContainsKey("info"))
         {
             info = content["info"];
+        }
+        if (content.ContainsKey("imageplace"))
+        {
+            imagePlace = path + "/" + content["imageplace"];
+        }
+        else // No image is a valid condition
+        {
+            imagePlace = image;
+        }
+        activations = new string[0];
+        if (content.ContainsKey("activation"))
+        {
+            activations = content["activation"].Split(' ');
         }
     }
 }
@@ -294,6 +309,8 @@ public class ActivationData : GenericData
     public string minionActions = "-";
     public string masterActions = "-";
     public static new string type = "MonsterActivation";
+    public bool masterFirst = false;
+    public bool minionFirst = false;
 
     public ActivationData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -312,8 +329,14 @@ public class ActivationData : GenericData
         {
             masterActions = content["master"];
         }
-
-
+        if (content.ContainsKey("masterfirst"))
+        {
+            masterFirst = bool.Parse(content["masterfirst"]);
+        }
+        if (content.ContainsKey("minionfirst"))
+        {
+            minionFirst = bool.Parse(content["minionfirst"]);
+        }
     }
 }
 
@@ -377,5 +400,18 @@ public class GenericData
             image = "";
         }
 
+    }
+
+    public bool ContainsTrait(string trait)
+    {
+        bool t = false;
+        foreach (string s in traits)
+        {
+            if (trait.Equals(s))
+            {
+                t = true;
+            }
+        }
+        return t;
     }
 }

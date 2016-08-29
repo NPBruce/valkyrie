@@ -3,18 +3,30 @@ using System.Collections;
 
 public class InfoDialog {
 
-    public InfoDialog(MonsterData md)
+    public InfoDialog(Game.Monster m)
     {
-        if (md == null)
+        if (m == null)
         {
             Debug.Log("Warning: Invalid monster type requested.");
             return;
         }
 
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), md.info.Replace("\\n", "\n"));
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), m.monsterData.info.Replace("\\n", "\n"));
         db.AddBorder();
 
-        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), "Close", delegate { onClose(); });
+        if (m.unique)
+        {
+            db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), m.uniqueTitle, Color.red);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db.AddBorder();
+            db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), m.uniqueText.Replace("\\n", "\n"));
+            db.AddBorder(Color.red);
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 23.5f), new Vector2(10, 2), "Close", delegate { onClose(); });
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), "Close", delegate { onClose(); });
+        }
     }
 
     // Close cleans up
