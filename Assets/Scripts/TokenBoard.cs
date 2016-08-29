@@ -83,7 +83,6 @@ public class TokenBoard : MonoBehaviour {
 
     public void AddPlacedMonsters(QuestData.Monster m, int count)
     {
-        Game game = Game.Get();
         string imagePath = @"file://" + m.mData.image;
 
         WWW www = new WWW(imagePath);
@@ -97,13 +96,29 @@ public class TokenBoard : MonoBehaviour {
             Application.Quit();
         }
 
+        int x = 1;
+        int y = 1;
+
+        if (m.mData.ContainsTrait("medium") || m.mData.ContainsTrait("huge"))
+        {
+            x = 2;
+        }
+        if (m.mData.ContainsTrait("huge") || m.mData.ContainsTrait("massive"))
+        {
+            y = 2;
+        }
+        if (m.mData.ContainsTrait("massive"))
+        {
+            x = 3;
+        }
+
         foreach (string s in m.placement[count])
         {
-            AddPlacedMonsterImg(s, newTex);
+            AddPlacedMonsterImg(s, newTex, x, y);
         }
     }
 
-    public void AddPlacedMonsterImg(string place, Texture2D newTex)
+    public void AddPlacedMonsterImg(string place, Texture2D newTex, int x, int y)
     {
         Game game = Game.Get();
         Sprite tileSprite;
@@ -115,6 +130,13 @@ public class TokenBoard : MonoBehaviour {
         }
 
         QuestData.MPlace mp = game.qd.components[place] as QuestData.MPlace;
+
+        if(mp.rotate)
+        {
+            int temp = x;
+            x = y;
+            y = temp;
+        }
 
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
@@ -130,9 +152,9 @@ public class TokenBoard : MonoBehaviour {
             image.color = Color.red;
         }
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8 * (float)x), (int)((float)newTex.height * (float)0.8 * (float)y));
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(mp.location.x + ((float)(x - 1) / 2f), mp.location.y - ((float)(y - 1) / 2f), 0) * 105, Space.World);
     }
 
 

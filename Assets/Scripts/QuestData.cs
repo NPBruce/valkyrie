@@ -607,6 +607,7 @@ public class QuestData
     {
         public bool master;
         new public static string type = "MPlace";
+        public bool rotate;
 
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {
@@ -614,6 +615,10 @@ public class QuestData
             if (data.ContainsKey("master"))
             {
                 master = bool.Parse(data["master"]);
+            }
+            if (data.ContainsKey("rotate"))
+            {
+                rotate = bool.Parse(data["rotate"]);
             }
         }
     }

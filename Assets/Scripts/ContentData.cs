@@ -378,4 +378,17 @@ public class GenericData
         }
 
     }
+
+    public bool ContainsTrait(string trait)
+    {
+        bool t = false;
+        foreach (string s in traits)
+        {
+            if (trait.Equals(s))
+            {
+                t = true;
+            }
+        }
+        return t;
+    }
 }
