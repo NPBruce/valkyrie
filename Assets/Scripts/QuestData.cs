@@ -375,28 +375,74 @@ public class QuestData
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Monster type must be specified
-            if (!data.ContainsKey("monster"))
+            string[] types;
+            //First try to a list of specific types
+            if (data.ContainsKey("monster"))
             {
-                Debug.Log("Error: No monster type specified in event: " + name);
-                Application.Quit();
+                types = data["monster"].Split(' ');
+            }
+            else
+            {
+                types = new string[0];
             }
 
-            // Monster type must exist in content packs, 'Monster' is optional
-            if (game.cd.monsters.ContainsKey(data["monster"]))
+            // Next try to find a type that is valid
+            foreach (string t in types)
             {
-                mData = game.cd.monsters[data["monster"]];
+                // Monster type must exist in content packs, 'Monster' is optional
+                if (game.cd.monsters.ContainsKey(t) && mData == null)
+                {
+                    mData = game.cd.monsters[t];
+                }
+                else if (game.cd.monsters.ContainsKey("Monster" + t) && mData == null)
+                {
+                    mData = game.cd.monsters["Monster" + t];
+                }
             }
-            if (game.cd.monsters.ContainsKey("Monster"+data["monster"]))
+            
+            // If we didn't find anything try by trait
+            if (mData == null)
             {
-                mData = game.cd.monsters["Monster" + data["monster"]];
+                string[] traits = new string[0];
+                if (data.ContainsKey("traits"))
+                {
+                    traits = data["traits"].Split(' ');
+                }
+                else
+                {
+                    Debug.Log("Error: Cannot find monster and no traits provided: " + data["monster"] + " specified in event: " + name);
+                    Application.Quit();
+                }
+
+                List<MonsterData> list = new List<MonsterData>();
+                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+                {
+                    bool allFound = true;
+                    foreach (string t in traits)
+                    {
+                        bool found = false;
+                        foreach (string mt in kv.Value.traits)
+                        {
+                            if (mt.Equals(t)) found = true;
+                        }
+                        if (found == false) allFound = false;
+                    }
+                    if (allFound)
+                    {
+                        list.Add(kv.Value);
+                    }
+                }
+                
+                // Not found, throw error
+                if (list.Count == 0)
+                {
+                    Debug.Log("Error: Unable to find monster of traits specified in event: " + name);
+                    Application.Quit();
+                }
+
+                mData = list[Random.Range(0, list.Count)];
             }
-            // Not found, throw error
-            if(mData == null)
-            {
-                Debug.Log("Error: Unknown monster type: " + data["monster"] + " specified in event: " + name);
-                Application.Quit();
-            }
+            text = text.Replace("<type>", mData.name);
         }
     }
 

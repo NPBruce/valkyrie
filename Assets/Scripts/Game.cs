@@ -9,7 +9,6 @@ system menu (end quest, quit, about)
 CleanUp quest at end
 specific place monsters
 unique monsters
-morale
 
 import from RtL
 > activations
@@ -17,8 +16,8 @@ import from RtL
 > Threat
 > Add expansions
 > > conent selection
-
-    */
+> > Stacked tileselection
+*/
 
 // General controller for the game
 public class Game : MonoBehaviour {
