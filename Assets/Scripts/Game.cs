@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 /*
-Dump list of things to to:
+Dump list of things to do:
 
 system menu (editor, end quest, quit, about)
 CleanUp quest at end
-unique monsters - test
 
 import from RtL
 > activations

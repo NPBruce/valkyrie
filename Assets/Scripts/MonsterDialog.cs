@@ -58,12 +58,18 @@ public class MonsterDialog
         game.monsters.Remove(monster);
         updateDisplay();
         EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
+        if (monster.unique)
+        {
+            EventHelper.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+        }
     }
 
     // Unique Defeated (others still around)
     public void UniqueDefeated()
     {
         Destroy();
+        monster.unique = false;
+        Game.Get().monsterCanvas.UpdateStatus();
         EventHelper.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
     }
 
