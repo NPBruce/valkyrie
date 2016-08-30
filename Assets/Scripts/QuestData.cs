@@ -249,6 +249,19 @@ public class QuestData
             // Move tile into target location (spaces are 105 units, Space.World is needed because tile has been rotated)
             tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            r += "side=" + tileType.sectionName + nl;
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
+            }
+            return r;
+        }
     }
 
     // Doors are like tokens but placed differently and have different defaults
@@ -258,6 +271,7 @@ public class QuestData
         public int rotation = 0;
         public Color colour = Color.white;
         public GameObject gameObject;
+        public string colourName = "white";
 
         public Door(string s) : base(s)
         {
@@ -276,7 +290,8 @@ public class QuestData
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
-                SetColor(data["color"]);
+                colourName = data["color"];
+                SetColor(colourName);
             }
 
             if (text.Equals(""))
@@ -287,6 +302,7 @@ public class QuestData
 
         public void SetColor(string s)
         {
+            colourName = s;
             string colorRGB = ColorUtil.FromName(s);
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
@@ -351,6 +367,22 @@ public class QuestData
             Draw();
             Game game = Game.Get();
             game.tokenBoard.add(this);
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (!colourName.Equals("white"))
+            {
+                r += "color=" + colourName + nl;
+            }
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
+            }
+            return r;
         }
     }
 
@@ -428,6 +460,18 @@ public class QuestData
             Game game = Game.Get();
             game.tokenBoard.add(this);
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if(!spriteName.Equals("search-token"))
+            {
+                r += "type=" + spriteName;
+            }
+            return r;
+        }
     }
 
 
@@ -440,22 +484,23 @@ public class QuestData
         public bool unique = false;
         public string uniqueTitle = "";
         public string uniqueText = "";
+        public string[] mTypes;
+        public string[] mTraits;
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            string[] types;
             //First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
-                types = data["monster"].Split(' ');
+                mTypes = data["monster"].Split(' ');
             }
             else
             {
-                types = new string[0];
+                mTypes = new string[0];
             }
 
             // Next try to find a type that is valid
-            foreach (string t in types)
+            foreach (string t in mTypes)
             {
                 // Monster type must exist in content packs, 'Monster' is optional
                 if (game.cd.monsters.ContainsKey(t) && mData == null)
@@ -471,10 +516,10 @@ public class QuestData
             // If we didn't find anything try by trait
             if (mData == null)
             {
-                string[] traits = new string[0];
+                mTraits = new string[0];
                 if (data.ContainsKey("traits"))
                 {
-                    traits = data["traits"].Split(' ');
+                    mTraits = data["traits"].Split(' ');
                 }
                 else
                 {
@@ -486,7 +531,7 @@ public class QuestData
                 foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
                 {
                     bool allFound = true;
-                    foreach (string t in traits)
+                    foreach (string t in mTraits)
                     {
                         bool found = false;
                         foreach (string mt in kv.Value.traits)
@@ -538,6 +583,45 @@ public class QuestData
             {
                 uniqueText = data["uniquetext"];
             }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (mTypes.Length > 0)
+            {
+                r += "monster=";
+                foreach (string s in mTypes)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (mTraits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in mTraits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            for(int i = 0; i < placement.Length; i++)
+            {
+                if (placement[i].Length > 0)
+                {
+                    r += "placement" + i + "=";
+                    foreach (string s in placement[i])
+                    {
+                        r += s + " ";
+                    }
+                    r = r.Substring(0, r.Length - 1) + nl;
+                }
+            }
+
+            return r;
         }
     }
 
@@ -687,6 +771,103 @@ public class QuestData
                 clearFlags = new string[0];
             }
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            r += "text=\"" + text + "\"" + nl;
+            
+            if (highlight)
+            {
+                r += "highlight=true" + nl;
+            }
+            if (nextEvent.Length > 0)
+            {
+                r += "event=";
+                foreach (string s in nextEvent)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (failEvent.Length > 0)
+            {
+                r += "failevent=";
+                foreach (string s in failEvent)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (!heroListName.Equals(""))
+            {
+                r += "hero=" + heroListName + nl;
+            }
+            if (gold != 0)
+            {
+                r += "gold=" + gold + nl;
+            }
+            if (minHeroes != 0)
+            {
+                r += "minhero=" + minHeroes + nl;
+            }
+            if (maxHeroes != 0)
+            {
+                r += "maxhero=" + maxHeroes + nl;
+            }
+            if (addComponents.Length > 0)
+            {
+                r += "add=";
+                foreach (string s in addComponents)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (removeComponents.Length > 0)
+            {
+                r += "remove=";
+                foreach (string s in removeComponents)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (!trigger.Equals(""))
+            {
+                r += "trigger=" + trigger + nl;
+            }
+            if (flags.Length > 0)
+            {
+                r += "flags=";
+                foreach (string s in flags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (setFlags.Length > 0)
+            {
+                r += "set=";
+                foreach (string s in setFlags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (clearFlags.Length > 0)
+            {
+                r += "clear=";
+                foreach (string s in clearFlags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            return r;
+        }
     }
 
 
@@ -710,6 +891,21 @@ public class QuestData
             {
                 rotate = bool.Parse(data["rotate"]);
             }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+            if (master)
+            {
+                r += "master=true" + nl;
+            }
+            if (rotate)
+            {
+                r += "rotate=true" + nl;
+            }
+            return r;
         }
     }
 
@@ -791,6 +987,20 @@ public class QuestData
                 return false;
             return true;
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = "[" + name + "]" + nl;
+            r += "name=" + name + nl;
+            if (locationSpecified)
+            {
+                r += "xposition=" + location.x + nl;
+                r += "yposition=" + location.y + nl;
+            }
+
+            return r;
+        }
     }
 
     public class Quest
@@ -839,6 +1049,16 @@ public class QuestData
             cc.minPanY = minPanY;
             cc.maxPanX = maxPanX;
             cc.maxPanY = maxPanY;
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = "[Quest]" + nl;
+            r += "name=" + name + nl;
+            r += "description=" + description + nl;
+
+            return r;
         }
     }
 }
