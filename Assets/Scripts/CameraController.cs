@@ -79,9 +79,27 @@ public class CameraController : MonoBehaviour {
         }
         if (Input.GetMouseButton(0))
         {
-            // Scaling??
+            // Scaling?? (probably need to do a ray trace like GetMouseTile
             gameObject.transform.position = new Vector3(mouseDownCamPosition.x + mouseDownMousePosition.x - Input.mousePosition.x,
                 mouseDownCamPosition.y + mouseDownMousePosition.y - Input.mousePosition.y, mouseDownCamPosition.z);
         }
+    }
+
+    public static Vector2 GetMouseTile()
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+
+        Game game = Game.Get();
+
+        //game.boardCanvas.transform.rotation
+        Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
+        float rayDistance = 0;
+        basePlane.Raycast(ray, out rayDistance);
+        
+
+        Vector3 clickPoint = ray.GetPoint(rayDistance) / 105f;
+
+        return new Vector2(Mathf.Round(clickPoint.x), Mathf.Round(clickPoint.y));
     }
 }

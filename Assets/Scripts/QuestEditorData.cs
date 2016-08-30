@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class QuestEditorData {
 
+    public EditorSelectionList esl;
+
     public QuestEditorData()
     {
         SelectQuest();
@@ -23,14 +25,14 @@ public class QuestEditorData {
         TextButton tb = new TextButton(new Vector2(21, 2), new Vector2(9, 1), "Quest", delegate { SelectQuest(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 4), new Vector2(9, 1), "Tile", delegate { SelectTile(); });
+        tb = new TextButton(new Vector2(21, 4), new Vector2(9, 1), "Tile", delegate { ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(31, 4), new Vector2(9, 1), "New", delegate { NewTile(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 6), new Vector2(9, 1), "Door", delegate { SelectDoor(); });
+        tb = new TextButton(new Vector2(21, 6), new Vector2(9, 1), "Door", delegate { ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(31, 6), new Vector2(9, 1), "New", delegate { NewDoor(); });
@@ -52,6 +54,13 @@ public class QuestEditorData {
         // Clean up everything marked as 'questui'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
             Object.Destroy(go);
+
+        Game game = Game.Get();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
+        {
+            qc.Value.SetVisible(true);
+            qc.Value.SetVisible(.2f);
+        }
     }
 
     public void SelectQuest()
@@ -69,9 +78,53 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(0, 4), new Vector2(20, 6), game.qd.quest.description, delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), ">< Max Camera", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
     }
 
-    public void SelectTile()
+
+    public void SelectTile(string name)
+    {
+        Clean();
+        Game game = Game.Get();
+        QuestData.Tile t = game.qd.components[name] as QuestData.Tile;
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Tile".Length), delegate { ListTile(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileType.sectionName, delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "<> Position", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
+
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("questui");
+
+        t.SetVisible(true);
+    }
+
+    public void ListTile()
     {
         Game game = Game.Get();
 
@@ -88,7 +141,8 @@ public class QuestEditorData {
         {
             return;
         }
-        SelectItem(tiles);
+        esl = new EditorSelectionList("Select Item", tiles, delegate { SelectComponent(); });
+        esl.SelectItem();
     }
 
     public void NewTile()
@@ -96,7 +150,7 @@ public class QuestEditorData {
 
     }
 
-    public void SelectDoor()
+    public void ListDoor()
     {
         Game game = Game.Get();
 
@@ -113,8 +167,8 @@ public class QuestEditorData {
         {
             return;
         }
-        SelectItem(doors);
-
+        esl = new EditorSelectionList("Select Item", doors, delegate { SelectComponent(); });
+        esl.SelectItem();
     }
 
     public void NewDoor()
@@ -122,28 +176,30 @@ public class QuestEditorData {
 
     }
 
-    public void SelectItem(List<string> items)
+    public void SelectComponent()
     {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        SelectComponent(esl.selection);
+    }
 
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), "Select Item");
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
-        db.AddBorder();
-
-        float offset = 2;
-        TextButton tb = null;
-        foreach (string s in items)
+    public void SelectComponent(string name)
+    {
+        if (name.Equals("Quest"))
         {
-            tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), s, delegate { SelectTile(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            offset += 1;
+            SelectQuest();
+            return;
         }
-        offset += 1;
-        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        Game game = Game.Get();
+
+        if (!game.qd.components.ContainsKey(name))
+        {
+            Debug.Log("Error: Attempting to bring up missing component: " + name);
+        }
+
+        if (game.qd.components[name] is QuestData.Tile)
+        {
+            SelectTile(name);
+        }
     }
 
     public static void Cancel()

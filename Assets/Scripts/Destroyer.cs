@@ -53,4 +53,11 @@ public class Destroyer {
         game.tokenBoard.tc.Clear();
         game.editMode = false;
     }
+
+    public static void Dialog()
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
+    }
 }
