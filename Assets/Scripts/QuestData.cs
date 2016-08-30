@@ -193,6 +193,7 @@ public class QuestData
             }
 
             GameObject tile = new GameObject(name);
+            tile.tag = "board";
             tile.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
@@ -281,6 +282,7 @@ public class QuestData
 
             // Create object
             gameObject = new GameObject("Object" + name);
+            gameObject.tag = "board";
 
             Game game = Game.Get();
             gameObject.transform.parent = game.tokenCanvas.transform;
@@ -354,6 +356,7 @@ public class QuestData
 
             // Create object
             gameObject = new GameObject("Object" + name);
+            gameObject.tag = "board";
 
             Game game = Game.Get();
             gameObject.transform.parent = game.tokenCanvas.transform;

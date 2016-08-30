@@ -45,7 +45,8 @@ public class Game : MonoBehaviour {
     }
 
     // Unity fires off this function
-    void Start () {
+    void Start()
+    {
 
         // Find the common objects we use.  These are created by unity.
         uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
@@ -59,6 +60,11 @@ public class Game : MonoBehaviour {
         eventList = new Stack<QuestData.Event>();
         uiScaler = new UIScaler(uICanvas);
 
+        // Bring up the main menu
+        new MainMenu();
+    }
+    public void SelectQuest()
+    {
         // In the build the content packs need to go into the build data dir, this is currently manual
         string contentLocation = Application.dataPath + "/valkyrie-contentpacks/";
         if (Application.isEditor)
@@ -83,9 +89,6 @@ public class Game : MonoBehaviour {
 
         // Get a list of available quests
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
-
-        // Create the quit button
-        new QuitButton();
 
         // Pull up the quest selection page
         new QuestSelection(ql);
@@ -113,9 +116,13 @@ public class Game : MonoBehaviour {
         heroCanvas.SetupUI();
 
         // Add a finished button to start the quest
-        TextButton endSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(12, 2), "Finished", delegate { EndSelection(); }, Color.green);
+        TextButton endSelection = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "Finished", delegate { EndSelection(); }, Color.green);
         // Untag as dialog so this isn't cleared away during hero selection
         endSelection.ApplyTag("heroselect");
+
+        TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
+        // Untag as dialog so this isn't cleared away during hero selection
+        cancelSelection.ApplyTag("heroselect");
 
         // Create the monster list so we are ready to start
         monsters = new List<Monster>();
@@ -142,6 +149,7 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         morale = count;
+        round = 0;
         heroCanvas.EndSection();
     }
 
