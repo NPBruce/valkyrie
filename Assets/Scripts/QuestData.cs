@@ -259,6 +259,10 @@ public class QuestData
         public Color colour = Color.white;
         public GameObject gameObject;
 
+        public Door(string s) : base(s)
+        {
+        }
+
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             // Doors are cancelable because you can select then cancel
@@ -356,6 +360,11 @@ public class QuestData
         new public static string type = "Token";
         public GameObject gameObject;
         public string spriteName;
+
+        public Token(string s) : base(s)
+        {
+            spriteName = "search-token";
+        }
 
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
@@ -552,6 +561,17 @@ public class QuestData
         public string[] clearFlags;
         public bool cancelable = false;
         public bool highlight = false;
+
+        public Event(string s) : base(s)
+        {
+            nextEvent = new string[0];
+            failEvent = new string[0];
+            addComponents = new string[0];
+            removeComponents = new string[0];
+            flags = new string[0];
+            setFlags = new string[0];
+            clearFlags = new string[0];
+        }
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {

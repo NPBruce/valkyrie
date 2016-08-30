@@ -41,7 +41,15 @@ public class QuestEditorData {
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(26.5f, 8), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(21, 8), new Vector2(9, 1), "Token", delegate { ListToken(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(31, 8), new Vector2(9, 1), "New", delegate { NewToken(); });
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+
+        tb = new TextButton(new Vector2(26.5f, 10), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
@@ -218,12 +226,41 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(10, 1), "Color", delegate { DoorColour(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Color", delegate { DoorColour(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         d.SetVisible(1f);
     }
+
+    public void SelectToken(string name)
+    {
+        Clean();
+        Game game = Game.Get();
+        QuestData.Token t = game.qd.components[name] as QuestData.Token;
+        selection = t;
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Token", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Token".Length), delegate { ListToken(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        t.SetVisible(1f);
+    }
+
 
     public void DoorRotate()
     {
@@ -315,7 +352,49 @@ public class QuestEditorData {
 
     public void NewDoor()
     {
+        Game game = Game.Get();
+        int index = 0;
 
+        while (game.qd.components.ContainsKey("Door" + index))
+        {
+            index++;
+        }
+        game.qd.components.Add("Door" + index, new QuestData.Door("Door" + index));
+        SelectComponent("Door" + index);
+    }
+
+    public void ListToken()
+    {
+        Game game = Game.Get();
+
+        List<string> tokens = new List<string>();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            if (kv.Value is QuestData.Token)
+            {
+                tokens.Add(kv.Key);
+            }
+        }
+
+        if (tokens.Count == 0)
+        {
+            return;
+        }
+        esl = new EditorSelectionList("Select Item", tokens, delegate { SelectComponent(); });
+        esl.SelectItem();
+    }
+
+    public void NewToken()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.qd.components.ContainsKey("Token" + index))
+        {
+            index++;
+        }
+        game.qd.components.Add("Token" + index, new QuestData.Token("Token" + index));
+        SelectComponent("Token" + index);
     }
 
     public void SelectComponent()
@@ -346,6 +425,10 @@ public class QuestEditorData {
         if (game.qd.components[name] is QuestData.Door)
         {
             SelectDoor(name);
+        }
+        if (game.qd.components[name] is QuestData.Token)
+        {
+            SelectToken(name);
         }
     }
 
