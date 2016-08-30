@@ -210,11 +210,15 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + d.rotation + ")", delegate { DoorRotate(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 4), new Vector2(10, 1), "Color", delegate { DoorColour(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -235,6 +239,24 @@ public class QuestEditorData {
         SelectDoor(d.name);
     }
 
+
+    public void DoorColour()
+    {
+        List<string> colours = new List<string>();
+        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        {
+            colours.Add(kv.Key);
+        }
+        esl = new EditorSelectionList("Select Item", colours, delegate { SelectDoorColour(); });
+        esl.SelectItem();
+    }
+
+    public void SelectDoorColour()
+    {
+        QuestData.Door d = selection as QuestData.Door;
+        d.SetColor(esl.selection);
+        SelectComponent(d.name);
+    }
 
     public void ListTile()
     {
@@ -259,7 +281,15 @@ public class QuestEditorData {
 
     public void NewTile()
     {
+        Game game = Game.Get();
+        int index = 0;
 
+        while (game.qd.components.ContainsKey("Tile" + index))
+        {
+            index++;
+        }
+        game.qd.components.Add("Tile" + index, new QuestData.Tile("Tile" + index));
+        SelectComponent("Tile" + index);
     }
 
     public void ListDoor()

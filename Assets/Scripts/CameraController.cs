@@ -89,14 +89,10 @@ public class CameraController : MonoBehaviour {
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
 
-        Game game = Game.Get();
-
-        //game.boardCanvas.transform.rotation
         Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
         float rayDistance = 0;
         basePlane.Raycast(ray, out rayDistance);
-        
 
         Vector3 clickPoint = ray.GetPoint(rayDistance) / 105f;
 

@@ -149,6 +149,16 @@ public class QuestData
         new public static string type = "Tile";
         public int rotation = 0;
 
+        public Tile(string s) : base(s)
+        {
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
+            {
+                tileType = kv.Value;
+            }
+
+        }
+
         public Tile(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             // Get rotation if specified
@@ -246,7 +256,7 @@ public class QuestData
     {
         new public static string type = "Door";
         public int rotation = 0;
-        public float[] colour = { 1f, 1f, 1f };
+        public Color colour = Color.white;
         public GameObject gameObject;
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
@@ -262,17 +272,7 @@ public class QuestData
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
-                string colorRGB = ColorUtil.FromName(data["color"]);
-                if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
-                {
-                    Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
-                }
-                else
-                {
-                    colour[0] = System.Convert.ToInt32(colorRGB.Substring(1, 2), 16);
-                    colour[1] = System.Convert.ToInt32(colorRGB.Substring(3, 2), 16);
-                    colour[2] = System.Convert.ToInt32(colorRGB.Substring(5, 2), 16);
-                }
+                SetColor(data["color"]);
             }
 
             if (text.Equals(""))
@@ -281,8 +281,29 @@ public class QuestData
             }
         }
 
+        public void SetColor(string s)
+        {
+            string colorRGB = ColorUtil.FromName(s);
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
+            }
+            else
+            {
+                colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+                colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+                colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            }
+        }
+
         public override void Draw()
         {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+
             Sprite tileSprite;
             Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
             // Check load worked
@@ -303,7 +324,7 @@ public class QuestData
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
-            image.color = new Color(colour[0] / 255, colour[1] / 255, colour[2] / 255, 1);
+            image.color = new Color(colour[0], colour[1], colour[2], 1);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Rotate as required
@@ -678,13 +699,19 @@ public class QuestData
         // location on the board in squares
         public Vector2 location;
         // Has a location been speficied?
-        public bool locationSpecified;
+        public bool locationSpecified = false;
         // type for sub classes
         public static string type = "";
         // name of section in ini file
         public string name;
         // image for display
         public UnityEngine.UI.Image image;
+
+        public QuestComponent(string nameIn)
+        {
+            name = nameIn;
+            location = Vector2.zero;
+        }
 
         // Construct from ini data
         public QuestComponent(string nameIn, Dictionary<string, string> data)
