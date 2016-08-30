@@ -8,12 +8,20 @@ public class MenuButton {
 
         // Untag as dialog so this isn't cleared away
 
-        qb.ApplyTag("Untagged");
+        qb.ApplyTag("questui");
     }
 
     public void Menu()
     {
-        GameMenu.Create();
+        Game game = Game.Get();
+        if (game.editMode)
+        {
+            EditorMenu.Create();
+        }
+        else
+        {
+            GameMenu.Create();
+        }
     }
 
 }

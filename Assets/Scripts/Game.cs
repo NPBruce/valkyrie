@@ -37,6 +37,7 @@ public class Game : MonoBehaviour {
     public UIScaler uiScaler;
     public int morale;
     public MoraleDisplay moraleDisplay;
+    public bool editMode = false;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()

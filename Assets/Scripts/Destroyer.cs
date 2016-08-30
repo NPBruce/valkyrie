@@ -50,5 +50,6 @@ public class Destroyer {
         game.heroesSelected = false;
         game.moraleDisplay = null;
         game.tokenBoard.tc.Clear();
+        game.editMode = false;
     }
 }

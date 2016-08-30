@@ -17,22 +17,28 @@ public class QuestData
 
     // List of ini files containing quest data
     List<string> files;
+
+    // Location of the quest.ini file
+    public string questPath = "";
+    
     Game game;
 
     public QuestData(QuestLoader.Quest q)
     {
-        LoadQuestData(q.path + "/quest.ini");
+        questPath = q.path + "/quest.ini";
+        LoadQuestData();
     }
 
     // Read all data files and populate components for quest
     public QuestData(string path)
     {
-        LoadQuestData(path);
+        questPath = path;
+        LoadQuestData();
     }
 
-    public void LoadQuestData(string path)
+    public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + path + "\"");
+        Debug.Log("Loading quest from: \"" + questPath + "\"");
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
@@ -40,30 +46,30 @@ public class QuestData
         heroSelection = new Dictionary<string, List<Game.Hero>>();
 
         // Read the main quest file
-        IniData d = IniRead.ReadFromIni(path);
+        IniData d = IniRead.ReadFromIni(questPath);
         // Failure to read quest is fatal
         if(d == null)
         {
-            Debug.Log("Failed to load quest from: \"" + path + "\"");
+            Debug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
         }
 
         // List of data files
         files = new List<string>();
         // The main data file is included
-        files.Add(path);
+        files.Add(questPath);
 
         // Find others (no addition files is not fatal)
         if(d.Get("QuestData") == null)
         {
-            Debug.Log("QuestData section missing in: \"" + path + "\"");
+            Debug.Log("QuestData section missing in: \"" + questPath + "\"");
         }
         else
         {
             foreach (string file in d.Get("QuestData").Keys)
             {
                 // path is relative to the main file (absolute not supported)
-                files.Add(Path.GetDirectoryName(path) + "/" + file);
+                files.Add(Path.GetDirectoryName(questPath) + "/" + file);
             }
         }
 
@@ -690,6 +696,14 @@ public class QuestData
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
             else
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
+        }
+
+        // items are invisible by default, can toggle visibility
+        virtual public void SetVisible(float vis)
+        {
+            if (image == null)
+                return;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, vis);
         }
 
         // return visibility of image
