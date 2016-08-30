@@ -41,6 +41,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'editor'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
+            Object.Destroy(go);
+
         Game game = Game.Get();
         game.eventList.Clear();
         game.cd = null;

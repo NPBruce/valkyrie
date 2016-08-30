@@ -18,17 +18,14 @@ public class QuestEditor {
 
     public static void Reload()
     {
-
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        Destroyer.Dialog();
 
         // Clean up everything marked as 'board'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
             Object.Destroy(go);
 
-        // Clean up everything marked as 'questui'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+        // Clean up everything marked as 'editor'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
         Game game = Game.Get();
@@ -37,7 +34,7 @@ public class QuestEditor {
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
         {
-            qc.Value.SetVisible(true);
+            qc.Value.Draw();
             qc.Value.SetVisible(.2f);
         }
 

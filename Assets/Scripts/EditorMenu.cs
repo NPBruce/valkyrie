@@ -21,14 +21,8 @@ public class EditorMenu {
         tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 16), new Vector2(10, 2f), "Main Menu", delegate { Destroyer.MainMenu(); }, Color.white);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 19), new Vector2(10, 2f), "Cancel", delegate { Cancel(); }, Color.white);
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 19), new Vector2(10, 2f), "Cancel", delegate { Destroyer.Dialog(); }, Color.white);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
 
-    }
-
-    public static void Cancel()
-    {
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
     }
 }

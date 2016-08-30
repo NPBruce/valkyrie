@@ -10,6 +10,7 @@ TagManager:
   - herodisplay
   - board
   - questui
+  - editor
   layers:
   - Default
   - TransparentFX

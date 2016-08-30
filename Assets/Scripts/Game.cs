@@ -161,7 +161,16 @@ public class Game : MonoBehaviour {
         // Clean up temporary files
         QuestLoader.CleanTemp();
     }
-    
+
+
+    void Update()
+    {
+        if (qed != null && Input.GetMouseButtonDown(0))
+        {
+            qed.MouseDown();
+        }
+    }
+
     // Class for holding current hero status
     public class Hero
     {

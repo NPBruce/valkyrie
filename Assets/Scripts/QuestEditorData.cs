@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class QuestEditorData {
 
     public EditorSelectionList esl;
+    public QuestData.QuestComponent selection;
+    public bool gettingPosition = false;
 
     public QuestEditorData()
     {
@@ -51,14 +53,15 @@ public class QuestEditorData {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        // Clean up everything marked as 'questui'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+        // Clean up everything marked as 'editor'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
         {
-            qc.Value.SetVisible(true);
+            qc.Value.SetVisible(false);
+            qc.Value.Draw();
             qc.Value.SetVisible(.2f);
         }
     }
@@ -67,25 +70,26 @@ public class QuestEditorData {
     {
         Clean();
         Game game = Game.Get();
+        selection = null;
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Quest", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), game.qd.quest.name, delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 4), new Vector2(20, 6), game.qd.quest.description, delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), ">< Max Camera", delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
     }
 
 
@@ -94,35 +98,143 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Tile t = game.qd.components[name] as QuestData.Tile;
+        selection = t;
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Tile".Length), delegate { ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileType.sectionName, delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileType.sectionName, delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "<> Position", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("questui");
+        tb.ApplyTag("editor");
 
-        t.SetVisible(true);
+        t.SetVisible(1f);
     }
+
+    public void GetPosition()
+    {
+        gettingPosition = true;
+    }
+
+    public void MouseDown()
+    {
+        if (gettingPosition)
+        {
+            selection.location = CameraController.GetMouseTile();
+            gettingPosition = false;
+            SelectComponent(selection.name);
+        }
+    }
+
+
+    public void TileRotate()
+    {
+        QuestData.Tile t = selection as QuestData.Tile;
+        if (t.rotation == 0)
+        {
+            t.rotation = 90;
+        }
+        else if (t.rotation > 0 && t.rotation <= 100)
+        {
+            t.rotation = 180;
+        }
+        else if (t.rotation > 100 && t.rotation <= 190)
+        {
+            t.rotation = 270;
+        }
+        else
+        {
+            t.rotation = 0;
+        }
+        SelectTile(t.name);
+    }
+
+    public void ChangeTileSide()
+    {
+        Game game = Game.Get();
+
+        List<string> sides = new List<string>();
+
+        foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
+        {
+            sides.Add(kv.Key);
+        }
+        esl = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
+        esl.SelectItem();
+    }
+
+    public void SelectTileSide()
+    {
+        Game game = Game.Get();
+        QuestData.Tile t = selection as QuestData.Tile;
+        t.tileType = game.cd.tileSides[esl.selection];
+        SelectTile(t.name);
+    }
+
+    public void SelectDoor(string name)
+    {
+        Clean();
+        Game game = Game.Get();
+        QuestData.Door d = game.qd.components[name] as QuestData.Door;
+        selection = d;
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Door", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Door".Length), delegate { ListDoor(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + d.rotation + ")", delegate { DoorRotate(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        d.SetVisible(1f);
+    }
+
+    public void DoorRotate()
+    {
+        QuestData.Door d = selection as QuestData.Door;
+        if (d.rotation == 0)
+        {
+            d.rotation = 90;
+        }
+        else
+        {
+            d.rotation = 0;
+        }
+        SelectDoor(d.name);
+    }
+
 
     public void ListTile()
     {
@@ -199,6 +311,11 @@ public class QuestEditorData {
         if (game.qd.components[name] is QuestData.Tile)
         {
             SelectTile(name);
+        }
+
+        if (game.qd.components[name] is QuestData.Door)
+        {
+            SelectDoor(name);
         }
     }
 

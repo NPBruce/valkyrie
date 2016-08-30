@@ -38,7 +38,8 @@ public class EditorSelectionList
         {
             foreach (string s in items)
             {
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), s, delegate { SelectComponent(s); });
+                string key = s;
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 offset += 1;
             }
@@ -51,7 +52,8 @@ public class EditorSelectionList
         {
             for (int i = 0; i < 20; i++)
             {
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), items[i], delegate { SelectComponent(items[i]); });
+                string key = items[i];
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 offset += 1;
             }

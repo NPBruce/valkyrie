@@ -156,7 +156,7 @@ public class QuestData
             {
                 rotation = int.Parse(data["rotation"]);
             }
-            
+
             // Find the tileside that is used
             if (data.ContainsKey("side"))
             {
@@ -183,6 +183,19 @@ public class QuestData
                 Application.Quit();
             }
 
+            Draw();
+        }
+
+        public override void Draw()
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+
+            Game game = Game.Get();
+
             // Attempt to load image
             string imagePath = @"file://" + tileType.image;
             Sprite tileSprite;
@@ -201,7 +214,7 @@ public class QuestData
                 Application.Quit();
             }
 
-            GameObject tile = new GameObject(name);
+            GameObject tile = new GameObject("Object" + name);
             tile.tag = "board";
             tile.transform.parent = game.boardCanvas.transform;
 
@@ -268,18 +281,8 @@ public class QuestData
             }
         }
 
-        public override void SetVisible(bool vis)
+        public override void Draw()
         {
-            if(!vis)
-            {
-                GameObject go = GameObject.Find("Object" + name);
-                if (go != null)
-                {
-                    Object.Destroy(go);
-                }
-                return;
-            }
-
             Sprite tileSprite;
             Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
             // Check load worked
@@ -308,7 +311,20 @@ public class QuestData
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
-            
+        }
+
+        public override void SetVisible(bool vis)
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+
+            if (!vis) return;
+
+            Draw();
+            Game game = Game.Get();
             game.tokenBoard.add(this);
         }
     }
@@ -333,20 +349,8 @@ public class QuestData
             }
         }
 
-
-        public override void SetVisible(bool vis)
+        public override void Draw()
         {
-            if (!vis)
-            {
-                GameObject go = GameObject.Find("Object" + name);
-                if (go != null)
-                {
-                    Object.Destroy(go);
-                }
-                return;
-            }
-
-
             Sprite tileSprite;
             Texture2D newTex = Resources.Load("sprites/tokens/" + spriteName) as Texture2D;
             // Check if we can find the token image
@@ -378,7 +382,20 @@ public class QuestData
             image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+        }
 
+        public override void SetVisible(bool vis)
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+            if (!vis) return;
+
+            Draw();
+
+            Game game = Game.Get();
             game.tokenBoard.add(this);
         }
     }
@@ -689,6 +706,15 @@ public class QuestData
                 location.y = float.Parse(data["yposition"]);
             }
         }
+
+        // items are invisible by default, can toggle visibility
+        virtual public void Draw()
+        {
+            if(image == null)
+                return;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        }
+
 
         // items are invisible by default, can toggle visibility
         virtual public void SetVisible(bool vis)
