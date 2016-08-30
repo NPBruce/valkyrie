@@ -12,6 +12,8 @@ public class QuestEditor {
         Reload();
 
         new MenuButton();
+
+        game.qed = new QuestEditorData();
     }
 
     public static void Reload()
@@ -25,6 +27,10 @@ public class QuestEditor {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'questui'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+            Object.Destroy(go);
+
         Game game = Game.Get();
 
         game.qd = new QuestData(game.qd.questPath);
@@ -34,6 +40,8 @@ public class QuestEditor {
             qc.Value.SetVisible(true);
             qc.Value.SetVisible(.2f);
         }
+
+        game.qed = new QuestEditorData();
     }
 
     public static void Save()

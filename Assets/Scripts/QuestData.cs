@@ -20,7 +20,10 @@ public class QuestData
 
     // Location of the quest.ini file
     public string questPath = "";
-    
+
+    // Data from 'Quest' section
+    public Quest quest;
+
     Game game;
 
     public QuestData(QuestLoader.Quest q)
@@ -103,7 +106,7 @@ public class QuestData
 
         if (name.Equals("Quest"))
         {
-            new Quest(content);
+            quest = new Quest(content);
         }
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
@@ -719,45 +722,51 @@ public class QuestData
 
     public class Quest
     {
+        public string name = "";
+        public string description = "";
+        public int minPanX;
+        public int minPanY;
+        public int maxPanX;
+        public int maxPanY;
+
         public Quest(Dictionary<string, string> data)
         {
             CameraController cc = GameObject.FindObjectOfType<CameraController>();
+            maxPanX = 20 * 105;
+            maxPanY = 20 * 105;
+            minPanX = -20 * 105;
+            minPanY = -20 * 105;
+
+            if (data.ContainsKey("name"))
+            {
+                name = data["name"];
+            }
+            if (data.ContainsKey("description"))
+            {
+                name = data["description"];
+            }
 
             if (data.ContainsKey("maxpanx"))
             {
-                cc.maxPanX = int.Parse(data["maxpanx"]) * 105;
+                maxPanX = int.Parse(data["maxpanx"]) * 105;
             }
-            else
-            {
-                cc.maxPanX = 20 * 105;
-            }
-
             if (data.ContainsKey("maxpany"))
             {
-                cc.maxPanY = int.Parse(data["maxpany"]) * 105;
+                maxPanY = int.Parse(data["maxpany"]) * 105;
             }
-            else
-            {
-                cc.maxPanY = 20 * 105;
-            }
-
             if (data.ContainsKey("minpanx"))
             {
-                cc.minPanX = int.Parse(data["minpanx"]) * 105;
+                minPanX = int.Parse(data["minpanx"]) * 105;
             }
-            else
-            {
-                cc.minPanX = -20 * 105;
-            }
-
             if (data.ContainsKey("minpany"))
             {
                 cc.minPanY = int.Parse(data["minpany"]) * 105;
             }
-            else
-            {
-                cc.minPanY = -20 * 105;
-            }
+            cc.minPanX = minPanY;
+            cc.minPanY = minPanY;
+            cc.maxPanX = maxPanX;
+            cc.maxPanY = maxPanY;
         }
     }
 }
+

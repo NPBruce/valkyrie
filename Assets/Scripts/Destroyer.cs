@@ -45,6 +45,7 @@ public class Destroyer {
         game.eventList.Clear();
         game.cd = null;
         game.qd = null;
+        game.qed = null;
         game.heros = null;
         game.monsters = null;
         game.heroesSelected = false;
