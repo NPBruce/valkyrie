@@ -884,7 +884,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(7, 1), ">< Position", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -892,30 +892,107 @@ public class QuestEditorData {
         {
             if (!e.locationSpecified)
             {
-                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Unused", delegate { EventPosition(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { EventPosition(); });
             }
             else if (e.highlight)
             {
-                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Highlight", delegate { EventPosition(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Highlight", delegate { EventPosition(); });
             }
             else
             {
-                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Camera", delegate { EventPosition(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Camera", delegate { EventPosition(); });
             }
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        tb = new TextButton(new Vector2(12, 2), new Vector2(8, 1), "Flags/Components", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 4), new Vector2(20, 8), e.text.Replace("\\n", "\n"), delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(0, 12), new Vector2(8, 1), "Trigger:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), e.trigger, delegate { EventTrigger(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(8, 12), new Vector2(8, 1), "Selection:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(8, 13), new Vector2(8, 1), e.heroListName, delegate { EventHighlight(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(16, 12), new Vector2(2, 1), "Min");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(16, 13), new Vector2(2, 1), e.minHeroes.ToString(), delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(18, 12), new Vector2(2, 1), "Max");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(18, 13), new Vector2(2, 1), e.maxHeroes.ToString(), delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Add Components:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(9, 15), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        int offset = 16;
+        foreach (string s in e.addComponents)
+        {
+            tb = new TextButton(new Vector2(0, offset), new Vector2(9, 1), s, delegate { Cancel(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), "-", delegate { Cancel(); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        db = new DialogBox(new Vector2(10, 15), new Vector2(9, 1), "Remove Components:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        offset = 16;
+        foreach (string s in e.removeComponents)
+        {
+            tb = new TextButton(new Vector2(10, offset), new Vector2(9, 1), s, delegate { Cancel(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "-", delegate { Cancel(); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
 
         if (!type.Equals(QuestData.Event.type))
         {
-            tb = new TextButton(new Vector2(7, 4), new Vector2(6, 1), "Back", delegate { SelectComponent(name); });
+            tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { SelectComponent(name); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
-
-        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        else
+        {
+            tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
 
         if (e.locationSpecified)
         {
@@ -923,6 +1000,56 @@ public class QuestEditorData {
         }
 
         e.SetVisible(1f);
+    }
+
+    public void EventHighlight()
+    {
+        List<string> events = new List<string>();
+        events.Add("");
+
+        Game game = Game.Get();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            if (kv.Value is QuestData.Event)
+            {
+                events.Add(kv.Key);
+            }
+        }
+
+        esl = new EditorSelectionList("Select Event", events, delegate { SelectEventHighlight(); });
+        esl.SelectItem();
+    }
+
+    public void SelectEventHighlight()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.heroListName = esl.selection;
+        SelectComponent(e.name);
+    }
+
+    public void EventTrigger()
+    {
+        List<string> triggers = new List<string>();
+        triggers.Add("");
+        triggers.Add("EndRound");
+        triggers.Add("NoMorale");
+
+        Game game = Game.Get();
+        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        {
+            triggers.Add("Defeated" + kv.Key);
+            triggers.Add("DefeatedUnique" + kv.Key);
+        }
+
+        esl = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
+        esl.SelectItem();
+    }
+
+    public void SelectEventTrigger()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.trigger = esl.selection;
+        SelectComponent(e.name);
     }
 
     public void EventPosition()
