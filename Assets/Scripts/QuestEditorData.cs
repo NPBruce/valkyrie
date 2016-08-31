@@ -379,7 +379,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Types:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 6), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+        tb = new TextButton(new Vector2(16, 6), new Vector2(1, 1), "+", delegate { MonsterTypeAdd(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -387,15 +387,22 @@ public class QuestEditorData {
         {
             if (m.mTypes.Length > i)
             {
-                tb = new TextButton(new Vector2(0, 7 + i), new Vector2(1, 1), "-", delegate { Cancel(); }, Color.red);
+                int mSlot = i;
+                string mName = m.mTypes[i];
+                if (mName.IndexOf("Monster") == 0)
+                {
+                    mName = mName.Substring("Monster".Length);
+                }
+
+                tb = new TextButton(new Vector2(0, 7 + i), new Vector2(1, 1), "-", delegate { MonsterTypeRemove(mSlot); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(1, 7 + i), new Vector2(15, 1), m.mTypes[i], delegate { Cancel(); });
+                tb = new TextButton(new Vector2(1, 7 + i), new Vector2(15, 1), mName, delegate { MonsterTypeReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(16, 7 + i), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+                tb = new TextButton(new Vector2(16, 7 + i), new Vector2(1, 1), "+", delegate { MonsterTypeAdd(mSlot + 1); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -404,6 +411,77 @@ public class QuestEditorData {
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);
+    }
+
+    public void MonsterTypeRemove(int pos)
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        string[] newM = new string[m.mTypes.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < m.mTypes.Length; i++)
+        {
+            if (i != pos || i != j)
+            {
+                newM[j] = m.mTypes[i];
+                j++;
+            }
+        }
+        m.mTypes = newM;
+        SelectComponent(m.name);
+    }
+
+    public void MonsterTypeAdd(int pos)
+    {
+        Game game = Game.Get();
+        List<string> monsters = new List<string>();
+        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        {
+            monsters.Add(kv.Key);
+        }
+        esl = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos); });
+        esl.SelectItem();
+    }
+
+    public void MonsterTypeReplace(int pos)
+    {
+        Game game = Game.Get();
+        List<string> monsters = new List<string>();
+        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        {
+            monsters.Add(kv.Key);
+        }
+        esl = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos, true); });
+        esl.SelectItem();
+    }
+
+    public void SelectMonsterType(int pos, bool replace = false)
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        if (replace)
+        {
+            m.mTypes[pos] = esl.selection;
+        }
+        else
+        {
+            string[] newM = new string[m.mTypes.Length + 1];
+
+            int j = 0;
+            for (int i = 0; i < newM.Length; i++)
+            {
+                if (j == pos && i == j)
+                {
+                    newM[i] = esl.selection;
+                }
+                else
+                {
+                    newM[i] = m.mTypes[j];
+                    j++;
+                }
+            }
+            m.mTypes = newM;
+        }
+        SelectComponent(m.name);
     }
 
     public void SelectMPlace(string name)

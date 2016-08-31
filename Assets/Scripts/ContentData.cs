@@ -182,6 +182,9 @@ public class ContentData {
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
+            // Ignore monster activations
+            if (name.IndexOf(ActivationData.type) == 0)
+                return;
             // If we don't already have one then add this
             if (!monsters.ContainsKey(d.name))
             {
