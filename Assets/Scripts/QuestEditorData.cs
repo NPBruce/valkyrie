@@ -322,11 +322,28 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Event", delegate { SelectEvent(name); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), t.spriteName, delegate { TokenType(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Event", delegate { SelectEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         t.SetVisible(1f);
+    }
+
+    public void TokenType()
+    {
+        esl = new EditorSelectionList("Select Token", GetTokenNames(), delegate { SelectTokenType(); });
+        esl.SelectItem();
+    }
+
+    public void SelectTokenType()
+    {
+        QuestData.Token t = selection as QuestData.Token;
+        t.spriteName = esl.selection;
+        SelectComponent(t.name);
     }
 
     public void SelectMonster(string name)
@@ -774,5 +791,22 @@ public class QuestEditorData {
     {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
+    }
+
+    public static List<string> GetTokenNames()
+    {
+        List<string> names = new List<string>();
+        names.Add("Search-Token");
+        names.Add("search-token-special");
+        names.Add("objective-token-black");
+        names.Add("objective-token-blue");
+        names.Add("objective-token-green");
+        names.Add("objective-token-red");
+        names.Add("objective-token-white");
+        names.Add("rubble-token-clipped");
+        names.Add("villager-token-man");
+        names.Add("villager-tokens-woman");
+        names.Add("tokensunstone");
+        return names;
     }
 }
