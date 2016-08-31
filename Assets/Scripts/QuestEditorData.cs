@@ -6,12 +6,28 @@ public class QuestEditorData {
 
     public EditorSelectionList esl;
     public QuestData.QuestComponent selection;
+    public Stack<QuestData.QuestComponent> selectionStack;
     public bool gettingPosition = false;
     public bool gettingMinPosition = false;
     public bool gettingMaxPosition = false;
+    public bool backTriggered = false;
+
+    public void NewSelection(QuestData.QuestComponent c)
+    {
+        if (!backTriggered)
+        {
+            if (selection != c)
+            {
+                selectionStack.Push(selection);
+            }
+        }
+        backTriggered = false;
+        selection = c;
+    }
 
     public QuestEditorData()
     {
+        selectionStack = new Stack<QuestData.QuestComponent>();
         SelectQuest();
     }
 
@@ -100,11 +116,29 @@ public class QuestEditorData {
         }
     }
 
+    public void Back()
+    {
+        if (selectionStack.Count == 0)
+        {
+            return;
+        }
+        QuestData.QuestComponent qc = selectionStack.Pop();
+        backTriggered = true;
+        if (qc == null)
+        {
+            SelectQuest();
+        }
+        else
+        {
+            SelectComponent(qc.name);
+        }
+    }
+
     public void SelectQuest()
     {
         Clean();
         Game game = Game.Get();
-        selection = null;
+        NewSelection(null);
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Quest", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -125,6 +159,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
         game.tokenBoard.AddHighlight(new Vector2(game.qd.quest.minPanX, game.qd.quest.minPanY), "CamMin", "editor");
         game.tokenBoard.AddHighlight(new Vector2(game.qd.quest.maxPanX, game.qd.quest.maxPanY), "CamMax", "editor");
     }
@@ -135,7 +173,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Tile t = game.qd.components[name] as QuestData.Tile;
-        selection = t;
+        NewSelection(t);
         CameraController.SetCamera(t.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { TypeSelect(); });
@@ -161,6 +199,10 @@ public class QuestEditorData {
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { TileRotate(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -258,7 +300,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Door d = game.qd.components[name] as QuestData.Door;
-        selection = d;
+        NewSelection(d);
         CameraController.SetCamera(d.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Door", delegate { TypeSelect(); });
@@ -291,6 +333,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
         game.tokenBoard.AddHighlight(d.location, "DoorAnchor", "editor");
 
         d.SetVisible(1f);
@@ -301,7 +347,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Token t = game.qd.components[name] as QuestData.Token;
-        selection = t;
+        NewSelection(t);
         CameraController.SetCamera(t.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Token", delegate { TypeSelect(); });
@@ -330,6 +376,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
         t.SetVisible(1f);
     }
 
@@ -351,7 +401,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Monster m = game.qd.components[name] as QuestData.Monster;
-        selection = m;
+        NewSelection(m);
         CameraController.SetCamera(m.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { TypeSelect(); });
@@ -376,7 +426,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { SelectMonsterPlacements(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -462,9 +512,69 @@ public class QuestEditorData {
             }
         }
 
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);
+    }
+
+    public void SelectMonsterPlacements()
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        Clean();
+        Game game = Game.Get();
+        CameraController.SetCamera(m.location);
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), m.name.Substring("Monster".Length), delegate { ListMonster(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        int offset = 1;
+        DialogBox db = null;
+        for (int heroes = 2; heroes < 5; heroes++)
+        {
+            int h = heroes;
+            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), heroes + " Heros:");
+            db.ApplyTag("editor");
+
+            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { MonsterPlaceAdd(h); }, Color.green);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (m.placement[heroes].Length > i)
+                {
+                    int mSlot = i;
+                    string place = m.placement[heroes][i];
+
+                    tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { MonsterPlaceRemove(h, mSlot); }, Color.red);
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.ApplyTag("editor");
+
+                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), place, delegate { SelectMPlace(place); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.ApplyTag("editor");
+                }
+                offset++;
+            }
+        }
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { SelectMonster(m.name); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
     }
 
     public void MonsterUnique()
@@ -565,6 +675,60 @@ public class QuestEditorData {
         SelectComponent(m.name);
     }
 
+    public void MonsterPlaceAdd(int heroes)
+    {
+        Game game = Game.Get();
+
+        List<string> mplaces = new List<string>();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            if (kv.Value is QuestData.MPlace)
+            {
+                mplaces.Add(kv.Key);
+            }
+        }
+
+        if (mplaces.Count == 0)
+        {
+            return;
+        }
+        esl = new EditorSelectionList("Select Item", mplaces, delegate { MonsterPlaceAddSelection(heroes); });
+        esl.SelectItem();
+    }
+
+    public void MonsterPlaceAddSelection(int heroes)
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        string[] newM = new string[m.placement[heroes].Length + 1];
+        int i;
+        for (i = 0; i < m.placement[heroes].Length; i++)
+        {
+            newM[i] = m.placement[heroes][i];
+        }
+
+        newM[i] = esl.selection;
+        m.placement[heroes] = newM;
+        SelectMonsterPlacements();
+    }
+
+    public void MonsterPlaceRemove(int heroes, int pos)
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        string[] newM = new string[m.placement[heroes].Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < m.placement[heroes].Length; i++)
+        {
+            if (i != pos || i != j)
+            {
+                newM[j] = m.placement[heroes][i];
+                j++;
+            }
+        }
+        m.placement[heroes] = newM;
+        SelectMonsterPlacements();
+    }
+
     public void MonsterTypeAdd(int pos)
     {
         Game game = Game.Get();
@@ -623,7 +787,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.MPlace m = game.qd.components[name] as QuestData.MPlace;
-        selection = m;
+        NewSelection(m);
         CameraController.SetCamera(m.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "MPlace", delegate { TypeSelect(); });
@@ -656,6 +820,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);
@@ -682,7 +850,7 @@ public class QuestEditorData {
         Clean();
         Game game = Game.Get();
         QuestData.Event e = game.qd.components[name] as QuestData.Event;
-        selection = e;
+        NewSelection(e);
         if (e.highlight)
         {
             CameraController.SetCamera(e.location);
@@ -744,6 +912,10 @@ public class QuestEditorData {
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
+
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
 
         if (e.locationSpecified)
         {
