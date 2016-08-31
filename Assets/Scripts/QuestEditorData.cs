@@ -716,13 +716,31 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        //tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
-        //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        //tb.ApplyTag("editor");
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
 
-        if(!type.Equals(QuestData.Event.type))
+        if (!e.GetType().IsSubclassOf(typeof(QuestData.Event)))
         {
-            tb = new TextButton(new Vector2(7, 2), new Vector2(6, 1), "Back", delegate { SelectComponent(name); });
+            if (!e.locationSpecified)
+            {
+                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Unused", delegate { EventPosition(); });
+            }
+            else if (e.highlight)
+            {
+                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Highlight", delegate { EventPosition(); });
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(8, 2), new Vector2(8, 1), "Camera", delegate { EventPosition(); });
+            }
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        if (!type.Equals(QuestData.Event.type))
+        {
+            tb = new TextButton(new Vector2(7, 4), new Vector2(6, 1), "Back", delegate { SelectComponent(name); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -733,6 +751,27 @@ public class QuestEditorData {
         }
 
         e.SetVisible(1f);
+    }
+
+    public void EventPosition()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        if (!e.locationSpecified)
+        {
+            e.locationSpecified = true;
+            e.highlight = false;
+        }
+        else if (!e.highlight)
+        {
+            e.locationSpecified = true;
+            e.highlight = true;
+        }
+        else
+        {
+            e.locationSpecified = false;
+            e.highlight = false;
+        }
+        SelectEvent(e.name);
     }
 
     public void DoorRotate()
