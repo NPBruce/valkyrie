@@ -912,9 +912,14 @@ public class QuestData
     // Events are used to create dialogs that control the quest
     public class MPlace : QuestComponent
     {
-        public bool master;
+        public bool master = false;
         new public static string type = "MPlace";
-        public bool rotate;
+        public bool rotate = false;
+
+
+        public MPlace(string s) : base(s)
+        {
+        }
 
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {

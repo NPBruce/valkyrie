@@ -55,14 +55,21 @@ public class QuestEditorData {
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 12), new Vector2(9, 1), "Event", delegate { ListEvent(); });
+        tb = new TextButton(new Vector2(21, 12), new Vector2(9, 1), "MPlace", delegate { ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 12), new Vector2(9, 1), "New", delegate { NewEvent(); });
+        tb = new TextButton(new Vector2(31, 12), new Vector2(9, 1), "New", delegate { NewMPlace(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(26.5f, 14), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(21, 14), new Vector2(9, 1), "Event", delegate { ListEvent(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(31, 14), new Vector2(9, 1), "New", delegate { NewEvent(); });
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(26.5f, 16), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
@@ -124,6 +131,7 @@ public class QuestEditorData {
         Game game = Game.Get();
         QuestData.Tile t = game.qd.components[name] as QuestData.Tile;
         selection = t;
+        CameraController.SetCamera(t.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -220,6 +228,7 @@ public class QuestEditorData {
         Game game = Game.Get();
         QuestData.Door d = game.qd.components[name] as QuestData.Door;
         selection = d;
+        CameraController.SetCamera(d.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Door", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -260,6 +269,7 @@ public class QuestEditorData {
         Game game = Game.Get();
         QuestData.Token t = game.qd.components[name] as QuestData.Token;
         selection = t;
+        CameraController.SetCamera(t.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Token", delegate { TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -286,12 +296,73 @@ public class QuestEditorData {
         t.SetVisible(1f);
     }
 
+    public void SelectMonster(string name)
+    {
+        Clean();
+        Game game = Game.Get();
+        QuestData.Monster m = game.qd.components[name] as QuestData.Monster;
+        selection = m;
+        CameraController.SetCamera(m.location);
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Monster".Length), delegate { ListToken(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        m.SetVisible(1f);
+    }
+
+    public void SelectMPlace(string name)
+    {
+        Clean();
+        Game game = Game.Get();
+        QuestData.MPlace m = game.qd.components[name] as QuestData.MPlace;
+        selection = m;
+        CameraController.SetCamera(m.location);
+
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "MPlace", delegate { TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("MPlace".Length), delegate { ListToken(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        m.SetVisible(1f);
+    }
     public void SelectEvent(string name)
     {
         Clean();
         Game game = Game.Get();
         QuestData.Event e = game.qd.components[name] as QuestData.Event;
         selection = e;
+        if (e.highlight)
+        {
+            CameraController.SetCamera(e.location);
+        }
 
         string type = QuestData.Event.type;
         if (e is QuestData.Door)
@@ -504,6 +575,40 @@ public class QuestEditorData {
         SelectComponent("Monster" + index);
     }
 
+    public void ListMPlace()
+    {
+        Game game = Game.Get();
+
+        List<string> mplaces = new List<string>();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            if (kv.Value is QuestData.MPlace)
+            {
+                mplaces.Add(kv.Key);
+            }
+        }
+
+        if (mplaces.Count == 0)
+        {
+            return;
+        }
+        esl = new EditorSelectionList("Select Item", mplaces, delegate { SelectComponent(); });
+        esl.SelectItem();
+    }
+
+    public void NewMPlace()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.qd.components.ContainsKey("MPlace" + index))
+        {
+            index++;
+        }
+        game.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
+        SelectComponent("MPlace" + index);
+    }
+
     public void ListEvent()
     {
         Game game = Game.Get();
@@ -575,6 +680,16 @@ public class QuestEditorData {
         if (game.qd.components[name] is QuestData.Token)
         {
             SelectToken(name);
+            return;
+        }
+        if (game.qd.components[name] is QuestData.Monster)
+        {
+            SelectMonster(name);
+            return;
+        }
+        if (game.qd.components[name] is QuestData.MPlace)
+        {
+            SelectMPlace(name);
             return;
         }
         if (game.qd.components[name] is QuestData.Event)

@@ -152,8 +152,7 @@ public class EventHelper {
 
         if (e.locationSpecified)
         {
-            Camera cam = GameObject.FindObjectOfType<Camera>();
-            cam.transform.position = new Vector3(e.location.x * 105, e.location.y * 105, -800);
+            CameraController.SetCamera(e.location);
         }
     }
 

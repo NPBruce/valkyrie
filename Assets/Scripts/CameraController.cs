@@ -79,7 +79,7 @@ public class CameraController : MonoBehaviour {
         }
         if (Input.GetMouseButton(0))
         {
-            // Scaling?? (probably need to do a ray trace like GetMouseTile
+            // Scaling?? (probably need to do a ray trace like GetMouseTile (but remove the find object - not static)
             gameObject.transform.position = new Vector3(mouseDownCamPosition.x + mouseDownMousePosition.x - Input.mousePosition.x,
                 mouseDownCamPosition.y + mouseDownMousePosition.y - Input.mousePosition.y, mouseDownCamPosition.z);
         }
@@ -111,5 +111,11 @@ public class CameraController : MonoBehaviour {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.maxPanX = Mathf.RoundToInt(max.x * 105);
         cc.maxPanY = Mathf.RoundToInt(max.y * 105);
+    }
+
+    public static void SetCamera(Vector2 pos)
+    {
+        Camera cam = GameObject.FindObjectOfType<Camera>();
+        cam.transform.position = new Vector3(pos.x * 105, pos.y * 105, -800);
     }
 }
