@@ -164,6 +164,8 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        game.tokenBoard.AddHighlight(t.location, "TileAnchor", "editor");
+
         t.SetVisible(1f);
     }
 
@@ -289,6 +291,8 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        game.tokenBoard.AddHighlight(d.location, "DoorAnchor", "editor");
+
         d.SetVisible(1f);
     }
 
@@ -351,6 +355,8 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
+
         m.SetVisible(1f);
     }
 
@@ -380,8 +386,39 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        string r = "Right";
+        if (m.rotate) r = "Down";
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotate: " + r, delegate { RotateMPlace(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        string mast = "Minion";
+        if (m.master) mast = "Master";
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), mast, delegate { MasterMPlace(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
+
         m.SetVisible(1f);
     }
+
+
+    public void RotateMPlace()
+    {
+        QuestData.MPlace d = selection as QuestData.MPlace;
+        d.rotate = !d.rotate;
+        SelectComponent(d.name);
+    }
+
+    public void MasterMPlace()
+    {
+        QuestData.MPlace d = selection as QuestData.MPlace;
+        d.master = !d.master;
+        SelectComponent(d.name);
+    }
+
+
     public void SelectEvent(string name)
     {
         Clean();
@@ -430,6 +467,11 @@ public class QuestEditorData {
             tb = new TextButton(new Vector2(7, 2), new Vector2(6, 1), "Back", delegate { SelectComponent(name); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
+        }
+
+        if (e.locationSpecified)
+        {
+            game.tokenBoard.AddHighlight(e.location, "EventLoc", "editor");
         }
 
         e.SetVisible(1f);
