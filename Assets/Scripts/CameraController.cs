@@ -98,4 +98,18 @@ public class CameraController : MonoBehaviour {
 
         return new Vector2(Mathf.Round(clickPoint.x), Mathf.Round(clickPoint.y));
     }
+
+    public static void SetCameraMin(Vector2 min)
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        cc.minPanX = Mathf.RoundToInt(min.x * 105);
+        cc.minPanY = Mathf.RoundToInt(min.y * 105);
+    }
+
+    public static void SetCameraMax(Vector2 max)
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        cc.maxPanX = Mathf.RoundToInt(max.x * 105);
+        cc.maxPanY = Mathf.RoundToInt(max.y * 105);
+    }
 }

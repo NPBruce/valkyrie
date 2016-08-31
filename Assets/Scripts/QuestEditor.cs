@@ -43,6 +43,25 @@ public class QuestEditor {
 
     public static void Save()
     {
-        //Fixme
+        Game game = Game.Get();
+        string content = "; Saved by version: " + Game.version + System.Environment.NewLine;
+        content += game.qd.quest.ToString() + System.Environment.NewLine;
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            content += System.Environment.NewLine;
+            content += kv.Value.ToString();
+        }
+
+        try
+        {
+            System.IO.File.WriteAllText(game.qd.questPath, content);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("FDFDFD");
+        }
+
+        Reload();
     }
 }

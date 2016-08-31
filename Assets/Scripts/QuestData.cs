@@ -468,7 +468,7 @@ public class QuestData
 
             if(!spriteName.Equals("search-token"))
             {
-                r += "type=" + spriteName;
+                r += "type=" + spriteName + nl;
             }
             return r;
         }
@@ -486,6 +486,7 @@ public class QuestData
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
+        public string originalText;
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
@@ -514,9 +515,9 @@ public class QuestData
             }
 
             // If we didn't find anything try by trait
+            mTraits = new string[0];
             if (mData == null)
             {
-                mTraits = new string[0];
                 if (data.ContainsKey("traits"))
                 {
                     mTraits = data["traits"].Split(' ');
@@ -555,6 +556,7 @@ public class QuestData
 
                 mData = list[Random.Range(0, list.Count)];
             }
+            originalText = text;
             text = text.Replace("<type>", mData.name);
 
             placement = new string[5][];
@@ -590,6 +592,10 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
+            int textStart = r.IndexOf("text=");
+            int textEnd = r.IndexOf("\n", textStart);
+            r = r.Substring(0, textStart) + "text=\"" + originalText + "\"" + r.Substring(textEnd);
+
             if (mTypes.Length > 0)
             {
                 r += "monster=";
@@ -619,6 +625,18 @@ public class QuestData
                     }
                     r = r.Substring(0, r.Length - 1) + nl;
                 }
+            }
+            if(unique)
+            {
+                r += "unique=true" + nl;
+            }
+            if (!uniqueTitle.Equals("Master " + mData.name))
+            {
+                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+            }
+            if (!uniqueText.Equals(""))
+            {
+                r += "uniquetext=\"" + uniqueText + "\"" + nl;
             }
 
             return r;
@@ -992,7 +1010,6 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = "[" + name + "]" + nl;
-            r += "name=" + name + nl;
             if (locationSpecified)
             {
                 r += "xposition=" + location.x + nl;
@@ -1014,11 +1031,10 @@ public class QuestData
 
         public Quest(Dictionary<string, string> data)
         {
-            CameraController cc = GameObject.FindObjectOfType<CameraController>();
-            maxPanX = 20 * 105;
-            maxPanY = 20 * 105;
-            minPanX = -20 * 105;
-            minPanY = -20 * 105;
+            maxPanX = 20;
+            maxPanY = 20;
+            minPanX = -20;
+            minPanY = -20;
 
             if (data.ContainsKey("name"))
             {
@@ -1026,29 +1042,28 @@ public class QuestData
             }
             if (data.ContainsKey("description"))
             {
-                name = data["description"];
+                description = data["description"];
             }
 
             if (data.ContainsKey("maxpanx"))
             {
-                maxPanX = int.Parse(data["maxpanx"]) * 105;
+                maxPanX = int.Parse(data["maxpanx"]);
             }
             if (data.ContainsKey("maxpany"))
             {
-                maxPanY = int.Parse(data["maxpany"]) * 105;
+                maxPanY = int.Parse(data["maxpany"]);
             }
             if (data.ContainsKey("minpanx"))
             {
-                minPanX = int.Parse(data["minpanx"]) * 105;
+                minPanX = int.Parse(data["minpanx"]);
             }
             if (data.ContainsKey("minpany"))
             {
-                cc.minPanY = int.Parse(data["minpany"]) * 105;
+                minPanY = int.Parse(data["minpany"]);
             }
-            cc.minPanX = minPanY;
-            cc.minPanY = minPanY;
-            cc.maxPanX = maxPanX;
-            cc.maxPanY = maxPanY;
+
+            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
+            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
         }
 
         override public string ToString()
@@ -1057,7 +1072,22 @@ public class QuestData
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
             r += "description=" + description + nl;
-
+            if (minPanY != -20)
+            {
+                r += "minpany=" + minPanY + nl;
+            }
+            if (minPanX != -20)
+            {
+                r += "minpanx=" + minPanX + nl;
+            }
+            if (maxPanX != -20)
+            {
+                r += "maxpanx=" + maxPanX + nl;
+            }
+            if (maxPanY != -20)
+            {
+                r += "maxpany=" + maxPanY + nl;
+            }
             return r;
         }
     }
