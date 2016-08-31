@@ -59,7 +59,8 @@ public class QuestEditor {
         }
         catch (System.Exception)
         {
-            Debug.Log("FDFDFD");
+            Debug.Log("Error: Failed to save quest in editor.");
+            Application.Quit();
         }
 
         Reload();

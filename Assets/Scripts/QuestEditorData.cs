@@ -65,10 +65,14 @@ public class QuestEditorData {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'board'
+        // This means we have to reload everything, but otherwise we end up with ghost objects.  This solution is good enough
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+            Object.Destroy(go);
+
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
         {
-            qc.Value.SetVisible(false);
             qc.Value.Draw();
             qc.Value.SetVisible(.2f);
         }
