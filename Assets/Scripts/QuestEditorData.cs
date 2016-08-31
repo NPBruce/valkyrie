@@ -7,6 +7,8 @@ public class QuestEditorData {
     public EditorSelectionList esl;
     public QuestData.QuestComponent selection;
     public bool gettingPosition = false;
+    public bool gettingMinPosition = false;
+    public bool gettingMaxPosition = false;
 
     public QuestEditorData()
     {
@@ -115,13 +117,16 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { GetMinPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), ">< Max Camera", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), ">< Max Camera", delegate { GetMaxPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
+
+        game.tokenBoard.AddHighlight(new Vector2(game.qd.quest.minPanX, game.qd.quest.minPanY), "CamMin", "editor");
+        game.tokenBoard.AddHighlight(new Vector2(game.qd.quest.maxPanX, game.qd.quest.maxPanY), "CamMax", "editor");
     }
 
 
@@ -167,6 +172,16 @@ public class QuestEditorData {
         gettingPosition = true;
     }
 
+    public void GetMinPosition()
+    {
+        gettingMinPosition = true;
+    }
+
+    public void GetMaxPosition()
+    {
+        gettingMaxPosition = true;
+    }
+
     public void MouseDown()
     {
         if (gettingPosition)
@@ -174,6 +189,20 @@ public class QuestEditorData {
             selection.location = CameraController.GetMouseTile();
             gettingPosition = false;
             SelectComponent(selection.name);
+        }
+        if (gettingMaxPosition)
+        {
+            Game game = Game.Get();
+            game.qd.quest.SetMaxCam(CameraController.GetMouseTile());
+            SelectQuest();
+            gettingMaxPosition = false;
+        }
+        if (gettingMinPosition)
+        {
+            Game game = Game.Get();
+            game.qd.quest.SetMinCam(CameraController.GetMouseTile());
+            SelectQuest();
+            gettingMinPosition = false;
         }
     }
 

@@ -69,7 +69,15 @@ public class QuestEditSelection
 
     public void Delete(string key)
     {
-        //Fixme
+        try
+        {
+            Directory.Delete(key, true);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Failed to delete quest: " + key);
+        }
+        new QuestEditSelection();
     }
 
     public void CancelCopy()

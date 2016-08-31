@@ -1089,6 +1089,20 @@ public class QuestData
             CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
         }
 
+        public void SetMaxCam(Vector2 pos)
+        {
+            maxPanX = Mathf.RoundToInt(pos.x);
+            maxPanY = Mathf.RoundToInt(pos.y);
+            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
+        }
+
+        public void SetMinCam(Vector2 pos)
+        {
+            minPanX = Mathf.RoundToInt(pos.x);
+            minPanY = Mathf.RoundToInt(pos.y);
+            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
+        }
+
         override public string ToString()
         {
             string nl = System.Environment.NewLine;

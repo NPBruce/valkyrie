@@ -189,6 +189,11 @@ public class TokenBoard : MonoBehaviour {
 
     public void AddHighlight(QuestData.Event e)
     {
+        AddHighlight(e.location);
+    }
+
+    public void AddHighlight(Vector2 location, string id="", string tag="dialog")
+    {
         Sprite tileSprite;
         Texture2D newTex = Resources.Load("sprites/tokens/search-token-special") as Texture2D;
         // Check load worked
@@ -199,8 +204,8 @@ public class TokenBoard : MonoBehaviour {
         }
 
         // Create object
-        GameObject gameObject = new GameObject("MonsterSpawn");
-        gameObject.tag = "dialog";
+        GameObject gameObject = new GameObject("Highlight" + id);
+        gameObject.tag = tag;
 
         Game game = Game.Get();
         gameObject.transform.parent = game.tokenCanvas.transform;
@@ -213,7 +218,7 @@ public class TokenBoard : MonoBehaviour {
         image.sprite = tileSprite;
         image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(e.location.x, e.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
     }
 }
 
