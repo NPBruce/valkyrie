@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class QuestEditSelection
 {
@@ -107,12 +108,111 @@ public class QuestEditSelection
 
     public void Copy(string key)
     {
-        // Fixme
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+
+        int i = 1;
+        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        {
+            i++;
+        }
+        string targetLocation = dataLocation + "/EditorQuest" + i;
+
+        try
+        {
+            DirectoryCopy(key, targetLocation, true);
+            string[] questData = File.ReadAllLines(targetLocation + "/quest.ini");
+
+            bool questFound = false;
+            for (i = 0; i < questData.Length; i++)
+            {
+                if (questData[i].Equals("[Quest]"))
+                {
+                    questFound = true;
+                }
+                if (questFound && questData[i].IndexOf("name=") == 0)
+                {
+                    questFound = false;
+                    questData[i] = questData[i] + " (Copy)";
+                }
+            }
+
+            File.WriteAllLines(targetLocation + "/quest.ini", questData);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Error: Failed to copy quest.");
+            Application.Quit();
+        }
+        new QuestEditSelection();
+    }
+
+    private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+    {
+        // Get the subdirectories for the specified directory.
+        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException(
+                "Source directory does not exist or could not be found: "
+                + sourceDirName);
+        }
+
+        DirectoryInfo[] dirs = dir.GetDirectories();
+        // If the destination directory doesn't exist, create it.
+        if (!Directory.Exists(destDirName))
+        {
+            Directory.CreateDirectory(destDirName);
+        }
+
+        // Get the files in the directory and copy them to the new location.
+        FileInfo[] files = dir.GetFiles();
+        foreach (FileInfo file in files)
+        {
+            string temppath = Path.Combine(destDirName, file.Name);
+            file.CopyTo(temppath, false);
+        }
+
+        // If copying subdirectories, copy them and their contents to new location.
+        if (copySubDirs)
+        {
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string temppath = Path.Combine(destDirName, subdir.Name);
+                DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+            }
+        }
     }
 
     public void NewQuest()
     {
-        // fixme
+
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+
+        int i = 1;
+        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        {
+            i++;
+        }
+        string targetLocation = dataLocation + "/EditorQuest" + i;
+
+        try
+        {
+            Directory.CreateDirectory(targetLocation);
+
+            string[] questData = new string[2];
+
+            questData[0] = "[Quest]";
+            questData[1] = "name=EditorQuest" + i;
+
+            File.WriteAllLines(targetLocation + "/quest.ini", questData);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Error: Failed to create new quest.");
+            Application.Quit();
+        }
+        new QuestEditSelection();
     }
 
     public void Selection(string key)

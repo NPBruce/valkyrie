@@ -486,7 +486,25 @@ public class QuestData
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
-        public string originalText;
+        public string originalText = "";
+
+        public Monster(string s) : base(s)
+        {
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+            {
+                mData = kv.Value;
+            }
+            mTypes = new string[1];
+            mTypes[0] = mData.sectionName;
+            mTraits = new string[0];
+
+            placement = new string[5][];
+            for (int i = 0; i < placement.Length; i++)
+            {
+                placement[i] = new string[0];
+            }
+        }
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
@@ -1071,7 +1089,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
-            r += "description=" + description + nl;
+            r += "description=\"" + description + "\"" + nl;
             if (minPanY != -20)
             {
                 r += "minpany=" + minPanY + nl;
