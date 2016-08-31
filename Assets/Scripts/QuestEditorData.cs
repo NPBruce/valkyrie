@@ -372,6 +372,35 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Event", delegate { SelectEvent(name); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        DialogBox db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Types:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 6), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (m.mTypes.Length > i)
+            {
+                tb = new TextButton(new Vector2(0, 7 + i), new Vector2(1, 1), "-", delegate { Cancel(); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+
+                tb = new TextButton(new Vector2(1, 7 + i), new Vector2(15, 1), m.mTypes[i], delegate { Cancel(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+
+                tb = new TextButton(new Vector2(16, 7 + i), new Vector2(1, 1), "+", delegate { Cancel(); }, Color.green);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);

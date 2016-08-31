@@ -6,6 +6,12 @@ public class DialogBox {
     public GameObject textObj;
     public GameObject background;
 
+    public void ApplyTag(string tag)
+    {
+        textObj.tag = tag;
+        background.tag = tag;
+    }
+
     public DialogBox(Vector2 location, Vector2 size, string text)
     {
         createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
