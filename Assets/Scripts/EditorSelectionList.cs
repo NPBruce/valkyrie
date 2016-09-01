@@ -30,9 +30,10 @@ public class EditorSelectionList
         Destroyer.Dialog();
         cancelCall = call;
 
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
         db.AddBorder();
+
+        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
 
         float offset = 2;
         TextButton tb = null;

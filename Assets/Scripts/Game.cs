@@ -5,9 +5,6 @@ using System.Collections.Generic;
 /*
 Dump list of things to do:
 
-system menu (editor, end quest, quit, about)
-CleanUp quest at end
-
 import from RtL
 > activations
 > symbols in text
@@ -20,7 +17,7 @@ import from RtL
 // General controller for the game
 public class Game : MonoBehaviour {
 
-    public static string version = "0.1.0";
+    public static string version = "0.1.9";
     public ContentData cd;
     public QuestData qd;
     public List<Hero> heros;

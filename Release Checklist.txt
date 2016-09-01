@@ -1,0 +1,11 @@
+1: Update version number
+2: Build
+3: Copy D2E data
+4: Copy example quest
+5: Copy licence files
+6: Zip
+7: Test
+8: Merge to master
+9: Tag
+10: Write changelog
+11: Release

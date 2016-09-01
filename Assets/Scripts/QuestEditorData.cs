@@ -38,9 +38,10 @@ public class QuestEditorData {
             return;
         }
 
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), "Select Type");
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
         db.AddBorder();
+
+        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), "Select Type");
 
         TextButton tb = new TextButton(new Vector2(21, 2), new Vector2(9, 1), "Quest", delegate { SelectQuest(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -671,6 +672,12 @@ public class QuestEditorData {
     public void MonsterTraitsRemove(int pos)
     {
         QuestData.Monster m = selection as QuestData.Monster;
+
+        if ((m.mTypes.Length == 0) && (m.mTraits.Length == 1))
+        {
+            return;
+        }
+
         string[] newM = new string[m.mTraits.Length - 1];
 
         int j = 0;
@@ -689,6 +696,12 @@ public class QuestEditorData {
     public void MonsterTypeRemove(int pos)
     {
         QuestData.Monster m = selection as QuestData.Monster;
+
+        if ((m.mTypes.Length == 1) && (m.mTraits.Length == 0))
+        {
+            return;
+        }
+
         string[] newM = new string[m.mTypes.Length - 1];
 
         int j = 0;

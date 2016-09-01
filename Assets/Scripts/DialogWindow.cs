@@ -134,7 +134,7 @@ public class DialogWindow {
 
         if (eventData.name.IndexOf("EventEnd") == 0)
         {
-            Application.Quit();
+            Destroyer.MainMenu();
         }
     }
 
