@@ -310,6 +310,12 @@ public class QuestEditorData {
     public void SelectToDelete()
     {
         Game game = Game.Get();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            kv.Value.RemoveReference(esl.selection);
+        }
+
         if (game.qd.components.ContainsKey(esl.selection))
         {
             game.qd.components.Remove(esl.selection);
@@ -555,7 +561,6 @@ public class QuestEditorData {
     {
         QuestData.Monster m = selection as QuestData.Monster;
         Clean();
-        Game game = Game.Get();
         CameraController.SetCamera(m.location);
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { TypeSelect(); });

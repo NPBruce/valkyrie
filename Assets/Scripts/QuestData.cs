@@ -603,6 +603,21 @@ public class QuestData
             }
         }
 
+        override public void ChangeReference(string oldName, string newName)
+        {
+            for (int j = 0; j < placement.Length; j++)
+            {
+                for (int i = 0; i < placement[j].Length; i++)
+                {
+                    if (placement[j][i].Equals(oldName))
+                    {
+                        placement[j][i] = newName;
+                    }
+                }
+                placement[j] = RemoveFromArray(placement[j], "");
+            }
+        }
+
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -808,6 +823,47 @@ public class QuestData
             }
         }
 
+        override public void ChangeReference(string oldName, string newName)
+        {
+            if (heroListName.Equals(oldName))
+            {
+                heroListName = newName;
+            }
+            for (int i = 0; i < nextEvent.Length; i++)
+            {
+                if (nextEvent[i].Equals(oldName))
+                {
+                    nextEvent[i] = newName;
+                }
+            }
+            nextEvent = RemoveFromArray(nextEvent, "");
+
+            for (int i = 0; i < failEvent.Length; i++)
+            {
+                if (failEvent[i].Equals(oldName))
+                {
+                    failEvent[i] = newName;
+                }
+            }
+            failEvent = RemoveFromArray(nextEvent, "");
+            for (int i = 0; i < addComponents.Length; i++)
+            {
+                if (addComponents[i].Equals(oldName))
+                {
+                    addComponents[i] = newName;
+                }
+            }
+            addComponents = RemoveFromArray(nextEvent, "");
+            for (int i = 0; i < removeComponents.Length; i++)
+            {
+                if (removeComponents[i].Equals(oldName))
+                {
+                    removeComponents[i] = newName;
+                }
+            }
+            removeComponents = RemoveFromArray(nextEvent, "");
+        }
+
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -989,6 +1045,38 @@ public class QuestData
                 locationSpecified = true;
                 location.y = float.Parse(data["yposition"]);
             }
+        }
+
+        public static string[] RemoveFromArray(string[] array, string element)
+        {
+            int count = 0;
+            foreach (string s in array)
+            {
+                if (!s.Equals(element)) count++;
+            }
+
+            string[] trimArray = new string[count];
+
+            int j = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (!array[i].Equals(element))
+                {
+                    trimArray[j++] = array[i];
+                }
+            }
+
+            return trimArray;
+        }
+
+        virtual public void ChangeReference(string oldName, string newName)
+        {
+
+        }
+
+        virtual public void RemoveReference(string refName)
+        {
+            ChangeReference(refName, "");
         }
 
         // items are invisible by default, can toggle visibility
