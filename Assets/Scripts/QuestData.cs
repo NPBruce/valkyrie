@@ -486,7 +486,6 @@ public class QuestData
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
-        public string originalText = "";
 
         public Monster(string s) : base(s)
         {
@@ -574,7 +573,6 @@ public class QuestData
 
                 mData = list[Random.Range(0, list.Count)];
             }
-            originalText = text;
             text = text.Replace("<type>", mData.name);
 
             placement = new string[5][];
@@ -667,6 +665,7 @@ public class QuestData
     {
         new public static string type = "Event";
         public string text = "";
+        public string originalText = "";
         public string trigger = "";
         public string[] nextEvent;
         public string[] failEvent;
@@ -700,6 +699,7 @@ public class QuestData
             {
                 text = data["text"];
             }
+            originalText = text;
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))

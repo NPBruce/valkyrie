@@ -913,7 +913,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(20, 8), e.text.Replace("\\n", "\n"), delegate { Cancel(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(20, 8), e.originalText.Replace("\\n", "\n"), delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

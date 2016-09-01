@@ -75,13 +75,13 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             mouseDownCamPosition = gameObject.transform.position;
-            mouseDownMousePosition = Input.mousePosition;
+            mouseDownMousePosition = GetMouseBoardPlane(this);
         }
         if (Input.GetMouseButton(0))
         {
-            // Scaling?? (probably need to do a ray trace like GetMouseTile (but remove the find object - not static)
-            gameObject.transform.position = new Vector3(mouseDownCamPosition.x + mouseDownMousePosition.x - Input.mousePosition.x,
-                mouseDownCamPosition.y + mouseDownMousePosition.y - Input.mousePosition.y, mouseDownCamPosition.z);
+            Vector2 bPos = GetMouseBoardPlane(this);
+            gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
+                mouseDownMousePosition.y - bPos.y, 0));
         }
     }
 
@@ -89,14 +89,21 @@ public class CameraController : MonoBehaviour {
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
 
+        Vector2 bPos = GetMouseBoardPlane(cc);
+
+        return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y)) / 105f;
+    }
+
+    public static Vector2 GetMouseBoardPlane(CameraController cc)
+    {
         Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
         float rayDistance = 0;
         basePlane.Raycast(ray, out rayDistance);
 
-        Vector3 clickPoint = ray.GetPoint(rayDistance) / 105f;
+        Vector3 clickPoint = ray.GetPoint(rayDistance);
 
-        return new Vector2(Mathf.Round(clickPoint.x), Mathf.Round(clickPoint.y));
+        return new Vector2(clickPoint.x, clickPoint.y);
     }
 
     public static void SetCameraMin(Vector2 min)
