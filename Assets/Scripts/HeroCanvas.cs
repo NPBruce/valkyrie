@@ -182,6 +182,6 @@ public class HeroCanvas : MonoBehaviour {
         // Create the menu button
         new MenuButton();
 
-        EventHelper.QueueEvent("EventStart");
+        EventHelper.EventTriggerType("EventStart");
     }
 }

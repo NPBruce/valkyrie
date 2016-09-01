@@ -573,7 +573,7 @@ public class QuestData
 
                 mData = list[Random.Range(0, list.Count)];
             }
-            text = text.Replace("<type>", mData.name);
+            text = text.Replace("{type}", mData.name);
 
             placement = new string[5][];
             for (int i = 0; i < placement.Length; i++)
