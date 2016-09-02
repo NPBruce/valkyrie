@@ -150,6 +150,7 @@ public class QuestData
             Game game = Game.Get();
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
+                typeDynamic = type;
                 tileType = kv.Value;
             }
 
@@ -157,6 +158,7 @@ public class QuestData
 
         public Tile(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
             {
@@ -271,10 +273,12 @@ public class QuestData
 
         public Door(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Doors are cancelable because you can select then cancel
             cancelable = true;
 
@@ -391,11 +395,13 @@ public class QuestData
 
         public Token(string s) : base(s)
         {
+            typeDynamic = type;
             spriteName = "search-token";
         }
 
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
@@ -479,12 +485,14 @@ public class QuestData
         public string[][] placement;
         public bool unique = false;
         public string uniqueTitle = "";
+        public string uniqueTitleOriginal = "";
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
 
         public Monster(string s) : base(s)
         {
+            typeDynamic = type;
             Game game = Game.Get();
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
@@ -503,6 +511,7 @@ public class QuestData
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             //First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
@@ -587,11 +596,12 @@ public class QuestData
             }
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitle = data["uniquetitle"];
-            }
-            else
-            {
-                uniqueTitle = "Master " + mData.name;
+                uniqueTitleOriginal = data["uniquetitle"];
+                uniqueTitle = uniqueTitleOriginal.Replace("{type}", mData.name);
+                if (uniqueTitle.Equals(""))
+                {
+                    uniqueTitle = "Master " + mData.name;
+                }
             }
             if (data.ContainsKey("uniquetext"))
             {
@@ -657,9 +667,9 @@ public class QuestData
             {
                 r += "unique=true" + nl;
             }
-            if (!uniqueTitle.Equals("Master " + mData.name))
+            if (!uniqueTitleOriginal.Equals(""))
             {
-                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+                r += "uniquetitle=\"" + uniqueTitleOriginal + "\"" + nl;
             }
             if (!uniqueText.Equals(""))
             {
@@ -694,6 +704,7 @@ public class QuestData
 
         public Event(string s) : base(s)
         {
+            typeDynamic = type;
             nextEvent = new string[0];
             failEvent = new string[0];
             addComponents = new string[0];
@@ -705,6 +716,7 @@ public class QuestData
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             // Text to be displayed
             if (data.ContainsKey("text"))
             {
@@ -841,7 +853,7 @@ public class QuestData
                     failEvent[i] = newName;
                 }
             }
-            failEvent = RemoveFromArray(nextEvent, "");
+            failEvent = RemoveFromArray(failEvent, "");
             for (int i = 0; i < addComponents.Length; i++)
             {
                 if (addComponents[i].Equals(oldName))
@@ -849,7 +861,7 @@ public class QuestData
                     addComponents[i] = newName;
                 }
             }
-            addComponents = RemoveFromArray(nextEvent, "");
+            addComponents = RemoveFromArray(addComponents, "");
             for (int i = 0; i < removeComponents.Length; i++)
             {
                 if (removeComponents[i].Equals(oldName))
@@ -857,7 +869,7 @@ public class QuestData
                     removeComponents[i] = newName;
                 }
             }
-            removeComponents = RemoveFromArray(nextEvent, "");
+            removeComponents = RemoveFromArray(removeComponents, "");
         }
 
         override public string ToString()
@@ -971,10 +983,12 @@ public class QuestData
 
         public MPlace(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             master = false;
             if (data.ContainsKey("master"))
             {
@@ -1011,6 +1025,7 @@ public class QuestData
         public bool locationSpecified = false;
         // type for sub classes
         public static string type = "";
+        public string typeDynamic = "";
         // name of section in ini file
         public string name;
         // image for display
@@ -1018,6 +1033,7 @@ public class QuestData
 
         public QuestComponent(string nameIn)
         {
+            typeDynamic = type;
             name = nameIn;
             location = Vector2.zero;
         }
@@ -1025,6 +1041,7 @@ public class QuestData
         // Construct from ini data
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
+            typeDynamic = type;
             name = nameIn;
 
             // Default to 0, 0 unless specified

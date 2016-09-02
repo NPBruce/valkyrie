@@ -7,6 +7,7 @@ public class QuestEditorData {
     public EditorSelectionList esl;
     public QuestData.QuestComponent selection;
     public Stack<QuestData.QuestComponent> selectionStack;
+    QuestEditorTextEdit te;
     public bool gettingPosition = false;
     public bool gettingMinPosition = false;
     public bool gettingMaxPosition = false;
@@ -122,6 +123,7 @@ public class QuestEditorData {
 
     public void Back()
     {
+        Game game = Game.Get();
         if (selectionStack.Count == 0)
         {
             return;
@@ -190,7 +192,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -349,7 +351,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -396,7 +398,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -450,7 +452,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -480,7 +482,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitle, delegate { Cancel(); });
+        tb = new TextButton(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitleOriginal, delegate { Cancel(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -573,7 +575,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -878,8 +880,33 @@ public class QuestEditorData {
 
     public void RenameComponent()
     {
-        QuestEditorTextEdit te =  new QuestEditorTextEdit("Component Name:", selection.name, delegate { Cancel(); });
+        string name = selection.name.Substring(selection.typeDynamic.Length);
+        te =  new QuestEditorTextEdit("Component Name:", name, delegate { RenameComponentFinished(); });
         te.EditText();
+    }
+
+    public void RenameComponentFinished()
+    {
+        string newName = System.Text.RegularExpressions.Regex.Replace(te.value, "[^A-Za-z0-9_]", "");
+        if (newName.Equals("")) return;
+        string baseName = selection.typeDynamic + newName;
+        string name = baseName;
+        Game game = Game.Get();
+        int i = 0;
+        while (game.qd.components.ContainsKey(name))
+        {
+            name = baseName + i++;
+        }
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            kv.Value.ChangeReference(selection.name, name);
+        }
+
+        game.qd.components.Remove(selection.name);
+        selection.name = name;
+        game.qd.components.Add(selection.name, selection);
+        SelectComponent(name);
     }
 
 
@@ -933,7 +960,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -1095,7 +1122,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -1217,12 +1244,9 @@ public class QuestEditorData {
             }
         }
 
-        if (!type.Equals(QuestData.Event.type))
-        {
-            tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { SelectEvent(e.name); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
-        }
+        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { SelectEvent(e.name); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
 
         if (e.locationSpecified)
         {
@@ -1405,43 +1429,56 @@ public class QuestEditorData {
     {
         QuestData.Event e = selection as QuestData.Event;
 
+        if (esl.selection.Equals("{NEW}"))
+        {
+            te = new QuestEditorTextEdit("Flag Name:", "", delegate { NewFlag(type); });
+            te.EditText();
+            return;
+        }
+
         if (type.Equals("flag"))
         {
-            if (esl.selection.Equals("{NEW}"))
-            {
-                //fixme
-            }
-            else
-            {
-                System.Array.Resize(ref e.flags, e.flags.Length + 1);
-                e.flags[e.flags.Length - 1] = esl.selection;
-            }
+            System.Array.Resize(ref e.flags, e.flags.Length + 1);
+            e.flags[e.flags.Length - 1] = esl.selection;
         }
 
         if (type.Equals("set"))
         {
-            if (esl.selection.Equals("{NEW}"))
-            {
-                //fixme
-            }
-            else
-            {
-                System.Array.Resize(ref e.setFlags, e.setFlags.Length + 1);
-                e.setFlags[e.setFlags.Length - 1] = esl.selection;
-            }
+            System.Array.Resize(ref e.setFlags, e.setFlags.Length + 1);
+            e.setFlags[e.setFlags.Length - 1] = esl.selection;
         }
 
         if (type.Equals("clear"))
         {
-            if (esl.selection.Equals("{NEW}"))
-            {
-                //fixme
-            }
-            else
-            {
-                System.Array.Resize(ref e.clearFlags, e.clearFlags.Length + 1);
-                e.clearFlags[e.clearFlags.Length - 1] = esl.selection;
-            }
+            System.Array.Resize(ref e.clearFlags, e.clearFlags.Length + 1);
+            e.clearFlags[e.clearFlags.Length - 1] = esl.selection;
+        }
+
+        SelectEventPageTwo();
+    }
+
+    public void NewFlag(string type)
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        string newName = System.Text.RegularExpressions.Regex.Replace(te.value, "[^A-Za-z0-9_]", "");
+
+        if (newName.Equals("")) return;
+        if (type.Equals("flag"))
+        {
+            System.Array.Resize(ref e.flags, e.flags.Length + 1);
+            e.flags[e.flags.Length - 1] = newName;
+        }
+
+        if (type.Equals("set"))
+        {
+            System.Array.Resize(ref e.setFlags, e.setFlags.Length + 1);
+            e.setFlags[e.setFlags.Length - 1] = newName;
+        }
+
+        if (type.Equals("clear"))
+        {
+            System.Array.Resize(ref e.clearFlags, e.clearFlags.Length + 1);
+            e.clearFlags[e.clearFlags.Length - 1] = newName;
         }
 
         SelectEventPageTwo();
@@ -1888,9 +1925,10 @@ public class QuestEditorData {
 
         Game game = Game.Get();
 
+        // This can happen to due rename/delete
         if (!game.qd.components.ContainsKey(name))
         {
-            Debug.Log("Error: Attempting to bring up missing component: " + name);
+            SelectQuest();
         }
 
         if (game.qd.components[name] is QuestData.Tile)
