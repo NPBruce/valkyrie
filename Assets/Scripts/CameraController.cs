@@ -81,7 +81,7 @@ public class CameraController : MonoBehaviour {
         {
             Vector2 bPos = GetMouseBoardPlane(this);
             gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
-                mouseDownMousePosition.y - bPos.y, 0));
+                mouseDownMousePosition.y - bPos.y, 0), Space.World);
         }
     }
 
@@ -91,7 +91,7 @@ public class CameraController : MonoBehaviour {
 
         Vector2 bPos = GetMouseBoardPlane(cc);
 
-        return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y)) / 105f;
+        return new Vector2(Mathf.Round(bPos.x / 105), Mathf.Round(bPos.y / 105));
     }
 
     public static Vector2 GetMouseBoardPlane(CameraController cc)

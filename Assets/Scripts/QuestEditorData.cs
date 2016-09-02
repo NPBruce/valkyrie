@@ -847,7 +847,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -874,6 +874,12 @@ public class QuestEditorData {
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);
+    }
+
+    public void RenameComponent()
+    {
+        QuestEditorTextEdit te =  new QuestEditorTextEdit("Component Name:", selection.name, delegate { Cancel(); });
+        te.EditText();
     }
 
 

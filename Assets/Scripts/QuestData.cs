@@ -63,11 +63,7 @@ public class QuestData
         files.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(d.Get("QuestData") == null)
-        {
-            Debug.Log("QuestData section missing in: \"" + questPath + "\"");
-        }
-        else
+        if(d.Get("QuestData") != null)
         {
             foreach (string file in d.Get("QuestData").Keys)
             {
