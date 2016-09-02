@@ -17,7 +17,7 @@ import from RtL
 // General controller for the game
 public class Game : MonoBehaviour {
 
-    public static string version = "0.1.9";
+    public static string version = "0.2.0";
     public ContentData cd;
     public QuestData qd;
     public List<Hero> heros;

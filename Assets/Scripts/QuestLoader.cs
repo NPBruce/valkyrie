@@ -171,7 +171,7 @@ public class QuestLoader {
     public static void CleanTemp()
     {
         // Nothing to do if no temporary files
-        if(!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+        if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
         {
             return;
         }
