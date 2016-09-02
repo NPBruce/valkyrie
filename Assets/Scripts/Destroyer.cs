@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// This is a helper class because we often need to clean things up.
 public class Destroyer {
+
+    // This function takes us back to the main menu
     public static void MainMenu()
     {
+        // Destroy everything
         Destroy();
         new MainMenu();
     }
 
+    // This takes us to the quest select screen
     public static void QuestSelect()
     {
+        // Destroy everything
         Destroy();
         Game game = Game.Get();
         game.SelectQuest();
@@ -46,6 +52,8 @@ public class Destroyer {
             Object.Destroy(go);
 
         Game game = Game.Get();
+
+        // Clear up all data
         game.eventList.Clear();
         game.cd = null;
         game.qd = null;
@@ -58,6 +66,7 @@ public class Destroyer {
         game.editMode = false;
     }
 
+    // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
     public static void Dialog()
     {
         // Clean up everything marked as 'dialog'

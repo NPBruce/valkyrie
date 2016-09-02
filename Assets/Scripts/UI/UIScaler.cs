@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// I couldn't work out unity scaling so I wrote my own.
+// The screen is alway 30 'units' high.  At 4:3 it is 40 across, at 16:9 it is 53.33.
+// I have not designed for 5:4 (37.5 units)
+// 1 unit is enough for 'small' text with a border.  1.5 is medium text, 3 is big text
+// Everything is floats so partial units are fine.
+
 public class UIScaler {
 
     public int widthPx;

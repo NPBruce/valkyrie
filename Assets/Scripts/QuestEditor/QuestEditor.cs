@@ -44,7 +44,7 @@ public class QuestEditor {
     public static void Save()
     {
         Game game = Game.Get();
-        string content = "; Saved by version: " + Game.version + System.Environment.NewLine;
+        string content = "; Saved by version: " + game.version + System.Environment.NewLine;
         content += game.qd.quest.ToString() + System.Environment.NewLine;
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
