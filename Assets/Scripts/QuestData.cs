@@ -877,7 +877,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "text=\"" + text + "\"" + nl;
+            r += "text=\"" + originalText + "\"" + nl;
             
             if (highlight)
             {

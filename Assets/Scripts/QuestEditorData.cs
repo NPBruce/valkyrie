@@ -7,11 +7,13 @@ public class QuestEditorData {
     public EditorSelectionList esl;
     public QuestData.QuestComponent selection;
     public Stack<QuestData.QuestComponent> selectionStack;
-    QuestEditorTextEdit te;
+    public QuestEditorTextEdit te;
     public bool gettingPosition = false;
     public bool gettingMinPosition = false;
     public bool gettingMaxPosition = false;
     public bool backTriggered = false;
+    public DialogBoxEditable dbe1;
+    public DialogBoxEditable dbe2;
 
     public void NewSelection(QuestData.QuestComponent c)
     {
@@ -123,7 +125,6 @@ public class QuestEditorData {
 
     public void Back()
     {
-        Game game = Game.Get();
         if (selectionStack.Count == 0)
         {
             return;
@@ -149,13 +150,13 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), game.qd.quest.name, delegate { Cancel(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        dbe1 = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 1), game.qd.quest.name, delegate { UpdateQuestName(); });
+        dbe1.ApplyTag("editor");
+        dbe1.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(20, 6), game.qd.quest.description, delegate { Cancel(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        dbe2 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 6), game.qd.quest.description, delegate { UpdateQuestDesc(); });
+        dbe2.ApplyTag("editor");
+        dbe2.AddBorder();
 
         tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { GetMinPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -173,6 +174,21 @@ public class QuestEditorData {
         game.tokenBoard.AddHighlight(new Vector2(game.qd.quest.maxPanX, game.qd.quest.maxPanY), "CamMax", "editor");
     }
 
+    public void UpdateQuestName()
+    {
+        Game game = Game.Get();
+
+        if (!dbe1.uiInput.text.Equals(""))
+            game.qd.quest.name = dbe1.uiInput.text;
+    }
+
+    public void UpdateQuestDesc()
+    {
+        Game game = Game.Get();
+
+        if (!dbe2.uiInput.text.Equals(""))
+            game.qd.quest.description = dbe2.uiInput.text;
+    }
 
     public void SelectTile(string name)
     {
@@ -993,9 +1009,9 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(20, 8), e.originalText.Replace("\\n", "\n"), delegate { Cancel(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), e.originalText, delegate { UpdateEventText(); });
+        dbe1.ApplyTag("editor");
+        dbe1.AddBorder();
 
         db = new DialogBox(new Vector2(0, 12), new Vector2(8, 1), "Trigger:");
         db.ApplyTag("editor");
@@ -1091,6 +1107,14 @@ public class QuestEditorData {
         e.SetVisible(1f);
     }
 
+    public void UpdateEventText()
+    {
+        if (!dbe1.uiInput.text.Equals(""))
+        {
+            QuestData.Event e = selection as QuestData.Event;
+            e.originalText = dbe1.uiInput.text;
+        }
+    }
 
     public void SelectEventPageTwo()
     {
