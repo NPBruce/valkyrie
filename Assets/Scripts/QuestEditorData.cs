@@ -498,16 +498,16 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitleOriginal, delegate { Cancel(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        dbe1 = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitleOriginal, delegate { UpdateUniqueTitle(); });
+        dbe1.ApplyTag("editor");
+        dbe1.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), "Unique Information:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 11), new Vector2(20, 8), m.uniqueText, delegate { Cancel(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        dbe2 = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), m.uniqueText, delegate { UpdateUniqueText(); });
+        dbe2.ApplyTag("editor");
+        dbe2.AddBorder();
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), "Types:");
         db.ApplyTag("editor");
@@ -573,6 +573,18 @@ public class QuestEditorData {
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
         m.SetVisible(1f);
+    }
+
+    public void UpdateUniqueTitle()
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        m.uniqueTitleOriginal = dbe1.uiInput.text;
+    }
+
+    public void UpdateUniqueText()
+    {
+        QuestData.Monster m = selection as QuestData.Monster;
+        m.uniqueText = dbe1.uiInput.text;
     }
 
     public void SelectMonsterPlacements()
