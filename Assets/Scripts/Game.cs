@@ -65,6 +65,10 @@ public class Game : MonoBehaviour {
         // The newline at the end stops the stack trace appearing in the log
         Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
+        // Pull data from RtL - need to work out when this should be done
+        new RtLFinder();
+        new MoMFinder();
+
         // Bring up the main menu
         new MainMenu();
     }
