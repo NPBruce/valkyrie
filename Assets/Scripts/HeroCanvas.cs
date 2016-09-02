@@ -34,6 +34,7 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         GameObject heroImg = new GameObject("heroImg" + heroName);
+        heroImg.tag = "herodisplay";
 
         heroImg.transform.parent = game.uICanvas.transform;
 
@@ -178,6 +179,9 @@ public class HeroCanvas : MonoBehaviour {
 
         game.heroesSelected = true;
         game.moraleDisplay = new MoraleDisplay();
-        EventHelper.QueueEvent("EventStart");
+        // Create the menu button
+        new MenuButton();
+
+        EventHelper.EventTriggerType("EventStart");
     }
 }

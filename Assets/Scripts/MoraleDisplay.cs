@@ -8,9 +8,9 @@ public class MoraleDisplay {
     {
         Game game = Game.Get();
         md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), game.morale.ToString(), Color.red);
-        md.textObj.tag = "Untagged";
+        md.textObj.tag = "questui";
         md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize =UIScaler.GetLargeFont();
-        md.background.tag = "Untagged";
+        md.background.tag = "questui";
         md.AddBorder();
     }
 

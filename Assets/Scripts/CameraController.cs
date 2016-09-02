@@ -75,13 +75,54 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             mouseDownCamPosition = gameObject.transform.position;
-            mouseDownMousePosition = Input.mousePosition;
+            mouseDownMousePosition = GetMouseBoardPlane(this);
         }
         if (Input.GetMouseButton(0))
         {
-            // Scaling??
-            gameObject.transform.position = new Vector3(mouseDownCamPosition.x + mouseDownMousePosition.x - Input.mousePosition.x,
-                mouseDownCamPosition.y + mouseDownMousePosition.y - Input.mousePosition.y, mouseDownCamPosition.z);
+            Vector2 bPos = GetMouseBoardPlane(this);
+            gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
+                mouseDownMousePosition.y - bPos.y, 0), Space.World);
         }
+    }
+
+    public static Vector2 GetMouseTile()
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+
+        Vector2 bPos = GetMouseBoardPlane(cc);
+
+        return new Vector2(Mathf.Round(bPos.x / 105), Mathf.Round(bPos.y / 105));
+    }
+
+    public static Vector2 GetMouseBoardPlane(CameraController cc)
+    {
+        Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
+        float rayDistance = 0;
+        basePlane.Raycast(ray, out rayDistance);
+
+        Vector3 clickPoint = ray.GetPoint(rayDistance);
+
+        return new Vector2(clickPoint.x, clickPoint.y);
+    }
+
+    public static void SetCameraMin(Vector2 min)
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        cc.minPanX = Mathf.RoundToInt(min.x * 105);
+        cc.minPanY = Mathf.RoundToInt(min.y * 105);
+    }
+
+    public static void SetCameraMax(Vector2 max)
+    {
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        cc.maxPanX = Mathf.RoundToInt(max.x * 105);
+        cc.maxPanY = Mathf.RoundToInt(max.y * 105);
+    }
+
+    public static void SetCamera(Vector2 pos)
+    {
+        Camera cam = GameObject.FindObjectOfType<Camera>();
+        cam.transform.position = new Vector3(pos.x * 105, pos.y * 105, -800);
     }
 }

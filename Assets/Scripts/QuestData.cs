@@ -17,22 +17,31 @@ public class QuestData
 
     // List of ini files containing quest data
     List<string> files;
+
+    // Location of the quest.ini file
+    public string questPath = "";
+
+    // Data from 'Quest' section
+    public Quest quest;
+
     Game game;
 
     public QuestData(QuestLoader.Quest q)
     {
-        LoadQuestData(q.path + "/quest.ini");
+        questPath = q.path + "/quest.ini";
+        LoadQuestData();
     }
 
     // Read all data files and populate components for quest
     public QuestData(string path)
     {
-        LoadQuestData(path);
+        questPath = path;
+        LoadQuestData();
     }
 
-    public void LoadQuestData(string path)
+    public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + path + "\"");
+        Debug.Log("Loading quest from: \"" + questPath + "\"");
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
@@ -40,30 +49,26 @@ public class QuestData
         heroSelection = new Dictionary<string, List<Game.Hero>>();
 
         // Read the main quest file
-        IniData d = IniRead.ReadFromIni(path);
+        IniData d = IniRead.ReadFromIni(questPath);
         // Failure to read quest is fatal
         if(d == null)
         {
-            Debug.Log("Failed to load quest from: \"" + path + "\"");
+            Debug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
         }
 
         // List of data files
         files = new List<string>();
         // The main data file is included
-        files.Add(path);
+        files.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(d.Get("QuestData") == null)
-        {
-            Debug.Log("QuestData section missing in: \"" + path + "\"");
-        }
-        else
+        if(d.Get("QuestData") != null)
         {
             foreach (string file in d.Get("QuestData").Keys)
             {
                 // path is relative to the main file (absolute not supported)
-                files.Add(Path.GetDirectoryName(path) + "/" + file);
+                files.Add(Path.GetDirectoryName(questPath) + "/" + file);
             }
         }
 
@@ -97,7 +102,7 @@ public class QuestData
 
         if (name.Equals("Quest"))
         {
-            new Quest(content);
+            quest = new Quest(content);
         }
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
@@ -140,14 +145,26 @@ public class QuestData
         new public static string type = "Tile";
         public int rotation = 0;
 
+        public Tile(string s) : base(s)
+        {
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
+            {
+                typeDynamic = type;
+                tileType = kv.Value;
+            }
+
+        }
+
         public Tile(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
             {
                 rotation = int.Parse(data["rotation"]);
             }
-            
+
             // Find the tileside that is used
             if (data.ContainsKey("side"))
             {
@@ -174,6 +191,19 @@ public class QuestData
                 Application.Quit();
             }
 
+            Draw();
+        }
+
+        public override void Draw()
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+
+            Game game = Game.Get();
+
             // Attempt to load image
             string imagePath = @"file://" + tileType.image;
             Sprite tileSprite;
@@ -192,7 +222,8 @@ public class QuestData
                 Application.Quit();
             }
 
-            GameObject tile = new GameObject(name);
+            GameObject tile = new GameObject("Object" + name);
+            tile.tag = "board";
             tile.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
@@ -216,6 +247,19 @@ public class QuestData
             // Move tile into target location (spaces are 105 units, Space.World is needed because tile has been rotated)
             tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            r += "side=" + tileType.sectionName + nl;
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
+            }
+            return r;
+        }
     }
 
     // Doors are like tokens but placed differently and have different defaults
@@ -223,11 +267,18 @@ public class QuestData
     {
         new public static string type = "Door";
         public int rotation = 0;
-        public float[] colour = { 1f, 1f, 1f };
+        public Color colour = Color.white;
         public GameObject gameObject;
+        public string colourName = "white";
+
+        public Door(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Doors are cancelable because you can select then cancel
             cancelable = true;
 
@@ -239,17 +290,8 @@ public class QuestData
             // color is only supported as a hexadecimal "#RRGGBB" format
             if (data.ContainsKey("color"))
             {
-                string colorRGB = ColorUtil.FromName(data["color"]);
-                if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
-                {
-                    Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
-                }
-                else
-                {
-                    colour[0] = System.Convert.ToInt32(colorRGB.Substring(1, 2), 16);
-                    colour[1] = System.Convert.ToInt32(colorRGB.Substring(3, 2), 16);
-                    colour[2] = System.Convert.ToInt32(colorRGB.Substring(5, 2), 16);
-                }
+                colourName = data["color"];
+                SetColor(colourName);
             }
 
             if (text.Equals(""))
@@ -258,16 +300,28 @@ public class QuestData
             }
         }
 
-        public override void SetVisible(bool vis)
+        public void SetColor(string s)
         {
-            if(!vis)
+            colourName = s;
+            string colorRGB = ColorUtil.FromName(s);
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                GameObject go = GameObject.Find("Object" + name);
-                if (go != null)
-                {
-                    Object.Destroy(go);
-                }
-                return;
+                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
+            }
+            else
+            {
+                colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+                colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+                colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            }
+        }
+
+        public override void Draw()
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
             }
 
             Sprite tileSprite;
@@ -281,6 +335,7 @@ public class QuestData
 
             // Create object
             gameObject = new GameObject("Object" + name);
+            gameObject.tag = "board";
 
             Game game = Game.Get();
             gameObject.transform.parent = game.tokenCanvas.transform;
@@ -289,7 +344,7 @@ public class QuestData
             image = gameObject.AddComponent<UnityEngine.UI.Image>();
             tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
-            image.color = new Color(colour[0] / 255, colour[1] / 255, colour[2] / 255, 1);
+            image.color = new Color(colour[0], colour[1], colour[2], 1);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Rotate as required
@@ -297,8 +352,37 @@ public class QuestData
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
-            
+        }
+
+        public override void SetVisible(bool vis)
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+
+            if (!vis) return;
+
+            Draw();
+            Game game = Game.Get();
             game.tokenBoard.add(this);
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (!colourName.Equals("white"))
+            {
+                r += "color=" + colourName + nl;
+            }
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
+            }
+            return r;
         }
     }
 
@@ -309,8 +393,15 @@ public class QuestData
         public GameObject gameObject;
         public string spriteName;
 
+        public Token(string s) : base(s)
+        {
+            typeDynamic = type;
+            spriteName = "search-token";
+        }
+
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            typeDynamic = type;
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
@@ -322,20 +413,8 @@ public class QuestData
             }
         }
 
-
-        public override void SetVisible(bool vis)
+        public override void Draw()
         {
-            if (!vis)
-            {
-                GameObject go = GameObject.Find("Object" + name);
-                if (go != null)
-                {
-                    Object.Destroy(go);
-                }
-                return;
-            }
-
-
             Sprite tileSprite;
             Texture2D newTex = Resources.Load("sprites/tokens/" + spriteName) as Texture2D;
             // Check if we can find the token image
@@ -354,6 +433,7 @@ public class QuestData
 
             // Create object
             gameObject = new GameObject("Object" + name);
+            gameObject.tag = "board";
 
             Game game = Game.Get();
             gameObject.transform.parent = game.tokenCanvas.transform;
@@ -366,8 +446,33 @@ public class QuestData
             image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
             // Move to square (105 units per square)
             gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+        }
 
+        public override void SetVisible(bool vis)
+        {
+            GameObject go = GameObject.Find("Object" + name);
+            if (go != null)
+            {
+                Object.Destroy(go);
+            }
+            if (!vis) return;
+
+            Draw();
+
+            Game game = Game.Get();
             game.tokenBoard.add(this);
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if(!spriteName.Equals("search-token"))
+            {
+                r += "type=" + spriteName + nl;
+            }
+            return r;
         }
     }
 
@@ -380,23 +485,45 @@ public class QuestData
         public string[][] placement;
         public bool unique = false;
         public string uniqueTitle = "";
+        public string uniqueTitleOriginal = "";
         public string uniqueText = "";
+        public string[] mTypes;
+        public string[] mTraits;
+
+        public Monster(string s) : base(s)
+        {
+            typeDynamic = type;
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+            {
+                mData = kv.Value;
+            }
+            mTypes = new string[1];
+            mTypes[0] = mData.sectionName;
+            mTraits = new string[0];
+
+            placement = new string[5][];
+            for (int i = 0; i < placement.Length; i++)
+            {
+                placement[i] = new string[0];
+            }
+        }
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            string[] types;
+            typeDynamic = type;
             //First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
-                types = data["monster"].Split(' ');
+                mTypes = data["monster"].Split(' ');
             }
             else
             {
-                types = new string[0];
+                mTypes = new string[0];
             }
 
             // Next try to find a type that is valid
-            foreach (string t in types)
+            foreach (string t in mTypes)
             {
                 // Monster type must exist in content packs, 'Monster' is optional
                 if (game.cd.monsters.ContainsKey(t) && mData == null)
@@ -410,12 +537,12 @@ public class QuestData
             }
 
             // If we didn't find anything try by trait
+            mTraits = new string[0];
             if (mData == null)
             {
-                string[] traits = new string[0];
                 if (data.ContainsKey("traits"))
                 {
-                    traits = data["traits"].Split(' ');
+                    mTraits = data["traits"].Split(' ');
                 }
                 else
                 {
@@ -427,7 +554,7 @@ public class QuestData
                 foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
                 {
                     bool allFound = true;
-                    foreach (string t in traits)
+                    foreach (string t in mTraits)
                     {
                         bool found = false;
                         foreach (string mt in kv.Value.traits)
@@ -451,7 +578,7 @@ public class QuestData
 
                 mData = list[Random.Range(0, list.Count)];
             }
-            text = text.Replace("<type>", mData.name);
+            text = text.Replace("{type}", mData.name);
 
             placement = new string[5][];
             for (int i = 0; i < placement.Length; i++)
@@ -469,16 +596,87 @@ public class QuestData
             }
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitle = data["uniquetitle"];
-            }
-            else
-            {
-                uniqueTitle = "Master " + mData.name;
+                uniqueTitleOriginal = data["uniquetitle"];
+                uniqueTitle = uniqueTitleOriginal.Replace("{type}", mData.name);
+                if (uniqueTitle.Equals(""))
+                {
+                    uniqueTitle = "Master " + mData.name;
+                }
             }
             if (data.ContainsKey("uniquetext"))
             {
                 uniqueText = data["uniquetext"];
             }
+        }
+
+        override public void ChangeReference(string oldName, string newName)
+        {
+            for (int j = 0; j < placement.Length; j++)
+            {
+                for (int i = 0; i < placement[j].Length; i++)
+                {
+                    if (placement[j][i].Equals(oldName))
+                    {
+                        placement[j][i] = newName;
+                    }
+                }
+                placement[j] = RemoveFromArray(placement[j], "");
+            }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            int textStart = r.IndexOf("text=");
+            int textEnd = r.IndexOf("\n", textStart);
+            r = r.Substring(0, textStart) + "text=\"" + originalText + "\"" + r.Substring(textEnd);
+
+            if (mTypes.Length > 0)
+            {
+                r += "monster=";
+                foreach (string s in mTypes)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (mTraits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in mTraits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            for(int i = 0; i < placement.Length; i++)
+            {
+                if (placement[i].Length > 0)
+                {
+                    r += "placement" + i + "=";
+                    foreach (string s in placement[i])
+                    {
+                        r += s + " ";
+                    }
+                    r = r.Substring(0, r.Length - 1) + nl;
+                }
+            }
+            if(unique)
+            {
+                r += "unique=true" + nl;
+            }
+            if (!uniqueTitleOriginal.Equals(""))
+            {
+                r += "uniquetitle=\"" + uniqueTitleOriginal + "\"" + nl;
+            }
+            if (!uniqueText.Equals(""))
+            {
+                r += "uniquetext=\"" + uniqueText + "\"" + nl;
+            }
+
+            return r;
         }
     }
 
@@ -488,6 +686,7 @@ public class QuestData
     {
         new public static string type = "Event";
         public string text = "";
+        public string originalText = "";
         public string trigger = "";
         public string[] nextEvent;
         public string[] failEvent;
@@ -503,13 +702,27 @@ public class QuestData
         public bool cancelable = false;
         public bool highlight = false;
 
+        public Event(string s) : base(s)
+        {
+            typeDynamic = type;
+            nextEvent = new string[0];
+            failEvent = new string[0];
+            addComponents = new string[0];
+            removeComponents = new string[0];
+            flags = new string[0];
+            setFlags = new string[0];
+            clearFlags = new string[0];
+        }
+
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             // Text to be displayed
             if (data.ContainsKey("text"))
             {
                 text = data["text"];
             }
+            originalText = text;
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
@@ -617,6 +830,144 @@ public class QuestData
                 clearFlags = new string[0];
             }
         }
+
+        override public void ChangeReference(string oldName, string newName)
+        {
+            if (heroListName.Equals(oldName))
+            {
+                heroListName = newName;
+            }
+            for (int i = 0; i < nextEvent.Length; i++)
+            {
+                if (nextEvent[i].Equals(oldName))
+                {
+                    nextEvent[i] = newName;
+                }
+            }
+            nextEvent = RemoveFromArray(nextEvent, "");
+
+            for (int i = 0; i < failEvent.Length; i++)
+            {
+                if (failEvent[i].Equals(oldName))
+                {
+                    failEvent[i] = newName;
+                }
+            }
+            failEvent = RemoveFromArray(failEvent, "");
+            for (int i = 0; i < addComponents.Length; i++)
+            {
+                if (addComponents[i].Equals(oldName))
+                {
+                    addComponents[i] = newName;
+                }
+            }
+            addComponents = RemoveFromArray(addComponents, "");
+            for (int i = 0; i < removeComponents.Length; i++)
+            {
+                if (removeComponents[i].Equals(oldName))
+                {
+                    removeComponents[i] = newName;
+                }
+            }
+            removeComponents = RemoveFromArray(removeComponents, "");
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            r += "text=\"" + originalText + "\"" + nl;
+            
+            if (highlight)
+            {
+                r += "highlight=true" + nl;
+            }
+            if (nextEvent.Length > 0)
+            {
+                r += "event=";
+                foreach (string s in nextEvent)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (failEvent.Length > 0)
+            {
+                r += "failevent=";
+                foreach (string s in failEvent)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (!heroListName.Equals(""))
+            {
+                r += "hero=" + heroListName + nl;
+            }
+            if (gold != 0)
+            {
+                r += "gold=" + gold + nl;
+            }
+            if (minHeroes != 0)
+            {
+                r += "minhero=" + minHeroes + nl;
+            }
+            if (maxHeroes != 0)
+            {
+                r += "maxhero=" + maxHeroes + nl;
+            }
+            if (addComponents.Length > 0)
+            {
+                r += "add=";
+                foreach (string s in addComponents)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (removeComponents.Length > 0)
+            {
+                r += "remove=";
+                foreach (string s in removeComponents)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (!trigger.Equals(""))
+            {
+                r += "trigger=" + trigger + nl;
+            }
+            if (flags.Length > 0)
+            {
+                r += "flags=";
+                foreach (string s in flags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (setFlags.Length > 0)
+            {
+                r += "set=";
+                foreach (string s in setFlags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (clearFlags.Length > 0)
+            {
+                r += "clear=";
+                foreach (string s in clearFlags)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            return r;
+        }
     }
 
 
@@ -625,12 +976,19 @@ public class QuestData
     // Events are used to create dialogs that control the quest
     public class MPlace : QuestComponent
     {
-        public bool master;
+        public bool master = false;
         new public static string type = "MPlace";
-        public bool rotate;
+        public bool rotate = false;
+
+
+        public MPlace(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
 
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             master = false;
             if (data.ContainsKey("master"))
             {
@@ -641,6 +999,21 @@ public class QuestData
                 rotate = bool.Parse(data["rotate"]);
             }
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+            if (master)
+            {
+                r += "master=true" + nl;
+            }
+            if (rotate)
+            {
+                r += "rotate=true" + nl;
+            }
+            return r;
+        }
     }
 
     // Super class for all quest components
@@ -649,17 +1022,26 @@ public class QuestData
         // location on the board in squares
         public Vector2 location;
         // Has a location been speficied?
-        public bool locationSpecified;
+        public bool locationSpecified = false;
         // type for sub classes
         public static string type = "";
+        public string typeDynamic = "";
         // name of section in ini file
         public string name;
         // image for display
         public UnityEngine.UI.Image image;
 
+        public QuestComponent(string nameIn)
+        {
+            typeDynamic = type;
+            name = nameIn;
+            location = Vector2.zero;
+        }
+
         // Construct from ini data
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
+            typeDynamic = type;
             name = nameIn;
 
             // Default to 0, 0 unless specified
@@ -678,6 +1060,47 @@ public class QuestData
             }
         }
 
+        public static string[] RemoveFromArray(string[] array, string element)
+        {
+            int count = 0;
+            foreach (string s in array)
+            {
+                if (!s.Equals(element)) count++;
+            }
+
+            string[] trimArray = new string[count];
+
+            int j = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (!array[i].Equals(element))
+                {
+                    trimArray[j++] = array[i];
+                }
+            }
+
+            return trimArray;
+        }
+
+        virtual public void ChangeReference(string oldName, string newName)
+        {
+
+        }
+
+        virtual public void RemoveReference(string refName)
+        {
+            ChangeReference(refName, "");
+        }
+
+        // items are invisible by default, can toggle visibility
+        virtual public void Draw()
+        {
+            if(image == null)
+                return;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        }
+
+
         // items are invisible by default, can toggle visibility
         virtual public void SetVisible(bool vis)
         {
@@ -689,6 +1112,14 @@ public class QuestData
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         }
 
+        // items are invisible by default, can toggle visibility
+        virtual public void SetVisible(float vis)
+        {
+            if (image == null)
+                return;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, vis);
+        }
+
         // return visibility of image
         virtual public bool GetVisible()
         {
@@ -698,49 +1129,105 @@ public class QuestData
                 return false;
             return true;
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = "[" + name + "]" + nl;
+            if (locationSpecified)
+            {
+                r += "xposition=" + location.x + nl;
+                r += "yposition=" + location.y + nl;
+            }
+
+            return r;
+        }
     }
 
     public class Quest
     {
+        public string name = "";
+        public string description = "";
+        public int minPanX;
+        public int minPanY;
+        public int maxPanX;
+        public int maxPanY;
+
         public Quest(Dictionary<string, string> data)
         {
-            CameraController cc = GameObject.FindObjectOfType<CameraController>();
+            maxPanX = 20;
+            maxPanY = 20;
+            minPanX = -20;
+            minPanY = -20;
+
+            if (data.ContainsKey("name"))
+            {
+                name = data["name"];
+            }
+            if (data.ContainsKey("description"))
+            {
+                description = data["description"];
+            }
 
             if (data.ContainsKey("maxpanx"))
             {
-                cc.maxPanX = int.Parse(data["maxpanx"]) * 105;
+                maxPanX = int.Parse(data["maxpanx"]);
             }
-            else
-            {
-                cc.maxPanX = 20 * 105;
-            }
-
             if (data.ContainsKey("maxpany"))
             {
-                cc.maxPanY = int.Parse(data["maxpany"]) * 105;
+                maxPanY = int.Parse(data["maxpany"]);
             }
-            else
-            {
-                cc.maxPanY = 20 * 105;
-            }
-
             if (data.ContainsKey("minpanx"))
             {
-                cc.minPanX = int.Parse(data["minpanx"]) * 105;
+                minPanX = int.Parse(data["minpanx"]);
             }
-            else
-            {
-                cc.minPanX = -20 * 105;
-            }
-
             if (data.ContainsKey("minpany"))
             {
-                cc.minPanY = int.Parse(data["minpany"]) * 105;
+                minPanY = int.Parse(data["minpany"]);
             }
-            else
+
+            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
+            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
+        }
+
+        public void SetMaxCam(Vector2 pos)
+        {
+            maxPanX = Mathf.RoundToInt(pos.x);
+            maxPanY = Mathf.RoundToInt(pos.y);
+            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
+        }
+
+        public void SetMinCam(Vector2 pos)
+        {
+            minPanX = Mathf.RoundToInt(pos.x);
+            minPanY = Mathf.RoundToInt(pos.y);
+            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = "[Quest]" + nl;
+            r += "name=" + name + nl;
+            r += "description=\"" + description + "\"" + nl;
+            if (minPanY != -20)
             {
-                cc.minPanY = -20 * 105;
+                r += "minpany=" + minPanY + nl;
             }
+            if (minPanX != -20)
+            {
+                r += "minpanx=" + minPanX + nl;
+            }
+            if (maxPanX != -20)
+            {
+                r += "maxpanx=" + maxPanX + nl;
+            }
+            if (maxPanY != -20)
+            {
+                r += "maxpany=" + maxPanY + nl;
+            }
+            return r;
         }
     }
 }
+

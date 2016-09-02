@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 public class ColorUtil  {
 	public static string FromName(string name) {
+        if (LookUp().ContainsKey(name.ToLower())) return LookUp()[name.ToLower()];
+
+        return name;
+    }
+
+    public static Dictionary<string, string> LookUp()
+    {
         Dictionary<string, string> lookUp = new Dictionary<string, string>();
 
         lookUp.Add("black", "#000000");
@@ -25,8 +32,6 @@ public class ColorUtil  {
         lookUp.Add("teal", "#008080");
         lookUp.Add("navy", "#000080");
 
-        if (lookUp.ContainsKey(name.ToLower())) return lookUp[name.ToLower()];
-
-        return name;
+        return lookUp;
     }
 }

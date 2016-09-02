@@ -39,6 +39,50 @@ public class QuestLoader {
         return quests;
     }
 
+    public static Dictionary<string, Quest> GetUserQuests()
+    {
+        Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
+
+        CleanTemp();
+
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        mkDir(dataLocation);
+        List<string> questDirectories = GetQuests(dataLocation);
+
+        questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
+
+        foreach (string p in questDirectories)
+        {
+            Quest q = new Quest(p);
+            if (!q.name.Equals(""))
+            {
+                quests.Add(p, q);
+            }
+        }
+
+        return quests;
+    }
+
+    public static Dictionary<string, Quest> GetUserUnpackedQuests()
+    {
+        Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
+
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        mkDir(dataLocation);
+        List<string> questDirectories = GetQuests(dataLocation);
+
+        foreach (string p in questDirectories)
+        {
+            Quest q = new Quest(p);
+            if (!q.name.Equals(""))
+            {
+                quests.Add(p, q);
+            }
+        }
+
+        return quests;
+    }
+
     public static List<string> GetQuests(string path)
     {
         List<string> quests = new List<string>();
@@ -127,7 +171,7 @@ public class QuestLoader {
     public static void CleanTemp()
     {
         // Nothing to do if no temporary files
-        if(!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+        if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
         {
             return;
         }

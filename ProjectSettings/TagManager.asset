@@ -7,6 +7,10 @@ TagManager:
   - dialog
   - monsters
   - heroselect
+  - herodisplay
+  - board
+  - questui
+  - editor
   layers:
   - Default
   - TransparentFX
