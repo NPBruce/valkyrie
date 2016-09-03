@@ -66,8 +66,7 @@ public class Game : MonoBehaviour {
         Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Pull data from RtL - need to work out when this should be done
-        new RtLFinder();
-        new MoMFinder();
+        new FetchContent("D2E");
 
         // Bring up the main menu
         new MainMenu();

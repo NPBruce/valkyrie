@@ -12,6 +12,16 @@ public class ContentData {
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
 
+    public static string ContentPath()
+    {
+        if (Application.isEditor)
+        {
+            // If running through unity then we assume you are using the git content, with the project at the same level
+            return Application.dataPath + "/../../valkyrie-contentpacks/";
+        }
+        return Application.dataPath + "/valkyrie-contentpacks/";
+    }
+
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {

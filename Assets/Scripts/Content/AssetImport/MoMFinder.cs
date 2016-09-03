@@ -12,6 +12,6 @@ public class MoMFinder : AppFinder {
     }
     override public string DataDirectory()
     {
-        return "Mansions of Madness_Data";
+        return "/Mansions of Madness_Data";
     }
 }

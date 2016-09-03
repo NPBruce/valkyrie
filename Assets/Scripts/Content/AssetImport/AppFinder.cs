@@ -8,10 +8,11 @@ abstract public class AppFinder
     public abstract string AppId();
     public abstract string Destination();
     public abstract string DataDirectory();
+    public string location;
 
     public AppFinder()
     {
-        string location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
+        location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
         location += DataDirectory();
         if (Directory.Exists(location))
         {
