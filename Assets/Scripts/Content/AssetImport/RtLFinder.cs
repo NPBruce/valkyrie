@@ -11,4 +11,9 @@ public class RtLFinder : AppFinder {
     {
         return "D2E";
     }
+
+    override public string DataDirectory()
+    {
+        return "Road to Legend_Data";
+    }
 }
