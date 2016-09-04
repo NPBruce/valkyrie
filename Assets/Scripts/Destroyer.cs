@@ -54,7 +54,10 @@ public class Destroyer {
         Game game = Game.Get();
 
         // Clear up all data
-        game.eventList.Clear();
+        if (game.eventList != null)
+        {
+            game.eventList.Clear();
+        }
         game.cd = null;
         game.qd = null;
         game.qed = null;
