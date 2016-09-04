@@ -193,18 +193,19 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // Ignore monster activations
-            if (name.IndexOf(ActivationData.type) == 0)
-                return;
-            // If we don't already have one then add this
-            if (!monsters.ContainsKey(d.name))
+            if (name.IndexOf(ActivationData.type) != 0)
             {
-                monsters.Add(name, d);
-            }
-            // If we do replace if this has higher priority
-            else if (monsters[d.name].priority < d.priority)
-            {
-                monsters.Remove(name);
-                monsters.Add(name, d);
+                // If we don't already have one then add this
+                if (!monsters.ContainsKey(d.name))
+                {
+                    monsters.Add(name, d);
+                }
+                // If we do replace if this has higher priority
+                else if (monsters[d.name].priority < d.priority)
+                {
+                    monsters.Remove(name);
+                    monsters.Add(name, d);
+                }
             }
         }
         // Is this a "Activation" entry?
