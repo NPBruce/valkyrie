@@ -43,7 +43,6 @@ public class FetchContent {
             var quedSharedFile = unityFiles.Find(uFile => string.Equals(Path.GetFileName(uFile), sharedFileName, System.StringComparison.OrdinalIgnoreCase));
             if (quedSharedFile == null)
             {
-                //if (!File.Exists(sharedFilePath)) { sharedFilePath = Path.GetDirectoryName(fileName) + "\\" + sharedFileName; }
                 if (!File.Exists(sharedFilePath))
                 {
                     var findFiles = Directory.GetFiles(Path.GetDirectoryName(resources), sharedFileName, SearchOption.AllDirectories);
@@ -70,12 +69,22 @@ public class FetchContent {
         if (CleanImport())
         {
             BuildAssetStrucutres();
+            WriteExportLog();
         }
+    }
+
+    private void WriteExportLog()
+    {
+        string[] log = new string[2];
+        log[0] = "[Export]";
+        log[1] = "Valkyrie=" + Game.Get().version;
+//        log[2] = "FFG=" + exe;
     }
 
     //Clean old fetched data
     private bool CleanImport()
     {
+        if (!Directory.Exists(ContentData.ContentPath() + gameType + "/ffg")) return true;
         try
         {
             Directory.Delete(ContentData.ContentPath() + gameType + "/ffg", true);
@@ -128,7 +137,7 @@ public class FetchContent {
                     //case 89: //CubeMap
                     case 128: //Font
                         {
-                            //ExportFont(asset);
+                            ExportFont(asset);
                             break;
                         }
                     //case 129: //PlayerSettings
@@ -240,8 +249,8 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath());
         Directory.CreateDirectory(ContentData.ContentPath() + gameType);
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
-        Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/text");
-        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/text/" + asset.Text;
+        Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/audio");
+        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/audio/" + asset.Text;
         int i = 0;
         string fileName = fileCandidate + asset.extension;
 
@@ -288,15 +297,21 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath());
         Directory.CreateDirectory(ContentData.ContentPath() + gameType);
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
-        Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/text");
-        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/text/" + asset.Text;
+        Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/fonts");
+        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/fonts/" + asset.Text;
         int i = 0;
-        string fileName = fileCandidate + asset.extension;
+        string fileName = fileCandidate + ".ttf";
 
         m_Font = new Unity_Studio.unityFont(asset, true);
+
+        if (m_Font.m_FontData == null)
+        {
+            return;
+        }
+
         while (File.Exists(fileName))
         {
-            fileName = fileCandidate + i++ + asset.extension;
+            fileName = fileCandidate + i++ + ".ttf";
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))

@@ -14,4 +14,8 @@ public class MoMFinder : AppFinder {
     {
         return "/Mansions of Madness_Data";
     }
+    override public string Executable()
+    {
+        return "Mansions of Madness.exe";
+    }
 }

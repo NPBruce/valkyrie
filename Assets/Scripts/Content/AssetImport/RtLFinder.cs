@@ -16,4 +16,8 @@ public class RtLFinder : AppFinder {
     {
         return "/Road to Legend_Data";
     }
+    override public string Executable()
+    {
+        return "Road to Legend.exe";
+    }
 }

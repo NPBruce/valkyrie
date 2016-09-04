@@ -99,6 +99,7 @@ namespace Unity_Studio
                 else { float m_PixelScale = a_Stream.ReadSingle(); }
 
                 int m_FontData_size = a_Stream.ReadInt32();
+                UnityEngine.Debug.Log(m_FontData_size);
                 if (m_FontData_size > 0)
                 {
                     m_FontData = new byte[m_FontData_size];

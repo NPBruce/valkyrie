@@ -380,5 +380,71 @@ namespace Unity_Studio
                 preloadData.subItems.AddRange(new string[] { preloadData.TypeString, preloadData.exportSize.ToString() });
             }
         }
+
+        public static UnityEngine.Texture2D ToTexture(AssetPreloadData preloadData)
+        {
+            Unity_Studio.Texture2D data = new Texture2D(preloadData, false);
+            var sourceFile = preloadData.sourceFile;
+            var a_Stream = preloadData.sourceFile.a_Stream;
+            a_Stream.Position = preloadData.Offset;
+
+            if (sourceFile.platform == -2)
+            {
+                uint m_ObjectHideFlags = a_Stream.ReadUInt32();
+                PPtr m_PrefabParentObject = sourceFile.ReadPPtr();
+                PPtr m_PrefabInternal = sourceFile.ReadPPtr();
+            }
+
+            data.m_Name = a_Stream.ReadAlignedString(a_Stream.ReadInt32());
+            data.m_Width = a_Stream.ReadInt32();
+            data.m_Height = a_Stream.ReadInt32();
+            data.m_CompleteImageSize = a_Stream.ReadInt32();
+            data.m_TextureFormat = a_Stream.ReadInt32();
+
+            if (sourceFile.version[0] < 5 || (sourceFile.version[0] == 5 && sourceFile.version[1] < 2))
+            { data.m_MipMap = a_Stream.ReadBoolean(); }
+            else
+            {
+                data.dwFlags += 0x20000;
+                data.dwMipMapCount = a_Stream.ReadInt32();//is this with or without main image?
+                data.dwCaps += 0x400008;
+            }
+
+            data.m_IsReadable = a_Stream.ReadBoolean(); //2.6.0 and up
+            data.m_ReadAllowed = a_Stream.ReadBoolean(); //3.0.0 and up
+            a_Stream.AlignStream(4);
+
+            data.m_ImageCount = a_Stream.ReadInt32();
+            data.m_TextureDimension = a_Stream.ReadInt32();
+            //m_TextureSettings
+            data.m_FilterMode = a_Stream.ReadInt32();
+            data.m_Aniso = a_Stream.ReadInt32();
+            data.m_MipBias = a_Stream.ReadSingle();
+            data.m_WrapMode = a_Stream.ReadInt32();
+
+            if (sourceFile.version[0] >= 3)
+            {
+                data.m_LightmapFormat = a_Stream.ReadInt32();
+                if (sourceFile.version[0] >= 4 || sourceFile.version[1] >= 5) { data.m_ColorSpace = a_Stream.ReadInt32(); } //3.5.0 and up
+            }
+
+            data.image_data_size = a_Stream.ReadInt32();
+
+            if (data.m_MipMap)
+            {
+                data.dwFlags += 0x20000;
+                data.dwMipMapCount = Convert.ToInt32(Math.Log(Math.Max(data.m_Width, data.m_Height)) / Math.Log(2));
+                data.dwCaps += 0x400008;
+            }
+
+            byte[] image_data = new byte[data.image_data_size];
+            a_Stream.Read(image_data, 0, data.image_data_size);
+
+            UnityEngine.Texture2D tex = new UnityEngine.Texture2D(data.m_Width, data.m_Height, (UnityEngine.TextureFormat)data.m_TextureFormat, false);
+            tex.LoadRawTextureData(image_data);
+            tex.Apply();
+
+            return tex;
+        }
     }
 }

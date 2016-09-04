@@ -8,6 +8,7 @@ abstract public class AppFinder
     public abstract string AppId();
     public abstract string Destination();
     public abstract string DataDirectory();
+    public abstract string Executable();
     public string location;
 
     public AppFinder()
@@ -20,3 +21,4 @@ abstract public class AppFinder
         }
     }
 }
+

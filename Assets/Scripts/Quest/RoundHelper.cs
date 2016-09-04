@@ -119,6 +119,9 @@ public class RoundHelper {
         // Search for additional common activations
         foreach (string s in m.monsterData.activations)
         {
+            Debug.Log(s);
+            if (s.IndexOf("Monster") == 0)
+
             if (game.cd.activations.ContainsKey("MonsterActivation" + s))
             {
                 adList.Add(game.cd.activations["MonsterActivation" + s]);
