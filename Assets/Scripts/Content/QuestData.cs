@@ -147,6 +147,7 @@ public class QuestData
 
         public Tile(string s) : base(s)
         {
+            locationSpecified = true;
             Game game = Game.Get();
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
@@ -158,6 +159,7 @@ public class QuestData
 
         public Tile(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            locationSpecified = true;
             typeDynamic = type;
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
@@ -273,11 +275,13 @@ public class QuestData
 
         public Door(string s) : base(s)
         {
+            locationSpecified = true;
             typeDynamic = type;
         }
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            locationSpecified = true;
             typeDynamic = type;
             // Doors are cancelable because you can select then cancel
             cancelable = true;
@@ -395,12 +399,14 @@ public class QuestData
 
         public Token(string s) : base(s)
         {
+            locationSpecified = true;
             typeDynamic = type;
             spriteName = "search-token";
         }
 
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            locationSpecified = true;
             typeDynamic = type;
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
@@ -492,6 +498,7 @@ public class QuestData
 
         public Monster(string s) : base(s)
         {
+            locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
@@ -511,6 +518,7 @@ public class QuestData
 
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            locationSpecified = true;
             typeDynamic = type;
             //First try to a list of specific types
             if (data.ContainsKey("monster"))
@@ -983,11 +991,13 @@ public class QuestData
 
         public MPlace(string s) : base(s)
         {
+            locationSpecified = true;
             typeDynamic = type;
         }
 
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {
+            locationSpecified = true;
             typeDynamic = type;
             master = false;
             if (data.ContainsKey("master"))
