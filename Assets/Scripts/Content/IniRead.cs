@@ -135,7 +135,7 @@ public static class IniRead{
             }
             for (int i = 0; i < game.ffgText.Length; i++)
             {
-                string[] values = game.ffgText[i].Split(',');
+                string[] values = game.ffgText[i].Split(",".ToCharArray(), 2);
                 if (values.Length > 1 && values[0].Equals(key))
                 {
                     string returnValue = values[1];
