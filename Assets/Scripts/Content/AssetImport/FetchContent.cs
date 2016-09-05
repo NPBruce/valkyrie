@@ -151,19 +151,18 @@ public class FetchContent {
     private void ExportTexture(Unity_Studio.AssetPreloadData asset)
     {
         Unity_Studio.Texture2D m_Texture2D = new Unity_Studio.Texture2D(asset, false);
+        m_Texture2D = new Unity_Studio.Texture2D(asset, true);
         Directory.CreateDirectory(ContentData.ContentPath());
         Directory.CreateDirectory(ContentData.ContentPath() + gameType);
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/img");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/img/" + asset.Text;
         int i = 0;
-        string fileName = fileCandidate + asset.extension;
+        string fileName = fileCandidate + "." + asset.extension;
         while (File.Exists(fileName))
         {
-            fileName = fileCandidate + i++ + asset.extension;
+            fileName = fileCandidate + i++ + "." + asset.extension;
         }
-
-        m_Texture2D = new Unity_Studio.Texture2D(asset, true);
 
         switch (m_Texture2D.m_TextureFormat)
         {

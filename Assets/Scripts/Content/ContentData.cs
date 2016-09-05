@@ -237,6 +237,59 @@ public class ContentData {
         public string description;
         public List<string> iniFiles;
     }
+
+    public static Texture2D FileToTexture(string file)
+    {
+        string imagePath = @"file://" + file;
+        WWW www = null;
+        Texture2D texture = null;
+
+        if (Path.GetExtension(file).Equals(".dds"))
+        {
+            string ddsType = Path.GetExtension(Path.GetFileNameWithoutExtension(file)).Substring(1);
+            byte[] ddsBytes = null;
+            Debug.Log(ddsType);
+            try
+            {
+                ddsBytes = File.ReadAllBytes(file);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("cantread: " + file);
+                Debug.Log(e);
+                return null;
+            }
+            byte ddsSizeCheck = ddsBytes[4];
+            if (ddsSizeCheck != 124)
+            {
+                return null;
+                Debug.Log("sizecheck");
+            }
+
+            int height = ddsBytes[13] * 256 + ddsBytes[12];
+            int width = ddsBytes[17] * 256 + ddsBytes[16];
+
+            int DDS_HEADER_SIZE = 128;
+            byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
+            System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
+
+            texture = new Texture2D(width, height, (TextureFormat)int.Parse(ddsType), false);
+            texture.LoadRawTextureData(dxtBytes);
+            texture.Apply();
+        }
+
+        try
+        {
+            www = new WWW(@"file://" + imagePath);
+            texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
+            www.LoadImageIntoTexture(texture);
+            return texture;
+        }
+        catch (System.Exception)
+        {
+            return null;
+        }
+    }
 }
 
 // Class for tile specific data

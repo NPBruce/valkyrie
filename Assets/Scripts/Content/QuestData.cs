@@ -207,17 +207,10 @@ public class QuestData
             Game game = Game.Get();
 
             // Attempt to load image
-            string imagePath = @"file://" + tileType.image;
+            string imagePath = tileType.image;
+            Texture2D newTex = ContentData.FileToTexture(imagePath);
             Sprite tileSprite;
-            WWW www = null;
-            Texture2D newTex = null;
-            try
-            {
-                www = new WWW(imagePath);
-                newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-                www.LoadImageIntoTexture(newTex);
-            }
-            catch (System.Exception)
+            if (newTex == null)
             {
                 // Fatal if missing
                 Debug.Log("Error: cannot open image file for TileSide: " + imagePath);

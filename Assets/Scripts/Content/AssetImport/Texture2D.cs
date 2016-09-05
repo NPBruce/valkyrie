@@ -44,6 +44,8 @@ namespace Unity_Studio
         public int dwABitMask;
         public int dwCaps = 0x1000;
         public int dwCaps2 = 0x0;
+        public int m_offset;
+        public string m_source;
 
         public int pvrVersion = 0x03525650;
         public int pvrFlags = 0x0;
@@ -108,6 +110,15 @@ namespace Unity_Studio
 
             image_data_size = a_Stream.ReadInt32();
 
+            if (image_data_size == 0 && sourceFile.version[0] >= 5 && sourceFile.version[1] >= 3)
+            {
+                m_offset = a_Stream.ReadInt32();
+                image_data_size = a_Stream.ReadInt32();
+                int resourceFileNameSize = a_Stream.ReadInt32();
+                m_source = a_Stream.ReadAlignedString(resourceFileNameSize);
+                m_source = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(sourceFile.filePath), m_source);
+            }
+
             if (m_MipMap)
             {
                 dwFlags += 0x20000;
@@ -119,7 +130,21 @@ namespace Unity_Studio
             {
 
                 image_data = new byte[image_data_size];
-                a_Stream.Read(image_data, 0, image_data_size);
+
+                if (m_source == null)
+                {
+                    a_Stream.Read(image_data, 0, image_data_size);
+                }
+                else if (System.IO.File.Exists(m_source))
+                {
+                    image_data = new byte[image_data_size];
+                    using (System.IO.BinaryReader reader = new System.IO.BinaryReader(System.IO.File.OpenRead(m_source)))
+                    {
+                        reader.BaseStream.Position = m_offset;
+                        reader.Read(image_data, 0, image_data_size);
+                        reader.Close();
+                    }
+                }
 
                 switch (m_TextureFormat)
                 {
