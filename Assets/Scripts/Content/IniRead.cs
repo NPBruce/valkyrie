@@ -69,7 +69,8 @@ public static class IniRead{
                     }
                     else
                     {
-                        entryData.Add(key, l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                        string value = FFGLookup(l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                        entryData.Add(key, value);
                     }
                 }
                 // This won't go anywhere if we don't have a section
@@ -90,6 +91,41 @@ public static class IniRead{
         }
 
         return output;
+    }
+
+    public static string FFGLookup(string input)
+    {
+        string output = input;
+        while (output.IndexOf("{ffg:") != -1)
+        {
+            int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
+            int lookupEnd = output.Substring(lookupStart).IndexOf("}");
+            string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
+            string result = FFGKeyLookup(lookup);
+            output.Replace("{ffg:" + lookup + "}", result);
+        }
+        return output;
+    }
+
+    public static string FFGKeyLookup(string key)
+    {
+        try
+        {
+            string[] allText = System.IO.File.ReadAllLines(ContentData.ContentPath() + "D2E/ffg/text/Localization.txt");
+            foreach (string s in allText)
+            {
+                string[] values = s.Split(',');
+                if (values.Length > 1 && values[0].Equals(key))
+                {
+                    return values[1];
+                }
+            }
+        }
+        catch(System.Exception)
+        {
+            Debug.Log("Warning: Unable to open imported Localization file." + System.Environment.NewLine);
+        }
+        return key;
     }
 }
 
