@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public static class IniRead{
     // Function takes path to ini file and returns data object
     // Returns null on error
+
     public static IniData ReadFromIni(string path)
     {
         string[] lines;
@@ -126,10 +127,14 @@ public static class IniRead{
     {
         try
         {
-            string[] allText = System.IO.File.ReadAllLines(ContentData.ContentPath() + "D2E/ffg/text/Localization.txt");
-            for (int i = 0; i < allText.Length; i++)
+            Game game = Game.Get();
+            if (game.ffgText == null)
             {
-                string[] values = allText[i].Split(',');
+                game.ffgText = System.IO.File.ReadAllLines(ContentData.ContentPath() + "D2E/ffg/text/Localization.txt");
+            }
+            for (int i = 0; i < game.ffgText.Length; i++)
+            {
+                string[] values = game.ffgText[i].Split(',');
                 if (values.Length > 1 && values[0].Equals(key))
                 {
                     string returnValue = values[1];
@@ -149,8 +154,8 @@ public static class IniRead{
                         }
                         else if (nextQuote == -1)
                         {
-                            if (i >= allText.Length) return returnValue.Replace("\"\"", "\"").Trim('\"');
-                            returnValue += System.Environment.NewLine + allText[++i];
+                            if (i >= game.ffgText.Length) return returnValue.Replace("\"\"", "\"").Trim('\"');
+                            returnValue += System.Environment.NewLine + game.ffgText[++i];
                         }
                         else
                         {
