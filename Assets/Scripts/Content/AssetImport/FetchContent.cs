@@ -64,7 +64,6 @@ public class FetchContent {
         {
             AssetsFile file = new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian));
             assetFiles.Add(file);
-            Debug.Log(s);
         }
         if (CleanImport())
         {
