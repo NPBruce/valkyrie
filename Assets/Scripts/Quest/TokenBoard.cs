@@ -83,11 +83,7 @@ public class TokenBoard : MonoBehaviour {
 
     public void AddPlacedMonsters(QuestData.Monster m, int count)
     {
-        string imagePath = @"file://" + m.mData.imagePlace;
-
-        WWW www = new WWW(imagePath);
-        Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-        www.LoadImageIntoTexture(newTex);
+        Texture2D newTex = ContentData.FileToTexture(m.mData.imagePlace);
 
         // Check load worked
         if (newTex == null)

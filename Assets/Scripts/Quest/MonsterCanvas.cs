@@ -29,13 +29,9 @@ public class MonsterCanvas : MonoBehaviour
 
     void AddMonster(Game.Monster m, Game game)
     {
-        string imagePath = @"file://" + m.monsterData.image;
-
         Sprite mSprite;
 
-        WWW www = new WWW(imagePath);
-        Texture2D newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-        www.LoadImageIntoTexture(newTex);
+        Texture2D newTex = ContentData.FileToTexture(m.monsterData.image);
 
         GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
         mImg.tag = "monsters";

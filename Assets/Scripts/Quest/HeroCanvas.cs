@@ -26,10 +26,7 @@ public class HeroCanvas : MonoBehaviour {
 
         if (h.heroData != null)
         {
-            string imagePath = @"file://" + h.heroData.image;
-            WWW www = new WWW(imagePath);
-            newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-            www.LoadImageIntoTexture(newTex);
+            newTex = ContentData.FileToTexture(h.heroData.image);
             heroName = h.heroData.name;
         }
 
@@ -97,10 +94,7 @@ public class HeroCanvas : MonoBehaviour {
 
             if (h.heroData != null)
             {
-                string imagePath = @"file://" + h.heroData.image;
-                WWW www = new WWW(imagePath);
-                newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-                www.LoadImageIntoTexture(newTex);
+                newTex = ContentData.FileToTexture(h.heroData.image);
             }
 
             Sprite heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);

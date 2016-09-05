@@ -44,10 +44,7 @@ public class HeroSelection {
 
         if (hd != null)
         {
-            string imagePath = @"file://" + hd.image;
-            WWW www = new WWW(imagePath);
-            newTex = new Texture2D(256, 256, TextureFormat.DXT5, false);
-            www.LoadImageIntoTexture(newTex);
+            newTex = ContentData.FileToTexture(hd.image);
             name = hd.name;
         }
 
