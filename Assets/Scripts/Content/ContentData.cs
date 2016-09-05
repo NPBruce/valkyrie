@@ -246,24 +246,19 @@ public class ContentData {
 
         if (Path.GetExtension(file).Equals(".dds"))
         {
-            string ddsType = Path.GetExtension(Path.GetFileNameWithoutExtension(file)).Substring(1);
             byte[] ddsBytes = null;
-            Debug.Log(ddsType);
             try
             {
                 ddsBytes = File.ReadAllBytes(file);
             }
             catch (System.Exception e)
             {
-                Debug.Log("cantread: " + file);
-                Debug.Log(e);
                 return null;
             }
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
                 return null;
-                Debug.Log("sizecheck");
             }
 
             int height = ddsBytes[13] * 256 + ddsBytes[12];
@@ -273,9 +268,10 @@ public class ContentData {
             byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
             System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
-            texture = new Texture2D(width, height, (TextureFormat)int.Parse(ddsType), false);
+            texture = new Texture2D(width, height, TextureFormat.DXT5, false);
             texture.LoadRawTextureData(dxtBytes);
             texture.Apply();
+            return texture;
         }
 
         try

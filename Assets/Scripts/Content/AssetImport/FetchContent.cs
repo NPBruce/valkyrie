@@ -158,10 +158,10 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/img");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/img/" + asset.Text;
         int i = 0;
-        string fileName = fileCandidate + "." + asset.extension;
+        string fileName = fileCandidate + asset.extension;
         while (File.Exists(fileName))
         {
-            fileName = fileCandidate + i++ + "." + asset.extension;
+            fileName = fileCandidate + i++ + asset.extension;
         }
 
         switch (m_Texture2D.m_TextureFormat)
