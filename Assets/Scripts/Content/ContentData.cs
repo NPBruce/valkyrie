@@ -17,9 +17,9 @@ public class ContentData {
         if (Application.isEditor)
         {
             // If running through unity then we assume you are using the git content, with the project at the same level
-            return Application.dataPath + "/../../valkyrie-contentpacks/";
+            return Application.dataPath + "/../content/";
         }
-        return Application.dataPath + "/valkyrie-contentpacks/";
+        return Application.dataPath + "/content/";
     }
 
     // Constructor takes a path in which to look for content
