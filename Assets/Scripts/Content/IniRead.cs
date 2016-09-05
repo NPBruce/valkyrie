@@ -97,15 +97,15 @@ public static class IniRead{
     public static string SymbolReplace(string input)
     {
         string output = input;
-        output.Replace("{heart}", "≥");
-        output.Replace("{fatigue}", "∏");
-        output.Replace("{might}", "∂");
-        output.Replace("{will}", "π");
-        output.Replace("{knowledge}", "∑");
-        output.Replace("{awareness}", "μ");
-        output.Replace("{action}", "∞");
-        output.Replace("{shield}", "±");
-        output.Replace("{surge}", "≥");
+        output = output.Replace("{heart}", "≥");
+        output = output.Replace("{fatigue}", "∏");
+        output = output.Replace("{might}", "∂");
+        output = output.Replace("{will}", "π");
+        output = output.Replace("{knowledge}", "∑");
+        output = output.Replace("{awareness}", "μ");
+        output = output.Replace("{action}", "∞");
+        output = output.Replace("{shield}", "±");
+        output = output.Replace("{surge}", "≥");
         return output;
     }
 
