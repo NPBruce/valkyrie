@@ -128,7 +128,8 @@ public static class IniRead{
         try
         {
             Game game = Game.Get();
-            if (game.ffgText == null)
+
+            if (game.ffgText == null || game.ffgText.Length == 0)
             {
                 game.ffgText = System.IO.File.ReadAllLines(ContentData.ContentPath() + "D2E/ffg/text/Localization.txt");
             }
