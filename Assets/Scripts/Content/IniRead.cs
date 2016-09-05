@@ -17,7 +17,6 @@ public static class IniRead{
         }
         catch(System.Exception e)
         {
-            Debug.Log(e);
             return null;
         }
         // Create a dictionary for the first section

@@ -65,11 +65,8 @@ public class Game : MonoBehaviour {
         // The newline at the end stops the stack trace appearing in the log
         Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
-        // Pull data from RtL - need to work out when this should be done
-        new FetchContent("D2E");
-
-        // Bring up the main menu
-        new MainMenu();
+        // Bring up the Game selector
+        new GameSelection();
     }
 
     // This is called by 'start quest' on the main menu

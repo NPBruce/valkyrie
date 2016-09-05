@@ -8,11 +8,12 @@ public class FetchContent {
     public List<AssetsFile> assetFiles; // All asset files
     private List<AssetPreloadData> exportableAssets;
     public string gameType;
+    AppFinder finder = null;
+    public bool needImport;
+    string logFile;
 
     public FetchContent(string type)
     {
-        AppFinder finder = null;
-        List<string> unityFiles = new List<string>(); //files to load
         gameType = type;
 
         if (type.Equals("D2E"))
@@ -24,6 +25,22 @@ public class FetchContent {
             return;
         }
 
+        logFile = ContentData.ContentPath() + gameType + "/ffg/import.ini";
+        IniData log = IniRead.ReadFromIni(logFile);
+
+        if (log == null)
+        {
+            needImport = true;
+            return;
+        }
+
+        string lastImport = log.Get("Import", "FFG");
+        needImport = VersionNewer(lastImport, finder.AppVersion());
+    }
+
+    public void Import()
+    {
+        List<string> unityFiles = new List<string>(); //files to load
         string resources = finder.location + "/resources.assets";
 
         AssetsFile assetsFile = new AssetsFile(resources, new EndianStream(File.OpenRead(resources), EndianType.BigEndian));
@@ -68,16 +85,34 @@ public class FetchContent {
         if (CleanImport())
         {
             BuildAssetStrucutres();
-            WriteExportLog();
+            WriteImportLog(logFile);
         }
     }
 
-    private void WriteExportLog()
+    private void WriteImportLog(string logFile)
     {
-        string[] log = new string[2];
-        log[0] = "[Export]";
+        string[] log = new string[3];
+        log[0] = "[Import]";
         log[1] = "Valkyrie=" + Game.Get().version;
-//        log[2] = "FFG=" + exe;
+        log[2] = "FFG=" + finder.AppVersion();
+        try
+        {
+            Directory.CreateDirectory(ContentData.ContentPath());
+            Directory.CreateDirectory(ContentData.ContentPath() + gameType);
+            Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
+
+            logFile = ContentData.ContentPath() + gameType + "/ffg/import.ini";
+
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+            File.WriteAllLines(logFile, log);
+        }
+        catch(System.Exception)
+        {
+            Debug.Log("Warning: Unable to create import log");
+        }
     }
 
     //Clean old fetched data
@@ -317,5 +352,35 @@ public class FetchContent {
             writer.Write(m_Font.m_FontData);
             writer.Close();
         }
+    }
+
+    public static bool VersionNewer(string oldVersion, string newVersion)
+    {
+        string[] oldV = oldVersion.Split('.');
+        string[] newV = newVersion.Split('.');
+
+        if (oldV.Equals("")) return true;
+
+        if (oldV.Length != newV.Length)
+        {
+            return true;
+        }
+        for (int i = 0; i < oldV.Length; i++)
+        {
+            string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
+            string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
+            try
+            {
+                if (int.Parse(oldS) < int.Parse(newS))
+                {
+                    return true;
+                }
+            }
+            catch (System.Exception)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
