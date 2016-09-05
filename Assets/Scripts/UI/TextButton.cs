@@ -65,7 +65,7 @@ public class TextButton {
         uiText.color = colour;
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
-        uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        uiText.font = (Font)Resources.Load("fonts/gara_scenario_desc");
         uiText.fontSize = UIScaler.GetMediumFont();
     }
 }

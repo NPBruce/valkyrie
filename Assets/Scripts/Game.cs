@@ -72,20 +72,12 @@ public class Game : MonoBehaviour {
     // This is called by 'start quest' on the main menu
     public void SelectQuest()
     {
-        // In the build the content packs need to go into the build data dir, this is currently manual
-        string contentLocation = Application.dataPath + "/valkyrie-contentpacks/";
-        if (Application.isEditor)
-        {
-            // If running through unity then we assume you are using the git content, with the project at the same level
-            contentLocation = Application.dataPath + "/../../valkyrie-contentpacks/";
-        }
-
         // Find any content packs at the location
-        cd = new ContentData(contentLocation);
+        cd = new ContentData(ContentData.ContentPath() + "D2E/");
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + contentLocation + System.Environment.NewLine);
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + ContentData.ContentPath() + "D2E/" + System.Environment.NewLine);
         }
 
         // In the future this is where you select which packs to load, for now we load everything.

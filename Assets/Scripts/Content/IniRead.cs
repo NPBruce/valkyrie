@@ -70,7 +70,7 @@ public static class IniRead{
                     else
                     {
                         string value = FFGLookup(l.Substring(equalsLocation + 1).Trim().Trim('\"'));
-                        entryData.Add(key, value);
+                        entryData.Add(key, SymbolReplace(value));
                     }
                 }
                 // This won't go anywhere if we don't have a section
@@ -93,6 +93,21 @@ public static class IniRead{
         return output;
     }
 
+    public static string SymbolReplace(string input)
+    {
+        string output = input;
+        output.Replace("{heart}", "≥");
+        output.Replace("{fatigue}", "∏");
+        output.Replace("{might}", "∂");
+        output.Replace("{will}", "π");
+        output.Replace("{knowledge}", "∑");
+        output.Replace("{awareness}", "μ");
+        output.Replace("{action}", "∞");
+        output.Replace("{shield}", "±");
+        output.Replace("{surge}", "≥");
+        return output;
+    }
+
     public static string FFGLookup(string input)
     {
         string output = input;
@@ -100,9 +115,9 @@ public static class IniRead{
         {
             int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
             int lookupEnd = output.Substring(lookupStart).IndexOf("}");
-            string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
+            string lookup = output.Substring(lookupStart, lookupEnd);
             string result = FFGKeyLookup(lookup);
-            output.Replace("{ffg:" + lookup + "}", result);
+            output = output.Replace("{ffg:" + lookup + "}", result);
         }
         return output;
     }
@@ -112,14 +127,41 @@ public static class IniRead{
         try
         {
             string[] allText = System.IO.File.ReadAllLines(ContentData.ContentPath() + "D2E/ffg/text/Localization.txt");
-            foreach (string s in allText)
+            for (int i = 0; i < allText.Length; i++)
             {
-                string[] values = s.Split(',');
+                string[] values = allText[i].Split(',');
                 if (values.Length > 1 && values[0].Equals(key))
                 {
-                    return values[1];
+                    string returnValue = values[1];
+                    int nextQuote = 0;
+
+                    while (true)
+                    {
+                        nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
+                        if (nextQuote == returnValue.Length - 1)
+                        {
+                            return returnValue.Replace("\"\"", "\"").Trim('\"');
+                        }
+
+                        if (returnValue[nextQuote + 1].Equals("\""))
+                        {
+                            nextQuote++;
+                        }
+                        else if (nextQuote == -1)
+                        {
+                            if (i >= allText.Length) return returnValue.Replace("\"\"", "\"").Trim('\"');
+                            returnValue += System.Environment.NewLine + allText[++i];
+                        }
+                        else
+                        {
+                            return returnValue.Replace("\"\"", "\"").Trim('\"');
+                        }
+                        nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
+                    }
+
                 }
             }
+            return key;
         }
         catch(System.Exception)
         {
