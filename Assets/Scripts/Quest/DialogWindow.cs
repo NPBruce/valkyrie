@@ -8,12 +8,12 @@ using UnityEngine.Events;
 public class DialogWindow {
     // The even that raises this dialog
     public QuestData.Event eventData;
-    public List<Game.Hero> heroList;
+    public List<Round.Hero> heroList;
 
     public DialogWindow(QuestData.Event e)
     {
         eventData = e;
-        heroList = new List<Game.Hero>();
+        heroList = new List<Round.Hero>();
         Game game = Game.Get();
         game.eventList.Push(eventData);
 
@@ -25,7 +25,7 @@ public class DialogWindow {
             }
             else
             {
-                foreach (Game.Hero h in game.qd.heroSelection[eventData.heroListName])
+                foreach (Round.Hero h in game.qd.heroSelection[eventData.heroListName])
                 {
                     h.selected = true;
                 }
@@ -93,9 +93,9 @@ public class DialogWindow {
     {
         Game game = Game.Get();
 
-        heroList = new List<Game.Hero>();
+        heroList = new List<Round.Hero>();
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (h.selected)
             {
@@ -106,7 +106,7 @@ public class DialogWindow {
         if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return;
         if (eventData.minHeroes > heroList.Count) return;
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             h.selected = false;
         }

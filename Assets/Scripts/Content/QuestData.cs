@@ -13,7 +13,7 @@ public class QuestData
     public List<string> flags;
 
     // A dictionary of heros that have been selected in events
-    public Dictionary<string, List<Game.Hero>> heroSelection;
+    public Dictionary<string, List<Round.Hero>> heroSelection;
 
     // List of ini files containing quest data
     List<string> files;
@@ -46,7 +46,7 @@ public class QuestData
 
         components = new Dictionary<string, QuestComponent>();
         flags = new List<string>();
-        heroSelection = new Dictionary<string, List<Game.Hero>>();
+        heroSelection = new Dictionary<string, List<Round.Hero>>();
 
         // Read the main quest file
         IniData d = IniRead.ReadFromIni(questPath);

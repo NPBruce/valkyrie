@@ -3,9 +3,9 @@ using System.Collections;
 
 // Class for creation of hero control button menu
 public class HeroDialog{
-    public Game.Hero hero;
+    public Round.Hero hero;
 
-    public HeroDialog(Game.Hero h)
+    public HeroDialog(Round.Hero h)
     {
         hero = h;
         CreateWindow();

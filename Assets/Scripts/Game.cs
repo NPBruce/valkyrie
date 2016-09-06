@@ -7,17 +7,18 @@ Dump list of things to do:
 
 Done:
     Better panning
+    end round event in editor
 
 Now:
-    Better panning
-    end round event in editor
     custom pass/fail
     frame color for portraits
     text editing sucks (text wrap?)
     32bit
     Threat/peril
+    Monster present flag
 
 Later:
+    no confirm on event
     random tags
     tags for hero count
     tags for round number
@@ -37,9 +38,7 @@ public class Game : MonoBehaviour {
     public string version = "";
     public ContentData cd;
     public QuestData qd;
-    public List<Hero> heros;
-    public List<Monster> monsters;
-    public int round = 0;
+    public Round round;
     public bool heroesSelected = false;
     public Stack<QuestData.Event> eventList;
     public Canvas uICanvas;
@@ -124,11 +123,13 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
+        round = new Round();
+
         // Populate null hero list, these can then be selected as hero types
-        heros = new List<Hero>();
+        round.heroes = new List<Round.Hero>();
         for (int i = 1; i < 5; i++)
         {
-            heros.Add(new Hero(null, i));
+            round.heroes.Add(new Round.Hero(null, i));
         }
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
@@ -148,7 +149,7 @@ public class Game : MonoBehaviour {
         cancelSelection.ApplyTag("heroselect");
 
         // Create the monster list so we are ready to start
-        monsters = new List<Monster>();
+        round.monsters = new List<Round.Monster>();
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
@@ -169,14 +170,14 @@ public class Game : MonoBehaviour {
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Hero h in heros)
+        foreach (Round.Hero h in round.heroes)
         {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
         morale = count;
         // Starting round is 1
-        round = 1;
+        round.round = 1;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
@@ -197,48 +198,6 @@ public class Game : MonoBehaviour {
         if (qed != null && Input.GetMouseButtonDown(0))
         {
             qed.MouseDown();
-        }
-    }
-
-    // Class for holding current hero status
-    public class Hero
-    {
-        // This can be null if not selected
-        public HeroData heroData;
-        public bool activated = false;
-        public bool defeated = false;
-        //  Heros are in a list so they need ID... maybe at some point this can move to an array
-        public int id = 0;
-        // Used for events that can select or highlight heros
-        public bool selected;
-
-        public Hero(HeroData h, int i)
-        {
-            heroData = h;
-            id = i;
-        }
-    }
-
-    // Class for holding current monster status
-    public class Monster
-    {
-        public MonsterData monsterData;
-        public bool activated = false;
-        public bool minionStarted = false;
-        public bool masterStarted = false;
-        public bool unique = false;
-        public string uniqueText = "";
-        public string uniqueTitle = "";
-        // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
-        public ActivationData currentActivation;
-
-        // Initialise from monster event
-        public Monster(QuestData.Monster m)
-        {
-            monsterData = m.mData;
-            unique = m.unique;
-            uniqueTitle = m.uniqueTitle;
-            uniqueText = m.uniqueText;
         }
     }
 }

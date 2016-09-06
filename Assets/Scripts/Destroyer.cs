@@ -61,8 +61,7 @@ public class Destroyer {
         game.cd = null;
         game.qd = null;
         game.qed = null;
-        game.heros = null;
-        game.monsters = null;
+        game.round = null;
         game.heroesSelected = false;
         game.moraleDisplay = null;
         game.tokenBoard.tc.Clear();

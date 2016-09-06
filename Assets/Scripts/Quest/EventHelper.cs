@@ -96,8 +96,8 @@ public class EventHelper {
             QuestData.Monster qm = (QuestData.Monster)e;
 
             // Is this type new?
-            Game.Monster oldMonster = null;
-            foreach (Game.Monster m in game.monsters)
+            Round.Monster oldMonster = null;
+            foreach (Round.Monster m in game.round.monsters)
             {
                 if (m.monsterData.name.Equals(qm.mData.name))
                 {
@@ -107,7 +107,7 @@ public class EventHelper {
             // Add the new type
             if (oldMonster == null)
             {
-                game.monsters.Add(new Game.Monster(qm));
+                game.round.monsters.Add(new Round.Monster(qm));
                 game.monsterCanvas.UpdateList();
             }
             else if(qm.unique)

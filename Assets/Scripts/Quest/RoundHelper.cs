@@ -10,7 +10,7 @@ public class RoundHelper {
         Game game = Game.Get();
         // Check if all heros have finished
         bool herosActivated = true;
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (!h.activated && h.heroData != null)
                 herosActivated = false;
@@ -27,7 +27,7 @@ public class RoundHelper {
     }
 
     // Finish the other half of monster activation
-    public static void ParticalActivationComplete(Game.Monster m)
+    public static void ParticalActivationComplete(Round.Monster m)
     {
         // Start the other half of the activation
         new ActivateDialog(m, m.minionStarted);
@@ -41,7 +41,7 @@ public class RoundHelper {
         Game game = Game.Get();
 
         // Check for any partial monster activations
-        foreach (Game.Monster m in game.monsters)
+        foreach (Round.Monster m in game.round.monsters)
         {
             if (m.minionStarted ^ m.masterStarted)
             {
@@ -62,7 +62,7 @@ public class RoundHelper {
 
         // Check if all heros have finished
         bool herosActivated = true;
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (!h.activated && h.heroData != null)
                 herosActivated = false;
@@ -86,9 +86,9 @@ public class RoundHelper {
 
         List<int> notActivated = new List<int>();
         // Get the index of all monsters that haven't activated
-        for (int i = 0; i < game.monsters.Count; i++)
+        for (int i = 0; i < game.round.monsters.Count; i++)
         {
-            if (!game.monsters[i].activated)
+            if (!game.round.monsters[i].activated)
                 notActivated.Add(i);
         }
 
@@ -97,12 +97,12 @@ public class RoundHelper {
             return true;
 
         // Find a random unactivated monster
-        Game.Monster toActivate = game.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+        Round.Monster toActivate = game.round.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
         return ActivateMonster(toActivate);
     }
 
-    public static bool ActivateMonster(Game.Monster m)
+    public static bool ActivateMonster(Round.Monster m)
     {
         List<ActivationData> adList = new List<ActivationData>();
         Game game = Game.Get();
@@ -179,29 +179,29 @@ public class RoundHelper {
             return;
 
         // Check if all heros have finished
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (!h.activated && h.heroData != null) return;
         }
 
         // Check if all heros have finished
-        foreach (Game.Monster m in game.monsters)
+        foreach (Round.Monster m in game.round.monsters)
         {
             if (!m.activated) return;
         }
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             h.activated = false;
         }
-        foreach (Game.Monster m in game.monsters)
+        foreach (Round.Monster m in game.round.monsters)
         {
             m.activated = false;
             m.minionStarted = false;
             m.masterStarted = false;
             m.currentActivation = null;
         }
-        game.round++;
+        game.round.round++;
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

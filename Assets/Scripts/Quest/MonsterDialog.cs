@@ -4,9 +4,9 @@ using System.Collections;
 // Class for creation of hero control button menu
 public class MonsterDialog
 {
-    public Game.Monster monster;
+    public Round.Monster monster;
 
-    public MonsterDialog(Game.Monster m)
+    public MonsterDialog(Round.Monster m)
     {
         monster = m;
         CreateWindow();
@@ -16,9 +16,9 @@ public class MonsterDialog
     {
         Game game = Game.Get();
         int index = 0;
-        for (int i = 0; i < game.monsters.Count; i++)
+        for (int i = 0; i < game.round.monsters.Count; i++)
         {
-            if (game.monsters[i] == monster)
+            if (game.round.monsters[i] == monster)
             {
                 index = i;
             }
@@ -55,7 +55,7 @@ public class MonsterDialog
     {
         Destroy();
         Game game = Game.Get();
-        game.monsters.Remove(monster);
+        game.round.monsters.Remove(monster);
         updateDisplay();
         EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         if (monster.unique)

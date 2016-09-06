@@ -1697,6 +1697,11 @@ public class QuestEditorData {
             triggers.Add("DefeatedUnique" + kv.Key);
         }
 
+        for (int i = 1; i <= 25; i++)
+        {
+            triggers.Add("EndRound" + i);
+        }
+
         esl = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
         esl.SelectItem();
     }
