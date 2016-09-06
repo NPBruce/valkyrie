@@ -41,60 +41,51 @@ public class QuestEditorData {
             return;
         }
 
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 18), "");
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), "Select Type");
+        db = new DialogBox(new Vector2(21, 0), new Vector2(17, 1), "Select Type");
 
-        TextButton tb = new TextButton(new Vector2(21, 2), new Vector2(9, 1), "Quest", delegate { SelectQuest(); });
+        TextButton tb = new TextButton(new Vector2(22, 2), new Vector2(9, 1), "Quest", delegate { SelectQuest(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 2), new Vector2(9, 1), "Delete", delegate { DeleteComponent(); }, Color.red);
+        tb = new TextButton(new Vector2(22, 4), new Vector2(9, 1), "Tile", delegate { ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 4), new Vector2(9, 1), "Tile", delegate { ListTile(); });
+        tb = new TextButton(new Vector2(32, 4), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Tile"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 4), new Vector2(9, 1), "New", delegate { NewTile(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb = new TextButton(new Vector2(22, 6), new Vector2(9, 1), "Door", delegate { ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 6), new Vector2(9, 1), "Door", delegate { ListDoor(); });
+        tb = new TextButton(new Vector2(32, 6), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Door"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 6), new Vector2(9, 1), "New", delegate { NewDoor(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb = new TextButton(new Vector2(22, 8), new Vector2(9, 1), "Token", delegate { ListToken(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 8), new Vector2(9, 1), "Token", delegate { ListToken(); });
+        tb = new TextButton(new Vector2(32, 8), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Token"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 8), new Vector2(9, 1), "New", delegate { NewToken(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb = new TextButton(new Vector2(22, 10), new Vector2(9, 1), "Monster", delegate { ListMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 10), new Vector2(9, 1), "Monster", delegate { ListMonster(); });
+        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Monster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 10), new Vector2(9, 1), "New", delegate { NewMonster(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb = new TextButton(new Vector2(22, 12), new Vector2(9, 1), "MPlace", delegate { ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 12), new Vector2(9, 1), "MPlace", delegate { ListMPlace(); });
+        tb = new TextButton(new Vector2(32, 12), new Vector2(6, 1), "Delete", delegate { DeleteComponent("MPlace"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 12), new Vector2(9, 1), "New", delegate { NewMPlace(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb = new TextButton(new Vector2(22, 14), new Vector2(9, 1), "Event", delegate { ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(21, 14), new Vector2(9, 1), "Event", delegate { ListEvent(); });
+        tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31, 14), new Vector2(9, 1), "New", delegate { NewEvent(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        tb = new TextButton(new Vector2(26.5f, 16), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(25.5f, 16), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
@@ -309,6 +300,24 @@ public class QuestEditorData {
         esl.SelectItem();
     }
 
+
+    public void DeleteComponent(string type)
+    {
+        Game game = Game.Get();
+
+        List<string> sides = new List<string>();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        {
+            if (kv.Key.IndexOf(type) == 0)
+            {
+                sides.Add(kv.Key);
+                sides.Add("");
+            }
+        }
+        esl = new EditorSelectionList("Component to Delete:", sides, delegate { SelectToDelete(); });
+        esl.SelectItem();
+    }
 
     public void DeleteComponent()
     {
@@ -872,7 +881,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("MPlace".Length), delegate { ListToken(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("MPlace".Length), delegate { ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -1744,6 +1753,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> tiles = new List<string>();
+        tiles.Add("{NEW:Tile}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.Tile)
@@ -1778,6 +1788,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> doors = new List<string>();
+        doors.Add("{NEW:Door}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.Door)
@@ -1812,6 +1823,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> tokens = new List<string>();
+        tokens.Add("{NEW:Token}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.Token)
@@ -1846,6 +1858,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> monsters = new List<string>();
+        monsters.Add("{NEW:Monster}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.Monster)
@@ -1880,6 +1893,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> mplaces = new List<string>();
+        mplaces.Add("{NEW:MPlace}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
@@ -1914,6 +1928,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> events = new List<string>();
+        events.Add("{NEW:Event}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.Event)
@@ -1956,6 +1971,36 @@ public class QuestEditorData {
         if (name.Equals("Quest"))
         {
             SelectQuest();
+            return;
+        }
+        if (name.Equals("{NEW:Tile}"))
+        {
+            NewTile();
+            return;
+        }
+        if (name.Equals("{NEW:Door}"))
+        {
+            NewDoor();
+            return;
+        }
+        if (name.Equals("{NEW:Token}"))
+        {
+            NewToken();
+            return;
+        }
+        if (name.Equals("{NEW:Monster}"))
+        {
+            NewMonster();
+            return;
+        }
+        if (name.Equals("{NEW:MPlace}"))
+        {
+            NewMPlace();
+            return;
+        }
+        if (name.Equals("{NEW:Event}"))
+        {
+            NewEvent();
             return;
         }
 

@@ -9,16 +9,16 @@ import from RtL
 64 bit
 symbols in text
 more activations
-end of each round tag
+end of each round trigger
+unique title empty bug
 
-    tag ideas:
-    random
-    expansions
-
+new components in selector
+random tags
+Select heros title missing
+Expansion name on elements in editor, tags
 Markup and symbols in editor
 ffg app version unity
 32bit
-remove warnings
 quest set
 Threat
 lt.

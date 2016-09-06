@@ -182,7 +182,7 @@ public class QuestData
                 else
                 {
                     // Fatal if not found
-                    Debug.Log("Error: Failed to located TileSide: " + data["side"] + "in quest component: " + name);
+                    Debug.Log("Error: Failed to located TileSide: " + data["side"] + " in quest component: " + name);
                     Application.Quit();
                 }
             }
@@ -599,10 +599,10 @@ public class QuestData
             {
                 uniqueTitleOriginal = data["uniquetitle"];
                 uniqueTitle = uniqueTitleOriginal.Replace("{type}", mData.name);
-                if (uniqueTitle.Equals(""))
-                {
-                    uniqueTitle = "Master " + mData.name;
-                }
+            }
+            if (uniqueTitle.Equals(""))
+            {
+                uniqueTitle = "Master " + mData.name;
             }
             if (data.ContainsKey("uniquetext"))
             {

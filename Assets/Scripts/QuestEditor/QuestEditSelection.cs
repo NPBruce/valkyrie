@@ -231,11 +231,11 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // In the build the content packs need to go into the build data dir, this is currently manual
-        string contentLocation = Application.dataPath + "/valkyrie-contentpacks/";
+        string contentLocation = Application.dataPath + "/content/D2E";
         if (Application.isEditor)
         {
             // If running through unity then we assume you are using the git content, with the project at the same level
-            contentLocation = Application.dataPath + "/../../valkyrie-contentpacks/";
+            contentLocation = Application.dataPath + "/../content/D2E";
         }
 
         // Fetch content (in future this will need to be selectable
