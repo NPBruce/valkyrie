@@ -11,12 +11,14 @@ symbols in text
 more activations
 end of each round trigger
 unique title empty bug
-
 new components in selector
-random tags
+new mplace in add
+
 Select heros title missing
+
+text editing sucks (text wrap?)
+random tags
 Expansion name on elements in editor, tags
-Markup and symbols in editor
 ffg app version unity
 32bit
 quest set

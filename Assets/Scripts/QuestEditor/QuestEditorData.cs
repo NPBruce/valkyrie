@@ -514,7 +514,7 @@ public class QuestEditorData {
         db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), "Unique Information:");
         db.ApplyTag("editor");
 
-        dbe2 = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), m.uniqueText, delegate { UpdateUniqueText(); });
+        dbe2 = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), QuestEditorTextEdit.SymbolReplace(m.uniqueText), delegate { UpdateUniqueText(); });
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
@@ -593,7 +593,7 @@ public class QuestEditorData {
     public void UpdateUniqueText()
     {
         QuestData.Monster m = selection as QuestData.Monster;
-        m.uniqueText = dbe1.uiInput.text;
+        m.uniqueText = dbe2.uiInput.text;
     }
 
     public void SelectMonsterPlacements()
@@ -766,6 +766,7 @@ public class QuestEditorData {
         Game game = Game.Get();
 
         List<string> mplaces = new List<string>();
+        mplaces.Add("{NEW:MPlace}");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
@@ -784,6 +785,19 @@ public class QuestEditorData {
 
     public void MonsterPlaceAddSelection(int heroes)
     {
+        if (esl.selection.Equals("{NEW:MPlace}"))
+        {
+            Game game = Game.Get();
+            int index = 0;
+
+            while (game.qd.components.ContainsKey("MPlace" + index))
+            {
+                index++;
+            }
+            game.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
+            esl.selection = "MPlace" + index;
+        }
+
         QuestData.Monster m = selection as QuestData.Monster;
         string[] newM = new string[m.placement[heroes].Length + 1];
         int i;
@@ -1030,7 +1044,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
 
-        dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), e.originalText, delegate { UpdateEventText(); });
+        dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), QuestEditorTextEdit.SymbolReplace(e.originalText), delegate { UpdateEventText(); });
         dbe1.ApplyTag("editor");
         dbe1.AddBorder();
 
