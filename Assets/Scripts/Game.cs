@@ -15,6 +15,8 @@ end of each round tag
     random
     expansions
 
+duplicate build in zip
+ffg app version unity
 32bit
 better import diagnosis
 remove warnings
