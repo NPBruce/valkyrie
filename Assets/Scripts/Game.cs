@@ -5,25 +5,30 @@ using System.Collections.Generic;
 /*
 Dump list of things to do:
 
-import from RtL
-64 bit
-symbols in text
-more activations
-end of each round trigger
-unique title empty bug
-new components in selector
-new mplace in add
+Done:
+    Better panning
 
-text editing sucks (text wrap?)
-random tags
-Expansion name on elements in editor, tags
-ffg app version unity
-32bit
-quest set
-Threat
-lt.
-Add expansions, conent selection
-Stacked tileselection? (tags?)
+Now:
+    Better panning
+    end round event in editor
+    custom pass/fail
+    frame color for portraits
+    text editing sucks (text wrap?)
+    32bit
+    Threat/peril
+
+Later:
+    random tags
+    tags for hero count
+    tags for round number
+    Expansion name on elements in editor, tags
+    ffg app version unity
+    quest set
+    lt.
+    Add expansions, conent selection
+    Stacked tileselection? (tags?)
+    save games
+    undo
 */
 
 // General controller for the game

@@ -83,6 +83,12 @@ public class CameraController : MonoBehaviour {
             gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
                 mouseDownMousePosition.y - bPos.y, 0), Space.World);
         }
+        Vector3 pos = gameObject.transform.position;
+        if (pos.x < minPanX) pos.x = minPanX;
+        if (pos.y < minPanY) pos.y = minPanY;
+        if (pos.x > maxPanX) pos.x = maxPanX;
+        if (pos.y > maxPanY) pos.y = maxPanY;
+        gameObject.transform.position = pos;
     }
 
     public static Vector2 GetMouseTile()
