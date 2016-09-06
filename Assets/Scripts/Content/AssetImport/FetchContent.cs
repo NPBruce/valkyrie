@@ -6,7 +6,6 @@ using System.IO;
 
 public class FetchContent {
     public List<AssetsFile> assetFiles; // All asset files
-    private List<AssetPreloadData> exportableAssets;
     public string gameType;
     AppFinder finder = null;
     public bool importAvailable;
@@ -25,7 +24,9 @@ public class FetchContent {
             return;
         }
 
-        importAvailable = VersionNewer(finder.RequiredFFGVersion(), finder.AppVersion());
+        Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion());
+
+        importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), finder.AppVersion());
     }
 
     public bool NeedImport()
@@ -140,17 +141,10 @@ public class FetchContent {
 
     private void BuildAssetStrucutres()
     {
-        exportableAssets = new List<AssetPreloadData>();
-        string fileIDfmt = "D" + assetFiles.Count.ToString().Length.ToString();
-
         foreach (AssetsFile file in assetFiles)
         {
-            string fileID = assetFiles.IndexOf(file).ToString(fileIDfmt);
-
             foreach (var asset in file.preloadTable.Values)
             {
-                asset.uniqueID = fileID + asset.uniqueID;
-
                 switch (asset.Type2)
                 {
                     //case 1: //GameObject
@@ -358,6 +352,12 @@ public class FetchContent {
             writer.Write(m_Font.m_FontData);
             writer.Close();
         }
+    }
+
+    public static bool VersionNewerOrEqual(string oldVersion, string newVersion)
+    {
+        if (oldVersion.Equals(newVersion)) return true;
+        return VersionNewer(oldVersion, newVersion);
     }
 
     public static bool VersionNewer(string oldVersion, string newVersion)

@@ -14,4 +14,7 @@ xcopy /E /Y content build\batch\valkyrie_Data\content
 xcopy /E /Y ..\valkyrie-questdata\example build\batch\valkyrie_Data\valkyrie-questdata\example
 set /p version=<Assets\Resources\version.txt
 
-"C:\Program Files\7-Zip\7z.exe" a .\build\valkyrie-win-%version%.zip .\build\batch\* -r
+del build\valkyrie-win-%version%.zip
+cd build\batch
+"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-win-%version%.zip * -r
+cd ..\..

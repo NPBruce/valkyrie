@@ -17,11 +17,11 @@ public class QuestLoader {
 
         if (Application.isEditor)
         {
-            dataLocation = Application.dataPath + "/../../valkyrie-questdata/";
+            dataLocation = Application.dataPath + "/../quests/";
         }
         else
         {
-            dataLocation = Application.dataPath + "/valkyrie-questdata/";
+            dataLocation = Application.dataPath + "/quests/";
         }
         questDirectories.AddRange(GetQuests(dataLocation));
 

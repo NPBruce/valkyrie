@@ -15,10 +15,9 @@ end of each round tag
     random
     expansions
 
-duplicate build in zip
+Markup and symbols in editor
 ffg app version unity
 32bit
-better import diagnosis
 remove warnings
 quest set
 Threat

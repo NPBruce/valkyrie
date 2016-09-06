@@ -19,10 +19,6 @@ abstract public class AppFinder
         location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
         exeLocation += location + "/" + Executable();
         location += DataDirectory();
-        if (Directory.Exists(location))
-        {
-            Debug.Log("Found App installation at: " + location);
-        }
     }
 
     public string AppVersion()
