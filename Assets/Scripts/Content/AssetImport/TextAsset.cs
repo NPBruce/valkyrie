@@ -22,9 +22,9 @@ namespace Unity_Studio
 
             if (sourceFile.platform == -2)
             {
-                uint m_ObjectHideFlags = a_Stream.ReadUInt32();
-                PPtr m_PrefabParentObject = sourceFile.ReadPPtr();
-                PPtr m_PrefabInternal = sourceFile.ReadPPtr();
+                a_Stream.ReadUInt32();
+                sourceFile.ReadPPtr();
+                sourceFile.ReadPPtr();
             }
 
             m_Name = a_Stream.ReadAlignedString(a_Stream.ReadInt32());

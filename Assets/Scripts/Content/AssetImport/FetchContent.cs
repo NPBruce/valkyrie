@@ -9,7 +9,7 @@ public class FetchContent {
     private List<AssetPreloadData> exportableAssets;
     public string gameType;
     AppFinder finder = null;
-    public bool needImport;
+    public bool importAvailable;
     string logFile;
 
     public FetchContent(string type)
@@ -25,17 +25,24 @@ public class FetchContent {
             return;
         }
 
+        importAvailable = VersionNewer(finder.RequiredFFGVersion(), finder.AppVersion());
+    }
+
+    public bool NeedImport()
+    {
         logFile = ContentData.ContentPath() + gameType + "/ffg/import.ini";
         IniData log = IniRead.ReadFromIni(logFile);
 
         if (log == null)
         {
-            needImport = true;
-            return;
+            return true;
         }
-
         string lastImport = log.Get("Import", "FFG");
-        needImport = VersionNewer(lastImport, finder.AppVersion());
+        if (lastImport.Equals(finder.RequiredFFGVersion()))
+        {
+            return false;
+        }
+        return VersionNewer(finder.RequiredFFGVersion(), lastImport);
     }
 
     public void Import()
@@ -44,7 +51,6 @@ public class FetchContent {
         string resources = finder.location + "/resources.assets";
 
         AssetsFile assetsFile = new AssetsFile(resources, new EndianStream(File.OpenRead(resources), EndianType.BigEndian));
-        int totalAssetCount = assetsFile.preloadTable.Count;
         if (assetsFile.fileGen < 15)
         {
             Debug.Log("Invalid asset file: " + resources);
@@ -359,7 +365,9 @@ public class FetchContent {
         string[] oldV = oldVersion.Split('.');
         string[] newV = newVersion.Split('.');
 
-        if (oldV.Equals("")) return true;
+        if (newVersion.Equals("")) return false;
+
+        if (oldVersion.Equals("")) return true;
 
         if (oldV.Length != newV.Length)
         {

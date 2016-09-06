@@ -3,6 +3,16 @@ using System.Collections;
 
 public class RtLFinder : AppFinder {
 
+    override public string RequiredFFGVersion()
+    {
+        return "5.3.5.9834175";
+    }
+
+    override public string RequiredValkyrieVersion()
+    {
+        return "0.2.3";
+    }
+
     override public string AppId()
     {
         return "477200";

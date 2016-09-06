@@ -251,7 +251,7 @@ public class ContentData {
             {
                 ddsBytes = File.ReadAllBytes(file);
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return null;
             }

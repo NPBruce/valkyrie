@@ -34,9 +34,9 @@ namespace Unity_Studio
 
                 if (sourceFile.platform == -2)
                 {
-                    uint m_ObjectHideFlags = a_Stream.ReadUInt32();
-                    PPtr m_PrefabParentObject = sourceFile.ReadPPtr();
-                    PPtr m_PrefabInternal = sourceFile.ReadPPtr();
+                    a_Stream.ReadUInt32();
+                    sourceFile.ReadPPtr();
+                    sourceFile.ReadPPtr();
                 }
 
                 int m_Component_size = a_Stream.ReadInt32();
@@ -59,7 +59,7 @@ namespace Unity_Studio
                             m_SkinnedMeshRenderer = sourceFile.ReadPPtr();
                             break;
                         default:
-                            PPtr m_Component = sourceFile.ReadPPtr();
+                            sourceFile.ReadPPtr();
                             break;
                     }
                 }

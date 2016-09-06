@@ -18,12 +18,12 @@ namespace Unity_Studio
             a_Stream.Position = preloadData.Offset;
 
             int levels = a_Stream.ReadInt32();
-            for (int l = 0; l < levels; l++) { string level = a_Stream.ReadAlignedString(a_Stream.ReadInt32()); }
+            for (int l = 0; l < levels; l++) { a_Stream.ReadAlignedString(a_Stream.ReadInt32()); }
 
             if (sourceFile.version[0] == 5)
             {
                 int preloadedPlugins = a_Stream.ReadInt32();
-                for (int l = 0; l < preloadedPlugins; l++) { string preloadedPlugin = a_Stream.ReadAlignedString(a_Stream.ReadInt32()); }
+                for (int l = 0; l < preloadedPlugins; l++) { a_Stream.ReadAlignedString(a_Stream.ReadInt32()); }
             }
 
             a_Stream.Position += 4; //bool flags

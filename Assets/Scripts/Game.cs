@@ -6,12 +6,23 @@ using System.Collections.Generic;
 Dump list of things to do:
 
 import from RtL
-> activations
-> symbols in text
-> Threat
-> Add expansions
-> > conent selection
-> > Stacked tileselection
+64 bit
+symbols in text
+more activations
+end of each round tag
+
+    tag ideas:
+    random
+    expansions
+
+32bit
+better import diagnosis
+remove warnings
+quest set
+Threat
+lt.
+Add expansions, conent selection
+Stacked tileselection? (tags?)
 */
 
 // General controller for the game

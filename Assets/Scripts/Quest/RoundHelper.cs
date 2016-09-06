@@ -165,6 +165,7 @@ public class RoundHelper {
 
     public static void EndRound()
     {
+        EventHelper.EventTriggerType("EndRound" + Game.Get().round);
         EventHelper.EventTriggerType("EndRound");
         CheckNewRound();
     }

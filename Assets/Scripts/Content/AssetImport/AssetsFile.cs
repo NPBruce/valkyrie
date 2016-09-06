@@ -167,14 +167,10 @@ namespace Unity_Studio
                 a_Stream.Position += 2;
                 if (fileGen >= 15)
                 {
-                    byte unknownByte = a_Stream.ReadByte();
+                    a_Stream.ReadByte();
                     //this is a single byte, not an int32
                     //the next entry is aligned after this
                     //but not the last!
-                    if (unknownByte != 0)
-                    {
-                        bool investigate = true;
-                    }
                 }
 
                 if (UnityClassID.Names[asset.Type2] != null)
@@ -213,9 +209,9 @@ namespace Unity_Studio
                 int someCount = a_Stream.ReadInt32();
                 for (int i = 0; i < someCount; i++)
                 {
-                    int num1 = a_Stream.ReadInt32();
+                    a_Stream.ReadInt32();
                     a_Stream.AlignStream(4);
-                    long m_PathID = a_Stream.ReadInt64();
+                    a_Stream.ReadInt64();
                 }
             }
 
@@ -237,11 +233,11 @@ namespace Unity_Studio
             string varName = a_Stream.ReadStringToNull();
             //a_Stream.Position += 20;
             int size = a_Stream.ReadInt32();
-            int index = a_Stream.ReadInt32();
-            int isArray = a_Stream.ReadInt32();
-            int num0 = a_Stream.ReadInt32();
-            int num1 = a_Stream.ReadInt16();
-            int num2 = a_Stream.ReadInt16();
+            a_Stream.ReadInt32();
+            a_Stream.ReadInt32();
+            a_Stream.ReadInt32();
+            a_Stream.ReadInt16();
+            a_Stream.ReadInt16();
             int childrenCount = a_Stream.ReadInt32();
 
             //Debug.WriteLine(baseFormat + " " + baseName + " " + childrenCount);
@@ -329,9 +325,9 @@ namespace Unity_Studio
                 a_Stream.Position -= varCount * 24 + stringSize;
                 for (int i = 0; i < varCount; i++)
                 {
-                    ushort num0 = a_Stream.ReadUInt16();
+                    a_Stream.ReadUInt16();
                     byte level = a_Stream.ReadByte();
-                    bool isArray = a_Stream.ReadBoolean();
+                    a_Stream.ReadBoolean();
 
                     ushort varTypeIndex = a_Stream.ReadUInt16();
                     ushort test = a_Stream.ReadUInt16();
@@ -349,7 +345,7 @@ namespace Unity_Studio
 
                     int size = a_Stream.ReadInt32();
                     int index = a_Stream.ReadInt32();
-                    int num1 = a_Stream.ReadInt32();
+                    a_Stream.ReadInt32();
 
                     if (index == 0) { className = varTypeStr + " " + varNameStr; }
                     else { classVarStr.AppendFormat("{0}{1} {2} {3}\r\n", (new string('\t', level)), varTypeStr, varNameStr, size); }

@@ -16,7 +16,7 @@ public static class IniRead{
         {
             lines = System.IO.File.ReadAllLines(path);
         }
-        catch(System.Exception e)
+        catch(System.Exception)
         {
             return null;
         }
