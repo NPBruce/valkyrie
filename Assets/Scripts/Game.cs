@@ -6,18 +6,30 @@ using System.Collections.Generic;
 Dump list of things to do:
 
 import from RtL
-> activations
-> symbols in text
-> Threat
-> Add expansions
-> > conent selection
-> > Stacked tileselection
+64 bit
+symbols in text
+more activations
+end of each round trigger
+unique title empty bug
+new components in selector
+new mplace in add
+
+text editing sucks (text wrap?)
+random tags
+Expansion name on elements in editor, tags
+ffg app version unity
+32bit
+quest set
+Threat
+lt.
+Add expansions, conent selection
+Stacked tileselection? (tags?)
 */
 
 // General controller for the game
 public class Game : MonoBehaviour {
 
-    public static string version = "0.2.2";
+    public string version = "";
     public ContentData cd;
     public QuestData qd;
     public List<Hero> heros;
@@ -36,6 +48,7 @@ public class Game : MonoBehaviour {
     public MoraleDisplay moraleDisplay;
     public bool editMode = false;
     public QuestEditorData qed;
+    public string[] ffgText = null;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -59,25 +72,25 @@ public class Game : MonoBehaviour {
         eventList = new Stack<QuestData.Event>();
         uiScaler = new UIScaler(uICanvas);
 
-        // Bring up the main menu
-        new MainMenu();
+        // Read the version and add it to the log
+        TextAsset versionFile = Resources.Load("version") as TextAsset;
+        version = versionFile.text.Trim();
+        // The newline at the end stops the stack trace appearing in the log
+        Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
+
+        // Bring up the Game selector
+        new GameSelection();
     }
+
+    // This is called by 'start quest' on the main menu
     public void SelectQuest()
     {
-        // In the build the content packs need to go into the build data dir, this is currently manual
-        string contentLocation = Application.dataPath + "/valkyrie-contentpacks/";
-        if (Application.isEditor)
-        {
-            // If running through unity then we assume you are using the git content, with the project at the same level
-            contentLocation = Application.dataPath + "/../../valkyrie-contentpacks/";
-        }
-
         // Find any content packs at the location
-        cd = new ContentData(contentLocation);
+        cd = new ContentData(ContentData.ContentPath() + "D2E/");
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + contentLocation);
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + ContentData.ContentPath() + "D2E/" + System.Environment.NewLine);
         }
 
         // In the future this is where you select which packs to load, for now we load everything.
@@ -99,6 +112,7 @@ public class Game : MonoBehaviour {
         // Fetch all of the quest data
         qd = new QuestData(q);
 
+        // This shouldn't happen!
         if (qd == null)
         {
             Debug.Log("Error: Invalid Quest.");
@@ -119,6 +133,11 @@ public class Game : MonoBehaviour {
         // Untag as dialog so this isn't cleared away during hero selection
         endSelection.ApplyTag("heroselect");
 
+        // Add a title to the page
+        DialogBox db = new DialogBox(new Vector2(8, 1), new Vector2(UIScaler.GetWidthUnits() - 16, 3), "Select Heroes");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.ApplyTag("heroselect");
+
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         // Untag as dialog so this isn't cleared away during hero selection
         cancelSelection.ApplyTag("heroselect");
@@ -127,6 +146,7 @@ public class Game : MonoBehaviour {
         monsters = new List<Monster>();
     }
 
+    // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
     public void AdjustMorale(int m)
     {
         morale += m;
@@ -142,26 +162,33 @@ public class Game : MonoBehaviour {
     // HeroCanvas validates selection and starts quest if everything is good
     public void EndSelection()
     {
+        // Count up how many heros have been selected
         int count = 0;
         foreach (Hero h in heros)
         {
             if (h.heroData != null) count++;
         }
+        // Starting morale is number of heros
         morale = count;
-        round = 0;
+        // Starting round is 1
+        round = 1;
+        // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
 
     // On quitting
-    void onApplicationQuit ()
+    void OnApplicationQuit ()
     {
+        // This exists for the editor, because quitting doesn't actually work.
+        Destroyer.MainMenu();
         // Clean up temporary files
         QuestLoader.CleanTemp();
     }
 
-
+    //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor
     void Update()
     {
+        // 0 is the left mouse button
         if (qed != null && Input.GetMouseButtonDown(0))
         {
             qed.MouseDown();
@@ -175,6 +202,7 @@ public class Game : MonoBehaviour {
         public HeroData heroData;
         public bool activated = false;
         public bool defeated = false;
+        //  Heros are in a list so they need ID... maybe at some point this can move to an array
         public int id = 0;
         // Used for events that can select or highlight heros
         public bool selected;
@@ -199,11 +227,7 @@ public class Game : MonoBehaviour {
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
         public ActivationData currentActivation;
 
-        public Monster(MonsterData m)
-        {
-            monsterData = m;
-        }
-
+        // Initialise from monster event
         public Monster(QuestData.Monster m)
         {
             monsterData = m.mData;
