@@ -10,6 +10,10 @@ public class Round
     public Stack<QuestData.Event> eventList;
     public int morale;
 
+    public Round()
+    {
+        eventList = new Stack<QuestData.Event>();
+    }
 
     // Class for holding current hero status
     public class Hero

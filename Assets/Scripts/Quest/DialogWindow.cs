@@ -15,7 +15,7 @@ public class DialogWindow {
         eventData = e;
         heroList = new List<Round.Hero>();
         Game game = Game.Get();
-        game.eventList.Push(eventData);
+        game.round.eventList.Push(eventData);
 
         if (!eventData.heroListName.Equals(""))
         {
@@ -141,10 +141,8 @@ public class DialogWindow {
     public void destroy()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        Destroyer.Dialog();
 
-        Game game = Game.Get();
-        game.eventList.Pop();
+        Game.Get().round.eventList.Pop();
     }
 }

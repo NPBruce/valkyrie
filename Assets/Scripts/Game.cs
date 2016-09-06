@@ -39,8 +39,6 @@ public class Game : MonoBehaviour {
     public ContentData cd;
     public QuestData qd;
     public Round round;
-    public bool heroesSelected = false;
-    public Stack<QuestData.Event> eventList;
     public Canvas uICanvas;
     public Canvas boardCanvas;
     public Canvas tokenCanvas;
@@ -48,7 +46,6 @@ public class Game : MonoBehaviour {
     public HeroCanvas heroCanvas;
     public MonsterCanvas monsterCanvas;
     public UIScaler uiScaler;
-    public int morale;
     public MoraleDisplay moraleDisplay;
     public bool editMode = false;
     public QuestEditorData qed;
@@ -73,7 +70,6 @@ public class Game : MonoBehaviour {
         monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
 
         // Create some things
-        eventList = new Stack<QuestData.Event>();
         uiScaler = new UIScaler(uICanvas);
 
         // Read the version and add it to the log
@@ -155,10 +151,10 @@ public class Game : MonoBehaviour {
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
     public void AdjustMorale(int m)
     {
-        morale += m;
-        if(morale < 0)
+        round.morale += m;
+        if(round.morale < 0)
         {
-            morale = 0;
+            round.morale = 0;
             moraleDisplay.Update();
             EventHelper.EventTriggerType("NoMorale");
         }
@@ -175,7 +171,7 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        morale = count;
+        round.morale = count;
         // Starting round is 1
         round.round = 1;
         // This validates the selection then if OK starts first quest event

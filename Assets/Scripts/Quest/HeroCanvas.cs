@@ -119,7 +119,7 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
-            if (game.eventList.Count > 0 && game.eventList.Peek().maxHeroes != 0)
+            if (game.round.eventList.Count > 0 && game.round.eventList.Peek().maxHeroes != 0)
             {
                 target.selected = !target.selected;
                 UpdateStatus();
@@ -127,11 +127,11 @@ public class HeroCanvas : MonoBehaviour {
             return;
         }
 
-        if (game.heroesSelected && target.heroData != null)
+        if (game.round.heroesSelected && target.heroData != null)
         {
             new HeroDialog(target);
         }
-        if (!game.heroesSelected)
+        if (!game.round.heroesSelected)
         {
             icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             new HeroSelection(target);
@@ -171,7 +171,7 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        game.heroesSelected = true;
+        game.round.heroesSelected = true;
         game.moraleDisplay = new MoraleDisplay();
         // Create the menu button
         new MenuButton();

@@ -34,16 +34,16 @@ public class EventHelper {
 
         QuestData.Event e = (QuestData.Event)game.qd.components[name];
 
-        if (game.eventList.Count == 0)
+        if (game.round.eventList.Count == 0)
         {
-            game.eventList.Push(e);
+            game.round.eventList.Push(e);
             TriggerEvent();
         }
         else
         {
-            QuestData.Event ce = game.eventList.Pop();
-            game.eventList.Push(e);
-            game.eventList.Push(ce);
+            QuestData.Event ce = game.round.eventList.Pop();
+            game.round.eventList.Push(e);
+            game.round.eventList.Push(ce);
         }
     }
 
@@ -54,9 +54,9 @@ public class EventHelper {
 
         RoundHelper.CheckNewRound();
 
-        if (game.eventList.Count == 0) return;
+        if (game.round.eventList.Count == 0) return;
 
-        QuestData.Event e = game.eventList.Pop();
+        QuestData.Event e = game.round.eventList.Pop();
 
         // If the flags are not set do not trigger event
         foreach (string s in e.flags)
