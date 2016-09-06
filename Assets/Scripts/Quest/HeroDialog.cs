@@ -50,7 +50,7 @@ public class HeroDialog{
         hero.defeated = true;
         updateDisplay();
         Game game = Game.Get();
-        game.AdjustMorale(-1);
+        game.round.AdjustMorale(-1);
     }
 
     // Null function for activated hero

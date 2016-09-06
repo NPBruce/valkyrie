@@ -25,8 +25,6 @@ public class ContentData {
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {
-        Debug.Log("Searching for content in: \"" + path + "\"");
-
         // This is all of the available sides of tiles (not currently tracking physical tiles)
         tileSides = new Dictionary<string, TileSideData>();
 

@@ -41,7 +41,7 @@ public class QuestData
 
     public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + questPath + "\"");
+        Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();

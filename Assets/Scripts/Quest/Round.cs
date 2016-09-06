@@ -5,7 +5,7 @@ public class Round
 {
     public List<Hero> heroes;
     public List<Monster> monsters;
-    public int round = 0;
+    public int round = 1;
     public bool heroesSelected = false;
     public Stack<QuestData.Event> eventList;
     public int morale;
@@ -13,6 +13,31 @@ public class Round
     public Round()
     {
         eventList = new Stack<QuestData.Event>();
+
+        // Populate null hero list, these can then be selected as hero types
+        heroes = new List<Hero>();
+        for (int i = 1; i < 5; i++)
+        {
+            heroes.Add(new Hero(null, i));
+        }
+
+        // Create the monster list so we are ready to start
+        monsters = new List<Monster>();
+    }
+
+
+    // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
+    public void AdjustMorale(int m)
+    {
+        Game game = Game.Get();
+        morale += m;
+        if (morale < 0)
+        {
+            morale = 0;
+            game.moraleDisplay.Update();
+            EventHelper.EventTriggerType("NoMorale");
+        }
+        game.moraleDisplay.Update();
     }
 
     // Class for holding current hero status

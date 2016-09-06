@@ -8,10 +8,11 @@ Dump list of things to do:
 Done:
     Better panning
     end round event in editor
+    about page
 
 Now:
     custom pass/fail
-    frame color for portraits
+    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
     text editing sucks (text wrap?)
     32bit
     Threat/peril
@@ -121,12 +122,6 @@ public class Game : MonoBehaviour {
 
         round = new Round();
 
-        // Populate null hero list, these can then be selected as hero types
-        round.heroes = new List<Round.Hero>();
-        for (int i = 1; i < 5; i++)
-        {
-            round.heroes.Add(new Round.Hero(null, i));
-        }
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
 
@@ -143,24 +138,8 @@ public class Game : MonoBehaviour {
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         // Untag as dialog so this isn't cleared away during hero selection
         cancelSelection.ApplyTag("heroselect");
-
-        // Create the monster list so we are ready to start
-        round.monsters = new List<Round.Monster>();
     }
-
-    // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
-    public void AdjustMorale(int m)
-    {
-        round.morale += m;
-        if(round.morale < 0)
-        {
-            round.morale = 0;
-            moraleDisplay.Update();
-            EventHelper.EventTriggerType("NoMorale");
-        }
-        moraleDisplay.Update();
-    }
-
+    
     // HeroCanvas validates selection and starts quest if everything is good
     public void EndSelection()
     {
@@ -172,8 +151,6 @@ public class Game : MonoBehaviour {
         }
         // Starting morale is number of heros
         round.morale = count;
-        // Starting round is 1
-        round.round = 1;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
