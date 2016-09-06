@@ -57,6 +57,14 @@ public class MonsterDialog
         Game game = Game.Get();
         game.round.monsters.Remove(monster);
         updateDisplay();
+
+        // Check if all monsters gone
+        if (game.round.monsters.Count == 0)
+        {
+            // clear monster tag
+            game.qd.flags.Remove("#monsters");
+        }
+
         EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         if (monster.unique)
         {

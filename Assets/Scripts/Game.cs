@@ -9,17 +9,17 @@ Done:
     Better panning
     end round event in editor
     about page
+    #monsters flag
 
 Now:
     custom pass/fail
-    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
-    text editing sucks (text wrap?)
     32bit
     Threat/peril
-    Monster present flag
+    no confirm on door/token (if no available post events)
 
 Later:
-    no confirm on event
+    text editing sucks (text wrap?)
+    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
     random tags
     tags for hero count
     tags for round number

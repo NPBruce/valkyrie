@@ -1467,6 +1467,10 @@ public class QuestEditorData {
     {
         HashSet<string> flags = new HashSet<string>();
         flags.Add("{NEW}");
+        if (type.Equals("flag"))
+        {
+            flags.Add("#monsters");
+        }
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)

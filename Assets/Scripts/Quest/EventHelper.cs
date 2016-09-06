@@ -93,6 +93,9 @@ public class EventHelper {
         // If this is a monster event then add the monster group
         if (e is QuestData.Monster)
         {
+            // Set monster tag if not already
+            game.qd.flags.Add("#monsters");
+
             QuestData.Monster qm = (QuestData.Monster)e;
 
             // Is this type new?

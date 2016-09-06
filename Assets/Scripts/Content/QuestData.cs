@@ -10,7 +10,7 @@ public class QuestData
     public Dictionary<string, QuestComponent> components;
 
     // A list of flags that have been set during the quest
-    public List<string> flags;
+    public HashSet<string> flags;
 
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Round.Hero>> heroSelection;
@@ -45,7 +45,7 @@ public class QuestData
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
-        flags = new List<string>();
+        flags = new HashSet<string>();
         heroSelection = new Dictionary<string, List<Round.Hero>>();
 
         // Read the main quest file
