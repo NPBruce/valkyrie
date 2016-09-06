@@ -8,9 +8,6 @@ public class HeroSelection {
     {
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(new Vector2(8, 1), new Vector2(UIScaler.GetWidthUnits() - 16, 3), "Select Heros");
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-
         float x = 8;
         float y = 5;
 

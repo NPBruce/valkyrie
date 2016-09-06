@@ -14,8 +14,6 @@ unique title empty bug
 new components in selector
 new mplace in add
 
-Select heros title missing
-
 text editing sucks (text wrap?)
 random tags
 Expansion name on elements in editor, tags
@@ -134,6 +132,11 @@ public class Game : MonoBehaviour {
         TextButton endSelection = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "Finished", delegate { EndSelection(); }, Color.green);
         // Untag as dialog so this isn't cleared away during hero selection
         endSelection.ApplyTag("heroselect");
+
+        // Add a title to the page
+        DialogBox db = new DialogBox(new Vector2(8, 1), new Vector2(UIScaler.GetWidthUnits() - 16, 3), "Select Heroes");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.ApplyTag("heroselect");
 
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         // Untag as dialog so this isn't cleared away during hero selection
