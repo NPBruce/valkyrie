@@ -10,14 +10,17 @@ Done:
     end round event in editor
     about page
     #monsters flag
+    prevent events failing on incorrect selection
+    no confirm on door/token (if no available post events)
+    custom pass/fail (not in editor)
 
 Now:
     custom pass/fail
     32bit
     Threat/peril
-    no confirm on door/token (if no available post events)
 
 Later:
+    catch all parse exceptions
     text editing sucks (text wrap?)
     frame color for portraits Frame_Monster_1x1.dds (color rotation?)
     random tags

@@ -688,6 +688,8 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string originalText = "";
+        public string confirmText = "";
+        public string failText = "";
         public string trigger = "";
         public string[] nextEvent;
         public string[] failEvent;
@@ -724,6 +726,16 @@ public class QuestData
                 text = data["text"];
             }
             originalText = text;
+
+            if (data.ContainsKey("confirmtext"))
+            {
+                confirmText = data["confirmtext"];
+            }
+
+            if (data.ContainsKey("failtext"))
+            {
+                failText = data["failtext"];
+            }
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
@@ -879,7 +891,16 @@ public class QuestData
             string r = base.ToString();
 
             r += "text=\"" + originalText + "\"" + nl;
-            
+
+            if (!confirmText.Equals(""))
+            {
+                r += "confirmtext=\"" + confirmText + "\"" + nl;
+            }
+            if (!failText.Equals(""))
+            {
+                r += "failtext=\"" + failText + "\"" + nl;
+            }
+
             if (highlight)
             {
                 r += "highlight=true" + nl;

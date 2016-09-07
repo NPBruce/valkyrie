@@ -38,6 +38,7 @@ public class DialogWindow {
 
     public void CreateWindow()
     {
+        Game game = Game.Get();
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.text.Replace("\\n", "\n"));
         db.AddBorder();
 
@@ -46,16 +47,48 @@ public class DialogWindow {
         {
             new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
         }
+
         // If there isn't a fail event we have a confirm button
-        if(eventData.failEvent.Length == 0)
+        if (eventData.failEvent.Length == 0)
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), "Confirm", delegate { onConfirm(); });
+            bool showConfirm = true;
+            if (eventData is QuestData.Token || eventData is QuestData.Door)
+            {
+                showConfirm = false;
+                foreach (string s in eventData.nextEvent)
+                {
+                    showConfirm |= EventHelper.EventEnabled(game.qd.components[s] as QuestData.Event);
+                }
+            }
+            if (showConfirm)
+            {
+                string confirmLabel = "Confirm";
+                if (!eventData.confirmText.Equals(""))
+                {
+                    confirmLabel = eventData.confirmText;
+                }
+                new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), confirmLabel, delegate { onConfirm(); });
+            }
         }
         // Otherwise we have pass and fail buttons
         else
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), "Fail", delegate { onFail(); }, Color.red);
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), "Pass", delegate { onPass(); }, Color.green);
+            Color passColor = Color.green;
+            Color failColor = Color.red;
+            string confirmLabel = "Pass";
+            if (!eventData.confirmText.Equals(""))
+            {
+                confirmLabel = eventData.confirmText;
+                passColor = Color.white;
+            }
+            string failLabel = "Fail";
+            if (!eventData.failText.Equals(""))
+            {
+                failLabel = eventData.failText;
+                failColor = Color.white;
+            }
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), failLabel, delegate { onFail(); }, failColor);
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), confirmLabel, delegate { onPass(); }, passColor);
         }
     }
 

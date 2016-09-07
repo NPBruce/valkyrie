@@ -47,6 +47,16 @@ public class EventHelper {
         }
     }
 
+    public static bool EventEnabled(QuestData.Event e)
+    {
+        foreach (string s in e.flags)
+        {
+            if (!Game.Get().qd.flags.Contains(s))
+                return false;
+        }
+        return true;
+    }
+
     public static void TriggerEvent()
     {
 
@@ -58,12 +68,7 @@ public class EventHelper {
 
         QuestData.Event e = game.round.eventList.Pop();
 
-        // If the flags are not set do not trigger event
-        foreach (string s in e.flags)
-        {
-            if (!game.qd.flags.Contains(s))
-                return;
-        }
+        if (!EventEnabled(e)) return;
 
         // Add set flags
         foreach (string s in e.setFlags)
