@@ -17,6 +17,12 @@ public class CameraController : MonoBehaviour {
     public int maxPanX = 5000;
     public int maxPanY = 5000;
 
+    // Units to move per second
+    public static float autoPanSpeed = 1200;
+
+    public bool targetSet = false;
+    public Vector3 camTarget;
+
     public Vector3 mouseDownCamPosition;
     public Vector2 mouseDownMousePosition;
 
@@ -89,6 +95,21 @@ public class CameraController : MonoBehaviour {
         if (pos.x > maxPanX) pos.x = maxPanX;
         if (pos.y > maxPanY) pos.y = maxPanY;
         gameObject.transform.position = pos;
+
+        if (targetSet)
+        {
+            float camJumpDist = Vector3.Distance(gameObject.transform.position, camTarget);
+            if (camJumpDist > 0.1f)
+            {
+                // How many units to move this frame
+                float moveDist = Time.deltaTime * autoPanSpeed;
+                gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, camTarget, moveDist);
+            }
+            else
+            {
+                targetSet = false;
+            }
+        }
     }
 
     public static Vector2 GetMouseTile()
@@ -128,7 +149,14 @@ public class CameraController : MonoBehaviour {
 
     public static void SetCamera(Vector2 pos)
     {
-        Camera cam = GameObject.FindObjectOfType<Camera>();
-        cam.transform.position = new Vector3(pos.x * 105, pos.y * 105, -800);
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        cc.targetSet = true;
+
+        if (pos.x < cc.minPanX) pos.x = cc.minPanX;
+        if (pos.y < cc.minPanY) pos.y = cc.minPanY;
+        if (pos.x > cc.maxPanX) pos.x = cc.maxPanX;
+        if (pos.y > cc.maxPanY) pos.y = cc.maxPanY;
+
+        cc.camTarget = new Vector3(pos.x * 105, pos.y * 105, -800);
     }
 }

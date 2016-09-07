@@ -2,6 +2,8 @@
 using System.Collections;
 using Microsoft.Win32;
 using System.IO;
+using System;
+using Read64bitRegistryFrom32bitApp;
 
 abstract public class AppFinder
 {
@@ -17,6 +19,15 @@ abstract public class AppFinder
     public AppFinder()
     {
         location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
+        if (location.Equals(""))
+        {
+            try
+            {
+                location = RegistryWOW6432.GetRegKey64(RegHive.HKEY_LOCAL_MACHINE, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation");
+            }
+            catch (Exception) { }
+        }
+
         exeLocation += location + "/" + Executable();
         location += DataDirectory();
     }
@@ -33,4 +44,3 @@ abstract public class AppFinder
         return ffgVersion;
     }
 }
-
