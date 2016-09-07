@@ -2,41 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/*
-Dump list of things to do:
-
-Done:
-    Better panning
-    end round event in editor
-    about page
-    #monsters flag
-    prevent events failing on incorrect selection
-    no confirm on door/token (if no available post events)
-    custom pass/fail
-    build now 32bit
-    camera jump smoothing
-
-Now:
-    Threat/peril
-    {0}/{1} in activations
-
-Later:
-    catch all parse exceptions
-    text editing sucks (text wrap?)
-    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
-    random tags
-    tags for hero count
-    tags for round number
-    Expansion name on elements in editor, tags
-    ffg app version unity
-    quest set
-    lt.
-    Add expansions, conent selection
-    Stacked tileselection? (tags?)
-    save games
-    undo
-*/
-
 // General controller for the game
 public class Game : MonoBehaviour {
 

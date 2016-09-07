@@ -1,0 +1,22 @@
+Done:
+
+
+Now:
+Threat/peril (start with all required event extensions)
+{0}/{1} in activations
+
+Later:
+catch all parse exceptions
+text editing sucks (text wrap?)
+frame color for portraits Frame_Monster_1x1.dds (color rotation?)
+random tags
+tags for hero count
+tags for round number
+Expansion name on elements in editor, tags
+ffg app version unity
+quest set
+lt.
+Add expansions, content selection
+Stacked tileselection? (tags?)
+save games
+undo
