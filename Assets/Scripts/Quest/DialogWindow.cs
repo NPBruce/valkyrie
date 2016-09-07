@@ -74,6 +74,7 @@ public class DialogWindow {
 
     public void onFail()
     {
+        if (!checkHeroes()) return;
         // Destroy this dialog to close
         destroy();
         // Trigger failure event
@@ -89,7 +90,7 @@ public class DialogWindow {
         EventHelper.TriggerEvent();
     }
 
-    public void onConfirm()
+    public bool checkHeroes()
     {
         Game game = Game.Get();
 
@@ -103,8 +104,8 @@ public class DialogWindow {
             }
         }
 
-        if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return;
-        if (eventData.minHeroes > heroList.Count) return;
+        if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return false;
+        if (eventData.minHeroes > heroList.Count) return false;
 
         foreach (Round.Hero h in game.round.heroes)
         {
@@ -119,6 +120,13 @@ public class DialogWindow {
 
         game.heroCanvas.UpdateStatus();
 
+        return true;
+    }
+
+
+    public void onConfirm()
+    {
+        if (!checkHeroes()) return;
         // Destroy this dialog to close
         destroy();
         // Trigger next event
