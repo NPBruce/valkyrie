@@ -24,7 +24,7 @@ public class FetchContent {
             return;
         }
 
-        Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion());
+        Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion() + System.Environment.NewLine);
 
         importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), finder.AppVersion());
     }

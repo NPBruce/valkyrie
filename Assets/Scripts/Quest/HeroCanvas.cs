@@ -13,11 +13,11 @@ public class HeroCanvas : MonoBehaviour {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
         offset = offsetStart;
         Game game = Game.Get();
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
             AddHero(h, game);
     }
 
-    void AddHero(Game.Hero h, Game game)
+    void AddHero(Round.Hero h, Game game)
     {
         Sprite heroSprite;
 
@@ -56,7 +56,7 @@ public class HeroCanvas : MonoBehaviour {
     public void UpdateStatus()
     {
         Game game = Game.Get();
-        foreach(Game.Hero h in game.heros)
+        foreach(Round.Hero h in game.round.heroes)
         {
             UnityEngine.UI.Image image = icons[h.id];
             image.color = Color.white;
@@ -86,7 +86,7 @@ public class HeroCanvas : MonoBehaviour {
     public void UpdateImages()
     {
         Game game = Game.Get();
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             UnityEngine.UI.Image image = icons[h.id];
 
@@ -106,9 +106,9 @@ public class HeroCanvas : MonoBehaviour {
     void HeroDiag(int id)
     {
         Game game = Game.Get();
-        Game.Hero target = null;
+        Round.Hero target = null;
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (h.id == id)
             {
@@ -119,7 +119,7 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
-            if (game.eventList.Count > 0 && game.eventList.Peek().maxHeroes != 0)
+            if (game.round.eventList.Count > 0 && game.round.eventList.Peek().maxHeroes != 0)
             {
                 target.selected = !target.selected;
                 UpdateStatus();
@@ -127,11 +127,11 @@ public class HeroCanvas : MonoBehaviour {
             return;
         }
 
-        if (game.heroesSelected && target.heroData != null)
+        if (game.round.heroesSelected && target.heroData != null)
         {
             new HeroDialog(target);
         }
-        if (!game.heroesSelected)
+        if (!game.round.heroesSelected)
         {
             icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             new HeroSelection(target);
@@ -146,7 +146,7 @@ public class HeroCanvas : MonoBehaviour {
             return;
 
         Game game = Game.Get();
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (h.heroData != null) heroCount++;
         }
@@ -156,14 +156,14 @@ public class HeroCanvas : MonoBehaviour {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
-        for(int i = 0; i < game.heros.Count - 1; i++)
+        for(int i = 0; i < game.round.heroes.Count - 1; i++)
         {
             int j = i;
 
-            while(game.heros[i].heroData == null && j < game.heros.Count)
+            while(game.round.heroes[i].heroData == null && j < game.round.heroes.Count)
             {
-                game.heros[i].heroData = game.heros[j].heroData;
-                game.heros[j].heroData = null;
+                game.round.heroes[i].heroData = game.round.heroes[j].heroData;
+                game.round.heroes[j].heroData = null;
                 j++;
             }
         }
@@ -171,7 +171,7 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        game.heroesSelected = true;
+        game.round.heroesSelected = true;
         game.moraleDisplay = new MoraleDisplay();
         // Create the menu button
         new MenuButton();

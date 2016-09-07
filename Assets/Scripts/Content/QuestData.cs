@@ -10,10 +10,10 @@ public class QuestData
     public Dictionary<string, QuestComponent> components;
 
     // A list of flags that have been set during the quest
-    public List<string> flags;
+    public HashSet<string> flags;
 
     // A dictionary of heros that have been selected in events
-    public Dictionary<string, List<Game.Hero>> heroSelection;
+    public Dictionary<string, List<Round.Hero>> heroSelection;
 
     // List of ini files containing quest data
     List<string> files;
@@ -41,12 +41,12 @@ public class QuestData
 
     public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + questPath + "\"");
+        Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
-        flags = new List<string>();
-        heroSelection = new Dictionary<string, List<Game.Hero>>();
+        flags = new HashSet<string>();
+        heroSelection = new Dictionary<string, List<Round.Hero>>();
 
         // Read the main quest file
         IniData d = IniRead.ReadFromIni(questPath);
@@ -688,6 +688,8 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string originalText = "";
+        public string confirmText = "";
+        public string failText = "";
         public string trigger = "";
         public string[] nextEvent;
         public string[] failEvent;
@@ -724,6 +726,16 @@ public class QuestData
                 text = data["text"];
             }
             originalText = text;
+
+            if (data.ContainsKey("confirmtext"))
+            {
+                confirmText = data["confirmtext"];
+            }
+
+            if (data.ContainsKey("failtext"))
+            {
+                failText = data["failtext"];
+            }
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
@@ -879,7 +891,16 @@ public class QuestData
             string r = base.ToString();
 
             r += "text=\"" + originalText + "\"" + nl;
-            
+
+            if (!confirmText.Equals(""))
+            {
+                r += "confirmtext=\"" + confirmText + "\"" + nl;
+            }
+            if (!failText.Equals(""))
+            {
+                r += "failtext=\"" + failText + "\"" + nl;
+            }
+
             if (highlight)
             {
                 r += "highlight=true" + nl;

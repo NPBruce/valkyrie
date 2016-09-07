@@ -5,25 +5,36 @@ using System.Collections.Generic;
 /*
 Dump list of things to do:
 
-import from RtL
-64 bit
-symbols in text
-more activations
-end of each round trigger
-unique title empty bug
-new components in selector
-new mplace in add
+Done:
+    Better panning
+    end round event in editor
+    about page
+    #monsters flag
+    prevent events failing on incorrect selection
+    no confirm on door/token (if no available post events)
+    custom pass/fail
+    build now 32bit
+    camera jump smoothing
 
-text editing sucks (text wrap?)
-random tags
-Expansion name on elements in editor, tags
-ffg app version unity
-32bit
-quest set
-Threat
-lt.
-Add expansions, conent selection
-Stacked tileselection? (tags?)
+Now:
+    Threat/peril
+    {0}/{1} in activations
+
+Later:
+    catch all parse exceptions
+    text editing sucks (text wrap?)
+    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
+    random tags
+    tags for hero count
+    tags for round number
+    Expansion name on elements in editor, tags
+    ffg app version unity
+    quest set
+    lt.
+    Add expansions, conent selection
+    Stacked tileselection? (tags?)
+    save games
+    undo
 */
 
 // General controller for the game
@@ -32,11 +43,7 @@ public class Game : MonoBehaviour {
     public string version = "";
     public ContentData cd;
     public QuestData qd;
-    public List<Hero> heros;
-    public List<Monster> monsters;
-    public int round = 0;
-    public bool heroesSelected = false;
-    public Stack<QuestData.Event> eventList;
+    public Round round;
     public Canvas uICanvas;
     public Canvas boardCanvas;
     public Canvas tokenCanvas;
@@ -44,7 +51,6 @@ public class Game : MonoBehaviour {
     public HeroCanvas heroCanvas;
     public MonsterCanvas monsterCanvas;
     public UIScaler uiScaler;
-    public int morale;
     public MoraleDisplay moraleDisplay;
     public bool editMode = false;
     public QuestEditorData qed;
@@ -69,7 +75,6 @@ public class Game : MonoBehaviour {
         monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
 
         // Create some things
-        eventList = new Stack<QuestData.Event>();
         uiScaler = new UIScaler(uICanvas);
 
         // Read the version and add it to the log
@@ -119,12 +124,8 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
-        // Populate null hero list, these can then be selected as hero types
-        heros = new List<Hero>();
-        for (int i = 1; i < 5; i++)
-        {
-            heros.Add(new Hero(null, i));
-        }
+        round = new Round();
+
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
 
@@ -141,37 +142,19 @@ public class Game : MonoBehaviour {
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         // Untag as dialog so this isn't cleared away during hero selection
         cancelSelection.ApplyTag("heroselect");
-
-        // Create the monster list so we are ready to start
-        monsters = new List<Monster>();
     }
-
-    // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
-    public void AdjustMorale(int m)
-    {
-        morale += m;
-        if(morale < 0)
-        {
-            morale = 0;
-            moraleDisplay.Update();
-            EventHelper.EventTriggerType("NoMorale");
-        }
-        moraleDisplay.Update();
-    }
-
+    
     // HeroCanvas validates selection and starts quest if everything is good
     public void EndSelection()
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Hero h in heros)
+        foreach (Round.Hero h in round.heroes)
         {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        morale = count;
-        // Starting round is 1
-        round = 1;
+        round.morale = count;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
@@ -192,48 +175,6 @@ public class Game : MonoBehaviour {
         if (qed != null && Input.GetMouseButtonDown(0))
         {
             qed.MouseDown();
-        }
-    }
-
-    // Class for holding current hero status
-    public class Hero
-    {
-        // This can be null if not selected
-        public HeroData heroData;
-        public bool activated = false;
-        public bool defeated = false;
-        //  Heros are in a list so they need ID... maybe at some point this can move to an array
-        public int id = 0;
-        // Used for events that can select or highlight heros
-        public bool selected;
-
-        public Hero(HeroData h, int i)
-        {
-            heroData = h;
-            id = i;
-        }
-    }
-
-    // Class for holding current monster status
-    public class Monster
-    {
-        public MonsterData monsterData;
-        public bool activated = false;
-        public bool minionStarted = false;
-        public bool masterStarted = false;
-        public bool unique = false;
-        public string uniqueText = "";
-        public string uniqueTitle = "";
-        // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
-        public ActivationData currentActivation;
-
-        // Initialise from monster event
-        public Monster(QuestData.Monster m)
-        {
-            monsterData = m.mData;
-            unique = m.unique;
-            uniqueTitle = m.uniqueTitle;
-            uniqueText = m.uniqueText;
         }
     }
 }

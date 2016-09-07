@@ -54,16 +54,10 @@ public class Destroyer {
         Game game = Game.Get();
 
         // Clear up all data
-        if (game.eventList != null)
-        {
-            game.eventList.Clear();
-        }
         game.cd = null;
         game.qd = null;
         game.qed = null;
-        game.heros = null;
-        game.monsters = null;
-        game.heroesSelected = false;
+        game.round = null;
         game.moraleDisplay = null;
         game.tokenBoard.tc.Clear();
         game.editMode = false;

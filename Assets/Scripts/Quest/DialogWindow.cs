@@ -8,14 +8,14 @@ using UnityEngine.Events;
 public class DialogWindow {
     // The even that raises this dialog
     public QuestData.Event eventData;
-    public List<Game.Hero> heroList;
+    public List<Round.Hero> heroList;
 
     public DialogWindow(QuestData.Event e)
     {
         eventData = e;
-        heroList = new List<Game.Hero>();
+        heroList = new List<Round.Hero>();
         Game game = Game.Get();
-        game.eventList.Push(eventData);
+        game.round.eventList.Push(eventData);
 
         if (!eventData.heroListName.Equals(""))
         {
@@ -25,7 +25,7 @@ public class DialogWindow {
             }
             else
             {
-                foreach (Game.Hero h in game.qd.heroSelection[eventData.heroListName])
+                foreach (Round.Hero h in game.qd.heroSelection[eventData.heroListName])
                 {
                     h.selected = true;
                 }
@@ -38,6 +38,7 @@ public class DialogWindow {
 
     public void CreateWindow()
     {
+        Game game = Game.Get();
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.text.Replace("\\n", "\n"));
         db.AddBorder();
 
@@ -46,16 +47,48 @@ public class DialogWindow {
         {
             new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
         }
+
         // If there isn't a fail event we have a confirm button
-        if(eventData.failEvent.Length == 0)
+        if (eventData.failEvent.Length == 0)
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), "Confirm", delegate { onConfirm(); });
+            bool showConfirm = true;
+            if (eventData is QuestData.Token || eventData is QuestData.Door)
+            {
+                showConfirm = false;
+                foreach (string s in eventData.nextEvent)
+                {
+                    showConfirm |= EventHelper.EventEnabled(game.qd.components[s] as QuestData.Event);
+                }
+            }
+            if (showConfirm)
+            {
+                string confirmLabel = "Confirm";
+                if (!eventData.confirmText.Equals(""))
+                {
+                    confirmLabel = eventData.confirmText;
+                }
+                new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), confirmLabel, delegate { onConfirm(); });
+            }
         }
         // Otherwise we have pass and fail buttons
         else
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), "Fail", delegate { onFail(); }, Color.red);
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), "Pass", delegate { onPass(); }, Color.green);
+            Color passColor = Color.green;
+            Color failColor = Color.red;
+            string confirmLabel = "Pass";
+            if (!eventData.confirmText.Equals(""))
+            {
+                confirmLabel = eventData.confirmText;
+                passColor = Color.white;
+            }
+            string failLabel = "Fail";
+            if (!eventData.failText.Equals(""))
+            {
+                failLabel = eventData.failText;
+                failColor = Color.white;
+            }
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), failLabel, delegate { onFail(); }, failColor);
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), confirmLabel, delegate { onPass(); }, passColor);
         }
     }
 
@@ -74,6 +107,7 @@ public class DialogWindow {
 
     public void onFail()
     {
+        if (!checkHeroes()) return;
         // Destroy this dialog to close
         destroy();
         // Trigger failure event
@@ -89,13 +123,13 @@ public class DialogWindow {
         EventHelper.TriggerEvent();
     }
 
-    public void onConfirm()
+    public bool checkHeroes()
     {
         Game game = Game.Get();
 
-        heroList = new List<Game.Hero>();
+        heroList = new List<Round.Hero>();
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             if (h.selected)
             {
@@ -103,10 +137,10 @@ public class DialogWindow {
             }
         }
 
-        if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return;
-        if (eventData.minHeroes > heroList.Count) return;
+        if (eventData.maxHeroes < heroList.Count && eventData.maxHeroes != 0) return false;
+        if (eventData.minHeroes > heroList.Count) return false;
 
-        foreach (Game.Hero h in game.heros)
+        foreach (Round.Hero h in game.round.heroes)
         {
             h.selected = false;
         }
@@ -119,6 +153,13 @@ public class DialogWindow {
 
         game.heroCanvas.UpdateStatus();
 
+        return true;
+    }
+
+
+    public void onConfirm()
+    {
+        if (!checkHeroes()) return;
         // Destroy this dialog to close
         destroy();
         // Trigger next event
@@ -130,21 +171,19 @@ public class DialogWindow {
                 return;
             }
         }
-        EventHelper.TriggerEvent();
-
         if (eventData.name.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
         }
+
+        EventHelper.TriggerEvent();
     }
 
     public void destroy()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        Destroyer.Dialog();
 
-        Game game = Game.Get();
-        game.eventList.Pop();
+        Game.Get().round.eventList.Pop();
     }
 }

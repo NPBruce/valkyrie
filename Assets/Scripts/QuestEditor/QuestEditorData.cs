@@ -1185,8 +1185,21 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(19, 1), "Trigger Events:");
+        DialogBox db = new DialogBox(new Vector2(1, 1), new Vector2(10, 1), "Trigger Events:");
         db.ApplyTag("editor");
+
+        string confirmLabel = e.confirmText;
+        if (confirmLabel.Equals(""))
+        {
+            confirmLabel = "Confirm";
+            if (e.failEvent.Length != 0)
+            {
+                confirmLabel = "Pass";
+            }
+        }
+        dbe1 = new DialogBoxEditable(new Vector2(11, 1), new Vector2(6, 1), confirmLabel, delegate { UpdateConfirmLabel(); });
+        dbe1.ApplyTag("editor");
+        dbe1.AddBorder();
 
         tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { EventAddEvent(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -1211,8 +1224,17 @@ public class QuestEditorData {
             }
         }
 
-        db = new DialogBox(new Vector2(0, 10), new Vector2(19, 1), "Fail Events:");
+        db = new DialogBox(new Vector2(1, 10), new Vector2(10, 1), "Fail Events:");
         db.ApplyTag("editor");
+
+        string failLabel = e.failText;
+        if (failLabel.Equals(""))
+        {
+            failLabel = "Fail";
+        }
+        dbe2 = new DialogBoxEditable(new Vector2(11, 10), new Vector2(6, 1), failLabel, delegate { UpdateFailLabel(); });
+        dbe2.ApplyTag("editor");
+        dbe2.AddBorder();
 
         tb = new TextButton(new Vector2(19, 10), new Vector2(1, 1), "+", delegate { EventAddEvent(0, true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -1313,6 +1335,30 @@ public class QuestEditorData {
         }
 
         e.SetVisible(1f);
+    }
+
+    public void UpdateConfirmLabel()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.confirmText = dbe1.uiInput.text;
+        if (e.confirmText.Equals("Confirm") && e.failEvent.Length == 0)
+        {
+            e.confirmText = "";
+        }
+        if (e.confirmText.Equals("Pass") && e.failEvent.Length != 0)
+        {
+            e.confirmText = "";
+        }
+    }
+
+    public void UpdateFailLabel()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.failText = dbe2.uiInput.text;
+        if (e.failText.Equals("Fail"))
+        {
+            e.failText = "";
+        }
     }
 
     public void EventRemoveEvent(int index, bool fail = false)
@@ -1467,6 +1513,10 @@ public class QuestEditorData {
     {
         HashSet<string> flags = new HashSet<string>();
         flags.Add("{NEW}");
+        if (type.Equals("flag"))
+        {
+            flags.Add("#monsters");
+        }
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
@@ -1695,6 +1745,11 @@ public class QuestEditorData {
         {
             triggers.Add("Defeated" + kv.Key);
             triggers.Add("DefeatedUnique" + kv.Key);
+        }
+
+        for (int i = 1; i <= 25; i++)
+        {
+            triggers.Add("EndRound" + i);
         }
 
         esl = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });

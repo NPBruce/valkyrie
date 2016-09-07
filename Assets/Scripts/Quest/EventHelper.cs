@@ -34,17 +34,27 @@ public class EventHelper {
 
         QuestData.Event e = (QuestData.Event)game.qd.components[name];
 
-        if (game.eventList.Count == 0)
+        if (game.round.eventList.Count == 0)
         {
-            game.eventList.Push(e);
+            game.round.eventList.Push(e);
             TriggerEvent();
         }
         else
         {
-            QuestData.Event ce = game.eventList.Pop();
-            game.eventList.Push(e);
-            game.eventList.Push(ce);
+            QuestData.Event ce = game.round.eventList.Pop();
+            game.round.eventList.Push(e);
+            game.round.eventList.Push(ce);
         }
+    }
+
+    public static bool EventEnabled(QuestData.Event e)
+    {
+        foreach (string s in e.flags)
+        {
+            if (!Game.Get().qd.flags.Contains(s))
+                return false;
+        }
+        return true;
     }
 
     public static void TriggerEvent()
@@ -54,16 +64,11 @@ public class EventHelper {
 
         RoundHelper.CheckNewRound();
 
-        if (game.eventList.Count == 0) return;
+        if (game.round.eventList.Count == 0) return;
 
-        QuestData.Event e = game.eventList.Pop();
+        QuestData.Event e = game.round.eventList.Pop();
 
-        // If the flags are not set do not trigger event
-        foreach (string s in e.flags)
-        {
-            if (!game.qd.flags.Contains(s))
-                return;
-        }
+        if (!EventEnabled(e)) return;
 
         // Add set flags
         foreach (string s in e.setFlags)
@@ -93,11 +98,14 @@ public class EventHelper {
         // If this is a monster event then add the monster group
         if (e is QuestData.Monster)
         {
+            // Set monster tag if not already
+            game.qd.flags.Add("#monsters");
+
             QuestData.Monster qm = (QuestData.Monster)e;
 
             // Is this type new?
-            Game.Monster oldMonster = null;
-            foreach (Game.Monster m in game.monsters)
+            Round.Monster oldMonster = null;
+            foreach (Round.Monster m in game.round.monsters)
             {
                 if (m.monsterData.name.Equals(qm.mData.name))
                 {
@@ -107,7 +115,7 @@ public class EventHelper {
             // Add the new type
             if (oldMonster == null)
             {
-                game.monsters.Add(new Game.Monster(qm));
+                game.round.monsters.Add(new Round.Monster(qm));
                 game.monsterCanvas.UpdateList();
             }
             else if(qm.unique)

@@ -3,9 +3,9 @@ using System.Collections;
 
 // Class for creation of hero control button menu
 public class HeroDialog{
-    public Game.Hero hero;
+    public Round.Hero hero;
 
-    public HeroDialog(Game.Hero h)
+    public HeroDialog(Round.Hero h)
     {
         hero = h;
         CreateWindow();
@@ -50,7 +50,7 @@ public class HeroDialog{
         hero.defeated = true;
         updateDisplay();
         Game game = Game.Get();
-        game.AdjustMorale(-1);
+        game.round.AdjustMorale(-1);
     }
 
     // Null function for activated hero
