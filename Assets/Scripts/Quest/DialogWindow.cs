@@ -171,12 +171,12 @@ public class DialogWindow {
                 return;
             }
         }
-        EventHelper.TriggerEvent();
-
         if (eventData.name.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
         }
+
+        EventHelper.TriggerEvent();
     }
 
     public void destroy()

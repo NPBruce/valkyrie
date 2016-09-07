@@ -12,16 +12,15 @@ Done:
     #monsters flag
     prevent events failing on incorrect selection
     no confirm on door/token (if no available post events)
-    custom pass/fail (not in editor)
+    custom pass/fail
     build now 32bit
     camera jump smoothing
 
 Now:
     Threat/peril
-    endround event stuck
+    {0}/{1} in activations
 
 Later:
-    custom pass/fail in editor
     catch all parse exceptions
     text editing sucks (text wrap?)
     frame color for portraits Frame_Monster_1x1.dds (color rotation?)
