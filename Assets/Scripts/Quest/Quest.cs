@@ -60,6 +60,14 @@ public class Quest
         }
     }
 
+    public void Remove(string[] names)
+    {
+        foreach (string s in names)
+        {
+            Remove(s);
+        }
+    }
+
     public void Remove(string name)
     {
         if (!boardItems.ContainsKey(name)) return;
@@ -68,6 +76,29 @@ public class Quest
         boardItems.Remove(name);
     }
 
+    public void RemoveAll()
+    {
+        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        {
+            kv.Value.Remove();
+        }
+
+        boardItems.Clear();
+    }
+
+    public void ChangeAlpha(string name, float alpha)
+    {
+        if (!boardItems.ContainsKey(name)) return;
+        boardItems[name].SetVisible(alpha);
+    }
+
+    public void ChangeAlphaAll(float alpha)
+    {
+        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        {
+            kv.Value.SetVisible(alpha);
+        }
+    }
 
     // Class for Tile components (use TileSide content data)
     public class Tile : BoardComponent

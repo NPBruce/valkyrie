@@ -101,17 +101,7 @@ public class QuestEditorData {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
-        // Clean up everything marked as 'board'
-        // This means we have to reload everything, but otherwise we end up with ghost objects.  This solution is good enough
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
-            Object.Destroy(go);
-
-        Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
-        {
-            qc.Value.Draw();
-            qc.Value.SetVisible(.2f);
-        }
+        Game.Get().quest.ChangeAlphaAll(0.2f);
     }
 
     public void Back()
@@ -221,7 +211,7 @@ public class QuestEditorData {
 
         game.tokenBoard.AddHighlight(t.location, "TileAnchor", "editor");
 
-        t.SetVisible(1f);
+        game.quest.ChangeAlpha(t.name, 1f);
     }
 
     public void GetPosition()
@@ -404,7 +394,7 @@ public class QuestEditorData {
 
         game.tokenBoard.AddHighlight(d.location, "DoorAnchor", "editor");
 
-        d.SetVisible(1f);
+        game.quest.ChangeAlpha(d.name, 1f);
     }
 
     public void SelectToken(string name)
@@ -445,7 +435,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        t.SetVisible(1f);
+        game.quest.ChangeAlpha(t.name, 1f);
     }
 
     public void TokenType()
@@ -583,7 +573,7 @@ public class QuestEditorData {
 
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
-        m.SetVisible(1f);
+        game.quest.ChangeAlpha(m.name, 1f);
     }
 
     public void UpdateUniqueTitle()
@@ -928,7 +918,7 @@ public class QuestEditorData {
 
         game.tokenBoard.AddHighlight(m.location, "MonsterLoc", "editor");
 
-        m.SetVisible(1f);
+        game.quest.ChangeAlpha(m.name, 1f);
     }
 
     public void RenameComponent()
@@ -1141,7 +1131,7 @@ public class QuestEditorData {
             game.tokenBoard.AddHighlight(e.location, "EventLoc", "editor");
         }
 
-        e.SetVisible(1f);
+        game.quest.ChangeAlpha(e.name, 1f);
     }
 
     public void UpdateEventText()
@@ -1336,7 +1326,7 @@ public class QuestEditorData {
             game.tokenBoard.AddHighlight(e.location, "EventLoc", "editor");
         }
 
-        e.SetVisible(1f);
+        game.quest.ChangeAlpha(e.name, 1f);
     }
 
     public void UpdateConfirmLabel()

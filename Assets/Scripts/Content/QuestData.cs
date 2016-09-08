@@ -938,44 +938,6 @@ public class QuestData
             ChangeReference(refName, "");
         }
 
-        // items are invisible by default, can toggle visibility
-        virtual public void Draw()
-        {
-            if(image == null)
-                return;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-        }
-
-
-        // items are invisible by default, can toggle visibility
-        virtual public void SetVisible(bool vis)
-        {
-            if (image == null)
-                return;
-            if (vis)
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-            else
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
-        }
-
-        // items are invisible by default, can toggle visibility
-        virtual public void SetVisible(float vis)
-        {
-            if (image == null)
-                return;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, vis);
-        }
-
-        // return visibility of image
-        virtual public bool GetVisible()
-        {
-            if (image == null)
-                return false;
-            if (image.color.a == 0)
-                return false;
-            return true;
-        }
-
         override public string ToString()
         {
             string nl = System.Environment.NewLine;

@@ -20,23 +20,22 @@ public class QuestEditor {
     {
         Destroyer.Dialog();
 
-        // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
-            Object.Destroy(go);
+        Game game = Game.Get();
+        game.quest.RemoveAll();
 
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
-        Game game = Game.Get();
-
         game.qd = new QuestData(game.qd.questPath);
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
+        game.quest.RemoveAll();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
         {
-            qc.Value.Draw();
-            qc.Value.SetVisible(.2f);
+            game.quest.Add(kv.Key);
         }
+        game.quest.ChangeAlphaAll(0.2f);
 
         game.qed = new QuestEditorData();
     }
