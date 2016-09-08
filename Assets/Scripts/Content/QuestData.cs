@@ -366,7 +366,7 @@ public class QuestData
 
             Draw();
             Game game = Game.Get();
-            game.tokenBoard.add(this);
+            //game.tokenBoard.add(this);
         }
 
         override public string ToString()
@@ -462,7 +462,7 @@ public class QuestData
             Draw();
 
             Game game = Game.Get();
-            game.tokenBoard.add(this);
+            //game.tokenBoard.add(this);
         }
 
         override public string ToString()

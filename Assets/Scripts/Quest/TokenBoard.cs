@@ -13,13 +13,13 @@ public class TokenBoard : MonoBehaviour {
     }
 
     // Add a door
-    public void add(QuestData.Door d)
+    public void add(Quest.Door d)
     {
         tc.Add(new TokenControl(d));
     }
 
     // Add a token
-    public void add(QuestData.Token t)
+    public void add(Quest.Token t)
     {
         tc.Add(new TokenControl(t));
     }
@@ -27,37 +27,26 @@ public class TokenBoard : MonoBehaviour {
     // Class for tokens and doors that will get the onClick event
     public class TokenControl
     {
-        QuestData.Event e;
+        Quest.BoardComponent c;
 
         // Initialise from a door
-        public TokenControl(QuestData.Door d)
+        public TokenControl(Quest.BoardComponent component)
         {
-            UnityEngine.UI.Button button = d.gameObject.AddComponent<UnityEngine.UI.Button>();
+            c = component;
+            UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent(); });
-            e = d;
-        }
-
-        // Initialise from a token
-        public TokenControl(QuestData.Token t)
-        {
-            UnityEngine.UI.Button button = t.gameObject.AddComponent<UnityEngine.UI.Button>();
-            button.interactable = true;
-            button.onClick.AddListener(delegate { startEvent(); });
-            e = t;
+            c = component;
         }
 
         // On click the tokens start an event
         public void startEvent()
         {
-            // If we aren't visible ignore the click
-            if (!e.GetVisible())
-                return;
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            new DialogWindow(e);
+            new DialogWindow(c.GetEvent());
         }
 
     }

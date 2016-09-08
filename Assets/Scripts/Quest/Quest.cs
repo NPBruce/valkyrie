@@ -10,10 +10,7 @@ public class Quest
     public QuestData qd;
 
     // components on the board (tiles, tokens, doors)
-    public Dictionary<string, QuestComponent> boardItems;
-
-    // Current events (monsters, tokens, events, peril
-    public Dictionary<string, Event> events;
+    public Dictionary<string, BoardComponent> boardItems;
 
     // A list of flags that have been set during the quest
     public HashSet<string> flags;
@@ -27,13 +24,20 @@ public class Quest
     {
         game = gameObject;
         qd = new QuestData(q);
-        boardItems = new Dictionary<string, QuestComponent>();
-        events = new Dictionary<string, Event>();
+        boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
         heroSelection = new Dictionary<string, List<Round.Hero>>();
     }
 
-    public void Create(string name)
+    public void Add(string[] names)
+    {
+        foreach (string s in names)
+        {
+            Add(s);
+        }
+    }
+
+    public void Add(string name)
     {
         if (!game.qd.components.ContainsKey(name))
         {
@@ -41,15 +45,35 @@ public class Quest
             Application.Quit();
         }
         QuestData.QuestComponent qc = game.qd.components[name];
+
+        if (qc is QuestData.Tile)
+        {
+            boardItems.Add(name, new Tile((QuestData.Tile)qc, game));
+        }
+        if (qc is QuestData.Door)
+        {
+            boardItems.Add(name, new Door((QuestData.Door)qc, game));
+        }
+        if (qc is QuestData.Token)
+        {
+            boardItems.Add(name, new Token((QuestData.Token)qc, game));
+        }
+    }
+
+    public void Remove(string name)
+    {
+        if (!boardItems.ContainsKey(name)) return;
+
+        boardItems[name].Remove();
+        boardItems.Remove(name);
     }
 
 
     // Class for Tile components (use TileSide content data)
-    public class Tile : QuestComponent
+    public class Tile : BoardComponent
     {
         public QuestData.Tile qTile;
         public TileSideData cTile;
-        public GameObject tileObject;
 
         public Tile(QuestData.Tile questTile, Game gameObject) : base(gameObject)
         {
@@ -79,91 +103,48 @@ public class Quest
                 Application.Quit();
             }
 
-            tileObject = new GameObject("Object" + qTile.name);
-            tileObject.tag = "board";
-            tileObject.transform.parent = game.boardCanvas.transform;
+            unityObject = new GameObject("Object" + qTile.name);
+            unityObject.tag = "board";
+            unityObject.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
-            image = tileObject.AddComponent<UnityEngine.UI.Image>();
+            image = unityObject.AddComponent<UnityEngine.UI.Image>();
             // Create sprite from texture
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            // Set to transparent initially
-            image.color = new Color(1, 1, 1, 0);
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            tileObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left), Space.World);
-            tileObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top), Space.World);
+            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left), Space.World);
+            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top), Space.World);
             // Move to get the middle of the top left square at 0,0 (squares are 105 units)
-            tileObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             // Set the size to the image size (images are assumed to be 105px per square)
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
 
             // Rotate around 0,0 rotation amount
-            tileObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
+            unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
             // Move tile into target location (spaces are 105 units, Space.World is needed because tile has been rotated)
-            tileObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0) * 105, Space.World);
         }
 
-        ~Tile()
+        public override void Remove()
         {
-            Object.Destroy(tileObject);
-        }
-    }
-
-    // Doors are like tokens but placed differently and have different defaults
-    public class Door : Event
-    {
-        public GameObject doorObject;
-        public QuestData.Door qDoor;
-
-        public Door(QuestData.Door questDoor, Game gameObject) : base(questDoor, gameObject)
-        {
-            qDoor = questDoor;
-            Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
-            // Check load worked
-            if (newTex == null)
-            {
-                Debug.Log("Error: Cannot load door image");
-                Application.Quit();
-            }
-
-            // Create object
-            doorObject = new GameObject("Object" + qDoor.name);
-            doorObject.tag = "board";
-
-            doorObject.transform.parent = game.tokenCanvas.transform;
-
-            // Create the image
-            image = doorObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            // Set door colour
-            image.color = new Color(qDoor.colour[0], qDoor.colour[1], qDoor.colour[2], 1);
-            image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
-            // Rotate as required
-            doorObject.transform.RotateAround(Vector3.zero, Vector3.forward, qDoor.rotation);
-            // Move to square (105 units per square)
-            doorObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-            doorObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0) * 105, Space.World);
-
-            game.tokenBoard.add(qDoor);
+            Object.Destroy(unityObject);
         }
 
-        ~Door()
+        public override QuestData.Event GetEvent()
         {
-            Object.Destroy(doorObject);
+            return null;
         }
     }
 
     // Tokens are events that are tied to a token placed on the board
-    public class Token : Event
+    public class Token : BoardComponent
     {
 
-        public GameObject tokenObject;
         public QuestData.Token qToken;
 
-        public Token(QuestData.Token questToken, Game gameObject) : base(questToken, gameObject)
+        public Token(QuestData.Token questToken, Game gameObject) : base(gameObject)
         {
             qToken = questToken;
 
@@ -183,135 +164,86 @@ public class Quest
             }
 
             // Create object
-            tokenObject = new GameObject("Object" + qToken.name);
-            tokenObject.tag = "board";
+            unityObject = new GameObject("Object" + qToken.name);
+            unityObject.tag = "board";
 
-            tokenObject.transform.parent = game.tokenCanvas.transform;
+            unityObject.transform.parent = game.tokenCanvas.transform;
 
             // Create the image
-            image = tokenObject.AddComponent<UnityEngine.UI.Image>();
+            image = unityObject.AddComponent<UnityEngine.UI.Image>();
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = Color.white;
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
             // Move to square (105 units per square)
-            tokenObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0) * 105, Space.World);
 
-            game.tokenBoard.add(qToken);
+            game.tokenBoard.add(this);
         }
 
-        ~Token()
+        public override QuestData.Event GetEvent()
         {
-            Object.Destroy(tokenObject);
+            return qToken;
+        }
+
+        public override void Remove()
+        {
+            Object.Destroy(unityObject);
         }
     }
 
-
-    // Monster items are monster group placement events
-    public class Monster : Event
+    // Doors are like tokens but placed differently and have different defaults
+    public class Door : BoardComponent
     {
-        public QuestData.Monster qMonster;
-        public MonsterData cMonster;
+        public QuestData.Door qDoor;
 
-        public Monster(QuestData.Monster monster, Game gameObject) : base(monster, gameObject)
+        public Door(QuestData.Door questDoor, Game gameObject) : base(gameObject)
         {
-            qMonster = monster;
-            // Next try to find a type that is valid
-            foreach (string t in qMonster.mTypes)
+            qDoor = questDoor;
+            Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
+            // Check load worked
+            if (newTex == null)
             {
-                // Monster type must exist in content packs, 'Monster' is optional
-                if (game.cd.monsters.ContainsKey(t))
-                {
-                    cMonster = game.cd.monsters[t];
-                }
-                else if (game.cd.monsters.ContainsKey("Monster" + t))
-                {
-                    cMonster = game.cd.monsters["Monster" + t];
-                }
+                Debug.Log("Error: Cannot load door image");
+                Application.Quit();
             }
 
-            // If we didn't find anything try by trait
-            if (cMonster == null)
-            {
-                if (qMonster.mTraits.Length == 0)
-                {
-                    Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
-                    Application.Quit();
-                }
+            // Create object
+            unityObject = new GameObject("Object" + qDoor.name);
+            unityObject.tag = "board";
 
-                List<MonsterData> list = new List<MonsterData>();
-                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-                {
-                    bool allFound = true;
-                    foreach (string t in qMonster.mTraits)
-                    {
-                        if (!cMonster.ContainsTrait(t))
-                        {
-                            allFound = false;
-                        }
-                    }
-                    if (allFound)
-                    {
-                        list.Add(kv.Value);
-                    }
-                }
+            unityObject.transform.parent = game.tokenCanvas.transform;
 
-                // Not found, throw error
-                if (list.Count == 0)
-                {
-                    Debug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
-                    Application.Quit();
-                }
+            // Create the image
+            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            // Set door colour
+            image.color = new Color(qDoor.colour[0], qDoor.colour[1], qDoor.colour[2], 1);
+            image.sprite = tileSprite;
+            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+            // Rotate as required
+            unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qDoor.rotation);
+            // Move to square (105 units per square)
+            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0) * 105, Space.World);
 
-                cMonster = list[Random.Range(0, list.Count)];
-            }
+            game.tokenBoard.add(this);
         }
 
-        override public string GetText()
+        public override void Remove()
         {
-            return base.GetText().Replace("{type}", cMonster.name);
+            Object.Destroy(unityObject);
         }
 
-        public string GetUniqueTitle()
+        public override QuestData.Event GetEvent()
         {
-            return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
+            return qDoor;
         }
     }
 
-    // Events are used to create dialogs that control the quest
-    public class Event : QuestComponent
-    {
-        public QuestData.Event qEvent;
-
-        public Event(QuestData.Event questEvent, Game gameObject) : base(gameObject)
-        {
-            qEvent = questEvent;
-        }
-
-        virtual public string GetText()
-        {
-            return SymbolReplace(qEvent.text);
-        }
-
-        public static string SymbolReplace(string input)
-        {
-            string output = input;
-            output = output.Replace("{heart}", "≥");
-            output = output.Replace("{fatigue}", "∏");
-            output = output.Replace("{might}", "∂");
-            output = output.Replace("{will}", "π");
-            output = output.Replace("{knowledge}", "∑");
-            output = output.Replace("{awareness}", "μ");
-            output = output.Replace("{action}", "∞");
-            output = output.Replace("{shield}", "±");
-            output = output.Replace("{surge}", "≥");
-            return output;
-        }
-
-    }
 
     // Super class for all quest components
-    public class QuestComponent
+    abstract public class BoardComponent
     {
         // image for display
         public UnityEngine.UI.Image image;
@@ -319,10 +251,16 @@ public class Quest
         // Game object
         public Game game;
 
-        public QuestComponent(Game gameObject)
+        public GameObject unityObject;
+
+        public BoardComponent(Game gameObject)
         {
             game = gameObject;
         }
+
+        abstract public void Remove();
+
+        abstract public QuestData.Event GetEvent();
 
         virtual public void SetVisible(float alpha)
         {

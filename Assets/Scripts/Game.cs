@@ -8,6 +8,7 @@ public class Game : MonoBehaviour {
     public string version = "";
     public ContentData cd;
     public QuestData qd;
+    public Quest quest;
     public Round round;
     public Canvas uICanvas;
     public Canvas boardCanvas;
@@ -88,6 +89,9 @@ public class Game : MonoBehaviour {
             Debug.Log("Error: Invalid Quest.");
             Application.Quit();
         }
+
+        // Fetch all of the quest data
+        quest = new Quest(q, this);
 
         round = new Round();
 

@@ -135,8 +135,11 @@ public class EventHelper {
         }
 
         new DialogWindow(e);
+        game.quest.Add(e.addComponents);
+        /*
         foreach (string s in e.addComponents)
         {
+            game.quest.Add(s);
             if (game.qd.components.ContainsKey(s))
             {
                 game.qd.components[s].SetVisible(true);
@@ -145,7 +148,7 @@ public class EventHelper {
             {
                 Debug.Log("Warning: Attempting to show missing item: " + s);
             }
-        }
+        }*/
         foreach (string s in e.removeComponents)
         {
             if (game.qd.components.ContainsKey(s))
