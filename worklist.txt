@@ -5,6 +5,8 @@ Now:
 Threat/peril (start with all required event extensions)
 {0}/{1} in activations
 
+0 = random hero
+
 Later:
 catch all parse exceptions
 text editing sucks (text wrap?)

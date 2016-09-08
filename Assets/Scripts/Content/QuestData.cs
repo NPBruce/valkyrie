@@ -144,6 +144,7 @@ public class QuestData
         public TileSideData tileType;
         new public static string type = "Tile";
         public int rotation = 0;
+        public string tileName;
 
         public Tile(string s) : base(s)
         {
@@ -153,6 +154,7 @@ public class QuestData
             {
                 typeDynamic = type;
                 tileType = kv.Value;
+                tileName = tileType.name;
             }
 
         }
@@ -170,6 +172,7 @@ public class QuestData
             // Find the tileside that is used
             if (data.ContainsKey("side"))
             {
+                tileName = data["side"];
                 // 'TileSide' prefix is optional, test both
                 if (game.cd.tileSides.ContainsKey(data["side"]))
                 {
@@ -995,7 +998,7 @@ public class QuestData
 
 
 
-    // Events are used to create dialogs that control the quest
+    // MPlaces are used to position individual monsters
     public class MPlace : QuestComponent
     {
         public bool master = false;
