@@ -203,7 +203,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileType.sectionName, delegate { ChangeTileSide(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileSideName, delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -354,7 +354,9 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         QuestData.Tile t = selection as QuestData.Tile;
-        t.tileType = game.cd.tileSides[esl.selection];
+        t.tileSideName = esl.selection;
+        game.quest.Remove(t.name);
+        game.quest.Add(t.name);
         SelectTile(t.name);
     }
 
@@ -1813,7 +1815,9 @@ public class QuestEditorData {
     public void SelectDoorColour()
     {
         QuestData.Door d = selection as QuestData.Door;
-        d.SetColor(esl.selection);
+        d.colourName = esl.selection;
+        Game.Get().quest.Remove(d.name);
+        Game.Get().quest.Add(d.name);
         SelectComponent(d.name);
     }
 

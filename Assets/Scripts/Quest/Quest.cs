@@ -79,27 +79,27 @@ public class Quest
         {
             qTile = questTile;
 
-            if (game.cd.tileSides.ContainsKey(qTile.tileName))
+            if (game.cd.tileSides.ContainsKey(qTile.tileSideName))
             {
-                cTile = game.cd.tileSides[qTile.tileName];
+                cTile = game.cd.tileSides[qTile.tileSideName];
             }
-            else if (game.cd.tileSides.ContainsKey("TileSide" + qTile.tileName))
+            else if (game.cd.tileSides.ContainsKey("TileSide" + qTile.tileSideName))
             {
-                cTile = game.cd.tileSides["TileSide" + qTile.tileName];
+                cTile = game.cd.tileSides["TileSide" + qTile.tileSideName];
             }
             else
             {
                 // Fatal if not found
-                Debug.Log("Error: Failed to located TileSide: " + qTile.tileName + " in quest component: " + qTile.name);
+                Debug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.name);
                 Application.Quit();
             }
 
             // Attempt to load image
-            Texture2D newTex = ContentData.FileToTexture(qTile.tileType.image);
+            Texture2D newTex = ContentData.FileToTexture(game.cd.tileSides[qTile.tileSideName].image);
             if (newTex == null)
             {
                 // Fatal if missing
-                Debug.Log("Error: cannot open image file for TileSide: " + qTile.tileType.image);
+                Debug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
                 Application.Quit();
             }
 
@@ -218,7 +218,6 @@ public class Quest
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
-            image.color = new Color(qDoor.colour[0], qDoor.colour[1], qDoor.colour[2], 1);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
             // Rotate as required
@@ -227,8 +226,26 @@ public class Quest
             unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
             unityObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0) * 105, Space.World);
 
+            SetColor(qDoor.colourName);
+
             game.tokenBoard.add(this);
         }
+
+        public void SetColor(string colorName)
+        {
+            string colorRGB = ColorUtil.FromName(colorName);
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.name);
+            }
+
+            Color colour = Color.white;
+            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            image.color = colour;
+        }
+
 
         public override void Remove()
         {
