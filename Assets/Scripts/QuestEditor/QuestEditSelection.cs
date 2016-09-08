@@ -259,7 +259,7 @@ public class QuestEditSelection
         if (game.qd == null)
         {
             Debug.Log("Error: Unable to load quest: " + key);
-            Destroyer.MainMenu();
+            Application.Quit();
         }
         else
         {

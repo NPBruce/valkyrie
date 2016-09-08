@@ -9,8 +9,11 @@ public class Quest
     // QuestData
     public QuestData qd;
 
-    // All components in the quest
-    public Dictionary<string, QuestComponent> components;
+    // components on the board (tiles, tokens, doors)
+    public Dictionary<string, QuestComponent> boardItems;
+
+    // Current events (monsters, tokens, events, peril
+    public Dictionary<string, Event> events;
 
     // A list of flags that have been set during the quest
     public HashSet<string> flags;
@@ -18,13 +21,28 @@ public class Quest
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Round.Hero>> heroSelection;
 
-    public Quest(QuestLoader.Quest q)
+    public Game game;
+
+    public Quest(QuestLoader.Quest q, Game gameObject)
     {
+        game = gameObject;
         qd = new QuestData(q);
-        components = new Dictionary<string, QuestComponent>();
+        boardItems = new Dictionary<string, QuestComponent>();
+        events = new Dictionary<string, Event>();
         flags = new HashSet<string>();
         heroSelection = new Dictionary<string, List<Round.Hero>>();
     }
+
+    public void Create(string name)
+    {
+        if (!game.qd.components.ContainsKey(name))
+        {
+            Debug.Log("Error: Unable to create missing quest component: " + name);
+            Application.Quit();
+        }
+        QuestData.QuestComponent qc = game.qd.components[name];
+    }
+
 
     // Class for Tile components (use TileSide content data)
     public class Tile : QuestComponent
@@ -36,7 +54,6 @@ public class Quest
         public Tile(QuestData.Tile questTile, Game gameObject) : base(gameObject)
         {
             qTile = questTile;
-
 
             if (game.cd.tileSides.ContainsKey(qTile.tileName))
             {
@@ -50,7 +67,7 @@ public class Quest
             {
                 // Fatal if not found
                 Debug.Log("Error: Failed to located TileSide: " + qTile.tileName + " in quest component: " + qTile.name);
-                Destroyer.MainMenu();
+                Application.Quit();
             }
 
             // Attempt to load image
@@ -59,7 +76,7 @@ public class Quest
             {
                 // Fatal if missing
                 Debug.Log("Error: cannot open image file for TileSide: " + qTile.tileType.image);
-                Destroyer.MainMenu();
+                Application.Quit();
             }
 
             tileObject = new GameObject("Object" + qTile.name);
@@ -108,7 +125,7 @@ public class Quest
             if (newTex == null)
             {
                 Debug.Log("Error: Cannot load door image");
-                Destroyer.MainMenu();
+                Application.Quit();
             }
 
             // Create object
@@ -161,7 +178,7 @@ public class Quest
                 if (newTex == null)
                 {
                     Debug.Log("Error: Cannot load search token \"sprites/tokens/search-token\"");
-                    Destroyer.MainMenu();
+                    Application.Quit();
                 }
             }
 
@@ -219,7 +236,7 @@ public class Quest
                 if (qMonster.mTraits.Length == 0)
                 {
                     Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
-                    Destroyer.MainMenu();
+                    Application.Quit();
                 }
 
                 List<MonsterData> list = new List<MonsterData>();

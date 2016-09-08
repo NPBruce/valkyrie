@@ -128,7 +128,7 @@ public class Game : MonoBehaviour {
     void OnApplicationQuit ()
     {
         // This exists for the editor, because quitting doesn't actually work.
-        Destroyer.MainMenu();
+        Destroyer.Destroy();
         // Clean up temporary files
         QuestLoader.CleanTemp();
     }

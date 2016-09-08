@@ -174,6 +174,7 @@ public class DialogWindow {
         if (eventData.name.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
+            return;
         }
 
         EventHelper.TriggerEvent();
