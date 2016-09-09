@@ -329,6 +329,7 @@ public class QuestData
                 mTypes = new string[0];
             }
 
+            mTraits = new string[0];
             if (data.ContainsKey("traits"))
             {
                 mTraits = data["traits"].Split(' ');

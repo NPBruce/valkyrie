@@ -140,16 +140,16 @@ public class RoundHelper {
         {
             // Pick a random activation
             ActivationData activation = adList[Random.Range(0, adList.Count)];
-            m.currentActivation = activation;
+            m.NewActivation(activation);
         }
 
         // Pick Minion or master
         m.minionStarted = Random.Range(0, 2) == 0;
-        if(m.currentActivation.masterFirst)
+        if(m.currentActivation.ad.masterFirst)
         {
             m.minionStarted = false;
         }
-        if (m.currentActivation.minionFirst)
+        if (m.currentActivation.ad.minionFirst)
         {
             m.minionStarted = true;
         }

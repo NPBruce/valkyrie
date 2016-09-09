@@ -67,6 +67,19 @@ public class Quest
         game.moraleDisplay.Update();
     }
 
+    public Hero GetRandomHero()
+    {
+        List<Hero> hList = new List<Hero>();
+        foreach (Hero h in heroes)
+        {
+            if (h.heroData != null)
+            {
+                hList.Add(h);
+            }
+        }
+        return hList[Random.Range(0, hList.Count)];
+    }
+
     public void Add(string[] names)
     {
         foreach (string s in names)
@@ -386,7 +399,7 @@ public class Quest
         public string uniqueText = "";
         public string uniqueTitle = "";
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
-        public ActivationData currentActivation;
+        public ActivationInstance currentActivation;
 
         // Initialise from monster event
         public Monster(EventManager.MonsterEvent monsterEvent)
@@ -395,6 +408,25 @@ public class Quest
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
+        }
+
+        public void NewActivation(ActivationData contentActivation)
+        {
+            currentActivation = new ActivationInstance(contentActivation, monsterData.name);
+        }
+
+        public class ActivationInstance
+        {
+            public ActivationData ad;
+            public string effect;
+
+            public ActivationInstance(ActivationData contentActivation, string monsterName)
+            {
+                ad = contentActivation;
+                effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                effect = effect.Replace("{1}", monsterName);
+                effect.Replace("\\n", "\n");
+            }
         }
     }
 }

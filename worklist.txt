@@ -1,13 +1,10 @@
 Done:
 Fixed some tiles incorrect positioning
 auto camera pan to outside limits
+{0}/{1} in activations
 
 Now:
 Threat/peril (start with all required event extensions)
-
-{0}/{1} in activations
-0 = random hero
-1 = group
 
 Later:
 catch all parse exceptions
