@@ -65,20 +65,21 @@ public class MonsterDialog
             game.quest.flags.Remove("#monsters");
         }
 
-        EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);
+        game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         if (monster.unique)
         {
-            EventHelper.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
         }
     }
 
     // Unique Defeated (others still around)
     public void UniqueDefeated()
     {
+        Game game = Game.Get();
         Destroy();
         monster.unique = false;
-        Game.Get().monsterCanvas.UpdateStatus();
-        EventHelper.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+        game.monsterCanvas.UpdateStatus();
+        game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
     }
 
     // Cancel cleans up

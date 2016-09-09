@@ -165,8 +165,9 @@ public class RoundHelper {
 
     public static void EndRound()
     {
-        EventHelper.EventTriggerType("EndRound" + Game.Get().round.round);
-        EventHelper.EventTriggerType("EndRound");
+        Game game = Game.Get();
+        game.quest.eManager.EventTriggerType("EndRound" + Game.Get().round.round);
+        game.quest.eManager.EventTriggerType("EndRound");
         CheckNewRound();
     }
 
@@ -175,7 +176,7 @@ public class RoundHelper {
 
         Game game = Game.Get();
 
-        if (game.round.eventList.Count != 0)
+        if (game.quest.eManager.eventStack.Count != 0)
             return;
 
         // Check if all heros have finished

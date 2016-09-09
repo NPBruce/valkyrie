@@ -7,13 +7,10 @@ public class Round
     public List<Monster> monsters;
     public int round = 1;
     public bool heroesSelected = false;
-    public Stack<QuestData.Event> eventList;
     public int morale;
 
     public Round()
     {
-        eventList = new Stack<QuestData.Event>();
-
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
         for (int i = 1; i < 5; i++)
@@ -35,7 +32,7 @@ public class Round
         {
             morale = 0;
             game.moraleDisplay.Update();
-            EventHelper.EventTriggerType("NoMorale");
+            game.quest.eManager.EventTriggerType("NoMorale");
         }
         game.moraleDisplay.Update();
     }
@@ -73,12 +70,12 @@ public class Round
         public ActivationData currentActivation;
 
         // Initialise from monster event
-        public Monster(QuestData.Monster m)
+        public Monster(EventManager.MonsterEvent monsterEvent)
         {
-            monsterData = m.mData;
-            unique = m.unique;
-            uniqueTitle = m.uniqueTitle;
-            uniqueText = m.uniqueText;
+            monsterData = monsterEvent.cMonster;
+            unique = monsterEvent.qMonster.unique;
+            uniqueTitle = monsterEvent.GetUniqueTitle();
+            uniqueText = monsterEvent.qMonster.uniqueText;
         }
     }
 }

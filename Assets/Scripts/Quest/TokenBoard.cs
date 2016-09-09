@@ -49,7 +49,7 @@ public class TokenBoard : MonoBehaviour {
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            new DialogWindow(c.GetEvent());
+            Game.Get().quest.eManager.QueueEvent(c.GetEvent().name);
         }
 
     }

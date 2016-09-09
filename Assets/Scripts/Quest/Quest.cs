@@ -18,15 +18,23 @@ public class Quest
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Round.Hero>> heroSelection;
 
+    // Event manager handles the events
+    public EventManager eManager;
+
     public Game game;
 
     public Quest(QuestLoader.Quest q)
     {
         game = Game.Get();
+
+        // This happens anyway but we need it to be here before the following code is executed
+        game.quest = this;
+
         qd = new QuestData(q);
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
         heroSelection = new Dictionary<string, List<Round.Hero>>();
+        eManager = new EventManager();
     }
 
     public void Add(string[] names)

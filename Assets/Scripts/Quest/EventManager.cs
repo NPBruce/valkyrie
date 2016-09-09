@@ -1,191 +1,305 @@
-﻿/*using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-class EventManager
+public class EventManager
 {
-}
+    // A dictionary of events
+    public Dictionary<string, Event> events;
 
+    public Stack<Event> eventStack;
 
+    public Game game;
 
-// Doors are like tokens but placed differently and have different defaults
-public class Door : Event
-{
-    public GameObject doorObject;
-    public QuestData.Door qDoor;
+    public Event currentEvent;
 
-    public Door(QuestData.Door questDoor, Game gameObject) : base(questDoor, gameObject)
+    public EventManager()
     {
-        qDoor = questDoor;
-        Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
-        // Check load worked
-        if (newTex == null)
+        game = Game.Get();
+
+        events = new Dictionary<string, Event>();
+        eventStack = new Stack<Event>();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            Debug.Log("Error: Cannot load door image");
-            Application.Quit();
-        }
-
-        // Create object
-        doorObject = new GameObject("Object" + qDoor.name);
-        doorObject.tag = "board";
-
-        doorObject.transform.parent = game.tokenCanvas.transform;
-
-        // Create the image
-        image = doorObject.AddComponent<UnityEngine.UI.Image>();
-        Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        // Set door colour
-        image.color = new Color(qDoor.colour[0], qDoor.colour[1], qDoor.colour[2], 1);
-        image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
-        // Rotate as required
-        doorObject.transform.RotateAround(Vector3.zero, Vector3.forward, qDoor.rotation);
-        // Move to square (105 units per square)
-        doorObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-        doorObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0) * 105, Space.World);
-
-        game.tokenBoard.add(qDoor);
-    }
-
-    ~Door()
-    {
-        Object.Destroy(doorObject);
-    }
-}
-
-// Tokens are events that are tied to a token placed on the board
-public class Token : Event
-{
-
-    public GameObject tokenObject;
-    public QuestData.Token qToken;
-
-    public Token(QuestData.Token questToken, Game gameObject) : base(questToken, gameObject)
-    {
-        qToken = questToken;
-
-        Texture2D newTex = Resources.Load("sprites/tokens/" + qToken.spriteName) as Texture2D;
-        // Check if we can find the token image
-        if (newTex == null)
-        {
-            Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + qToken.spriteName);
-            // Use search token instead
-            newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
-            // If we still can't load it then fatal error
-            if (newTex == null)
+            if (kv.Value is QuestData.Event)
             {
-                Debug.Log("Error: Cannot load search token \"sprites/tokens/search-token\"");
-                Application.Quit();
-            }
-        }
-
-        // Create object
-        tokenObject = new GameObject("Object" + qToken.name);
-        tokenObject.tag = "board";
-
-        tokenObject.transform.parent = game.tokenCanvas.transform;
-
-        // Create the image
-        image = tokenObject.AddComponent<UnityEngine.UI.Image>();
-        Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        image.color = Color.white;
-        image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
-        // Move to square (105 units per square)
-        tokenObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0) * 105, Space.World);
-
-        game.tokenBoard.add(qToken);
-    }
-
-    ~Token()
-    {
-        Object.Destroy(tokenObject);
-    }
-}
-
-
-// Monster items are monster group placement events
-public class Monster : Event
-{
-    public QuestData.Monster qMonster;
-    public MonsterData cMonster;
-
-    public Monster(QuestData.Monster monster, Game gameObject) : base(monster, gameObject)
-    {
-        qMonster = monster;
-        // Next try to find a type that is valid
-        foreach (string t in qMonster.mTypes)
-        {
-            // Monster type must exist in content packs, 'Monster' is optional
-            if (game.cd.monsters.ContainsKey(t))
-            {
-                cMonster = game.cd.monsters[t];
-            }
-            else if (game.cd.monsters.ContainsKey("Monster" + t))
-            {
-                cMonster = game.cd.monsters["Monster" + t];
-            }
-        }
-
-        // If we didn't find anything try by trait
-        if (cMonster == null)
-        {
-            if (qMonster.mTraits.Length == 0)
-            {
-                Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
-                Application.Quit();
-            }
-
-            List<MonsterData> list = new List<MonsterData>();
-            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-            {
-                bool allFound = true;
-                foreach (string t in qMonster.mTraits)
+                if (kv.Value is QuestData.Monster)
                 {
-                    if (!cMonster.ContainsTrait(t))
+                    events.Add(kv.Key, new MonsterEvent(kv.Key));
+                }
+                else
+                {
+                    events.Add(kv.Key, new Event(kv.Key));
+                }
+            }
+        }
+    }
+
+    public void EventTriggerType(string type)
+    {
+        foreach (KeyValuePair<string, Event> kv in events)
+        {
+            if (kv.Value.qEvent.trigger.Equals(type))
+            {
+                QueueEvent(kv.Key);
+            }
+        }
+    }
+
+    public void QueueEvent(string name)
+    {
+        // Check if the event doesn't exists - quest fault
+        if (!events.ContainsKey(name))
+        {
+            Debug.Log("Warning: Missing event called: " + name);
+            return;
+        }
+
+        // Don't queue disabled events
+        if (events[name].Disabled()) return;
+
+        if (eventStack.Count == 0)
+        {
+            eventStack.Push(events[name]);
+            TriggerEvent();
+        }
+        else
+        {
+            // If there is something in the stack then insert this as the second item
+            Event e = eventStack.Pop();
+            eventStack.Push(events[name]);
+            eventStack.Push(e);
+        }
+    }
+
+    public void TriggerEvent()
+    {
+        RoundHelper.CheckNewRound();
+
+        if (eventStack.Count == 0) return;
+
+        Event e = eventStack.Pop();
+        currentEvent = e;
+
+        // Event may have been disabled since added
+        if (e.Disabled()) return;
+
+        // Add set flags
+        foreach (string s in e.qEvent.setFlags)
+        {
+            Debug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
+            game.quest.flags.Add(s);
+        }
+
+        // Remove clear flags
+        foreach (string s in e.qEvent.clearFlags)
+        {
+            Debug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
+            game.quest.flags.Remove(s);
+        }
+
+        // If a dialog window is open we force it closed (this shouldn't happen)
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            Object.Destroy(go);
+
+        // If this is a monster event then add the monster group
+        if (e is MonsterEvent)
+        {
+            // Set monster tag if not already
+            game.quest.flags.Add("#monsters");
+
+            MonsterEvent qe = (MonsterEvent)e;
+
+            // Is this type new?
+            Round.Monster oldMonster = null;
+            foreach (Round.Monster m in game.round.monsters)
+            {
+                if (m.monsterData.name.Equals(qe.cMonster.name))
+                {
+                    oldMonster = m;
+                }
+            }
+            // Add the new type
+            if (oldMonster == null)
+            {
+                game.round.monsters.Add(new Round.Monster(qe));
+                game.monsterCanvas.UpdateList();
+            }
+            // There is an existing tpye, but now it is unique
+            else if (qe.qMonster.unique)
+            {
+                oldMonster.unique = true;
+                oldMonster.uniqueText = qe.qMonster.uniqueText;
+                oldMonster.uniqueTitle = qe.GetUniqueTitle();
+            }
+
+            // Display the location
+            game.tokenBoard.AddMonster(qe.qMonster);
+        }
+
+        if (e.qEvent.highlight)
+        {
+            game.tokenBoard.AddHighlight(e.qEvent);
+        }
+
+        new DialogWindow(e);
+        game.quest.Add(e.qEvent.addComponents);
+        game.quest.Remove(e.qEvent.removeComponents);
+
+        if (e.qEvent.locationSpecified)
+        {
+            CameraController.SetCamera(e.qEvent.location);
+        }
+    }
+
+    public class Event
+    {
+        public Game game;
+        public QuestData.Event qEvent;
+
+        public Event(string name)
+        {
+            game = Game.Get();
+            qEvent = game.quest.qd.components[name] as QuestData.Event;
+        }
+        virtual public string GetText()
+        {
+            return SymbolReplace(qEvent.text).Replace("\\n", "\n");
+        }
+
+        public bool ConfirmPresent()
+        {
+            if (!(qEvent is QuestData.Token)) return true;
+            if (!(qEvent is QuestData.Door)) return true;
+            foreach (string s in qEvent.nextEvent)
+            {
+                if (!game.quest.eManager.events[s].Disabled()) return true;
+            }
+            return false;
+        }
+
+        public bool FailPresent()
+        {
+            return (qEvent.failEvent.Length != 0);
+        }
+
+        public string GetPass()
+        {
+            if (!qEvent.confirmText.Equals("")) return qEvent.confirmText;
+            if (qEvent.failEvent.Length == 0) return "Confirm";
+            return "Pass";
+        }
+        public string GetFail()
+        {
+            if (!qEvent.failText.Equals("")) return qEvent.failText;
+            return "Fail";
+        }
+
+        public Color GetPassColor()
+        {
+            if (GetPass().Equals("Pass")) return Color.green;
+            return Color.white;
+        }
+
+        public Color GetFailColor()
+        {
+            if (GetFail().Equals("Fail")) return Color.red;
+            return Color.white;
+        }
+
+        public bool Disabled()
+        {
+            foreach (string s in qEvent.flags)
+            {
+                if (!game.quest.flags.Contains(s))
+                    return true;
+            }
+            return false;
+        }
+
+        public Event Next()
+        {
+            return null;
+        }
+
+        public Event NextFail()
+        {
+            return null;
+        }
+    }
+
+    public class MonsterEvent : Event
+    {
+        public QuestData.Monster qMonster;
+        public MonsterData cMonster;
+
+        public MonsterEvent(string name) : base(name)
+        {
+            qMonster = qEvent as QuestData.Monster;
+            // Next try to find a type that is valid
+            foreach (string t in qMonster.mTypes)
+            {
+                // Monster type must exist in content packs, 'Monster' is optional
+                if (game.cd.monsters.ContainsKey(t))
+                {
+                    cMonster = game.cd.monsters[t];
+                }
+                else if (game.cd.monsters.ContainsKey("Monster" + t))
+                {
+                    cMonster = game.cd.monsters["Monster" + t];
+                }
+            }
+
+            // If we didn't find anything try by trait
+            if (cMonster == null)
+            {
+                if (qMonster.mTraits.Length == 0)
+                {
+                    Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
+                    Application.Quit();
+                }
+
+                List<MonsterData> list = new List<MonsterData>();
+                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+                {
+                    bool allFound = true;
+                    foreach (string t in qMonster.mTraits)
                     {
-                        allFound = false;
+                        if (!kv.Value.ContainsTrait(t))
+                        {
+                            allFound = false;
+                        }
+                    }
+                    if (allFound)
+                    {
+                        list.Add(kv.Value);
                     }
                 }
-                if (allFound)
+
+                // Not found, throw error
+                if (list.Count == 0)
                 {
-                    list.Add(kv.Value);
+                    Debug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
+                    Application.Quit();
                 }
-            }
 
-            // Not found, throw error
-            if (list.Count == 0)
-            {
-                Debug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
-                Application.Quit();
+                cMonster = list[Random.Range(0, list.Count)];
             }
-
-            cMonster = list[Random.Range(0, list.Count)];
         }
-    }
 
-    override public string GetText()
-    {
-        return base.GetText().Replace("{type}", cMonster.name);
-    }
+        override public string GetText()
+        {
+            return base.GetText().Replace("{type}", cMonster.name);
+        }
 
-    public string GetUniqueTitle()
-    {
-        return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
-    }
-}
-
-// Events are used to create dialogs that control the quest
-public class Event : QuestComponent
-{
-    public QuestData.Event qEvent;
-
-    public Event(QuestData.Event questEvent, Game gameObject) : base(gameObject)
-    {
-        qEvent = questEvent;
-    }
-
-    virtual public string GetText()
-    {
-        return SymbolReplace(qEvent.text);
+        public string GetUniqueTitle()
+        {
+            if (qMonster.uniqueTitle.Equals(""))
+            {
+                return "Master " + cMonster.name;
+            }
+            return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
+        }
     }
 
     public static string SymbolReplace(string input)
@@ -204,4 +318,3 @@ public class Event : QuestComponent
     }
 
 }
-*/

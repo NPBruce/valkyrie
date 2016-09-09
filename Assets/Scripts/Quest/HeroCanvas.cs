@@ -119,7 +119,7 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
-            if (game.round.eventList.Count > 0 && game.round.eventList.Peek().maxHeroes != 0)
+            if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
             {
                 target.selected = !target.selected;
                 UpdateStatus();
@@ -176,6 +176,6 @@ public class HeroCanvas : MonoBehaviour {
         // Create the menu button
         new MenuButton();
 
-        EventHelper.EventTriggerType("EventStart");
+        game.quest.eManager.EventTriggerType("EventStart");
     }
 }
