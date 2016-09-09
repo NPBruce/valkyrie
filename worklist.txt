@@ -4,9 +4,16 @@ auto camera pan to outside limits
 {0}/{1} in activations
 
 Now:
+{rnd:hero}
+{rnd:1:4}
+#2hero tags
+event for current round +x (delayedEvent=2:EventNext)
+
+
 Threat/peril (start with all required event extensions)
 
 Later:
+event log
 catch all parse exceptions
 text editing sucks (text wrap?)
 frame color for portraits Frame_Monster_1x1.dds (color rotation?)

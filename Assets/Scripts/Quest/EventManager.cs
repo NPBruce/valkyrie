@@ -171,6 +171,18 @@ public class EventManager
                 text = "You can open this door with an \"Open Door\" action.";
             }
 
+            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name);
+
+            int index = text.IndexOf("{rnd:");
+            while (index != -1)
+            {
+                string rand = text.Substring(index, text.IndexOf("}", index) - index);
+                int separator = rand.IndexOf(":");
+                int min = int.Parse(rand.Substring(5, separator - 5));
+                int max = int.Parse(rand.Substring(separator + 1, text.Length - separator - 2));
+                text = text.Replace(rand, Random.Range(min, max + 1).ToString());
+            }
+
             return SymbolReplace(text).Replace("\\n", "\n");
         }
 
