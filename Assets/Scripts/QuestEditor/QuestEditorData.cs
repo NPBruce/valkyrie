@@ -510,7 +510,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
         db.ApplyTag("editor");
 
-        dbe1 = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitleOriginal, delegate { UpdateUniqueTitle(); });
+        dbe1 = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitle, delegate { UpdateUniqueTitle(); });
         dbe1.ApplyTag("editor");
         dbe1.AddBorder();
 
@@ -590,7 +590,7 @@ public class QuestEditorData {
     public void UpdateUniqueTitle()
     {
         QuestData.Monster m = selection as QuestData.Monster;
-        m.uniqueTitleOriginal = dbe1.uiInput.text;
+        m.uniqueTitle = dbe1.uiInput.text;
     }
 
     public void UpdateUniqueText()

@@ -54,7 +54,7 @@ public class TokenBoard : MonoBehaviour {
 
     }
 
-    public void AddMonster(QuestData.Monster m)
+    public void AddMonster(EventManager.MonsterEvent me)
     {
         Game game = Game.Get();
         int count = 0;
@@ -63,19 +63,19 @@ public class TokenBoard : MonoBehaviour {
             if (h.heroData != null) count++;
         }
 
-        if (m.placement[count].Length == 0)
+        if (me.qMonster.placement[count].Length == 0)
         {
-            AddAreaMonster(m);
+            AddAreaMonster(me.qMonster);
         }
         else
         {
-            AddPlacedMonsters(m, count);
+            AddPlacedMonsters(me, count);
         }
     }
 
-    public void AddPlacedMonsters(QuestData.Monster m, int count)
+    public void AddPlacedMonsters(EventManager.MonsterEvent me, int count)
     {
-        Texture2D newTex = ContentData.FileToTexture(m.mData.imagePlace);
+        Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
 
         // Check load worked
         if (newTex == null)
@@ -87,20 +87,20 @@ public class TokenBoard : MonoBehaviour {
         int x = 1;
         int y = 1;
 
-        if (m.mData.ContainsTrait("medium") || m.mData.ContainsTrait("huge"))
+        if (me.cMonster.ContainsTrait("medium") || me.cMonster.ContainsTrait("huge"))
         {
             x = 2;
         }
-        if (m.mData.ContainsTrait("huge") || m.mData.ContainsTrait("massive"))
+        if (me.cMonster.ContainsTrait("huge") || me.cMonster.ContainsTrait("massive"))
         {
             y = 2;
         }
-        if (m.mData.ContainsTrait("massive"))
+        if (me.cMonster.ContainsTrait("massive"))
         {
             x = 3;
         }
 
-        foreach (string s in m.placement[count])
+        foreach (string s in me.qMonster.placement[count])
         {
             AddPlacedMonsterImg(s, newTex, x, y);
         }

@@ -223,11 +223,6 @@ public class QuestData
             {
                 colourName = data["color"];
             }
-
-            if (text.Equals(""))
-            {
-                text = "You can open this door with an \"Open Door\" action.";
-            }
         }
 
         override public string ToString()
@@ -294,11 +289,9 @@ public class QuestData
     public class Monster : Event
     {
         new public static string type = "Monster";
-        public MonsterData mData;
         public string[][] placement;
         public bool unique = false;
         public string uniqueTitle = "";
-        public string uniqueTitleOriginal = "";
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
@@ -308,12 +301,11 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
+            mTypes = new string[1];
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
-                mData = kv.Value;
+                mTypes[0] = kv.Key;
             }
-            mTypes = new string[1];
-            mTypes[0] = mData.sectionName;
             mTraits = new string[0];
 
             placement = new string[5][];
@@ -337,63 +329,10 @@ public class QuestData
                 mTypes = new string[0];
             }
 
-            // Next try to find a type that is valid
-            foreach (string t in mTypes)
+            if (data.ContainsKey("traits"))
             {
-                // Monster type must exist in content packs, 'Monster' is optional
-                if (game.cd.monsters.ContainsKey(t) && mData == null)
-                {
-                    mData = game.cd.monsters[t];
-                }
-                else if (game.cd.monsters.ContainsKey("Monster" + t) && mData == null)
-                {
-                    mData = game.cd.monsters["Monster" + t];
-                }
+                mTraits = data["traits"].Split(' ');
             }
-
-            // If we didn't find anything try by trait
-            mTraits = new string[0];
-            if (mData == null)
-            {
-                if (data.ContainsKey("traits"))
-                {
-                    mTraits = data["traits"].Split(' ');
-                }
-                else
-                {
-                    Debug.Log("Error: Cannot find monster and no traits provided: " + data["monster"] + " specified in event: " + name);
-                    Application.Quit();
-                }
-
-                List<MonsterData> list = new List<MonsterData>();
-                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-                {
-                    bool allFound = true;
-                    foreach (string t in mTraits)
-                    {
-                        bool found = false;
-                        foreach (string mt in kv.Value.traits)
-                        {
-                            if (mt.Equals(t)) found = true;
-                        }
-                        if (found == false) allFound = false;
-                    }
-                    if (allFound)
-                    {
-                        list.Add(kv.Value);
-                    }
-                }
-
-                // Not found, throw error
-                if (list.Count == 0)
-                {
-                    Debug.Log("Error: Unable to find monster of traits specified in event: " + name);
-                    Application.Quit();
-                }
-
-                mData = list[Random.Range(0, list.Count)];
-            }
-            text = text.Replace("{type}", mData.name);
 
             placement = new string[5][];
             for (int i = 0; i < placement.Length; i++)
@@ -411,12 +350,7 @@ public class QuestData
             }
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitleOriginal = data["uniquetitle"];
-                uniqueTitle = uniqueTitleOriginal.Replace("{type}", mData.name);
-            }
-            if (uniqueTitle.Equals(""))
-            {
-                uniqueTitle = "Master " + mData.name;
+                uniqueTitle = data["uniquetitle"];
             }
             if (data.ContainsKey("uniquetext"))
             {
@@ -482,9 +416,9 @@ public class QuestData
             {
                 r += "unique=true" + nl;
             }
-            if (!uniqueTitleOriginal.Equals(""))
+            if (!uniqueTitle.Equals(""))
             {
-                r += "uniquetitle=\"" + uniqueTitleOriginal + "\"" + nl;
+                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
             }
             if (!uniqueText.Equals(""))
             {

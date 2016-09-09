@@ -134,7 +134,7 @@ public class EventManager
             }
 
             // Display the location
-            game.tokenBoard.AddMonster(qe.qMonster);
+            game.tokenBoard.AddMonster(qe);
         }
 
         if (e.qEvent.highlight)
@@ -164,7 +164,14 @@ public class EventManager
         }
         virtual public string GetText()
         {
-            return SymbolReplace(qEvent.text).Replace("\\n", "\n");
+            string text = qEvent.text;
+
+            if (qEvent is QuestData.Door && text.Length == 0)
+            {
+                text = "You can open this door with an \"Open Door\" action.";
+            }
+
+            return SymbolReplace(text).Replace("\\n", "\n");
         }
 
         public bool ConfirmPresent()
