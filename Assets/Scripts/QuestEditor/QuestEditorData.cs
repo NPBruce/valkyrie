@@ -235,6 +235,8 @@ public class QuestEditorData {
         {
             selection.location = CameraController.GetMouseTile();
             gettingPosition = false;
+            Game.Get().quest.Remove(selection.name);
+            Game.Get().quest.Add(selection.name);
             SelectComponent(selection.name);
         }
         if (gettingMaxPosition)
@@ -455,6 +457,8 @@ public class QuestEditorData {
     {
         QuestData.Token t = selection as QuestData.Token;
         t.spriteName = esl.selection;
+        Game.Get().quest.Remove(t.name);
+        Game.Get().quest.Add(t.name);
         SelectComponent(t.name);
     }
 
@@ -1794,6 +1798,8 @@ public class QuestEditorData {
         {
             d.rotation = 0;
         }
+        Game.Get().quest.Remove(d.name);
+        Game.Get().quest.Add(d.name);
         SelectDoor(d.name);
     }
 
@@ -1850,6 +1856,7 @@ public class QuestEditorData {
             index++;
         }
         game.qd.components.Add("Tile" + index, new QuestData.Tile("Tile" + index));
+        game.quest.Add("Tile" + index);
         SelectComponent("Tile" + index);
     }
 
@@ -1885,6 +1892,7 @@ public class QuestEditorData {
             index++;
         }
         game.qd.components.Add("Door" + index, new QuestData.Door("Door" + index));
+        game.quest.Add("Door" + index);
         SelectComponent("Door" + index);
     }
 
@@ -1920,6 +1928,7 @@ public class QuestEditorData {
             index++;
         }
         game.qd.components.Add("Token" + index, new QuestData.Token("Token" + index));
+        game.quest.Add("Token" + index);
         SelectComponent("Token" + index);
     }
 
