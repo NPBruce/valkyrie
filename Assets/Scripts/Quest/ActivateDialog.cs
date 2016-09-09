@@ -4,11 +4,11 @@ using System.Collections;
 // Window with Monster activation
 public class ActivateDialog {
     // The even that raises this dialog
-    public Round.Monster monster;
+    public Quest.Monster monster;
     public bool master;
 
     // Create an activation window, if master is false then it is for minions
-    public ActivateDialog(Round.Monster m, bool masterIn)
+    public ActivateDialog(Quest.Monster m, bool masterIn)
     {
         monster = m;
         master = masterIn;

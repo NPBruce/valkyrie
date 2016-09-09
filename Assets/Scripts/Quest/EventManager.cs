@@ -111,8 +111,8 @@ public class EventManager
             MonsterEvent qe = (MonsterEvent)e;
 
             // Is this type new?
-            Round.Monster oldMonster = null;
-            foreach (Round.Monster m in game.round.monsters)
+            Quest.Monster oldMonster = null;
+            foreach (Quest.Monster m in game.quest.monsters)
             {
                 if (m.monsterData.name.Equals(qe.cMonster.name))
                 {
@@ -122,7 +122,7 @@ public class EventManager
             // Add the new type
             if (oldMonster == null)
             {
-                game.round.monsters.Add(new Round.Monster(qe));
+                game.quest.monsters.Add(new Quest.Monster(qe));
                 game.monsterCanvas.UpdateList();
             }
             // There is an existing tpye, but now it is unique

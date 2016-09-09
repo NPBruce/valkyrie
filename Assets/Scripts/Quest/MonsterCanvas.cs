@@ -21,13 +21,13 @@ public class MonsterCanvas : MonoBehaviour
         icons = new Dictionary<string, UnityEngine.UI.Image>();
 
         Game game = Game.Get();
-        foreach (Round.Monster m in game.round.monsters)
+        foreach (Quest.Monster m in game.quest.monsters)
             AddMonster(m, game);
 
         UpdateStatus();
     }
 
-    void AddMonster(Round.Monster m, Game game)
+    void AddMonster(Quest.Monster m, Game game)
     {
         Sprite mSprite;
 
@@ -58,7 +58,7 @@ public class MonsterCanvas : MonoBehaviour
     public void UpdateStatus()
     {
         Game game = Game.Get();
-        foreach (Round.Monster m in game.round.monsters)
+        foreach (Quest.Monster m in game.quest.monsters)
         {
             UnityEngine.UI.Image image = icons[m.monsterData.name];
             if (m.activated && m.unique)
@@ -87,7 +87,7 @@ public class MonsterCanvas : MonoBehaviour
             return;
 
         Game game = Game.Get();
-        foreach (Round.Monster m in game.round.monsters)
+        foreach (Quest.Monster m in game.quest.monsters)
         {
             if (name.Equals(m.monsterData.name))
                 new MonsterDialog(m);

@@ -16,10 +16,13 @@ public class Quest
     public HashSet<string> flags;
 
     // A dictionary of heros that have been selected in events
-    public Dictionary<string, List<Round.Hero>> heroSelection;
+    public Dictionary<string, List<Quest.Hero>> heroSelection;
 
     // Event manager handles the events
     public EventManager eManager;
+
+    public List<Hero> heroes;
+    public List<Monster> monsters;
 
     public Game game;
 
@@ -33,8 +36,16 @@ public class Quest
         qd = new QuestData(q);
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
-        heroSelection = new Dictionary<string, List<Round.Hero>>();
+        monsters = new List<Monster>();
+        heroSelection = new Dictionary<string, List<Quest.Hero>>();
         eManager = new EventManager();
+
+        // Populate null hero list, these can then be selected as hero types
+        heroes = new List<Hero>();
+        for (int i = 1; i < 5; i++)
+        {
+            heroes.Add(new Hero(null, i));
+        }
     }
 
     public void Add(string[] names)
@@ -323,6 +334,48 @@ public class Quest
             if (image == null)
                 return;
             image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+        }
+    }
+
+    // Class for holding current hero status
+    public class Hero
+    {
+        // This can be null if not selected
+        public HeroData heroData;
+        public bool activated = false;
+        public bool defeated = false;
+        //  Heros are in a list so they need ID... maybe at some point this can move to an array
+        public int id = 0;
+        // Used for events that can select or highlight heros
+        public bool selected;
+
+        public Hero(HeroData h, int i)
+        {
+            heroData = h;
+            id = i;
+        }
+    }
+
+    // Class for holding current monster status
+    public class Monster
+    {
+        public MonsterData monsterData;
+        public bool activated = false;
+        public bool minionStarted = false;
+        public bool masterStarted = false;
+        public bool unique = false;
+        public string uniqueText = "";
+        public string uniqueTitle = "";
+        // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
+        public ActivationData currentActivation;
+
+        // Initialise from monster event
+        public Monster(EventManager.MonsterEvent monsterEvent)
+        {
+            monsterData = monsterEvent.cMonster;
+            unique = monsterEvent.qMonster.unique;
+            uniqueTitle = monsterEvent.GetUniqueTitle();
+            uniqueText = monsterEvent.qMonster.uniqueText;
         }
     }
 }

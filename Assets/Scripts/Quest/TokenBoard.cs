@@ -58,7 +58,7 @@ public class TokenBoard : MonoBehaviour {
     {
         Game game = Game.Get();
         int count = 0;
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null) count++;
         }

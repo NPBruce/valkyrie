@@ -107,7 +107,7 @@ public class Game : MonoBehaviour {
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Round.Hero h in round.heroes)
+        foreach (Quest.Hero h in Game.Get().quest.heroes)
         {
             if (h.heroData != null) count++;
         }

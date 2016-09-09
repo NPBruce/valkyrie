@@ -3,7 +3,7 @@ using System.Collections;
 
 public class InfoDialog {
 
-    public InfoDialog(Round.Monster m)
+    public InfoDialog(Quest.Monster m)
     {
         if (m == null)
         {
