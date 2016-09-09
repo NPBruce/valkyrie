@@ -91,7 +91,7 @@ public class Game : MonoBehaviour {
         }
 
         // Fetch all of the quest data
-        quest = new Quest(q, this);
+        quest = new Quest(q);
 
         round = new Round();
 

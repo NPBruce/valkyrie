@@ -1,10 +1,11 @@
 Done:
 Fixed some tiles incorrect positioning
+auto camera pan to outside limits
 
 Now:
 Threat/peril (start with all required event extensions)
-{0}/{1} in activations
 
+{0}/{1} in activations
 0 = random hero
 1 = group
 

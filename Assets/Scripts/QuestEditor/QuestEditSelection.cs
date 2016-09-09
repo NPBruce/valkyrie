@@ -263,6 +263,7 @@ public class QuestEditSelection
         }
         else
         {
+            game.quest = new Quest(questList[key]);
             QuestEditor.Begin();
         }
     }

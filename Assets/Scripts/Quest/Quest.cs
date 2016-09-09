@@ -20,9 +20,9 @@ public class Quest
 
     public Game game;
 
-    public Quest(QuestLoader.Quest q, Game gameObject)
+    public Quest(QuestLoader.Quest q)
     {
-        game = gameObject;
+        game = Game.Get();
         qd = new QuestData(q);
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();

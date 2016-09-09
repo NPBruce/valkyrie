@@ -32,6 +32,9 @@ public class TokenBoard : MonoBehaviour {
         // Initialise from a door
         public TokenControl(Quest.BoardComponent component)
         {
+            // If we are in the editor we don't add the buttons
+            if (Game.Get().editMode) return;
+
             c = component;
             UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;

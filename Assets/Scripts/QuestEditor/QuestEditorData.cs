@@ -273,6 +273,11 @@ public class QuestEditorData {
         {
             t.rotation = 0;
         }
+
+        Game game = Game.Get();
+        game.quest.Remove(t.name);
+        game.quest.Add(t.name);
+
         SelectTile(t.name);
     }
 
@@ -337,6 +342,8 @@ public class QuestEditorData {
         {
             game.qd.components.Remove(esl.selection);
         }
+
+        game.quest.Remove(esl.selection);
         SelectQuest();
     }
 

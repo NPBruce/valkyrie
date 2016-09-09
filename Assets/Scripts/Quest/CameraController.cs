@@ -151,12 +151,11 @@ public class CameraController : MonoBehaviour {
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.targetSet = true;
-
-        if (pos.x < cc.minPanX) pos.x = cc.minPanX;
-        if (pos.y < cc.minPanY) pos.y = cc.minPanY;
-        if (pos.x > cc.maxPanX) pos.x = cc.maxPanX;
-        if (pos.y > cc.maxPanY) pos.y = cc.maxPanY;
-
         cc.camTarget = new Vector3(pos.x * 105, pos.y * 105, -800);
+
+        if (cc.camTarget.x < cc.minPanX) cc.camTarget.x = cc.minPanX;
+        if (cc.camTarget.y < cc.minPanY) cc.camTarget.y = cc.minPanY;
+        if (cc.camTarget.x > cc.maxPanX) cc.camTarget.x = cc.maxPanX;
+        if (cc.camTarget.y > cc.maxPanY) cc.camTarget.y = cc.maxPanY;
     }
 }
