@@ -8,7 +8,6 @@ public class Game : MonoBehaviour {
     public string version = "";
     public ContentData cd;
     public Quest quest;
-    public Round round;
     public Canvas uICanvas;
     public Canvas boardCanvas;
     public Canvas tokenCanvas;
@@ -82,8 +81,6 @@ public class Game : MonoBehaviour {
         // Fetch all of the quest data and initialise the quest
         quest = new Quest(q);
 
-        round = new Round();
-
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
 
@@ -112,7 +109,7 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        round.morale = count;
+        quest.morale = count;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }

@@ -57,7 +57,6 @@ public class Destroyer {
         game.cd = null;
         game.quest = null;
         game.qed = null;
-        game.round = null;
         game.moraleDisplay = null;
         if (game.tokenBoard.tc != null)
         {

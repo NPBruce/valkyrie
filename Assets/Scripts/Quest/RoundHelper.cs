@@ -166,7 +166,7 @@ public class RoundHelper {
     public static void EndRound()
     {
         Game game = Game.Get();
-        game.quest.eManager.EventTriggerType("EndRound" + Game.Get().round.round);
+        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round);
         game.quest.eManager.EventTriggerType("EndRound");
         CheckNewRound();
     }
@@ -202,7 +202,7 @@ public class RoundHelper {
             m.masterStarted = false;
             m.currentActivation = null;
         }
-        game.round.round++;
+        game.quest.round++;
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

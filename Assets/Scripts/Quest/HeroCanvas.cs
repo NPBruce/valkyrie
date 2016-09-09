@@ -127,11 +127,11 @@ public class HeroCanvas : MonoBehaviour {
             return;
         }
 
-        if (game.round.heroesSelected && target.heroData != null)
+        if (game.quest.heroesSelected && target.heroData != null)
         {
             new HeroDialog(target);
         }
-        if (!game.round.heroesSelected)
+        if (!game.quest.heroesSelected)
         {
             icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             new HeroSelection(target);
@@ -171,7 +171,7 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        game.round.heroesSelected = true;
+        game.quest.heroesSelected = true;
         game.moraleDisplay = new MoraleDisplay();
         // Create the menu button
         new MenuButton();

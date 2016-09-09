@@ -24,6 +24,11 @@ public class Quest
     public List<Hero> heroes;
     public List<Monster> monsters;
 
+    public int round = 1;
+    public int morale = 0;
+
+    public bool heroesSelected = false;
+
     public Game game;
 
     public Quest(QuestLoader.Quest q)
@@ -46,6 +51,20 @@ public class Quest
         {
             heroes.Add(new Hero(null, i));
         }
+    }
+
+    // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
+    public void AdjustMorale(int m)
+    {
+        Game game = Game.Get();
+        morale += m;
+        if (morale < 0)
+        {
+            morale = 0;
+            game.moraleDisplay.Update();
+            eManager.EventTriggerType("NoMorale");
+        }
+        game.moraleDisplay.Update();
     }
 
     public void Add(string[] names)
