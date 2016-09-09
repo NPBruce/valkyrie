@@ -62,7 +62,7 @@ public class MonsterDialog
         if (game.round.monsters.Count == 0)
         {
             // clear monster tag
-            game.qd.flags.Remove("#monsters");
+            game.quest.flags.Remove("#monsters");
         }
 
         EventHelper.EventTriggerType("Defeated" + monster.monsterData.sectionName);

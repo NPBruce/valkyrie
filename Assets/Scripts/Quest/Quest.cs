@@ -39,12 +39,12 @@ public class Quest
 
     public void Add(string name)
     {
-        if (!game.qd.components.ContainsKey(name))
+        if (!game.quest.qd.components.ContainsKey(name))
         {
             Debug.Log("Error: Unable to create missing quest component: " + name);
             Application.Quit();
         }
-        QuestData.QuestComponent qc = game.qd.components[name];
+        QuestData.QuestComponent qc = game.quest.qd.components[name];
 
         if (qc is QuestData.Tile)
         {

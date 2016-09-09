@@ -254,17 +254,7 @@ public class QuestEditSelection
         }
 
         // Fetch all of the quest data
-        game.qd = new QuestData(questList[key]);
-
-        if (game.qd == null)
-        {
-            Debug.Log("Error: Unable to load quest: " + key);
-            Application.Quit();
-        }
-        else
-        {
-            game.quest = new Quest(questList[key]);
-            QuestEditor.Begin();
-        }
+        game.quest = new Quest(questList[key]);
+        QuestEditor.Begin();
     }
 }

@@ -7,7 +7,6 @@ public class Game : MonoBehaviour {
 
     public string version = "";
     public ContentData cd;
-    public QuestData qd;
     public Quest quest;
     public Round round;
     public Canvas uICanvas;
@@ -80,17 +79,7 @@ public class Game : MonoBehaviour {
     // This is called when a quest is selected
     public void StartQuest(QuestLoader.Quest q)
     {
-        // Fetch all of the quest data
-        qd = new QuestData(q);
-
-        // This shouldn't happen!
-        if (qd == null)
-        {
-            Debug.Log("Error: Invalid Quest.");
-            Application.Quit();
-        }
-
-        // Fetch all of the quest data
+        // Fetch all of the quest data and initialise the quest
         quest = new Quest(q);
 
         round = new Round();

@@ -111,13 +111,13 @@ public class TokenBoard : MonoBehaviour {
         Game game = Game.Get();
         Sprite tileSprite;
 
-        if (!game.qd.components.ContainsKey(place))
+        if (!game.quest.qd.components.ContainsKey(place))
         {
             Debug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
         }
 
-        QuestData.MPlace mp = game.qd.components[place] as QuestData.MPlace;
+        QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
 
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn" + place);

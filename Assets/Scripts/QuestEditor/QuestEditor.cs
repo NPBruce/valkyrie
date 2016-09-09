@@ -27,11 +27,11 @@ public class QuestEditor {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
-        game.qd = new QuestData(game.qd.questPath);
+        game.quest.qd = new QuestData(game.quest.qd.questPath);
 
         game.quest.RemoveAll();
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             game.quest.Add(kv.Key);
         }
@@ -44,9 +44,9 @@ public class QuestEditor {
     {
         Game game = Game.Get();
         string content = "; Saved by version: " + game.version + System.Environment.NewLine;
-        content += game.qd.quest.ToString() + System.Environment.NewLine;
+        content += game.quest.qd.quest.ToString() + System.Environment.NewLine;
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             content += System.Environment.NewLine;
             content += kv.Value.ToString();
@@ -54,7 +54,7 @@ public class QuestEditor {
 
         try
         {
-            System.IO.File.WriteAllText(game.qd.questPath, content);
+            System.IO.File.WriteAllText(game.quest.qd.questPath, content);
         }
         catch (System.Exception)
         {

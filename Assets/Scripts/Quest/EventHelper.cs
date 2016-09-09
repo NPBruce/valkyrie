@@ -8,7 +8,7 @@ public class EventHelper {
     public static void EventTriggerType(string type)
     {
         Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> k in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> k in game.quest.qd.components)
         {
             QuestData.QuestComponent c = k.Value;
 
@@ -26,13 +26,13 @@ public class EventHelper {
     {
         Game game = Game.Get();
         // Check if the event doesn't exists - quest fault
-        if (!game.qd.components.ContainsKey(name))
+        if (!game.quest.qd.components.ContainsKey(name))
         {
             Debug.Log("Warning: Missing event called: " + name);
             return;
         }
 
-        QuestData.Event e = (QuestData.Event)game.qd.components[name];
+        QuestData.Event e = (QuestData.Event)game.quest.qd.components[name];
 
         if (game.round.eventList.Count == 0)
         {
@@ -51,7 +51,7 @@ public class EventHelper {
     {
         foreach (string s in e.flags)
         {
-            if (!Game.Get().qd.flags.Contains(s))
+            if (!Game.Get().quest.flags.Contains(s))
                 return false;
         }
         return true;
@@ -73,20 +73,20 @@ public class EventHelper {
         // Add set flags
         foreach (string s in e.setFlags)
         {
-            if (!game.qd.flags.Contains(s))
+            if (!game.quest.flags.Contains(s))
             {
                 Debug.Log("Notice: Setting quest flag: " + s);
-                game.qd.flags.Add(s);
+                game.quest.flags.Add(s);
             }
         }
 
         // Remove clear flags
         foreach (string s in e.clearFlags)
         {
-            if (game.qd.flags.Contains(s))
+            if (game.quest.flags.Contains(s))
             {
                 Debug.Log("Notice: Clearing quest flag: " + s);
-                game.qd.flags.Remove(s);
+                game.quest.flags.Remove(s);
             }
         }
 
@@ -99,7 +99,7 @@ public class EventHelper {
         if (e is QuestData.Monster)
         {
             // Set monster tag if not already
-            game.qd.flags.Add("#monsters");
+            game.quest.flags.Add("#monsters");
 
             QuestData.Monster qm = (QuestData.Monster)e;
 
@@ -149,18 +149,18 @@ public class EventHelper {
     {
         Game game = Game.Get();
         // Check if the event doesn't exists - quest fault
-        if (!game.qd.components.ContainsKey(name))
+        if (!game.quest.qd.components.ContainsKey(name))
         {
             Debug.Log("Warning: Missing event called: " + name);
             return false;
         }
 
-        QuestData.Event e = (QuestData.Event)game.qd.components[name];
+        QuestData.Event e = (QuestData.Event)game.quest.qd.components[name];
 
         // If the flags are not set do not trigger event
         foreach (string s in e.flags)
         {
-            if (!game.qd.flags.Contains(s))
+            if (!game.quest.flags.Contains(s))
                 return false;
         }
 

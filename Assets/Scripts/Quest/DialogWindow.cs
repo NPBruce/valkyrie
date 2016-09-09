@@ -19,13 +19,13 @@ public class DialogWindow {
 
         if (!eventData.heroListName.Equals(""))
         {
-            if (!game.qd.heroSelection.ContainsKey(eventData.heroListName))
+            if (!game.quest.heroSelection.ContainsKey(eventData.heroListName))
             {
                 Debug.Log("Warning: Hero selection in event: " + eventData.name + " from event " + eventData.heroListName + " with no data.");
             }
             else
             {
-                foreach (Round.Hero h in game.qd.heroSelection[eventData.heroListName])
+                foreach (Round.Hero h in game.quest.heroSelection[eventData.heroListName])
                 {
                     h.selected = true;
                 }
@@ -57,7 +57,7 @@ public class DialogWindow {
                 showConfirm = false;
                 foreach (string s in eventData.nextEvent)
                 {
-                    showConfirm |= EventHelper.EventEnabled(game.qd.components[s] as QuestData.Event);
+                    showConfirm |= EventHelper.EventEnabled(game.quest.qd.components[s] as QuestData.Event);
                 }
             }
             if (showConfirm)
@@ -145,11 +145,11 @@ public class DialogWindow {
             h.selected = false;
         }
 
-        if (game.qd.heroSelection.ContainsKey(eventData.name))
+        if (game.quest.heroSelection.ContainsKey(eventData.name))
         {
-            game.qd.heroSelection.Remove(eventData.name);
+            game.quest.heroSelection.Remove(eventData.name);
         }
-        game.qd.heroSelection.Add(eventData.name, heroList);
+        game.quest.heroSelection.Add(eventData.name, heroList);
 
         game.heroCanvas.UpdateStatus();
 
