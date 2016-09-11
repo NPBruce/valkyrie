@@ -136,4 +136,17 @@ public class Game : MonoBehaviour {
             qed.MouseDown();
         }
     }
+
+    public void CallAfterFrame(UnityEngine.Events.UnityAction call)
+    {
+        StartCoroutine(CallAfterFrameDelay(call));
+    }
+
+    private IEnumerator CallAfterFrameDelay(UnityEngine.Events.UnityAction call)
+    {
+        yield return new WaitForEndOfFrame();
+        // Fixme this is hacky
+        yield return new WaitForSeconds(1);
+        call();
+    }
 }

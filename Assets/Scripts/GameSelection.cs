@@ -5,7 +5,6 @@ public class GameSelection
 {
     FetchContent fcD2E;
     FetchContent fcMoM;
-    bool lockOut = false;
 
     // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
     public GameSelection()
@@ -37,12 +36,12 @@ public class GameSelection
         {
             if (fcD2E.NeedImport())
             {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Import Content", delegate { D2EImport(); });
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Import Content", delegate { Import("D2E"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
             else
             {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Reimport Content", delegate { D2EImport(); });
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Reimport Content", delegate { Import("D2E"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
         }
@@ -66,12 +65,12 @@ public class GameSelection
         {
             if (fcMoM.NeedImport())
             {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Import Content", delegate { MoMImport(); });
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Import Content", delegate { Import("MoM"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
             else
             {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Reimport Content", delegate { MoMImport(); });
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Reimport Content", delegate { Import("MoM"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
         }
@@ -87,7 +86,6 @@ public class GameSelection
     // Start quest
     public void D2E()
     {
-        if (lockOut) return;
         if (!fcD2E.NeedImport())
         {
             Game.Get().gameType = new D2EGameType();
@@ -95,19 +93,16 @@ public class GameSelection
         }
     }
 
-    public void D2EImport()
+    public void Import(string type)
     {
-        if (lockOut) return;
-        lockOut = true;
-        fcD2E.Import();
-        lockOut = false;
-        Destroyer.Dialog();
-        new GameSelection();
+        Destroyer.Destroy();
+        DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Importing...");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        Game.Get().CallAfterFrame(delegate { PerformImport(type); });
     }
 
     public void MoM()
     {
-        if (lockOut) return;
         if (!fcMoM.NeedImport())
         {
             Game.Get().gameType = new MoMGameType();
@@ -115,12 +110,16 @@ public class GameSelection
         }
     }
 
-    public void MoMImport()
+    private void PerformImport(string type)
     {
-        if (lockOut) return;
-        lockOut = true;
-        fcMoM.Import();
-        lockOut = false;
+        if (type.Equals("D2E"))
+        {
+            fcD2E.Import();
+        }
+        if (type.Equals("MoM"))
+        {
+            fcD2E.Import();
+        }
         Destroyer.Dialog();
         new GameSelection();
     }
