@@ -11,6 +11,7 @@ public class ContentData {
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
+    public Dictionary<string, TokenData> tokens;
 
     public static string ContentPath()
     {
@@ -39,6 +40,9 @@ public class ContentData {
 
         // This has all monster activations
         activations = new Dictionary<string, ActivationData>();
+
+        // This has all available tokens
+        tokens = new Dictionary<string, TokenData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentDirectories = Directory.GetDirectories(path);
@@ -225,6 +229,26 @@ public class ContentData {
                 activations.Add(name, d);
             }
         }
+
+        // Is this a "Token" entry?
+        if (name.IndexOf(TokenData.type) == 0)
+        {
+            TokenData d = new TokenData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!tokens.ContainsKey(d.name))
+            {
+                tokens.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (tokens[d.name].priority < d.priority)
+            {
+                tokens.Remove(name);
+                tokens.Add(name, d);
+            }
+        }
     }
 
     // Holding class for contentpack data
@@ -406,6 +430,43 @@ public class ActivationData : GenericData
         {
             minionFirst = bool.Parse(content["minionfirst"]);
         }
+    }
+}
+
+// Class for Token data
+public class TokenData : GenericData
+{
+    public int x = 0;
+    public int y = 0;
+    public int height = 0;
+    public int width = 0;
+    public static new string type = "Token";
+
+    public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        if (content.ContainsKey("x"))
+        {
+            x = int.Parse(content["x"]);
+        }
+        if (content.ContainsKey("y"))
+        {
+            y = int.Parse(content["y"]);
+        }
+        if (content.ContainsKey("height"))
+        {
+            height = int.Parse(content["height"]);
+        }
+        if (content.ContainsKey("height"))
+        {
+            width = int.Parse(content["width"]);
+        }
+    }
+
+    public bool FullImage()
+    {
+        if (height == 0) return true;
+        if (width == 0) return true;
+        return false;
     }
 }
 

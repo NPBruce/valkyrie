@@ -234,20 +234,17 @@ public class Quest
         {
             qToken = questToken;
 
-            Texture2D newTex = Resources.Load("sprites/tokens/" + qToken.spriteName) as Texture2D;
-            // Check if we can find the token image
-            if (newTex == null)
+            string tokenName = qToken.tokenName;
+            if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + qToken.spriteName);
-                // Use search token instead
-                newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
-                // If we still can't load it then fatal error
-                if (newTex == null)
+                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + tokenName);
+                // Catch for older quests with different types (0.4.0 or older)
+                if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
-                    Debug.Log("Error: Cannot load search token \"sprites/tokens/search-token\"");
-                    Application.Quit();
+                    tokenName = "TokenSearch";
                 }
             }
+            Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image);
 
             // Create object
             unityObject = new GameObject("Object" + qToken.name);

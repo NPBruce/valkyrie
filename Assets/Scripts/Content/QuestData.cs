@@ -246,13 +246,13 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
-        public string spriteName;
+        public string tokenName;
 
         public Token(string s) : base(s)
         {
             locationSpecified = true;
             typeDynamic = type;
-            spriteName = "search-token";
+            tokenName = "TokenSearch";
             cancelable = true;
         }
 
@@ -264,10 +264,10 @@ public class QuestData
             cancelable = true;
 
             // default token type is search, this is the image asset name
-            spriteName = "search-token";
+            tokenName = "TokenSearch";
             if (data.ContainsKey("type"))
             {
-                spriteName = data["type"];
+                tokenName = data["type"];
             }
         }
 
@@ -276,9 +276,9 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if(!spriteName.Equals("search-token"))
+            if(!tokenName.Equals("TokenSearch"))
             {
-                r += "type=" + spriteName + nl;
+                r += "type=" + tokenName + nl;
             }
             return r;
         }

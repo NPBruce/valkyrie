@@ -432,7 +432,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), t.spriteName, delegate { TokenType(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), t.tokenName, delegate { TokenType(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -456,7 +456,7 @@ public class QuestEditorData {
     public void SelectTokenType()
     {
         QuestData.Token t = selection as QuestData.Token;
-        t.spriteName = esl.selection;
+        t.tokenName = esl.selection;
         Game.Get().quest.Remove(t.name);
         Game.Get().quest.Add(t.name);
         SelectComponent(t.name);
@@ -2133,17 +2133,10 @@ public class QuestEditorData {
     public static List<string> GetTokenNames()
     {
         List<string> names = new List<string>();
-        names.Add("Search-Token");
-        names.Add("search-token-special");
-        names.Add("objective-token-black");
-        names.Add("objective-token-blue");
-        names.Add("objective-token-green");
-        names.Add("objective-token-red");
-        names.Add("objective-token-white");
-        names.Add("rubble-token-clipped");
-        names.Add("villager-token-man");
-        names.Add("villager-tokens-woman");
-        names.Add("tokensunstone");
+        foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
+        {
+            names.Add(kv.Key);
+        }
         return names;
     }
 }
