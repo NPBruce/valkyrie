@@ -199,7 +199,11 @@ public class Quest
             unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / game.gameType.TilePixelPerSquare(), Space.World);
             unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / game.gameType.TilePixelPerSquare(), Space.World);
             // Move to get the middle of the top left square at 0,0 (squares are 105 units)
-            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+            // We don't do this for MoM because it spaces differently
+            if (game.gameType.TileOnGrid())
+            {
+                unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+            }
             // Set the size to the image size
             image.rectTransform.sizeDelta = new Vector2((float)newTex.width / game.gameType.TilePixelPerSquare(), (float)newTex.height / game.gameType.TilePixelPerSquare());
 

@@ -173,14 +173,24 @@ public class EventManager
 
             text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name);
 
-            int index = text.IndexOf("{rnd:");
-            while (index != -1)
+            try
             {
-                string rand = text.Substring(index, text.IndexOf("}", index) - index);
-                int separator = rand.IndexOf(":");
-                int min = int.Parse(rand.Substring(5, separator - 5));
-                int max = int.Parse(rand.Substring(separator + 1, text.Length - separator - 2));
-                text = text.Replace(rand, Random.Range(min, max + 1).ToString());
+                int index = text.IndexOf("{rnd:");
+                while (index != -1)
+                {
+                    string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
+                    Debug.Log(rand);
+                    int separator = rand.IndexOf(":", 5);
+                    Debug.Log(separator);
+                    int min = int.Parse(rand.Substring(5, separator - 5));
+                    int max = int.Parse(rand.Substring(separator + 1, rand.Length - separator - 2));
+                    text = text.Replace(rand, Random.Range(min, max + 1).ToString());
+                    index = text.IndexOf("{rnd:");
+                }
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
             }
 
             return SymbolReplace(text).Replace("\\n", "\n");

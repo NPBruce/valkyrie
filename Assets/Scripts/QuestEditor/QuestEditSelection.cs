@@ -119,14 +119,15 @@ public class QuestEditSelection
 
     public void Copy(string key)
     {
+        Game game = Game.Get();
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
 
         int i = 1;
-        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/EditorQuest" + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
 
         try
         {

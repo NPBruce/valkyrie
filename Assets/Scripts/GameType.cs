@@ -11,6 +11,8 @@ public abstract class GameType
     public abstract int TilePixelPerSquare();
     public abstract Font GetFont();
     public abstract string TypeName();
+    public abstract bool TileOnGrid();
+    public abstract bool DisplayMorale();
 }
 
 public class NoGameType : GameType
@@ -53,6 +55,16 @@ public class NoGameType : GameType
     public override string TypeName()
     {
         return "";
+    }
+
+    public override bool TileOnGrid()
+    {
+        return true;
+    }
+
+    public override bool DisplayMorale()
+    {
+        return false;
     }
 }
 
@@ -97,6 +109,16 @@ public class D2EGameType : GameType
     {
         return "D2E";
     }
+
+    public override bool TileOnGrid()
+    {
+        return true;
+    }
+    public override bool DisplayMorale()
+    {
+        return true;
+    }
+
 }
 
 class MoMGameType : GameType
@@ -133,11 +155,21 @@ class MoMGameType : GameType
 
     public override int TilePixelPerSquare()
     {
-        return 256;
+        return 341;
     }
 
     public override string TypeName()
     {
         return "MoM";
     }
+
+    public override bool TileOnGrid()
+    {
+        return false;
+    }
+    public override bool DisplayMorale()
+    {
+        return false;
+    }
+
 }

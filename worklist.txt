@@ -2,17 +2,17 @@ Done:
 Fixed some tiles incorrect positioning
 auto camera pan to outside limits
 {0}/{1} in activations
-
-Now:
+MoM
 {rnd:hero}
 {rnd:1:4}
+
+Now:
 #2hero tags
 event for current round +x (delayedEvent=2:EventNext)
-Duplicate asset import
-
 Threat/peril (start with all required event extensions)
 
 Later:
+Duplicate asset import
 event log
 catch all parse exceptions
 text editing sucks (text wrap?)
