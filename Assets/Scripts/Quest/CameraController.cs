@@ -4,21 +4,21 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
 
     // How fast to move the screen when arrows used
-    static int keyScrollRate = 30;
+    static float keyScrollRate = 0.3f;
     // How much to zoom in/out with wheel
-    static int mouseWheelScrollRate = 600;
+    static int mouseWheelScrollRate = 6;
     // Max zoom in
-    static int maxZoom = -100;
+    static int maxZoom = -1;
     // Max zoom out
-    static int minZoom = -2500;
+    static int minZoom = -25;
 
-    public int minPanX = -5000;
-    public int minPanY = -5000;
-    public int maxPanX = 5000;
-    public int maxPanY = 5000;
+    public int minPanX = -50;
+    public int minPanY = -50;
+    public int maxPanX = 50;
+    public int maxPanY = 50;
 
     // Units to move per second
-    public static float autoPanSpeed = 1200;
+    public static float autoPanSpeed = 12;
 
     public bool targetSet = false;
     public Vector3 camTarget;
@@ -26,10 +26,13 @@ public class CameraController : MonoBehaviour {
     public Vector3 mouseDownCamPosition;
     public Vector2 mouseDownMousePosition;
 
+    Game game;
+
     void Awake()
     {
         mouseDownCamPosition = gameObject.transform.position;
         mouseDownMousePosition = Vector2.zero;
+        game = Game.Get();
     }
 
     // FixedUpdate is not tied to frame rate
@@ -112,16 +115,14 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public static Vector2 GetMouseTile()
+    public Vector2 GetMouseTile()
     {
-        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        Vector2 bPos = GetMouseBoardPlane(this);
 
-        Vector2 bPos = GetMouseBoardPlane(cc);
-
-        return new Vector2(Mathf.Round(bPos.x / 105), Mathf.Round(bPos.y / 105));
+        return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y));
     }
 
-    public static Vector2 GetMouseBoardPlane(CameraController cc)
+    public Vector2 GetMouseBoardPlane(CameraController cc)
     {
         Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
@@ -136,22 +137,22 @@ public class CameraController : MonoBehaviour {
     public static void SetCameraMin(Vector2 min)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
-        cc.minPanX = Mathf.RoundToInt(min.x * 105);
-        cc.minPanY = Mathf.RoundToInt(min.y * 105);
+        cc.minPanX = Mathf.RoundToInt(min.x);
+        cc.minPanY = Mathf.RoundToInt(min.y);
     }
 
     public static void SetCameraMax(Vector2 max)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
-        cc.maxPanX = Mathf.RoundToInt(max.x * 105);
-        cc.maxPanY = Mathf.RoundToInt(max.y * 105);
+        cc.maxPanX = Mathf.RoundToInt(max.x);
+        cc.maxPanY = Mathf.RoundToInt(max.y);
     }
 
     public static void SetCamera(Vector2 pos)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.targetSet = true;
-        cc.camTarget = new Vector3(pos.x * 105, pos.y * 105, -800);
+        cc.camTarget = new Vector3(pos.x, pos.y, -8);
 
         if (cc.camTarget.x < cc.minPanX) cc.camTarget.x = cc.minPanX;
         if (cc.camTarget.y < cc.minPanY) cc.camTarget.y = cc.minPanY;

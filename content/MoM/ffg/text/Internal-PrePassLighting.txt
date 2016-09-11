@@ -1,0 +1,508 @@
+Shader "Hidden/Internal-PrePassLighting" {
+Properties {
+ _LightTexture0 ("", any) = "" { }
+ _LightTextureB0 ("", 2D) = "" { }
+ _ShadowMapTexture ("", any) = "" { }
+}
+SubShader { 
+ Pass {
+  Tags { "SHADOWSUPPORT"="true" }
+  ZWrite Off
+  Blend DstColor Zero
+  GpuProgramID 57115
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 2
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 5
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 11
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 12
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 13
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 14
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 16
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 17
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 18
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 19
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 20
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 22
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 23
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 24
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 25
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 26
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 27
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 28
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 29
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 30
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 31
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 32
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 33
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 34
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 35
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 36
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 37
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 38
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 39
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 40
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 41
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 42
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 43
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 44
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 45
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 46
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 47
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 48
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 49
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 50
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 51
+}
+}
+ }
+ Pass {
+  Tags { "SHADOWSUPPORT"="true" }
+  ZWrite Off
+  Blend One One
+  GpuProgramID 113408
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 2
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 5
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 11
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 12
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 13
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 14
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 16
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 17
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 18
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 19
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 20
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 22
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 23
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 24
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 25
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 52
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 53
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 54
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 55
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 56
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 57
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 58
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 59
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 60
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 61
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 62
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 63
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 64
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 65
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 66
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 67
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 68
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 69
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 70
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 71
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 72
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 73
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 74
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 75
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 76
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 77
+}
+}
+ }
+ Pass {
+  Tags { "SHADOWSUPPORT"="true" }
+  ZWrite Off
+  Blend One One
+  GpuProgramID 155461
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 2
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 5
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 11
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 12
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 13
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 14
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 16
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 17
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 18
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 19
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 20
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 22
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 23
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 24
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 25
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 78
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 79
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 80
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 81
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 82
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 83
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 84
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 85
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 86
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 87
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 88
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 89
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 90
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 91
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 92
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 93
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 94
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 95
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 96
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 97
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 98
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 99
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 100
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 101
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 102
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 103
+}
+}
+ }
+}
+Fallback Off
+}

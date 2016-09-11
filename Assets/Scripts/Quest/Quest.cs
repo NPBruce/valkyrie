@@ -196,17 +196,17 @@ public class Quest
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left), Space.World);
-            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top), Space.World);
+            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / game.gameType.TilePixelPerSquare(), Space.World);
+            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / game.gameType.TilePixelPerSquare(), Space.World);
             // Move to get the middle of the top left square at 0,0 (squares are 105 units)
-            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-            // Set the size to the image size (images are assumed to be 105px per square)
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+            // Set the size to the image size
+            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / game.gameType.TilePixelPerSquare(), (float)newTex.height / game.gameType.TilePixelPerSquare());
 
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
             // Move tile into target location (spaces are 105 units, Space.World is needed because tile has been rotated)
-            unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
         }
 
         public override void Remove()
@@ -256,9 +256,9 @@ public class Quest
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = Color.white;
             image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+            image.rectTransform.sizeDelta = new Vector2(1f, 1f);
             // Move to square (105 units per square)
-            unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 
             game.tokenBoard.add(this);
         }
@@ -301,12 +301,12 @@ public class Quest
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             // Set door colour
             image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
+            image.rectTransform.sizeDelta = new Vector2(0.4f, 1.6f);
             // Rotate as required
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qDoor.rotation);
             // Move to square (105 units per square)
-            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-            unityObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0) * 105, Space.World);
+            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+            unityObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0), Space.World);
 
             SetColor(qDoor.colourName);
 

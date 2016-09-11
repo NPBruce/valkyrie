@@ -1,0 +1,539 @@
+Shader "Hidden/Camera-DepthNormalTexture" {
+Properties {
+ _MainTex ("", 2D) = "white" { }
+ _Cutoff ("", Float) = 0.5
+ _Color ("", Color) = (1,1,1,1)
+}
+SubShader { 
+ Tags { "RenderType"="Opaque" }
+ Pass {
+  Tags { "RenderType"="Opaque" }
+  GpuProgramID 37153
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 0
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 2
+}
+SubProgram "gles " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 4
+}
+SubProgram "gles3 " {
+GpuProgramIndex 5
+}
+SubProgram "glcore " {
+GpuProgramIndex 6
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="TransparentCutout" }
+ Pass {
+  Tags { "RenderType"="TransparentCutout" }
+  GpuProgramID 106902
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 14
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 16
+}
+SubProgram "gles " {
+GpuProgramIndex 17
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 18
+}
+SubProgram "gles3 " {
+GpuProgramIndex 19
+}
+SubProgram "glcore " {
+GpuProgramIndex 20
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 22
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 23
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="TreeBark" }
+ Pass {
+  Tags { "RenderType"="TreeBark" }
+  GpuProgramID 171880
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 24
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 25
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 26
+}
+SubProgram "gles " {
+GpuProgramIndex 27
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 28
+}
+SubProgram "gles3 " {
+GpuProgramIndex 29
+}
+SubProgram "glcore " {
+GpuProgramIndex 30
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 31
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 32
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 33
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="TreeLeaf" }
+ Pass {
+  Tags { "RenderType"="TreeLeaf" }
+  GpuProgramID 248790
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 34
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 35
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 36
+}
+SubProgram "gles " {
+GpuProgramIndex 37
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 38
+}
+SubProgram "gles3 " {
+GpuProgramIndex 39
+}
+SubProgram "glcore " {
+GpuProgramIndex 40
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 41
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 42
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 43
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "DisableBatching"="true" "RenderType"="TreeOpaque" }
+ Pass {
+  Tags { "DisableBatching"="true" "RenderType"="TreeOpaque" }
+  GpuProgramID 270309
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 44
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 45
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 46
+}
+SubProgram "gles " {
+GpuProgramIndex 47
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 48
+}
+SubProgram "gles3 " {
+GpuProgramIndex 49
+}
+SubProgram "glcore " {
+GpuProgramIndex 50
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "DisableBatching"="true" "RenderType"="TreeTransparentCutout" }
+ Pass {
+  Tags { "DisableBatching"="true" "RenderType"="TreeTransparentCutout" }
+  GpuProgramID 374526
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 51
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 52
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 53
+}
+SubProgram "gles " {
+GpuProgramIndex 54
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 55
+}
+SubProgram "gles3 " {
+GpuProgramIndex 56
+}
+SubProgram "glcore " {
+GpuProgramIndex 57
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 41
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 58
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 59
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+ Pass {
+  Tags { "DisableBatching"="true" "RenderType"="TreeTransparentCutout" }
+  Cull Front
+  GpuProgramID 416529
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 60
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 61
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 62
+}
+SubProgram "gles " {
+GpuProgramIndex 63
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 64
+}
+SubProgram "gles3 " {
+GpuProgramIndex 65
+}
+SubProgram "glcore " {
+GpuProgramIndex 66
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 41
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 58
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 59
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="TreeBillboard" }
+ Pass {
+  Tags { "RenderType"="TreeBillboard" }
+  Cull Off
+  GpuProgramID 510283
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 67
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 68
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 69
+}
+SubProgram "gles " {
+GpuProgramIndex 70
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 71
+}
+SubProgram "gles3 " {
+GpuProgramIndex 72
+}
+SubProgram "glcore " {
+GpuProgramIndex 73
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 74
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 75
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 76
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="GrassBillboard" }
+ Pass {
+  Tags { "RenderType"="GrassBillboard" }
+  Cull Off
+  GpuProgramID 543493
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 77
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 78
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 79
+}
+SubProgram "gles " {
+GpuProgramIndex 80
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 81
+}
+SubProgram "gles3 " {
+GpuProgramIndex 82
+}
+SubProgram "glcore " {
+GpuProgramIndex 83
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 84
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 85
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 86
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+SubShader { 
+ Tags { "RenderType"="Grass" }
+ Pass {
+  Tags { "RenderType"="Grass" }
+  Cull Off
+  GpuProgramID 615206
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 87
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 88
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 89
+}
+SubProgram "gles " {
+GpuProgramIndex 90
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 91
+}
+SubProgram "gles3 " {
+GpuProgramIndex 92
+}
+SubProgram "glcore " {
+GpuProgramIndex 93
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 84
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 85
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 86
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+Fallback Off
+}

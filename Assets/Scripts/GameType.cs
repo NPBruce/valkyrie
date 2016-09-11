@@ -8,6 +8,7 @@ public abstract class GameType
     public abstract string HeroesName();
     public abstract string QuestName();
     public abstract int MaxHeroes();
+    public abstract int TilePixelPerSquare();
     public abstract Font GetFont();
 }
 
@@ -41,6 +42,11 @@ public class NoGameType : GameType
     public override int MaxHeroes()
     {
         return 0;
+    }
+
+    public override int TilePixelPerSquare()
+    {
+        return 1;
     }
 }
 
@@ -76,6 +82,10 @@ public class D2EGameType : GameType
         return 4;
     }
 
+    public override int TilePixelPerSquare()
+    {
+        return 105;
+    }
 }
 
 class MoMGameType : GameType
@@ -110,4 +120,8 @@ class MoMGameType : GameType
         return 5;
     }
 
+    public override int TilePixelPerSquare()
+    {
+        return 512;
+    }
 }

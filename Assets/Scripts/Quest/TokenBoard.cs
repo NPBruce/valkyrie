@@ -133,17 +133,17 @@ public class TokenBoard : MonoBehaviour {
             image.color = Color.red;
         }
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((105f * x), (105f * y));
+        image.rectTransform.sizeDelta = new Vector2(x, y);
         // Move to get the top left square corner at 0,0
-        gameObject.transform.Translate(Vector3.right * 105f * (float)(x - 1) / 2f, Space.World);
-        gameObject.transform.Translate(Vector3.down * 105f * (float)(y - 1) / 2f, Space.World);
+        gameObject.transform.Translate(Vector3.right * (float)(x - 1) / 2f, Space.World);
+        gameObject.transform.Translate(Vector3.down * (float)(y - 1) / 2f, Space.World);
 
         if (mp.rotate)
         {
             gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
         }
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0), Space.World);
     }
 
 
@@ -170,9 +170,9 @@ public class TokenBoard : MonoBehaviour {
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.color = Color.red;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0), Space.World);
     }
 
     public void AddHighlight(QuestData.Event e)
@@ -204,9 +204,9 @@ public class TokenBoard : MonoBehaviour {
         // Set door colour
         image.color = Color.cyan;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
     }
 }
 

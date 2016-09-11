@@ -51,7 +51,13 @@ public class FetchContent {
 
     public void Import()
     {
-        Import (finder.location + "/resources.assets");
+        string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
+
+        if (!CleanImport()) return;
+        foreach (string s in assetFiles)
+        {
+            Import(s);
+        }
     }
 
     public void Import(string assetFile)
@@ -96,11 +102,9 @@ public class FetchContent {
             AssetsFile file = new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian));
             assetFiles.Add(file);
         }
-        if (CleanImport())
-        {
-            BuildAssetStrucutres();
-            WriteImportLog(logFile);
-        }
+
+        BuildAssetStrucutres();
+        WriteImportLog(logFile);
     }
 
     private void WriteImportLog(string logFile)
@@ -203,6 +207,7 @@ public class FetchContent {
         string fileName = fileCandidate + asset.extension;
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -297,6 +302,7 @@ public class FetchContent {
         m_AudioClip = new Unity_Studio.AudioClip(asset, true);
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -321,6 +327,7 @@ public class FetchContent {
         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -351,6 +358,7 @@ public class FetchContent {
 
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + ".ttf";
         }
 

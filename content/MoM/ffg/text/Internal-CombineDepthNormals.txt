@@ -1,0 +1,57 @@
+Shader "Hidden/Internal-CombineDepthNormals" {
+SubShader { 
+ Pass {
+  ZTest Always
+  ZWrite Off
+  Cull Off
+  GpuProgramID 4591
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 0
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 2
+}
+SubProgram "gles " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 4
+}
+SubProgram "gles3 " {
+GpuProgramIndex 5
+}
+SubProgram "glcore " {
+GpuProgramIndex 6
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+Fallback Off
+}

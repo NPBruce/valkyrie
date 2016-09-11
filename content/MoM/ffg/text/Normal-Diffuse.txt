@@ -1,0 +1,293 @@
+Shader "Legacy Shaders/Diffuse" {
+Properties {
+ _Color ("Main Color", Color) = (1,1,1,1)
+ _MainTex ("Base (RGB)", 2D) = "white" { }
+}
+SubShader { 
+ LOD 200
+ Tags { "RenderType"="Opaque" }
+ Pass {
+  Name "FORWARD"
+  Tags { "LIGHTMODE"="ForwardBase" "SHADOWSUPPORT"="true" "RenderType"="Opaque" }
+  GpuProgramID 6689
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 2
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 8
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 9
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 12
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 13
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 14
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 16
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 17
+}
+}
+ }
+ Pass {
+  Name "FORWARD"
+  Tags { "LIGHTMODE"="ForwardAdd" "RenderType"="Opaque" }
+  ZWrite Off
+  Blend One One
+  GpuProgramID 79369
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 18
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 19
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 20
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 22
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 23
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 24
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 25
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 26
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 27
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 28
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 29
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 30
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 31
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 32
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 33
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 34
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 35
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 36
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 37
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 38
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 39
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 40
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 41
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 42
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 43
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 44
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 45
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 46
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 47
+}
+}
+ }
+ Pass {
+  Name "PREPASS"
+  Tags { "LIGHTMODE"="PrePassBase" "RenderType"="Opaque" }
+  GpuProgramID 161489
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 48
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 49
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 50
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 51
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 52
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 53
+}
+}
+ }
+ Pass {
+  Name "PREPASS"
+  Tags { "LIGHTMODE"="PrePassFinal" "RenderType"="Opaque" }
+  ZWrite Off
+  GpuProgramID 200775
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 54
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 55
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 56
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 57
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 58
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 59
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 60
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 61
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 62
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 63
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 64
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 65
+}
+}
+ }
+ Pass {
+  Name "DEFERRED"
+  Tags { "LIGHTMODE"="Deferred" "RenderType"="Opaque" }
+  GpuProgramID 267886
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 66
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 67
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 68
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 69
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 70
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 71
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 72
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 73
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 74
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 75
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 76
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 77
+}
+}
+ }
+}
+Fallback "Legacy Shaders/VertexLit"
+}

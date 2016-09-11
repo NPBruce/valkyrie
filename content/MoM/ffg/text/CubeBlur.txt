@@ -1,0 +1,68 @@
+Shader "Hidden/CubeBlur" {
+Properties {
+ _MainTex ("Main", CUBE) = "" { }
+ _Texel ("Texel", Float) = 0.0078125
+ _Level ("Level", Float) = 0
+ _Scale ("Scale", Float) = 1
+}
+SubShader { 
+ LOD 200
+ Tags { "RenderType"="Opaque" }
+ Pass {
+  Tags { "RenderType"="Opaque" }
+  ZTest Always
+  ZWrite Off
+  Cull Off
+  GpuProgramID 13554
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 2
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 3
+}
+}
+ }
+}
+SubShader { 
+ LOD 200
+ Tags { "RenderType"="Opaque" }
+ Pass {
+  Tags { "RenderType"="Opaque" }
+  ZTest Always
+  ZWrite Off
+  Cull Off
+  GpuProgramID 85008
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 8
+}
+}
+ }
+}
+}

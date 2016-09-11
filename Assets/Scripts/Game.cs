@@ -20,6 +20,7 @@ public class Game : MonoBehaviour {
     public QuestEditorData qed;
     public string[] ffgText = null;
     public GameType gameType;
+    public CameraController cc;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -32,6 +33,7 @@ public class Game : MonoBehaviour {
     {
 
         // Find the common objects we use.  These are created by unity.
+        cc = GameObject.FindObjectOfType<CameraController>();
         uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         boardCanvas = GameObject.Find("BoardCanvas").GetComponent<Canvas>();
         tokenCanvas = GameObject.Find("TokenCanvas").GetComponent<Canvas>();

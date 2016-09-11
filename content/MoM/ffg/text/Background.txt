@@ -1,0 +1,39 @@
+Shader "Unlit/Background" {
+Properties {
+ _Color ("Color", Color) = (1,0,0,1)
+ _MainTex ("Texture", 2D) = "white" { }
+ _Intensity ("Light Intensity", Range(0,1.2)) = 1
+ _VignetteDropoff ("VignetteDropoff", Range(0,2)) = 1.1
+}
+SubShader { 
+ LOD 100
+ Tags { "RenderType"="Opaque" }
+ Pass {
+  Tags { "RenderType"="Opaque" }
+  GpuProgramID 4878
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 2
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+}
+ }
+}
+Fallback "Diffuse"
+}

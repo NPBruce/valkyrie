@@ -1,0 +1,63 @@
+Shader "GUI/Text Shader" {
+Properties {
+ _MainTex ("Font Texture", 2D) = "white" { }
+ _Color ("Text Color", Color) = (1,1,1,1)
+}
+SubShader { 
+ Tags { "QUEUE"="Transparent" "IGNOREPROJECTOR"="true" "RenderType"="Transparent" "PreviewType"="Plane" }
+ Pass {
+  Tags { "QUEUE"="Transparent" "IGNOREPROJECTOR"="true" "RenderType"="Transparent" "PreviewType"="Plane" }
+  ZTest Always
+  ZWrite Off
+  Cull Off
+  Blend SrcAlpha OneMinusSrcAlpha
+  GpuProgramID 16679
+Program "vp" {
+SubProgram "opengl " {
+GpuProgramIndex 0
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 2
+}
+SubProgram "gles " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 4
+}
+SubProgram "gles3 " {
+GpuProgramIndex 5
+}
+SubProgram "glcore " {
+GpuProgramIndex 6
+}
+}
+Program "fp" {
+SubProgram "opengl " {
+GpuProgramIndex 7
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 8
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 9
+}
+SubProgram "gles " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+SubProgram "gles3 " {
+GpuProgramIndex 12
+}
+SubProgram "glcore " {
+GpuProgramIndex 13
+}
+}
+ }
+}
+}

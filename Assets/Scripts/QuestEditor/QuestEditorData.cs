@@ -231,9 +231,11 @@ public class QuestEditorData {
 
     public void MouseDown()
     {
+        Game game = Game.Get();
         if (gettingPosition)
         {
-            selection.location = CameraController.GetMouseTile();
+
+            selection.location = game.cc.GetMouseTile();
             gettingPosition = false;
             Game.Get().quest.Remove(selection.name);
             Game.Get().quest.Add(selection.name);
@@ -241,15 +243,13 @@ public class QuestEditorData {
         }
         if (gettingMaxPosition)
         {
-            Game game = Game.Get();
-            game.quest.qd.quest.SetMaxCam(CameraController.GetMouseTile());
+            game.quest.qd.quest.SetMaxCam(game.cc.GetMouseTile());
             SelectQuest();
             gettingMaxPosition = false;
         }
         if (gettingMinPosition)
         {
-            Game game = Game.Get();
-            game.quest.qd.quest.SetMinCam(CameraController.GetMouseTile());
+            game.quest.qd.quest.SetMinCam(game.cc.GetMouseTile());
             SelectQuest();
             gettingMinPosition = false;
         }

@@ -8,7 +8,7 @@ Now:
 {rnd:1:4}
 #2hero tags
 event for current round +x (delayedEvent=2:EventNext)
-
+Duplicate asset import
 
 Threat/peril (start with all required event extensions)
 
