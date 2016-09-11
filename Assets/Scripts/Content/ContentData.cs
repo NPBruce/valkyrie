@@ -267,7 +267,15 @@ public class ContentData {
             System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
             texture = new Texture2D(width, height, TextureFormat.DXT5, false);
-            texture.LoadRawTextureData(dxtBytes);
+            try
+            {
+                texture.LoadRawTextureData(dxtBytes);
+            }
+            catch(System.Exception)
+            {
+                texture = new Texture2D(width, height, TextureFormat.DXT1, false);
+                texture.LoadRawTextureData(dxtBytes);
+            }
             texture.Apply();
             return texture;
         }

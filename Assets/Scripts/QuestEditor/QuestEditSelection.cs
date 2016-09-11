@@ -9,6 +9,7 @@ public class QuestEditSelection
 
     public QuestEditSelection()
     {
+        Game game = Game.Get();
         // For now only edit unpacked quests
         questList = QuestLoader.GetUserUnpackedQuests();
         //questList = QuestLoader.GetUserQuests();
@@ -17,7 +18,7 @@ public class QuestEditSelection
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select Quest");
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
         int offset = 5;
@@ -45,11 +46,12 @@ public class QuestEditSelection
     public void Delete()
     {
         questList = QuestLoader.GetUserUnpackedQuests();
+        Game game = Game.Get();
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select Quest To Delete");
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName() + "To Delete");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
         int offset = 5;
@@ -93,11 +95,12 @@ public class QuestEditSelection
     public void Copy()
     {
         questList = QuestLoader.GetQuests();
+        Game game = Game.Get();
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select Quest To Copy");
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName() + " To Copy");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
         int offset = 5;
@@ -116,14 +119,15 @@ public class QuestEditSelection
 
     public void Copy(string key)
     {
+        Game game = Game.Get();
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
 
         int i = 1;
-        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/EditorQuest" + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
 
         try
         {
@@ -194,24 +198,25 @@ public class QuestEditSelection
 
     public void NewQuest()
     {
-
+        Game game = Game.Get();
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
 
         int i = 1;
-        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/EditorQuest" + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
 
         try
         {
             Directory.CreateDirectory(targetLocation);
 
-            string[] questData = new string[2];
+            string[] questData = new string[3];
 
             questData[0] = "[Quest]";
-            questData[1] = "name=EditorQuest" + i;
+            questData[1] = "name=Editor " + game.gameType.QuestName() + " " + i;
+            questData[2] = "type=" + game.gameType.TypeName();
 
             File.WriteAllLines(targetLocation + "/quest.ini", questData);
         }
@@ -230,21 +235,13 @@ public class QuestEditSelection
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        // In the build the content packs need to go into the build data dir, this is currently manual
-        string contentLocation = Application.dataPath + "/content/D2E";
-        if (Application.isEditor)
-        {
-            // If running through unity then we assume you are using the git content, with the project at the same level
-            contentLocation = Application.dataPath + "/../content/D2E";
-        }
-
         // Fetch content (in future this will need to be selectable
         // Find any content packs at the location
-        game.cd = new ContentData(contentLocation);
+        game.cd = new ContentData(game.gameType.DataDirectory());
         // Check if we found anything
         if (game.cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + contentLocation);
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory());
         }
 
         // In the future this is where you select which packs to load, for now we load everything.
@@ -254,16 +251,7 @@ public class QuestEditSelection
         }
 
         // Fetch all of the quest data
-        game.qd = new QuestData(questList[key]);
-
-        if (game.qd == null)
-        {
-            Debug.Log("Error: Unable to load quest: " + key);
-            Destroyer.MainMenu();
-        }
-        else
-        {
-            QuestEditor.Begin();
-        }
+        game.quest = new Quest(questList[key]);
+        QuestEditor.Begin();
     }
 }

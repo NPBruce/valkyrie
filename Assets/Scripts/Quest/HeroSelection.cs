@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class HeroSelection {
 
-	public HeroSelection(Round.Hero h)
+	public HeroSelection(Quest.Hero h)
     {
         Game game = Game.Get();
 
@@ -22,7 +22,7 @@ public class HeroSelection {
             }
 
             bool disabled = false;
-            foreach (Round.Hero hIt in game.round.heroes)
+            foreach (Quest.Hero hIt in game.quest.heroes)
             {
                 if ((hIt.heroData == hd.Value) && (hIt.id != h.id))
                 {
@@ -81,7 +81,7 @@ public class HeroSelection {
                 hData = hd.Value;
             }
         }
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.id == id)
             {

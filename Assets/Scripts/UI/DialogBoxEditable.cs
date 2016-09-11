@@ -78,7 +78,7 @@ public class DialogBoxEditable
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
         uiText.color = fgColour;
         uiText.alignment = TextAnchor.MiddleCenter;
-        uiText.font = (Font)Resources.Load("fonts/gara_scenario_desc");
+        uiText.font = game.gameType.GetFont();
         uiText.fontSize = UIScaler.GetSmallFont();
 
         uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();

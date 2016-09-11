@@ -13,13 +13,13 @@ public class TokenBoard : MonoBehaviour {
     }
 
     // Add a door
-    public void add(QuestData.Door d)
+    public void add(Quest.Door d)
     {
         tc.Add(new TokenControl(d));
     }
 
     // Add a token
-    public void add(QuestData.Token t)
+    public void add(Quest.Token t)
     {
         tc.Add(new TokenControl(t));
     }
@@ -27,63 +27,55 @@ public class TokenBoard : MonoBehaviour {
     // Class for tokens and doors that will get the onClick event
     public class TokenControl
     {
-        QuestData.Event e;
+        Quest.BoardComponent c;
 
         // Initialise from a door
-        public TokenControl(QuestData.Door d)
+        public TokenControl(Quest.BoardComponent component)
         {
-            UnityEngine.UI.Button button = d.gameObject.AddComponent<UnityEngine.UI.Button>();
-            button.interactable = true;
-            button.onClick.AddListener(delegate { startEvent(); });
-            e = d;
-        }
+            // If we are in the editor we don't add the buttons
+            if (Game.Get().editMode) return;
 
-        // Initialise from a token
-        public TokenControl(QuestData.Token t)
-        {
-            UnityEngine.UI.Button button = t.gameObject.AddComponent<UnityEngine.UI.Button>();
+            c = component;
+            UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent(); });
-            e = t;
+            c = component;
         }
 
         // On click the tokens start an event
         public void startEvent()
         {
-            // If we aren't visible ignore the click
-            if (!e.GetVisible())
-                return;
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            new DialogWindow(e);
+            Game.Get().quest.eManager.QueueEvent(c.GetEvent().name);
         }
 
     }
 
-    public void AddMonster(QuestData.Monster m)
+    public void AddMonster(EventManager.MonsterEvent me)
     {
         Game game = Game.Get();
         int count = 0;
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null) count++;
         }
 
-        if (m.placement[count].Length == 0)
+        if (me.qMonster.placement[count].Length == 0)
         {
-            AddAreaMonster(m);
+            AddAreaMonster(me.qMonster);
         }
         else
         {
-            AddPlacedMonsters(m, count);
+            AddPlacedMonsters(me, count);
         }
     }
 
-    public void AddPlacedMonsters(QuestData.Monster m, int count)
+    public void AddPlacedMonsters(EventManager.MonsterEvent me, int count)
     {
-        Texture2D newTex = ContentData.FileToTexture(m.mData.imagePlace);
+        Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
 
         // Check load worked
         if (newTex == null)
@@ -95,20 +87,20 @@ public class TokenBoard : MonoBehaviour {
         int x = 1;
         int y = 1;
 
-        if (m.mData.ContainsTrait("medium") || m.mData.ContainsTrait("huge"))
+        if (me.cMonster.ContainsTrait("medium") || me.cMonster.ContainsTrait("huge"))
         {
             x = 2;
         }
-        if (m.mData.ContainsTrait("huge") || m.mData.ContainsTrait("massive"))
+        if (me.cMonster.ContainsTrait("huge") || me.cMonster.ContainsTrait("massive"))
         {
             y = 2;
         }
-        if (m.mData.ContainsTrait("massive"))
+        if (me.cMonster.ContainsTrait("massive"))
         {
             x = 3;
         }
 
-        foreach (string s in m.placement[count])
+        foreach (string s in me.qMonster.placement[count])
         {
             AddPlacedMonsterImg(s, newTex, x, y);
         }
@@ -119,13 +111,13 @@ public class TokenBoard : MonoBehaviour {
         Game game = Game.Get();
         Sprite tileSprite;
 
-        if (!game.qd.components.ContainsKey(place))
+        if (!game.quest.qd.components.ContainsKey(place))
         {
             Debug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
         }
 
-        QuestData.MPlace mp = game.qd.components[place] as QuestData.MPlace;
+        QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
 
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
@@ -141,17 +133,17 @@ public class TokenBoard : MonoBehaviour {
             image.color = Color.red;
         }
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((105f * x), (105f * y));
+        image.rectTransform.sizeDelta = new Vector2(x, y);
         // Move to get the top left square corner at 0,0
-        gameObject.transform.Translate(Vector3.right * 105f * (float)(x - 1) / 2f, Space.World);
-        gameObject.transform.Translate(Vector3.down * 105f * (float)(y - 1) / 2f, Space.World);
+        gameObject.transform.Translate(Vector3.right * (float)(x - 1) / 2f, Space.World);
+        gameObject.transform.Translate(Vector3.down * (float)(y - 1) / 2f, Space.World);
 
         if (mp.rotate)
         {
             gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
         }
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0), Space.World);
     }
 
 
@@ -178,9 +170,9 @@ public class TokenBoard : MonoBehaviour {
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.color = Color.red;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0), Space.World);
     }
 
     public void AddHighlight(QuestData.Event e)
@@ -212,9 +204,9 @@ public class TokenBoard : MonoBehaviour {
         // Set door colour
         image.color = Color.cyan;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
+        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
         // Move to square (105 units per square)
-        gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
+        gameObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
     }
 }
 

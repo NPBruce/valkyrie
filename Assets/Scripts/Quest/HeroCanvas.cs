@@ -13,11 +13,11 @@ public class HeroCanvas : MonoBehaviour {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
         offset = offsetStart;
         Game game = Game.Get();
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
             AddHero(h, game);
     }
 
-    void AddHero(Round.Hero h, Game game)
+    void AddHero(Quest.Hero h, Game game)
     {
         Sprite heroSprite;
 
@@ -56,7 +56,7 @@ public class HeroCanvas : MonoBehaviour {
     public void UpdateStatus()
     {
         Game game = Game.Get();
-        foreach(Round.Hero h in game.round.heroes)
+        foreach(Quest.Hero h in game.quest.heroes)
         {
             UnityEngine.UI.Image image = icons[h.id];
             image.color = Color.white;
@@ -86,7 +86,7 @@ public class HeroCanvas : MonoBehaviour {
     public void UpdateImages()
     {
         Game game = Game.Get();
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             UnityEngine.UI.Image image = icons[h.id];
 
@@ -106,9 +106,9 @@ public class HeroCanvas : MonoBehaviour {
     void HeroDiag(int id)
     {
         Game game = Game.Get();
-        Round.Hero target = null;
+        Quest.Hero target = null;
 
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.id == id)
             {
@@ -119,7 +119,7 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
-            if (game.round.eventList.Count > 0 && game.round.eventList.Peek().maxHeroes != 0)
+            if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
             {
                 target.selected = !target.selected;
                 UpdateStatus();
@@ -127,11 +127,11 @@ public class HeroCanvas : MonoBehaviour {
             return;
         }
 
-        if (game.round.heroesSelected && target.heroData != null)
+        if (game.quest.heroesSelected && target.heroData != null)
         {
             new HeroDialog(target);
         }
-        if (!game.round.heroesSelected)
+        if (!game.quest.heroesSelected)
         {
             icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             new HeroSelection(target);
@@ -146,7 +146,7 @@ public class HeroCanvas : MonoBehaviour {
             return;
 
         Game game = Game.Get();
-        foreach (Round.Hero h in game.round.heroes)
+        foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null) heroCount++;
         }
@@ -156,14 +156,14 @@ public class HeroCanvas : MonoBehaviour {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
-        for(int i = 0; i < game.round.heroes.Count - 1; i++)
+        for (int i = 0; i < game.quest.heroes.Count - 1; i++)
         {
             int j = i;
 
-            while(game.round.heroes[i].heroData == null && j < game.round.heroes.Count)
+            while (game.quest.heroes[i].heroData == null && j < game.quest.heroes.Count)
             {
-                game.round.heroes[i].heroData = game.round.heroes[j].heroData;
-                game.round.heroes[j].heroData = null;
+                game.quest.heroes[i].heroData = game.quest.heroes[j].heroData;
+                game.quest.heroes[j].heroData = null;
                 j++;
             }
         }
@@ -171,11 +171,15 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        game.round.heroesSelected = true;
-        game.moraleDisplay = new MoraleDisplay();
+        game.quest.heroesSelected = true;
+
+        if (game.gameType.DisplayMorale())
+        {
+            game.moraleDisplay = new MoraleDisplay();
+        }
         // Create the menu button
         new MenuButton();
 
-        EventHelper.EventTriggerType("EventStart");
+        game.quest.eManager.EventTriggerType("EventStart");
     }
 }

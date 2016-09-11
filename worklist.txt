@@ -1,0 +1,31 @@
+Done:
+Fixed some tiles incorrect positioning
+auto camera pan to outside limits
+{0}/{1} in activations
+MoM
+{rnd:hero}
+{rnd:1:4}
+
+Next:
+#2hero tags
+event for current round +x (delayedEvent=2:EventNext)
+Threat/peril (start with all required event extensions)
+MoM stuff?
+
+Later:
+Duplicate asset import
+event log
+catch all parse exceptions
+text editing sucks (text wrap?)
+frame color for portraits Frame_Monster_1x1.dds (color rotation?)
+random tags
+tags for hero count
+tags for round number
+Expansion name on elements in editor, tags
+ffg app version unity
+quest set
+lt.
+Add expansions, content selection
+Stacked tileselection? (tags?)
+save games
+undo

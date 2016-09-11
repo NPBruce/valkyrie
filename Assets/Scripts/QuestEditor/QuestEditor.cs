@@ -20,23 +20,22 @@ public class QuestEditor {
     {
         Destroyer.Dialog();
 
-        // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
-            Object.Destroy(go);
+        Game game = Game.Get();
+        game.quest.RemoveAll();
 
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
-        Game game = Game.Get();
+        game.quest.qd = new QuestData(game.quest.qd.questPath);
 
-        game.qd = new QuestData(game.qd.questPath);
+        game.quest.RemoveAll();
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> qc in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            qc.Value.Draw();
-            qc.Value.SetVisible(.2f);
+            game.quest.Add(kv.Key);
         }
+        game.quest.ChangeAlphaAll(0.2f);
 
         game.qed = new QuestEditorData();
     }
@@ -45,9 +44,9 @@ public class QuestEditor {
     {
         Game game = Game.Get();
         string content = "; Saved by version: " + game.version + System.Environment.NewLine;
-        content += game.qd.quest.ToString() + System.Environment.NewLine;
+        content += game.quest.qd.quest.ToString() + System.Environment.NewLine;
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             content += System.Environment.NewLine;
             content += kv.Value.ToString();
@@ -55,7 +54,7 @@ public class QuestEditor {
 
         try
         {
-            System.IO.File.WriteAllText(game.qd.questPath, content);
+            System.IO.File.WriteAllText(game.quest.qd.questPath, content);
         }
         catch (System.Exception)
         {

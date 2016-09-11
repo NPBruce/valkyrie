@@ -14,10 +14,13 @@ public class FetchContent {
     public FetchContent(string type)
     {
         gameType = type;
-
         if (type.Equals("D2E"))
         {
             finder = new RtLFinder();
+        }
+        else if (type.Equals("MoM"))
+        {
+            finder = new MoMFinder();
         }
         else
         {
@@ -48,13 +51,23 @@ public class FetchContent {
 
     public void Import()
     {
-        List<string> unityFiles = new List<string>(); //files to load
-        string resources = finder.location + "/resources.assets";
+        string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
 
-        AssetsFile assetsFile = new AssetsFile(resources, new EndianStream(File.OpenRead(resources), EndianType.BigEndian));
+        if (!CleanImport()) return;
+        foreach (string s in assetFiles)
+        {
+            Import(s);
+        }
+    }
+
+    public void Import(string assetFile)
+    {
+        List<string> unityFiles = new List<string>(); //files to load
+
+        AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
         if (assetsFile.fileGen < 15)
         {
-            Debug.Log("Invalid asset file: " + resources);
+            Debug.Log("Invalid asset file: " + assetFile);
             return;
         }
 
@@ -69,7 +82,7 @@ public class FetchContent {
             {
                 if (!File.Exists(sharedFilePath))
                 {
-                    var findFiles = Directory.GetFiles(Path.GetDirectoryName(resources), sharedFileName, SearchOption.AllDirectories);
+                    var findFiles = Directory.GetFiles(Path.GetDirectoryName(assetFile), sharedFileName, SearchOption.AllDirectories);
                     if (findFiles.Length > 0) { sharedFilePath = findFiles[0]; }
                 }
 
@@ -89,11 +102,9 @@ public class FetchContent {
             AssetsFile file = new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian));
             assetFiles.Add(file);
         }
-        if (CleanImport())
-        {
-            BuildAssetStrucutres();
-            WriteImportLog(logFile);
-        }
+
+        BuildAssetStrucutres();
+        WriteImportLog(logFile);
     }
 
     private void WriteImportLog(string logFile)
@@ -196,6 +207,7 @@ public class FetchContent {
         string fileName = fileCandidate + asset.extension;
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -290,6 +302,7 @@ public class FetchContent {
         m_AudioClip = new Unity_Studio.AudioClip(asset, true);
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -314,6 +327,7 @@ public class FetchContent {
         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + asset.extension;
         }
 
@@ -344,6 +358,7 @@ public class FetchContent {
 
         while (File.Exists(fileName))
         {
+            return;// Fixme;
             fileName = fileCandidate + i++ + ".ttf";
         }
 

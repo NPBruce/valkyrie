@@ -9,12 +9,6 @@ public class QuestData
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
 
-    // A list of flags that have been set during the quest
-    public HashSet<string> flags;
-
-    // A dictionary of heros that have been selected in events
-    public Dictionary<string, List<Round.Hero>> heroSelection;
-
     // List of ini files containing quest data
     List<string> files;
 
@@ -45,8 +39,6 @@ public class QuestData
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
-        flags = new HashSet<string>();
-        heroSelection = new Dictionary<string, List<Round.Hero>>();
 
         // Read the main quest file
         IniData d = IniRead.ReadFromIni(questPath);
@@ -107,7 +99,7 @@ public class QuestData
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
-            Tile c = new Tile(name, content, game);
+            Tile c = new Tile(name, content);
             components.Add(name, c);
         }
         if (name.IndexOf(Door.type) == 0)
@@ -141,23 +133,22 @@ public class QuestData
     // Class for Tile components (use TileSide content data)
     public class Tile : QuestComponent
     {
-        public TileSideData tileType;
         new public static string type = "Tile";
         public int rotation = 0;
+        public string tileSideName;
 
         public Tile(string s) : base(s)
         {
             locationSpecified = true;
+            typeDynamic = type;
             Game game = Game.Get();
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
-                typeDynamic = type;
-                tileType = kv.Value;
+                tileSideName = kv.Key;
             }
-
         }
 
-        public Tile(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public Tile(string name, Dictionary<string, string> data) : base(name, data)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -170,20 +161,11 @@ public class QuestData
             // Find the tileside that is used
             if (data.ContainsKey("side"))
             {
+                tileSideName = data["side"];
                 // 'TileSide' prefix is optional, test both
-                if (game.cd.tileSides.ContainsKey(data["side"]))
+                if (tileSideName.IndexOf("TileSide") != 0)
                 {
-                    tileType = game.cd.tileSides[data["side"]];
-                }
-                else if (game.cd.tileSides.ContainsKey("TileSide" + data["side"]))
-                {
-                    tileType = game.cd.tileSides["TileSide" + data["side"]];
-                }
-                else
-                {
-                    // Fatal if not found
-                    Debug.Log("Error: Failed to located TileSide: " + data["side"] + " in quest component: " + name);
-                    Application.Quit();
+                    tileSideName = "TileSide" + tileSideName;
                 }
             }
             else
@@ -192,55 +174,6 @@ public class QuestData
                 Debug.Log("Error: No TileSide specified in quest component: " + name);
                 Application.Quit();
             }
-
-            Draw();
-        }
-
-        public override void Draw()
-        {
-            GameObject go = GameObject.Find("Object" + name);
-            if (go != null)
-            {
-                Object.Destroy(go);
-            }
-
-            Game game = Game.Get();
-
-            // Attempt to load image
-            string imagePath = tileType.image;
-            Texture2D newTex = ContentData.FileToTexture(imagePath);
-            Sprite tileSprite;
-            if (newTex == null)
-            {
-                // Fatal if missing
-                Debug.Log("Error: cannot open image file for TileSide: " + imagePath);
-                Application.Quit();
-            }
-
-            GameObject tile = new GameObject("Object" + name);
-            tile.tag = "board";
-            tile.transform.parent = game.boardCanvas.transform;
-
-            // Add image to object
-            image = tile.AddComponent<UnityEngine.UI.Image>();
-            // Create sprite from texture
-            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            // Set to transparent initially
-            image.color = new Color(1, 1, 1, 0);
-            // Set image sprite
-            image.sprite = tileSprite;
-            // Move to get the top left square corner at 0,0
-            tile.transform.Translate(Vector3.right * ((newTex.width / 2) - tileType.left), Space.World);
-            tile.transform.Translate(Vector3.down * ((newTex.height / 2) - tileType.top), Space.World);
-            // Move to get the middle of the top left square at 0,0 (squares are 105 units)
-            tile.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-            // Set the size to the image size (images are assumed to be 105px per square)
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
-
-            // Rotate around 0,0 rotation amount
-            tile.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
-            // Move tile into target location (spaces are 105 units, Space.World is needed because tile has been rotated)
-            tile.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
         }
 
         override public string ToString()
@@ -248,7 +181,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "side=" + tileType.sectionName + nl;
+            r += "side=" + tileSideName + nl;
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
@@ -262,7 +195,6 @@ public class QuestData
     {
         new public static string type = "Door";
         public int rotation = 0;
-        public Color colour = Color.white;
         public GameObject gameObject;
         public string colourName = "white";
 
@@ -270,6 +202,8 @@ public class QuestData
         {
             locationSpecified = true;
             typeDynamic = type;
+            text = "You can open this door with an \"Open Door\" action.";
+            cancelable = true;
         }
 
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
@@ -288,82 +222,7 @@ public class QuestData
             if (data.ContainsKey("color"))
             {
                 colourName = data["color"];
-                SetColor(colourName);
             }
-
-            if (text.Equals(""))
-            {
-                text = "You can open this door with an \"Open Door\" action.";
-            }
-        }
-
-        public void SetColor(string s)
-        {
-            colourName = s;
-            string colorRGB = ColorUtil.FromName(s);
-            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
-            {
-                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + name);
-            }
-            else
-            {
-                colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-                colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-                colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
-            }
-        }
-
-        public override void Draw()
-        {
-            GameObject go = GameObject.Find("Object" + name);
-            if (go != null)
-            {
-                Object.Destroy(go);
-            }
-
-            Sprite tileSprite;
-            Texture2D newTex = Resources.Load("sprites/door") as Texture2D;
-            // Check load worked
-            if (newTex == null)
-            {
-                Debug.Log("Error: Cannot load door image");
-                Application.Quit();
-            }
-
-            // Create object
-            gameObject = new GameObject("Object" + name);
-            gameObject.tag = "board";
-
-            Game game = Game.Get();
-            gameObject.transform.parent = game.tokenCanvas.transform;
-
-            // Create the image
-            image = gameObject.AddComponent<UnityEngine.UI.Image>();
-            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            // Set door colour
-            image.color = new Color(colour[0], colour[1], colour[2], 1);
-            image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(newTex.width, newTex.height);
-            // Rotate as required
-            gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, rotation);
-            // Move to square (105 units per square)
-            gameObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0) * 105, Space.World);
-            gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
-        }
-
-        public override void SetVisible(bool vis)
-        {
-            GameObject go = GameObject.Find("Object" + name);
-            if (go != null)
-            {
-                Object.Destroy(go);
-            }
-
-            if (!vis) return;
-
-            Draw();
-            Game game = Game.Get();
-            game.tokenBoard.add(this);
         }
 
         override public string ToString()
@@ -387,7 +246,6 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
-        public GameObject gameObject;
         public string spriteName;
 
         public Token(string s) : base(s)
@@ -395,6 +253,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             spriteName = "search-token";
+            cancelable = true;
         }
 
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
@@ -408,58 +267,8 @@ public class QuestData
             spriteName = "search-token";
             if (data.ContainsKey("type"))
             {
-                spriteName = data["type"].ToLower();
+                spriteName = data["type"];
             }
-        }
-
-        public override void Draw()
-        {
-            Sprite tileSprite;
-            Texture2D newTex = Resources.Load("sprites/tokens/" + spriteName) as Texture2D;
-            // Check if we can find the token image
-            if (newTex == null)
-            {
-                Debug.Log("Warning: Quest component " + name + " is using missing token type: " + spriteName);
-                // Use search token instead
-                newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
-                // If we still can't load it then fatal error
-                if (newTex == null)
-                {
-                    Debug.Log("Error: Cannot load search token \"sprites/tokens/search-token\"");
-                    Application.Quit();
-                }
-            }
-
-            // Create object
-            gameObject = new GameObject("Object" + name);
-            gameObject.tag = "board";
-
-            Game game = Game.Get();
-            gameObject.transform.parent = game.tokenCanvas.transform;
-
-            // Create the image
-            image = gameObject.AddComponent<UnityEngine.UI.Image>();
-            tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = Color.white;
-            image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2((int)((float)newTex.width * (float)0.8), (int)((float)newTex.height * (float)0.8));
-            // Move to square (105 units per square)
-            gameObject.transform.Translate(new Vector3(location.x, location.y, 0) * 105, Space.World);
-        }
-
-        public override void SetVisible(bool vis)
-        {
-            GameObject go = GameObject.Find("Object" + name);
-            if (go != null)
-            {
-                Object.Destroy(go);
-            }
-            if (!vis) return;
-
-            Draw();
-
-            Game game = Game.Get();
-            game.tokenBoard.add(this);
         }
 
         override public string ToString()
@@ -480,11 +289,9 @@ public class QuestData
     public class Monster : Event
     {
         new public static string type = "Monster";
-        public MonsterData mData;
         public string[][] placement;
         public bool unique = false;
         public string uniqueTitle = "";
-        public string uniqueTitleOriginal = "";
         public string uniqueText = "";
         public string[] mTypes;
         public string[] mTraits;
@@ -494,15 +301,14 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
+            mTypes = new string[1];
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
-                mData = kv.Value;
+                mTypes[0] = kv.Key;
             }
-            mTypes = new string[1];
-            mTypes[0] = mData.sectionName;
             mTraits = new string[0];
 
-            placement = new string[5][];
+            placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -523,65 +329,13 @@ public class QuestData
                 mTypes = new string[0];
             }
 
-            // Next try to find a type that is valid
-            foreach (string t in mTypes)
-            {
-                // Monster type must exist in content packs, 'Monster' is optional
-                if (game.cd.monsters.ContainsKey(t) && mData == null)
-                {
-                    mData = game.cd.monsters[t];
-                }
-                else if (game.cd.monsters.ContainsKey("Monster" + t) && mData == null)
-                {
-                    mData = game.cd.monsters["Monster" + t];
-                }
-            }
-
-            // If we didn't find anything try by trait
             mTraits = new string[0];
-            if (mData == null)
+            if (data.ContainsKey("traits"))
             {
-                if (data.ContainsKey("traits"))
-                {
-                    mTraits = data["traits"].Split(' ');
-                }
-                else
-                {
-                    Debug.Log("Error: Cannot find monster and no traits provided: " + data["monster"] + " specified in event: " + name);
-                    Application.Quit();
-                }
-
-                List<MonsterData> list = new List<MonsterData>();
-                foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-                {
-                    bool allFound = true;
-                    foreach (string t in mTraits)
-                    {
-                        bool found = false;
-                        foreach (string mt in kv.Value.traits)
-                        {
-                            if (mt.Equals(t)) found = true;
-                        }
-                        if (found == false) allFound = false;
-                    }
-                    if (allFound)
-                    {
-                        list.Add(kv.Value);
-                    }
-                }
-
-                // Not found, throw error
-                if (list.Count == 0)
-                {
-                    Debug.Log("Error: Unable to find monster of traits specified in event: " + name);
-                    Application.Quit();
-                }
-
-                mData = list[Random.Range(0, list.Count)];
+                mTraits = data["traits"].Split(' ');
             }
-            text = text.Replace("{type}", mData.name);
 
-            placement = new string[5][];
+            placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -597,12 +351,7 @@ public class QuestData
             }
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitleOriginal = data["uniquetitle"];
-                uniqueTitle = uniqueTitleOriginal.Replace("{type}", mData.name);
-            }
-            if (uniqueTitle.Equals(""))
-            {
-                uniqueTitle = "Master " + mData.name;
+                uniqueTitle = data["uniquetitle"];
             }
             if (data.ContainsKey("uniquetext"))
             {
@@ -668,9 +417,9 @@ public class QuestData
             {
                 r += "unique=true" + nl;
             }
-            if (!uniqueTitleOriginal.Equals(""))
+            if (!uniqueTitle.Equals(""))
             {
-                r += "uniquetitle=\"" + uniqueTitleOriginal + "\"" + nl;
+                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
             }
             if (!uniqueText.Equals(""))
             {
@@ -995,7 +744,7 @@ public class QuestData
 
 
 
-    // Events are used to create dialogs that control the quest
+    // MPlaces are used to position individual monsters
     public class MPlace : QuestComponent
     {
         public bool master = false;
@@ -1116,44 +865,6 @@ public class QuestData
             ChangeReference(refName, "");
         }
 
-        // items are invisible by default, can toggle visibility
-        virtual public void Draw()
-        {
-            if(image == null)
-                return;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-        }
-
-
-        // items are invisible by default, can toggle visibility
-        virtual public void SetVisible(bool vis)
-        {
-            if (image == null)
-                return;
-            if (vis)
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-            else
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
-        }
-
-        // items are invisible by default, can toggle visibility
-        virtual public void SetVisible(float vis)
-        {
-            if (image == null)
-                return;
-            image.color = new Color(image.color.r, image.color.g, image.color.b, vis);
-        }
-
-        // return visibility of image
-        virtual public bool GetVisible()
-        {
-            if (image == null)
-                return false;
-            if (image.color.a == 0)
-                return false;
-            return true;
-        }
-
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -1176,6 +887,7 @@ public class QuestData
         public int minPanY;
         public int maxPanX;
         public int maxPanY;
+        public string type;
 
         public Quest(Dictionary<string, string> data)
         {
@@ -1187,6 +899,13 @@ public class QuestData
             if (data.ContainsKey("name"))
             {
                 name = data["name"];
+            }
+
+            // Default to D2E to support historical quests
+            type = "D2E";
+            if (data.ContainsKey("type"))
+            {
+                type = data["type"];
             }
             if (data.ContainsKey("description"))
             {
@@ -1234,6 +953,8 @@ public class QuestData
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
             r += "description=\"" + description + "\"" + nl;
+            // Set this so that old quests have a type applied
+            r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minPanY != -20)
             {
                 r += "minpany=" + minPanY + nl;

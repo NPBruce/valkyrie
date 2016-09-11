@@ -313,14 +313,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1237340d66ee57244b6a118b3f0ac9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  round: 0
-  heroesSelected: 0
+  version: 
   uICanvas: {fileID: 0}
   boardCanvas: {fileID: 0}
   tokenCanvas: {fileID: 0}
   tokenBoard: {fileID: 0}
   heroCanvas: {fileID: 0}
   monsterCanvas: {fileID: 0}
+  editMode: 0
+  ffgText: []
+  cc: {fileID: 0}
 --- !u!4 &1438429548
 Transform:
   m_ObjectHideFlags: 0
@@ -478,7 +480,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1842016590}
   m_LocalRotation: {x: -0.08715578, y: 0, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: 0, y: 0, z: -800}
+  m_LocalPosition: {x: 0, y: 0, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: -10, y: 0, z: 0}
   m_Children: []
@@ -499,6 +501,10 @@ MonoBehaviour:
   minPanY: -5000
   maxPanX: 5000
   maxPanY: 5000
+  targetSet: 0
+  camTarget: {x: 0, y: 0, z: 0}
+  mouseDownCamPosition: {x: 0, y: 0, z: 0}
+  mouseDownMousePosition: {x: 0, y: 0}
 --- !u!1 &1867481419
 GameObject:
   m_ObjectHideFlags: 0

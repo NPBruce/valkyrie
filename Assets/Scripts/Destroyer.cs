@@ -55,11 +55,13 @@ public class Destroyer {
 
         // Clear up all data
         game.cd = null;
-        game.qd = null;
+        game.quest = null;
         game.qed = null;
-        game.round = null;
         game.moraleDisplay = null;
-        game.tokenBoard.tc.Clear();
+        if (game.tokenBoard.tc != null)
+        {
+            game.tokenBoard.tc.Clear();
+        }
         game.editMode = false;
     }
 

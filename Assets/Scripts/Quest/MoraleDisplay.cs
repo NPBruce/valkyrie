@@ -7,7 +7,7 @@ public class MoraleDisplay {
     public MoraleDisplay()
     {
         Game game = Game.Get();
-        md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), game.round.morale.ToString(), Color.red);
+        md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), game.quest.morale.ToString(), Color.red);
         md.textObj.tag = "questui";
         md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize =UIScaler.GetLargeFont();
         md.background.tag = "questui";
@@ -17,7 +17,7 @@ public class MoraleDisplay {
     public void Update()
     {
         Game game = Game.Get();
-        md.textObj.GetComponent<UnityEngine.UI.Text>().text = game.round.morale.ToString();
+        md.textObj.GetComponent<UnityEngine.UI.Text>().text = game.quest.morale.ToString();
     }
 }
 

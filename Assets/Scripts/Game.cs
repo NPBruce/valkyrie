@@ -2,48 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/*
-Dump list of things to do:
-
-Done:
-    Better panning
-    end round event in editor
-    about page
-    #monsters flag
-    prevent events failing on incorrect selection
-    no confirm on door/token (if no available post events)
-    custom pass/fail
-    build now 32bit
-    camera jump smoothing
-
-Now:
-    Threat/peril
-    {0}/{1} in activations
-
-Later:
-    catch all parse exceptions
-    text editing sucks (text wrap?)
-    frame color for portraits Frame_Monster_1x1.dds (color rotation?)
-    random tags
-    tags for hero count
-    tags for round number
-    Expansion name on elements in editor, tags
-    ffg app version unity
-    quest set
-    lt.
-    Add expansions, conent selection
-    Stacked tileselection? (tags?)
-    save games
-    undo
-*/
-
 // General controller for the game
 public class Game : MonoBehaviour {
 
     public string version = "";
     public ContentData cd;
-    public QuestData qd;
-    public Round round;
+    public Quest quest;
     public Canvas uICanvas;
     public Canvas boardCanvas;
     public Canvas tokenCanvas;
@@ -55,6 +19,8 @@ public class Game : MonoBehaviour {
     public bool editMode = false;
     public QuestEditorData qed;
     public string[] ffgText = null;
+    public GameType gameType;
+    public CameraController cc;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -67,6 +33,7 @@ public class Game : MonoBehaviour {
     {
 
         // Find the common objects we use.  These are created by unity.
+        cc = GameObject.FindObjectOfType<CameraController>();
         uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         boardCanvas = GameObject.Find("BoardCanvas").GetComponent<Canvas>();
         tokenCanvas = GameObject.Find("TokenCanvas").GetComponent<Canvas>();
@@ -91,11 +58,12 @@ public class Game : MonoBehaviour {
     public void SelectQuest()
     {
         // Find any content packs at the location
-        cd = new ContentData(ContentData.ContentPath() + "D2E/");
+        cd = new ContentData(gameType.DataDirectory());
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + ContentData.ContentPath() + "D2E/" + System.Environment.NewLine);
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            Application.Quit();
         }
 
         // In the future this is where you select which packs to load, for now we load everything.
@@ -114,17 +82,8 @@ public class Game : MonoBehaviour {
     // This is called when a quest is selected
     public void StartQuest(QuestLoader.Quest q)
     {
-        // Fetch all of the quest data
-        qd = new QuestData(q);
-
-        // This shouldn't happen!
-        if (qd == null)
-        {
-            Debug.Log("Error: Invalid Quest.");
-            Application.Quit();
-        }
-
-        round = new Round();
+        // Fetch all of the quest data and initialise the quest
+        quest = new Quest(q);
 
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
@@ -149,12 +108,12 @@ public class Game : MonoBehaviour {
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Round.Hero h in round.heroes)
+        foreach (Quest.Hero h in Game.Get().quest.heroes)
         {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        round.morale = count;
+        quest.morale = count;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
@@ -163,7 +122,7 @@ public class Game : MonoBehaviour {
     void OnApplicationQuit ()
     {
         // This exists for the editor, because quitting doesn't actually work.
-        Destroyer.MainMenu();
+        Destroyer.Destroy();
         // Clean up temporary files
         QuestLoader.CleanTemp();
     }
@@ -178,4 +137,3 @@ public class Game : MonoBehaviour {
         }
     }
 }
-

@@ -4,11 +4,11 @@ using System.Collections;
 // Window with Monster activation
 public class ActivateDialog {
     // The even that raises this dialog
-    public Round.Monster monster;
+    public Quest.Monster monster;
     public bool master;
 
     // Create an activation window, if master is false then it is for minions
-    public ActivateDialog(Round.Monster m, bool masterIn)
+    public ActivateDialog(Quest.Monster m, bool masterIn)
     {
         monster = m;
         master = masterIn;
@@ -27,8 +27,7 @@ public class ActivateDialog {
         db.AddBorder();
         
         // ability text
-        string abiltiyText = monster.currentActivation.ability.Replace("\\n", "\n");
-        db = new DialogBox(new Vector2(10, 2.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 4), abiltiyText);
+        db = new DialogBox(new Vector2(10, 2.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect);
         db.AddBorder();
 
         // Activation box
@@ -37,12 +36,12 @@ public class ActivateDialog {
         if (master)
         {
             db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
-            activationText = monster.currentActivation.masterActions.Replace("\\n", "\n");
+            activationText = monster.currentActivation.ad.masterActions.Replace("\\n", "\n");
         }
         else
         {
             db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
-            activationText = monster.currentActivation.minionActions.Replace("\\n", "\n");
+            activationText = monster.currentActivation.ad.minionActions.Replace("\\n", "\n");
         }
         db.AddBorder();
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();

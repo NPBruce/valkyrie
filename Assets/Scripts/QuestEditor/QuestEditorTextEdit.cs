@@ -56,7 +56,7 @@ public class QuestEditorTextEdit {
         iField = inputObj.AddComponent<UnityEngine.UI.InputField>();
 
         uiText.color = Color.white;
-        uiText.font = (Font)Resources.Load("fonts/gara_scenario_desc");
+        uiText.font = game.gameType.GetFont();
         uiText.fontSize = UIScaler.GetSmallFont();
 
         iField.textComponent = uiText;

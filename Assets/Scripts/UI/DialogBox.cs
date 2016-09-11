@@ -69,9 +69,7 @@ public class DialogBox {
         uiText.color = fgColour;
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
-        //uiText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        //uiText.font = (Font)Resources.Load("fonts/windl");
-        uiText.font = (Font)Resources.Load("fonts/gara_scenario_desc");
+        uiText.font = game.gameType.GetFont();
         uiText.fontSize = UIScaler.GetSmallFont();
     }
 
