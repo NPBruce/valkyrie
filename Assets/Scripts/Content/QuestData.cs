@@ -887,6 +887,7 @@ public class QuestData
         public int minPanY;
         public int maxPanX;
         public int maxPanY;
+        public string type;
 
         public Quest(Dictionary<string, string> data)
         {
@@ -898,6 +899,13 @@ public class QuestData
             if (data.ContainsKey("name"))
             {
                 name = data["name"];
+            }
+
+            // Default to D2E to support historical quests
+            type = "D2E";
+            if (data.ContainsKey("type"))
+            {
+                type = data["type"];
             }
             if (data.ContainsKey("description"))
             {
@@ -945,6 +953,8 @@ public class QuestData
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
             r += "description=\"" + description + "\"" + nl;
+            // Set this so that old quests have a type applied
+            r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minPanY != -20)
             {
                 r += "minpany=" + minPanY + nl;

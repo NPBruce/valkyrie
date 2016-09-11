@@ -10,6 +10,7 @@ public abstract class GameType
     public abstract int MaxHeroes();
     public abstract int TilePixelPerSquare();
     public abstract Font GetFont();
+    public abstract string TypeName();
 }
 
 public class NoGameType : GameType
@@ -47,6 +48,11 @@ public class NoGameType : GameType
     public override int TilePixelPerSquare()
     {
         return 1;
+    }
+
+    public override string TypeName()
+    {
+        return "";
     }
 }
 
@@ -86,6 +92,11 @@ public class D2EGameType : GameType
     {
         return 105;
     }
+
+    public override string TypeName()
+    {
+        return "D2E";
+    }
 }
 
 class MoMGameType : GameType
@@ -122,6 +133,11 @@ class MoMGameType : GameType
 
     public override int TilePixelPerSquare()
     {
-        return 512;
+        return 256;
+    }
+
+    public override string TypeName()
+    {
+        return "MoM";
     }
 }

@@ -30,7 +30,7 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             Quest q = new Quest(p);
-            if (!q.name.Equals(""))
+            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
             }
@@ -54,7 +54,7 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             Quest q = new Quest(p);
-            if (!q.name.Equals(""))
+            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
             }
@@ -74,7 +74,7 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             Quest q = new Quest(p);
-            if (!q.name.Equals(""))
+            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
             }
@@ -191,6 +191,7 @@ public class QuestLoader {
         public string path;
         public string name = "";
         public string description;
+        public string type;
 
         public Quest(string p)
         {
@@ -200,6 +201,13 @@ public class QuestLoader {
             {
                 Debug.Log("Warning: Invalid quest:" + p + "/quest.ini!");
                 return;
+            }
+
+            type = d.Get("Quest", "type");
+            if (type.Length == 0)
+            {
+                // Default to D2E to support historical quests
+                type = "D2E";
             }
 
             name = d.Get("Quest", "name");

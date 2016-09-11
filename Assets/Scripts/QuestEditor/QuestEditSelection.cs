@@ -197,24 +197,25 @@ public class QuestEditSelection
 
     public void NewQuest()
     {
-
+        Game game = Game.Get();
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
 
         int i = 1;
-        while (Directory.Exists(dataLocation + "/EditorQuest" + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/EditorQuest" + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
 
         try
         {
             Directory.CreateDirectory(targetLocation);
 
-            string[] questData = new string[2];
+            string[] questData = new string[3];
 
             questData[0] = "[Quest]";
-            questData[1] = "name=Editor " + Game.Get().gameType.QuestName() + " " + i;
+            questData[1] = "name=Editor " + game.gameType.QuestName() + " " + i;
+            questData[2] = "type=" + game.gameType.TypeName();
 
             File.WriteAllLines(targetLocation + "/quest.ini", questData);
         }
