@@ -1,0 +1,36 @@
+Shader "Unlit/Transparent Cutout" {
+Properties {
+ _MainTex ("Base (RGB) Trans (A)", 2D) = "white" { }
+ _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
+}
+SubShader { 
+ LOD 100
+ Tags { "QUEUE"="AlphaTest" "IGNOREPROJECTOR"="true" "RenderType"="TransparentCutout" }
+ Pass {
+  Tags { "QUEUE"="AlphaTest" "IGNOREPROJECTOR"="true" "RenderType"="TransparentCutout" }
+  GpuProgramID 36113
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 2
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+}
+ }
+}
+}

@@ -19,6 +19,7 @@ public class Game : MonoBehaviour {
     public bool editMode = false;
     public QuestEditorData qed;
     public string[] ffgText = null;
+    public GameType gameType;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -55,11 +56,12 @@ public class Game : MonoBehaviour {
     public void SelectQuest()
     {
         // Find any content packs at the location
-        cd = new ContentData(ContentData.ContentPath() + "D2E/");
+        cd = new ContentData(gameType.DataDirectory());
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + ContentData.ContentPath() + "D2E/" + System.Environment.NewLine);
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            Application.Quit();
         }
 
         // In the future this is where you select which packs to load, for now we load everything.
@@ -133,4 +135,3 @@ public class Game : MonoBehaviour {
         }
     }
 }
-

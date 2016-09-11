@@ -14,10 +14,13 @@ public class FetchContent {
     public FetchContent(string type)
     {
         gameType = type;
-
         if (type.Equals("D2E"))
         {
             finder = new RtLFinder();
+        }
+        else if (type.Equals("MoM"))
+        {
+            finder = new MoMFinder();
         }
         else
         {
@@ -48,13 +51,17 @@ public class FetchContent {
 
     public void Import()
     {
-        List<string> unityFiles = new List<string>(); //files to load
-        string resources = finder.location + "/resources.assets";
+        Import (finder.location + "/resources.assets");
+    }
 
-        AssetsFile assetsFile = new AssetsFile(resources, new EndianStream(File.OpenRead(resources), EndianType.BigEndian));
+    public void Import(string assetFile)
+    {
+        List<string> unityFiles = new List<string>(); //files to load
+
+        AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
         if (assetsFile.fileGen < 15)
         {
-            Debug.Log("Invalid asset file: " + resources);
+            Debug.Log("Invalid asset file: " + assetFile);
             return;
         }
 
@@ -69,7 +76,7 @@ public class FetchContent {
             {
                 if (!File.Exists(sharedFilePath))
                 {
-                    var findFiles = Directory.GetFiles(Path.GetDirectoryName(resources), sharedFileName, SearchOption.AllDirectories);
+                    var findFiles = Directory.GetFiles(Path.GetDirectoryName(assetFile), sharedFileName, SearchOption.AllDirectories);
                     if (findFiles.Length > 0) { sharedFilePath = findFiles[0]; }
                 }
 

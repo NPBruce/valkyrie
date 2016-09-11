@@ -1,0 +1,132 @@
+Shader "Skybox/Procedural" {
+Properties {
+[KeywordEnum(None, Simple, High Quality)]  _SunDisk ("Sun", Float) = 2
+ _SunSize ("Sun Size", Range(0,1)) = 0.04
+ _AtmosphereThickness ("Atmoshpere Thickness", Range(0,5)) = 1
+ _SkyTint ("Sky Tint", Color) = (0.5,0.5,0.5,1)
+ _GroundColor ("Ground", Color) = (0.369,0.349,0.341,1)
+ _Exposure ("Exposure", Range(0,8)) = 1.3
+}
+SubShader { 
+ Tags { "QUEUE"="Background" "RenderType"="Background" "PreviewType"="Skybox" }
+ Pass {
+  Tags { "QUEUE"="Background" "RenderType"="Background" "PreviewType"="Skybox" }
+  ZWrite Off
+  Cull Off
+  GpuProgramID 1581
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 2
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 6
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 7
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 8
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 9
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 10
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 11
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 12
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 13
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 14
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 15
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 16
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 17
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 18
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 19
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 20
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 21
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 22
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 23
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 24
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 25
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 26
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 27
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 28
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 29
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 30
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 31
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 32
+}
+SubProgram "d3d9 " {
+GpuProgramIndex 33
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 34
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 35
+}
+}
+ }
+}
+Fallback Off
+}

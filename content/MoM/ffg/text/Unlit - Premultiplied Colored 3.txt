@@ -1,0 +1,41 @@
+Shader "Hidden/Unlit/Premultiplied Colored 3" {
+Properties {
+ _MainTex ("Base (RGB), Alpha (A)", 2D) = "black" { }
+}
+SubShader { 
+ LOD 200
+ Tags { "QUEUE"="Transparent" "IGNOREPROJECTOR"="true" "RenderType"="Transparent" }
+ Pass {
+  Tags { "QUEUE"="Transparent" "IGNOREPROJECTOR"="true" "RenderType"="Transparent" }
+  ZWrite Off
+  Cull Off
+  Blend One OneMinusSrcAlpha
+  ColorMask RGB
+  Offset -1, -1
+  GpuProgramID 55924
+Program "vp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 0
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 1
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 2
+}
+}
+Program "fp" {
+SubProgram "d3d9 " {
+GpuProgramIndex 3
+}
+SubProgram "d3d11 " {
+GpuProgramIndex 4
+}
+SubProgram "d3d11_9x " {
+GpuProgramIndex 5
+}
+}
+ }
+}
+Fallback "Unlit/Premultiplied Colored"
+}
