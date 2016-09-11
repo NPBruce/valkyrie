@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour {
     public Vector3 mouseDownCamPosition;
     public Vector2 mouseDownMousePosition;
 
-    Game game;
+    public Game game;
 
     void Awake()
     {

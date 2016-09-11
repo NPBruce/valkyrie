@@ -5,6 +5,7 @@ public class GameSelection
 {
     FetchContent fcD2E;
     FetchContent fcMoM;
+    bool lockOut = false;
 
     // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
     public GameSelection()
@@ -86,6 +87,7 @@ public class GameSelection
     // Start quest
     public void D2E()
     {
+        if (lockOut) return;
         if (!fcD2E.NeedImport())
         {
             Game.Get().gameType = new D2EGameType();
@@ -95,13 +97,17 @@ public class GameSelection
 
     public void D2EImport()
     {
+        if (lockOut) return;
+        lockOut = true;
         fcD2E.Import();
+        lockOut = false;
         Destroyer.Dialog();
         new GameSelection();
     }
 
     public void MoM()
     {
+        if (lockOut) return;
         if (!fcMoM.NeedImport())
         {
             Game.Get().gameType = new MoMGameType();
@@ -111,7 +117,10 @@ public class GameSelection
 
     public void MoMImport()
     {
+        if (lockOut) return;
+        lockOut = true;
         fcMoM.Import();
+        lockOut = false;
         Destroyer.Dialog();
         new GameSelection();
     }

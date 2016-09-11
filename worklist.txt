@@ -6,10 +6,11 @@ MoM
 {rnd:hero}
 {rnd:1:4}
 
-Now:
+Next:
 #2hero tags
 event for current round +x (delayedEvent=2:EventNext)
 Threat/peril (start with all required event extensions)
+MoM stuff?
 
 Later:
 Duplicate asset import
