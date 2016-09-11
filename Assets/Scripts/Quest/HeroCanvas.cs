@@ -156,11 +156,11 @@ public class HeroCanvas : MonoBehaviour {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
-        for(int i = 0; i < game.quest.heroes.Count - 1; i++)
+        for (int i = 0; i < game.quest.heroes.Count - 1; i++)
         {
             int j = i;
 
-            while(game.quest.heroes[i].heroData == null && j < game.quest.heroes.Count)
+            while (game.quest.heroes[i].heroData == null && j < game.quest.heroes.Count)
             {
                 game.quest.heroes[i].heroData = game.quest.heroes[j].heroData;
                 game.quest.heroes[j].heroData = null;
@@ -172,7 +172,11 @@ public class HeroCanvas : MonoBehaviour {
         UpdateStatus();
 
         game.quest.heroesSelected = true;
-        game.moraleDisplay = new MoraleDisplay();
+
+        if (game.gameType.DisplayMorale())
+        {
+            game.moraleDisplay = new MoraleDisplay();
+        }
         // Create the menu button
         new MenuButton();
 

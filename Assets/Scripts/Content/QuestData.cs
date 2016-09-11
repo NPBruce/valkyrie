@@ -308,7 +308,7 @@ public class QuestData
             }
             mTraits = new string[0];
 
-            placement = new string[5][];
+            placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -335,7 +335,7 @@ public class QuestData
                 mTraits = data["traits"].Split(' ');
             }
 
-            placement = new string[5][];
+            placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];

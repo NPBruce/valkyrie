@@ -179,9 +179,7 @@ public class EventManager
                 while (index != -1)
                 {
                     string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
-                    Debug.Log(rand);
                     int separator = rand.IndexOf(":", 5);
-                    Debug.Log(separator);
                     int min = int.Parse(rand.Substring(5, separator - 5));
                     int max = int.Parse(rand.Substring(separator + 1, rand.Length - separator - 2));
                     text = text.Replace(rand, Random.Range(min, max + 1).ToString());
