@@ -6,7 +6,7 @@ using System.IO;
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
 
-    List<ContentPack> allPacks;
+    public List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, MonsterData> monsters;
@@ -72,6 +72,9 @@ public class ContentData {
                     Debug.Log("Failed to get name data out of " + p + "/content_pack.ini!");
                     Application.Quit();
                 }
+
+                // id can be empty/missing
+                pack.id = d.Get("ContentPack", "id");
 
                 // If this is invalid we will just handle it later, not fatal
                 pack.image = p + "/" + d.Get("ContentPack", "image");
@@ -276,11 +279,12 @@ public class ContentData {
     }
 
     // Holding class for contentpack data
-    class ContentPack
+    public class ContentPack
     {
         public string name;
         public string image;
         public string description;
+        public string id;
         public List<string> iniFiles;
     }
 

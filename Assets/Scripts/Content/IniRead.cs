@@ -216,6 +216,30 @@ public class IniData
         return true;
     }
 
+    // Add new data, appends to data or replaces if exists
+    public void Add(string section, string name, string value)
+    {
+        if (!data.ContainsKey(section))
+        {
+            data.Add(section, new Dictionary<string, string>());
+        }
+
+        if (data[section].ContainsKey(name))
+        {
+            data[section].Remove(name);
+        }
+        data[section].Add(name, value);
+    }
+
+    public void Remove(string section, string name)
+    {
+        if (!data.ContainsKey(section)) return;
+
+        if (!data[section].ContainsKey(name)) return;
+
+        data[section].Remove(name);
+    }
+
     // Get section data, returns null if not found
     public Dictionary<string, string> Get(string section)
     {
@@ -232,5 +256,26 @@ public class IniData
         if (!data[section].ContainsKey(item))
             return "";
         return data[section][item];
+    }
+
+    override public string ToString()
+    {
+        string nl = System.Environment.NewLine;
+        string r = "";
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in data)
+        {
+            r += "[" + kv.Key + "]" + nl;
+            foreach (KeyValuePair<string, string> kv2 in kv.Value)
+            {
+                r += kv2.Key;
+                if (kv2.Value.Length > 0)
+                {
+                    r += "=" + kv2.Value;
+                }
+                r += nl;
+            }
+            r += nl;
+        }
+        return r;
     }
 }
