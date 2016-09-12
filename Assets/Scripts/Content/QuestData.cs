@@ -607,9 +607,9 @@ public class QuestData
             }
 
             delayedEvents = new Dictionary<int, string>();
-            if (data.ContainsKey("delayedEvents"))
+            if (data.ContainsKey("delayedevents"))
             {
-                string[] de = data["delayedEvents"].Split(' ');
+                string[] de = data["delayedevents"].Split(' ');
                 foreach (string s in de)
                 {
                     int delay = int.Parse(s.Substring(0, s.IndexOf(":")));
@@ -767,7 +767,7 @@ public class QuestData
 
             if (delayedEvents.Count > 0)
             {
-                r += "delayedEvents=";
+                r += "delayedevents=";
                 foreach (KeyValuePair<int, string> kv in delayedEvents)
                 {
                     r += kv.Key + ":" + kv.Value + " ";

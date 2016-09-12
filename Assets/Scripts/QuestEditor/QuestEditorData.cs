@@ -1519,6 +1519,10 @@ public class QuestEditorData {
         if (type.Equals("flag"))
         {
             flags.Add("#monsters");
+            flags.Add("#2hero");
+            flags.Add("#3hero");
+            flags.Add("#4hero");
+            flags.Add("#5hero");
         }
 
         Game game = Game.Get();
