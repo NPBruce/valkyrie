@@ -189,6 +189,27 @@ public class RoundHelper {
             }
         }
 
+        if (!game.quest.minorPeril && game.quest.qd.quest.minorPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
+            game.quest.minorPeril = true;
+            return;
+        }
+
+        if (!game.quest.majorPeril && game.quest.qd.quest.majorPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.major);
+            game.quest.majorPeril = true;
+            return;
+        }
+
+        if (!game.quest.deadlyPeril && game.quest.qd.quest.deadlyPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.deadly);
+            game.quest.deadlyPeril = true;
+            return;
+        }
+
         // Check if all heros have finished
         foreach (Quest.Hero h in game.quest.heroes)
         {

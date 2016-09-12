@@ -71,7 +71,7 @@ public static class IniRead{
                     else
                     {
                         string value = FFGLookup(l.Substring(equalsLocation + 1).Trim().Trim('\"'));
-                        entryData.Add(key, SymbolReplace(value));
+                        entryData.Add(key, value);
                     }
                 }
                 // This won't go anywhere if we don't have a section
@@ -93,38 +93,57 @@ public static class IniRead{
 
         return output;
     }
-
-    public static string SymbolReplace(string input)
-    {
-        string output = input;
-        output = output.Replace("{heart}", "≥");
-        output = output.Replace("{fatigue}", "∏");
-        output = output.Replace("{might}", "∂");
-        output = output.Replace("{will}", "π");
-        output = output.Replace("{knowledge}", "∑");
-        output = output.Replace("{awareness}", "μ");
-        output = output.Replace("{action}", "∞");
-        output = output.Replace("{shield}", "±");
-        output = output.Replace("{surge}", "≥");
-        return output;
-    }
-
+    
     public static string FFGLookup(string input)
     {
         string output = input;
         while (output.IndexOf("{ffg:") != -1)
         {
+            int bracketLevel = 1;
             int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
-            int lookupEnd = output.Substring(lookupStart).IndexOf("}");
-            string lookup = output.Substring(lookupStart, lookupEnd);
-            string result = FFGKeyLookup(lookup);
+
+            int lookupEnd = lookupStart;
+            while (bracketLevel > 0)
+            {
+                lookupEnd++;
+                if (output[lookupEnd].Equals('{'))
+                {
+                    bracketLevel++;
+                }
+                if (output[lookupEnd].Equals('}'))
+                {
+                    bracketLevel--;
+                }
+            }
+
+            string lookup = output.Substring(lookupStart + 5, (lookupEnd - lookupStart) - 5);
+            string result = FFGQuery(lookup);
+            // We don't support underlines
+            result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");
+            result = result.Replace("[i]", "<i>").Replace("[/i]", "</i>");
+            result = result.Replace("[b]", "<b>").Replace("[/b]", "</b>");
             output = output.Replace("{ffg:" + lookup + "}", result);
         }
         return output;
     }
 
+    public static string FFGQuery(string input)
+    {
+        string[] elements = input.Split(":".ToCharArray());
+
+        string fetched = FFGKeyLookup(elements[0]);
+
+        for (int i = 2; i < elements.Length; i += 2)
+        {
+            fetched = fetched.Replace(elements[i - 1], elements[i]);
+        }
+        return fetched;
+    }
+
     public static string FFGKeyLookup(string key)
     {
+        string[] elements = key.Split(":".ToCharArray());
+
         try
         {
             Game game = Game.Get();
@@ -136,7 +155,7 @@ public static class IniRead{
             for (int i = 0; i < game.ffgText.Length; i++)
             {
                 string[] values = game.ffgText[i].Split(",".ToCharArray(), 2);
-                if (values.Length > 1 && values[0].Equals(key))
+                if (values.Length > 1 && values[0].Equals(elements[0]))
                 {
                     string returnValue = values[1];
                     int nextQuote = 0;

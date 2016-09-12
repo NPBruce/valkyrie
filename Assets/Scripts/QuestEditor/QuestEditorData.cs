@@ -517,7 +517,7 @@ public class QuestEditorData {
         db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), "Unique Information:");
         db.ApplyTag("editor");
 
-        dbe2 = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), QuestEditorTextEdit.SymbolReplace(m.uniqueText), delegate { UpdateUniqueText(); });
+        dbe2 = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), m.uniqueText, delegate { UpdateUniqueText(); });
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
@@ -1047,7 +1047,7 @@ public class QuestEditorData {
         DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
 
-        dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), QuestEditorTextEdit.SymbolReplace(e.originalText), delegate { UpdateEventText(); });
+        dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), e.originalText, delegate { UpdateEventText(); });
         dbe1.ApplyTag("editor");
         dbe1.AddBorder();
 

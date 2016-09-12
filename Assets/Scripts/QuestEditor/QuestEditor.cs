@@ -48,8 +48,11 @@ public class QuestEditor {
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            content += System.Environment.NewLine;
-            content += kv.Value.ToString();
+            if (!(kv.Value is PerilData))
+            {
+                content += System.Environment.NewLine;
+                content += kv.Value.ToString();
+            }
         }
 
         try

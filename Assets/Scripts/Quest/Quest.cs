@@ -31,6 +31,9 @@ public class Quest
     public float threat = 0;
 
     public bool heroesSelected = false;
+    public bool minorPeril = false;
+    public bool majorPeril = false;
+    public bool deadlyPeril = false;
 
     public Game game;
 

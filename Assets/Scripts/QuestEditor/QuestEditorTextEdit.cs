@@ -78,19 +78,4 @@ public class QuestEditorTextEdit {
         Destroyer.Dialog();
         returnCall();
     }
-
-    public static string SymbolReplace(string input)
-    {
-        string output = input;
-        output = output.Replace("≥", "{heart}");
-        output = output.Replace("∏", "{fatigue}");
-        output = output.Replace("∂", "{might}");
-        output = output.Replace("π", "{will}");
-        output = output.Replace("∑", "{knowledge}");
-        output = output.Replace("μ", "{awareness}");
-        output = output.Replace("∞", "{action}");
-        output = output.Replace("±", "{shield}");
-        output = output.Replace("≥", "{surge}");
-        return output;
-    }
 }

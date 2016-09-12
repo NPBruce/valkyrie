@@ -255,7 +255,7 @@ public class ContentData {
         }
 
         // Is this a "Peril" entry?
-        if (name.IndexOf(TokenData.type) == 0)
+        if (name.IndexOf(PerilData.type) == 0)
         {
             PerilData d = new PerilData(name, content);
             // Ignore invalid entry
@@ -588,6 +588,7 @@ public class PerilData : QuestData.Event
     new public static string type = "Peril";
     public string monster = "";
     public int priority = 0;
+    public PerilType pType = PerilType.na;
 
     public PerilData(string name, Dictionary<string, string> data) : base(name, data)
     {
@@ -600,5 +601,25 @@ public class PerilData : QuestData.Event
         {
             priority = int.Parse(data["priority"]);
         }
+        if (name.IndexOf("PerilMinor") == 0)
+        {
+            pType = PerilType.minor;
+        }
+        if (name.IndexOf("PerilMajor") == 0)
+        {
+            pType = PerilType.major;
+        }
+        if (name.IndexOf("PerilDeadly") == 0)
+        {
+            pType = PerilType.deadly;
+        }
+    }
+
+    public enum PerilType
+    {
+        na,
+        minor,
+        major,
+        deadly
     }
 }

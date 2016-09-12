@@ -33,6 +33,30 @@ public class EventManager
                 }
             }
         }
+
+        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
+        {
+            events.Add(kv.Key, new Peril(kv.Key));
+        }
+    }
+
+    public void RaisePeril(PerilData.PerilType type)
+    {
+        Debug.Log(type);
+        List<string> list = new List<string>();
+        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
+        {
+            if (kv.Value.pType == type)
+            {
+                Peril p = new Peril(kv.Key);
+                if (!p.Disabled())
+                {
+                    list.Add(kv.Key);
+                }
+            }
+        }
+        Debug.Log(list.Count);
+        QueueEvent(list[Random.Range(0, list.Count)]);
     }
 
     public void EventTriggerType(string type)
@@ -189,7 +213,10 @@ public class EventManager
         public Event(string name)
         {
             game = Game.Get();
-            qEvent = game.quest.qd.components[name] as QuestData.Event;
+            if (game.quest.qd.components.ContainsKey(name))
+            {
+                qEvent = game.quest.qd.components[name] as QuestData.Event;
+            }
         }
         virtual public string GetText()
         {
@@ -355,6 +382,17 @@ public class EventManager
                 return "Master " + cMonster.name;
             }
             return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
+        }
+    }
+
+    public class Peril : Event
+    {
+        public PerilData cPeril;
+
+        public Peril(string name) : base(name)
+        {
+            qEvent = game.cd.perils[name] as QuestData.Event;
+            cPeril = qEvent as PerilData;
         }
     }
 
