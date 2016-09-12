@@ -8,7 +8,7 @@ public abstract class GameType
     public abstract string HeroesName();
     public abstract string QuestName();
     public abstract int MaxHeroes();
-    public abstract int TilePixelPerSquare();
+    public abstract float TilePixelPerSquare();
     public abstract Font GetFont();
     public abstract string TypeName();
     public abstract bool TileOnGrid();
@@ -47,9 +47,9 @@ public class NoGameType : GameType
         return 0;
     }
 
-    public override int TilePixelPerSquare()
+    public override float TilePixelPerSquare()
     {
-        return 1;
+        return 1f;
     }
 
     public override string TypeName()
@@ -100,7 +100,7 @@ public class D2EGameType : GameType
         return 4;
     }
 
-    public override int TilePixelPerSquare()
+    public override float TilePixelPerSquare()
     {
         return 105;
     }
@@ -153,9 +153,11 @@ class MoMGameType : GameType
         return 5;
     }
 
-    public override int TilePixelPerSquare()
+    public override float TilePixelPerSquare()
     {
-        return 341;
+        // the base side of the tile is 1024 pixels, we are having 3 'squares' in this
+        // These squares are slightly larger than D2E squares
+        return 1024f / 3f;
     }
 
     public override string TypeName()
