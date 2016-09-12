@@ -12,6 +12,7 @@ public class ContentData {
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
     public Dictionary<string, TokenData> tokens;
+    public Dictionary<string, PerilData> perils;
 
     public static string ContentPath()
     {
@@ -43,6 +44,9 @@ public class ContentData {
 
         // This has all available tokens
         tokens = new Dictionary<string, TokenData>();
+
+        // This has all avilable perils
+        perils = new Dictionary<string, PerilData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentDirectories = Directory.GetDirectories(path);
@@ -247,6 +251,26 @@ public class ContentData {
             {
                 tokens.Remove(name);
                 tokens.Add(name, d);
+            }
+        }
+
+        // Is this a "Peril" entry?
+        if (name.IndexOf(TokenData.type) == 0)
+        {
+            PerilData d = new PerilData(name, content);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!perils.ContainsKey(d.name))
+            {
+                perils.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (perils[d.name].priority < d.priority)
+            {
+                perils.Remove(name);
+                perils.Add(name, d);
             }
         }
     }
@@ -543,7 +567,6 @@ public class GenericData
         {
             image = "";
         }
-
     }
 
     public bool ContainsTrait(string trait)
@@ -557,5 +580,25 @@ public class GenericData
             }
         }
         return t;
+    }
+}
+
+public class PerilData : QuestData.Event
+{
+    new public static string type = "Peril";
+    public string monster = "";
+    public int priority = 0;
+
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data)
+    {
+        typeDynamic = type;
+        if (data.ContainsKey("monster"))
+        {
+            monster = data["monster"];
+        }
+        if (data.ContainsKey("priority"))
+        {
+            priority = int.Parse(data["priority"]);
+        }
     }
 }

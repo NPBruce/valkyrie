@@ -935,6 +935,9 @@ public class QuestData
         public int maxPanX;
         public int maxPanY;
         public string type;
+        public int minorPeril = 7;
+        public int majorPeril = 10;
+        public int deadlyPeril = 12;
 
         public Quest(Dictionary<string, string> data)
         {
@@ -974,6 +977,18 @@ public class QuestData
             if (data.ContainsKey("minpany"))
             {
                 minPanY = int.Parse(data["minpany"]);
+            }
+            if (data.ContainsKey("minorperil"))
+            {
+                minorPeril = int.Parse(data["minorperil"]);
+            }
+            if (data.ContainsKey("majorperil"))
+            {
+                majorPeril = int.Parse(data["majorperil"]);
+            }
+            if (data.ContainsKey("deadlyperil"))
+            {
+                deadlyPeril = int.Parse(data["deadlyperil"]);
             }
 
             CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
@@ -1018,6 +1033,19 @@ public class QuestData
             {
                 r += "maxpany=" + maxPanY + nl;
             }
+            if (minorPeril != 7)
+            {
+                r += "minorperil=" + maxPanY + nl;
+            }
+            if (majorPeril != 10)
+            {
+                r += "majorperil=" + maxPanY + nl;
+            }
+            if (deadlyPeril != 12)
+            {
+                r += "deadlyperil=" + maxPanY + nl;
+            }
+
             return r;
         }
     }
