@@ -168,6 +168,8 @@ public class HeroCanvas : MonoBehaviour {
             }
         }
 
+        game.quest.flags.Add("#" + heroCount + "hero");
+
         UpdateImages();
         UpdateStatus();
 

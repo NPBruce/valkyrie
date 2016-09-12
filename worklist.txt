@@ -3,9 +3,9 @@ Importing screen
 Tokens compat change
 MoM Tokens
 null events
+#2hero flags
 
 Next:
-#2hero tags
 event for current round +x (delayedEvent=2:EventNext)
 Threat/peril (start with all required event extensions)
 MoM stuff?
