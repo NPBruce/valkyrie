@@ -179,6 +179,16 @@ public class RoundHelper {
         if (game.quest.eManager.eventStack.Count != 0)
             return;
 
+        foreach (KeyValuePair<int, string> kv in game.quest.delayedEvents)
+        {
+            if (kv.Key == game.quest.round)
+            {
+                game.quest.delayedEvents.Remove(kv.Key);
+                game.quest.eManager.QueueEvent(kv.Value);
+                return;
+            }
+        }
+
         // Check if all heros have finished
         foreach (Quest.Hero h in game.quest.heroes)
         {

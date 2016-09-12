@@ -150,6 +150,11 @@ public class EventManager
             game.quest.threat = e.qEvent.threat;
         }
 
+        foreach (KeyValuePair<int, string> kv in e.qEvent.delayedEvents)
+        {
+            game.quest.delayedEvents.Add(kv.Key + game.quest.round, kv.Value);
+        }
+
         if (e.qEvent.locationSpecified)
         {
             CameraController.SetCamera(e.qEvent.location);
