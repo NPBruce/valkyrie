@@ -116,7 +116,7 @@ public static class IniRead{
                 }
             }
 
-            string lookup = output.Substring(lookupStart + 5, (lookupEnd - lookupStart) - 5);
+            string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
             string result = FFGQuery(lookup);
             // We don't support underlines
             result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");

@@ -7,11 +7,14 @@ null events
 threat set in events
 event for current round +x (delayedEvent=2:EventNext) - not in editor
 peril levels in quest (not in editor)
+some perils added
 
 Next:
-Peril
+content selection
+hybrid 1 activation bug
 
 Later:
+more perils
 Mythos
 MoM Activations
 Duplicate asset import
