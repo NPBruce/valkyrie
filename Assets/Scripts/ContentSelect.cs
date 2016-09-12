@@ -55,19 +55,21 @@ class ContentSelect
 
                 if (selected.Contains(id))
                 {
-                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(3, 3), "", delegate { Unselect(id); });
+                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Unselect(id); });
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                 }
                 else
                 {
-                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(3, 3), "", delegate { Select(id); }, Color.grey);
+                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
                 }
-                x += 4;
-                if (x > UIScaler.GetRight(-4))
+                x += 7;
+                if (x > UIScaler.GetRight(-7))
                 {
                     x = 1;
-                    y += 4;
+                    y += 7;
                 }
             }
         }
