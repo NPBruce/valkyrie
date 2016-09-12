@@ -26,6 +26,7 @@ public class Quest
 
     public int round = 1;
     public int morale = 0;
+    public float threat = 0;
 
     public bool heroesSelected = false;
 

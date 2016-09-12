@@ -453,6 +453,9 @@ public class QuestData
         public string[] clearFlags;
         public bool cancelable = false;
         public bool highlight = false;
+        public float threat;
+        public bool absoluteThreat = false;
+        public Dictionary<int, string> delayedEvents;
 
         public Event(string s) : base(s)
         {
@@ -464,6 +467,8 @@ public class QuestData
             flags = new string[0];
             setFlags = new string[0];
             clearFlags = new string[0];
+            threat = 0;
+            delayedEvents = new Dictionary<int, string>();
         }
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
@@ -590,6 +595,27 @@ public class QuestData
             else
             {
                 clearFlags = new string[0];
+            }
+
+            if (data.ContainsKey("threat"))
+            {
+                if (data["threat"][0].Equals('@'))
+                {
+                    absoluteThreat = true;
+                }
+                threat = float.Parse(data["threat"]);
+            }
+
+            delayedEvents = new Dictionary<int, string>();
+            if (data.ContainsKey("delayedEvents"))
+            {
+                string[] de = data["delayedEvents"].Split(' ');
+                foreach (string s in de)
+                {
+                    int delay = int.Parse(s.Substring(0, s.IndexOf(":")));
+                    string eventName = s.Substring(s.IndexOf(":") + 1);
+                    delayedEvents.Add(delay, eventName);
+                }
             }
         }
 
@@ -736,6 +762,27 @@ public class QuestData
                     r += s + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
+            }
+                delayedEvents = new Dictionary<int, string>();
+
+            if (delayedEvents.Count > 0)
+            {
+                r += "delayedEvents=";
+                foreach (KeyValuePair<int, string> kv in delayedEvents)
+                {
+                    r += kv.Key + ":" + kv.Value + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            if (threat != 0)
+            {
+                r += "threat=";
+                if (absoluteThreat)
+                {
+                    r += "@";
+                }
+                r += threat + nl;
             }
             return r;
         }

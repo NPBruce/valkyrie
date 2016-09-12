@@ -203,6 +203,7 @@ public class RoundHelper {
             m.currentActivation = null;
         }
         game.quest.round++;
+        game.quest.threat += 1;
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

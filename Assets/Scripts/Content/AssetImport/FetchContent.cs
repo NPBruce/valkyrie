@@ -203,12 +203,10 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/img");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/img/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         switch (m_Texture2D.m_TextureFormat)
@@ -296,14 +294,12 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/audio");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/audio/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
 
         m_AudioClip = new Unity_Studio.AudioClip(asset, true);
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
@@ -321,14 +317,12 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/text");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/text/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
 
         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
@@ -346,7 +340,6 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/fonts");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/fonts/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + ".ttf";
 
         m_Font = new Unity_Studio.unityFont(asset, true);
@@ -359,7 +352,6 @@ public class FetchContent {
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + ".ttf";
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))

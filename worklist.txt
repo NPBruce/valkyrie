@@ -4,6 +4,7 @@ Tokens compat change
 MoM Tokens
 null events
 #2hero flags
+threat set in events
 
 Next:
 event for current round +x (delayedEvent=2:EventNext)

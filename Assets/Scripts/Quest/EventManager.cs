@@ -142,9 +142,13 @@ public class EventManager
             game.tokenBoard.AddHighlight(e.qEvent);
         }
 
-        new DialogWindow(e);
         game.quest.Add(e.qEvent.addComponents);
         game.quest.Remove(e.qEvent.removeComponents);
+        game.quest.threat += e.qEvent.threat;
+        if (e.qEvent.absoluteThreat)
+        {
+            game.quest.threat = e.qEvent.threat;
+        }
 
         if (e.qEvent.locationSpecified)
         {
