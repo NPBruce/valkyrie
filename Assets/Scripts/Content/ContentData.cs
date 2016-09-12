@@ -262,6 +262,11 @@ public class ContentData {
 
     public static Texture2D FileToTexture(string file)
     {
+        return FileToTexture(file, Vector2.zero, Vector2.zero);
+    }
+
+    public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
+    {
         string imagePath = @"file://" + file;
         WWW www = null;
         Texture2D texture = null;
@@ -295,26 +300,35 @@ public class ContentData {
             {
                 texture.LoadRawTextureData(dxtBytes);
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 texture = new Texture2D(width, height, TextureFormat.DXT1, false);
                 texture.LoadRawTextureData(dxtBytes);
             }
             texture.Apply();
-            return texture;
         }
+        else
+        {
+            try
+            {
+                www = new WWW(@"file://" + imagePath);
+                texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
+                www.LoadImageIntoTexture(texture);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
+        // Get whole image
+        if (size.x == 0) return texture;
 
-        try
-        {
-            www = new WWW(@"file://" + imagePath);
-            texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
-            www.LoadImageIntoTexture(texture);
-            return texture;
-        }
-        catch (System.Exception)
-        {
-            return null;
-        }
+        // Get part of the image
+        Color[] pix = texture.GetPixels(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        Texture2D subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        subTexture.SetPixels(pix);
+        subTexture.Apply();
+        return subTexture;
     }
 }
 
