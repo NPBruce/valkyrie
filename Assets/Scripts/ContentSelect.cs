@@ -26,6 +26,7 @@ class ContentSelect
 
     public void Update()
     {
+        Destroyer.Dialog();
         selected = new List<string>();
         Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (setPacks != null)
@@ -37,8 +38,11 @@ class ContentSelect
         }
 
         // Name.  We should replace this with a banner
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select Expansion Content");
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Select Expansion Content");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        float x = 1;
+        float y = 4;
 
         foreach (ContentData.ContentPack cp in game.cd.allPacks)
         {
@@ -46,13 +50,24 @@ class ContentSelect
             {
                 string id = cp.id;
 
+                Texture2D tex = ContentData.FileToTexture(cp.image);
+                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
                 if (selected.Contains(id))
                 {
-                    new TextButton(new Vector2(5, 5), new Vector2(8, 2), cp.name, delegate { Unselect(id); });
+                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(3, 3), "", delegate { Unselect(id); });
+                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                 }
                 else
                 {
-                    new TextButton(new Vector2(5, 5), new Vector2(8, 2), cp.name, delegate { Select(id); }, Color.gray);
+                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(3, 3), "", delegate { Select(id); }, Color.grey);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                }
+                x += 4;
+                if (x > UIScaler.GetRight(-4))
+                {
+                    x = 1;
+                    y += 4;
                 }
             }
         }
@@ -62,7 +77,6 @@ class ContentSelect
 
     public void Select(string id)
     {
-        Debug.Log(id);
         game.config.data.Add(game.gameType.TypeName() + "Packs", id, "");
         game.config.Save();
         Update();
@@ -70,7 +84,6 @@ class ContentSelect
 
     public void Unselect(string id)
     {
-        Debug.Log(id);
         game.config.data.Remove(game.gameType.TypeName() + "Packs", id);
         game.config.Save();
         Update();
