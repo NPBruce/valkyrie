@@ -150,6 +150,26 @@ public class EventManager
         {
             CameraController.SetCamera(e.qEvent.location);
         }
+
+        // Only raise dialog if there is text, otherwise auto confirm
+        if (e.GetText().Length == 0)
+        {
+            foreach (string s in e.qEvent.nextEvent)
+            {
+                if (!game.quest.eManager.events[s].Disabled())
+                {
+                    game.quest.eManager.QueueEvent(s);
+                }
+            }
+            if (e.qEvent.name.IndexOf("EventEnd") == 0)
+            {
+                Destroyer.MainMenu();
+            }
+        }
+        else
+        {
+            new DialogWindow(e);
+        }
     }
 
     public class Event
