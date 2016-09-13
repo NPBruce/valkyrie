@@ -1523,6 +1523,13 @@ public class QuestEditorData {
             flags.Add("#3hero");
             flags.Add("#4hero");
             flags.Add("#5hero");
+            foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
+            {
+                if (pack.id.Length > 0)
+                {
+                    flags.Add("#" + pack.id);
+                }
+            }
         }
 
         Game game = Game.Get();

@@ -58,6 +58,12 @@ public class Quest
         {
             heroes.Add(new Hero(null, i));
         }
+
+        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        foreach (KeyValuePair<string, string> kv in packs)
+        {
+            flags.Add("#" + kv.Value);
+        }
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered

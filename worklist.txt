@@ -10,11 +10,12 @@ peril levels in quest (not in editor)
 some perils added
 Updated to RtL 1.1.7 - includes new tiles, must import
 expansions!
+tags for expansions
 
 Next:
 expansion note in editor
 expansion required in quests
-tags for expansions
+tags for expansions in editor
 
 Later:
 expansion appearance order
