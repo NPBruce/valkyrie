@@ -69,7 +69,7 @@ public class Game : MonoBehaviour {
         }
 
         // In the future this is where you select which packs to load, for now we load everything.
-        foreach(string pack in cd.GetPacks())
+        foreach(string pack in cd.GetEnabledPacks())
         {
             cd.LoadContent(pack);
         }

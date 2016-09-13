@@ -28,11 +28,20 @@ public class FetchContent {
             return;
         }
 
-        Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion() + System.Environment.NewLine);
+        string appVersion = finder.RequiredFFGVersion();
+
+        if (appVersion.Length != 0)
+        {
+            Debug.Log("FFG " + type + " Version Found: " + appVersion + System.Environment.NewLine);
+        }
+        else
+        {
+            Debug.Log("FFG " + type + " not found." + System.Environment.NewLine);
+        }
 
         string ffgVersion = fetchAppVersion();
 
-        importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), ffgVersion);
+        importAvailable = VersionNewerOrEqual(appVersion, ffgVersion);
     }
 
     public bool NeedImport()

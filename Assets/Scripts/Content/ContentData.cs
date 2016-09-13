@@ -117,6 +117,26 @@ public class ContentData {
         return names;
     }
 
+    // Return a list of names for all enbaled content packs
+    public List<string> GetEnabledPacks()
+    {
+        Game game = Game.Get();
+        List<string> names = new List<string>();
+        Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Length == 0)
+            {
+                names.Add(cp.name);
+            }
+            if (setPacks.ContainsKey(cp.id))
+            {
+                names.Add(cp.name);
+            }
+        }
+        return names;
+    }
+
     // This loads content from a pack by name
     // Duplicate content will be replaced by the higher priority value
     public void LoadContent(string name)

@@ -9,9 +9,9 @@ event for current round +x (delayedEvent=2:EventNext) - not in editor
 peril levels in quest (not in editor)
 some perils added
 Updated to RtL 1.1.7 - includes new tiles, must import
+expansions!
 
 Next:
-content selection doesn't actually do anything
 expansion note in editor
 expansion required in quests
 tags for expansions
