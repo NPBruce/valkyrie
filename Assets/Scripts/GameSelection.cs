@@ -118,7 +118,7 @@ public class GameSelection
         }
         if (type.Equals("MoM"))
         {
-            fcD2E.Import();
+            fcMoM.Import();
         }
         Destroyer.Dialog();
         new GameSelection();

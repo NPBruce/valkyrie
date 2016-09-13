@@ -30,7 +30,9 @@ public class FetchContent {
 
         Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion() + System.Environment.NewLine);
 
-        importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), finder.AppVersion());
+        string ffgVersion = fetchAppVersion();
+
+        importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), ffgVersion);
     }
 
     public bool NeedImport()
@@ -53,6 +55,33 @@ public class FetchContent {
         valkVersionOK = VersionNewerOrEqual(requiredValkyrieVersion, lastImport);
 
         return !appVersionOK || !valkVersionOK;
+    }
+
+    public string fetchAppVersion()
+    {
+        List<string> unityFiles = new List<string>(); //files to load
+
+        AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
+
+        string appVersion = "";
+        foreach (var asset in assetsFile.preloadTable.Values)
+        {
+            if (asset.Type2 == 49) //TextAsset
+            {
+                Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+                if (asset.Text.Equals("_version"))
+                {
+                    m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+                    appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
+                }
+            }
+        }
+
+        if (appVersion.IndexOf("#") != -1)
+        {
+            appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
+        }
+        return appVersion;
     }
 
     public void Import()
@@ -118,7 +147,7 @@ public class FetchContent {
         string[] log = new string[3];
         log[0] = "[Import]";
         log[1] = "Valkyrie=" + Game.Get().version;
-        log[2] = "FFG=" + finder.AppVersion();
+        log[2] = "FFG=" + fetchAppVersion();
         try
         {
             Directory.CreateDirectory(ContentData.ContentPath());

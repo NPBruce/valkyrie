@@ -16,6 +16,7 @@ hybrid 1 activation bug
 proper version check (text/_version.txt - 1.1.7#202)
 expansion extrances/joints/etc
 subdirectories for expansions
+crashes if app not available
 
 Later:
 more perils
