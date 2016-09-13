@@ -19,11 +19,9 @@ expansion required in quests
 Later:
 
 MoM:
-expansions investigators
 Mythos
 activations
 monsters
-
 
 D2E:
 expansion monsters/activations

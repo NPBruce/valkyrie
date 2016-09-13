@@ -208,13 +208,13 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!heros.ContainsKey(d.name))
+            if (!heros.ContainsKey(name))
             {
                 heros.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (heros[d.name].priority < d.priority)
+            else if (heros[name].priority < d.priority)
             {
                 heros.Remove(name);
                 heros.Add(name, d);
@@ -237,13 +237,13 @@ public class ContentData {
             if (name.IndexOf(ActivationData.type) != 0)
             {
                 // If we don't already have one then add this
-                if (!monsters.ContainsKey(d.name))
+                if (!monsters.ContainsKey(name))
                 {
                     monsters.Add(name, d);
                     d.sets.Add(packID);
                 }
                 // If we do replace if this has higher priority
-                else if (monsters[d.name].priority < d.priority)
+                else if (monsters[name].priority < d.priority)
                 {
                     monsters.Remove(name);
                     monsters.Add(name, d);
@@ -263,13 +263,13 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!activations.ContainsKey(d.name))
+            if (!activations.ContainsKey(name))
             {
                 activations.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (activations[d.name].priority < d.priority)
+            else if (activations[name].priority < d.priority)
             {
                 activations.Remove(name);
                 activations.Add(name, d);
@@ -289,13 +289,13 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!tokens.ContainsKey(d.name))
+            if (!tokens.ContainsKey(name))
             {
                 tokens.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (tokens[d.name].priority < d.priority)
+            else if (tokens[name].priority < d.priority)
             {
                 tokens.Remove(name);
                 tokens.Add(name, d);
@@ -315,12 +315,12 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!perils.ContainsKey(d.name))
+            if (!perils.ContainsKey(name))
             {
                 perils.Add(name, d);
             }
             // If we do replace if this has higher priority
-            else if (perils[d.name].priority < d.priority)
+            else if (perils[name].priority < d.priority)
             {
                 perils.Remove(name);
                 perils.Add(name, d);
