@@ -11,35 +11,36 @@ some perils added
 Updated to RtL 1.1.7 - includes new tiles, must import
 expansions!
 tags for expansions
+expansion note in editor
 
 Next:
-expansion note in editor
 expansion required in quests
-tags for expansions in editor
 
 Later:
-expansion appearance order
-hero selection scroll
-descent expansion monstsers
+
+MoM:
+expansions investigators
+Mythos
+activations
+monsters
+
+
+D2E:
+expansion monsters/activations
 hybrid 1 activation bug
-MoM investigators
 subdirectories for expansions
 more perils
-Mythos
-MoM Activations
-Duplicate asset import
+quest set
+
+Common:
+expansion appearance order
+hero selection scroll
 event log
 catch all parse exceptions
 text editing sucks (text wrap?)
 frame color for portraits Frame_Monster_1x1.dds (color rotation?)
 random tags
-tags for hero count
-tags for round number
-Expansion name on elements in editor, tags
-ffg app version unity
-quest set
 lt.
-Add expansions, content selection
 Stacked tileselection? (tags?)
 save games
 undo

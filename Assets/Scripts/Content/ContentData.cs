@@ -164,7 +164,7 @@ public class ContentData {
             // Add each section
             foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
-                AddContent(section.Key, section.Value, Path.GetDirectoryName(ini));
+                AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
             }
         }
     }
@@ -172,7 +172,7 @@ public class ContentData {
     // Add a section of an ini file to game content
     // name is from the ini file and must start with the type
     // path is relative and is used for images or other paths in the content
-    void AddContent(string name, Dictionary<string, string> content, string path)
+    void AddContent(string name, Dictionary<string, string> content, string path, string packID)
     {
         // Is this a "TileSide" entry?
         if(name.IndexOf(TileSideData.type) == 0)
@@ -185,12 +185,18 @@ public class ContentData {
             if(!tileSides.ContainsKey(name))
             {
                 tileSides.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if(tileSides[name].priority < d.priority)
             {
                 tileSides.Remove(name);
                 tileSides.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (tileSides[name].priority == d.priority)
+            {
+                tileSides[name].sets.Add(packID);
             }
         }
 
@@ -205,12 +211,18 @@ public class ContentData {
             if (!heros.ContainsKey(d.name))
             {
                 heros.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (heros[d.name].priority < d.priority)
             {
                 heros.Remove(name);
                 heros.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (heros[name].priority == d.priority)
+            {
+                heros[name].sets.Add(packID);
             }
         }
 
@@ -228,12 +240,18 @@ public class ContentData {
                 if (!monsters.ContainsKey(d.name))
                 {
                     monsters.Add(name, d);
+                    d.sets.Add(packID);
                 }
                 // If we do replace if this has higher priority
                 else if (monsters[d.name].priority < d.priority)
                 {
                     monsters.Remove(name);
                     monsters.Add(name, d);
+                }
+                // items of the same priority belong to multiple packs
+                else if (monsters[name].priority == d.priority)
+                {
+                    monsters[name].sets.Add(packID);
                 }
             }
         }
@@ -248,12 +266,18 @@ public class ContentData {
             if (!activations.ContainsKey(d.name))
             {
                 activations.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (activations[d.name].priority < d.priority)
             {
                 activations.Remove(name);
                 activations.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (activations[name].priority == d.priority)
+            {
+                activations[name].sets.Add(packID);
             }
         }
 
@@ -268,12 +292,18 @@ public class ContentData {
             if (!tokens.ContainsKey(d.name))
             {
                 tokens.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (tokens[d.name].priority < d.priority)
             {
                 tokens.Remove(name);
                 tokens.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (tokens[name].priority == d.priority)
+            {
+                tokens[name].sets.Add(packID);
             }
         }
 
@@ -537,6 +567,8 @@ public class GenericData
 {
     // name from section title or data
     public string name;
+    // sets from which this belogs (expansions)
+    public List<string> sets;
     // section name
     public string sectionName;
     // List of traits
@@ -552,6 +584,7 @@ public class GenericData
     public GenericData(string name_ini, Dictionary<string, string> content, string path, string type)
     {
         sectionName = name_ini;
+        sets = new List<string>();
 
         // Has the name been specified?
         if (content.ContainsKey("name"))

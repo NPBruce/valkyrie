@@ -291,7 +291,12 @@ public class QuestEditorData {
 
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
-            sides.Add(kv.Key);
+            string display = kv.Key;
+            foreach (string s in kv.Value.sets)
+            {
+                display += " " + s;
+            }
+            sides.Add(display);
         }
         esl = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
         esl.SelectItem();
@@ -353,7 +358,7 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         QuestData.Tile t = selection as QuestData.Tile;
-        t.tileSideName = esl.selection;
+        t.tileSideName = esl.selection.Split(" ".ToCharArray())[0];
         game.quest.Remove(t.name);
         game.quest.Add(t.name);
         SelectTile(t.name);
@@ -456,7 +461,7 @@ public class QuestEditorData {
     public void SelectTokenType()
     {
         QuestData.Token t = selection as QuestData.Token;
-        t.tokenName = esl.selection;
+        t.tokenName = esl.selection.Split(" ".ToCharArray())[0];
         Game.Get().quest.Remove(t.name);
         Game.Get().quest.Add(t.name);
         SelectComponent(t.name);
@@ -838,7 +843,12 @@ public class QuestEditorData {
         List<string> monsters = new List<string>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            monsters.Add(kv.Key);
+            string display = kv.Key;
+            foreach (string s in kv.Value.sets)
+            {
+                display += " " + s;
+            }
+            monsters.Add(display);
         }
         esl = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos); });
         esl.SelectItem();
@@ -861,7 +871,7 @@ public class QuestEditorData {
         QuestData.Monster m = selection as QuestData.Monster;
         if (replace)
         {
-            m.mTypes[pos] = esl.selection;
+            m.mTypes[pos] = esl.selection.Split(" ".ToCharArray())[0];
         }
         else
         {
@@ -872,7 +882,7 @@ public class QuestEditorData {
             {
                 if (j == pos && i == j)
                 {
-                    newM[i] = esl.selection;
+                    newM[i] = esl.selection.Split(" ".ToCharArray())[0];
                 }
                 else
                 {
@@ -2144,9 +2154,15 @@ public class QuestEditorData {
     public static List<string> GetTokenNames()
     {
         List<string> names = new List<string>();
+
         foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
         {
-            names.Add(kv.Key);
+            string display = kv.Key;
+            foreach (string s in kv.Value.sets)
+            {
+                display += " " + s;
+            }
+            names.Add(display);
         }
         return names;
     }
