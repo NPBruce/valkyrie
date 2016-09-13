@@ -162,12 +162,12 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if(!tileSides.ContainsKey(d.name))
+            if(!tileSides.ContainsKey(name))
             {
                 tileSides.Add(name, d);
             }
             // If we do replace if this has higher priority
-            else if(tileSides[d.name].priority < d.priority)
+            else if(tileSides[name].priority < d.priority)
             {
                 tileSides.Remove(name);
                 tileSides.Add(name, d);
