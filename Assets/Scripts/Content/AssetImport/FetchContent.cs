@@ -10,6 +10,7 @@ public class FetchContent {
     AppFinder finder = null;
     public bool importAvailable;
     string logFile;
+    public static string requiredValkyrieVersion = "0.4.1";
 
     public FetchContent(string type)
     {
@@ -41,12 +42,17 @@ public class FetchContent {
         {
             return true;
         }
+
+        bool appVersionOK = false;
+        bool valkVersionOK = false;
+
         string lastImport = log.Get("Import", "FFG");
-        if (lastImport.Equals(finder.RequiredFFGVersion()))
-        {
-            return false;
-        }
-        return VersionNewer(finder.RequiredFFGVersion(), lastImport);
+        appVersionOK = VersionNewerOrEqual(finder.RequiredFFGVersion(), lastImport);
+
+        lastImport = log.Get("Import", "Valkyrie");
+        valkVersionOK = VersionNewerOrEqual(requiredValkyrieVersion, lastImport);
+
+        return !appVersionOK || !valkVersionOK;
     }
 
     public void Import()
@@ -363,7 +369,9 @@ public class FetchContent {
 
     public static bool VersionNewerOrEqual(string oldVersion, string newVersion)
     {
-        if (oldVersion.Equals(newVersion)) return true;
+        string oldS = System.Text.RegularExpressions.Regex.Replace(oldVersion, "[^0-9]", "");
+        string newS = System.Text.RegularExpressions.Regex.Replace(newVersion, "[^0-9]", "");
+        if (oldS.Equals(newS)) return true;
         return VersionNewer(oldVersion, newVersion);
     }
 

@@ -8,13 +8,12 @@ threat set in events
 event for current round +x (delayedEvent=2:EventNext) - not in editor
 peril levels in quest (not in editor)
 some perils added
+Updated to RtL 1.1.7 - includes new tiles, must import
 
 Next:
 content selection
 hybrid 1 activation bug
 proper version check (text/_version.txt - 1.1.7#202)
-extra 1.1.7 tiles
-fix vert alignment of expansion tiles
 expansion extrances/joints/etc
 subdirectories for expansions
 
