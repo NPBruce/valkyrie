@@ -13,12 +13,14 @@ Updated to RtL 1.1.7 - includes new tiles, must import
 Next:
 content selection
 hybrid 1 activation bug
-proper version check (text/_version.txt - 1.1.7#202)
-expansion extrances/joints/etc
 subdirectories for expansions
 crashes if app not available
+expansion note in editor
+expansion required in quests
 
 Later:
+MoM investigators
+subdirectories for expansions
 more perils
 Mythos
 MoM Activations
