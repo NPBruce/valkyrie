@@ -16,6 +16,7 @@ proper version check (text/_version.txt - 1.1.7#202)
 extra 1.1.7 tiles
 fix vert alignment of expansion tiles
 expansion extrances/joints/etc
+subdirectories for expansions
 
 Later:
 more perils
