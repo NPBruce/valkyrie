@@ -60,27 +60,32 @@ public class FetchContent {
     public string fetchAppVersion()
     {
         List<string> unityFiles = new List<string>(); //files to load
-
-        AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
-
         string appVersion = "";
-        foreach (var asset in assetsFile.preloadTable.Values)
+
+        try
         {
-            if (asset.Type2 == 49) //TextAsset
+            AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
+
+            foreach (var asset in assetsFile.preloadTable.Values)
             {
-                Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
-                if (asset.Text.Equals("_version"))
+                if (asset.Type2 == 49) //TextAsset
                 {
-                    m_TextAsset = new Unity_Studio.TextAsset(asset, true);
-                    appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
+                    Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+                    if (asset.Text.Equals("_version"))
+                    {
+                        m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+                        appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
+                    }
                 }
             }
-        }
 
-        if (appVersion.IndexOf("#") != -1)
-        {
-            appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
+            if (appVersion.IndexOf("#") != -1)
+            {
+                appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
+            }
         }
+        catch (System.Exception) { }
+
         return appVersion;
     }
 

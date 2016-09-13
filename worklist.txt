@@ -11,14 +11,16 @@ some perils added
 Updated to RtL 1.1.7 - includes new tiles, must import
 
 Next:
-content selection
-hybrid 1 activation bug
-subdirectories for expansions
-crashes if app not available
+content selection doesn't actually do anything
 expansion note in editor
 expansion required in quests
+tags for expansions
 
 Later:
+expansion appearance order
+hero selection scroll
+descent expansion monstsers
+hybrid 1 activation bug
 MoM investigators
 subdirectories for expansions
 more perils
