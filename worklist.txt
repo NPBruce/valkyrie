@@ -20,9 +20,7 @@ Next:
 @threat in editor
 Affairs of Wizards
 nested{} in ffg text replace
-hero selection example
 Random next event (Red/Blue)
-MoR tile place bug
 
 Later:
 No ability text hides box

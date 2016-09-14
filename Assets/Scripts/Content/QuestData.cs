@@ -456,6 +456,7 @@ public class QuestData
         public float threat;
         public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
+        public bool randomEvents = false;
 
         public Event(string s) : base(s)
         {
@@ -620,6 +621,10 @@ public class QuestData
                     string eventName = s.Substring(s.IndexOf(":") + 1);
                     delayedEvents.Add(new DelayedEvent(delay, eventName));
                 }
+            }
+            if (data.ContainsKey("randomevents"))
+            {
+                randomEvents = bool.Parse(data["randomevents"]);
             }
         }
 
@@ -803,6 +808,10 @@ public class QuestData
                     r += "@";
                 }
                 r += threat + nl;
+            }
+            if (randomEvents)
+            {
+                r += "randomevents=true" + nl;
             }
             return r;
         }
