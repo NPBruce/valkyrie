@@ -13,10 +13,10 @@ expansions!
 tags for expansions
 expansion note in editor
 threat in editor
-expansion required in quests (doesn't stop attempt)
+expansion required in quests
 
 Next:
-expansion required enforce
+better highlights
 
 Later:
 

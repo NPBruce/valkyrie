@@ -10,6 +10,7 @@ public class QuestLoader {
     {
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
+        Game game = Game.Get();
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
@@ -32,7 +33,15 @@ public class QuestLoader {
             Quest q = new Quest(p);
             if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
-                quests.Add(p, q);
+                bool expansionsOK = true;
+                foreach (string s in q.packs)
+                {
+                    if (!game.cd.GetEnabledPacks().Contains(s))
+                    {
+                        expansionsOK = false;
+                    }
+                }
+                if (expansionsOK) quests.Add(p, q);
             }
         }
 
@@ -192,6 +201,7 @@ public class QuestLoader {
         public string name = "";
         public string description;
         public string type;
+        public string[] packs;
 
         public Quest(string p)
         {
@@ -215,6 +225,15 @@ public class QuestLoader {
             {
                 Debug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
                 return;
+            }
+
+            if (d.Get("Quest", "packs").Length > 0)
+            {
+                packs = d.Get("Quest", "packs").Split(' ');
+            }
+            else
+            {
+                packs = new string[0];
             }
 
             // Missing description is OK
