@@ -1340,7 +1340,13 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(1, 1), new Vector2(10, 1), "Trigger Events:");
+        string randomButton = "Ordered";
+        if (e.randomEvents) randomButton = "Random";
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), randomButton, delegate { EventToggleRandom(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(10, 1), "Trigger Events:");
         db.ApplyTag("editor");
 
         string confirmLabel = e.confirmText;
@@ -1538,6 +1544,13 @@ public class QuestEditorData {
         {
             e.failText = "";
         }
+    }
+
+    public void EventToggleRandom()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.randomEvents = !e.randomEvents;
+        SelectEventPageTwo();
     }
 
     public void EventRemoveEvent(int index, bool fail = false)

@@ -20,7 +20,6 @@ randomevents
 Next:
 Affairs of Wizards
 nested{} in ffg text replace
-randomevents in editor
 
 Later:
 No ability text hides box
