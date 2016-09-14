@@ -190,26 +190,37 @@ public class EventManager
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {
-            foreach (string s in e.qEvent.nextEvent)
-            {
-                if (!game.quest.eManager.events[s].Disabled())
-                {
-                    currentEvent = null;
-                    game.quest.eManager.QueueEvent(s);
-                    return;
-                }
-            }
-            if (e.qEvent.name.IndexOf("EventEnd") == 0)
-            {
-                Destroyer.MainMenu();
-            }
-            currentEvent = null;
-            TriggerEvent();
+            EndEvent();
         }
         else
         {
             new DialogWindow(e);
         }
+    }
+
+    public void EndEvent(bool fail=false)
+    {
+        string[] eventList = currentEvent.qEvent.nextEvent;
+        if (fail)
+        {
+            eventList = currentEvent.qEvent.failEvent;
+        }
+        foreach (string s in eventList)
+        {
+            if (!game.quest.eManager.events[s].Disabled())
+            {
+                currentEvent = null;
+                game.quest.eManager.QueueEvent(s);
+                return;
+            }
+        }
+        if (currentEvent.qEvent.name.IndexOf("EventEnd") == 0)
+        {
+            Destroyer.MainMenu();
+            return;
+        }
+        currentEvent = null;
+        TriggerEvent();
     }
 
     public class Event
