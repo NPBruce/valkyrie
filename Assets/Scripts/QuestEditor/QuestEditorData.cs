@@ -1062,33 +1062,40 @@ public class QuestEditorData {
         dbe1.ApplyTag("editor");
         dbe1.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 12), new Vector2(8, 1), "Trigger:");
+        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), "Trigger:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), e.trigger, delegate { EventTrigger(); });
+        tb = new TextButton(new Vector2(4, 12), new Vector2(8, 1), e.trigger, delegate { EventTrigger(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(8, 12), new Vector2(8, 1), "Selection:");
+        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), "Selection:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(8, 13), new Vector2(8, 1), e.heroListName, delegate { EventHighlight(); });
+        tb = new TextButton(new Vector2(4, 13), new Vector2(8, 1), e.heroListName, delegate { EventHighlight(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(16, 12), new Vector2(2, 1), "Min");
+        db = new DialogBox(new Vector2(12, 12), new Vector2(2, 1), "Min");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(16, 13), new Vector2(2, 1), e.minHeroes.ToString(), delegate { EventHeroCount(false); });
+        tb = new TextButton(new Vector2(12, 13), new Vector2(2, 1), e.minHeroes.ToString(), delegate { EventHeroCount(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(18, 12), new Vector2(2, 1), "Max");
+        db = new DialogBox(new Vector2(14, 12), new Vector2(2, 1), "Max");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(18, 13), new Vector2(2, 1), e.maxHeroes.ToString(), delegate { EventHeroCount(true); });
+        tb = new TextButton(new Vector2(14, 13), new Vector2(2, 1), e.maxHeroes.ToString(), delegate { EventHeroCount(true); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(17, 12), new Vector2(3, 1), "Threat");
+        db.ApplyTag("editor");
+
+        dbe2 = new DialogBoxEditable(new Vector2(17, 13), new Vector2(3, 1), e.threat.ToString(), delegate { UpdateThreatText(); });
+        dbe2.ApplyTag("editor");
+        dbe2.AddBorder();
 
         db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Add Components:");
         db.ApplyTag("editor");
@@ -1163,6 +1170,13 @@ public class QuestEditorData {
             QuestData.Event e = selection as QuestData.Event;
             e.originalText = dbe1.uiInput.text;
         }
+    }
+
+    public void UpdateThreatText()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        float.TryParse(dbe2.uiInput.text, out e.threat);
+        SelectEvent(e.name);
     }
 
     public void SelectEventPageTwo()
@@ -1777,11 +1791,10 @@ public class QuestEditorData {
     public void EventHeroCount(bool max)
     {
         List<string> num = new List<string>();
-        num.Add("0");
-        num.Add("1");
-        num.Add("2");
-        num.Add("3");
-        num.Add("4");
+        for (int i = 0; i <= Game.Get().gameType.MaxHeroes(); i++)
+        {
+            num.Add(i.ToString());
+        }
 
         esl = new EditorSelectionList("Select Number", num, delegate { SelectEventHeroCount(max); });
         esl.SelectItem();
