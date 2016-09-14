@@ -176,7 +176,7 @@ public class RoundHelper {
 
         Game game = Game.Get();
 
-        if (game.quest.eManager.eventStack.Count != 0)
+        if (game.quest.eManager.currentEvent != null)
             return;
 
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)

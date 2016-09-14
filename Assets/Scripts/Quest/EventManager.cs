@@ -82,17 +82,12 @@ public class EventManager
         // Don't queue disabled events
         if (events[name].Disabled()) return;
 
-        if (eventStack.Count == 0)
+        // Place this on top of the stack
+        eventStack.Push(events[name]);
+
+        if (currentEvent == null)
         {
-            eventStack.Push(events[name]);
             TriggerEvent();
-        }
-        else
-        {
-            // If there is something in the stack then insert this as the second item
-            Event e = eventStack.Pop();
-            eventStack.Push(events[name]);
-            eventStack.Push(e);
         }
     }
 
@@ -199,7 +194,9 @@ public class EventManager
             {
                 if (!game.quest.eManager.events[s].Disabled())
                 {
+                    currentEvent = null;
                     game.quest.eManager.QueueEvent(s);
+                    return;
                 }
             }
             if (e.qEvent.name.IndexOf("EventEnd") == 0)
