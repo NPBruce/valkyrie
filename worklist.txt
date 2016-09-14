@@ -18,12 +18,16 @@ dpi/aspect tile control
 
 Next:
 @threat in editor
-example/test quest
-demo quest (AoW)
+Affairs of Wizards
 nested{} in ffg text replace
-delayedevent bug
+delayedevent bug/stuck without event at end round
+hero selection example
+MPlace in example
+Random next event
 
 Later:
+No ability text hides box
+No minion text skips step
 
 MoM:
 Mythos

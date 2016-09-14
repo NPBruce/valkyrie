@@ -166,9 +166,10 @@ public class RoundHelper {
     public static void EndRound()
     {
         Game game = Game.Get();
+        game.quest.eManager.EventTriggerType("EndRound", false);
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round);
-        game.quest.eManager.EventTriggerType("EndRound");
-        CheckNewRound();
+        // This will cause the end of the round if nothing was added
+        game.quest.eManager.TriggerEvent();
     }
 
     public static void CheckNewRound()
@@ -177,6 +178,9 @@ public class RoundHelper {
         Game game = Game.Get();
 
         if (game.quest.eManager.currentEvent != null)
+            return;
+
+        if (game.quest.eManager.eventStack.Count > 0)
             return;
 
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)

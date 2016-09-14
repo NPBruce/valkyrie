@@ -59,18 +59,18 @@ public class EventManager
         QueueEvent(list[Random.Range(0, list.Count)]);
     }
 
-    public void EventTriggerType(string type)
+    public void EventTriggerType(string type, bool trigger=true)
     {
         foreach (KeyValuePair<string, Event> kv in events)
         {
             if (kv.Value.qEvent.trigger.Equals(type))
             {
-                QueueEvent(kv.Key);
+                QueueEvent(kv.Key, trigger);
             }
         }
     }
 
-    public void QueueEvent(string name)
+    public void QueueEvent(string name, bool trigger=true)
     {
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
@@ -85,7 +85,7 @@ public class EventManager
         // Place this on top of the stack
         eventStack.Push(events[name]);
 
-        if (currentEvent == null)
+        if (currentEvent == null && trigger)
         {
             TriggerEvent();
         }
@@ -203,6 +203,8 @@ public class EventManager
             {
                 Destroyer.MainMenu();
             }
+            currentEvent = null;
+            TriggerEvent();
         }
         else
         {
