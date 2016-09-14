@@ -179,12 +179,12 @@ public class RoundHelper {
         if (game.quest.eManager.eventStack.Count != 0)
             return;
 
-        foreach (KeyValuePair<int, string> kv in game.quest.delayedEvents)
+        foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
-            if (kv.Key == game.quest.round)
+            if (de.delay == game.quest.round)
             {
-                game.quest.delayedEvents.Remove(kv.Key);
-                game.quest.eManager.QueueEvent(kv.Value);
+                game.quest.delayedEvents.Remove(de);
+                game.quest.eManager.QueueEvent(de.eventName);
                 return;
             }
         }

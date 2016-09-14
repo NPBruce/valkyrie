@@ -455,7 +455,7 @@ public class QuestData
         public bool highlight = false;
         public float threat;
         public bool absoluteThreat = false;
-        public Dictionary<int, string> delayedEvents;
+        public List<DelayedEvent> delayedEvents;
 
         public Event(string s) : base(s)
         {
@@ -468,7 +468,7 @@ public class QuestData
             setFlags = new string[0];
             clearFlags = new string[0];
             threat = 0;
-            delayedEvents = new Dictionary<int, string>();
+            delayedEvents = new List<DelayedEvent>();
         }
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
@@ -606,7 +606,7 @@ public class QuestData
                 threat = float.Parse(data["threat"]);
             }
 
-            delayedEvents = new Dictionary<int, string>();
+            delayedEvents = new List<DelayedEvent>();
             if (data.ContainsKey("delayedevents"))
             {
                 string[] de = data["delayedevents"].Split(' ');
@@ -614,7 +614,7 @@ public class QuestData
                 {
                     int delay = int.Parse(s.Substring(0, s.IndexOf(":")));
                     string eventName = s.Substring(s.IndexOf(":") + 1);
-                    delayedEvents.Add(delay, eventName);
+                    delayedEvents.Add(new DelayedEvent(delay, eventName));
                 }
             }
         }
@@ -763,14 +763,13 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-                delayedEvents = new Dictionary<int, string>();
 
             if (delayedEvents.Count > 0)
             {
                 r += "delayedevents=";
-                foreach (KeyValuePair<int, string> kv in delayedEvents)
+                foreach (DelayedEvent de in delayedEvents)
                 {
-                    r += kv.Key + ":" + kv.Value + " ";
+                    r += de.delay + ":" + de.eventName + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
@@ -785,6 +784,18 @@ public class QuestData
                 r += threat + nl;
             }
             return r;
+        }
+
+        public class DelayedEvent
+        {
+            public string eventName;
+            public int delay;
+
+            public DelayedEvent(int d, string e)
+            {
+                delay = d;
+                eventName = e;
+            }
         }
     }
 

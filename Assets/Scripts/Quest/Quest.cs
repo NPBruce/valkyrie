@@ -21,7 +21,7 @@ public class Quest
     // Event manager handles the events
     public EventManager eManager;
 
-    public Dictionary<int, string> delayedEvents;
+    public List<QuestData.Event.DelayedEvent> delayedEvents;
 
     public List<Hero> heroes;
     public List<Monster> monsters;
@@ -50,7 +50,7 @@ public class Quest
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         eManager = new EventManager();
-        delayedEvents = new Dictionary<int, string>();
+        delayedEvents = new List<QuestData.Event.DelayedEvent>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();

@@ -15,6 +15,8 @@ expansion note in editor
 
 Next:
 expansion required in quests
+delayed events in editor
+peril in editor
 
 Later:
 
@@ -22,23 +24,30 @@ MoM:
 Mythos
 activations
 monsters
+missing tiles
+free place tokens/events/monsters
+foyer aspect
 
 D2E:
+more perils
 expansion monsters/activations
 hybrid 1 activation bug
-subdirectories for expansions
-more perils
 quest set
+missing tiles
+subdirectories for expansions
+
 
 Common:
-expansion appearance order
 hero selection scroll
-event log
-catch all parse exceptions
-text editing sucks (text wrap?)
 frame color for portraits Frame_Monster_1x1.dds (color rotation?)
-random tags
-lt.
-Stacked tileselection? (tags?)
+event log
 save games
 undo
+lt.
+catch all parse exceptions
+expansion appearance order
+random tags
+Stacked tileselection? (tags?)
+map sets
+text editing sucks (text wrap?)
+lt.

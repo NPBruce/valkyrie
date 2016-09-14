@@ -68,9 +68,7 @@ public class FetchContent {
 
     public string fetchAppVersion()
     {
-        List<string> unityFiles = new List<string>(); //files to load
         string appVersion = "";
-
         try
         {
             AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
