@@ -49,7 +49,8 @@ public class MainMenu {
 
     public void Editor()
     {
-        new QuestEditSelection();
+        Game game = Game.Get();
+        game.SelectEditQuest();
     }
 
     public void About()

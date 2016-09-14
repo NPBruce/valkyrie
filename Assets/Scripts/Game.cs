@@ -68,7 +68,6 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
-        // In the future this is where you select which packs to load, for now we load everything.
         foreach(string pack in cd.GetEnabledPacks())
         {
             cd.LoadContent(pack);
@@ -79,6 +78,27 @@ public class Game : MonoBehaviour {
 
         // Pull up the quest selection page
         new QuestSelection(ql);
+    }
+
+    // This is called by editor on the main menu
+    public void SelectEditQuest()
+    {
+        // Find any content packs at the location
+        cd = new ContentData(gameType.DataDirectory());
+        // Check if we found anything
+        if (cd.GetPacks().Count == 0)
+        {
+            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            Application.Quit();
+        }
+
+        foreach (string pack in cd.GetPacks())
+        {
+            cd.LoadContent(pack);
+        }
+
+        // Pull up the quest selection page
+        new QuestEditSelection();
     }
 
     // This is called when a quest is selected
