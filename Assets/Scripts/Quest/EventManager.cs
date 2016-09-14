@@ -205,15 +205,30 @@ public class EventManager
         {
             eventList = currentEvent.qEvent.failEvent;
         }
+
+        List<string> enabledEvents = new List<string>();
         foreach (string s in eventList)
         {
             if (!game.quest.eManager.events[s].Disabled())
             {
-                currentEvent = null;
-                game.quest.eManager.QueueEvent(s);
-                return;
+                enabledEvents.Add(s);
             }
         }
+        if (enabledEvents.Count > 0)
+        {
+            if (currentEvent.qEvent.randomEvents)
+            {
+                currentEvent = null;
+                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)]);
+            }
+            else
+            {
+                currentEvent = null;
+                game.quest.eManager.QueueEvent(enabledEvents[0]);
+            }
+            return;
+        }
+
         if (currentEvent.qEvent.name.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();

@@ -132,7 +132,5 @@ public class DialogWindow {
     {
         // Clean up everything marked as 'dialog'
         Destroyer.Dialog();
-
-        Game.Get().quest.eManager.currentEvent = null;
     }
 }

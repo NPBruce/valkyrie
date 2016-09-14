@@ -15,12 +15,12 @@ expansion note in editor
 expansion required in quests
 better highlights
 dpi/aspect tile control
+randomevents
 
 Next:
 @threat in editor
 Affairs of Wizards
 nested{} in ffg text replace
-Random next event (Red/Blue)
 
 Later:
 No ability text hides box
