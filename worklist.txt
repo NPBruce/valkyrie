@@ -14,9 +14,10 @@ tags for expansions
 expansion note in editor
 threat in editor
 expansion required in quests
+better highlights
+dpi/aspect tile control
 
 Next:
-better highlights
 
 Later:
 
@@ -26,7 +27,6 @@ activations
 monsters
 missing tiles
 free place tokens/events/monsters
-foyer aspect
 
 D2E:
 more perils
@@ -35,7 +35,6 @@ hybrid 1 activation bug
 quest set
 missing tiles
 subdirectories for expansions
-
 
 Common:
 hero selection scroll

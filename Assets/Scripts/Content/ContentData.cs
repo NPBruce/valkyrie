@@ -415,6 +415,8 @@ public class TileSideData : GenericData
 {
     public float top;
     public float left;
+    public float pxPerSquare;
+    public float aspect;
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -436,6 +438,22 @@ public class TileSideData : GenericData
         else
         {
             left = 0;
+        }
+        if (content.ContainsKey("pps"))
+        {
+            pxPerSquare = float.Parse(content["pps"]);
+        }
+        else
+        {
+            pxPerSquare = Game.Get().gameType.TilePixelPerSquare();
+        }
+        if (content.ContainsKey("aspect"))
+        {
+            aspect = float.Parse(content["aspect"]);
+        }
+        else
+        {
+            aspect = 0;
         }
     }
 }

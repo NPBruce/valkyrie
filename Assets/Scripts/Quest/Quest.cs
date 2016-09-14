@@ -209,8 +209,16 @@ public class Quest
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / game.gameType.TilePixelPerSquare(), Space.World);
-            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / game.gameType.TilePixelPerSquare(), Space.World);
+            float vPPS = game.cd.tileSides[qTile.tileSideName].pxPerSquare;
+            float hPPS = vPPS;
+            // manual aspect control
+            if (game.cd.tileSides[qTile.tileSideName].aspect != 0)
+            {
+                hPPS = (vPPS * newTex.width / newTex.height) / game.cd.tileSides[qTile.tileSideName].aspect;
+            }
+
+            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / hPPS, Space.World);
+            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / vPPS, Space.World);
             // Move to get the middle of the top left square at 0,0 (squares are 105 units)
             // We don't do this for MoM because it spaces differently
             if (game.gameType.TileOnGrid())
@@ -218,7 +226,7 @@ public class Quest
                 unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
             }
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / game.gameType.TilePixelPerSquare(), (float)newTex.height / game.gameType.TilePixelPerSquare());
+            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / hPPS, (float)newTex.height / vPPS);
 
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
