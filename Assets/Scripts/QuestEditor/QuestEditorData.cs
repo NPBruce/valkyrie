@@ -148,6 +148,31 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        DialogBox db = new DialogBox(new Vector2(0, 15), new Vector2(8, 1), "Minor Peril Level:");
+        db.ApplyTag("editor");
+
+        dbeList = new List<DialogBoxEditable>();
+        DialogBoxEditable dbeTmp = new DialogBoxEditable(new Vector2(8, 15), new Vector2(3, 1), game.quest.qd.quest.minorPeril.ToString(), delegate { UpdatePeril(0); });
+        dbeTmp.ApplyTag("editor");
+        dbeTmp.AddBorder();
+        dbeList.Add(dbeTmp);
+
+        db = new DialogBox(new Vector2(0, 16), new Vector2(8, 1), "Major Peril Level:");
+        db.ApplyTag("editor");
+
+        dbeTmp = new DialogBoxEditable(new Vector2(8, 16), new Vector2(3, 1), game.quest.qd.quest.majorPeril.ToString(), delegate { UpdatePeril(1); });
+        dbeTmp.ApplyTag("editor");
+        dbeTmp.AddBorder();
+        dbeList.Add(dbeTmp);
+
+        db = new DialogBox(new Vector2(0, 17), new Vector2(8, 1), "Deadly Peril Level:");
+        db.ApplyTag("editor");
+
+        dbeTmp = new DialogBoxEditable(new Vector2(8, 17), new Vector2(3, 1), game.quest.qd.quest.deadlyPeril.ToString(), delegate { UpdatePeril(2); });
+        dbeTmp.ApplyTag("editor");
+        dbeTmp.AddBorder();
+        dbeList.Add(dbeTmp);
+
         tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -170,6 +195,23 @@ public class QuestEditorData {
 
         if (!dbe2.uiInput.text.Equals(""))
             game.quest.qd.quest.description = dbe2.uiInput.text;
+    }
+
+    public void UpdatePeril(int level)
+    {
+        if (level == 0)
+        {
+            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.minorPeril);
+        }
+        if (level == 1)
+        {
+            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.majorPeril);
+        }
+        if (level == 2)
+        {
+            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.deadlyPeril);
+        }
+        SelectQuest();
     }
 
     public void SelectTile(string name)
