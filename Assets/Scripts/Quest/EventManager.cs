@@ -252,8 +252,7 @@ public class EventManager
 
         public bool ConfirmPresent()
         {
-            if (!(qEvent is QuestData.Token)) return true;
-            if (!(qEvent is QuestData.Door)) return true;
+            if (!qEvent.cancelable) return true;
             foreach (string s in qEvent.nextEvent)
             {
                 if (!game.quest.eManager.events[s].Disabled()) return true;
