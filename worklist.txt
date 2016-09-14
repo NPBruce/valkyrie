@@ -33,7 +33,7 @@ more perils
 expansion monsters/activations
 hybrid 1 activation bug
 quest set
-missing tiles
+missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
 subdirectories for expansions
 
 Common:
