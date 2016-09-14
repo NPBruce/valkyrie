@@ -966,6 +966,7 @@ public class QuestData
         public int minorPeril = 7;
         public int majorPeril = 10;
         public int deadlyPeril = 12;
+        public string[] packs;
 
         public Quest(Dictionary<string, string> data)
         {
@@ -1017,6 +1018,14 @@ public class QuestData
             if (data.ContainsKey("deadlyperil"))
             {
                 deadlyPeril = int.Parse(data["deadlyperil"]);
+            }
+            if (data.ContainsKey("packs"))
+            {
+                packs = data["packs"].Split(' ');
+            }
+            else
+            {
+                packs = new string[0];
             }
 
             CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
@@ -1072,6 +1081,15 @@ public class QuestData
             if (deadlyPeril != 12)
             {
                 r += "deadlyperil=" + maxPanY + nl;
+            }
+            if (packs.Length > 0)
+            {
+                r += "packs=";
+                foreach (string s in packs)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
             }
 
             return r;

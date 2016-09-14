@@ -173,6 +173,30 @@ public class QuestEditorData {
         dbeTmp.AddBorder();
         dbeList.Add(dbeTmp);
 
+        db = new DialogBox(new Vector2(0, 19), new Vector2(9, 1), "Required Expansions:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(9, 19), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        int offset = 20;
+        int index;
+        for (index = 0; index < 8; index++)
+        {
+            if (game.quest.qd.quest.packs.Length > index)
+            {
+                int i = index;
+                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), game.quest.qd.quest.packs[index]);
+                db.AddBorder();
+                db.ApplyTag("editor");
+                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), "-", delegate { QuestRemovePack(i); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
+
         tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -211,6 +235,54 @@ public class QuestEditorData {
         {
             int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.deadlyPeril);
         }
+        SelectQuest();
+    }
+
+    public void QuestAddPack()
+    {
+        List<string> packs = new List<string>();
+
+        foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
+        {
+            if (pack.id.Length > 0)
+            {
+                packs.Add(pack.id);
+            }
+        }
+
+        esl = new EditorSelectionList("Select Pack", packs, delegate { SelectQuestAddPack(); });
+        esl.SelectItem();
+    }
+
+    public void SelectQuestAddPack()
+    {
+        Game game = Game.Get();
+        string[] packs = new string[game.quest.qd.quest.packs.Length + 1];
+        int i;
+        for (i = 0; i < game.quest.qd.quest.packs.Length; i++)
+        {
+            packs[i] = game.quest.qd.quest.packs[i];
+        }
+        packs[i] = (esl.selection);
+        game.quest.qd.quest.packs = packs;
+        SelectQuest();
+    }
+
+    public void QuestRemovePack(int index)
+    {
+        Game game = Game.Get();
+        string[] packs = new string[game.quest.qd.quest.packs.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < game.quest.qd.quest.packs.Length; i++)
+        {
+            if (i != index || i != j)
+            {
+                packs[j] = game.quest.qd.quest.packs[i];
+                j++;
+            }
+        }
+        game.quest.qd.quest.packs = packs;
         SelectQuest();
     }
 
