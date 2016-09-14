@@ -36,7 +36,7 @@ public class QuestLoader {
                 bool expansionsOK = true;
                 foreach (string s in q.packs)
                 {
-                    if (!game.cd.GetEnabledPacks().Contains(s))
+                    if (!game.cd.GetEnabledPackIDs().Contains(s))
                     {
                         expansionsOK = false;
                     }

@@ -406,8 +406,8 @@ public class EventManager
         output = output.Replace("{knowledge}", "∑");
         output = output.Replace("{awareness}", "μ");
         output = output.Replace("{action}", "∞");
-        output = output.Replace("{shield}", "±");
-        output = output.Replace("{surge}", "≥");
+        output = output.Replace("{shield}", "≤");
+        output = output.Replace("{surge}", "±");
         return output;
     }
 
