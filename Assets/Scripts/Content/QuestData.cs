@@ -658,6 +658,23 @@ public class QuestData
                 }
             }
             removeComponents = RemoveFromArray(removeComponents, "");
+
+            List<DelayedEvent> deList = new List<DelayedEvent>();
+            foreach (DelayedEvent de in delayedEvents)
+            {
+                if (de.eventName.Equals(oldName))
+                {
+                    if (newName.Length > 0)
+                    {
+                        deList.Add(new DelayedEvent(de.delay, newName));
+                    }
+                }
+                else
+                {
+                    deList.Add(de);
+                }
+            }
+            delayedEvents = deList;
         }
 
         override public string ToString()
