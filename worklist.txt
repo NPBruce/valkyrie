@@ -18,9 +18,9 @@ dpi/aspect tile control
 randomevents
 
 Next:
-@threat in editor
 Affairs of Wizards
 nested{} in ffg text replace
+randomevents in editor
 
 Later:
 No ability text hides box

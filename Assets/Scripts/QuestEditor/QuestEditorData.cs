@@ -1207,7 +1207,13 @@ public class QuestEditorData {
         db = new DialogBox(new Vector2(17, 12), new Vector2(3, 1), "Threat");
         db.ApplyTag("editor");
 
-        dbe2 = new DialogBoxEditable(new Vector2(17, 13), new Vector2(3, 1), e.threat.ToString(), delegate { UpdateThreatText(); });
+        string absLabel = "";
+        if (e.absoluteThreat) absLabel = "@";
+        tb = new TextButton(new Vector2(17, 13), new Vector2(1, 1), absLabel, delegate { EventToggleAbsThreat(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        dbe2 = new DialogBoxEditable(new Vector2(18, 13), new Vector2(2, 1), e.threat.ToString(), delegate { UpdateThreatText(); });
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
@@ -1284,6 +1290,13 @@ public class QuestEditorData {
             QuestData.Event e = selection as QuestData.Event;
             e.originalText = dbe1.uiInput.text;
         }
+    }
+
+    public void EventToggleAbsThreat()
+    {
+        QuestData.Event e = selection as QuestData.Event;
+        e.absoluteThreat = !e.absoluteThreat;
+        SelectEvent(e.name);
     }
 
     public void UpdateThreatText()
