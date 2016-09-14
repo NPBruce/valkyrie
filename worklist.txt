@@ -20,10 +20,9 @@ Next:
 @threat in editor
 Affairs of Wizards
 nested{} in ffg text replace
-delayedevent bug/stuck without event at end round
 hero selection example
-MPlace in example
-Random next event
+Random next event (Red/Blue)
+MoR tile place bug
 
 Later:
 No ability text hides box

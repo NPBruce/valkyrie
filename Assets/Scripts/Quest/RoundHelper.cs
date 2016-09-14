@@ -167,7 +167,7 @@ public class RoundHelper {
     {
         Game game = Game.Get();
         game.quest.eManager.EventTriggerType("EndRound", false);
-        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round);
+        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
         // This will cause the end of the round if nothing was added
         game.quest.eManager.TriggerEvent();
     }
