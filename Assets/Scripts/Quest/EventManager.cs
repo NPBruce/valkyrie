@@ -171,7 +171,15 @@ public class EventManager
         game.quest.threat += e.qEvent.threat;
         if (e.qEvent.absoluteThreat)
         {
+            if (e.qEvent.threat != 0)
+            {
+                Debug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
+            }
             game.quest.threat = e.qEvent.threat;
+        }
+        else if (e.qEvent.threat != 0)
+        {
+            Debug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
         }
 
         foreach (QuestData.Event.DelayedEvent de in e.qEvent.delayedEvents)

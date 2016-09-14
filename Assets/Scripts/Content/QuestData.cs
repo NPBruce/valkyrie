@@ -602,8 +602,12 @@ public class QuestData
                 if (data["threat"][0].Equals('@'))
                 {
                     absoluteThreat = true;
+                    threat = float.Parse(data["threat"].Substring(1));
                 }
-                threat = float.Parse(data["threat"]);
+                else
+                {
+                    threat = float.Parse(data["threat"]);
+                }
             }
 
             delayedEvents = new List<DelayedEvent>();
