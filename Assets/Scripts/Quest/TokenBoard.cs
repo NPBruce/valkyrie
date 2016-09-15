@@ -173,6 +173,9 @@ public class TokenBoard : MonoBehaviour {
         image.rectTransform.sizeDelta = new Vector2(1f, 1f);
         // Move to square (105 units per square)
         gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0), Space.World);
+
+        // Add pulser
+        gameObject.AddComponent<SpritePulser>();
     }
 
     public void AddHighlight(QuestData.Event e)
@@ -206,6 +209,9 @@ public class TokenBoard : MonoBehaviour {
         image.rectTransform.sizeDelta = new Vector2(1f, 1f);
         // Move to square (105 units per square)
         gameObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
+
+        // Add pulser
+        gameObject.AddComponent<SpritePulser>();
     }
 }
 
