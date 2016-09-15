@@ -129,11 +129,31 @@ public static class IniRead{
 
     public static string FFGQuery(string input)
     {
-        string[] elements = input.Split(":".ToCharArray());
+        int bracketLevel = 0;
+        int lastSection = 0;
+        List<string> elements = new List<string>();
+        for (int index = 0; index < input.Length; index++)
+        {
+            if (input[index].Equals('{'))
+            {
+                bracketLevel++;
+            }
+            if (input[index].Equals('}'))
+            {
+                bracketLevel--;
+            }
+            if (input[index].Equals(':'))
+                if (bracketLevel == 0)
+            {
+                elements.Add(input.Substring(lastSection, index - lastSection));
+                lastSection = index + 1;
+            }
+        }
+        elements.Add(input.Substring(lastSection, input.Length - lastSection));
 
         string fetched = FFGKeyLookup(elements[0]);
 
-        for (int i = 2; i < elements.Length; i += 2)
+        for (int i = 2; i < elements.Count; i += 2)
         {
             fetched = fetched.Replace(elements[i - 1], elements[i]);
         }

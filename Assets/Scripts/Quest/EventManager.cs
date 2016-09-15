@@ -42,7 +42,6 @@ public class EventManager
 
     public void RaisePeril(PerilData.PerilType type)
     {
-        Debug.Log(type);
         List<string> list = new List<string>();
         foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
         {
@@ -55,7 +54,6 @@ public class EventManager
                 }
             }
         }
-        Debug.Log(list.Count);
         QueueEvent(list[Random.Range(0, list.Count)]);
     }
 
