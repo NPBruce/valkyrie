@@ -1,6 +1,4 @@
 Done:
-Fixed event cancel bug.
-Sin wave on Bing
 
 Next:
 Affairs of Wizards
@@ -17,20 +15,23 @@ missing tiles
 free place tokens/events/monsters
 
 D2E:
-more perils
-expansion monsters/activations
-hybrid 1 activation bug
+expansion monsters
 quest set
 missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
+campaign
 subdirectories for expansions
+h&m
+more perils
+expansion activations
+hybrid 1 activation bug
 lt.
 
 Common:
-hero selection scroll
-frame color for portraits Frame_Monster_1x1.dds (color rotation?)
 event log
 save games
 undo
+hero selection scroll
+frame color for portraits Frame_Monster_1x1.dds/atlas
 catch all parse exceptions
 expansion appearance order
 random tags

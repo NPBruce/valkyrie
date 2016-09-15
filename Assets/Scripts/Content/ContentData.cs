@@ -501,6 +501,11 @@ public class MonsterData : GenericData
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
+    
+    // This constuctor only exists for the quest version of this class to use to do nothing
+    public MonsterData()
+    {
+    }
 
     public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -617,6 +622,10 @@ public class GenericData
     public int priority;
     // for sub classes to set type
     public static string type = "";
+
+    public GenericData()
+    {
+    }
 
     // generic constructor gets common things
     public GenericData(string name_ini, Dictionary<string, string> content, string path, string type)
