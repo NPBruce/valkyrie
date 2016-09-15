@@ -20,10 +20,12 @@ randomevents
 Next:
 Affairs of Wizards
 starting/trailing '"'
+Sin wave on Bing
+No minion text skips step
 
 Later:
 No ability text hides box
-No minion text skips step
+Custom monsters/activations in quests
 
 MoM:
 Mythos
