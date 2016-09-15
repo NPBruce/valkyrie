@@ -9,9 +9,6 @@ public class QuestData
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
 
-    // Custom monsters
-    public Dictionary<string, MonsterData> questMonsters;
-
     // Custom activations
     public Dictionary<string, ActivationData> questActivations;
 
@@ -45,7 +42,6 @@ public class QuestData
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
-        questMonsters = new Dictionary<string, MonsterData>();
         questActivations = new Dictionary<string, ActivationData>();
 
         // Read the main quest file
@@ -137,8 +133,8 @@ public class QuestData
         }
         if (name.IndexOf("UniqueMonster") == 0)
         {
-            QuestMonster qm = new QuestMonster(name, content, path);
-            questMonsters.Add(name, qm);
+            UniqueMonster c = new UniqueMonster(name, content, path);
+            components.Add(name, c);
         }
         // If not known ignore
     }
@@ -980,97 +976,58 @@ public class QuestData
         }
     }
 
-    public class QuestMonster : MonsterData
+    public class UniqueMonster : QuestComponent
     {
+        new public static string type = "UniqueMonster";
         public string baseMonster = "";
+        public string monsterName = "";
+        public string imagePath = "";
+        public string imagePlace = "";
+        public string info = "";
+        public string[] activations;
+        public string[] traits;
 
-        public QuestMonster(string nameIn) : base()
+        public UniqueMonster(string s) : base(s)
         {
-            name = nameIn;
-            sets = new List<string>();
-            sectionName = nameIn;
-            traits = new string[0];
-            image = "";
-            priority = 0;
+            monsterName = name;
             activations = new string[0];
-            image = "";
-            imagePlace = "";
+            traits = new string[0];
         }
 
-        public QuestMonster(string nameIn, Dictionary<string, string> data, string path) : base()
+        public UniqueMonster(string name, Dictionary<string, string> data, string path) : base(name, data)
         {
-            Game game = Game.Get();
-
             // Get base derived monster type
             if (data.ContainsKey("base"))
             {
                 baseMonster = data["base"];
             }
-            MonsterData baseObject = null;
-            if (game.cd.monsters.ContainsKey(baseMonster))
-            {
-                baseObject = game.cd.monsters[baseMonster];
-            }
 
-            sectionName = nameIn;
-            sets = new List<string>();
-
-            name = "";
+            monsterName = name;
             if (data.ContainsKey("name"))
             {
-                name = data["name"];
-            }
-            if (baseObject != null && name.Length == 0)
-            {
-                name = baseObject.name;
-            }
-            if (name.Length == 0)
-            {
-                name = nameIn;
+                monsterName = data["name"];
             }
 
-            priority = 0;
-
+            traits = new string[0];
             if (data.ContainsKey("traits"))
             {
                 traits = data["traits"].Split(" ".ToCharArray());
             }
-            else if (baseObject != null)
-            {
-                traits = baseObject.traits;
-            }
-            else
-            {
-                traits = new string[0];
-            }
 
-            image = "";
             if (data.ContainsKey("image"))
             {
-                image = path + "/" + data["image"];
-            }
-            else if (baseObject != null)
-            {
-                image = baseObject.image;
+                imagePath = path + "/" + data["image"];
             }
 
             if (data.ContainsKey("info"))
             {
                 info = data["info"];
             }
-            else if (baseObject != null)
-            {
-                info = baseObject.info;
-            }
 
-            imagePlace = image;
+            imagePlace = imagePath;
             if (data.ContainsKey("imageplace"))
             {
-                info = data["imageplace"];
-            }
-            else if (baseObject != null)
-            {
-                imagePlace = baseObject.imagePlace;
+                imagePlace = data["imageplace"];
             }
 
             activations = new string[0];
@@ -1078,7 +1035,14 @@ public class QuestData
             {
                 activations = data["activation"].Split(' ');
             }
-            // Note - we don't copy activations from base, if it is empty we will fall back to standard activation system
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+            // stuff
+            return r;
         }
     }
 
