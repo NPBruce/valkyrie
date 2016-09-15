@@ -6,11 +6,13 @@ using System.IO;
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
 
-    List<ContentPack> allPacks;
+    public List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
+    public Dictionary<string, TokenData> tokens;
+    public Dictionary<string, PerilData> perils;
 
     public static string ContentPath()
     {
@@ -40,6 +42,12 @@ public class ContentData {
         // This has all monster activations
         activations = new Dictionary<string, ActivationData>();
 
+        // This has all available tokens
+        tokens = new Dictionary<string, TokenData>();
+
+        // This has all avilable perils
+        perils = new Dictionary<string, PerilData>();
+
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentDirectories = Directory.GetDirectories(path);
         foreach (string p in contentDirectories)
@@ -64,6 +72,9 @@ public class ContentData {
                     Debug.Log("Failed to get name data out of " + p + "/content_pack.ini!");
                     Application.Quit();
                 }
+
+                // id can be empty/missing
+                pack.id = d.Get("ContentPack", "id");
 
                 // If this is invalid we will just handle it later, not fatal
                 pack.image = p + "/" + d.Get("ContentPack", "image");
@@ -106,6 +117,46 @@ public class ContentData {
         return names;
     }
 
+    // Return a list of names for all enbaled content packs
+    public List<string> GetEnabledPacks()
+    {
+        Game game = Game.Get();
+        List<string> names = new List<string>();
+        Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Length == 0)
+            {
+                names.Add(cp.name);
+            }
+            if (setPacks.ContainsKey(cp.id))
+            {
+                names.Add(cp.name);
+            }
+        }
+        return names;
+    }
+
+    // Return a list of id for all enbaled content packs
+    public List<string> GetEnabledPackIDs()
+    {
+        Game game = Game.Get();
+        List<string> ids = new List<string>();
+        Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Length == 0)
+            {
+                ids.Add(cp.id);
+            }
+            if (setPacks.ContainsKey(cp.id))
+            {
+                ids.Add(cp.id);
+            }
+        }
+        return ids;
+    }
+
     // This loads content from a pack by name
     // Duplicate content will be replaced by the higher priority value
     public void LoadContent(string name)
@@ -133,7 +184,7 @@ public class ContentData {
             // Add each section
             foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
-                AddContent(section.Key, section.Value, Path.GetDirectoryName(ini));
+                AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
             }
         }
     }
@@ -141,7 +192,7 @@ public class ContentData {
     // Add a section of an ini file to game content
     // name is from the ini file and must start with the type
     // path is relative and is used for images or other paths in the content
-    void AddContent(string name, Dictionary<string, string> content, string path)
+    void AddContent(string name, Dictionary<string, string> content, string path, string packID)
     {
         // Is this a "TileSide" entry?
         if(name.IndexOf(TileSideData.type) == 0)
@@ -151,15 +202,21 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if(!tileSides.ContainsKey(d.name))
+            if(!tileSides.ContainsKey(name))
             {
                 tileSides.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if(tileSides[d.name].priority < d.priority)
+            else if(tileSides[name].priority < d.priority)
             {
                 tileSides.Remove(name);
                 tileSides.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (tileSides[name].priority == d.priority)
+            {
+                tileSides[name].sets.Add(packID);
             }
         }
 
@@ -171,15 +228,21 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!heros.ContainsKey(d.name))
+            if (!heros.ContainsKey(name))
             {
                 heros.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (heros[d.name].priority < d.priority)
+            else if (heros[name].priority < d.priority)
             {
                 heros.Remove(name);
                 heros.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (heros[name].priority == d.priority)
+            {
+                heros[name].sets.Add(packID);
             }
         }
 
@@ -194,15 +257,21 @@ public class ContentData {
             if (name.IndexOf(ActivationData.type) != 0)
             {
                 // If we don't already have one then add this
-                if (!monsters.ContainsKey(d.name))
+                if (!monsters.ContainsKey(name))
                 {
                     monsters.Add(name, d);
+                    d.sets.Add(packID);
                 }
                 // If we do replace if this has higher priority
-                else if (monsters[d.name].priority < d.priority)
+                else if (monsters[name].priority < d.priority)
                 {
                     monsters.Remove(name);
                     monsters.Add(name, d);
+                }
+                // items of the same priority belong to multiple packs
+                else if (monsters[name].priority == d.priority)
+                {
+                    monsters[name].sets.Add(packID);
                 }
             }
         }
@@ -214,29 +283,87 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!activations.ContainsKey(d.name))
+            if (!activations.ContainsKey(name))
             {
                 activations.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (activations[d.name].priority < d.priority)
+            else if (activations[name].priority < d.priority)
             {
                 activations.Remove(name);
                 activations.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (activations[name].priority == d.priority)
+            {
+                activations[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Token" entry?
+        if (name.IndexOf(TokenData.type) == 0)
+        {
+            TokenData d = new TokenData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!tokens.ContainsKey(name))
+            {
+                tokens.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (tokens[name].priority < d.priority)
+            {
+                tokens.Remove(name);
+                tokens.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (tokens[name].priority == d.priority)
+            {
+                tokens[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Peril" entry?
+        if (name.IndexOf(PerilData.type) == 0)
+        {
+            PerilData d = new PerilData(name, content);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!perils.ContainsKey(name))
+            {
+                perils.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (perils[name].priority < d.priority)
+            {
+                perils.Remove(name);
+                perils.Add(name, d);
             }
         }
     }
 
     // Holding class for contentpack data
-    class ContentPack
+    public class ContentPack
     {
         public string name;
         public string image;
         public string description;
+        public string id;
         public List<string> iniFiles;
     }
 
     public static Texture2D FileToTexture(string file)
+    {
+        return FileToTexture(file, Vector2.zero, Vector2.zero);
+    }
+
+    public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
         string imagePath = @"file://" + file;
         WWW www = null;
@@ -271,26 +398,35 @@ public class ContentData {
             {
                 texture.LoadRawTextureData(dxtBytes);
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 texture = new Texture2D(width, height, TextureFormat.DXT1, false);
                 texture.LoadRawTextureData(dxtBytes);
             }
             texture.Apply();
-            return texture;
         }
+        else
+        {
+            try
+            {
+                www = new WWW(@"file://" + imagePath);
+                texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
+                www.LoadImageIntoTexture(texture);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
+        // Get whole image
+        if (size.x == 0) return texture;
 
-        try
-        {
-            www = new WWW(@"file://" + imagePath);
-            texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
-            www.LoadImageIntoTexture(texture);
-            return texture;
-        }
-        catch (System.Exception)
-        {
-            return null;
-        }
+        // Get part of the image
+        Color[] pix = texture.GetPixels(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        Texture2D subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        subTexture.SetPixels(pix);
+        subTexture.Apply();
+        return subTexture;
     }
 }
 
@@ -299,6 +435,8 @@ public class TileSideData : GenericData
 {
     public float top;
     public float left;
+    public float pxPerSquare;
+    public float aspect;
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -320,6 +458,22 @@ public class TileSideData : GenericData
         else
         {
             left = 0;
+        }
+        if (content.ContainsKey("pps"))
+        {
+            pxPerSquare = float.Parse(content["pps"]);
+        }
+        else
+        {
+            pxPerSquare = Game.Get().gameType.TilePixelPerSquare();
+        }
+        if (content.ContainsKey("aspect"))
+        {
+            aspect = float.Parse(content["aspect"]);
+        }
+        else
+        {
+            aspect = 0;
         }
     }
 }
@@ -409,11 +563,50 @@ public class ActivationData : GenericData
     }
 }
 
+// Class for Token data
+public class TokenData : GenericData
+{
+    public int x = 0;
+    public int y = 0;
+    public int height = 0;
+    public int width = 0;
+    public static new string type = "Token";
+
+    public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        if (content.ContainsKey("x"))
+        {
+            x = int.Parse(content["x"]);
+        }
+        if (content.ContainsKey("y"))
+        {
+            y = int.Parse(content["y"]);
+        }
+        if (content.ContainsKey("height"))
+        {
+            height = int.Parse(content["height"]);
+        }
+        if (content.ContainsKey("height"))
+        {
+            width = int.Parse(content["width"]);
+        }
+    }
+
+    public bool FullImage()
+    {
+        if (height == 0) return true;
+        if (width == 0) return true;
+        return false;
+    }
+}
+
 // Super class for all content loaded from content packs
 public class GenericData
 {
     // name from section title or data
     public string name;
+    // sets from which this belogs (expansions)
+    public List<string> sets;
     // section name
     public string sectionName;
     // List of traits
@@ -429,6 +622,7 @@ public class GenericData
     public GenericData(string name_ini, Dictionary<string, string> content, string path, string type)
     {
         sectionName = name_ini;
+        sets = new List<string>();
 
         // Has the name been specified?
         if (content.ContainsKey("name"))
@@ -468,7 +662,6 @@ public class GenericData
         {
             image = "";
         }
-
     }
 
     public bool ContainsTrait(string trait)
@@ -482,5 +675,46 @@ public class GenericData
             }
         }
         return t;
+    }
+}
+
+public class PerilData : QuestData.Event
+{
+    new public static string type = "Peril";
+    public string monster = "";
+    public int priority = 0;
+    public PerilType pType = PerilType.na;
+
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data)
+    {
+        typeDynamic = type;
+        if (data.ContainsKey("monster"))
+        {
+            monster = data["monster"];
+        }
+        if (data.ContainsKey("priority"))
+        {
+            priority = int.Parse(data["priority"]);
+        }
+        if (name.IndexOf("PerilMinor") == 0)
+        {
+            pType = PerilType.minor;
+        }
+        if (name.IndexOf("PerilMajor") == 0)
+        {
+            pType = PerilType.major;
+        }
+        if (name.IndexOf("PerilDeadly") == 0)
+        {
+            pType = PerilType.deadly;
+        }
+    }
+
+    public enum PerilType
+    {
+        na,
+        minor,
+        major,
+        deadly
     }
 }

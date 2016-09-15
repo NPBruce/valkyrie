@@ -16,7 +16,7 @@ public class MainMenu {
         TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 10), new Vector2(12, 2f), "Start " + game.gameType.QuestName(), delegate { Start(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 13), new Vector2(12, 2f), "Select Content", delegate { Content(); }, Color.red);
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 13), new Vector2(12, 2f), "Select Content", delegate { Content(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
         tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 16), new Vector2(12, 2f), game.gameType.QuestName() + " Editor", delegate { Editor(); });
@@ -43,12 +43,14 @@ public class MainMenu {
     // FIXME!
     public void Content()
     {
+        new ContentSelect();
     }
 
 
     public void Editor()
     {
-        new QuestEditSelection();
+        Game game = Game.Get();
+        game.SelectEditQuest();
     }
 
     public void About()

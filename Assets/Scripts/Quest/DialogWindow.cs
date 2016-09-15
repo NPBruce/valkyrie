@@ -79,17 +79,7 @@ public class DialogWindow {
         destroy();
         // Trigger failure event
         // Trigger next event
-        foreach (string e in eventData.qEvent.failEvent)
-        {
-            if (!game.quest.eManager.events[e].Disabled())
-            {
-                game.quest.eManager.QueueEvent(e);
-                return;
-            }
-        }
-
-        // Nothing more to queue from this event, but there might be other stuff in the queue, so trigger that
-        game.quest.eManager.TriggerEvent();
+        game.quest.eManager.EndEvent(true);
     }
 
     public bool checkHeroes()
@@ -134,30 +124,13 @@ public class DialogWindow {
 
         // Destroy this dialog to close
         destroy();
-        // Trigger next event
-        foreach (string e in eventData.qEvent.nextEvent)
-        {
-            if (!game.quest.eManager.events[e].Disabled())
-            {
-                game.quest.eManager.QueueEvent(e);
-                return;
-            }
-        }
-        if (eventData.qEvent.name.IndexOf("EventEnd") == 0)
-        {
-            Destroyer.MainMenu();
-            return;
-        }
 
-        // Nothing more to queue from this event, but there might be other stuff in the queue, so trigger that
-        game.quest.eManager.TriggerEvent();
+        game.quest.eManager.EndEvent();
     }
 
     public void destroy()
     {
         // Clean up everything marked as 'dialog'
         Destroyer.Dialog();
-
-        Game.Get().quest.eManager.currentEvent = null;
     }
 }

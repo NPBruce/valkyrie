@@ -246,13 +246,13 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
-        public string spriteName;
+        public string tokenName;
 
         public Token(string s) : base(s)
         {
             locationSpecified = true;
             typeDynamic = type;
-            spriteName = "search-token";
+            tokenName = "TokenSearch";
             cancelable = true;
         }
 
@@ -264,10 +264,10 @@ public class QuestData
             cancelable = true;
 
             // default token type is search, this is the image asset name
-            spriteName = "search-token";
+            tokenName = "TokenSearch";
             if (data.ContainsKey("type"))
             {
-                spriteName = data["type"];
+                tokenName = data["type"];
             }
         }
 
@@ -276,9 +276,9 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if(!spriteName.Equals("search-token"))
+            if(!tokenName.Equals("TokenSearch"))
             {
-                r += "type=" + spriteName + nl;
+                r += "type=" + tokenName + nl;
             }
             return r;
         }
@@ -453,6 +453,10 @@ public class QuestData
         public string[] clearFlags;
         public bool cancelable = false;
         public bool highlight = false;
+        public float threat;
+        public bool absoluteThreat = false;
+        public List<DelayedEvent> delayedEvents;
+        public bool randomEvents = false;
 
         public Event(string s) : base(s)
         {
@@ -464,6 +468,8 @@ public class QuestData
             flags = new string[0];
             setFlags = new string[0];
             clearFlags = new string[0];
+            threat = 0;
+            delayedEvents = new List<DelayedEvent>();
         }
 
         public Event(string name, Dictionary<string, string> data) : base(name, data)
@@ -591,6 +597,35 @@ public class QuestData
             {
                 clearFlags = new string[0];
             }
+
+            if (data.ContainsKey("threat"))
+            {
+                if (data["threat"][0].Equals('@'))
+                {
+                    absoluteThreat = true;
+                    threat = float.Parse(data["threat"].Substring(1));
+                }
+                else
+                {
+                    threat = float.Parse(data["threat"]);
+                }
+            }
+
+            delayedEvents = new List<DelayedEvent>();
+            if (data.ContainsKey("delayedevents"))
+            {
+                string[] de = data["delayedevents"].Split(' ');
+                foreach (string s in de)
+                {
+                    int delay = int.Parse(s.Substring(0, s.IndexOf(":")));
+                    string eventName = s.Substring(s.IndexOf(":") + 1);
+                    delayedEvents.Add(new DelayedEvent(delay, eventName));
+                }
+            }
+            if (data.ContainsKey("randomevents"))
+            {
+                randomEvents = bool.Parse(data["randomevents"]);
+            }
         }
 
         override public void ChangeReference(string oldName, string newName)
@@ -632,6 +667,23 @@ public class QuestData
                 }
             }
             removeComponents = RemoveFromArray(removeComponents, "");
+
+            List<DelayedEvent> deList = new List<DelayedEvent>();
+            foreach (DelayedEvent de in delayedEvents)
+            {
+                if (de.eventName.Equals(oldName))
+                {
+                    if (newName.Length > 0)
+                    {
+                        deList.Add(new DelayedEvent(de.delay, newName));
+                    }
+                }
+                else
+                {
+                    deList.Add(de);
+                }
+            }
+            delayedEvents = deList;
         }
 
         override public string ToString()
@@ -737,7 +789,43 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+
+            if (delayedEvents.Count > 0)
+            {
+                r += "delayedevents=";
+                foreach (DelayedEvent de in delayedEvents)
+                {
+                    r += de.delay + ":" + de.eventName + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            if (threat != 0)
+            {
+                r += "threat=";
+                if (absoluteThreat)
+                {
+                    r += "@";
+                }
+                r += threat + nl;
+            }
+            if (randomEvents)
+            {
+                r += "randomevents=true" + nl;
+            }
             return r;
+        }
+
+        public class DelayedEvent
+        {
+            public string eventName;
+            public int delay;
+
+            public DelayedEvent(int d, string e)
+            {
+                delay = d;
+                eventName = e;
+            }
         }
     }
 
@@ -888,6 +976,10 @@ public class QuestData
         public int maxPanX;
         public int maxPanY;
         public string type;
+        public int minorPeril = 7;
+        public int majorPeril = 10;
+        public int deadlyPeril = 12;
+        public string[] packs;
 
         public Quest(Dictionary<string, string> data)
         {
@@ -927,6 +1019,26 @@ public class QuestData
             if (data.ContainsKey("minpany"))
             {
                 minPanY = int.Parse(data["minpany"]);
+            }
+            if (data.ContainsKey("minorperil"))
+            {
+                minorPeril = int.Parse(data["minorperil"]);
+            }
+            if (data.ContainsKey("majorperil"))
+            {
+                majorPeril = int.Parse(data["majorperil"]);
+            }
+            if (data.ContainsKey("deadlyperil"))
+            {
+                deadlyPeril = int.Parse(data["deadlyperil"]);
+            }
+            if (data.ContainsKey("packs"))
+            {
+                packs = data["packs"].Split(' ');
+            }
+            else
+            {
+                packs = new string[0];
             }
 
             CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
@@ -971,6 +1083,28 @@ public class QuestData
             {
                 r += "maxpany=" + maxPanY + nl;
             }
+            if (minorPeril != 7)
+            {
+                r += "minorperil=" + maxPanY + nl;
+            }
+            if (majorPeril != 10)
+            {
+                r += "majorperil=" + maxPanY + nl;
+            }
+            if (deadlyPeril != 12)
+            {
+                r += "deadlyperil=" + maxPanY + nl;
+            }
+            if (packs.Length > 0)
+            {
+                r += "packs=";
+                foreach (string s in packs)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
             return r;
         }
     }

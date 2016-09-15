@@ -151,7 +151,7 @@ public class TokenBoard : MonoBehaviour {
     {
         Game game = Game.Get();
         Sprite tileSprite;
-        Texture2D newTex = Resources.Load("sprites/tokens/villager-token-man") as Texture2D;
+        Texture2D newTex = Resources.Load("sprites/target") as Texture2D;
         // Check load worked
         if (newTex == null)
         {
@@ -170,7 +170,7 @@ public class TokenBoard : MonoBehaviour {
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.color = Color.red;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
+        image.rectTransform.sizeDelta = new Vector2(1f, 1f);
         // Move to square (105 units per square)
         gameObject.transform.Translate(new Vector3(m.location.x, m.location.y, 0), Space.World);
     }
@@ -183,7 +183,7 @@ public class TokenBoard : MonoBehaviour {
     public void AddHighlight(Vector2 location, string id="", string tag="dialog")
     {
         Sprite tileSprite;
-        Texture2D newTex = Resources.Load("sprites/tokens/search-token-special") as Texture2D;
+        Texture2D newTex = Resources.Load("sprites/target") as Texture2D;
         // Check load worked
         if (newTex == null)
         {
@@ -202,9 +202,8 @@ public class TokenBoard : MonoBehaviour {
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
         tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         // Set door colour
-        image.color = Color.cyan;
         image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2(0.5f, 0.5f);
+        image.rectTransform.sizeDelta = new Vector2(1f, 1f);
         // Move to square (105 units per square)
         gameObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
     }

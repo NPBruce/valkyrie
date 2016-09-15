@@ -1,23 +1,58 @@
-Next:
-#2hero tags
+Done:
+Importing screen
+Tokens compat change
+MoM Tokens
+null events
+#2hero flags
+threat set in events
 event for current round +x (delayedEvent=2:EventNext)
-Threat/peril (start with all required event extensions)
-MoM stuff?
+peril levels in quest
+some perils added
+Updated to RtL 1.1.7 - includes new tiles, must import
+expansions!
+tags for expansions
+expansion note in editor
+expansion required in quests
+better highlights
+dpi/aspect tile control
+randomevents
+
+Next:
+Affairs of Wizards
+starting/trailing '"'
+Sin wave on Bing
+No minion text skips step
 
 Later:
-Duplicate asset import
-event log
-catch all parse exceptions
-text editing sucks (text wrap?)
-frame color for portraits Frame_Monster_1x1.dds (color rotation?)
-random tags
-tags for hero count
-tags for round number
-Expansion name on elements in editor, tags
-ffg app version unity
+No ability text hides box
+Custom monsters/activations in quests
+
+MoM:
+Mythos
+activations
+monsters
+missing tiles
+free place tokens/events/monsters
+
+D2E:
+more perils
+expansion monsters/activations
+hybrid 1 activation bug
 quest set
-lt.
-Add expansions, content selection
-Stacked tileselection? (tags?)
+missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
+subdirectories for expansions
+
+Common:
+hero selection scroll
+frame color for portraits Frame_Monster_1x1.dds (color rotation?)
+event log
 save games
 undo
+lt.
+catch all parse exceptions
+expansion appearance order
+random tags
+Stacked tileselection? (tags?)
+map sets
+text editing sucks (text wrap?)
+lt.

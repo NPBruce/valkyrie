@@ -33,20 +33,42 @@ public class EventManager
                 }
             }
         }
+
+        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
+        {
+            events.Add(kv.Key, new Peril(kv.Key));
+        }
     }
 
-    public void EventTriggerType(string type)
+    public void RaisePeril(PerilData.PerilType type)
+    {
+        List<string> list = new List<string>();
+        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
+        {
+            if (kv.Value.pType == type)
+            {
+                Peril p = new Peril(kv.Key);
+                if (!p.Disabled())
+                {
+                    list.Add(kv.Key);
+                }
+            }
+        }
+        QueueEvent(list[Random.Range(0, list.Count)]);
+    }
+
+    public void EventTriggerType(string type, bool trigger=true)
     {
         foreach (KeyValuePair<string, Event> kv in events)
         {
             if (kv.Value.qEvent.trigger.Equals(type))
             {
-                QueueEvent(kv.Key);
+                QueueEvent(kv.Key, trigger);
             }
         }
     }
 
-    public void QueueEvent(string name)
+    public void QueueEvent(string name, bool trigger=true)
     {
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
@@ -58,17 +80,12 @@ public class EventManager
         // Don't queue disabled events
         if (events[name].Disabled()) return;
 
-        if (eventStack.Count == 0)
+        // Place this on top of the stack
+        eventStack.Push(events[name]);
+
+        if (currentEvent == null && trigger)
         {
-            eventStack.Push(events[name]);
             TriggerEvent();
-        }
-        else
-        {
-            // If there is something in the stack then insert this as the second item
-            Event e = eventStack.Pop();
-            eventStack.Push(events[name]);
-            eventStack.Push(e);
         }
     }
 
@@ -142,14 +159,81 @@ public class EventManager
             game.tokenBoard.AddHighlight(e.qEvent);
         }
 
-        new DialogWindow(e);
         game.quest.Add(e.qEvent.addComponents);
         game.quest.Remove(e.qEvent.removeComponents);
+        game.quest.threat += e.qEvent.threat;
+        if (e.qEvent.absoluteThreat)
+        {
+            if (e.qEvent.threat != 0)
+            {
+                Debug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
+            }
+            game.quest.threat = e.qEvent.threat;
+        }
+        else if (e.qEvent.threat != 0)
+        {
+            Debug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
+        }
+
+        foreach (QuestData.Event.DelayedEvent de in e.qEvent.delayedEvents)
+        {
+            game.quest.delayedEvents.Add(new QuestData.Event.DelayedEvent(de.delay + game.quest.round, de.eventName));
+        }
 
         if (e.qEvent.locationSpecified)
         {
             CameraController.SetCamera(e.qEvent.location);
         }
+
+        // Only raise dialog if there is text, otherwise auto confirm
+        if (e.GetText().Length == 0)
+        {
+            EndEvent();
+        }
+        else
+        {
+            new DialogWindow(e);
+        }
+    }
+
+    public void EndEvent(bool fail=false)
+    {
+        string[] eventList = currentEvent.qEvent.nextEvent;
+        if (fail)
+        {
+            eventList = currentEvent.qEvent.failEvent;
+        }
+
+        List<string> enabledEvents = new List<string>();
+        foreach (string s in eventList)
+        {
+            if (!game.quest.eManager.events[s].Disabled())
+            {
+                enabledEvents.Add(s);
+            }
+        }
+        if (enabledEvents.Count > 0)
+        {
+            if (currentEvent.qEvent.randomEvents)
+            {
+                currentEvent = null;
+                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)]);
+            }
+            else
+            {
+                currentEvent = null;
+                game.quest.eManager.QueueEvent(enabledEvents[0]);
+            }
+            return;
+        }
+
+        if (currentEvent.qEvent.name.IndexOf("EventEnd") == 0)
+        {
+            Destroyer.MainMenu();
+            return;
+        }
+        currentEvent = null;
+        TriggerEvent();
     }
 
     public class Event
@@ -160,7 +244,10 @@ public class EventManager
         public Event(string name)
         {
             game = Game.Get();
-            qEvent = game.quest.qd.components[name] as QuestData.Event;
+            if (game.quest.qd.components.ContainsKey(name))
+            {
+                qEvent = game.quest.qd.components[name] as QuestData.Event;
+            }
         }
         virtual public string GetText()
         {
@@ -196,8 +283,7 @@ public class EventManager
 
         public bool ConfirmPresent()
         {
-            if (!(qEvent is QuestData.Token)) return true;
-            if (!(qEvent is QuestData.Door)) return true;
+            if (!qEvent.cancelable) return true;
             foreach (string s in qEvent.nextEvent)
             {
                 if (!game.quest.eManager.events[s].Disabled()) return true;
@@ -329,6 +415,17 @@ public class EventManager
         }
     }
 
+    public class Peril : Event
+    {
+        public PerilData cPeril;
+
+        public Peril(string name) : base(name)
+        {
+            qEvent = game.cd.perils[name] as QuestData.Event;
+            cPeril = qEvent as PerilData;
+        }
+    }
+
     public static string SymbolReplace(string input)
     {
         string output = input;
@@ -339,8 +436,8 @@ public class EventManager
         output = output.Replace("{knowledge}", "∑");
         output = output.Replace("{awareness}", "μ");
         output = output.Replace("{action}", "∞");
-        output = output.Replace("{shield}", "±");
-        output = output.Replace("{surge}", "≥");
+        output = output.Replace("{shield}", "≤");
+        output = output.Replace("{surge}", "±");
         return output;
     }
 

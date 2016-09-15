@@ -10,6 +10,7 @@ public class FetchContent {
     AppFinder finder = null;
     public bool importAvailable;
     string logFile;
+    public static string requiredValkyrieVersion = "0.4.1";
 
     public FetchContent(string type)
     {
@@ -27,9 +28,20 @@ public class FetchContent {
             return;
         }
 
-        Debug.Log("FFG " + type + " Version Found: " + finder.AppVersion() + System.Environment.NewLine);
+        string appVersion = finder.RequiredFFGVersion();
 
-        importAvailable = VersionNewerOrEqual(finder.RequiredFFGVersion(), finder.AppVersion());
+        if (appVersion.Length != 0)
+        {
+            Debug.Log("FFG " + type + " Version Found: " + appVersion + System.Environment.NewLine);
+        }
+        else
+        {
+            Debug.Log("FFG " + type + " not found." + System.Environment.NewLine);
+        }
+
+        string ffgVersion = fetchAppVersion();
+
+        importAvailable = VersionNewerOrEqual(appVersion, ffgVersion);
     }
 
     public bool NeedImport()
@@ -41,12 +53,47 @@ public class FetchContent {
         {
             return true;
         }
+
+        bool appVersionOK = false;
+        bool valkVersionOK = false;
+
         string lastImport = log.Get("Import", "FFG");
-        if (lastImport.Equals(finder.RequiredFFGVersion()))
+        appVersionOK = VersionNewerOrEqual(finder.RequiredFFGVersion(), lastImport);
+
+        lastImport = log.Get("Import", "Valkyrie");
+        valkVersionOK = VersionNewerOrEqual(requiredValkyrieVersion, lastImport);
+
+        return !appVersionOK || !valkVersionOK;
+    }
+
+    public string fetchAppVersion()
+    {
+        string appVersion = "";
+        try
         {
-            return false;
+            AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
+
+            foreach (var asset in assetsFile.preloadTable.Values)
+            {
+                if (asset.Type2 == 49) //TextAsset
+                {
+                    Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+                    if (asset.Text.Equals("_version"))
+                    {
+                        m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+                        appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
+                    }
+                }
+            }
+
+            if (appVersion.IndexOf("#") != -1)
+            {
+                appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
+            }
         }
-        return VersionNewer(finder.RequiredFFGVersion(), lastImport);
+        catch (System.Exception) { }
+
+        return appVersion;
     }
 
     public void Import()
@@ -112,7 +159,7 @@ public class FetchContent {
         string[] log = new string[3];
         log[0] = "[Import]";
         log[1] = "Valkyrie=" + Game.Get().version;
-        log[2] = "FFG=" + finder.AppVersion();
+        log[2] = "FFG=" + fetchAppVersion();
         try
         {
             Directory.CreateDirectory(ContentData.ContentPath());
@@ -203,12 +250,10 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/img");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/img/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         switch (m_Texture2D.m_TextureFormat)
@@ -296,14 +341,12 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/audio");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/audio/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
 
         m_AudioClip = new Unity_Studio.AudioClip(asset, true);
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
@@ -321,14 +364,12 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/text");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/text/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + asset.extension;
 
         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + asset.extension;
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
@@ -346,7 +387,6 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/fonts");
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/fonts/" + asset.Text;
-        int i = 0;
         string fileName = fileCandidate + ".ttf";
 
         m_Font = new Unity_Studio.unityFont(asset, true);
@@ -359,7 +399,6 @@ public class FetchContent {
         while (File.Exists(fileName))
         {
             return;// Fixme;
-            fileName = fileCandidate + i++ + ".ttf";
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
@@ -371,7 +410,9 @@ public class FetchContent {
 
     public static bool VersionNewerOrEqual(string oldVersion, string newVersion)
     {
-        if (oldVersion.Equals(newVersion)) return true;
+        string oldS = System.Text.RegularExpressions.Regex.Replace(oldVersion, "[^0-9]", "");
+        string newS = System.Text.RegularExpressions.Regex.Replace(newVersion, "[^0-9]", "");
+        if (oldS.Equals(newS)) return true;
         return VersionNewer(oldVersion, newVersion);
     }
 

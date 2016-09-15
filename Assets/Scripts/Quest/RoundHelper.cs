@@ -166,9 +166,10 @@ public class RoundHelper {
     public static void EndRound()
     {
         Game game = Game.Get();
-        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round);
-        game.quest.eManager.EventTriggerType("EndRound");
-        CheckNewRound();
+        game.quest.eManager.EventTriggerType("EndRound", false);
+        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
+        // This will cause the end of the round if nothing was added
+        game.quest.eManager.TriggerEvent();
     }
 
     public static void CheckNewRound()
@@ -176,8 +177,42 @@ public class RoundHelper {
 
         Game game = Game.Get();
 
-        if (game.quest.eManager.eventStack.Count != 0)
+        if (game.quest.eManager.currentEvent != null)
             return;
+
+        if (game.quest.eManager.eventStack.Count > 0)
+            return;
+
+        foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
+        {
+            if (de.delay == game.quest.round)
+            {
+                game.quest.delayedEvents.Remove(de);
+                game.quest.eManager.QueueEvent(de.eventName);
+                return;
+            }
+        }
+
+        if (!game.quest.minorPeril && game.quest.qd.quest.minorPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
+            game.quest.minorPeril = true;
+            return;
+        }
+
+        if (!game.quest.majorPeril && game.quest.qd.quest.majorPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.major);
+            game.quest.majorPeril = true;
+            return;
+        }
+
+        if (!game.quest.deadlyPeril && game.quest.qd.quest.deadlyPeril <= game.quest.round)
+        {
+            game.quest.eManager.RaisePeril(PerilData.PerilType.deadly);
+            game.quest.deadlyPeril = true;
+            return;
+        }
 
         // Check if all heros have finished
         foreach (Quest.Hero h in game.quest.heroes)
@@ -203,6 +238,7 @@ public class RoundHelper {
             m.currentActivation = null;
         }
         game.quest.round++;
+        game.quest.threat += 1;
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

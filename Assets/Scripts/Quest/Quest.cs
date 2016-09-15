@@ -21,13 +21,19 @@ public class Quest
     // Event manager handles the events
     public EventManager eManager;
 
+    public List<QuestData.Event.DelayedEvent> delayedEvents;
+
     public List<Hero> heroes;
     public List<Monster> monsters;
 
     public int round = 1;
     public int morale = 0;
+    public float threat = 0;
 
     public bool heroesSelected = false;
+    public bool minorPeril = false;
+    public bool majorPeril = false;
+    public bool deadlyPeril = false;
 
     public Game game;
 
@@ -44,12 +50,19 @@ public class Quest
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         eManager = new EventManager();
+        delayedEvents = new List<QuestData.Event.DelayedEvent>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
         for (int i = 1; i <= game.gameType.MaxHeroes(); i++)
         {
             heroes.Add(new Hero(null, i));
+        }
+
+        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        foreach (KeyValuePair<string, string> kv in packs)
+        {
+            flags.Add("#" + kv.Key);
         }
     }
 
@@ -196,8 +209,16 @@ public class Quest
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / game.gameType.TilePixelPerSquare(), Space.World);
-            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / game.gameType.TilePixelPerSquare(), Space.World);
+            float vPPS = game.cd.tileSides[qTile.tileSideName].pxPerSquare;
+            float hPPS = vPPS;
+            // manual aspect control
+            if (game.cd.tileSides[qTile.tileSideName].aspect != 0)
+            {
+                hPPS = (vPPS * newTex.width / newTex.height) / game.cd.tileSides[qTile.tileSideName].aspect;
+            }
+
+            unityObject.transform.Translate(Vector3.right * ((newTex.width / 2) - cTile.left) / hPPS, Space.World);
+            unityObject.transform.Translate(Vector3.down * ((newTex.height / 2) - cTile.top) / vPPS, Space.World);
             // Move to get the middle of the top left square at 0,0 (squares are 105 units)
             // We don't do this for MoM because it spaces differently
             if (game.gameType.TileOnGrid())
@@ -205,7 +226,7 @@ public class Quest
                 unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
             }
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / game.gameType.TilePixelPerSquare(), (float)newTex.height / game.gameType.TilePixelPerSquare());
+            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / hPPS, (float)newTex.height / vPPS);
 
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
@@ -234,20 +255,19 @@ public class Quest
         {
             qToken = questToken;
 
-            Texture2D newTex = Resources.Load("sprites/tokens/" + qToken.spriteName) as Texture2D;
-            // Check if we can find the token image
-            if (newTex == null)
+            string tokenName = qToken.tokenName;
+            if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + qToken.spriteName);
-                // Use search token instead
-                newTex = Resources.Load("sprites/tokens/search-token") as Texture2D;
-                // If we still can't load it then fatal error
-                if (newTex == null)
+                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + tokenName);
+                // Catch for older quests with different types (0.4.0 or older)
+                if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
-                    Debug.Log("Error: Cannot load search token \"sprites/tokens/search-token\"");
-                    Application.Quit();
+                    tokenName = "TokenSearch";
                 }
             }
+            Vector2 texPos = new Vector2(game.cd.tokens[tokenName].x, game.cd.tokens[tokenName].y);
+            Vector2 texSize = new Vector2(game.cd.tokens[tokenName].width, game.cd.tokens[tokenName].height);
+            Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image, texPos, texSize);
 
             // Create object
             unityObject = new GameObject("Object" + qToken.name);

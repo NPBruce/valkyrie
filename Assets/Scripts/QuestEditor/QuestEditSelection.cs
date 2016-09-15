@@ -235,21 +235,6 @@ public class QuestEditSelection
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        // Fetch content (in future this will need to be selectable
-        // Find any content packs at the location
-        game.cd = new ContentData(game.gameType.DataDirectory());
-        // Check if we found anything
-        if (game.cd.GetPacks().Count == 0)
-        {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory());
-        }
-
-        // In the future this is where you select which packs to load, for now we load everything.
-        foreach (string pack in game.cd.GetPacks())
-        {
-            game.cd.LoadContent(pack);
-        }
-
         // Fetch all of the quest data
         game.quest = new Quest(questList[key]);
         QuestEditor.Begin();
