@@ -3,14 +3,19 @@ using UnityEngine;
 
 public class QuestMonster : MonsterData
 {
+    public bool useMonsterTypeActivations = false;
+    public string derivedType = "";
+
     public QuestMonster(QuestData.UniqueMonster qm) : base()
     {
         Game game = Game.Get();
 
         // Get base derived monster type
         MonsterData baseObject = null;
+
         if (game.cd.monsters.ContainsKey(qm.baseMonster))
         {
+            derivedType = qm.baseMonster;
             baseObject = game.cd.monsters[qm.baseMonster];
         }
 
@@ -45,90 +50,9 @@ public class QuestMonster : MonsterData
 
 
         activations = qm.activations;
-        //asdf dsl;kfj ! unfinished!!
+        if (activations.Length == 0 && baseObject != null)
+        {
+            useMonsterTypeActivations = true;
+        }
     }
-    /*
-    public QuestMonster(string nameIn, Dictionary<string, string> data, string path) : base()
-    {
-        Game game = Game.Get();
-
-        // Get base derived monster type
-        if (data.ContainsKey("base"))
-        {
-            baseMonster = data["base"];
-        }
-        MonsterData baseObject = null;
-        if (game.cd.monsters.ContainsKey(baseMonster))
-        {
-            baseObject = game.cd.monsters[baseMonster];
-        }
-
-        sectionName = nameIn;
-        sets = new List<string>();
-
-        name = "";
-        if (data.ContainsKey("name"))
-        {
-            name = data["name"];
-        }
-        if (baseObject != null && name.Length == 0)
-        {
-            name = baseObject.name;
-        }
-        if (name.Length == 0)
-        {
-            name = nameIn;
-        }
-
-        priority = 0;
-
-        if (data.ContainsKey("traits"))
-        {
-            traits = data["traits"].Split(" ".ToCharArray());
-        }
-        else if (baseObject != null)
-        {
-            traits = baseObject.traits;
-        }
-        else
-        {
-            traits = new string[0];
-        }
-
-        image = "";
-        if (data.ContainsKey("image"))
-        {
-            image = path + "/" + data["image"];
-        }
-        else if (baseObject != null)
-        {
-            image = baseObject.image;
-        }
-
-        if (data.ContainsKey("info"))
-        {
-            info = data["info"];
-        }
-        else if (baseObject != null)
-        {
-            info = baseObject.info;
-        }
-
-        imagePlace = image;
-        if (data.ContainsKey("imageplace"))
-        {
-            info = data["imageplace"];
-        }
-        else if (baseObject != null)
-        {
-            imagePlace = baseObject.imagePlace;
-        }
-
-        activations = new string[0];
-        if (data.ContainsKey("activation"))
-        {
-            activations = data["activation"].Split(' ');
-        }
-        // Note - we don't copy activations from base, if it is empty we will fall back to standard activation system
-    }*/
 }

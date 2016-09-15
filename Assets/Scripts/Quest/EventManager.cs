@@ -352,8 +352,13 @@ public class EventManager
             // Next try to find a type that is valid
             foreach (string t in qMonster.mTypes)
             {
-                // Monster type must exist in content packs, 'Monster' is optional
-                if (game.cd.monsters.ContainsKey(t))
+                // Monster type might be a unique for this quest
+                if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                {
+                    cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                }
+                // Monster type might exist in content packs, 'Monster' is optional
+                else if (game.cd.monsters.ContainsKey(t))
                 {
                     cMonster = game.cd.monsters[t];
                 }

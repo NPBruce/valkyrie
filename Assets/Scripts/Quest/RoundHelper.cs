@@ -129,6 +129,32 @@ public class RoundHelper {
             }
         }
 
+        // If this is a quest specific monster with custom activations throw this list out and use that instead
+        if (m.monsterData is QuestMonster)
+        {
+            QuestMonster qm = m.monsterData as QuestMonster;
+            if (!qm.useMonsterTypeActivations)
+            {
+                adList = new List<ActivationData>();
+                foreach (string s in qm.activations)
+                {
+                    // This should check for quest activations!
+                    if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                    {
+                        adList.Add(game.cd.activations["MonsterActivation" + s]);
+                    }
+                    else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                    {
+                        adList.Add(game.cd.activations["MonsterActivation" + s]);
+                    }
+                    else
+                    {
+                        Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+                    }
+                }
+            }
+        }
+
         // Check for no activations
         if (adList.Count == 0)
         {
