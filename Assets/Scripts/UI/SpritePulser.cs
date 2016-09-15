@@ -14,7 +14,7 @@ public class SpritePulser : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        float factor = 1f + (0.5f * Mathf.Sin(Time.time));
+        float factor = 1f + (0.2f * Mathf.Sin(Time.time * 4));
         image.rectTransform.sizeDelta = new Vector2(factor, factor);
     }
 }

@@ -1,10 +1,10 @@
 Done:
 Fixed event cancel bug.
+Sin wave on Bing
 
 Next:
 Affairs of Wizards
 starting/trailing '"'
-Sin wave on Bing
 No minion text skips step
 Custom monsters/activations in quests
 
