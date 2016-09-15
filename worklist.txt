@@ -1,3 +1,6 @@
+Done:
+Fixed event cancel bug.
+
 Next:
 Affairs of Wizards
 starting/trailing '"'
@@ -20,6 +23,7 @@ hybrid 1 activation bug
 quest set
 missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
 subdirectories for expansions
+lt.
 
 Common:
 hero selection scroll
@@ -27,11 +31,9 @@ frame color for portraits Frame_Monster_1x1.dds (color rotation?)
 event log
 save games
 undo
-lt.
 catch all parse exceptions
 expansion appearance order
 random tags
 Stacked tileselection? (tags?)
 map sets
 text editing sucks (text wrap?)
-lt.

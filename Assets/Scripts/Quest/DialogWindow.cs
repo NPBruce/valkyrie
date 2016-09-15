@@ -67,6 +67,7 @@ public class DialogWindow {
     public void onCancel()
     {
         destroy();
+        Game.Get().quest.eManager.currentEvent = null;
         Game.Get().quest.eManager.TriggerEvent();
     }
 
