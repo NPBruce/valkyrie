@@ -1,33 +1,12 @@
-Done:
-Importing screen
-Tokens compat change
-MoM Tokens
-null events
-#2hero flags
-threat set in events
-event for current round +x (delayedEvent=2:EventNext)
-peril levels in quest
-some perils added
-Updated to RtL 1.1.7 - includes new tiles, must import
-expansions!
-tags for expansions
-expansion note in editor
-expansion required in quests
-better highlights
-dpi/aspect tile control
-randomevents
-
 Next:
 Affairs of Wizards
 starting/trailing '"'
 Sin wave on Bing
 No minion text skips step
-
-Later:
-No ability text hides box
 Custom monsters/activations in quests
 
 MoM:
+No ability text hides box
 Mythos
 activations
 monsters
