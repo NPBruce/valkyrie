@@ -1,10 +1,11 @@
 Done:
 No minion/master text skips step
-Custom monsters in quests
+Custom monsters and activations in quests
+No ability text hides box
 
 Next:
 Affairs of Wizards
-activations in quests
+custom monsters/activations editor
 
 MoM:
 No ability text hides box

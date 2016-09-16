@@ -25,29 +25,35 @@ public class ActivateDialog {
         DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
-        
-        // ability text
-        db = new DialogBox(new Vector2(10, 2.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect);
-        db.AddBorder();
+
+        float offset = 2.5f;
+        if (monster.currentActivation.effect.Length > 0)
+        {
+            // ability text
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect);
+            db.AddBorder();
+            offset += 4.5f;
+        }
 
         // Activation box
         string activationText = "";
         // Create header
         if (master)
         {
-            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
             activationText = monster.currentActivation.ad.masterActions.Replace("\\n", "\n");
         }
         else
         {
-            db = new DialogBox(new Vector2(15, 7f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
             activationText = monster.currentActivation.ad.minionActions.Replace("\\n", "\n");
         }
         db.AddBorder();
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        offset += 2;
 
         // Create ability text box
-        db = new DialogBox(new Vector2(10, 9), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
         if (master)
         {
             db.AddBorder(Color.red);
@@ -57,14 +63,16 @@ public class ActivateDialog {
             db.AddBorder();
         }
 
+        offset += 7.5f;
+
         // Create finished button
         if (master)
         {
-            new TextButton(new Vector2(15, 16.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
         }
         else
         {
-            new TextButton(new Vector2(15, 16.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
         }
     }
 
