@@ -111,7 +111,7 @@ public class RoundHelper {
         MonsterData md = m.monsterData;
 
         QuestMonster qm = md as QuestMonster;
-        if (m.monsterData != null)
+        if (qm != null)
         {
             if (game.cd.monsters.ContainsKey(qm.derivedType))
             {
@@ -180,6 +180,24 @@ public class RoundHelper {
             // Pick a random activation
             ActivationData activation = adList[Random.Range(0, adList.Count)];
             m.NewActivation(activation);
+        }
+
+        // If no minion activation just do master
+        if (m.currentActivation.ad.minionActions.Length == 0)
+        {
+            m.minionStarted = true;
+            m.masterStarted = true;
+            new ActivateDialog(m, true);
+            return false;
+        }
+
+        // If no master activation just do minion
+        if (m.currentActivation.ad.masterActions.Length == 0)
+        {
+            m.minionStarted = true;
+            m.masterStarted = true;
+            new ActivateDialog(m, false);
+            return false;
         }
 
         // Pick Minion or master
