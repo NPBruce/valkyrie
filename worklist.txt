@@ -2,6 +2,7 @@ Done:
 No minion/master text skips step
 Custom monsters and activations in quests
 No ability text hides box
+Debug for quest editor crash
 
 Next:
 Affairs of Wizards
