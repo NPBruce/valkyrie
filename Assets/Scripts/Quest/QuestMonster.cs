@@ -41,13 +41,13 @@ public class QuestMonster : MonsterData
             info = baseObject.info;
         }
 
-        image = qm.imagePath;
+        image = qm.GetImagePath();
         if (image.Length == 0 && baseObject != null)
         {
             image = baseObject.image;
         }
 
-        imagePlace = qm.imagePlace;
+        imagePlace = qm.GetImagePlacePath();
         if (imagePlace.Length == 0 && baseObject != null)
         {
             imagePlace = baseObject.image;

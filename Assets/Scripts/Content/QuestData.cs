@@ -986,6 +986,7 @@ public class QuestData
         public string info = "";
         public string[] activations;
         public string[] traits;
+        public string path = "";
 
         public UniqueMonster(string s) : base(s)
         {
@@ -994,8 +995,9 @@ public class QuestData
             traits = new string[0];
         }
 
-        public UniqueMonster(string name, Dictionary<string, string> data, string path) : base(name, data)
+        public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
+            path = pathIn;
             // Get base derived monster type
             if (data.ContainsKey("base"))
             {
@@ -1016,7 +1018,7 @@ public class QuestData
 
             if (data.ContainsKey("image"))
             {
-                imagePath = path + "/" + data["image"];
+                imagePath = data["image"];
             }
 
             if (data.ContainsKey("info"))
@@ -1037,11 +1039,66 @@ public class QuestData
             }
         }
 
+        public string GetImagePath()
+        {
+            if (imagePath.Length == 0)
+            {
+                return "";
+            }
+            return path + "/" + imagePath;
+        }
+        public string GetImagePlacePath()
+        {
+            if (imagePlace.Length == 0)
+            {
+                return "";
+            }
+            return path + "/" + imagePlace;
+        }
+
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
             string r = base.ToString();
-            // stuff
+
+            if (baseMonster.Length > 0)
+            {
+                r += "base=" + baseMonster + nl;
+            }
+            if (monsterName.Length > 0)
+            {
+                r += "name=" + monsterName + nl;
+            }
+            if (traits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in traits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (info.Length > 0)
+            {
+                r += "info=" + info + nl;
+            }
+            if (imagePath.Length > 0)
+            {
+                r += "image=" + info + nl;
+            }
+            if (imagePlace.Length > 0)
+            {
+                r += "imageplace=" + info + nl;
+            }
+            if (activations.Length > 0)
+            {
+                r += "activation=";
+                foreach (string s in activations)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
             return r;
         }
     }
