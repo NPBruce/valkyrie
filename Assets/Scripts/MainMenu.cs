@@ -62,7 +62,7 @@ public class MainMenu {
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
-        db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 8f), new Vector2(30, 6), "Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legent.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.");
+        db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 8f), new Vector2(30, 6), "Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 16f), new Vector2(30, 5), "Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio.");
