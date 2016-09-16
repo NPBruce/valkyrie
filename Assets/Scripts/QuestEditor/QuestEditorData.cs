@@ -1083,8 +1083,10 @@ public class QuestEditorData {
         }
 
         game.quest.qd.components.Remove(selection.name);
+        game.quest.Remove(selection.name);
         selection.name = name;
         game.quest.qd.components.Add(selection.name, selection);
+        game.quest.Add(selection.name);
         SelectComponent(name);
     }
 
