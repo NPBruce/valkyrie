@@ -35,7 +35,7 @@ public class QuestMonster : MonsterData
             traits = baseObject.traits;
         }
 
-        info = qm.info;
+        info = EventManager.SymbolReplace(qm.info);
         if (info.Length == 0 && baseObject != null)
         {
             info = baseObject.info;
@@ -68,9 +68,9 @@ public class QuestActivation : ActivationData
 {
     public QuestActivation(QuestData.Activation qa) : base()
     {
-        ability = qa.ability;
-        masterActions = qa.masterActions;
-        minionActions = qa.minionActions;
+        ability = EventManager.SymbolReplace(qa.ability);
+        masterActions = EventManager.SymbolReplace(qa.masterActions);
+        minionActions = EventManager.SymbolReplace(qa.minionActions);
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
     }
