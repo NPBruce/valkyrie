@@ -3,11 +3,10 @@ No minion/master text skips step
 Custom monsters and activations in quests
 No ability text hides box
 Debug for quest editor crash
+\n support in activation ability
 
 Next:
-Affairs of Wizards - activations list, test
 custom monsters/activations editor
-\n support in activation ability
 
 MoM:
 No ability text hides box

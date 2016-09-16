@@ -30,7 +30,7 @@ public class ActivateDialog {
         if (monster.currentActivation.effect.Length > 0)
         {
             // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect);
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
             db.AddBorder();
             offset += 4.5f;
         }
