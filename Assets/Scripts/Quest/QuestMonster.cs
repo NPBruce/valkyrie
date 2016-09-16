@@ -35,6 +35,12 @@ public class QuestMonster : MonsterData
             traits = baseObject.traits;
         }
 
+        info = qm.info;
+        if (info.Length == 0 && baseObject != null)
+        {
+            info = baseObject.info;
+        }
+
         image = qm.imagePath;
         if (image.Length == 0 && baseObject != null)
         {
