@@ -5,8 +5,9 @@ No ability text hides box
 Debug for quest editor crash
 
 Next:
-Affairs of Wizards
+Affairs of Wizards - activations list, test
 custom monsters/activations editor
+\n support in activation ability
 
 MoM:
 No ability text hides box
