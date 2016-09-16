@@ -136,6 +136,11 @@ public class QuestData
             UniqueMonster c = new UniqueMonster(name, content, path);
             components.Add(name, c);
         }
+        if (name.IndexOf("Activation") == 0)
+        {
+            Activation c = new Activation(name, content);
+            components.Add(name, c);
+        }
         // If not known ignore
     }
 

@@ -540,6 +540,10 @@ public class ActivationData : GenericData
     public bool masterFirst = false;
     public bool minionFirst = false;
 
+    public ActivationData()
+    {
+    }
+
     public ActivationData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
         // Get ability

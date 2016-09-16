@@ -128,9 +128,9 @@ public class RoundHelper {
                 foreach (string s in qm.activations)
                 {
                     // This should check for quest activations!
-                    if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                    if (game.quest.qd.components.ContainsKey("Activation" + s))
                     {
-                        adList.Add(game.cd.activations["MonsterActivation" + s]);
+                        adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
                     else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
                     {

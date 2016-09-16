@@ -62,3 +62,16 @@ public class QuestMonster : MonsterData
         }
     }
 }
+
+
+public class QuestActivation : ActivationData
+{
+    public QuestActivation(QuestData.Activation qa) : base()
+    {
+        ability = qa.ability;
+        masterActions = qa.masterActions;
+        minionActions = qa.minionActions;
+        minionFirst = qa.minionFirst;
+        masterFirst = qa.masterFirst;
+    }
+}
