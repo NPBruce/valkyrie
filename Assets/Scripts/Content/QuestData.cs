@@ -1103,6 +1103,72 @@ public class QuestData
         }
     }
 
+    public class Activation : QuestComponent
+    {
+        new public static string type = "Activation";
+        public string ability = "";
+        public string minionActions = "";
+        public string masterActions = "";
+        public bool minionFirst = false;
+        public bool masterFirst = false;
+
+        public Activation(string s) : base(s)
+        {
+        }
+
+        public Activation(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            if (data.ContainsKey("ability"))
+            {
+                ability = data["ability"];
+            }
+            if (data.ContainsKey("master"))
+            {
+                masterActions = data["master"];
+            }
+            if (data.ContainsKey("minion"))
+            {
+                minionActions = data["minion"];
+            }
+            if (data.ContainsKey("minionfirst"))
+            {
+                bool.TryParse(data["minionfirst"], out minionFirst);
+            }
+            if (data.ContainsKey("masterfirst"))
+            {
+                bool.TryParse(data["masterfirst"], out masterFirst);
+            }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (ability.Length > 0)
+            {
+                r += "ability=" + ability + nl;
+            }
+            if (masterActions.Length > 0)
+            {
+                r += "master=" + masterActions + nl;
+            }
+            if (minionActions.Length > 0)
+            {
+                r += "minion=" + minionActions + nl;
+            }
+            if (minionFirst)
+            {
+                r += "minionfirst=" + minionFirst.ToString() + nl;
+            }
+            if (masterFirst)
+            {
+                r += "masterfirst=" + masterFirst.ToString() + nl;
+            }
+            return r;
+        }
+    }
+
     public class Quest
     {
         public string name = "";
