@@ -107,32 +107,21 @@ public class RoundHelper {
         List<ActivationData> adList = new List<ActivationData>();
         Game game = Game.Get();
 
-        // Find all possible activations
-        foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
+        bool customActivations = false;
+        MonsterData md = m.monsterData;
+
+        QuestMonster qm = md as QuestMonster;
+        if (m.monsterData != null)
         {
-            // Is this activation for this monster type? (replace "Monster" with "MonsterActivation", ignore specific variety)
-            if (kv.Key.IndexOf("MonsterActivation" + m.monsterData.sectionName.Substring("Monster".Length)) == 0)
+            if (game.cd.monsters.ContainsKey(qm.derivedType))
             {
-                adList.Add(kv.Value);
+                md = game.cd.monsters[qm.derivedType];
             }
-        }
-        // Search for additional common activations
-        foreach (string s in m.monsterData.activations)
-        {
-            if (game.cd.activations.ContainsKey("MonsterActivation" + s))
-            {
-                adList.Add(game.cd.activations["MonsterActivation" + s]);
-            }
-            else
-            {
-                Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
-            }
+            customActivations = !qm.useMonsterTypeActivations;
         }
 
-        // If this is a quest specific monster with custom activations throw this list out and use that instead
-        if (m.monsterData is QuestMonster)
+        if (customActivations)
         {
-            QuestMonster qm = m.monsterData as QuestMonster;
             if (!qm.useMonsterTypeActivations)
             {
                 adList = new List<ActivationData>();
@@ -154,11 +143,35 @@ public class RoundHelper {
                 }
             }
         }
+        else
+        {
+            // Find all possible activations
+            foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
+            {
+                // Is this activation for this monster type? (replace "Monster" with "MonsterActivation", ignore specific variety)
+                if (kv.Key.IndexOf("MonsterActivation" + md.sectionName.Substring("Monster".Length)) == 0)
+                {
+                    adList.Add(kv.Value);
+                }
+            }
+            // Search for additional common activations
+            foreach (string s in md.activations)
+            {
+                if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                {
+                    adList.Add(game.cd.activations["MonsterActivation" + s]);
+                }
+                else
+                {
+                    Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + md.sectionName);
+                }
+            }
+        }
 
         // Check for no activations
         if (adList.Count == 0)
         {
-            Debug.Log("Error: Unable to find any activation data for monster type: " + m.monsterData.name);
+            Debug.Log("Error: Unable to find any activation data for monster type: " + md.name);
             Application.Quit();
         }
 
