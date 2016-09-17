@@ -7,14 +7,17 @@ Debug for quest editor crash
 
 Next:
 custom monsters/activations editor
+catch all parse exceptions
+validate all quest data
 
 MoM:
 No ability text hides box
 Mythos
+free place tokens/events/monsters
 activations
 monsters
+Puzzles
 missing tiles
-free place tokens/events/monsters
 
 D2E:
 expansion monsters
@@ -29,6 +32,7 @@ hybrid 1 activation bug
 lt.
 
 Common:
+validate all content data
 starting/trailing '"'
 event log
 save games
