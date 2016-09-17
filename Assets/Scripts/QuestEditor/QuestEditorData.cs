@@ -1947,11 +1947,11 @@ public class QuestEditorData {
         QuestData.Event e = selection as QuestData.Event;
         if (max)
         {
-            e.maxHeroes = int.Parse(esl.selection);
+            int.TryParse(esl.selection, out e.maxHeroes);
         }
         else
         {
-            e.minHeroes = int.Parse(esl.selection);
+            int.TryParse(esl.selection, out e.minHeroes);
         }
         SelectComponent(e.name);
     }

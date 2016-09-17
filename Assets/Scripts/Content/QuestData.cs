@@ -169,7 +169,7 @@ public class QuestData
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
             {
-                rotation = int.Parse(data["rotation"]);
+                int.TryParse(data["rotation"], out rotation);
             }
 
             // Find the tileside that is used
@@ -229,7 +229,7 @@ public class QuestData
 
             if (data.ContainsKey("rotation"))
             {
-                rotation = int.Parse(data["rotation"]);
+                int.TryParse(data["rotation"], out rotation);
             }
 
             // color is only supported as a hexadecimal "#RRGGBB" format
@@ -361,7 +361,7 @@ public class QuestData
 
             if (data.ContainsKey("unique"))
             {
-                unique = bool.Parse(data["unique"]);
+                bool.TryParse(data["unique"], out unique);
             }
             if (data.ContainsKey("uniquetitle"))
             {
@@ -509,7 +509,7 @@ public class QuestData
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
             {
-                highlight = bool.Parse(data["highlight"]);
+                bool.TryParse(data["highlight"], out highlight);
             }
 
             // Events to trigger on confirm or success
@@ -541,19 +541,19 @@ public class QuestData
             // alter party gold (currently unused)
             if (data.ContainsKey("gold"))
             {
-                gold = int.Parse(data["gold"]);
+                int.TryParse(data["gold"], out gold);
             }
             
             // minimum heros required to be selected for event
             if (data.ContainsKey("minhero"))
             {
-                minHeroes = int.Parse(data["minhero"]);
+                int.TryParse(data["minhero"], out minHeroes);
             }
 
             // maximum heros selectable for event (0 disables)
             if (data.ContainsKey("maxhero"))
             {
-                maxHeroes = int.Parse(data["maxhero"]);
+                int.TryParse(data["maxhero"], out maxHeroes);
             }
 
             // Display hidden components (space separated list)
@@ -614,14 +614,17 @@ public class QuestData
 
             if (data.ContainsKey("threat"))
             {
-                if (data["threat"][0].Equals('@'))
+                if (data["threat"].Length != 0)
                 {
-                    absoluteThreat = true;
-                    threat = float.Parse(data["threat"].Substring(1));
-                }
-                else
-                {
-                    threat = float.Parse(data["threat"]);
+                    if (data["threat"][0].Equals('@'))
+                    {
+                        absoluteThreat = true;
+                        float.TryParse(data["threat"].Substring(1), out threat);
+                    }
+                    else
+                    {
+                        float.TryParse(data["threat"], out threat);
+                    }
                 }
             }
 
@@ -631,14 +634,15 @@ public class QuestData
                 string[] de = data["delayedevents"].Split(' ');
                 foreach (string s in de)
                 {
-                    int delay = int.Parse(s.Substring(0, s.IndexOf(":")));
+                    int delay;
+                    int.TryParse(s.Substring(0, s.IndexOf(":")), out delay);
                     string eventName = s.Substring(s.IndexOf(":") + 1);
                     delayedEvents.Add(new DelayedEvent(delay, eventName));
                 }
             }
             if (data.ContainsKey("randomevents"))
             {
-                randomEvents = bool.Parse(data["randomevents"]);
+                bool.TryParse(data["randomevents"], out randomEvents);
             }
         }
 
@@ -867,11 +871,11 @@ public class QuestData
             master = false;
             if (data.ContainsKey("master"))
             {
-                master = bool.Parse(data["master"]);
+                bool.TryParse(data["master"], out master);
             }
             if (data.ContainsKey("rotate"))
             {
-                rotate = bool.Parse(data["rotate"]);
+                bool.TryParse(data["rotate"], out rotate);
             }
         }
 
@@ -925,13 +929,13 @@ public class QuestData
             if (data.ContainsKey("xposition"))
             {
                 locationSpecified = true;
-                location.x = float.Parse(data["xposition"]);
+                float.TryParse(data["xposition"], out location.x);
             }
 
             if (data.ContainsKey("yposition"))
             {
                 locationSpecified = true;
-                location.y = float.Parse(data["yposition"]);
+                float.TryParse(data["yposition"], out location.y);
             }
         }
 
@@ -1213,31 +1217,31 @@ public class QuestData
 
             if (data.ContainsKey("maxpanx"))
             {
-                maxPanX = int.Parse(data["maxpanx"]);
+                int.TryParse(data["maxpanx"], out maxPanX);
             }
             if (data.ContainsKey("maxpany"))
             {
-                maxPanY = int.Parse(data["maxpany"]);
+                int.TryParse(data["maxpany"], out maxPanY);
             }
             if (data.ContainsKey("minpanx"))
             {
-                minPanX = int.Parse(data["minpanx"]);
+                int.TryParse(data["minpanx"], out minPanX);
             }
             if (data.ContainsKey("minpany"))
             {
-                minPanY = int.Parse(data["minpany"]);
+                int.TryParse(data["minpany"], out minPanY);
             }
             if (data.ContainsKey("minorperil"))
             {
-                minorPeril = int.Parse(data["minorperil"]);
+                int.TryParse(data["minorperil"], out minorPeril);
             }
             if (data.ContainsKey("majorperil"))
             {
-                majorPeril = int.Parse(data["majorperil"]);
+                int.TryParse(data["majorperil"], out majorPeril);
             }
             if (data.ContainsKey("deadlyperil"))
             {
-                deadlyPeril = int.Parse(data["deadlyperil"]);
+                int.TryParse(data["deadlyperil"], out deadlyPeril);
             }
             if (data.ContainsKey("packs"))
             {

@@ -433,10 +433,10 @@ public class ContentData {
 // Class for tile specific data
 public class TileSideData : GenericData
 {
-    public float top;
-    public float left;
+    public float top = 0;
+    public float left = 0;
     public float pxPerSquare;
-    public float aspect;
+    public float aspect = 0;
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -444,36 +444,25 @@ public class TileSideData : GenericData
         // Get location of top left square in tile image, default 0
         if (content.ContainsKey("top"))
         {
-            top = float.Parse(content["top"]);
+            float.TryParse(content["top"], out top);
         }
-        else
-        {
-            top = 0;
-        }
-
         if (content.ContainsKey("left"))
         {
-            left = float.Parse(content["left"]);
+            float.TryParse(content["left"], out left);
         }
-        else
-        {
-            left = 0;
-        }
+
         if (content.ContainsKey("pps"))
         {
-            pxPerSquare = float.Parse(content["pps"]);
+            float.TryParse(content["pps"], out pxPerSquare);
         }
         else
         {
             pxPerSquare = Game.Get().gameType.TilePixelPerSquare();
         }
+
         if (content.ContainsKey("aspect"))
         {
-            aspect = float.Parse(content["aspect"]);
-        }
-        else
-        {
-            aspect = 0;
+            float.TryParse(content["aspect"], out aspect);
         }
     }
 }
@@ -563,11 +552,11 @@ public class ActivationData : GenericData
         }
         if (content.ContainsKey("masterfirst"))
         {
-            masterFirst = bool.Parse(content["masterfirst"]);
+            bool.TryParse(content["masterfirst"], out masterFirst);
         }
         if (content.ContainsKey("minionfirst"))
         {
-            minionFirst = bool.Parse(content["minionfirst"]);
+            bool.TryParse(content["minionfirst"], out minionFirst);
         }
     }
 }
@@ -585,19 +574,19 @@ public class TokenData : GenericData
     {
         if (content.ContainsKey("x"))
         {
-            x = int.Parse(content["x"]);
+            int.TryParse(content["x"], out x);
         }
         if (content.ContainsKey("y"))
         {
-            y = int.Parse(content["y"]);
+            int.TryParse(content["y"], out y);
         }
         if (content.ContainsKey("height"))
         {
-            height = int.Parse(content["height"]);
+            int.TryParse(content["height"], out height);
         }
         if (content.ContainsKey("height"))
         {
-            width = int.Parse(content["width"]);
+            int.TryParse(content["width"], out width);
         }
     }
 
@@ -647,13 +636,11 @@ public class GenericData
         {
             name = name_ini.Substring(type.Length);
         }
+
+        priority = 0;
         if (content.ContainsKey("priority"))
         {
-            priority = int.Parse(content["priority"]);
-        }
-        else // Default piority is 0
-        {
-            priority = 0;
+            int.TryParse(content["priority"], out priority);
         }
 
         if (content.ContainsKey("traits"))
@@ -707,7 +694,7 @@ public class PerilData : QuestData.Event
         }
         if (data.ContainsKey("priority"))
         {
-            priority = int.Parse(data["priority"]);
+            int.TryParse(data["priority"], out priority);
         }
         if (name.IndexOf("PerilMinor") == 0)
         {

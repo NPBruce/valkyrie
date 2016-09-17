@@ -267,8 +267,9 @@ public class EventManager
                 {
                     string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
                     int separator = rand.IndexOf(":", 5);
-                    int min = int.Parse(rand.Substring(5, separator - 5));
-                    int max = int.Parse(rand.Substring(separator + 1, rand.Length - separator - 2));
+                    int min, max;
+                    int.TryParse(rand.Substring(5, separator - 5), out min);
+                    int.TryParse(rand.Substring(separator + 1, rand.Length - separator - 2), out max);
                     text = text.Replace(rand, Random.Range(min, max + 1).ToString());
                     index = text.IndexOf("{rnd:");
                 }

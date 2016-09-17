@@ -4,10 +4,10 @@ Custom monsters and activations in quests
 No ability text hides box
 Debug for quest editor crash
 \n support in activation ability
+Affairs of Wizards
 
 Next:
 custom monsters/activations editor
-catch all parse exceptions
 validate all quest data
 
 MoM:
