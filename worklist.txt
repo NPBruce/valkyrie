@@ -6,10 +6,6 @@ Debug for quest editor crash
 \n support in activation ability
 Affairs of Wizards
 
-Next:
-custom monsters/activations editor
-validate all quest data
-
 MoM:
 No ability text hides box
 Mythos
@@ -20,6 +16,7 @@ Puzzles
 missing tiles
 
 D2E:
+custom monsters/activations editor
 expansion monsters
 quest set
 missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
