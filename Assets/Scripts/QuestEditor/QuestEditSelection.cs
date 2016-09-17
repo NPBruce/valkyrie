@@ -236,7 +236,9 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Fetch all of the quest data
+        Debug.Log("Selecting Quest: " + key + System.Environment.NewLine);
         game.quest = new Quest(questList[key]);
+        Debug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin();
     }
 }

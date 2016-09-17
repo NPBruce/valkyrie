@@ -267,8 +267,9 @@ public class EventManager
                 {
                     string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
                     int separator = rand.IndexOf(":", 5);
-                    int min = int.Parse(rand.Substring(5, separator - 5));
-                    int max = int.Parse(rand.Substring(separator + 1, rand.Length - separator - 2));
+                    int min, max;
+                    int.TryParse(rand.Substring(5, separator - 5), out min);
+                    int.TryParse(rand.Substring(separator + 1, rand.Length - separator - 2), out max);
                     text = text.Replace(rand, Random.Range(min, max + 1).ToString());
                     index = text.IndexOf("{rnd:");
                 }
@@ -352,8 +353,13 @@ public class EventManager
             // Next try to find a type that is valid
             foreach (string t in qMonster.mTypes)
             {
-                // Monster type must exist in content packs, 'Monster' is optional
-                if (game.cd.monsters.ContainsKey(t))
+                // Monster type might be a unique for this quest
+                if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                {
+                    cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                }
+                // Monster type might exist in content packs, 'Monster' is optional
+                else if (game.cd.monsters.ContainsKey(t))
                 {
                     cMonster = game.cd.monsters[t];
                 }

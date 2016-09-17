@@ -1083,8 +1083,10 @@ public class QuestEditorData {
         }
 
         game.quest.qd.components.Remove(selection.name);
+        game.quest.Remove(selection.name);
         selection.name = name;
         game.quest.qd.components.Add(selection.name, selection);
+        game.quest.Add(selection.name);
         SelectComponent(name);
     }
 
@@ -1945,11 +1947,11 @@ public class QuestEditorData {
         QuestData.Event e = selection as QuestData.Event;
         if (max)
         {
-            e.maxHeroes = int.Parse(esl.selection);
+            int.TryParse(esl.selection, out e.maxHeroes);
         }
         else
         {
-            e.minHeroes = int.Parse(esl.selection);
+            int.TryParse(esl.selection, out e.minHeroes);
         }
         SelectComponent(e.name);
     }

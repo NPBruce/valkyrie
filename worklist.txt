@@ -1,36 +1,41 @@
 Done:
-Fixed event cancel bug.
-Sin wave on Bing
-
-Next:
+No minion/master text skips step
+Custom monsters and activations in quests
+No ability text hides box
+Debug for quest editor crash
+\n support in activation ability
 Affairs of Wizards
-starting/trailing '"'
-No minion text skips step
-Custom monsters/activations in quests
 
 MoM:
 No ability text hides box
 Mythos
+free place tokens/events/monsters
 activations
 monsters
+Puzzles
 missing tiles
-free place tokens/events/monsters
 
 D2E:
-more perils
-expansion monsters/activations
-hybrid 1 activation bug
+custom monsters/activations editor
+expansion monsters
 quest set
 missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
+campaign
 subdirectories for expansions
+h&m
+more perils
+expansion activations
+hybrid 1 activation bug
 lt.
 
 Common:
-hero selection scroll
-frame color for portraits Frame_Monster_1x1.dds (color rotation?)
+validate all content data
+starting/trailing '"'
 event log
 save games
 undo
+hero selection scroll
+frame color for portraits Frame_Monster_1x1.dds/atlas
 catch all parse exceptions
 expansion appearance order
 random tags
