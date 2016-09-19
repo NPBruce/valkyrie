@@ -351,7 +351,7 @@ public class EventManager
         public MonsterEvent(string name) : base(name)
         {
             qMonster = qEvent as QuestData.Monster;
-            // Next try to find a type that is valid
+            // Try to find a type that is valid
             foreach (string t in qMonster.mTypes)
             {
                 // Monster type might be a unique for this quest

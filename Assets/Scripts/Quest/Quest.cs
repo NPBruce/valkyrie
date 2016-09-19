@@ -73,7 +73,7 @@ public class Quest
     {
         game = Game.Get();
 
-        // This happens anyway but we need it to be here before the following code is executed
+        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
         IniData saveData = IniRead.ReadFromString(save);
@@ -127,7 +127,7 @@ public class Quest
         monsters = new List<Monster>();
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
-            if (kv.Key.IndexOf("Hero") == 0)
+            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
             {
                 heroes.Add(new Hero(kv.Value));
             }
@@ -163,6 +163,15 @@ public class Quest
     public void Save()
     {
         undo.Push(ToString());
+    }
+
+    public void Undo()
+    {
+        if (undo.Count == 0) return;
+        Quest oldQuest = new Quest(undo.Pop());
+        oldQuest.undo = undo;
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
@@ -574,11 +583,14 @@ public class Tile : BoardComponent
             int.TryParse(data["id"], out id);
 
             Game game = Game.Get();
-            foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+            if (data.ContainsKey("type"))
             {
-                if (hd.Value.sectionName.Equals(data["type"]))
+                foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
                 {
-                    heroData = hd.Value;
+                    if (hd.Value.sectionName.Equals(data["type"]))
+                    {
+                        heroData = hd.Value;
+                    }
                 }
             }
         }
@@ -591,7 +603,10 @@ public class Tile : BoardComponent
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
-            r += "type=" + heroData.sectionName + nl;
+            if (heroData != null)
+            {
+                r += "type=" + heroData.sectionName + nl;
+            }
 
             return r;
         }
@@ -629,12 +644,13 @@ public class Tile : BoardComponent
             uniqueTitle = data["uniqueTitle"];
 
             Game game = Game.Get();
-            foreach (KeyValuePair<string, MonsterData> hd in game.cd.monsters)
+            if (game.cd.monsters.ContainsKey(data["type"]))
             {
-                if (hd.Value.sectionName.Equals(data["type"]))
-                {
-                    monsterData = hd.Value;
-                }
+                monsterData = game.cd.monsters[data["type"]];
+            }
+            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.UniqueMonster)
+            {
+                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.UniqueMonster);
             }
 
             if (data.ContainsKey("activation"))
