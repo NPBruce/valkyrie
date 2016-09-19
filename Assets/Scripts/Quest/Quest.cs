@@ -99,7 +99,18 @@ public class Quest
         Dictionary<string, string> saveBoard = saveData.Get("Board");
         foreach (KeyValuePair<string, string> kv in saveBoard)
         {
-            //fixme;
+            if (kv.Key.IndexOf("Door") == 0)
+            {
+                boardItems.Add(kv.Key, new Door(qd.components[kv.Key] as QuestData.Door, game));
+            }
+            if (kv.Key.IndexOf("Token") == 0)
+            {
+                boardItems.Add(kv.Key, new Token(qd.components[kv.Key] as QuestData.Token, game));
+            }
+            if (kv.Key.IndexOf("Tile") == 0)
+            {
+                boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
+            }
         }
 
         flags = new HashSet<string>();
@@ -553,7 +564,18 @@ public class Tile : BoardComponent
 
         public Hero(Dictionary<string, string> data)
         {
+            bool.TryParse(data["activated"], out activated);
+            bool.TryParse(data["defeated"], out defeated);
+            int.TryParse(data["id"], out id);
 
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+            {
+                if (hd.Value.sectionName.Equals(data["type"]))
+                {
+                    heroData = hd.Value;
+                }
+            }
         }
 
         override public string ToString()
@@ -594,7 +616,35 @@ public class Tile : BoardComponent
 
         public Monster(Dictionary<string, string> data)
         {
+            bool.TryParse(data["activated"], out activated);
+            bool.TryParse(data["minionStarted"], out minionStarted);
+            bool.TryParse(data["masterStarted"], out masterStarted);
+            bool.TryParse(data["unique"], out unique);
+            uniqueText = data["uniqueText"];
+            uniqueTitle = data["uniqueTitle"];
 
+            Game game = Game.Get();
+            foreach (KeyValuePair<string, MonsterData> hd in game.cd.monsters)
+            {
+                if (hd.Value.sectionName.Equals(data["type"]))
+                {
+                    monsterData = hd.Value;
+                }
+            }
+
+            if (data.ContainsKey("activation"))
+            {
+                ActivationData saveActivation = null;
+                if (game.cd.activations.ContainsKey(data["activation"]))
+                {
+                    saveActivation = game.cd.activations[data["activation"]];
+                }
+                if (game.quest.qd.components.ContainsKey(data["activation"]))
+                {
+                    saveActivation = new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
+                }
+                currentActivation = new ActivationInstance(saveActivation, monsterData.name);
+            }
         }
 
         public void NewActivation(ActivationData contentActivation)
