@@ -95,6 +95,11 @@ public class Quest
         string questPath = saveData.Get("Quest", "path");
         qd = new QuestData(questPath);
 
+        game.tokenBoard.Clear();
+        // Clean up everything marked as 'board'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+            Object.Destroy(go);
+
         boardItems = new Dictionary<string, BoardComponent>();
         Dictionary<string, string> saveBoard = saveData.Get("Board");
         foreach (KeyValuePair<string, string> kv in saveBoard)
@@ -158,6 +163,8 @@ public class Quest
             }
             heroSelection.Add(kv.Key, heroList);
         }
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
     }
 
     public void Save()
@@ -170,8 +177,6 @@ public class Quest
         if (undo.Count == 0) return;
         Quest oldQuest = new Quest(undo.Pop());
         oldQuest.undo = undo;
-        game.monsterCanvas.UpdateList();
-        game.heroCanvas.UpdateStatus();
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
@@ -449,7 +454,7 @@ public class Tile : BoardComponent
             // Move to square (105 units per square)
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 
-            game.tokenBoard.add(this);
+            game.tokenBoard.Add(this);
         }
 
         public override QuestData.Event GetEvent()
@@ -499,7 +504,7 @@ public class Tile : BoardComponent
 
             SetColor(qDoor.colourName);
 
-            game.tokenBoard.add(this);
+            game.tokenBoard.Add(this);
         }
 
         public void SetColor(string colorName)
