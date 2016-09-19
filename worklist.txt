@@ -5,6 +5,10 @@ Mythos
 free place tokens/events/monsters
 activations
 monsters
+test results
+more than 2 options in events
+action symbol in events
+moster information box
 Puzzles
 missing tiles
 

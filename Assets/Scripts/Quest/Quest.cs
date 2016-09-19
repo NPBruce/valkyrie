@@ -164,8 +164,64 @@ public class Quest
         }
     }
 
-    // Class for Tile components (use TileSide content data)
-    public class Tile : BoardComponent
+    override public string ToString()
+    {
+        string nl = System.Environment.NewLine;
+        string r = "[Quest]" + nl;
+
+        r += "path=" + qd.questPath + nl;
+        r += "round=" + round+ nl;
+        r += "morale=" + morale + nl;
+        r += "threat=" + threat + nl;
+        r += "heroesSelected=" + heroesSelected + nl;
+        r += "minorPeril=" + minorPeril + nl;
+        r += "majorPeril=" + majorPeril + nl;
+        r += "deadlyPeril=" + deadlyPeril + nl;
+
+        r += "[Board]" + nl;
+        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        {
+            r += kv.Key + nl;
+        }
+
+        r += "[Flags]" + nl;
+        foreach (string s in flags)
+        {
+            r += s + nl;
+        }
+
+        r += "[HeroSelection]" + nl;
+        foreach (KeyValuePair<string, List<Quest.Hero>> kv in heroSelection)
+        {
+            r += kv.Key + "=";
+            foreach (Quest.Hero h in kv.Value)
+            {
+                r += h.id + " ";
+            }
+            r = r.Substring(0, r.Length - 1) + nl;
+        }
+
+        r += "[DelayedEvents]" + nl;
+        foreach (QuestData.Event.DelayedEvent de in delayedEvents)
+        {
+            r += de.delay + ":" + de.eventName + nl;
+        }
+
+        foreach (Hero h in heroes)
+        {
+            r += h.ToString();
+        }
+
+        foreach (Monster m in monsters)
+        {
+            r += m.ToString();
+        }
+
+        return r;
+    }
+
+// Class for Tile components (use TileSide content data)
+public class Tile : BoardComponent
     {
         public QuestData.Tile qTile;
         public TileSideData cTile;
@@ -410,6 +466,19 @@ public class Quest
             heroData = h;
             id = i;
         }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+
+            string r = "[Hero" + id + "]" + nl;
+            r += "id=" + id + nl;
+            r += "activated=" + activated + nl;
+            r += "defeated=" + defeated + nl;
+            r += "type=" + heroData.sectionName + nl;
+
+            return r;
+        }
     }
 
     // Class for holding current monster status
@@ -451,6 +520,25 @@ public class Quest
                 effect = effect.Replace("{1}", monsterName);
                 effect.Replace("\\n", "\n");
             }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+
+            string r = "[Monster" + monsterData.sectionName + "]" + nl;
+            r += "activated=" + activated + nl;
+            r += "type=" + monsterData.sectionName + nl;
+            r += "minionStarted=" + minionStarted + nl;
+            r += "masterStarted=" + masterStarted + nl;
+            r += "unique=" + unique + nl;
+            r += "uniqueText=" + uniqueText + nl;
+            r += "uniqueTitle=" + uniqueTitle + nl;
+            if (currentActivation != null)
+            {
+                r += "activation=" + currentActivation.ad.sectionName + nl;
+            }
+            return r;
         }
     }
 }
