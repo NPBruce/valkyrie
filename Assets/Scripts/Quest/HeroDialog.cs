@@ -68,7 +68,7 @@ public class HeroDialog{
         hero.activated = true;
 
         // Let the game know that a hero has activated
-        RoundHelper.HeroActivated();
+        Game.Get().roundControl.HeroActivated();
 
         updateDisplay();
     }

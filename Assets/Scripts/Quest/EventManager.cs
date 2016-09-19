@@ -91,7 +91,7 @@ public class EventManager
 
     public void TriggerEvent()
     {
-        RoundHelper.CheckNewRound();
+        Game.Get().roundControl.CheckNewRound();
 
         if (eventStack.Count == 0) return;
 
@@ -223,6 +223,7 @@ public class EventManager
             {
                 currentEvent = null;
                 game.quest.eManager.QueueEvent(enabledEvents[0]);
+
             }
             return;
         }

@@ -47,7 +47,7 @@ public class MonsterDialog
     // Todo
     public void Activate()
     {
-        RoundHelper.ActivateMonster(monster);
+        Game.Get().roundControl.ActivateMonster(monster);
     }
 
     // Defeated monsters

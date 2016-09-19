@@ -1,13 +1,6 @@
 Done:
-No minion/master text skips step
-Custom monsters and activations in quests
-No ability text hides box
-Debug for quest editor crash
-\n support in activation ability
-Affairs of Wizards
 
 MoM:
-No ability text hides box
 Mythos
 free place tokens/events/monsters
 activations
