@@ -1,4 +1,12 @@
 Done:
+MoM activation order
+
+Next:
+quest set
+save games
+undo
+event log
+campaign
 
 MoM:
 Mythos
@@ -15,9 +23,7 @@ missing tiles
 D2E:
 custom monsters/activations editor
 expansion monsters
-quest set
-missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
-campaign
+missing tiles
 subdirectories for expansions
 h&m
 more perils
@@ -28,9 +34,6 @@ lt.
 Common:
 validate all content data
 starting/trailing '"'
-event log
-save games
-undo
 hero selection scroll
 frame color for portraits Frame_Monster_1x1.dds/atlas
 catch all parse exceptions

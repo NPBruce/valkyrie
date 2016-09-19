@@ -26,6 +26,8 @@ public class Quest
     public List<Hero> heroes;
     public List<Monster> monsters;
 
+    public Stack<string> undo;
+
     public int round = 1;
     public int morale = 0;
     public float threat = 0;
@@ -51,6 +53,7 @@ public class Quest
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
+        undo = new Stack<string>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -63,6 +66,86 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in packs)
         {
             flags.Add("#" + kv.Key);
+        }
+    }
+
+    public Quest(string save)
+    {
+        game = Game.Get();
+
+        // This happens anyway but we need it to be here before the following code is executed
+        game.quest = this;
+
+        IniData saveData = IniRead.ReadFromString(save);
+
+        int.TryParse(saveData.Get("Quest", "round"), out round);
+        int.TryParse(saveData.Get("Quest", "morale"), out morale);
+        bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
+        bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
+        bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
+        bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
+
+        delayedEvents = new List<QuestData.Event.DelayedEvent>();
+        string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (string de in saveDelayed)
+        {
+            delayedEvents.Add(new QuestData.Event.DelayedEvent(de));
+        }
+
+        string questPath = saveData.Get("Quest", "path");
+        qd = new QuestData(questPath);
+
+        boardItems = new Dictionary<string, BoardComponent>();
+        Dictionary<string, string> saveBoard = saveData.Get("Board");
+        foreach (KeyValuePair<string, string> kv in saveBoard)
+        {
+            //fixme;
+        }
+
+        flags = new HashSet<string>();
+        Dictionary<string, string> saveFlags = saveData.Get("Flags");
+        foreach (KeyValuePair<string, string> kv in saveFlags)
+        {
+            flags.Add(kv.Key);
+        }
+
+        eManager = new EventManager();
+        undo = new Stack<string>();
+
+        heroes = new List<Hero>();
+        monsters = new List<Monster>();
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("Hero") == 0)
+            {
+                heroes.Add(new Hero(kv.Value));
+            }
+            if (kv.Key.IndexOf("Monster") == 0)
+            {
+                monsters.Add(new Monster(kv.Value));
+            }
+        }
+
+        heroSelection = new Dictionary<string, List<Hero>>();
+        Dictionary<string, string> saveSelection = saveData.Get("HeroSelection");
+        foreach (KeyValuePair<string, string> kv in saveSelection)
+        {
+            string[] selectHeroes = kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            List<Hero> heroList = new List<Hero>();
+
+            foreach (string s in selectHeroes)
+            {
+                foreach (Hero h in heroes)
+                {
+                    int id;
+                    int.TryParse(s, out id);
+                    if (id == h.id)
+                    {
+                        heroList.Add(h);
+                    }
+                }
+            }
+            heroSelection.Add(kv.Key, heroList);
         }
     }
 
@@ -177,6 +260,13 @@ public class Quest
         r += "minorPeril=" + minorPeril + nl;
         r += "majorPeril=" + majorPeril + nl;
         r += "deadlyPeril=" + deadlyPeril + nl;
+        r += "DelayedEvents=";
+
+        foreach (QuestData.Event.DelayedEvent de in delayedEvents)
+        {
+            r += de.delay + ":" + de.eventName + " ";
+        }
+        r += nl;
 
         r += "[Board]" + nl;
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
@@ -199,12 +289,6 @@ public class Quest
                 r += h.id + " ";
             }
             r = r.Substring(0, r.Length - 1) + nl;
-        }
-
-        r += "[DelayedEvents]" + nl;
-        foreach (QuestData.Event.DelayedEvent de in delayedEvents)
-        {
-            r += de.delay + ":" + de.eventName + nl;
         }
 
         foreach (Hero h in heroes)
@@ -467,6 +551,11 @@ public class Tile : BoardComponent
             id = i;
         }
 
+        public Hero(Dictionary<string, string> data)
+        {
+
+        }
+
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -501,6 +590,11 @@ public class Tile : BoardComponent
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
+        }
+
+        public Monster(Dictionary<string, string> data)
+        {
+
         }
 
         public void NewActivation(ActivationData contentActivation)

@@ -7,19 +7,32 @@ public static class IniRead{
     // Function takes path to ini file and returns data object
     // Returns null on error
 
+
     public static IniData ReadFromIni(string path)
     {
         string[] lines;
-        
+
         // Read the whole file
         try
         {
             lines = System.IO.File.ReadAllLines(path);
         }
-        catch(System.Exception)
+        catch (System.Exception)
         {
             return null;
         }
+        return ReadFromStringArray(lines, path);
+    }
+
+
+    public static IniData ReadFromString(string content)
+    {
+        string[] lines = content.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+        return ReadFromStringArray(lines, "<INTERNAL>");
+    }
+
+    public static IniData ReadFromStringArray(string[] lines, string path)
+    {
         // Create a dictionary for the first section
         Dictionary<string, string> entryData = new Dictionary<string, string>();
         // Name for the current section
