@@ -47,7 +47,9 @@ public class MonsterDialog
     // Todo
     public void Activate()
     {
-        Game.Get().roundControl.ActivateMonster(monster);
+        Game game = Game.Get();
+        game.quest.Save();
+        game.roundControl.ActivateMonster(monster);
     }
 
     // Defeated monsters
@@ -55,6 +57,7 @@ public class MonsterDialog
     {
         Destroy();
         Game game = Game.Get();
+        game.quest.Save();
         game.quest.monsters.Remove(monster);
         updateDisplay();
 
@@ -77,6 +80,7 @@ public class MonsterDialog
     {
         Game game = Game.Get();
         Destroy();
+        game.quest.Save();
         monster.unique = false;
         game.monsterCanvas.UpdateStatus();
         game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);

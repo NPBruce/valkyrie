@@ -78,6 +78,11 @@ public class DialogWindow {
         Game game = Game.Get();
         // Destroy this dialog to close
         destroy();
+
+        if (eventData.qEvent.cancelable)
+        {
+            game.quest.Save();
+        }
         // Trigger failure event
         // Trigger next event
         game.quest.eManager.EndEvent(true);
@@ -125,6 +130,11 @@ public class DialogWindow {
 
         // Destroy this dialog to close
         destroy();
+
+        if (eventData.qEvent.cancelable)
+        {
+            game.quest.Save();
+        }
 
         game.quest.eManager.EndEvent();
     }

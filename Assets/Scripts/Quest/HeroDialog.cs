@@ -47,9 +47,10 @@ public class HeroDialog{
     public void defeated()
     {
         destroy();
+        Game game = Game.Get();
+        game.quest.Save();
         hero.defeated = true;
         updateDisplay();
-        Game game = Game.Get();
         game.quest.AdjustMorale(-1);
     }
 
@@ -57,6 +58,8 @@ public class HeroDialog{
     public void restored()
     {
         destroy();
+        Game game = Game.Get();
+        game.quest.Save();
         hero.defeated = false;
         updateDisplay();
     }
@@ -65,6 +68,8 @@ public class HeroDialog{
     public void activated()
     {
         destroy();
+        Game game = Game.Get();
+        game.quest.Save();
         hero.activated = true;
 
         // Let the game know that a hero has activated

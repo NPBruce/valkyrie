@@ -160,6 +160,11 @@ public class Quest
         }
     }
 
+    public void Save()
+    {
+        undo.Push(ToString());
+    }
+
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
     public void AdjustMorale(int m)
     {
