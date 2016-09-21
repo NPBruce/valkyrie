@@ -8,6 +8,8 @@ MoM 1.1.0 tiles
 Next:
 save games expansion check, hero redo, from menu..
 Additional tiles aspect
+MoM distance unit
+MoM detected as 1.0.4
 
 MoM:
 Mythos

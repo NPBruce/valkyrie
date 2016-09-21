@@ -13,19 +13,31 @@ public class MainMenu {
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
-        TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 10), new Vector2(12, 2f), "Start " + game.gameType.QuestName(), delegate { Start(); });
+        TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), new Vector2(12, 2f), "Start " + game.gameType.QuestName(), delegate { Start(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 13), new Vector2(12, 2f), "Select Content", delegate { Content(); });
+        if (SaveManager.SaveExists())
+        {
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), delegate { Load(); });
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
+        }
+        else
+        {
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), Color.red);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db.AddBorder();
+        }
+
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14), new Vector2(12, 2f), "Select Content", delegate { Content(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 16), new Vector2(12, 2f), game.gameType.QuestName() + " Editor", delegate { Editor(); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), new Vector2(12, 2f), game.gameType.QuestName() + " Editor", delegate { Editor(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 19), new Vector2(12, 2f), "About", delegate { About(); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "About", delegate { About(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 22), new Vector2(12, 2f), "Exit", delegate { Exit(); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), "Exit", delegate { Exit(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
     }
 
@@ -40,7 +52,11 @@ public class MainMenu {
         game.SelectQuest();
     }
 
-    // FIXME!
+    public void Load()
+    {
+        //fixme
+    }
+
     public void Content()
     {
         new ContentSelect();

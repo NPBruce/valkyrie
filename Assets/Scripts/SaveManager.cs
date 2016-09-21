@@ -6,7 +6,8 @@ class SaveManager
 {
     public static string SaveFile()
     {
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save.ini";
+        Game game = Game.Get();
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.GetType() + ".ini";
     }
 
     public static void Save()
@@ -27,6 +28,11 @@ class SaveManager
         {
             Debug.Log("Warning: Unable to write to save file.");
         }
+    }
+
+    public static bool SaveExists()
+    {
+        return File.Exists(SaveFile());
     }
 
     public static void Load()
