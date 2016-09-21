@@ -63,9 +63,12 @@ public class Quest
         }
 
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        foreach (KeyValuePair<string, string> kv in packs)
+        if (packs != null)
         {
-            flags.Add("#" + kv.Key);
+            foreach (KeyValuePair<string, string> kv in packs)
+            {
+                flags.Add("#" + kv.Key);
+            }
         }
     }
 
