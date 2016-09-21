@@ -1,13 +1,14 @@
 Done:
 MoM activation order
 undo
+save games
 
 Next:
 quest set
-save games
-undo
-event log
+save games expansion check, hero redo, from menu..
 campaign
+symbols don't work in unique text
+unique monster name inherit
 
 MoM:
 Mythos
@@ -33,6 +34,7 @@ hybrid 1 activation bug
 lt.
 
 Common:
+event log
 validate all content data
 starting/trailing '"'
 hero selection scroll
