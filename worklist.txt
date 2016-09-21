@@ -2,13 +2,12 @@ Done:
 MoM activation order
 undo
 save games
+Crash with missing config file
+MoM 1.1.0 tiles
 
 Next:
-quest set
 save games expansion check, hero redo, from menu..
-campaign
-symbols don't work in unique text
-unique monster name inherit
+Additional tiles aspect
 
 MoM:
 Mythos
@@ -23,6 +22,7 @@ Puzzles
 missing tiles
 
 D2E:
+campaign
 custom monsters/activations editor
 expansion monsters
 missing tiles
@@ -34,7 +34,10 @@ hybrid 1 activation bug
 lt.
 
 Common:
+quest set
+symbols don't work in unique text
 event log
+unique monster name inherit
 validate all content data
 starting/trailing '"'
 hero selection scroll
