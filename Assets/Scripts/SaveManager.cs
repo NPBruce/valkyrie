@@ -46,6 +46,8 @@ class SaveManager
 
                 IniData saveData = IniRead.ReadFromString(data);
 
+                Destroyer.Dialog();
+
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
@@ -54,6 +56,7 @@ class SaveManager
                     Application.Quit();
                 }
 
+                game.cd.LoadContentID("");
                 Dictionary<string, string> packs = saveData.Get("Packs");
                 foreach (KeyValuePair<string, string> kv in packs)
                 {
@@ -62,7 +65,6 @@ class SaveManager
                 }
 
                 new Quest(saveData);
-
                 game.heroCanvas.SetupUI();
                 game.heroCanvas.UpdateStatus();
 

@@ -147,6 +147,11 @@ public class Quest
             {
                 heroes.Add(new Hero(kv.Value));
             }
+        }
+
+        // Monsters must be after heros because some activations refer to heros
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
             if (kv.Key.IndexOf("Monster") == 0)
             {
                 monsters.Add(new Monster(kv.Value));

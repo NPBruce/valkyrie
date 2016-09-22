@@ -349,8 +349,12 @@ public class QuestEditorData {
         Game game = Game.Get();
         if (gettingPosition)
         {
-
-            selection.location = game.cc.GetMouseTile();
+            selection.location = game.cc.GetMouseBoardRounded(game.gameType.SelectionRound());
+            if (selection is QuestData.Tile)
+            {
+                selection.location = game.cc.GetMouseBoardRounded(game.gameType.TileRound());
+                Debug.Log(selection.location.x + " " + selection.location.y);
+            }
             gettingPosition = false;
             Game.Get().quest.Remove(selection.name);
             Game.Get().quest.Add(selection.name);

@@ -55,6 +55,9 @@ public class HeroCanvas : MonoBehaviour {
 
     public void UpdateStatus()
     {
+        // If we haven't set up yet just return
+        if (icons == null) return;
+
         Game game = Game.Get();
         foreach(Quest.Hero h in game.quest.heroes)
         {

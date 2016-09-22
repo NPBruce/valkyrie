@@ -68,6 +68,7 @@ public class QuestActivation : ActivationData
 {
     public QuestActivation(QuestData.Activation qa) : base()
     {
+        sectionName = qa.name;
         ability = EventManager.SymbolReplace(qa.ability);
         masterActions = EventManager.SymbolReplace(qa.masterActions);
         minionActions = EventManager.SymbolReplace(qa.minionActions);

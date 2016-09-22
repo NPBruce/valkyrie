@@ -122,11 +122,11 @@ public class CameraController : MonoBehaviour {
         return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y));
     }
 
-    public Vector2 GetMouseHalfTile()
+    public Vector2 GetMouseBoardRounded(float round)
     {
-        Vector2 bPos = GetMouseBoardPlane(this);
+        Vector2 bPos = GetMouseBoardPlane(this) / round;
 
-        return new Vector2(Mathf.Round(bPos.x * 2) / 2f, Mathf.Round(bPos.y * 2) / 2f);
+        return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y)) * round;
     }
 
     public Vector2 GetMouseBoardPlane(CameraController cc)
