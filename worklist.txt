@@ -6,9 +6,6 @@ Crash with missing config file
 MoM 1.1.0 tiles (requires 1.1.0)
 MoM scaling and token/tile snap
 
-Next:
-save games crash
-
 MoM:
 Mythos
 free place tokens/events/monsters

@@ -61,7 +61,6 @@ public class FetchContent {
 
         lastImport = log.Get("Import", "Valkyrie");
         valkVersionOK = VersionNewerOrEqual(requiredValkyrieVersion, lastImport);
-
         return !appVersionOK || !valkVersionOK;
     }
 
@@ -437,6 +436,10 @@ public class FetchContent {
                 if (int.Parse(oldS) < int.Parse(newS))
                 {
                     return true;
+                }
+                if (int.Parse(oldS) > int.Parse(newS))
+                {
+                    return false;
                 }
             }
             catch (System.Exception)
