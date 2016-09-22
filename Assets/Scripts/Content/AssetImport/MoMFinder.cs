@@ -4,7 +4,7 @@ using System.Collections;
 public class MoMFinder : AppFinder {
     override public string RequiredFFGVersion()
     {
-        return "1.0.4";
+        return "1.1.0";
     }
     override public string RequiredValkyrieVersion()
     {

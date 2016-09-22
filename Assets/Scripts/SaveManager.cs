@@ -7,7 +7,7 @@ class SaveManager
     public static string SaveFile()
     {
         Game game = Game.Get();
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.GetType() + ".ini";
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.TypeName() + ".ini";
     }
 
     public static void Save()
@@ -37,17 +37,48 @@ class SaveManager
 
     public static void Load()
     {
+        Game game = Game.Get();
         try
         {
             if (File.Exists(SaveFile()))
             {
                 string data = File.ReadAllText(SaveFile());
-                new Quest(data);
+
+                IniData saveData = IniRead.ReadFromString(data);
+
+                game.cd = new ContentData(game.gameType.DataDirectory());
+                // Check if we found anything
+                if (game.cd.GetPacks().Count == 0)
+                {
+                    Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    Application.Quit();
+                }
+
+                Dictionary<string, string> packs = saveData.Get("Packs");
+                foreach (KeyValuePair<string, string> kv in packs)
+                {
+                    game.cd.LoadContentID("");
+                    game.cd.LoadContentID(kv.Key);
+                }
+
+                new Quest(saveData);
+
+                game.heroCanvas.SetupUI();
+                game.heroCanvas.UpdateStatus();
+
+                if (game.gameType.DisplayMorale())
+                {
+                    game.moraleDisplay = new MoraleDisplay();
+                }
+
+                // Create the menu button
+                new MenuButton();
             }
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
             Debug.Log("Error: Unable to open save file: " + SaveFile());
+            throw (e);
             Application.Quit();
         }
     }

@@ -129,7 +129,7 @@ public class ContentData {
             {
                 names.Add(cp.name);
             }
-            if (setPacks.ContainsKey(cp.id))
+            if (setPacks != null && setPacks.ContainsKey(cp.id))
             {
                 names.Add(cp.name);
             }
@@ -149,7 +149,7 @@ public class ContentData {
             {
                 ids.Add(cp.id);
             }
-            if (setPacks.ContainsKey(cp.id))
+            if (setPacks != null && setPacks.ContainsKey(cp.id))
             {
                 ids.Add(cp.id);
             }
@@ -164,6 +164,20 @@ public class ContentData {
         foreach (ContentPack cp in allPacks)
         {
             if(cp.name.Equals(name))
+            {
+                LoadContent(cp);
+            }
+        }
+    }
+
+
+    // This loads content from a pack by ID
+    // Duplicate content will be replaced by the higher priority value
+    public void LoadContentID(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
             {
                 LoadContent(cp);
             }

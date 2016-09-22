@@ -74,12 +74,20 @@ public class Quest
 
     public Quest(string save)
     {
+        LoadQuest(IniRead.ReadFromString(save));
+    }
+
+    public Quest(IniData saveData)
+    {
+        LoadQuest(saveData);
+    }
+
+    public void LoadQuest(IniData saveData)
+    {
         game = Game.Get();
 
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
-
-        IniData saveData = IniRead.ReadFromString(save);
 
         int.TryParse(saveData.Get("Quest", "round"), out round);
         int.TryParse(saveData.Get("Quest", "morale"), out morale);
@@ -300,6 +308,12 @@ public class Quest
             r += de.delay + ":" + de.eventName + " ";
         }
         r += nl;
+
+        r += "[Packs]" + nl;
+        foreach (string pack in game.cd.GetEnabledPackIDs())
+        {
+            r += pack + nl;
+        }
 
         r += "[Board]" + nl;
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)

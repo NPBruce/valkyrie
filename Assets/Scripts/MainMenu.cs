@@ -18,7 +18,7 @@ public class MainMenu {
 
         if (SaveManager.SaveExists())
         {
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), delegate { Load(); });
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), delegate { SaveManager.Load(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
         }
         else
@@ -50,11 +50,6 @@ public class MainMenu {
         Destroyer.Dialog();
 
         game.SelectQuest();
-    }
-
-    public void Load()
-    {
-        //fixme
     }
 
     public void Content()
