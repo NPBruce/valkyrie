@@ -106,6 +106,7 @@ public class GameSelection
         if (!fcMoM.NeedImport())
         {
             Game.Get().gameType = new MoMGameType();
+            Game.Get().roundControl = new RoundControllerMoM();
             Destroyer.MainMenu();
         }
     }

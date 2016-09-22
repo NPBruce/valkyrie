@@ -35,10 +35,6 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
-        // Clean up everything marked as 'herodisplay'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("herodisplay"))
-            Object.Destroy(go);
-
         // Clean up everything marked as 'board'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
             Object.Destroy(go);
@@ -52,6 +48,8 @@ public class Destroyer {
             Object.Destroy(go);
 
         Game game = Game.Get();
+
+        game.heroCanvas.Clean();
 
         // Clear up all data
         game.cd = null;

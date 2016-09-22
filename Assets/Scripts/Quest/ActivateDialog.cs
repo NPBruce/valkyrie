@@ -81,7 +81,7 @@ public class ActivateDialog {
         // Destroy this dialog to close
         destroy();
 
-        RoundHelper.MonsterActivated();
+        Game.Get().roundControl.MonsterActivated();
     }
 
     public void destroy()

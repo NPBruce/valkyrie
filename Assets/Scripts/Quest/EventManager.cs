@@ -91,7 +91,7 @@ public class EventManager
 
     public void TriggerEvent()
     {
-        RoundHelper.CheckNewRound();
+        Game.Get().roundControl.CheckNewRound();
 
         if (eventStack.Count == 0) return;
 
@@ -223,6 +223,7 @@ public class EventManager
             {
                 currentEvent = null;
                 game.quest.eManager.QueueEvent(enabledEvents[0]);
+
             }
             return;
         }
@@ -350,7 +351,7 @@ public class EventManager
         public MonsterEvent(string name) : base(name)
         {
             qMonster = qEvent as QuestData.Monster;
-            // Next try to find a type that is valid
+            // Try to find a type that is valid
             foreach (string t in qMonster.mTypes)
             {
                 // Monster type might be a unique for this quest

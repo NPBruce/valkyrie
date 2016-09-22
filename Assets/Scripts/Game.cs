@@ -22,6 +22,7 @@ public class Game : MonoBehaviour {
     public GameType gameType;
     public CameraController cc;
     public ConfigFile config;
+    public RoundController roundControl;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -45,6 +46,7 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+        roundControl = new RoundController();
 
         // Read the version and add it to the log
         TextAsset versionFile = Resources.Load("version") as TextAsset;

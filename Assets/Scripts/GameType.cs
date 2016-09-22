@@ -13,6 +13,8 @@ public abstract class GameType
     public abstract string TypeName();
     public abstract bool TileOnGrid();
     public abstract bool DisplayMorale();
+    public abstract float SelectionRound();
+    public abstract float TileRound();
 }
 
 public class NoGameType : GameType
@@ -65,6 +67,16 @@ public class NoGameType : GameType
     public override bool DisplayMorale()
     {
         return false;
+    }
+
+    public override float SelectionRound()
+    {
+        return 1f;
+    }
+
+    public override float TileRound()
+    {
+        return 1f;
     }
 }
 
@@ -119,6 +131,15 @@ public class D2EGameType : GameType
         return true;
     }
 
+    public override float SelectionRound()
+    {
+        return 1f;
+    }
+
+    public override float TileRound()
+    {
+        return 1f;
+    }
 }
 
 class MoMGameType : GameType
@@ -157,7 +178,7 @@ class MoMGameType : GameType
     {
         // the base side of the tile is 1024 pixels, we are having 3 'squares' in this
         // These squares are slightly larger than D2E squares
-        return 1024f / 3f;
+        return 1024f / 3.5f;
     }
 
     public override string TypeName()
@@ -174,4 +195,13 @@ class MoMGameType : GameType
         return false;
     }
 
+    public override float SelectionRound()
+    {
+        return 1.75f;
+    }
+
+    public override float TileRound()
+    {
+        return 3.5f;
+    }
 }

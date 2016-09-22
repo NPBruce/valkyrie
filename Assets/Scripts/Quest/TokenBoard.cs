@@ -9,17 +9,22 @@ public class TokenBoard : MonoBehaviour {
     public List<TokenControl> tc;
     // Use this for initialization
     void Awake() {
+        Clear();
+    }
+
+    public void Clear()
+    {
         tc = new List<TokenControl>();
     }
 
     // Add a door
-    public void add(Quest.Door d)
+    public void Add(Quest.Door d)
     {
         tc.Add(new TokenControl(d));
     }
 
     // Add a token
-    public void add(Quest.Token t)
+    public void Add(Quest.Token t)
     {
         tc.Add(new TokenControl(t));
     }

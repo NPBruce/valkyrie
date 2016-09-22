@@ -1,26 +1,28 @@
 Done:
-No minion/master text skips step
-Custom monsters and activations in quests
-No ability text hides box
-Debug for quest editor crash
-\n support in activation ability
-Affairs of Wizards
+MoM activation order
+undo
+save games
+Crash with missing config file
+MoM 1.1.0 tiles (requires 1.1.0)
+MoM scaling and token/tile snap
 
 MoM:
-No ability text hides box
 Mythos
 free place tokens/events/monsters
 activations
 monsters
+test results
+more than 2 options in events
+action symbol in events
+moster information box
 Puzzles
 missing tiles
 
 D2E:
+campaign
 custom monsters/activations editor
 expansion monsters
-quest set
-missing tiles (http://tools.fantasyflightgames.com/media/images/30-B.png)
-campaign
+missing tiles
 subdirectories for expansions
 h&m
 more perils
@@ -29,11 +31,12 @@ hybrid 1 activation bug
 lt.
 
 Common:
+quest set
+symbols don't work in unique text
+event log
+unique monster name inherit
 validate all content data
 starting/trailing '"'
-event log
-save games
-undo
 hero selection scroll
 frame color for portraits Frame_Monster_1x1.dds/atlas
 catch all parse exceptions

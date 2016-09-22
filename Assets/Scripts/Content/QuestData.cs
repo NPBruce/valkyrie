@@ -836,13 +836,24 @@ public class QuestData
 
         public class DelayedEvent
         {
-            public string eventName;
-            public int delay;
+            public string eventName = "";
+            public int delay = 0;
 
             public DelayedEvent(int d, string e)
             {
                 delay = d;
                 eventName = e;
+            }
+
+            public DelayedEvent(string data)
+            {
+                int colon = data.IndexOf(":");
+                if (colon == -1)
+                {
+                    return;
+                }
+                int.TryParse(data.Substring(0, colon), out delay);
+                eventName = data.Substring(colon + 1);
             }
         }
     }

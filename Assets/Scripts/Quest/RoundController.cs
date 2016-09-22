@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class RoundHelper {
+public class RoundController {
 
     // A hero has finished their turn
-    public static void HeroActivated()
+    virtual public void HeroActivated()
     {
         Game game = Game.Get();
         // Check if all heros have finished
@@ -27,7 +27,7 @@ public class RoundHelper {
     }
 
     // Finish the other half of monster activation
-    public static void ParticalActivationComplete(Quest.Monster m)
+    public void ParticalActivationComplete(Quest.Monster m)
     {
         // Start the other half of the activation
         new ActivateDialog(m, m.minionStarted);
@@ -36,7 +36,7 @@ public class RoundHelper {
     }
 
 
-    public static void MonsterActivated()
+    virtual public void MonsterActivated()
     {
         Game game = Game.Get();
 
@@ -80,7 +80,7 @@ public class RoundHelper {
     }
 
     // Activate a monster (if any left) and return true if all monsters activated
-    public static bool ActivateMonster()
+    virtual public bool ActivateMonster()
     {
         Game game = Game.Get();
 
@@ -102,7 +102,7 @@ public class RoundHelper {
         return ActivateMonster(toActivate);
     }
 
-    public static bool ActivateMonster(Quest.Monster m)
+    virtual public bool ActivateMonster(Quest.Monster m)
     {
         List<ActivationData> adList = new List<ActivationData>();
         Game game = Game.Get();
@@ -220,7 +220,7 @@ public class RoundHelper {
         return false;
     }
 
-    public static void EndRound()
+    public void EndRound()
     {
         Game game = Game.Get();
         game.quest.eManager.EventTriggerType("EndRound", false);
@@ -229,7 +229,7 @@ public class RoundHelper {
         game.quest.eManager.TriggerEvent();
     }
 
-    public static void CheckNewRound()
+    public void CheckNewRound()
     {
 
         Game game = Game.Get();

@@ -17,6 +17,14 @@ public class HeroCanvas : MonoBehaviour {
             AddHero(h, game);
     }
 
+    public void Clean()
+    {
+        icons = null;
+        // Clean up everything marked as 'herodisplay'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("herodisplay"))
+            Object.Destroy(go);
+    }
+
     void AddHero(Quest.Hero h, Game game)
     {
         Sprite heroSprite;
@@ -55,6 +63,9 @@ public class HeroCanvas : MonoBehaviour {
 
     public void UpdateStatus()
     {
+        // If we haven't set up yet just return
+        if (icons == null) return;
+
         Game game = Game.Get();
         foreach(Quest.Hero h in game.quest.heroes)
         {

@@ -26,6 +26,8 @@ public class Quest
     public List<Hero> heroes;
     public List<Monster> monsters;
 
+    public Stack<string> undo;
+
     public int round = 1;
     public int morale = 0;
     public float threat = 0;
@@ -51,6 +53,7 @@ public class Quest
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
+        undo = new Stack<string>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -60,10 +63,136 @@ public class Quest
         }
 
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        foreach (KeyValuePair<string, string> kv in packs)
+        if (packs != null)
         {
-            flags.Add("#" + kv.Key);
+            foreach (KeyValuePair<string, string> kv in packs)
+            {
+                flags.Add("#" + kv.Key);
+            }
         }
+    }
+
+    public Quest(string save)
+    {
+        LoadQuest(IniRead.ReadFromString(save));
+    }
+
+    public Quest(IniData saveData)
+    {
+        LoadQuest(saveData);
+    }
+
+    public void LoadQuest(IniData saveData)
+    {
+        game = Game.Get();
+
+        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
+        game.quest = this;
+
+        int.TryParse(saveData.Get("Quest", "round"), out round);
+        int.TryParse(saveData.Get("Quest", "morale"), out morale);
+        bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
+        bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
+        bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
+        bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
+
+        delayedEvents = new List<QuestData.Event.DelayedEvent>();
+        string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (string de in saveDelayed)
+        {
+            delayedEvents.Add(new QuestData.Event.DelayedEvent(de));
+        }
+
+        string questPath = saveData.Get("Quest", "path");
+        qd = new QuestData(questPath);
+
+        game.tokenBoard.Clear();
+        // Clean up everything marked as 'board'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+            Object.Destroy(go);
+
+        boardItems = new Dictionary<string, BoardComponent>();
+        Dictionary<string, string> saveBoard = saveData.Get("Board");
+        foreach (KeyValuePair<string, string> kv in saveBoard)
+        {
+            if (kv.Key.IndexOf("Door") == 0)
+            {
+                boardItems.Add(kv.Key, new Door(qd.components[kv.Key] as QuestData.Door, game));
+            }
+            if (kv.Key.IndexOf("Token") == 0)
+            {
+                boardItems.Add(kv.Key, new Token(qd.components[kv.Key] as QuestData.Token, game));
+            }
+            if (kv.Key.IndexOf("Tile") == 0)
+            {
+                boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
+            }
+        }
+
+        flags = new HashSet<string>();
+        Dictionary<string, string> saveFlags = saveData.Get("Flags");
+        foreach (KeyValuePair<string, string> kv in saveFlags)
+        {
+            flags.Add(kv.Key);
+        }
+
+        eManager = new EventManager();
+        undo = new Stack<string>();
+
+        heroes = new List<Hero>();
+        monsters = new List<Monster>();
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
+            {
+                heroes.Add(new Hero(kv.Value));
+            }
+        }
+
+        // Monsters must be after heros because some activations refer to heros
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("Monster") == 0)
+            {
+                monsters.Add(new Monster(kv.Value));
+            }
+        }
+
+        heroSelection = new Dictionary<string, List<Hero>>();
+        Dictionary<string, string> saveSelection = saveData.Get("HeroSelection");
+        foreach (KeyValuePair<string, string> kv in saveSelection)
+        {
+            string[] selectHeroes = kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            List<Hero> heroList = new List<Hero>();
+
+            foreach (string s in selectHeroes)
+            {
+                foreach (Hero h in heroes)
+                {
+                    int id;
+                    int.TryParse(s, out id);
+                    if (id == h.id)
+                    {
+                        heroList.Add(h);
+                    }
+                }
+            }
+            heroSelection.Add(kv.Key, heroList);
+        }
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
+    }
+
+    public void Save()
+    {
+        undo.Push(ToString());
+    }
+
+    public void Undo()
+    {
+        if (undo.Count == 0) return;
+        Quest oldQuest = new Quest(undo.Pop());
+        oldQuest.undo = undo;
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
@@ -164,8 +293,71 @@ public class Quest
         }
     }
 
-    // Class for Tile components (use TileSide content data)
-    public class Tile : BoardComponent
+    override public string ToString()
+    {
+        string nl = System.Environment.NewLine;
+        string r = "[Quest]" + nl;
+
+        r += "path=" + qd.questPath + nl;
+        r += "round=" + round+ nl;
+        r += "morale=" + morale + nl;
+        r += "threat=" + threat + nl;
+        r += "heroesSelected=" + heroesSelected + nl;
+        r += "minorPeril=" + minorPeril + nl;
+        r += "majorPeril=" + majorPeril + nl;
+        r += "deadlyPeril=" + deadlyPeril + nl;
+        r += "DelayedEvents=";
+
+        foreach (QuestData.Event.DelayedEvent de in delayedEvents)
+        {
+            r += de.delay + ":" + de.eventName + " ";
+        }
+        r += nl;
+
+        r += "[Packs]" + nl;
+        foreach (string pack in game.cd.GetEnabledPackIDs())
+        {
+            r += pack + nl;
+        }
+
+        r += "[Board]" + nl;
+        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        {
+            r += kv.Key + nl;
+        }
+
+        r += "[Flags]" + nl;
+        foreach (string s in flags)
+        {
+            r += s + nl;
+        }
+
+        r += "[HeroSelection]" + nl;
+        foreach (KeyValuePair<string, List<Quest.Hero>> kv in heroSelection)
+        {
+            r += kv.Key + "=";
+            foreach (Quest.Hero h in kv.Value)
+            {
+                r += h.id + " ";
+            }
+            r = r.Substring(0, r.Length - 1) + nl;
+        }
+
+        foreach (Hero h in heroes)
+        {
+            r += h.ToString();
+        }
+
+        foreach (Monster m in monsters)
+        {
+            r += m.ToString();
+        }
+
+        return r;
+    }
+
+// Class for Tile components (use TileSide content data)
+public class Tile : BoardComponent
     {
         public QuestData.Tile qTile;
         public TileSideData cTile;
@@ -284,7 +476,7 @@ public class Quest
             // Move to square (105 units per square)
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 
-            game.tokenBoard.add(this);
+            game.tokenBoard.Add(this);
         }
 
         public override QuestData.Event GetEvent()
@@ -334,7 +526,7 @@ public class Quest
 
             SetColor(qDoor.colourName);
 
-            game.tokenBoard.add(this);
+            game.tokenBoard.Add(this);
         }
 
         public void SetColor(string colorName)
@@ -410,6 +602,41 @@ public class Quest
             heroData = h;
             id = i;
         }
+
+        public Hero(Dictionary<string, string> data)
+        {
+            bool.TryParse(data["activated"], out activated);
+            bool.TryParse(data["defeated"], out defeated);
+            int.TryParse(data["id"], out id);
+
+            Game game = Game.Get();
+            if (data.ContainsKey("type"))
+            {
+                foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+                {
+                    if (hd.Value.sectionName.Equals(data["type"]))
+                    {
+                        heroData = hd.Value;
+                    }
+                }
+            }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+
+            string r = "[Hero" + id + "]" + nl;
+            r += "id=" + id + nl;
+            r += "activated=" + activated + nl;
+            r += "defeated=" + defeated + nl;
+            if (heroData != null)
+            {
+                r += "type=" + heroData.sectionName + nl;
+            }
+
+            return r;
+        }
     }
 
     // Class for holding current monster status
@@ -434,6 +661,40 @@ public class Quest
             uniqueText = monsterEvent.qMonster.uniqueText;
         }
 
+        public Monster(Dictionary<string, string> data)
+        {
+            bool.TryParse(data["activated"], out activated);
+            bool.TryParse(data["minionStarted"], out minionStarted);
+            bool.TryParse(data["masterStarted"], out masterStarted);
+            bool.TryParse(data["unique"], out unique);
+            uniqueText = data["uniqueText"];
+            uniqueTitle = data["uniqueTitle"];
+
+            Game game = Game.Get();
+            if (game.cd.monsters.ContainsKey(data["type"]))
+            {
+                monsterData = game.cd.monsters[data["type"]];
+            }
+            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.UniqueMonster)
+            {
+                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.UniqueMonster);
+            }
+
+            if (data.ContainsKey("activation"))
+            {
+                ActivationData saveActivation = null;
+                if (game.cd.activations.ContainsKey(data["activation"]))
+                {
+                    saveActivation = game.cd.activations[data["activation"]];
+                }
+                if (game.quest.qd.components.ContainsKey(data["activation"]))
+                {
+                    saveActivation = new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
+                }
+                currentActivation = new ActivationInstance(saveActivation, monsterData.name);
+            }
+        }
+
         public void NewActivation(ActivationData contentActivation)
         {
             currentActivation = new ActivationInstance(contentActivation, monsterData.name);
@@ -451,6 +712,25 @@ public class Quest
                 effect = effect.Replace("{1}", monsterName);
                 effect.Replace("\\n", "\n");
             }
+        }
+
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+
+            string r = "[Monster" + monsterData.sectionName + "]" + nl;
+            r += "activated=" + activated + nl;
+            r += "type=" + monsterData.sectionName + nl;
+            r += "minionStarted=" + minionStarted + nl;
+            r += "masterStarted=" + masterStarted + nl;
+            r += "unique=" + unique + nl;
+            r += "uniqueText=" + uniqueText + nl;
+            r += "uniqueTitle=" + uniqueTitle + nl;
+            if (currentActivation != null)
+            {
+                r += "activation=" + currentActivation.ad.sectionName + nl;
+            }
+            return r;
         }
     }
 }
