@@ -84,11 +84,11 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             mouseDownCamPosition = gameObject.transform.position;
-            mouseDownMousePosition = GetMouseBoardPlane(this);
+            mouseDownMousePosition = GetMouseBoardPlane();
         }
         if (Input.GetMouseButton(0))
         {
-            Vector2 bPos = GetMouseBoardPlane(this);
+            Vector2 bPos = GetMouseBoardPlane();
             gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
                 mouseDownMousePosition.y - bPos.y, 0), Space.World);
         }
@@ -117,21 +117,21 @@ public class CameraController : MonoBehaviour {
 
     public Vector2 GetMouseTile()
     {
-        Vector2 bPos = GetMouseBoardPlane(this);
+        Vector2 bPos = GetMouseBoardPlane();
 
         return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y));
     }
 
     public Vector2 GetMouseBoardRounded(float round)
     {
-        Vector2 bPos = GetMouseBoardPlane(this) / round;
+        Vector2 bPos = GetMouseBoardPlane() / round;
 
         return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y)) * round;
     }
 
-    public Vector2 GetMouseBoardPlane(CameraController cc)
+    public Vector2 GetMouseBoardPlane()
     {
-        Ray ray = cc.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        Ray ray = gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
         float rayDistance = 0;
         basePlane.Raycast(ray, out rayDistance);
