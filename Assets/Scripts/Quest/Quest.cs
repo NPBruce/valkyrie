@@ -652,6 +652,7 @@ public class Tile : BoardComponent
         public bool unique = false;
         public string uniqueText = "";
         public string uniqueTitle = "";
+        public int damage = 0;
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
         public ActivationInstance currentActivation;
 

@@ -375,6 +375,15 @@ public class FetchContent {
             writer.Write(m_TextAsset.Deobfuscate(finder.ObfuscateKey()));
             writer.Close();
         }
+
+        // Run monster data extration tool if in dev
+        if (Application.isEditor && asset.Text.Equals("Localization"))
+        {
+            if (finder is MoMFinder)
+            {
+                ExtractDataTool.MoM(m_TextAsset.Deobfuscate(finder.ObfuscateKey()));
+            }
+        }
     }
 
     private void ExportFont(Unity_Studio.AssetPreloadData asset)
