@@ -17,6 +17,13 @@ public class NextStageButton
 
         game.quest.Save();
 
-        game.quest.horrorPhase = !game.quest.horrorPhase;
+        if (game.quest.horrorPhase)
+        {
+            game.roundControl.EndRound();
+        }
+        else
+        {
+            game.quest.horrorPhase = true;
+        }
     }
 }
