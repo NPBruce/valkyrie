@@ -1,13 +1,13 @@
 Done:
+free place tokens/events/monsters
 
 MoM:
 Mythos
-free place tokens/events/monsters
 activations
 monsters
-test results
-more than 2 options in events
-action symbol in events
+Event subtype - get successes, pass/fail
+Event subtype -  X selection options
+action symbol in event buttons
 moster information box
 Puzzles
 missing tiles
@@ -25,6 +25,7 @@ hybrid 1 activation bug
 lt.
 
 Common:
+canera limits set in events
 quest set
 symbols don't work in unique text
 event log

@@ -96,7 +96,10 @@ public class HeroCanvas : MonoBehaviour {
 
     public void UpdateImages()
     {
+        if (icons == null) return;
+
         Game game = Game.Get();
+
         foreach (Quest.Hero h in game.quest.heroes)
         {
             UnityEngine.UI.Image image = icons[h.id];
@@ -190,6 +193,13 @@ public class HeroCanvas : MonoBehaviour {
         {
             game.moraleDisplay = new MoraleDisplay();
         }
+
+
+        if (!game.gameType.DisplayHeroes())
+        {
+            Clean();
+        }
+
         // Create the menu button
         new MenuButton();
 

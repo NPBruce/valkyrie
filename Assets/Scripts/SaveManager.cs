@@ -72,6 +72,10 @@ class SaveManager
                 {
                     game.moraleDisplay = new MoraleDisplay();
                 }
+                if (!game.gameType.DisplayHeroes())
+                {
+                    game.heroCanvas.Clean();
+                }
 
                 // Create the menu button
                 new MenuButton();
@@ -80,7 +84,6 @@ class SaveManager
         catch (System.Exception e)
         {
             Debug.Log("Error: Unable to open save file: " + SaveFile());
-            throw (e);
             Application.Quit();
         }
     }
