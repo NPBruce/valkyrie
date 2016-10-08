@@ -50,11 +50,14 @@ public class TokenBoard : MonoBehaviour {
         // On click the tokens start an event
         public void startEvent()
         {
+            Game game = Game.Get();
+            // If in horror phase ignore
+            if (game.quest.horrorPhase) return;
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            Game.Get().quest.eManager.QueueEvent(c.GetEvent().name);
+            game.quest.eManager.QueueEvent(c.GetEvent().name);
         }
 
     }

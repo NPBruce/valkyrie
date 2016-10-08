@@ -82,7 +82,7 @@ class SaveManager
                 new NextStageButton();
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             Debug.Log("Error: Unable to open save file: " + SaveFile());
             Application.Quit();

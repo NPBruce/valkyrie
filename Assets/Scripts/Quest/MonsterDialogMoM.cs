@@ -4,8 +4,6 @@ using System.Collections;
 // Class for creation of monster seleciton options
 public class MonsterDialogMoM : MonsterDialog
 {
-    public Quest.Monster monster;
-
     public MonsterDialogMoM(Quest.Monster m) : base(m)
     {
     }
