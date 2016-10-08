@@ -58,5 +58,33 @@ namespace Unity_Studio
 
             m_PathName = a_Stream.ReadAlignedString(a_Stream.ReadInt32());
         }
+
+        public byte[] Deobfuscate(int key)
+        {
+            if (key == 0) return m_Script;
+
+            byte[] retData = new byte[m_Script.Length];
+
+            int byteOffset = 0;
+            byte[] intData = new byte[4];
+            for (int i = 0; i < m_Script.Length; i++)
+            {
+                intData[byteOffset++] = m_Script[i];
+
+                if (byteOffset >= 4)
+                {
+                    int num = (int)intData[0] << 24 | (int)intData[1] << 16 | (int)intData[2] << 8 | (int)intData[3];
+                    num ^= key;
+                    byteOffset = 0;
+
+                    retData[i - 3] = (byte)(num >> 24);
+                    retData[i - 2] = (byte)(num >> 16 & 255);
+                    retData[i - 1] = (byte)(num >> 8 & 255);
+                    retData[i] = (byte)(num & 255);
+                    byteOffset = 0;
+                }
+            }
+            return retData;
+        }
     }
 }

@@ -1,14 +1,19 @@
 Done:
 free place tokens/events/monsters
+deobfuscated MoM text
+added MoM mythos phase (no events), ui improvements
 
 MoM:
 Mythos
 activations
-monsters
+monsters (health?)
+duplicate monsters
 Event subtype - get successes, pass/fail
 Event subtype -  X selection options
 action symbol in event buttons
-moster information box
+monster attack box
+monster evade
+monster horror
 Puzzles
 missing tiles
 

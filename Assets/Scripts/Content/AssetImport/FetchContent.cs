@@ -10,7 +10,7 @@ public class FetchContent {
     AppFinder finder = null;
     public bool importAvailable;
     string logFile;
-    public static string requiredValkyrieVersion = "0.4.1";
+    public static string requiredValkyrieVersion = "0.5.4";
 
     public FetchContent(string type)
     {
@@ -372,7 +372,7 @@ public class FetchContent {
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
         {
-            writer.Write(m_TextAsset.m_Script);
+            writer.Write(m_TextAsset.Deobfuscate(finder.ObfuscateKey()));
             writer.Close();
         }
     }

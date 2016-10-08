@@ -26,4 +26,9 @@ public class MoMFinder : AppFinder {
     {
         return "Mansions of Madness.exe";
     }
+
+    override public int ObfuscateKey()
+    {
+        return 68264378;
+    }
 }
