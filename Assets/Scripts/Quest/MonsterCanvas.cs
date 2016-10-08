@@ -90,7 +90,16 @@ public class MonsterCanvas : MonoBehaviour
         foreach (Quest.Monster m in game.quest.monsters)
         {
             if (name.Equals(m.monsterData.name))
-                new MonsterDialog(m);
+            {
+                if (game.gameType.DisplayHeroes())
+                {
+                    new MonsterDialog(m);
+                }
+                else
+                {
+                    new MonsterDialogMoM(m);
+                }
+            }
         }
     }
 }

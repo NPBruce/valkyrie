@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Class for creation of hero control button menu
+// Class for creation of monster seleciton options
 public class MonsterDialog
 {
     public Quest.Monster monster;
@@ -12,7 +12,7 @@ public class MonsterDialog
         CreateWindow();
     }
 
-    public void CreateWindow()
+    public virtual void CreateWindow()
     {
         Game game = Game.Get();
         int index = 0;

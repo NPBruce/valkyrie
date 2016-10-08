@@ -79,6 +79,7 @@ class SaveManager
 
                 // Create the menu button
                 new MenuButton();
+                new NextStageButton();
             }
         }
         catch (System.Exception e)
