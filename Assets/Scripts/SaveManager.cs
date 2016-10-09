@@ -72,15 +72,19 @@ class SaveManager
                 {
                     game.moraleDisplay = new MoraleDisplay();
                 }
+                if (!game.gameType.DisplayHeroes())
+                {
+                    game.heroCanvas.Clean();
+                }
 
                 // Create the menu button
                 new MenuButton();
+                new NextStageButton();
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             Debug.Log("Error: Unable to open save file: " + SaveFile());
-            throw (e);
             Application.Quit();
         }
     }

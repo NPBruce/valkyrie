@@ -30,4 +30,9 @@ public class RtLFinder : AppFinder {
     {
         return "Road to Legend.exe";
     }
+
+    override public int ObfuscateKey()
+    {
+        return 0;
+    }
 }

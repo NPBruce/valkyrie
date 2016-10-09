@@ -74,4 +74,46 @@ public class RoundControllerMoM : RoundController
         }
         return true;
     }
+
+
+    public override void CheckNewRound()
+    {
+
+        Game game = Game.Get();
+
+        if (game.quest.eManager.currentEvent != null)
+            return;
+
+        if (game.quest.eManager.eventStack.Count > 0)
+            return;
+
+        foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
+        {
+            if (de.delay == game.quest.round)
+            {
+                game.quest.delayedEvents.Remove(de);
+                game.quest.eManager.QueueEvent(de.eventName);
+                return;
+            }
+        }
+
+        foreach (Quest.Hero h in game.quest.heroes)
+        {
+            h.activated = false;
+        }
+        foreach (Quest.Monster m in game.quest.monsters)
+        {
+            m.activated = false;
+            m.minionStarted = false;
+            m.masterStarted = false;
+            m.currentActivation = null;
+        }
+
+        game.quest.round++;
+        game.quest.horrorPhase = false;
+        game.quest.threat += 1;
+
+        // Update monster display
+        game.monsterCanvas.UpdateStatus();
+    }
 }

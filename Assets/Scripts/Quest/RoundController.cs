@@ -229,7 +229,7 @@ public class RoundController {
         game.quest.eManager.TriggerEvent();
     }
 
-    public void CheckNewRound()
+    public virtual void CheckNewRound()
     {
 
         Game game = Game.Get();
@@ -295,6 +295,7 @@ public class RoundController {
             m.currentActivation = null;
         }
         game.quest.round++;
+        game.quest.horrorPhase = false;
         game.quest.threat += 1;
 
         // Update monster and hero display

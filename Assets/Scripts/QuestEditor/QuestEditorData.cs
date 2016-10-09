@@ -9,6 +9,7 @@ public class QuestEditorData {
     public Stack<QuestData.QuestComponent> selectionStack;
     public QuestEditorTextEdit te;
     public bool gettingPosition = false;
+    public bool gettingPositionSnap = true;
     public bool gettingMinPosition = false;
     public bool gettingMaxPosition = false;
     public bool backTriggered = false;
@@ -140,15 +141,22 @@ public class QuestEditorData {
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ">< Min Camera", delegate { GetMinPosition(); });
+
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(5, 1), "Min Camera");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 11), new Vector2(1, 1), "~", delegate { GetMinPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 13), new Vector2(8, 1), ">< Max Camera", delegate { GetMaxPosition(); });
+        db = new DialogBox(new Vector2(0, 13), new Vector2(5, 1), "Max Camera");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 13), new Vector2(1, 1), "~", delegate { GetMaxPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 15), new Vector2(8, 1), "Minor Peril Level:");
+        db = new DialogBox(new Vector2(0, 15), new Vector2(8, 1), "Minor Peril Level:");
         db.ApplyTag("editor");
 
         dbeList = new List<DialogBoxEditable>();
@@ -312,7 +320,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        DialogBox db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 4), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -329,9 +340,10 @@ public class QuestEditorData {
         game.quest.ChangeAlpha(t.name, 1f);
     }
 
-    public void GetPosition()
+    public void GetPosition(bool snap=true)
     {
         gettingPosition = true;
+        gettingPositionSnap = snap;
     }
 
     public void GetMinPosition()
@@ -349,11 +361,17 @@ public class QuestEditorData {
         Game game = Game.Get();
         if (gettingPosition)
         {
-            selection.location = game.cc.GetMouseBoardRounded(game.gameType.SelectionRound());
-            if (selection is QuestData.Tile)
+            if (gettingPositionSnap)
             {
-                selection.location = game.cc.GetMouseBoardRounded(game.gameType.TileRound());
-                Debug.Log(selection.location.x + " " + selection.location.y);
+                selection.location = game.cc.GetMouseBoardRounded(game.gameType.SelectionRound());
+                if (selection is QuestData.Tile)
+                {
+                    selection.location = game.cc.GetMouseBoardRounded(game.gameType.TileRound());
+                }
+            }
+            else
+            {
+                selection.location = game.cc.GetMouseBoardPlane();
             }
             gettingPosition = false;
             Game.Get().quest.Remove(selection.name);
@@ -362,13 +380,13 @@ public class QuestEditorData {
         }
         if (gettingMaxPosition)
         {
-            game.quest.qd.quest.SetMaxCam(game.cc.GetMouseTile());
+            game.quest.qd.quest.SetMaxCam(game.cc.GetMouseBoardPlane());
             SelectQuest();
             gettingMaxPosition = false;
         }
         if (gettingMinPosition)
         {
-            game.quest.qd.quest.SetMinCam(game.cc.GetMouseTile());
+            game.quest.qd.quest.SetMinCam(game.cc.GetMouseBoardPlane());
             SelectQuest();
             gettingMinPosition = false;
         }
@@ -505,7 +523,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -552,7 +573,15 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), "~", delegate { GetPosition(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -608,7 +637,14 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), "~", delegate { GetPosition(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -631,7 +667,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
+        db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
         db.ApplyTag("editor");
 
         dbe1 = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), m.uniqueTitle, delegate { UpdateUniqueTitle(); });
@@ -1036,7 +1072,10 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(8, 1), ">< Position", delegate { GetPosition(); });
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -1149,7 +1188,14 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(7, 1), ">< Position", delegate { GetPosition(); });
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), "~", delegate { GetPosition(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -1175,7 +1221,7 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
+        db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
 
         dbe1 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), e.originalText, delegate { UpdateEventText(); });

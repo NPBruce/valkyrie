@@ -31,6 +31,7 @@ public class Quest
     public int round = 1;
     public int morale = 0;
     public float threat = 0;
+    public bool horrorPhase = false;
 
     public bool heroesSelected = false;
     public bool minorPeril = false;
@@ -92,6 +93,7 @@ public class Quest
         int.TryParse(saveData.Get("Quest", "round"), out round);
         int.TryParse(saveData.Get("Quest", "morale"), out morale);
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
+        bool.TryParse(saveData.Get("Quest", "horror"), out horrorPhase);
         bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
         bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
         bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
@@ -302,6 +304,7 @@ public class Quest
         r += "round=" + round+ nl;
         r += "morale=" + morale + nl;
         r += "threat=" + threat + nl;
+        r += "horror=" + horrorPhase + nl;
         r += "heroesSelected=" + heroesSelected + nl;
         r += "minorPeril=" + minorPeril + nl;
         r += "majorPeril=" + majorPeril + nl;
@@ -649,6 +652,7 @@ public class Tile : BoardComponent
         public bool unique = false;
         public string uniqueText = "";
         public string uniqueTitle = "";
+        public int damage = 0;
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
         public ActivationInstance currentActivation;
 

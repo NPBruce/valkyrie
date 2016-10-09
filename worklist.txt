@@ -1,20 +1,19 @@
 Done:
-MoM activation order
-undo
-save games
-Crash with missing config file
-MoM 1.1.0 tiles (requires 1.1.0)
-MoM scaling and token/tile snap
+free place tokens/events/monsters
+deobfuscated MoM text
+added MoM mythos phase (no events), ui improvements
 
 MoM:
 Mythos
-free place tokens/events/monsters
 activations
-monsters
-test results
-more than 2 options in events
-action symbol in events
-moster information box
+monsters (health?)
+duplicate monsters
+Event subtype - get successes, pass/fail
+Event subtype -  X selection options
+action symbol in event buttons
+monster attack box
+monster evade
+monster horror
 Puzzles
 missing tiles
 
@@ -31,6 +30,7 @@ hybrid 1 activation bug
 lt.
 
 Common:
+canera limits set in events
 quest set
 symbols don't work in unique text
 event log
