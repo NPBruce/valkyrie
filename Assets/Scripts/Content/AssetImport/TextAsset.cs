@@ -63,6 +63,8 @@ namespace Unity_Studio
         {
             if (key == 0) return m_Script;
 
+            if (!isBinary()) return m_Script;
+
             byte[] retData = new byte[m_Script.Length];
 
             int byteOffset = 0;
@@ -85,6 +87,34 @@ namespace Unity_Studio
                 }
             }
             return retData;
+        }
+
+        public bool isBinary()
+        {
+            if (m_Script.Length == 0) return false;
+
+            for (int i = 0; i < m_Script.Length; i++)
+            {
+                if (isControlChar(m_Script[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool isControlChar(int ch)
+        {
+            return (ch > Chars.NUL && ch < Chars.BS)
+                || (ch > Chars.CR && ch < Chars.SUB);
+        }
+
+        public class Chars
+        {
+            public static char NUL = (char)0; // Null char
+            public static char BS = (char)8; // Back Space
+            public static char CR = (char)13; // Carriage Return
+            public static char SUB = (char)26; // Substitute
         }
     }
 }
