@@ -213,7 +213,7 @@ public class FetchContent {
                             ExportTexture(asset);
                             break;
                         }
-                    case 48: //Shader
+                    //case 48: //Shader
                     case 49: //TextAsset
                         {
                             ExportText(asset);
