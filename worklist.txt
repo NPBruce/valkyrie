@@ -1,7 +1,4 @@
 Done:
-free place tokens/events/monsters
-deobfuscated MoM text
-added MoM mythos phase (no events), ui improvements
 
 MoM:
 Mythos

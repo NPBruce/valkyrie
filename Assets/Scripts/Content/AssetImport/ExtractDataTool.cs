@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -8,14 +8,34 @@ class ExtractDataTool
     public static void MoM(byte[] data)
     {
         List<string> labels = ReadLabels(data);
+        HashSet<string> monsters = new HashSet<string>();
+        string move = "_MOVE_";
+        string attack = "_ATTACK_";
+        string evade = "_EVADE_";
+        string horror = "_HORROR_";
+        string monster = "MONSTER_";
 
+        foreach (string m in labels)
+        {
+            if (m.IndexOf(monster) == 0)
+            {
+                if (m.IndexOf(move) == m.Length - move.Length - 2)
+                {
+                    monsters.Add(m.Substring(monster.Length, m.IndexOf(move) - monster.Length));
+                }
+            }
+        }
+
+        foreach (string m in monsters)
+        {
+            Debug.Log(m);
+        }
     }
 
     public static List<string> ReadLabels(byte[] data)
     {
         List<string> list = new List<string>();
         StreamReader stream = new StreamReader(new MemoryStream(data));
-        stream.ReadLine();
 
         string text = string.Empty;
         string readLine = stream.ReadLine();
@@ -103,7 +123,6 @@ class ExtractDataTool
                     }
                     //list.Add(text.Substring(num, text.Length - num));
                 }
-                return list;
             }
             readLine = stream.ReadLine();
             //if not in quote
@@ -117,5 +136,38 @@ class ExtractDataTool
         }
 
         return list;
+    }
+
+    class Monster
+    {
+        string id;
+        string name;
+        List<Activation> activations;
+        List<string> horror;
+        List<string> evade;
+
+        public Monster(string id, string name, List<string> data)
+        {
+
+        }
+
+        public string GetImage()
+        {
+            return "";
+        }
+
+        public override string ToString()
+        {
+            return "";
+        }
+    }
+
+    class Activation
+    {
+        string number;
+        string condition;
+        string attack;
+        string unableButton;
+        string unableText;
     }
 }
