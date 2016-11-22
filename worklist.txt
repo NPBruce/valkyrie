@@ -1,5 +1,7 @@
 Done:
 
+BUG: Should require RtL 1.2.0
+
 MoM:
 Mythos
 activations
