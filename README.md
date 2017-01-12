@@ -10,6 +10,5 @@ Currently has experimental support for Mansions of Madness Second Edition which 
 
 FFG apps can be downloaded from steam:
 
-http://store.steampowered.com/app/478980/
-
-http://store.steampowered.com/app/477200/
+* __Descent: Road to Legend:__ http://store.steampowered.com/app/477200/
+* __Mansions of Madness:__ http://store.steampowered.com/app/478980/
