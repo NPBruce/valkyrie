@@ -108,8 +108,8 @@ public class HeroSelection {
         prevImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = prevImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 27 * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 8 * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6 * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetRight(-8) * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
         prevImg.AddComponent<CanvasRenderer>();
 
 
@@ -135,8 +135,8 @@ public class HeroSelection {
         nextImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = nextImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 27 * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 8 * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 20 * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetRight(-8) * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
         nextImg.AddComponent<CanvasRenderer>();
 
 
