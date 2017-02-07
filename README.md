@@ -1,4 +1,5 @@
-# valkyrie
+![Valkyrie](https://raw.githubusercontent.com/NPBruce/valkyrie/master/web/valkyrie-black.png)
+
 Valkyrie GM for Fantasy Flight Board Games
 
 Download here:
