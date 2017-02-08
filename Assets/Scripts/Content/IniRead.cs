@@ -193,6 +193,12 @@ public static class IniRead{
                     string returnValue = values[1];
                     int nextQuote = 0;
 
+                    // Check if the string is quoted
+                    if (returnValue.Length == 0 || returnValue[0] != '\"')
+                    {
+                        return returnValue;
+                    }
+
                     while (true)
                     {
                         nextQuote = returnValue.IndexOf("\"", nextQuote + 1);

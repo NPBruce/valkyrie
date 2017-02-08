@@ -49,62 +49,67 @@ public class ContentData {
         perils = new Dictionary<string, PerilData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
-        string[] contentDirectories = Directory.GetDirectories(path);
-        foreach (string p in contentDirectories)
+        string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
+        foreach (string p in contentFiles)
         {
-            // All packs must have a content_pack.ini, otherwise ignore
-            if (File.Exists(p + "/content_pack.ini"))
-            {
-                ContentPack pack = new ContentPack();
-                
-                // Get all data from the file
-                IniData d = IniRead.ReadFromIni(p + "/content_pack.ini");
-                // Todo: better error handling
-                if (d == null)
-                {
-                    Debug.Log("Failed to get any data out of " + p + "/content_pack.ini!");
-                    Application.Quit();
-                }
-
-                pack.name = d.Get("ContentPack", "name");
-                if (pack.name.Equals(""))
-                {
-                    Debug.Log("Failed to get name data out of " + p + "/content_pack.ini!");
-                    Application.Quit();
-                }
-
-                // id can be empty/missing
-                pack.id = d.Get("ContentPack", "id");
-
-                // If this is invalid we will just handle it later, not fatal
-                pack.image = p + "/" + d.Get("ContentPack", "image");
-
-                // Black description isn't fatal
-                pack.description = d.Get("ContentPack", "description");
-
-                // Get all the other ini files in the pack
-                List<string> files = new List<string>();
-                // content_pack file is included
-                files.Add(p + "/content_pack.ini");
-
-                // No extra files is valid
-                if (d.Get("ContentPackData") != null)
-                {
-                    foreach (string file in d.Get("ContentPackData").Keys)
-                    {
-                        files.Add(p + "/" + file);
-                    }
-                }
-                // Save list of files
-                pack.iniFiles = files;
-                
-                // Add content pack
-                allPacks.Add(pack);
-
-                // We finish without actually loading the content, this is done later (content optional)
-            }
+            PopulatePackList(Path.GetDirectoryName(p));
         }
    }
+
+    public void PopulatePackList(string path)
+    {
+        // All packs must have a content_pack.ini, otherwise ignore
+        if (File.Exists(path + "/content_pack.ini"))
+        {
+            ContentPack pack = new ContentPack();
+
+            // Get all data from the file
+            IniData d = IniRead.ReadFromIni(path + "/content_pack.ini");
+            // Todo: better error handling
+            if (d == null)
+            {
+                Debug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
+                Application.Quit();
+            }
+
+            pack.name = d.Get("ContentPack", "name");
+            if (pack.name.Equals(""))
+            {
+                Debug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
+                Application.Quit();
+            }
+
+            // id can be empty/missing
+            pack.id = d.Get("ContentPack", "id");
+
+            // If this is invalid we will just handle it later, not fatal
+            pack.image = path + "/" + d.Get("ContentPack", "image");
+
+            // Black description isn't fatal
+            pack.description = d.Get("ContentPack", "description");
+
+            // Get all the other ini files in the pack
+            List<string> files = new List<string>();
+            // content_pack file is included
+            files.Add(path + "/content_pack.ini");
+
+            // No extra files is valid
+            if (d.Get("ContentPackData") != null)
+            {
+                foreach (string file in d.Get("ContentPackData").Keys)
+                {
+                    files.Add(path + "/" + file);
+                }
+            }
+            // Save list of files
+            pack.iniFiles = files;
+
+            // Add content pack
+            allPacks.Add(pack);
+
+            // We finish without actually loading the content, this is done later (content optional)
+        }
+    }
 
     // Return a list of names for all found content packs
     public List<string> GetPacks()
@@ -392,11 +397,13 @@ public class ContentData {
             }
             catch (System.Exception)
             {
+                Debug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
+                Debug.Log("Warning: Image invalid: " + file);
                 return null;
             }
 
@@ -429,6 +436,7 @@ public class ContentData {
             }
             catch (System.Exception)
             {
+                Debug.Log("Warning: Image missing: " + file);
                 return null;
             }
         }
