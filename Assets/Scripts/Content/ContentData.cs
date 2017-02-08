@@ -397,11 +397,13 @@ public class ContentData {
             }
             catch (System.Exception)
             {
+                Debug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
+                Debug.Log("Warning: Image invalid: " + file);
                 return null;
             }
 

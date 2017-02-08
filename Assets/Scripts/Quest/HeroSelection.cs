@@ -17,9 +17,12 @@ public class HeroSelection {
         Game game = Game.Get();
 
         float x = 8;
-        float y = 5 - (6 * offset);
+        float y = 5 - (5f * offset);
 
-        HeroSelectButton(new Vector2(x, y), null, heroId);
+        if (y > 4)
+        {
+            HeroSelectButton(new Vector2(x, y), null, heroId);
+        }
 
         List<string> heroList = new List<string>(game.cd.heros.Keys);
 
@@ -29,11 +32,11 @@ public class HeroSelection {
         bool nextPage = false;
         foreach (string hero in heroList)
         {
-            x += 6;
+            x += 5f;
             if (x > UIScaler.GetRight(-13))
             {
                 x = 8;
-                y += 6;
+                y += 5f;
             }
 
             if (y >= 24)
@@ -81,15 +84,15 @@ public class HeroSelection {
         heroImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = heroImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, position.y * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, position.x * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, position.y * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, position.x * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
         heroImg.AddComponent<CanvasRenderer>();
 
 
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
         heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(5f * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
+        image.rectTransform.sizeDelta = new Vector2(4.25f * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = !disabled;
