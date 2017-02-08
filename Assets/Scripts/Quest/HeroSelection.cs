@@ -21,7 +21,7 @@ public class HeroSelection {
 
         HeroSelectButton(new Vector2(x, y), null, heroId);
 
-        List<string> heroList = game.quest.heros.Keys.ToList();
+        List<string> heroList = new List<string>(game.cd.heros.Keys);
 
         heroList.Sort();
 
@@ -49,17 +49,17 @@ public class HeroSelection {
                 bool disabled = false;
                 foreach (Quest.Hero hIt in game.quest.heroes)
                 {
-                    if ((hIt.heroData == game.quest.heroes[hero].Value) && (hIt.id != heroId))
+                    if ((hIt.heroData == game.cd.heros[hero]) && (hIt.id != heroId))
                     {
                         disabled = true;
                     }
                 }
-                HeroSelectButton(new Vector2(x, y), game.quest.heroes[hero].Value, heroId, disabled);
+                HeroSelectButton(new Vector2(x, y), game.cd.heros[hero], heroId, disabled);
             }
         }
 
-        PrevButton(prevPage, heroId, offset);
-        NextButton(nextPage, heroId, offset);
+        PrevButton(!prevPage, heroId, offset);
+        NextButton(!nextPage, heroId, offset);
     }
 
     public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
@@ -101,7 +101,7 @@ public class HeroSelection {
         Sprite heroSprite;
         Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
 
-        GameObject prevImg = new GameObject("prevImg" + name);
+        GameObject prevImg = new GameObject("prevImg");
         prevImg.tag = "dialog";
 
         Game game = Game.Get();
@@ -128,7 +128,7 @@ public class HeroSelection {
         Sprite heroSprite;
         Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
 
-        GameObject nextImg = new GameObject("nextImg" + name);
+        GameObject nextImg = new GameObject("nextImg");
         nextImg.tag = "dialog";
 
         Game game = Game.Get();
