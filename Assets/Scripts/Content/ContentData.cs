@@ -434,6 +434,7 @@ public class ContentData {
             }
             catch (System.Exception)
             {
+                Debug.Log("Warning: Image missing: " + file);
                 return null;
             }
         }
