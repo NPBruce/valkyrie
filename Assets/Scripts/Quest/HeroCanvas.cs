@@ -6,11 +6,13 @@ public class HeroCanvas : MonoBehaviour {
 
     public float offset;
     public Dictionary<int, UnityEngine.UI.Image> icons;
+    public Dictionary<int, UnityEngine.UI.Image> icon_frames;
     public static float heroSize = 4;
     public static float offsetStart = 3.75f;
 
     public void SetupUI() {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
+        icon_frames = new Dictionary<int, UnityEngine.UI.Image>();
         offset = offsetStart;
         Game game = Game.Get();
         foreach (Quest.Hero h in game.quest.heroes)
@@ -20,6 +22,7 @@ public class HeroCanvas : MonoBehaviour {
     public void Clean()
     {
         icons = null;
+        icon_frames = null;
         // Clean up everything marked as 'herodisplay'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("herodisplay"))
             Object.Destroy(go);
@@ -28,43 +31,69 @@ public class HeroCanvas : MonoBehaviour {
     void AddHero(Quest.Hero h, Game game)
     {
         Sprite heroSprite;
+        Sprite frameSprite;
+
+        Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
 
         string heroName = h.id.ToString();
-        Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
 
         if (h.heroData != null)
         {
-            newTex = ContentData.FileToTexture(h.heroData.image);
+            frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
             heroName = h.heroData.name;
         }
 
+        GameObject heroFrame = new GameObject("heroFrame" + heroName);
+        heroFrame.tag = "herodisplay";
+        heroFrame.transform.parent = game.uICanvas.transform;
+        RectTransform transFrame = heroFrame.AddComponent<RectTransform>();
+
+        transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        heroFrame.AddComponent<CanvasRenderer>();
+
+        UnityEngine.UI.Image imageFrame = heroFrame.AddComponent<UnityEngine.UI.Image>();
+        icon_frames.Add(h.id, imageFrame);
+        frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+        imageFrame.sprite = frameSprite;
+        imageFrame.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+
+        UnityEngine.UI.Button buttonFrame = heroFrame.AddComponent<UnityEngine.UI.Button>();
+        buttonFrame.interactable = true;
+        buttonFrame.onClick.AddListener(delegate { HeroDiag(h.id); });
+
         GameObject heroImg = new GameObject("heroImg" + heroName);
         heroImg.tag = "herodisplay";
-
         heroImg.transform.parent = game.uICanvas.transform;
-
         RectTransform trans = heroImg.AddComponent<RectTransform>();
 
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
         offset += heroSize + 0.5f;
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
         heroImg.AddComponent<CanvasRenderer>();
-
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
+
         icons.Add(h.id, image);
-        heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
+        image.color = Color.clear;
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
         button.onClick.AddListener(delegate { HeroDiag(h.id); });
+
+        if (h.heroData != null)
+        {
+            Texture2D newTex = ContentData.FileToTexture(h.heroData.image);
+            heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.sprite = heroSprite;
+        }
     }
 
     public void UpdateStatus()
     {
         // If we haven't set up yet just return
         if (icons == null) return;
+        if (icon_frames == null) return;
 
         Game game = Game.Get();
         foreach(Quest.Hero h in game.quest.heroes)
@@ -97,23 +126,36 @@ public class HeroCanvas : MonoBehaviour {
     public void UpdateImages()
     {
         if (icons == null) return;
+        if (icon_frames == null) return;
 
         Game game = Game.Get();
 
         foreach (Quest.Hero h in game.quest.heroes)
         {
-            UnityEngine.UI.Image image = icons[h.id];
+            Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
+            icons[h.id].color = Color.clear;
+            icon_frames[h.id].color = Color.clear;
 
-            Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
+            if (!game.quest.heroesSelected)
+            {
+                icon_frames[h.id].color = Color.white;
+            }
 
             if (h.heroData != null)
             {
-                newTex = ContentData.FileToTexture(h.heroData.image);
+
+                frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
+                Texture2D heroTex = ContentData.FileToTexture(h.heroData.image);
+
+                Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
+
+                icons[h.id].sprite = heroSprite;
+                icons[h.id].color = Color.white;
+                icon_frames[h.id].color = Color.white;
             }
 
-            Sprite heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.sprite = heroSprite;
-            image.color = Color.white;
+            Sprite frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+            icon_frames[h.id].sprite = frameSprite;
         }
     }
 
@@ -147,7 +189,11 @@ public class HeroCanvas : MonoBehaviour {
         }
         if (!game.quest.heroesSelected)
         {
-            icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
+            icon_frames[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
+            if (icons[id].color.a > 0)
+            {
+                icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
+            }
             new HeroSelection(target);
         }
     }
@@ -184,10 +230,10 @@ public class HeroCanvas : MonoBehaviour {
 
         game.quest.flags.Add("#" + heroCount + "hero");
 
+        game.quest.heroesSelected = true;
+
         UpdateImages();
         UpdateStatus();
-
-        game.quest.heroesSelected = true;
 
         if (game.gameType.DisplayMorale())
         {

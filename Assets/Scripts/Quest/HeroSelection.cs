@@ -71,7 +71,7 @@ public class HeroSelection {
     public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
     {
         Sprite heroSprite;
-        Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
+        Texture2D newTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
         string name = "";
 
         if (hd != null)
