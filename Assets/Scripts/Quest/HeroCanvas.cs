@@ -98,27 +98,25 @@ public class HeroCanvas : MonoBehaviour {
         Game game = Game.Get();
         foreach(Quest.Hero h in game.quest.heroes)
         {
-            UnityEngine.UI.Image image = icons[h.id];
-            image.color = Color.white;
+            icons[h.id].color = Color.white;
+            icon_frames[h.id].color = Color.white;
+
             if (h.defeated)
             {
-                image.color = Color.red;
+                icons[h.id].color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
             if (h.activated)
             {
-                image.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
-            }
-            if (h.defeated && h.activated)
-            {
-                image.color = new Color((float) 0.2, 0, 0, 1);
+                icon_frames[h.id].color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
             if (h.heroData == null)
             {
-                image.color = Color.clear;
+                icons[h.id].color = Color.clear;
+                icon_frames[h.id].color = Color.clear;
             }
             if (h.selected)
             {
-                image.color = Color.green;
+                icon_frames[h.id].color = Color.green;
             }
         }
     }
