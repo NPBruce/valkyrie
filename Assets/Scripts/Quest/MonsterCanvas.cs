@@ -6,7 +6,8 @@ public class MonsterCanvas : MonoBehaviour
 {
 
     public float offset = 0;
-    public Dictionary<string, UnityEngine.UI.Image> icons;
+    public Dictionary<string, MonsterIcon> icons;
+    public Dictionary<string, UnityEngine.UI.Image> iconFrames;
     public static float monsterSize = 4;
 
     // Call to update list of monsters
@@ -18,7 +19,7 @@ public class MonsterCanvas : MonoBehaviour
 
         // New list
         offset = 0;
-        icons = new Dictionary<string, UnityEngine.UI.Image>();
+        icons = new Dictionary<string, MonsterIcon>();
 
         Game game = Game.Get();
         foreach (Quest.Monster m in game.quest.monsters)
@@ -98,6 +99,87 @@ public class MonsterCanvas : MonoBehaviour
                 else
                 {
                     new MonsterDialogMoM(m);
+                }
+            }
+        }
+    }
+
+    public class MonsterIcon
+    {
+        Quest.Monster m;
+
+        Game game;
+
+        UnityEngine.UI.Image icon;
+        UnityEngine.UI.Image frame;
+
+        Sprite iconSprite;
+        Sprite frameSprite;
+
+        int index;
+
+        public MonsterIcon(Quest.Monster monster, int i = 0)
+        {
+            m = monster;
+            index = i;
+
+            game = Game.Get();
+
+            Texture2D newTex = ContentData.FileToTexture(m.monsterData.image);
+            Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
+            iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+        }
+
+        public void Draw(int offset)
+        {
+            if (index < offset)
+            {
+                return;
+            }
+            if (index > offset + 6)
+            {
+                return;
+            }
+
+            GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
+            mImg.tag = "monsters";
+
+            mImg.transform.parent = game.uICanvas.transform;
+
+            RectTransform trans = mImg.AddComponent<RectTransform>();
+            trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + (offset * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            mImg.AddComponent<CanvasRenderer>();
+
+            icon = mImg.AddComponent<UnityEngine.UI.Image>();
+            icon.sprite = iconSprite;
+            icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+
+            UnityEngine.UI.Button button = mImg.AddComponent<UnityEngine.UI.Button>();
+            button.interactable = true;
+            button.onClick.AddListener(delegate { MonsterDiag(m.monsterData.name); });
+        }
+
+        void MonsterDiag(string name)
+        {
+            // If there are any other dialogs open just finish
+            if (GameObject.FindGameObjectWithTag("dialog") != null)
+                return;
+
+            Game game = Game.Get();
+            foreach (Quest.Monster m in game.quest.monsters)
+            {
+                if (name.Equals(m.monsterData.name))
+                {
+                    if (game.gameType.DisplayHeroes())
+                    {
+                        new MonsterDialog(m);
+                    }
+                    else
+                    {
+                        new MonsterDialogMoM(m);
+                    }
                 }
             }
         }
