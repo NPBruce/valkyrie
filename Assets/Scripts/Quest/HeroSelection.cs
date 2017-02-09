@@ -61,8 +61,11 @@ public class HeroSelection {
             }
         }
 
-        PrevButton(!prevPage, heroId, offset);
-        NextButton(!nextPage, heroId, offset);
+        if (prevPage || nextPage)
+        {
+            PrevButton(!prevPage, heroId, offset);
+            NextButton(!nextPage, heroId, offset);
+        }
     }
 
     public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
@@ -99,58 +102,35 @@ public class HeroSelection {
         button.onClick.AddListener(delegate { SelectHero(id, name); });
     }
 
+
+
     public void PrevButton(bool disabled, int heroId, int offset)
     {
-        Sprite heroSprite;
-        Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
-
-        GameObject prevImg = new GameObject("prevImg");
-        prevImg.tag = "dialog";
-
-        Game game = Game.Get();
-        prevImg.transform.parent = game.uICanvas.transform;
-
-        RectTransform trans = prevImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6 * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetRight(-8) * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
-        prevImg.AddComponent<CanvasRenderer>();
-
-
-        UnityEngine.UI.Image image = prevImg.AddComponent<UnityEngine.UI.Image>();
-        heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(2f * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
-
-        UnityEngine.UI.Button button = prevImg.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = !disabled;
-        button.onClick.AddListener(delegate { RenderPage(heroId, offset-1); });
+        if (disabled)
+        {
+            new TextButton(new Vector2(UIScaler.GetRight(-8), 6), new Vector2(2, 4), "/\\", delegate { noAction(); }, Color.gray);
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetRight(-8), 6), new Vector2(2, 4), "/\\", delegate { RenderPage(heroId, offset - 1); });
+        }
     }
 
     public void NextButton(bool disabled, int heroId, int offset)
     {
-        Sprite heroSprite;
-        Texture2D newTex = Resources.Load("sprites/tokens/objective-token-black") as Texture2D;
+        if (disabled)
+        {
+            new TextButton(new Vector2(UIScaler.GetRight(-8), 19), new Vector2(2, 4), "\\/", delegate { noAction(); }, Color.gray);
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetRight(-8), 19), new Vector2(2, 4), "\\/", delegate { RenderPage(heroId, offset + 1); });
+        }
+    }
 
-        GameObject nextImg = new GameObject("nextImg");
-        nextImg.tag = "dialog";
-
-        Game game = Game.Get();
-        nextImg.transform.parent = game.uICanvas.transform;
-
-        RectTransform trans = nextImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 20 * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetRight(-8) * UIScaler.GetPixelsPerUnit(), 2f * UIScaler.GetPixelsPerUnit());
-        nextImg.AddComponent<CanvasRenderer>();
-
-
-        UnityEngine.UI.Image image = nextImg.AddComponent<UnityEngine.UI.Image>();
-        heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(2f * UIScaler.GetPixelsPerUnit(), 5f * UIScaler.GetPixelsPerUnit());
-
-        UnityEngine.UI.Button button = nextImg.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = !disabled;
-        button.onClick.AddListener(delegate { RenderPage(heroId, offset+1); });
+    public void noAction()
+    {
+        return;
     }
 
     public void SelectHero(int id, string name)
