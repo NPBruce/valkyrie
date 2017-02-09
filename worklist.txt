@@ -1,6 +1,13 @@
 Done:
+Now requires RtL 1.3.0
+Updated tiles from RtL 1.3.0
+Added MoM2E:BtT
+Added entry for all MoM monsters
+Hero selection now paged
+Added banner/icon
+Added D2E boxed expansion monsters
+Fixed bug fetching csv text without quotes
 
-BUG: Should require RtL 1.2.0
 
 MoM:
 Mythos
@@ -17,15 +24,13 @@ Puzzles
 missing tiles
 
 D2E:
+H&M monster placement images
 campaign
 custom monsters/activations editor
-expansion monsters
-missing tiles
-subdirectories for expansions
-h&m
+expansion monsters activations details
+h&m activations details
+Remaining h&m
 more perils
-expansion activations
-hybrid 1 activation bug
 lt.
 
 Common:
