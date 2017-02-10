@@ -1,21 +1,28 @@
 Done:
+General:
+Hero selection now paged if required
+Added banner/icon
+Fixed bug fetching csv text without quotes
+Hero images now framed
+
+D2E:
 Now requires RtL 1.3.0
 Updated tiles from RtL 1.3.0
-Added MoM2E:BtT
-Added entry for all MoM monsters
-Hero selection now paged
-Added banner/icon
-Added D2E boxed expansion monsters
-Fixed bug fetching csv text without quotes
+Added monsters from expansions
+Added all Hero and Monster collections
 
+MoM:
+Added Beyond the Threshold
+Added all monsters
 
+Outstanding:
 MoM:
 Mythos
 activations
 monsters (health?)
 duplicate monsters
 Event subtype - get successes, pass/fail
-Event subtype -  X selection options
+Event subtype - X selection options
 action symbol in event buttons
 monster attack box
 monster evade
@@ -24,28 +31,23 @@ Puzzles
 missing tiles
 
 D2E:
-H&M monster placement images
-campaign
 custom monsters/activations editor
-expansion monsters activations details
-h&m activations details
-Remaining h&m
+paged content selection
+activations details
+campaign
 more perils
 lt.
 
 Common:
-canera limits set in events
+camera limits set in events
 quest set
 symbols don't work in unique text
 event log
 unique monster name inherit
-validate all content data
 starting/trailing '"'
-hero selection scroll
-frame color for portraits Frame_Monster_1x1.dds/atlas
-catch all parse exceptions
-expansion appearance order
 random tags
+frame for monsters
+expansion appearance order
 Stacked tileselection? (tags?)
 map sets
 text editing sucks (text wrap?)
