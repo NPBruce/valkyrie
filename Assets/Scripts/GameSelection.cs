@@ -21,7 +21,7 @@ public class GameSelection
 
         // Banner Image
         Sprite bannerSprite;
-        Texture2D newTex = Resources.Load("sprites/valkyrie-white") as Texture2D;
+        Texture2D newTex = Resources.Load("sprites/bannerb") as Texture2D;
 
         GameObject banner = new GameObject("banner");
         banner.tag = "dialog";
