@@ -5,7 +5,7 @@ public class RtLFinder : AppFinder {
 
     override public string RequiredFFGVersion()
     {
-        return "1.1.7";
+        return "1.3.0";
     }
 
     override public string RequiredValkyrieVersion()

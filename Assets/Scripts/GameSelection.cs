@@ -19,9 +19,27 @@ public class GameSelection
         fcD2E = new FetchContent("D2E");
         fcMoM = new FetchContent("MoM");
 
-        // Name.  We should replace this with a banner
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        // Banner Image
+        Sprite bannerSprite;
+        Texture2D newTex = Resources.Load("sprites/bannerb") as Texture2D;
+
+        GameObject banner = new GameObject("banner");
+        banner.tag = "dialog";
+
+        banner.transform.parent = game.uICanvas.transform;
+
+        RectTransform trans = banner.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1 * UIScaler.GetPixelsPerUnit(), 4.5f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 18.75f) * UIScaler.GetPixelsPerUnit() / 2f, 18.75f * UIScaler.GetPixelsPerUnit());
+        banner.AddComponent<CanvasRenderer>();
+
+
+        UnityEngine.UI.Image image = banner.AddComponent<UnityEngine.UI.Image>();
+        bannerSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        image.sprite = bannerSprite;
+        image.rectTransform.sizeDelta = new Vector2(18.75f * UIScaler.GetPixelsPerUnit(), 4.5f * UIScaler.GetPixelsPerUnit());
+
+        DialogBox db;
 
         Color startColor = Color.white;
         if (fcD2E.NeedImport())

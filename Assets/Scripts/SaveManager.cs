@@ -66,6 +66,7 @@ class SaveManager
 
                 new Quest(saveData);
                 game.heroCanvas.SetupUI();
+                game.heroCanvas.UpdateImages();
                 game.heroCanvas.UpdateStatus();
 
                 if (game.gameType.DisplayMorale())
