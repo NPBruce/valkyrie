@@ -17,7 +17,6 @@ public class MonsterCanvas : MonoBehaviour
             Object.Destroy(go);
 
         // New list
-        offset = 0;
         icons = new Dictionary<string, MonsterIcon>();
 
         Game game = Game.Get();
@@ -27,7 +26,59 @@ public class MonsterCanvas : MonoBehaviour
             icons.Add(m.monsterData.name, new MonsterIcon(m, index++));
         }
 
+        DrawUp();
+        DrawDown();
+
         UpdateStatus();
+    }
+
+    public void DrawUp()
+    {
+        Game game = Game.Get();
+        if (game.quest.monsters.Count < 6 && offset == 0)
+        {
+            return;
+        }
+        if (offset == 0)
+        {
+            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), "/\\", delegate { noAction(); }, Color.gray);
+            up.ApplyTag("monsters");
+        }
+        else
+        {
+            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), "/\\", delegate { Move(-1); });
+            up.ApplyTag("monsters");
+        }
+    }
+
+    public void DrawDown()
+    {
+        Game game = Game.Get();
+        if (game.quest.monsters.Count < 6)
+        {
+            return;
+        }
+        if (game.quest.monsters.Count - offset <  6)
+        {
+            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), "\\/", delegate { noAction(); }, Color.gray);
+            down.ApplyTag("monsters");
+        }
+        else
+        {
+            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), "\\/", delegate { Move(); });
+            down.ApplyTag("monsters");
+        }
+    }
+
+    public static void Move(int index = 1)
+    {
+        Game game = Game.Get();
+        game.monsterCanvas.offset += index;
+        game.monsterCanvas.UpdateList();
+    }
+
+    public static void noAction()
+    {
     }
 
     public void UpdateStatus()
@@ -105,10 +156,12 @@ public class MonsterCanvas : MonoBehaviour
             if (m.activated && m.unique)
             {
                 iconFrame.color = new Color(0f, 0.3f, 0f, 1);
+                icon.color = new Color(0.5f, 0.5f, 0.5f, 1);
             }
             else if (m.activated)
             {
                 iconFrame.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
+                icon.color = new Color(0.5f, 0.5f, 0.5f, 1);
             }
             else if (m.unique)
             {
@@ -116,6 +169,7 @@ public class MonsterCanvas : MonoBehaviour
             }
             else
             {
+                iconFrame.color = Color.white;
                 icon.color = Color.white;
             }
 
