@@ -78,7 +78,6 @@ public class MonsterCanvas : MonoBehaviour
             mImg.tag = "monsters";
             GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
             mImgFrame.tag = "monsters";
-
             mImg.transform.parent = game.uICanvas.transform;
             mImgFrame.transform.parent = game.uICanvas.transform;
 
@@ -86,30 +85,34 @@ public class MonsterCanvas : MonoBehaviour
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             mImg.AddComponent<CanvasRenderer>();
-            //RectTransform trans = mImg.AddComponent<RectTransform>();
-            //trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            //trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            //mImg.AddComponent<CanvasRenderer>();
+            RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
+            transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            mImgFrame.AddComponent<CanvasRenderer>();
 
             UnityEngine.UI.Image icon = mImg.AddComponent<UnityEngine.UI.Image>();
             icon.sprite = iconSprite;
-            icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
 
-            UnityEngine.UI.Button button = mImg.AddComponent<UnityEngine.UI.Button>();
-            button.interactable = true;
-            button.onClick.AddListener(delegate { MonsterDiag(m.monsterData.name); });
+            UnityEngine.UI.Image iconFrame = mImgFrame.AddComponent<UnityEngine.UI.Image>();
+            iconFrame.sprite = frameSprite;
+            iconFrame.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+
+            UnityEngine.UI.Button buttonFrame = mImgFrame.AddComponent<UnityEngine.UI.Button>();
+            buttonFrame.interactable = true;
+            buttonFrame.onClick.AddListener(delegate { MonsterDiag(m.monsterData.name); });
 
             if (m.activated && m.unique)
             {
-                icon.color = new Color(0f, 0.3f, 0f, 1);
+                iconFrame.color = new Color(0f, 0.3f, 0f, 1);
             }
             else if (m.activated)
             {
-                icon.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
+                iconFrame.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
             else if (m.unique)
             {
-                icon.color = new Color(0.6f, 1f, 0.6f, 1);
+                iconFrame.color = new Color(0.6f, 1f, 0.6f, 1);
             }
             else
             {
