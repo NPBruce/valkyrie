@@ -174,7 +174,7 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  resolutionDialogBanner: {fileID: 2800000, guid: f6fa3adacf205f148b6bb112460da9a0,
+  resolutionDialogBanner: {fileID: 2800000, guid: a2ac9acdcf4ce394c8c0db5ecfb1597d,
     type: 3}
   m_BuildTargetIcons:
   - m_BuildTarget: 
@@ -186,7 +186,7 @@ PlayerSettings:
   - m_BuildTarget: Standalone
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 9824bea8d5d927840b8dfbef00681e16, type: 3}
       m_Width: 1024
       m_Height: 1024
     - serializedVersion: 2
@@ -198,7 +198,7 @@ PlayerSettings:
       m_Width: 256
       m_Height: 256
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: bf224a247b1465d49a12e785e404cbfd, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 128
       m_Height: 128
     - serializedVersion: 2
