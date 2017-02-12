@@ -20,7 +20,7 @@ public class MonsterDialogMoM : MonsterDialog
             }
         }
 
-        float offset = (index + 0.1f) * (MonsterCanvas.monsterSize + 0.5f);
+        float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
         if (game.quest.horrorPhase)
         {
