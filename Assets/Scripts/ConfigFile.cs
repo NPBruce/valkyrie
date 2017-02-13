@@ -2,10 +2,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// Class to control user configuration of Valkyrie
+// This is a generic system and has no knowledge of the actual configuration structure
 public class ConfigFile
 {
+    // This is the configuration data structure, it is public for read/write
+    // Save must be called if modifications are to be kept
     public IniData data;
 
+    // Initialise data from the file on disk
     public ConfigFile()
     {
         data = new IniData();
@@ -16,6 +21,7 @@ public class ConfigFile
         }
     }
 
+    // Save the configuration in memory to disk
     public void Save()
     {
         string optionsFile = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/config.ini";

@@ -3,28 +3,52 @@ using System.Collections;
 using System.Collections.Generic;
 
 // General controller for the game
+// There is one object of this class and it is used to find most game components
 public class Game : MonoBehaviour {
 
+    // This is populated at run time from the text asset
     public string version = "";
+
+    // These components are referenced here for easy of use
+    // Data included in content packs
     public ContentData cd;
+    // Data for the current quest
     public Quest quest;
+    // Canvas for UI components (fixed on screen)
     public Canvas uICanvas;
+    // Canvas for board tiles (tilted, in game space)
     public Canvas boardCanvas;
+    // Canvas for board tokens (just above board tiles)
     public Canvas tokenCanvas;
+    // Class for management of tokens on the board
     public TokenBoard tokenBoard;
+    // Class for management of hero selection panel
     public HeroCanvas heroCanvas;
+    // Class for management of monster selection panel
     public MonsterCanvas monsterCanvas;
+    // Utility Class for UI scale and position
     public UIScaler uiScaler;
+    // Class for Morale counter
     public MoraleDisplay moraleDisplay;
-    public bool editMode = false;
+    // Class for quest editor management
     public QuestEditorData qed;
-    public string[] ffgText = null;
+    // Class for gameType information (controls specific to a game type)
     public GameType gameType;
+    // Class for camera management (zoom, scroll)
     public CameraController cc;
+    // Class for managing user configuration
     public ConfigFile config;
+    // Class for progress of activations, rounds
     public RoundController roundControl;
 
+    // Store of the game text imported from FFG app
+    public string[] ffgText = null;
+
+    // Set when in quest editor
+    public bool editMode = false;
+
     // This is used all over the place to find the game object.  Game then provides acces to common objects
+    // Note that this is not fast, so shouldn't be used in frame
     public static Game Get()
     {
         return FindObjectOfType<Game>();
@@ -70,6 +94,7 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
+        // Load selected packs
         foreach(string pack in cd.GetEnabledPacks())
         {
             cd.LoadContent(pack);
@@ -94,6 +119,7 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
+        // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
             cd.LoadContent(pack);
@@ -161,6 +187,9 @@ public class Game : MonoBehaviour {
         }
     }
 
+    // This is here to call a function after the frame has been rendered
+    // We use this on import because the import function blocks rendering
+    // and we want to update the display before it starts
     public void CallAfterFrame(UnityEngine.Events.UnityAction call)
     {
         StartCoroutine(CallAfterFrameDelay(call));
@@ -169,7 +198,7 @@ public class Game : MonoBehaviour {
     private IEnumerator CallAfterFrameDelay(UnityEngine.Events.UnityAction call)
     {
         yield return new WaitForEndOfFrame();
-        // Fixme this is hacky
+        // Fixme this is hacky, the single frame solution doesn't work, we add 1 second
         yield return new WaitForSeconds(1);
         call();
     }
