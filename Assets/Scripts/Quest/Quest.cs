@@ -653,6 +653,8 @@ public class Tile : BoardComponent
         public string uniqueText = "";
         public string uniqueTitle = "";
         public int damage = 0;
+        public int duplicate = 0;
+
         // Activation is reset each round so that master/minion are the same and forcing doesn't re roll
         public ActivationInstance currentActivation;
 
@@ -663,6 +665,21 @@ public class Tile : BoardComponent
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
+
+            Game game = Game.Get();
+            HashSet<int> dupe = new HashSet<int();
+            foreach (Monster m in game.quest.monsters)
+            {
+                if (m.monsterData == monsterData)
+                {
+                    dupe.Add(m.duplicate);
+                }
+            }
+
+            while (dupe.ContainsKey(duplicate))
+            {
+                duplicate++;
+            }
         }
 
         public Monster(Dictionary<string, string> data)
@@ -671,6 +688,8 @@ public class Tile : BoardComponent
             bool.TryParse(data["minionStarted"], out minionStarted);
             bool.TryParse(data["masterStarted"], out masterStarted);
             bool.TryParse(data["unique"], out unique);
+            int.TryParse(data["damage"], out damage);
+            int.TryParse(data["duplicate"], out duplicate);
             uniqueText = data["uniqueText"];
             uniqueTitle = data["uniqueTitle"];
 
@@ -730,6 +749,8 @@ public class Tile : BoardComponent
             r += "unique=" + unique + nl;
             r += "uniqueText=" + uniqueText + nl;
             r += "uniqueTitle=" + uniqueTitle + nl;
+            r += "damage=" + damage + nl;
+            r += "duplicate=" + duplicate + nl;
             if (currentActivation != null)
             {
                 r += "activation=" + currentActivation.ad.sectionName + nl;
