@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// This class controls the progression of activations and events
 public class RoundController {
 
     // A hero has finished their turn
@@ -35,7 +36,7 @@ public class RoundController {
         m.masterStarted= true;
     }
 
-
+    // A monster has activated, work out what to do next
     virtual public void MonsterActivated()
     {
         Game game = Game.Get();
@@ -102,6 +103,7 @@ public class RoundController {
         return ActivateMonster(toActivate);
     }
 
+    // Activate a monster
     virtual public bool ActivateMonster(Quest.Monster m)
     {
         List<ActivationData> adList = new List<ActivationData>();
@@ -110,40 +112,46 @@ public class RoundController {
         bool customActivations = false;
         MonsterData md = m.monsterData;
 
+        // Find out of this monster is quest specific
         QuestMonster qm = md as QuestMonster;
         if (qm != null)
         {
+            // Get the base monster type
             if (game.cd.monsters.ContainsKey(qm.derivedType))
             {
                 md = game.cd.monsters[qm.derivedType];
             }
+            // Determine if the monster has quest specific activations
             customActivations = !qm.useMonsterTypeActivations;
         }
 
+        // A monster with quest specific activations
         if (customActivations)
         {
             if (!qm.useMonsterTypeActivations)
             {
                 adList = new List<ActivationData>();
+                // Get all custom activations
                 foreach (string s in qm.activations)
                 {
-                    // This should check for quest activations!
+                    // Find the activation in quest data
                     if (game.quest.qd.components.ContainsKey("Activation" + s))
                     {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
+                    // Otherwise look for the activation in contend data
                     else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
                     {
                         adList.Add(game.cd.activations["MonsterActivation" + s]);
                     }
-                    else
+                    else // Invalid activation
                     {
                         Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
                     }
                 }
             }
         }
-        else
+        else // Content Data activations only
         {
             // Find all possible activations
             foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
@@ -175,6 +183,7 @@ public class RoundController {
             Application.Quit();
         }
 
+        // No current activation
         if (m.currentActivation == null)
         {
             // Pick a random activation
@@ -200,8 +209,10 @@ public class RoundController {
             return false;
         }
 
-        // Pick Minion or master
+        // Random pick Minion or master (both available)
         m.minionStarted = Random.Range(0, 2) == 0;
+
+        // If order specificed then use that instead
         if(m.currentActivation.ad.masterFirst)
         {
             m.minionStarted = false;
@@ -211,6 +222,7 @@ public class RoundController {
             m.minionStarted = true;
         }
 
+        // Master is opposite of minion as this is the first activation
         m.masterStarted = !m.minionStarted;
 
         // Create activation window
@@ -220,36 +232,45 @@ public class RoundController {
         return false;
     }
 
+    // All activations finished, start end of round
     public void EndRound()
     {
         Game game = Game.Get();
+        // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
+        // Queue end of this round events
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
         // This will cause the end of the round if nothing was added
         game.quest.eManager.TriggerEvent();
     }
 
+    // Check if ready for new round
     public virtual void CheckNewRound()
     {
 
         Game game = Game.Get();
 
+        // Is there an active event?
         if (game.quest.eManager.currentEvent != null)
             return;
 
+        // Are there queued events?
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
+        // Check for delayed events
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
             if (de.delay == game.quest.round)
             {
+                // Trigger delayed event
                 game.quest.delayedEvents.Remove(de);
                 game.quest.eManager.QueueEvent(de.eventName);
                 return;
             }
         }
 
+        // Check if we are due for a minor peril
         if (!game.quest.minorPeril && game.quest.qd.quest.minorPeril <= game.quest.round)
         {
             game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
@@ -257,6 +278,7 @@ public class RoundController {
             return;
         }
 
+        // Check if we are due for a major peril
         if (!game.quest.majorPeril && game.quest.qd.quest.majorPeril <= game.quest.round)
         {
             game.quest.eManager.RaisePeril(PerilData.PerilType.major);
@@ -264,6 +286,7 @@ public class RoundController {
             return;
         }
 
+        // Check if we are due for a deadly peril
         if (!game.quest.deadlyPeril && game.quest.qd.quest.deadlyPeril <= game.quest.round)
         {
             game.quest.eManager.RaisePeril(PerilData.PerilType.deadly);
@@ -271,22 +294,25 @@ public class RoundController {
             return;
         }
 
-        // Check if all heros have finished
+        // Check if all heros have finished (obsolete?)
         foreach (Quest.Hero h in game.quest.heroes)
         {
             if (!h.activated && h.heroData != null) return;
         }
 
-        // Check if all heros have finished
+        // Check if all monsters have finished (obsolete?)
         foreach (Quest.Monster m in game.quest.monsters)
         {
             if (!m.activated) return;
         }
 
+        // Clean up for next round
+        // Clear hero activations
         foreach (Quest.Hero h in game.quest.heroes)
         {
             h.activated = false;
         }
+        // Clear monster activations
         foreach (Quest.Monster m in game.quest.monsters)
         {
             m.activated = false;
@@ -294,6 +320,8 @@ public class RoundController {
             m.masterStarted = false;
             m.currentActivation = null;
         }
+
+        // Increment the round
         game.quest.round++;
         game.quest.horrorPhase = false;
         game.quest.threat += 1;

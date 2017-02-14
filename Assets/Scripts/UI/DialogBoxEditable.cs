@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Create a dialog box which has editable text
+// These are pretty rough at the moment.  Only used for editor
 public class DialogBoxEditable
 {
     public GameObject textObj;

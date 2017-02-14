@@ -21,6 +21,7 @@ public class Destroyer {
         game.SelectQuest();
     }
 
+    // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
         // Clean up everything marked as 'dialog'

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 
+// This class provides functions to load and save games.
 class SaveManager
 {
+    // This gets the path to the save game file.  Only one file is used/supported per game type.
     public static string SaveFile()
     {
         Game game = Game.Get();
         return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.TypeName() + ".ini";
     }
 
+    // This saves the current game to disk.  Will overwrite any previous saves
     public static void Save()
     {
         try
@@ -30,11 +33,13 @@ class SaveManager
         }
     }
 
+    // Check if a save game exists for the current game type
     public static bool SaveExists()
     {
         return File.Exists(SaveFile());
     }
 
+    // Load a saved game, does nothing if file does not exist
     public static void Load()
     {
         Game game = Game.Get();
@@ -48,6 +53,7 @@ class SaveManager
 
                 Destroyer.Dialog();
 
+                // Restart contend data so we can select from save
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
@@ -57,6 +63,9 @@ class SaveManager
                 }
 
                 game.cd.LoadContentID("");
+                // Load the base content
+
+                // Load content that the save game uses
                 Dictionary<string, string> packs = saveData.Get("Packs");
                 foreach (KeyValuePair<string, string> kv in packs)
                 {
@@ -64,7 +73,10 @@ class SaveManager
                     game.cd.LoadContentID(kv.Key);
                 }
 
+                // This loads the game
                 new Quest(saveData);
+
+                // Draw things on the screen
                 game.heroCanvas.SetupUI();
                 game.heroCanvas.UpdateImages();
                 game.heroCanvas.UpdateStatus();

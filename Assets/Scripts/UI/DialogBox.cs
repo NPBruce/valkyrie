@@ -1,32 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Create a box with text
 public class DialogBox {
 
+    // Unity objects for the text and background
     public GameObject textObj;
     public GameObject background;
 
+    // Set the unity object tag
     public void ApplyTag(string tag)
     {
         textObj.tag = tag;
         background.tag = tag;
     }
 
+    // Create text on the screen
+    // location: position in scale units
+    // size: size in scale units
+    // text: text to display
     public DialogBox(Vector2 location, Vector2 size, string text)
     {
         createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
+    // Create text on the screen, as above with
+    // fgColour: color for the text, border if used
     public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour)
     {
         createDialog(location, size, text, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
+    // Create text on the screen, as above with
+    // bgColour: color for the background
     public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
     {
         createDialog(location, size, text, fgColour, bgColour);
     }
 
+    // Internal function to create the text from constructors
     void createDialog(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
@@ -73,11 +85,15 @@ public class DialogBox {
         uiText.fontSize = UIScaler.GetSmallFont();
     }
 
+    // Function to draw a border around the text
+    // FIXME border does not have horizontal padding from wrapped text
     public void AddBorder()
     {
         AddBorder(textObj.GetComponent<UnityEngine.UI.Text>().color);
     }
 
+    // As above, but with
+    // c: colour for the border
     public void AddBorder(Color c)
     {
         UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
