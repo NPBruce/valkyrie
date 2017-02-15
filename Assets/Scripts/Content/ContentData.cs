@@ -54,8 +54,9 @@ public class ContentData {
         {
             PopulatePackList(Path.GetDirectoryName(p));
         }
-   }
+    }
 
+    // Read a content pack for list of files and meta data
     public void PopulatePackList(string path)
     {
         // All packs must have a content_pack.ini, otherwise ignore
@@ -127,13 +128,16 @@ public class ContentData {
     {
         Game game = Game.Get();
         List<string> names = new List<string>();
+        // Get list of configured packs
         Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
         foreach (ContentPack cp in allPacks)
         {
+            // base pack
             if (cp.id.Length == 0)
             {
                 names.Add(cp.name);
             }
+            // Selected expansion
             if (setPacks != null && setPacks.ContainsKey(cp.id))
             {
                 names.Add(cp.name);
@@ -147,13 +151,16 @@ public class ContentData {
     {
         Game game = Game.Get();
         List<string> ids = new List<string>();
+        // Read from config
         Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
         foreach (ContentPack cp in allPacks)
         {
+            // Base pack
             if (cp.id.Length == 0)
             {
                 ids.Add(cp.id);
             }
+            // Enabled expansion
             if (setPacks != null && setPacks.ContainsKey(cp.id))
             {
                 ids.Add(cp.id);
@@ -174,7 +181,6 @@ public class ContentData {
             }
         }
     }
-
 
     // This loads content from a pack by ID
     // Duplicate content will be replaced by the higher priority value
@@ -377,19 +383,24 @@ public class ContentData {
         public List<string> iniFiles;
     }
 
+    // Get a unity texture from a file (dds or other unity supported format)
     public static Texture2D FileToTexture(string file)
     {
         return FileToTexture(file, Vector2.zero, Vector2.zero);
     }
 
+    // Get a unity texture from a file (dds or other unity supported format)
+    // Crop to pos and size in pixels
     public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
         string imagePath = @"file://" + file;
         WWW www = null;
         Texture2D texture = null;
 
+        // Unity doesn't support dds directly, have to do hackery
         if (Path.GetExtension(file).Equals(".dds"))
         {
+            // Read the data
             byte[] ddsBytes = null;
             try
             {
@@ -400,6 +411,7 @@ public class ContentData {
                 Debug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
+            // Check for valid header
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
@@ -407,14 +419,18 @@ public class ContentData {
                 return null;
             }
 
+            // Extract dimensions
             int height = ddsBytes[13] * 256 + ddsBytes[12];
             int width = ddsBytes[17] * 256 + ddsBytes[16];
 
+            // Copy image data (skip header)
             int DDS_HEADER_SIZE = 128;
             byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
             System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
+            // Create empty texture
             texture = new Texture2D(width, height, TextureFormat.DXT5, false);
+            // Load data into texture
             try
             {
                 texture.LoadRawTextureData(dxtBytes);
@@ -427,6 +443,7 @@ public class ContentData {
             texture.Apply();
         }
         else
+        // If the image isn't DDS just use unity file load
         {
             try
             {
@@ -444,8 +461,11 @@ public class ContentData {
         if (size.x == 0) return texture;
 
         // Get part of the image
+        // Array of pixels from image
         Color[] pix = texture.GetPixels(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        // Empty texture
         Texture2D subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        // Set pixels
         subTexture.SetPixels(pix);
         subTexture.Apply();
         return subTexture;
@@ -473,6 +493,7 @@ public class TileSideData : GenericData
             float.TryParse(content["left"], out left);
         }
 
+        // pixel per D2E square (inch) of image
         if (content.ContainsKey("pps"))
         {
             float.TryParse(content["pps"], out pxPerSquare);
@@ -482,6 +503,7 @@ public class TileSideData : GenericData
             pxPerSquare = Game.Get().gameType.TilePixelPerSquare();
         }
 
+        // Some MoM tiles have crazy aspect
         if (content.ContainsKey("aspect"))
         {
             float.TryParse(content["aspect"], out aspect);
@@ -607,6 +629,8 @@ public class TokenData : GenericData
         {
             int.TryParse(content["y"], out y);
         }
+
+        // These are used to extract part of an image (atlas) for the token
         if (content.ContainsKey("height"))
         {
             int.TryParse(content["height"], out height);
@@ -691,6 +715,7 @@ public class GenericData
         }
     }
 
+    // Does the component contain a trait?
     public bool ContainsTrait(string trait)
     {
         bool t = false;
@@ -705,6 +730,7 @@ public class GenericData
     }
 }
 
+// Perils are content data that inherits from QuestData for reasons.
 public class PerilData : QuestData.Event
 {
     new public static string type = "Peril";

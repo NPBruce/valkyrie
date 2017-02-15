@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-// Class to manage all data for the current quest
+// Class to manage all static data for the current quest
 public class QuestData
 {
     // All components in the quest
@@ -23,6 +23,7 @@ public class QuestData
 
     Game game;
 
+    // Create from quest loader entry
     public QuestData(QuestLoader.Quest q)
     {
         questPath = q.path + "/quest.ini";
@@ -36,6 +37,7 @@ public class QuestData
         LoadQuestData();
     }
 
+    // Populate data
     public void LoadQuestData()
     {
         Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
@@ -78,6 +80,7 @@ public class QuestData
                 Debug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
+            // Loop through all ini sections
             foreach (KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
                 // Add the section to our quest data
@@ -96,6 +99,7 @@ public class QuestData
             Application.Quit();
         }
 
+        // Quest is a special component
         if (name.Equals("Quest"))
         {
             quest = new Quest(content);
@@ -151,6 +155,7 @@ public class QuestData
         public int rotation = 0;
         public string tileSideName;
 
+        // Create new with name (used by editor)
         public Tile(string s) : base(s)
         {
             locationSpecified = true;
@@ -162,8 +167,10 @@ public class QuestData
             }
         }
 
+        // Create tile from ini data
         public Tile(string name, Dictionary<string, string> data) : base(name, data)
         {
+            // Tiles must have a location
             locationSpecified = true;
             typeDynamic = type;
             // Get rotation if specified
@@ -190,6 +197,7 @@ public class QuestData
             }
         }
 
+        // Save to ini string (used by editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -212,6 +220,7 @@ public class QuestData
         public GameObject gameObject;
         public string colourName = "white";
 
+        // Create new with name (used by editor)
         public Door(string s) : base(s)
         {
             locationSpecified = true;
@@ -220,6 +229,7 @@ public class QuestData
             cancelable = true;
         }
 
+        // Create from ini data
         public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             locationSpecified = true;
@@ -239,6 +249,7 @@ public class QuestData
             }
         }
 
+        // Save to string
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -262,6 +273,7 @@ public class QuestData
         new public static string type = "Token";
         public string tokenName;
 
+        // Create new with name (used by editor)
         public Token(string s) : base(s)
         {
             locationSpecified = true;
@@ -270,6 +282,7 @@ public class QuestData
             cancelable = true;
         }
 
+        // Create from ini data
         public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             locationSpecified = true;
@@ -277,7 +290,7 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
-            // default token type is search, this is the image asset name
+            // default token type is TokenSearch, this is content data name
             tokenName = "TokenSearch";
             if (data.ContainsKey("type"))
             {
@@ -285,6 +298,7 @@ public class QuestData
             }
         }
 
+        // Save to string (for editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -303,6 +317,7 @@ public class QuestData
     public class Monster : Event
     {
         new public static string type = "Monster";
+        // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
         public string uniqueTitle = "";
@@ -310,18 +325,22 @@ public class QuestData
         public string[] mTypes;
         public string[] mTraits;
 
+        // Create new with name (used by editor)
         public Monster(string s) : base(s)
         {
+            // Location always specified
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
             mTypes = new string[1];
+            // This gets the last type available, because we need something
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
                 mTypes[0] = kv.Key;
             }
             mTraits = new string[0];
 
+            // Initialise array
             placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
@@ -329,11 +348,13 @@ public class QuestData
             }
         }
 
+        // Create from ini data
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
+            // Location always specified
             locationSpecified = true;
             typeDynamic = type;
-            //First try to a list of specific types
+            // First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
                 mTypes = data["monster"].Split(' ');
@@ -343,12 +364,14 @@ public class QuestData
                 mTypes = new string[0];
             }
 
+            // A list of traits to match
             mTraits = new string[0];
             if (data.ContainsKey("traits"))
             {
                 mTraits = data["traits"].Split(' ');
             }
 
+            // Array of placements by hero count
             placement = new string[game.gameType.MaxHeroes() + 1][];
             for (int i = 0; i < placement.Length; i++)
             {
@@ -373,21 +396,25 @@ public class QuestData
             }
         }
 
+        // When changing the name placement event need to update in array
         override public void ChangeReference(string oldName, string newName)
         {
             for (int j = 0; j < placement.Length; j++)
             {
                 for (int i = 0; i < placement[j].Length; i++)
                 {
+                    // Placement used is being renamed
                     if (placement[j][i].Equals(oldName))
                     {
                         placement[j][i] = newName;
                     }
                 }
+                // If any were replaced with "", remove them
                 placement[j] = RemoveFromArray(placement[j], "");
             }
         }
 
+        // Save to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -472,6 +499,7 @@ public class QuestData
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
 
+        // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
             typeDynamic = type;
@@ -486,6 +514,7 @@ public class QuestData
             delayedEvents = new List<DelayedEvent>();
         }
 
+        // Create event from ini data
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
@@ -496,11 +525,13 @@ public class QuestData
             }
             originalText = text;
 
+            // confirm/pass button
             if (data.ContainsKey("confirmtext"))
             {
                 confirmText = data["confirmtext"];
             }
 
+            // fail button
             if (data.ContainsKey("failtext"))
             {
                 failText = data["failtext"];
@@ -612,10 +643,12 @@ public class QuestData
                 clearFlags = new string[0];
             }
 
+            // Threat modifier
             if (data.ContainsKey("threat"))
             {
                 if (data["threat"].Length != 0)
                 {
+                    // '@' at the start makes modifier absolute
                     if (data["threat"][0].Equals('@'))
                     {
                         absoluteThreat = true;
@@ -628,30 +661,37 @@ public class QuestData
                 }
             }
 
+            // Read list of delayed events
             delayedEvents = new List<DelayedEvent>();
             if (data.ContainsKey("delayedevents"))
             {
+                // List is space separated
                 string[] de = data["delayedevents"].Split(' ');
                 foreach (string s in de)
                 {
                     int delay;
+                    // : separates delay and event name
                     int.TryParse(s.Substring(0, s.IndexOf(":")), out delay);
                     string eventName = s.Substring(s.IndexOf(":") + 1);
                     delayedEvents.Add(new DelayedEvent(delay, eventName));
                 }
             }
+            // Randomise next event setting
             if (data.ContainsKey("randomevents"))
             {
                 bool.TryParse(data["randomevents"], out randomEvents);
             }
         }
 
+        // Check all references when a component name is changed
         override public void ChangeReference(string oldName, string newName)
         {
+            // hero list event is changed
             if (heroListName.Equals(oldName))
             {
                 heroListName = newName;
             }
+            // a next event is changed
             for (int i = 0; i < nextEvent.Length; i++)
             {
                 if (nextEvent[i].Equals(oldName))
@@ -659,8 +699,10 @@ public class QuestData
                     nextEvent[i] = newName;
                 }
             }
+            // If next event is deleted, trim array
             nextEvent = RemoveFromArray(nextEvent, "");
 
+            // a fail event is changed
             for (int i = 0; i < failEvent.Length; i++)
             {
                 if (failEvent[i].Equals(oldName))
@@ -668,7 +710,10 @@ public class QuestData
                     failEvent[i] = newName;
                 }
             }
+            // If fail event is deleted, trim array
             failEvent = RemoveFromArray(failEvent, "");
+
+            // component to add renamed
             for (int i = 0; i < addComponents.Length; i++)
             {
                 if (addComponents[i].Equals(oldName))
@@ -676,7 +721,10 @@ public class QuestData
                     addComponents[i] = newName;
                 }
             }
+            // If component is deleted, trim array
             addComponents = RemoveFromArray(addComponents, "");
+
+            // component to remove renamed
             for (int i = 0; i < removeComponents.Length; i++)
             {
                 if (removeComponents[i].Equals(oldName))
@@ -684,8 +732,10 @@ public class QuestData
                     removeComponents[i] = newName;
                 }
             }
+            // If component is deleted, trim array
             removeComponents = RemoveFromArray(removeComponents, "");
 
+            // delayed event renamed, create new list and move across
             List<DelayedEvent> deList = new List<DelayedEvent>();
             foreach (DelayedEvent de in delayedEvents)
             {
@@ -701,9 +751,11 @@ public class QuestData
                     deList.Add(de);
                 }
             }
+            // Update list
             delayedEvents = deList;
         }
 
+        // Save event to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -834,6 +886,7 @@ public class QuestData
             return r;
         }
 
+        // Delayed events have a name and delay value
         public class DelayedEvent
         {
             public string eventName = "";
@@ -868,15 +921,17 @@ public class QuestData
         new public static string type = "MPlace";
         public bool rotate = false;
 
-
+        // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
         {
             locationSpecified = true;
             typeDynamic = type;
         }
 
+        // Load mplace from ini data
         public MPlace(string name, Dictionary<string, string> data) : base(name, data)
         {
+            // Must have a location
             locationSpecified = true;
             typeDynamic = type;
             master = false;
@@ -890,6 +945,7 @@ public class QuestData
             }
         }
 
+        // Save to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -921,6 +977,7 @@ public class QuestData
         // image for display
         public UnityEngine.UI.Image image;
 
+        // Create new component in editor
         public QuestComponent(string nameIn)
         {
             typeDynamic = type;
@@ -950,16 +1007,20 @@ public class QuestData
             }
         }
 
+        // Helper function to remove an element form an array
         public static string[] RemoveFromArray(string[] array, string element)
         {
+            // Count how many elements remain
             int count = 0;
             foreach (string s in array)
             {
                 if (!s.Equals(element)) count++;
             }
 
+            // Create new array
             string[] trimArray = new string[count];
 
+            // Index through old array, storing in new array
             int j = 0;
             for (int i = 0; i < array.Length; i++)
             {
@@ -972,16 +1033,20 @@ public class QuestData
             return trimArray;
         }
 
+        // Used to rename components
         virtual public void ChangeReference(string oldName, string newName)
         {
 
         }
 
+        // Used to delete components
         virtual public void RemoveReference(string refName)
         {
+            // Rename to "" is taken to be delete
             ChangeReference(refName, "");
         }
 
+        // Save to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -996,9 +1061,11 @@ public class QuestData
         }
     }
 
+    // Monster defined in the quest
     public class UniqueMonster : QuestComponent
     {
         new public static string type = "UniqueMonster";
+        // A bast type is used for default values
         public string baseMonster = "";
         public string monsterName = "";
         public string imagePath = "";
@@ -1008,6 +1075,7 @@ public class QuestData
         public string[] traits;
         public string path = "";
 
+        // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
         {
             monsterName = name;
@@ -1015,6 +1083,7 @@ public class QuestData
             traits = new string[0];
         }
 
+        // Create from ini data
         public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
             path = pathIn;
@@ -1059,10 +1128,12 @@ public class QuestData
             }
         }
 
+        // get path of monster image
         public string GetImagePath()
         {
             if (imagePath.Length == 0)
             {
+                // this will use the base monster type
                 return "";
             }
             return path + "/" + imagePath;
@@ -1071,11 +1142,13 @@ public class QuestData
         {
             if (imagePlace.Length == 0)
             {
+                // this will use the base monster type
                 return "";
             }
             return path + "/" + imagePlace;
         }
 
+        // Save to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -1123,6 +1196,7 @@ public class QuestData
         }
     }
 
+    // Quest defined Monster activation
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
@@ -1132,10 +1206,12 @@ public class QuestData
         public bool minionFirst = false;
         public bool masterFirst = false;
 
+        // Create new (editor)
         public Activation(string s) : base(s)
         {
         }
 
+        // Create from ini data
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
             if (data.ContainsKey("ability"))
@@ -1160,6 +1236,7 @@ public class QuestData
             }
         }
 
+        // Save to string
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
@@ -1189,20 +1266,29 @@ public class QuestData
         }
     }
 
+    // Quest ini component has special data
     public class Quest
     {
+        // Quest name
         public string name = "";
+        // Quest description (currently unused)
         public string description = "";
+        // Camera pan limits
+        // TODO: move these to events
         public int minPanX;
         public int minPanY;
         public int maxPanX;
         public int maxPanY;
+        // quest type (MoM, D2E)
         public string type;
+        // threat levels to trigger perils
         public int minorPeril = 7;
         public int majorPeril = 10;
         public int deadlyPeril = 12;
+        // Content packs required for quest
         public string[] packs;
 
+        // Create from ini data
         public Quest(Dictionary<string, string> data)
         {
             maxPanX = 20;
@@ -1267,6 +1353,7 @@ public class QuestData
             CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
         }
 
+        // Change camera limits (editor)
         public void SetMaxCam(Vector2 pos)
         {
             maxPanX = Mathf.RoundToInt(pos.x);
@@ -1274,6 +1361,7 @@ public class QuestData
             CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
         }
 
+        // Change camera limits (editor)
         public void SetMinCam(Vector2 pos)
         {
             minPanX = Mathf.RoundToInt(pos.x);
@@ -1281,6 +1369,7 @@ public class QuestData
             CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
         }
 
+        // Save to string (editor)
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
