@@ -1,4 +1,4 @@
-![Valkyrie](https://github.com/NPBruce/valkyrie/blob/master/web/valkyrie-banner.png)
+![Valkyrie](https://raw.githubusercontent.com/NPBruce/valkyrie/master/web/banner.png)
 
 Valkyrie GM for Fantasy Flight Board Games
 
