@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// In quest game menu
 public class GameMenu {
 
+    // Open the menu
 	public static void Create()
     {
         if (GameObject.FindGameObjectWithTag("dialog") != null)
@@ -10,6 +12,7 @@ public class GameMenu {
             return;
         }
 
+        // Border around menu items
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), "");
         db.AddBorder();
 

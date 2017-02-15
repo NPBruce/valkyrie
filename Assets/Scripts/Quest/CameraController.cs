@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Class to control the game camera
+// Used to pan/zoom around the board
 public class CameraController : MonoBehaviour {
 
     // How fast to move the screen when arrows used
@@ -12,6 +14,7 @@ public class CameraController : MonoBehaviour {
     // Max zoom out
     static int minZoom = -25;
 
+    // These are defaults, replaced by the quest
     public int minPanX = -50;
     public int minPanY = -50;
     public int maxPanX = 50;
@@ -20,14 +23,19 @@ public class CameraController : MonoBehaviour {
     // Units to move per second
     public static float autoPanSpeed = 12;
 
+    // Are we moving to a target position?
     public bool targetSet = false;
+    // Target position
     public Vector3 camTarget;
 
+    // Camera position on mouse down
     public Vector3 mouseDownCamPosition;
+    // Mouse position on mouse down
     public Vector2 mouseDownMousePosition;
 
     public Game game;
 
+    // Called by Unity
     void Awake()
     {
         mouseDownCamPosition = gameObject.transform.position;
@@ -36,6 +44,7 @@ public class CameraController : MonoBehaviour {
     }
 
     // FixedUpdate is not tied to frame rate
+    // Scrolling by keys go here to be at a fixed rate
     void FixedUpdate () {
         // Check if the scroll wheel has moved
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
@@ -79,19 +88,24 @@ public class CameraController : MonoBehaviour {
         gameObject.transform.position = pos;
     }
 
+    // Called by unity every frame
+    // Scrolling by mouse/scripts goes here, rate is fixed, display needs to be smooth
     void Update()
     {
+        // latch positions on mouse down
         if (Input.GetMouseButtonDown(0))
         {
             mouseDownCamPosition = gameObject.transform.position;
             mouseDownMousePosition = GetMouseBoardPlane();
         }
+        // If mouse is held down update camera
         if (Input.GetMouseButton(0))
         {
             Vector2 bPos = GetMouseBoardPlane();
             gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
                 mouseDownMousePosition.y - bPos.y, 0), Space.World);
         }
+        // Limit camera position
         Vector3 pos = gameObject.transform.position;
         if (pos.x < minPanX) pos.x = minPanX;
         if (pos.y < minPanY) pos.y = minPanY;
@@ -99,9 +113,12 @@ public class CameraController : MonoBehaviour {
         if (pos.y > maxPanY) pos.y = maxPanY;
         gameObject.transform.position = pos;
 
+        // If we are moving to a target position
         if (targetSet)
         {
+            // Calculate distance to target
             float camJumpDist = Vector3.Distance(gameObject.transform.position, camTarget);
+            // Are we close?
             if (camJumpDist > 0.1f)
             {
                 // How many units to move this frame
@@ -109,38 +126,49 @@ public class CameraController : MonoBehaviour {
                 gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, camTarget, moveDist);
             }
             else
-            {
+            { // Close enough to target, finish move
                 targetSet = false;
             }
         }
     }
 
+    // Get mouse position in board space coordinates, rounded for tile location
     public Vector2 GetMouseTile()
     {
         Vector2 bPos = GetMouseBoardPlane();
 
+        // return rounded results
         return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y));
     }
 
+    // Get mouse position in board space coordinates, rounded to arbitrary distance
     public Vector2 GetMouseBoardRounded(float round)
     {
+        // Get position divided by rounding
         Vector2 bPos = GetMouseBoardPlane() / round;
 
+        // Return rounded results, re multiplied
         return new Vector2(Mathf.Round(bPos.x), Mathf.Round(bPos.y)) * round;
     }
 
+    // Get mouse position in board space coordinates
     public Vector2 GetMouseBoardPlane()
     {
+        // Ray from mouse position
         Ray ray = gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        // Plane at board
         Plane basePlane = new Plane(Vector3.forward, Vector3.zero);
         float rayDistance = 0;
+        // Find intersection of plane and ray
         basePlane.Raycast(ray, out rayDistance);
 
+        // Get coordinates of intersection
         Vector3 clickPoint = ray.GetPoint(rayDistance);
 
         return new Vector2(clickPoint.x, clickPoint.y);
     }
 
+    // Update minimum camera pan
     public static void SetCameraMin(Vector2 min)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
@@ -148,6 +176,7 @@ public class CameraController : MonoBehaviour {
         cc.minPanY = Mathf.RoundToInt(min.y);
     }
 
+    // Update maximum camera pan
     public static void SetCameraMax(Vector2 max)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
@@ -155,6 +184,7 @@ public class CameraController : MonoBehaviour {
         cc.maxPanY = Mathf.RoundToInt(max.y);
     }
 
+    // Set camera target position
     public static void SetCamera(Vector2 pos)
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();

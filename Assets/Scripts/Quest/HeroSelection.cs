@@ -2,13 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Hero selection options
+// This comes up when selection a hero icon to pick hero
 public class HeroSelection {
 
+    // Create page of options
 	public HeroSelection(Quest.Hero h)
     {
         RenderPage(h.id, 0);
 	}
 
+    // Render hero buttons, starting at scroll offset
     public void RenderPage(int heroId, int offset)
     {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -16,44 +20,52 @@ public class HeroSelection {
 
         Game game = Game.Get();
 
+        // Starting array position
         float x = 8;
         float y = 5 - (5f * offset);
 
+        // If we haven't scrolled down
         if (y > 4)
         {
+            // Create an 'empty' button to clear selection
             HeroSelectButton(new Vector2(x, y), null, heroId);
         }
 
+        // Get all available heros
         List<string> heroList = new List<string>(game.cd.heros.Keys);
-
         heroList.Sort();
 
         bool prevPage = false;
         bool nextPage = false;
         foreach (string hero in heroList)
         {
+            // Shift to the right
             x += 5f;
+            // If too far right move down
             if (x > UIScaler.GetRight(-13))
             {
                 x = 8;
                 y += 5f;
             }
 
+            // If too far down set scroll down
             if (y >= 24)
             {
                 nextPage = true;
             }
+            // If too high set scroll up
             else if (y < 4)
             {
                 prevPage = true;
             }
             else
-            {
+            { // hero in scroll range
                 bool disabled = false;
                 foreach (Quest.Hero hIt in game.quest.heroes)
                 {
                     if ((hIt.heroData == game.cd.heros[hero]) && (hIt.id != heroId))
                     {
+                        // Hero already picked
                         disabled = true;
                     }
                 }
@@ -61,6 +73,7 @@ public class HeroSelection {
             }
         }
 
+        // Are we scrolling?
         if (prevPage || nextPage)
         {
             PrevButton(!prevPage, heroId, offset);
@@ -68,12 +81,15 @@ public class HeroSelection {
         }
     }
 
+    // Create a button for a hero selection option
     public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
     {
         Sprite heroSprite;
+        // Should be game type specific
         Texture2D newTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
         string name = "";
 
+        // is this an empty hero option?
         if (hd != null)
         {
             newTex = ContentData.FileToTexture(hd.image);
