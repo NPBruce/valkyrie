@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Monster information dialog (additional rules)
 public class InfoDialog {
 
     public InfoDialog(Quest.Monster m)
@@ -11,9 +12,11 @@ public class InfoDialog {
             return;
         }
 
+        // box with monster info
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), m.monsterData.info.Replace("\\n", "\n"));
         db.AddBorder();
 
+        // Unique monsters have additional info
         if (m.unique)
         {
             db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), m.uniqueTitle, Color.red);

@@ -12,6 +12,7 @@ public class TokenBoard : MonoBehaviour {
         Clear();
     }
 
+    // Used when ending a quest
     public void Clear()
     {
         tc = new List<TokenControl>();
@@ -62,27 +63,34 @@ public class TokenBoard : MonoBehaviour {
 
     }
 
+    // Monsters are only on the board during an event
     public void AddMonster(EventManager.MonsterEvent me)
     {
         Game game = Game.Get();
         int count = 0;
+        // Get number of heroes
         foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null) count++;
         }
 
+        // Check for a placement list at this hero count
         if (me.qMonster.placement[count].Length == 0)
         {
+            // group placement
             AddAreaMonster(me.qMonster);
         }
         else
         {
+            // Individual monster placement
             AddPlacedMonsters(me, count);
         }
     }
 
+    // Add individual monster placements for hero count
     public void AddPlacedMonsters(EventManager.MonsterEvent me, int count)
     {
+        // Get monster placement image
         Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
 
         // Check load worked
@@ -92,6 +100,7 @@ public class TokenBoard : MonoBehaviour {
             Application.Quit();
         }
 
+        // Get placement dimensions
         int x = 1;
         int y = 1;
 
@@ -108,17 +117,20 @@ public class TokenBoard : MonoBehaviour {
             x = 3;
         }
 
+        // All all placements
         foreach (string s in me.qMonster.placement[count])
         {
             AddPlacedMonsterImg(s, newTex, x, y);
         }
     }
 
+    // Add a placement image
     public void AddPlacedMonsterImg(string place, Texture2D newTex, int x, int y)
     {
         Game game = Game.Get();
         Sprite tileSprite;
 
+        // Check that placement name exists
         if (!game.quest.qd.components.ContainsKey(place))
         {
             Debug.Log("Error: Invalid moster place: " + place);
@@ -150,11 +162,12 @@ public class TokenBoard : MonoBehaviour {
         {
             gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
         }
-        // Move to square (105 units per square)
+        // Move to square
         gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0), Space.World);
     }
 
 
+    // Add a signal to place a monster group
     public void AddAreaMonster(QuestData.Monster m)
     {
         Game game = Game.Get();
@@ -186,11 +199,13 @@ public class TokenBoard : MonoBehaviour {
         gameObject.AddComponent<SpritePulser>();
     }
 
+    // Add highlight for event
     public void AddHighlight(QuestData.Event e)
     {
         AddHighlight(e.location);
     }
 
+    // Draw a highlight at location
     public void AddHighlight(Vector2 location, string id="", string tag="dialog")
     {
         Sprite tileSprite;

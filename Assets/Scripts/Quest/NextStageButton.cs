@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Next stage button is used by MoM to move between investigators and monsters
 public class NextStageButton
 {
+    // Construct and display
     public NextStageButton()
     {
         if (Game.Get().gameType.DisplayHeroes()) return;
@@ -11,10 +13,12 @@ public class NextStageButton
         qb.ApplyTag("questui");
     }
 
+    // Button pressed
     public void Next()
     {
         Game game = Game.Get();
 
+        // Add to undo stack
         game.quest.Save();
 
         if (game.quest.horrorPhase)

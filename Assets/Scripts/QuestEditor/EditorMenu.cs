@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Menu popup when in editor
 public class EditorMenu {
     public static void Create()
     {
@@ -9,6 +10,7 @@ public class EditorMenu {
             return;
         }
 
+        // Menu border
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 9), new Vector2(12, 13), "");
         db.AddBorder();
 

@@ -2,8 +2,10 @@
 using System.Runtime.InteropServices;
 using System.Text;
  
+ // Windows registry utility
 namespace Read64bitRegistryFrom32bitApp
 {
+    // Magic numbers
     public enum RegSAM
     {
         QueryValue = 0x0001,
@@ -21,16 +23,20 @@ namespace Read64bitRegistryFrom32bitApp
         AllAccess = 0x000f003f
     }
 
+    // Magic numbers
     public static class RegHive
     {
         public static UIntPtr HKEY_LOCAL_MACHINE = new UIntPtr(0x80000002u);
         public static UIntPtr HKEY_CURRENT_USER = new UIntPtr(0x80000001u);
     }
 
+    // 64/32 bit hackery
     public static class RegistryWOW6432
     {
         #region Member Variables
         #region Read 64bit Reg from 32bit app
+        // We need to load this DLL for registry reads
+        // It is very annoying that C# can't read the registry!
         [DllImport("Advapi32.dll")]
         static extern uint RegOpenKeyEx(
             UIntPtr hKey,
@@ -53,11 +59,13 @@ namespace Read64bitRegistryFrom32bitApp
         #endregion
 
         #region Functions
+        // Read a 64 bit key
         static public string GetRegKey64(UIntPtr inHive, String inKeyName, String inPropertyName)
         {
             return GetRegKey64(inHive, inKeyName, RegSAM.WOW64_64Key, inPropertyName);
         }
 
+        // Read a 32 bit key
         static public string GetRegKey32(UIntPtr inHive, String inKeyName, String inPropertyName)
         {
             return GetRegKey64(inHive, inKeyName, RegSAM.WOW64_32Key, inPropertyName);
@@ -70,17 +78,21 @@ namespace Read64bitRegistryFrom32bitApp
 
             try
             {
+                // Check key
                 uint lResult = RegOpenKeyEx(RegHive.HKEY_LOCAL_MACHINE, inKeyName, 0, (int)RegSAM.QueryValue | (int)in32or64key, out hkey);
+                // Check for error code
                 if (0 != lResult) return null;
                 uint lpType = 0;
                 uint lpcbData = 1024;
                 StringBuilder AgeBuffer = new StringBuilder(1024);
+                // Read value
                 RegQueryValueEx(hkey, inPropertyName, 0, ref lpType, AgeBuffer, ref lpcbData);
                 string Age = AgeBuffer.ToString();
                 return Age;
             }
             finally
             {
+                // Clean up
                 if (0 != hkey) RegCloseKey(hkey);
             }
         }
