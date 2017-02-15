@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity_Studio;
 using System.IO;
 
+// Used to import content from FFG apps
 public class FetchContent {
     public List<AssetsFile> assetFiles; // All asset files
     public string gameType;
@@ -12,6 +13,7 @@ public class FetchContent {
     string logFile;
     public static string requiredValkyrieVersion = "0.5.4";
 
+    // Set up and check availability
     public FetchContent(string type)
     {
         gameType = type;
@@ -29,8 +31,10 @@ public class FetchContent {
         }
 
         string appVersion = finder.RequiredFFGVersion();
+        // Open up the assets to get the actual version number
         string ffgVersion = fetchAppVersion();
 
+        // Add version found to log
         if (ffgVersion.Length != 0)
         {
             Debug.Log("FFG " + type + " Version Found: " + ffgVersion + System.Environment.NewLine);
@@ -40,14 +44,18 @@ public class FetchContent {
             Debug.Log("FFG " + type + " not found." + System.Environment.NewLine);
         }
 
+        // Check if version is acceptable for import
         importAvailable = VersionNewerOrEqual(appVersion, ffgVersion);
     }
 
+    // Check if an import is required
     public bool NeedImport()
     {
+        // Read the import log
         logFile = ContentData.ContentPath() + gameType + "/ffg/import.ini";
         IniData log = IniRead.ReadFromIni(logFile);
 
+        // If no import log, import is required
         if (log == null)
         {
             return true;
@@ -56,34 +64,45 @@ public class FetchContent {
         bool appVersionOK = false;
         bool valkVersionOK = false;
 
+        // Check that the FFG app version in import is new enough
         string lastImport = log.Get("Import", "FFG");
         appVersionOK = VersionNewerOrEqual(finder.RequiredFFGVersion(), lastImport);
 
+        // Check that the Valkyrie version in import is new enough
         lastImport = log.Get("Import", "Valkyrie");
         valkVersionOK = VersionNewerOrEqual(requiredValkyrieVersion, lastImport);
         return !appVersionOK || !valkVersionOK;
     }
 
+    // Determine FFG app version
     public string fetchAppVersion()
     {
         string appVersion = "";
         try
         {
+            // We assume that the version asset is in resources.assets
             AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
 
+            // Look through all listed assets
             foreach (var asset in assetsFile.preloadTable.Values)
             {
+                // Check all text assets
                 if (asset.Type2 == 49) //TextAsset
                 {
+                    // Load as text
                     Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+                    // Check if called _version
                     if (asset.Text.Equals("_version"))
                     {
+                        // Read asset content
                         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+                        // Extract version
                         appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
                     }
                 }
             }
 
+            // Trim content from #
             if (appVersion.IndexOf("#") != -1)
             {
                 appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
@@ -94,34 +113,44 @@ public class FetchContent {
         return appVersion;
     }
 
+    // Import from app
     public void Import()
     {
+        // List all assets files
         string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
 
+        // Attempt to clean up old import
         if (!CleanImport()) return;
+        // Import from all assets files
         foreach (string s in assetFiles)
         {
             Import(s);
         }
     }
 
+    // Import one assets file
     public void Import(string assetFile)
     {
         List<string> unityFiles = new List<string>(); //files to load
 
+        // read file
         AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
+        // Legacy assets not supported, shouldn't be old
         if (assetsFile.fileGen < 15)
         {
             Debug.Log("Invalid asset file: " + assetFile);
             return;
         }
 
-
+        // Loop through all assets listed in file
+        // Fixme: I don't think we need to do this as we are importing from all files anyway
         foreach (var sharedFile in assetsFile.sharedAssetsList)
         {
+            // Some listed assets are in other assets files
             string sharedFilePath = finder.location + "/" + sharedFile.fileName;
             string sharedFileName = Path.GetFileName(sharedFile.fileName);
 
+            // find assets file
             var quedSharedFile = unityFiles.Find(uFile => string.Equals(Path.GetFileName(uFile), sharedFileName, System.StringComparison.OrdinalIgnoreCase));
             if (quedSharedFile == null)
             {
@@ -141,6 +170,7 @@ public class FetchContent {
             else { sharedFile.Index = unityFiles.IndexOf(quedSharedFile); }
         }
 
+        // Make assets from string list
         assetFiles = new List<AssetsFile>();
         foreach (string s in unityFiles)
         {
@@ -148,16 +178,20 @@ public class FetchContent {
             assetFiles.Add(file);
         }
 
+        // Get all asset content
         BuildAssetStrucutres();
+        // Write log
         WriteImportLog(logFile);
     }
 
+    // Write log of import
     private void WriteImportLog(string logFile)
     {
         string[] log = new string[3];
         log[0] = "[Import]";
         log[1] = "Valkyrie=" + Game.Get().version;
         log[2] = "FFG=" + fetchAppVersion();
+        // Write out data
         try
         {
             Directory.CreateDirectory(ContentData.ContentPath());
@@ -195,10 +229,13 @@ public class FetchContent {
         return true;
     }
 
+    // Import asset contents
     private void BuildAssetStrucutres()
     {
+        // All asset files connected to the one openned
         foreach (AssetsFile file in assetFiles)
         {
+            // All assets
             foreach (var asset in file.preloadTable.Values)
             {
                 switch (asset.Type2)
@@ -239,6 +276,7 @@ public class FetchContent {
         }
     }
 
+    // Save texture to disk
     private void ExportTexture(Unity_Studio.AssetPreloadData asset)
     {
         Unity_Studio.Texture2D m_Texture2D = new Unity_Studio.Texture2D(asset, false);
@@ -247,8 +285,11 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType);
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/img");
+        // Default file name
         string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/img/" + asset.Text;
         string fileName = fileCandidate + asset.extension;
+        // This should apend a postfix to the name to avoid collisions, but as we import multiple times
+        // This is broken
         while (File.Exists(fileName))
         {
             return;// Fixme;
@@ -268,6 +309,7 @@ public class FetchContent {
             case 13: //R4G4B4A4, iOS (only?)
                 using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
                 {
+                    // We have to manually add a header because unity doesn't have it
                     writer.Write(0x20534444);
                     writer.Write(0x7C);
                     writer.Write(m_Texture2D.dwFlags);
@@ -289,6 +331,7 @@ public class FetchContent {
                     writer.Write(m_Texture2D.dwCaps2);
                     writer.Write(new byte[12]); //dwCaps3&4 & dwReserved2
 
+                    // Write image data
                     writer.Write(m_Texture2D.image_data);
                     writer.Close();
                 }
@@ -302,6 +345,7 @@ public class FetchContent {
             case 34: //ETC_RGB4
                 using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
                 {
+                    // We have to manually add a header because unity doesn't have it
                     writer.Write(m_Texture2D.pvrVersion);
                     writer.Write(m_Texture2D.pvrFlags);
                     writer.Write(m_Texture2D.pvrPixelFormat);
@@ -315,6 +359,7 @@ public class FetchContent {
                     writer.Write(m_Texture2D.dwMipMapCount);
                     writer.Write(m_Texture2D.pvrMetaDataSize);
 
+                    // Write image data
                     writer.Write(m_Texture2D.image_data);
                     writer.Close();
                 }
@@ -331,6 +376,8 @@ public class FetchContent {
                 break;
         }
     }
+
+    // Save audio to file
     private void ExportAudioClip(Unity_Studio.AssetPreloadData asset)
     {
         Unity_Studio.AudioClip m_AudioClip = new Unity_Studio.AudioClip(asset, false);
@@ -342,11 +389,14 @@ public class FetchContent {
         string fileName = fileCandidate + asset.extension;
 
         m_AudioClip = new Unity_Studio.AudioClip(asset, true);
+        // This should apend a postfix to the name to avoid collisions, but as we import multiple times
+        // This is broken
         while (File.Exists(fileName))
         {
             return;// Fixme;
         }
 
+        // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
         {
             writer.Write(m_AudioClip.m_AudioData);
@@ -354,6 +404,7 @@ public class FetchContent {
         }
     }
 
+    // Save text to file
     private void ExportText(Unity_Studio.AssetPreloadData asset)
     {
         Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
@@ -365,13 +416,17 @@ public class FetchContent {
         string fileName = fileCandidate + asset.extension;
 
         m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+        // This should apend a postfix to the name to avoid collisions, but as we import multiple times
+        // This is broken
         while (File.Exists(fileName))
         {
             return;// Fixme;
         }
 
+        // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
         {
+            // Pass the Deobfuscate key to decrypt
             writer.Write(m_TextAsset.Deobfuscate(finder.ObfuscateKey()));
             writer.Close();
         }
@@ -386,6 +441,7 @@ public class FetchContent {
         }
     }
 
+    // Save TTF font to dist
     private void ExportFont(Unity_Studio.AssetPreloadData asset)
     {
         Unity_Studio.unityFont m_Font = new Unity_Studio.unityFont(asset, false);
@@ -403,11 +459,14 @@ public class FetchContent {
             return;
         }
 
+        // This should apend a postfix to the name to avoid collisions, but as we import multiple times
+        // This is broken
         while (File.Exists(fileName))
         {
             return;// Fixme;
         }
 
+        // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
         {
             writer.Write(m_Font.m_FontData);
@@ -415,16 +474,20 @@ public class FetchContent {
         }
     }
 
+    // Test version of the form a.b.c is newer or equal
     public static bool VersionNewerOrEqual(string oldVersion, string newVersion)
     {
         string oldS = System.Text.RegularExpressions.Regex.Replace(oldVersion, "[^0-9]", "");
         string newS = System.Text.RegularExpressions.Regex.Replace(newVersion, "[^0-9]", "");
+        // If numbers are the same they are equal
         if (oldS.Equals(newS)) return true;
         return VersionNewer(oldVersion, newVersion);
     }
 
+    // Test version of the form a.b.c is newer
     public static bool VersionNewer(string oldVersion, string newVersion)
     {
+        // Split into components
         string[] oldV = oldVersion.Split('.');
         string[] newV = newVersion.Split('.');
 
@@ -432,12 +495,15 @@ public class FetchContent {
 
         if (oldVersion.Equals("")) return true;
 
+        // Different number of components
         if (oldV.Length != newV.Length)
         {
             return true;
         }
+        // Check each component
         for (int i = 0; i < oldV.Length; i++)
         {
+            // Strip for only numbers
             string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
             string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
             try

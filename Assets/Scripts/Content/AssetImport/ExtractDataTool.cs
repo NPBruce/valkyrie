@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+// WIP tool to extract content from localization files
 class ExtractDataTool
 {
     public static void MoM(byte[] data)
