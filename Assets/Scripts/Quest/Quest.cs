@@ -767,7 +767,7 @@ public class Quest
             uniqueText = monsterEvent.qMonster.uniqueText;
 
             Game game = Game.Get();
-            HashSet<int> dupe = new HashSet<int();
+            HashSet<int> dupe = new HashSet<int>();
             foreach (Monster m in game.quest.monsters)
             {
                 if (m.monsterData == monsterData)
@@ -776,7 +776,7 @@ public class Quest
                 }
             }
 
-            while (dupe.ContainsKey(duplicate))
+            while (dupe.Contains(duplicate))
             {
                 duplicate++;
             }
