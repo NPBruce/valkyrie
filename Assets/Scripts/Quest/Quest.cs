@@ -739,6 +739,8 @@ public class Quest
     {
         // Content Data
         public MonsterData monsterData;
+        // What dulpicate number is the monster?
+        public int duplicate = 0;
 
         // State
         public bool activated = false;
@@ -763,6 +765,21 @@ public class Quest
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
+
+            Game game = Game.Get();
+            HashSet<int> dupe = new HashSet<int();
+            foreach (Monster m in game.quest.monsters)
+            {
+                if (m.monsterData == monsterData)
+                {
+                    dupe.Add(m.duplicate);
+                }
+            }
+
+            while (dupe.ContainsKey(duplicate))
+            {
+                duplicate++;
+            }
         }
 
         // Construct from save data
@@ -772,6 +789,8 @@ public class Quest
             bool.TryParse(data["minionStarted"], out minionStarted);
             bool.TryParse(data["masterStarted"], out masterStarted);
             bool.TryParse(data["unique"], out unique);
+            int.TryParse(data["damage"], out damage);
+            int.TryParse(data["duplicate"], out duplicate);
             uniqueText = data["uniqueText"];
             uniqueTitle = data["uniqueTitle"];
 
@@ -844,6 +863,8 @@ public class Quest
             r += "unique=" + unique + nl;
             r += "uniqueText=" + uniqueText + nl;
             r += "uniqueTitle=" + uniqueTitle + nl;
+            r += "damage=" + damage + nl;
+            r += "duplicate=" + duplicate + nl;
             // Save the activation (currently doesn't save the effect string)
             if (currentActivation != null)
             {
