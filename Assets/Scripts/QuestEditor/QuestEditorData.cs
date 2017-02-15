@@ -2,40 +2,61 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Pretty much the entire quest editor is in this class
+// It is HUGE and terrible
+// And scary
 public class QuestEditorData {
-
+    // When a selection list is raised it is stored here
+    // This allows the return value to be fetched later
     public EditorSelectionList esl;
+    // This is the currently selected component
     public QuestData.QuestComponent selection;
+    // The selection stack is used for the 'back' button
+    // (mostly)
     public Stack<QuestData.QuestComponent> selectionStack;
+    // When a text edit box raised it is stored here
+    // This allows the return value to be fetched later
     public QuestEditorTextEdit te;
+    // We use these for mouse position hackery
     public bool gettingPosition = false;
     public bool gettingPositionSnap = true;
     public bool gettingMinPosition = false;
     public bool gettingMaxPosition = false;
+
+    // Signal that the new selection is not new it is old, so don't add to stack
     public bool backTriggered = false;
+    // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable dbe1;
     public DialogBoxEditable dbe2;
+    // ...unless the component uses the list here instead
     public List<DialogBoxEditable> dbeList;
 
+    // Update component selection
     public void NewSelection(QuestData.QuestComponent c)
     {
+        // If we are going back don't add the the history stack
         if (!backTriggered)
         {
+            // If reloading the same don't add to the stack
             if (selection != c)
             {
                 selectionStack.Push(selection);
             }
         }
+        // Reset back triggered
         backTriggered = false;
         selection = c;
     }
 
+    // Create this monstrosity
     public QuestEditorData()
     {
         selectionStack = new Stack<QuestData.QuestComponent>();
+        // Start at the quest component
         SelectQuest();
     }
 
+    // Open component selection top level
     public void TypeSelect()
     {
         if (GameObject.FindGameObjectWithTag("dialog") != null)
@@ -43,11 +64,14 @@ public class QuestEditorData {
             return;
         }
 
+        // Border
         DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 18), "");
         db.AddBorder();
 
+        // Heading
         db = new DialogBox(new Vector2(21, 0), new Vector2(17, 1), "Select Type");
 
+        // Buttons for each component type (and delete buttons)
         TextButton tb = new TextButton(new Vector2(22, 2), new Vector2(9, 1), "Quest", delegate { SelectQuest(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
@@ -106,14 +130,17 @@ public class QuestEditorData {
         Game.Get().quest.ChangeAlphaAll(0.2f);
     }
 
+    // Go back in the selection stack
     public void Back()
     {
+        // Check if there is anything to go back to
         if (selectionStack.Count == 0)
         {
             return;
         }
         QuestData.QuestComponent qc = selectionStack.Pop();
         backTriggered = true;
+        // null is a special case for the quest meta component
         if (qc == null)
         {
             SelectQuest();
@@ -124,6 +151,7 @@ public class QuestEditorData {
         }
     }
 
+    // Quest is a special component with meta data
     public void SelectQuest()
     {
         Clean();
