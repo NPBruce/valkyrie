@@ -20,16 +20,9 @@ public class QuestEditorData {
     // We use these for mouse position hackery
     public bool gettingPosition = false;
     public bool gettingPositionSnap = true;
-    public bool gettingMinPosition = false;
-    public bool gettingMaxPosition = false;
-
     // Signal that the new selection is not new it is old, so don't add to stack
     public bool backTriggered = false;
     // When a component has editable boxes they use these, so that the value can be read
-    public DialogBoxEditable dbe1;
-    public DialogBoxEditable dbe2;
-    // ...unless the component uses the list here instead
-    public List<DialogBoxEditable> dbeList;
 
     // Update component selection
     public void NewSelection(QuestData.QuestComponent c)
@@ -57,7 +50,7 @@ public class QuestEditorData {
     }
 
     // Open component selection top level
-    public void TypeSelect()
+    public static void TypeSelect()
     {
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
@@ -117,356 +110,27 @@ public class QuestEditorData {
 
     }
 
-    public void Clean()
-    {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
-
-        // Clean up everything marked as 'editor'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
-            Object.Destroy(go);
-
-        Game.Get().quest.ChangeAlphaAll(0.2f);
-    }
-
     // Go back in the selection stack
-    public void Back()
+    public static void Back()
     {
+        Game game = Game.Get();
         // Check if there is anything to go back to
-        if (selectionStack.Count == 0)
+        if (game.qed.selectionStack.Count == 0)
         {
             return;
         }
-        QuestData.QuestComponent qc = selectionStack.Pop();
-        backTriggered = true;
+        QuestData.QuestComponent qc = game.qed.selectionStack.Pop();
+        game.qed.backTriggered = true;
         // null is a special case for the quest meta component
         if (qc == null)
         {
-            SelectQuest();
+            game.qed.SelectQuest();
         }
         else
         {
-            SelectComponent(qc.name);
+            game.qed.SelectComponent(qc.name);
         }
     }
-
-    // Quest is a special component with meta data
-    public void SelectQuest()
-    {
-        Clean();
-        Game game = Game.Get();
-        NewSelection(null);
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Quest", delegate { TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        dbe1 = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 1), game.quest.qd.quest.name, delegate { UpdateQuestName(); });
-        dbe1.ApplyTag("editor");
-        dbe1.AddBorder();
-
-        dbe2 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 6), game.quest.qd.quest.description, delegate { UpdateQuestDesc(); });
-        dbe2.ApplyTag("editor");
-        dbe2.AddBorder();
-
-
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(5, 1), "Min Camera");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(5, 11), new Vector2(1, 1), "~", delegate { GetMinPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 13), new Vector2(5, 1), "Max Camera");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(5, 13), new Vector2(1, 1), "~", delegate { GetMaxPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 15), new Vector2(8, 1), "Minor Peril Level:");
-        db.ApplyTag("editor");
-
-        dbeList = new List<DialogBoxEditable>();
-        DialogBoxEditable dbeTmp = new DialogBoxEditable(new Vector2(8, 15), new Vector2(3, 1), game.quest.qd.quest.minorPeril.ToString(), delegate { UpdatePeril(0); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 16), new Vector2(8, 1), "Major Peril Level:");
-        db.ApplyTag("editor");
-
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 16), new Vector2(3, 1), game.quest.qd.quest.majorPeril.ToString(), delegate { UpdatePeril(1); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 17), new Vector2(8, 1), "Deadly Peril Level:");
-        db.ApplyTag("editor");
-
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 17), new Vector2(3, 1), game.quest.qd.quest.deadlyPeril.ToString(), delegate { UpdatePeril(2); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 19), new Vector2(9, 1), "Required Expansions:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(9, 19), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        int offset = 20;
-        int index;
-        for (index = 0; index < 8; index++)
-        {
-            if (game.quest.qd.quest.packs.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), game.quest.qd.quest.packs[index]);
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), "-", delegate { QuestRemovePack(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-            }
-        }
-
-
-        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.minPanX, game.quest.qd.quest.minPanY), "CamMin", "editor");
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.maxPanX, game.quest.qd.quest.maxPanY), "CamMax", "editor");
-    }
-
-    public void UpdateQuestName()
-    {
-        Game game = Game.Get();
-
-        if (!dbe1.uiInput.text.Equals(""))
-            game.quest.qd.quest.name = dbe1.uiInput.text;
-    }
-
-    public void UpdateQuestDesc()
-    {
-        Game game = Game.Get();
-
-        if (!dbe2.uiInput.text.Equals(""))
-            game.quest.qd.quest.description = dbe2.uiInput.text;
-    }
-
-    public void UpdatePeril(int level)
-    {
-        if (level == 0)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.minorPeril);
-        }
-        if (level == 1)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.majorPeril);
-        }
-        if (level == 2)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.deadlyPeril);
-        }
-        SelectQuest();
-    }
-
-    public void QuestAddPack()
-    {
-        List<string> packs = new List<string>();
-
-        foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
-        {
-            if (pack.id.Length > 0)
-            {
-                packs.Add(pack.id);
-            }
-        }
-
-        esl = new EditorSelectionList("Select Pack", packs, delegate { SelectQuestAddPack(); });
-        esl.SelectItem();
-    }
-
-    public void SelectQuestAddPack()
-    {
-        Game game = Game.Get();
-        string[] packs = new string[game.quest.qd.quest.packs.Length + 1];
-        int i;
-        for (i = 0; i < game.quest.qd.quest.packs.Length; i++)
-        {
-            packs[i] = game.quest.qd.quest.packs[i];
-        }
-        packs[i] = (esl.selection);
-        game.quest.qd.quest.packs = packs;
-        SelectQuest();
-    }
-
-    public void QuestRemovePack(int index)
-    {
-        Game game = Game.Get();
-        string[] packs = new string[game.quest.qd.quest.packs.Length - 1];
-
-        int j = 0;
-        for (int i = 0; i < game.quest.qd.quest.packs.Length; i++)
-        {
-            if (i != index || i != j)
-            {
-                packs[j] = game.quest.qd.quest.packs[i];
-                j++;
-            }
-        }
-        game.quest.qd.quest.packs = packs;
-        SelectQuest();
-    }
-
-    public void SelectTile(string name)
-    {
-        Clean();
-        Game game = Game.Get();
-        QuestData.Tile t = game.quest.qd.components[name] as QuestData.Tile;
-        NewSelection(t);
-        CameraController.SetCamera(t.location);
-
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Tile".Length), delegate { ListTile(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { RenameComponent(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileSideName, delegate { ChangeTileSide(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        DialogBox db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1), "Position");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(4, 4), new Vector2(1, 1), "><", delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { TileRotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { Back(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        game.tokenBoard.AddHighlight(t.location, "TileAnchor", "editor");
-
-        game.quest.ChangeAlpha(t.name, 1f);
-    }
-
-    public void GetPosition(bool snap=true)
-    {
-        gettingPosition = true;
-        gettingPositionSnap = snap;
-    }
-
-    public void GetMinPosition()
-    {
-        gettingMinPosition = true;
-    }
-
-    public void GetMaxPosition()
-    {
-        gettingMaxPosition = true;
-    }
-
-    public void MouseDown()
-    {
-        Game game = Game.Get();
-        if (gettingPosition)
-        {
-            if (gettingPositionSnap)
-            {
-                selection.location = game.cc.GetMouseBoardRounded(game.gameType.SelectionRound());
-                if (selection is QuestData.Tile)
-                {
-                    selection.location = game.cc.GetMouseBoardRounded(game.gameType.TileRound());
-                }
-            }
-            else
-            {
-                selection.location = game.cc.GetMouseBoardPlane();
-            }
-            gettingPosition = false;
-            Game.Get().quest.Remove(selection.name);
-            Game.Get().quest.Add(selection.name);
-            SelectComponent(selection.name);
-        }
-        if (gettingMaxPosition)
-        {
-            game.quest.qd.quest.SetMaxCam(game.cc.GetMouseBoardPlane());
-            SelectQuest();
-            gettingMaxPosition = false;
-        }
-        if (gettingMinPosition)
-        {
-            game.quest.qd.quest.SetMinCam(game.cc.GetMouseBoardPlane());
-            SelectQuest();
-            gettingMinPosition = false;
-        }
-    }
-
-
-    public void TileRotate()
-    {
-        QuestData.Tile t = selection as QuestData.Tile;
-        if (t.rotation == 0)
-        {
-            t.rotation = 90;
-        }
-        else if (t.rotation > 0 && t.rotation <= 100)
-        {
-            t.rotation = 180;
-        }
-        else if (t.rotation > 100 && t.rotation <= 190)
-        {
-            t.rotation = 270;
-        }
-        else
-        {
-            t.rotation = 0;
-        }
-
-        Game game = Game.Get();
-        game.quest.Remove(t.name);
-        game.quest.Add(t.name);
-
-        SelectTile(t.name);
-    }
-
-    public void ChangeTileSide()
-    {
-        Game game = Game.Get();
-
-        List<string> sides = new List<string>();
-
-        foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
-        {
-            string display = kv.Key;
-            foreach (string s in kv.Value.sets)
-            {
-                display += " " + s;
-            }
-            sides.Add(display);
-        }
-        esl = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
-        esl.SelectItem();
-    }
-
 
     public void DeleteComponent(string type)
     {
@@ -517,16 +181,6 @@ public class QuestEditorData {
 
         game.quest.Remove(esl.selection);
         SelectQuest();
-    }
-
-    public void SelectTileSide()
-    {
-        Game game = Game.Get();
-        QuestData.Tile t = selection as QuestData.Tile;
-        t.tileSideName = esl.selection.Split(" ".ToCharArray())[0];
-        game.quest.Remove(t.name);
-        game.quest.Add(t.name);
-        SelectTile(t.name);
     }
 
     public void SelectDoor(string name)
@@ -1127,40 +781,6 @@ public class QuestEditorData {
 
         game.quest.ChangeAlpha(m.name, 1f);
     }
-
-    public void RenameComponent()
-    {
-        string name = selection.name.Substring(selection.typeDynamic.Length);
-        te =  new QuestEditorTextEdit("Component Name:", name, delegate { RenameComponentFinished(); });
-        te.EditText();
-    }
-
-    public void RenameComponentFinished()
-    {
-        string newName = System.Text.RegularExpressions.Regex.Replace(te.value, "[^A-Za-z0-9_]", "");
-        if (newName.Equals("")) return;
-        string baseName = selection.typeDynamic + newName;
-        string name = baseName;
-        Game game = Game.Get();
-        int i = 0;
-        while (game.quest.qd.components.ContainsKey(name))
-        {
-            name = baseName + i++;
-        }
-
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            kv.Value.ChangeReference(selection.name, name);
-        }
-
-        game.quest.qd.components.Remove(selection.name);
-        game.quest.Remove(selection.name);
-        selection.name = name;
-        game.quest.qd.components.Add(selection.name, selection);
-        game.quest.Add(selection.name);
-        SelectComponent(name);
-    }
-
 
     public void RotateMPlace()
     {
@@ -2127,28 +1747,7 @@ public class QuestEditorData {
         SelectDoor(d.name);
     }
 
-
-    public void DoorColour()
-    {
-        List<string> colours = new List<string>();
-        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
-        {
-            colours.Add(kv.Key);
-        }
-        esl = new EditorSelectionList("Select Item", colours, delegate { SelectDoorColour(); });
-        esl.SelectItem();
-    }
-
-    public void SelectDoorColour()
-    {
-        QuestData.Door d = selection as QuestData.Door;
-        d.colourName = esl.selection;
-        Game.Get().quest.Remove(d.name);
-        Game.Get().quest.Add(d.name);
-        SelectComponent(d.name);
-    }
-
-    public void ListTile()
+    public static void ListTile()
     {
         Game game = Game.Get();
 
@@ -2166,8 +1765,8 @@ public class QuestEditorData {
         {
             return;
         }
-        esl = new EditorSelectionList("Select Item", tiles, delegate { SelectComponent(); });
-        esl.SelectItem();
+        game.qed.esl = new EditorSelectionList("Select Item", tiles, delegate { SelectComponent(); });
+        game.qed.esl.SelectItem();
     }
 
     public void NewTile()
@@ -2184,7 +1783,7 @@ public class QuestEditorData {
         SelectComponent("Tile" + index);
     }
 
-    public void ListDoor()
+    public static void ListDoor()
     {
         Game game = Game.Get();
 
@@ -2202,8 +1801,8 @@ public class QuestEditorData {
         {
             return;
         }
-        esl = new EditorSelectionList("Select Item", doors, delegate { SelectComponent(); });
-        esl.SelectItem();
+        game.qed.esl = new EditorSelectionList("Select Item", doors, delegate { SelectComponent(); });
+        game.qed.esl.SelectItem();
     }
 
     public void NewDoor()
@@ -2369,81 +1968,82 @@ public class QuestEditorData {
         SelectComponent(esl.selection);
     }
 
-    public void SelectComponent(string name)
+    public static void SelectComponent(string name)
     {
+        Game game = Game.Get();
+        QuestEditorData qed = game.qed;
+
         if (name.Equals("Quest"))
         {
-            SelectQuest();
+            qed.SelectQuest();
             return;
         }
         if (name.Equals("{NEW:Tile}"))
         {
-            NewTile();
+            qed.NewTile();
             return;
         }
         if (name.Equals("{NEW:Door}"))
         {
-            NewDoor();
+            qed.NewDoor();
             return;
         }
         if (name.Equals("{NEW:Token}"))
         {
-            NewToken();
+            qed.NewToken();
             return;
         }
         if (name.Equals("{NEW:Monster}"))
         {
-            NewMonster();
+            qed.NewMonster();
             return;
         }
         if (name.Equals("{NEW:MPlace}"))
         {
-            NewMPlace();
+            qed.NewMPlace();
             return;
         }
         if (name.Equals("{NEW:Event}"))
         {
-            NewEvent();
+            qed.NewEvent();
             return;
         }
-
-        Game game = Game.Get();
 
         // This can happen to due rename/delete
         if (!game.quest.qd.components.ContainsKey(name))
         {
-            SelectQuest();
+            qed.SelectQuest();
         }
 
         if (game.quest.qd.components[name] is QuestData.Tile)
         {
-            SelectTile(name);
+            qed.SelectTile(name);
             return;
         }
 
         if (game.quest.qd.components[name] is QuestData.Door)
         {
-            SelectDoor(name);
+            qed.SelectDoor(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Token)
         {
-            SelectToken(name);
+            qed.SelectToken(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Monster)
         {
-            SelectMonster(name);
+            qed.SelectMonster(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.MPlace)
         {
-            SelectMPlace(name);
+            qed.SelectMPlace(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Event)
         {
-            SelectEvent(name);
+            qed.SelectEvent(name);
             return;
         }
     }
