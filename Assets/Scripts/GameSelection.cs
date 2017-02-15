@@ -24,7 +24,7 @@ public class GameSelection
 
         // Banner Image
         Sprite bannerSprite;
-        Texture2D newTex = Resources.Load("sprites/bannerb") as Texture2D;
+        Texture2D newTex = Resources.Load("sprites/banner") as Texture2D;
 
         GameObject banner = new GameObject("banner");
         banner.tag = "dialog";
@@ -32,15 +32,15 @@ public class GameSelection
         banner.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = banner.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1 * UIScaler.GetPixelsPerUnit(), 4.5f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 18.75f) * UIScaler.GetPixelsPerUnit() / 2f, 18.75f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1 * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 18f) * UIScaler.GetPixelsPerUnit() / 2f, 18f * UIScaler.GetPixelsPerUnit());
         banner.AddComponent<CanvasRenderer>();
 
 
         UnityEngine.UI.Image image = banner.AddComponent<UnityEngine.UI.Image>();
         bannerSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = bannerSprite;
-        image.rectTransform.sizeDelta = new Vector2(18.75f * UIScaler.GetPixelsPerUnit(), 4.5f * UIScaler.GetPixelsPerUnit());
+        image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
 
         DialogBox db;
 
