@@ -12,7 +12,7 @@ public class EditorComponentMonster : EditorComponent
     EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
 
-    public EditorComponentToken(string name) : base()
+    public EditorComponentMonster(string name) : base()
     {
         Game game = Game.Get();
         monsterComponent = game.quest.qd.components[name] as QuestData.Monster;
@@ -143,7 +143,6 @@ public class EditorComponentMonster : EditorComponent
         }
 
         game.tokenBoard.AddHighlight(monsterComponent.location, "MonsterLoc", "editor");
-        game.quest.ChangeAlpha(monsterComponent.name, 1f);
     }
 
 

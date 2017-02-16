@@ -91,7 +91,7 @@ public class EditorComponentDoor : EditorComponent
         doorComponent.colourName = colorList.selection;
         Game.Get().quest.Remove(doorComponent.name);
         Game.Get().quest.Add(doorComponent.name);
-        SelectComponent(doorComponent.name);
+        Update();
     }
 
 }
