@@ -6,12 +6,12 @@ public class EditorComponentTile : EditorComponent
 {
     QuestData.Tile tileComponent
 
-    // Quest is a special component with meta data
     public EditorComponentTile(string name) : base()
     {
         Game game = Game.Get();
         tileComponent = game.quest.qd.components[name] as QuestData.Tile;
         component = tileComponent;
+        name = component.name;
         Update();
     }
     

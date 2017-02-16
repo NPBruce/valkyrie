@@ -6,6 +6,7 @@ public class EditorComponent {
     public QuestData.QuestComponent component;
     public bool gettingPosition = false;
     public bool gettingPositionSnap = false;
+    public string name
 
     QuestEditorTextEdit rename;
 
