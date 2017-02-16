@@ -65,6 +65,22 @@ public class EditorComponentToken : EditorComponent
         typeList.SelectItem();
     }
 
+    public static List<string> GetTokenNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
+        {
+            string display = kv.Key;
+            foreach (string s in kv.Value.sets)
+            {
+                display += " " + s;
+            }
+            names.Add(display);
+        }
+        return names;
+    }
+
     public void SelectType()
     {
         tokenComponent.tokenName = typeList.selection.Split(" ".ToCharArray())[0];
