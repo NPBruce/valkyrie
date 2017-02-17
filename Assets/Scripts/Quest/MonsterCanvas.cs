@@ -140,12 +140,12 @@ public class MonsterCanvas : MonoBehaviour
             Texture2D newTex = ContentData.FileToTexture(m.monsterData.image);
             // FIXME: should be game type specific
             Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
-            Texture2D dupeTex = Resources.Load("sprites/borders/monster_duplicate_" + m.duplicate) as Texture2D;
+            Texture2D dupeTex = Resources.Load("sprites/monster_duplicate_" + m.duplicate) as Texture2D;
             iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
             if (dupeTex != null)
             {
-               duplicateSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+               duplicateSprite = Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1);
             }
         }
 
@@ -164,32 +164,42 @@ public class MonsterCanvas : MonoBehaviour
 
             GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
             mImg.tag = "monsters";
-            GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
-            mImgFrame.tag = "monsters";
             mImg.transform.parent = game.uICanvas.transform;
-            mImgFrame.transform.parent = game.uICanvas.transform;
 
             RectTransform trans = mImg.AddComponent<RectTransform>();
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             mImg.AddComponent<CanvasRenderer>();
-            RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
-            transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            mImgFrame.AddComponent<CanvasRenderer>();
 
             icon = mImg.AddComponent<UnityEngine.UI.Image>();
             icon.sprite = iconSprite;
-            icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
+            icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
 
-            iconFrame = mImgFrame.AddComponent<UnityEngine.UI.Image>();
-            iconFrame.sprite = frameSprite;
-            iconFrame.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            UnityEngine.UI.Button button = mImg.AddComponent<UnityEngine.UI.Button>();
+            button.interactable = true;
+            button.onClick.AddListener(delegate { MonsterDiag(); });
 
-            // Frame is on top, so monster image doesn't need button
-            UnityEngine.UI.Button buttonFrame = mImgFrame.AddComponent<UnityEngine.UI.Button>();
-            buttonFrame.interactable = true;
-            buttonFrame.onClick.AddListener(delegate { MonsterDiag(); });
+            iconFrame = null;
+            if (game.gameType is D2EGameType)
+            {
+                icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
+                GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
+                mImgFrame.tag = "monsters";
+                mImgFrame.transform.parent = game.uICanvas.transform;
+
+                RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
+                transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+                transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+                mImgFrame.AddComponent<CanvasRenderer>();
+
+                iconFrame = mImgFrame.AddComponent<UnityEngine.UI.Image>();
+                iconFrame.sprite = frameSprite;
+                iconFrame.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+
+                UnityEngine.UI.Button buttonFrame = mImgFrame.AddComponent<UnityEngine.UI.Button>();
+                buttonFrame.interactable = true;
+                buttonFrame.onClick.AddListener(delegate { MonsterDiag(); });
+            }
 
             iconDupe = null;
             if (duplicateSprite != null)
@@ -220,8 +230,11 @@ public class MonsterCanvas : MonoBehaviour
             if (m.activated && m.unique)
             {
                 // Green frame, dim monster
-                iconFrame.color = new Color(0f, 0.3f, 0f, 1);
                 icon.color = new Color(0.5f, 0.5f, 0.5f, 1);
+                if (iconFrame != null)
+                {
+                    iconFrame.color = new Color(0f, 0.3f, 0f, 1);
+                }
                 if (iconDupe != null)
                 {
                     iconDupe.color = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -230,13 +243,23 @@ public class MonsterCanvas : MonoBehaviour
             else if (m.activated)
             {
                 // dim
-                iconFrame.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
                 icon.color = new Color(0.5f, 0.5f, 0.5f, 1);
+                if (iconFrame != null)
+                {
+                    iconFrame.color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
+                }
+                if (iconDupe != null)
+                {
+                    iconDupe.color = new Color(0.5f, 0.5f, 0.5f, 1);
+                }
             }
             else if (m.unique)
             {
                 // green frame
-                iconFrame.color = new Color(0.6f, 1f, 0.6f, 1);
+                if (iconFrame != null)
+                {
+                    iconFrame.color = new Color(0.6f, 1f, 0.6f, 1);
+                }
                 if (iconDupe != null)
                 {
                     iconDupe.color = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -244,8 +267,11 @@ public class MonsterCanvas : MonoBehaviour
             }
             else
             {
-                iconFrame.color = Color.white;
                 icon.color = Color.white;
+                if (iconFrame != null)
+                {
+                    iconFrame.color = Color.white;
+                }
                 if (iconDupe != null)
                 {
                     iconDupe.color = Color.white;
