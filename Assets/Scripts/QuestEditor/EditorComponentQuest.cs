@@ -15,6 +15,8 @@ public class EditorComponentQuest : EditorComponent
     // ...unless the component uses the list here instead
     public List<DialogBoxEditable> dbeList;
 
+    EditorSelectionList packESL;
+
     // Quest is a special component with meta data
     public EditorComponentQuest()
     {
@@ -22,7 +24,7 @@ public class EditorComponentQuest : EditorComponent
         Update();
     }
 
-    override public Update()
+    override public void Update()
     {
         base.Update();
         Game game = Game.Get();
@@ -149,8 +151,8 @@ public class EditorComponentQuest : EditorComponent
             }
         }
 
-        esl = new EditorSelectionList("Select Pack", packs, delegate { SelectQuestAddPack(); });
-        esl.SelectItem();
+        packESL = new EditorSelectionList("Select Pack", packs, delegate { SelectQuestAddPack(); });
+        packESL.SelectItem();
     }
 
     public void SelectQuestAddPack()
@@ -162,7 +164,7 @@ public class EditorComponentQuest : EditorComponent
         {
             packs[i] = game.quest.qd.quest.packs[i];
         }
-        packs[i] = (esl.selection);
+        packs[i] = (packESL.selection);
         game.quest.qd.quest.packs = packs;
         Update();
     }

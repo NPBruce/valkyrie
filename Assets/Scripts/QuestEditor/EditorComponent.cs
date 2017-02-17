@@ -22,7 +22,7 @@ public class EditorComponent {
         Clean();
 
         // Back button is common to all components
-        tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { QuestEditorData.Back(); });
+        TextButton tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { QuestEditorData.Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
     }
@@ -44,6 +44,7 @@ public class EditorComponent {
     // This is called by the editor
     virtual public void MouseDown()
     {
+        Game game = Game.Get();
         // Are we looking for a position?
         if (!gettingPosition) return;
 

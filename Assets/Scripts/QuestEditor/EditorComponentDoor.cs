@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EditorComponentDoor : EditorComponent
 {
-    QuestData.Door doorComponent
+    QuestData.Door doorComponent;
     // List to select door colour
     EditorSelectionList colorList;
 
@@ -17,7 +17,7 @@ public class EditorComponentDoor : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         Game game = Game.Get();
@@ -45,7 +45,7 @@ public class EditorComponentDoor : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + d.rotation + ")", delegate { Rotate(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + doorComponent.rotation + ")", delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

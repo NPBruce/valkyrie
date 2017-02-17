@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EditorComponentToken : EditorComponent
 {
-    QuestData.Token tokenComponent
+    QuestData.Token tokenComponent;
     EditorSelectionList typeList;
 
     public EditorComponentToken(string name) : base()
@@ -16,7 +16,7 @@ public class EditorComponentToken : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         Game game = Game.Get();

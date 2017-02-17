@@ -22,7 +22,7 @@ public class EditorComponentEventPageTwo : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         if (eventComponent.locationSpecified)
@@ -277,7 +277,7 @@ public class EditorComponentEventPageTwo : EditorComponent
             }
         }
 
-        addEventESL = new EditorSelectionList("Select Event", events, delegate { SelectEventAddEvent(index, fail); });
+        addEventESL = new EditorSelectionList("Select Event", events, delegate { SelectAddEvent(index, fail); });
         addEventESL.SelectItem();
     }
 
@@ -377,7 +377,7 @@ public class EditorComponentEventPageTwo : EditorComponent
 
     public void SetDelayedEvent(int i)
     {
-        int.TryParse(dbeList[i].uiInput.text, out eventComponent.delayedEvents[i].delay);
+        int.TryParse(delayedEventsDBE[i].uiInput.text, out eventComponent.delayedEvents[i].delay);
         Update();
     }
 
@@ -437,7 +437,7 @@ public class EditorComponentEventPageTwo : EditorComponent
         }
         else
         {
-            SelectAddFlag(type, flagsESL.selection)
+            SelectAddFlag(type, flagsESL.selection);
         }
     }
 
@@ -467,7 +467,7 @@ public class EditorComponentEventPageTwo : EditorComponent
     public void NewFlag(string type)
     {
         string name = System.Text.RegularExpressions.Regex.Replace(newFlagText.value, "[^A-Za-z0-9_]", "");
-        SelectAddFlag(type, name)
+        SelectAddFlag(type, name);
     }
 
     public void FlagRemove(int index)

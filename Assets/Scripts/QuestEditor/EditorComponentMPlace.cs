@@ -15,7 +15,7 @@ public class EditorComponentMPlace : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         CameraController.SetCamera(mPlaceComponent.location);

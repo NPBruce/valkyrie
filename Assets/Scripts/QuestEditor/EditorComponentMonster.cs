@@ -21,7 +21,7 @@ public class EditorComponentMonster : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         CameraController.SetCamera(monsterComponent.location);
@@ -261,7 +261,7 @@ public class EditorComponentMonster : EditorComponent
     public void SelectMonsterTraitReplace(int pos)
     {
         monsterComponent.mTraits[pos] = monsterTraitESL.selection;
-        Upddate();
+        Update();
     }
 
     public void MonsterTraitsAdd()

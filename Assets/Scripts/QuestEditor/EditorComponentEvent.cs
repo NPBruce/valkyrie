@@ -22,7 +22,7 @@ public class EditorComponentEvent : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         if (eventComponent.locationSpecified)
@@ -88,7 +88,7 @@ public class EditorComponentEvent : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        tb = new TextButton(new Vector2(12, 2), new Vector2(8, 1), "Flags/Events", delegate { QuestEditorData.SelectAsEventPageTwo(); });
+        tb = new TextButton(new Vector2(12, 2), new Vector2(8, 1), "Flags/Events", delegate { QuestEditorData.SelectAsEventPageTwo(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -151,7 +151,7 @@ public class EditorComponentEvent : EditorComponent
         int index;
         for (index = 0; index < 12; index++)
         {
-            if (e.addComponents.Length > index)
+            if (eventComponent.addComponents.Length > index)
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), eventComponent.addComponents[index]);

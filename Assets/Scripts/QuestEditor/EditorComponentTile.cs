@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class EditorComponentTile : EditorComponent
 {
-    QuestData.Tile tileComponent
+    QuestData.Tile tileComponent;
+    EditorSelectionList tileESL;
 
     public EditorComponentTile(string name) : base()
     {
@@ -15,7 +16,7 @@ public class EditorComponentTile : EditorComponent
         Update();
     }
     
-    override public Update()
+    override public void Update()
     {
         base.Update();
         Game game = Game.Get();
@@ -35,7 +36,7 @@ public class EditorComponentTile : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), t.tileSideName, delegate { ChangeTileSide(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), tileComponent.tileSideName, delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -46,7 +47,7 @@ public class EditorComponentTile : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + t.rotation + ")", delegate { TileRotate(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + tileComponent.rotation + ")", delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -70,14 +71,14 @@ public class EditorComponentTile : EditorComponent
             }
             sides.Add(display);
         }
-        esl = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
-        esl.SelectItem();
+        tileESL = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
+        tileESL.SelectItem();
     }
 
     public void SelectTileSide()
     {
         Game game = Game.Get();
-        tileComponent.tileSideName = esl.selection.Split(" ".ToCharArray())[0];
+        tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
         game.quest.Remove(tileComponent.name);
         game.quest.Add(tileComponent.name);
         Update();

@@ -46,7 +46,7 @@ public class QuestEditorData {
         {
             game.qed.selection.Update();
         }
-        else if (game.quest.component.ContainsKey(game.qed.selected.name))
+        else if (game.quest.qd.components.ContainsKey(game.qed.selection.name))
         {
             // Existing component
             game.qed.selection.Update();
@@ -62,6 +62,7 @@ public class QuestEditorData {
     // Menu for selection of all component types, includes delete options
     public static void TypeSelect()
     {
+        Game game = Game.Get();
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
             return;
@@ -81,37 +82,37 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(22, 4), new Vector2(9, 1), "Tile", delegate { ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 4), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Tile"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 4), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Tile"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 6), new Vector2(9, 1), "Door", delegate { ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 6), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Door"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 6), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Door"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 8), new Vector2(9, 1), "Token", delegate { ListToken(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 8), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Token"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 8), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Token"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 10), new Vector2(9, 1), "Monster", delegate { ListMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Monster"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Monster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 12), new Vector2(9, 1), "MPlace", delegate { ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 12), new Vector2(6, 1), "Delete", delegate { DeleteComponent("MPlace"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 12), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("MPlace"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 14), new Vector2(9, 1), "Event", delegate { ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), "Delete", delegate { DeleteComponent("Event"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(25.5f, 16), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
@@ -139,7 +140,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", tiles, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", tiles, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -163,7 +164,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", doors, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", doors, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -187,7 +188,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", tokens, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", tokens, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -211,7 +212,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", monsters, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", monsters, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -235,7 +236,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", mplaces, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", mplaces, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -262,7 +263,7 @@ public class QuestEditorData {
         {
             return;
         }
-        game.qed.esl = new EditorSelectionList("Select Item", events, delegate { SelectComponent(); });
+        game.qed.esl = new EditorSelectionList("Select Item", events, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -281,7 +282,7 @@ public class QuestEditorData {
         // Quest is a special component
         if (name.Equals("Quest"))
         {
-            qed.SelectQuest();
+            SelectQuest();
             return;
         }
         // These are special strings for creating new objects
@@ -319,39 +320,39 @@ public class QuestEditorData {
         // This may happen to due rename/delete
         if (!game.quest.qd.components.ContainsKey(name))
         {
-            qed.SelectQuest();
+            SelectQuest();
         }
 
         // Determine the component type and select
         if (game.quest.qd.components[name] is QuestData.Tile)
         {
-            qed.SelectAsTile(name);
+            SelectAsTile(name);
             return;
         }
 
         if (game.quest.qd.components[name] is QuestData.Door)
         {
-            qed.SelectAsDoor(name);
+            SelectAsDoor(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Token)
         {
-            qed.SelectAsToken(name);
+            SelectAsToken(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Monster)
         {
-            qed.SelectAsMonster(name);
+            SelectAsMonster(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.MPlace)
         {
-            qed.SelectAsMPlace(name);
+            SelectAsMPlace(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Event)
         {
-            qed.SelectAsEvent(name);
+            SelectAsEvent(name);
             return;
         }
     }
@@ -359,25 +360,25 @@ public class QuestEditorData {
     public static void SelectQuest()
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentQuest());
+        game.qed.NewSelection(new EditorComponentQuest());
     }
 
     public static void SelectAsTile(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentTile(name));
+        game.qed.NewSelection(new EditorComponentTile(name));
     }
 
     public static void SelectAsDoor(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentDoor(name));
+        game.qed.NewSelection(new EditorComponentDoor(name));
     }
 
     public static void SelectAsToken(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentToken(name));
+        game.qed.NewSelection(new EditorComponentToken(name));
     }
 
     // Events, tokens, doors and monsters can all be openned as events
@@ -385,7 +386,7 @@ public class QuestEditorData {
     public static void SelectAsEvent(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentEvent(name));
+        game.qed.NewSelection(new EditorComponentEvent(name));
     }
 
     // Events, tokens, doors and monsters can all be openned as events
@@ -393,26 +394,26 @@ public class QuestEditorData {
     public static void SelectAsEventPageTwo(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentEventPageTwo(name));
+        game.qed.NewSelection(new EditorComponentEventPageTwo(name));
     }
 
     public static void SelectAsMonster(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentMonster(name));
+        game.qed.NewSelection(new EditorComponentMonster(name));
     }
 
     // Mosters can be opened as a placement list page
     public static void SelectAsMonsterPlacement(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentMonsterPlacement(name));
+        game.qed.NewSelection(new EditorComponentMonsterPlacement(name));
     }
 
     public static void SelectAsMPlace(string name)
     {
         Game game = Game.Get();
-        NewSelection(new EditorComponentMPlace(name));
+        game.qed.NewSelection(new EditorComponentMPlace(name));
     }
 
     // Create a new tile, use next available number
@@ -568,5 +569,11 @@ public class QuestEditorData {
     {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
+    }
+
+    // This is called game
+    public void MouseDown()
+    {
+        selection.MouseDown();
     }
 }
