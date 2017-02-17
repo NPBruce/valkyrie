@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class EditorComponentDoor : EditorComponent
 {
     QuestData.Door doorComponent
+    // List to select door colour
     EditorSelectionList colorList;
 
     public EditorComponentDoor(string name) : base()
@@ -39,6 +40,7 @@ public class EditorComponentDoor : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
         db.ApplyTag("editor");
 
+        // This is a snapped position
         tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
