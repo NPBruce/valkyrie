@@ -13,6 +13,7 @@ public abstract class GameType
     public abstract float TilePixelPerSquare();
     // There are actually two fonts, should expand to include header/text
     public abstract Font GetFont();
+    public abstract Font GetHeaderFont();
     public abstract string TypeName();
     public abstract bool TileOnGrid();
     public abstract bool DisplayMorale();
@@ -45,6 +46,11 @@ public class NoGameType : GameType
     }
 
     public override Font GetFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+    }
+
+    public override Font GetHeaderFont()
     {
         return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
@@ -121,6 +127,11 @@ public class D2EGameType : GameType
         return (Font)Resources.Load("fonts/gara_scenario_desc");
     }
 
+    public override Font GetHeaderFont()
+    {
+        return (Font)Resources.Load("fonts/Windl");
+    }
+
     public override int MaxHeroes()
     {
         return 4;
@@ -185,6 +196,13 @@ class MoMGameType : GameType
     }
 
     public override Font GetFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+        //FIXME
+        //return (Font)Resources.Load("fonts/MadGarmondPro");
+    }
+
+    public override Font GetHeaderFont()
     {
         return (Font)Resources.Load("fonts/OldNewspaperTypes");
     }
