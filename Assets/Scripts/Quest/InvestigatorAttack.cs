@@ -8,7 +8,6 @@ public class InvestigatorAttack {
     public List<AttackData> attacks;
     public Hashset<string> attackType;
 
-    // Create an activation window, if master is false then it is for minions
     public InvestigatorAttack(Quest.Monster m)
     {
         monster = m;
@@ -60,8 +59,10 @@ public class InvestigatorAttack {
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
 
-        string text = attack.text.Replace("{0}", m.monsterData.name);
+        string text = attack.text.Replace("{0}", monster.monsterData.name);
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
+
+        new TextButton(new Vector2(GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }

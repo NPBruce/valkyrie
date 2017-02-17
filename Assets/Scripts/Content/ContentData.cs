@@ -12,6 +12,8 @@ public class ContentData {
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
     public Dictionary<string, AttackData> investigatorAttacks;
+    public Dictionary<string, EvadeData> investigatorEvades;
+    public Dictionary<string, HorrorData> horrorChecks;
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
 
@@ -45,6 +47,12 @@ public class ContentData {
 
         // This has all available attacks
         investigatorAttacks = new Dictionary<string, AttackData>();
+
+        // This has all available evades
+        investigatorEvades = new Dictionary<string, EvadeData>();
+
+        // This has all available evades
+        horrorChecks = new Dictionary<string, HorrorData>();
 
         // This has all available tokens
         tokens = new Dictionary<string, TokenData>();
@@ -304,10 +312,37 @@ public class ContentData {
                 }
             }
         }
+
         // Is this a "Activation" entry?
         if (name.IndexOf(ActivationData.type) == 0)
         {
             ActivationData d = new ActivationData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!activations.ContainsKey(name))
+            {
+                activations.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (activations[name].priority < d.priority)
+            {
+                activations.Remove(name);
+                activations.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (activations[name].priority == d.priority)
+            {
+                activations[name].sets.Add(packID);
+            }
+        }
+        
+        // Is this a "Attack" entry?
+        if (name.IndexOf(AttackData.type) == 0)
+        {
+            AttackData d = new AttackData(name, content, path);
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
@@ -330,29 +365,55 @@ public class ContentData {
             }
         }
 
-        // Is this a "Attack" entry?
-        if (name.IndexOf(AttackData.type) == 0)
+        // Is this a "Evade" entry?
+        if (name.IndexOf(EvadeData.type) == 0)
         {
-            AttackData d = new AttackData(name, content, path);
+            EvadeData d = new EvadeData(name, content, path);
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!activations.ContainsKey(name))
+            if (!investigatorEvades.ContainsKey(name))
             {
-                activations.Add(name, d);
+                investigatorEvades.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (activations[name].priority < d.priority)
+            else if (investigatorEvades[name].priority < d.priority)
             {
-                activations.Remove(name);
-                activations.Add(name, d);
+                investigatorEvades.Remove(name);
+                investigatorEvades.Add(name, d);
             }
             // items of the same priority belong to multiple packs
-            else if (activations[name].priority == d.priority)
+            else if (investigatorEvades[name].priority == d.priority)
             {
-                activations[name].sets.Add(packID);
+                investigatorEvades[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Horror" entry?
+        if (name.IndexOf(HorrorData.type) == 0)
+        {
+            HorrorData d = new HorrorData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!horrorChecks.ContainsKey(name))
+            {
+                horrorChecks.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (horrorChecks[name].priority < d.priority)
+            {
+                horrorChecks.Remove(name);
+                horrorChecks.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (horrorChecks[name].priority == d.priority)
+            {
+                horrorChecks[name].sets.Add(packID);
             }
         }
 
@@ -709,6 +770,56 @@ public class AttackData : GenericData
         if (content.ContainsKey("attacktype"))
         {
             attackType = content["attacktype"];
+        }
+    }
+}
+
+// Class for Investigator Evades
+public class EvadeData : GenericData
+{
+    public static new string type = "Evade";
+
+    // Evade text
+    public string text = "";
+    public string monster = "";
+
+    public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get attack text
+        if (content.ContainsKey("text"))
+        {
+            text = content["text"];
+        }
+
+        // Get attack target
+        if (content.ContainsKey("monster"))
+        {
+            monster = content["monster"];
+        }
+    }
+}
+
+// Class for Horror Checks
+public class HorrorData : GenericData
+{
+    public static new string type = "Horror";
+
+    // Evade text
+    public string text = "";
+    public string monster = "";
+
+    public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get attack text
+        if (content.ContainsKey("text"))
+        {
+            text = content["text"];
+        }
+
+        // Get attack target
+        if (content.ContainsKey("monster"))
+        {
+            monster = content["monster"];
         }
     }
 }
