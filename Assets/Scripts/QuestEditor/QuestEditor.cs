@@ -11,13 +11,10 @@ public class QuestEditor {
         Game game = Game.Get();
         game.editMode = true;
 
-        // re-read quest data
-        Reload();
-
         new MenuButton();
 
-        // Create a new QED object
-        game.qed = new QuestEditorData();
+        // re-read quest data
+        Reload();
     }
 
     // Reload a quest from file

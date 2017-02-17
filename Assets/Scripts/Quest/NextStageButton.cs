@@ -8,7 +8,7 @@ public class NextStageButton
     public NextStageButton()
     {
         if (Game.Get().gameType.DisplayHeroes()) return;
-        TextButton qb = new TextButton(new Vector2(UIScaler.GetRight(-5), UIScaler.GetBottom(-3)), new Vector2(4, 2), "->", delegate { Next(); });
+        TextButton qb = new TextButton(new Vector2(UIScaler.GetRight(-10), UIScaler.GetBottom(-3)), new Vector2(4, 2), "->", delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         qb.ApplyTag("questui");
     }

@@ -289,6 +289,8 @@ public class Quest
         // Add to active list
         QuestData.QuestComponent qc = game.quest.qd.components[name];
 
+        if (boardItems.ContainsKey(name)) return;
+
         // Add to board
         if (qc is QuestData.Tile)
         {
@@ -770,7 +772,7 @@ public class Quest
             HashSet<int> dupe = new HashSet<int>();
             foreach (Monster m in game.quest.monsters)
             {
-                if (m.monsterData == monsterData)
+                if (m.monsterData == monsterData || m.duplicate != 0)
                 {
                     dupe.Add(m.duplicate);
                 }

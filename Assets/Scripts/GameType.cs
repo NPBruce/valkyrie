@@ -13,11 +13,13 @@ public abstract class GameType
     public abstract float TilePixelPerSquare();
     // There are actually two fonts, should expand to include header/text
     public abstract Font GetFont();
+    public abstract Font GetHeaderFont();
     public abstract string TypeName();
     public abstract bool TileOnGrid();
     public abstract bool DisplayMorale();
     public abstract float SelectionRound();
     public abstract float TileRound();
+    public abstract bool MonstersGrouped();
 }
 
 // NoGameType exists for management reasons
@@ -45,6 +47,11 @@ public class NoGameType : GameType
     }
 
     public override Font GetFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+    }
+
+    public override Font GetHeaderFont()
     {
         return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
@@ -90,6 +97,11 @@ public class NoGameType : GameType
     {
         return 1f;
     }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
+    }
 }
 
 // Things for D2E
@@ -119,6 +131,11 @@ public class D2EGameType : GameType
     public override Font GetFont()
     {
         return (Font)Resources.Load("fonts/gara_scenario_desc");
+    }
+
+    public override Font GetHeaderFont()
+    {
+        return (Font)Resources.Load("fonts/Windl");
     }
 
     public override int MaxHeroes()
@@ -160,6 +177,11 @@ public class D2EGameType : GameType
     {
         return 1f;
     }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
+    }
 }
 
 class MoMGameType : GameType
@@ -185,6 +207,13 @@ class MoMGameType : GameType
     }
 
     public override Font GetFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+        //FIXME
+        //return (Font)Resources.Load("fonts/MadGarmondPro");
+    }
+
+    public override Font GetHeaderFont()
     {
         return (Font)Resources.Load("fonts/OldNewspaperTypes");
     }
@@ -230,5 +259,10 @@ class MoMGameType : GameType
     public override float TileRound()
     {
         return 3.5f;
+    }
+
+    public override bool MonstersGrouped()
+    {
+        return false;
     }
 }
