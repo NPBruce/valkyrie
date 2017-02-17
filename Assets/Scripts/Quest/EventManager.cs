@@ -155,13 +155,14 @@ public class EventManager
                     oldMonster = m;
                 }
             }
+
             // Add the new type
-            if (oldMonster == null)
+            if (!game.gameType.MonstersGrouped() || oldMonster == null)
             {
                 game.quest.monsters.Add(new Quest.Monster(qe));
                 game.monsterCanvas.UpdateList();
             }
-            // There is an existing tpye, but now it is unique
+            // There is an existing group, but now it is unique
             else if (qe.qMonster.unique)
             {
                 oldMonster.unique = true;

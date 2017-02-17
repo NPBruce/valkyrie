@@ -18,6 +18,7 @@ public abstract class GameType
     public abstract bool DisplayMorale();
     public abstract float SelectionRound();
     public abstract float TileRound();
+    public abstract bool MonstersGrouped();
 }
 
 // NoGameType exists for management reasons
@@ -90,6 +91,11 @@ public class NoGameType : GameType
     {
         return 1f;
     }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
+    }
 }
 
 // Things for D2E
@@ -159,6 +165,11 @@ public class D2EGameType : GameType
     public override float TileRound()
     {
         return 1f;
+    }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
     }
 }
 
@@ -230,5 +241,10 @@ class MoMGameType : GameType
     public override float TileRound()
     {
         return 3.5f;
+    }
+
+    public override bool MonstersGrouped()
+    {
+        return false;
     }
 }
