@@ -197,7 +197,9 @@ class MoMGameType : GameType
 
     public override Font GetFont()
     {
-        return (Font)Resources.Load("fonts/MadGarmondPro");
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+        //FIXME
+        //return (Font)Resources.Load("fonts/MadGarmondPro");
     }
 
     public override Font GetHeaderFont()
