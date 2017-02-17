@@ -5,89 +5,63 @@ using System.Collections;
 public class InvestigatorAttack {
     // The monster that raises this dialog
     public Quest.Monster monster;
+    public List<AttackData> attacks;
+    public Hashset<string> attackType;
 
     // Create an activation window, if master is false then it is for minions
     public InvestigatorAttack(Quest.Monster m)
     {
         monster = m;
-        master = masterIn;
-        CreateWindow();
+        Game game = Game.Get();
+        attacks = new List<AttackData>();
+        attackType = new List<string>();
+        foreach (AttackData ad in game.cd.investigatorAttacks)
+        {
+            if (m.monsterData.ContainsTrait(ad.target))
+            {
+                attacks.Add(ad);
+                attackType.Add(ad.attackType);
+            }
+        }
+        AttackOptions();
     }
 
-    public void CreateWindow()
+    public void AttackOptions()
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
+        DialogBox db = new DialogBox(new Vector2(GetVCenter(-15f), 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Select Attack Type");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        float offset = 2.5f;
-        if (monster.currentActivation.effect.Length > 0)
+        foreach (string type in attackType)
         {
-            // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
-            db.AddBorder();
-            offset += 4.5f;
+            offset += 2.5;
+            string tmpType = type;
+            // Make first character upper case
+            string nameType = type[0].ToUpper() + type.Substring(1);
+            new TextButton(new Vector2(GetVCenter(-8f), offset), new Vector2(UIScaler.GetWidthUnits() - 16, 2), nameType, delegate { Attack(tmpType); });
         }
 
-        // Activation box
-        string activationText = "";
-        // Create header
-        if (master)
+        new TextButton(new Vector2(GetVCenter(-6f), offset + 2.5), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Cancel", delegate { Destroyer.Dialog(); });
+    }
+
+    public void Attack(string type)
+    {
+        List<AttackData> validAttacks = new List<AttackData>();
+        foreach (AttackData ad in attacks)
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
-            activationText = monster.currentActivation.ad.masterActions.Replace("\\n", "\n");
+            if (ad.attackType.equals(type))
+            {
+                validAttacks.Add(ad)
+            }
         }
-        else
-        {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
-            activationText = monster.currentActivation.ad.minionActions.Replace("\\n", "\n");
-        }
+        AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
+
+        string text = attack.text.Replace("{0}", m.monsterData.name);
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        offset += 2;
-
-        // Create activation text box
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
-        if (master)
-        {
-            db.AddBorder(Color.red);
-        }
-        else
-        {
-            db.AddBorder();
-        }
-
-        offset += 7.5f;
-
-        // Create finished button
-        if (master)
-        {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
-        }
-        else
-        {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
-        }
     }
-
-    public void activated()
-    {
-        // Destroy this dialog to close
-        destroy();
-
-        Game.Get().roundControl.MonsterActivated();
-    }
-
-    public void destroy()
-    {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
-    }
-
 }

@@ -686,6 +686,10 @@ public class AttackData : GenericData
 
     // Attack text
     public string text = "";
+    // Target type (human, spirit...)
+    public string target = "";
+    // Attack type (heavy, unarmed)
+    public string attackType = "";
 
     public AttackData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -693,6 +697,18 @@ public class AttackData : GenericData
         if (content.ContainsKey("text"))
         {
             text = content["text"];
+        }
+
+        // Get attack target
+        if (content.ContainsKey("target"))
+        {
+            target = content["target"];
+        }
+
+        // Get attack type
+        if (content.ContainsKey("attacktype"))
+        {
+            attackType = content["attacktype"];
         }
     }
 }
