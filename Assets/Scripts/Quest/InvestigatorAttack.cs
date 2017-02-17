@@ -1,25 +1,26 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 // Window with Investigator attack information
 public class InvestigatorAttack {
     // The monster that raises this dialog
     public Quest.Monster monster;
     public List<AttackData> attacks;
-    public Hashset<string> attackType;
+    public HashSet<string> attackType;
 
     public InvestigatorAttack(Quest.Monster m)
     {
         monster = m;
         Game game = Game.Get();
         attacks = new List<AttackData>();
-        attackType = new List<string>();
-        foreach (AttackData ad in game.cd.investigatorAttacks)
+        attackType = new HashSet<string>();
+        foreach (KeyValuePair<string, AttackData> kv in game.cd.investigatorAttacks)
         {
-            if (m.monsterData.ContainsTrait(ad.target))
+            if (m.monsterData.ContainsTrait(kv.Value.target))
             {
-                attacks.Add(ad);
-                attackType.Add(ad.attackType);
+                attacks.Add(kv.Value);
+                attackType.Add(kv.Value.attackType);
             }
         }
         AttackOptions();
@@ -31,20 +32,21 @@ public class InvestigatorAttack {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(GetVCenter(-15f), 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Select Attack Type");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetVCenter(-15f), 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Select Attack Type");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
+        float offset = 2.5f;
         foreach (string type in attackType)
         {
-            offset += 2.5;
             string tmpType = type;
             // Make first character upper case
-            string nameType = type[0].ToUpper() + type.Substring(1);
-            new TextButton(new Vector2(GetVCenter(-8f), offset), new Vector2(UIScaler.GetWidthUnits() - 16, 2), nameType, delegate { Attack(tmpType); });
+            string nameType = System.Char.ToUpper(type[0]) + type.Substring(1);
+            new TextButton(new Vector2(UIScaler.GetVCenter(-8f), offset), new Vector2(UIScaler.GetWidthUnits() - 16, 2), nameType, delegate { Attack(tmpType); });
+            offset += 2.5f;
         }
 
-        new TextButton(new Vector2(GetVCenter(-6f), offset + 2.5), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Cancel", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), offset), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Cancel", delegate { Destroyer.Dialog(); });
     }
 
     public void Attack(string type)
@@ -52,9 +54,9 @@ public class InvestigatorAttack {
         List<AttackData> validAttacks = new List<AttackData>();
         foreach (AttackData ad in attacks)
         {
-            if (ad.attackType.equals(type))
+            if (ad.attackType.Equals(type))
             {
-                validAttacks.Add(ad)
+                validAttacks.Add(ad);
             }
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
@@ -63,6 +65,6 @@ public class InvestigatorAttack {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }

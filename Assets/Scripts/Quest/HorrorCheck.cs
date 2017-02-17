@@ -1,18 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 // Window with Investigator evade information
 public class HorrorCheck {
     public HorrorCheck(Quest.Monster m)
     {
-        monster = m;
         Game game = Game.Get();
-        horrors = new List<HorrorData>();
-        foreach (HorrorData hd in game.cd.horrorChecks)
+        List<HorrorData> horrors = new List<HorrorData>();
+        foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
         {
-            if (m.monsterData.sectionName.equals(hd.monster))
+            if (m.monsterData.sectionName.Equals(kv.Value.monster))
             {
-                horrors.Add(ed);
+                horrors.Add(kv.Value);
             }
         }
         // If a dialog window is open we force it closed (this shouldn't happen)
@@ -23,6 +23,6 @@ public class HorrorCheck {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }

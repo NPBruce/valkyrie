@@ -1,18 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 // Window with Investigator evade information
 public class InvestigatorEvade {
-    public InvestigatorAttack(Quest.Monster m)
+    public InvestigatorEvade(Quest.Monster m)
     {
-        monster = m;
         Game game = Game.Get();
-        evades = new List<EvadeData>();
-        foreach (EvadeData ed in game.cd.investigatorEvades)
+        List<EvadeData> evades = new List<EvadeData>();
+        foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
         {
-            if (m.monsterData.sectionName.equals(ed.monster))
+            if (m.monsterData.sectionName.Equals(kv.Key))
             {
-                evades.Add(ed);
+                evades.Add(kv.Value);
             }
         }
         // If a dialog window is open we force it closed (this shouldn't happen)
@@ -24,6 +24,6 @@ public class InvestigatorEvade {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }
