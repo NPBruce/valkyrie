@@ -39,6 +39,7 @@ more perils
 lt.
 
 Common:
+monster without text bug
 camera limits set in events
 quest set
 symbols don't work in unique text

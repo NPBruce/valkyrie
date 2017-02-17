@@ -10,7 +10,12 @@ public class MonsterCanvas : MonoBehaviour
     // This is assumed in a few places, can't just be changed
     public static float monsterSize = 4;
     // We keep a collection of the icons here
-    public Dictionary<string, MonsterIcon> icons;
+    public List<MonsterIcon> icons;
+
+    void Awake()
+    {
+        icons = new List<MonsterIcon>();
+    }
 
     // Call to update list of monsters
     public void UpdateList()
@@ -20,14 +25,14 @@ public class MonsterCanvas : MonoBehaviour
             Object.Destroy(go);
 
         // New list
-        icons = new Dictionary<string, MonsterIcon>();
+        icons = new List<MonsterIcon>();
 
         Game game = Game.Get();
         int index = 0;
         // Create icons (not drawn)
         foreach (Quest.Monster m in game.quest.monsters)
         {
-            icons.Add(m.monsterData.name, new MonsterIcon(m, index++));
+            icons.Add(new MonsterIcon(m, index++));
         }
 
         // Draw scoll buttons if required
@@ -35,7 +40,10 @@ public class MonsterCanvas : MonoBehaviour
         DrawDown();
 
         // Draw icons in scroll range
-        UpdateStatus();
+        foreach (MonsterIcon mi in icons)
+        {
+            mi.Draw(offset);
+        }
     }
 
     // Draw up button if > 5 monsters, disabled if at top
@@ -98,10 +106,9 @@ public class MonsterCanvas : MonoBehaviour
     // FIXME: should update existing, does this draw over the top?
     public void UpdateStatus()
     {
-        Game game = Game.Get();
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (MonsterIcon mi in icons)
         {
-            icons[m.monsterData.name].Draw(offset);
+            mi.Update();
         }
     }
 
@@ -115,6 +122,9 @@ public class MonsterCanvas : MonoBehaviour
         Sprite iconSprite;
         Sprite frameSprite;
         Sprite duplicateSprite;
+        UnityEngine.UI.Image icon;
+        UnityEngine.UI.Image iconFrame;
+        UnityEngine.UI.Image iconDupe;
 
         // Location of the monster in the list
         int index;
@@ -156,11 +166,8 @@ public class MonsterCanvas : MonoBehaviour
             mImg.tag = "monsters";
             GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
             mImgFrame.tag = "monsters";
-            GameObject mImgDupe = new GameObject("monsterDupe" + m.monsterData.name);
-            mImgDupe.tag = "monsters";
             mImg.transform.parent = game.uICanvas.transform;
             mImgFrame.transform.parent = game.uICanvas.transform;
-            mImgDupe.transform.parent = game.uICanvas.transform;
 
             RectTransform trans = mImg.AddComponent<RectTransform>();
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
@@ -171,32 +178,44 @@ public class MonsterCanvas : MonoBehaviour
             transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             mImgFrame.AddComponent<CanvasRenderer>();
 
-            RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
-            dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-            mImgDupe.AddComponent<CanvasRenderer>();
-
-            UnityEngine.UI.Image icon = mImg.AddComponent<UnityEngine.UI.Image>();
+            icon = mImg.AddComponent<UnityEngine.UI.Image>();
             icon.sprite = iconSprite;
             icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
 
-            UnityEngine.UI.Image iconFrame = mImgFrame.AddComponent<UnityEngine.UI.Image>();
+            iconFrame = mImgFrame.AddComponent<UnityEngine.UI.Image>();
             iconFrame.sprite = frameSprite;
             iconFrame.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
-
-            UnityEngine.UI.Image iconDupe = mImgDupe.AddComponent<UnityEngine.UI.Image>();
-            iconDupe.sprite = duplicateSprite;
-            iconDupe.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
 
             // Frame is on top, so monster image doesn't need button
             UnityEngine.UI.Button buttonFrame = mImgFrame.AddComponent<UnityEngine.UI.Button>();
             buttonFrame.interactable = true;
-            buttonFrame.onClick.AddListener(delegate { MonsterDiag(m.monsterData.name); });
+            buttonFrame.onClick.AddListener(delegate { MonsterDiag(); });
 
-            UnityEngine.UI.Button buttonDupe = mImgDupe.AddComponent<UnityEngine.UI.Button>();
-            buttonDupe.interactable = true;
-            buttonDupe.onClick.AddListener(delegate { MonsterDiag(m.monsterData.name); });
+            iconDupe = null;
+            if (duplicateSprite != null)
+            {
+                GameObject mImgDupe = new GameObject("monsterDupe" + m.monsterData.name);
+                mImgDupe.tag = "monsters";
+                mImgDupe.transform.parent = game.uICanvas.transform;
 
+                RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
+                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, ((monsterSize / 2f) + 3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
+                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
+                mImgDupe.AddComponent<CanvasRenderer>();
+
+                iconDupe = mImgDupe.AddComponent<UnityEngine.UI.Image>();
+                iconDupe.sprite = duplicateSprite;
+                iconDupe.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() / 2f, monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
+
+                UnityEngine.UI.Button buttonDupe = mImgDupe.AddComponent<UnityEngine.UI.Button>();
+                buttonDupe.interactable = true;
+                buttonDupe.onClick.AddListener(delegate { MonsterDiag(); });
+            }
+            Update();
+        }
+
+        public void Update()
+        {
             // Set colour based on monster state
             if (m.activated && m.unique)
             {
@@ -235,27 +254,21 @@ public class MonsterCanvas : MonoBehaviour
         }
 
         // Function when monster icon pressed
-        static void MonsterDiag(string name)
+        public void MonsterDiag()
         {
             // If there are any other dialogs open just finish
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
 
             Game game = Game.Get();
-            foreach (Quest.Monster m in game.quest.monsters)
+            // This is a bad test
+            if (game.gameType.DisplayHeroes())
             {
-                if (name.Equals(m.monsterData.name))
-                {
-                    // This is a bad test
-                    if (game.gameType.DisplayHeroes())
-                    {
-                        new MonsterDialog(m);
-                    }
-                    else
-                    {
-                        new MonsterDialogMoM(m);
-                    }
-                }
+                new MonsterDialog(m);
+            }
+            else
+            {
+                new MonsterDialogMoM(m);
             }
         }
     }
