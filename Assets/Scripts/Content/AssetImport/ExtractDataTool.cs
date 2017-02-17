@@ -196,7 +196,6 @@ class ExtractDataTool
         string nameCamel;
         string nameUnderScoreLower;
         string nameReadable;
-        List<Activation> activations;
         List<string> horror;
         List<string> evade;
 
@@ -205,7 +204,6 @@ class ExtractDataTool
             horror = new List<string>();
             evade = new List<string>();
             horror = new List<string>();
-            activations = new List<Activation>();
 
             nameFFG = name;
             string[] elements = name.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -278,6 +276,14 @@ class ExtractDataTool
             return ret;
         }
 
+        public string GetAttack()
+        {
+            string ret = "";
+            return ret;
+            // Attacks have prep, attack and move instructions
+        }
+
+
         public string GetImage()
         {
             return "";
@@ -287,15 +293,6 @@ class ExtractDataTool
         {
             return "";
         }
-    }
-
-    class Activation
-    {
-        string number;
-        string condition;
-        string attack;
-        string unableButton;
-        string unableText;
     }
 }
 
