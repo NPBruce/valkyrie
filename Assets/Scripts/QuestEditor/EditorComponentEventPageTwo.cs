@@ -13,10 +13,10 @@ public class EditorComponentEventPageTwo : EditorComponent
     EditorSelectionList flagsESL;
     QuestEditorTextEdit newFlagText;
 
-    public EditorComponentEventPageTwo(string name) : base()
+    public EditorComponentEventPageTwo(string nameIn) : base()
     {
         Game game = Game.Get();
-        eventComponent = game.quest.qd.components[name] as QuestData.Event;
+        eventComponent = game.quest.qd.components[nameIn] as QuestData.Event;
         component = eventComponent;
         name = component.name;
         Update();

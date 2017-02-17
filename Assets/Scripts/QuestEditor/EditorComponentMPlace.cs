@@ -6,10 +6,10 @@ public class EditorComponentMPlace : EditorComponent
 {
     QuestData.MPlace mPlaceComponent;
 
-    public EditorComponentMPlace(string name) : base()
+    public EditorComponentMPlace(string nameIn) : base()
     {
         Game game = Game.Get();
-        mPlaceComponent = game.quest.qd.components[name] as QuestData.MPlace;
+        mPlaceComponent = game.quest.qd.components[nameIn] as QuestData.MPlace;
         component = mPlaceComponent;
         name = component.name;
         Update();

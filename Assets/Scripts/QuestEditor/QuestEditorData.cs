@@ -16,6 +16,7 @@ public class QuestEditorData {
     // Start the editor
     public QuestEditorData()
     {
+        Game.Get().qed = this;       
         selectionStack = new Stack<EditorComponent>();
         // Start at the quest component
         SelectQuest();

@@ -7,10 +7,10 @@ public class EditorComponentTile : EditorComponent
     QuestData.Tile tileComponent;
     EditorSelectionList tileESL;
 
-    public EditorComponentTile(string name) : base()
+    public EditorComponentTile(string nameIn) : base()
     {
         Game game = Game.Get();
-        tileComponent = game.quest.qd.components[name] as QuestData.Tile;
+        tileComponent = game.quest.qd.components[nameIn] as QuestData.Tile;
         component = tileComponent;
         name = component.name;
         Update();

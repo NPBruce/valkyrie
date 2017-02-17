@@ -7,10 +7,10 @@ public class EditorComponentMonsterPlacement : EditorComponent
     QuestData.Monster monsterComponent;
     EditorSelectionList monsterPlaceESL;
 
-    public EditorComponentMonsterPlacement(string name) : base()
+    public EditorComponentMonsterPlacement(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[name] as QuestData.Monster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Monster;
         component = monsterComponent;
         name = component.name;
         Update();

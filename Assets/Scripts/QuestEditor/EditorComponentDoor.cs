@@ -8,10 +8,10 @@ public class EditorComponentDoor : EditorComponent
     // List to select door colour
     EditorSelectionList colorList;
 
-    public EditorComponentDoor(string name) : base()
+    public EditorComponentDoor(string nameIn) : base()
     {
         Game game = Game.Get();
-        doorComponent = game.quest.qd.components[name] as QuestData.Door;
+        doorComponent = game.quest.qd.components[nameIn] as QuestData.Door;
         component = doorComponent;
         name = component.name;
         Update();

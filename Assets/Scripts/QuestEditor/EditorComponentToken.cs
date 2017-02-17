@@ -7,10 +7,10 @@ public class EditorComponentToken : EditorComponent
     QuestData.Token tokenComponent;
     EditorSelectionList typeList;
 
-    public EditorComponentToken(string name) : base()
+    public EditorComponentToken(string nameIn) : base()
     {
         Game game = Game.Get();
-        tokenComponent = game.quest.qd.components[name] as QuestData.Token;
+        tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
         component = tokenComponent;
         name = component.name;
         Update();

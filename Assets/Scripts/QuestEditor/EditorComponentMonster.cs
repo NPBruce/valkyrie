@@ -12,10 +12,10 @@ public class EditorComponentMonster : EditorComponent
     EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
 
-    public EditorComponentMonster(string name) : base()
+    public EditorComponentMonster(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[name] as QuestData.Monster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Monster;
         component = monsterComponent;
         name = component.name;
         Update();

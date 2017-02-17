@@ -13,10 +13,10 @@ public class EditorComponentEvent : EditorComponent
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
 
-    public EditorComponentEvent(string name) : base()
+    public EditorComponentEvent(string nameIn) : base()
     {
         Game game = Game.Get();
-        eventComponent = game.quest.qd.components[name] as QuestData.Event;
+        eventComponent = game.quest.qd.components[nameIn] as QuestData.Event;
         component = eventComponent;
         name = component.name;
         Update();
