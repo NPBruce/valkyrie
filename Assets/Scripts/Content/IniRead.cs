@@ -203,6 +203,11 @@ public static class IniRead{
         // FIXME This appears redundant
         string[] elements = key.Split(":".ToCharArray());
 
+        if (key.Equals("MONSTER_CULTIST_EVADE_01"))
+        {
+            string nothing = "";
+        }
+
         try
         {
             Game game = Game.Get();
@@ -259,7 +264,7 @@ public static class IniRead{
                         else
                         {
                             // Return the text
-                            return returnValue.Replace("\"\"", "\"").Trim('\"');
+                            return returnValue.Substring(0, nextQuote + 1).Replace("\"\"", "\"").Trim('\"');
                         }
                         // Next quote location
                         nextQuote = returnValue.IndexOf("\"", nextQuote + 1);

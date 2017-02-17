@@ -29,6 +29,21 @@ class ExtractDataTool
                 attacks += GetAttack(m);
             }
         }
+
+        string evade = "";
+        foreach (KeyValuePair<string, Monster> kv in monsters)
+        {
+            evade += kv.Value.GetEvade();
+        }
+        string file = ContentData.ContentPath() + "/extract-evade.ini";
+        File.WriteAllText(file, evade);
+        string horror = "";
+        foreach (KeyValuePair<string, Monster> kv in monsters)
+        {
+            horror += kv.Value.GetHorror();
+        }
+        file = ContentData.ContentPath() + "/extract-horror.ini";
+        File.WriteAllText(file, horror);
     }
 
     public static string GetAttack(string label)
@@ -62,10 +77,10 @@ class ExtractDataTool
         if (label.IndexOf(monster) != 0) return "";
         string name = label.Substring(monster.Length);
 
-        if (name.IndexOf(move) != -1) return label.Substring(0, name.IndexOf(move));
-        if (name.IndexOf(evade) != -1) return label.Substring(0, name.IndexOf(evade));
-        if (name.IndexOf(attack) != -1) return label.Substring(0, name.IndexOf(attack));
-        if (name.IndexOf(horror) != -1) return label.Substring(0, name.IndexOf(horror));
+        if (name.IndexOf(move) != -1) return name.Substring(0, name.IndexOf(move));
+        if (name.IndexOf(evade) != -1) return name.Substring(0, name.IndexOf(evade));
+        if (name.IndexOf(attack) != -1) return name.Substring(0, name.IndexOf(attack));
+        if (name.IndexOf(horror) != -1) return name.Substring(0, name.IndexOf(horror));
         return "";
     }
 

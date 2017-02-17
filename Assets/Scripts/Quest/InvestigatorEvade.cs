@@ -10,7 +10,7 @@ public class InvestigatorEvade {
         List<EvadeData> evades = new List<EvadeData>();
         foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
         {
-            if (m.monsterData.sectionName.Equals(kv.Key))
+            if (m.monsterData.sectionName.Equals("Monster" + kv.Value.monster))
             {
                 evades.Add(kv.Value);
             }
@@ -24,6 +24,6 @@ public class InvestigatorEvade {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }
