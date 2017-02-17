@@ -11,6 +11,7 @@ public class ContentData {
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
+    public Dictionary<string, AttackData> investigatorAttacks;
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
 
@@ -41,6 +42,9 @@ public class ContentData {
 
         // This has all monster activations
         activations = new Dictionary<string, ActivationData>();
+
+        // This has all available attacks
+        investigatorAttacks = new Dictionary<string, AttackData>();
 
         // This has all available tokens
         tokens = new Dictionary<string, TokenData>();
@@ -304,6 +308,32 @@ public class ContentData {
         if (name.IndexOf(ActivationData.type) == 0)
         {
             ActivationData d = new ActivationData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!investigatorAttacks.ContainsKey(name))
+            {
+                investigatorAttacks.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (investigatorAttacks[name].priority < d.priority)
+            {
+                investigatorAttacks.Remove(name);
+                investigatorAttacks.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (investigatorAttacks[name].priority == d.priority)
+            {
+                investigatorAttacks[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Attack" entry?
+        if (name.IndexOf(AttackData.type) == 0)
+        {
+            AttackData d = new AttackData(name, content, path);
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
@@ -646,6 +676,24 @@ public class TokenData : GenericData
         if (height == 0) return true;
         if (width == 0) return true;
         return false;
+    }
+}
+
+// Class for Investigator Attacks
+public class AttackData : GenericData
+{
+    public static new string type = "Attack";
+
+    // Attack text
+    public string text = "";
+
+    public AttackData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get attack text
+        if (content.ContainsKey("text"))
+        {
+            text = content["text"];
+        }
     }
 }
 
