@@ -10,7 +10,7 @@ public class HorrorCheck {
         List<HorrorData> horrors = new List<HorrorData>();
         foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
         {
-            if (m.monsterData.sectionName.Equals(kv.Value.monster))
+            if (m.monsterData.sectionName.Equals("Monster" + kv.Value.monster))
             {
                 horrors.Add(kv.Value);
             }
@@ -23,6 +23,6 @@ public class HorrorCheck {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }
