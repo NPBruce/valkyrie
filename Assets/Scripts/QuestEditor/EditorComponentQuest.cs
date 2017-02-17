@@ -21,6 +21,7 @@ public class EditorComponentQuest : EditorComponent
     public EditorComponentQuest()
     {
         component = null;
+        name = "";
         Update();
     }
 

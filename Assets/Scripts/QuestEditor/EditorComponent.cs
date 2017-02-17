@@ -115,7 +115,7 @@ public class EditorComponent {
         // Add component with new name
         game.quest.qd.components.Add(component.name, component);
         game.quest.Add(component.name);
-        // Update UI
-        Update();
+        // Reselect with new name
+        QuestEditorData.SelectComponent(component.name);
     }
 }

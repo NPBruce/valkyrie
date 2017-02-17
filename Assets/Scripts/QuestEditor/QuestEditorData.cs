@@ -26,7 +26,11 @@ public class QuestEditorData {
     // Used to save selection history
     public void NewSelection(EditorComponent c)
     {
-        selectionStack.Push(selection);
+        // selection starts at null
+        if (selection != null)
+        {
+            selectionStack.Push(selection);
+        }
         selection = c;
     }
 
@@ -557,6 +561,8 @@ public class QuestEditorData {
 
         // Clean up the current quest environment
         game.quest.Remove(esl.selection);
+
+        Destroyer.Dialog();
 
         // If we deleted the selected item, go back to the last item
         if (selection.name.Equals(esl.selection))
