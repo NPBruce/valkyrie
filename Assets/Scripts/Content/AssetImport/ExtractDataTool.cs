@@ -9,28 +9,64 @@ class ExtractDataTool
     public static void MoM(byte[] data)
     {
         List<string> labels = ReadLabels(data);
-        HashSet<string> monsters = new HashSet<string>();
+        Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
+        string attacks = "";
+
+        foreach (string m in labels)
+        {
+            string mName = ExtractMonsterName(m);
+            if (mName.length > 0)
+            {
+                if (!monsters.ContainsKey(mName))
+                {
+                    monsters.Add(mName, new Monster(nName))
+                }
+                monsters[mName].Add(m);
+            }
+            
+            if (m.IndexOf("ATTACK_" == 0)
+            {
+                attacks += GetAttack(m);
+            }
+        }
+    }
+
+    public static GetAttack(string label)
+    {
+        string nameCamel;
+
+        string[] elements label.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+        foreach (string e in elements)
+        {
+            string eFixed = e[0] + e.Substring(1).ToLower();
+            nameCamel += eFixed;
+        }
+
+        string ret = "[Attack" + nameCamel + "]\r\n";
+        ret += "text={ffg:" + label + "}\r\n";
+        ret += "text={ffg:" + label + "}\r\n";
+        //FIXME ATTACK_FIREARM_VS_BEAST_01
+        ret += "target=" + label.Substring(0,1) + "}\r\n";
+        ret += "attacktype=" + elements[1].ToLower() + "}\r\n";
+        target
+    }
+
+    public static string ExtractMonsterName(string label)
+    {
         string move = "_MOVE_";
         string attack = "_ATTACK_";
         string evade = "_EVADE_";
         string horror = "_HORROR_";
         string monster = "MONSTER_";
 
-        foreach (string m in labels)
-        {
-            if (m.IndexOf(monster) == 0)
-            {
-                if (m.IndexOf(move) == m.Length - move.Length - 2)
-                {
-                    monsters.Add(m.Substring(monster.Length, m.IndexOf(move) - monster.Length));
-                }
-            }
-        }
+        if (m.IndexOf(monster) != 0) return "";
+        string name = label.Substring(monster.Length)
 
-        foreach (string m in monsters)
-        {
-            Debug.Log(m);
-        }
+        if (m.IndexOf(move) != -1) return label.Substring(0, m.IndexOf(move));
+        if (m.IndexOf(evade) != -1) return label.Substring(0, m.IndexOf(evade));
+        if (m.IndexOf(attack) != -1) return label.Substring(0, m.IndexOf(attack));
+        if (m.IndexOf(horror) != -1) return label.Substring(0, m.IndexOf(horror));
+        return ""
     }
 
     public static List<string> ReadLabels(byte[] data)
@@ -141,15 +177,88 @@ class ExtractDataTool
 
     class Monster
     {
-        string id;
-        string name;
+        string nameFFG;
+        string nameCamel;
+        string nameUnderScoreLower;
+        string nameReadable;
         List<Activation> activations;
         List<string> horror;
         List<string> evade;
 
-        public Monster(string id, string name, List<string> data)
+        public Monster(string name)
         {
+            horror = new List<string>();
+            evade = new List<string>();
+            horror = new List<string>();
+            activations = new List<Activation>();
 
+            nameFFG = name;
+            string[] elements name.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            foreach (string e in elements)
+            {
+                string eFixed = e[0] + e.Substring(1).ToLower();
+                nameCamel += eFixed;
+                nameUnderScoreLower += eFixed + "_";
+                nameReadable += eFixed + " ";
+            }
+            nameUnderScoreLower = nameUnderScoreLower.Substring(0, nameUnderScoreLower.length - 1);
+            nameReadable = nameReadable.Substring(0, nameReadable.length - 1);
+        }
+
+        public void Add(string label)
+        {
+            string move = "_MOVE_";
+            string attack = "_ATTACK_";
+            string evade = "_EVADE_";
+            string horror = "_HORROR_";
+            
+            string l = label.substring(l.IndexOf(nameFFG) + nameFFG.length);
+            if (l.IndexOf(move) == 0)
+            {
+                AddMove(l.substring(move.length))
+            }
+            if (l.IndexOf(attack) == 0)
+            {
+                AddAttack(l.substring(attack.length))
+            }
+            if (l.IndexOf(evade) == 0)
+            {
+                evade.Add(label)
+            }
+            if (l.IndexOf(horror) == 0)
+            {
+                horror.Add(label)
+            }
+        }
+
+        public void AddMove(string m)
+        {
+        }
+
+        public void AddAttack(string m)
+        {
+        }
+
+        public string GetEvade()
+        {
+            string ret = "";
+            foreach (string s in evade)
+            {
+                ret += "[Evade" + nameCamel + s.Substring(s.length - 2, 2) + "]\r\n";
+                ret += "monster=" + nameCamel + "\r\n";
+                ret += "text={ffg:" + s + "}\r\n\r\n";
+            }
+        }
+
+        public string GetHorror()
+        {
+            string ret = "";
+            foreach (string s in horror)
+            {
+                ret += "[Horror" + nameCamel + s.Substring(s.length - 2, 2) + "]\r\n";
+                ret += "monster=" + nameCamel + "\r\n";
+                ret += "text={ffg:" + s + "}\r\n\r\n";
+            }
         }
 
         public string GetImage()
@@ -172,3 +281,4 @@ class ExtractDataTool
         string unableText;
     }
 }
+
