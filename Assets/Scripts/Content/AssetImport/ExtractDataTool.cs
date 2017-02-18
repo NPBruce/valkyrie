@@ -44,6 +44,13 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-horror.ini";
         File.WriteAllText(file, horror);
+        string activation = "";
+        foreach (KeyValuePair<string, Monster> kv in monsters)
+        {
+            activation += kv.Value.GetActivation();
+        }
+        file = ContentData.ContentPath() + "/extract-activation.ini";
+        File.WriteAllText(file, activation);
     }
 
     public static string GetAttack(string label)
@@ -274,8 +281,15 @@ class ExtractDataTool
         public string GetActivation()
         {
             string ret = "";
+            foreach (string a in attack)
+            {
+                string m = a.Replace("_ATTACK_", "_MOVE_");
+                string id = a.Substring(a.IndexOf("_ATTACK_") + "_ATTACK_".Length);
+                ret += "[MonsterActivation" + nameCamel + id + "]\r\n";
+                ret += "ability={ffg:" + m + "}\r\n";
+                ret += "master={ffg:" + a + "}\r\n\r\n";
+            }
             return ret;
-            // Attacks have prep, attack and move instructions
         }
 
 
@@ -290,4 +304,3 @@ class ExtractDataTool
         }
     }
 }
-

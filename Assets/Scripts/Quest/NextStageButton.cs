@@ -27,7 +27,7 @@ public class NextStageButton
         }
         else
         {
-            game.quest.horrorPhase = true;
+            game.roundControl.HeroActivated();
         }
     }
 }

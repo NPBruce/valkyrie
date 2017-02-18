@@ -15,12 +15,13 @@ public class RoundControllerMoM : RoundController
         {
             game.quest.heroes[i].activated = true;
         }
-        // Activate monsters
-        if (ActivateMonster())
+        game.quest.horrorPhase = true;
+        if (game.quest.monsters.Count == 0)
         {
             // No monsters, end the round
             EndRound();
         }
+        ActivateMonster();
     }
 
     // Mark a monster as activated
@@ -42,11 +43,7 @@ public class RoundControllerMoM : RoundController
         game.monsterCanvas.UpdateStatus();
 
         // Activate a monster
-        if (ActivateMonster())
-        {
-            // No monsters left, end the round
-            EndRound();
-        }
+        ActivateMonster();
     }
 
     // Activate a monster

@@ -192,7 +192,7 @@ public class RoundController {
         }
 
         // If no minion activation just do master
-        if (m.currentActivation.ad.minionActions.Length == 0)
+        if (m.currentActivation.ad.minionActions.Length == 0 || m.currentActivation.ad.minionActions.Equals("-"))
         {
             m.minionStarted = true;
             m.masterStarted = true;
@@ -201,7 +201,7 @@ public class RoundController {
         }
 
         // If no master activation just do minion
-        if (m.currentActivation.ad.masterActions.Length == 0)
+        if (m.currentActivation.ad.masterActions.Length == 0 || m.currentActivation.ad.masterActions.Equals("-"))
         {
             m.minionStarted = true;
             m.masterStarted = true;
