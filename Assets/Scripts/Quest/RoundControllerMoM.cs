@@ -32,15 +32,11 @@ public class RoundControllerMoM : RoundController
         // Check for any partial monster activations
         foreach (Quest.Monster m in game.quest.monsters)
         {
-            // If both started then it is complete
             if (m.minionStarted || m.masterStarted)
             {
                 m.activated = true;
             }
         }
-
-        // Full activation, update display
-        game.monsterCanvas.UpdateStatus();
 
         // Activate a monster
         ActivateMonster();
@@ -51,33 +47,23 @@ public class RoundControllerMoM : RoundController
     {
         Game game = Game.Get();
 
-        bool allActivated = false;
         // Search for unactivated monsters
-        // FIXME: this while shouldn't be here?
-        while (!allActivated)
+        List<int> notActivated = new List<int>();
+        // Get the index of all monsters that haven't activated
+        for (int i = 0; i < game.quest.monsters.Count; i++)
         {
-            List<int> notActivated = new List<int>();
-            // Get the index of all monsters that haven't activated
-            for (int i = 0; i < game.quest.monsters.Count; i++)
-            {
-                if (!game.quest.monsters[i].activated)
-                    notActivated.Add(i);
-            }
+            if (!game.quest.monsters[i].activated)
+                notActivated.Add(i);
+        }
 
-            // If no monsters are found return true
-            if (notActivated.Count == 0)
-            {
-                allActivated = true;
-            }
-            else
-            {
-                // Find a random unactivated monster
-                Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+        if (notActivated.Count > 0)
+        {
+            // Find a random unactivated monster
+            Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
-                ActivateMonster(toActivate);
-                // Return false as activations remain
-                return false;
-            }
+            ActivateMonster(toActivate);
+            // Return false as activations remain
+            return false;
         }
         return true;
     }
