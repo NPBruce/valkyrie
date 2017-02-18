@@ -203,11 +203,6 @@ public static class IniRead{
         // FIXME This appears redundant
         string[] elements = key.Split(":".ToCharArray());
 
-        if (key.Equals("MONSTER_CULTIST_EVADE_01"))
-        {
-            string nothing = "";
-        }
-
         try
         {
             Game game = Game.Get();

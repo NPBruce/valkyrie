@@ -15,7 +15,7 @@ public class ActivateDialog {
         CreateWindow();
     }
 
-    public void CreateWindow()
+    virtual public void CreateWindow()
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

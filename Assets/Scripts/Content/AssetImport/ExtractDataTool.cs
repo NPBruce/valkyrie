@@ -44,6 +44,13 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-horror.ini";
         File.WriteAllText(file, horror);
+        string activation = "";
+        foreach (KeyValuePair<string, Monster> kv in monsters)
+        {
+            activation += kv.Value.GetActivation();
+        }
+        file = ContentData.ContentPath() + "/extract-activation.ini";
+        File.WriteAllText(file, activation);
     }
 
     public static string GetAttack(string label)
@@ -198,12 +205,15 @@ class ExtractDataTool
         string nameReadable;
         List<string> horror;
         List<string> evade;
+        List<string> move;
+        List<string> attack;
 
         public Monster(string name)
         {
             horror = new List<string>();
             evade = new List<string>();
-            horror = new List<string>();
+            move = new List<string>();
+            attack = new List<string>();
 
             nameFFG = name;
             string[] elements = name.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -228,11 +238,11 @@ class ExtractDataTool
             string l = label.Substring(label.IndexOf(nameFFG) + nameFFG.Length);
             if (l.IndexOf(moveStr) == 0)
             {
-                AddMove(l.Substring(moveStr.Length));
+                move.Add(label);
             }
             if (l.IndexOf(attackStr) == 0)
             {
-                AddAttack(l.Substring(attackStr.Length));
+                attack.Add(label);
             }
             if (l.IndexOf(evadeStr) == 0)
             {
@@ -242,14 +252,6 @@ class ExtractDataTool
             {
                 horror.Add(label);
             }
-        }
-
-        public void AddMove(string m)
-        {
-        }
-
-        public void AddAttack(string m)
-        {
         }
 
         public string GetEvade()
@@ -276,11 +278,18 @@ class ExtractDataTool
             return ret;
         }
 
-        public string GetAttack()
+        public string GetActivation()
         {
             string ret = "";
+            foreach (string a in attack)
+            {
+                string m = a.Replace("_ATTACK_", "_MOVE_");
+                string id = a.Substring(a.IndexOf("_ATTACK_") + "_ATTACK_".Length);
+                ret += "[MonsterActivation" + nameCamel + id + "]\r\n";
+                ret += "ability={ffg:" + m + "}\r\n";
+                ret += "master={ffg:" + a + "}\r\n\r\n";
+            }
             return ret;
-            // Attacks have prep, attack and move instructions
         }
 
 
@@ -295,4 +304,3 @@ class ExtractDataTool
         }
     }
 }
-

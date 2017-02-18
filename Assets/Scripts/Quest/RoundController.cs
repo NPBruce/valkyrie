@@ -33,7 +33,7 @@ public class RoundController {
         // Start the other half of the activation
         new ActivateDialog(m, m.minionStarted);
         m.minionStarted = true;
-        m.masterStarted= true;
+        m.masterStarted = true;
     }
 
     // A monster has activated, work out what to do next
@@ -191,8 +191,16 @@ public class RoundController {
             m.NewActivation(activation);
         }
 
+        // MoM has a special activation
+        if (game.gameType is MoMGameType)
+        {
+            m.masterStarted = true;
+            new ActivateDialogMoM(m);
+            return false;
+        }
+
         // If no minion activation just do master
-        if (m.currentActivation.ad.minionActions.Length == 0)
+        if (m.currentActivation.ad.minionActions.Length == 0 || m.currentActivation.ad.minionActions.Equals("-"))
         {
             m.minionStarted = true;
             m.masterStarted = true;
@@ -201,7 +209,7 @@ public class RoundController {
         }
 
         // If no master activation just do minion
-        if (m.currentActivation.ad.masterActions.Length == 0)
+        if (m.currentActivation.ad.masterActions.Length == 0 || m.currentActivation.ad.masterActions.Equals("-"))
         {
             m.minionStarted = true;
             m.masterStarted = true;

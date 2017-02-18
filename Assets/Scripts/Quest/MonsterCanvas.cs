@@ -226,6 +226,10 @@ public class MonsterCanvas : MonoBehaviour
 
         public void Update()
         {
+            // MoM doesn't do colours
+            // Bad test
+            if (iconFrame == null) return;
+
             // Set colour based on monster state
             if (m.activated && m.unique)
             {
