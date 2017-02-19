@@ -1,18 +1,29 @@
+Done:
+
+MoM:
+activations
+duplicate monsters
+monster attack box
+monster evade
+monster horror
+missing tiles
+
+D2E:
+frame for monsters
+
+common:
+paged monsters
+logo
 
 Outstanding:
 MoM:
 Mythos
-activations
-monsters (health?)
-duplicate monsters
+monsters health
 Event subtype - get successes, pass/fail
 Event subtype - X selection options
 action symbol in event buttons
 monster attack box
-monster evade
-monster horror
 Puzzles
-missing tiles
 
 D2E:
 custom monsters/activations editor
@@ -24,7 +35,7 @@ lt.
 
 Common:
 Font fix (header)
-monster without text bug
+monster without event text bug
 camera limits set in events
 quest set
 symbols don't work in unique text
@@ -32,7 +43,6 @@ event log
 unique monster name inherit
 starting/trailing '"'
 random tags
-frame for monsters
 expansion appearance order
 Stacked tileselection? (tags?)
 map sets

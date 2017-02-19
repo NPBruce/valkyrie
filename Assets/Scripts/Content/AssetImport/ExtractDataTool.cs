@@ -51,6 +51,8 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-activation.ini";
         File.WriteAllText(file, activation);
+        file = ContentData.ContentPath() + "/extract-attacks.ini";
+        File.WriteAllText(file, attacks);
     }
 
     public static string GetAttack(string label)
@@ -64,12 +66,11 @@ class ExtractDataTool
             nameCamel += eFixed;
         }
 
-        string ret = "[Attack" + nameCamel + "]\r\n";
-        ret += "text={ffg:" + label + "}\r\n";
+        string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
         //FIXME ATTACK_FIREARM_VS_BEAST_01
-        ret += "target=" + label.Substring(0,1) + "}\r\n";
-        ret += "attacktype=" + elements[1].ToLower() + "}\r\n";
+        ret += "target=" + elements[3].ToLower() + "\r\n";
+        ret += "attacktype=" + elements[1].ToLower() + "\r\n\r\n";
         return ret;
     }
 
