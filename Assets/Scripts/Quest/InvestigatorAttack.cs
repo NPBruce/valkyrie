@@ -32,25 +32,26 @@ public class InvestigatorAttack {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetVCenter(-15f), 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Select Attack Type");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 0.5f), new Vector2(20, 2), "Select Attack Type");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        float offset = 2.5f;
+        float offset = 3f;
         foreach (string type in attackType)
         {
             string tmpType = type;
             // Make first character upper case
             string nameType = System.Char.ToUpper(type[0]) + type.Substring(1);
-            new TextButton(new Vector2(UIScaler.GetVCenter(-8f), offset), new Vector2(UIScaler.GetWidthUnits() - 16, 2), nameType, delegate { Attack(tmpType); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), nameType, delegate { Attack(tmpType); });
             offset += 2.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), offset), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Cancel", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset), new Vector2(8, 2), "Cancel", delegate { Destroyer.Dialog(); }, Color.red);
     }
 
     public void Attack(string type)
     {
+        Destroyer.Dialog();
         List<AttackData> validAttacks = new List<AttackData>();
         foreach (AttackData ad in attacks)
         {
@@ -61,10 +62,10 @@ public class InvestigatorAttack {
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
 
-        string text = attack.text.Replace("{0}", monster.monsterData.name);
+        string text = attack.text.Replace("{0}", monster.monsterData.name).Replace("\\\n","\n");
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(UIScaler.GetVCenter(-6f), 9f), new Vector2(UIScaler.GetWidthUnits() - 12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
     }
 }
