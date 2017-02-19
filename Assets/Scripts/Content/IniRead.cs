@@ -228,7 +228,11 @@ public static class IniRead{
                     // Check if the string is quoted
                     if (returnValue.Length == 0 || returnValue[0] != '\"')
                     {
-                        return returnValue;
+                        if (returnValue.IndexOf(',') == -1)
+                        {
+                            return returnValue;
+                        }
+                        return returnValue.Substring(0, returnValue.IndexOf(','));
                     }
 
                     // Find the end of the element
