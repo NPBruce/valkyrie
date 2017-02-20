@@ -844,8 +844,15 @@ public class Quest
                 ad = contentActivation;
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
-                effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
-                effect = effect.Replace("{1}", monsterName);
+                if (Game.Get().gameType is MoMGameType)
+                {
+                    effect = ad.ability.Replace("{0}", monsterName);
+                }
+                else
+                {
+                    effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                    effect = effect.Replace("{1}", monsterName);
+                }
                 // Fix new lines
                 effect.Replace("\\n", "\n");
             }
