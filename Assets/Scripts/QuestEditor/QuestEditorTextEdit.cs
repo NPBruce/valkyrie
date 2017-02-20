@@ -63,6 +63,7 @@ public class QuestEditorTextEdit {
 
         uiText.color = Color.white;
         uiText.font = game.gameType.GetFont();
+        uiText.material = uiText.font.material; 
         uiText.fontSize = UIScaler.GetSmallFont();
 
         iField.textComponent = uiText;

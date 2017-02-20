@@ -91,6 +91,6 @@ public class UIScaler {
     // large font size
     public static int GetLargeFont()
     {
-        return Mathf.RoundToInt(GetPixelsPerUnit() * 2.4f);
+        return Mathf.RoundToInt(GetPixelsPerUnit() * 2.3f);
     }
 }

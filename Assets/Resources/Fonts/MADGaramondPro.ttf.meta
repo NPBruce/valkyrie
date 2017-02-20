@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 39e389ba57425ce49910e2212b87c464
-timeCreated: 1487318699
+guid: 52ed5ccd268c3a7428b521a307f3bff4
+timeCreated: 1487576708
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -9,6 +9,7 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
+  fontName: MAD Garamond Pro
   fontNames:
   - MAD Garamond Pro
   fallbackFontReferences: []

@@ -82,6 +82,7 @@ public class DialogBox {
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
+        uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
     }
 
@@ -98,5 +99,11 @@ public class DialogBox {
     {
         UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+    }
+
+    public void SetFont(Font f)
+    {
+        textObj.GetComponent<UnityEngine.UI.Text>().font = f;
+        textObj.GetComponent<UnityEngine.UI.Text>().material = textObj.GetComponent<UnityEngine.UI.Text>().font.material;
     }
 }

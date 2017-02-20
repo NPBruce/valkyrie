@@ -81,6 +81,7 @@ public class DialogBoxEditable
         uiText.color = fgColour;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
+        uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
 
         uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();

@@ -24,10 +24,12 @@ public class NextStageButton
         if (Game.Get().quest.horrorPhase)
         {
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(20, 2), "Mythos Phase");
+            db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         else
         {
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(20, 2), "Investigator Phase");
+            db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         db.ApplyTag("uiphase");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();

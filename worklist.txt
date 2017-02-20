@@ -7,6 +7,7 @@ monster attack box
 monster evade
 monster horror
 missing tiles
+monster attack box
 
 D2E:
 frame for monsters
@@ -22,7 +23,6 @@ monsters health
 Event subtype - get successes, pass/fail
 Event subtype - X selection options
 action symbol in event buttons
-monster attack box
 Puzzles
 
 D2E:

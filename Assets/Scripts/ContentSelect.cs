@@ -51,11 +51,13 @@ class ContentSelect
         // Draw a header
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Select Expansion Content");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.SetFont(game.gameType.GetHeaderFont());
 
         // Location for first pack
         float x = 1;
         float y = 4;
 
+        TextButton tb;
         // Draw all packs to the screen
         // Note this is currently unordered
         foreach (ContentData.ContentPack cp in game.cd.allPacks)
@@ -72,13 +74,13 @@ class ContentSelect
                 // Draw normally if selected, dark if not
                 if (selected.Contains(id))
                 {
-                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Unselect(id); });
+                    tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Unselect(id); });
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                 }
                 else
                 {
-                    TextButton tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
+                    tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
                 }
@@ -95,7 +97,8 @@ class ContentSelect
         }
 
         // Button for back to main menu
-        new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+        tb.SetFont(game.gameType.GetHeaderFont());
     }
 
     // set a pack as selected by id

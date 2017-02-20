@@ -11,6 +11,8 @@ public class TextButton {
     // Border for the button
     public RectangleBorder border;
 
+    public UnityEngine.UI.Text uiText;
+
     // Function to alter the tag of the button (unity classification)
     public void ApplyTag(string tag)
     {
@@ -76,13 +78,20 @@ public class TextButton {
         uiButton.interactable = true;
         uiButton.onClick.AddListener(call);
 
-        UnityEngine.UI.Text uiText = button.AddComponent<UnityEngine.UI.Text>();
+        uiText = button.AddComponent<UnityEngine.UI.Text>();
         uiText.color = colour;
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
+        uiText.material = uiText.font.material;
         // Default to medium font size
         uiText.fontSize = UIScaler.GetMediumFont();
+    }
+
+    public void SetFont(Font f)
+    {
+        uiText.font = f;
+        uiText.material = uiText.font.material;
     }
 }
 
