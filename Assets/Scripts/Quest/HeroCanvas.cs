@@ -279,7 +279,7 @@ public class HeroCanvas : MonoBehaviour {
         // Create the menu button
         new MenuButton();
         // Draw next stage button if required
-        new NextStageButton();
+        game.stageUI = new NextStageButton();
 
         // Start the quest
         game.quest.eManager.EventTriggerType("EventStart");

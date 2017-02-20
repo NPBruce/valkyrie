@@ -266,6 +266,18 @@ public class RoundController {
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
+        // Check if all heros have finished
+        foreach (Quest.Hero h in game.quest.heroes)
+        {
+            if (!h.activated && h.heroData != null) return;
+        }
+
+        // Check if all monsters have finished
+        foreach (Quest.Monster m in game.quest.monsters)
+        {
+            if (!m.activated) return;
+        }
+
         // Check for delayed events
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
@@ -302,18 +314,6 @@ public class RoundController {
             return;
         }
 
-        // Check if all heros have finished (obsolete?)
-        foreach (Quest.Hero h in game.quest.heroes)
-        {
-            if (!h.activated && h.heroData != null) return;
-        }
-
-        // Check if all monsters have finished (obsolete?)
-        foreach (Quest.Monster m in game.quest.monsters)
-        {
-            if (!m.activated) return;
-        }
-
         // Clean up for next round
         // Clear hero activations
         foreach (Quest.Hero h in game.quest.heroes)
@@ -331,7 +331,6 @@ public class RoundController {
 
         // Increment the round
         game.quest.round++;
-        game.quest.horrorPhase = false;
         game.quest.threat += 1;
 
         // Update monster and hero display

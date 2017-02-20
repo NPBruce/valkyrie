@@ -15,13 +15,12 @@ public class RoundControllerMoM : RoundController
         {
             game.quest.heroes[i].activated = true;
         }
-        game.quest.horrorPhase = true;
-        if (game.quest.monsters.Count == 0)
-        {
-            // No monsters, end the round
-            EndRound();
-        }
-        ActivateMonster();
+        game.quest.phase = Quest.MoMPhase.mythos;
+        game.stageUI.Update();
+
+        game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
+
+        return;
     }
 
     // Mark a monster as activated
@@ -39,7 +38,10 @@ public class RoundControllerMoM : RoundController
         }
 
         // Activate a monster
-        ActivateMonster();
+        if (ActivateMonster())
+        {
+            CheckNewRound();
+        }
     }
 
     // Activate a monster
@@ -82,6 +84,35 @@ public class RoundControllerMoM : RoundController
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
+        if (game.quest.phase == Quest.MoMPhase.investigator)
+        {
+            return;
+        }
+
+        if (game.quest.phase == Quest.MoMPhase.mythos)
+        {
+            if (game.quest.monsters.Count > 0)
+            {
+                game.quest.phase = Quest.MoMPhase.monsters;
+                game.stageUI.Update();
+                ActivateMonster();
+                return;
+            }
+            else
+            {
+                game.quest.phase = Quest.MoMPhase.horror;
+                game.stageUI.Update();
+                EndRound();
+            }
+        }
+
+        if (game.quest.phase == Quest.MoMPhase.monsters)
+        {
+            game.quest.phase = Quest.MoMPhase.horror;
+            game.stageUI.Update();
+            return;
+        }
+
         // Check all delayed events
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
@@ -113,7 +144,8 @@ public class RoundControllerMoM : RoundController
 
         // Advance to next round
         game.quest.round++;
-        game.quest.horrorPhase = false;
+        game.quest.phase = Quest.MoMPhase.investigator;
+        game.stageUI.Update();
         game.quest.threat += 1;
 
         // Update monster display

@@ -37,7 +37,7 @@ public class Quest
     public int round = 1;
     public int morale = 0;
     public float threat = 0;
-    public bool horrorPhase = false;
+    public MoMPhase phase = MoMPhase.investigator;
 
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
@@ -113,7 +113,12 @@ public class Quest
         int.TryParse(saveData.Get("Quest", "round"), out round);
         int.TryParse(saveData.Get("Quest", "morale"), out morale);
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
-        bool.TryParse(saveData.Get("Quest", "horror"), out horrorPhase);
+        bool horror;
+        bool.TryParse(saveData.Get("Quest", "horror"), out horror);
+        if (horror)
+        {
+            phase = MoMPhase.horror;
+        }
         bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
         bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
         bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
@@ -376,7 +381,14 @@ public class Quest
         r += "round=" + round+ nl;
         r += "morale=" + morale + nl;
         r += "threat=" + threat + nl;
-        r += "horror=" + horrorPhase + nl;
+        if (phase == MoMPhase.horror)
+        {
+            r += "horror=true" + nl;
+        }
+        else
+        {
+            r += "horror=false" + nl;
+        }
         r += "heroesSelected=" + heroesSelected + nl;
         r += "minorPeril=" + minorPeril + nl;
         r += "majorPeril=" + majorPeril + nl;
@@ -894,6 +906,14 @@ public class Quest
             }
             return r;
         }
+    }
+
+    public enum MoMPhase
+    {
+        investigator,
+        mythos,
+        monsters,
+        horror
     }
 }
 

@@ -8,6 +8,7 @@ monster evade
 monster horror
 missing tiles
 monster attack box
+Mythos support
 
 D2E:
 frame for monsters
@@ -18,7 +19,8 @@ logo
 
 Outstanding:
 MoM:
-Mythos
+Fire
+Mythos events
 monsters health
 Event subtype - get successes, pass/fail
 Event subtype - X selection options

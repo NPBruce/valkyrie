@@ -48,6 +48,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'uiphase'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("uiphase"))
+            Object.Destroy(go);
+
         Game game = Game.Get();
 
         game.heroCanvas.Clean();

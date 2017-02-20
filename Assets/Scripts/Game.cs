@@ -40,6 +40,8 @@ public class Game : MonoBehaviour {
     public ConfigFile config;
     // Class for progress of activations, rounds
     public RoundController roundControl;
+    // Class for stage control UI
+    public NextStageButton stageUI;
 
     // Store of the game text imported from FFG app
     public string[] ffgText = null;
