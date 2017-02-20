@@ -4,18 +4,23 @@ using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
 
+// Class for getting lists of quest with details
+// TODO: work out why this is so slow
 public class QuestLoader {
 
+    // Return a dictionary of all available quests
     public static Dictionary<string, Quest> GetQuests()
     {
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
         Game game = Game.Get();
+        // Look in the user application data directory
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
+        // Get a list of quest directories (extract found packages)
         List<string> questDirectories = GetQuests(dataLocation);
 
-
+        // If we are running inside unity paths are different
         if (Application.isEditor)
         {
             dataLocation = Application.dataPath + "/../quests/";
@@ -24,15 +29,21 @@ public class QuestLoader {
         {
             dataLocation = Application.dataPath + "/quests/";
         }
+        // Add included quests (extract found packages)
         questDirectories.AddRange(GetQuests(dataLocation));
 
+        // Add packaged quests that have been extracted
         questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
 
+        // Go through all directories
         foreach (string p in questDirectories)
         {
+            // load quest
             Quest q = new Quest(p);
+            // Check quest is valid and of the right type
             if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
+                // Check that we have required expansions
                 bool expansionsOK = true;
                 foreach (string s in q.packs)
                 {
@@ -41,28 +52,37 @@ public class QuestLoader {
                         expansionsOK = false;
                     }
                 }
+                // Add quest to quest list
                 if (expansionsOK) quests.Add(p, q);
             }
         }
 
+        // Return list of available quests
         return quests;
     }
 
+    // Return list of quests available in the user path (includes packages)
     public static Dictionary<string, Quest> GetUserQuests()
     {
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
+        // Clean up extracted packages
         CleanTemp();
 
+        // Read user application data for quests
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
 
+        // Read extracted packages
         questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
 
+        // go through all found quests
         foreach (string p in questDirectories)
         {
+            // read quest
             Quest q = new Quest(p);
+            // Check if valid and correct type
             if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
@@ -72,17 +92,22 @@ public class QuestLoader {
         return quests;
     }
 
+    // Return list of quests available in the user path unpackaged (editable)
     public static Dictionary<string, Quest> GetUserUnpackedQuests()
     {
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
+        // Read user application data for quests
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
 
+        // go through all found quests
         foreach (string p in questDirectories)
         {
+            // read quest
             Quest q = new Quest(p);
+            // Check if valid and correct type
             if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
@@ -92,6 +117,7 @@ public class QuestLoader {
         return quests;
     }
 
+    // Get list of directories with quests at a path, and extract found packages
     public static List<string> GetQuests(string path)
     {
         List<string> quests = new List<string>();
@@ -101,6 +127,7 @@ public class QuestLoader {
             return quests;
         }
 
+        // Get all directories at path
         List<string> questDirectories = DirList(path);
         foreach (string p in questDirectories)
         {
@@ -111,9 +138,12 @@ public class QuestLoader {
             }
         }
 
+        // Find all packages at path
         string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
+        // Extract all packages
         foreach (string f in archives)
         {
+            // Extract into temp
             mkDir(Path.GetTempPath() + "/Valkyrie");
             string extractedPath = Path.GetTempPath() + "Valkyrie/" + Path.GetFileName(f);
             if (Directory.Exists(extractedPath))
@@ -143,6 +173,7 @@ public class QuestLoader {
         return quests;
     }
 
+    // Attempt to create a directory
     public static void mkDir(string p)
     {
         if (!Directory.Exists(p))
@@ -159,11 +190,13 @@ public class QuestLoader {
         }
     }
 
+    // Return a list of directories at a path (recursive)
     public static List<string> DirList(string path)
     {
         return DirList(path, new List<string>());
     }
 
+    // Add to list of directories at a path (recursive)
     public static List<string> DirList(string path, List<string> l)
     {
         List<string> list = new List<string>(l);
@@ -195,6 +228,7 @@ public class QuestLoader {
         }
     }
 
+    // Read quest for for validity
     public class Quest
     {
         public string path;

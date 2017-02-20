@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// GameType manages setting that are specific to the game type
 public abstract class GameType
 {
     public abstract string DataDirectory();
@@ -10,14 +11,19 @@ public abstract class GameType
     public abstract int MaxHeroes();
     public abstract bool DisplayHeroes();
     public abstract float TilePixelPerSquare();
+    // There are actually two fonts, should expand to include header/text
     public abstract Font GetFont();
+    public abstract Font GetHeaderFont();
     public abstract string TypeName();
     public abstract bool TileOnGrid();
     public abstract bool DisplayMorale();
     public abstract float SelectionRound();
     public abstract float TileRound();
+    public abstract bool MonstersGrouped();
 }
 
+// NoGameType exists for management reasons
+// Perhaps this should be the base and others inherit from this to simplify this class?
 public class NoGameType : GameType
 {
     public override string DataDirectory()
@@ -41,6 +47,11 @@ public class NoGameType : GameType
     }
 
     public override Font GetFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+    }
+
+    public override Font GetHeaderFont()
     {
         return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
@@ -75,17 +86,25 @@ public class NoGameType : GameType
         return false;
     }
 
+    // Number of squares for snap of objects in editor
     public override float SelectionRound()
     {
         return 1f;
     }
 
+    // Number of squares for snap of tiles in editor
     public override float TileRound()
     {
         return 1f;
     }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
+    }
 }
 
+// Things for D2E
 public class D2EGameType : GameType
 {
     public override string DataDirectory()
@@ -108,9 +127,15 @@ public class D2EGameType : GameType
         return "Quest";
     }
 
+    // There are actually two fonts, should expand to include header/text
     public override Font GetFont()
     {
         return (Font)Resources.Load("fonts/gara_scenario_desc");
+    }
+
+    public override Font GetHeaderFont()
+    {
+        return (Font)Resources.Load("fonts/windl");
     }
 
     public override int MaxHeroes()
@@ -123,7 +148,7 @@ public class D2EGameType : GameType
         return true;
     }
 
-
+    // Tiles imported from RtL have 105 pixels per square (each 1 inch)
     public override float TilePixelPerSquare()
     {
         return 105;
@@ -152,6 +177,11 @@ public class D2EGameType : GameType
     {
         return 1f;
     }
+
+    public override bool MonstersGrouped()
+    {
+        return true;
+    }
 }
 
 class MoMGameType : GameType
@@ -178,7 +208,12 @@ class MoMGameType : GameType
 
     public override Font GetFont()
     {
-        return (Font)Resources.Load("fonts/OldNewspaperTypes");
+        return (Font)Resources.Load("fonts/mad");
+    }
+
+    public override Font GetHeaderFont()
+    {
+        return (Font)Resources.Load("fonts/oldnewspapertypes");
     }
 
     public override int MaxHeroes()
@@ -193,8 +228,8 @@ class MoMGameType : GameType
 
     public override float TilePixelPerSquare()
     {
-        // the base side of the tile is 1024 pixels, we are having 3 'squares' in this
-        // These squares are slightly larger than D2E squares
+        // the base side of the tile is 1024 pixels, we are having 3.5 'squares' (3.5 inches) in this
+        // These squares are the same size as D2E squares
         return 1024f / 3.5f;
     }
 
@@ -212,13 +247,20 @@ class MoMGameType : GameType
         return false;
     }
 
+    // Number of squares for snap of objects in editor
     public override float SelectionRound()
     {
         return 1.75f;
     }
 
+    // Number of squares for snap of tiles in editor
     public override float TileRound()
     {
         return 3.5f;
+    }
+
+    public override bool MonstersGrouped()
+    {
+        return false;
     }
 }

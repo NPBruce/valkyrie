@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// This round controller extends the standard controller for MoM specific round order
 public class RoundControllerMoM : RoundController
 {
     // Investigators have finished
@@ -9,16 +10,20 @@ public class RoundControllerMoM : RoundController
     {
         Game game = Game.Get();
 
+        // Mark all Investigators as finished
         for (int i = 0; i < game.quest.heroes.Count; i++)
         {
             game.quest.heroes[i].activated = true;
         }
-        if (ActivateMonster())
-        {
-            EndRound();
-        }
+        game.quest.phase = Quest.MoMPhase.mythos;
+        game.stageUI.Update();
+
+        game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
+
+        return;
     }
 
+    // Mark a monster as activated
     override public void MonsterActivated()
     {
         Game game = Game.Get();
@@ -26,81 +31,109 @@ public class RoundControllerMoM : RoundController
         // Check for any partial monster activations
         foreach (Quest.Monster m in game.quest.monsters)
         {
-            // If both started then it is complete
             if (m.minionStarted || m.masterStarted)
             {
                 m.activated = true;
             }
         }
 
-        // Full activation, update display
-        game.monsterCanvas.UpdateStatus();
-
+        // Activate a monster
         if (ActivateMonster())
         {
-            EndRound();
+            CheckNewRound();
         }
     }
 
-    // Activate All monsters
+    // Activate a monster
     override public bool ActivateMonster()
     {
         Game game = Game.Get();
 
-        bool allActivated = false;
-        while (!allActivated)
+        // Search for unactivated monsters
+        List<int> notActivated = new List<int>();
+        // Get the index of all monsters that haven't activated
+        for (int i = 0; i < game.quest.monsters.Count; i++)
         {
-            List<int> notActivated = new List<int>();
-            // Get the index of all monsters that haven't activated
-            for (int i = 0; i < game.quest.monsters.Count; i++)
-            {
-                if (!game.quest.monsters[i].activated)
-                    notActivated.Add(i);
-            }
+            if (!game.quest.monsters[i].activated)
+                notActivated.Add(i);
+        }
 
-            // If no monsters are found return true
-            if (notActivated.Count == 0)
-            {
-                allActivated = true;
-            }
-            else
-            {
-                // Find a random unactivated monster
-                Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+        if (notActivated.Count > 0)
+        {
+            // Find a random unactivated monster
+            Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
-                ActivateMonster(toActivate);
-                return false;
-            }
+            ActivateMonster(toActivate);
+            // Return false as activations remain
+            return false;
         }
         return true;
     }
 
-
+    // Check if there are events that are required at the end of the round
     public override void CheckNewRound()
     {
 
         Game game = Game.Get();
 
+        // Return if there is an event open
         if (game.quest.eManager.currentEvent != null)
             return;
 
+        // Return if there is an event queued
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
+        if (game.quest.phase == Quest.MoMPhase.investigator)
+        {
+            return;
+        }
+
+        if (game.quest.phase == Quest.MoMPhase.mythos)
+        {
+            if (game.quest.monsters.Count > 0)
+            {
+                game.quest.phase = Quest.MoMPhase.monsters;
+                game.stageUI.Update();
+                ActivateMonster();
+                return;
+            }
+            else
+            {
+                game.quest.phase = Quest.MoMPhase.horror;
+                game.stageUI.Update();
+                EndRound();
+            }
+        }
+
+        if (game.quest.phase == Quest.MoMPhase.monsters)
+        {
+            game.quest.phase = Quest.MoMPhase.horror;
+            game.stageUI.Update();
+            return;
+        }
+
+        // Check all delayed events
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
+            // Is the delay up?
             if (de.delay == game.quest.round)
             {
+                // Trigger the event, then return
                 game.quest.delayedEvents.Remove(de);
                 game.quest.eManager.QueueEvent(de.eventName);
                 return;
             }
         }
 
+        // Finishing the round
+        // Clear all investigator activated
         foreach (Quest.Hero h in game.quest.heroes)
         {
             h.activated = false;
         }
+
+        //  Clear monster activations
         foreach (Quest.Monster m in game.quest.monsters)
         {
             m.activated = false;
@@ -109,8 +142,10 @@ public class RoundControllerMoM : RoundController
             m.currentActivation = null;
         }
 
+        // Advance to next round
         game.quest.round++;
-        game.quest.horrorPhase = false;
+        game.quest.phase = Quest.MoMPhase.investigator;
+        game.stageUI.Update();
         game.quest.threat += 1;
 
         // Update monster display

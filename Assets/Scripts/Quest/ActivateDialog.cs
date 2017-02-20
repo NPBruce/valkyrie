@@ -3,7 +3,7 @@ using System.Collections;
 
 // Window with Monster activation
 public class ActivateDialog {
-    // The even that raises this dialog
+    // The monster that raises this dialog
     public Quest.Monster monster;
     public bool master;
 
@@ -15,7 +15,7 @@ public class ActivateDialog {
         CreateWindow();
     }
 
-    public void CreateWindow()
+    virtual public void CreateWindow()
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -52,7 +52,7 @@ public class ActivateDialog {
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         offset += 2;
 
-        // Create ability text box
+        // Create activation text box
         db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
         if (master)
         {

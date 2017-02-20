@@ -2,13 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Util class to convert colour names to RGB strings
+// Returns input if not found
 public class ColorUtil  {
 	public static string FromName(string name) {
-        if (LookUp().ContainsKey(name.ToLower())) return LookUp()[name.ToLower()];
-
+        if (LookUp().ContainsKey(name.ToLower()))
+        {
+            return LookUp()[name.ToLower()];
+        }
+        // No match found
         return name;
     }
 
+    // Staticly defined dictionary of names to RGB strings
+    // Data should match web standards
     public static Dictionary<string, string> LookUp()
     {
         Dictionary<string, string> lookUp = new Dictionary<string, string>();

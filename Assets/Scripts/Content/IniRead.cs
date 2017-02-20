@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 // Helper class to read an ini file into a nested dictionary
+// This exists because .NET/Mono doesn't have one!!
 public static class IniRead{
     // Function takes path to ini file and returns data object
     // Returns null on error
-
-
     public static IniData ReadFromIni(string path)
     {
         string[] lines;
@@ -21,16 +20,21 @@ public static class IniRead{
         {
             return null;
         }
+        // Parse text data
         return ReadFromStringArray(lines, path);
     }
 
 
+    // Function ini file contents as a string and returns data object
+    // Returns null on error
     public static IniData ReadFromString(string content)
     {
+        // split text into array of lines
         string[] lines = content.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
         return ReadFromStringArray(lines, "<INTERNAL>");
     }
 
+    // Parse ini data into data structure
     public static IniData ReadFromStringArray(string[] lines, string path)
     {
         // Create a dictionary for the first section
@@ -107,14 +111,19 @@ public static class IniRead{
         return output;
     }
     
+    // Check for FFG text lookups and insert required text
     public static string FFGLookup(string input)
     {
         string output = input;
+        // While there are more lookups
         while (output.IndexOf("{ffg:") != -1)
         {
+            // Can be nested
             int bracketLevel = 1;
+            // Start of lookup
             int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
 
+            // Loop to find end of lookup
             int lookupEnd = lookupStart;
             while (bracketLevel > 0)
             {
@@ -129,22 +138,29 @@ public static class IniRead{
                 }
             }
 
+            // Extract lookup key
             string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
+            // Get key result
             string result = FFGQuery(lookup);
-            // We don't support underlines
+            // We (unity) don't support underlines
+            // Unity uses <> not []
             result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");
             result = result.Replace("[i]", "<i>").Replace("[/i]", "</i>");
             result = result.Replace("[b]", "<b>").Replace("[/b]", "</b>");
+            // Replace the lookup
             output = output.Replace("{ffg:" + lookup + "}", result);
         }
         return output;
     }
 
+    // Look up a key in the FFG text Localization
     public static string FFGQuery(string input)
     {
         int bracketLevel = 0;
         int lastSection = 0;
         List<string> elements = new List<string>();
+
+        // Separate the input into sections
         for (int index = 0; index < input.Length; index++)
         {
             if (input[index].Equals('{'))
@@ -155,17 +171,25 @@ public static class IniRead{
             {
                 bracketLevel--;
             }
+            // Section divider
             if (input[index].Equals(':'))
-                if (bracketLevel == 0)
             {
-                elements.Add(input.Substring(lastSection, index - lastSection));
-                lastSection = index + 1;
+                // Not in brackets
+                if (bracketLevel == 0)
+                {
+                    // Add previous element
+                    elements.Add(input.Substring(lastSection, index - lastSection));
+                    lastSection = index + 1;
+                }
             }
         }
+        // Add previous element
         elements.Add(input.Substring(lastSection, input.Length - lastSection));
 
+        // Look up the first element (key)
         string fetched = FFGKeyLookup(elements[0]);
 
+        // Find and replace with other elements
         for (int i = 2; i < elements.Count; i += 2)
         {
             fetched = fetched.Replace(elements[i - 1], elements[i]);
@@ -173,58 +197,80 @@ public static class IniRead{
         return fetched;
     }
 
+    // Key lookup in localization
     public static string FFGKeyLookup(string key)
     {
+        // FIXME This appears redundant
         string[] elements = key.Split(":".ToCharArray());
 
         try
         {
             Game game = Game.Get();
 
+            // We load the text into the game object so we only have to load it once
             if (game.ffgText == null || game.ffgText.Length == 0)
             {
                 game.ffgText = System.IO.File.ReadAllLines(game.gameType.DataDirectory() + "ffg/text/Localization.txt");
             }
+
+            // Loop through all lines text
             for (int i = 0; i < game.ffgText.Length; i++)
             {
+                // Separate the line based on the first ','
                 string[] values = game.ffgText[i].Split(",".ToCharArray(), 2);
+                // If the first element is our key
                 if (values.Length > 1 && values[0].Equals(elements[0]))
                 {
+                    // get the second element
                     string returnValue = values[1];
                     int nextQuote = 0;
 
                     // Check if the string is quoted
                     if (returnValue.Length == 0 || returnValue[0] != '\"')
                     {
-                        return returnValue;
+                        if (returnValue.IndexOf(',') == -1)
+                        {
+                            return returnValue;
+                        }
+                        return returnValue.Substring(0, returnValue.IndexOf(','));
                     }
 
+                    // Find the end of the element
                     while (true)
                     {
+                        // Next quote location
                         nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
+                        // Quote ends at the end of the element
                         if (nextQuote == returnValue.Length - 1)
                         {
+                            // Return with quote escape removed
                             return returnValue.Replace("\"\"", "\"").Trim('\"');
                         }
 
+                        // If quote is escaped ("")
                         if (returnValue[nextQuote + 1].Equals("\""))
                         {
                             nextQuote++;
                         }
+                        // No more quotes on this line
                         else if (nextQuote == -1)
                         {
+                            // If we are at the end of Localization just return what we have
                             if (i >= game.ffgText.Length) return returnValue.Replace("\"\"", "\"").Trim('\"');
+                            // fetch the next line
                             returnValue += System.Environment.NewLine + game.ffgText[++i];
                         }
                         else
                         {
-                            return returnValue.Replace("\"\"", "\"").Trim('\"');
+                            // Return the text
+                            return returnValue.Substring(0, nextQuote + 1).Replace("\"\"", "\"").Trim('\"');
                         }
+                        // Next quote location
                         nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
                     }
-
                 }
             }
+            // Key not found, return as is
             return key;
         }
         catch(System.Exception)
@@ -270,6 +316,7 @@ public class IniData
         data[section].Add(name, value);
     }
 
+    // Remove an item by section and name
     public void Remove(string section, string name)
     {
         if (!data.ContainsKey(section)) return;
@@ -297,6 +344,7 @@ public class IniData
         return data[section][item];
     }
 
+    // output the ini data back to a string
     override public string ToString()
     {
         string nl = System.Environment.NewLine;

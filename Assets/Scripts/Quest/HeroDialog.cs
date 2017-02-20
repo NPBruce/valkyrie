@@ -43,38 +43,43 @@ public class HeroDialog{
     {
     }
 
-    // Null function for activated hero
+    // Hero defeated
     public void defeated()
     {
         destroy();
         Game game = Game.Get();
+        // Save to undo stack
         game.quest.Save();
         hero.defeated = true;
         updateDisplay();
+        // This can trigger events
         game.quest.AdjustMorale(-1);
     }
 
-    // Null function for activated hero
+    // Hero restored
     public void restored()
     {
         destroy();
         Game game = Game.Get();
+        // Save to undo stack
         game.quest.Save();
         hero.defeated = false;
         updateDisplay();
     }
 
-    // Null function for activated hero
+    // Activated hero
     public void activated()
     {
         destroy();
         Game game = Game.Get();
+        // Save state to undo stack
         game.quest.Save();
         hero.activated = true;
 
         // Let the game know that a hero has activated
         Game.Get().roundControl.HeroActivated();
 
+        // Should this be before the roundControl?
         updateDisplay();
     }
 

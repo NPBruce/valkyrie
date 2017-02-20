@@ -2,14 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// This class is for drawing hero images on the screen
 public class HeroCanvas : MonoBehaviour {
 
     public float offset;
     public Dictionary<int, UnityEngine.UI.Image> icons;
     public Dictionary<int, UnityEngine.UI.Image> icon_frames;
+    // This is assumed in a number of places
     public static float heroSize = 4;
     public static float offsetStart = 3.75f;
 
+    // Called when a quest is started, draws to screen
     public void SetupUI() {
         icons = new Dictionary<int, UnityEngine.UI.Image>();
         icon_frames = new Dictionary<int, UnityEngine.UI.Image>();
@@ -19,6 +22,7 @@ public class HeroCanvas : MonoBehaviour {
             AddHero(h, game);
     }
 
+    // Called when existing quest, cleans up
     public void Clean()
     {
         icons = null;
@@ -28,15 +32,18 @@ public class HeroCanvas : MonoBehaviour {
             Object.Destroy(go);
     }
 
+    // Add a hero
     void AddHero(Quest.Hero h, Game game)
     {
         Sprite heroSprite;
         Sprite frameSprite;
 
+        // FIXME: should be game type specific
         Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
 
         string heroName = h.id.ToString();
 
+        // If hero selected use blue frame (FIX for game type)
         if (h.heroData != null)
         {
             frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
@@ -81,6 +88,7 @@ public class HeroCanvas : MonoBehaviour {
         button.interactable = true;
         button.onClick.AddListener(delegate { HeroDiag(h.id); });
 
+        // Add hero image if selected
         if (h.heroData != null)
         {
             Texture2D newTex = ContentData.FileToTexture(h.heroData.image);
@@ -89,6 +97,7 @@ public class HeroCanvas : MonoBehaviour {
         }
     }
 
+    // Update hero image state
     public void UpdateStatus()
     {
         // If we haven't set up yet just return
@@ -98,29 +107,35 @@ public class HeroCanvas : MonoBehaviour {
         Game game = Game.Get();
         foreach(Quest.Hero h in game.quest.heroes)
         {
+            // Start as white (normal)
             icons[h.id].color = Color.white;
             icon_frames[h.id].color = Color.white;
 
             if (h.defeated)
             {
+                // Grey hero image
                 icons[h.id].color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
             if (h.activated)
             {
+                // Grey frame
                 icon_frames[h.id].color = new Color((float)0.2, (float)0.2, (float)0.2, 1);
             }
             if (h.heroData == null)
             {
+                // No hero, make invisible
                 icons[h.id].color = Color.clear;
                 icon_frames[h.id].color = Color.clear;
             }
             if (h.selected)
             {
+                // green frame
                 icon_frames[h.id].color = Color.green;
             }
         }
     }
 
+    // Redraw images
     public void UpdateImages()
     {
         if (icons == null) return;
@@ -157,11 +172,13 @@ public class HeroCanvas : MonoBehaviour {
         }
     }
 
+    // Called when hero pressed
     void HeroDiag(int id)
     {
         Game game = Game.Get();
         Quest.Hero target = null;
 
+        // Find the pressed hero
         foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.id == id)
@@ -173,29 +190,39 @@ public class HeroCanvas : MonoBehaviour {
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
+            // Check if we are in a hero selection dialog
             if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
             {
+                // Invert hero selection
                 target.selected = !target.selected;
                 UpdateStatus();
             }
+            // Non hero selection dialog, do nothing
             return;
         }
 
+        // We are in game and a valid hero was selected
         if (game.quest.heroesSelected && target.heroData != null)
         {
             new HeroDialog(target);
         }
+        // Game hasn't started, open hero selection options
         if (!game.quest.heroesSelected)
         {
+            // Dim selected frame
             icon_frames[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             if (icons[id].color.a > 0)
             {
+                // Dim selected hero if picked
                 icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
             }
             new HeroSelection(target);
         }
     }
 
+    // End hero selection and reorder heroselect
+    // FIXME: bad name
+    // FIXME: why is this even here?
     public void EndSection()
     {
         int heroCount = 0;
@@ -203,17 +230,20 @@ public class HeroCanvas : MonoBehaviour {
         if (GameObject.FindGameObjectWithTag("dialog") != null)
             return;
 
+        // Count number of selected heroes
         Game game = Game.Get();
         foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null) heroCount++;
         }
 
+        // Check for validity
         if (heroCount < 2) return;
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
 
+        // Reorder heros so that selected heroes are first
         for (int i = 0; i < game.quest.heroes.Count - 1; i++)
         {
             int j = i;
@@ -226,6 +256,7 @@ public class HeroCanvas : MonoBehaviour {
             }
         }
 
+        // Set quest flag based on hero count
         game.quest.flags.Add("#" + heroCount + "hero");
 
         game.quest.heroesSelected = true;
@@ -233,12 +264,13 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
+        // Draw morale if required
         if (game.gameType.DisplayMorale())
         {
             game.moraleDisplay = new MoraleDisplay();
         }
 
-
+        // Clear off heros if not required
         if (!game.gameType.DisplayHeroes())
         {
             Clean();
@@ -246,8 +278,10 @@ public class HeroCanvas : MonoBehaviour {
 
         // Create the menu button
         new MenuButton();
-        new NextStageButton();
+        // Draw next stage button if required
+        game.stageUI = new NextStageButton();
 
+        // Start the quest
         game.quest.eManager.EventTriggerType("EventStart");
     }
 }

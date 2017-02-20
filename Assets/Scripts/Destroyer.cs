@@ -21,6 +21,7 @@ public class Destroyer {
         game.SelectQuest();
     }
 
+    // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
         // Clean up everything marked as 'dialog'
@@ -45,6 +46,10 @@ public class Destroyer {
 
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
+            Object.Destroy(go);
+
+        // Clean up everything marked as 'uiphase'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("uiphase"))
             Object.Destroy(go);
 
         Game game = Game.Get();
