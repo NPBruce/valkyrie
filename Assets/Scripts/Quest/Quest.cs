@@ -268,6 +268,19 @@ public class Quest
         return hList[Random.Range(0, hList.Count)];
     }
 
+    public int GetHeroCount()
+    {
+        int count = 0;
+        foreach (Hero h in heroes)
+        {
+            if (h.heroData != null)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     // Add a list of scomponents (token, tile, etc)
     public void Add(string[] names)
     {
