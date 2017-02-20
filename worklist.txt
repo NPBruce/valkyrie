@@ -9,6 +9,7 @@ monster horror
 missing tiles
 monster attack box
 Mythos support
+Font fix
 
 D2E:
 frame for monsters
@@ -16,6 +17,7 @@ frame for monsters
 common:
 paged monsters
 logo
+misc UI cleanups
 
 Outstanding:
 MoM:
@@ -36,16 +38,12 @@ more perils
 lt.
 
 Common:
-Font fix (header)
 monster without event text bug
 camera limits set in events
 quest set
 symbols don't work in unique text
 event log
 unique monster name inherit
-starting/trailing '"'
 random tags
 expansion appearance order
-Stacked tileselection? (tags?)
-map sets
 text editing sucks (text wrap?)

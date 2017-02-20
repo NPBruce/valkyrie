@@ -53,7 +53,7 @@ public class ActivateDialogMoM : ActivateDialog
 
         offset += 4.5f;
 
-        new TextButton(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 2), "Finished", delegate { activated(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
 
         DrawMonsterIcon();
     }
