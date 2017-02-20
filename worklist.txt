@@ -18,6 +18,7 @@ logo
 
 Outstanding:
 MoM:
+Fire
 Mythos
 monsters health
 Event subtype - get successes, pass/fail

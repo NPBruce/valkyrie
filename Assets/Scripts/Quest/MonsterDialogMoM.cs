@@ -25,7 +25,7 @@ public class MonsterDialogMoM : MonsterDialog
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
         // In horror phase we do horror checks
-        if (game.quest.horrorPhase)
+        if (game.quest.phase == Quest.MoMPhase.horror)
         {
             new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Horror Check", delegate { Horror(); });
             new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });

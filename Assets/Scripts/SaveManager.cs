@@ -92,7 +92,7 @@ class SaveManager
 
                 // Create the menu button
                 new MenuButton();
-                new NextStageButton();
+                game.stageUI = new NextStageButton();
             }
         }
         catch (System.Exception)

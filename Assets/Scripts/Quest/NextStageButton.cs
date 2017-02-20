@@ -21,9 +21,19 @@ public class NextStageButton
             Object.Destroy(go);
 
         DialogBox db;
-        if (Game.Get().quest.horrorPhase)
+        if (Game.Get().quest.phase == Quest.MoMPhase.horror)
+        {
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(20, 2), "Horror Phase");
+            db.SetFont(Game.Get().gameType.GetHeaderFont());
+        }
+        else if (Game.Get().quest.phase == Quest.MoMPhase.mythos)
         {
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(20, 2), "Mythos Phase");
+            db.SetFont(Game.Get().gameType.GetHeaderFont());
+        }
+        else if (Game.Get().quest.phase == Quest.MoMPhase.monsters)
+        {
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(20, 2), "Monster Phase");
             db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         else
@@ -49,15 +59,13 @@ public class NextStageButton
         // Add to undo stack
         game.quest.Save();
 
-        if (game.quest.horrorPhase)
+        if (game.quest.phase == Quest.MoMPhase.horror)
         {
             game.roundControl.EndRound();
-            Update();
         }
         else
         {
             game.roundControl.HeroActivated();
-            Update();
         }
     }
 }

@@ -53,7 +53,7 @@ public class TokenBoard : MonoBehaviour {
         {
             Game game = Game.Get();
             // If in horror phase ignore
-            if (game.quest.horrorPhase) return;
+            if (game.quest.phase != Quest.MoMPhase.investigator) return;
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
