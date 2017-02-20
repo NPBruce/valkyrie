@@ -534,13 +534,35 @@ public class EventManager
         output = output.Replace("{heart}", "≥");
         output = output.Replace("{fatigue}", "∏");
         output = output.Replace("{might}", "∂");
-        output = output.Replace("{will}", "π");
+        if (Game.Get().gameType is MoMGameType)
+        {
+            output = output.Replace("{will}", "");
+            output = output.Replace("{action}", "");
+        }
+        else
+        {
+            output = output.Replace("{will}", "π");
+            output = output.Replace("{action}", "∞");
+        }
         output = output.Replace("{knowledge}", "∑");
         output = output.Replace("{awareness}", "μ");
-        output = output.Replace("{action}", "∞");
         output = output.Replace("{shield}", "≤");
         output = output.Replace("{surge}", "±");
+        output = output.Replace("{strenth}", "");
+        output = output.Replace("{agility}", "");
+        output = output.Replace("{lore}", "");
+        output = output.Replace("{influence}", "");
+        output = output.Replace("{success}", "");
+        output = output.Replace("{clue}", "");
+        output = output.Replace("{MAD01}", "");
+        output = output.Replace("{MAD06}", "");
+        output = output.Replace("{MAD09}", "");
+        output = output.Replace("{MAD20}", "");
+        output = output.Replace("{MAD21}", "");
+        output = output.Replace("{MAD22}", "");
+        output = output.Replace("{MAD23}", "");
+
         return output;
     }
-
 }
+
