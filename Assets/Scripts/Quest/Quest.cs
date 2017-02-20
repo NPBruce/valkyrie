@@ -286,7 +286,7 @@ public class Quest
         return count;
     }
 
-    // Add a list of scomponents (token, tile, etc)
+    // Add a list of components (token, tile, etc)
     public void Add(string[] names)
     {
         foreach (string s in names)
@@ -367,6 +367,14 @@ public class Quest
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
         {
             kv.Value.SetVisible(alpha);
+        }
+    }
+
+    public void Update()
+    {
+        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        {
+            kv.Value.UpdateAlpha(Time.deltaTime);
         }
     }
 
@@ -522,6 +530,7 @@ public class Quest
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
             // Move tile into target location (Space.World is needed because tile has been rotated)
             unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
+            image.color = new Color(1, 1, 1, 0);
         }
 
         // Remove this tile
@@ -574,7 +583,7 @@ public class Quest
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = Color.white;
+            image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(1f, 1f);
             // Move to square
@@ -637,6 +646,8 @@ public class Quest
             // Set the texture colour from quest data
             SetColor(qDoor.colourName);
 
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
+
             game.tokenBoard.Add(this);
         }
 
@@ -685,6 +696,9 @@ public class Quest
 
         public GameObject unityObject;
 
+        // Target alpha
+        public float targetAlpha = 1f;
+
         public BoardComponent(Game gameObject)
         {
             game = gameObject;
@@ -699,6 +713,29 @@ public class Quest
         {
             if (image == null)
                 return;
+            targetAlpha = alpha;
+        }
+
+        // Set visible can control the transparency level of the component
+        virtual public void UpdateAlpha(float time)
+        {
+            if (image == null)
+                return;
+            float alpha = image.color.a;
+            float distUpdate = time;
+            float distRemain = targetAlpha - alpha;
+            if (distRemain > distUpdate)
+            {
+                alpha += distUpdate;
+            }
+            else if (-distRemain > distUpdate)
+            {
+                alpha -= distUpdate;
+            }
+            else
+            {
+                alpha = targetAlpha;
+            }
             image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
         }
     }

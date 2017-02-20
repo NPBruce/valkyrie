@@ -190,6 +190,11 @@ public class Game : MonoBehaviour {
         {
             qed.MouseDown();
         }
+
+        if (quest != null)
+        {
+            quest.Update();
+        }
     }
 
     // This is here to call a function after the frame has been rendered
