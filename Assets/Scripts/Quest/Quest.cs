@@ -268,6 +268,19 @@ public class Quest
         return hList[Random.Range(0, hList.Count)];
     }
 
+    public int GetHeroCount()
+    {
+        int count = 0;
+        foreach (Hero h in heroes)
+        {
+            if (h.heroData != null)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     // Add a list of scomponents (token, tile, etc)
     public void Add(string[] names)
     {
@@ -844,8 +857,15 @@ public class Quest
                 ad = contentActivation;
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
-                effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
-                effect = effect.Replace("{1}", monsterName);
+                if (Game.Get().gameType is MoMGameType)
+                {
+                    effect = ad.ability.Replace("{0}", monsterName);
+                }
+                else
+                {
+                    effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                    effect = effect.Replace("{1}", monsterName);
+                }
                 // Fix new lines
                 effect.Replace("\\n", "\n");
             }

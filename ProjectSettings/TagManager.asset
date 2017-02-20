@@ -11,6 +11,7 @@ TagManager:
   - board
   - questui
   - editor
+  - uiphase
   layers:
   - Default
   - TransparentFX

@@ -40,6 +40,9 @@ public class MonsterDialogMoM : MonsterDialog
 
     public void Attack()
     {
+        Game game = Game.Get();
+        // Save to undo stack
+        game.quest.Save();
         new InvestigatorAttack(monster);
     }
 
