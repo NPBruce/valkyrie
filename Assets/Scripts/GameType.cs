@@ -135,7 +135,7 @@ public class D2EGameType : GameType
 
     public override Font GetHeaderFont()
     {
-        return (Font)Resources.Load("fonts/Windl");
+        return (Font)Resources.Load("fonts/windl");
     }
 
     public override int MaxHeroes()
@@ -208,14 +208,12 @@ class MoMGameType : GameType
 
     public override Font GetFont()
     {
-        return Resources.GetBuiltinResource<Font>("Arial.ttf");
-        //FIXME
-        //return (Font)Resources.Load("fonts/MadGarmondPro");
+        return (Font)Resources.Load("fonts/mad");
     }
 
     public override Font GetHeaderFont()
     {
-        return (Font)Resources.Load("fonts/OldNewspaperTypes");
+        return (Font)Resources.Load("fonts/oldnewspapertypes");
     }
 
     public override int MaxHeroes()

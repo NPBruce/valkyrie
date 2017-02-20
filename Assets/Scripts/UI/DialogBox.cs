@@ -82,6 +82,7 @@ public class DialogBox {
         uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
+        uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
     }
 

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0c905c00fe2398f4c957d04df6ba398c
-timeCreated: 1473559478
+guid: d798d73082b4c844fabb87d27cb04d9b
+timeCreated: 1487576708
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -9,6 +9,7 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
+  fontName: OldNewspaperTypes
   fontNames:
   - OldNewspaperTypes
   fallbackFontReferences: []

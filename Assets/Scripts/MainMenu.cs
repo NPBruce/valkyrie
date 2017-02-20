@@ -13,6 +13,7 @@ public class MainMenu {
         // Name.  Should this be the banner, or better to print Valkyrie with the game font?
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.textObj.GetComponent<UnityEngine.UI.Text>().font = game.gameType.GetHeaderFont();
 
         // Button for start quest/scenario
         TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), new Vector2(12, 2f), "Start " + game.gameType.QuestName(), delegate { Start(); });
