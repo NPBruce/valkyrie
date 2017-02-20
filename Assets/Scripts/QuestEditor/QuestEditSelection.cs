@@ -22,14 +22,16 @@ public class QuestEditSelection
         // Heading
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.SetFont(Game.Get().gameType.GetHeaderFont());
 
         // List of quests
         // FIXME: requires paging
         int offset = 5;
+        TextButton tb;
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
             string key = q.Key;
-            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.white, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.white, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
@@ -37,13 +39,17 @@ public class QuestEditSelection
         }
 
         // Main menu
-        new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
+        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Delete a user quest
-        new TextButton(new Vector2((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Delete", delegate { Delete(); }, Color.red);
+        tb = new TextButton(new Vector2((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Delete", delegate { Delete(); }, Color.red);
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Copy a quest
-        new TextButton(new Vector2((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Copy", delegate { Copy(); });
+        tb = new TextButton(new Vector2((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Copy", delegate { Copy(); });
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Create a new quest
-        new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "New", delegate { NewQuest(); });
+        tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "New", delegate { NewQuest(); });
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
     }
 
     public void Cancel()
@@ -61,23 +67,26 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Header
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName() + "To Delete");
+        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName() + " To Delete");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.SetFont(Game.Get().gameType.GetHeaderFont());
 
         // List of quests
         // FIXME: requires paging
+        TextButton tb;
         int offset = 5;
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
             string key = q.Key;
-            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Delete(key); }, Color.red, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Delete(key); }, Color.red, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
             offset += 2;
         }
         // Back to edit list
-        new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelDelete(); }, Color.red);
+        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelDelete(); }, Color.red);
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
     }
 
     // Delete quest
@@ -117,21 +126,24 @@ public class QuestEditSelection
         // Header
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName() + " To Copy");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        db.SetFont(Game.Get().gameType.GetHeaderFont());
 
         // List of quests
         // FIXME: requires paging
+        TextButton tb;
         int offset = 5;
         foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
         {
             string key = q.Key;
-            TextButton tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Copy(key); }, Color.white, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Copy(key); }, Color.white, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
             offset += 2;
         }
         // Back to edit selection
-        new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelCopy(); }, Color.red);
+        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelCopy(); }, Color.red);
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
     }
 
     // Copy a quest
