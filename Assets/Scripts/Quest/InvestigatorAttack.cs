@@ -62,7 +62,7 @@ public class InvestigatorAttack {
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
 
-        string text = attack.text.Replace("{0}", monster.monsterData.name).Replace("\\\n","\n");
+        string text = attack.text.Replace("{0}", monster.monsterData.name).Replace("\\n","\n");
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
