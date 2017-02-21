@@ -1,23 +1,5 @@
 Done:
 
-MoM:
-activations
-duplicate monsters
-monster attack box
-monster evade
-monster horror
-missing tiles
-monster attack box
-Mythos support
-Font fix
-
-D2E:
-frame for monsters
-
-common:
-paged monsters
-logo
-misc UI cleanups
 
 Outstanding:
 MoM:

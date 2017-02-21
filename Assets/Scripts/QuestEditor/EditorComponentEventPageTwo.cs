@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public class EditorComponentEventPageTwo : EditorComponent
 {
     QuestData.Event eventComponent;
-    DialogBoxEditable confirmDBE;
-    DialogBoxEditable failDBE;
+    List<DialogBoxEditable> buttonDBE;
     List<DialogBoxEditable> delayedEventsDBE;
     EditorSelectionList addEventESL;
     EditorSelectionList delayedEventESL;
@@ -59,83 +58,63 @@ public class EditorComponentEventPageTwo : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(6, 1), "Selection:");
+        db.ApplyTag("editor");
+
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(6, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(10, 1), "Trigger Events:");
+        db = new DialogBox(new Vector2(10, 1), new Vector2(9, 1), "Buttons:");
         db.ApplyTag("editor");
 
-        string confirmLabel = eventComponent.confirmText;
-        if (confirmLabel.Equals(""))
-        {
-            confirmLabel = "Confirm";
-            if (eventComponent.failEvent.Length != 0)
-            {
-                confirmLabel = "Pass";
-            }
-        }
-        confirmDBE = new DialogBoxEditable(new Vector2(11, 1), new Vector2(6, 1), confirmLabel, delegate { UpdateConfirmLabel(); });
-        confirmDBE.ApplyTag("editor");
-        confirmDBE.AddBorder();
-
-        tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddEvent(0); }, Color.green);
+        tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddButton(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         int offset = 2;
-        int index;
-        for (index = 0; index < 8; index++)
+        int button = 1;
+        int index = 0;
+        buttonDBE = new List<DialogBoxEditable>();
+        foreach (List<string> l in eventComponent.nextEvent)
         {
-            if (eventComponent.nextEvent.Length > index)
+            int buttonTmp = button++;
+            string buttonLabel = eventComponent.buttons[buttonTmp - 1];
+
+            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(2, offset), new Vector2(15, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
+            buttonEdit.ApplyTag("editor");
+            buttonEdit.AddBorder();
+            buttonDBE.Add(buttonEdit);
+
+            tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "-", delegate { RemoveButton(buttonTmp); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+
+            index = 0;
+            foreach (string s in l)
             {
-                int i = index;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { RemoveEvent(i); }, Color.red);
+                int i = index++;
+                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "+", delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(18, 1), eventComponent.nextEvent[index]);
+                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), s);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddEvent(i + 1); }, Color.green);
+                tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1), "-", delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
-        }
+            int tmp = index;
+            tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "+", delegate { AddEvent(tmp, buttonTmp); }, Color.green);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
 
-        offset++;
-        db = new DialogBox(new Vector2(1, offset), new Vector2(10, 1), "Fail Events:");
-        db.ApplyTag("editor");
-
-        string failLabel = eventComponent.failText;
-        if (failLabel.Equals(""))
-        {
-            failLabel = "Fail";
-        }
-        failDBE = new DialogBoxEditable(new Vector2(11, offset), new Vector2(6, 1), failLabel, delegate { UpdateFailLabel(); });
-        failDBE.ApplyTag("editor");
-        failDBE.AddBorder();
-
-        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddEvent(0, true); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        for (index = 0; index < 12; index++)
-        {
-            if (eventComponent.failEvent.Length > index)
-            {
-                int i = index;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { RemoveEvent(i, true); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(18, 1), eventComponent.failEvent[index]);
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddEvent(i + 1, true); }, Color.green);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-            }
+            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddButton(buttonTmp); }, Color.green);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            offset++;
         }
 
         offset++;
@@ -241,30 +220,38 @@ public class EditorComponentEventPageTwo : EditorComponent
         Update();
     }
 
-
-    public void UpdateConfirmLabel()
+    public void AddButton(int number)
     {
-        eventComponent.confirmText = confirmDBE.uiInput.text;
-        if (eventComponent.confirmText.Equals("Confirm") && eventComponent.failEvent.Length == 0)
+        eventComponent.nextEvent.Insert(number, new List<string>());
+        if (eventComponent.nextEvent.Count == 1)
         {
-            eventComponent.confirmText = "";
+            eventComponent.buttons.Add("Confirm");
         }
-        if (eventComponent.confirmText.Equals("Pass") && eventComponent.failEvent.Length != 0)
+        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals("Confirm"))
         {
-            eventComponent.confirmText = "";
+            eventComponent.buttons[0] = "Pass";
+            eventComponent.buttons.Add("Fail");
         }
+        else
+        {
+            eventComponent.buttons.Insert(number, "Button " + (number + 1));
+        }
+        Update();
     }
 
-    public void UpdateFailLabel()
+    public void RemoveButton(int number)
     {
-        eventComponent.failText = failDBE.uiInput.text;
-        if (eventComponent.failText.Equals("Fail"))
-        {
-            eventComponent.failText = "";
-        }
+        eventComponent.nextEvent.RemoveAt(number - 1);
+        eventComponent.buttons.RemoveAt(number - 1);
+        Update();
     }
 
-    public void AddEvent(int index, bool fail = false)
+    public void UpdateButtonLabel(int number)
+    {
+        eventComponent.buttons[number - 1] = buttonDBE[number - 1].uiInput.text;
+    }
+
+    public void AddEvent(int index, int button)
     {
         List<string> events = new List<string>();
 
@@ -277,78 +264,19 @@ public class EditorComponentEventPageTwo : EditorComponent
             }
         }
 
-        addEventESL = new EditorSelectionList("Select Event", events, delegate { SelectAddEvent(index, fail); });
+        addEventESL = new EditorSelectionList("Select Event", events, delegate { SelectAddEvent(index, button); });
         addEventESL.SelectItem();
     }
 
-    public void SelectAddEvent(int index, bool fail)
+    public void SelectAddEvent(int index, int button)
     {
-        if (fail)
-        {
-            System.Array.Resize(ref eventComponent.failEvent, eventComponent.failEvent.Length + 1);
-
-            for (int i = eventComponent.failEvent.Length - 1; i >= 0; i--)
-            {
-                if (i > index)
-                {
-                    eventComponent.failEvent[i] = eventComponent.failEvent[i - 1];
-                }
-                if (i == index)
-                {
-                    eventComponent.failEvent[i] = addEventESL.selection;
-                }
-            }
-        }
-        else
-        {
-            System.Array.Resize(ref eventComponent.nextEvent, eventComponent.nextEvent.Length + 1);
-
-            for (int i = eventComponent.nextEvent.Length - 1; i >= 0; i--)
-            {
-                if (i > index)
-                {
-                    eventComponent.nextEvent[i] = eventComponent.nextEvent[i - 1];
-
-                }
-                if (i == index)
-                {
-                    eventComponent.nextEvent[i] = addEventESL.selection;
-                }
-            }
-        }
+        eventComponent.nextEvent[button - 1].Insert(index, addEventESL.selection);
         Update();
     }
 
-    public void RemoveEvent(int index, bool fail = false)
+    public void RemoveEvent(int index, int button)
     {
-        if (fail)
-        {
-            string[] events = new string[eventComponent.failEvent.Length - 1];
-
-            int j = 0;
-            for (int i = 0; i <  eventComponent.failEvent.Length; i++)
-            {
-                if (i != index)
-                {
-                    events[j++] = eventComponent.failEvent[i];
-                }
-            }
-            eventComponent.failEvent = events;
-        }
-        else
-        {
-            string[] events = new string[eventComponent.nextEvent.Length - 1];
-
-            int j = 0;
-            for (int i = 0; i < eventComponent.nextEvent.Length; i++)
-            {
-                if (i != index)
-                {
-                    events[j++] = eventComponent.nextEvent[i];
-                }
-            }
-            eventComponent.nextEvent = events;
-        }
+        eventComponent.nextEvent[button - 1].RemoveAt(index);
         Update();
     }
 

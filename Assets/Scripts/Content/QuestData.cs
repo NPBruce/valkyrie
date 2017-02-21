@@ -478,11 +478,9 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string originalText = "";
-        public string confirmText = "";
-        public string failText = "";
+        public List<string> buttons;
         public string trigger = "";
-        public string[] nextEvent;
-        public string[] failEvent;
+        public List<List<string>> nextEvent;
         public string heroListName = "";
         public int gold = 0;
         public int minHeroes = 0;
@@ -503,8 +501,8 @@ public class QuestData
         public Event(string s) : base(s)
         {
             typeDynamic = type;
-            nextEvent = new string[0];
-            failEvent = new string[0];
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
             flags = new string[0];
@@ -525,42 +523,82 @@ public class QuestData
             }
             originalText = text;
 
-            // confirm/pass button
-            if (data.ContainsKey("confirmtext"))
-            {
-                confirmText = data["confirmtext"];
-            }
-
-            // fail button
-            if (data.ContainsKey("failtext"))
-            {
-                failText = data["failtext"];
-            }
-
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
             {
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("event"))
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
+            int buttonNum = 1;
+            bool moreEvents = true;
+            while (moreEvents)
             {
-                nextEvent = data["event"].Split(' ');
-            }
-            else
-            {
-                nextEvent = new string[0];
+                if (data.ContainsKey("button" + buttonNum))
+                {
+                    buttons.Add(data["button" + buttonNum]);
+
+                    if (data.ContainsKey("event" + buttonNum))
+                    {
+                        if (data["event" + buttonNum].Trim().Length > 0)
+                        {
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                        }
+                        else
+                        {
+                            nextEvent.Add(new List<string>());
+                        }
+                    }
+                    else
+                    {
+                        nextEvent.Add(new List<string>());
+                    }
+                }
+                else
+                {
+                    moreEvents = false;
+                }
+                buttonNum++;
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("failevent"))
+            // Legacy support
+            if (nextEvent.Count == 0)
             {
-                failEvent = data["failevent"].Split(' ');
-            }
-            else
-            {
-                failEvent = new string[0];
+                if (data.ContainsKey("event"))
+                {
+                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                }
+                else
+                {
+                    nextEvent.Add(new List<string>());
+                }
+
+                if (data.ContainsKey("confirmtext"))
+                {
+                    buttons.Add(data["confirmtext"]);
+                }
+                else if (data.ContainsKey("failevent"))
+                {
+                    buttons.Add("Pass");
+                }
+                else
+                {
+                    buttons.Add("Confirm");
+                }
+
+                if (data.ContainsKey("failevent"))
+                {
+                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    if (data.ContainsKey("failtext"))
+                    {
+                        buttons.Add(data["failtext"]);
+                    }
+                    else
+                    {
+                        buttons.Add("Fail");
+                    }
+                }
             }
 
             // Heros from another event can be hilighted
@@ -692,26 +730,25 @@ public class QuestData
                 heroListName = newName;
             }
             // a next event is changed
-            for (int i = 0; i < nextEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (nextEvent[i].Equals(oldName))
+                for (int j = 0; j < nextEvent[i].Count; j++)
                 {
-                    nextEvent[i] = newName;
+                    if (nextEvent[i][j].Equals(oldName))
+                    {
+                        nextEvent[i][j] = newName;
+                    }
                 }
             }
             // If next event is deleted, trim array
-            nextEvent = RemoveFromArray(nextEvent, "");
-
-            // a fail event is changed
-            for (int i = 0; i < failEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (failEvent[i].Equals(oldName))
+                bool removed = true;
+                while (removed)
                 {
-                    failEvent[i] = newName;
+                    removed = nextEvent[i].Remove("");
                 }
             }
-            // If fail event is deleted, trim array
-            failEvent = RemoveFromArray(failEvent, "");
 
             // component to add renamed
             for (int i = 0; i < addComponents.Length; i++)
@@ -763,37 +800,32 @@ public class QuestData
 
             r += "text=\"" + originalText + "\"" + nl;
 
-            if (!confirmText.Equals(""))
-            {
-                r += "confirmtext=\"" + confirmText + "\"" + nl;
-            }
-            if (!failText.Equals(""))
-            {
-                r += "failtext=\"" + failText + "\"" + nl;
-            }
-
             if (highlight)
             {
                 r += "highlight=true" + nl;
             }
-            if (nextEvent.Length > 0)
+
+            int buttonNum = 1;
+            foreach (List<string> l in nextEvent)
             {
-                r += "event=";
-                foreach (string s in nextEvent)
+                r += "event" + buttonNum++ + "=";
+                foreach (string s in l)
                 {
                     r += s + " ";
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (failEvent.Length > 0)
-            {
-                r += "failevent=";
-                foreach (string s in failEvent)
+                if (l.Count > 0)
                 {
-                    r += s + " ";
+                    r = r.Substring(0, r.Length - 1);
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r += nl;
             }
+
+            buttonNum = 1;
+            foreach (string s in buttons)
+            {
+                r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
+            }
+
             if (!heroListName.Equals(""))
             {
                 r += "hero=" + heroListName + nl;
