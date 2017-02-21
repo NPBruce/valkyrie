@@ -67,41 +67,43 @@ public class EditorComponentEventPageTwo : EditorComponent
         DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(10, 1), "Button Events:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, offset-1), new Vector2(1, 1), "+", delegate { AddButton(0); }, Color.green);
+        tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddButton(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         int offset = 2;
         int button = 1;
+        int index = 0;
         foreach (List<string> l in eventComponent.nextEvent)
         {
-            int buttonTmp = button;
-            string buttonLabel = eventComponent.buttons[button-1];
+            int buttonTmp = button++;
+            string buttonLabel = eventComponent.buttons[buttonTmp - 1];
 
-            DialogButtonEditable buttonEdit = new DialogBoxEditable(new Vector2(11, 1), new Vector2(6, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
+            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(11, 1), new Vector2(6, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
 
-            tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddEvent(0); }, Color.green);
+            tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddEvent(0, buttonTmp); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
+            index = 0;
             foreach (string s in l)
             {
                 int i = index;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { RemoveEvent(i); }, Color.red);
+                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(16, 1), eventComponent.nextEvent[index]);
+                db = new DialogBox(new Vector2(1, offset), new Vector2(16, 1), eventComponent.nextEvent[buttonTmp-1][index]);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "+", delegate { AddEvent(i + 1); }, Color.green);
+                tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "+", delegate { AddEvent(i + 1, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
 
-            tb = new TextButton(new Vector2(19, offset-1), new Vector2(1, 1), "+", delegate { AddButton(button++); }, Color.green);
+            tb = new TextButton(new Vector2(19, offset-1), new Vector2(1, 1), "+", delegate { AddButton(buttonTmp); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -209,27 +211,27 @@ public class EditorComponentEventPageTwo : EditorComponent
         Update();
     }
 
-
-    public void UpdateConfirmLabel()
+    public void AddButton(int number)
     {
-        eventComponent.confirmText = confirmDBE.uiInput.text;
-        if (eventComponent.confirmText.Equals("Confirm") && eventComponent.failEvent.Length == 0)
+        eventComponent.nextEvent.Add(new List<string>());
+        if (eventComponent.nextEvent.Count == 1)
         {
-            eventComponent.confirmText = "";
+            eventComponent.buttons.Add("Confirm");
         }
-        if (eventComponent.confirmText.Equals("Pass") && eventComponent.failEvent.Length != 0)
+        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals("Confirm"))
         {
-            eventComponent.confirmText = "";
+            eventComponent.buttons[0] = "Pass";
+            eventComponent.buttons.Add("Fail");
+        }
+        else
+        {
+            eventComponent.buttons.Add("Button " + number);
         }
     }
 
-    public void UpdateFailLabel()
+    public void UpdateButtonLabel(int number)
     {
-        eventComponent.failText = failDBE.uiInput.text;
-        if (eventComponent.failText.Equals("Fail"))
-        {
-            eventComponent.failText = "";
-        }
+        eventComponent.buttons[number - 1] = buttonDBE[number].uiInput.text;
     }
 
     public void AddEvent(int index, int button)
@@ -251,39 +253,13 @@ public class EditorComponentEventPageTwo : EditorComponent
 
     public void SelectAddEvent(int index, int button)
     {
-        if (fail)
-        {
-            System.Array.Resize(ref eventComponent.failEvent, eventComponent.failEvent.Length + 1);
+        eventComponent.nextEvent[button - 1].Insert(index, addEventESL.selection);
+        Update();
+    }
 
-            for (int i = eventComponent.failEvent.Length - 1; i >= 0; i--)
-            {
-                if (i > index)
-                {
-                    eventComponent.failEvent[i] = eventComponent.failEvent[i - 1];
-                }
-                if (i == index)
-                {
-                    eventComponent.failEvent[i] = addEventESL.selection;
-                }
-            }
-        }
-        else
-        {
-            System.Array.Resize(ref eventComponent.nextEvent, eventComponent.nextEvent.Length + 1);
-
-            for (int i = eventComponent.nextEvent.Length - 1; i >= 0; i--)
-            {
-                if (i > index)
-                {
-                    eventComponent.nextEvent[i] = eventComponent.nextEvent[i - 1];
-
-                }
-                if (i == index)
-                {
-                    eventComponent.nextEvent[i] = addEventESL.selection;
-                }
-            }
-        }
+    public void RemoveEvent(int index, int button)
+    {
+        eventComponent.nextEvent[button - 1].RemoveAt(index);
         Update();
     }
 

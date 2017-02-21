@@ -529,6 +529,8 @@ public class QuestData
                 bool.TryParse(data["highlight"], out highlight);
             }
 
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
             int buttonNum = 1;
             bool moreEvents = true;
             while (moreEvents)
