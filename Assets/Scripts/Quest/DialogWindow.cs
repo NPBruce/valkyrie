@@ -54,23 +54,14 @@ public class DialogWindow {
             new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
         }
 
-        // Is there a confirm button
-        if (eventData.ConfirmPresent())
+        float offset = 9f;
+        int num = 1;
+        foreach (EventButton eb in eventData.GetButtons())
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eventData.GetPass(), delegate { onConfirm(); }, eventData.GetPassColor());
-            // Is there a fail button
-            if (eventData.FailPresent())
-            {
-                new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), eventData.GetFail(), delegate { onFail(); }, eventData.GetFailColor());
-            }
+            int numTmp = num++;
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
+            offset += 2.5f;
         }
-    }
-
-    // Pass and confirm are the same
-    // FIXME: can this be removed?
-    public void onPass()
-    {
-        onConfirm();
     }
 
     // Cancel cleans up
@@ -82,7 +73,7 @@ public class DialogWindow {
         Game.Get().quest.eManager.TriggerEvent();
     }
 
-    public void onFail()
+    public void onButton(int num)
     {
         // Do we have correct hero selection?
         if (!checkHeroes()) return;
@@ -97,7 +88,7 @@ public class DialogWindow {
             game.quest.Save();
         }
         // Event manager handles the failure
-        game.quest.eManager.EndEvent(true);
+        game.quest.eManager.EndEvent(num);
     }
 
     // Check that the correct number of heroes are selected
@@ -141,30 +132,20 @@ public class DialogWindow {
         return true;
     }
 
-
-    public void onConfirm()
-    {
-        // Check that correct number of heroes selected
-        if (!checkHeroes()) return;
-
-        Game game = Game.Get();
-
-        // Destroy this dialog to close
-        destroy();
-
-        // If the user started this event (cancelable) failing is undoable
-        if (eventData.qEvent.cancelable)
-        {
-            game.quest.Save();
-        }
-
-        // Event manager handles event completion
-        game.quest.eManager.EndEvent();
-    }
-
     public void destroy()
     {
         // Clean up everything marked as 'dialog'
         Destroyer.Dialog();
+    }
+
+    public class EventButton
+    {
+        public string label = "";
+        public Color colour = Color.white;
+
+        public EventButton(string l)
+        {
+            label = l;
+        }
     }
 }
