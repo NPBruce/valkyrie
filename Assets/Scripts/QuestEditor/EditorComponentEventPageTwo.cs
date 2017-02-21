@@ -58,13 +58,16 @@ public class EditorComponentEventPageTwo : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(6, 1), "Selection:");
+        db.ApplyTag("editor");
+
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(6, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(10, 1), "Button Events:");
+        db = new DialogBox(new Vector2(10, 1), new Vector2(9, 1), "Buttons:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddButton(0); }, Color.green);
@@ -74,38 +77,44 @@ public class EditorComponentEventPageTwo : EditorComponent
         int offset = 2;
         int button = 1;
         int index = 0;
+        buttonDBE = new List<DialogBoxEditable>();
         foreach (List<string> l in eventComponent.nextEvent)
         {
             int buttonTmp = button++;
             string buttonLabel = eventComponent.buttons[buttonTmp - 1];
 
-            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(11, 1), new Vector2(6, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
+            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(2, offset), new Vector2(15, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
 
-            tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddEvent(0, buttonTmp); }, Color.green);
+            tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "-", delegate { RemoveButton(buttonTmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
             index = 0;
             foreach (string s in l)
             {
-                int i = index;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { RemoveEvent(i, buttonTmp); }, Color.red);
+                int i = index++;
+                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "+", delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(16, 1), eventComponent.nextEvent[buttonTmp-1][index]);
+                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), s);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "+", delegate { AddEvent(i + 1, buttonTmp); }, Color.green);
+                tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1), "-", delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
-
-            tb = new TextButton(new Vector2(19, offset-1), new Vector2(1, 1), "+", delegate { AddButton(buttonTmp); }, Color.green);
+            int tmp = index;
+            tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "+", delegate { AddEvent(tmp, buttonTmp); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
+
+            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddButton(buttonTmp); }, Color.green);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            offset++;
         }
 
         offset++;
@@ -213,7 +222,7 @@ public class EditorComponentEventPageTwo : EditorComponent
 
     public void AddButton(int number)
     {
-        eventComponent.nextEvent.Add(new List<string>());
+        eventComponent.nextEvent.Insert(number, new List<string>());
         if (eventComponent.nextEvent.Count == 1)
         {
             eventComponent.buttons.Add("Confirm");
@@ -225,13 +234,21 @@ public class EditorComponentEventPageTwo : EditorComponent
         }
         else
         {
-            eventComponent.buttons.Add("Button " + number);
+            eventComponent.buttons.Insert(number, "Button " + (number + 1));
         }
+        Update();
+    }
+
+    public void RemoveButton(int number)
+    {
+        eventComponent.nextEvent.RemoveAt(number - 1);
+        eventComponent.buttons.RemoveAt(number - 1);
+        Update();
     }
 
     public void UpdateButtonLabel(int number)
     {
-        eventComponent.buttons[number - 1] = buttonDBE[number].uiInput.text;
+        eventComponent.buttons[number - 1] = buttonDBE[number - 1].uiInput.text;
     }
 
     public void AddEvent(int index, int button)

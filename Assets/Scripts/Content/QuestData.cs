@@ -539,10 +539,16 @@ public class QuestData
                 {
                     buttons.Add(data["button" + buttonNum]);
 
-                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
                     if (data.ContainsKey("event" + buttonNum))
                     {
-                        nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                        if (data["event" + buttonNum].Trim().Length > 0)
+                        {
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                        }
+                        else
+                        {
+                            nextEvent.Add(new List<string>());
+                        }
                     }
                     else
                     {
@@ -807,7 +813,10 @@ public class QuestData
                 {
                     r += s + " ";
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
+                if (l.Count > 0)
+                {
+                    r = r.Substring(0, r.Length - 1) + nl;
+                }
             }
 
             buttonNum = 1;
