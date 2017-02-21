@@ -346,7 +346,7 @@ public class EventManager
 
             foreach (string s in qEvent.buttons)
             {
-                DialogWindow.EventButton eb = new DialogWindow.EventButton(s);
+                DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(s));
                 // Hack for pass/fail color buttons
                 if (qEvent.nextEvent.Count == 2)
                 {

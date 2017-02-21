@@ -387,7 +387,7 @@ public class QuestEditorData {
     }
 
     // Events, tokens, doors and monsters can all be openned as events
-    // and as EventPageTwo
+    // and as tags/nextevent
     public static void SelectAsEvent(string name)
     {
         Game game = Game.Get();
@@ -395,11 +395,19 @@ public class QuestEditorData {
     }
 
     // Events, tokens, doors and monsters can all be openned as events
-    // and as EventPageTwo
-    public static void SelectAsEventPageTwo(string name)
+    // and as  tags/nextevent
+    public static void SelectAsEventFlags(string name)
     {
         Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentEventPageTwo(name));
+        game.qed.NewSelection(new EditorComponentEventFlags(name));
+    }
+
+    // Events, tokens, doors and monsters can all be openned as events
+    // and as  tags/nextevent
+    public static void SelectAsEventNextEvent(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentEventNextEvent(name));
     }
 
     public static void SelectAsMonster(string name)
