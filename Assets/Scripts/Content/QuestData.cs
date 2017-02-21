@@ -535,47 +535,18 @@ public class QuestData
             bool moreEvents = true;
             while (moreEvents)
             {
-                if (data.ContainsKey("event" + buttonNum))
+                if (data.ContainsKey("button" + buttonNum))
                 {
+                    buttons.Add(data["button" + buttonNum]);
+
                     nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
-                    if (data.ContainsKey("button" + buttonNum))
+                    if (data.ContainsKey("event" + buttonNum))
                     {
-                        buttons.Add(data["button" + buttonNum]);
+                        nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
                     }
                     else
                     {
-                        // Legacy support
-                        if (buttonNum == 1)
-                        {
-                            if (data.ContainsKey("confirmtext"))
-                            {
-                                buttons.Add(data["confirmtext"]);
-                            }
-                            else if(data.ContainsKey("failevent"))
-                            {
-                                buttons.Add("Pass");
-                            }
-                            else
-                            {
-                                buttons.Add("Confirm");
-                            }
-                        }
-                        else if (buttonNum == 2)
-                        {
-                            if (data.ContainsKey("failtext"))
-                            {
-                                buttons.Add(data["failtext"]);
-                            }
-                            else
-                            {
-                                buttons.Add("Fail");
-                            }
-                        }
-                        else
-                        {
-                            // This is needed to pad buttons to equal events
-                            buttons.Add("");
-                        }
+                        nextEvent.Add(new List<string>());
                     }
                 }
                 else
@@ -586,19 +557,41 @@ public class QuestData
             }
 
             // Legacy support
-            if (data.ContainsKey("event") && nextEvent.Count == 0)
+            if (nextEvent.Count == 0)
             {
-                nextEvent.Add(new List<string>(data["event"].Split(' ')));
-            }
-            if (data.ContainsKey("failevent"))
-            {
-                if (nextEvent.Count == 0)
+                if (data.ContainsKey("event"))
+                {
+                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                }
+                else
                 {
                     nextEvent.Add(new List<string>());
                 }
-                if (nextEvent.Count == 1)
+
+                if (data.ContainsKey("confirmtext"))
+                {
+                    buttons.Add(data["confirmtext"]);
+                }
+                else if (data.ContainsKey("failevent"))
+                {
+                    buttons.Add("Pass");
+                }
+                else
+                {
+                    buttons.Add("Confirm");
+                }
+
+                if (data.ContainsKey("failevent"))
                 {
                     nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    if (data.ContainsKey("failtext"))
+                    {
+                        buttons.Add(data["failtext"]);
+                    }
+                    else
+                    {
+                        buttons.Add("Fail");
+                    }
                 }
             }
 

@@ -59,7 +59,7 @@ public class DialogWindow {
         foreach (EventButton eb in eventData.GetButtons())
         {
             int numTmp = num++;
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, offset), new Vector2(8f, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
     }
@@ -88,7 +88,7 @@ public class DialogWindow {
             game.quest.Save();
         }
         // Event manager handles the failure
-        game.quest.eManager.EndEvent(num);
+        game.quest.eManager.EndEvent(num-1);
     }
 
     // Check that the correct number of heroes are selected
