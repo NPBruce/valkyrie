@@ -815,8 +815,9 @@ public class QuestData
                 }
                 if (l.Count > 0)
                 {
-                    r = r.Substring(0, r.Length - 1) + nl;
+                    r = r.Substring(0, r.Length - 1);
                 }
+                r += nl;
             }
 
             buttonNum = 1;
