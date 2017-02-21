@@ -88,7 +88,11 @@ public class EditorComponentEvent : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        tb = new TextButton(new Vector2(12, 2), new Vector2(8, 1), "Flags/Events", delegate { QuestEditorData.SelectAsEventPageTwo(name); });
+        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Flags", delegate { QuestEditorData.SelectAsEventFlags(name); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(16, 2), new Vector2(4, 1), "Next Events", delegate { QuestEditorData.SelectAsEventNextEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
