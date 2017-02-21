@@ -781,15 +781,6 @@ public class QuestData
 
             r += "text=\"" + originalText + "\"" + nl;
 
-            if (!confirmText.Equals(""))
-            {
-                r += "confirmtext=\"" + confirmText + "\"" + nl;
-            }
-            if (!failText.Equals(""))
-            {
-                r += "failtext=\"" + failText + "\"" + nl;
-            }
-
             if (highlight)
             {
                 r += "highlight=true" + nl;
@@ -806,6 +797,7 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
+            // FIXME: ISSUE WITH space separation of ""
             int buttonNum = 1;
             foreach (string s in buttons)
             {
