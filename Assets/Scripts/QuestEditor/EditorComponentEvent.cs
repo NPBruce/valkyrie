@@ -8,6 +8,7 @@ public class EditorComponentEvent : EditorComponent
 
     DialogBoxEditable eventTextDBE;
     DialogBoxEditable threatDBE;
+    DialogBoxEditable quotaDBE;
     EditorSelectionList triggerESL;
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
@@ -95,6 +96,14 @@ public class EditorComponentEvent : EditorComponent
         tb = new TextButton(new Vector2(16, 2), new Vector2(4, 1), "Next Events", delegate { QuestEditorData.SelectAsEventNextEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
+
+        // FIXME location
+        db = new DialogBox(new Vector2(14, 12), new Vector2(2, 1), "Quota:");
+        db.ApplyTag("editor");
+
+        quotaDBE = new DialogBoxEditable(new Vector2(18, 13), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });
+        quotaDBE.ApplyTag("editor");
+        quotaDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
         db.ApplyTag("editor");
@@ -222,6 +231,12 @@ public class EditorComponentEvent : EditorComponent
         {
             eventComponent.originalText = eventTextDBE.uiInput.text;
         }
+    }
+
+    public void SetQuota()
+    {
+        int.TryParse(quotaDBE.uiInput.text, out eventComponent.quota);
+        Update();
     }
 
     public void SetTrigger()
