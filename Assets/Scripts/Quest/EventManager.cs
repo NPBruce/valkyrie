@@ -346,28 +346,16 @@ public class EventManager
 
             foreach (string s in qEvent.buttons)
             {
-                DialogWindow.EventButton eb = ew DialogWindow.EventButton("s");
-                // Empty label, apply one
-                if (s.Equals(""))
+                DialogWindow.EventButton eb = new DialogWindow.EventButton(s);
+                // Hack for pass/fail color buttons
+                if (qEvent.nextEvent.Count == 2)
                 {
-                    eb.label = "Button " + (buttons.Length + 1);
-                    // Pass/Confirm button
-                    if (buttons.Length == 0)
+                    if (buttons.Count == 0 && eb.label.Equals("Pass"))
                     {
-                        if (qEvent.nextEvent.Length < 2)
-                        {
-                            eb.label = "Confirm";
-                        }
-                        else if (qEvent.nextEvent.Length == 2)
-                        {
-                            eb.label = "Pass";
-                            eb.colour = Color.green;
-                        }
+                        eb.colour = Color.green;
                     }
-                    // Fail button
-                    if (buttons.Length == 1) && (qEvent.nextEvent.Length == 2)
+                    if (buttons.Count == 1 && eb.label.Equals("Fail"))
                     {
-                        eb.label = "Fail";
                         eb.colour = Color.red;
                     }
                 }

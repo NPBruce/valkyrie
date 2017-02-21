@@ -535,7 +535,7 @@ public class QuestData
             {
                 if (data.ContainsKey("event" + buttonNum))
                 {
-                    nextEvent.Add(data["event" + buttonNum].Split(' '))
+                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
                     if (data.ContainsKey("button" + buttonNum))
                     {
                         buttons.Add(data["button" + buttonNum]);
@@ -543,13 +543,31 @@ public class QuestData
                     else
                     {
                         // Legacy support
-                        if (data.ContainsKey("confirmtext") && buttonNum == 1)
+                        if (buttonNum == 1)
                         {
-                            buttons.Add(data["confirmtext"]);
+                            if (data.ContainsKey("confirmtext"))
+                            {
+                                buttons.Add(data["confirmtext"]);
+                            }
+                            else if(data.ContainsKey("failevent"))
+                            {
+                                buttons.Add("Pass");
+                            }
+                            else
+                            {
+                                buttons.Add("Confirm");
+                            }
                         }
-                        else if (data.ContainsKey("failtext") && buttonNum == 2)
+                        else if (buttonNum == 2)
                         {
-                            buttons.Add(data["failtext"]);
+                            if (data.ContainsKey("failtext"))
+                            {
+                                buttons.Add(data["failtext"]);
+                            }
+                            else
+                            {
+                                buttons.Add("Fail");
+                            }
                         }
                         else
                         {
@@ -566,19 +584,19 @@ public class QuestData
             }
 
             // Legacy support
-            if (data.ContainsKey("event") && nextEvent.Length == 0)
+            if (data.ContainsKey("event") && nextEvent.Count == 0)
             {
-                nextEvent.Add(data["event"].Split(' '));
+                nextEvent.Add(new List<string>(data["event"].Split(' ')));
             }
             if (data.ContainsKey("failevent"))
             {
-                if (nextEvent.Length == 0)
+                if (nextEvent.Count == 0)
                 {
                     nextEvent.Add(new List<string>());
                 }
-                if (nextEvent.Length == 1)
+                if (nextEvent.Count == 1)
                 {
-                    nextEvent.Add(data["failevent"].Split(' '));
+                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
                 }
             }
 
@@ -711,9 +729,9 @@ public class QuestData
                 heroListName = newName;
             }
             // a next event is changed
-            for (int i = 0; i < nextEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                for (int j = 0; j < nextEvent[i].Length; j++)
+                for (int j = 0; j < nextEvent[i].Count; j++)
                 {
                     if (nextEvent[i][j].Equals(oldName))
                     {
@@ -722,12 +740,12 @@ public class QuestData
                 }
             }
             // If next event is deleted, trim array
-            for (int i = 0; i < nextEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
                 bool removed = true;
                 while (removed)
                 {
-                    removed = nextEvent[i].Remove(nextEvent);
+                    removed = nextEvent[i].Remove("");
                 }
             }
 
@@ -797,8 +815,7 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            // FIXME: ISSUE WITH space separation of ""
-            int buttonNum = 1;
+            buttonNum = 1;
             foreach (string s in buttons)
             {
                 r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
