@@ -1000,9 +1000,11 @@ public class QuestData
     }
 
     // Puzzle component
-    public class Puzzle
+    public class Puzzle : Event
     {
         new public static string type = "Puzzle";
+        public string puzzleClass = "slide";
+        public int puzzleLevel = "4";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1014,6 +1016,15 @@ public class QuestData
         public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
+
+            if (data.ContainsKey("class"))
+            {
+                puzzleClass = data["class"];
+            }
+            if (data.ContainsKey("puzzlelevel"))
+            {
+                int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
         }
 
         // Save to string (editor)
@@ -1021,6 +1032,15 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = base.ToString();
+
+            if (!puzzleClass.Equals("slide"))
+            {
+                r += "class=" + puzzleClass + nl;
+            }
+            if (puzzleLevel != 4)
+            {
+                r += "puzzlelevel=" + puzzleLevel + nl;
+            }
             return r;
         }
     }
