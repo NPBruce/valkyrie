@@ -2,11 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PuzzleSlideGeneration
+public class PuzzleSlide
 {
     public List<Block> puzzle;
+    public int moves = 0;
 
-    public PuzzleSlideGeneration(int depth)
+    public PuzzleSlide(int depth)
     {
         puzzle = new List<Block>();
         puzzle.Add(new Block());
@@ -29,6 +30,22 @@ public class PuzzleSlideGeneration
             if (steps > depth)
             {
                 RemoveBlock());
+            }
+        }
+    }
+
+    public PuzzleSlide(Dictionary<string, string> data)
+    {
+        puzzle = new List<Block>();
+        foreach (KeyValuePair<string, string> in data)
+        {
+            if (kv.key.Equals("moves"))
+            {
+                int.TryParse(kv.value, out moves)
+            }
+            else
+            {
+                puzzle.Add(new Block(kv.Value));
             }
         }
     }
@@ -62,6 +79,19 @@ public class PuzzleSlideGeneration
             }
         }
         return true;
+    }
+
+    public string ToString(string id)
+    {
+        string nl = System.Environment.NewLine;
+        // General quest state block
+        string r = "[PuzzleSlide" + id + "]" + nl;
+        r += "moves=" + moves + nl;
+        for (int i = 0; i < blocks.Count)
+        {
+            r += "block" + i + "=" + blocks[i].ToString() + nl;
+        }
+        return r + nl;
     }
 
     public class Block
@@ -162,6 +192,23 @@ public class PuzzleSlideGeneration
                 xlen = length;
                 ylen = 0;
             }
+        }
+
+        public Block(string data)
+        {
+            string[] vars = data.Split[",".ToCharArray()];
+            bool.TryParse(vars[0], out rotation);
+            int.TryParse(vars[1], out xlen);
+            int.TryParse(vars[2], out ylen);
+            int.TryParse(vars[3], out xpos);
+            int.TryParse(vars[4], out ypos);
+            int.TryParse(vars[5], out target);
+            rotation + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
+        }
+
+        public string ToString
+        {
+            return rotation + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
         }
     }
 }

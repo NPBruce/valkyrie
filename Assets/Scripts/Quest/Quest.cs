@@ -18,6 +18,9 @@ public class Quest
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
+    // A dictionary of puzzle state
+    public Dictionary<string, PuzzleSlide> puzzle;
+
     // Event manager handles the events
     public EventManager eManager;
 
@@ -66,6 +69,7 @@ public class Quest
         flags = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, PuzzleSlide>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
@@ -220,6 +224,16 @@ public class Quest
             // Add this selection
             heroSelection.Add(kv.Key, heroList);
         }
+
+        puzzle = new Dictionary<string, PuzzleSlide>();
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("PuzzleSlide") == 0)
+            {
+                puzzle.Add(new PuzzleSlide(kv.Value));
+            }
+        }
+
         // Update the screen
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
@@ -450,6 +464,11 @@ public class Quest
         foreach (Monster m in monsters)
         {
             r += m.ToString();
+        }
+
+        foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
+        {
+            r += kv.Value.ToString(kv.key);
         }
 
         return r;

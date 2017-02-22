@@ -213,6 +213,12 @@ public class EventManager
             CameraController.SetCamera(e.qEvent.location);
         }
 
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            new PuzzleSlideWindow(e);
+            return;
+        }
+
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {

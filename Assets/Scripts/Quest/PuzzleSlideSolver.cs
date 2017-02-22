@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using PuzzleSlideGeneration;
+using PuzzleSlide;
 
 public class PuzzleSlideSolver
 {
