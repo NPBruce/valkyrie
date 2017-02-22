@@ -135,6 +135,11 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
+        if (name.IndexOf(Puzzle.type) == 0)
+        {
+            Puzzle c = new Puzzle(name, content);
+            components.Add(name, c);
+        }
         if (name.IndexOf("UniqueMonster") == 0)
         {
             UniqueMonster c = new UniqueMonster(name, content, path);
@@ -990,6 +995,32 @@ public class QuestData
             {
                 r += "rotate=true" + nl;
             }
+            return r;
+        }
+    }
+
+    // Puzzle component
+    public class Puzzle
+    {
+        new public static string type = "Puzzle";
+
+        // Create a new puzzle with name (editor)
+        public Puzzle(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
+
+        // Construct from ini data
+        public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+        }
+
+        // Save to string (editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
             return r;
         }
     }
