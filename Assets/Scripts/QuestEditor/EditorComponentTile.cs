@@ -60,7 +60,7 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
 
-        List<string> sides = new List<string>();
+        Dictionary<string, Color> sides = new Dictionary<string, Color>();
 
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
@@ -69,7 +69,25 @@ public class EditorComponentTile : EditorComponent
             {
                 display += " " + s;
             }
-            sides.Add(display);
+
+            bool tilePresent = false;
+            foreach (KeyValuePair<string, QuestComponent> kv in game.qd.components)
+            {
+                QuestComponent t = kv.Value as QuestData.Tile;
+                if (t != null && t.tileSideName.Equals(kv.Key))
+                {
+                    tilePresent = true;
+                }
+            }
+
+            if (tilePresent)
+            {
+                sides.Add(display, Color.grey);
+            }
+            else
+            {
+                sides.Add(display, Color.white);
+            }
         }
         tileESL = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
         tileESL.SelectItem();

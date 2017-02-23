@@ -10,6 +10,7 @@ public class EditorSelectionList
     public string selection = "";
     // List of items to select
     public string[] items;
+    public Color[] colours;
     public string title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
@@ -20,6 +21,20 @@ public class EditorSelectionList
     public EditorSelectionList(string t, List<string> list, UnityEngine.Events.UnityAction call)
     {
         items = list.ToArray();
+        colours = new Color[list.Count];
+        for (int i = 0; i < list.Count; i++)
+        {
+            colours[i] = Color.white;
+        }
+        title = t;
+        returnCall = call;
+    }
+
+    // Create editor selection clist with title, list, colour and callback
+    public EditorSelectionList(string t, Dictionary<string, Color> list>, UnityEngine.Events.UnityAction call)
+    {
+        items = list.Keys.ToArray();
+        colours = list.Values.ToArray();
         title = t;
         returnCall = call;
     }
@@ -45,38 +60,23 @@ public class EditorSelectionList
 
         float offset = 2;
         TextButton tb = null;
-        // Fit in one page
-        if (items.Length <= 20)
+
+        // All items on this page
+        for (int i = indexOffset; i < (20 + indexOffset); i++)
         {
-            // List all items
-            foreach (string s in items)
+            // limit to array length
+            if (items.Length > i)
             {
-                string key = s;
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); });
+                string key = items[i];
+                Color c = colours[i];
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, c);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                offset += 1;
             }
             offset += 1;
-            // Cancel
-            tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", call);
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
-        else
+        // Paged
+        if (items.Length > 20)
         {
-            // Paged
-            // All items on this page
-            for (int i = indexOffset; i < (20 + indexOffset); i++)
-            {
-                // limit to array length
-                if (items.Length > i)
-                {
-                    string key = items[i];
-                    tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                }
-                offset += 1;
-            }
             // Prev button
             offset += 1;
             tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), "<", delegate { PreviousPage(); });
@@ -86,12 +86,12 @@ public class EditorSelectionList
             tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), ">", delegate { NextPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            // Cancel button
-            offset += 1;
-            tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", cancelCall);
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
+        // Cancel button
+        offset += 1;
+        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", cancelCall);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
     
     // Move to next page and redraw
