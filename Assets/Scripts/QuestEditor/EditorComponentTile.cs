@@ -60,8 +60,19 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
 
-        Dictionary<string, Color> sides = new Dictionary<string, Color>();
+        // Work out what sides are used
+        HashSet<string> usedSides = new HashSet<string>();
+        foreach (KeyValuePair<string, QuestComponent> kv in game.qd.components)
+        {
+            QuestComponent t = kv.Value as QuestData.Tile;
+            if (t != null)
+            {
+                usedTiles.Add(t.tileSideName);
+                usedTiles.Add(game.cd.tileSides[t.tileSideName].reverse);
+            }
+        }
 
+        Dictionary<string, Color> sides = new Dictionary<string, Color>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             string display = kv.Key;
@@ -70,17 +81,7 @@ public class EditorComponentTile : EditorComponent
                 display += " " + s;
             }
 
-            bool tilePresent = false;
-            foreach (KeyValuePair<string, QuestComponent> kv in game.qd.components)
-            {
-                QuestComponent t = kv.Value as QuestData.Tile;
-                if (t != null && t.tileSideName.Equals(kv.Key))
-                {
-                    tilePresent = true;
-                }
-            }
-
-            if (tilePresent)
+            if (usedSides.Contains(kv.Key))
             {
                 sides.Add(display, Color.grey);
             }
