@@ -228,7 +228,11 @@ public class EventManager
     public void EndEvent(int state=0)
     {
         // Get list of next events
-        List<string> eventList = currentEvent.qEvent.nextEvent[state];
+        List<string> eventList = new List<string>();
+        if (currentEvent.qEvent.nextEvent.Count > state)
+        {
+            eventList = currentEvent.qEvent.nextEvent[state];
+        }
 
         // Only take enabled events from list
         List<string> enabledEvents = new List<string>();
