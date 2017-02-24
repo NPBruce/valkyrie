@@ -65,12 +65,33 @@ public class DialogWindow {
 
         float offset = 9f;
         int num = 1;
+        float length = 8f;
+        float hOffset = UIScaler.GetWidthUnits() - 19f;
+        if (eventData.GetButtons().Count > 2)
+        {
+            length = 16f;
+            hOffset = UIScaler.GetHCenter(-8f);
+        }
         foreach (EventButton eb in eventData.GetButtons())
         {
             int numTmp = num++;
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, offset), new Vector2(8f, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
+            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
+
+        // Do we have a cancel button?
+        if (eventData.qEvent.cancelable)
+        {
+            if (eventData.GetButtons().Count > 2)
+            {
+                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            }
+            else
+            {
+                new TextButton(new Vector2(hOffset, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            }
+        }
+
     }
 
     public void CreateQuotaWindow()

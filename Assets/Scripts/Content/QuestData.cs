@@ -496,6 +496,8 @@ public class QuestData
         public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
+        public bool minCam = false;
+        public bool maxCam = false;
         public int quota = 0;
 
         // Create a new event with name (editor)
@@ -511,6 +513,8 @@ public class QuestData
             clearFlags = new string[0];
             threat = 0;
             delayedEvents = new List<DelayedEvent>();
+            minCam = false;
+            maxCam = false;
         }
 
         // Create event from ini data
@@ -726,6 +730,18 @@ public class QuestData
             {
                 bool.TryParse(data["randomevents"], out randomEvents);
             }
+            // Randomise next event setting
+            if (data.ContainsKey("mincam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["mincam"], out minCam);
+            }
+            // Randomise next event setting
+            if (data.ContainsKey("maxcam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["maxcam"], out maxCam);
+            }
         }
 
         // Check all references when a component name is changed
@@ -926,6 +942,20 @@ public class QuestData
             {
                 r += "randomevents=true" + nl;
             }
+            // Randomise next event setting
+            if (minCam)
+            {
+                r += "mincam=true" + nl;
+            }
+            if (maxCam)
+            {
+                r += "maxcam=true" + nl;
+            }
+            if (maxCam || minCam)
+            {
+                r += "xposition=" + location.x + nl;
+                r += "yposition=" + location.y + nl;
+            }
             return r;
         }
 
@@ -1124,11 +1154,13 @@ public class QuestData
             monsterName = name;
             activations = new string[0];
             traits = new string[0];
+            typeDynamic = type;
         }
 
         // Create from ini data
         public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
+            typeDynamic = type;
             path = pathIn;
             // Get base derived monster type
             if (data.ContainsKey("base"))
@@ -1252,11 +1284,13 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         // Create from ini data
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
                 ability = data["ability"];
@@ -1309,6 +1343,64 @@ public class QuestData
         }
     }
 
+
+    // Scenario starting item
+    public class Item : QuestComponent
+    {
+        new public static string type = "Item";
+        public string itemName = "";
+        public string[] traits;
+
+        // Create new (editor)
+        public Item(string s) : base(s)
+        {
+            typeDynamic = type;
+            traits = new string[1];
+            traits[0] = "weapon";
+        }
+
+        // Create from ini data
+        public Item(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+            if (data.ContainsKey("itemname"))
+            {
+                itemName = data["itemname"];
+            }
+            if (data.ContainsKey("traits"))
+            {
+                traits = data["traits"].Split(' ');
+            }
+            else
+            {
+                traits = new string[0];
+            }
+        }
+
+        // Save to string
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (itemName.Length > 0)
+            {
+                r += "itemname=" + itemName + nl;
+            }
+            if (traits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in traits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            return r;
+        }
+    }
+
+
     // Quest ini component has special data
     public class Quest
     {
@@ -1316,12 +1408,6 @@ public class QuestData
         public string name = "";
         // Quest description (currently unused)
         public string description = "";
-        // Camera pan limits
-        // TODO: move these to events
-        public int minPanX;
-        public int minPanY;
-        public int maxPanX;
-        public int maxPanY;
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils
@@ -1334,11 +1420,6 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> data)
         {
-            maxPanX = 20;
-            maxPanY = 20;
-            minPanX = -20;
-            minPanY = -20;
-
             if (data.ContainsKey("name"))
             {
                 name = data["name"];
@@ -1353,23 +1434,6 @@ public class QuestData
             if (data.ContainsKey("description"))
             {
                 description = data["description"];
-            }
-
-            if (data.ContainsKey("maxpanx"))
-            {
-                int.TryParse(data["maxpanx"], out maxPanX);
-            }
-            if (data.ContainsKey("maxpany"))
-            {
-                int.TryParse(data["maxpany"], out maxPanY);
-            }
-            if (data.ContainsKey("minpanx"))
-            {
-                int.TryParse(data["minpanx"], out minPanX);
-            }
-            if (data.ContainsKey("minpany"))
-            {
-                int.TryParse(data["minpany"], out minPanY);
             }
             if (data.ContainsKey("minorperil"))
             {
@@ -1391,25 +1455,6 @@ public class QuestData
             {
                 packs = new string[0];
             }
-
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMaxCam(Vector2 pos)
-        {
-            maxPanX = Mathf.RoundToInt(pos.x);
-            maxPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMinCam(Vector2 pos)
-        {
-            minPanX = Mathf.RoundToInt(pos.x);
-            minPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
         }
 
         // Save to string (editor)
@@ -1421,33 +1466,17 @@ public class QuestData
             r += "description=\"" + description + "\"" + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
-            if (minPanY != -20)
-            {
-                r += "minpany=" + minPanY + nl;
-            }
-            if (minPanX != -20)
-            {
-                r += "minpanx=" + minPanX + nl;
-            }
-            if (maxPanX != -20)
-            {
-                r += "maxpanx=" + maxPanX + nl;
-            }
-            if (maxPanY != -20)
-            {
-                r += "maxpany=" + maxPanY + nl;
-            }
             if (minorPeril != 7)
             {
-                r += "minorperil=" + maxPanY + nl;
+                r += "minorperil=" + minorPeril + nl;
             }
             if (majorPeril != 10)
             {
-                r += "majorperil=" + maxPanY + nl;
+                r += "majorperil=" + majorPeril + nl;
             }
             if (deadlyPeril != 12)
             {
-                r += "deadlyperil=" + maxPanY + nl;
+                r += "deadlyperil=" + deadlyPeril + nl;
             }
             if (packs.Length > 0)
             {
@@ -1463,4 +1492,3 @@ public class QuestData
         }
     }
 }
-

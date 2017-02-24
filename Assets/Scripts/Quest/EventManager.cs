@@ -213,6 +213,16 @@ public class EventManager
             CameraController.SetCamera(e.qEvent.location);
         }
 
+        // Set camera limits
+        if (e.qEvent.minCam)
+        {
+            CameraController.SetCameraMin(e.qEvent.location);
+        }
+        if (e.qEvent.maxCam)
+        {
+            CameraController.SetCameraMax(e.qEvent.location);
+        }
+
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {

@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public class EditorComponentQuest : EditorComponent
 {
-    // When a text edit box raised it is stored here
-    // This allows the return value to be fetched later
-    public bool gettingMinPosition = false;
-    public bool gettingMaxPosition = false;
-
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable dbe1;
     public DialogBoxEditable dbe2;
@@ -41,53 +36,39 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(5, 1), "Min Camera");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(5, 11), new Vector2(1, 1), "~", delegate { GetMinPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 13), new Vector2(5, 1), "Max Camera");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(5, 13), new Vector2(1, 1), "~", delegate { GetMaxPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 15), new Vector2(8, 1), "Minor Peril Level:");
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(8, 1), "Minor Peril Level:");
         db.ApplyTag("editor");
 
         dbeList = new List<DialogBoxEditable>();
-        DialogBoxEditable dbeTmp = new DialogBoxEditable(new Vector2(8, 15), new Vector2(3, 1), game.quest.qd.quest.minorPeril.ToString(), delegate { UpdatePeril(0); });
+        DialogBoxEditable dbeTmp = new DialogBoxEditable(new Vector2(8, 11), new Vector2(3, 1), game.quest.qd.quest.minorPeril.ToString(), delegate { UpdatePeril(0); });
         dbeTmp.ApplyTag("editor");
         dbeTmp.AddBorder();
         dbeList.Add(dbeTmp);
 
-        db = new DialogBox(new Vector2(0, 16), new Vector2(8, 1), "Major Peril Level:");
+        db = new DialogBox(new Vector2(0, 12), new Vector2(8, 1), "Major Peril Level:");
         db.ApplyTag("editor");
 
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 16), new Vector2(3, 1), game.quest.qd.quest.majorPeril.ToString(), delegate { UpdatePeril(1); });
+        dbeTmp = new DialogBoxEditable(new Vector2(8, 12), new Vector2(3, 1), game.quest.qd.quest.majorPeril.ToString(), delegate { UpdatePeril(1); });
         dbeTmp.ApplyTag("editor");
         dbeTmp.AddBorder();
         dbeList.Add(dbeTmp);
 
-        db = new DialogBox(new Vector2(0, 17), new Vector2(8, 1), "Deadly Peril Level:");
+        db = new DialogBox(new Vector2(0, 13), new Vector2(8, 1), "Deadly Peril Level:");
         db.ApplyTag("editor");
 
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 17), new Vector2(3, 1), game.quest.qd.quest.deadlyPeril.ToString(), delegate { UpdatePeril(2); });
+        dbeTmp = new DialogBoxEditable(new Vector2(8, 13), new Vector2(3, 1), game.quest.qd.quest.deadlyPeril.ToString(), delegate { UpdatePeril(2); });
         dbeTmp.ApplyTag("editor");
         dbeTmp.AddBorder();
         dbeList.Add(dbeTmp);
 
-        db = new DialogBox(new Vector2(0, 19), new Vector2(9, 1), "Required Expansions:");
+        db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Required Expansions:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(9, 19), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, 15), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        int offset = 20;
+        int offset = 16;
         int index;
         for (index = 0; index < 8; index++)
         {
@@ -102,9 +83,6 @@ public class EditorComponentQuest : EditorComponent
                 tb.ApplyTag("editor");
             }
         }
-
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.minPanX, game.quest.qd.quest.minPanY), "CamMin", "editor");
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.maxPanX, game.quest.qd.quest.maxPanY), "CamMax", "editor");
     }
 
     public void UpdateQuestName()
@@ -186,32 +164,5 @@ public class EditorComponentQuest : EditorComponent
         }
         game.quest.qd.quest.packs = packs;
         Update();
-    }
-
-    public void GetMinPosition()
-    {
-        gettingMinPosition = true;
-    }
-
-    public void GetMaxPosition()
-    {
-        gettingMaxPosition = true;
-    }
-
-    override public void MouseDown()
-    {
-        Game game = Game.Get();
-        if (gettingMaxPosition)
-        {
-            game.quest.qd.quest.SetMaxCam(game.cc.GetMouseBoardPlane());
-            Update();
-            gettingMaxPosition = false;
-        }
-        if (gettingMinPosition)
-        {
-            game.quest.qd.quest.SetMinCam(game.cc.GetMouseBoardPlane());
-            Update();
-            gettingMinPosition = false;
-        }
     }
 }

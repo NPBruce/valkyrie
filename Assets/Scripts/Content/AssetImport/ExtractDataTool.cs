@@ -11,6 +11,7 @@ class ExtractDataTool
         List<string> labels = ReadLabels(data);
         Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
         string attacks = "";
+        string items = "";
 
         foreach (string m in labels)
         {
@@ -27,6 +28,11 @@ class ExtractDataTool
             if (m.IndexOf("ATTACK_") == 0)
             {
                 attacks += GetAttack(m);
+            }
+
+            if (m.IndexOf("UNIQUE_ITEM") == 0 || m.IndexOf("COMMON_ITEM") == 0)
+            {
+                items += GetItem(m);
             }
         }
 
@@ -53,6 +59,30 @@ class ExtractDataTool
         File.WriteAllText(file, activation);
         file = ContentData.ContentPath() + "/extract-attacks.ini";
         File.WriteAllText(file, attacks);
+        file = ContentData.ContentPath() + "/extract-items.ini";
+        File.WriteAllText(file, items);
+    }
+
+    public static string GetItem(string label)
+    {
+        string nameCamel = "";
+        string nameCamelUnder = "";
+
+        string[] elements = label.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+
+        string type = elements[0][0] + elements[0].Substring(1).ToLower();
+        for (int i = 2; i < elements.Length; i++)
+        {
+            string eFixed = elements[i][0] + elements[i].Substring(1).ToLower();
+            nameCamel += eFixed;
+            nameCamelUnder += "_" + eFixed;
+        }
+
+        string ret = "[Item" + type + nameCamel + "]\r\n";
+        ret += "name={ffg:" + label + "}\r\n";
+        ret += "image=../ffg/img/Item_" + type + nameCamel + ".dds\r\n\r\n";
+
+        return ret;
     }
 
     public static string GetAttack(string label)
@@ -68,7 +98,6 @@ class ExtractDataTool
 
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
-        //FIXME ATTACK_FIREARM_VS_BEAST_01
         ret += "target=" + elements[3].ToLower() + "\r\n";
         ret += "attacktype=" + elements[1].ToLower() + "\r\n\r\n";
         return ret;

@@ -72,7 +72,15 @@ public class EditorComponentEvent : EditorComponent
 
         if (!eventComponent.GetType().IsSubclassOf(typeof(QuestData.Event)))
         {
-            if (!eventComponent.locationSpecified)
+            if (eventComponent.minCam)
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Min Cam", delegate { PositionTypeCycle(); });
+            }
+            else if (eventComponent.maxCam)
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Max Cam", delegate { PositionTypeCycle(); });
+            }
+            else if (!eventComponent.locationSpecified)
             {
                 tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { PositionTypeCycle(); });
             }
@@ -198,20 +206,40 @@ public class EditorComponentEvent : EditorComponent
 
     public void PositionTypeCycle()
     {
-        if (!eventComponent.locationSpecified)
-        {
-            eventComponent.locationSpecified = true;
-            eventComponent.highlight = false;
-        }
-        else if (!eventComponent.highlight)
-        {
-            eventComponent.locationSpecified = true;
-            eventComponent.highlight = true;
-        }
-        else
+        if (eventComponent.minCam)
         {
             eventComponent.locationSpecified = false;
             eventComponent.highlight = false;
+            eventComponent.maxCam = true;
+            eventComponent.minCam = false;
+        }
+        else if (eventComponent.maxCam)
+        {
+            eventComponent.locationSpecified = false;
+            eventComponent.highlight = false;
+            eventComponent.maxCam = false;
+            eventComponent.minCam = false;
+        }
+        else if (eventComponent.highlight)
+        {
+            eventComponent.locationSpecified = false;
+            eventComponent.highlight = false;
+            eventComponent.maxCam = false;
+            eventComponent.minCam = true;
+        }
+        else if (eventComponent.locationSpecified)
+        {
+            eventComponent.locationSpecified = true;
+            eventComponent.highlight = true;
+            eventComponent.maxCam = false;
+            eventComponent.minCam = false;
+        }
+        else
+        {
+            eventComponent.locationSpecified = true;
+            eventComponent.highlight = false;
+            eventComponent.maxCam = false;
+            eventComponent.minCam = false;
         }
         Update();
     }
