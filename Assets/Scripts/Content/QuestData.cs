@@ -617,7 +617,7 @@ public class QuestData
             // Success quota
             if (data.ContainsKey("quota"))
             {
-                int.TryParse(data["quota"], out gold);
+                int.TryParse(data["quota"], out quota);
             }
             
             // minimum heros required to be selected for event
@@ -843,7 +843,7 @@ public class QuestData
             }
             if (quota != 0)
             {
-                r += "quota=" + gold + nl;
+                r += "quota=" + quota + nl;
             }
             if (minHeroes != 0)
             {

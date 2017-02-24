@@ -229,7 +229,9 @@ public class Quest
         eventQuota = new Dictionary<string, int>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
         {
-            eventQuota.Add(kv.Key, kv.Value);
+            int value;
+            int.TryParse(kv.Value, out value);
+            eventQuota.Add(kv.Key, value);
         }
 
         // Update the screen

@@ -98,11 +98,11 @@ public class DialogWindow {
         }
         else
         {
-            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { quotaInc(); }, eb.colour);
+            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { quotaInc(); }, Color.white);
         }
 
         // Only one button, action depends on quota
-        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eb.label, delegate { onQuota(); }, Color.white);
+        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
