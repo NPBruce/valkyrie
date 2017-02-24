@@ -79,7 +79,7 @@ class ExtractDataTool
         }
 
         string ret = "[Item" + type + nameCamel + "]\r\n";
-        ret += "name={ffg:" + label + "}\r\n\r\n";
+        ret += "name={ffg:" + label + "}\r\n";
         ret += "image=../ffg/img/Item_" + type + nameCamel + ".dds\r\n\r\n";
 
         return ret;
