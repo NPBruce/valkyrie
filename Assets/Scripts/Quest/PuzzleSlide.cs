@@ -179,8 +179,8 @@ public class PuzzleSlide
             rotation = ((seed & 0x01) == 0);
             int rndData = seed >> 1;
 
-            int length = (rndData % 5);
-            rndData = rndData / 5;
+            int length = (rndData % 4) + 1;
+            rndData = rndData / 4;
 
             int stillpos = (rndData % 6);
             rndData = rndData / 6;

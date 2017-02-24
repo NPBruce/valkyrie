@@ -175,6 +175,7 @@ public class BlockSlider : MonoBehaviour
 {
     public bool sliding = false;
     public Vector2 mouseStart;
+    public Vector2 transStart;
     public PuzzleSlide.Block block;
     public PuzzleSlideWindow win;
     RectTransform trans;
@@ -193,9 +194,10 @@ public class BlockSlider : MonoBehaviour
         {
             return;
         }
+
         if (block.rotation)
         {
-            float yTarget = -trans.anchoredPosition.y + Input.mousePosition.y - mouseStart.y;
+            float yTarget = -transStart.y + mouseStart.y - Input.mousePosition.y;
             float yTargetSq = yTarget / (3f * UIScaler.GetPixelsPerUnit());
             int yLimit = GetNegativeLimit();
             if (yTargetSq < yLimit)
@@ -214,12 +216,12 @@ public class BlockSlider : MonoBehaviour
                 yTarget = nearestFit;
             }
             Vector3 pos = trans.anchoredPosition;
-            pos.x = -yTarget;
+            pos.y = -yTarget;
             trans.anchoredPosition = pos;
         }
         else
         {
-            float xTarget = trans.anchoredPosition.x + Input.mousePosition.x - mouseStart.x;
+            float xTarget = transStart.x + Input.mousePosition.x - mouseStart.x;
             float xTargetSq = xTarget / (3f * UIScaler.GetPixelsPerUnit());
             int xLimit = GetNegativeLimit();
             if (xTargetSq < xLimit)
@@ -242,7 +244,7 @@ public class BlockSlider : MonoBehaviour
             trans.anchoredPosition = pos;
         }
 
-        if (!Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
             sliding = false;
             block.xpos = Mathf.RoundToInt(trans.anchoredPosition.x / (3f * UIScaler.GetPixelsPerUnit()));
@@ -317,5 +319,6 @@ public class BlockSlider : MonoBehaviour
     {
         sliding = true;
         mouseStart = Input.mousePosition;
+        transStart = trans.anchoredPosition;
     }
 }
