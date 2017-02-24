@@ -4,6 +4,7 @@ Done:
 Outstanding:
 MoM:
 Fire
+Investigator Eliminated
 Mythos events
 monsters health
 Event subtype - get successes, pass/fail
