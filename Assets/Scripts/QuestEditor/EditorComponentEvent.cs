@@ -228,14 +228,13 @@ public class EditorComponentEvent : EditorComponent
     {
         Game game = Game.Get();
         Dictionary<string, Color> triggers = new Dictionary<string, Color>();
-        List<string> triggers = new List<string>();
         triggers.Add("", Color.white);
 
         bool startPresent = false;
-        bool noMorale = false
-        foreach (KeyValuePair<string, QuestComponent> kv in game.qd.components)
+        bool noMorale = false;
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestComponent e = kv.Value as QuestData.Event;
+            QuestData.Event e = kv.Value as QuestData.Event;
             if (e != null)
             {
                 if (e.trigger.Equals("EventStart"))
@@ -269,7 +268,6 @@ public class EditorComponentEvent : EditorComponent
 
         triggers.Add("EndRound", Color.white);
 
-        Game game = Game.Get();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             triggers.Add("Defeated" + kv.Key, Color.white);

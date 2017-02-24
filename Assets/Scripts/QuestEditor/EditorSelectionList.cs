@@ -9,8 +9,8 @@ public class EditorSelectionList
     // Selection made
     public string selection = "";
     // List of items to select
-    public string[] items;
-    public Color[] colours;
+    public List<string> items;
+    public List<Color> colours;
     public string title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
@@ -20,21 +20,21 @@ public class EditorSelectionList
     // Create editor selection clist with title, list and callback
     public EditorSelectionList(string t, List<string> list, UnityEngine.Events.UnityAction call)
     {
-        items = list.ToArray();
-        colours = new Color[list.Count];
+        items = list;
+        colours = new List<Color>();
         for (int i = 0; i < list.Count; i++)
         {
-            colours[i] = Color.white;
+            colours.Add(Color.white);
         }
         title = t;
         returnCall = call;
     }
 
     // Create editor selection clist with title, list, colour and callback
-    public EditorSelectionList(string t, Dictionary<string, Color> list>, UnityEngine.Events.UnityAction call)
+    public EditorSelectionList(string t, Dictionary<string, Color> list, UnityEngine.Events.UnityAction call)
     {
-        items = list.Keys.ToArray();
-        colours = list.Values.ToArray();
+        items = new List<string>(list.Keys);
+        colours = new List<Color>(list.Values);
         title = t;
         returnCall = call;
     }
@@ -65,7 +65,7 @@ public class EditorSelectionList
         for (int i = indexOffset; i < (20 + indexOffset); i++)
         {
             // limit to array length
-            if (items.Length > i)
+            if (items.Count > i)
             {
                 string key = items[i];
                 Color c = colours[i];
@@ -75,7 +75,7 @@ public class EditorSelectionList
             offset += 1;
         }
         // Paged
-        if (items.Length > 20)
+        if (items.Count > 20)
         {
             // Prev button
             offset += 1;
@@ -98,7 +98,7 @@ public class EditorSelectionList
     public void NextPage()
     {
         indexOffset += 20;
-        if (indexOffset > items.Length)
+        if (indexOffset > items.Count)
         {
             indexOffset -= 20;
         }

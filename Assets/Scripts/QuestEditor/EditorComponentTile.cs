@@ -62,13 +62,13 @@ public class EditorComponentTile : EditorComponent
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
-        foreach (KeyValuePair<string, QuestComponent> kv in game.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestComponent t = kv.Value as QuestData.Tile;
+            QuestData.Tile t = kv.Value as QuestData.Tile;
             if (t != null)
             {
-                usedTiles.Add(t.tileSideName);
-                usedTiles.Add(game.cd.tileSides[t.tileSideName].reverse);
+                usedSides.Add(t.tileSideName);
+                usedSides.Add(game.cd.tileSides[t.tileSideName].reverse);
             }
         }
 
