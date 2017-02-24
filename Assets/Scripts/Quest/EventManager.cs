@@ -219,6 +219,16 @@ public class EventManager
             return;
         }
 
+        // Set camera limits
+        if (e.qEvent.minCam)
+        {
+            CameraController.SetCameraMin(e.qEvent.location);
+        }
+        if (e.qEvent.maxCam)
+        {
+            CameraController.SetCameraMax(e.qEvent.location);
+        }
+
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {
@@ -234,7 +244,11 @@ public class EventManager
     public void EndEvent(int state=0)
     {
         // Get list of next events
-        List<string> eventList = currentEvent.qEvent.nextEvent[state];
+        List<string> eventList = new List<string>();
+        if (currentEvent.qEvent.nextEvent.Count > state)
+        {
+            eventList = currentEvent.qEvent.nextEvent[state];
+        }
 
         // Only take enabled events from list
         List<string> enabledEvents = new List<string>();

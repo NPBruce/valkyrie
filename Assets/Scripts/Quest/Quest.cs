@@ -21,6 +21,9 @@ public class Quest
     // A dictionary of puzzle state
     public Dictionary<string, PuzzleSlide> puzzle;
 
+    // A count of successes from events
+    public Dictionary<string, int> eventQuota;
+
     // Event manager handles the events
     public EventManager eManager;
 
@@ -70,6 +73,7 @@ public class Quest
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, PuzzleSlide>();
+        eventQuota = new Dictionary<string, int>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
@@ -232,6 +236,14 @@ public class Quest
             {
                 puzzle.Add(new PuzzleSlide(kv.Value));
             }
+        }
+        // Restore event quotas
+        eventQuota = new Dictionary<string, int>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
+        {
+            int value;
+            int.TryParse(kv.Value, out value);
+            eventQuota.Add(kv.Key, value);
         }
 
         // Update the screen
@@ -452,6 +464,13 @@ public class Quest
                 r += h.id + " ";
             }
             r = r.Substring(0, r.Length - 1) + nl;
+        }
+
+        // Save event quotas
+        r += "[EventQuota]" + nl;
+        foreach (KeyValuePair<string, int> kv in eventQuota)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
         }
 
         // Save hero state

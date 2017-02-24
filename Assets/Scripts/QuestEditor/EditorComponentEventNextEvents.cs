@@ -7,6 +7,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     QuestData.Event eventComponent;
     List<DialogBoxEditable> buttonDBE;
     List<DialogBoxEditable> delayedEventsDBE;
+    DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
     EditorSelectionList delayedEventESL;
 
@@ -56,16 +57,23 @@ public class EditorComponentEventNextEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(6, 1), "Selection:");
-        db.ApplyTag("editor");
-
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(6, 1), new Vector2(4, 1), randomButton, delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(10, 1), new Vector2(9, 1), "Buttons:");
+        DialogBox db = new DialogBox(new Vector2(10, 1), new Vector2(9, 1), "Buttons:");
+        db.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), "Quota:");
+        db.ApplyTag("editor");
+
+        quotaDBE = new DialogBoxEditable(new Vector2(6, 1), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });
+        quotaDBE.ApplyTag("editor");
+        quotaDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(8, 1), new Vector2(11, 1), "Buttons:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1), "+", delegate { AddButton(0); }, Color.green);
@@ -151,6 +159,12 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void ToggleRandom()
     {
         eventComponent.randomEvents = !eventComponent.randomEvents;
+        Update();
+    }
+
+    public void SetQuota()
+    {
+        int.TryParse(quotaDBE.uiInput.text, out eventComponent.quota);
         Update();
     }
 

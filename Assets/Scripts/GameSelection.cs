@@ -71,8 +71,7 @@ public class GameSelection
         }
         else // Import unavailable
         {
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Import Unavailable", Color.red);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 20) / 2, 14.2f), new Vector2(20, 1f), "Unable to locate Road to Legend, install via Steam", Color.red);
             db.AddBorder();
         }
 
@@ -102,8 +101,7 @@ public class GameSelection
         }
         else // Import unavailable
         {
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Import Unavailable", Color.red);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 20) / 2, 23.2f), new Vector2(20, 1f), "Unable to locate Mansions of Madness, install via Steam", Color.red);
             db.AddBorder();
         }
         new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Exit", delegate { Exit(); }, Color.red);
