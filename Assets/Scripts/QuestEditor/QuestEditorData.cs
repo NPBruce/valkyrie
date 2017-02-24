@@ -74,7 +74,7 @@ public class QuestEditorData {
         }
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 18), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 22), "");
         db.AddBorder();
 
         // Heading
@@ -126,13 +126,13 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 16), new Vector2(9, 1), "Item", delegate { ListItem(); });
+        tb = new TextButton(new Vector2(22, 18), new Vector2(9, 1), "Item", delegate { ListItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 18), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(25.5f, 18), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(25.5f, 20), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
@@ -385,6 +385,11 @@ public class QuestEditorData {
             SelectAsMPlace(name);
             return;
         }
+        if (game.quest.qd.components[name] is QuestData.Puzzle)
+        {
+            SelectAsPuzzle(name);
+            return;
+        }
         if (game.quest.qd.components[name] is QuestData.Item)
         {
             SelectAsItem(name);
@@ -462,6 +467,12 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentMPlace(name));
+    }
+
+    public static void SelectAsPuzzle(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentPuzzle(name));
     }
 
     public static void SelectAsItem(string name)
@@ -561,7 +572,7 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Puzzle" + index, new QuestData.Event("Puzzle" + index));
+        game.quest.qd.components.Add("Puzzle" + index, new QuestData.Puzzle("Puzzle" + index));
         SelectComponent("Puzzle" + index);
     }
     

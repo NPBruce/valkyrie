@@ -37,11 +37,13 @@ public class PuzzleSlideWindow
 
         // Puzzle goes here
         GameObject background = new GameObject("puzzleContent");
+        background.tag = "dialog";
         RectTransform transBg = background.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit(), 18f * UIScaler.GetPixelsPerUnit());
+        background.transform.SetParent(Game.Get().uICanvas.transform);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() * 2.5f, 18f * UIScaler.GetPixelsPerUnit());
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-12f) * UIScaler.GetPixelsPerUnit(), 24f * UIScaler.GetPixelsPerUnit());
 
-        DrawSlideFrame(transBg);
+        DrawSlideFrame(background.transform);
 
         foreach (PuzzleSlide.Block b in puzzle.puzzle)
         {
@@ -50,13 +52,13 @@ public class PuzzleSlideWindow
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(11, 24.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 24.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(11, 24.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 24.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
         }
     }
 
@@ -87,7 +89,7 @@ public class PuzzleSlideWindow
         game.quest.eManager.EndEvent();
     }
 
-    public void DrawSlideFrame(RectTransform pos, float scale = 3f)
+    public void DrawSlideFrame(Transform trans, float scale = 3f)
     {
         GameObject[] bLine = new GameObject[8];
         // create 4 lines
@@ -97,7 +99,7 @@ public class PuzzleSlideWindow
             bLine[i].tag = "dialog";
             bLine[i].AddComponent<RectTransform>();
             bLine[i].AddComponent<CanvasRenderer>();
-            bLine[i].transform.SetParent(pos);
+            bLine[i].transform.SetParent(trans);
             UnityEngine.UI.Image blImage = bLine[i].AddComponent<UnityEngine.UI.Image>();
             blImage.color = Color.white;
         }
@@ -143,17 +145,18 @@ public class PuzzleSlideWindow
             borderColour = Color.red;
             bgColour = new Color(0.8f, 0.0f, 0f, 1f);
         }
-        border = new RectangleBorder(blockGO.transform, borderColour, new Vector2(block.xlen, block.ylen));
-
         blockGO.tag = "dialog";
 
         Game game = Game.Get();
         blockGO.transform.parent = pos;
 
         RectTransform transBg = blockGO.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (block.ypos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (block.ylen * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (block.xpos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (block.xlen * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
+        transBg.pivot = Vector2.up;
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (block.ypos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, ((block.ylen + 1) * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (block.xpos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, ((block.xlen + 1) * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
         blockGO.AddComponent<CanvasRenderer>();
+
+        border = new RectangleBorder(blockGO.transform, borderColour, new Vector2((block.xlen + 1) * 3f, (block.ylen + 1) *3f));
 
         UnityEngine.UI.Image uiImage = blockGO.AddComponent<UnityEngine.UI.Image>();
         uiImage.color = bgColour;
@@ -170,17 +173,17 @@ public class PuzzleSlideWindow
 
 public class BlockSlider : MonoBehaviour
 {
-    public Transform trans;
     public bool sliding = false;
     public Vector2 mouseStart;
     public PuzzleSlide.Block block;
     public PuzzleSlideWindow win;
+    RectTransform trans;
 
-	// Use this for initialization (called at creation)
-	void Start ()
+    // Use this for initialization (called at creation)
+    void Start ()
     {
+        trans = gameObject.GetComponent<RectTransform>();
         // Get the image attached to this game object
-        trans = gameObject.transform;
     }
 	
 	// Update is called once per frame
@@ -190,53 +193,60 @@ public class BlockSlider : MonoBehaviour
         {
             return;
         }
-        // FIXME collisions
         if (block.rotation)
         {
-            float yTarget = trans.position.y + Input.mousePosition.y - mouseStart.y;
-            float yLimit = (GetNegativeLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
-            if (yTarget < yLimit)
+            float yTarget = -trans.anchoredPosition.y + Input.mousePosition.y - mouseStart.y;
+            float yTargetSq = yTarget / (3f * UIScaler.GetPixelsPerUnit());
+            int yLimit = GetNegativeLimit();
+            if (yTargetSq < yLimit)
             {
-                yTarget = yLimit;
+                yTargetSq = yLimit;
             }
-            yLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
-            if (yTarget > yLimit)
+            yLimit = GetPositiveLimit();
+            if (yTargetSq > yLimit)
             {
-                yTarget = yLimit;
+                yTargetSq = yLimit;
             }
-            float nearestFit = Mathf.Round((yTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
-            if (Mathf.Abs(yTarget - nearestFit) < 0.5f)
+            yTarget = (yTargetSq * 3f * UIScaler.GetPixelsPerUnit());
+            float nearestFit = (yTargetSq * 3f * UIScaler.GetPixelsPerUnit());
+            if (Mathf.Abs(yTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 0.5f))
             {
                 yTarget = nearestFit;
             }
-            trans.Translate(Vector3.down * yTarget);
+            Vector3 pos = trans.anchoredPosition;
+            pos.x = -yTarget;
+            trans.anchoredPosition = pos;
         }
         else
         {
-            float xTarget = trans.position.x + Input.mousePosition.x - mouseStart.x;
-            float xLimit = (GetNegativeLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
-            if (xTarget < xLimit)
+            float xTarget = trans.anchoredPosition.x + Input.mousePosition.x - mouseStart.x;
+            float xTargetSq = xTarget / (3f * UIScaler.GetPixelsPerUnit());
+            int xLimit = GetNegativeLimit();
+            if (xTargetSq < xLimit)
             {
-                xTarget = xLimit;
+                xTargetSq = xLimit;
             }
-            xLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
-            if (xTarget > xLimit)
+            xLimit = GetPositiveLimit();
+            if (xTargetSq > xLimit)
             {
-                xTarget = xLimit;
+                xTargetSq = xLimit;
             }
-            float nearestFit = Mathf.Round((xTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
-            if (Mathf.Abs(xTarget - nearestFit) < 0.5f)
+            xTarget = xTargetSq * 3f * UIScaler.GetPixelsPerUnit();
+            float nearestFit = Mathf.Round(xTargetSq) * 3f * UIScaler.GetPixelsPerUnit();
+            if (Mathf.Abs(xTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 0.5f))
             {
                 xTarget = nearestFit;
             }
-            trans.Translate(Vector3.right * xTarget);
+            Vector3 pos = trans.anchoredPosition;
+            pos.x = xTarget;
+            trans.anchoredPosition = pos;
         }
 
         if (!Input.GetMouseButton(0))
         {
             sliding = false;
-            block.xpos = Mathf.RoundToInt((trans.position.x - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
-            block.ypos = Mathf.RoundToInt((trans.position.y - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
+            block.xpos = Mathf.RoundToInt(trans.anchoredPosition.x / (3f * UIScaler.GetPixelsPerUnit()));
+            block.ypos = Mathf.RoundToInt(-trans.anchoredPosition.y / (3f * UIScaler.GetPixelsPerUnit()));
             // Update
             win.CreateWindow();
         }
@@ -245,7 +255,7 @@ public class BlockSlider : MonoBehaviour
     public int GetNegativeLimit()
     {
         int posx = block.xpos;
-        int posy = block.xpos;
+        int posy = block.ypos;
 
         do
         {
@@ -273,7 +283,7 @@ public class BlockSlider : MonoBehaviour
     public int GetPositiveLimit()
     {
         int posx = block.xpos;
-        int posy = block.xpos;
+        int posy = block.ypos;
 
         if (block.rotation)
         {

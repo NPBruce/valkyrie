@@ -36,28 +36,21 @@ public class EditorComponentPuzzle : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Class:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "~", delegate { GetPosition(false); });
+        tb = new TextButton(new Vector2(3, 2), new Vector2(8, 1), puzzleComponent.puzzleClass, delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), "Class:");
+        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), "Level:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 4), new Vector2(8, 1), puzzleComponent.puzzleClass, delegate { Class(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Level:");
-        db.ApplyTag("editor");
-
-        levelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
+        levelDBE = new DialogBoxEditable(new Vector2(3, 4), new Vector2(2, 1), puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
     }
