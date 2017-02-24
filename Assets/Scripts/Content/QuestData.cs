@@ -1045,7 +1045,7 @@ public class QuestData
     {
         new public static string type = "Puzzle";
         public string puzzleClass = "slide";
-        public int puzzleLevel = "4";
+        public int puzzleLevel = 4;
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)

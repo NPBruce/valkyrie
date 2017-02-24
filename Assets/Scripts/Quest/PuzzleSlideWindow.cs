@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class PuzzleSlideWindow {
     public EventManager.Event eventData;
+    QuestData.Puzzle questPuzzle;
     public PuzzleSlide puzzle;
 
     public PuzzleSlideWindow(EventManager.Event e)
@@ -13,15 +14,15 @@ public class PuzzleSlideWindow {
         eventData = e;
         Game game = Game.Get();
 
-        QuestData.Event questPuzzle = e.qEvent as QuestData.Puzzle;
+        questPuzzle = e.qEvent as QuestData.Puzzle;
 
-        if (game.quest.puzzle.ContainsKey(questPuzzle.qEvent.name)
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
-            puzzle = game.quest.puzzle[questPuzzle.qEvent.name];
+            puzzle = game.quest.puzzle[questPuzzle.name];
         }
         else
         {
-            puzzle = new PuzzleSlide(questPuzzle.level);
+            puzzle = new PuzzleSlide(questPuzzle.puzzleLevel);
         }
 
         CreateWindow();
@@ -30,21 +31,21 @@ public class PuzzleSlideWindow {
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2( UIScaler.GetGetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
+        DialogBox db = new DialogBox(new Vector2( UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
         db.AddBorder();
 
 
         // Puzzle goes here
-        background = new GameObject("puzzleContent");
+        GameObject background = new GameObject("puzzleContent");
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit(), 18f * UIScaler.GetPixelsPerUnit());
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetGetHCenter(-12f) * UIScaler.GetPixelsPerUnit(), 24f * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-12f) * UIScaler.GetPixelsPerUnit(), 24f * UIScaler.GetPixelsPerUnit());
 
         DrawSlideFrame(transBg);
 
         foreach (PuzzleSlide.Block b in puzzle.puzzle)
         {
-            CreateBlock(b, RectTransform transBg, b.target)
+            CreateBlock(b, transBg, b.target);
         }
 
         if (puzzle.Solved())
@@ -63,11 +64,11 @@ public class PuzzleSlideWindow {
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.qEvent.name)
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
-            game.quest.puzzle.Remove(questPuzzle.qEvent.name);
+            game.quest.puzzle.Remove(questPuzzle.name);
         }
-        game.quest.puzzle.Add(questPuzzle.qEvent.name, puzzle);
+        game.quest.puzzle.Add(questPuzzle.name, puzzle);
 
         game.quest.eManager.currentEvent = null;
         game.quest.eManager.currentEvent = null;
@@ -78,9 +79,9 @@ public class PuzzleSlideWindow {
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.qEvent.name)
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
-            game.quest.puzzle.Remove(questPuzzle.qEvent.name);
+            game.quest.puzzle.Remove(questPuzzle.name);
         }
 
         game.quest.eManager.EndEvent();
@@ -88,7 +89,7 @@ public class PuzzleSlideWindow {
 
     public void DrawSlideFrame(RectTransform pos, float scale = 3f)
     {
-        bLine = new GameObject[8];
+        GameObject[] bLine = new GameObject[8];
         // create 4 lines
         for (int i = 0; i < 8; i++)
         {
@@ -105,39 +106,39 @@ public class PuzzleSlideWindow {
         float thick = 0.05f * UIScaler.GetPixelsPerUnit();
 
         bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, -thick, thick);
-        bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick);
+        bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick));
 
         bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, thick);
-        bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick);
+        bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick));
 
         bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, thick);
-        bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick);
+        bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, (scale * 6f * UIScaler.GetPixelsPerUnit()) + (2 * thick));
 
         bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, (scale * 2f * UIScaler.GetPixelsPerUnit()) - thick, thick);
-        bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick;
+        bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick);
 
         bLine[4].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, (scale * 2f * UIScaler.GetPixelsPerUnit()) - thick, thick);
-        bLine[4].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Buttom, -thick, (scale * 3f * UIScaler.GetPixelsPerUnit()) + thick;
+        bLine[4].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, -thick, (scale * 3f * UIScaler.GetPixelsPerUnit()) + thick);
 
         bLine[5].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -thick, thick);
-        bLine[5].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (scale * 2f * UIScaler.GetPixelsPerUnit()) - thick, (scale * UIScaler.GetPixelsPerUnit()) + (2 * thick);
+        bLine[5].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (scale * 2f * UIScaler.GetPixelsPerUnit()) - thick, (scale * UIScaler.GetPixelsPerUnit()) + (2 * thick));
 
         bLine[6].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (scale * 2f * UIScaler.GetPixelsPerUnit()) - thick, thick);
-        bLine[6].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick;
+        bLine[6].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick);
 
-        bLine[7].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Buttom, (scale * 3f * UIScaler.GetPixelsPerUnit()) - thick, thick);
-        bLine[7].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick;
+        bLine[7].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, (scale * 3f * UIScaler.GetPixelsPerUnit()) - thick, thick);
+        bLine[7].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -thick, (scale * 2f * UIScaler.GetPixelsPerUnit()) + thick);
     }
 
-    public CreateBlock(PuzzleSlide.Block block, RectTransform pos, bool target=false)
+    public void CreateBlock(PuzzleSlide.Block block, RectTransform pos, bool target = false)
     {
         public GameObject blockGO;
         public RectangleBorder border;
         public Color borderColour = Color.yellow;
         public Color bgColour = new Color(0.6f, 0.6f, 0f, 1f);
 
-        // Create object
-        blockGO = new GameObject("puzzleBlock");
+       // Create object
+       GameObject blockGO = new GameObject("puzzleBlock");
         if (target)
         {
             borderColour = Color.red;

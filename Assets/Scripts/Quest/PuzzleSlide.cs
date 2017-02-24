@@ -13,23 +13,23 @@ public class PuzzleSlide
         puzzle.Add(new Block());
 
         // Start with 4 blocks
-        AddBlock());
-        AddBlock());
-        AddBlock());
-        AddBlock());
+        AddBlock();
+        AddBlock();
+        AddBlock();
+        AddBlock();
 
         PuzzleSlideSolver solve = new PuzzleSlideSolver();
         int steps = 0;
         while (steps != depth)
         {
-            steps = solve.Solve(puzzle, depth)
+            steps = solve.Solve(puzzle, depth);
             if (steps < depth)
             {
-                AddBlock());
+                AddBlock();
             }
             if (steps > depth)
             {
-                RemoveBlock());
+                RemoveBlock();
             }
         }
     }
@@ -37,11 +37,11 @@ public class PuzzleSlide
     public PuzzleSlide(Dictionary<string, string> data)
     {
         puzzle = new List<Block>();
-        foreach (KeyValuePair<string, string> in data)
+        foreach (KeyValuePair<string, string> kv in data)
         {
-            if (kv.key.Equals("moves"))
+            if (kv.Key.Equals("moves"))
             {
-                int.TryParse(kv.value, out moves)
+                int.TryParse(kv.Value, out moves);
             }
             else
             {
@@ -76,7 +76,7 @@ public class PuzzleSlide
         {
             return false;
         }
-        Foreach (Block b in state)
+        foreach (Block b in state)
         {
             if (b.Blocks(x,y))
             {
@@ -92,9 +92,9 @@ public class PuzzleSlide
         // General quest state block
         string r = "[PuzzleSlide" + id + "]" + nl;
         r += "moves=" + moves + nl;
-        for (int i = 0; i < blocks.Count)
+        for (int i = 0; i < puzzle.Count; i++)
         {
-            r += "block" + i + "=" + blocks[i].ToString() + nl;
+            r += "block" + i + "=" + puzzle[i].ToString() + nl;
         }
         return r + nl;
     }
@@ -118,10 +118,10 @@ public class PuzzleSlide
             return true;
         }
 
-        public Vector2 GetMove(bool dir, int distance = 1;)
+        public Vector2 GetMove(bool dir, int distance = 1)
         {
             Vector2 ret = new Vector2(xpos, ypos);
-            if (dir > 0)
+            if (dir)
             {
                 if (rotation)
                 {
@@ -168,11 +168,15 @@ public class PuzzleSlide
             return true;
         }
 
+        public Block()
+        {
+        }
+
         public Block(int seed)
         {
             target = false;
 
-            rotation = seed & 0x01;
+            rotation = ((seed & 0x01) == 0);
             int rndData = seed >> 1;
 
             int length = (rndData % 5);
@@ -181,7 +185,7 @@ public class PuzzleSlide
             int stillpos = (rndData % 6);
             rndData = rndData / 6;
 
-            itn movPos = (rndData % (6 - length));
+            int movPos = (rndData % (6 - length));
 
             if (rotation)
             {
@@ -201,19 +205,18 @@ public class PuzzleSlide
 
         public Block(string data)
         {
-            string[] vars = data.Split[",".ToCharArray()];
+            string[] vars = data.Split(",".ToCharArray());
             bool.TryParse(vars[0], out rotation);
             int.TryParse(vars[1], out xlen);
             int.TryParse(vars[2], out ylen);
             int.TryParse(vars[3], out xpos);
             int.TryParse(vars[4], out ypos);
-            int.TryParse(vars[5], out target);
-            rotation + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
+            bool.TryParse(vars[5], out target);
         }
 
-        public string ToString
+        override public string ToString()
         {
-            return rotation + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
+            return rotation.ToString() + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
         }
     }
 }
