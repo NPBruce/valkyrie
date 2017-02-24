@@ -1154,11 +1154,13 @@ public class QuestData
             monsterName = name;
             activations = new string[0];
             traits = new string[0];
+            typeDynamic = type;
         }
 
         // Create from ini data
         public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
+            typeDynamic = type;
             path = pathIn;
             // Get base derived monster type
             if (data.ContainsKey("base"))
@@ -1282,11 +1284,13 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         // Create from ini data
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
                 ability = data["ability"];
@@ -1350,6 +1354,7 @@ public class QuestData
         // Create new (editor)
         public Item(string s) : base(s)
         {
+            typeDynamic = type;
             traits = new string[1];
             traits[0] = "weapon";
         }
@@ -1357,6 +1362,7 @@ public class QuestData
         // Create from ini data
         public Item(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             if (data.ContainsKey("itemname"))
             {
                 itemName = data["itemname"];

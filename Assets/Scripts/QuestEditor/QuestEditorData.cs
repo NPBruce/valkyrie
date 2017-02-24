@@ -386,6 +386,11 @@ public class QuestEditorData {
             SelectAsMPlace(name);
             return;
         }
+        if (game.quest.qd.components[name] is QuestData.Item)
+        {
+            SelectAsItem(name);
+            return;
+        }
         if (game.quest.qd.components[name] is QuestData.Event)
         {
             SelectAsEvent(name);
@@ -458,6 +463,12 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentMPlace(name));
+    }
+
+    public static void SelectAsItem(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentItem(name));
     }
 
     // Create a new tile, use next available number
@@ -551,7 +562,7 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Item" + index, new QuestData.Event("Item" + index));
+        game.quest.qd.components.Add("Item" + index, new QuestData.Item("Item" + index));
         SelectComponent("Item" + index);
     }
 
