@@ -1328,6 +1328,62 @@ public class QuestData
         }
     }
 
+
+    // Scenario starting item
+    public class Item : QuestComponent
+    {
+        new public static string type = "Item";
+        public string itemName = "";
+        public string[] traits;
+
+        // Create new (editor)
+        public Activation(string s) : base(s)
+        {
+            traits = packs = new string[1];
+            traits[0] = "weapon";
+        }
+
+        // Create from ini data
+        public Activation(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            if (data.ContainsKey("itemname"))
+            {
+                itemName = data["itemname"];
+            }
+            if (data.ContainsKey("traits"))
+            {
+                traits = data["traits"].Split(' ');
+            }
+            else
+            {
+                packs = new string[0];
+            }
+        }
+
+        // Save to string
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (itemName.Length > 0)
+            {
+                r += "itemname=" + itemName + nl;
+            }
+            if (packs.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in traits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.traits - 1) + nl;
+            }
+            return r;
+        }
+    }
+
+
     // Quest ini component has special data
     public class Quest
     {

@@ -120,7 +120,13 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(25.5f, 16), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(22, 16), new Vector2(9, 1), "Item", delegate { ListItem(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(25.5f, 18), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
@@ -272,6 +278,26 @@ public class QuestEditorData {
         game.qed.esl.SelectItem();
     }
 
+    // Create selection list for items
+    public static void ListItem()
+    {
+        Game game = Game.Get();
+
+        List<string> items = new List<string>();
+        // This magic string is picked up later for object creation
+        items.Add("{NEW:Item}");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.Item)
+            {
+                items.Add(kv.Key);
+            }
+        }
+
+        game.qed.esl = new EditorSelectionList("Select Item", items, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+    }
+
     // Select a component from a list
     public void SelectComponent()
     {
@@ -314,6 +340,11 @@ public class QuestEditorData {
         if (name.Equals("{NEW:MPlace}"))
         {
             qed.NewMPlace();
+            return;
+        }
+        if (name.Equals("{NEW:Item}"))
+        {
+            qed.NewItem();
             return;
         }
         if (name.Equals("{NEW:Event}"))
