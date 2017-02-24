@@ -1348,14 +1348,14 @@ public class QuestData
         public string[] traits;
 
         // Create new (editor)
-        public Activation(string s) : base(s)
+        public Item(string s) : base(s)
         {
-            traits = packs = new string[1];
+            traits = new string[1];
             traits[0] = "weapon";
         }
 
         // Create from ini data
-        public Activation(string name, Dictionary<string, string> data) : base(name, data)
+        public Item(string name, Dictionary<string, string> data) : base(name, data)
         {
             if (data.ContainsKey("itemname"))
             {
@@ -1367,7 +1367,7 @@ public class QuestData
             }
             else
             {
-                packs = new string[0];
+                traits = new string[0];
             }
         }
 
@@ -1381,14 +1381,14 @@ public class QuestData
             {
                 r += "itemname=" + itemName + nl;
             }
-            if (packs.Length > 0)
+            if (traits.Length > 0)
             {
                 r += "traits=";
                 foreach (string s in traits)
                 {
                     r += s + " ";
                 }
-                r = r.Substring(0, r.traits - 1) + nl;
+                r = r.Substring(0, r.Length - 1) + nl;
             }
             return r;
         }
@@ -1462,15 +1462,15 @@ public class QuestData
             r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minorPeril != 7)
             {
-                r += "minorperil=" + maxPanY + nl;
+                r += "minorperil=" + minorPeril + nl;
             }
             if (majorPeril != 10)
             {
-                r += "majorperil=" + maxPanY + nl;
+                r += "majorperil=" + majorPeril + nl;
             }
             if (deadlyPeril != 12)
             {
-                r += "deadlyperil=" + maxPanY + nl;
+                r += "deadlyperil=" + deadlyPeril + nl;
             }
             if (packs.Length > 0)
             {

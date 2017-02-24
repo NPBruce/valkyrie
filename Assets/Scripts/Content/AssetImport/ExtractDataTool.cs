@@ -67,14 +67,13 @@ class ExtractDataTool
     {
         string nameCamel = "";
         string nameCamelUnder = "";
-        string type = 
 
         string[] elements = label.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
 
         string type = elements[0][0] + elements[0].Substring(1).ToLower();
-        for (int i = 2; i < elements.Count; i++)
+        for (int i = 2; i < elements.Length; i++)
         {
-            string eFixed = e[0] + e.Substring(1).ToLower();
+            string eFixed = elements[i][0] + elements[i].Substring(1).ToLower();
             nameCamel += eFixed;
             nameCamelUnder += "_" + eFixed;
         }

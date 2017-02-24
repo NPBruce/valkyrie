@@ -72,21 +72,21 @@ public class EditorComponentEvent : EditorComponent
 
         if (!eventComponent.GetType().IsSubclassOf(typeof(QuestData.Event)))
         {
-            if (!eventComponent.locationSpecified)
-            {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { PositionTypeCycle(); });
-            }
-            else if (eventComponent.highlight)
-            {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Highlight", delegate { PositionTypeCycle(); });
-            }
-            else if (eventComponent.minCam)
+            if (eventComponent.minCam)
             {
                 tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Min Cam", delegate { PositionTypeCycle(); });
             }
             else if (eventComponent.maxCam)
             {
                 tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Max Cam", delegate { PositionTypeCycle(); });
+            }
+            else if (!eventComponent.locationSpecified)
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { PositionTypeCycle(); });
+            }
+            else if (eventComponent.highlight)
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Highlight", delegate { PositionTypeCycle(); });
             }
             else
             {

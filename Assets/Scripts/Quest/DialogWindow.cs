@@ -67,7 +67,7 @@ public class DialogWindow {
         int num = 1;
         float length = 8f;
         float hOffset = UIScaler.GetWidthUnits() - 19f;
-        if (evenData.GetButtons().Count > 2)
+        if (eventData.GetButtons().Count > 2)
         {
             length = 16f;
             hOffset = UIScaler.GetHCenter(-8f);
@@ -82,7 +82,7 @@ public class DialogWindow {
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            if (evenData.GetButtons().Count > 2)
+            if (eventData.GetButtons().Count > 2)
             {
                 new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
             }

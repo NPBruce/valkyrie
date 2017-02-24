@@ -36,7 +36,7 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 11), new Vector2(8, 1), "Minor Peril Level:");
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(8, 1), "Minor Peril Level:");
         db.ApplyTag("editor");
 
         dbeList = new List<DialogBoxEditable>();
@@ -83,9 +83,6 @@ public class EditorComponentQuest : EditorComponent
                 tb.ApplyTag("editor");
             }
         }
-
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.minPanX, game.quest.qd.quest.minPanY), "CamMin", "editor");
-        game.tokenBoard.AddHighlight(new Vector2(game.quest.qd.quest.maxPanX, game.quest.qd.quest.maxPanY), "CamMax", "editor");
     }
 
     public void UpdateQuestName()

@@ -542,6 +542,19 @@ public class QuestEditorData {
         SelectComponent("Event" + index);
     }
 
+    public void NewItem()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.quest.qd.components.ContainsKey("Item" + index))
+        {
+            index++;
+        }
+        game.quest.qd.components.Add("Item" + index, new QuestData.Event("Item" + index));
+        SelectComponent("Item" + index);
+    }
+
     // Delete a component by type
     public void DeleteComponent(string type)
     {
