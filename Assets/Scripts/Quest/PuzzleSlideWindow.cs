@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class PuzzleSlideWindow {
+public class PuzzleSlideWindow
+{
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
     public PuzzleSlide puzzle;
@@ -31,9 +32,8 @@ public class PuzzleSlideWindow {
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2( UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
         db.AddBorder();
-
 
         // Puzzle goes here
         GameObject background = new GameObject("puzzleContent");
@@ -50,13 +50,13 @@ public class PuzzleSlideWindow {
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(11, 24.5f), new Vector2(8f, 2), "Close", delegate { ; }, Color.grey);
+            new TextButton(new Vector2(11, 24.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
             new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 24.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
         }
         else
         {
             new TextButton(new Vector2(11, 24.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 24.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { ; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 24.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
         }
     }
 
@@ -132,14 +132,13 @@ public class PuzzleSlideWindow {
 
     public void CreateBlock(PuzzleSlide.Block block, RectTransform pos, bool target = false)
     {
-        public GameObject blockGO;
-        public RectangleBorder border;
-        public Color borderColour = Color.yellow;
-        public Color bgColour = new Color(0.6f, 0.6f, 0f, 1f);
+        RectangleBorder border;
+        Color borderColour = Color.yellow;
+        Color bgColour = new Color(0.6f, 0.6f, 0f, 1f);
 
-       // Create object
-       GameObject blockGO = new GameObject("puzzleBlock");
-        if (target)
+        // Create object
+        GameObject blockGO = new GameObject("puzzleBlock");
+        if (block.target)
         {
             borderColour = Color.red;
             bgColour = new Color(0.8f, 0.0f, 0f, 1f);
@@ -152,8 +151,8 @@ public class PuzzleSlideWindow {
         blockGO.transform.parent = pos;
 
         RectTransform transBg = blockGO.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (location.y * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (size.y * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (location.x * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (size.x * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (block.ypos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (block.ylen * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (block.xpos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, (block.xlen * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
         blockGO.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Image uiImage = blockGO.AddComponent<UnityEngine.UI.Image>();
@@ -169,19 +168,19 @@ public class PuzzleSlideWindow {
     }
 }
 
-public BlockSlider : MonoBehaviour {
-
-    RectTransform trans;
-    bool sliding = false;
-    Vector2 mouseStart;
-    PuzzleSlide.Block block;
-    PuzzleSlideWindow win;
+public class BlockSlider : MonoBehaviour
+{
+    public Transform trans;
+    public bool sliding = false;
+    public Vector2 mouseStart;
+    public PuzzleSlide.Block block;
+    public PuzzleSlideWindow win;
 
 	// Use this for initialization (called at creation)
 	void Start ()
     {
         // Get the image attached to this game object
-        trans = gameObject.transform
+        trans = gameObject.transform;
     }
 	
 	// Update is called once per frame
@@ -200,17 +199,17 @@ public BlockSlider : MonoBehaviour {
             {
                 yTarget = yLimit;
             }
-            float yLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
+            yLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
             if (yTarget > yLimit)
             {
                 yTarget = yLimit;
             }
-            float nearestFit = Round((yTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
-            if (Math.Abs(yTarget - nearestFit) < 0.5f)
+            float nearestFit = Mathf.Round((yTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
+            if (Mathf.Abs(yTarget - nearestFit) < 0.5f)
             {
                 yTarget = nearestFit;
             }
-            trans.Traslate(Vector3.down * yTarget);
+            trans.Translate(Vector3.down * yTarget);
         }
         else
         {
@@ -220,24 +219,24 @@ public BlockSlider : MonoBehaviour {
             {
                 xTarget = xLimit;
             }
-            float xLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
+            xLimit = (GetPositiveLimit() * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f;
             if (xTarget > xLimit)
             {
                 xTarget = xLimit;
             }
-            float nearestFit = Round((xTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
-            if (Math.Abs(xTarget - nearestFit) < 0.5f)
+            float nearestFit = Mathf.Round((xTarget - 0.1f) / (3f * UIScaler.GetPixelsPerUnit())) + 0.1f;
+            if (Mathf.Abs(xTarget - nearestFit) < 0.5f)
             {
                 xTarget = nearestFit;
             }
-            trans.Traslate(Vector3.right * xTarget);
+            trans.Translate(Vector3.right * xTarget);
         }
 
         if (!Input.GetMouseButton(0))
         {
             sliding = false;
-            block.posx = RoundToInt((trans.position.x - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
-            block.posy = RoundToInt((trans.position.y - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
+            block.xpos = Mathf.RoundToInt((trans.position.x - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
+            block.ypos = Mathf.RoundToInt((trans.position.y - 0.1f) / (3f * UIScaler.GetPixelsPerUnit()));
             // Update
             win.CreateWindow();
         }
@@ -250,7 +249,7 @@ public BlockSlider : MonoBehaviour {
 
         do
         {
-            if (rotation)
+            if (block.rotation)
             {
                 posy--;
             }
@@ -258,9 +257,9 @@ public BlockSlider : MonoBehaviour {
             {
                 posx--;
             }
-        } while (PuzzleSlide.Empty(win.puzzle.puzzle, posx, posy);
+        } while (PuzzleSlide.Empty(win.puzzle.puzzle, posx, posy));
 
-        if (rotation)
+        if (block.rotation)
         {
             return posy + 1;
         }
@@ -276,18 +275,18 @@ public BlockSlider : MonoBehaviour {
         int posx = block.xpos;
         int posy = block.xpos;
 
-        if (rotation)
+        if (block.rotation)
         {
-            posy += length + 1;
+            posy += block.ylen + 1;
         }
         else
         {
-            posx += length + 1;
+            posx += block.xlen + 1;
         }
         
-        while (PuzzleSlide.Empty(win.puzzle.puzzle, posx, posy)
+        while (PuzzleSlide.Empty(win.puzzle.puzzle, posx, posy))
         {
-            if (rotation)
+            if (block.rotation)
             {
                 posy++;
             }
@@ -297,17 +296,11 @@ public BlockSlider : MonoBehaviour {
             }
         }
 
-        if (rotation)
+        if (block.rotation)
         {
             return posy - 1;
         }
         return posx - 1;
-    }
-
-    public int GetNegativeLimit()
-    {
-        int = 0;
-
     }
 
     public void Click()

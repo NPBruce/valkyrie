@@ -53,7 +53,7 @@ public class EditorComponentPuzzle : EditorComponent
         db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Level:");
         db.ApplyTag("editor");
 
-        levelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), eventComponent.level.ToString(), delegate { UpdateLevel(); });
+        levelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
@@ -78,7 +78,7 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void UpdateLevel()
     {
-        int.TryParse(threatDBE.uiInput.text, out eventComponent.level);
+        int.TryParse(levelDBE.uiInput.text, out puzzleComponent.puzzleLevel);
         Update();
     }
 }

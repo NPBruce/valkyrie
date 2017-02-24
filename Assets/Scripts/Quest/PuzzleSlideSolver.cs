@@ -16,15 +16,15 @@ public class PuzzleSlideSolver
     public int Solve(List<PuzzleSlide.Block> current, int moves)
     {
         Propose(current, null);
-        boolean solved = false;
-        for (int i = 0; i < moves; i++)
+        int i;
+        for (i = 0; i < moves; i++)
         {
-            List<PuzzleSlide.Block> current = queue.Dequeue();
-            if (AtGoal(current))
+            List<PuzzleSlide.Block> fromQueue = queue.Dequeue();
+            if (AtGoal(fromQueue))
             {
                 return i;
             }
-            explore(current);
+            Explore(fromQueue);
         }
         return i;
     }
@@ -33,8 +33,8 @@ public class PuzzleSlideSolver
     {
         foreach (PuzzleSlide.Block b in current)
         {
-            Slide(current, block, -1);
-            Slide(current, block, 1);
+            Slide(current, b, -1);
+            Slide(current, b, 1);
         }
     }
 
@@ -45,7 +45,7 @@ public class PuzzleSlideSolver
         {
             newState.Remove(b);
 
-            PuzzleSlide.Block newBlock = PuzzleSlide.Block(b);
+            PuzzleSlide.Block newBlock = new PuzzleSlide.Block(b);
             if (b.rotation)
             {
                 newBlock.ypos += dir;
@@ -72,7 +72,7 @@ public class PuzzleSlideSolver
     public bool CheckMove(List<PuzzleSlide.Block> state, PuzzleSlide.Block b, int dir)
     {
         Vector2 target = b.GetMove(dir);
-        return Empty(state, target.x, target.y);
+        return PuzzleSlide.Empty(state, Mathf.RoundToInt(target.x), Mathf.RoundToInt(target.y));
     }
 
     public bool AtGoal(List<PuzzleSlide.Block> state)

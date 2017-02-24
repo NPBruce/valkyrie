@@ -118,10 +118,10 @@ public class PuzzleSlide
             return true;
         }
 
-        public Vector2 GetMove(bool dir, int distance = 1)
+        public Vector2 GetMove(int dir, int distance = 1)
         {
             Vector2 ret = new Vector2(xpos, ypos);
-            if (dir)
+            if (dir > 0)
             {
                 if (rotation)
                 {
@@ -161,10 +161,10 @@ public class PuzzleSlide
 
         public bool Blocks(Block b)
         {
-            if ((b.y + b.ylen) < ypos) return false;
-            if ((b.x + b.xlen) < xpos) return false;
-            if (b.y > (ypos + ylen)) return false;
-            if (b.x > (xpos + xlen)) return false;
+            if ((b.ypos + b.ylen) < ypos) return false;
+            if ((b.xpos + b.xlen) < xpos) return false;
+            if (b.ypos > (ypos + ylen)) return false;
+            if (b.xpos > (xpos + xlen)) return false;
             return true;
         }
 
@@ -212,6 +212,16 @@ public class PuzzleSlide
             int.TryParse(vars[3], out xpos);
             int.TryParse(vars[4], out ypos);
             bool.TryParse(vars[5], out target);
+        }
+
+        public Block(Block b)
+        {
+            rotation = b.rotation;
+            xlen = b.xlen;
+            ylen = b.ylen;
+            xpos = b.xpos;
+            ypos = b.ypos;
+            target = b.target;
         }
 
         override public string ToString()

@@ -234,7 +234,7 @@ public class Quest
         {
             if (kv.Key.IndexOf("PuzzleSlide") == 0)
             {
-                puzzle.Add(new PuzzleSlide(kv.Value));
+                puzzle.Add(kv.Key, new PuzzleSlide(kv.Value));
             }
         }
         // Restore event quotas
@@ -487,7 +487,7 @@ public class Quest
 
         foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
         {
-            r += kv.Value.ToString(kv.key);
+            r += kv.Value.ToString(kv.Key);
         }
 
         return r;
