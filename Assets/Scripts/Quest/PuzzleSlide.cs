@@ -50,6 +50,11 @@ public class PuzzleSlide
         }
     }
 
+    public bool Solved()
+    {
+        return (puzzle[0].xpos == 6);
+    }
+
     public void AddBlock()
     {
         Block b = new Block(Random.Range(0, 255));
@@ -113,29 +118,29 @@ public class PuzzleSlide
             return true;
         }
 
-        public Vector2 GetMove(bool dir)
+        public Vector2 GetMove(bool dir, int distance = 1;)
         {
             Vector2 ret = new Vector2(xpos, ypos);
             if (dir > 0)
             {
                 if (rotation)
                 {
-                    ret.y += ylen + 1;
+                    ret.y += ylen + distance;
                 }
                 else
                 {
-                    ret.x += xlen + 1;
+                    ret.x += xlen + distance;
                 }
             }
             else
             {
                 if (rotation)
                 {
-                    ret.y -= 1;
+                    ret.y -= distance;
                 }
                 else
                 {
-                    ret.x -= 1;
+                    ret.x -= distance;
                 }
             }
 
