@@ -254,22 +254,57 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetTrigger()
     {
-        List<string> triggers = new List<string>();
-        triggers.Add("");
-        triggers.Add("EventStart");
-        triggers.Add("EndRound");
-        triggers.Add("NoMorale");
-
         Game game = Game.Get();
+        Dictionary<string, Color> triggers = new Dictionary<string, Color>();
+        triggers.Add("", Color.white);
+
+        bool startPresent = false;
+        bool noMorale = false;
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            QuestData.Event e = kv.Value as QuestData.Event;
+            if (e != null)
+            {
+                if (e.trigger.Equals("EventStart"))
+                {
+                    startPresent = true;
+                }
+                if (e.trigger.Equals("NoMorale"))
+                {
+                    noMorale = true;
+                }
+            }
+        }
+
+        if (startPresent)
+        {
+            triggers.Add("EventStart", Color.grey);
+        }
+        else
+        {
+            triggers.Add("EventStart", Color.white);
+        }
+
+        if (noMorale)
+        {
+            triggers.Add("NoMorale", Color.grey);
+        }
+        else
+        {
+            triggers.Add("NoMorale", Color.white);
+        }
+
+        triggers.Add("EndRound", Color.white);
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add("Defeated" + kv.Key);
-            triggers.Add("DefeatedUnique" + kv.Key);
+            triggers.Add("Defeated" + kv.Key, Color.white);
+            triggers.Add("DefeatedUnique" + kv.Key, Color.white);
         }
 
         for (int i = 1; i <= 25; i++)
         {
-            triggers.Add("EndRound" + i);
+            triggers.Add("EndRound" + i, Color.white);
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });

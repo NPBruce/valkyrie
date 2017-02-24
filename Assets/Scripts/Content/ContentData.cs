@@ -600,6 +600,7 @@ public class TileSideData : GenericData
     public float left = 0;
     public float pxPerSquare;
     public float aspect = 0;
+    public string reverse = "";
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -628,6 +629,12 @@ public class TileSideData : GenericData
         if (content.ContainsKey("aspect"))
         {
             float.TryParse(content["aspect"], out aspect);
+        }
+
+        // Other side used for validating duplicate use
+        if (content.ContainsKey("reverse"))
+        {
+            reverse = content["reverse"];
         }
     }
 }

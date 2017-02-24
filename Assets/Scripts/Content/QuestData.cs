@@ -498,6 +498,7 @@ public class QuestData
         public bool randomEvents = false;
         public bool minCam = false;
         public bool maxCam = false;
+        public int quota = 0;
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -615,6 +616,12 @@ public class QuestData
             if (data.ContainsKey("gold"))
             {
                 int.TryParse(data["gold"], out gold);
+            }
+            
+            // Success quota
+            if (data.ContainsKey("quota"))
+            {
+                int.TryParse(data["quota"], out quota);
             }
             
             // minimum heros required to be selected for event
@@ -849,6 +856,10 @@ public class QuestData
             if (gold != 0)
             {
                 r += "gold=" + gold + nl;
+            }
+            if (quota != 0)
+            {
+                r += "quota=" + quota + nl;
             }
             if (minHeroes != 0)
             {

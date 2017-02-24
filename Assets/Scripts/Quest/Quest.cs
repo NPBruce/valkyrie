@@ -18,6 +18,9 @@ public class Quest
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
+    // A count of successes from events
+    public Dictionary<string, int> eventQuota;
+
     // Event manager handles the events
     public EventManager eManager;
 
@@ -66,6 +69,7 @@ public class Quest
         flags = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        eventQuota = new Dictionary<string, int>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
@@ -220,6 +224,16 @@ public class Quest
             // Add this selection
             heroSelection.Add(kv.Key, heroList);
         }
+
+        // Restore event quotas
+        eventQuota = new Dictionary<string, int>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
+        {
+            int value;
+            int.TryParse(kv.Value, out value);
+            eventQuota.Add(kv.Key, value);
+        }
+
         // Update the screen
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
@@ -438,6 +452,13 @@ public class Quest
                 r += h.id + " ";
             }
             r = r.Substring(0, r.Length - 1) + nl;
+        }
+
+        // Save event quotas
+        r += "[EventQuota]" + nl;
+        foreach (KeyValuePair<string, int> kv in eventQuota)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
         }
 
         // Save hero state
