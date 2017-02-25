@@ -310,9 +310,9 @@ public class BlockSlider : MonoBehaviour
 
         if (block.rotation)
         {
-            return posy - 1;
+            return posy - (1 + block.ylen);
         }
-        return posx - 1;
+        return posx - (1 + block.xlen);
     }
 
     public void Click()

@@ -5,26 +5,31 @@ using System.Collections.Generic;
 public class PuzzleSlideSolver
 {
     public Queue<List<PuzzleSlide.Block>> queue;
+    public Queue<List<PuzzleSlide.Block>> nextQueue;
     public Dictionary<List<PuzzleSlide.Block>, List<PuzzleSlide.Block>> pred;
 
     public PuzzleSlideSolver()
     {
-        queue = new Queue<List<PuzzleSlide.Block>>();
-        pred = new Dictionary<List<PuzzleSlide.Block>, List<PuzzleSlide.Block>>();
     }
 
     public int Solve(List<PuzzleSlide.Block> current, int moves)
     {
+        pred = new Dictionary<List<PuzzleSlide.Block>, List<PuzzleSlide.Block>>();
+        nextQueue = new Queue<List<PuzzleSlide.Block>>();
         Propose(current, null);
         int i;
         for (i = 0; i <= moves; i++)
         {
-            List<PuzzleSlide.Block> fromQueue = queue.Dequeue();
-            if (AtGoal(fromQueue))
+            queue = nextQueue;
+            nextQueue = new Queue<List<PuzzleSlide.Block>>();
+            foreach (List<PuzzleSlide.Block> fromQueue in queue)
             {
-                return i;
+                if (AtGoal(fromQueue))
+                {
+                    return i;
+                }
+                Explore(fromQueue);
             }
-            Explore(fromQueue);
         }
         return i;
     }
@@ -68,7 +73,7 @@ public class PuzzleSlideSolver
         if (!pred.ContainsKey(next))
         {
             pred.Add(next, prev);
-            queue.Enqueue(next);
+            nextQueue.Enqueue(next);
         }
     }
 
