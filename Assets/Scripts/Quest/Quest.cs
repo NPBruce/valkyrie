@@ -15,6 +15,9 @@ public class Quest
     // A list of flags that have been set during the quest
     public HashSet<string> flags;
 
+    // A list of items that have been given to the investigators
+    public HashSet<string> items;
+
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
@@ -70,6 +73,7 @@ public class Quest
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
+        items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, PuzzleSlide>();
@@ -174,6 +178,14 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in saveFlags)
         {
             flags.Add(kv.Key);
+        }
+
+        // Set items
+        items = new HashSet<string>();
+        Dictionary<string, string> saveItems = saveData.Get("Items");
+        foreach (KeyValuePair<string, string> kv in saveItems)
+        {
+            items.Add(kv.Key);
         }
 
         // Restart event EventManager
@@ -450,6 +462,12 @@ public class Quest
 
         r += "[Flags]" + nl;
         foreach (string s in flags)
+        {
+            r += s + nl;
+        }
+
+        r += "[Items]" + nl;
+        foreach (string s in items)
         {
             r += s + nl;
         }

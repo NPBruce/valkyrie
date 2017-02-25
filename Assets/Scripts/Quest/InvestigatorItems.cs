@@ -8,7 +8,6 @@ public class InvestigatorItems
     public InvestigatorItems()
     {
         Game game = Game.Get();
-        List<ItemData> items = new List<ItemData>();
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -17,14 +16,14 @@ public class InvestigatorItems
             {
                 if (game.cd.items.ContainsKey(item.itemName))
                 {
-                    items.Add(game.cd.items[item.itemName]);
+                    game.quest.items.Add(item.itemName);
                 }
                 else
                 {
-                    List<ItemData> candidates = new List<ItemData>();
+                    List<string> candidates = new List<string>();
                     foreach (KeyValuePair<string, ItemData> id in game.cd.items)
                     {
-                        bool valid = true;
+                        bool valid = !game.quest.items.Contains(id.Value.sectionName);
                         foreach (string trait in item.traits)
                         {
                             if (!id.Value.ContainsTrait(trait))
@@ -34,12 +33,12 @@ public class InvestigatorItems
                         }
                         if (valid)
                         {
-                            candidates.Add(id.Value);
+                            candidates.Add(id.Value.sectionName);
                         }
                     }
                     if (candidates.Count > 0)
                     {
-                        items.Add(candidates[Random.Range(0, candidates.Count)]);
+                        game.quest.items.Add(candidates[Random.Range(0, candidates.Count)]);
                     }
                 }
             }
@@ -51,7 +50,7 @@ public class InvestigatorItems
             {
                 if (game.cd.items.ContainsKey(h.heroData.item))
                 {
-                    items.Add(game.cd.items[h.heroData.item]);
+                    game.quest.items.Add(h.heroData.item);
                 }
             }
         }
@@ -65,14 +64,17 @@ public class InvestigatorItems
 
         int y = 0;
         int x = 0;
-        foreach (ItemData item in items)
+        foreach (string item in game.quest.items)
         {
-            Texture2D tex = ContentData.FileToTexture(item.image);
+            Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (8f * y)), new Vector2(6, 6), "");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), "");
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
             db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name);
+
             x++;
             if (x > 4)
             {
