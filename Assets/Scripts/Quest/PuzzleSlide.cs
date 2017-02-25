@@ -13,10 +13,10 @@ public class PuzzleSlide
         puzzle.Add(new Block());
 
         // Start with 4 blocks
-        AddBlock();
-        AddBlock();
-        AddBlock();
-        AddBlock();
+        //AddBlock();
+        //AddBlock();
+        //AddBlock();
+        //AddBlock();
 
         PuzzleSlideSolver solve = new PuzzleSlideSolver();
         int steps = 0;
@@ -72,7 +72,11 @@ public class PuzzleSlide
 
     public static bool Empty(List<Block> state, int x, int y)
     {
-        if (x < 0 || y < 0 || x > 5 || y > 5)
+        if (x < 0 || y < 0 || y > 5)
+        {
+            return false;
+        }
+        if (x > 5 && y != 2)
         {
             return false;
         }

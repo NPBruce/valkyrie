@@ -17,7 +17,7 @@ public class PuzzleSlideSolver
     {
         Propose(current, null);
         int i;
-        for (i = 0; i < moves; i++)
+        for (i = 0; i <= moves; i++)
         {
             List<PuzzleSlide.Block> fromQueue = queue.Dequeue();
             if (AtGoal(fromQueue))
@@ -41,12 +41,13 @@ public class PuzzleSlideSolver
     public void Slide(List<PuzzleSlide.Block> current, PuzzleSlide.Block b, int dir)
     {
         List<PuzzleSlide.Block> newState = new List<PuzzleSlide.Block>(current);
-        while(CheckMove(newState, b, dir))
+        PuzzleSlide.Block newBlock = new PuzzleSlide.Block(b);
+        PuzzleSlide.Block oldBlock = b;
+        while (CheckMove(newState, oldBlock, dir))
         {
-            newState.Remove(b);
+            newState.Remove(oldBlock);
 
-            PuzzleSlide.Block newBlock = new PuzzleSlide.Block(b);
-            if (b.rotation)
+            if (oldBlock.rotation)
             {
                 newBlock.ypos += dir;
             }
@@ -54,9 +55,11 @@ public class PuzzleSlideSolver
             {
                 newBlock.xpos += dir;
             }
-            newState.Add(b);
+            newState.Add(newBlock);
             Propose(newState, current);
             newState = new List<PuzzleSlide.Block>(newState);
+            oldBlock = newBlock;
+            newBlock = new PuzzleSlide.Block(oldBlock);
         }
     }
 
