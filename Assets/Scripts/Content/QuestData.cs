@@ -135,6 +135,11 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
+        if (name.IndexOf(Item.type) == 0)
+        {
+            Item c = new Item(name, content);
+            components.Add(name, c);
+        }
         if (name.IndexOf(Puzzle.type) == 0)
         {
             Puzzle c = new Puzzle(name, content);
