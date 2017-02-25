@@ -264,24 +264,21 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        // Draw morale if required
-        if (game.gameType.DisplayMorale())
-        {
-            game.moraleDisplay = new MoraleDisplay();
-        }
-
         // Clear off heros if not required
         if (!game.gameType.DisplayHeroes())
         {
             Clean();
         }
 
-        // Create the menu button
-        new MenuButton();
-        // Draw next stage button if required
-        game.stageUI = new NextStageButton();
-
-        // Start the quest
-        game.quest.eManager.EventTriggerType("EventStart");
+        // Draw morale if required
+        if (game.gameType.DisplayMorale())
+        {
+            game.moraleDisplay = new MoraleDisplay();
+            game.QuestStartEvent();
+        }
+        else
+        {
+            new InvestigatorItems();
+        }
     }
 }

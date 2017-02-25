@@ -173,6 +173,18 @@ public class Game : MonoBehaviour {
         heroCanvas.EndSection();
     }
 
+    public void QuestStartEvent()
+    {
+        Destroyer.Dialog();
+        // Create the menu button
+        new MenuButton();
+        // Draw next stage button if required
+        stageUI = new NextStageButton();
+
+        // Start the quest
+        quest.eManager.EventTriggerType("EventStart");
+    }
+
     // On quitting
     void OnApplicationQuit ()
     {
