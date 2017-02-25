@@ -28,10 +28,20 @@ public class PuzzleSlideSolver
                 {
                     return i;
                 }
+            }
+            foreach (List<PuzzleSlide.Block> fromQueue in queue)
+            {
                 Explore(fromQueue);
             }
         }
-        return i;
+        foreach (List<PuzzleSlide.Block> fromQueue in nextQueue)
+        {
+            if (AtGoal(fromQueue))
+            {
+                return i;
+            }
+        }
+        return i+1;
     }
 
     public void Explore(List<PuzzleSlide.Block> current)
@@ -89,7 +99,7 @@ public class PuzzleSlideSolver
         {
             if (b.target)
             {
-                if (b.Blocks(5,2))
+                if (b.Blocks(6,2))
                 {
                     return true;
                 }

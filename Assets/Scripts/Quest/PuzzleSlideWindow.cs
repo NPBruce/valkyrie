@@ -50,6 +50,15 @@ public class PuzzleSlideWindow
             CreateBlock(b, transBg, b.target);
         }
 
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 13f), new Vector2(6f, 2f), "Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 15f), new Vector2(3f, 2f), puzzle.moves.ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+
+
         if (puzzle.Solved())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
@@ -247,8 +256,14 @@ public class BlockSlider : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             sliding = false;
-            block.xpos = Mathf.RoundToInt(trans.anchoredPosition.x / (3f * UIScaler.GetPixelsPerUnit()));
-            block.ypos = Mathf.RoundToInt(-trans.anchoredPosition.y / (3f * UIScaler.GetPixelsPerUnit()));
+            int newXPos = Mathf.RoundToInt(trans.anchoredPosition.x / (3f * UIScaler.GetPixelsPerUnit()));
+            int newYPos = Mathf.RoundToInt(-trans.anchoredPosition.y / (3f * UIScaler.GetPixelsPerUnit()));
+            if (newXPos != block.xpos || newYPos != block.ypos)
+            {
+                win.puzzle.moves++;
+                block.xpos = newXPos;
+                block.ypos = newYPos;
+            }
             // Update
             win.CreateWindow();
         }
