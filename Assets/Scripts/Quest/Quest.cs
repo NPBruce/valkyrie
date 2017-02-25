@@ -18,6 +18,9 @@ public class Quest
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
+    // A dictionary of puzzle state
+    public Dictionary<string, PuzzleSlide> puzzle;
+
     // A count of successes from events
     public Dictionary<string, int> eventQuota;
 
@@ -69,6 +72,7 @@ public class Quest
         flags = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, PuzzleSlide>();
         eventQuota = new Dictionary<string, int>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
@@ -225,6 +229,14 @@ public class Quest
             heroSelection.Add(kv.Key, heroList);
         }
 
+        puzzle = new Dictionary<string, PuzzleSlide>();
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("PuzzleSlide") == 0)
+            {
+                puzzle.Add(kv.Key, new PuzzleSlide(kv.Value));
+            }
+        }
         // Restore event quotas
         eventQuota = new Dictionary<string, int>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
@@ -471,6 +483,11 @@ public class Quest
         foreach (Monster m in monsters)
         {
             r += m.ToString();
+        }
+
+        foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
+        {
+            r += kv.Value.ToString(kv.Key);
         }
 
         return r;

@@ -63,10 +63,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(10, 1), new Vector2(9, 1), "Buttons:");
-        db.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), "Quota:");
+        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), "Quota:");
         db.ApplyTag("editor");
 
         quotaDBE = new DialogBoxEditable(new Vector2(6, 1), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });

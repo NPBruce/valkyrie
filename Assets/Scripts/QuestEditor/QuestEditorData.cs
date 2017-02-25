@@ -74,7 +74,7 @@ public class QuestEditorData {
         }
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 18), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 22), "");
         db.AddBorder();
 
         // Heading
@@ -120,13 +120,19 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 16), new Vector2(9, 1), "Item", delegate { ListItem(); });
+        tb = new TextButton(new Vector2(22, 16), new Vector2(9, 1), "Puzzle", delegate { ListPuzzle(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(25.5f, 18), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(22, 18), new Vector2(9, 1), "Item", delegate { ListItem(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(32, 18), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(25.5f, 20), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
@@ -145,11 +151,6 @@ public class QuestEditorData {
             {
                 tiles.Add(kv.Key);
             }
-        }
-
-        if (tiles.Count == 0)
-        {
-            return;
         }
         game.qed.esl = new EditorSelectionList("Select Item", tiles, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
@@ -170,11 +171,6 @@ public class QuestEditorData {
                 doors.Add(kv.Key);
             }
         }
-
-        if (doors.Count == 0)
-        {
-            return;
-        }
         game.qed.esl = new EditorSelectionList("Select Item", doors, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
@@ -193,11 +189,6 @@ public class QuestEditorData {
             {
                 tokens.Add(kv.Key);
             }
-        }
-
-        if (tokens.Count == 0)
-        {
-            return;
         }
         game.qed.esl = new EditorSelectionList("Select Item", tokens, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
@@ -218,11 +209,6 @@ public class QuestEditorData {
                 monsters.Add(kv.Key);
             }
         }
-
-        if (monsters.Count == 0)
-        {
-            return;
-        }
         game.qed.esl = new EditorSelectionList("Select Item", monsters, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
@@ -241,11 +227,6 @@ public class QuestEditorData {
             {
                 mplaces.Add(kv.Key);
             }
-        }
-
-        if (mplaces.Count == 0)
-        {
-            return;
         }
         game.qed.esl = new EditorSelectionList("Select Item", mplaces, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
@@ -269,12 +250,26 @@ public class QuestEditorData {
                 }
             }
         }
-
-        if (events.Count == 0)
-        {
-            return;
-        }
         game.qed.esl = new EditorSelectionList("Select Item", events, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+    }
+
+    // Create selection list for events
+    public static void ListPuzzle()
+    {
+        Game game = Game.Get();
+
+        List<string> puzzle = new List<string>();
+        // This magic string is picked up later for object creation
+        puzzle.Add("{NEW:Puzzle}");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.Puzzle)
+            {
+                puzzle.Add(kv.Key);
+            }
+        }
+        game.qed.esl = new EditorSelectionList("Select Item", puzzle, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -352,7 +347,11 @@ public class QuestEditorData {
             qed.NewEvent();
             return;
         }
-
+        if (name.Equals("{NEW:Puzzle}"))
+        {
+            qed.NewPuzzle();
+            return;
+        }
         // This may happen to due rename/delete
         if (!game.quest.qd.components.ContainsKey(name))
         {
@@ -384,6 +383,11 @@ public class QuestEditorData {
         if (game.quest.qd.components[name] is QuestData.MPlace)
         {
             SelectAsMPlace(name);
+            return;
+        }
+        if (game.quest.qd.components[name] is QuestData.Puzzle)
+        {
+            SelectAsPuzzle(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Item)
@@ -463,6 +467,12 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentMPlace(name));
+    }
+
+    public static void SelectAsPuzzle(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentPuzzle(name));
     }
 
     public static void SelectAsItem(string name)
@@ -553,6 +563,19 @@ public class QuestEditorData {
         SelectComponent("Event" + index);
     }
 
+    public void NewPuzzle()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.quest.qd.components.ContainsKey("Puzzle" + index))
+        {
+            index++;
+        }
+        game.quest.qd.components.Add("Puzzle" + index, new QuestData.Puzzle("Puzzle" + index));
+        SelectComponent("Puzzle" + index);
+    }
+    
     public void NewItem()
     {
         Game game = Game.Get();

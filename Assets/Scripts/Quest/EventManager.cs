@@ -213,6 +213,12 @@ public class EventManager
             CameraController.SetCamera(e.qEvent.location);
         }
 
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            new PuzzleSlideWindow(e);
+            return;
+        }
+
         // Set camera limits
         if (e.qEvent.minCam)
         {

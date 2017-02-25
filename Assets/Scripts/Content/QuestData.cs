@@ -135,6 +135,11 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
+        if (name.IndexOf(Puzzle.type) == 0)
+        {
+            Puzzle c = new Puzzle(name, content);
+            components.Add(name, c);
+        }
         if (name.IndexOf("UniqueMonster") == 0)
         {
             UniqueMonster c = new UniqueMonster(name, content, path);
@@ -1030,6 +1035,52 @@ public class QuestData
             if (rotate)
             {
                 r += "rotate=true" + nl;
+            }
+            return r;
+        }
+    }
+
+    // Puzzle component
+    public class Puzzle : Event
+    {
+        new public static string type = "Puzzle";
+        public string puzzleClass = "slide";
+        public int puzzleLevel = 4;
+
+        // Create a new puzzle with name (editor)
+        public Puzzle(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
+
+        // Construct from ini data
+        public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+
+            if (data.ContainsKey("class"))
+            {
+                puzzleClass = data["class"];
+            }
+            if (data.ContainsKey("puzzlelevel"))
+            {
+                int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
+        }
+
+        // Save to string (editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (!puzzleClass.Equals("slide"))
+            {
+                r += "class=" + puzzleClass + nl;
+            }
+            if (puzzleLevel != 4)
+            {
+                r += "puzzlelevel=" + puzzleLevel + nl;
             }
             return r;
         }
