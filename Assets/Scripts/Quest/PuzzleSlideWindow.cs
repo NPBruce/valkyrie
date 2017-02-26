@@ -173,10 +173,6 @@ public class PuzzleSlideWindow
         BlockSlider slider = blockGO.AddComponent<BlockSlider>();
         slider.block = block;
         slider.win = this;
-
-        UnityEngine.UI.Button uiButton = blockGO.AddComponent<UnityEngine.UI.Button>();
-        uiButton.interactable = true;
-        uiButton.onClick.AddListener(delegate { slider.Click(); });
     }
 }
 
@@ -199,6 +195,21 @@ public class BlockSlider : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (!sliding && !Input.GetMouseButtonDown(0))
+        {
+            return;
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Input.mousePosition.x < trans.position.x) return;
+            if (Input.mousePosition.y < trans.position.y - trans.rect.height) return;
+            if (Input.mousePosition.x > trans.position.x + trans.rect.width) return;
+            if (Input.mousePosition.y > trans.position.y) return;
+            sliding = true;
+            mouseStart = Input.mousePosition;
+            transStart = trans.anchoredPosition;
+        }
+
         if (!sliding)
         {
             return;
@@ -220,7 +231,7 @@ public class BlockSlider : MonoBehaviour
             }
             yTarget = (yTargetSq * 3f * UIScaler.GetPixelsPerUnit());
             float nearestFit = (yTargetSq * 3f * UIScaler.GetPixelsPerUnit());
-            if (Mathf.Abs(yTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 0.5f))
+            if (Mathf.Abs(yTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 1f))
             {
                 yTarget = nearestFit;
             }
@@ -244,7 +255,7 @@ public class BlockSlider : MonoBehaviour
             }
             xTarget = xTargetSq * 3f * UIScaler.GetPixelsPerUnit();
             float nearestFit = Mathf.Round(xTargetSq) * 3f * UIScaler.GetPixelsPerUnit();
-            if (Mathf.Abs(xTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 0.5f))
+            if (Mathf.Abs(xTarget - nearestFit) < (UIScaler.GetPixelsPerUnit() * 1f))
             {
                 xTarget = nearestFit;
             }
@@ -253,7 +264,7 @@ public class BlockSlider : MonoBehaviour
             trans.anchoredPosition = pos;
         }
 
-        if (Input.GetMouseButton(1))
+        if (!Input.GetMouseButton(0))
         {
             sliding = false;
             int newXPos = Mathf.RoundToInt(trans.anchoredPosition.x / (3f * UIScaler.GetPixelsPerUnit()));
@@ -328,12 +339,5 @@ public class BlockSlider : MonoBehaviour
             return posy - (1 + block.ylen);
         }
         return posx - (1 + block.xlen);
-    }
-
-    public void Click()
-    {
-        sliding = true;
-        mouseStart = Input.mousePosition;
-        transStart = trans.anchoredPosition;
     }
 }
