@@ -281,6 +281,7 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
+        public int rotation = 0;
         public string tokenName;
 
         // Create new with name (used by editor)
@@ -306,6 +307,11 @@ public class QuestData
             {
                 tokenName = data["type"];
             }
+            // Get rotation if specified
+            if (data.ContainsKey("rotation"))
+            {
+                int.TryParse(data["rotation"], out rotation);
+            }
         }
 
         // Save to string (for editor)
@@ -317,6 +323,10 @@ public class QuestData
             if(!tokenName.Equals("TokenSearch"))
             {
                 r += "type=" + tokenName + nl;
+            }
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
             }
             return r;
         }

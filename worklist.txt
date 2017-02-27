@@ -4,12 +4,13 @@ Event subtype - X selection options
 action symbol in event buttons
 slide puzzle (slow)
 camera limits set in events
+rotating tokens
+mom more tokens
 
 Outstanding:
 MoM:
 Long Dialog
 Item exclusion
-Barriers (various)
 Items in events
 Fire
 Investigator Eliminated
