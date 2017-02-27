@@ -14,6 +14,10 @@ public class QuestSelection {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
+        // Clean up downloader if present
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+            Object.Destroy(go);
+
         // Heading
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
@@ -37,12 +41,24 @@ public class QuestSelection {
 
         tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
         tb.SetFont(game.gameType.GetHeaderFont());
+
+        tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "Download", delegate { Download(); }, Color.green);
+        tb.SetFont(game.gameType.GetHeaderFont());
     }
 
     // Return to main menu
     public void Cancel()
     {
         Destroyer.MainMenu();
+    }
+
+    // Return to main menu
+    public void Download()
+    {
+        Destroyer.Dialog();
+        GameObject download = new GameObject("downloadPage");
+        download.tag = "questui";
+        download.AddComponent<QuestDownload>();
     }
 
     // Select a quest

@@ -1,16 +1,20 @@
 Done:
-
+Event subtype - get successes, pass/fail
+Event subtype - X selection options
+action symbol in event buttons
+slide puzzle (slow)
+camera limits set in events
 
 Outstanding:
 MoM:
+Long Dialog
+Item exclusion
+Barriers (various)
 Items in events
 Fire
 Investigator Eliminated
 Mythos events
 monsters health
-Event subtype - get successes, pass/fail
-Event subtype - X selection options
-action symbol in event buttons
 Puzzles
 
 D2E:
@@ -23,7 +27,6 @@ lt.
 
 Common:
 monster without event text bug
-camera limits set in events
 quest set
 symbols don't work in unique text
 event log
