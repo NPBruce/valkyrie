@@ -10,23 +10,35 @@ public class QuestDownload : MonoBehaviour
     public WWW download;
     public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-questdata/master/build/";
     public Game game;
-    IniData manifest;
+    IniData remoteManifest;
+    IniData localManifest;
 
     void Start()
     {
+        if (Application.isEditor)
+        {
+            serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-questdata/development/build/";
+        }
         game = Game.Get();
-        string manifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
-        StartCoroutine(Download(manifest, delegate { ReadManifest(); }));
+        string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
+        StartCoroutine(Download(remoteManifest, delegate { ReadManifest(); }));
     }
 
     public void ReadManifest()
     {
-        manifest = IniRead.ReadFromString(download.text);
+        remoteManifest = IniRead.ReadFromString(download.text);
+
         DrawList();
     }
 
     public void DrawList()
     {
+        localManifest = IniRead.ReadFromString("");
+        if (File.Exists(saveLocation() + "/manifest.ini"))
+        {
+            localManifest = IniRead.ReadFromIni(saveLocation() + "/manifest.ini");
+        }
+
         // Heading
         DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Download " + game.gameType.QuestName());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
@@ -37,16 +49,29 @@ public class QuestDownload : MonoBehaviour
         int offset = 5;
         // Loop through all available quests
         // FIXME: this isn't paged Dictionary<string, Dictionary<string, string>> data;
-        foreach (KeyValuePair<string, Dictionary<string, string>> kv in manifest.data)
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
-            string file = kv.Value["file"];
+            string file = kv.Key + ".valkyrie";
             // Size is 1.2 to be clear of characters with tails
             if (File.Exists(saveLocation() + "/" + file))
             {
-                db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + kv.Value["name"], Color.grey);
-                db.AddBorder();
-                db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.05f, 0.05f, 0.05f);
-                db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                int localVersion = 0;
+                int remoteVersion = 0;
+                int.TryParse(localManifest.Get(kv.Key, "version"), out localVersion);
+                int.TryParse(remoteManifest.Get(kv.Key, "version"), out remoteVersion);
+                if (localVersion < remoteVersion)
+                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  [Update] " + kv.Value["name"], delegate { Selection(file); }, Color.blue, offset);
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+                }
+                else
+                {
+                    db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + kv.Value["name"], Color.grey);
+                    db.AddBorder();
+                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.05f, 0.05f, 0.05f);
+                    db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                }
             }
             else
             {
