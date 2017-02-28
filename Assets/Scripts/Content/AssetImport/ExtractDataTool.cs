@@ -36,7 +36,7 @@ class ExtractDataTool
                 items += GetItem(m);
             }
 
-            if (m.IndexOf("MYTHOS_EVENT") == 0 && m.IndexOf("01") > 0)
+            if (m.IndexOf("MYTHOS_EVENT") == 0)
             {
                 items += GetMythos(m);
             }
@@ -113,6 +113,15 @@ class ExtractDataTool
 
     public static string GetMythos(string label)
     {
+        if (label.Right(4).Equals("_ALT"))
+        {
+            return;
+        }
+
+        if (label.Right(3).Equals("_02"))
+        {
+            return;
+        }
         string nameCamel = "Peril";
 
         string[] elements = label.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -125,13 +134,16 @@ class ExtractDataTool
 
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
-        ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
-        ret += "button1=\"Resolve Event\"\r\n";
-        ret += "event2=\r\n";
-        ret += "button2=\"No Effect\"\r\n\r\n";
+        if (if (label.Right(3).Equals("_01")))
+        {
+            ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
+            ret += "button1=\"Resolve Event\"\r\n";
+            ret += "event2=\r\n";
+            ret += "button2=\"No Effect\"\r\n\r\n";
 
-        string ret = "[" + nameCamel.Replace("01", "02") + "]\r\n";
-        ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+            ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
+            ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+        }
         ret += "event1=\r\n";
         ret += "button1=\"Continue\"\r\n\r\n";
         return ret;
