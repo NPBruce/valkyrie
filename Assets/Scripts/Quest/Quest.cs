@@ -641,7 +641,17 @@ public class Quest
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(1f, 1f);
+
+            float PPS = game.cd.tokens[tokenName].pxPerSquare;
+            if (PPS == 0)
+            {
+                PPS = (float)newTex.width;
+            }
+
+            // Set the size to the image size
+            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / PPS, (float)newTex.height / PPS);
+            // Rotate around 0,0 rotation amount
+            unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
             // Move to square
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 

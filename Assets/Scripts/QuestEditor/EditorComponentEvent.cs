@@ -197,7 +197,7 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        if (eventComponent.locationSpecified)
+        if (eventComponent.locationSpecified || eventComponent.maxCam || eventComponent.minCam)
         {
             game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", "editor");
         }

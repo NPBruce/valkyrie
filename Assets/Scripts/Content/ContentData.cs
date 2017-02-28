@@ -761,6 +761,8 @@ public class TokenData : GenericData
     public int y = 0;
     public int height = 0;
     public int width = 0;
+    // 0 means token is 1 square big
+    public float pxPerSquare = 0;
     public static new string type = "Token";
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -782,6 +784,11 @@ public class TokenData : GenericData
         if (content.ContainsKey("height"))
         {
             int.TryParse(content["width"], out width);
+        }
+        // pixel per D2E square (inch) of image
+        if (content.ContainsKey("pps"))
+        {
+            float.TryParse(content["pps"], out pxPerSquare);
         }
     }
 
