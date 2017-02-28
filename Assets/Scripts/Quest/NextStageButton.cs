@@ -11,6 +11,9 @@ public class NextStageButton
         TextButton qb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "->", delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         qb.ApplyTag("questui");
+        TextButton qb = new TextButton(new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "Log", delegate { Log(); });
+        // Untag as dialog so this isn't cleared away
+        qb.ApplyTag("questui");
         Update();
     }
 
@@ -67,5 +70,10 @@ public class NextStageButton
         {
             game.roundControl.HeroActivated();
         }
+    }
+
+    public void Log()
+    {
+        new Log();
     }
 }
