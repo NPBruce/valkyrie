@@ -20,18 +20,6 @@ public class QuestLoader {
         // Get a list of quest directories (extract found packages)
         List<string> questDirectories = GetQuests(dataLocation);
 
-        // If we are running inside unity paths are different
-        if (Application.isEditor)
-        {
-            dataLocation = Application.dataPath + "/../quests/";
-        }
-        else
-        {
-            dataLocation = Application.dataPath + "/quests/";
-        }
-        // Add included quests (extract found packages)
-        questDirectories.AddRange(GetQuests(dataLocation));
-
         // Add packaged quests that have been extracted
         questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
 
