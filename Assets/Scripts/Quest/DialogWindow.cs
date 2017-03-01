@@ -14,7 +14,7 @@ public class DialogWindow {
 
     public int quota = 0;
 
-    public string text;
+    public string text= "";
 
     // Create from event
     public DialogWindow(EventManager.Event e)

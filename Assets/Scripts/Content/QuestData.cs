@@ -983,6 +983,10 @@ public class QuestData
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
             }
+            if (longText)
+            {
+                r += "longtext=true" + nl;
+            }
             return r;
         }
 
