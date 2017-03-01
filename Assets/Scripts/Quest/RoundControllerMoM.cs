@@ -18,7 +18,9 @@ public class RoundControllerMoM : RoundController
         game.quest.phase = Quest.MoMPhase.mythos;
         game.stageUI.Update();
 
-        game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
+        game.quest.eManager.EventTriggerType("Mythos", false);
+        // This will cause the next phase if nothing was added
+        game.quest.eManager.TriggerEvent();
 
         return;
     }

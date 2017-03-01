@@ -14,6 +14,8 @@ public class DialogWindow {
 
     public int quota = 0;
 
+    public string text= "";
+
     // Create from event
     public DialogWindow(EventManager.Event e)
     {
@@ -54,16 +56,16 @@ public class DialogWindow {
     public void CreateWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.GetText());
+        text = eventData.GetText();
+        float offset = 8;
+        if (eventData.qEvent.longText)
+        {
+            offset = 21;
+        }
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), text);
         db.AddBorder();
 
-        // Do we have a cancel button?
-        if (eventData.qEvent.cancelable)
-        {
-            new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-        }
-
-        float offset = 9f;
+        offset += 1f;
         int num = 1;
         float length = 8f;
         float hOffset = UIScaler.GetWidthUnits() - 19f;
@@ -84,11 +86,11 @@ public class DialogWindow {
         {
             if (eventData.GetButtons().Count > 2)
             {
-                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+                new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
             }
             else
             {
-                new TextButton(new Vector2(hOffset, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+                new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
             }
         }
 
@@ -192,6 +194,10 @@ public class DialogWindow {
         {
             game.quest.Save();
         }
+
+        // Add this to the log
+        game.quest.log.Add(text.Replace("\n", "\\n"));
+
         // Event manager handles the aftermath
         game.quest.eManager.EndEvent(num-1);
     }

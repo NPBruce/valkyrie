@@ -12,6 +12,7 @@ class ExtractDataTool
         Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
         string attacks = "";
         string items = "";
+        string mythos = "";
 
         foreach (string m in labels)
         {
@@ -33,6 +34,11 @@ class ExtractDataTool
             if (m.IndexOf("UNIQUE_ITEM") == 0 || m.IndexOf("COMMON_ITEM") == 0)
             {
                 items += GetItem(m);
+            }
+
+            if (m.IndexOf("MYTHOS_EVENT") == 0)
+            {
+                items += GetMythos(m);
             }
         }
 
@@ -61,6 +67,8 @@ class ExtractDataTool
         File.WriteAllText(file, attacks);
         file = ContentData.ContentPath() + "/extract-items.ini";
         File.WriteAllText(file, items);
+        file = ContentData.ContentPath() + "/extract-mythos.ini";
+        File.WriteAllText(file, mythos);
     }
 
     public static string GetItem(string label)
@@ -100,6 +108,43 @@ class ExtractDataTool
         ret += "text={ffg:" + label + "}\r\n";
         ret += "target=" + elements[3].ToLower() + "\r\n";
         ret += "attacktype=" + elements[1].ToLower() + "\r\n\r\n";
+        return ret;
+    }
+
+    public static string GetMythos(string label)
+    {
+        if (label.Substring(label.Length-4).Equals("_ALT"))
+        {
+            return "";
+        }
+
+        if (label.Substring(label.Length - 4).Equals("_02"))
+        {
+            return "";
+        }
+        string nameCamel = "Peril";
+
+        string[] elements = label.Split("_".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 2; i < elements.Length; i++)
+        {
+            string eFixed = elements[i][0] + elements[i].Substring(1).ToLower();
+            nameCamel += eFixed;
+        }
+
+        string ret = "[" + nameCamel + "]\r\n";
+        ret += "text={ffg:" + label + "}\r\n";
+        if (label.Substring(label.Length - 4).Equals("_01"))
+        {
+            ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
+            ret += "button1=\"Resolve Event\"\r\n";
+            ret += "event2=\r\n";
+            ret += "button2=\"No Effect\"\r\n\r\n";
+
+            ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
+            ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+        }
+        ret += "event1=\r\n";
+        ret += "button1=\"Continue\"\r\n\r\n";
         return ret;
     }
 
