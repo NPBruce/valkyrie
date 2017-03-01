@@ -60,6 +60,7 @@ public class QuestDownload : MonoBehaviour
                 int.TryParse(localManifest.Get(kv.Key, "version"), out localVersion);
                 int.TryParse(remoteManifest.Get(kv.Key, "version"), out remoteVersion);
                 if (localVersion < remoteVersion)
+                {
                     tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  [Update] " + kv.Value["name"], delegate { Selection(file); }, Color.blue, offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
