@@ -42,6 +42,9 @@ public class Quest
     // Stack of saved game state for undo
     public Stack<string> undo;
 
+    // Event Log
+    public List<string> log;
+
     // game state variables
     public int round = 1;
     public int morale = 0;
@@ -81,6 +84,7 @@ public class Quest
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
+        log = new List<string>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -256,6 +260,13 @@ public class Quest
             int value;
             int.TryParse(kv.Value, out value);
             eventQuota.Add(kv.Key, value);
+        }
+
+        // Restore event log
+        log = new List<string>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
+        {
+            log.Add(kv.Key);
         }
 
         // Update the screen
@@ -506,6 +517,12 @@ public class Quest
         foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
         {
             r += kv.Value.ToString(kv.Key);
+        }
+
+        r += "[Log]\r\n";
+        foreach (string s in log)
+        {
+            r += s;
         }
 
         return r;
