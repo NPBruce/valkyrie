@@ -113,12 +113,12 @@ class ExtractDataTool
 
     public static string GetMythos(string label)
     {
-        if (label.Substring(label.Length-4).Equals("_ALT"))
+        if (label.Substring(label.Length - 4).Equals("_ALT"))
         {
             return "";
         }
 
-        if (label.Substring(label.Length - 4).Equals("_02"))
+        if (label.Substring(label.Length - 3).Equals("_02"))
         {
             return "";
         }
@@ -133,7 +133,7 @@ class ExtractDataTool
 
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
-        if (label.Substring(label.Length - 4).Equals("_01"))
+        if (label.Substring(label.Length - 3).Equals("_01"))
         {
             ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
             ret += "button1=\"Resolve Event\"\r\n";
