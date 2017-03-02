@@ -14,36 +14,50 @@ public class InvestigatorItems
             QuestData.Item item = kv.Value as QuestData.Item;
             if (item != null)
             {
-                if (game.cd.items.ContainsKey(item.itemName))
+                if (item.traits.Length == 0)
                 {
-                    game.quest.items.Add(item.itemName);
-                }
-                else
-                {
-                    List<string> candidates = new List<string>();
-                    foreach (KeyValuePair<string, ItemData> id in game.cd.items)
+                    if (item.itemName.Length < 0 && game.cd.items.ContainsKey(item.itemName[0]))
                     {
-                        bool valid = !game.quest.items.Contains(id.Value.sectionName);
-                        foreach (string trait in item.traits)
-                        {
-                            if (!id.Value.ContainsTrait(trait))
-                            {
-                                valid = false;
-                            }
-                        }
-                        if (valid)
-                        {
-                            candidates.Add(id.Value.sectionName);
-                        }
-                    }
-                    if (candidates.Count > 0)
-                    {
-                        game.quest.items.Add(candidates[Random.Range(0, candidates.Count)]);
+                        game.quest.items.Add(item.itemName[0]);
                     }
                 }
             }
         }
 
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            QuestData.Item item = kv.Value as QuestData.Item;
+            if (item != null)
+            {
+                List<string> candidates = new List<string>();
+                foreach (KeyValuePair<string, ItemData> id in game.cd.items)
+                {
+                    bool valid = !game.quest.items.Contains(id.Value.sectionName);
+                    foreach (string trait in item.traits)
+                    {
+                        if (!id.Value.ContainsTrait(trait))
+                        {
+                            valid = false;
+                        }
+                        foreach (string s in item.itemName)
+                        {
+                            if (s.Equals(id.Value.sectionName))
+                            {
+                                valid = false;
+                            }
+                        }
+                    }
+                    if (valid)
+                    {
+                        candidates.Add(id.Value.sectionName);
+                    }
+                }
+                if (candidates.Count > 0)
+                {
+                    game.quest.items.Add(candidates[Random.Range(0, candidates.Count)]);
+                }
+            }
+        }
         foreach (Quest.Hero h in game.quest.heroes)
         {
             if (h.heroData != null)

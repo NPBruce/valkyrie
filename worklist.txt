@@ -6,10 +6,11 @@ slide puzzle (slow)
 camera limits set in events
 rotating tokens
 mom more tokens
+Long Dialog
+Mythos events
 
 Outstanding:
 MoM:
-Long Dialog
 Item exclusion
 Items in events
 Fire
