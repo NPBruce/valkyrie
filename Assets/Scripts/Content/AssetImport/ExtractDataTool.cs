@@ -38,7 +38,7 @@ class ExtractDataTool
 
             if (m.IndexOf("MYTHOS_EVENT") == 0)
             {
-                items += GetMythos(m);
+                mythos += GetMythos(m);
             }
         }
 
@@ -217,7 +217,8 @@ class ExtractDataTool
                         if (i + 1 >= length)
                         {
                             //list.Add(text.Substring(num, i - num).Replace("\"\"", "\""));
-                            return list;
+                            // Broken quotes
+                            break;
                         }
                         if (text[i + 1] != '"')
                         {
@@ -247,6 +248,7 @@ class ExtractDataTool
                 }
                 i++;
             }
+            readLine = stream.ReadLine();
             if (!comment)
             {
                 if (num < text.Length)
@@ -258,7 +260,6 @@ class ExtractDataTool
                     //list.Add(text.Substring(num, text.Length - num));
                 }
             }
-            readLine = stream.ReadLine();
             //if not in quote
             if (!quote)
             {
