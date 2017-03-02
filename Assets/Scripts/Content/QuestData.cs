@@ -1425,13 +1425,14 @@ public class QuestData
     public class Item : QuestComponent
     {
         new public static string type = "Item";
-        public string itemName = "";
+        public string[] itemName;
         public string[] traits;
 
         // Create new (editor)
         public Item(string s) : base(s)
         {
             typeDynamic = type;
+            itemName = new string[0];
             traits = new string[1];
             traits[0] = "weapon";
         }
@@ -1442,7 +1443,11 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
             {
-                itemName = data["itemname"];
+                itemName = data["itemname"].Split(' ');
+            }
+            else
+            {
+                itemName = new string[0];
             }
             if (data.ContainsKey("traits"))
             {
@@ -1462,7 +1467,12 @@ public class QuestData
 
             if (itemName.Length > 0)
             {
-                r += "itemname=" + itemName + nl;
+                r += "itemname=";
+                foreach (string s in itemName)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
             }
             if (traits.Length > 0)
             {

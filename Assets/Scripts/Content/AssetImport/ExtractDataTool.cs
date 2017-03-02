@@ -38,7 +38,7 @@ class ExtractDataTool
 
             if (m.IndexOf("MYTHOS_EVENT") == 0)
             {
-                items += GetMythos(m);
+                mythos += GetMythos(m);
             }
         }
 
@@ -113,12 +113,12 @@ class ExtractDataTool
 
     public static string GetMythos(string label)
     {
-        if (label.Substring(label.Length-4).Equals("_ALT"))
+        if (label.Substring(label.Length - 4).Equals("_ALT"))
         {
             return "";
         }
 
-        if (label.Substring(label.Length - 4).Equals("_02"))
+        if (label.Substring(label.Length - 3).Equals("_02"))
         {
             return "";
         }
@@ -133,7 +133,7 @@ class ExtractDataTool
 
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
-        if (label.Substring(label.Length - 4).Equals("_01"))
+        if (label.Substring(label.Length - 3).Equals("_01"))
         {
             ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
             ret += "button1=\"Resolve Event\"\r\n";
@@ -217,7 +217,8 @@ class ExtractDataTool
                         if (i + 1 >= length)
                         {
                             //list.Add(text.Substring(num, i - num).Replace("\"\"", "\""));
-                            return list;
+                            // Broken quotes
+                            break;
                         }
                         if (text[i + 1] != '"')
                         {
@@ -247,6 +248,7 @@ class ExtractDataTool
                 }
                 i++;
             }
+            readLine = stream.ReadLine();
             if (!comment)
             {
                 if (num < text.Length)
@@ -258,7 +260,6 @@ class ExtractDataTool
                     //list.Add(text.Substring(num, text.Length - num));
                 }
             }
-            readLine = stream.ReadLine();
             //if not in quote
             if (!quote)
             {
