@@ -9,6 +9,7 @@ class ExtractDataTool
     public static void MoM(byte[] data)
     {
         List<string> labels = ReadLabels(data);
+        List<string> mythosList = List<string>();
         Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
         string attacks = "";
         string items = "";
@@ -38,7 +39,7 @@ class ExtractDataTool
 
             if (m.IndexOf("MYTHOS_EVENT") == 0)
             {
-                mythos += GetMythos(m);
+                mythos += GetMythos(m, mythosList);
             }
         }
 
@@ -49,6 +50,7 @@ class ExtractDataTool
         }
         string file = ContentData.ContentPath() + "/extract-evade.ini";
         File.WriteAllText(file, evade);
+
         string horror = "";
         foreach (KeyValuePair<string, Monster> kv in monsters)
         {
@@ -56,6 +58,7 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-horror.ini";
         File.WriteAllText(file, horror);
+
         string activation = "";
         foreach (KeyValuePair<string, Monster> kv in monsters)
         {
@@ -63,10 +66,22 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-activation.ini";
         File.WriteAllText(file, activation);
+
         file = ContentData.ContentPath() + "/extract-attacks.ini";
         File.WriteAllText(file, attacks);
+
         file = ContentData.ContentPath() + "/extract-items.ini";
         File.WriteAllText(file, items);
+
+        mythos += "[MythosPool]\r\n";
+        mythos += "event1="
+        foreach (string s in mythosList)
+        {
+            mythos += s + " ";
+        }
+        mythos[mythos.Length-1] =  + '\r'
+        mythos += "\nbutton1=\"Continue\"\r\n";
+        mythos += "trigger=#mythos\r\n";
         file = ContentData.ContentPath() + "/extract-mythos.ini";
         File.WriteAllText(file, mythos);
     }
@@ -111,7 +126,7 @@ class ExtractDataTool
         return ret;
     }
 
-    public static string GetMythos(string label)
+    public static string GetMythos(string label, List<string> list)
     {
         if (label.Substring(label.Length - 4).Equals("_ALT"))
         {
@@ -131,6 +146,7 @@ class ExtractDataTool
             nameCamel += eFixed;
         }
 
+        list.Add(nameCamel);
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
         if (label.Substring(label.Length - 3).Equals("_01"))
@@ -139,9 +155,14 @@ class ExtractDataTool
             ret += "button1=\"Resolve Event\"\r\n";
             ret += "event2=\r\n";
             ret += "button2=\"No Effect\"\r\n\r\n";
+            ret ++ "flags=mythos"
 
             ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
             ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+        }
+        else
+        {
+            ret ++ "flags=mythos"
         }
         ret += "event1=\r\n";
         ret += "button1=\"Continue\"\r\n\r\n";
