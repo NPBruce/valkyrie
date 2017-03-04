@@ -9,7 +9,7 @@ class ExtractDataTool
     public static void MoM(byte[] data)
     {
         List<string> labels = ReadLabels(data);
-        List<string> mythosList = List<string>();
+        List<string> mythosList = new List<string>();
         Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
         string attacks = "";
         string items = "";
@@ -74,14 +74,14 @@ class ExtractDataTool
         File.WriteAllText(file, items);
 
         mythos += "[MythosPool]\r\n";
-        mythos += "event1="
+        string mythosAll = "event1=";
         foreach (string s in mythosList)
         {
-            mythos += s + " ";
+            mythosAll += s + " ";
         }
-        mythos[mythos.Length-1] =  + '\r'
-        mythos += "\nbutton1=\"Continue\"\r\n";
-        mythos += "trigger=#mythos\r\n";
+        mythos += mythosAll.Substring(0, mythosAll.Length - 1);
+        mythos += "\r\nbutton1=\"Continue\"\r\n";
+        mythos += "trigger=Mythos\r\n";
         file = ContentData.ContentPath() + "/extract-mythos.ini";
         File.WriteAllText(file, mythos);
     }
@@ -154,15 +154,15 @@ class ExtractDataTool
             ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
             ret += "button1=\"Resolve Event\"\r\n";
             ret += "event2=\r\n";
-            ret += "button2=\"No Effect\"\r\n\r\n";
-            ret ++ "flags=mythos"
+            ret += "button2=\"No Effect\"\r\n";
+            ret += "flags=mythos\r\n\r\n";
 
             ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
             ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
         }
         else
         {
-            ret ++ "flags=mythos"
+            ret += "flags=mythos\r\n";
         }
         ret += "event1=\r\n";
         ret += "button1=\"Continue\"\r\n\r\n";
