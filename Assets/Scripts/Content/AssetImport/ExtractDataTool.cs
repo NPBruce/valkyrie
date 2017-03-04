@@ -9,6 +9,7 @@ class ExtractDataTool
     public static void MoM(byte[] data)
     {
         List<string> labels = ReadLabels(data);
+        List<string> mythosList = new List<string>();
         Dictionary<string, Monster> monsters = new Dictionary<string, Monster>();
         string attacks = "";
         string items = "";
@@ -38,7 +39,7 @@ class ExtractDataTool
 
             if (m.IndexOf("MYTHOS_EVENT") == 0)
             {
-                items += GetMythos(m);
+                mythos += GetMythos(m, mythosList);
             }
         }
 
@@ -49,6 +50,7 @@ class ExtractDataTool
         }
         string file = ContentData.ContentPath() + "/extract-evade.ini";
         File.WriteAllText(file, evade);
+
         string horror = "";
         foreach (KeyValuePair<string, Monster> kv in monsters)
         {
@@ -56,6 +58,7 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-horror.ini";
         File.WriteAllText(file, horror);
+
         string activation = "";
         foreach (KeyValuePair<string, Monster> kv in monsters)
         {
@@ -63,10 +66,22 @@ class ExtractDataTool
         }
         file = ContentData.ContentPath() + "/extract-activation.ini";
         File.WriteAllText(file, activation);
+
         file = ContentData.ContentPath() + "/extract-attacks.ini";
         File.WriteAllText(file, attacks);
+
         file = ContentData.ContentPath() + "/extract-items.ini";
         File.WriteAllText(file, items);
+
+        mythos += "[MythosPool]\r\n";
+        string mythosAll = "event1=";
+        foreach (string s in mythosList)
+        {
+            mythosAll += s + " ";
+        }
+        mythos += mythosAll.Substring(0, mythosAll.Length - 1);
+        mythos += "\r\nbutton1=\"Continue\"\r\n";
+        mythos += "trigger=Mythos\r\n";
         file = ContentData.ContentPath() + "/extract-mythos.ini";
         File.WriteAllText(file, mythos);
     }
@@ -111,14 +126,14 @@ class ExtractDataTool
         return ret;
     }
 
-    public static string GetMythos(string label)
+    public static string GetMythos(string label, List<string> list)
     {
-        if (label.Substring(label.Length-4).Equals("_ALT"))
+        if (label.Substring(label.Length - 4).Equals("_ALT"))
         {
             return "";
         }
 
-        if (label.Substring(label.Length - 4).Equals("_02"))
+        if (label.Substring(label.Length - 3).Equals("_02"))
         {
             return "";
         }
@@ -131,17 +146,23 @@ class ExtractDataTool
             nameCamel += eFixed;
         }
 
+        list.Add(nameCamel);
         string ret = "[" + nameCamel + "]\r\n";
         ret += "text={ffg:" + label + "}\r\n";
-        if (label.Substring(label.Length - 4).Equals("_01"))
+        if (label.Substring(label.Length - 3).Equals("_01"))
         {
             ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
             ret += "button1=\"Resolve Event\"\r\n";
             ret += "event2=\r\n";
-            ret += "button2=\"No Effect\"\r\n\r\n";
+            ret += "button2=\"No Effect\"\r\n";
+            ret += "flags=mythos\r\n\r\n";
 
             ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
             ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+        }
+        else
+        {
+            ret += "flags=mythos\r\n";
         }
         ret += "event1=\r\n";
         ret += "button1=\"Continue\"\r\n\r\n";
@@ -217,7 +238,8 @@ class ExtractDataTool
                         if (i + 1 >= length)
                         {
                             //list.Add(text.Substring(num, i - num).Replace("\"\"", "\""));
-                            return list;
+                            // Broken quotes
+                            break;
                         }
                         if (text[i + 1] != '"')
                         {
@@ -247,6 +269,7 @@ class ExtractDataTool
                 }
                 i++;
             }
+            readLine = stream.ReadLine();
             if (!comment)
             {
                 if (num < text.Length)
@@ -258,7 +281,6 @@ class ExtractDataTool
                     //list.Add(text.Substring(num, text.Length - num));
                 }
             }
-            readLine = stream.ReadLine();
             //if not in quote
             if (!quote)
             {

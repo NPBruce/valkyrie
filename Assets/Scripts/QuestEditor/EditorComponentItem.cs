@@ -36,37 +36,55 @@ public class EditorComponentItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Item:");
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(19, 1), "Item:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), itemComponent.itemName, delegate { SetItem(); });
+        tb = new TextButton(new Vector2(19, 2), new Vector2(1, 1), "+", delegate { AddItem(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(16, 1), "Traits:");
+        float offset = 3;
+        for (int i = 0; i < itemComponent.itemName.Length; i++)
+        {
+            int tmp = i;
+            db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), itemComponent.itemName[i]);
+            db.ApplyTag("editor");
+
+            if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1)
+            {
+                tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveItem(tmp); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+            offset++;
+        }
+
+        offset++;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), "Traits:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(17, 4), new Vector2(1, 1), "+", delegate { AddTrait(); }, Color.green);
+        tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), "+", delegate { AddTrait(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         for (int i = 0; i < itemComponent.traits.Length; i++)
         {
             int tmp = i;
-            db = new DialogBox(new Vector2(0, 5 + i), new Vector2(16, 1), itemComponent.traits[i]);
+            db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), itemComponent.traits[i]);
             db.ApplyTag("editor");
 
             if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 5 + i), new Vector2(1, 1), "-", delegate { RemoveTrait(tmp); }, Color.red);
+                tb = new TextButton(new Vector2(17, offset), new Vector2(1, 1), "-", delegate { RemoveTrait(tmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
+            offset++;
         }
     }
 
-
-    public void SetItem()
+    public void AddItem()
     {
         Game game = Game.Get();
         Dictionary<string, Color> items = new Dictionary<string, Color>();
@@ -82,7 +100,10 @@ public class EditorComponentItem : EditorComponent
             QuestData.Item i = kv.Value as QuestData.Item;
             if (i != null)
             {
-                usedItems.Add(i.itemName);
+                if (i.traits.Length == 0)
+                {
+                    usedItems.Add(i.itemName[0]);
+                }
             }
         }
 
@@ -103,13 +124,36 @@ public class EditorComponentItem : EditorComponent
                 items.Add(display, Color.white);
             }
         }
-        itemESL = new EditorSelectionList("Select Item", items, delegate { SelectSetItem(); });
+        itemESL = new EditorSelectionList("Select Item", items, delegate { SelectAddItem(); });
         itemESL.SelectItem();
     }
 
-    public void SelectSetItem()
+    public void SelectAddItem()
     {
-        itemComponent.itemName = itemESL.selection;
+        string[] newArray = new string[itemComponent.itemName.Length + 1];
+
+        for (int i = 0; i < itemComponent.itemName.Length; i++)
+        {
+            newArray[i] = itemComponent.itemName[i];
+        }
+        newArray[itemComponent.itemName.Length] = itemESL.selection;
+        itemComponent.itemName = newArray;
+        Update();
+    }
+
+    public void RemoveItem(int index)
+    {
+        string[] newArray = new string[itemComponent.itemName.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < itemComponent.itemName.Length; i++)
+        {
+            if (i != index)
+            {
+                newArray[j++] = itemComponent.itemName[i];
+            }
+        }
+        itemComponent.itemName = newArray;
         Update();
     }
 
