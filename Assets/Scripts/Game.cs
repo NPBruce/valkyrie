@@ -46,6 +46,9 @@ public class Game : MonoBehaviour {
     // Store of the game text imported from FFG app
     public string[] ffgText = null;
 
+    // Current language
+    public int currentLang;
+
     // Set when in quest editor
     public bool editMode = false;
 
@@ -72,6 +75,13 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+        currentLang = 1; // English
+
+        if (config.data.Get("MoMConfig") != null)
+        {
+            currentLang = int.Parse(config.data.Get("MoMConfig", "currentLang"));
+        }
+
         roundControl = new RoundController();
 
         // Read the version and add it to the log

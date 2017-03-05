@@ -1,12 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Content;
+using UnityEngine;
 
 // First screen which contains game type selection
 // and import controls
-public class GameSelection
+public class GameSelection 
 {
     FetchContent fcD2E;
     FetchContent fcMoM;
+
+    TextButton[] languageTextButtons;
 
     // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
     public GameSelection()
@@ -51,27 +55,21 @@ public class GameSelection
             startColor = Color.gray;
         }
         // Draw D2E button
-        TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), new Vector2(30, 4f), "Descent: Journeys in the Dark Second Edition", delegate { D2E(); }, startColor);
+        TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 32) / 2, 10), new Vector2(30, 4f), "Descent: Journeys in the Dark Second Edition", delegate { D2E(); }, startColor);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
         // Draw D2E import button
         if (fcD2E.importAvailable)
         {
-            if (fcD2E.NeedImport())
-            {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Import Content", delegate { Import("D2E"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            }
-            else // Import OK, can redo
-            {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), "Reimport Content", delegate { Import("D2E"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            }
+            string text = fcD2E.NeedImport() ? "Import Content" : "Reimport Content";
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14.2f), new Vector2(10, 2f), text, delegate { Import("D2E"); });
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
+
         }
         else // Import unavailable
         {
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), "Unable to locate Road to Legend, install via Steam", Color.red);
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 26) / 2, 14.2f), new Vector2(24, 1f), "Unable to locate Road to Legend, install via Steam", Color.red);
             db.AddBorder();
         }
 
@@ -81,30 +79,91 @@ public class GameSelection
         {
             startColor = Color.gray;
         }
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), "Mansions of Madness Second Edition", delegate { MoM(); }, startColor);
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 32) / 2, 19), new Vector2(30, 4f), "Mansions of Madness Second Edition", delegate { MoM(); }, startColor);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
         // Draw MoM import button
         if (fcMoM.importAvailable)
         {
-            if (fcMoM.NeedImport())
-            {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Import Content", delegate { Import("MoM"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            }
-            else // Import OK, can redo
-            {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), "Reimport Content", delegate { Import("MoM"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            }
+            string text = fcMoM.NeedImport() ? "Import Content" : "Reimport Content";
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23.2f), new Vector2(10, 2f), text, delegate { Import("MoM"); });
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
         }
         else // Import unavailable
         {
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), "Unable to locate Mansions of Madness, install via Steam", Color.red);
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 26) / 2, 23.2f), new Vector2(24, 1f), "Unable to locate Mansions of Madness, install via Steam", Color.red);
             db.AddBorder();
         }
+
+        // If localization data were imported.
+        if (!fcMoM.NeedImport())
+        {
+            if (game.config.data.Get("MoMConfig") == null)
+            {
+                // TODO: FFGlookup to get the first line (languages list)
+                string langsString = StringI18n.FFG_LANGS;
+
+                // List of languages
+                game.config.data.Add("MoMConfig","Langs", langsString);
+                // English is the default current language
+                game.config.data.Add("MoMConfig", "currentLang","1");
+                game.config.Save();
+            }
+
+            string[] langs = game.config.data.Get("MoMConfig", "Langs").Split(',');
+            int currentLang = int.Parse(game.config.data.Get("MoMConfig", "currentLang"));
+
+            game.currentLang = currentLang;
+
+            float verticalStart = 12 - ((langs.Length - 1) * 1.25f);
+
+            languageTextButtons = new TextButton[langs.Length];
+            for (int i = 1; i < langs.Length; i++)
+            {
+                // Need current index in order to delegate not point to loop for variable
+                int currentIndex = i;
+
+                languageTextButtons[currentIndex] = new TextButton(
+                    new Vector2(UIScaler.GetHCenter() + 15, verticalStart + (2.5f * currentIndex)),
+                    new Vector2(8, 2f), 
+                    langs[currentIndex], 
+                    delegate { SelectLang(currentIndex); },
+                    currentIndex == currentLang ? Color.white : Color.gray
+                    );
+            }
+        }
+
         new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Exit", delegate { Exit(); }, Color.red);
+    }
+
+    /// <summary>
+    /// Select current language to specified
+    /// </summary>
+    /// <param name="i"></param>
+    private void SelectLang(int i)
+    {
+        Game currentGame = Game.Get();
+        if (currentGame.currentLang < languageTextButtons.Length)
+        {
+            languageTextButtons[currentGame.currentLang].setColor(Color.gray);
+        }
+        languageTextButtons[i].setColor(Color.white);
+        // English is the default current language
+        currentGame.config.data.Add("MoMConfig", "currentLang", i.ToString());
+        currentGame.config.Save();
+        currentGame.currentLang = i;
+        refreshScreen();
+        Debug.Log("new current language stablished:" + i.ToString());
+    }
+
+    /// <summary>
+    /// Refreshes the screen texts
+    /// </summary>
+    private void refreshScreen()
+    {
+        // TODO
+        // Reprint all texts in the screen.
     }
 
     // Start game as D2E
