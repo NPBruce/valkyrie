@@ -13,12 +13,18 @@ namespace Assets.Scripts.Content
         /// <summary>
         /// Fixed value included in FFGs Localization.txt file
         /// </summary>
-        public const string FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese";
+        public const string FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech";
+        /// <summary>
+        /// Default initial language is English
+        /// </summary>
+        public const string DEFAULT_LANG = "English";
 
         // Languages
         private string[] languages;
-        // Dictionary
+        
+        // Dictionary: Will be used to store all strings of a localization file
         private Dictionary<string, StringI18n> dict;
+
         // default language. If current language doesn't have description, default will be used.
         public int defaultLanguage { get; set; }
 

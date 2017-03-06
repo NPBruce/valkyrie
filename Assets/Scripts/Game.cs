@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -47,7 +49,7 @@ public class Game : MonoBehaviour {
     public string[] ffgText = null;
 
     // Current language
-    public int currentLang;
+    public string currentLang;
 
     // Set when in quest editor
     public bool editMode = false;
@@ -75,12 +77,14 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
-        currentLang = 1; // English
 
-        if (config.data.Get("MoMConfig") != null)
+        if (config.data.Get("UserConfig") == null)
         {
-            currentLang = int.Parse(config.data.Get("MoMConfig", "currentLang"));
+            // English is the default current language
+            config.data.Add("UserConfig", "currentLang", DictionaryI18n.DEFAULT_LANG);
+            config.Save();
         }
+        currentLang = config.data.Get("UserConfig", "currentLang");
 
         roundControl = new RoundController();
 
@@ -91,7 +95,7 @@ public class Game : MonoBehaviour {
         Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
-        new GameSelection();
+        new GameSelectionScreen();
     }
 
     // This is called by 'start quest' on the main menu
@@ -116,7 +120,7 @@ public class Game : MonoBehaviour {
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
-        new QuestSelection(ql);
+        new QuestSelectionScreen(ql);
     }
 
     // This is called by editor on the main menu

@@ -95,7 +95,7 @@ namespace Assets.Scripts.Content
 
             if (translations.Length != dict.getLanguages().Length)
             {
-                Debug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString);
+                Debug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
             }
         }
 
