@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.Content
 {
@@ -10,74 +10,21 @@ namespace Assets.Scripts.Content
     /// </summary>
     public class StringI18n
     {
-        /// <summary>
-        /// Fixed value included in FFGs Localization.txt file
-        /// </summary>
-        public const String FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese";
 
-        private static String[] languages;
-
-        private static int currentLanguage;
-        /// <summary>
-        /// Static initialization of languages list
-        /// </summary>
-        static StringI18n()
-        {
-            setLanguages(FFG_LANGS);
-        }
-
-        /// <summary>
-        /// Set the languages list from a comma separed string with them.
-        /// </summary>
-        /// <param name="stringLanguages">comma separed string</param>
-        public static void setLanguages(String stringLanguages)
-        {
-            languages = stringLanguages.Split(COMMA);
-            // Default language is english = 1. 
-            // Language 0 is the key
-            currentLanguage = 1;
-        }
-
-        /// <summary>
-        /// Sets current language using the string of the language.
-        /// If there is no language with this name, the default language
-        /// remains the same.
-        /// </summary>
-        /// <param name="languageName">Name of the language</param>
-        public static void setCurrentLanguage(String languageName)
-        {
-            for (int pos = 1; pos < languages.Length; pos++)
-            {
-                if (languages[pos] == languageName)
-                {
-                    currentLanguage = pos;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sets curreng language using its position. 0 doesn't count.
-        /// </summary>
-        /// <param name="languagePosition"></param>
-        public static void setCurrentLanguage(int languagePosition)
-        {
-            if (languagePosition != 0)
-            {
-                currentLanguage = languagePosition;
-            }
-        }
+        private DictionaryI18n referedDictionary;
 
         /// <summary>
         /// Instance info of the current translations
         /// </summary>
-        private String[] translations;
-
+        private string[] translations;
+       
         /// <summary>
         /// Creates an empty instance of a Multilanguage String
         /// </summary>
-        public StringI18n()
+        public StringI18n(DictionaryI18n dict)
         {
-            translations = new String[languages.Length];
+            referedDictionary = dict;
+            translations = new string[dict.getLanguages().Length];
         }
 
         private const char QUOTES = '\"';
@@ -87,16 +34,18 @@ namespace Assets.Scripts.Content
         /// Constructor with the complete localisation elements
         /// </summary>
         /// <param name="completeLocalisationString"></param>
-        public StringI18n(String completeLocalisationString)
+        public StringI18n(DictionaryI18n dict,string completeLocalisationString)
         {
+            referedDictionary = dict;
+
             if (completeLocalisationString.Contains(QUOTES))
             {
                 // with quotes, commas inside quotes isn't considered separator
-                List<String> partialTranslation = new List<String>(completeLocalisationString.Split(COMMA));
-                List<String> finalTranslation = new List<string>();
-                String currentTranslation = "";
+                List<string> partialTranslation = new List<string>(completeLocalisationString.Split(COMMA));
+                List<string> finalTranslation = new List<string>();
+                string currentTranslation = "";
                 bool opened = false;
-                foreach (String suposedTranslation in partialTranslation)
+                foreach (string suposedTranslation in partialTranslation)
                 {
                     currentTranslation += suposedTranslation;
 
@@ -143,10 +92,15 @@ namespace Assets.Scripts.Content
                 // Without quotes, all commas are separators
                 translations = completeLocalisationString.Split(COMMA);
             }
+
+            if (translations.Length != dict.getLanguages().Length)
+            {
+                Debug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString);
+            }
         }
 
         // The key is que position 0 of the array
-        public String key
+        public string key
         {
             get
             {
@@ -154,7 +108,7 @@ namespace Assets.Scripts.Content
             }
         }
 
-        public String getSpecificLanguageString(int nLanguage)
+        public string getSpecificLanguageString(int nLanguage)
         {
             return translations[nLanguage];
         }
@@ -166,29 +120,29 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="nLanguage">number of the language to use</param>
         /// <returns></returns>
-        public String getCurrentOrSpecificLanguageString(int nLanguage)
+        public string getCurrentOrDefaultLanguageString()
         {
             if (HasTextInCurrentLanguage)
             {
                 return currentLanguageString;
             } else
             {
-                return getSpecificLanguageString(nLanguage);
+                return getSpecificLanguageString(referedDictionary.defaultLanguage);
             }            
         }
 
         /// <summary>
         /// The string value of the key whith the current language
         /// </summary>
-        public String currentLanguageString
+        public string currentLanguageString
         {
             get
             {
-                return translations[currentLanguage];
+                return translations[referedDictionary.currentLanguage];
             }
             set
             {
-                translations[currentLanguage] = value;
+                translations[referedDictionary.currentLanguage] = value;
             }
         }
 
@@ -208,14 +162,15 @@ namespace Assets.Scripts.Content
         {
             StringBuilder result = new StringBuilder();
 
-            Boolean first = true;
-            foreach (String oneTranslation in translations)
+            bool first = true;
+            foreach (string oneTranslation in translations)
             {
                 if (!first)
                 {
                     result.Append(COMMA);
                 }
-                if (oneTranslation.Contains(COMMA))
+
+                if (oneTranslation.Contains(COMMA) || oneTranslation.Contains(QUOTES))
                 {
                     // The serializable text should repeat mid quotes and add initial and final quotes
                     result.Append(QUOTES).Append(oneTranslation.Replace(QUOTES.ToString(),"\"\"")).Append(QUOTES);
@@ -224,6 +179,7 @@ namespace Assets.Scripts.Content
                 {
                     result.Append(oneTranslation);
                 }
+
                 if (first)
                 {
                     first = false;

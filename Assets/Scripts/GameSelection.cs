@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Assets.Scripts.Content;
+﻿using Assets.Scripts.Content;
 using UnityEngine;
 
 // First screen which contains game type selection
@@ -10,7 +8,7 @@ public class GameSelection
     FetchContent fcD2E;
     FetchContent fcMoM;
 
-    TextButton[] languageTextButtons;
+    //TextButton[] languageTextButtons;
 
     // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
     public GameSelection()
@@ -96,13 +94,14 @@ public class GameSelection
             db.AddBorder();
         }
 
+        /*
         // If localization data were imported.
         if (!fcMoM.NeedImport())
         {
             if (game.config.data.Get("MoMConfig") == null)
             {
                 // TODO: FFGlookup to get the first line (languages list)
-                string langsString = StringI18n.FFG_LANGS;
+                string langsString = DictionaryI18n.FFG_LANGS;
 
                 // List of languages
                 game.config.data.Add("MoMConfig","Langs", langsString);
@@ -116,7 +115,8 @@ public class GameSelection
 
             game.currentLang = currentLang;
 
-            float verticalStart = 12 - ((langs.Length - 1) * 1.25f);
+            //The first button in the list of buttons should start in this vertical coordinate
+            float verticalStart = UIScaler.GetVCenter(-1.25f) - ((langs.Length - 1) * 1.25f);
 
             languageTextButtons = new TextButton[langs.Length];
             for (int i = 1; i < langs.Length; i++)
@@ -133,10 +133,11 @@ public class GameSelection
                     );
             }
         }
+        */
 
         new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Exit", delegate { Exit(); }, Color.red);
     }
-
+    /*
     /// <summary>
     /// Select current language to specified
     /// </summary>
@@ -165,6 +166,7 @@ public class GameSelection
         // TODO
         // Reprint all texts in the screen.
     }
+    */
 
     // Start game as D2E
     public void D2E()
