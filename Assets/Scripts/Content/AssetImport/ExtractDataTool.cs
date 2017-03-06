@@ -48,7 +48,7 @@ class ExtractDataTool
         {
             evade += kv.Value.GetEvade();
         }
-        string file = ContentData.ContentPath() + "/extract-evade.ini";
+        string file = ContentData.ContentPath() + "/MoM/ffg/extract-evade.ini";
         File.WriteAllText(file, evade);
 
         string horror = "";
@@ -56,7 +56,7 @@ class ExtractDataTool
         {
             horror += kv.Value.GetHorror();
         }
-        file = ContentData.ContentPath() + "/extract-horror.ini";
+        file = ContentData.ContentPath() + "/MoM/ffg/extract-horror.ini";
         File.WriteAllText(file, horror);
 
         string activation = "";
@@ -64,13 +64,13 @@ class ExtractDataTool
         {
             activation += kv.Value.GetActivation();
         }
-        file = ContentData.ContentPath() + "/extract-activation.ini";
+        file = ContentData.ContentPath() + "/MoM/ffg/extract-activation.ini";
         File.WriteAllText(file, activation);
 
-        file = ContentData.ContentPath() + "/extract-attacks.ini";
+        file = ContentData.ContentPath() + "/MoM/ffg/extract-attacks.ini";
         File.WriteAllText(file, attacks);
 
-        file = ContentData.ContentPath() + "/extract-items.ini";
+        file = ContentData.ContentPath() + "/MoM/ffg/extract-items.ini";
         File.WriteAllText(file, items);
 
         mythos += "[MythosPool]\r\n";
@@ -82,7 +82,7 @@ class ExtractDataTool
         mythos += mythosAll.Substring(0, mythosAll.Length - 1);
         mythos += "\r\nbutton1=\"Continue\"\r\n";
         mythos += "trigger=Mythos\r\n";
-        file = ContentData.ContentPath() + "/extract-mythos.ini";
+        file = ContentData.ContentPath() + "MoM/ffg/extract-mythos.ini";
         File.WriteAllText(file, mythos);
     }
 
