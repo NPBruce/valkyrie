@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.UI.Screens;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
@@ -96,7 +97,7 @@ public class QuestDownload : MonoBehaviour
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
-        new QuestSelection(ql);
+        new QuestSelectionScreen(ql);
     }
 
     public void Selection(string file)

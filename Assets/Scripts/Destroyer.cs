@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts.UI.Screens;
 
 // This is a helper class because we often need to clean things up.
 public class Destroyer {
@@ -9,7 +9,7 @@ public class Destroyer {
     {
         // Destroy everything
         Destroy();
-        new MainMenu();
+        new MainMenuScreen();
     }
 
     // This takes us to the quest select screen
