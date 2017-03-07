@@ -74,15 +74,15 @@ class ExtractDataTool
         file = ContentData.ContentPath() + "/MoM/ffg/extract-items.ini";
         File.WriteAllText(file, items);
 
-        mythos += "[MythosPool]\r\n";
+        mythos += "[MythosPool]\n";
         string mythosAll = "event1=";
         foreach (string s in mythosList)
         {
             mythosAll += s + " ";
         }
         mythos += mythosAll.Substring(0, mythosAll.Length - 1);
-        mythos += "\r\nbutton1=\"Continue\"\r\n";
-        mythos += "trigger=Mythos\r\n";
+        mythos += "\nbutton1=\"Continue\"\n";
+        mythos += "trigger=Mythos\n";
         file = ContentData.ContentPath() + "MoM/ffg/extract-mythos.ini";
         File.WriteAllText(file, mythos);
     }
@@ -102,9 +102,9 @@ class ExtractDataTool
             nameCamelUnder += "_" + eFixed;
         }
 
-        string ret = "[Item" + type + nameCamel + "]\r\n";
-        ret += "name={ffg:" + label + "}\r\n";
-        ret += "image=../ffg/img/Item_" + type + nameCamel + ".dds\r\n\r\n";
+        string ret = "[Item" + type + nameCamel + "]\n";
+        ret += "name={ffg:" + label + "}\n";
+        ret += "image=../ffg/img/Item_" + type + nameCamel + ".dds\n\n";
 
         return ret;
     }
@@ -120,10 +120,10 @@ class ExtractDataTool
             nameCamel += eFixed;
         }
 
-        string ret = "[" + nameCamel + "]\r\n";
-        ret += "text={ffg:" + label + "}\r\n";
-        ret += "target=" + elements[3].ToLower() + "\r\n";
-        ret += "attacktype=" + elements[1].ToLower() + "\r\n\r\n";
+        string ret = "[" + nameCamel + "]\n";
+        ret += "text={ffg:" + label + "}\n";
+        ret += "target=" + elements[3].ToLower() + "\n";
+        ret += "attacktype=" + elements[1].ToLower() + "\n\n";
         return ret;
     }
 
@@ -148,25 +148,25 @@ class ExtractDataTool
         }
 
         list.Add(nameCamel);
-        string ret = "[" + nameCamel + "]\r\n";
-        ret += "text={ffg:" + label + "}\r\n";
+        string ret = "[" + nameCamel + "\n";
+        ret += "text={ffg:" + label + "}\n";
         if (label.Substring(label.Length - 3).Equals("_01"))
         {
-            ret += "event1=" + nameCamel.Replace("01", "02") + "\r\n";
-            ret += "button1=\"Resolve Event\"\r\n";
-            ret += "event2=\r\n";
-            ret += "button2=\"No Effect\"\r\n";
-            ret += "flags=mythos\r\n\r\n";
+            ret += "event1=" + nameCamel.Replace("01", "02") + "\n";
+            ret += "button1=\"Resolve Event\"\n";
+            ret += "event2=\n";
+            ret += "button2=\"No Effect\"\n";
+            ret += "flags=mythos\n\n";
 
-            ret += "[" + nameCamel.Replace("01", "02") + "]\r\n";
-            ret += "text={ffg:" + label.Replace("01", "02") + "}\r\n";
+            ret += "[" + nameCamel.Replace("01", "02") + "]\n";
+            ret += "text={ffg:" + label.Replace("01", "02") + "}\n";
         }
         else
         {
-            ret += "flags=mythos\r\n";
+            ret += "flags=mythos\n";
         }
-        ret += "event1=\r\n";
-        ret += "button1=\"Continue\"\r\n\r\n";
+        ret += "event1=\n";
+        ret += "button1=\"Continue\"\n\n";
         return ret;
     }
 
@@ -341,9 +341,22 @@ class ExtractDataTool
                 move.Add(label);
                 int indexStart = allText.IndexOf(label);
                 string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart));
+                string altmove = label.Substring(0, label.Length - 2) + "00";
                 if ((instruction.IndexOf("towards the nearest") > 0) && (instruction.IndexOf("towards the nearest within range") < 0))
                 {
                      movealt.Add("");
+                }
+                else if (allText.IndexOf(altmove) > 0)
+                {
+                    // Hack for hounds, needs fixing
+                    if (allText.IndexOf(altmove + 'a') > 0)
+                    {
+                        movealt.Add("{ffg:" + altmove + "a}");
+                    }
+                    else
+                    {
+                        movealt.Add("{ffg:" + altmove + "}");
+                    }
                 }
                 else if (instruction.IndexOf("The {0} moves 3 spaces") > 0 || instruction.IndexOf("moves up to 3 spaces") > 0)
                 {
@@ -412,9 +425,9 @@ class ExtractDataTool
             string ret = "";
             foreach (string s in evade)
             {
-                ret += "[Evade" + nameCamel + s.Substring(s.Length - 2, 2) + "]\r\n";
-                ret += "monster=" + nameCamel + "\r\n";
-                ret += "text={ffg:" + s + "}\r\n\r\n";
+                ret += "[Evade" + nameCamel + s.Substring(s.Length - 2, 2) + "]\n";
+                ret += "monster=" + nameCamel + "\n";
+                ret += "text={ffg:" + s + "}\n\n";
             }
             return ret;
         }
@@ -424,9 +437,9 @@ class ExtractDataTool
             string ret = "";
             foreach (string s in horror)
             {
-                ret += "[Horror" + nameCamel + s.Substring(s.Length - 2, 2) + "]\r\n";
-                ret += "monster=" + nameCamel + "\r\n";
-                ret += "text={ffg:" + s + "}\r\n\r\n";
+                ret += "[Horror" + nameCamel + s.Substring(s.Length - 2, 2) + "]\n";
+                ret += "monster=" + nameCamel + "\n";
+                ret += "text={ffg:" + s + "}\n\n";
             }
             return ret;
         }
@@ -434,13 +447,19 @@ class ExtractDataTool
         public string GetActivation()
         {
             string ret = "";
-            foreach (string a in attack)
+            for (int i = 0; i < attack.Length)
             {
-                string m = a.Replace("_ATTACK_", "_MOVE_");
-                string id = a.Substring(a.IndexOf("_ATTACK_") + "_ATTACK_".Length);
-                ret += "[MonsterActivation" + nameCamel + id + "]\r\n";
-                ret += "ability={ffg:" + m + "}\r\n";
-                ret += "master={ffg:" + a + "}\r\n\r\n";
+                string m = attack[i].Replace("_ATTACK_", "_MOVE_");
+                string id = attack[i].Substring(attack[i].IndexOf("_ATTACK_") + "_ATTACK_".Length);
+                ret += "[MonsterActivation" + nameCamel + id + "]\n";
+                ret += "ability={ffg:" + m + "}\n";
+                ret += "master={ffg:" + attack[i] + "}\n";
+                ret += "movebutton=" + movebutton[i] + "\n";
+                if (movealt[i].Length > 0)
+                {
+                    ret += "move=" + movealt[i] + "\n";
+                }
+                ret += '\n';
             }
             return ret;
         }
