@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
 // Class for creation of a dialog window with buttons and handling button press
 // This is used for display of event information

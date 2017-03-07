@@ -2,23 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.UI.Screens;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
 {
     public Dictionary<string, QuestLoader.Quest> questList;
     public WWW download;
-    public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-questdata/master/build/";
+    public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/";
     public Game game;
     IniData remoteManifest;
     IniData localManifest;
 
     void Start()
     {
-        if (Application.isEditor)
-        {
-            serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-questdata/development/build/";
-        }
         game = Game.Get();
         string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
         StartCoroutine(Download(remoteManifest, delegate { ReadManifest(); }));
@@ -96,7 +93,7 @@ public class QuestDownload : MonoBehaviour
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
-        new QuestSelection(ql);
+        new QuestSelectionScreen(ql);
     }
 
     public void Selection(string file)

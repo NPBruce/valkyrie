@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -46,6 +48,9 @@ public class Game : MonoBehaviour {
     // Store of the game text imported from FFG app
     public string[] ffgText = null;
 
+    // Current language
+    public string currentLang;
+
     // Set when in quest editor
     public bool editMode = false;
 
@@ -72,6 +77,15 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+
+        if (config.data.Get("UserConfig") == null)
+        {
+            // English is the default current language
+            config.data.Add("UserConfig", "currentLang", DictionaryI18n.DEFAULT_LANG);
+            config.Save();
+        }
+        currentLang = config.data.Get("UserConfig", "currentLang");
+
         roundControl = new RoundController();
 
         // Read the version and add it to the log
@@ -81,7 +95,7 @@ public class Game : MonoBehaviour {
         Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
-        new GameSelection();
+        new GameSelectionScreen();
     }
 
     // This is called by 'start quest' on the main menu
@@ -106,7 +120,7 @@ public class Game : MonoBehaviour {
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
-        new QuestSelection(ql);
+        new QuestSelectionScreen(ql);
     }
 
     // This is called by editor on the main menu
