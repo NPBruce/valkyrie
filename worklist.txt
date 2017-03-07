@@ -1,32 +1,22 @@
 Done:
-
-MoM:
-activations
-duplicate monsters
-monster attack box
-monster evade
-monster horror
-missing tiles
-monster attack box
-Mythos support
-Font fix
-
-D2E:
-frame for monsters
-
-common:
-paged monsters
-logo
-misc UI cleanups
-
-Outstanding:
-MoM:
-Fire
-Mythos events
-monsters health
 Event subtype - get successes, pass/fail
 Event subtype - X selection options
 action symbol in event buttons
+slide puzzle (slow)
+camera limits set in events
+rotating tokens
+mom more tokens
+Long Dialog
+Mythos events
+
+Outstanding:
+MoM:
+Item exclusion
+Items in events
+Fire
+Investigator Eliminated
+Mythos events
+monsters health
 Puzzles
 
 D2E:
@@ -39,7 +29,6 @@ lt.
 
 Common:
 monster without event text bug
-camera limits set in events
 quest set
 symbols don't work in unique text
 event log

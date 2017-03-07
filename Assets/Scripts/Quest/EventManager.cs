@@ -213,6 +213,22 @@ public class EventManager
             CameraController.SetCamera(e.qEvent.location);
         }
 
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            new PuzzleSlideWindow(e);
+            return;
+        }
+
+        // Set camera limits
+        if (e.qEvent.minCam)
+        {
+            CameraController.SetCameraMin(e.qEvent.location);
+        }
+        if (e.qEvent.maxCam)
+        {
+            CameraController.SetCameraMax(e.qEvent.location);
+        }
+
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {
@@ -225,14 +241,13 @@ public class EventManager
     }
 
     // Event ended (pass or set as fail)
-    public void EndEvent(bool fail=false)
+    public void EndEvent(int state=0)
     {
         // Get list of next events
-        string[] eventList = currentEvent.qEvent.nextEvent;
-        if (fail)
+        List<string> eventList = new List<string>();
+        if (currentEvent.qEvent.nextEvent.Count > state)
         {
-            // On fail alternate list
-            eventList = currentEvent.qEvent.failEvent;
+            eventList = currentEvent.qEvent.nextEvent[state];
         }
 
         // Only take enabled events from list
@@ -339,60 +354,52 @@ public class EventManager
             return SymbolReplace(text).Replace("\\n", "\n");
         }
 
-        // Is the confirm button present?
-        public bool ConfirmPresent()
+        public List<DialogWindow.EventButton> GetButtons()
         {
-            // If the event can't be canceled it must have a confirm
+            List<DialogWindow.EventButton> buttons = new List<DialogWindow.EventButton>();
+
+            // Determine if no buttons should be displayed
+            if (!ButtonsPresent())
+            {
+                return buttons;
+            }
+
+            foreach (string s in qEvent.buttons)
+            {
+                DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(s));
+                // Hack for pass/fail color buttons
+                if (qEvent.nextEvent.Count == 2)
+                {
+                    if (buttons.Count == 0 && eb.label.Equals("Pass"))
+                    {
+                        eb.colour = Color.green;
+                    }
+                    if (buttons.Count == 1 && eb.label.Equals("Fail"))
+                    {
+                        eb.colour = Color.red;
+                    }
+                }
+                buttons.Add(eb);
+            }
+
+            return buttons;
+        }
+
+        // Is the confirm button present?
+        public bool ButtonsPresent()
+        {
+            // If the event can't be canceled it must have buttons
             if (!qEvent.cancelable) return true;
             // Check if any of the next events are enabled
-            foreach (string s in qEvent.nextEvent)
+            foreach (List<string> l in qEvent.nextEvent)
             {
-                if (!game.quest.eManager.events[s].Disabled()) return true;
+                foreach (string s in l)
+                {
+                    if (!game.quest.eManager.events[s].Disabled()) return true;
+                }
             }
-            // Nothing valid, no confirm
+            // Nothing valid, no buttons
             return false;
-        }
-
-        // Is the fail button present?
-        public bool FailPresent()
-        {
-            // Check for any fail events (even if disabled)
-            return (qEvent.failEvent.Length != 0);
-        }
-
-        // Get pass/confirm button text
-        public string GetPass()
-        {
-            // Custom text
-            if (!qEvent.confirmText.Equals("")) return qEvent.confirmText;
-            // no fail button, use Confirm
-            if (qEvent.failEvent.Length == 0) return "Confirm";
-            // fail, use pass
-            return "Pass";
-        }
-
-        // Get fail button text
-        public string GetFail()
-        {
-            // if specified return that
-            if (!qEvent.failText.Equals("")) return qEvent.failText;
-            return "Fail";
-        }
-
-        // Get colour of pass button
-        public Color GetPassColor()
-        {
-            // If it is 'pass' it is green, otherwise white
-            if (GetPass().Equals("Pass")) return Color.green;
-            return Color.white;
-        }
-
-        // Get colour of fail button
-        public Color GetFailColor()
-        {
-            // If it is Fail it is red, otherwise white
-            if (GetFail().Equals("Fail")) return Color.red;
-            return Color.white;
         }
 
         // Is this event disabled?
@@ -407,17 +414,6 @@ public class EventManager
             }
             // No missing flags
             return false;
-        }
-
-        // FIXME These should be removed?
-        public Event Next()
-        {
-            return null;
-        }
-
-        public Event NextFail()
-        {
-            return null;
         }
     }
 

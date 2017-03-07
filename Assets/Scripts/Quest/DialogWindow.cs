@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
 // Class for creation of a dialog window with buttons and handling button press
 // This is used for display of event information
@@ -11,6 +8,10 @@ public class DialogWindow {
     public EventManager.Event eventData;
     // An event can have a list of selected heroes
     public List<Quest.Hero> heroList;
+
+    public int quota = 0;
+
+    public string text= "";
 
     // Create from event
     public DialogWindow(EventManager.Event e)
@@ -39,65 +40,163 @@ public class DialogWindow {
             }
         }
 
-        CreateWindow();
+        if (eventData.qEvent.quota > 0)
+        {
+            CreateQuotaWindow();
+        }
+        else
+        {
+            CreateWindow();
+        }
     }
 
     public void CreateWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.GetText());
+        text = eventData.GetText();
+        float offset = 8;
+        if (eventData.qEvent.longText)
+        {
+            offset = 21;
+        }
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), text);
         db.AddBorder();
+
+        offset += 1f;
+        int num = 1;
+        float length = 8f;
+        float hOffset = UIScaler.GetWidthUnits() - 19f;
+        if (eventData.GetButtons().Count > 2)
+        {
+            length = 16f;
+            hOffset = UIScaler.GetHCenter(-8f);
+        }
+        foreach (EventButton eb in eventData.GetButtons())
+        {
+            int numTmp = num++;
+            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
+            offset += 2.5f;
+        }
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-        }
-
-        // Is there a confirm button
-        if (eventData.ConfirmPresent())
-        {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eventData.GetPass(), delegate { onConfirm(); }, eventData.GetPassColor());
-            // Is there a fail button
-            if (eventData.FailPresent())
+            if (eventData.GetButtons().Count > 2)
             {
-                new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 11.5f), new Vector2(8f, 2), eventData.GetFail(), delegate { onFail(); }, eventData.GetFailColor());
+                new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            }
+            else
+            {
+                new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
             }
         }
+
     }
 
-    // Pass and confirm are the same
-    // FIXME: can this be removed?
-    public void onPass()
+    public void CreateQuotaWindow()
     {
-        onConfirm();
+        // Draw text
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.GetText());
+        db.AddBorder();
+
+        if (quota == 0)
+        {
+            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), "-", delegate { ; }, Color.grey);
+        }
+        else
+        {
+            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), "-", delegate { quotaDec(); }, Color.white);
+        }
+
+        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota.ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        if (quota >= 10)
+        {
+            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { ; }, Color.grey);
+        }
+        else
+        {
+            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { quotaInc(); }, Color.white);
+        }
+
+        // Only one button, action depends on quota
+        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { onQuota(); }, Color.white);
+
+        // Do we have a cancel button?
+        if (eventData.qEvent.cancelable)
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), 11.5f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+        }
+
+    }
+
+    public void quotaDec()
+    {
+        quota--;
+        Destroyer.Dialog();
+        CreateQuotaWindow();
+    }
+
+    public void quotaInc()
+    {
+        quota++;
+        Destroyer.Dialog();
+        CreateQuotaWindow();
+    }
+
+    public void onQuota()
+    {
+        Game game = Game.Get();
+        if (game.quest.eventQuota.ContainsKey(eventData.qEvent.name))
+        {
+            game.quest.eventQuota[eventData.qEvent.name] += quota;
+        }
+        else
+        {
+            game.quest.eventQuota.Add(eventData.qEvent.name, quota);
+        }
+        if (game.quest.eventQuota[eventData.qEvent.name] >= eventData.qEvent.quota)
+        {
+            game.quest.eventQuota.Remove(eventData.qEvent.name);
+            onButton(1);
+        }
+        else
+        {
+            onButton(2);
+        }
     }
 
     // Cancel cleans up
     public void onCancel()
     {
-        destroy();
+        Destroyer.Dialog();
         Game.Get().quest.eManager.currentEvent = null;
         // There may be a waiting event
         Game.Get().quest.eManager.TriggerEvent();
     }
 
-    public void onFail()
+    public void onButton(int num)
     {
         // Do we have correct hero selection?
         if (!checkHeroes()) return;
 
         Game game = Game.Get();
         // Destroy this dialog to close
-        destroy();
+        Destroyer.Dialog();
 
-        // If the user started this event (cancelable) failing is undoable
+        // If the user started this event button is undoable
         if (eventData.qEvent.cancelable)
         {
             game.quest.Save();
         }
-        // Event manager handles the failure
-        game.quest.eManager.EndEvent(true);
+
+        // Add this to the log
+        game.quest.log.Add(text.Replace("\n", "\\n"));
+
+        // Event manager handles the aftermath
+        game.quest.eManager.EndEvent(num-1);
     }
 
     // Check that the correct number of heroes are selected
@@ -141,30 +240,14 @@ public class DialogWindow {
         return true;
     }
 
-
-    public void onConfirm()
+    public class EventButton
     {
-        // Check that correct number of heroes selected
-        if (!checkHeroes()) return;
+        public string label = "";
+        public Color colour = Color.white;
 
-        Game game = Game.Get();
-
-        // Destroy this dialog to close
-        destroy();
-
-        // If the user started this event (cancelable) failing is undoable
-        if (eventData.qEvent.cancelable)
+        public EventButton(string l)
         {
-            game.quest.Save();
+            label = l;
         }
-
-        // Event manager handles event completion
-        game.quest.eManager.EndEvent();
-    }
-
-    public void destroy()
-    {
-        // Clean up everything marked as 'dialog'
-        Destroyer.Dialog();
     }
 }

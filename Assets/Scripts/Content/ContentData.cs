@@ -9,6 +9,7 @@ public class ContentData {
     public List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
+    public Dictionary<string, ItemData> items;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
     public Dictionary<string, AttackData> investigatorAttacks;
@@ -35,6 +36,9 @@ public class ContentData {
 
         // Available heros
         heros = new Dictionary<string, HeroData>();
+
+        // Available items
+        items = new Dictionary<string, ItemData>();
 
         // Available monsters
         monsters = new Dictionary<string, MonsterData>();
@@ -280,6 +284,32 @@ public class ContentData {
             else if (heros[name].priority == d.priority)
             {
                 heros[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Item" entry?
+        if (name.IndexOf(ItemData.type) == 0)
+        {
+            ItemData d = new ItemData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!items.ContainsKey(name))
+            {
+                items.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (items[name].priority < d.priority)
+            {
+                items.Remove(name);
+                items.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (items[name].priority == d.priority)
+            {
+                items[name].sets.Add(packID);
             }
         }
 
@@ -570,6 +600,7 @@ public class TileSideData : GenericData
     public float left = 0;
     public float pxPerSquare;
     public float aspect = 0;
+    public string reverse = "";
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -599,6 +630,12 @@ public class TileSideData : GenericData
         {
             float.TryParse(content["aspect"], out aspect);
         }
+
+        // Other side used for validating duplicate use
+        if (content.ContainsKey("reverse"))
+        {
+            reverse = content["reverse"];
+        }
     }
 }
 
@@ -607,6 +644,7 @@ public class HeroData : GenericData
 {
     public string archetype = "warrior";
     public static new string type = "Hero";
+    public string item = "";
 
     public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -615,6 +653,21 @@ public class HeroData : GenericData
         {
             archetype = content["archetype"];
         }
+        // Get starting item
+        if (content.ContainsKey("item"))
+        {
+            item = content["item"];
+        }
+    }
+}
+
+// Class for Item specific data
+public class ItemData : GenericData
+{
+    public static new string type = "Item";
+
+    public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
     }
 }
 
@@ -708,6 +761,8 @@ public class TokenData : GenericData
     public int y = 0;
     public int height = 0;
     public int width = 0;
+    // 0 means token is 1 square big
+    public float pxPerSquare = 0;
     public static new string type = "Token";
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -729,6 +784,11 @@ public class TokenData : GenericData
         if (content.ContainsKey("height"))
         {
             int.TryParse(content["width"], out width);
+        }
+        // pixel per D2E square (inch) of image
+        if (content.ContainsKey("pps"))
+        {
+            float.TryParse(content["pps"], out pxPerSquare);
         }
     }
 

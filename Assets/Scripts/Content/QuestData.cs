@@ -135,6 +135,16 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
+        if (name.IndexOf(Item.type) == 0)
+        {
+            Item c = new Item(name, content);
+            components.Add(name, c);
+        }
+        if (name.IndexOf(Puzzle.type) == 0)
+        {
+            Puzzle c = new Puzzle(name, content);
+            components.Add(name, c);
+        }
         if (name.IndexOf("UniqueMonster") == 0)
         {
             UniqueMonster c = new UniqueMonster(name, content, path);
@@ -271,6 +281,7 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
+        public int rotation = 0;
         public string tokenName;
 
         // Create new with name (used by editor)
@@ -296,6 +307,11 @@ public class QuestData
             {
                 tokenName = data["type"];
             }
+            // Get rotation if specified
+            if (data.ContainsKey("rotation"))
+            {
+                int.TryParse(data["rotation"], out rotation);
+            }
         }
 
         // Save to string (for editor)
@@ -307,6 +323,10 @@ public class QuestData
             if(!tokenName.Equals("TokenSearch"))
             {
                 r += "type=" + tokenName + nl;
+            }
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
             }
             return r;
         }
@@ -478,11 +498,9 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string originalText = "";
-        public string confirmText = "";
-        public string failText = "";
+        public List<string> buttons;
         public string trigger = "";
-        public string[] nextEvent;
-        public string[] failEvent;
+        public List<List<string>> nextEvent;
         public string heroListName = "";
         public int gold = 0;
         public int minHeroes = 0;
@@ -498,13 +516,17 @@ public class QuestData
         public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
+        public bool minCam = false;
+        public bool maxCam = false;
+        public int quota = 0;
+        public bool longText = false;
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
             typeDynamic = type;
-            nextEvent = new string[0];
-            failEvent = new string[0];
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
             flags = new string[0];
@@ -512,6 +534,8 @@ public class QuestData
             clearFlags = new string[0];
             threat = 0;
             delayedEvents = new List<DelayedEvent>();
+            minCam = false;
+            maxCam = false;
         }
 
         // Create event from ini data
@@ -525,42 +549,82 @@ public class QuestData
             }
             originalText = text;
 
-            // confirm/pass button
-            if (data.ContainsKey("confirmtext"))
-            {
-                confirmText = data["confirmtext"];
-            }
-
-            // fail button
-            if (data.ContainsKey("failtext"))
-            {
-                failText = data["failtext"];
-            }
-
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
             {
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("event"))
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
+            int buttonNum = 1;
+            bool moreEvents = true;
+            while (moreEvents)
             {
-                nextEvent = data["event"].Split(' ');
-            }
-            else
-            {
-                nextEvent = new string[0];
+                if (data.ContainsKey("button" + buttonNum))
+                {
+                    buttons.Add(data["button" + buttonNum]);
+
+                    if (data.ContainsKey("event" + buttonNum))
+                    {
+                        if (data["event" + buttonNum].Trim().Length > 0)
+                        {
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                        }
+                        else
+                        {
+                            nextEvent.Add(new List<string>());
+                        }
+                    }
+                    else
+                    {
+                        nextEvent.Add(new List<string>());
+                    }
+                }
+                else
+                {
+                    moreEvents = false;
+                }
+                buttonNum++;
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("failevent"))
+            // Legacy support
+            if (nextEvent.Count == 0)
             {
-                failEvent = data["failevent"].Split(' ');
-            }
-            else
-            {
-                failEvent = new string[0];
+                if (data.ContainsKey("event"))
+                {
+                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                }
+                else
+                {
+                    nextEvent.Add(new List<string>());
+                }
+
+                if (data.ContainsKey("confirmtext"))
+                {
+                    buttons.Add(data["confirmtext"]);
+                }
+                else if (data.ContainsKey("failevent"))
+                {
+                    buttons.Add("Pass");
+                }
+                else
+                {
+                    buttons.Add("Confirm");
+                }
+
+                if (data.ContainsKey("failevent"))
+                {
+                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    if (data.ContainsKey("failtext"))
+                    {
+                        buttons.Add(data["failtext"]);
+                    }
+                    else
+                    {
+                        buttons.Add("Fail");
+                    }
+                }
             }
 
             // Heros from another event can be hilighted
@@ -573,6 +637,12 @@ public class QuestData
             if (data.ContainsKey("gold"))
             {
                 int.TryParse(data["gold"], out gold);
+            }
+            
+            // Success quota
+            if (data.ContainsKey("quota"))
+            {
+                int.TryParse(data["quota"], out quota);
             }
             
             // minimum heros required to be selected for event
@@ -681,6 +751,24 @@ public class QuestData
             {
                 bool.TryParse(data["randomevents"], out randomEvents);
             }
+            // Randomise next event setting
+            if (data.ContainsKey("mincam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["mincam"], out minCam);
+            }
+            // Randomise next event setting
+            if (data.ContainsKey("maxcam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["maxcam"], out maxCam);
+            }
+
+            // Randomise next event setting
+            if (data.ContainsKey("longtext"))
+            {
+                bool.TryParse(data["longtext"], out longText);
+            }
         }
 
         // Check all references when a component name is changed
@@ -692,26 +780,25 @@ public class QuestData
                 heroListName = newName;
             }
             // a next event is changed
-            for (int i = 0; i < nextEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (nextEvent[i].Equals(oldName))
+                for (int j = 0; j < nextEvent[i].Count; j++)
                 {
-                    nextEvent[i] = newName;
+                    if (nextEvent[i][j].Equals(oldName))
+                    {
+                        nextEvent[i][j] = newName;
+                    }
                 }
             }
             // If next event is deleted, trim array
-            nextEvent = RemoveFromArray(nextEvent, "");
-
-            // a fail event is changed
-            for (int i = 0; i < failEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (failEvent[i].Equals(oldName))
+                bool removed = true;
+                while (removed)
                 {
-                    failEvent[i] = newName;
+                    removed = nextEvent[i].Remove("");
                 }
             }
-            // If fail event is deleted, trim array
-            failEvent = RemoveFromArray(failEvent, "");
 
             // component to add renamed
             for (int i = 0; i < addComponents.Length; i++)
@@ -763,37 +850,32 @@ public class QuestData
 
             r += "text=\"" + originalText + "\"" + nl;
 
-            if (!confirmText.Equals(""))
-            {
-                r += "confirmtext=\"" + confirmText + "\"" + nl;
-            }
-            if (!failText.Equals(""))
-            {
-                r += "failtext=\"" + failText + "\"" + nl;
-            }
-
             if (highlight)
             {
                 r += "highlight=true" + nl;
             }
-            if (nextEvent.Length > 0)
+
+            int buttonNum = 1;
+            foreach (List<string> l in nextEvent)
             {
-                r += "event=";
-                foreach (string s in nextEvent)
+                r += "event" + buttonNum++ + "=";
+                foreach (string s in l)
                 {
                     r += s + " ";
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (failEvent.Length > 0)
-            {
-                r += "failevent=";
-                foreach (string s in failEvent)
+                if (l.Count > 0)
                 {
-                    r += s + " ";
+                    r = r.Substring(0, r.Length - 1);
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r += nl;
             }
+
+            buttonNum = 1;
+            foreach (string s in buttons)
+            {
+                r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
+            }
+
             if (!heroListName.Equals(""))
             {
                 r += "hero=" + heroListName + nl;
@@ -801,6 +883,10 @@ public class QuestData
             if (gold != 0)
             {
                 r += "gold=" + gold + nl;
+            }
+            if (quota != 0)
+            {
+                r += "quota=" + quota + nl;
             }
             if (minHeroes != 0)
             {
@@ -883,6 +969,24 @@ public class QuestData
             {
                 r += "randomevents=true" + nl;
             }
+            // Randomise next event setting
+            if (minCam)
+            {
+                r += "mincam=true" + nl;
+            }
+            if (maxCam)
+            {
+                r += "maxcam=true" + nl;
+            }
+            if (maxCam || minCam)
+            {
+                r += "xposition=" + location.x + nl;
+                r += "yposition=" + location.y + nl;
+            }
+            if (longText)
+            {
+                r += "longtext=true" + nl;
+            }
             return r;
         }
 
@@ -957,6 +1061,52 @@ public class QuestData
             if (rotate)
             {
                 r += "rotate=true" + nl;
+            }
+            return r;
+        }
+    }
+
+    // Puzzle component
+    public class Puzzle : Event
+    {
+        new public static string type = "Puzzle";
+        public string puzzleClass = "slide";
+        public int puzzleLevel = 4;
+
+        // Create a new puzzle with name (editor)
+        public Puzzle(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
+
+        // Construct from ini data
+        public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+
+            if (data.ContainsKey("class"))
+            {
+                puzzleClass = data["class"];
+            }
+            if (data.ContainsKey("puzzlelevel"))
+            {
+                int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
+        }
+
+        // Save to string (editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (!puzzleClass.Equals("slide"))
+            {
+                r += "class=" + puzzleClass + nl;
+            }
+            if (puzzleLevel != 4)
+            {
+                r += "puzzlelevel=" + puzzleLevel + nl;
             }
             return r;
         }
@@ -1081,11 +1231,13 @@ public class QuestData
             monsterName = name;
             activations = new string[0];
             traits = new string[0];
+            typeDynamic = type;
         }
 
         // Create from ini data
         public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
+            typeDynamic = type;
             path = pathIn;
             // Get base derived monster type
             if (data.ContainsKey("base"))
@@ -1209,11 +1361,13 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         // Create from ini data
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
                 ability = data["ability"];
@@ -1266,6 +1420,74 @@ public class QuestData
         }
     }
 
+
+    // Scenario starting item
+    public class Item : QuestComponent
+    {
+        new public static string type = "Item";
+        public string[] itemName;
+        public string[] traits;
+
+        // Create new (editor)
+        public Item(string s) : base(s)
+        {
+            typeDynamic = type;
+            itemName = new string[0];
+            traits = new string[1];
+            traits[0] = "weapon";
+        }
+
+        // Create from ini data
+        public Item(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+            if (data.ContainsKey("itemname"))
+            {
+                itemName = data["itemname"].Split(' ');
+            }
+            else
+            {
+                itemName = new string[0];
+            }
+            if (data.ContainsKey("traits"))
+            {
+                traits = data["traits"].Split(' ');
+            }
+            else
+            {
+                traits = new string[0];
+            }
+        }
+
+        // Save to string
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (itemName.Length > 0)
+            {
+                r += "itemname=";
+                foreach (string s in itemName)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (traits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in traits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            return r;
+        }
+    }
+
+
     // Quest ini component has special data
     public class Quest
     {
@@ -1273,12 +1495,6 @@ public class QuestData
         public string name = "";
         // Quest description (currently unused)
         public string description = "";
-        // Camera pan limits
-        // TODO: move these to events
-        public int minPanX;
-        public int minPanY;
-        public int maxPanX;
-        public int maxPanY;
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils
@@ -1291,11 +1507,6 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> data)
         {
-            maxPanX = 20;
-            maxPanY = 20;
-            minPanX = -20;
-            minPanY = -20;
-
             if (data.ContainsKey("name"))
             {
                 name = data["name"];
@@ -1310,23 +1521,6 @@ public class QuestData
             if (data.ContainsKey("description"))
             {
                 description = data["description"];
-            }
-
-            if (data.ContainsKey("maxpanx"))
-            {
-                int.TryParse(data["maxpanx"], out maxPanX);
-            }
-            if (data.ContainsKey("maxpany"))
-            {
-                int.TryParse(data["maxpany"], out maxPanY);
-            }
-            if (data.ContainsKey("minpanx"))
-            {
-                int.TryParse(data["minpanx"], out minPanX);
-            }
-            if (data.ContainsKey("minpany"))
-            {
-                int.TryParse(data["minpany"], out minPanY);
             }
             if (data.ContainsKey("minorperil"))
             {
@@ -1348,25 +1542,6 @@ public class QuestData
             {
                 packs = new string[0];
             }
-
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMaxCam(Vector2 pos)
-        {
-            maxPanX = Mathf.RoundToInt(pos.x);
-            maxPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMinCam(Vector2 pos)
-        {
-            minPanX = Mathf.RoundToInt(pos.x);
-            minPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
         }
 
         // Save to string (editor)
@@ -1378,33 +1553,17 @@ public class QuestData
             r += "description=\"" + description + "\"" + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
-            if (minPanY != -20)
-            {
-                r += "minpany=" + minPanY + nl;
-            }
-            if (minPanX != -20)
-            {
-                r += "minpanx=" + minPanX + nl;
-            }
-            if (maxPanX != -20)
-            {
-                r += "maxpanx=" + maxPanX + nl;
-            }
-            if (maxPanY != -20)
-            {
-                r += "maxpany=" + maxPanY + nl;
-            }
             if (minorPeril != 7)
             {
-                r += "minorperil=" + maxPanY + nl;
+                r += "minorperil=" + minorPeril + nl;
             }
             if (majorPeril != 10)
             {
-                r += "majorperil=" + maxPanY + nl;
+                r += "majorperil=" + majorPeril + nl;
             }
             if (deadlyPeril != 12)
             {
-                r += "deadlyperil=" + maxPanY + nl;
+                r += "deadlyperil=" + deadlyPeril + nl;
             }
             if (packs.Length > 0)
             {
@@ -1420,4 +1579,3 @@ public class QuestData
         }
     }
 }
-

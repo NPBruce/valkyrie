@@ -15,8 +15,17 @@ public class Quest
     // A list of flags that have been set during the quest
     public HashSet<string> flags;
 
+    // A list of items that have been given to the investigators
+    public HashSet<string> items;
+
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
+
+    // A dictionary of puzzle state
+    public Dictionary<string, PuzzleSlide> puzzle;
+
+    // A count of successes from events
+    public Dictionary<string, int> eventQuota;
 
     // Event manager handles the events
     public EventManager eManager;
@@ -32,6 +41,9 @@ public class Quest
 
     // Stack of saved game state for undo
     public Stack<string> undo;
+
+    // Event Log
+    public List<string> log;
 
     // game state variables
     public int round = 1;
@@ -64,11 +76,15 @@ public class Quest
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
+        items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, PuzzleSlide>();
+        eventQuota = new Dictionary<string, int>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
+        log = new List<string>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -168,6 +184,14 @@ public class Quest
             flags.Add(kv.Key);
         }
 
+        // Set items
+        items = new HashSet<string>();
+        Dictionary<string, string> saveItems = saveData.Get("Items");
+        foreach (KeyValuePair<string, string> kv in saveItems)
+        {
+            items.Add(kv.Key);
+        }
+
         // Restart event EventManager
         eManager = new EventManager();
 
@@ -220,6 +244,31 @@ public class Quest
             // Add this selection
             heroSelection.Add(kv.Key, heroList);
         }
+
+        puzzle = new Dictionary<string, PuzzleSlide>();
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
+        {
+            if (kv.Key.IndexOf("PuzzleSlide") == 0)
+            {
+                puzzle.Add(kv.Key, new PuzzleSlide(kv.Value));
+            }
+        }
+        // Restore event quotas
+        eventQuota = new Dictionary<string, int>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
+        {
+            int value;
+            int.TryParse(kv.Value, out value);
+            eventQuota.Add(kv.Key, value);
+        }
+
+        // Restore event log
+        log = new List<string>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
+        {
+            log.Add(kv.Key);
+        }
+
         // Update the screen
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
@@ -428,6 +477,12 @@ public class Quest
             r += s + nl;
         }
 
+        r += "[Items]" + nl;
+        foreach (string s in items)
+        {
+            r += s + nl;
+        }
+
         // Hero selection is a list of selections, each with space separated hero lists
         r += "[HeroSelection]" + nl;
         foreach (KeyValuePair<string, List<Quest.Hero>> kv in heroSelection)
@@ -440,6 +495,13 @@ public class Quest
             r = r.Substring(0, r.Length - 1) + nl;
         }
 
+        // Save event quotas
+        r += "[EventQuota]" + nl;
+        foreach (KeyValuePair<string, int> kv in eventQuota)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
+        }
+
         // Save hero state
         foreach (Hero h in heroes)
         {
@@ -450,6 +512,17 @@ public class Quest
         foreach (Monster m in monsters)
         {
             r += m.ToString();
+        }
+
+        foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
+        {
+            r += kv.Value.ToString(kv.Key);
+        }
+
+        r += "[Log]\r\n";
+        foreach (string s in log)
+        {
+            r += s;
         }
 
         return r;
@@ -585,7 +658,17 @@ public class Quest
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
-            image.rectTransform.sizeDelta = new Vector2(1f, 1f);
+
+            float PPS = game.cd.tokens[tokenName].pxPerSquare;
+            if (PPS == 0)
+            {
+                PPS = (float)newTex.width;
+            }
+
+            // Set the size to the image size
+            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / PPS, (float)newTex.height / PPS);
+            // Rotate around 0,0 rotation amount
+            unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
             // Move to square
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 
