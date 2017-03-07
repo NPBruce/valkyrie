@@ -33,5 +33,3 @@ sysinfo.txt
 # FFG imported content
 /content/D2E/ffg
 /content/MoM/ffg
-# Valkyrie ini files importing ffg ones
-/content/extract-*.ini
