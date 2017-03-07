@@ -93,5 +93,15 @@ public class TextButton {
         uiText.font = f;
         uiText.material = uiText.font.material;
     }
+
+    /// <summary>
+    /// Change the color of entire element
+    /// </summary>
+    /// <param name="c"></param>
+    public void setColor(Color c)
+    {
+        uiText.color = c;
+        border.color = c;
+    }
 }
 
