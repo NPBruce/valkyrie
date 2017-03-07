@@ -15,6 +15,7 @@ class ExtractDataTool
         string items = "";
         string mythos = "";
 
+        string allText = encoding.GetString(data, 0, data.Length);
         foreach (string m in labels)
         {
             string mName = ExtractMonsterName(m);
@@ -24,7 +25,7 @@ class ExtractDataTool
                 {
                     monsters.Add(mName, new Monster(mName));
                 }
-                monsters[mName].Add(m);
+                monsters[mName].Add(m, allText);
             }
             
             if (m.IndexOf("ATTACK_") == 0)
@@ -310,6 +311,8 @@ class ExtractDataTool
             horror = new List<string>();
             evade = new List<string>();
             move = new List<string>();
+            movebutton =  = new List<string>();
+            movealt =  = new List<string>();
             attack = new List<string>();
 
             nameFFG = name;
@@ -325,7 +328,7 @@ class ExtractDataTool
             nameReadable = nameReadable.Substring(0, nameReadable.Length - 1);
         }
 
-        public void Add(string label)
+        public void Add(string label, string allText)
         {
             string moveStr = "_MOVE_";
             string attackStr = "_ATTACK_";
@@ -336,6 +339,59 @@ class ExtractDataTool
             if (l.IndexOf(moveStr) == 0)
             {
                 move.Add(label);
+                int indexStart = allText.IndexOf(label);
+                string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart));
+                if ((instruction.IndexOf("towards the nearest") > 0) && (instruction.IndexOf("towards the nearest within range") < 0))
+                {
+                     movealt.Add("");
+                }
+                else if (instruction.IndexOf("The {0} moves 3 spaces") > 0 || instruction.IndexOf("moves up to 3 spaces") > 0)
+                {
+                    movealt.Add("{ffg:MONSTER_COMMON_MOVE_03}");
+                }
+                else if (instruction.IndexOf("The {0} moves 2 spaces") > 0 || instruction.IndexOf("moves up to 2 spaces") > 0)
+                {
+                    movealt.Add("{ffg:MONSTER_COMMON_MOVE_02}");
+                }
+                else if (instruction.IndexOf("The {0} moves 1 space") > 0 || instruction.IndexOf("moves up to 1 space") > 0)
+                {
+                    movealt.Add("{ffg:MONSTER_COMMON_MOVE_01}");
+                }
+                else
+                {
+                    movealt.Add("");
+                }
+
+                if ((instruction.IndexOf("toward the investigator within range") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                }
+                else if ((instruction.IndexOf("to be adjacent to as many investigators as possibl") > 0))
+                {
+                     movebutton.Add("{ffg:UI_CANT_MOVE_ADJACENT}");
+                }
+                else if ((instruction.IndexOf("3 spaces to be in a space with as many investigators as possible") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_WITHIN_3}");
+                }
+                else if ((instruction.IndexOf("1 space to be in a space with as many investigators as possible") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_WITHIN_1}");
+                }
+                else if ((instruction.IndexOf("2 spaces to be in a space with as many investigators as possible") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_WITHIN_2}");
+                }
+                else if ((instruction.IndexOf("to be within range of as many investigators") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_WITHIN_MOVE}");
+                }
+                else if ((instruction.IndexOf("nvestigator in its space") > 0))
+                {
+                     movebutton.Add("{ffg:UI_NOT_IN_SPACE}");
+                }
+
+                movebutton.Add(label, data);
             }
             if (l.IndexOf(attackStr) == 0)
             {
