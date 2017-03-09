@@ -93,9 +93,12 @@ namespace Assets.Scripts.Content
                 translations = completeLocalisationString.Split(COMMA);
             }
 
-            if (translations.Length != dict.getLanguages().Length)
+            if (translations.Length > dict.getLanguages().Length)
             {
                 Debug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
+            } else
+            {
+                Debug.Log("Imported correctly: " + completeLocalisationString + System.Environment.NewLine);
             }
         }
 
@@ -138,7 +141,15 @@ namespace Assets.Scripts.Content
         {
             get
             {
-                return translations[referedDictionary.currentLanguage];
+                if (referedDictionary.currentLanguage < translations.Length)
+                {
+                    return translations[referedDictionary.currentLanguage];
+                }
+                else
+                {
+                    return "";
+                }
+
             }
             set
             {

@@ -46,7 +46,7 @@ public class Game : MonoBehaviour {
     public NextStageButton stageUI;
 
     // Store of the game text imported from FFG app
-    public string[] ffgText = null;
+    public DictionaryI18n ffgDict;
 
     // Current language
     public string currentLang;

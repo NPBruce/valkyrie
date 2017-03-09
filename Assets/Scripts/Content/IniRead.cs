@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // Helper class to read an ini file into a nested dictionary
 // This exists because .NET/Mono doesn't have one!!
@@ -208,74 +209,29 @@ public static class IniRead{
             Game game = Game.Get();
 
             // We load the text into the game object so we only have to load it once
-            if (game.ffgText == null || game.ffgText.Length == 0)
+            if (game.ffgDict == null)
             {
-                game.ffgText = System.IO.File.ReadAllLines(game.gameType.DataDirectory() + "ffg/text/Localization.txt");
+                // FFG default language is allways English
+                game.ffgDict = new DictionaryI18n(
+                    System.IO.File.ReadAllLines(game.gameType.DataDirectory() + "ffg/text/Localization.txt"),
+                    DictionaryI18n.DEFAULT_LANG);
+                game.ffgDict.setCurrentLanguage(game.currentLang);
             }
 
-            // Loop through all lines text
-            for (int i = 0; i < game.ffgText.Length; i++)
+            StringI18n valueOut;
+             
+            if (game.ffgDict.tryGetValue(elements[0],out valueOut))
             {
-                // Separate the line based on the first ','
-                string[] values = game.ffgText[i].Split(",".ToCharArray(), 2);
-                // If the first element is our key
-                if (values.Length > 1 && values[0].Equals(elements[0]))
-                {
-                    // get the second element
-                    string returnValue = values[1];
-                    int nextQuote = 0;
-
-                    // Check if the string is quoted
-                    if (returnValue.Length == 0 || returnValue[0] != '\"')
-                    {
-                        if (returnValue.IndexOf(',') == -1)
-                        {
-                            return returnValue;
-                        }
-                        return returnValue.Substring(0, returnValue.IndexOf(','));
-                    }
-
-                    // Find the end of the element
-                    while (true)
-                    {
-                        // Next quote location
-                        nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
-                        // Quote ends at the end of the element
-                        if (nextQuote == returnValue.Length - 1)
-                        {
-                            // Return with quote escape removed
-                            return returnValue.Replace("\"\"", "\"").Trim('\"');
-                        }
-
-                        // If quote is escaped ("")
-                        if (returnValue[nextQuote + 1].Equals("\""))
-                        {
-                            nextQuote++;
-                        }
-                        // No more quotes on this line
-                        else if (nextQuote == -1)
-                        {
-                            // If we are at the end of Localization just return what we have
-                            if (i >= game.ffgText.Length) return returnValue.Replace("\"\"", "\"").Trim('\"');
-                            // fetch the next line
-                            returnValue += System.Environment.NewLine + game.ffgText[++i];
-                        }
-                        else
-                        {
-                            // Return the text
-                            return returnValue.Substring(0, nextQuote + 1).Replace("\"\"", "\"").Trim('\"');
-                        }
-                        // Next quote location
-                        nextQuote = returnValue.IndexOf("\"", nextQuote + 1);
-                    }
-                }
+                return valueOut.getCurrentOrDefaultLanguageString();
             }
-            // Key not found, return as is
-            return key;
+            else
+            {
+                return key;
+            }            
         }
-        catch(System.Exception)
+        catch(System.Exception e)
         {
-            Debug.Log("Warning: Unable to open imported Localization file." + System.Environment.NewLine);
+            Debug.Log("Warning: Unable to process imported Localization file. Exception:" + e.Message + System.Environment.NewLine);
         }
         return key;
     }
