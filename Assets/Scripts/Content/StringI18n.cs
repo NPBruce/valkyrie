@@ -59,7 +59,7 @@ namespace Assets.Scripts.Content
                     else
                     {
                         // If opening and closing quotes, we supress it.
-                        if (currentTranslation[0] == QUOTES)
+                        if (currentTranslation.Length > 0 && currentTranslation[0] == QUOTES)
                         {
                             currentTranslation = currentTranslation.Substring(1, currentTranslation.Length - 2);
                         }

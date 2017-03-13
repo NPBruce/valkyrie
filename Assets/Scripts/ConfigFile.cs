@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using UnityEngine;
-using System.Collections.Generic;
 
 // Class to control user configuration of Valkyrie
 // This is a generic system and has no knowledge of the actual configuration structure

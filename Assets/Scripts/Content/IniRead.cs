@@ -231,7 +231,7 @@ public static class IniRead{
         }
         catch(System.Exception e)
         {
-            ValkyrieDebug.Log("Warning: Unable to process imported Localization file. Exception:" + e.Message + System.Environment.NewLine);
+            ValkyrieDebug.Log("Warning: Unable to process imported Localization string with key: " + key + ". Exception:" + e.Message + System.Environment.NewLine);
         }
         return key;
     }
