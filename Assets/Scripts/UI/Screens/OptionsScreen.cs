@@ -97,7 +97,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.Save();
             game.currentLang = newLang;
             refreshScreen();
-            Debug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
+            ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
         }
 
         /// <summary>

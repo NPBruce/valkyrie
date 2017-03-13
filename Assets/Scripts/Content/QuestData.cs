@@ -40,7 +40,7 @@ public class QuestData
     // Populate data
     public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
+        ValkyrieDebug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
@@ -51,7 +51,7 @@ public class QuestData
         // Failure to read quest is fatal
         if(d == null)
         {
-            Debug.Log("Failed to load quest from: \"" + questPath + "\"");
+            ValkyrieDebug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
         }
 
@@ -77,7 +77,7 @@ public class QuestData
             // Failure to read a file is fatal
             if (d == null)
             {
-                Debug.Log("Unable to read quest file: \"" + f + "\"");
+                ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
             // Loop through all ini sections
@@ -95,7 +95,7 @@ public class QuestData
         // Fatal error on duplicates
         if(components.ContainsKey(name))
         {
-            Debug.Log("Duplicate component in quest: " + name);
+            ValkyrieDebug.Log("Duplicate component in quest: " + name);
             Application.Quit();
         }
 
@@ -202,7 +202,7 @@ public class QuestData
             else
             {
                 // Fatal if missing
-                Debug.Log("Error: No TileSide specified in quest component: " + name);
+                ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);
                 Application.Quit();
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace Assets.Scripts.Content
 {
@@ -44,46 +43,34 @@ namespace Assets.Scripts.Content
                 List<string> partialTranslation = new List<string>(completeLocalisationString.Split(COMMA));
                 List<string> finalTranslation = new List<string>();
                 string currentTranslation = "";
-                bool opened = false;
+                bool oddity = false;
                 foreach (string suposedTranslation in partialTranslation)
                 {
                     currentTranslation += suposedTranslation;
 
-                    bool initialQuote = suposedTranslation.Length != 0 && suposedTranslation[0] == QUOTES;
-                    bool finalQuote = suposedTranslation.Length > 1 &&
-                        suposedTranslation[suposedTranslation.Length - 1] == QUOTES;
+                    // Counting quotes inside string to know oddity.
+                    bool newOddity = (suposedTranslation.Count(ch => ch == QUOTES) % 2) == 1;
 
-                    // If contains one quote we need to analyze
-                    if (initialQuote ^ finalQuote)
+                    if (oddity ^ newOddity)
                     {
-                        if (opened)
-                        {
-                            // Closing quotes
-                            finalTranslation.Add(
-                                // remove initial and final quote
-                                currentTranslation.Substring(1, currentTranslation.Length - 2)
-                                // replace double quotes for single quotes
-                                .Replace("\"\"", "\"")
-                                );
-                            currentTranslation = "";
-                        }
-                        else
-                        {
-                            currentTranslation += COMMA;
-                        }
-                        opened = !opened;
+                        // If oddity changes we are still inside quotes
+                        currentTranslation += COMMA;
                     }
                     else
                     {
-                        if (initialQuote)
+                        // If opening and closing quotes, we supress it.
+                        if (currentTranslation[0] == QUOTES)
                         {
                             currentTranslation = currentTranslation.Substring(1, currentTranslation.Length - 2);
                         }
-                        // other options are no quotes
-                        // both need same proceed.
+
+                        // escaping double quotes
                         finalTranslation.Add(currentTranslation.Replace("\"\"", "\""));
                         currentTranslation = "";
                     }
+
+                    oddity = oddity ^ newOddity;
+
                 }
                 translations = finalTranslation.ToArray();
             }
@@ -95,10 +82,10 @@ namespace Assets.Scripts.Content
 
             if (translations.Length > dict.getLanguages().Length)
             {
-                Debug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
+                ValkyrieDebug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
             } else
             {
-                Debug.Log("Imported correctly: " + completeLocalisationString + System.Environment.NewLine);
+                ValkyrieDebug.Log("Imported correctly: " + completeLocalisationString + System.Environment.NewLine);
             }
         }
 

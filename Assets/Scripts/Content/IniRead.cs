@@ -58,7 +58,7 @@ public static class IniRead{
                 {
                     if (!output.Add(entryName, entryData))
                     {
-                        Debug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
+                        ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
                     }
                 }
                 // create new data for new section
@@ -68,7 +68,7 @@ public static class IniRead{
                 // Blank section names not allowed, but not fatal
                 if(entryName.Equals(""))
                 {
-                    Debug.Log("Warning: empty section in " + path + " will be ignored.");
+                    ValkyrieDebug.Log("Warning: empty section in " + path + " will be ignored.");
                 }
             }
             // If the line is not a comment (starts with ;)
@@ -84,7 +84,7 @@ public static class IniRead{
                     string key = l.Substring(0, equalsLocation).Trim();
                     if(entryData.ContainsKey(key))
                     {
-                        Debug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
+                        ValkyrieDebug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
                     }
                     else
                     {
@@ -95,7 +95,7 @@ public static class IniRead{
                 // This won't go anywhere if we don't have a section
                 if (entryName.Equals(""))
                 {
-                    Debug.Log("Warning: data without section in " + path + " will be ignored.");
+                    ValkyrieDebug.Log("Warning: data without section in " + path + " will be ignored.");
                 }
             }
         }
@@ -105,7 +105,7 @@ public static class IniRead{
         {
             if (!output.Add(entryName, entryData))
             {
-                Debug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
+                ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
             }
         }
 
@@ -231,7 +231,7 @@ public static class IniRead{
         }
         catch(System.Exception e)
         {
-            Debug.Log("Warning: Unable to process imported Localization file. Exception:" + e.Message + System.Environment.NewLine);
+            ValkyrieDebug.Log("Warning: Unable to process imported Localization file. Exception:" + e.Message + System.Environment.NewLine);
         }
         return key;
     }

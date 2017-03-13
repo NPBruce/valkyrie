@@ -86,7 +86,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            Debug.Log("Warning: Missing event called: " + name);
+            ValkyrieDebug.Log("Warning: Missing event called: " + name);
             return;
         }
 
@@ -122,14 +122,14 @@ public class EventManager
         // Add set flags
         foreach (string s in e.qEvent.setFlags)
         {
-            Debug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
+            ValkyrieDebug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
             game.quest.flags.Add(s);
         }
 
         // Remove clear flags
         foreach (string s in e.qEvent.clearFlags)
         {
-            Debug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
+            ValkyrieDebug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
             game.quest.flags.Remove(s);
         }
 
@@ -192,13 +192,13 @@ public class EventManager
         {
             if (e.qEvent.threat != 0)
             {
-                Debug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
+                ValkyrieDebug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
             }
             game.quest.threat = e.qEvent.threat;
         }
         else if (e.qEvent.threat != 0)
         {
-            Debug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
+            ValkyrieDebug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
         }
 
         // Add delayed events
@@ -347,7 +347,7 @@ public class EventManager
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
+                ValkyrieDebug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
             }
 
             // Fix new lines and replace symbol text with special characters
@@ -454,7 +454,7 @@ public class EventManager
                 // No matches or trait match
                 if (qMonster.mTraits.Length == 0)
                 {
-                    Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
                     Application.Quit();
                 }
 
@@ -482,7 +482,7 @@ public class EventManager
                 // Not found, throw error
                 if (list.Count == 0)
                 {
-                    Debug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
                     Application.Quit();
                 }
 

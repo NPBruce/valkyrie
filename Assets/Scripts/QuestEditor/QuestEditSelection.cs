@@ -98,7 +98,7 @@ public class QuestEditSelection
         }
         catch (System.Exception)
         {
-            Debug.Log("Failed to delete quest: " + key);
+            ValkyrieDebug.Log("Failed to delete quest: " + key);
         }
         new QuestEditSelection();
     }
@@ -188,7 +188,7 @@ public class QuestEditSelection
         }
         catch (System.Exception)
         {
-            Debug.Log("Error: Failed to copy quest.");
+            ValkyrieDebug.Log("Error: Failed to copy quest.");
             Application.Quit();
         }
         // Back to selection
@@ -264,7 +264,7 @@ public class QuestEditSelection
         }
         catch (System.Exception)
         {
-            Debug.Log("Error: Failed to create new quest.");
+            ValkyrieDebug.Log("Error: Failed to create new quest.");
             Application.Quit();
         }
         // Back to edit selection
@@ -280,9 +280,9 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Fetch all of the quest data
-        Debug.Log("Selecting Quest: " + key + System.Environment.NewLine);
+        ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
         game.quest = new Quest(questList[key]);
-        Debug.Log("Starting Editor" + System.Environment.NewLine);
+        ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin();
     }
 }

@@ -8,7 +8,7 @@ public class InfoDialog {
     {
         if (m == null)
         {
-            Debug.Log("Warning: Invalid monster type requested.");
+            ValkyrieDebug.Log("Warning: Invalid monster type requested.");
             return;
         }
 

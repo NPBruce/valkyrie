@@ -85,14 +85,14 @@ public class ContentData {
             // Todo: better error handling
             if (d == null)
             {
-                Debug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
             pack.name = d.Get("ContentPack", "name");
             if (pack.name.Equals(""))
             {
-                Debug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
@@ -529,14 +529,14 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: DDS Image missing: " + file);
+                ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
             // Check for valid header
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
-                Debug.Log("Warning: Image invalid: " + file);
+                ValkyrieDebug.Log("Warning: Image invalid: " + file);
                 return null;
             }
 
@@ -574,7 +574,7 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Image missing: " + file);
+                ValkyrieDebug.Log("Warning: Image missing: " + file);
                 return null;
             }
         }

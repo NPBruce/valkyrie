@@ -350,7 +350,7 @@ public class Quest
         // Check that the component is valid
         if (!game.quest.qd.components.ContainsKey(name))
         {
-            Debug.Log("Error: Unable to create missing quest component: " + name);
+            ValkyrieDebug.Log("Error: Unable to create missing quest component: " + name);
             Application.Quit();
         }
         // Add to active list
@@ -553,7 +553,7 @@ public class Quest
             else
             {
                 // Fatal if not found
-                Debug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.name);
+                ValkyrieDebug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.name);
                 Application.Quit();
             }
 
@@ -562,7 +562,7 @@ public class Quest
             if (newTex == null)
             {
                 // Fatal if missing
-                Debug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
+                ValkyrieDebug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
                 Application.Quit();
             }
 
@@ -634,7 +634,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + tokenName);
+                ValkyrieDebug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + tokenName);
                 // Catch for older quests with different types (0.4.0 or older)
                 if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
@@ -704,7 +704,7 @@ public class Quest
             // Check load worked
             if (newTex == null)
             {
-                Debug.Log("Error: Cannot load door image");
+                ValkyrieDebug.Log("Error: Cannot load door image");
                 Application.Quit();
             }
 
@@ -742,7 +742,7 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.name);
+                ValkyrieDebug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.name);
             }
 
             // State with white (used for alpha)

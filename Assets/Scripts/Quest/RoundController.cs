@@ -146,7 +146,7 @@ public class RoundController {
                     }
                     else // Invalid activation
                     {
-                        Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+                        ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
                     }
                 }
             }
@@ -171,7 +171,7 @@ public class RoundController {
                 }
                 else
                 {
-                    Debug.Log("Warning: Unable to find activation: " + s + " for monster type: " + md.sectionName);
+                    ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + md.sectionName);
                 }
             }
         }
@@ -179,7 +179,7 @@ public class RoundController {
         // Check for no activations
         if (adList.Count == 0)
         {
-            Debug.Log("Error: Unable to find any activation data for monster type: " + md.name);
+            ValkyrieDebug.Log("Error: Unable to find any activation data for monster type: " + md.name);
             Application.Quit();
         }
 

@@ -36,7 +36,7 @@ public class ConfigFile
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to write to config file: " + optionsFile + System.Environment.NewLine);
+            ValkyrieDebug.Log("Warning: Unable to write to config file: " + optionsFile + System.Environment.NewLine);
         }
     }
 }

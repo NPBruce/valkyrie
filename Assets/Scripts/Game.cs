@@ -92,7 +92,7 @@ public class Game : MonoBehaviour {
         TextAsset versionFile = Resources.Load("version") as TextAsset;
         version = versionFile.text.Trim();
         // The newline at the end stops the stack trace appearing in the log
-        Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
+        ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
         new GameSelectionScreen();
@@ -106,7 +106,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 
@@ -131,7 +131,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 

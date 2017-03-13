@@ -26,7 +26,7 @@ public class DialogWindow {
             // Try to find the event
             if (!game.quest.heroSelection.ContainsKey(eventData.qEvent.heroListName))
             {
-                Debug.Log("Warning: Hero selection in event: " + eventData.qEvent.name + " from event " + eventData.qEvent.heroListName + " with no data.");
+                ValkyrieDebug.Log("Warning: Hero selection in event: " + eventData.qEvent.name + " from event " + eventData.qEvent.heroListName + " with no data.");
             }
             else
             {
