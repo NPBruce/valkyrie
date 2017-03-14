@@ -83,9 +83,6 @@ namespace Assets.Scripts.Content
             if (translations.Length > dict.getLanguages().Length)
             {
                 ValkyrieDebug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
-            } else
-            {
-                ValkyrieDebug.Log("Imported correctly: " + completeLocalisationString + System.Environment.NewLine);
             }
         }
 
