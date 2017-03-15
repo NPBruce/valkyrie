@@ -47,9 +47,9 @@ public class QuestData
         questActivations = new Dictionary<string, ActivationData>();
 
         // Read the main quest file
-        IniData d = IniRead.ReadFromIni(questPath);
+        IniData questIniData = IniRead.ReadFromIni(questPath);
         // Failure to read quest is fatal
-        if(d == null)
+        if(questIniData == null)
         {
             ValkyrieDebug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
@@ -61,9 +61,9 @@ public class QuestData
         files.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(d.Get("QuestData") != null)
+        if(questIniData.Get("QuestData") != null)
         {
-            foreach (string file in d.Get("QuestData").Keys)
+            foreach (string file in questIniData.Get("QuestData").Keys)
             {
                 // path is relative to the main file (absolute not supported)
                 files.Add(Path.GetDirectoryName(questPath) + "/" + file);
@@ -73,15 +73,15 @@ public class QuestData
         foreach (string f in files)
         {
             // Read each file
-            d = IniRead.ReadFromIni(f);
+            questIniData = IniRead.ReadFromIni(f);
             // Failure to read a file is fatal
-            if (d == null)
+            if (questIniData == null)
             {
                 ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
             // Loop through all ini sections
-            foreach (KeyValuePair<string, Dictionary<string, string>> section in d.data)
+            foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
                 AddData(section.Key, section.Value, Path.GetDirectoryName(f));
@@ -1123,7 +1123,7 @@ public class QuestData
         public static string type = "";
         public string typeDynamic = "";
         // name of section in ini file
-        public string name;
+        public string sectionName;
         // image for display
         public UnityEngine.UI.Image image;
 
@@ -1131,7 +1131,7 @@ public class QuestData
         public QuestComponent(string nameIn)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
             location = Vector2.zero;
         }
 
@@ -1139,7 +1139,7 @@ public class QuestData
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
 
             // Default to 0, 0 unless specified
             location = new Vector2(0, 0);
@@ -1200,7 +1200,7 @@ public class QuestData
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
-            string r = "[" + name + "]" + nl;
+            string r = "[" + sectionName + "]" + nl;
             if (locationSpecified)
             {
                 r += "xposition=" + location.x + nl;
@@ -1228,7 +1228,7 @@ public class QuestData
         // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
         {
-            monsterName = name;
+            monsterName = sectionName;
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1492,9 +1492,9 @@ public class QuestData
     public class Quest
     {
         // Quest name
-        public string name = "";
+        public string nameKey = "";
         // Quest description (currently unused)
-        public string description = "";
+        public string descriptionKey = "";
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils
@@ -1505,38 +1505,38 @@ public class QuestData
         public string[] packs;
 
         // Create from ini data
-        public Quest(Dictionary<string, string> data)
+        public Quest(Dictionary<string, string> iniData)
         {
-            if (data.ContainsKey("name"))
+            if (iniData.ContainsKey("name"))
             {
-                name = data["name"];
+                nameKey = iniData["name"];
             }
 
             // Default to D2E to support historical quests
             type = "D2E";
-            if (data.ContainsKey("type"))
+            if (iniData.ContainsKey("type"))
             {
-                type = data["type"];
+                type = iniData["type"];
             }
-            if (data.ContainsKey("description"))
+            if (iniData.ContainsKey("description"))
             {
-                description = data["description"];
+                descriptionKey = iniData["description"];
             }
-            if (data.ContainsKey("minorperil"))
+            if (iniData.ContainsKey("minorperil"))
             {
-                int.TryParse(data["minorperil"], out minorPeril);
+                int.TryParse(iniData["minorperil"], out minorPeril);
             }
-            if (data.ContainsKey("majorperil"))
+            if (iniData.ContainsKey("majorperil"))
             {
-                int.TryParse(data["majorperil"], out majorPeril);
+                int.TryParse(iniData["majorperil"], out majorPeril);
             }
-            if (data.ContainsKey("deadlyperil"))
+            if (iniData.ContainsKey("deadlyperil"))
             {
-                int.TryParse(data["deadlyperil"], out deadlyPeril);
+                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
             }
-            if (data.ContainsKey("packs"))
+            if (iniData.ContainsKey("packs"))
             {
-                packs = data["packs"].Split(' ');
+                packs = iniData["packs"].Split(' ');
             }
             else
             {
@@ -1549,8 +1549,8 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
-            r += "name=" + name + nl;
-            r += "description=\"" + description + "\"" + nl;
+            r += "name=" + nameKey + nl;
+            r += "description=" + descriptionKey + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minorPeril != 7)

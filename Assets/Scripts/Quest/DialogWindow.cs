@@ -26,7 +26,7 @@ public class DialogWindow {
             // Try to find the event
             if (!game.quest.heroSelection.ContainsKey(eventData.qEvent.heroListName))
             {
-                ValkyrieDebug.Log("Warning: Hero selection in event: " + eventData.qEvent.name + " from event " + eventData.qEvent.heroListName + " with no data.");
+                ValkyrieDebug.Log("Warning: Hero selection in event: " + eventData.qEvent.sectionName + " from event " + eventData.qEvent.heroListName + " with no data.");
             }
             else
             {
@@ -149,17 +149,17 @@ public class DialogWindow {
     public void onQuota()
     {
         Game game = Game.Get();
-        if (game.quest.eventQuota.ContainsKey(eventData.qEvent.name))
+        if (game.quest.eventQuota.ContainsKey(eventData.qEvent.sectionName))
         {
-            game.quest.eventQuota[eventData.qEvent.name] += quota;
+            game.quest.eventQuota[eventData.qEvent.sectionName] += quota;
         }
         else
         {
-            game.quest.eventQuota.Add(eventData.qEvent.name, quota);
+            game.quest.eventQuota.Add(eventData.qEvent.sectionName, quota);
         }
-        if (game.quest.eventQuota[eventData.qEvent.name] >= eventData.qEvent.quota)
+        if (game.quest.eventQuota[eventData.qEvent.sectionName] >= eventData.qEvent.quota)
         {
-            game.quest.eventQuota.Remove(eventData.qEvent.name);
+            game.quest.eventQuota.Remove(eventData.qEvent.sectionName);
             onButton(1);
         }
         else
@@ -226,12 +226,12 @@ public class DialogWindow {
         }
 
         // If this event has previous selected heroes clear the data
-        if (game.quest.heroSelection.ContainsKey(eventData.qEvent.name))
+        if (game.quest.heroSelection.ContainsKey(eventData.qEvent.sectionName))
         {
-            game.quest.heroSelection.Remove(eventData.qEvent.name);
+            game.quest.heroSelection.Remove(eventData.qEvent.sectionName);
         }
         // Add this selection to the quest
-        game.quest.heroSelection.Add(eventData.qEvent.name, heroList);
+        game.quest.heroSelection.Add(eventData.qEvent.sectionName, heroList);
 
         // Update hero image state
         game.heroCanvas.UpdateStatus();

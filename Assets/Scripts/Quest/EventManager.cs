@@ -282,7 +282,7 @@ public class EventManager
         }
 
         // Does this event end the quest?
-        if (currentEvent.qEvent.name.IndexOf("EventEnd") == 0)
+        if (currentEvent.qEvent.sectionName.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
             return;
@@ -454,7 +454,7 @@ public class EventManager
                 // No matches or trait match
                 if (qMonster.mTraits.Length == 0)
                 {
-                    ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.sectionName);
                     Application.Quit();
                 }
 
@@ -482,7 +482,7 @@ public class EventManager
                 // Not found, throw error
                 if (list.Count == 0)
                 {
-                    ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.sectionName);
                     Application.Quit();
                 }
 

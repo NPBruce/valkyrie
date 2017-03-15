@@ -12,7 +12,7 @@ public class EditorComponentToken : EditorComponent
         Game game = Game.Get();
         tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
         component = tokenComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -60,7 +60,7 @@ public class EditorComponentToken : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        game.quest.ChangeAlpha(tokenComponent.name, 1f);
+        game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);
     }
 
     public void Rotate()
@@ -70,8 +70,8 @@ public class EditorComponentToken : EditorComponent
         {
             tokenComponent.rotation = 0;
         }
-        Game.Get().quest.Remove(tokenComponent.name);
-        Game.Get().quest.Add(tokenComponent.name);
+        Game.Get().quest.Remove(tokenComponent.sectionName);
+        Game.Get().quest.Add(tokenComponent.sectionName);
         Update();
     }
 
@@ -100,8 +100,8 @@ public class EditorComponentToken : EditorComponent
     public void SelectType()
     {
         tokenComponent.tokenName = typeList.selection.Split(" ".ToCharArray())[0];
-        Game.Get().quest.Remove(tokenComponent.name);
-        Game.Get().quest.Add(tokenComponent.name);
+        Game.Get().quest.Remove(tokenComponent.sectionName);
+        Game.Get().quest.Add(tokenComponent.sectionName);
         Update();
     }
 }
