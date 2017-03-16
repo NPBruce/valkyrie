@@ -15,7 +15,7 @@ class ExtractDataTool
         string items = "";
         string mythos = "";
 
-        string allText = encoding.GetString(data, 0, data.Length);
+        string allText = Encoding.UTF8.GetString(data, 0, data.Length);
         foreach (string m in labels)
         {
             string mName = ExtractMonsterName(m);
@@ -239,10 +239,9 @@ class ExtractDataTool
                         if (i + 1 >= length)
                         {
                             //list.Add(text.Substring(num, i - num).Replace("\"\"", "\""));
-                            // Broken quotes
-                            break;
+                            quote = false;
                         }
-                        if (text[i + 1] != '"')
+                        else if (text[i + 1] != '"')
                         {
                             //list.Add(text.Substring(num, i - num).Replace("\"\"", "\""));
                             quote = false;
@@ -305,14 +304,16 @@ class ExtractDataTool
         List<string> evade;
         List<string> move;
         List<string> attack;
+        List<string> movebutton;
+        List<string> movealt;
 
         public Monster(string name)
         {
             horror = new List<string>();
             evade = new List<string>();
             move = new List<string>();
-            movebutton =  = new List<string>();
-            movealt =  = new List<string>();
+            movebutton = new List<string>();
+            movealt = new List<string>();
             attack = new List<string>();
 
             nameFFG = name;
@@ -338,13 +339,21 @@ class ExtractDataTool
             string l = label.Substring(label.IndexOf(nameFFG) + nameFFG.Length);
             if (l.IndexOf(moveStr) == 0)
             {
+                if (label.Substring(label.Length - 2, 2).Equals("00"))
+                {
+                    return;
+                }
+                if (label.Substring(label.Length - 3, 2).Equals("00"))
+                {
+                    return;
+                }
                 move.Add(label);
                 int indexStart = allText.IndexOf(label);
-                string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart));
+                string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart) - indexStart);
                 string altmove = label.Substring(0, label.Length - 2) + "00";
                 if ((instruction.IndexOf("towards the nearest") > 0) && (instruction.IndexOf("towards the nearest within range") < 0))
                 {
-                     movealt.Add("");
+                    movealt.Add("");
                 }
                 else if (allText.IndexOf(altmove) > 0)
                 {
@@ -377,23 +386,23 @@ class ExtractDataTool
 
                 if ((instruction.IndexOf("toward the investigator within range") > 0))
                 {
-                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                    movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
                 else if ((instruction.IndexOf("to be adjacent to as many investigators as possibl") > 0))
                 {
-                     movebutton.Add("{ffg:UI_CANT_MOVE_ADJACENT}");
+                    movebutton.Add("{ffg:UI_CANT_MOVE_ADJACENT}");
                 }
                 else if ((instruction.IndexOf("3 spaces to be in a space with as many investigators as possible") > 0))
                 {
-                     movebutton.Add("{ffg:UI_NOT_WITHIN_3}");
+                    movebutton.Add("{ffg:UI_NOT_WITHIN_3}");
                 }
                 else if ((instruction.IndexOf("1 space to be in a space with as many investigators as possible") > 0))
                 {
-                     movebutton.Add("{ffg:UI_NOT_WITHIN_1}");
+                    movebutton.Add("{ffg:UI_NOT_WITHIN_1}");
                 }
                 else if ((instruction.IndexOf("2 spaces to be in a space with as many investigators as possible") > 0))
                 {
-                     movebutton.Add("{ffg:UI_NOT_WITHIN_2}");
+                    movebutton.Add("{ffg:UI_NOT_WITHIN_2}");
                 }
                 else if ((instruction.IndexOf("to be within range of as many investigators") > 0))
                 {
@@ -401,10 +410,12 @@ class ExtractDataTool
                 }
                 else if ((instruction.IndexOf("nvestigator in its space") > 0))
                 {
-                     movebutton.Add("{ffg:UI_NOT_IN_SPACE}");
+                    movebutton.Add("{ffg:UI_NOT_IN_SPACE}");
                 }
-
-                movebutton.Add(label, data);
+                else
+                {
+                    movebutton.Add("UNKOWN");
+                }
             }
             if (l.IndexOf(attackStr) == 0)
             {
@@ -447,7 +458,7 @@ class ExtractDataTool
         public string GetActivation()
         {
             string ret = "";
-            for (int i = 0; i < attack.Length)
+            for (int i = 0; i < attack.Count; i++)
             {
                 string m = attack[i].Replace("_ATTACK_", "_MOVE_");
                 string id = attack[i].Substring(attack[i].IndexOf("_ATTACK_") + "_ATTACK_".Length);
