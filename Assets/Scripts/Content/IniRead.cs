@@ -17,8 +17,9 @@ public static class IniRead{
         {
             lines = System.IO.File.ReadAllLines(path);
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
+            ValkyrieDebug.Log(ex.Message);
             return null;
         }
         // Parse text data
