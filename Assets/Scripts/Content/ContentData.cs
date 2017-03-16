@@ -478,7 +478,7 @@ public class ContentData {
         {
             PerilData d = new PerilData(name, content);
             // Ignore invalid entry
-            if (d.name.Equals(""))
+            if (d.sectionName.Equals(""))
                 return;
             // If we don't already have one then add this
             if (!perils.ContainsKey(name))

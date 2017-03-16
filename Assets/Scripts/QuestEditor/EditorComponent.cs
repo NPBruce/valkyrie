@@ -63,8 +63,8 @@ public class EditorComponent {
         // Unlatch
         gettingPosition = false;
         // Redraw component
-        Game.Get().quest.Remove(component.name);
-        Game.Get().quest.Add(component.name);
+        Game.Get().quest.Remove(component.sectionName);
+        Game.Get().quest.Add(component.sectionName);
         // Update UI
         Update();
     }
@@ -79,7 +79,7 @@ public class EditorComponent {
     // Open a dialog to rename this component
     public void Rename()
     {
-        string name = component.name.Substring(component.typeDynamic.Length);
+        string name = component.sectionName.Substring(component.typeDynamic.Length);
         rename =  new QuestEditorTextEdit("Component Name:", name, delegate { RenameFinished(); });
         rename.EditText();
     }
@@ -105,17 +105,17 @@ public class EditorComponent {
         // Update all references to this component
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            kv.Value.ChangeReference(component.name, name);
+            kv.Value.ChangeReference(component.sectionName, name);
         }
 
         // Remove component by old name
-        game.quest.qd.components.Remove(component.name);
-        game.quest.Remove(component.name);
-        component.name = name;
+        game.quest.qd.components.Remove(component.sectionName);
+        game.quest.Remove(component.sectionName);
+        component.sectionName = name;
         // Add component with new name
-        game.quest.qd.components.Add(component.name, component);
-        game.quest.Add(component.name);
+        game.quest.qd.components.Add(component.sectionName, component);
+        game.quest.Add(component.sectionName);
         // Reselect with new name
-        QuestEditorData.SelectComponent(component.name);
+        QuestEditorData.SelectComponent(component.sectionName);
     }
 }

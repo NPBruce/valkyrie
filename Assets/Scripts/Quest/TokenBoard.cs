@@ -58,7 +58,7 @@ public class TokenBoard : MonoBehaviour {
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            game.quest.eManager.QueueEvent(c.GetEvent().name);
+            game.quest.eManager.QueueEvent(c.GetEvent().sectionName);
         }
 
     }

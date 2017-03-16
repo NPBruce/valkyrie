@@ -35,7 +35,7 @@ public class QuestMonster : MonsterData
         sets = new List<string>();
 
         // define data
-        sectionName = qm.name;
+        sectionName = qm.sectionName;
         priority = 0;
 
         // Read traits from quest data or base type
@@ -82,7 +82,7 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        sectionName = qa.name;
+        sectionName = qa.sectionName;
         ability = EventManager.SymbolReplace(qa.ability);
         masterActions = EventManager.SymbolReplace(qa.masterActions);
         minionActions = EventManager.SymbolReplace(qa.minionActions);

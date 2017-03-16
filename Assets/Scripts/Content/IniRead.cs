@@ -6,8 +6,11 @@ using Assets.Scripts.Content;
 // Helper class to read an ini file into a nested dictionary
 // This exists because .NET/Mono doesn't have one!!
 public static class IniRead{
-    // Function takes path to ini file and returns data object
-    // Returns null on error
+    /// <summary>
+    /// Function takes path to ini file and returns data object
+    /// </summary>
+    /// <param name="path">path to ini file</param>
+    /// <returns>Returns null on error</returns>
     public static IniData ReadFromIni(string path)
     {
         string[] lines;
@@ -27,8 +30,11 @@ public static class IniRead{
     }
 
 
-    // Function ini file contents as a string and returns data object
-    // Returns null on error
+    /// <summary>
+    /// Function ini file contents as a string and returns data object 
+    /// </summary>
+    /// <param name="content">string to read</param>
+    /// <returns>Returns null on error</returns>
     public static IniData ReadFromString(string content)
     {
         // split text into array of lines
@@ -36,7 +42,12 @@ public static class IniRead{
         return ReadFromStringArray(lines, "<INTERNAL>");
     }
 
-    // Parse ini data into data structure
+    /// <summary>
+    /// Parse ini data into data structure 
+    /// </summary>
+    /// <param name="lines">array of text lines</param>
+    /// <param name="path">path from where lines came</param>
+    /// <returns></returns>
     public static IniData ReadFromStringArray(string[] lines, string path)
     {
         // Create a dictionary for the first section
@@ -89,7 +100,8 @@ public static class IniRead{
                     }
                     else
                     {
-                        string value = FFGLookup(l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                        string value = l.Substring(equalsLocation + 1).Trim().Trim('\"');
+                        //string translatedValue = LocalizationRead.FFGLookup(value);
                         entryData.Add(key, value);
                     }
                 }
@@ -111,130 +123,6 @@ public static class IniRead{
         }
 
         return output;
-    }
-    
-    // Check for FFG text lookups and insert required text
-    public static string FFGLookup(string input)
-    {
-        string output = input;
-        // While there are more lookups
-        while (output.IndexOf("{ffg:") != -1)
-        {
-            // Can be nested
-            int bracketLevel = 1;
-            // Start of lookup
-            int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
-
-            // Loop to find end of lookup
-            int lookupEnd = lookupStart;
-            while (bracketLevel > 0)
-            {
-                lookupEnd++;
-                if (output[lookupEnd].Equals('{'))
-                {
-                    bracketLevel++;
-                }
-                if (output[lookupEnd].Equals('}'))
-                {
-                    bracketLevel--;
-                }
-            }
-
-            // Extract lookup key
-            string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
-            // Get key result
-            string result = FFGQuery(lookup);
-            // We (unity) don't support underlines
-            // Unity uses <> not []
-            result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");
-            result = result.Replace("[i]", "<i>").Replace("[/i]", "</i>");
-            result = result.Replace("[b]", "<b>").Replace("[/b]", "</b>");
-            // Replace the lookup
-            output = output.Replace("{ffg:" + lookup + "}", result);
-        }
-        return output;
-    }
-
-    // Look up a key in the FFG text Localization
-    public static string FFGQuery(string input)
-    {
-        int bracketLevel = 0;
-        int lastSection = 0;
-        List<string> elements = new List<string>();
-
-        // Separate the input into sections
-        for (int index = 0; index < input.Length; index++)
-        {
-            if (input[index].Equals('{'))
-            {
-                bracketLevel++;
-            }
-            if (input[index].Equals('}'))
-            {
-                bracketLevel--;
-            }
-            // Section divider
-            if (input[index].Equals(':'))
-            {
-                // Not in brackets
-                if (bracketLevel == 0)
-                {
-                    // Add previous element
-                    elements.Add(input.Substring(lastSection, index - lastSection));
-                    lastSection = index + 1;
-                }
-            }
-        }
-        // Add previous element
-        elements.Add(input.Substring(lastSection, input.Length - lastSection));
-
-        // Look up the first element (key)
-        string fetched = FFGKeyLookup(elements[0]);
-
-        // Find and replace with other elements
-        for (int i = 2; i < elements.Count; i += 2)
-        {
-            fetched = fetched.Replace(elements[i - 1], elements[i]);
-        }
-        return fetched;
-    }
-
-    // Key lookup in localization
-    public static string FFGKeyLookup(string key)
-    {
-        // FIXME This appears redundant
-        string[] elements = key.Split(":".ToCharArray());
-
-        try
-        {
-            Game game = Game.Get();
-
-            // We load the text into the game object so we only have to load it once
-            if (game.ffgDict == null)
-            {
-                // FFG default language is allways English
-                game.ffgDict = new DictionaryI18n(
-                    System.IO.File.ReadAllLines(game.gameType.DataDirectory() + "ffg/text/Localization.txt"),
-                    DictionaryI18n.DEFAULT_LANG);
-                game.ffgDict.setCurrentLanguage(game.currentLang);
-            }
-
-            StringI18n valueOut;
-             
-            if (game.ffgDict.tryGetValue(elements[0],out valueOut))
-            {
-                return valueOut.getCurrentOrDefaultLanguageString();
-            }
-            else
-            {
-                return key;
-            }            
-        }
-        catch(System.Exception e)
-        {
-            ValkyrieDebug.Log("Warning: Unable to process imported Localization string with key: " + key + ". Exception:" + e.Message + System.Environment.NewLine);
-        }
-        return key;
     }
 }
 

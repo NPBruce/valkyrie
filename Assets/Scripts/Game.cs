@@ -45,9 +45,6 @@ public class Game : MonoBehaviour {
     // Class for stage control UI
     public NextStageButton stageUI;
 
-    // Store of the game text imported from FFG app
-    public DictionaryI18n ffgDict;
-
     // Current language
     public string currentLang;
 
@@ -85,6 +82,19 @@ public class Game : MonoBehaviour {
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
+
+
+        // TODO: Here the ValkyrieDict should be loaded
+        /*
+        try
+        {
+            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromLocalization("", currentLang);
+        }
+        catch (System.Exception e)
+        {
+            ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
+        }
+        */
 
         roundControl = new RoundController();
 
