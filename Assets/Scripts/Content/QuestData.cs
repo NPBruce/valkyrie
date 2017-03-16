@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -1220,7 +1221,7 @@ public class QuestData
         public string monsterName = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public string info = "";
+        public StringKey info = null;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1264,7 +1265,7 @@ public class QuestData
 
             if (data.ContainsKey("info"))
             {
-                info = data["info"];
+                info = new StringKey(data["info"]);
             }
 
             imagePlace = imagePath;
@@ -1323,7 +1324,7 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            if (info.Length > 0)
+            if (info != null)
             {
                 r += "info=" + info + nl;
             }
@@ -1352,9 +1353,9 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
-        public string ability = "";
-        public string minionActions = "";
-        public string masterActions = "";
+        public StringKey ability = null;
+        public StringKey minionActions = null;
+        public StringKey masterActions = null;
         public bool minionFirst = false;
         public bool masterFirst = false;
 
@@ -1370,15 +1371,15 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
-                ability = data["ability"];
+                ability = new StringKey(data["ability"]);
             }
             if (data.ContainsKey("master"))
             {
-                masterActions = data["master"];
+                masterActions = new StringKey(data["master"]);
             }
             if (data.ContainsKey("minion"))
             {
-                minionActions = data["minion"];
+                minionActions = new StringKey(data["minion"]);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1396,15 +1397,15 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if (ability.Length > 0)
+            if (ability != null)
             {
                 r += "ability=" + ability + nl;
             }
-            if (masterActions.Length > 0)
+            if (masterActions != null)
             {
                 r += "master=" + masterActions + nl;
             }
-            if (minionActions.Length > 0)
+            if (minionActions != null)
             {
                 r += "minion=" + minionActions + nl;
             }
@@ -1492,9 +1493,9 @@ public class QuestData
     public class Quest
     {
         // Quest name
-        public string nameKey = "";
+        public string nameKey = null;
         // Quest description (currently unused)
-        public string descriptionKey = "";
+        public string descriptionKey = null;
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils

@@ -46,8 +46,8 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = EventManager.SymbolReplace(qm.info);
-        if (info.Length == 0 && baseObject != null)
+        info = qm.info;
+        if (info == null && baseObject != null)
         {
             info = baseObject.info;
         }
@@ -83,9 +83,9 @@ public class QuestActivation : ActivationData
     {
         // Read data from activation
         sectionName = qa.sectionName;
-        ability = EventManager.SymbolReplace(qa.ability);
-        masterActions = EventManager.SymbolReplace(qa.masterActions);
-        minionActions = EventManager.SymbolReplace(qa.minionActions);
+        ability = qa.ability;
+        masterActions = qa.masterActions;
+        minionActions = qa.minionActions;
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
     }

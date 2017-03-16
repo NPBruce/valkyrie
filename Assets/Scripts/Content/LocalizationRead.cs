@@ -70,9 +70,9 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="input">{ffg:XXXX} like input</param>
         /// <returns>Translation to current language</returns>
-        public static string FFGLookup(string input)
+        public static string FFGLookup(StringKey input)
         {
-            string output = input;
+            string output = input.key;
             // While there are more lookups
             while (output.IndexOf("{ffg:") != -1)
             {
@@ -117,7 +117,7 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string FFGQuery(string input)
+        private static string FFGQuery(string input)
         {
             int bracketLevel = 0;
             int lastSection = 0;
@@ -166,13 +166,13 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static string FFGKeyLookup(string key)
+        private static string FFGKeyLookup(string key)
         {
             if (ffgDict != null)
             {
                 try
                 {
-                    StringI18n valueOut;
+                    EntryI18n valueOut;
 
                     if (ffgDict.tryGetValue(key, out valueOut))
                     {

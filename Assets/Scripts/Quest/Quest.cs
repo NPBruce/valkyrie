@@ -991,11 +991,11 @@ public class Quest
                 // Note: Random hero selection is NOT kept on load/undo FIXME
                 if (Game.Get().gameType is MoMGameType)
                 {
-                    effect = ad.ability.Replace("{0}", monsterName);
+                    effect = ad.ability.Translate().Replace("{0}", monsterName);
                 }
                 else
                 {
-                    effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                    effect = ad.ability.Translate().Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines

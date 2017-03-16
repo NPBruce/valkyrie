@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
@@ -674,7 +675,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public string info = "-";
+    public StringKey info = null;
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -690,7 +691,7 @@ public class MonsterData : GenericData
         // Get usage info
         if (content.ContainsKey("info"))
         {
-            info = content["info"];
+            info = new StringKey(content["info"]);
         }
         if (content.ContainsKey("imageplace"))
         {
@@ -715,9 +716,9 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public string ability = "-";
-    public string minionActions = "-";
-    public string masterActions = "-";
+    public StringKey ability = null;
+    public StringKey minionActions = null;
+    public StringKey masterActions = null;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -731,17 +732,17 @@ public class ActivationData : GenericData
         // Get ability
         if (content.ContainsKey("ability"))
         {
-            ability = content["ability"];
+            ability = new StringKey(content["ability"]);
         }
         // Get minion activation info
         if (content.ContainsKey("minion"))
         {
-            minionActions = content["minion"];
+            minionActions = new StringKey(content["minion"]);
         }
         // Get master activation info
         if (content.ContainsKey("master"))
         {
-            masterActions = content["master"];
+            masterActions = new StringKey(content["master"]);
         }
         if (content.ContainsKey("masterfirst"))
         {
@@ -806,7 +807,7 @@ public class AttackData : GenericData
     public static new string type = "Attack";
 
     // Attack text
-    public string text = "";
+    public StringKey text = null;
     // Target type (human, spirit...)
     public string target = "";
     // Attack type (heavy, unarmed)
@@ -817,7 +818,7 @@ public class AttackData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -840,7 +841,7 @@ public class EvadeData : GenericData
     public static new string type = "Evade";
 
     // Evade text
-    public string text = "";
+    public StringKey text = null;
     public string monster = "";
 
     public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -848,7 +849,7 @@ public class EvadeData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -865,7 +866,7 @@ public class HorrorData : GenericData
     public static new string type = "Horror";
 
     // Evade text
-    public string text = "";
+    public StringKey text = null;
     public string monster = "";
 
     public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -873,7 +874,7 @@ public class HorrorData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target

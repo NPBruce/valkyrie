@@ -48,7 +48,10 @@ public class ActivateDialogMoM : ActivateDialog
         db.AddBorder();
 
         float offset = 2.5f;
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.ad.masterActions.Replace("\\n", "\n"));
+        db = new DialogBox(
+            new Vector2(10, offset), 
+            new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
+            monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n"));
         db.AddBorder();
 
         offset += 4.5f;

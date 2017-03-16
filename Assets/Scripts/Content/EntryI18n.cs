@@ -7,7 +7,7 @@ namespace Assets.Scripts.Content
     /// <summary>
     /// String in international FFG format. Including all available languages supported by MoM App
     /// </summary>
-    public class StringI18n
+    public class EntryI18n
     {
 
         private DictionaryI18n referedDictionary;
@@ -20,7 +20,7 @@ namespace Assets.Scripts.Content
         /// <summary>
         /// Creates an empty instance of a Multilanguage String
         /// </summary>
-        public StringI18n(DictionaryI18n dict)
+        public EntryI18n(DictionaryI18n dict)
         {
             referedDictionary = dict;
             translations = new string[dict.getLanguages().Length];
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Content
         /// Constructor with the complete localisation elements
         /// </summary>
         /// <param name="completeLocalisationString"></param>
-        public StringI18n(DictionaryI18n dict,string completeLocalisationString)
+        public EntryI18n(DictionaryI18n dict,string completeLocalisationString)
         {
             referedDictionary = dict;
 

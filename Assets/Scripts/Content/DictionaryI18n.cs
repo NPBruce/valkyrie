@@ -24,7 +24,7 @@ namespace Assets.Scripts.Content
         private string[] languages;
         
         // Dictionary: Will be used to store all strings of a localization file
-        private Dictionary<string, StringI18n> dict;
+        private Dictionary<string, EntryI18n> dict;
         // raw dict
         private string[] rawDict;
 
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Content
             // Get default language
             setDefaultLanguage(newDefaultLanguage);
             // Create dictionary with file lines capacity
-            dict = new Dictionary<string, StringI18n>(languagesAndTexts.Length);
+            dict = new Dictionary<string, EntryI18n>(languagesAndTexts.Length);
             //Load raw dictionary
             rawDict = languagesAndTexts;
         }
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Content
         /// Create a dict entry with the StringI18n
         /// </summary>
         /// <param name="currentKeyValues">line of localization file</param>
-        public void Add(StringI18n currentKeyValues)
+        public void Add(EntryI18n currentKeyValues)
         {
             dict.Add(currentKeyValues.key, currentKeyValues);
         }
@@ -128,7 +128,7 @@ namespace Assets.Scripts.Content
         /// <param name="v">key to find</param>
         /// <param name="valueOut">variable to store result if exists</param>
         /// <returns>true if the key exists in the dictionary</returns>
-        public bool tryGetValue(string v, out StringI18n valueOut)
+        public bool tryGetValue(string v, out EntryI18n valueOut)
         {
             bool found = dict.TryGetValue(v, out valueOut);
 
@@ -144,7 +144,7 @@ namespace Assets.Scripts.Content
                     // if the line is not empty and not slash (/) insert
                     if (rawDict[pos].StartsWith(v + COMMA))
                     {
-                        valueOut = new StringI18n(this, rawDict[pos]);
+                        valueOut = new EntryI18n(this, rawDict[pos]);
                         Add(valueOut);
                         return true;
                     }

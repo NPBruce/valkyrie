@@ -13,7 +13,10 @@ public class InfoDialog {
         }
 
         // box with monster info
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 12), m.monsterData.info.Replace("\\n", "\n"));
+        DialogBox db = new DialogBox(
+            new Vector2(10, 0.5f), 
+            new Vector2(UIScaler.GetWidthUnits() - 20, 12), 
+            m.monsterData.info.Translate().Replace("\\n", "\n"));
         db.AddBorder();
 
         // Unique monsters have additional info
