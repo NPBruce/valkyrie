@@ -29,11 +29,11 @@ public class ActivateDialogMoM : ActivateDialog
             offset += 4.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "The monster attacks.", delegate { CreateAttackWindow(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), "The monster attacks.", delegate { CreateAttackWindow(); });
 
         offset += 2.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), monster.currentActivation.ad.moveButton, delegate { CreateMoveWindow(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), monster.currentActivation.ad.moveButton, delegate { CreateMoveWindow(); });
 
         DrawMonsterIcon();
     }
