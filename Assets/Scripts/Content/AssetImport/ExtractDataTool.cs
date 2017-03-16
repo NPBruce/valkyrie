@@ -384,13 +384,33 @@ class ExtractDataTool
                     movealt.Add("");
                 }
 
-                if ((instruction.IndexOf("toward the investigator within range") > 0))
+                if (instruction.IndexOf("toward the investigator within range") > 0)
+                {
+                    movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                }
+                else if (instruction.IndexOf("toward the nearest investigator within range") > 0)
+                {
+                    movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                }
+                else if (instruction.IndexOf("to the nearest investigator within range") > 0)
+                {
+                    movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                }
+                else if (instruction.IndexOf("toward the farthest investigator within range") > 0)
+                {
+                    movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
+                }
+                else if ((instruction.IndexOf("attacks the investigator within range") > 0))
                 {
                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
                 else if ((instruction.IndexOf("to be adjacent to as many investigators as possibl") > 0))
                 {
                     movebutton.Add("{ffg:UI_CANT_MOVE_ADJACENT}");
+                }
+                else if ((instruction.IndexOf("moves to the investigator within 3 spaces") > 0))
+                {
+                    movebutton.Add("{ffg:UI_NOT_WITHIN_3}");
                 }
                 else if ((instruction.IndexOf("3 spaces to be in a space with as many investigators as possible") > 0))
                 {
@@ -414,7 +434,7 @@ class ExtractDataTool
                 }
                 else
                 {
-                    movebutton.Add("UNKOWN");
+                    movebutton.Add("UNKNOWN");
                 }
             }
             if (l.IndexOf(attackStr) == 0)
