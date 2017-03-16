@@ -718,6 +718,8 @@ public class ActivationData : GenericData
     public string ability = "-";
     public string minionActions = "-";
     public string masterActions = "-";
+    public string moveButton = "";
+    public string move = "";
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -742,6 +744,14 @@ public class ActivationData : GenericData
         if (content.ContainsKey("master"))
         {
             masterActions = content["master"];
+        }
+        if (content.ContainsKey("movebutton"))
+        {
+            moveButton = content["movebutton"];
+        }
+        if (content.ContainsKey("move"))
+        {
+            move = content["move"];
         }
         if (content.ContainsKey("masterfirst"))
         {

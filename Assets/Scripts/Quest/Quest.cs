@@ -982,6 +982,7 @@ public class Quest
             public ActivationData ad;
             // String is populated on creation of the activation
             public string effect;
+            public string move;
 
             // Construct activation
             public ActivationInstance(ActivationData contentActivation, string monsterName)
@@ -992,6 +993,7 @@ public class Quest
                 if (Game.Get().gameType is MoMGameType)
                 {
                     effect = ad.ability.Replace("{0}", monsterName);
+                    move = ad.move.Replace("{0}", monsterName);
                 }
                 else
                 {
