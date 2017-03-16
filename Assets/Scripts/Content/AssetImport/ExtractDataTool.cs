@@ -148,7 +148,7 @@ class ExtractDataTool
         }
 
         list.Add(nameCamel);
-        string ret = "[" + nameCamel + "\n";
+        string ret = "[" + nameCamel + "]\n";
         ret += "text={ffg:" + label + "}\n";
         if (label.Substring(label.Length - 3).Equals("_01"))
         {
@@ -351,7 +351,7 @@ class ExtractDataTool
                 int indexStart = allText.IndexOf(label);
                 string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart) - indexStart);
                 string altmove = label.Substring(0, label.Length - 2) + "00";
-                if ((instruction.IndexOf("towards the nearest") > 0) && (instruction.IndexOf("towards the nearest within range") < 0))
+                if ((instruction.IndexOf("toward the nearest") > 0) && (instruction.IndexOf("toward the nearest within range") < 0))
                 {
                     movealt.Add("");
                 }
