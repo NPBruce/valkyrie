@@ -1071,7 +1071,10 @@ public class QuestData
     {
         new public static string type = "Puzzle";
         public string puzzleClass = "slide";
+        public string skill = "{observation}";
         public int puzzleLevel = 4;
+        public int puzzleAltLevel = 3;
+        public string imageType = "";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1088,9 +1091,21 @@ public class QuestData
             {
                 puzzleClass = data["class"];
             }
+            if (data.ContainsKey("image"))
+            {
+                imageType = data["image"];
+            }
+            if (data.ContainsKey("skill"))
+            {
+                skill = data["skill"];
+            }
             if (data.ContainsKey("puzzlelevel"))
             {
                 int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
+            if (data.ContainsKey("puzzlealtlevel"))
+            {
+                int.TryParse(data["puzzlealtlevel"], out puzzleAltLevel);
             }
         }
 
@@ -1104,9 +1119,21 @@ public class QuestData
             {
                 r += "class=" + puzzleClass + nl;
             }
+            if (!skill.Equals("{observation}"))
+            {
+                r += "skill=" + skill + nl;
+            }
+            if (!imageType.Equals(""))
+            {
+                r += "image=" + imageType + nl;
+            }
             if (puzzleLevel != 4)
             {
                 r += "puzzlelevel=" + puzzleLevel + nl;
+            }
+            if (puzzleAltLevel != 3)
+            {
+                r += "puzzlealtlevel=" + puzzleAltLevel + nl;
             }
             return r;
         }
