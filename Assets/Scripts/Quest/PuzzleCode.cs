@@ -57,19 +57,19 @@ public class PuzzleCode : Puzzle
         string r = "[PuzzleCode" + id + "]" + nl;
         r += "answer=" + answer.ToString() + nl;
 
-        r += "guess="
+        r += "guess=";
         foreach (CodeGuess g in guess)
         {
             r += g.ToString() + ",";
         }
-        r = r.substring(0, r.length - 1) + nl;
+        r = r.Substring(0, r.Length - 1) + nl;
         
         return r + nl;
     }
 
     public class Answer
     {
-        public List<int> = state;
+        public List<int> state;
 
         public Answer(int items, int options)
         {
@@ -83,10 +83,10 @@ public class PuzzleCode : Puzzle
         public Answer(string s)
         {
             state = new List<int>();
-            foreach (string s in g.Split(" ".ToCharArray()))
+            foreach (string part in s.Split(" ".ToCharArray()))
             {
                 int temp = 0;
-                int.TryParse(s, out temp);
+                int.TryParse(part, out temp);
                 state.Add(temp);
             }
         }
@@ -98,14 +98,14 @@ public class PuzzleCode : Puzzle
             {
                 r += i + " ";
             }
-            r = r.substring(0, r.length - 1);
+            r = r.Substring(0, r.Length - 1);
             return r;
         }
     }
 
-    public Class CodeGuess
+    public class CodeGuess
     {
-        Answer answer;
+        PuzzleCode.Answer answer;
         public List<int> guess;
 
         public CodeGuess(Answer a, List<int> g)
@@ -154,12 +154,12 @@ public class PuzzleCode : Puzzle
         public int CorrectType()
         {
             int r = 0;
-            bool[] used = new bool[answer.state.count];
+            bool[] used = new bool[answer.state.Count];
 
             for (int i = 0; i < guess.Count; i++)
             {
                 bool done = false;
-                for (int j = 0; j < answer.state.count; j++)
+                for (int j = 0; j < answer.state.Count; j++)
                 {
                     if (!done && i != j && !used[j] && answer.state[j] == guess[i])
                     {
@@ -179,7 +179,7 @@ public class PuzzleCode : Puzzle
             {
                 r += i + " ";
             }
-            r = r.substring(0, r.length - 1);
+            r = r.Substring(0, r.Length - 1);
             return r;
         }
     }

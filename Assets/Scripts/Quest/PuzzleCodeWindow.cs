@@ -11,7 +11,7 @@ public class PuzzleCodeWindow
     public PuzzleCode puzzle;
     public List<int> guess;
 
-    public PuzzleSlideWindow(EventManager.Event e)
+    public PuzzleCodeWindow(EventManager.Event e)
     {
         eventData = e;
         Game game = Game.Get();
@@ -39,45 +39,45 @@ public class PuzzleCodeWindow
 
         // Puzzle goes here
 
+        float hPos = UIScaler.GetHCenter(-13f);
         if (!puzzle.Solved())
         {
-            float hPos = UIScaler.GetHCenter(-13f);
             for (int i = 1; i <= questPuzzle.puzzleAltLevel; i++)
             {
                 int tmp = i;
                 new TextButton(new Vector2(hPos, 1.5f), new Vector2(2f, 2), i.ToString(), delegate { GuessAdd(tmp); });
-                hPos += 2.5;
+                hPos += 2.5f;
             }
         }
 
         float vPos = 7f;
-        foreach (List<PuzzleCode.CodeGuess> g in puzzle.guess)
+        foreach (PuzzleCode.CodeGuess g in puzzle.guess)
         {
-            float hPos = UIScaler.GetHCenter(-13f);
+            hPos = UIScaler.GetHCenter(-13f);
             foreach (int i in g.guess)
             {
-                DialogBox db = new DialogBox(new Vector(hPos, vPos), new Vector2(2f, 2f), i.ToString());
+                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), i.ToString());
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.AddBorder();
-                hPos += 2.5;
+                hPos += 2.5f;
             }
 
-            float hPos = UIScaler.GetHCenter();
+            hPos = UIScaler.GetHCenter();
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                DialogBox db = new DialogBox(new Vector(hPos, vPos), new Vector2(2f, 2f), "");
+                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.AddBorder();
-                hPos += 2.5;
+                hPos += 2.5f;
             }
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                DialogBox db = new DialogBox(new Vector(hPos, vPos), new Vector2(2f, 2f), "");
+                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.AddBorder();
-                hPos += 2.5;
+                hPos += 2.5f;
             }
-            vPos += 2.5f
+            vPos += 2.5f;
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 13f), new Vector2(6f, 2f), "Moves:");

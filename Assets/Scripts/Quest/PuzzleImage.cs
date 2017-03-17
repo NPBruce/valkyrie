@@ -11,20 +11,21 @@ public class PuzzleImage : Puzzle
     {
         state = new Dictionary<TilePosition, TilePosition>();
 
-        Stack<TilePosition> stack = new Stack<TilePositon>();
-        for (int i = 0, i < x; i++)
+        List<TilePosition> list = new List<TilePosition>();
+        for (int i = 0; i < x; i++)
         {
-            for (int j = 0, j < y; j++)
+            for (int j = 0; j < y; j++)
             {
-                stack.Insert(Random.Range(0, stack.Count), new TilePosition(x, y));
+                list.Insert(Random.Range(0, list.Count), new TilePosition(x, y));
             }
         }
 
-        for (int i = 0, i < x; i++)
+        int count = 0;
+        for (int i = 0; i < x; i++)
         {
-            for (int j = 0, j < y; j++)
+            for (int j = 0; j < y; j++)
             {
-                state.Add(new TilePosition(x, y), stack.Pop());
+                state.Add(new TilePosition(x, y), list[count++]);
             }
         }
     }
@@ -61,8 +62,8 @@ public class PuzzleImage : Puzzle
             {
                 return false;
             }
-            return true;
         }
+        return true;
     }
 
     override public string ToString(string id)
@@ -71,29 +72,35 @@ public class PuzzleImage : Puzzle
         string r = "[PuzzleCode" + id + "]" + nl;
         r += "moves=" + moves.ToString() + nl;
 
-        r += "state="
+        r += "state=";
         foreach (KeyValuePair<TilePosition, TilePosition> p in state)
         {
             r += p.Key.ToString() + "," + p.Value.ToString() + ":";
         }
-        r = r.substring(0, r.length - 1) + nl;
+        r = r.Substring(0, r.Length - 1) + nl;
         
         return r + nl;
     }
 
-    Public Class TilePosition
+    public class TilePosition
     {
         public int x = 0;
         public int y = 0;
 
+        public TilePosition(int xIn, int yIn)
+        {
+            x = xIn;
+            y = yIn;
+        }
+
         public TilePosition(string s)
         {
-            string[] split = s.Split(" ".ToCharArray())
+            string[] split = s.Split(" ".ToCharArray());
             int.TryParse(split[0], out x);
             int.TryParse(split[1], out y);
         }
 
-        public string ToString()
+        override public string ToString()
         {
             return x + " " + y;
         }

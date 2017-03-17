@@ -63,10 +63,10 @@ public class EditorComponentPuzzle : EditorComponent
 
             if (puzzleComponent.puzzleClass.Equals("image"))
             {
-                DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1), "Image:");
+                db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1), "Image:");
                 db.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(3, 8), new Vector2(8, 1), puzzleComponent.image, delegate { Image(); });
+                tb = new TextButton(new Vector2(3, 8), new Vector2(8, 1), puzzleComponent.imageType, delegate { Image(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -92,7 +92,7 @@ public class EditorComponentPuzzle : EditorComponent
         puzzleComponent.puzzleClass = classList.selection;
         if (!puzzleComponent.puzzleClass.Equals("image"))
         {
-            puzzleComponent.image = "";
+            puzzleComponent.imageType = "";
         }
         Update();
     }
@@ -121,7 +121,7 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void SelectImage()
     {
-        puzzleComponent.image = imageList.selection;
+        puzzleComponent.imageType = imageList.selection;
         Update();
     }
 }

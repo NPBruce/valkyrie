@@ -216,15 +216,15 @@ public class EventManager
         if (e.qEvent is QuestData.Puzzle)
         {
             QuestData.Puzzle p = e.qEvent as QuestData.Puzzle;
-            if (p.class.Equals("slide"))
+            if (p.puzzleClass.Equals("slide"))
             {
                 new PuzzleSlideWindow(e);
             }
-            if (p.class.Equals("code"))
+            if (p.puzzleClass.Equals("code"))
             {
                 new PuzzleCodeWindow(e);
             }
-            if (p.class.Equals("image"))
+            if (p.puzzleClass.Equals("image"))
             {
                 new PuzzleImageWindow(e);
             }

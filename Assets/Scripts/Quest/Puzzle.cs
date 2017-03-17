@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Puzzle
 {
-    public string ToString(string id)
+    virtual public string ToString(string id)
     {
         return "";
     }

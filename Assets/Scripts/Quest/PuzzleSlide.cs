@@ -94,7 +94,7 @@ public class PuzzleSlide : Puzzle
         return true;
     }
 
-    public string ToString(string id)
+    override public string ToString(string id)
     {
         string nl = System.Environment.NewLine;
         // General quest state block
