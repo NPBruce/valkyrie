@@ -556,10 +556,11 @@ public class EventManager
         output = output.Replace("{awareness}", "μ");
         output = output.Replace("{shield}", "≤");
         output = output.Replace("{surge}", "±");
-        output = output.Replace("{strenth}", "");
+        output = output.Replace("{strength}", "");
         output = output.Replace("{agility}", "");
         output = output.Replace("{lore}", "");
         output = output.Replace("{influence}", "");
+        output = output.Replace("{observation}", "");
         output = output.Replace("{success}", "");
         output = output.Replace("{clue}", "");
         output = output.Replace("{MAD01}", "");

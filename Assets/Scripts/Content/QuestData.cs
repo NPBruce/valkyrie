@@ -1071,6 +1071,7 @@ public class QuestData
     {
         new public static string type = "Puzzle";
         public string puzzleClass = "slide";
+        public string skill = "{observation}";
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
         public string imageType = "";
@@ -1094,6 +1095,10 @@ public class QuestData
             {
                 imageType = data["image"];
             }
+            if (data.ContainsKey("skill"))
+            {
+                skill = data["skill"];
+            }
             if (data.ContainsKey("puzzlelevel"))
             {
                 int.TryParse(data["puzzlelevel"], out puzzleLevel);
@@ -1113,6 +1118,10 @@ public class QuestData
             if (!puzzleClass.Equals("slide"))
             {
                 r += "class=" + puzzleClass + nl;
+            }
+            if (!skill.Equals("{observation}"))
+            {
+                r += "skill=" + skill + nl;
             }
             if (!imageType.Equals(""))
             {
