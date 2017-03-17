@@ -4,73 +4,171 @@ using System.Collections.Generic;
 
 public class PuzzleCode : Puzzle
 {
-    public List<int> = state;
-    public List<List<int>> = guess;
+    public Answer answer;
+    public List<CodeGuess> guess;
 
-    public PuzzleCode(int count, int style)
+    public PuzzleCode(int items, int options)
     {
-        state = new List<int>();
-        guess = new List<List<int>>();
-
-
+        guess = new List<CodeGuess>();
+        answer = new Answer(items, options);
     }
 
     public PuzzleCode(Dictionary<string, string> data)
     {
-        state = new List<int>();
-        guess = new List<List<int>>();
+        guess = new List<CodeGuess>();
+        List<string> guessString = new List<string>();
         foreach (KeyValuePair<string, string> kv in data)
         {
-            if (kv.Key.Equals("state"))
+            if (kv.Key.Equals("answer"))
             {
-                foreach (string s in kv.Value.Split(" ".ToCharArray()))
-                {
-                    int temp = 0;
-                    int.TryParse(s, out temp);
-                    state.Add(temp);
-                }
+                answer = new Answer(kv.Value);
             }
             if (kv.Key.Equals("guess"))
             {
                 foreach (string s in kv.Value.Split(",".ToCharArray()))
                 {
-                    List<int> guessList = new List<int>();
-                    foreach (int i in s.Split(" ".ToCharArray()))
-                    {
-                        int temp = 0;
-                        int.TryParse(i, out temp);
-                        guessList.Add(temp);
-                    }
-                    guess.Add(guessList);
+                    guessString.Add(s);
                 }
             }
         }
+        foreach (string s in guessString)
+        {
+            guess.Add(new CodeGuess(answer, s));
+        }
     }
 
-    public string ToString(string id)
+    public 
+
+    override public string ToString(string id)
     {
         string nl = System.Environment.NewLine;
-        // General quest state block
         string r = "[PuzzleCode" + id + "]" + nl;
-        r += "state="
-        foreach (int i in state)
-        {
-            r += i + " ";
-        }
-        r = r.substring(0, r.length - 1) + nl;
+        r += "answer=" + answer.ToString() + nl;
 
         r += "guess="
-        foreach (List<int> l in guess)
+        foreach (CodeGuess g in guess)
         {
-            foreach (int i in l)
-            {
-                r += i + " ";
-            }
-            r[r.length - 1] = ",";
+            r += g.ToString() + ",";
         }
         r = r.substring(0, r.length - 1) + nl;
         
         return r + nl;
     }
 
+    public class Answer
+    {
+        public List<int> = state;
+
+        public Answer(int items, int options)
+        {
+            state = new List<int>();
+            for (int i = 0; i < items; i++)
+            {
+                state.Add(Random.Range(0, options));
+            }
+        }
+
+        public Answer(string s)
+        {
+            state = new List<int>();
+            foreach (string s in g.Split(" ".ToCharArray()))
+            {
+                int temp = 0;
+                int.TryParse(s, out temp);
+                state.Add(temp);
+            }
+        }
+
+        override public string ToString()
+        {
+            string r = "";
+            foreach (int i in state)
+            {
+                r += i + " ";
+            }
+            r = r.substring(0, r.length - 1);
+            return r;
+        }
+    }
+
+    public Class CodeGuess
+    {
+        Answer answer;
+        public List<int> guess;
+
+        public CodeGuess(Answer a, List<int> g)
+        {
+            answer = a;
+            guess = g;
+        }
+
+        public CodeGuess(Answer a, string g)
+        {
+            answer = a;
+            guess = new List<int>();
+            foreach (string s in g.Split(" ".ToCharArray()))
+            {
+                int temp = 0;
+                int.TryParse(s, out temp);
+                guess.Add(temp);
+            }
+        }
+
+        public bool Correct()
+        {
+            for (int i = 0; i < answer.state.Count; i++)
+            {
+                if (answer.state[i] != guess[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public int CorrectSpot()
+        {
+            int r = 0;
+            for (int i = 0; i < answer.state.Count; i++)
+            {
+                if (answer.state[i] == guess[i])
+                {
+                    r++;
+                }
+            }
+            return r;
+        }
+
+        public int CorrectType()
+        {
+            int r = 0;
+            bool[] used = new bool[answer.state.count];
+
+            for (int i = 0; i < guess.Count; i++)
+            {
+                bool done = false;
+                for (int j = 0; j < answer.state.count; j++)
+                {
+                    if (!done && i != j && !used[j] && answer.state[j] == guess[i])
+                    {
+                        r++;
+                        done = true;
+                        used[j] = true;
+                    }
+                }
+            }
+            return r;
+        }
+
+        override public string ToString()
+        {
+            string r = "";
+            foreach (int i in guess)
+            {
+                r += i + " ";
+            }
+            r = r.substring(0, r.length - 1);
+            return r;
+        }
+    }
 }

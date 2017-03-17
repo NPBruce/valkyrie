@@ -23,7 +23,7 @@ public class PuzzleCodeWindow
         }
         else
         {
-            puzzle = new PuzzleCode(3, 0);
+            puzzle = new PuzzleCode(questPuzzle.puzzleLevel, questPuzzle.puzzleAltLevel);
         }
 
         CreateWindow();

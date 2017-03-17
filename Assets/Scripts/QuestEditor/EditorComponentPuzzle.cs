@@ -7,6 +7,7 @@ public class EditorComponentPuzzle : EditorComponent
     QuestData.Puzzle puzzleComponent;
     EditorSelectionList classList;
     DialogBoxEditable levelDBE;
+    DialogBoxEditable altLevelDBE;
 
     public EditorComponentPuzzle(string nameIn) : base()
     {
@@ -50,7 +51,14 @@ public class EditorComponentPuzzle : EditorComponent
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
+        db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Alt Level:");
+        db.ApplyTag("editor");
+
+        altLevelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
+        altLevelDBE.ApplyTag("editor");
+        altLevelDBE.AddBorder();
+
+        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
     }
@@ -59,6 +67,7 @@ public class EditorComponentPuzzle : EditorComponent
     {
         List<string> puzzleClass = new List<string>();
         puzzleClass.Add("slide");
+        puzzleClass.Add("code");
         classList = new EditorSelectionList("Select Class", puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
@@ -72,6 +81,12 @@ public class EditorComponentPuzzle : EditorComponent
     public void UpdateLevel()
     {
         int.TryParse(levelDBE.uiInput.text, out puzzleComponent.puzzleLevel);
+        Update();
+    }
+
+    public void UpdateAltLevel()
+    {
+        int.TryParse(altLevelDBE.uiInput.text, out puzzleComponent.puzzleAltLevel);
         Update();
     }
 }
