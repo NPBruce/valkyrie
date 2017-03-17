@@ -6,6 +6,7 @@ public class EditorComponentPuzzle : EditorComponent
 {
     QuestData.Puzzle puzzleComponent;
     EditorSelectionList classList;
+    EditorSelectionList imageList;
     DialogBoxEditable levelDBE;
     DialogBoxEditable altLevelDBE;
 
@@ -51,14 +52,27 @@ public class EditorComponentPuzzle : EditorComponent
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Alt Level:");
-        db.ApplyTag("editor");
+        if (!puzzleComponent.puzzleClass.Equals("slide"))
+        {
+            db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), "Alt Level:");
+            db.ApplyTag("editor");
 
-        altLevelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
-        altLevelDBE.ApplyTag("editor");
-        altLevelDBE.AddBorder();
+            altLevelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
+            altLevelDBE.ApplyTag("editor");
+            altLevelDBE.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
+            if (puzzleComponent.puzzleClass.Equals("image"))
+            {
+                DialogBox db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1), "Image:");
+                db.ApplyTag("editor");
+
+                tb = new TextButton(new Vector2(3, 8), new Vector2(8, 1), puzzleComponent.image, delegate { Image(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
+        tb = new TextButton(new Vector2(0, 10), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
     }
@@ -68,6 +82,7 @@ public class EditorComponentPuzzle : EditorComponent
         List<string> puzzleClass = new List<string>();
         puzzleClass.Add("slide");
         puzzleClass.Add("code");
+        puzzleClass.Add("image");
         classList = new EditorSelectionList("Select Class", puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
@@ -75,6 +90,10 @@ public class EditorComponentPuzzle : EditorComponent
     public void SelectClass()
     {
         puzzleComponent.puzzleClass = classList.selection;
+        if (!puzzleComponent.puzzleClass.Equals("image"))
+        {
+            puzzleComponent.image = "";
+        }
         Update();
     }
 
@@ -87,6 +106,22 @@ public class EditorComponentPuzzle : EditorComponent
     public void UpdateAltLevel()
     {
         int.TryParse(altLevelDBE.uiInput.text, out puzzleComponent.puzzleAltLevel);
+        Update();
+    }
+    
+    public void Image()
+    {
+        List<string> puzzleImage = new List<string>();
+        puzzleImage.Add("A");
+        puzzleImage.Add("B");
+        puzzleImage.Add("C");
+        imageList = new EditorSelectionList("Select Image", puzzleImage, delegate { SelectImage(); });
+        imageList.SelectItem();
+    }
+
+    public void SelectImage()
+    {
+        puzzleComponent.image = imageList.selection;
         Update();
     }
 }

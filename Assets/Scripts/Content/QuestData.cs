@@ -1073,6 +1073,7 @@ public class QuestData
         public string puzzleClass = "slide";
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
+        public string image = "";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1088,6 +1089,10 @@ public class QuestData
             if (data.ContainsKey("class"))
             {
                 puzzleClass = data["class"];
+            }
+            if (data.ContainsKey("image"))
+            {
+                image = data["image"];
             }
             if (data.ContainsKey("puzzlelevel"))
             {
@@ -1108,6 +1113,10 @@ public class QuestData
             if (!puzzleClass.Equals("slide"))
             {
                 r += "class=" + puzzleClass + nl;
+            }
+            if (!image.Equals(""))
+            {
+                r += "image=" + image + nl;
             }
             if (puzzleLevel != 4)
             {

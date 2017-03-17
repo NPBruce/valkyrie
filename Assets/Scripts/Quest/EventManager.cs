@@ -224,6 +224,10 @@ public class EventManager
             {
                 new PuzzleCodeWindow(e);
             }
+            if (p.class.Equals("image"))
+            {
+                new PuzzleImageWindow(e);
+            }
             return;
         }
 

@@ -256,6 +256,10 @@ public class Quest
             {
                 puzzle.Add(kv.Key, new PuzzleCode(kv.Value));
             }
+            if (kv.Key.IndexOf("PuzzleCode") == 0)
+            {
+                puzzle.Add(kv.Key, new PuzzleImage(kv.Value));
+            }
         }
         // Restore event quotas
         eventQuota = new Dictionary<string, int>();
