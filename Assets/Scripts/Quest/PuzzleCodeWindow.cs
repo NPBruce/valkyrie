@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class PuzzleSlideWindow
+public class PuzzleCodeWindow
 {
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
-    public PuzzleSlide puzzle;
+    public PuzzleCode puzzle;
 
     public PuzzleSlideWindow(EventManager.Event e)
     {
@@ -19,11 +19,11 @@ public class PuzzleSlideWindow
 
         if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
-            puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleSlide;
+            puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleCode;
         }
         else
         {
-            puzzle = new PuzzleSlide(questPuzzle.puzzleLevel);
+            puzzle = new PuzzleCode(3, 0);
         }
 
         CreateWindow();

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PuzzleSlide
+public class PuzzleSlide : Puzzle
 {
     public List<Block> puzzle;
     public int moves = 0;
