@@ -9,6 +9,7 @@ public class PuzzleSlideWindow
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
     public PuzzleSlide puzzle;
+    public int lastMoves = 0;
 
     public PuzzleSlideWindow(EventManager.Event e)
     {
@@ -20,6 +21,7 @@ public class PuzzleSlideWindow
         if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
             puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleSlide;
+            lastMoves = puzzle.moves;
         }
         else
         {
@@ -50,14 +52,26 @@ public class PuzzleSlideWindow
             CreateBlock(b, transBg, b.target);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 13f), new Vector2(6f, 2f), "Moves:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f), "Skill:");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 15f), new Vector2(3f, 2f), puzzle.moves.ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), EventManager.SymbolReplace(questPuzzle.skill));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f), "Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), (puzzle.moves - lastMoves).ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 17f), new Vector2(6f, 2f), "Total Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), puzzle.moves.ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
 
         if (puzzle.Solved())
         {

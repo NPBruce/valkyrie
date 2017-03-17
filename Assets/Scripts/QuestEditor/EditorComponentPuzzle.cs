@@ -49,7 +49,7 @@ public class EditorComponentPuzzle : EditorComponent
         db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), "Skill:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 4), new Vector2(1, 1), EventManager.SymbolReplace(puzzleComponent.skill), delegate { Skill(); });
+        tb = new TextButton(new Vector2(3, 4), new Vector2(2, 1), EventManager.SymbolReplace(puzzleComponent.skill), delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -108,19 +108,19 @@ public class EditorComponentPuzzle : EditorComponent
     public void Skill()
     {
         List<string> skill = new List<string>();
-        skill.Add("{will}");
-        skill.Add("{strength}");
-        skill.Add("{agility}");
-        skill.Add("{lore}");
-        skill.Add("{influence}");
-        skill.Add("{observation}");
+        skill.Add("{will} " + EventManager.SymbolReplace("{will}"));
+        skill.Add("{strength} " + EventManager.SymbolReplace("{strength}"));
+        skill.Add("{agility} " + EventManager.SymbolReplace("{agility}"));
+        skill.Add("{lore} " + EventManager.SymbolReplace("{lore}"));
+        skill.Add("{influence} " + EventManager.SymbolReplace("{influence}"));
+        skill.Add("{observation} " + EventManager.SymbolReplace("{observation}"));
         skillList = new EditorSelectionList("Select Skill", skill, delegate { SelectSkill(); });
         skillList.SelectItem();
     }
 
     public void SelectSkill()
     {
-        puzzleComponent.skill = skillList.selection;
+        puzzleComponent.skill = skillList.selection.Split(" ".ToCharArray())[0];
         Update();
     }
 
