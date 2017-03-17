@@ -1125,7 +1125,7 @@ public class QuestData
             }
             if (!imageType.Equals(""))
             {
-                r += "image=" + image + nl;
+                r += "image=" + imageType + nl;
             }
             if (puzzleLevel != 4)
             {

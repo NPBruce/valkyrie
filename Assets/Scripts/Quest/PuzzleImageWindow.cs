@@ -6,7 +6,191 @@ using UnityEngine.Events;
 
 public class PuzzleImageWindow
 {
+    public EventManager.Event eventData;
+    QuestData.Puzzle questPuzzle;
+    public PuzzleImage puzzle;
+    public int previousMoves = 0;
+    public Sprite[][] imageSprite;
+    public float width = 1f;
+    public float height = 1f;
+
     public PuzzleImageWindow(EventManager.Event e)
     {
+        eventData = e;
+        Game game = Game.Get();
+
+        questPuzzle = e.qEvent as QuestData.Puzzle;
+
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        {
+            puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleImage;
+            previousMoves = puzzle.moves;
+        }
+        else
+        {
+            puzzle = new PuzzleImage(questPuzzle.puzzleLevel, questPuzzle.puzzleAltLevel);
+        }
+
+        height = 19f / questPuzzle.puzzleAltLevel;
+        width = 19f / questPuzzle.puzzleLevel;
+        Texture2D newTex = ContentData.FileToTexture(game.cd.puzzles[questPuzzle.imageType].image);
+        if (newTex.width > newTex.height)
+        {
+            height = height * newTex.height / newTex.width;
+        }
+        else
+        {
+            width = width * newTex.width / newTex.height;
+        }
+
+        imageSprite = new Sprite[questPuzzle.puzzleLevel][];
+        for (int i = 0; i < questPuzzle.puzzleLevel; i++)
+        {
+            imageSprite[i] = new Sprite[questPuzzle.puzzleAltLevel];
+            for (int j = 0; j < questPuzzle.puzzleAltLevel; j++)
+            {
+                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, j * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1);
+            }
+        }
+
+        CreateWindow();
+    }
+
+    public void CreateWindow()
+    {
+        Destroyer.Dialog();
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
+        db.AddBorder();
+
+        // Puzzle goes here
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 8f), new Vector2(3f, 2f), "Skill:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 10f), new Vector2(3f, 2f), EventManager.SymbolReplace(questPuzzle.skill));
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        foreach (KeyValuePair<PuzzleImage.TilePosition, PuzzleImage.TilePosition> kv in puzzle.state)
+        {
+            Draw(kv.Key, kv.Value);
+        }
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), "Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), (puzzle.moves - previousMoves).ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), "Total Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), puzzle.moves.ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        if (puzzle.Solved())
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
+        }
+    }
+
+    public void Draw(PuzzleImage.TilePosition screenPos, PuzzleImage.TilePosition imgPos)
+    {
+        Game game = Game.Get();
+        // Create object
+        GameObject gameObject = new GameObject("PuzzleTile");
+        gameObject.tag = "dialog";
+
+        gameObject.transform.parent = game.uICanvas.transform;
+
+        RectTransform trans = gameObject.AddComponent<RectTransform>();
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() + (UIScaler.GetPixelsPerUnit() * screenPos.y * height), height * UIScaler.GetPixelsPerUnit());
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetHCenter(-11.5f) * UIScaler.GetPixelsPerUnit()) + (UIScaler.GetPixelsPerUnit() * screenPos.x * width), width * UIScaler.GetPixelsPerUnit());
+        gameObject.AddComponent<CanvasRenderer>();
+
+        // Create the image
+        UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
+        image.sprite = imageSprite[imgPos.x][imgPos.y];
+        image.rectTransform.sizeDelta = new Vector2(width * UIScaler.GetPixelsPerUnit(), height * UIScaler.GetPixelsPerUnit());
+
+        BlockSlider slider = gameObject.AddComponent<BlockSlider>();
+        slider.screenPos = screenPos;
+        slider.win = this;
+    }
+
+    public void Close()
+    {
+        Destroyer.Dialog();
+        Game game = Game.Get();
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        {
+            game.quest.puzzle.Remove(questPuzzle.name);
+        }
+        game.quest.puzzle.Add(questPuzzle.name, puzzle);
+
+        game.quest.eManager.currentEvent = null;
+        game.quest.eManager.currentEvent = null;
+        game.quest.eManager.TriggerEvent();
+    }
+
+    public void Finished()
+    {
+        Destroyer.Dialog();
+        Game game = Game.Get();
+        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        {
+            game.quest.puzzle.Remove(questPuzzle.name);
+        }
+
+        game.quest.eManager.EndEvent();
+    }
+
+    public class BlockSlider : MonoBehaviour
+    {
+        public bool sliding = false;
+        public Vector2 mouseStart;
+        public Vector2 transStart;
+        public PuzzleImage.TilePosition screenPos;
+        public PuzzleImageWindow win;
+        RectTransform trans;
+
+        // Use this for initialization (called at creation)
+        void Start()
+        {
+            trans = gameObject.GetComponent<RectTransform>();
+            // Get the image attached to this game object
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (!sliding && !Input.GetMouseButtonDown(0))
+            {
+                return;
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (Input.mousePosition.x < trans.position.x) return;
+                if (Input.mousePosition.y < trans.position.y - trans.rect.height) return;
+                if (Input.mousePosition.x > trans.position.x + trans.rect.width) return;
+                if (Input.mousePosition.y > trans.position.y) return;
+                sliding = true;
+                mouseStart = Input.mousePosition;
+                transStart = trans.anchoredPosition;
+            }
+
+            if (!sliding)
+            {
+                return;
+            }
+        }
     }
 }
