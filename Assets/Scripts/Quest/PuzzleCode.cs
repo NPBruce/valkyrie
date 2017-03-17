@@ -44,6 +44,10 @@ public class PuzzleCode : Puzzle
 
     public bool Solved()
     {
+        if (guess.Count == 0)
+        {
+            return false;
+        }
         if (guess[guess.Count - 1].Correct())
         {
             return true;
@@ -76,7 +80,7 @@ public class PuzzleCode : Puzzle
             state = new List<int>();
             for (int i = 0; i < items; i++)
             {
-                state.Add(Random.Range(0, options));
+                state.Add(Random.Range(0, options) + 1);
             }
         }
 
@@ -105,7 +109,7 @@ public class PuzzleCode : Puzzle
 
     public class CodeGuess
     {
-        PuzzleCode.Answer answer;
+        Answer answer;
         public List<int> guess;
 
         public CodeGuess(Answer a, List<int> g)
@@ -161,7 +165,7 @@ public class PuzzleCode : Puzzle
                 bool done = false;
                 for (int j = 0; j < answer.state.Count; j++)
                 {
-                    if (!done && i != j && !used[j] && answer.state[j] == guess[i])
+                    if (!done && i != j && !used[j] && answer.state[j] == guess[i] && answer.state[j] != guess[j])
                     {
                         r++;
                         done = true;
