@@ -37,7 +37,19 @@ public class PuzzleCode : Puzzle
         }
     }
 
-    public 
+    public void AddGuess(List<int> g)
+    {
+        guess.Add(new CodeGuess(answer, g));
+    }
+
+    public bool Solved()
+    {
+        if (guess[guess.Count - 1].Correct())
+        {
+            return true;
+        }
+        return false;
+    }
 
     override public string ToString(string id)
     {
