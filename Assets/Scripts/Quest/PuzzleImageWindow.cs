@@ -49,7 +49,7 @@ public class PuzzleImageWindow
             imageSprite[i] = new Sprite[questPuzzle.puzzleAltLevel];
             for (int j = 0; j < questPuzzle.puzzleAltLevel; j++)
             {
-                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, j * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1);
+                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, (questPuzzle.puzzleAltLevel - (j + 1)) * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1);
             }
         }
 
@@ -71,9 +71,10 @@ public class PuzzleImageWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
+        bool solved = puzzle.Solved();
         foreach (KeyValuePair<PuzzleImage.TilePosition, PuzzleImage.TilePosition> kv in puzzle.state)
         {
-            Draw(kv.Key, kv.Value);
+            Draw(kv.Key, kv.Value, solved);
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), "Moves:");
@@ -90,7 +91,7 @@ public class PuzzleImageWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        if (puzzle.Solved())
+        if (solved)
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
@@ -102,7 +103,7 @@ public class PuzzleImageWindow
         }
     }
 
-    public void Draw(PuzzleImage.TilePosition screenPos, PuzzleImage.TilePosition imgPos)
+    public void Draw(PuzzleImage.TilePosition screenPos, PuzzleImage.TilePosition imgPos, bool solved)
     {
         Game game = Game.Get();
         // Create object
@@ -121,6 +122,10 @@ public class PuzzleImageWindow
         image.sprite = imageSprite[imgPos.x][imgPos.y];
         image.rectTransform.sizeDelta = new Vector2(width * UIScaler.GetPixelsPerUnit(), height * UIScaler.GetPixelsPerUnit());
 
+        if (solved)
+        {
+            return;
+        }
         BlockSlider slider = gameObject.AddComponent<BlockSlider>();
         slider.screenPos = screenPos;
         slider.win = this;
@@ -178,10 +183,10 @@ public class PuzzleImageWindow
             }
             if (Input.GetMouseButtonDown(0))
             {
-                if (Input.mousePosition.x < trans.position.x) return;
-                if (Input.mousePosition.y < trans.position.y - trans.rect.height) return;
-                if (Input.mousePosition.x > trans.position.x + trans.rect.width) return;
-                if (Input.mousePosition.y > trans.position.y) return;
+                if (Input.mousePosition.x < trans.position.x - (trans.rect.width / 2f)) return;
+                if (Input.mousePosition.y < trans.position.y - (trans.rect.height / 2f)) return;
+                if (Input.mousePosition.x > trans.position.x + (trans.rect.width / 2f)) return;
+                if (Input.mousePosition.y > trans.position.y + (trans.rect.height / 2f)) return;
                 sliding = true;
                 mouseStart = Input.mousePosition;
                 transStart = trans.anchoredPosition;
@@ -190,6 +195,91 @@ public class PuzzleImageWindow
             if (!sliding)
             {
                 return;
+            }
+
+
+            float yDiff = Input.mousePosition.y - mouseStart.y;
+            float xDiff = Input.mousePosition.x - mouseStart.x;
+
+            if (screenPos.x == 0 && xDiff < 0)
+            {
+                xDiff = 0;
+            }
+
+            if (screenPos.y == 0 && yDiff > 0)
+            {
+                yDiff = 0;
+            }
+
+            if (screenPos.x == (win.questPuzzle.puzzleLevel - 1) && xDiff > 0)
+            {
+                xDiff = 0;
+            }
+
+            if (screenPos.y == (win.questPuzzle.puzzleAltLevel - 1) && yDiff < 0)
+            {
+                yDiff = 0;
+            }
+
+            if (xDiff > (win.width * UIScaler.GetPixelsPerUnit()))
+            {
+                xDiff = (win.width * UIScaler.GetPixelsPerUnit());
+            }
+            if (xDiff < -(win.width * UIScaler.GetPixelsPerUnit()))
+            {
+                xDiff = -(win.width * UIScaler.GetPixelsPerUnit());
+            }
+
+            if (yDiff > (win.height * UIScaler.GetPixelsPerUnit()))
+            {
+                yDiff = (win.height * UIScaler.GetPixelsPerUnit());
+            }
+            if (yDiff < -(win.height * UIScaler.GetPixelsPerUnit()))
+            {
+                yDiff = -(win.height * UIScaler.GetPixelsPerUnit());
+            }
+            if (Mathf.Abs(yDiff) > Mathf.Abs(xDiff))
+            {
+                xDiff = 0;
+            }
+            else
+            {
+                yDiff = 0;
+            }
+
+            Vector3 pos = new Vector3(transStart.x, transStart.y, 0);
+            pos.x += xDiff;
+            pos.y += yDiff;
+            trans.anchoredPosition = pos;
+            trans.SetAsLastSibling();
+
+            if (!Input.GetMouseButton(0))
+            {
+                sliding = false;
+                int Xshift = Mathf.RoundToInt(xDiff / (win.width * UIScaler.GetPixelsPerUnit()));
+                int Yshift = -Mathf.RoundToInt(yDiff / (win.height * UIScaler.GetPixelsPerUnit()));
+                if (Yshift != 0 || Xshift != 0)
+                {
+                    win.puzzle.moves++;
+                    PuzzleImage.TilePosition swap = null;
+                    foreach (KeyValuePair<PuzzleImage.TilePosition, PuzzleImage.TilePosition> kv in win.puzzle.state)
+                    {
+                        if ((kv.Key.x == screenPos.x + Xshift) && (kv.Key.y == screenPos.y + Yshift))
+                        {
+                            swap = kv.Key;
+                        }
+                    }
+                    swap.x = screenPos.x;
+                    swap.y = screenPos.y;
+                    screenPos.x += Xshift;
+                    screenPos.y += Yshift;
+                    win.CreateWindow();
+                }
+                else
+                {
+                    pos = new Vector3(transStart.x, transStart.y, 0);
+                    trans.anchoredPosition = pos;
+                }
             }
         }
     }
