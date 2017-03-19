@@ -7,6 +7,7 @@ public class DialogBox {
     // Unity objects for the text and background
     public GameObject textObj;
     public GameObject background;
+    public RectangleBorder border;
 
     // Set the unity object tag
     public void ApplyTag(string tag)
@@ -105,5 +106,19 @@ public class DialogBox {
     {
         textObj.GetComponent<UnityEngine.UI.Text>().font = f;
         textObj.GetComponent<UnityEngine.UI.Text>().material = textObj.GetComponent<UnityEngine.UI.Text>().font.material;
+    }
+
+    public void Destroy()
+    {
+        Object.Destroy(textObj);
+        Object.Destroy(background);
+        if (border == null)
+        {
+            return;
+        }
+        Object.Destroy(border.bLine[0]);
+        Object.Destroy(border.bLine[1]);
+        Object.Destroy(border.bLine[2]);
+        Object.Destroy(border.bLine[3]);
     }
 }

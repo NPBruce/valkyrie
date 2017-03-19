@@ -519,7 +519,6 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
-        public bool longText = false;
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -763,12 +762,6 @@ public class QuestData
                 locationSpecified = false;
                 bool.TryParse(data["maxcam"], out maxCam);
             }
-
-            // Randomise next event setting
-            if (data.ContainsKey("longtext"))
-            {
-                bool.TryParse(data["longtext"], out longText);
-            }
         }
 
         // Check all references when a component name is changed
@@ -982,10 +975,6 @@ public class QuestData
             {
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
-            }
-            if (longText)
-            {
-                r += "longtext=true" + nl;
             }
             return r;
         }
