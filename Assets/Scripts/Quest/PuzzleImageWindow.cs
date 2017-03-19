@@ -33,7 +33,16 @@ public class PuzzleImageWindow
 
         height = 19f / questPuzzle.puzzleAltLevel;
         width = 19f / questPuzzle.puzzleLevel;
-        Texture2D newTex = ContentData.FileToTexture(game.cd.puzzles[questPuzzle.imageType].image);
+
+        Texture2D newTex = null;
+        if (game.cd.puzzles.ContainsKey(questPuzzle.imageType))
+        {
+            newTex = ContentData.FileToTexture(game.cd.puzzles[questPuzzle.imageType].image);
+        }
+        else
+        {
+            newTex = ContentData.FileToTexture(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + questPuzzle.imageType);
+        }
         if (newTex.width > newTex.height)
         {
             height = height * newTex.height / newTex.width;
