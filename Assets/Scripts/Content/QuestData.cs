@@ -371,8 +371,6 @@ public class QuestData
         // Create from ini data
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Location always specified
-            locationSpecified = true;
             typeDynamic = type;
             // First try to a list of specific types
             if (data.ContainsKey("monster"))
@@ -1240,6 +1238,8 @@ public class QuestData
         public string[] activations;
         public string[] traits;
         public string path = "";
+        public int health = 0;
+        public bool healthDefined = false;
 
         // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
@@ -1293,6 +1293,12 @@ public class QuestData
             if (data.ContainsKey("activation"))
             {
                 activations = data["activation"].Split(' ');
+            }
+
+            if (data.ContainsKey("health"))
+            {
+                healthDefined = true;
+                int.TryParse(data["health"], out health);
             }
         }
 
@@ -1359,6 +1365,10 @@ public class QuestData
                     r += s + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (healthDefined)
+            {
+                r += "health=" + health.ToString() + nl;
             }
             return r;
         }

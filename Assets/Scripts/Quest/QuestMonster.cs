@@ -73,6 +73,13 @@ public class QuestMonster : MonsterData
         {
             useMonsterTypeActivations = true;
         }
+
+        // Read activations  from quest data or base type
+        activations = qm.activations;
+        if (activations.Length == 0 && baseObject != null)
+        {
+            useMonsterTypeActivations = true;
+        }
     }
 }
 
