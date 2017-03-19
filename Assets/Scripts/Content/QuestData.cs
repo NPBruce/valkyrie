@@ -976,6 +976,7 @@ public class QuestData
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
             }
+            return r;
         }
 
         // Delayed events have a name and delay value
