@@ -9,6 +9,7 @@ public class InvestigatorItems
     {
         Game game = Game.Get();
 
+        // Add specific items first
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             QuestData.Item item = kv.Value as QuestData.Item;
@@ -16,7 +17,7 @@ public class InvestigatorItems
             {
                 if (item.traits.Length == 0)
                 {
-                    if (item.itemName.Length < 0 && game.cd.items.ContainsKey(item.itemName[0]))
+                    if (item.itemName.Length == 1 && game.cd.items.ContainsKey(item.itemName[0]))
                     {
                         game.quest.items.Add(item.itemName[0]);
                     }

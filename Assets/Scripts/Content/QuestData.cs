@@ -1383,6 +1383,8 @@ public class QuestData
         public string masterActions = "";
         public bool minionFirst = false;
         public bool masterFirst = false;
+        public string moveButton = "";
+        public string move = "";
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1405,6 +1407,14 @@ public class QuestData
             if (data.ContainsKey("minion"))
             {
                 minionActions = data["minion"];
+            }
+            if (data.ContainsKey("move"))
+            {
+                move = data["move"];
+            }
+            if (data.ContainsKey("movebutton"))
+            {
+                moveButton = data["movebutton"];
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1433,6 +1443,14 @@ public class QuestData
             if (minionActions.Length > 0)
             {
                 r += "minion=" + minionActions + nl;
+            }
+            if (move.Length > 0)
+            {
+                r += "move=" + move + nl;
+            }
+            if (moveButton.Length > 0)
+            {
+                r += "movebutton=" + moveButton + nl;
             }
             if (minionFirst)
             {
