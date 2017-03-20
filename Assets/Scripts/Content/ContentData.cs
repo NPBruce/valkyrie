@@ -689,9 +689,14 @@ public class HeroData : GenericData
 public class ItemData : GenericData
 {
     public static new string type = "Item";
+    public bool unique = false;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+        if (name.IndexOf("ItemUnique") == 0)
+        {
+            unique = true;
+        }
     }
 }
 

@@ -34,6 +34,10 @@ public class InvestigatorItems
                 foreach (KeyValuePair<string, ItemData> id in game.cd.items)
                 {
                     bool valid = !game.quest.items.Contains(id.Value.sectionName);
+                    if (id.Value.unique)
+                    {
+                        valid = false;
+                    }
                     foreach (string trait in item.traits)
                     {
                         if (!id.Value.ContainsTrait(trait))
