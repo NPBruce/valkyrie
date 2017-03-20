@@ -185,6 +185,7 @@ public class HeroCanvas : MonoBehaviour {
             if (h.id == id)
             {
                 target = h;
+                break;
             }
         }
 
