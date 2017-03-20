@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 // Window with Monster activation
 public class ActivateDialog {
@@ -22,7 +21,10 @@ public class ActivateDialog {
             Object.Destroy(go);
 
         // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
+        DialogBox db = new DialogBox(
+            new Vector2(15, 0.5f), 
+            new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
+            monster.monsterData.name.Translate());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

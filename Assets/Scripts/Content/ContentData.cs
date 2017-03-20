@@ -889,7 +889,7 @@ public class HorrorData : GenericData
 public class GenericData
 {
     // name from section title or data
-    public string name;
+    public StringKey name;
     // sets from which this belogs (expansions)
     public List<string> sets;
     // section name
@@ -916,13 +916,13 @@ public class GenericData
         // Has the name been specified?
         if (content.ContainsKey("name"))
         {
-            name = content["name"];
-        }
-        else
-        // If not use section name without type as name
+            name = new StringKey(content["name"]);
+        } else
         {
-            name = name_ini.Substring(type.Length);
+            name = new StringKey(name_ini.Substring(type.Length));
         }
+
+
 
         priority = 0;
         if (content.ContainsKey("priority"))

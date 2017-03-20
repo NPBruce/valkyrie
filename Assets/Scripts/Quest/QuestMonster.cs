@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using Assets.Scripts.Content;
+using System.Collections.Generic;
 
 // A monster quest class that is defined by the quest
 public class QuestMonster : MonsterData
@@ -23,10 +23,13 @@ public class QuestMonster : MonsterData
             baseObject = game.cd.monsters[qm.baseMonster];
         }
 
+        // TODO: We get only the name inherited from fixed
+        // monsters. It can be edited in next Pull Request
+        // when Valkyrie is translated
         // Set name
-        name = qm.monsterName;
+        name = new StringKey(qm.monsterName);
         // If name not set use base type
-        if (name.Length == 0 && baseObject != null)
+        if (baseObject != null)
         {
             name = baseObject.name;
         }

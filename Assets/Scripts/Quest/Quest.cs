@@ -966,14 +966,14 @@ public class Quest
                 {
                     saveActivation = new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
                 }
-                currentActivation = new ActivationInstance(saveActivation, monsterData.name);
+                currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
         }
 
         // Create new activation
         public void NewActivation(ActivationData contentActivation)
         {
-            currentActivation = new ActivationInstance(contentActivation, monsterData.name);
+            currentActivation = new ActivationInstance(contentActivation, monsterData.name.Translate());
         }
 
         // Activation instance is requresd to track variables in the activation
@@ -995,7 +995,7 @@ public class Quest
                 }
                 else
                 {
-                    effect = ad.ability.Translate().Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                    effect = ad.ability.Translate().Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name.Translate());
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines

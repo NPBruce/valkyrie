@@ -62,7 +62,7 @@ public class InvestigatorAttack
             }
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
-        attackText = attack.text.Translate().Replace("{0}", monster.monsterData.name).Replace("\\n", "\n");
+        attackText = attack.text.Translate().Replace("{0}", monster.monsterData.name.Translate()).Replace("\\n", "\n");
         Attack();
     }
 

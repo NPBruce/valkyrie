@@ -93,7 +93,7 @@ public class HeroSelection {
         if (hd != null)
         {
             newTex = ContentData.FileToTexture(hd.image);
-            name = hd.name;
+            name = hd.name.Translate();
         }
 
         GameObject heroImg = new GameObject("heroImg" + name);

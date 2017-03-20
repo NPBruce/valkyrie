@@ -321,7 +321,7 @@ public class EventManager
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
-            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name);
+            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
 
             // Random numbers in events
             try
@@ -495,7 +495,7 @@ public class EventManager
         override public string GetText()
         {
             // Monster events have {type} replaced with the selected type
-            return base.GetText().Replace("{type}", cMonster.name);
+            return base.GetText().Replace("{type}", cMonster.name.Translate());
         }
 
         // Unique monsters can have a special name
@@ -506,7 +506,7 @@ public class EventManager
             {
                 return "Master " + cMonster.name;
             }
-            return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
+            return qMonster.uniqueTitle.Replace("{type}", cMonster.name.Translate());
         }
     }
 
