@@ -95,5 +95,7 @@ public class QuestActivation : ActivationData
         minionActions = EventManager.SymbolReplace(qa.minionActions);
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
+        move = qa.move;
+        moveButton = qa.moveButton;
     }
 }
