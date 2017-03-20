@@ -86,7 +86,7 @@ public class PuzzleSlide : Puzzle
         }
         foreach (Block b in state)
         {
-            if (b.Blocks(x,y))
+            if (b.Blocks(x, y))
             {
                 return false;
             }
@@ -234,7 +234,24 @@ public class PuzzleSlide : Puzzle
 
         override public string ToString()
         {
-            return rotation.ToString() + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' +  target;
+            return rotation.ToString() + ',' + xlen + ',' + ylen + ',' + xpos + ',' + ypos + ',' + target;
         }
+    }
+
+    public string HardCodedPuzzle()
+    {
+        string r = "[PuzzleSlidePuzzleFrontDoor]\n";
+        r += "moves=0\n";
+        r += "block0 =False,1,0,0,2,True\n";
+        r += "block1 =False,2,0,0,1,False\n";
+        r += "block2 =True,0,1,5,0,False\n";
+        r += "block3 =True,0,1,4,1,False\n";
+        r += "block4 =False,3,0,0,5,False\n";
+        r += "block5 =False,2,0,0,4,False\n";
+        r += "block6 =False,1,0,2,0,False\n";
+        r += "block7 =False,4,0,0,3,False\n";
+        r += "block8 =True,0,1,5,2,False\n";
+        r += "block9 =False,1,0,4,4,False\n";
+        return r;
     }
 }
