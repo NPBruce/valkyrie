@@ -18,6 +18,7 @@ public class ContentData {
     public Dictionary<string, HorrorData> horrorChecks;
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
+    public Dictionary<string, PuzzleData> puzzles;
 
     public static string ContentPath()
     {
@@ -64,6 +65,9 @@ public class ContentData {
 
         // This has all avilable perils
         perils = new Dictionary<string, PerilData>();
+
+        // This has all avilable puzzle images
+        puzzles = new Dictionary<string, PuzzleData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
@@ -493,6 +497,26 @@ public class ContentData {
                 perils.Add(name, d);
             }
         }
+
+        // Is this a "Puzzle" entry?
+        if (name.IndexOf(PuzzleData.type) == 0)
+        {
+            PuzzleData d = new PuzzleData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!puzzles.ContainsKey(name))
+            {
+                puzzles.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (puzzles[name].priority < d.priority)
+            {
+                puzzles.Remove(name);
+                puzzles.Add(name, d);
+            }
+        }
     }
 
     // Holding class for contentpack data
@@ -666,9 +690,14 @@ public class HeroData : GenericData
 public class ItemData : GenericData
 {
     public static new string type = "Item";
+    public bool unique = false;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+        if (name.IndexOf("ItemUnique") == 0)
+        {
+            unique = true;
+        }
     }
 }
 
@@ -719,6 +748,8 @@ public class ActivationData : GenericData
     public StringKey ability = null;
     public StringKey minionActions = null;
     public StringKey masterActions = null;
+    public StringKey moveButton = null;
+    public StringKey move = null;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -743,6 +774,14 @@ public class ActivationData : GenericData
         if (content.ContainsKey("master"))
         {
             masterActions = new StringKey(content["master"]);
+        }
+        if (content.ContainsKey("movebutton"))
+        {
+            moveButton = new StringKey(content["movebutton"]);
+        }
+        if (content.ContainsKey("move"))
+        {
+            move = new StringKey(content["move"]);
         }
         if (content.ContainsKey("masterfirst"))
         {
@@ -882,6 +921,17 @@ public class HorrorData : GenericData
         {
             monster = content["monster"];
         }
+    }
+}
+
+
+// Class for Puzzle images
+public class PuzzleData : GenericData
+{
+    public static new string type = "Puzzle";
+
+    public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
     }
 }
 

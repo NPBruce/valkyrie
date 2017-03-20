@@ -22,7 +22,7 @@ public class Quest
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
     // A dictionary of puzzle state
-    public Dictionary<string, PuzzleSlide> puzzle;
+    public Dictionary<string, Puzzle> puzzle;
 
     // A count of successes from events
     public Dictionary<string, int> eventQuota;
@@ -79,7 +79,7 @@ public class Quest
         items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
-        puzzle = new Dictionary<string, PuzzleSlide>();
+        puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
@@ -245,12 +245,20 @@ public class Quest
             heroSelection.Add(kv.Key, heroList);
         }
 
-        puzzle = new Dictionary<string, PuzzleSlide>();
+        puzzle = new Dictionary<string, Puzzle>();
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
             if (kv.Key.IndexOf("PuzzleSlide") == 0)
             {
                 puzzle.Add(kv.Key, new PuzzleSlide(kv.Value));
+            }
+            if (kv.Key.IndexOf("PuzzleCode") == 0)
+            {
+                puzzle.Add(kv.Key, new PuzzleCode(kv.Value));
+            }
+            if (kv.Key.IndexOf("PuzzleCode") == 0)
+            {
+                puzzle.Add(kv.Key, new PuzzleImage(kv.Value));
             }
         }
         // Restore event quotas
@@ -514,7 +522,7 @@ public class Quest
             r += m.ToString();
         }
 
-        foreach (KeyValuePair<string, PuzzleSlide> kv in puzzle)
+        foreach (KeyValuePair<string, Puzzle> kv in puzzle)
         {
             r += kv.Value.ToString(kv.Key);
         }
@@ -982,6 +990,7 @@ public class Quest
             public ActivationData ad;
             // String is populated on creation of the activation
             public string effect;
+            public string move;
 
             // Construct activation
             public ActivationInstance(ActivationData contentActivation, string monsterName)
@@ -992,6 +1001,7 @@ public class Quest
                 if (Game.Get().gameType is MoMGameType)
                 {
                     effect = ad.ability.Translate().Replace("{0}", monsterName);
+                    move = ad.move.Translate().Replace("{0}", monsterName);
                 }
                 else
                 {

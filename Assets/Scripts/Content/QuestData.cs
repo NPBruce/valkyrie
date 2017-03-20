@@ -372,8 +372,6 @@ public class QuestData
         // Create from ini data
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Location always specified
-            locationSpecified = true;
             typeDynamic = type;
             // First try to a list of specific types
             if (data.ContainsKey("monster"))
@@ -520,7 +518,6 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
-        public bool longText = false;
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -764,12 +761,6 @@ public class QuestData
                 locationSpecified = false;
                 bool.TryParse(data["maxcam"], out maxCam);
             }
-
-            // Randomise next event setting
-            if (data.ContainsKey("longtext"))
-            {
-                bool.TryParse(data["longtext"], out longText);
-            }
         }
 
         // Check all references when a component name is changed
@@ -984,10 +975,6 @@ public class QuestData
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
             }
-            if (longText)
-            {
-                r += "longtext=true" + nl;
-            }
             return r;
         }
 
@@ -1072,7 +1059,10 @@ public class QuestData
     {
         new public static string type = "Puzzle";
         public string puzzleClass = "slide";
+        public string skill = "{observation}";
         public int puzzleLevel = 4;
+        public int puzzleAltLevel = 3;
+        public string imageType = "";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1089,9 +1079,21 @@ public class QuestData
             {
                 puzzleClass = data["class"];
             }
+            if (data.ContainsKey("image"))
+            {
+                imageType = data["image"];
+            }
+            if (data.ContainsKey("skill"))
+            {
+                skill = data["skill"];
+            }
             if (data.ContainsKey("puzzlelevel"))
             {
                 int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
+            if (data.ContainsKey("puzzlealtlevel"))
+            {
+                int.TryParse(data["puzzlealtlevel"], out puzzleAltLevel);
             }
         }
 
@@ -1105,9 +1107,21 @@ public class QuestData
             {
                 r += "class=" + puzzleClass + nl;
             }
+            if (!skill.Equals("{observation}"))
+            {
+                r += "skill=" + skill + nl;
+            }
+            if (!imageType.Equals(""))
+            {
+                r += "image=" + imageType + nl;
+            }
             if (puzzleLevel != 4)
             {
                 r += "puzzlelevel=" + puzzleLevel + nl;
+            }
+            if (puzzleAltLevel != 3)
+            {
+                r += "puzzlealtlevel=" + puzzleAltLevel + nl;
             }
             return r;
         }
@@ -1225,6 +1239,8 @@ public class QuestData
         public string[] activations;
         public string[] traits;
         public string path = "";
+        public int health = 0;
+        public bool healthDefined = false;
 
         // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
@@ -1278,6 +1294,12 @@ public class QuestData
             if (data.ContainsKey("activation"))
             {
                 activations = data["activation"].Split(' ');
+            }
+
+            if (data.ContainsKey("health"))
+            {
+                healthDefined = true;
+                int.TryParse(data["health"], out health);
             }
         }
 
@@ -1345,6 +1367,10 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+            if (healthDefined)
+            {
+                r += "health=" + health.ToString() + nl;
+            }
             return r;
         }
     }
@@ -1358,6 +1384,8 @@ public class QuestData
         public StringKey masterActions = null;
         public bool minionFirst = false;
         public bool masterFirst = false;
+        public StringKey moveButton = null;
+        public StringKey move = null;
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1380,6 +1408,14 @@ public class QuestData
             if (data.ContainsKey("minion"))
             {
                 minionActions = new StringKey(data["minion"]);
+            }
+            if (data.ContainsKey("move"))
+            {
+                move = new StringKey(data["move"]);
+            }
+            if (data.ContainsKey("movebutton"))
+            {
+                moveButton = new StringKey(data["movebutton"]);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1408,6 +1444,14 @@ public class QuestData
             if (minionActions != null)
             {
                 r += "minion=" + minionActions + nl;
+            }
+            if (move.key.Length > 0)
+            {
+                r += "move=" + move + nl;
+            }
+            if (moveButton.key.Length > 0)
+            {
+                r += "movebutton=" + moveButton + nl;
             }
             if (minionFirst)
             {

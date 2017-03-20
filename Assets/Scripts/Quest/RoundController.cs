@@ -244,10 +244,21 @@ public class RoundController {
     public void EndRound()
     {
         Game game = Game.Get();
+
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
         // Queue end of this round events
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
+
+        if (game.quest.flags.Contains("#eliminatedprev"))
+        {
+            game.quest.eManager.EventTriggerType("Eliminated", false);
+        }
+        if (game.quest.flags.Contains("#eliminated"))
+        {
+            game.quest.flags.Add("#eliminatedprev");
+        }
+
         // This will cause the end of the round if nothing was added
         game.quest.eManager.TriggerEvent();
     }

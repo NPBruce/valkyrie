@@ -29,11 +29,15 @@ public class ActivateDialogMoM : ActivateDialog
             offset += 4.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Monster Attacks", delegate { CreateAttackWindow(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), "The monster attacks.", delegate { CreateAttackWindow(); });
 
         offset += 2.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Unable to Atack", delegate { activated(); });
+        new TextButton(
+            new Vector2(UIScaler.GetHCenter(-9f), offset), 
+            new Vector2(18, 2), 
+            monster.currentActivation.ad.moveButton.Translate(), 
+            delegate { CreateMoveWindow(); });
 
         DrawMonsterIcon();
     }
@@ -52,6 +56,30 @@ public class ActivateDialogMoM : ActivateDialog
             new Vector2(10, offset), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
             monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n"));
+        db.AddBorder();
+
+        offset += 4.5f;
+
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
+
+        DrawMonsterIcon();
+    }
+
+    public void CreateMoveWindow()
+    {
+        if (monster.currentActivation.ad.move.key.Length == 0)
+        {
+            activated();
+            return;
+        }
+
+        Destroyer.Dialog();
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name.Translate());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        float offset = 2.5f;
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.move.Replace("\\n", "\n"));
         db.AddBorder();
 
         offset += 4.5f;

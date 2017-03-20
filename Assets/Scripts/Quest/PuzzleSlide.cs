@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PuzzleSlide
+public class PuzzleSlide : Puzzle
 {
     public List<Block> puzzle;
     public int moves = 0;
@@ -94,7 +94,7 @@ public class PuzzleSlide
         return true;
     }
 
-    public string ToString(string id)
+    override public string ToString(string id)
     {
         string nl = System.Environment.NewLine;
         // General quest state block
