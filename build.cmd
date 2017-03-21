@@ -1,8 +1,6 @@
 mkdir build
 del build\valkyrie.zip
 rmdir /s /q build\batch
-rmdir /s /q content\D2E\ffg
-rmdir /s /q content\MoM\ffg
 mkdir build\batch
 xcopy /E /Y build\unity build\batch
 copy LICENSE build\batch
@@ -11,6 +9,8 @@ copy dotnetzip-license.rtf build\batch
 mkdir build\batch\valkyrie_Data\content
 mkdir build\batch\valkyrie_Data\quests
 xcopy /E /Y content build\batch\valkyrie_Data\content
+rmdir /s /q build\batch\valkyrie_Data\content\D2E\ffg
+rmdir /s /q build\batch\valkyrie_Data\content\MoM\ffg
 xcopy /E /Y quests build\batch\valkyrie_Data\quests
 set /p version=<Assets\Resources\version.txt
 
