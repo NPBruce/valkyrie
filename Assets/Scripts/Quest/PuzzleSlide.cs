@@ -240,9 +240,8 @@ public class PuzzleSlide : Puzzle
 
     public static Dictionary<string, string> HardCodedPuzzle()
     {
-        Dictionary<string, string> content= new Dictionary<string, string>();
+        Dictionary<string, string> content = new Dictionary<string, string>();
         content.Add("moves", "0");
-        content.Add("block0", "False,1,0,0,2,True");
         content.Add("block0", "False,1,0,0,2,True");
         content.Add("block1", "False,2,0,0,1,False");
         content.Add("block2", "True,0,1,5,0,False");
