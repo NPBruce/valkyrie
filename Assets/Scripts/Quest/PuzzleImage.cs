@@ -16,7 +16,7 @@ public class PuzzleImage : Puzzle
         {
             for (int j = 0; j < y; j++)
             {
-                list.Insert(Random.Range(0, list.Count), new TilePosition(x, y));
+                list.Insert(Random.Range(0, list.Count), new TilePosition(i, j));
             }
         }
 
@@ -25,7 +25,7 @@ public class PuzzleImage : Puzzle
         {
             for (int j = 0; j < y; j++)
             {
-                state.Add(new TilePosition(x, y), list[count++]);
+                state.Add(new TilePosition(i, j), list[count++]);
             }
         }
     }

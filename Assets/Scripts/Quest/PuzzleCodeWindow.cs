@@ -10,6 +10,7 @@ public class PuzzleCodeWindow
     QuestData.Puzzle questPuzzle;
     public PuzzleCode puzzle;
     public List<int> guess;
+    public int previousMoves = 0;
 
     public PuzzleCodeWindow(EventManager.Event e)
     {
@@ -22,6 +23,7 @@ public class PuzzleCodeWindow
         if (game.quest.puzzle.ContainsKey(questPuzzle.name))
         {
             puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleCode;
+            previousMoves = puzzle.guess.Count;
         }
         else
         {
@@ -48,7 +50,32 @@ public class PuzzleCodeWindow
                 new TextButton(new Vector2(hPos, 1.5f), new Vector2(2f, 2), i.ToString(), delegate { GuessAdd(tmp); });
                 hPos += 2.5f;
             }
+            hPos = UIScaler.GetHCenter(-13f);
+            for (int i = 1; i <= questPuzzle.puzzleLevel; i++)
+            {
+                if (guess.Count >= i)
+                {
+                    int tmp = i - 1;
+                    new TextButton(new Vector2(hPos, 4f), new Vector2(2f, 2f), guess[tmp].ToString(), delegate { GuessRemove(tmp); });
+                }
+                else
+                {
+                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), "");
+                    db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                    db.AddBorder();
+                }
+                hPos += 2.5f;
+            }
         }
+
+        new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), "Guess", delegate { Guess(); });
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), "Skill:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f), EventManager.SymbolReplace(questPuzzle.skill));
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
 
         float vPos = 7f;
         foreach (PuzzleCode.CodeGuess g in puzzle.guess)
@@ -70,7 +97,7 @@ public class PuzzleCodeWindow
                 db.AddBorder();
                 hPos += 2.5f;
             }
-            for (int i = 0; i < g.CorrectSpot(); i++)
+            for (int i = 0; i < g.CorrectType(); i++)
             {
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
@@ -80,10 +107,17 @@ public class PuzzleCodeWindow
             vPos += 2.5f;
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 13f), new Vector2(6f, 2f), "Moves:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), "Moves:");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 15f), new Vector2(3f, 2f), puzzle.guess.Count.ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), (puzzle.guess.Count - previousMoves).ToString());
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), "Total Moves:");
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), puzzle.guess.Count.ToString());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -101,21 +135,29 @@ public class PuzzleCodeWindow
 
     public void GuessAdd(int symbolType)
     {
-        guess.Add(symbolType);
-
         if (guess.Count >= questPuzzle.puzzleLevel)
         {
-            FinishedGuess();
             return;
         }
         float hPos = UIScaler.GetHCenter(-13f) + (guess.Count * 2.5f);
-        DialogBox db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2f), symbolType.ToString());
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        guess.Add(symbolType);
+
+        int tmp = guess.Count - 1;
+        new TextButton(new Vector2(hPos, 4f), new Vector2(2f, 2f), symbolType.ToString(), delegate { GuessRemove(tmp); });
     }
 
-    public void FinishedGuess()
+    public void GuessRemove(int symbolPos)
     {
+        guess.RemoveAt(symbolPos);
+        CreateWindow();
+    }
+
+    public void Guess()
+    {
+        if (guess.Count < questPuzzle.puzzleLevel)
+        {
+            return;
+        }
         puzzle.AddGuess(guess);
         guess = new List<int>();
         CreateWindow();

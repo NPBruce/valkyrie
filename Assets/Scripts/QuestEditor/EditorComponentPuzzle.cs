@@ -139,9 +139,10 @@ public class EditorComponentPuzzle : EditorComponent
     public void Image()
     {
         List<string> puzzleImage = new List<string>();
-        puzzleImage.Add("A");
-        puzzleImage.Add("B");
-        puzzleImage.Add("C");
+        foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
+        {
+            puzzleImage.Add(kv.Key);
+        }
         imageList = new EditorSelectionList("Select Image", puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();
     }

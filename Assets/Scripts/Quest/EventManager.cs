@@ -171,7 +171,10 @@ public class EventManager
             }
 
             // Display the location(s)
-            game.tokenBoard.AddMonster(qe);
+            if (qe.qEvent.locationSpecified)
+            {
+                game.tokenBoard.AddMonster(qe);
+            }
         }
 
         // Highlight a space on the board
