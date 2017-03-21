@@ -238,20 +238,21 @@ public class PuzzleSlide : Puzzle
         }
     }
 
-    public string HardCodedPuzzle()
+    public static Dictionary<string, string> HardCodedPuzzle()
     {
-        string r = "[PuzzleSlidePuzzleFrontDoor]\n";
-        r += "moves=0\n";
-        r += "block0 =False,1,0,0,2,True\n";
-        r += "block1 =False,2,0,0,1,False\n";
-        r += "block2 =True,0,1,5,0,False\n";
-        r += "block3 =True,0,1,4,1,False\n";
-        r += "block4 =False,3,0,0,5,False\n";
-        r += "block5 =False,2,0,0,4,False\n";
-        r += "block6 =False,1,0,2,0,False\n";
-        r += "block7 =False,4,0,0,3,False\n";
-        r += "block8 =True,0,1,5,2,False\n";
-        r += "block9 =False,1,0,4,4,False\n";
-        return r;
+        Dictionary<string, string> content= new Dictionary<string, string>();
+        content.Add("moves", "0");
+        content.Add("block0", "False,1,0,0,2,True");
+        content.Add("block0", "False,1,0,0,2,True");
+        content.Add("block1", "False,2,0,0,1,False");
+        content.Add("block2", "True,0,1,5,0,False");
+        content.Add("block3", "True,0,1,4,1,False");
+        content.Add("block4", "False,3,0,0,5,False");
+        content.Add("block5", "False,2,0,0,4,False");
+        content.Add("block6", "False,1,0,2,0,False");
+        content.Add("block7", "False,4,0,0,3,False");
+        content.Add("block8", "True,0,1,5,2,False");
+        content.Add("block9", "False,1,0,4,4,False");
+        return content;
     }
 }

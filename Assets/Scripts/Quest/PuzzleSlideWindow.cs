@@ -25,7 +25,9 @@ public class PuzzleSlideWindow
         }
         else
         {
-            puzzle = new PuzzleSlide(questPuzzle.puzzleLevel);
+            // FIXME: dynamic generation too slow
+            //puzzle = new PuzzleSlide(questPuzzle.puzzleLevel);
+            puzzle = new PuzzleSlide(PuzzleSlide.HardCodedPuzzle());
         }
 
         CreateWindow();
