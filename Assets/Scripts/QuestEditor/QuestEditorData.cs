@@ -74,7 +74,7 @@ public class QuestEditorData {
         }
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 22), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(18, 26), "");
         db.AddBorder();
 
         // Heading
@@ -132,7 +132,19 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 18), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(25.5f, 20), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
+        tb = new TextButton(new Vector2(22, 20), new Vector2(9, 1), "UniqueMonster", delegate { ListUniqueMonster(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("UniqueMonster"); }, Color.red);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(22, 22), new Vector2(9, 1), "Activation", delegate { ListActivation(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(32, 22), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(25.5f, 24), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
@@ -293,6 +305,46 @@ public class QuestEditorData {
         game.qed.esl.SelectItem();
     }
 
+    // Create selection list for unique monsters
+    public static void ListUniqueMonster()
+    {
+        Game game = Game.Get();
+
+        List<string> monsters = new List<string>();
+        // This magic string is picked up later for object creation
+        monsters.Add("{NEW:UniqueMonster}");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.UniqueMonster)
+            {
+                monsters.Add(kv.Key);
+            }
+        }
+
+        game.qed.esl = new EditorSelectionList("Select Item", monsters, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+    }
+
+    // Create selection list for unique monsters
+    public static void ListActivation()
+    {
+        Game game = Game.Get();
+
+        List<string> activations = new List<string>();
+        // This magic string is picked up later for object creation
+        activations.Add("{NEW:Activation}");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.Activation)
+            {
+                activations.Add(kv.Key);
+            }
+        }
+
+        game.qed.esl = new EditorSelectionList("Select Item", activations, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+    }
+
     // Select a component from a list
     public void SelectComponent()
     {
@@ -340,6 +392,16 @@ public class QuestEditorData {
         if (name.Equals("{NEW:Item}"))
         {
             qed.NewItem();
+            return;
+        }
+        if (name.Equals("{NEW:UniqueMonster}"))
+        {
+            qed.NewUniqueMonster();
+            return;
+        }
+        if (name.Equals("{NEW:Activation}"))
+        {
+            qed.NewActivation();
             return;
         }
         if (name.Equals("{NEW:Event}"))
@@ -393,6 +455,16 @@ public class QuestEditorData {
         if (game.quest.qd.components[name] is QuestData.Item)
         {
             SelectAsItem(name);
+            return;
+        }
+        if (game.quest.qd.components[name] is QuestData.UniqueMonster)
+        {
+            SelectAsUniqueMonster(name);
+            return;
+        }
+        if (game.quest.qd.components[name] is QuestData.Activation)
+        {
+            SelectAsActivation(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Event)
@@ -479,6 +551,16 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentItem(name));
+    }
+    public static void SelectAsUniqueMonster(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentUniqueMonster(name));
+    }
+    public static void SelectAsActivation(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentActivation(name));
     }
 
     // Create a new tile, use next available number
@@ -587,6 +669,32 @@ public class QuestEditorData {
         }
         game.quest.qd.components.Add("Item" + index, new QuestData.Item("Item" + index));
         SelectComponent("Item" + index);
+    }
+
+    public void NewUniqueMonster()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.quest.qd.components.ContainsKey("UniqueMonster" + index))
+        {
+            index++;
+        }
+        game.quest.qd.components.Add("UniqueMonster" + index, new QuestData.UniqueMonster("UniqueMonster" + index));
+        SelectComponent("UniqueMonster" + index);
+    }
+
+    public void NewActivation()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.quest.qd.components.ContainsKey("Activation" + index))
+        {
+            index++;
+        }
+        game.quest.qd.components.Add("Activation" + index, new QuestData.Activation("Activation" + index));
+        SelectComponent("Activation" + index);
     }
 
     // Delete a component by type

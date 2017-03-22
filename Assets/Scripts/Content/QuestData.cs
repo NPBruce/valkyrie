@@ -349,7 +349,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Monster(string s) : base(s)
         {
-            // Location always specified
+            // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
@@ -1379,12 +1379,19 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
+        //TODO: abilities are loaded from ffg strings, but it can be edited
+        // for ffg abilities this field will be a key but for edited ability
+        // after localization for quests, all abilityes will be keys.
         public StringKey ability = null;
+        // same as ability
         public StringKey minionActions = null;
+        // same as ability
         public StringKey masterActions = null;
         public bool minionFirst = false;
         public bool masterFirst = false;
+        // same as ability
         public StringKey moveButton = null;
+        // same as ability
         public StringKey move = null;
 
         // Create new (editor)

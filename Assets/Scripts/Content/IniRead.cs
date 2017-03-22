@@ -29,6 +29,25 @@ public static class IniRead{
         return ReadFromStringArray(lines, path);
     }
 
+    // Function takes path to ini file and section name
+    // Returns section as string, string dictionary
+    // Returns empty dictionary if not found
+    public static Dictionary<string, string> ReadFromIni(string path, string section)
+    {
+        string[] lines;
+
+        // Read the whole file
+        try
+        {
+            lines = System.IO.File.ReadAllLines(path);
+        }
+        catch (System.Exception)
+        {
+            return null;
+        }
+        // Parse text data
+        return ReadFromStringArray(lines, path, section);
+    }
 
     /// <summary>
     /// Function ini file contents as a string and returns data object 
@@ -123,6 +142,59 @@ public static class IniRead{
         }
 
         return output;
+    }
+    // Parse ini data into data structure
+    public static Dictionary<string, string> ReadFromStringArray(string[] lines, string path, string section)
+    {
+        // Create a dictionary for the section
+        Dictionary<string, string> entryData = new Dictionary<string, string>();
+
+        bool found = false;
+        bool end = false;
+        int i = 0;
+        string find = "[" + section + "]";
+        while (!end && i < lines.Length)
+        {
+            if (found)
+            {
+                if (lines[i].IndexOf('[') == 0)
+                {
+                    end = true;
+                }
+                else
+                {
+                    // If the line is not a comment (starts with ;)
+                    if (lines[i].Length > 0 && lines[i].Trim()[0] != ';')
+                    {
+                        int equalsLocation = lines[i].IndexOf('=');
+                        // Add data as entry with no value
+                        if (equalsLocation == -1)
+                            entryData.Add(lines[i].Trim(), "");
+                        // If there is an = add data as key and value
+                        else
+                        {
+                            string key = lines[i].Substring(0, equalsLocation).Trim();
+                            if (entryData.ContainsKey(key))
+                            {
+                                Debug.Log("Warning: duplicate \"" + key + "\" data in section \"" + section + "\" in " + path + " will be ignored.");
+                            }
+                            else
+                            {
+                                string value = lines[i].Substring(equalsLocation + 1).Trim().Trim('\"');
+                                //string translatedValue = LocalizationRead.FFGLookup(value);
+                                entryData.Add(key, value);
+                            }
+                        }
+                    }
+                }
+            }
+            if (lines[i].IndexOf(find) == 0)
+            {
+                found = true;
+            }
+            i++;
+        }
+        return entryData;
     }
 }
 
