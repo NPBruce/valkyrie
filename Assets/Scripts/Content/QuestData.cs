@@ -348,7 +348,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Monster(string s) : base(s)
         {
-            // Location always specified
+            // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();

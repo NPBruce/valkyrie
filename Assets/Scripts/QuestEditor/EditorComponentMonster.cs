@@ -53,6 +53,20 @@ public class EditorComponentMonster : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        if (!eventComponent.GetType().IsSubclassOf(typeof(QuestData.Event)))
+        {
+            if (!eventComponent.locationSpecified)
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { PositionTypeCycle(); });
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Highlight", delegate { PositionTypeCycle(); });
+            }
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -145,6 +159,11 @@ public class EditorComponentMonster : EditorComponent
         game.tokenBoard.AddHighlight(monsterComponent.location, "MonsterLoc", "editor");
     }
 
+    public void PositionTypeCycle()
+    {
+        eventComponent.locationSpecified = !eventComponent.locationSpecified;
+        Update();
+    }
 
     public void UniqueToggle()
     {
