@@ -229,29 +229,31 @@ public class QuestLoader {
         {
             path = p;
             IniData d = IniRead.ReadFromIni(p + "/quest.ini");
-            if (d == null)
-            {
-                Debug.Log("Warning: Invalid quest:" + p + "/quest.ini!");
-                return;
-            }
+            Dictionary<string, string> d = IniRead.ReadFromIni(p + "/quest.ini", "Quest");
 
-            type = d.Get("Quest", "type");
-            if (type.Length == 0)
+            if (d.ContainsKey("type"))
+            {
+                type = d["type"];
+            }
+            else
             {
                 // Default to D2E to support historical quests
                 type = "D2E";
             }
 
-            name = d.Get("Quest", "name");
-            if (name.Equals(""))
+            if (d.ContainsKey("name"))
+            {
+                name = d["name"];
+            }
+            else
             {
                 Debug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
                 return;
             }
 
-            if (d.Get("Quest", "packs").Length > 0)
+            if (d.ContainsKey("packs") && d["packs"].Length > 0)
             {
-                packs = d.Get("Quest", "packs").Split(' ');
+                packs = d["packs"].Split(' ');
             }
             else
             {
@@ -259,7 +261,10 @@ public class QuestLoader {
             }
 
             // Missing description is OK
-            description = d.Get("Quest", "description");
+            if (d.ContainsKey("description"))
+            {
+                description = d["description"];
+            }
         }
     }
 }
