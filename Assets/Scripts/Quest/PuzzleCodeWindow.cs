@@ -77,6 +77,21 @@ public class PuzzleCodeWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
+        // Guesses window
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 27 * UIScaler.GetPixelsPerUnit());
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         float vPos = 7f;
         foreach (PuzzleCode.CodeGuess g in puzzle.guess)
         {
@@ -85,6 +100,7 @@ public class PuzzleCodeWindow
             {
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), i.ToString());
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                db.background.transform.parent = scrollArea.transform;
                 db.AddBorder();
                 hPos += 2.5f;
             }
@@ -94,6 +110,7 @@ public class PuzzleCodeWindow
             {
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                db.background.transform.parent = scrollArea.transform;
                 db.AddBorder();
                 hPos += 2.5f;
             }
@@ -101,11 +118,13 @@ public class PuzzleCodeWindow
             {
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                db.background.transform.parent = scrollArea.transform;
                 db.AddBorder();
                 hPos += 2.5f;
             }
             vPos += 2.5f;
         }
+        scrollRect.verticalNormalizedPosition = 0f;
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), "Moves:");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
