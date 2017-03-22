@@ -65,11 +65,11 @@ public class EditorComponentActivation : EditorComponent
         TextButton tb = null;
         if (masterFirst)
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "First", delegate { QuestEditorData.ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "First", delegate { ToggleMasterFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { QuestEditorData.ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { ToggleMasterFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -82,11 +82,11 @@ public class EditorComponentActivation : EditorComponent
         db.ApplyTag("editor");
         if (minionFirst)
         {
-            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "First", delegate { QuestEditorData.ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "First", delegate { ToggleMinionFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { QuestEditorData.ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { ToggleMinionFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
