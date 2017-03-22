@@ -51,8 +51,6 @@ public class EditorComponentActivation : EditorComponent
 
     public void Activation()
     {
-        public bool minionFirst = false;
-        public bool masterFirst = false;
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), "Ability:");
         db.ApplyTag("editor");
 
@@ -63,7 +61,7 @@ public class EditorComponentActivation : EditorComponent
         db = new DialogBox(new Vector2(0, 10), new Vector2(15, 1), "Master:");
         db.ApplyTag("editor");
         TextButton tb = null;
-        if (masterFirst)
+        if (activationComponent.masterFirst)
         {
             tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "First", delegate { ToggleMasterFirst(); });
         }
@@ -80,7 +78,7 @@ public class EditorComponentActivation : EditorComponent
 
         db = new DialogBox(new Vector2(0, 19), new Vector2(15, 1), "Minion:");
         db.ApplyTag("editor");
-        if (minionFirst)
+        if (activationComponent.minionFirst)
         {
             tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "First", delegate { ToggleMinionFirst(); });
         }

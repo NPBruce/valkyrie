@@ -228,7 +228,6 @@ public class QuestLoader {
         public Quest(string p)
         {
             path = p;
-            IniData d = IniRead.ReadFromIni(p + "/quest.ini");
             Dictionary<string, string> d = IniRead.ReadFromIni(p + "/quest.ini", "Quest");
 
             if (d.ContainsKey("type"))

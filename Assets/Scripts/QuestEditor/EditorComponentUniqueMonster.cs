@@ -37,7 +37,7 @@ public class EditorComponentUniqueMonster : EditorComponent
         tb.ApplyTag("editor");
 
 
-        db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Base:");
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Base:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 2), new Vector2(18, 1), monsterComponent.baseMonster, delegate { SetBase(); });
@@ -86,19 +86,19 @@ public class EditorComponentUniqueMonster : EditorComponent
         baseESL.SelectItem();
     }
 
-    public void SelectSetBase(int index, int button)
+    public void SelectSetBase()
     {
         if (baseESL.selection.Equals("{NONE}"))
         {
             monsterComponent.baseMonster = "";
-            if (monsterComponent.monsterName == 0)
+            if (monsterComponent.monsterName.Length == 0)
             {
                 SetName();
             }
         }
         else
         {
-            baseMonster = baseESL.selection.Split(" ".ToCharArray())[0];
+            monsterComponent.baseMonster = baseESL.selection.Split(" ".ToCharArray())[0];
         }
         Update();
     }

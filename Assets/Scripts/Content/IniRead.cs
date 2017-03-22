@@ -137,37 +137,37 @@ public static class IniRead{
         Dictionary<string, string> entryData = new Dictionary<string, string>();
 
         bool found = false;
-        bool end = false
+        bool end = false;
         int i = 0;
         string find = "[" + section + "]";
-        while (!end && i < lines.Count)
+        while (!end && i < lines.Length)
         {
             if (found)
             {
-                if (lines[i].indexOf('[') == 0)
+                if (lines[i].IndexOf('[') == 0)
                 {
                     end = true;
                 }
                 else
                 {
                     // If the line is not a comment (starts with ;)
-                    if (l.Length > 0 && l.Trim()[0] != ';')
+                    if (lines[i].Length > 0 && lines[i].Trim()[0] != ';')
                     {
-                        int equalsLocation = l.IndexOf('=');
+                        int equalsLocation = lines[i].IndexOf('=');
                         // Add data as entry with no value
                         if (equalsLocation == -1)
-                            entryData.Add(l.Trim(), "");
+                            entryData.Add(lines[i].Trim(), "");
                         // If there is an = add data as key and value
                         else
                         {
-                            string key = l.Substring(0, equalsLocation).Trim();
+                            string key = lines[i].Substring(0, equalsLocation).Trim();
                             if(entryData.ContainsKey(key))
                             {
                                 Debug.Log("Warning: duplicate \"" + key + "\" data in section \"" + section + "\" in " + path + " will be ignored.");
                             }
                             else
                             {
-                                string value = FFGLookup(l.Substring(equalsLocation + 1).Trim().Trim('\"'));
+                                string value = FFGLookup(lines[i].Substring(equalsLocation + 1).Trim().Trim('\"'));
                                 entryData.Add(key, value);
                             }
                         }
