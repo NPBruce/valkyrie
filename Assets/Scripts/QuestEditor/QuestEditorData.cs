@@ -138,10 +138,10 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("UniqueMonster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 20), new Vector2(9, 1), "Activation", delegate { ListActivation(); });
+        tb = new TextButton(new Vector2(22, 22), new Vector2(9, 1), "Activation", delegate { ListActivation(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 22), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(25.5f, 24), new Vector2(9, 1), "Cancel", delegate { Cancel(); });
