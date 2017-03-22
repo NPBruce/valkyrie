@@ -1235,7 +1235,7 @@ public class QuestData
         public string monsterName = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public StringKey info = null;
+        public StringKey info = StringKey.EmptyStringKey;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1382,17 +1382,17 @@ public class QuestData
         //TODO: abilities are loaded from ffg strings, but it can be edited
         // for ffg abilities this field will be a key but for edited ability
         // after localization for quests, all abilityes will be keys.
-        public StringKey ability = null;
+        public StringKey ability = StringKey.EmptyStringKey;
         // same as ability
-        public StringKey minionActions = null;
+        public StringKey minionActions = StringKey.EmptyStringKey;
         // same as ability
-        public StringKey masterActions = null;
+        public StringKey masterActions = StringKey.EmptyStringKey;
         public bool minionFirst = false;
         public bool masterFirst = false;
         // same as ability
-        public StringKey moveButton = null;
+        public StringKey moveButton = StringKey.EmptyStringKey;
         // same as ability
-        public StringKey move = null;
+        public StringKey move = StringKey.EmptyStringKey;
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1544,9 +1544,9 @@ public class QuestData
     public class Quest
     {
         // Quest name
-        public string nameKey = null;
+        public string name = "";
         // Quest description (currently unused)
-        public string descriptionKey = null;
+        public string description = "";
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils
@@ -1561,7 +1561,7 @@ public class QuestData
         {
             if (iniData.ContainsKey("name"))
             {
-                nameKey = iniData["name"];
+                name = iniData["name"];
             }
 
             // Default to D2E to support historical quests
@@ -1572,7 +1572,7 @@ public class QuestData
             }
             if (iniData.ContainsKey("description"))
             {
-                descriptionKey = iniData["description"];
+                description = iniData["description"];
             }
             if (iniData.ContainsKey("minorperil"))
             {
@@ -1601,8 +1601,8 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
-            r += "name=" + nameKey + nl;
-            r += "description=" + descriptionKey + nl;
+            r += "name=" + name + nl;
+            r += "description=" + description + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minorPeril != 7)

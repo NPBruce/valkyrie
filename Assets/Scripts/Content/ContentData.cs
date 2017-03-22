@@ -704,7 +704,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public StringKey info = null;
+    public StringKey info = StringKey.EmptyStringKey;
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -745,11 +745,11 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public StringKey ability = null;
-    public StringKey minionActions = null;
-    public StringKey masterActions = null;
-    public StringKey moveButton = null;
-    public StringKey move = null;
+    public StringKey ability = StringKey.EmptyStringKey;
+    public StringKey minionActions = StringKey.EmptyStringKey;
+    public StringKey masterActions = StringKey.EmptyStringKey;
+    public StringKey moveButton = StringKey.EmptyStringKey;
+    public StringKey move = StringKey.EmptyStringKey;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -846,7 +846,7 @@ public class AttackData : GenericData
     public static new string type = "Attack";
 
     // Attack text
-    public StringKey text = null;
+    public StringKey text = StringKey.EmptyStringKey;
     // Target type (human, spirit...)
     public string target = "";
     // Attack type (heavy, unarmed)
@@ -880,7 +880,7 @@ public class EvadeData : GenericData
     public static new string type = "Evade";
 
     // Evade text
-    public StringKey text = null;
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -905,7 +905,7 @@ public class HorrorData : GenericData
     public static new string type = "Horror";
 
     // Evade text
-    public StringKey text = null;
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -939,7 +939,7 @@ public class PuzzleData : GenericData
 public class GenericData
 {
     // name from section title or data
-    public StringKey name;
+    public StringKey name = StringKey.EmptyStringKey;
     // sets from which this belogs (expansions)
     public List<string> sets;
     // section name

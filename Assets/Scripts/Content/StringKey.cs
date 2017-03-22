@@ -5,6 +5,11 @@
     /// </summary>
     public class StringKey
     {
+        /// <summary>
+        /// Empty string Key
+        /// </summary>
+        public static StringKey EmptyStringKey = new StringKey("");
+
         public string key { get; set; }
 
         /// <summary>

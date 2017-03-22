@@ -28,11 +28,11 @@ public class EditorComponentQuest : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        dbe1 = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 1), game.quest.qd.quest.nameKey, delegate { UpdateQuestName(); });
+        dbe1 = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 1), game.quest.qd.quest.name, delegate { UpdateQuestName(); });
         dbe1.ApplyTag("editor");
         dbe1.AddBorder();
 
-        dbe2 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 6), game.quest.qd.quest.descriptionKey, delegate { UpdateQuestDesc(); });
+        dbe2 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 6), game.quest.qd.quest.description, delegate { UpdateQuestDesc(); });
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
@@ -93,7 +93,7 @@ public class EditorComponentQuest : EditorComponent
         {
             // TODO: Me must, search quest dictionary for the key and change its
             // translation to the current language
-            game.quest.qd.quest.nameKey = dbe1.uiInput.text;
+            game.quest.qd.quest.name = dbe1.uiInput.text;
         }
     }
 
@@ -102,7 +102,7 @@ public class EditorComponentQuest : EditorComponent
         Game game = Game.Get();
 
         if (!dbe2.uiInput.text.Equals(""))
-            game.quest.qd.quest.descriptionKey = dbe2.uiInput.text;
+            game.quest.qd.quest.description = dbe2.uiInput.text;
     }
 
     public void UpdatePeril(int level)
