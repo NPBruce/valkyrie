@@ -139,6 +139,13 @@ public class Quest
         bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
         bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
 
+        // Set camera
+        float camx, camy, camz;
+        float.TryParse(saveData.Get("Quest", "camx"), out camx);
+        float.TryParse(saveData.Get("Quest", "camy"), out camy);
+        float.TryParse(saveData.Get("Quest", "camz"), out camz);
+        game.cc.gameObject.transform.position = new Vector3(camx, camy, camz);
+
         // Populate DelayedEvents
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -438,6 +445,7 @@ public class Quest
     // Save the quest state to a string for save games and undo
     override public string ToString()
     {
+        //Game game = Game.Get();
         string nl = System.Environment.NewLine;
         // General quest state block
         string r = "[Quest]" + nl;
@@ -458,6 +466,9 @@ public class Quest
         r += "minorPeril=" + minorPeril + nl;
         r += "majorPeril=" + majorPeril + nl;
         r += "deadlyPeril=" + deadlyPeril + nl;
+        r += "camx=" + game.cc.gameObject.transform.position.x + nl;
+        r += "camy=" + game.cc.gameObject.transform.position.y + nl;
+        r += "camz=" + game.cc.gameObject.transform.position.z + nl;
         r += "DelayedEvents=";
 
         // Delayed events have a delay and a name ':' separated
