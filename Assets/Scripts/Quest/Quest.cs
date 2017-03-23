@@ -256,7 +256,7 @@ public class Quest
             {
                 puzzle.Add(kv.Key, new PuzzleCode(kv.Value));
             }
-            if (kv.Key.IndexOf("PuzzleCode") == 0)
+            if (kv.Key.IndexOf("PuzzleImage") == 0)
             {
                 puzzle.Add(kv.Key, new PuzzleImage(kv.Value));
             }
