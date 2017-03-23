@@ -170,8 +170,8 @@ namespace Assets.Scripts.Content
         {
             if (ffgDict != null)
             {
-                try
-                {
+                //try
+                //{
                     EntryI18n valueOut;
 
                     if (ffgDict.tryGetValue(key, out valueOut))
@@ -182,11 +182,11 @@ namespace Assets.Scripts.Content
                     {
                         return key;
                     }
-                }
-                catch (System.Exception e)
+                //}
+                /*catch (System.Exception e)
                 {
                     ValkyrieDebug.Log("Warning: Unable to process imported Localization string with key: " + key + ". Exception:" + e.Message + System.Environment.NewLine);
-                }
+                }*/
             } else
             {
                 ValkyrieDebug.Log("Error: FFG dictionary not loaded");

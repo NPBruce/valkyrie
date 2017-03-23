@@ -144,13 +144,54 @@ namespace Assets.Scripts.Content
                     // if the line is not empty and not slash (/) insert
                     if (rawDict[pos].StartsWith(v + COMMA))
                     {
-                        valueOut = new EntryI18n(this, rawDict[pos]);
+                        valueOut = new EntryI18n(this, GetEntry(pos));
                         Add(valueOut);
                         return true;
                     }
                 }
                 return false;
             }
+        }
+
+        public string GetEntry(int pos)
+        {
+            string r = rawDict[pos];
+            int index = pos + 1;
+            while(!EntryFinished(r) && index < rawDict.Length)
+            {
+                r += Environment.NewLine + rawDict[index++];
+            }
+            return r;
+        }
+
+        public bool EntryFinished(string entry)
+        {
+            bool quote = false;
+            for (int i = 0; i < entry.Length; i++)
+            {
+                char next = '_';
+                if (i < (entry.Length - 1))
+                {
+                    next = entry[i + 1];
+                }
+                if (!quote && entry[i] == '\\' && next == '\\')
+                {
+                    return true;
+                }
+                if (entry[i] == '\"')
+                {
+                    if (next != '\"')
+                    {
+                        quote = !quote;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+            }
+
+            return !quote;
         }
     }
 }
