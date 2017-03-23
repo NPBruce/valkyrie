@@ -91,7 +91,7 @@ public class InvestigatorItems
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
             db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name.Translate());
 
             x++;
             if (x > 4)

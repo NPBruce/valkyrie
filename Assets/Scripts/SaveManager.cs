@@ -29,7 +29,7 @@ class SaveManager
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to write to save file.");
+            ValkyrieDebug.Log("Warning: Unable to write to save file.");
         }
     }
 
@@ -58,7 +58,7 @@ class SaveManager
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
                 {
-                    Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
                     Application.Quit();
                 }
 
@@ -97,7 +97,7 @@ class SaveManager
         }
         catch (System.Exception)
         {
-            Debug.Log("Error: Unable to open save file: " + SaveFile());
+            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile());
             Application.Quit();
         }
     }

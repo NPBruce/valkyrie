@@ -13,7 +13,7 @@ public class EditorComponentDoor : EditorComponent
         Game game = Game.Get();
         doorComponent = game.quest.qd.components[nameIn] as QuestData.Door;
         component = doorComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -59,7 +59,7 @@ public class EditorComponentDoor : EditorComponent
 
         game.tokenBoard.AddHighlight(doorComponent.location, "DoorAnchor", "editor");
 
-        game.quest.ChangeAlpha(doorComponent.name, 1f);
+        game.quest.ChangeAlpha(doorComponent.sectionName, 1f);
     }
 
     public void Rotate()
@@ -72,8 +72,8 @@ public class EditorComponentDoor : EditorComponent
         {
             doorComponent.rotation = 0;
         }
-        Game.Get().quest.Remove(doorComponent.name);
-        Game.Get().quest.Add(doorComponent.name);
+        Game.Get().quest.Remove(doorComponent.sectionName);
+        Game.Get().quest.Add(doorComponent.sectionName);
         Update();
     }
 
@@ -91,8 +91,8 @@ public class EditorComponentDoor : EditorComponent
     public void SelectColour()
     {
         doorComponent.colourName = colorList.selection;
-        Game.Get().quest.Remove(doorComponent.name);
-        Game.Get().quest.Add(doorComponent.name);
+        Game.Get().quest.Remove(doorComponent.sectionName);
+        Game.Get().quest.Add(doorComponent.sectionName);
         Update();
     }
 

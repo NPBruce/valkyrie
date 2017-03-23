@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using UnityEngine;
-using System.Collections.Generic;
 
 // Class to control user configuration of Valkyrie
 // This is a generic system and has no knowledge of the actual configuration structure
@@ -36,7 +34,7 @@ public class ConfigFile
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to write to config file: " + optionsFile + System.Environment.NewLine);
+            ValkyrieDebug.Log("Warning: Unable to write to config file: " + optionsFile + System.Environment.NewLine);
         }
     }
 }

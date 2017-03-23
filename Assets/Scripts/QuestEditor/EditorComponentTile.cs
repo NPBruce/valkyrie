@@ -12,7 +12,7 @@ public class EditorComponentTile : EditorComponent
         Game game = Game.Get();
         tileComponent = game.quest.qd.components[nameIn] as QuestData.Tile;
         component = tileComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -53,7 +53,7 @@ public class EditorComponentTile : EditorComponent
 
         game.tokenBoard.AddHighlight(tileComponent.location, "TileAnchor", "editor");
 
-        game.quest.ChangeAlpha(tileComponent.name, 1f);
+        game.quest.ChangeAlpha(tileComponent.sectionName, 1f);
     }
 
     public void ChangeTileSide()
@@ -98,8 +98,8 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
         tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
-        game.quest.Remove(tileComponent.name);
-        game.quest.Add(tileComponent.name);
+        game.quest.Remove(tileComponent.sectionName);
+        game.quest.Add(tileComponent.sectionName);
         Update();
     }
 
@@ -123,8 +123,8 @@ public class EditorComponentTile : EditorComponent
         }
 
         Game game = Game.Get();
-        game.quest.Remove(tileComponent.name);
-        game.quest.Add(tileComponent.name);
+        game.quest.Remove(tileComponent.sectionName);
+        game.quest.Add(tileComponent.sectionName);
 
         Update();
     }

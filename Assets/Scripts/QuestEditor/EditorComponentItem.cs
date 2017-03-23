@@ -13,7 +13,7 @@ public class EditorComponentItem : EditorComponent
         Game game = Game.Get();
         itemComponent = game.quest.qd.components[nameIn] as QuestData.Item;
         component = itemComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     

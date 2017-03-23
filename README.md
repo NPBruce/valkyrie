@@ -2,12 +2,14 @@
 
 Valkyrie GM for Fantasy Flight Board Games
 
+Inlcudes editor for user built scenarios/quests.
+
 Download here:
 https://github.com/NPBruce/valkyrie/releases
 
-Currently supports Descent: Journeys in the Dark (Second Edition) which requires Descent: Road to Legend to be installed.  One quest and a quest editor in included.
-
-Currently has experimental support for Mansions of Madness Second Edition which requires the Mansions of Madness app to be installed.
+Currently supports:
+* Descent: Journeys in the Dark (Second Edition) which requires Descent: Road to Legend to be installed.  One quest included.
+* Mansions of Madness Second Edition which requires the Mansions of Madness app to be installed.
 
 FFG apps can be downloaded from steam:
 

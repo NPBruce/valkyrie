@@ -13,7 +13,7 @@ public class EditorComponentUniqueMonster : EditorComponent
         Game game = Game.Get();
         monsterComponent = game.quest.qd.components[nameIn] as QuestData.UniqueMonster;
         component = monsterComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -22,12 +22,12 @@ public class EditorComponentUniqueMonster : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), "UniqueMonster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "UniqueMonster", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 0), new Vector2(14, 1), name.Substring("UniqueMonster".Length), delegate { QuestEditorData.ListItem(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("UniqueMonster".Length), delegate { QuestEditorData.ListUniqueMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -53,14 +53,14 @@ public class EditorComponentUniqueMonster : EditorComponent
             nameDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 4), new Vector2(3, 4), "Reset", delegate { ClearName(); });
+                tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), "Reset", delegate { ClearName(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 4), new Vector2(3, 4), "Set", delegate { SetName(); });
+            tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), "Set", delegate { SetName(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
