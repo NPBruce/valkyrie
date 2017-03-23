@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // This class is for drawing hero images on the screen
 public class HeroCanvas : MonoBehaviour {
@@ -47,7 +48,7 @@ public class HeroCanvas : MonoBehaviour {
         if (h.heroData != null)
         {
             frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
-            heroName = h.heroData.name;
+            heroName = h.heroData.name.Translate();
         }
 
         GameObject heroFrame = new GameObject("heroFrame" + heroName);
@@ -184,6 +185,7 @@ public class HeroCanvas : MonoBehaviour {
             if (h.id == id)
             {
                 target = h;
+                break;
             }
         }
 

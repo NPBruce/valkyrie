@@ -358,7 +358,7 @@ public class Quest
         // Check that the component is valid
         if (!game.quest.qd.components.ContainsKey(name))
         {
-            Debug.Log("Error: Unable to create missing quest component: " + name);
+            ValkyrieDebug.Log("Error: Unable to create missing quest component: " + name);
             Application.Quit();
         }
         // Add to active list
@@ -561,7 +561,7 @@ public class Quest
             else
             {
                 // Fatal if not found
-                Debug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.name);
+                ValkyrieDebug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.sectionName);
                 Application.Quit();
             }
 
@@ -570,12 +570,12 @@ public class Quest
             if (newTex == null)
             {
                 // Fatal if missing
-                Debug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
+                ValkyrieDebug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
                 Application.Quit();
             }
 
             // Create a unity object for the tile
-            unityObject = new GameObject("Object" + qTile.name);
+            unityObject = new GameObject("Object" + qTile.sectionName);
             unityObject.tag = "board";
             unityObject.transform.parent = game.boardCanvas.transform;
 
@@ -642,7 +642,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                Debug.Log("Warning: Quest component " + qToken.name + " is using missing token type: " + tokenName);
+                ValkyrieDebug.Log("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName);
                 // Catch for older quests with different types (0.4.0 or older)
                 if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
@@ -656,7 +656,7 @@ public class Quest
             Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image, texPos, texSize);
 
             // Create object
-            unityObject = new GameObject("Object" + qToken.name);
+            unityObject = new GameObject("Object" + qToken.sectionName);
             unityObject.tag = "board";
 
             unityObject.transform.parent = game.tokenCanvas.transform;
@@ -712,12 +712,12 @@ public class Quest
             // Check load worked
             if (newTex == null)
             {
-                Debug.Log("Error: Cannot load door image");
+                ValkyrieDebug.Log("Error: Cannot load door image");
                 Application.Quit();
             }
 
             // Create object
-            unityObject = new GameObject("Object" + qDoor.name);
+            unityObject = new GameObject("Object" + qDoor.sectionName);
             unityObject.tag = "board";
 
             unityObject.transform.parent = game.tokenCanvas.transform;
@@ -750,7 +750,7 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                Debug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.name);
+                ValkyrieDebug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName);
             }
 
             // State with white (used for alpha)
@@ -974,14 +974,14 @@ public class Quest
                 {
                     saveActivation = new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
                 }
-                currentActivation = new ActivationInstance(saveActivation, monsterData.name);
+                currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
         }
 
         // Create new activation
         public void NewActivation(ActivationData contentActivation)
         {
-            currentActivation = new ActivationInstance(contentActivation, monsterData.name);
+            currentActivation = new ActivationInstance(contentActivation, monsterData.name.Translate());
         }
 
         // Activation instance is requresd to track variables in the activation
@@ -1000,12 +1000,12 @@ public class Quest
                 // Note: Random hero selection is NOT kept on load/undo FIXME
                 if (Game.Get().gameType is MoMGameType)
                 {
-                    effect = ad.ability.Replace("{0}", monsterName);
-                    move = ad.move.Replace("{0}", monsterName);
+                    effect = ad.ability.Translate().Replace("{0}", monsterName);
+                    move = ad.move.Translate().Replace("{0}", monsterName);
                 }
                 else
                 {
-                    effect = ad.ability.Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name);
+                    effect = ad.ability.Translate().Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name.Translate());
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines

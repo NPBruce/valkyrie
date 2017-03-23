@@ -11,7 +11,7 @@ public class EditorComponentMPlace : EditorComponent
         Game game = Game.Get();
         mPlaceComponent = game.quest.qd.components[nameIn] as QuestData.MPlace;
         component = mPlaceComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     

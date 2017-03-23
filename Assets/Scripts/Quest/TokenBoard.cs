@@ -58,7 +58,7 @@ public class TokenBoard : MonoBehaviour {
             if (GameObject.FindGameObjectWithTag("dialog") != null)
                 return;
             // Spawn a window with the door/token info
-            game.quest.eManager.QueueEvent(c.GetEvent().name);
+            game.quest.eManager.QueueEvent(c.GetEvent().sectionName);
         }
 
     }
@@ -96,7 +96,7 @@ public class TokenBoard : MonoBehaviour {
         // Check load worked
         if (newTex == null)
         {
-            Debug.Log("Error: Cannot load monster image");
+            ValkyrieDebug.Log("Error: Cannot load monster image");
             Application.Quit();
         }
 
@@ -133,7 +133,7 @@ public class TokenBoard : MonoBehaviour {
         // Check that placement name exists
         if (!game.quest.qd.components.ContainsKey(place))
         {
-            Debug.Log("Error: Invalid moster place: " + place);
+            ValkyrieDebug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
         }
 
@@ -176,7 +176,7 @@ public class TokenBoard : MonoBehaviour {
         // Check load worked
         if (newTex == null)
         {
-            Debug.Log("Error: Cannot load monster image");
+            ValkyrieDebug.Log("Error: Cannot load monster image");
             Application.Quit();
         }
 
@@ -213,7 +213,7 @@ public class TokenBoard : MonoBehaviour {
         // Check load worked
         if (newTex == null)
         {
-            Debug.Log("Error: Cannot load monster image");
+            ValkyrieDebug.Log("Error: Cannot load monster image");
             Application.Quit();
         }
 

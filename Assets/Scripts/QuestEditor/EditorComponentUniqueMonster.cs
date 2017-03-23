@@ -13,7 +13,7 @@ public class EditorComponentUniqueMonster : EditorComponent
         Game game = Game.Get();
         monsterComponent = game.quest.qd.components[nameIn] as QuestData.UniqueMonster;
         component = monsterComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
