@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.Content;
 
 // Class for managing quest events
 public class EventManager
@@ -327,6 +328,10 @@ public class EventManager
         virtual public string GetText()
         {
             string text = qEvent.text;
+            if (qEvent is PerilData)
+            {
+                text = new StringKey(qEvent.text).Translate();
+            }
 
             // Default door text
             if (qEvent is QuestData.Door && text.Length == 0)
@@ -376,6 +381,15 @@ public class EventManager
             // Determine if no buttons should be displayed
             if (!ButtonsPresent())
             {
+                return buttons;
+            }
+
+            if (qEvent is PerilData)
+            {
+                foreach (string s in qEvent.buttons)
+                {
+                    buttons.Add(new DialogWindow.EventButton(new StringKey(s).Translate()));
+                }
                 return buttons;
             }
 
