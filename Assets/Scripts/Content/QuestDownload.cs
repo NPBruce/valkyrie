@@ -129,7 +129,7 @@ public class QuestDownload : MonoBehaviour
         if (!string.IsNullOrEmpty(download.error))
         {
             // fixme not fatal
-            Debug.Log(download.error);
+            ValkyrieDebug.Log(download.error);
             Application.Quit();
         }
         call();

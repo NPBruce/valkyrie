@@ -16,7 +16,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         Game game = Game.Get();
         eventComponent = game.quest.qd.components[nameIn] as QuestData.Event;
         component = eventComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     

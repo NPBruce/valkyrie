@@ -240,7 +240,7 @@ namespace Unity_Studio
             a_Stream.ReadInt16();
             int childrenCount = a_Stream.ReadInt32();
 
-            //Debug.WriteLine(baseFormat + " " + baseName + " " + childrenCount);
+            //ValkyrieDebug.WriteLine(baseFormat + " " + baseName + " " + childrenCount);
             cb.AppendFormat("{0}{1} {2} {3}\r\n", (new string('\t', level)), varType, varName, size);
             for (int i = 0; i < childrenCount; i++) { readBase(cb, level + 1); }
         }
@@ -350,8 +350,8 @@ namespace Unity_Studio
                     if (index == 0) { className = varTypeStr + " " + varNameStr; }
                     else { classVarStr.AppendFormat("{0}{1} {2} {3}\r\n", (new string('\t', level)), varTypeStr, varNameStr, size); }
 
-                    //for (int t = 0; t < level; t++) { Debug.Write("\t"); }
-                    //Debug.WriteLine(varTypeStr + " " + varNameStr + " " + size);
+                    //for (int t = 0; t < level; t++) { ValkyrieDebug.Write("\t"); }
+                    //ValkyrieDebug.WriteLine(varTypeStr + " " + varNameStr + " " + size);
                 }
                 a_Stream.Position += stringSize;
 

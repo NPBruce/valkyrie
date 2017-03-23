@@ -93,7 +93,7 @@ public class HeroSelection {
         if (hd != null)
         {
             newTex = ContentData.FileToTexture(hd.image);
-            name = hd.name;
+            name = hd.sectionName;
         }
 
         GameObject heroImg = new GameObject("heroImg" + name);
@@ -158,9 +158,10 @@ public class HeroSelection {
         HeroData hData = null;
         foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
         {
-            if (hd.Value.name.Equals(name))
+            if (hd.Value.sectionName.Equals(name))
             {
                 hData = hd.Value;
+                break;
             }
         }
         foreach (Quest.Hero h in game.quest.heroes)
@@ -168,6 +169,7 @@ public class HeroSelection {
             if (h.id == id)
             {
                 h.heroData = hData;
+                break;
             }
         }
 

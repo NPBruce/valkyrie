@@ -90,7 +90,11 @@ public class EditorComponentQuest : EditorComponent
         Game game = Game.Get();
 
         if (!dbe1.uiInput.text.Equals(""))
+        {
+            // TODO: Me must, search quest dictionary for the key and change its
+            // translation to the current language
             game.quest.qd.quest.name = dbe1.uiInput.text;
+        }
     }
 
     public void UpdateQuestDesc()

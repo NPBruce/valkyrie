@@ -76,7 +76,7 @@ public class QuestEditor {
         }
         catch (System.Exception)
         {
-            Debug.Log("Error: Failed to save quest in editor.");
+            ValkyrieDebug.Log("Error: Failed to save quest in editor.");
             Application.Quit();
         }
 

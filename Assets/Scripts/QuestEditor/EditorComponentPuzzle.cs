@@ -16,7 +16,7 @@ public class EditorComponentPuzzle : EditorComponent
         Game game = Game.Get();
         puzzleComponent = game.quest.qd.components[nameIn] as QuestData.Puzzle;
         component = puzzleComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     

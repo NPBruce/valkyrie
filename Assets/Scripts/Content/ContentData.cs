@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
@@ -89,14 +90,14 @@ public class ContentData {
             // Todo: better error handling
             if (d == null)
             {
-                Debug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
             pack.name = d.Get("ContentPack", "name");
             if (pack.name.Equals(""))
             {
-                Debug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
@@ -482,7 +483,7 @@ public class ContentData {
         {
             PerilData d = new PerilData(name, content);
             // Ignore invalid entry
-            if (d.name.Equals(""))
+            if (d.sectionName.Equals(""))
                 return;
             // If we don't already have one then add this
             if (!perils.ContainsKey(name))
@@ -553,14 +554,14 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: DDS Image missing: " + file);
+                ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
             // Check for valid header
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
-                Debug.Log("Warning: Image invalid: " + file);
+                ValkyrieDebug.Log("Warning: Image invalid: " + file);
                 return null;
             }
 
@@ -598,7 +599,7 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Image missing: " + file);
+                ValkyrieDebug.Log("Warning: Image missing: " + file);
                 return null;
             }
         }
@@ -703,7 +704,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public string info = "-";
+    public StringKey info = StringKey.EmptyStringKey;
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -719,7 +720,7 @@ public class MonsterData : GenericData
         // Get usage info
         if (content.ContainsKey("info"))
         {
-            info = content["info"];
+            info = new StringKey(content["info"]);
         }
         if (content.ContainsKey("imageplace"))
         {
@@ -744,11 +745,11 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public string ability = "-";
-    public string minionActions = "-";
-    public string masterActions = "-";
-    public string moveButton = "";
-    public string move = "";
+    public StringKey ability = StringKey.EmptyStringKey;
+    public StringKey minionActions = StringKey.EmptyStringKey;
+    public StringKey masterActions = StringKey.EmptyStringKey;
+    public StringKey moveButton = StringKey.EmptyStringKey;
+    public StringKey move = StringKey.EmptyStringKey;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -762,25 +763,25 @@ public class ActivationData : GenericData
         // Get ability
         if (content.ContainsKey("ability"))
         {
-            ability = content["ability"];
+            ability = new StringKey(content["ability"]);
         }
         // Get minion activation info
         if (content.ContainsKey("minion"))
         {
-            minionActions = content["minion"];
+            minionActions = new StringKey(content["minion"]);
         }
         // Get master activation info
         if (content.ContainsKey("master"))
         {
-            masterActions = content["master"];
+            masterActions = new StringKey(content["master"]);
         }
         if (content.ContainsKey("movebutton"))
         {
-            moveButton = content["movebutton"];
+            moveButton = new StringKey(content["movebutton"]);
         }
         if (content.ContainsKey("move"))
         {
-            move = content["move"];
+            move = new StringKey(content["move"]);
         }
         if (content.ContainsKey("masterfirst"))
         {
@@ -845,7 +846,7 @@ public class AttackData : GenericData
     public static new string type = "Attack";
 
     // Attack text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     // Target type (human, spirit...)
     public string target = "";
     // Attack type (heavy, unarmed)
@@ -856,7 +857,7 @@ public class AttackData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -879,7 +880,7 @@ public class EvadeData : GenericData
     public static new string type = "Evade";
 
     // Evade text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -887,7 +888,7 @@ public class EvadeData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -904,7 +905,7 @@ public class HorrorData : GenericData
     public static new string type = "Horror";
 
     // Evade text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -912,7 +913,7 @@ public class HorrorData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -938,7 +939,7 @@ public class PuzzleData : GenericData
 public class GenericData
 {
     // name from section title or data
-    public string name;
+    public StringKey name = StringKey.EmptyStringKey;
     // sets from which this belogs (expansions)
     public List<string> sets;
     // section name
@@ -965,13 +966,13 @@ public class GenericData
         // Has the name been specified?
         if (content.ContainsKey("name"))
         {
-            name = content["name"];
-        }
-        else
-        // If not use section name without type as name
+            name = new StringKey(content["name"]);
+        } else
         {
-            name = name_ini.Substring(type.Length);
+            name = new StringKey(name_ini.Substring(type.Length));
         }
+
+
 
         priority = 0;
         if (content.ContainsKey("priority"))
