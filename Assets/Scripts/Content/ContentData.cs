@@ -704,7 +704,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public StringKey info = StringKey.EmptyStringKey;
+    public StringKey info = new StringKey("-", false);
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -745,7 +745,7 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public StringKey ability = StringKey.EmptyStringKey;
+    public StringKey ability = new StringKey("-", false);
     public StringKey minionActions = StringKey.EmptyStringKey;
     public StringKey masterActions = StringKey.EmptyStringKey;
     public StringKey moveButton = StringKey.EmptyStringKey;

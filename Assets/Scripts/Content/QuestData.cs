@@ -1281,7 +1281,7 @@ public class QuestData
 
             if (data.ContainsKey("info"))
             {
-                info = new StringKey(data["info"]);
+                info = new StringKey(data["info"], false);
             }
 
             imagePlace = imagePath;
@@ -1406,23 +1406,23 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
-                ability = new StringKey(data["ability"]);
+                ability = new StringKey(data["ability"], false);
             }
             if (data.ContainsKey("master"))
             {
-                masterActions = new StringKey(data["master"]);
+                masterActions = new StringKey(data["master"], false);
             }
             if (data.ContainsKey("minion"))
             {
-                minionActions = new StringKey(data["minion"]);
+                minionActions = new StringKey(data["minion"], false);
             }
             if (data.ContainsKey("move"))
             {
-                move = new StringKey(data["move"]);
+                move = new StringKey(data["move"], false);
             }
             if (data.ContainsKey("movebutton"))
             {
-                moveButton = new StringKey(data["movebutton"]);
+                moveButton = new StringKey(data["movebutton"], false);
             }
             if (data.ContainsKey("minionfirst"))
             {

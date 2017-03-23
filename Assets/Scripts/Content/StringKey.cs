@@ -12,13 +12,16 @@
 
         public string key { get; set; }
 
+        private bool preventLookup = false;
+
         /// <summary>
         /// Basic constructor from a key
         /// </summary>
         /// <param name="newKey">key to translate</param>
-        public StringKey(string newKey)
+        public StringKey(string newKey, bool doLookup = true)
         {
             key = newKey;
+            preventLookup = !doLookup;
         }
 
         /// <summary>
@@ -36,7 +39,7 @@
         /// <returns>the text in the current language</returns>
         public string Translate()
         {
-            if (this.isKey())
+            if (this.isKey() && !preventLookup)
             {
                 return LocalizationRead.FFGLookup(this);
             } else

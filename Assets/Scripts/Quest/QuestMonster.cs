@@ -27,9 +27,9 @@ public class QuestMonster : MonsterData
         // monsters. It can be edited in next Pull Request
         // when Valkyrie is translated
         // Set name
-        name = new StringKey(qm.monsterName);
+        name = new StringKey(qm.monsterName, false);
         // If name not set use base type
-        if (baseObject != null)
+        if (name.key.Length == 0 && baseObject != null)
         {
             name = baseObject.name;
         }
@@ -49,7 +49,7 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = qm.info;
+        info = new StringKey(EventManager.SymbolReplace(qm.info.key), false);
         if (info == null && baseObject != null)
         {
             info = baseObject.info;
@@ -92,13 +92,12 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        sectionName = qa.sectionName;
-        ability = qa.ability;
-        masterActions = qa.masterActions;
-        minionActions = qa.minionActions;
+        ability = new StringKey(EventManager.SymbolReplace(qa.ability.key), false);
+        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.key), false);
+        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.key), false);
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
-        move = qa.move;
-        moveButton = qa.moveButton;
+        move = new StringKey(EventManager.SymbolReplace(qa.move.key), false);
+        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.key), false);
     }
 }
