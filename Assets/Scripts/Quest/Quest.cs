@@ -250,15 +250,15 @@ public class Quest
         {
             if (kv.Key.IndexOf("PuzzleSlide") == 0)
             {
-                puzzle.Add(kv.Key, new PuzzleSlide(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleSlide".Length, kv.Key.Length - "PuzzleSlide".Length), new PuzzleSlide(kv.Value));
             }
             if (kv.Key.IndexOf("PuzzleCode") == 0)
             {
-                puzzle.Add(kv.Key, new PuzzleCode(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleCode".Length, kv.Key.Length - "PuzzleCode".Length), new PuzzleCode(kv.Value));
             }
             if (kv.Key.IndexOf("PuzzleImage") == 0)
             {
-                puzzle.Add(kv.Key, new PuzzleImage(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length), new PuzzleImage(kv.Value));
             }
         }
         // Restore event quotas
