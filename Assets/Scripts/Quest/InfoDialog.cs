@@ -16,7 +16,7 @@ public class InfoDialog {
         DialogBox db = new DialogBox(
             new Vector2(10, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 12), 
-            m.monsterData.info.Translate().Replace("\\n", "\n"));
+            m.monsterData.info.Translate());
         db.AddBorder();
 
         // Unique monsters have additional info

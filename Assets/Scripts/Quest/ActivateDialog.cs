@@ -43,12 +43,12 @@ public class ActivateDialog {
         if (master)
         {
             db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
-            activationText = monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n");
+            activationText = monster.currentActivation.ad.masterActions.Translate();
         }
         else
         {
             db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
-            activationText = monster.currentActivation.ad.minionActions.Translate().Replace("\\n", "\n");
+            activationText = monster.currentActivation.ad.minionActions.Translate();
         }
         db.AddBorder();
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
