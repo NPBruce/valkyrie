@@ -44,8 +44,6 @@ public class Game : MonoBehaviour {
     public RoundController roundControl;
     // Class for stage control UI
     public NextStageButton stageUI;
-    // Class for loading screen, handles background threads
-    public LoadingScreen loading;
 
     // Store of the game text imported from FFG app
     public string[] ffgText = null;
@@ -89,8 +87,6 @@ public class Game : MonoBehaviour {
         currentLang = config.data.Get("UserConfig", "currentLang");
 
         roundControl = new RoundController();
-
-        loading = new LoadingScreen();
 
         // Read the version and add it to the log
         TextAsset versionFile = Resources.Load("version") as TextAsset;
@@ -225,8 +221,6 @@ public class Game : MonoBehaviour {
         {
             quest.Update();
         }
-
-        loading.Update();
     }
 
     // This is here to call a function after the frame has been rendered
