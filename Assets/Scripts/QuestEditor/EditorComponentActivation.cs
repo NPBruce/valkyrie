@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 public class EditorComponentActivation : EditorComponent
 {
@@ -16,7 +17,7 @@ public class EditorComponentActivation : EditorComponent
         Game game = Game.Get();
         activationComponent = game.quest.qd.components[nameIn] as QuestData.Activation;
         component = activationComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -25,12 +26,12 @@ public class EditorComponentActivation : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), "Activation", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Activation", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 0), new Vector2(14, 1), name.Substring("Activation".Length), delegate { QuestEditorData.ListItem(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Activation".Length), delegate { QuestEditorData.ListActivation(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -54,7 +55,7 @@ public class EditorComponentActivation : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), "Ability:");
         db.ApplyTag("editor");
 
-        abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability, delegate { UpdateAbility(); });
+        abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability.Translate(), delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
 
@@ -72,7 +73,7 @@ public class EditorComponentActivation : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        masterActionsDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), activationComponent.masterActions, delegate { UpdateMasterActions(); });
+        masterActionsDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), activationComponent.masterActions.Translate(), delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
 
@@ -89,7 +90,7 @@ public class EditorComponentActivation : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        minionActionsDBE = new DialogBoxEditable(new Vector2(0, 20), new Vector2(20, 8), activationComponent.minionActions, delegate { UpdateMinionActions(); });
+        minionActionsDBE = new DialogBoxEditable(new Vector2(0, 20), new Vector2(20, 8), activationComponent.minionActions.Translate(), delegate { UpdateMinionActions(); });
         minionActionsDBE.ApplyTag("editor");
         minionActionsDBE.AddBorder();
     }
@@ -99,27 +100,27 @@ public class EditorComponentActivation : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), "Initial Message:");
         db.ApplyTag("editor");
 
-        abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability, delegate { UpdateAbility(); });
+        abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability.Translate(), delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), "Unable Button:");
 
-        moveButtonDBE = new DialogBoxEditable(new Vector2(10, 10), new Vector2(10, 1), activationComponent.moveButton, delegate { UpdateMoveButton(); });
+        moveButtonDBE = new DialogBoxEditable(new Vector2(10, 10), new Vector2(10, 1), activationComponent.moveButton.Translate(), delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag("editor");
         moveButtonDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 11), new Vector2(20, 1), "Attack Message:");
         db.ApplyTag("editor");
 
-        masterActionsDBE = new DialogBoxEditable(new Vector2(0, 12), new Vector2(20, 8), activationComponent.masterActions, delegate { UpdateMasterActions(); });
+        masterActionsDBE = new DialogBoxEditable(new Vector2(0, 12), new Vector2(20, 8), activationComponent.masterActions.Translate(), delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(20, 1), "No Attack Message:");
         db.ApplyTag("editor");
 
-        moveDBE = new DialogBoxEditable(new Vector2(0, 21), new Vector2(20, 8), activationComponent.move, delegate { UpdateMove(); });
+        moveDBE = new DialogBoxEditable(new Vector2(0, 21), new Vector2(20, 8), activationComponent.move.Translate(), delegate { UpdateMove(); });
         moveDBE.ApplyTag("editor");
         moveDBE.AddBorder();
     }
@@ -128,7 +129,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!abilityDBE.uiInput.text.Equals(""))
         {
-            activationComponent.ability = abilityDBE.uiInput.text;
+            activationComponent.ability = new StringKey(abilityDBE.uiInput.text);
         }
     }
 
@@ -136,7 +137,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!moveButtonDBE.uiInput.text.Equals(""))
         {
-            activationComponent.moveButton = moveButtonDBE.uiInput.text;
+            activationComponent.moveButton = new StringKey(moveButtonDBE.uiInput.text);
         }
     }
 
@@ -144,7 +145,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!masterActionsDBE.uiInput.text.Equals(""))
         {
-            activationComponent.masterActions = masterActionsDBE.uiInput.text;
+            activationComponent.masterActions = new StringKey(masterActionsDBE.uiInput.text);
         }
     }
 
@@ -152,7 +153,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!minionActionsDBE.uiInput.text.Equals(""))
         {
-            activationComponent.minionActions = minionActionsDBE.uiInput.text;
+            activationComponent.minionActions = new StringKey(minionActionsDBE.uiInput.text);
         }
     }
 
@@ -160,7 +161,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!moveDBE.uiInput.text.Equals(""))
         {
-            activationComponent.move = moveDBE.uiInput.text;
+            activationComponent.move = new StringKey(moveDBE.uiInput.text);
         }
     }
 

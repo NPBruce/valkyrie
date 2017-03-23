@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -40,18 +41,18 @@ public class QuestData
     // Populate data
     public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
+        ValkyrieDebug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
         questActivations = new Dictionary<string, ActivationData>();
 
         // Read the main quest file
-        IniData d = IniRead.ReadFromIni(questPath);
+        IniData questIniData = IniRead.ReadFromIni(questPath);
         // Failure to read quest is fatal
-        if(d == null)
+        if(questIniData == null)
         {
-            Debug.Log("Failed to load quest from: \"" + questPath + "\"");
+            ValkyrieDebug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
         }
 
@@ -61,9 +62,9 @@ public class QuestData
         files.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(d.Get("QuestData") != null)
+        if(questIniData.Get("QuestData") != null)
         {
-            foreach (string file in d.Get("QuestData").Keys)
+            foreach (string file in questIniData.Get("QuestData").Keys)
             {
                 // path is relative to the main file (absolute not supported)
                 files.Add(Path.GetDirectoryName(questPath) + "/" + file);
@@ -73,15 +74,15 @@ public class QuestData
         foreach (string f in files)
         {
             // Read each file
-            d = IniRead.ReadFromIni(f);
+            questIniData = IniRead.ReadFromIni(f);
             // Failure to read a file is fatal
-            if (d == null)
+            if (questIniData == null)
             {
-                Debug.Log("Unable to read quest file: \"" + f + "\"");
+                ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
             // Loop through all ini sections
-            foreach (KeyValuePair<string, Dictionary<string, string>> section in d.data)
+            foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
                 AddData(section.Key, section.Value, Path.GetDirectoryName(f));
@@ -95,7 +96,7 @@ public class QuestData
         // Fatal error on duplicates
         if(components.ContainsKey(name))
         {
-            Debug.Log("Duplicate component in quest: " + name);
+            ValkyrieDebug.Log("Duplicate component in quest: " + name);
             Application.Quit();
         }
 
@@ -202,7 +203,7 @@ public class QuestData
             else
             {
                 // Fatal if missing
-                Debug.Log("Error: No TileSide specified in quest component: " + name);
+                ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);
                 Application.Quit();
             }
         }
@@ -1137,7 +1138,7 @@ public class QuestData
         public static string type = "";
         public string typeDynamic = "";
         // name of section in ini file
-        public string name;
+        public string sectionName;
         // image for display
         public UnityEngine.UI.Image image;
 
@@ -1145,7 +1146,7 @@ public class QuestData
         public QuestComponent(string nameIn)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
             location = Vector2.zero;
         }
 
@@ -1153,7 +1154,7 @@ public class QuestData
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
 
             // Default to 0, 0 unless specified
             location = new Vector2(0, 0);
@@ -1214,7 +1215,7 @@ public class QuestData
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
-            string r = "[" + name + "]" + nl;
+            string r = "[" + sectionName + "]" + nl;
             if (locationSpecified)
             {
                 r += "xposition=" + location.x + nl;
@@ -1234,7 +1235,7 @@ public class QuestData
         public string monsterName = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public string info = "";
+        public StringKey info = StringKey.EmptyStringKey;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1244,7 +1245,7 @@ public class QuestData
         // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
         {
-            monsterName = name;
+            monsterName = sectionName;
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1280,7 +1281,7 @@ public class QuestData
 
             if (data.ContainsKey("info"))
             {
-                info = data["info"];
+                info = new StringKey(data["info"], false);
             }
 
             imagePlace = imagePath;
@@ -1345,7 +1346,7 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            if (info.Length > 0)
+            if (info != null)
             {
                 r += "info=" + info + nl;
             }
@@ -1378,13 +1379,20 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
-        public string ability = "";
-        public string minionActions = "";
-        public string masterActions = "";
+        //TODO: abilities are loaded from ffg strings, but it can be edited
+        // for ffg abilities this field will be a key but for edited ability
+        // after localization for quests, all abilityes will be keys.
+        public StringKey ability = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey minionActions = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey masterActions = StringKey.EmptyStringKey;
         public bool minionFirst = false;
         public bool masterFirst = false;
-        public string moveButton = "";
-        public string move = "";
+        // same as ability
+        public StringKey moveButton = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey move = StringKey.EmptyStringKey;
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1398,23 +1406,23 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
-                ability = data["ability"];
+                ability = new StringKey(data["ability"], false);
             }
             if (data.ContainsKey("master"))
             {
-                masterActions = data["master"];
+                masterActions = new StringKey(data["master"], false);
             }
             if (data.ContainsKey("minion"))
             {
-                minionActions = data["minion"];
+                minionActions = new StringKey(data["minion"], false);
             }
             if (data.ContainsKey("move"))
             {
-                move = data["move"];
+                move = new StringKey(data["move"], false);
             }
             if (data.ContainsKey("movebutton"))
             {
-                moveButton = data["movebutton"];
+                moveButton = new StringKey(data["movebutton"], false);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1432,23 +1440,23 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if (ability.Length > 0)
+            if (ability != null)
             {
                 r += "ability=" + ability + nl;
             }
-            if (masterActions.Length > 0)
+            if (masterActions != null)
             {
                 r += "master=" + masterActions + nl;
             }
-            if (minionActions.Length > 0)
+            if (minionActions != null)
             {
                 r += "minion=" + minionActions + nl;
             }
-            if (move.Length > 0)
+            if (move.key.Length > 0)
             {
                 r += "move=" + move + nl;
             }
-            if (moveButton.Length > 0)
+            if (moveButton.key.Length > 0)
             {
                 r += "movebutton=" + moveButton + nl;
             }
@@ -1549,38 +1557,38 @@ public class QuestData
         public string[] packs;
 
         // Create from ini data
-        public Quest(Dictionary<string, string> data)
+        public Quest(Dictionary<string, string> iniData)
         {
-            if (data.ContainsKey("name"))
+            if (iniData.ContainsKey("name"))
             {
-                name = data["name"];
+                name = iniData["name"];
             }
 
             // Default to D2E to support historical quests
             type = "D2E";
-            if (data.ContainsKey("type"))
+            if (iniData.ContainsKey("type"))
             {
-                type = data["type"];
+                type = iniData["type"];
             }
-            if (data.ContainsKey("description"))
+            if (iniData.ContainsKey("description"))
             {
-                description = data["description"];
+                description = iniData["description"];
             }
-            if (data.ContainsKey("minorperil"))
+            if (iniData.ContainsKey("minorperil"))
             {
-                int.TryParse(data["minorperil"], out minorPeril);
+                int.TryParse(iniData["minorperil"], out minorPeril);
             }
-            if (data.ContainsKey("majorperil"))
+            if (iniData.ContainsKey("majorperil"))
             {
-                int.TryParse(data["majorperil"], out majorPeril);
+                int.TryParse(iniData["majorperil"], out majorPeril);
             }
-            if (data.ContainsKey("deadlyperil"))
+            if (iniData.ContainsKey("deadlyperil"))
             {
-                int.TryParse(data["deadlyperil"], out deadlyPeril);
+                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
             }
-            if (data.ContainsKey("packs"))
+            if (iniData.ContainsKey("packs"))
             {
-                packs = data["packs"].Split(' ');
+                packs = iniData["packs"].Split(' ');
             }
             else
             {
@@ -1594,7 +1602,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
-            r += "description=\"" + description + "\"" + nl;
+            r += "description=" + description + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minorPeril != 7)

@@ -21,9 +21,9 @@ public class PuzzleImageWindow
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
-        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            puzzle = game.quest.puzzle[questPuzzle.name] as PuzzleImage;
+            puzzle = game.quest.puzzle[questPuzzle.sectionName] as PuzzleImage;
             previousMoves = puzzle.moves;
         }
         else
@@ -144,11 +144,11 @@ public class PuzzleImageWindow
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.name);
+            game.quest.puzzle.Remove(questPuzzle.sectionName);
         }
-        game.quest.puzzle.Add(questPuzzle.name, puzzle);
+        game.quest.puzzle.Add(questPuzzle.sectionName, puzzle);
 
         game.quest.eManager.currentEvent = null;
         game.quest.eManager.currentEvent = null;
@@ -159,9 +159,9 @@ public class PuzzleImageWindow
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.name))
+        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.name);
+            game.quest.puzzle.Remove(questPuzzle.sectionName);
         }
 
         game.quest.eManager.EndEvent();

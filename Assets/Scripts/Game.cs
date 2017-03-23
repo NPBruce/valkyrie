@@ -45,9 +45,6 @@ public class Game : MonoBehaviour {
     // Class for stage control UI
     public NextStageButton stageUI;
 
-    // Store of the game text imported from FFG app
-    public string[] ffgText = null;
-
     // Current language
     public string currentLang;
 
@@ -86,13 +83,26 @@ public class Game : MonoBehaviour {
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
+
+        // TODO: Here the ValkyrieDict should be loaded
+        /*
+        try
+        {
+            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromLocalization("", currentLang);
+        }
+        catch (System.Exception e)
+        {
+            ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
+        }
+        */
+
         roundControl = new RoundController();
 
         // Read the version and add it to the log
         TextAsset versionFile = Resources.Load("version") as TextAsset;
         version = versionFile.text.Trim();
         // The newline at the end stops the stack trace appearing in the log
-        Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
+        ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
         new GameSelectionScreen();
@@ -106,7 +116,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 
@@ -131,7 +141,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 

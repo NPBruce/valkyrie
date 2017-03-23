@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Content;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -104,6 +105,7 @@ namespace Assets.Scripts.UI.Screens
             if (!fcD2E.NeedImport())
             {
                 Game.Get().gameType = new D2EGameType();
+                loadLocalization();
                 Destroyer.MainMenu();
             }
         }
@@ -128,7 +130,24 @@ namespace Assets.Scripts.UI.Screens
                 Game.Get().gameType = new MoMGameType();
                 // MoM also has a special reound controller
                 Game.Get().roundControl = new RoundControllerMoM();
+                loadLocalization();
                 Destroyer.MainMenu();
+            }
+        }
+
+        /// <summary>
+        /// After selecting game, we load the localization file
+        /// </summary>
+        private void loadLocalization()
+        {
+            // After content import, we load the localization file
+            if (LocalizationRead.ffgDict == null)
+            {
+                // FFG default language is allways English
+                LocalizationRead.ffgDict = new DictionaryI18n(
+                    System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
+                    DictionaryI18n.DEFAULT_LANG);
+                LocalizationRead.ffgDict.setCurrentLanguage(Game.Get().currentLang);
             }
         }
 

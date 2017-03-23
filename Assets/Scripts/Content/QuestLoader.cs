@@ -142,7 +142,7 @@ public class QuestLoader {
                 }
                 catch (System.Exception)
                 {
-                    Debug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
+                    ValkyrieDebug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
                 }
             }
             mkDir(extractedPath);
@@ -154,7 +154,7 @@ public class QuestLoader {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Unable to read file: " + extractedPath);
+                ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
             }
         }
 
@@ -172,7 +172,7 @@ public class QuestLoader {
             }
             catch (System.Exception)
             {
-                Debug.Log("Error: Unable to create directory: " + p);
+                ValkyrieDebug.Log("Error: Unable to create directory: " + p);
                 Application.Quit();
             }
         }
@@ -212,7 +212,7 @@ public class QuestLoader {
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to remove temporary files.");
+            ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
         }
     }
 
@@ -246,7 +246,7 @@ public class QuestLoader {
             }
             else
             {
-                Debug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
+                ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
                 return;
             }
 
