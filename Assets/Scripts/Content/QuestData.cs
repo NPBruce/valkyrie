@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -40,18 +41,18 @@ public class QuestData
     // Populate data
     public void LoadQuestData()
     {
-        Debug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
+        ValkyrieDebug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
 
         components = new Dictionary<string, QuestComponent>();
         questActivations = new Dictionary<string, ActivationData>();
 
         // Read the main quest file
-        IniData d = IniRead.ReadFromIni(questPath);
+        IniData questIniData = IniRead.ReadFromIni(questPath);
         // Failure to read quest is fatal
-        if(d == null)
+        if(questIniData == null)
         {
-            Debug.Log("Failed to load quest from: \"" + questPath + "\"");
+            ValkyrieDebug.Log("Failed to load quest from: \"" + questPath + "\"");
             Application.Quit();
         }
 
@@ -61,9 +62,9 @@ public class QuestData
         files.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(d.Get("QuestData") != null)
+        if(questIniData.Get("QuestData") != null)
         {
-            foreach (string file in d.Get("QuestData").Keys)
+            foreach (string file in questIniData.Get("QuestData").Keys)
             {
                 // path is relative to the main file (absolute not supported)
                 files.Add(Path.GetDirectoryName(questPath) + "/" + file);
@@ -73,15 +74,15 @@ public class QuestData
         foreach (string f in files)
         {
             // Read each file
-            d = IniRead.ReadFromIni(f);
+            questIniData = IniRead.ReadFromIni(f);
             // Failure to read a file is fatal
-            if (d == null)
+            if (questIniData == null)
             {
-                Debug.Log("Unable to read quest file: \"" + f + "\"");
+                ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
             // Loop through all ini sections
-            foreach (KeyValuePair<string, Dictionary<string, string>> section in d.data)
+            foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
                 AddData(section.Key, section.Value, Path.GetDirectoryName(f));
@@ -95,7 +96,7 @@ public class QuestData
         // Fatal error on duplicates
         if(components.ContainsKey(name))
         {
-            Debug.Log("Duplicate component in quest: " + name);
+            ValkyrieDebug.Log("Duplicate component in quest: " + name);
             Application.Quit();
         }
 
@@ -133,6 +134,16 @@ public class QuestData
         if (name.IndexOf(MPlace.type) == 0)
         {
             MPlace c = new MPlace(name, content);
+            components.Add(name, c);
+        }
+        if (name.IndexOf(Item.type) == 0)
+        {
+            Item c = new Item(name, content);
+            components.Add(name, c);
+        }
+        if (name.IndexOf(Puzzle.type) == 0)
+        {
+            Puzzle c = new Puzzle(name, content);
             components.Add(name, c);
         }
         if (name.IndexOf("UniqueMonster") == 0)
@@ -192,7 +203,7 @@ public class QuestData
             else
             {
                 // Fatal if missing
-                Debug.Log("Error: No TileSide specified in quest component: " + name);
+                ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);
                 Application.Quit();
             }
         }
@@ -271,6 +282,7 @@ public class QuestData
     public class Token : Event
     {
         new public static string type = "Token";
+        public int rotation = 0;
         public string tokenName;
 
         // Create new with name (used by editor)
@@ -296,6 +308,11 @@ public class QuestData
             {
                 tokenName = data["type"];
             }
+            // Get rotation if specified
+            if (data.ContainsKey("rotation"))
+            {
+                int.TryParse(data["rotation"], out rotation);
+            }
         }
 
         // Save to string (for editor)
@@ -307,6 +324,10 @@ public class QuestData
             if(!tokenName.Equals("TokenSearch"))
             {
                 r += "type=" + tokenName + nl;
+            }
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
             }
             return r;
         }
@@ -328,7 +349,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Monster(string s) : base(s)
         {
-            // Location always specified
+            // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
@@ -351,8 +372,6 @@ public class QuestData
         // Create from ini data
         public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
-            // Location always specified
-            locationSpecified = true;
             typeDynamic = type;
             // First try to a list of specific types
             if (data.ContainsKey("monster"))
@@ -478,11 +497,9 @@ public class QuestData
         new public static string type = "Event";
         public string text = "";
         public string originalText = "";
-        public string confirmText = "";
-        public string failText = "";
+        public List<string> buttons;
         public string trigger = "";
-        public string[] nextEvent;
-        public string[] failEvent;
+        public List<List<string>> nextEvent;
         public string heroListName = "";
         public int gold = 0;
         public int minHeroes = 0;
@@ -498,13 +515,16 @@ public class QuestData
         public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
+        public bool minCam = false;
+        public bool maxCam = false;
+        public int quota = 0;
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
             typeDynamic = type;
-            nextEvent = new string[0];
-            failEvent = new string[0];
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
             flags = new string[0];
@@ -512,6 +532,8 @@ public class QuestData
             clearFlags = new string[0];
             threat = 0;
             delayedEvents = new List<DelayedEvent>();
+            minCam = false;
+            maxCam = false;
         }
 
         // Create event from ini data
@@ -525,42 +547,82 @@ public class QuestData
             }
             originalText = text;
 
-            // confirm/pass button
-            if (data.ContainsKey("confirmtext"))
-            {
-                confirmText = data["confirmtext"];
-            }
-
-            // fail button
-            if (data.ContainsKey("failtext"))
-            {
-                failText = data["failtext"];
-            }
-
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
             {
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("event"))
+            nextEvent = new List<List<string>>();
+            buttons = new List<string>();
+            int buttonNum = 1;
+            bool moreEvents = true;
+            while (moreEvents)
             {
-                nextEvent = data["event"].Split(' ');
-            }
-            else
-            {
-                nextEvent = new string[0];
+                if (data.ContainsKey("button" + buttonNum))
+                {
+                    buttons.Add(data["button" + buttonNum]);
+
+                    if (data.ContainsKey("event" + buttonNum))
+                    {
+                        if (data["event" + buttonNum].Trim().Length > 0)
+                        {
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                        }
+                        else
+                        {
+                            nextEvent.Add(new List<string>());
+                        }
+                    }
+                    else
+                    {
+                        nextEvent.Add(new List<string>());
+                    }
+                }
+                else
+                {
+                    moreEvents = false;
+                }
+                buttonNum++;
             }
 
-            // Events to trigger on confirm or success
-            if (data.ContainsKey("failevent"))
+            // Legacy support
+            if (nextEvent.Count == 0)
             {
-                failEvent = data["failevent"].Split(' ');
-            }
-            else
-            {
-                failEvent = new string[0];
+                if (data.ContainsKey("event"))
+                {
+                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                }
+                else
+                {
+                    nextEvent.Add(new List<string>());
+                }
+
+                if (data.ContainsKey("confirmtext"))
+                {
+                    buttons.Add(data["confirmtext"]);
+                }
+                else if (data.ContainsKey("failevent"))
+                {
+                    buttons.Add("Pass");
+                }
+                else
+                {
+                    buttons.Add("Confirm");
+                }
+
+                if (data.ContainsKey("failevent"))
+                {
+                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    if (data.ContainsKey("failtext"))
+                    {
+                        buttons.Add(data["failtext"]);
+                    }
+                    else
+                    {
+                        buttons.Add("Fail");
+                    }
+                }
             }
 
             // Heros from another event can be hilighted
@@ -573,6 +635,12 @@ public class QuestData
             if (data.ContainsKey("gold"))
             {
                 int.TryParse(data["gold"], out gold);
+            }
+            
+            // Success quota
+            if (data.ContainsKey("quota"))
+            {
+                int.TryParse(data["quota"], out quota);
             }
             
             // minimum heros required to be selected for event
@@ -681,6 +749,18 @@ public class QuestData
             {
                 bool.TryParse(data["randomevents"], out randomEvents);
             }
+            // Randomise next event setting
+            if (data.ContainsKey("mincam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["mincam"], out minCam);
+            }
+            // Randomise next event setting
+            if (data.ContainsKey("maxcam"))
+            {
+                locationSpecified = false;
+                bool.TryParse(data["maxcam"], out maxCam);
+            }
         }
 
         // Check all references when a component name is changed
@@ -692,26 +772,25 @@ public class QuestData
                 heroListName = newName;
             }
             // a next event is changed
-            for (int i = 0; i < nextEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (nextEvent[i].Equals(oldName))
+                for (int j = 0; j < nextEvent[i].Count; j++)
                 {
-                    nextEvent[i] = newName;
+                    if (nextEvent[i][j].Equals(oldName))
+                    {
+                        nextEvent[i][j] = newName;
+                    }
                 }
             }
             // If next event is deleted, trim array
-            nextEvent = RemoveFromArray(nextEvent, "");
-
-            // a fail event is changed
-            for (int i = 0; i < failEvent.Length; i++)
+            for (int i = 0; i < nextEvent.Count; i++)
             {
-                if (failEvent[i].Equals(oldName))
+                bool removed = true;
+                while (removed)
                 {
-                    failEvent[i] = newName;
+                    removed = nextEvent[i].Remove("");
                 }
             }
-            // If fail event is deleted, trim array
-            failEvent = RemoveFromArray(failEvent, "");
 
             // component to add renamed
             for (int i = 0; i < addComponents.Length; i++)
@@ -763,37 +842,32 @@ public class QuestData
 
             r += "text=\"" + originalText + "\"" + nl;
 
-            if (!confirmText.Equals(""))
-            {
-                r += "confirmtext=\"" + confirmText + "\"" + nl;
-            }
-            if (!failText.Equals(""))
-            {
-                r += "failtext=\"" + failText + "\"" + nl;
-            }
-
             if (highlight)
             {
                 r += "highlight=true" + nl;
             }
-            if (nextEvent.Length > 0)
+
+            int buttonNum = 1;
+            foreach (List<string> l in nextEvent)
             {
-                r += "event=";
-                foreach (string s in nextEvent)
+                r += "event" + buttonNum++ + "=";
+                foreach (string s in l)
                 {
                     r += s + " ";
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (failEvent.Length > 0)
-            {
-                r += "failevent=";
-                foreach (string s in failEvent)
+                if (l.Count > 0)
                 {
-                    r += s + " ";
+                    r = r.Substring(0, r.Length - 1);
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r += nl;
             }
+
+            buttonNum = 1;
+            foreach (string s in buttons)
+            {
+                r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
+            }
+
             if (!heroListName.Equals(""))
             {
                 r += "hero=" + heroListName + nl;
@@ -801,6 +875,10 @@ public class QuestData
             if (gold != 0)
             {
                 r += "gold=" + gold + nl;
+            }
+            if (quota != 0)
+            {
+                r += "quota=" + quota + nl;
             }
             if (minHeroes != 0)
             {
@@ -883,6 +961,20 @@ public class QuestData
             {
                 r += "randomevents=true" + nl;
             }
+            // Randomise next event setting
+            if (minCam)
+            {
+                r += "mincam=true" + nl;
+            }
+            if (maxCam)
+            {
+                r += "maxcam=true" + nl;
+            }
+            if (maxCam || minCam)
+            {
+                r += "xposition=" + location.x + nl;
+                r += "yposition=" + location.y + nl;
+            }
             return r;
         }
 
@@ -962,6 +1054,79 @@ public class QuestData
         }
     }
 
+    // Puzzle component
+    public class Puzzle : Event
+    {
+        new public static string type = "Puzzle";
+        public string puzzleClass = "slide";
+        public string skill = "{observation}";
+        public int puzzleLevel = 4;
+        public int puzzleAltLevel = 3;
+        public string imageType = "";
+
+        // Create a new puzzle with name (editor)
+        public Puzzle(string s) : base(s)
+        {
+            typeDynamic = type;
+        }
+
+        // Construct from ini data
+        public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+
+            if (data.ContainsKey("class"))
+            {
+                puzzleClass = data["class"];
+            }
+            if (data.ContainsKey("image"))
+            {
+                imageType = data["image"];
+            }
+            if (data.ContainsKey("skill"))
+            {
+                skill = data["skill"];
+            }
+            if (data.ContainsKey("puzzlelevel"))
+            {
+                int.TryParse(data["puzzlelevel"], out puzzleLevel);
+            }
+            if (data.ContainsKey("puzzlealtlevel"))
+            {
+                int.TryParse(data["puzzlealtlevel"], out puzzleAltLevel);
+            }
+        }
+
+        // Save to string (editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (!puzzleClass.Equals("slide"))
+            {
+                r += "class=" + puzzleClass + nl;
+            }
+            if (!skill.Equals("{observation}"))
+            {
+                r += "skill=" + skill + nl;
+            }
+            if (!imageType.Equals(""))
+            {
+                r += "image=" + imageType + nl;
+            }
+            if (puzzleLevel != 4)
+            {
+                r += "puzzlelevel=" + puzzleLevel + nl;
+            }
+            if (puzzleAltLevel != 3)
+            {
+                r += "puzzlealtlevel=" + puzzleAltLevel + nl;
+            }
+            return r;
+        }
+    }
+
     // Super class for all quest components
     public class QuestComponent
     {
@@ -973,7 +1138,7 @@ public class QuestData
         public static string type = "";
         public string typeDynamic = "";
         // name of section in ini file
-        public string name;
+        public string sectionName;
         // image for display
         public UnityEngine.UI.Image image;
 
@@ -981,7 +1146,7 @@ public class QuestData
         public QuestComponent(string nameIn)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
             location = Vector2.zero;
         }
 
@@ -989,7 +1154,7 @@ public class QuestData
         public QuestComponent(string nameIn, Dictionary<string, string> data)
         {
             typeDynamic = type;
-            name = nameIn;
+            sectionName = nameIn;
 
             // Default to 0, 0 unless specified
             location = new Vector2(0, 0);
@@ -1050,7 +1215,7 @@ public class QuestData
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
-            string r = "[" + name + "]" + nl;
+            string r = "[" + sectionName + "]" + nl;
             if (locationSpecified)
             {
                 r += "xposition=" + location.x + nl;
@@ -1070,22 +1235,26 @@ public class QuestData
         public string monsterName = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public string info = "";
+        public StringKey info = StringKey.EmptyStringKey;
         public string[] activations;
         public string[] traits;
         public string path = "";
+        public int health = 0;
+        public bool healthDefined = false;
 
         // Create new with name (editor)
         public UniqueMonster(string s) : base(s)
         {
-            monsterName = name;
+            monsterName = sectionName;
             activations = new string[0];
             traits = new string[0];
+            typeDynamic = type;
         }
 
         // Create from ini data
         public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
+            typeDynamic = type;
             path = pathIn;
             // Get base derived monster type
             if (data.ContainsKey("base"))
@@ -1112,7 +1281,7 @@ public class QuestData
 
             if (data.ContainsKey("info"))
             {
-                info = data["info"];
+                info = new StringKey(data["info"], false);
             }
 
             imagePlace = imagePath;
@@ -1125,6 +1294,12 @@ public class QuestData
             if (data.ContainsKey("activation"))
             {
                 activations = data["activation"].Split(' ');
+            }
+
+            if (data.ContainsKey("health"))
+            {
+                healthDefined = true;
+                int.TryParse(data["health"], out health);
             }
         }
 
@@ -1171,7 +1346,7 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            if (info.Length > 0)
+            if (info != null)
             {
                 r += "info=" + info + nl;
             }
@@ -1192,6 +1367,10 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+            if (healthDefined)
+            {
+                r += "health=" + health.ToString() + nl;
+            }
             return r;
         }
     }
@@ -1200,31 +1379,50 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
-        public string ability = "";
-        public string minionActions = "";
-        public string masterActions = "";
+        //TODO: abilities are loaded from ffg strings, but it can be edited
+        // for ffg abilities this field will be a key but for edited ability
+        // after localization for quests, all abilityes will be keys.
+        public StringKey ability = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey minionActions = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey masterActions = StringKey.EmptyStringKey;
         public bool minionFirst = false;
         public bool masterFirst = false;
+        // same as ability
+        public StringKey moveButton = StringKey.EmptyStringKey;
+        // same as ability
+        public StringKey move = StringKey.EmptyStringKey;
 
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            typeDynamic = type;
         }
 
         // Create from ini data
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
+            typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
-                ability = data["ability"];
+                ability = new StringKey(data["ability"], false);
             }
             if (data.ContainsKey("master"))
             {
-                masterActions = data["master"];
+                masterActions = new StringKey(data["master"], false);
             }
             if (data.ContainsKey("minion"))
             {
-                minionActions = data["minion"];
+                minionActions = new StringKey(data["minion"], false);
+            }
+            if (data.ContainsKey("move"))
+            {
+                move = new StringKey(data["move"], false);
+            }
+            if (data.ContainsKey("movebutton"))
+            {
+                moveButton = new StringKey(data["movebutton"], false);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1242,17 +1440,25 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if (ability.Length > 0)
+            if (ability != null)
             {
                 r += "ability=" + ability + nl;
             }
-            if (masterActions.Length > 0)
+            if (masterActions != null)
             {
                 r += "master=" + masterActions + nl;
             }
-            if (minionActions.Length > 0)
+            if (minionActions != null)
             {
                 r += "minion=" + minionActions + nl;
+            }
+            if (move.key.Length > 0)
+            {
+                r += "move=" + move + nl;
+            }
+            if (moveButton.key.Length > 0)
+            {
+                r += "movebutton=" + moveButton + nl;
             }
             if (minionFirst)
             {
@@ -1266,6 +1472,74 @@ public class QuestData
         }
     }
 
+
+    // Scenario starting item
+    public class Item : QuestComponent
+    {
+        new public static string type = "Item";
+        public string[] itemName;
+        public string[] traits;
+
+        // Create new (editor)
+        public Item(string s) : base(s)
+        {
+            typeDynamic = type;
+            itemName = new string[0];
+            traits = new string[1];
+            traits[0] = "weapon";
+        }
+
+        // Create from ini data
+        public Item(string name, Dictionary<string, string> data) : base(name, data)
+        {
+            typeDynamic = type;
+            if (data.ContainsKey("itemname"))
+            {
+                itemName = data["itemname"].Split(' ');
+            }
+            else
+            {
+                itemName = new string[0];
+            }
+            if (data.ContainsKey("traits"))
+            {
+                traits = data["traits"].Split(' ');
+            }
+            else
+            {
+                traits = new string[0];
+            }
+        }
+
+        // Save to string
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            if (itemName.Length > 0)
+            {
+                r += "itemname=";
+                foreach (string s in itemName)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            if (traits.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in traits)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            return r;
+        }
+    }
+
+
     // Quest ini component has special data
     public class Quest
     {
@@ -1273,12 +1547,6 @@ public class QuestData
         public string name = "";
         // Quest description (currently unused)
         public string description = "";
-        // Camera pan limits
-        // TODO: move these to events
-        public int minPanX;
-        public int minPanY;
-        public int maxPanX;
-        public int maxPanY;
         // quest type (MoM, D2E)
         public string type;
         // threat levels to trigger perils
@@ -1289,84 +1557,43 @@ public class QuestData
         public string[] packs;
 
         // Create from ini data
-        public Quest(Dictionary<string, string> data)
+        public Quest(Dictionary<string, string> iniData)
         {
-            maxPanX = 20;
-            maxPanY = 20;
-            minPanX = -20;
-            minPanY = -20;
-
-            if (data.ContainsKey("name"))
+            if (iniData.ContainsKey("name"))
             {
-                name = data["name"];
+                name = iniData["name"];
             }
 
             // Default to D2E to support historical quests
             type = "D2E";
-            if (data.ContainsKey("type"))
+            if (iniData.ContainsKey("type"))
             {
-                type = data["type"];
+                type = iniData["type"];
             }
-            if (data.ContainsKey("description"))
+            if (iniData.ContainsKey("description"))
             {
-                description = data["description"];
+                description = iniData["description"];
             }
-
-            if (data.ContainsKey("maxpanx"))
+            if (iniData.ContainsKey("minorperil"))
             {
-                int.TryParse(data["maxpanx"], out maxPanX);
+                int.TryParse(iniData["minorperil"], out minorPeril);
             }
-            if (data.ContainsKey("maxpany"))
+            if (iniData.ContainsKey("majorperil"))
             {
-                int.TryParse(data["maxpany"], out maxPanY);
+                int.TryParse(iniData["majorperil"], out majorPeril);
             }
-            if (data.ContainsKey("minpanx"))
+            if (iniData.ContainsKey("deadlyperil"))
             {
-                int.TryParse(data["minpanx"], out minPanX);
+                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
             }
-            if (data.ContainsKey("minpany"))
+            if (iniData.ContainsKey("packs"))
             {
-                int.TryParse(data["minpany"], out minPanY);
-            }
-            if (data.ContainsKey("minorperil"))
-            {
-                int.TryParse(data["minorperil"], out minorPeril);
-            }
-            if (data.ContainsKey("majorperil"))
-            {
-                int.TryParse(data["majorperil"], out majorPeril);
-            }
-            if (data.ContainsKey("deadlyperil"))
-            {
-                int.TryParse(data["deadlyperil"], out deadlyPeril);
-            }
-            if (data.ContainsKey("packs"))
-            {
-                packs = data["packs"].Split(' ');
+                packs = iniData["packs"].Split(' ');
             }
             else
             {
                 packs = new string[0];
             }
-
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMaxCam(Vector2 pos)
-        {
-            maxPanX = Mathf.RoundToInt(pos.x);
-            maxPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMax(new Vector2(maxPanX, maxPanY));
-        }
-
-        // Change camera limits (editor)
-        public void SetMinCam(Vector2 pos)
-        {
-            minPanX = Mathf.RoundToInt(pos.x);
-            minPanY = Mathf.RoundToInt(pos.y);
-            CameraController.SetCameraMin(new Vector2(minPanX, minPanY));
         }
 
         // Save to string (editor)
@@ -1375,36 +1602,20 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
             r += "name=" + name + nl;
-            r += "description=\"" + description + "\"" + nl;
+            r += "description=" + description + nl;
             // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
-            if (minPanY != -20)
-            {
-                r += "minpany=" + minPanY + nl;
-            }
-            if (minPanX != -20)
-            {
-                r += "minpanx=" + minPanX + nl;
-            }
-            if (maxPanX != -20)
-            {
-                r += "maxpanx=" + maxPanX + nl;
-            }
-            if (maxPanY != -20)
-            {
-                r += "maxpany=" + maxPanY + nl;
-            }
             if (minorPeril != 7)
             {
-                r += "minorperil=" + maxPanY + nl;
+                r += "minorperil=" + minorPeril + nl;
             }
             if (majorPeril != 10)
             {
-                r += "majorperil=" + maxPanY + nl;
+                r += "majorperil=" + majorPeril + nl;
             }
             if (deadlyPeril != 12)
             {
-                r += "deadlyperil=" + maxPanY + nl;
+                r += "deadlyperil=" + deadlyPeril + nl;
             }
             if (packs.Length > 0)
             {
@@ -1420,4 +1631,3 @@ public class QuestData
         }
     }
 }
-

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // This class is for drawing hero images on the screen
 public class HeroCanvas : MonoBehaviour {
@@ -47,7 +48,7 @@ public class HeroCanvas : MonoBehaviour {
         if (h.heroData != null)
         {
             frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
-            heroName = h.heroData.name;
+            heroName = h.heroData.name.Translate();
         }
 
         GameObject heroFrame = new GameObject("heroFrame" + heroName);
@@ -184,6 +185,7 @@ public class HeroCanvas : MonoBehaviour {
             if (h.id == id)
             {
                 target = h;
+                break;
             }
         }
 
@@ -264,24 +266,21 @@ public class HeroCanvas : MonoBehaviour {
         UpdateImages();
         UpdateStatus();
 
-        // Draw morale if required
-        if (game.gameType.DisplayMorale())
-        {
-            game.moraleDisplay = new MoraleDisplay();
-        }
-
         // Clear off heros if not required
         if (!game.gameType.DisplayHeroes())
         {
             Clean();
         }
 
-        // Create the menu button
-        new MenuButton();
-        // Draw next stage button if required
-        game.stageUI = new NextStageButton();
-
-        // Start the quest
-        game.quest.eManager.EventTriggerType("EventStart");
+        // Draw morale if required
+        if (game.gameType.DisplayMorale())
+        {
+            game.moraleDisplay = new MoraleDisplay();
+            game.QuestStartEvent();
+        }
+        else
+        {
+            new InvestigatorItems();
+        }
     }
 }

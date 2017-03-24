@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -43,8 +45,8 @@ public class Game : MonoBehaviour {
     // Class for stage control UI
     public NextStageButton stageUI;
 
-    // Store of the game text imported from FFG app
-    public string[] ffgText = null;
+    // Current language
+    public string currentLang;
 
     // Set when in quest editor
     public bool editMode = false;
@@ -72,16 +74,38 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+
+        if (config.data.Get("UserConfig") == null)
+        {
+            // English is the default current language
+            config.data.Add("UserConfig", "currentLang", DictionaryI18n.DEFAULT_LANG);
+            config.Save();
+        }
+        currentLang = config.data.Get("UserConfig", "currentLang");
+
+
+        // TODO: Here the ValkyrieDict should be loaded
+        /*
+        try
+        {
+            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromLocalization("", currentLang);
+        }
+        catch (System.Exception e)
+        {
+            ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
+        }
+        */
+
         roundControl = new RoundController();
 
         // Read the version and add it to the log
         TextAsset versionFile = Resources.Load("version") as TextAsset;
         version = versionFile.text.Trim();
         // The newline at the end stops the stack trace appearing in the log
-        Debug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
+        ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
-        new GameSelection();
+        new GameSelectionScreen();
     }
 
     // This is called by 'start quest' on the main menu
@@ -92,7 +116,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 
@@ -106,7 +130,7 @@ public class Game : MonoBehaviour {
         Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
-        new QuestSelection(ql);
+        new QuestSelectionScreen(ql);
     }
 
     // This is called by editor on the main menu
@@ -117,7 +141,7 @@ public class Game : MonoBehaviour {
         // Check if we found anything
         if (cd.GetPacks().Count == 0)
         {
-            Debug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
             Application.Quit();
         }
 
@@ -171,6 +195,18 @@ public class Game : MonoBehaviour {
         quest.morale = count;
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
+    }
+
+    public void QuestStartEvent()
+    {
+        Destroyer.Dialog();
+        // Create the menu button
+        new MenuButton();
+        // Draw next stage button if required
+        stageUI = new NextStageButton();
+
+        // Start the quest
+        quest.eManager.EventTriggerType("EventStart");
     }
 
     // On quitting

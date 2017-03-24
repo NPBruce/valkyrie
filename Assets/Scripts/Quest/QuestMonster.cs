@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using Assets.Scripts.Content;
+using System.Collections.Generic;
 
 // A monster quest class that is defined by the quest
 public class QuestMonster : MonsterData
@@ -23,10 +23,13 @@ public class QuestMonster : MonsterData
             baseObject = game.cd.monsters[qm.baseMonster];
         }
 
+        // TODO: We get only the name inherited from fixed
+        // monsters. It can be edited in next Pull Request
+        // when Valkyrie is translated
         // Set name
-        name = qm.monsterName;
+        name = new StringKey(qm.monsterName, false);
         // If name not set use base type
-        if (name.Length == 0 && baseObject != null)
+        if (name.key.Length == 0 && baseObject != null)
         {
             name = baseObject.name;
         }
@@ -35,7 +38,7 @@ public class QuestMonster : MonsterData
         sets = new List<string>();
 
         // define data
-        sectionName = qm.name;
+        sectionName = qm.sectionName;
         priority = 0;
 
         // Read traits from quest data or base type
@@ -46,8 +49,8 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = EventManager.SymbolReplace(qm.info);
-        if (info.Length == 0 && baseObject != null)
+        info = new StringKey(EventManager.SymbolReplace(qm.info.key), false);
+        if (info == null && baseObject != null)
         {
             info = baseObject.info;
         }
@@ -73,6 +76,13 @@ public class QuestMonster : MonsterData
         {
             useMonsterTypeActivations = true;
         }
+
+        // Read activations  from quest data or base type
+        activations = qm.activations;
+        if (activations.Length == 0 && baseObject != null)
+        {
+            useMonsterTypeActivations = true;
+        }
     }
 }
 
@@ -82,11 +92,12 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        sectionName = qa.name;
-        ability = EventManager.SymbolReplace(qa.ability);
-        masterActions = EventManager.SymbolReplace(qa.masterActions);
-        minionActions = EventManager.SymbolReplace(qa.minionActions);
+        ability = new StringKey(EventManager.SymbolReplace(qa.ability.key), false);
+        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.key), false);
+        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.key), false);
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
+        move = new StringKey(EventManager.SymbolReplace(qa.move.key), false);
+        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.key), false);
     }
 }

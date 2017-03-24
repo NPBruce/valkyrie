@@ -20,7 +20,7 @@ public class InvestigatorEvade {
             Object.Destroy(go);
 
 
-        string text = evades[Random.Range(0, evades.Count)].text.Replace("{0}", m.monsterData.name);
+        string text = evades[Random.Range(0, evades.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 

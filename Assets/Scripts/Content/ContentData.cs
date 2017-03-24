@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
@@ -9,6 +10,7 @@ public class ContentData {
     public List<ContentPack> allPacks;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
+    public Dictionary<string, ItemData> items;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
     public Dictionary<string, AttackData> investigatorAttacks;
@@ -16,6 +18,7 @@ public class ContentData {
     public Dictionary<string, HorrorData> horrorChecks;
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
+    public Dictionary<string, PuzzleData> puzzles;
 
     public static string ContentPath()
     {
@@ -35,6 +38,9 @@ public class ContentData {
 
         // Available heros
         heros = new Dictionary<string, HeroData>();
+
+        // Available items
+        items = new Dictionary<string, ItemData>();
 
         // Available monsters
         monsters = new Dictionary<string, MonsterData>();
@@ -60,6 +66,9 @@ public class ContentData {
         // This has all avilable perils
         perils = new Dictionary<string, PerilData>();
 
+        // This has all avilable puzzle images
+        puzzles = new Dictionary<string, PuzzleData>();
+
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
         foreach (string p in contentFiles)
@@ -81,14 +90,14 @@ public class ContentData {
             // Todo: better error handling
             if (d == null)
             {
-                Debug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
             pack.name = d.Get("ContentPack", "name");
             if (pack.name.Equals(""))
             {
-                Debug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
                 Application.Quit();
             }
 
@@ -283,6 +292,32 @@ public class ContentData {
             }
         }
 
+        // Is this a "Item" entry?
+        if (name.IndexOf(ItemData.type) == 0)
+        {
+            ItemData d = new ItemData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!items.ContainsKey(name))
+            {
+                items.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (items[name].priority < d.priority)
+            {
+                items.Remove(name);
+                items.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (items[name].priority == d.priority)
+            {
+                items[name].sets.Add(packID);
+            }
+        }
+
         // Is this a "Monster" entry?
         if (name.IndexOf(MonsterData.type) == 0)
         {
@@ -448,7 +483,7 @@ public class ContentData {
         {
             PerilData d = new PerilData(name, content);
             // Ignore invalid entry
-            if (d.name.Equals(""))
+            if (d.sectionName.Equals(""))
                 return;
             // If we don't already have one then add this
             if (!perils.ContainsKey(name))
@@ -460,6 +495,26 @@ public class ContentData {
             {
                 perils.Remove(name);
                 perils.Add(name, d);
+            }
+        }
+
+        // Is this a "Puzzle" entry?
+        if (name.IndexOf(PuzzleData.type) == 0)
+        {
+            PuzzleData d = new PuzzleData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!puzzles.ContainsKey(name))
+            {
+                puzzles.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (puzzles[name].priority < d.priority)
+            {
+                puzzles.Remove(name);
+                puzzles.Add(name, d);
             }
         }
     }
@@ -499,14 +554,14 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: DDS Image missing: " + file);
+                ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
                 return null;
             }
             // Check for valid header
             byte ddsSizeCheck = ddsBytes[4];
             if (ddsSizeCheck != 124)
             {
-                Debug.Log("Warning: Image invalid: " + file);
+                ValkyrieDebug.Log("Warning: Image invalid: " + file);
                 return null;
             }
 
@@ -544,7 +599,7 @@ public class ContentData {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Image missing: " + file);
+                ValkyrieDebug.Log("Warning: Image missing: " + file);
                 return null;
             }
         }
@@ -570,6 +625,7 @@ public class TileSideData : GenericData
     public float left = 0;
     public float pxPerSquare;
     public float aspect = 0;
+    public string reverse = "";
     public static new string type = "TileSide";
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -599,6 +655,12 @@ public class TileSideData : GenericData
         {
             float.TryParse(content["aspect"], out aspect);
         }
+
+        // Other side used for validating duplicate use
+        if (content.ContainsKey("reverse"))
+        {
+            reverse = content["reverse"];
+        }
     }
 }
 
@@ -607,6 +669,7 @@ public class HeroData : GenericData
 {
     public string archetype = "warrior";
     public static new string type = "Hero";
+    public string item = "";
 
     public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -615,13 +678,33 @@ public class HeroData : GenericData
         {
             archetype = content["archetype"];
         }
+        // Get starting item
+        if (content.ContainsKey("item"))
+        {
+            item = content["item"];
+        }
+    }
+}
+
+// Class for Item specific data
+public class ItemData : GenericData
+{
+    public static new string type = "Item";
+    public bool unique = false;
+
+    public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        if (name.IndexOf("ItemUnique") == 0)
+        {
+            unique = true;
+        }
     }
 }
 
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public string info = "-";
+    public StringKey info = new StringKey("-", false);
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -637,7 +720,7 @@ public class MonsterData : GenericData
         // Get usage info
         if (content.ContainsKey("info"))
         {
-            info = content["info"];
+            info = new StringKey(content["info"]);
         }
         if (content.ContainsKey("imageplace"))
         {
@@ -662,9 +745,11 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public string ability = "-";
-    public string minionActions = "-";
-    public string masterActions = "-";
+    public StringKey ability = new StringKey("-", false);
+    public StringKey minionActions = StringKey.EmptyStringKey;
+    public StringKey masterActions = StringKey.EmptyStringKey;
+    public StringKey moveButton = StringKey.EmptyStringKey;
+    public StringKey move = StringKey.EmptyStringKey;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -678,17 +763,25 @@ public class ActivationData : GenericData
         // Get ability
         if (content.ContainsKey("ability"))
         {
-            ability = content["ability"];
+            ability = new StringKey(content["ability"]);
         }
         // Get minion activation info
         if (content.ContainsKey("minion"))
         {
-            minionActions = content["minion"];
+            minionActions = new StringKey(content["minion"]);
         }
         // Get master activation info
         if (content.ContainsKey("master"))
         {
-            masterActions = content["master"];
+            masterActions = new StringKey(content["master"]);
+        }
+        if (content.ContainsKey("movebutton"))
+        {
+            moveButton = new StringKey(content["movebutton"]);
+        }
+        if (content.ContainsKey("move"))
+        {
+            move = new StringKey(content["move"]);
         }
         if (content.ContainsKey("masterfirst"))
         {
@@ -708,6 +801,8 @@ public class TokenData : GenericData
     public int y = 0;
     public int height = 0;
     public int width = 0;
+    // 0 means token is 1 square big
+    public float pxPerSquare = 0;
     public static new string type = "Token";
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -730,6 +825,11 @@ public class TokenData : GenericData
         {
             int.TryParse(content["width"], out width);
         }
+        // pixel per D2E square (inch) of image
+        if (content.ContainsKey("pps"))
+        {
+            float.TryParse(content["pps"], out pxPerSquare);
+        }
     }
 
     public bool FullImage()
@@ -746,7 +846,7 @@ public class AttackData : GenericData
     public static new string type = "Attack";
 
     // Attack text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     // Target type (human, spirit...)
     public string target = "";
     // Attack type (heavy, unarmed)
@@ -757,7 +857,7 @@ public class AttackData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -780,7 +880,7 @@ public class EvadeData : GenericData
     public static new string type = "Evade";
 
     // Evade text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -788,7 +888,7 @@ public class EvadeData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -805,7 +905,7 @@ public class HorrorData : GenericData
     public static new string type = "Horror";
 
     // Evade text
-    public string text = "";
+    public StringKey text = StringKey.EmptyStringKey;
     public string monster = "";
 
     public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -813,7 +913,7 @@ public class HorrorData : GenericData
         // Get attack text
         if (content.ContainsKey("text"))
         {
-            text = content["text"];
+            text = new StringKey(content["text"]);
         }
 
         // Get attack target
@@ -824,11 +924,22 @@ public class HorrorData : GenericData
     }
 }
 
+
+// Class for Puzzle images
+public class PuzzleData : GenericData
+{
+    public static new string type = "Puzzle";
+
+    public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+    }
+}
+
 // Super class for all content loaded from content packs
 public class GenericData
 {
     // name from section title or data
-    public string name;
+    public StringKey name = StringKey.EmptyStringKey;
     // sets from which this belogs (expansions)
     public List<string> sets;
     // section name
@@ -855,13 +966,13 @@ public class GenericData
         // Has the name been specified?
         if (content.ContainsKey("name"))
         {
-            name = content["name"];
-        }
-        else
-        // If not use section name without type as name
+            name = new StringKey(content["name"]);
+        } else
         {
-            name = name_ini.Substring(type.Length);
+            name = new StringKey(name_ini.Substring(type.Length));
         }
+
+
 
         priority = 0;
         if (content.ContainsKey("priority"))

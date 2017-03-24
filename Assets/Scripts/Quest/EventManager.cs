@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.Content;
 
 // Class for managing quest events
 public class EventManager
@@ -86,7 +87,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            Debug.Log("Warning: Missing event called: " + name);
+            ValkyrieDebug.Log("Warning: Missing event called: " + name);
             return;
         }
 
@@ -122,14 +123,14 @@ public class EventManager
         // Add set flags
         foreach (string s in e.qEvent.setFlags)
         {
-            Debug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
+            ValkyrieDebug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
             game.quest.flags.Add(s);
         }
 
         // Remove clear flags
         foreach (string s in e.qEvent.clearFlags)
         {
-            Debug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
+            ValkyrieDebug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
             game.quest.flags.Remove(s);
         }
 
@@ -171,7 +172,10 @@ public class EventManager
             }
 
             // Display the location(s)
-            game.tokenBoard.AddMonster(qe);
+            if (qe.qEvent.locationSpecified)
+            {
+                game.tokenBoard.AddMonster(qe);
+            }
         }
 
         // Highlight a space on the board
@@ -192,13 +196,13 @@ public class EventManager
         {
             if (e.qEvent.threat != 0)
             {
-                Debug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
+                ValkyrieDebug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
             }
             game.quest.threat = e.qEvent.threat;
         }
         else if (e.qEvent.threat != 0)
         {
-            Debug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
+            ValkyrieDebug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
         }
 
         // Add delayed events
@@ -213,6 +217,34 @@ public class EventManager
             CameraController.SetCamera(e.qEvent.location);
         }
 
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            QuestData.Puzzle p = e.qEvent as QuestData.Puzzle;
+            if (p.puzzleClass.Equals("slide"))
+            {
+                new PuzzleSlideWindow(e);
+            }
+            if (p.puzzleClass.Equals("code"))
+            {
+                new PuzzleCodeWindow(e);
+            }
+            if (p.puzzleClass.Equals("image"))
+            {
+                new PuzzleImageWindow(e);
+            }
+            return;
+        }
+
+        // Set camera limits
+        if (e.qEvent.minCam)
+        {
+            CameraController.SetCameraMin(e.qEvent.location);
+        }
+        if (e.qEvent.maxCam)
+        {
+            CameraController.SetCameraMax(e.qEvent.location);
+        }
+
         // Only raise dialog if there is text, otherwise auto confirm
         if (e.GetText().Length == 0)
         {
@@ -225,14 +257,13 @@ public class EventManager
     }
 
     // Event ended (pass or set as fail)
-    public void EndEvent(bool fail=false)
+    public void EndEvent(int state=0)
     {
         // Get list of next events
-        string[] eventList = currentEvent.qEvent.nextEvent;
-        if (fail)
+        List<string> eventList = new List<string>();
+        if (currentEvent.qEvent.nextEvent.Count > state)
         {
-            // On fail alternate list
-            eventList = currentEvent.qEvent.failEvent;
+            eventList = currentEvent.qEvent.nextEvent[state];
         }
 
         // Only take enabled events from list
@@ -267,7 +298,7 @@ public class EventManager
         }
 
         // Does this event end the quest?
-        if (currentEvent.qEvent.name.IndexOf("EventEnd") == 0)
+        if (currentEvent.qEvent.sectionName.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
             return;
@@ -297,6 +328,10 @@ public class EventManager
         virtual public string GetText()
         {
             string text = qEvent.text;
+            if (qEvent is PerilData)
+            {
+                text = new StringKey(qEvent.text).Translate();
+            }
 
             // Default door text
             if (qEvent is QuestData.Door && text.Length == 0)
@@ -306,7 +341,7 @@ public class EventManager
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
-            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name);
+            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
 
             // Random numbers in events
             try
@@ -332,67 +367,68 @@ public class EventManager
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
+                ValkyrieDebug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
             }
 
             // Fix new lines and replace symbol text with special characters
             return SymbolReplace(text).Replace("\\n", "\n");
         }
 
-        // Is the confirm button present?
-        public bool ConfirmPresent()
+        public List<DialogWindow.EventButton> GetButtons()
         {
-            // If the event can't be canceled it must have a confirm
+            List<DialogWindow.EventButton> buttons = new List<DialogWindow.EventButton>();
+
+            // Determine if no buttons should be displayed
+            if (!ButtonsPresent())
+            {
+                return buttons;
+            }
+
+            if (qEvent is PerilData)
+            {
+                foreach (string s in qEvent.buttons)
+                {
+                    buttons.Add(new DialogWindow.EventButton(new StringKey(s).Translate()));
+                }
+                return buttons;
+            }
+
+            foreach (string s in qEvent.buttons)
+            {
+                DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(s));
+                // Hack for pass/fail color buttons
+                if (qEvent.nextEvent.Count == 2)
+                {
+                    if (buttons.Count == 0 && eb.label.Equals("Pass"))
+                    {
+                        eb.colour = Color.green;
+                    }
+                    if (buttons.Count == 1 && eb.label.Equals("Fail"))
+                    {
+                        eb.colour = Color.red;
+                    }
+                }
+                buttons.Add(eb);
+            }
+
+            return buttons;
+        }
+
+        // Is the confirm button present?
+        public bool ButtonsPresent()
+        {
+            // If the event can't be canceled it must have buttons
             if (!qEvent.cancelable) return true;
             // Check if any of the next events are enabled
-            foreach (string s in qEvent.nextEvent)
+            foreach (List<string> l in qEvent.nextEvent)
             {
-                if (!game.quest.eManager.events[s].Disabled()) return true;
+                foreach (string s in l)
+                {
+                    if (!game.quest.eManager.events[s].Disabled()) return true;
+                }
             }
-            // Nothing valid, no confirm
+            // Nothing valid, no buttons
             return false;
-        }
-
-        // Is the fail button present?
-        public bool FailPresent()
-        {
-            // Check for any fail events (even if disabled)
-            return (qEvent.failEvent.Length != 0);
-        }
-
-        // Get pass/confirm button text
-        public string GetPass()
-        {
-            // Custom text
-            if (!qEvent.confirmText.Equals("")) return qEvent.confirmText;
-            // no fail button, use Confirm
-            if (qEvent.failEvent.Length == 0) return "Confirm";
-            // fail, use pass
-            return "Pass";
-        }
-
-        // Get fail button text
-        public string GetFail()
-        {
-            // if specified return that
-            if (!qEvent.failText.Equals("")) return qEvent.failText;
-            return "Fail";
-        }
-
-        // Get colour of pass button
-        public Color GetPassColor()
-        {
-            // If it is 'pass' it is green, otherwise white
-            if (GetPass().Equals("Pass")) return Color.green;
-            return Color.white;
-        }
-
-        // Get colour of fail button
-        public Color GetFailColor()
-        {
-            // If it is Fail it is red, otherwise white
-            if (GetFail().Equals("Fail")) return Color.red;
-            return Color.white;
         }
 
         // Is this event disabled?
@@ -407,17 +443,6 @@ public class EventManager
             }
             // No missing flags
             return false;
-        }
-
-        // FIXME These should be removed?
-        public Event Next()
-        {
-            return null;
-        }
-
-        public Event NextFail()
-        {
-            return null;
         }
     }
 
@@ -458,7 +483,7 @@ public class EventManager
                 // No matches or trait match
                 if (qMonster.mTraits.Length == 0)
                 {
-                    Debug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.sectionName);
                     Application.Quit();
                 }
 
@@ -486,7 +511,7 @@ public class EventManager
                 // Not found, throw error
                 if (list.Count == 0)
                 {
-                    Debug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.name);
+                    ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + qMonster.sectionName);
                     Application.Quit();
                 }
 
@@ -499,7 +524,7 @@ public class EventManager
         override public string GetText()
         {
             // Monster events have {type} replaced with the selected type
-            return base.GetText().Replace("{type}", cMonster.name);
+            return base.GetText().Replace("{type}", cMonster.name.Translate());
         }
 
         // Unique monsters can have a special name
@@ -510,7 +535,7 @@ public class EventManager
             {
                 return "Master " + cMonster.name;
             }
-            return qMonster.uniqueTitle.Replace("{type}", cMonster.name);
+            return qMonster.uniqueTitle.Replace("{type}", cMonster.name.Translate());
         }
     }
 
@@ -548,10 +573,11 @@ public class EventManager
         output = output.Replace("{awareness}", "μ");
         output = output.Replace("{shield}", "≤");
         output = output.Replace("{surge}", "±");
-        output = output.Replace("{strenth}", "");
+        output = output.Replace("{strength}", "");
         output = output.Replace("{agility}", "");
         output = output.Replace("{lore}", "");
         output = output.Replace("{influence}", "");
+        output = output.Replace("{observation}", "");
         output = output.Replace("{success}", "");
         output = output.Replace("{clue}", "");
         output = output.Replace("{MAD01}", "");

@@ -12,7 +12,7 @@ public class EditorComponentToken : EditorComponent
         Game game = Game.Get();
         tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
         component = tokenComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -48,15 +48,31 @@ public class EditorComponentToken : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), tokenComponent.tokenName, delegate { Type(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + tokenComponent.rotation + ")", delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), tokenComponent.tokenName, delegate { Type(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        game.quest.ChangeAlpha(tokenComponent.name, 1f);
+        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);
+    }
+
+    public void Rotate()
+    {
+        tokenComponent.rotation += 90;
+        if (tokenComponent.rotation > 300)
+        {
+            tokenComponent.rotation = 0;
+        }
+        Game.Get().quest.Remove(tokenComponent.sectionName);
+        Game.Get().quest.Add(tokenComponent.sectionName);
+        Update();
     }
 
     public void Type()
@@ -84,8 +100,8 @@ public class EditorComponentToken : EditorComponent
     public void SelectType()
     {
         tokenComponent.tokenName = typeList.selection.Split(" ".ToCharArray())[0];
-        Game.Get().quest.Remove(tokenComponent.name);
-        Game.Get().quest.Add(tokenComponent.name);
+        Game.Get().quest.Remove(tokenComponent.sectionName);
+        Game.Get().quest.Add(tokenComponent.sectionName);
         Update();
     }
 }

@@ -20,18 +20,6 @@ public class QuestLoader {
         // Get a list of quest directories (extract found packages)
         List<string> questDirectories = GetQuests(dataLocation);
 
-        // If we are running inside unity paths are different
-        if (Application.isEditor)
-        {
-            dataLocation = Application.dataPath + "/../quests/";
-        }
-        else
-        {
-            dataLocation = Application.dataPath + "/quests/";
-        }
-        // Add included quests (extract found packages)
-        questDirectories.AddRange(GetQuests(dataLocation));
-
         // Add packaged quests that have been extracted
         questDirectories.AddRange(GetQuests(Path.GetTempPath() + "Valkyrie"));
 
@@ -154,7 +142,7 @@ public class QuestLoader {
                 }
                 catch (System.Exception)
                 {
-                    Debug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
+                    ValkyrieDebug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
                 }
             }
             mkDir(extractedPath);
@@ -166,7 +154,7 @@ public class QuestLoader {
             }
             catch (System.Exception)
             {
-                Debug.Log("Warning: Unable to read file: " + extractedPath);
+                ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
             }
         }
 
@@ -184,7 +172,7 @@ public class QuestLoader {
             }
             catch (System.Exception)
             {
-                Debug.Log("Error: Unable to create directory: " + p);
+                ValkyrieDebug.Log("Error: Unable to create directory: " + p);
                 Application.Quit();
             }
         }
@@ -224,7 +212,7 @@ public class QuestLoader {
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to remove temporary files.");
+            ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
         }
     }
 
@@ -240,30 +228,31 @@ public class QuestLoader {
         public Quest(string p)
         {
             path = p;
-            IniData d = IniRead.ReadFromIni(p + "/quest.ini");
-            if (d == null)
-            {
-                Debug.Log("Warning: Invalid quest:" + p + "/quest.ini!");
-                return;
-            }
+            Dictionary<string, string> d = IniRead.ReadFromIni(p + "/quest.ini", "Quest");
 
-            type = d.Get("Quest", "type");
-            if (type.Length == 0)
+            if (d.ContainsKey("type"))
+            {
+                type = d["type"];
+            }
+            else
             {
                 // Default to D2E to support historical quests
                 type = "D2E";
             }
 
-            name = d.Get("Quest", "name");
-            if (name.Equals(""))
+            if (d.ContainsKey("name"))
             {
-                Debug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
+                name = d["name"];
+            }
+            else
+            {
+                ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
                 return;
             }
 
-            if (d.Get("Quest", "packs").Length > 0)
+            if (d.ContainsKey("packs") && d["packs"].Length > 0)
             {
-                packs = d.Get("Quest", "packs").Split(' ');
+                packs = d["packs"].Split(' ');
             }
             else
             {
@@ -271,7 +260,10 @@ public class QuestLoader {
             }
 
             // Missing description is OK
-            description = d.Get("Quest", "description");
+            if (d.ContainsKey("description"))
+            {
+                description = d["description"];
+            }
         }
     }
 }

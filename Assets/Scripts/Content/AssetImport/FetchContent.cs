@@ -37,11 +37,11 @@ public class FetchContent {
         // Add version found to log
         if (ffgVersion.Length != 0)
         {
-            Debug.Log("FFG " + type + " Version Found: " + ffgVersion + System.Environment.NewLine);
+            ValkyrieDebug.Log("FFG " + type + " Version Found: " + ffgVersion + System.Environment.NewLine);
         }
         else
         {
-            Debug.Log("FFG " + type + " not found." + System.Environment.NewLine);
+            ValkyrieDebug.Log("FFG " + type + " not found." + System.Environment.NewLine);
         }
 
         // Check if version is acceptable for import
@@ -138,7 +138,7 @@ public class FetchContent {
         // Legacy assets not supported, shouldn't be old
         if (assetsFile.fileGen < 15)
         {
-            Debug.Log("Invalid asset file: " + assetFile);
+            ValkyrieDebug.Log("Invalid asset file: " + assetFile);
             return;
         }
 
@@ -208,7 +208,7 @@ public class FetchContent {
         }
         catch(System.Exception)
         {
-            Debug.Log("Warning: Unable to create import log");
+            ValkyrieDebug.Log("Warning: Unable to create import log");
         }
     }
 
@@ -222,7 +222,7 @@ public class FetchContent {
         }
         catch (System.Exception)
         {
-            Debug.Log("Warning: Unable to remove temporary files.");
+            ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
             return false;
         }
         if (Directory.Exists(ContentData.ContentPath() + gameType + "/ffg")) return false;

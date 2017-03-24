@@ -93,5 +93,25 @@ public class TextButton {
         uiText.font = f;
         uiText.material = uiText.font.material;
     }
+
+    /// <summary>
+    /// Change the color of entire element
+    /// </summary>
+    /// <param name="c"></param>
+    public void setColor(Color c)
+    {
+        uiText.color = c;
+        border.color = c;
+    }
+
+    public void Destroy()
+    {
+        Object.Destroy(button);
+        Object.Destroy(background);
+        Object.Destroy(border.bLine[0]);
+        Object.Destroy(border.bLine[1]);
+        Object.Destroy(border.bLine[2]);
+        Object.Destroy(border.bLine[3]);
+    }
 }
 

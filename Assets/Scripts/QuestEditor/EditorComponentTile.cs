@@ -12,7 +12,7 @@ public class EditorComponentTile : EditorComponent
         Game game = Game.Get();
         tileComponent = game.quest.qd.components[nameIn] as QuestData.Tile;
         component = tileComponent;
-        name = component.name;
+        name = component.sectionName;
         Update();
     }
     
@@ -53,15 +53,26 @@ public class EditorComponentTile : EditorComponent
 
         game.tokenBoard.AddHighlight(tileComponent.location, "TileAnchor", "editor");
 
-        game.quest.ChangeAlpha(tileComponent.name, 1f);
+        game.quest.ChangeAlpha(tileComponent.sectionName, 1f);
     }
 
     public void ChangeTileSide()
     {
         Game game = Game.Get();
 
-        List<string> sides = new List<string>();
+        // Work out what sides are used
+        HashSet<string> usedSides = new HashSet<string>();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            QuestData.Tile t = kv.Value as QuestData.Tile;
+            if (t != null)
+            {
+                usedSides.Add(t.tileSideName);
+                usedSides.Add(game.cd.tileSides[t.tileSideName].reverse);
+            }
+        }
 
+        Dictionary<string, Color> sides = new Dictionary<string, Color>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             string display = kv.Key;
@@ -69,7 +80,15 @@ public class EditorComponentTile : EditorComponent
             {
                 display += " " + s;
             }
-            sides.Add(display);
+
+            if (usedSides.Contains(kv.Key))
+            {
+                sides.Add(display, Color.grey);
+            }
+            else
+            {
+                sides.Add(display, Color.white);
+            }
         }
         tileESL = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
         tileESL.SelectItem();
@@ -79,8 +98,8 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
         tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
-        game.quest.Remove(tileComponent.name);
-        game.quest.Add(tileComponent.name);
+        game.quest.Remove(tileComponent.sectionName);
+        game.quest.Add(tileComponent.sectionName);
         Update();
     }
 
@@ -104,8 +123,8 @@ public class EditorComponentTile : EditorComponent
         }
 
         Game game = Game.Get();
-        game.quest.Remove(tileComponent.name);
-        game.quest.Add(tileComponent.name);
+        game.quest.Remove(tileComponent.sectionName);
+        game.quest.Add(tileComponent.sectionName);
 
         Update();
     }
