@@ -70,9 +70,9 @@ public class EditorComponentUniqueMonster : EditorComponent
         //string imagePath
         //string imagePlace
 
-        DialogBox db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
+        db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
         db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.Length > 0)
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.key.Length > 0)
         {
             infoDBE = new DialogBoxEditable(new Vector2(0, 7), new Vector2(20, 8), monsterComponent.info.Translate(), delegate { UpdateInfo(); });
             infoDBE.ApplyTag("editor");
@@ -94,23 +94,23 @@ public class EditorComponentUniqueMonster : EditorComponent
         //string[] activations
         //string[] traits
 
-        db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1), "Health:");
+        db = new DialogBox(new Vector2(0, 15), new Vector2(3, 1), "Health:");
         db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || healthDefined)
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
-            healthDBE = new DialogBoxEditable(new Vector2(3, 8), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
+            healthDBE = new DialogBoxEditable(new Vector2(3, 15), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
             healthDBE.ApplyTag("editor");
             healthDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 8), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
+                tb = new TextButton(new Vector2(17, 15), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 8), new Vector2(3, 1), "Set", delegate { SetHealth(); });
+            tb = new TextButton(new Vector2(17, 15), new Vector2(3, 1), "Set", delegate { SetHealth(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -144,7 +144,13 @@ public class EditorComponentUniqueMonster : EditorComponent
             if (monsterComponent.monsterName.Length == 0)
             {
                 SetName();
+            }
+            if (monsterComponent.info.key.Length == 0)
+            {
                 SetInfo();
+            }
+            if (!monsterComponent.healthDefined)
+            {
                 SetHealth();
             }
         }
@@ -179,25 +185,25 @@ public class EditorComponentUniqueMonster : EditorComponent
     {
         if (!infoDBE.uiInput.text.Equals(""))
         {
-            monsterComponent.info = new StringKey(infoDBE.uiInput.text);
+            monsterComponent.info = new Assets.Scripts.Content.StringKey(infoDBE.uiInput.text);
         }
     }
 
     public void ClearInfo()
     {
-        monsterComponent.monsterName = StringKey.EmptyStringKey;
+        monsterComponent.info = Assets.Scripts.Content.StringKey.EmptyStringKey;
         Update();
     }
 
     public void SetInfo()
     {
-        monsterComponent.monsterName = new StringKey("Monster Info");
+        monsterComponent.info = new Assets.Scripts.Content.StringKey("Monster Info");
         Update();
     }
 
     public void UpdateHealth()
     {
-        Int.TryParse(healthDBE.uiInput.text, out monsterComponent.health);
+        int.TryParse(healthDBE.uiInput.text, out monsterComponent.health);
     }
 
     public void ClearHealth()
