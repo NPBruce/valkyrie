@@ -1,0 +1,30 @@
+.,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese
+// TESTING
+RND_MONSTER,Random spawn with the traits [{0}] yielded a {1}.,El monstruo con los rasgos [{0}] ha soltado {1}.,Random spawn with the traits [{0}] yielded a {1}.,Zufälliges Monster mit den Merkmalen [{0}] erscheint: {1}.,Random spawn with the traits [{0}] yielded a {1}.,Geração aleatória com os atributos [{0}] resultou num(a) {1}.,Losowe wystawienie z cechą [{0}] daje w wyniku {1}.,モンスターをランダムに選択[{0}]次のモンスターが登場{1}。,用性質[{0}] 隨機生成一頭 {1}。
+RND_OPT_1,Human (porthole),Humano,Humain,Mensch,Human (porthole),Humano,Człowiek,人間型,人類 (porthole)
+RND_OPT_2,Human Caster (center),Humano Hechicero,Lanceur humain,"Mensch, Zauberkundiger",Human Caster (center),Feiticeiro Humano,Człowiek Czaromiot,人間の魔術師,人類法師 (center)
+RND_OPT_3,!Human !Huge !Massive (outside icon),!Humano !Enorme !Descomunal,!Humain !Immense !Massif,!Mensch !Riesig !Gewaltig,!Human !Huge !Massive (outside icon),!Humano !Enorme !Gigante,!Człowiek !Ogromny !Masywny,!人間型!巨大!強い,!人!高大 !魁梧 (outside icon)
+RND_OPT_4,Humanoid !Human (outside icon),Humanoide !Humano,Humanoïde !Humain,Humanoider !Mensch,Humanoid !Human (outside icon),Humanoide !Humano,Humanoid !Człowiek,ヒューマノイド!人間型,類人!人類 (outside icon)
+RND_OPT_5,Beast !Small !Medium !Large (porthole),Bestial !Pequeño !Mediano !Grande,Bête !Petite !Moyenne !Grande,Bestie !Klein !Mittelgroß !Groß,Beast !Small !Medium !Large (porthole),Fera !Pequena !Média !Grande,Bestia !Mała !Średnia !Duża,モンスター!小さい!中型!大きい,野獸 !小型 !中型 !大型 (porthole)
+RND_INVESTIGATOR,Random investigator yielded {0}.,El investigador aleatorio ha soltado {0}.,Random investigator yielded {0}.,Zufälliger Ermittler ergab: {0}.,Random investigator yielded {0}.,Investigador aleatório resultou em {0}.,Losowy badacz daje w wyniku {0}.,探索者をランダムに選択{0}。,隨機調查員生成{0}。
+RND_INVESTIGATOR_ALT,Random investigator yielded {0}.,El investigador aleatorio ha soltado {0}.,Random investigator yielded {0}.,Zufällige Ermittlerin ergab: {0}.,Random investigator yielded {0}.,Investigador aleatório resultou em {0}.,Losowy badacz daje w wyniku {0}.,探索者をランダムに選択{0}。,隨機調查員生成{0}。
+RND_ITEM,There is a {0} in this drawer (porthole).,Hay 1 {0} en este cajón.,Il y a 1 {0} dans la monstrothèque.,In der Monsterleiste befindet sich 1 {0}.,There is a {0} in this drawer (porthole).,Há um(a) {0} nesta gaveta.,W tej szufladzie jest {0} (porthole).,中に{0}が入っていた。,在抽屜里有個{0}。(porthole)
+RND_ITEM_ALT,There is also a {0} on the floor (outside icon).,También hay 1 {0} en el suelo.,Il y a également 1 {0} sur le plateau.,Auf dem Boden befindet sich auch 1 {0}.,There is also a {0} on the floor (outside icon).,Há também um(a) {0} no chão.,Poza tym na podłodze leży {0} (outside icon).,床に{0}が落ちていた。,在地板上還有個{0}。(outside icon)
+// ICONS
+ICON_SKILL_STRENGTH,,,,,,,,,
+ICON_SKILL_AGILITY,,,,,,,,,
+ICON_SKILL_OBSERVATION,,,,,,,,,
+ICON_SKILL_LORE,,,,,,,,,
+ICON_SKILL_INFLUENCE,,,,,,,,,
+ICON_SKILL_WILL,,,,,,,,,
+ICON_ACTION,,,,,,,,,
+ICON_SUCCESS_RESULT,,,,,,,,,
+ICON_INVESTIGATION_RESULT,,,,,,,,,
+ICON_PRODUCT_MAD00
+ICON_PRODUCT_MAD01,,,,,,,,,
+ICON_PRODUCT_MAD06,,,,,,,,,
+ICON_PRODUCT_MAD09,,,,,,,,,
+ICON_PRODUCT_MAD20,,,,,,,,,
+ICON_PRODUCT_MAD21,,,,,,,,,
+ICON_PRODUCT_MAD22,,,,,,,,,
+ICON_PRODUCT_MAD23,,,,,,,,,
