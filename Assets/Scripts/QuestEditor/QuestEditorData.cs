@@ -573,7 +573,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Tile" + index, new QuestData.Tile("Tile" + index));
+        QuestData.Tile tile = new QuestData.Tile("Tile" + index);
+        game.quest.qd.components.Add("Tile" + index, tile);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        tile.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
+        tile.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
+
         game.quest.Add("Tile" + index);
         SelectComponent("Tile" + index);
     }
@@ -587,7 +593,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Door" + index, new QuestData.Door("Door" + index));
+        QuestData.Door door = new QuestData.Door("Door" + index);
+        game.quest.qd.components.Add("Door" + index, door);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        door.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
+        door.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
+
         game.quest.Add("Door" + index);
         SelectComponent("Door" + index);
     }
@@ -601,7 +613,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Token" + index, new QuestData.Token("Token" + index));
+        QuestData.Token token = new QuestData.Token("Token" + index);
+        game.quest.qd.components.Add("Token" + index, token);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        token.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
+        token.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
+
         game.quest.Add("Token" + index);
         SelectComponent("Token" + index);
     }
