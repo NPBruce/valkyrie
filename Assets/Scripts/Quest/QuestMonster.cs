@@ -99,5 +99,6 @@ public class QuestActivation : ActivationData
         masterFirst = qa.masterFirst;
         move = new StringKey(EventManager.SymbolReplace(qa.move.key), false);
         moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.key), false);
+        sectionName = qa.sectionName;
     }
 }

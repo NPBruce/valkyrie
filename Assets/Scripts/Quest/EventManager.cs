@@ -150,7 +150,7 @@ public class EventManager
             Quest.Monster oldMonster = null;
             foreach (Quest.Monster m in game.quest.monsters)
             {
-                if (m.monsterData.name.Equals(qe.cMonster.name))
+                if (m.monsterData.sectionName.Equals(qe.cMonster.sectionName))
                 {
                     // Matched existing monster
                     oldMonster = m;

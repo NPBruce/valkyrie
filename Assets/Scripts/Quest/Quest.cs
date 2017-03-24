@@ -948,6 +948,12 @@ public class Quest
             }
         }
 
+        // Create new activation
+        public void NewActivation(ActivationData contentActivation)
+        {
+            currentActivation = new ActivationInstance(contentActivation, monsterData.name.Translate());
+        }
+
         // Construct from save data
         public Monster(Dictionary<string, string> data)
         {
@@ -987,12 +993,6 @@ public class Quest
                 }
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
-        }
-
-        // Create new activation
-        public void NewActivation(ActivationData contentActivation)
-        {
-            currentActivation = new ActivationInstance(contentActivation, monsterData.name.Translate());
         }
 
         // Activation instance is requresd to track variables in the activation
