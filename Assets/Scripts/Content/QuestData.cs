@@ -1141,6 +1141,8 @@ public class QuestData
         public string sectionName;
         // image for display
         public UnityEngine.UI.Image image;
+        // comment for developers
+        public string comment = "";
 
         // Create new component in editor
         public QuestComponent(string nameIn)
@@ -1169,6 +1171,10 @@ public class QuestData
             {
                 locationSpecified = true;
                 float.TryParse(data["yposition"], out location.y);
+            }
+            if (data.ContainsKey("comment"))
+            {
+                comment = data["comment"];
             }
         }
 
@@ -1221,7 +1227,10 @@ public class QuestData
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
             }
-
+            if (comment.Length > 0)
+            {
+                r += "comment=" + comment + nl;
+            }
             return r;
         }
     }
