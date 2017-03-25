@@ -258,6 +258,14 @@ public class EditorComponentEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> triggers = new List<EditorSelectionList.SelectionListEntry>();
         triggers.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
 
+        List<string> general = new List<string>();
+        general.Add("General");
+        List<string> round = new List<string>();
+        round.Add("Round");
+        List<string> defeated = new List<string>();
+        defeated.Add("Defeated");
+
+
         bool startPresent = false;
         bool noMorale = false;
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -278,33 +286,33 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", general, Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", general, Color.white));
         }
 
         if (noMorale)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", general, Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", general, Color.white));
         }
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", Color.white));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", general, Color.white));
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, Color.white));
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, defeated, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, defeated, Color.white));
         }
 
-        for (int i = 1; i <= 25; i++)
+        for (int i = 1; i <= 40; i++)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, round, Color.white));
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });

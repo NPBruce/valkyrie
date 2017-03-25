@@ -110,18 +110,27 @@ public class EditorComponentItem : EditorComponent
         foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
         {
             string display = kv.Key;
+            List<string> sets = new List<string>();
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
             }
 
             if (usedItems.Contains(kv.Key))
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, Color.grey));
+                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
             }
             else
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, Color.white));
+                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
             }
         }
         itemESL = new EditorSelectionList("Select Item", items, delegate { SelectAddItem(); });
