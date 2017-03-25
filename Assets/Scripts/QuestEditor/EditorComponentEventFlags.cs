@@ -161,7 +161,11 @@ public class EditorComponentEventFlags : EditorComponent
             }
         }
 
-        List<string> list = new List<string>(flags);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in flags)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         flagsESL = new EditorSelectionList("Select Flag", list, delegate { SelectAddFlag(type); });
         flagsESL.SelectItem();
     }

@@ -9,32 +9,17 @@ public class EditorSelectionList
     // Selection made
     public string selection = "";
     // List of items to select
-    public List<string> items;
-    public List<Color> colours;
+    public List<SelectionListEntry> items;
     public string title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     // Page offset
     public int indexOffset = 0;
 
-    // Create editor selection clist with title, list and callback
-    public EditorSelectionList(string t, List<string> list, UnityEngine.Events.UnityAction call)
+    // Create editor selection clist with title, list, colour and callback
+    public EditorSelectionList(string t, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
     {
         items = list;
-        colours = new List<Color>();
-        for (int i = 0; i < list.Count; i++)
-        {
-            colours.Add(Color.white);
-        }
-        title = t;
-        returnCall = call;
-    }
-
-    // Create editor selection clist with title, list, colour and callback
-    public EditorSelectionList(string t, Dictionary<string, Color> list, UnityEngine.Events.UnityAction call)
-    {
-        items = new List<string>(list.Keys);
-        colours = new List<Color>(list.Values);
         title = t;
         returnCall = call;
     }
@@ -67,9 +52,8 @@ public class EditorSelectionList
             // limit to array length
             if (items.Count > i)
             {
-                string key = items[i];
-                Color c = colours[i];
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, c);
+                string key = items[i].name;
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, items[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             offset += 1;
@@ -121,5 +105,38 @@ public class EditorSelectionList
     {
         selection = s;
         returnCall();
+    }
+
+    public class SelectionListEntry
+    {
+        public Color color = Color.white;
+        public string name = "";
+        public List<string> filter;
+
+        public SelectionListEntry(string nameIn)
+        {
+            name = nameIn;
+            filter = new List<string>();
+        }
+
+        public SelectionListEntry(string nameIn, Color c)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            color = c;
+        }
+
+        public SelectionListEntry(string nameIn, List<string> l)
+        {
+            name = nameIn;
+            filter = l;
+        }
+
+        public SelectionListEntry(string nameIn, List<string> l, Color c)
+        {
+            name = nameIn;
+            filter = l;
+            color = c;
+        }
     }
 }

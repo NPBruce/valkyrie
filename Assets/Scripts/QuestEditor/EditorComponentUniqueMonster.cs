@@ -118,10 +118,10 @@ public class EditorComponentUniqueMonster : EditorComponent
 
     public void SetBase()
     {
-        List<string> baseMonster = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> baseMonster = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
-        baseMonster.Add("{NONE}");
+        baseMonster.Add(new EditorSelectionList.SelectionListEntry("{NONE}"));
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
@@ -129,7 +129,7 @@ public class EditorComponentUniqueMonster : EditorComponent
             {
                 display += " " + s;
             }
-            baseMonster.Add(display);
+            baseMonster.Add(new EditorSelectionList.SelectionListEntry(display));
         }
 
         baseESL = new EditorSelectionList("Select Event", baseMonster, delegate { SelectSetBase(); });

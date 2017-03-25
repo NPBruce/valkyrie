@@ -87,11 +87,11 @@ public class EditorComponentItem : EditorComponent
     public void AddItem()
     {
         Game game = Game.Get();
-        Dictionary<string, Color> items = new Dictionary<string, Color>();
+        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
 
         if (itemComponent.traits.Length > 0)
         {
-            items.Add("", Color.white);
+            items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
         }
 
         HashSet<string> usedItems = new HashSet<string>();
@@ -117,11 +117,11 @@ public class EditorComponentItem : EditorComponent
 
             if (usedItems.Contains(kv.Key))
             {
-                items.Add(display, Color.grey);
+                items.Add(new EditorSelectionList.SelectionListEntry(display, Color.grey));
             }
             else
             {
-                items.Add(display, Color.white);
+                items.Add(new EditorSelectionList.SelectionListEntry(display, Color.white));
             }
         }
         itemESL = new EditorSelectionList("Select Item", items, delegate { SelectAddItem(); });
@@ -170,7 +170,11 @@ public class EditorComponentItem : EditorComponent
             }
         }
 
-        List<string> list = new List<string>(traits);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         traitESL = new EditorSelectionList("Select Trait", list, delegate { SelectAddTrait(); });
         traitESL.SelectItem();
     }

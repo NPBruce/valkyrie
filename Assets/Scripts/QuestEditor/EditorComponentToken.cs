@@ -81,9 +81,9 @@ public class EditorComponentToken : EditorComponent
         typeList.SelectItem();
     }
 
-    public static List<string> GetTokenNames()
+    public static List<EditorSelectionList.SelectionListEntry> GetTokenNames()
     {
-        List<string> names = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> names = new List<EditorSelectionList.SelectionListEntry>();
 
         foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
         {
@@ -92,7 +92,7 @@ public class EditorComponentToken : EditorComponent
             {
                 display += " " + s;
             }
-            names.Add(display);
+            names.Add(new EditorSelectionList.SelectionListEntry(display));
         }
         return names;
     }

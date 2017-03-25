@@ -255,8 +255,8 @@ public class EditorComponentEvent : EditorComponent
     public void SetTrigger()
     {
         Game game = Game.Get();
-        Dictionary<string, Color> triggers = new Dictionary<string, Color>();
-        triggers.Add("", Color.white);
+        List<EditorSelectionList.SelectionListEntry> triggers = new List<EditorSelectionList.SelectionListEntry>();
+        triggers.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
 
         bool startPresent = false;
         bool noMorale = false;
@@ -278,33 +278,33 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add("EventStart", Color.grey);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.grey));
         }
         else
         {
-            triggers.Add("EventStart", Color.white);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.white));
         }
 
         if (noMorale)
         {
-            triggers.Add("NoMorale", Color.grey);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.grey));
         }
         else
         {
-            triggers.Add("NoMorale", Color.white);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.white));
         }
 
-        triggers.Add("EndRound", Color.white);
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", Color.white));
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add("Defeated" + kv.Key, Color.white);
-            triggers.Add("DefeatedUnique" + kv.Key, Color.white);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, Color.white));
         }
 
         for (int i = 1; i <= 25; i++)
         {
-            triggers.Add("EndRound" + i, Color.white);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, Color.white));
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
@@ -319,15 +319,15 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetHighlight()
     {
-        List<string> events = new List<string>();
-        events.Add("");
+        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
+        events.Add(new EditorSelectionList.SelectionListEntry(""));
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(kv.Key);
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
 
@@ -343,10 +343,10 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetHeroCount(bool max)
     {
-        List<string> num = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> num = new List<EditorSelectionList.SelectionListEntry>();
         for (int i = 0; i <= Game.Get().gameType.MaxHeroes(); i++)
         {
-            num.Add(i.ToString());
+            num.Add(new EditorSelectionList.SelectionListEntry(i.ToString()));
         }
 
         heroCountESL = new EditorSelectionList("Select Number", num, delegate { SelectEventHeroCount(max); });
@@ -380,12 +380,12 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddVisibility(bool add)
     {
-        List<string> components = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> components = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            components.Add(kv.Key);
+            components.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
 
         visibilityESL = new EditorSelectionList("Select Event", components, delegate { SelectAddVisibility(add); });

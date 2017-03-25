@@ -182,7 +182,7 @@ public class EditorComponentMonster : EditorComponent
     public void MonsterTypeAdd(int pos)
     {
         Game game = Game.Get();
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
@@ -190,7 +190,7 @@ public class EditorComponentMonster : EditorComponent
             {
                 display += " " + s;
             }
-            monsters.Add(display);
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
@@ -199,10 +199,10 @@ public class EditorComponentMonster : EditorComponent
     public void MonsterTypeReplace(int pos)
     {
         Game game = Game.Get();
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            monsters.Add(kv.Key);
+            monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();
@@ -269,7 +269,11 @@ public class EditorComponentMonster : EditorComponent
                 traits.Add(s);
             }
         }
-        List<string> list = new List<string>(traits);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTraitReplace(pos); });
         monsterTraitESL.SelectItem();
     }
@@ -291,7 +295,12 @@ public class EditorComponentMonster : EditorComponent
                 traits.Add(s);
             }
         }
-        List<string> list = new List<string>(traits);
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTrait(); });
         monsterTraitESL.SelectItem();
     }
