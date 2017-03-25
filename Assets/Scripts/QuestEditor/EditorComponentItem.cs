@@ -110,7 +110,7 @@ public class EditorComponentItem : EditorComponent
         foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
         {
             string display = kv.Key;
-            List<string> sets = new List<string>();
+            List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
                 if (s.Length == 0)

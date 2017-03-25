@@ -205,7 +205,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
         }
 
@@ -234,7 +234,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
         }
 

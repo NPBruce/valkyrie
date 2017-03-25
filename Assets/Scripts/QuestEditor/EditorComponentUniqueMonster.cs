@@ -125,11 +125,20 @@ public class EditorComponentUniqueMonster : EditorComponent
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
             }
-            baseMonster.Add(new EditorSelectionList.SelectionListEntry(display));
+            baseMonster.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
 
         baseESL = new EditorSelectionList("Select Event", baseMonster, delegate { SelectSetBase(); });

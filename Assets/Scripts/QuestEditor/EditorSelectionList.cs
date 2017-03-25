@@ -18,6 +18,7 @@ public class EditorSelectionList
     // Filters
     public HashSet<string> filter;
     public HashSet<string> traits;
+    public int perPage = 20;
 
     // Create editor selection clist with title, list, colour and callback
     public EditorSelectionList(string t, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
@@ -109,8 +110,10 @@ public class EditorSelectionList
             }
         }
 
+        perPage = 27 - Mathf.RoundToInt(offset);
+
         // All items on this page
-        for (int i = indexOffset; i < (20 + indexOffset); i++)
+        for (int i = indexOffset; i < (perPage + indexOffset); i++)
         {
             // limit to array length
             if (filtered.Count > i)
@@ -122,7 +125,7 @@ public class EditorSelectionList
             offset += 1;
         }
         // Paged
-        if (filtered.Count > 20)
+        if (filtered.Count > perPage)
         {
             // Prev button
             offset += 1;
@@ -157,10 +160,10 @@ public class EditorSelectionList
     // Move to next page and redraw
     public void NextPage()
     {
-        indexOffset += 20;
+        indexOffset += perPage;
         if (indexOffset > items.Count)
         {
-            indexOffset -= 20;
+            indexOffset -= perPage;
         }
         SelectItem(cancelCall);
     }
@@ -168,7 +171,7 @@ public class EditorSelectionList
     // Move to previous page and redraw
     public void PreviousPage()
     {
-        indexOffset -= 20;
+        indexOffset -= perPage;
         if (indexOffset < 0)
         {
             indexOffset = 0;
@@ -208,10 +211,25 @@ public class EditorSelectionList
             filter = l;
         }
 
+        public SelectionListEntry(string nameIn, string l)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            filter.Add(l);
+        }
+
         public SelectionListEntry(string nameIn, List<string> l, Color c)
         {
             name = nameIn;
             filter = l;
+            color = c;
+        }
+
+        public SelectionListEntry(string nameIn, string l, Color c)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            filter.Add(l);
             color = c;
         }
     }

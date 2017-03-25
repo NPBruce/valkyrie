@@ -258,14 +258,6 @@ public class EditorComponentEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> triggers = new List<EditorSelectionList.SelectionListEntry>();
         triggers.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
 
-        List<string> general = new List<string>();
-        general.Add("General");
-        List<string> round = new List<string>();
-        round.Add("Round");
-        List<string> defeated = new List<string>();
-        defeated.Add("Defeated");
-
-
         bool startPresent = false;
         bool noMorale = false;
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -286,33 +278,33 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", general, Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", general, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.white));
         }
 
         if (noMorale)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", general, Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", general, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.white));
         }
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", general, Color.white));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "Round", Color.white));
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, defeated, Color.white));
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, defeated, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Defeated", Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Defeated", Color.white));
         }
 
         for (int i = 1; i <= 40; i++)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, round, Color.white));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, "Round", Color.white));
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
@@ -335,7 +327,7 @@ public class EditorComponentEvent : EditorComponent
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
         }
 
@@ -393,7 +385,8 @@ public class EditorComponentEvent : EditorComponent
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            components.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token)
+            components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
         }
 
         visibilityESL = new EditorSelectionList("Select Event", components, delegate { SelectAddVisibility(add); });
