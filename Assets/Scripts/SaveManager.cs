@@ -117,6 +117,7 @@ class SaveManager
 
                 // Create the menu button
                 new MenuButton();
+                new LogButton();
                 game.stageUI = new NextStageButton();
             }
         }
