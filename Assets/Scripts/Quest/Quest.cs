@@ -146,6 +146,22 @@ public class Quest
         float.TryParse(saveData.Get("Quest", "camz"), out camz);
         game.cc.gameObject.transform.position = new Vector3(camx, camy, camz);
 
+        game.cc.minLimit = false;
+        if (saveData.Get("Quest", "camxmin").Length > 0)
+        {
+            game.cc.minLimit = true;
+            int.TryParse(saveData.Get("Quest", "camxmin"), out game.cc.minPanX);
+            int.TryParse(saveData.Get("Quest", "camymin"), out game.cc.minPanY);
+        }
+
+        game.cc.maxLimit = false;
+        if (saveData.Get("Quest", "camxmax").Length > 0)
+        {
+            game.cc.maxLimit = true;
+            int.TryParse(saveData.Get("Quest", "camxmax"), out game.cc.maxPanX);
+            int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
+        }
+
         // Populate DelayedEvents
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -469,6 +485,16 @@ public class Quest
         r += "camx=" + game.cc.gameObject.transform.position.x + nl;
         r += "camy=" + game.cc.gameObject.transform.position.y + nl;
         r += "camz=" + game.cc.gameObject.transform.position.z + nl;
+        if (game.cc.minLimit)
+        {
+            r += "camxmin=" + game.cc.minPanX + nl;
+            r += "camymin=" + game.cc.minPanY + nl;
+        }
+        if (game.cc.maxLimit)
+        {
+            r += "camxmax=" + game.cc.maxPanX + nl;
+            r += "camymax=" + game.cc.maxPanY + nl;
+        }
         r += "DelayedEvents=";
 
         // Delayed events have a delay and a name ':' separated
