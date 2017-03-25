@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour {
     // Max zoom out
     static int minZoom = -25;
 
+    public bool minLimit = false;
+    public bool maxLimit = false;
     // These are defaults, replaced by the quest
     public int minPanX = -50;
     public int minPanY = -50;
@@ -81,10 +83,16 @@ public class CameraController : MonoBehaviour {
 
         // Limit camera movement
         Vector3 pos = gameObject.transform.position;
-        if (pos.x < minPanX) pos.x = minPanX;
-        if (pos.y < minPanY) pos.y = minPanY;
-        if (pos.x > maxPanX) pos.x = maxPanX;
-        if (pos.y > maxPanY) pos.y = maxPanY;
+        if (minLimit)
+        {
+            if (pos.x < minPanX) pos.x = minPanX;
+            if (pos.y < minPanY) pos.y = minPanY;
+        }
+        if (maxLimit)
+        {
+            if (pos.x > maxPanX) pos.x = maxPanX;
+            if (pos.y > maxPanY) pos.y = maxPanY;
+        }
         gameObject.transform.position = pos;
     }
 
@@ -107,10 +115,16 @@ public class CameraController : MonoBehaviour {
         }
         // Limit camera position
         Vector3 pos = gameObject.transform.position;
-        if (pos.x < minPanX) pos.x = minPanX;
-        if (pos.y < minPanY) pos.y = minPanY;
-        if (pos.x > maxPanX) pos.x = maxPanX;
-        if (pos.y > maxPanY) pos.y = maxPanY;
+        if (minLimit)
+        {
+            if (pos.x < minPanX) pos.x = minPanX;
+            if (pos.y < minPanY) pos.y = minPanY;
+        }
+        if (maxLimit)
+        {
+            if (pos.x > maxPanX) pos.x = maxPanX;
+            if (pos.y > maxPanY) pos.y = maxPanY;
+        }
         gameObject.transform.position = pos;
 
         // If we are moving to a target position
@@ -174,6 +188,7 @@ public class CameraController : MonoBehaviour {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.minPanX = Mathf.RoundToInt(min.x);
         cc.minPanY = Mathf.RoundToInt(min.y);
+        cc.minLimit = true;
     }
 
     // Update maximum camera pan
@@ -182,6 +197,7 @@ public class CameraController : MonoBehaviour {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.maxPanX = Mathf.RoundToInt(max.x);
         cc.maxPanY = Mathf.RoundToInt(max.y);
+        cc.maxLimit = true;
     }
 
     // Set camera target position
@@ -191,9 +207,15 @@ public class CameraController : MonoBehaviour {
         cc.targetSet = true;
         cc.camTarget = new Vector3(pos.x, pos.y, -8);
 
-        if (cc.camTarget.x < cc.minPanX) cc.camTarget.x = cc.minPanX;
-        if (cc.camTarget.y < cc.minPanY) cc.camTarget.y = cc.minPanY;
-        if (cc.camTarget.x > cc.maxPanX) cc.camTarget.x = cc.maxPanX;
-        if (cc.camTarget.y > cc.maxPanY) cc.camTarget.y = cc.maxPanY;
+        if (cc.minLimit)
+        {
+            if (cc.camTarget.x < cc.minPanX) cc.camTarget.x = cc.minPanX;
+            if (cc.camTarget.y < cc.minPanY) cc.camTarget.y = cc.minPanY;
+        }
+        if (cc.maxLimit)
+        {
+            if (cc.camTarget.x > cc.maxPanX) cc.camTarget.x = cc.maxPanX;
+            if (cc.camTarget.y > cc.maxPanY) cc.camTarget.y = cc.maxPanY;
+        }
     }
 }

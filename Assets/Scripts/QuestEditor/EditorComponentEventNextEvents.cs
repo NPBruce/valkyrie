@@ -198,14 +198,14 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void AddEvent(int index, int button)
     {
-        List<string> events = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(kv.Key);
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
         }
 
@@ -227,14 +227,14 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void AddDelayedEvent()
     {
-        List<string> events = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(kv.Key);
+                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
         }
 

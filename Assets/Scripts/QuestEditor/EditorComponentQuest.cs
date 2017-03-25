@@ -124,13 +124,13 @@ public class EditorComponentQuest : EditorComponent
 
     public void QuestAddPack()
     {
-        List<string> packs = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> packs = new List<EditorSelectionList.SelectionListEntry>();
 
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                packs.Add(pack.id);
+                packs.Add(new EditorSelectionList.SelectionListEntry(pack.id));
             }
         }
 

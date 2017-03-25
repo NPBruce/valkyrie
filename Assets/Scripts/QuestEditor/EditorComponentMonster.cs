@@ -182,15 +182,24 @@ public class EditorComponentMonster : EditorComponent
     public void MonsterTypeAdd(int pos)
     {
         Game game = Game.Get();
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
             }
-            monsters.Add(display);
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
@@ -199,10 +208,24 @@ public class EditorComponentMonster : EditorComponent
     public void MonsterTypeReplace(int pos)
     {
         Game game = Game.Get();
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            monsters.Add(kv.Key);
+            string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
+            foreach (string s in kv.Value.sets)
+            {
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
+            }
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();
@@ -269,7 +292,11 @@ public class EditorComponentMonster : EditorComponent
                 traits.Add(s);
             }
         }
-        List<string> list = new List<string>(traits);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTraitReplace(pos); });
         monsterTraitESL.SelectItem();
     }
@@ -291,7 +318,12 @@ public class EditorComponentMonster : EditorComponent
                 traits.Add(s);
             }
         }
-        List<string> list = new List<string>(traits);
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTrait(); });
         monsterTraitESL.SelectItem();
     }

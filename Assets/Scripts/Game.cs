@@ -199,6 +199,7 @@ public class Game : MonoBehaviour {
         Destroyer.Dialog();
         // Create the menu button
         new MenuButton();
+        new LogButton();
         // Draw next stage button if required
         stageUI = new NextStageButton();
 

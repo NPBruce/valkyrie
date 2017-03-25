@@ -9,34 +9,32 @@ public class EditorSelectionList
     // Selection made
     public string selection = "";
     // List of items to select
-    public List<string> items;
-    public List<Color> colours;
+    public List<SelectionListEntry> items;
     public string title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     // Page offset
     public int indexOffset = 0;
-
-    // Create editor selection clist with title, list and callback
-    public EditorSelectionList(string t, List<string> list, UnityEngine.Events.UnityAction call)
-    {
-        items = list;
-        colours = new List<Color>();
-        for (int i = 0; i < list.Count; i++)
-        {
-            colours.Add(Color.white);
-        }
-        title = t;
-        returnCall = call;
-    }
+    // Filters
+    public HashSet<string> filter;
+    public HashSet<string> traits;
+    public int perPage = 20;
 
     // Create editor selection clist with title, list, colour and callback
-    public EditorSelectionList(string t, Dictionary<string, Color> list, UnityEngine.Events.UnityAction call)
+    public EditorSelectionList(string t, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
     {
-        items = new List<string>(list.Keys);
-        colours = new List<Color>(list.Values);
+        items = list;
         title = t;
         returnCall = call;
+        filter = new HashSet<string>();
+        traits = new HashSet<string>();
+        foreach (SelectionListEntry e in items)
+        {
+            foreach (string s in e.filter)
+            {
+                traits.Add(s);
+            }
+        }
     }
 
     // Draw list, destroy on cancel
@@ -52,30 +50,82 @@ public class EditorSelectionList
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 26), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 30), "");
         db.AddBorder();
 
         // Title
         db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
 
-        float offset = 2;
+        float offset = 2f;
         TextButton tb = null;
 
+        float hOffset = 22;
+        foreach (string s in traits)
+        {
+            db = new DialogBox(Vector2.zero, new Vector2(10, 1), s);
+            float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
+            db.Destroy();
+            if (hOffset + width > 40)
+            {
+                hOffset = 22;
+                offset++;
+            }
+            string tmp = s;
+            if (filter.Count == 0)
+            {
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); });
+            }
+            else if (filter.Contains(s))
+            {
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { ClearFilter(s); });
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); }, Color.gray);
+            }
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            hOffset += width;
+        }
+
+        if (traits.Count > 0) offset += 2;
+
+        List<SelectionListEntry> filtered = items;
+        if (filter.Count > 0)
+        {
+            filtered = new List<SelectionListEntry>();
+            foreach (SelectionListEntry e in items)
+            {
+                bool valid = true;
+                foreach (string s in filter)
+                {
+                    if (!e.filter.Contains(s))
+                    {
+                        valid = false;
+                    }
+                }
+                if (valid)
+                {
+                    filtered.Add(e);
+                }
+            }
+        }
+
+        perPage = 27 - Mathf.RoundToInt(offset);
+
         // All items on this page
-        for (int i = indexOffset; i < (20 + indexOffset); i++)
+        for (int i = indexOffset; i < (perPage + indexOffset); i++)
         {
             // limit to array length
-            if (items.Count > i)
+            if (filtered.Count > i)
             {
-                string key = items[i];
-                Color c = colours[i];
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, c);
+                string key = filtered[i].name;
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             offset += 1;
         }
         // Paged
-        if (items.Count > 20)
+        if (filtered.Count > perPage)
         {
             // Prev button
             offset += 1;
@@ -88,19 +138,32 @@ public class EditorSelectionList
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
         // Cancel button
-        offset += 1;
         tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
     
+    public void SetFilter(string f)
+    {
+        filter.Add(f);
+        indexOffset = 0;
+        SelectItem(cancelCall);
+    }
+
+    public void ClearFilter(string f)
+    {
+        filter.Remove(f);
+        indexOffset = 0;
+        SelectItem(cancelCall);
+    }
+
     // Move to next page and redraw
     public void NextPage()
     {
-        indexOffset += 20;
+        indexOffset += perPage;
         if (indexOffset > items.Count)
         {
-            indexOffset -= 20;
+            indexOffset -= perPage;
         }
         SelectItem(cancelCall);
     }
@@ -108,7 +171,7 @@ public class EditorSelectionList
     // Move to previous page and redraw
     public void PreviousPage()
     {
-        indexOffset -= 20;
+        indexOffset -= perPage;
         if (indexOffset < 0)
         {
             indexOffset = 0;
@@ -121,5 +184,53 @@ public class EditorSelectionList
     {
         selection = s;
         returnCall();
+    }
+
+    public class SelectionListEntry
+    {
+        public Color color = Color.white;
+        public string name = "";
+        public List<string> filter;
+
+        public SelectionListEntry(string nameIn)
+        {
+            name = nameIn;
+            filter = new List<string>();
+        }
+
+        public SelectionListEntry(string nameIn, Color c)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            color = c;
+        }
+
+        public SelectionListEntry(string nameIn, List<string> l)
+        {
+            name = nameIn;
+            filter = l;
+        }
+
+        public SelectionListEntry(string nameIn, string l)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            filter.Add(l);
+        }
+
+        public SelectionListEntry(string nameIn, List<string> l, Color c)
+        {
+            name = nameIn;
+            filter = l;
+            color = c;
+        }
+
+        public SelectionListEntry(string nameIn, string l, Color c)
+        {
+            name = nameIn;
+            filter = new List<string>();
+            filter.Add(l);
+            color = c;
+        }
     }
 }
