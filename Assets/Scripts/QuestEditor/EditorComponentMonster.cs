@@ -186,11 +186,20 @@ public class EditorComponentMonster : EditorComponent
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(display));
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
@@ -202,7 +211,21 @@ public class EditorComponentMonster : EditorComponent
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
+            foreach (string s in kv.Value.sets)
+            {
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
+            }
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
         monsterTypeESL = new EditorSelectionList("Select Item", monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();
