@@ -41,7 +41,7 @@
         {
             if (this.isKey() && !preventLookup)
             {
-                return LocalizationRead.FFGLookup(this);
+                return LocalizationRead.DictLookup(this);
             } else
             {
                 return key;

@@ -11,6 +11,8 @@ namespace Assets.Scripts.UI.Screens
         FetchContent fcD2E;
         FetchContent fcMoM;
 
+        private StringKey D2E_NAME = new StringKey("{val:D2E_NAME}");
+
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
         {
@@ -54,7 +56,7 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             // Draw D2E button
-            TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), new Vector2(30, 4f), "Descent: Journeys in the Dark Second Edition", delegate { D2E(); }, startColor);
+            TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), new Vector2(30, 4f), D2E_NAME.Translate(), delegate { D2E(); }, startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
@@ -136,7 +138,9 @@ namespace Assets.Scripts.UI.Screens
         }
 
         /// <summary>
-        /// After selecting game, we load the localization file
+        /// After selecting game, we load the localization file.
+        /// Deppends on the gameType selected.
+        /// There are two Localization.txt, one for D2E and one for MoM
         /// </summary>
         private void loadLocalization()
         {

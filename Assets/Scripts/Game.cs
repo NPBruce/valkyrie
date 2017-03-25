@@ -83,18 +83,15 @@ public class Game : MonoBehaviour {
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
-
-        // TODO: Here the ValkyrieDict should be loaded
-        /*
         try
         {
-            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromLocalization("", currentLang);
+            TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
+            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromTextAsset(localizationFile, currentLang);
         }
         catch (System.Exception e)
         {
             ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
         }
-        */
 
         roundControl = new RoundController();
 

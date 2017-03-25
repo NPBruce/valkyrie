@@ -28,3 +28,7 @@ ICON_PRODUCT_MAD20,,,,,,,,,
 ICON_PRODUCT_MAD21,,,,,,,,,
 ICON_PRODUCT_MAD22,,,,,,,,,
 ICON_PRODUCT_MAD23,,,,,,,,,
+//COMMONS
+//D2E
+D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
+//MOM

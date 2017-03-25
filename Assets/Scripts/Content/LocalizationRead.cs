@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.Content
 {
-    // Helper class to read an ini file into a nested dictionary
+    // Helper class to read a localization file into a nested dictionary
     // This exists because .NET/Mono doesn't have one!!
     public static class LocalizationRead
     {
@@ -33,9 +34,27 @@ namespace Assets.Scripts.Content
             }
         }
 
-        // Function takes path to ini file and returns data object
+        // Function takes Unity TextAsset and returns localization dictionary
+        public static DictionaryI18n ReadFromTextAsset(TextAsset asset, string newLang)
+        {
+            string[] lines;
+            try
+            {
+                // split text into array of lines
+                lines = asset.text.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log("Error loading localization from asset " + asset.name + ":" + e.Message);
+                return null;
+            }
+
+            return new DictionaryI18n(lines,newLang);
+        }
+
+        // Function takes path to localization file and returns data object
         // Returns null on error
-        public static DictionaryI18n ReadFromLocalization(string path, string newLang)
+        public static DictionaryI18n ReadFromFilePath(string path, string newLang)
         {
             string[] lines;
 
@@ -70,7 +89,7 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="input">{ffg:XXXX} like input</param>
         /// <returns>Translation to current language</returns>
-        public static string FFGLookup(StringKey input)
+        public static string DictLookup(StringKey input)
         {
             string output = input.key;
             // While there are more lookups
@@ -99,7 +118,7 @@ namespace Assets.Scripts.Content
                 // Extract lookup key
                 string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
                 // Get key result
-                string result = FFGQuery(lookup);
+                string result = DictQuery(lookup);
                 // We (unity) don't support underlines
                 // Unity uses <> not []
                 result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");
@@ -117,7 +136,7 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private static string FFGQuery(string input)
+        private static string DictQuery(string input)
         {
             int bracketLevel = 0;
             int lastSection = 0;
@@ -150,7 +169,7 @@ namespace Assets.Scripts.Content
             elements.Add(input.Substring(lastSection, input.Length - lastSection));
 
             // Look up the first element (key)
-            string fetched = FFGKeyLookup(elements[0]);
+            string fetched = DictKeyLookup(elements[0]);
 
             // Find and replace with other elements
             for (int i = 2; i < elements.Count; i += 2)
@@ -166,27 +185,20 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        private static string FFGKeyLookup(string key)
+        private static string DictKeyLookup(string key)
         {
             if (ffgDict != null)
             {
-                //try
-                //{
-                    EntryI18n valueOut;
+                EntryI18n valueOut;
 
-                    if (ffgDict.tryGetValue(key, out valueOut))
-                    {
-                        return valueOut.getCurrentOrDefaultLanguageString();
-                    }
-                    else
-                    {
-                        return key;
-                    }
-                //}
-                /*catch (System.Exception e)
+                if (ffgDict.tryGetValue(key, out valueOut))
                 {
-                    ValkyrieDebug.Log("Warning: Unable to process imported Localization string with key: " + key + ". Exception:" + e.Message + System.Environment.NewLine);
-                }*/
+                    return valueOut.getCurrentOrDefaultLanguageString();
+                }
+                else
+                {
+                    return key;
+                }
             } else
             {
                 ValkyrieDebug.Log("Error: FFG dictionary not loaded");

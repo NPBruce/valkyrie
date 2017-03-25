@@ -52,15 +52,14 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), new Vector2(12, 2f), "About", delegate { About(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
-            /*
+            
             // Configuration menu
             tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "Options", delegate { Config(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
-            */
-
+            
             // Exit Valkyrie
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "Exit", delegate { Exit(); });
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), "Exit", delegate { Exit(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
