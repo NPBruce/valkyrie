@@ -456,37 +456,37 @@ public class EventManager
         {
             // cast the monster event
             qMonster = qEvent as QuestData.Monster;
-            // Try to find a type that is valid
+
+            // If there are no traits try to find a type that is valid
             // Searches is specified order
             // FIXME: is this reverse order?
-            foreach (string t in qMonster.mTypes)
+            if (qMonster.mTraits.Length == 0)
             {
-                // Monster type might be a unique for this quest
-                if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                foreach (string t in qMonster.mTypes)
                 {
-                    cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                    // Monster type might be a unique for this quest
+                    if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                    {
+                        cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                    }
+                    // Monster type might exist in content packs, 'Monster' is optional
+                    else if (game.cd.monsters.ContainsKey(t))
+                    {
+                        cMonster = game.cd.monsters[t];
+                    }
+                    else if (game.cd.monsters.ContainsKey("Monster" + t))
+                    {
+                        cMonster = game.cd.monsters["Monster" + t];
+                    }
                 }
-                // Monster type might exist in content packs, 'Monster' is optional
-                else if (game.cd.monsters.ContainsKey(t))
-                {
-                    cMonster = game.cd.monsters[t];
-                }
-                else if (game.cd.monsters.ContainsKey("Monster" + t))
-                {
-                    cMonster = game.cd.monsters["Monster" + t];
-                }
-            }
-
-            // If we didn't find anything try by trait
-            if (cMonster == null)
-            {
-                // No matches or trait match
-                if (qMonster.mTraits.Length == 0)
+                if (cMonster == null)
                 {
                     ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + qMonster.sectionName);
                     Application.Quit();
                 }
-
+            }
+            else
+            {
                 // Start a list of matches
                 List<MonsterData> list = new List<MonsterData>();
                 foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
@@ -501,8 +501,20 @@ public class EventManager
                             allFound = false;
                         }
                     }
+                    bool exclude = false;
+                    foreach (string t in qMonster.mTypes)
+                    {
+                        if (t.Equals(kv.Key)) exclude = true;
+                    }
+                    foreach (Quest.Monster qm in game.quest.monsters)
+                    {
+                        if (qm.monsterData.sectionName.Equals(kv.Key))
+                        {
+                            exclude = true;
+                        }
+                    }
                     // Monster has all traits
-                    if (allFound)
+                    if (allFound && !exclude)
                     {
                         list.Add(kv.Value);
                     }
