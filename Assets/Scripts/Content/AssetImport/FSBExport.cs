@@ -38,7 +38,7 @@ class FSBExport
         for (int i = 0; i < numSamples; i++)
         {
             uint offset = stream.ReadUInt32();
-            uint samples = stream.ReadUInt32() >> 2;
+            bool extraHeaders = (offset & 0x01) != 0;
             uint type = offset & ((1 << 7) - 1);
             offset = (offset >> 7) * 0x20;
             uint channels = (type >> 5) + 1;
@@ -58,6 +58,41 @@ class FSBExport
                 case 10: frequency = 96000; break;
                 default: frequency = 44100; break;
             }
+
+            uint unknown = stream.ReadUInt32() >> 2;
+
+            while (extraHeaders)
+            {
+                byte dataByte = stream.ReadByte();
+                extraHeaders = (dataByte & 0x01) != 0;
+                long extraLen = dataByte >> 1;
+                extraLen += stream.ReadByte() << 7;
+                extraLen += stream.ReadByte() << 15;
+                dataByte = stream.ReadByte();
+                if (dataByte == 0x02)
+                {
+                    channels = stream.ReadByte();
+                    extraLen -= 1;
+                }
+                if (dataByte == 0x04)
+                {
+                    frequency = stream.ReadUInt32();
+                    extraLen -= 4;
+                }
+                if (dataByte == 0x06)
+                {
+                    uint loopStart = stream.ReadUInt32();
+                    uint loopEnd = stream.ReadUInt32();
+                    extraLen -= 8;
+                }
+                if (dataByte == 0x16)
+                {
+                    uint crc32 = stream.ReadUInt32();
+                    extraLen -= 4;
+                }
+                stream.Position += extraLen;
+            }
+
             long nextFilePos = stream.Position;
 
             long size = stream.ReadUInt32();
