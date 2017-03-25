@@ -72,7 +72,7 @@ public class EditorComponentTile : EditorComponent
             }
         }
 
-        Dictionary<string, Color> sides = new Dictionary<string, Color>();
+        List<EditorSelectionList.SelectionListEntry> sides = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             string display = kv.Key;
@@ -83,11 +83,11 @@ public class EditorComponentTile : EditorComponent
 
             if (usedSides.Contains(kv.Key))
             {
-                sides.Add(display, Color.grey);
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, Color.grey));
             }
             else
             {
-                sides.Add(display, Color.white);
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, Color.white));
             }
         }
         tileESL = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
