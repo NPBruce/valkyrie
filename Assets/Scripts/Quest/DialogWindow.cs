@@ -58,9 +58,9 @@ public class DialogWindow {
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
         db.Destroy();
         
-        if (offset < 8)
+        if (offset < 4)
         {
-            offset = 8;
+            offset = 4;
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), text);
