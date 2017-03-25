@@ -37,26 +37,27 @@ class FSBExport
 
         for (int i = 0; i < numSamples; i++)
         {
+            Ogg ogg = new Ogg();
             uint offset = stream.ReadUInt32();
             bool extraHeaders = (offset & 0x01) != 0;
             uint type = offset & ((1 << 7) - 1);
             offset = (offset >> 7) * 0x20;
-            uint channels = (type >> 5) + 1;
-            uint frequency = 44100;
+            ogg.channels = (type >> 5) + 1;
+            ogg.frequency = 44100;
             switch ((type >> 1) & ((1 << 4) - 1))
             {
-                case 0: frequency = 4000; break;
-                case 1: frequency = 8000; break;
-                case 2: frequency = 11000; break;
-                case 3: frequency = 12000; break;
-                case 4: frequency = 16000; break;
-                case 5: frequency = 22050; break;
-                case 6: frequency = 24000; break;
-                case 7: frequency = 32000; break;
-                case 8: frequency = 44100; break;
-                case 9: frequency = 48000; break;
-                case 10: frequency = 96000; break;
-                default: frequency = 44100; break;
+                case 0: ogg.frequency = 4000; break;
+                case 1: ogg.frequency = 8000; break;
+                case 2: ogg.frequency = 11000; break;
+                case 3: ogg.frequency = 12000; break;
+                case 4: ogg.frequency = 16000; break;
+                case 5: ogg.frequency = 22050; break;
+                case 6: ogg.frequency = 24000; break;
+                case 7: ogg.frequency = 32000; break;
+                case 8: ogg.frequency = 44100; break;
+                case 9: ogg.frequency = 48000; break;
+                case 10: ogg.frequency = 96000; break;
+                default: ogg.frequency = 44100; break;
             }
 
             uint unknown = stream.ReadUInt32() >> 2;
@@ -71,23 +72,23 @@ class FSBExport
                 dataByte = stream.ReadByte();
                 if (dataByte == 0x02)
                 {
-                    channels = stream.ReadByte();
+                    ogg.channels = stream.ReadByte();
                     extraLen -= 1;
                 }
                 if (dataByte == 0x04)
                 {
-                    frequency = stream.ReadUInt32();
+                    ogg.frequency = stream.ReadUInt32();
                     extraLen -= 4;
                 }
                 if (dataByte == 0x06)
                 {
-                    uint loopStart = stream.ReadUInt32();
-                    uint loopEnd = stream.ReadUInt32();
+                    ogg.loopStart = stream.ReadUInt32();
+                    ogg.loopEnd = stream.ReadUInt32();
                     extraLen -= 8;
                 }
                 if (dataByte == 0x16)
                 {
-                    uint crc32 = stream.ReadUInt32();
+                    ogg.crc32 = stream.ReadUInt32();
                     extraLen -= 4;
                 }
                 stream.Position += extraLen;
@@ -113,11 +114,11 @@ class FSBExport
 
             if (i == 0)
             {
-                WriteFile(data, file, (int)fileOffset, (int)size);
+                WriteFile(data, file, (int)fileOffset, (int)size, ogg);
             }
             else
             {
-                WriteFile(data, file + i, (int)fileOffset, (int)size);
+                WriteFile(data, file + i, (int)fileOffset, (int)size, ogg);
             }
 
             stream.Position = nextFilePos;
@@ -125,15 +126,23 @@ class FSBExport
         stream.Dispose(true);
     }
 
-    public static void WriteFile(byte[] data, string file, int offset, int size)
+    public static void WriteFile(byte[] data, string file, int offset, int size, Ogg ogg)
     {
         // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(file, FileMode.Create)))
         {
-            // Pass the Deobfuscate key to decrypt
-            writer.Write(data, offset, size);
+            //writer.Write();
             writer.Close();
         }
+    }
+
+    public class Ogg
+    {
+        public uint frequency = 0;
+        public uint channels = 0;
+        public uint loopStart = 0;
+        public uint loopEnd = 0;
+        public uint crc32 = 0;
     }
 
     public enum FSBAudioFormat
