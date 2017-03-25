@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using Ionic.Zip;
 
 // This class provides functions to load and save games.
 class SaveManager
@@ -9,12 +10,13 @@ class SaveManager
     public static string SaveFile()
     {
         Game game = Game.Get();
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.TypeName() + ".ini";
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.TypeName() + ".vSave";
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
     public static void Save()
     {
+        Game game = Game.Get();
         try
         {
             if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie"))
@@ -25,7 +27,17 @@ class SaveManager
             {
                 Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save");
             }
-            File.WriteAllText(SaveFile(), Game.Get().quest.ToString());
+
+            QuestLoader.CleanTemp();
+            if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+            {
+                Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+            }
+            File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
+            ZipFile zip = new ZipFile();
+            zip.AddFile(Path.GetTempPath() + "/Valkyrie/save.ini", "");
+            zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
+            zip.Save(SaveFile());
         }
         catch (System.Exception)
         {
@@ -47,9 +59,22 @@ class SaveManager
         {
             if (File.Exists(SaveFile()))
             {
-                string data = File.ReadAllText(SaveFile());
+                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+                {
+                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+                }
+                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie/Load"))
+                {
+                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie/Load");
+                }
+
+                ZipFile zip = ZipFile.Read(SaveFile());
+                zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
+
+                string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
 
                 IniData saveData = IniRead.ReadFromString(data);
+                saveData.data["Quest"]["path"] = Path.GetTempPath() + "/Valkyrie/Load/quest/quest.ini";
 
                 Destroyer.Dialog();
 
@@ -95,9 +120,8 @@ class SaveManager
                 game.stageUI = new NextStageButton();
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            e = e;
             ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile());
             Application.Quit();
         }
