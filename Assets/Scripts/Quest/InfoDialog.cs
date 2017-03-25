@@ -25,7 +25,7 @@ public class InfoDialog {
             db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), m.uniqueTitle, Color.red);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.AddBorder();
-            db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), m.uniqueText.Replace("\\n", "\n"));
+            db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), EventManager.SymbolReplace(m.uniqueText.Replace("\\n", "\n")));
             db.AddBorder(Color.red);
             new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 23.5f), new Vector2(10, 2), "Close", delegate { onClose(); });
         }

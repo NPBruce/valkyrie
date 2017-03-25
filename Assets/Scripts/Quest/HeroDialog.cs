@@ -28,11 +28,11 @@ public class HeroDialog{
         // Is this hero defeated?
         if (hero.defeated)
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Restored", delegate { restored(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Recover", delegate { restored(); });
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Defeated", delegate { defeated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "KO", delegate { defeated(); });
         }
 
         new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
