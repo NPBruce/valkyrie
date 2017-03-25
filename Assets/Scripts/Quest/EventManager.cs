@@ -172,7 +172,7 @@ public class EventManager
             }
 
             // Display the location(s)
-            if (qe.qEvent.locationSpecified)
+            if (qe.qEvent.locationSpecified && e.GetText().Length > 0)
             {
                 game.tokenBoard.AddMonster(qe);
             }
