@@ -82,8 +82,16 @@ public class TokenBoard : MonoBehaviour {
         // Check for a placement list at this hero count
         else if (me.qMonster.placement[count].Length == 0)
         {
-            // group placement
-            AddAreaMonster(me.qMonster);
+            if (me.cMonster.ContainsTrait("lieutenant"))
+            {
+                Texture2D newTex = ContentData.FileToTexture(me.cMonster.image);
+                AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
+            }
+            else
+            {
+                // group placement
+                AddAreaMonster(me.qMonster);
+            }
         }
         else
         {
@@ -159,26 +167,21 @@ public class TokenBoard : MonoBehaviour {
         image.sprite = iconSprite;
         image.rectTransform.sizeDelta = new Vector2(sizeX, sizeY);
 
-        if (place.Length > 0)
+        UnityEngine.UI.Image iconFrame = null;
+        if (game.gameType is D2EGameType)
         {
-            QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
-            posX = mp.location.x;
-            posY = mp.location.y;
-
             // Move to get the top left square corner at 0,0
             gameObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
             gameObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
             borderObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
             borderObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
-            circleObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
-            circleObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
 
             image.rectTransform.sizeDelta = new Vector2(sizeX * 0.83f, sizeY * 0.83f);
 
             borderObject.AddComponent<CanvasRenderer>();
             borderObject.AddComponent<RectTransform>();
 
-            UnityEngine.UI.Image iconFrame = borderObject.AddComponent<UnityEngine.UI.Image>();
+            iconFrame = borderObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
             if (sizeX == 3)
             {
@@ -190,6 +193,16 @@ public class TokenBoard : MonoBehaviour {
             }
             iconFrame.sprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
             iconFrame.rectTransform.sizeDelta = new Vector2(sizeX, sizeY);
+        }
+
+        if (place.Length > 0)
+        {
+            QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
+            posX = mp.location.x;
+            posY = mp.location.y;
+            
+            circleObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
+            circleObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
 
             circleObject.AddComponent<CanvasRenderer>();
             circleObject.AddComponent<RectTransform>();
