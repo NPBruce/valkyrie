@@ -297,7 +297,7 @@ public class Quest
         log = new List<LogEntry>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
         {
-            log.Add(new Quest.LogEntry(kv.Key, kv.Value));
+            log.Add(new LogEntry(kv.Key, kv.Value));
         }
 
         // Update the screen
@@ -680,7 +680,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                ValkyrieDebug.Log("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName);
+                game.quest.log.Add(new Quest.LogEntry("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName, true));
                 // Catch for older quests with different types (0.4.0 or older)
                 if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
@@ -788,7 +788,7 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                ValkyrieDebug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName);
+                game.quest.log.Add(new Quest.LogEntry("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName, true));
             }
 
             // State with white (used for alpha)
@@ -1090,9 +1090,11 @@ public class Quest
         bool valkyrie = false;
         bool editor = false;
 
-        public LogEntry(string e)
+        public LogEntry(string e, bool editorIn = false, bool valkyrieIn = false)
         {
             entry = e;
+            editor = editorIn;
+            valkyrie = valkyrieIn;
         }
 
         public LogEntry(string type, string e)
@@ -1101,7 +1103,7 @@ public class Quest
             {
                 valkyrie = true;
             }
-            if (type.IndexOf("valkyrie") == 0)
+            if (type.IndexOf("editor") == 0)
             {
                 editor = true;
             }
@@ -1129,18 +1131,14 @@ public class Quest
 
         public string GetEntry()
         {
-            if (valkyrie || editor) return "";
-            return entry.Replace("\\n", "\n") + "\n\n";
-        }
-
-        public string GetEntryEditor()
-        {
-            if (valkyrie) return "";
-            return entry.Replace("\\n", "\n") + "\n\n";
-        }
-
-        public string GetEntryValkyrie()
-        {
+            if (valkyrie && !Application.isEditor)
+            {
+                return "";
+            }
+            if (editor && !Application.isEditor)
+            {
+                return "";
+            }
             return entry.Replace("\\n", "\n") + "\n\n";
         }
     }

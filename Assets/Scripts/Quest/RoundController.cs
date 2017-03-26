@@ -139,14 +139,14 @@ public class RoundController {
                     {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
-                    // Otherwise look for the activation in contend data
+                    // Otherwise look for the activation in content data
                     else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
                     {
                         adList.Add(game.cd.activations["MonsterActivation" + s]);
                     }
                     else // Invalid activation
                     {
-                        ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+                        game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
                     }
                 }
             }
