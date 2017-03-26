@@ -75,6 +75,13 @@ public class DialogWindow {
             length = 16f;
             hOffset = UIScaler.GetHCenter(-8f);
         }
+        else
+        {
+            if (eventData.qEvent.cancelable)
+            {
+                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            }
+        }
         foreach (EventButton eb in eventData.GetButtons())
         {
             int numTmp = num++;
@@ -83,16 +90,9 @@ public class DialogWindow {
         }
 
         // Do we have a cancel button?
-        if (eventData.qEvent.cancelable)
+        if (eventData.qEvent.cancelable && (eventData.GetButtons().Count > 2))
         {
-            if (eventData.GetButtons().Count > 2)
-            {
-                new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-            }
-            else
-            {
-                new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-            }
+            new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
         }
 
     }
