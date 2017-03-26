@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 
-public static class FSBExport
+class FSBExport
 {
-    [DllImport("libvorbis")]
-    static extern void vorbis_info_init(vorbis_info vi);
-
     public static void Write(byte[] data, string file)
     {
         Unity_Studio.EndianStream stream = new Unity_Studio.EndianStream(new System.IO.MemoryStream(data), Unity_Studio.EndianType.LittleEndian);
@@ -165,18 +161,15 @@ public static class FSBExport
 
     public class Header
     {
-        public uint crc32;
-        public int blocksize_short;
-        public int blocksize_long;
-        public uint setup_header_size;
-        public char[] setup_header;
+        //public uint crc32;
+        //public int blocksize_short;
+        //public int blocksize_long;
+        //public uint setup_header_size;
+        //public char[] setup_header;
 
         public Header(int channels, int rate, int quality)
         {
             float vorbis_quality = ((quality - 1) + (quality - 100) * 0.1f) / 99.0f;
-            vorbis_quality += .0000001f;
-            if (vorbis_quality >= 1) vorbis_quality = .9999f;
-
         }
     }
 

@@ -121,7 +121,7 @@ namespace Assets.Scripts.UI.Screens
             DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 10f), new Vector2(30, 6), "Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.");
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), new Vector2(30, 5), "Valkyrie uses libvorbis, DotNetZip-For-Unity and has code derived from Unity Studio.");
+            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), new Vector2(30, 5), "Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio.");
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
             TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); });

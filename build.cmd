@@ -5,7 +5,6 @@ mkdir build\batch
 xcopy /E /Y build\unity build\batch
 copy LICENSE build\batch
 copy NOTICE build\batch
-copy libvorbis-LICENSE build\batch
 copy dotnetzip-license.rtf build\batch
 mkdir build\batch\valkyrie_Data\content
 mkdir build\batch\valkyrie_Data\quests
@@ -19,4 +18,3 @@ del build\valkyrie-win-%version%.zip
 cd build\batch
 "C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-win-%version%.zip * -r
 cd ..\..
-
