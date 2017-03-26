@@ -134,7 +134,6 @@ public class TokenBoard : MonoBehaviour {
     {
         Game game = Game.Get();
         Sprite iconSprite;
-        Sprite borderSprite;
 
         // Check that placement name exists
         if (!game.quest.qd.components.ContainsKey(place) && place.Length > 0)
