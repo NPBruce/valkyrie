@@ -91,26 +91,68 @@ public class EditorComponentUniqueMonster : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        //string[] activations
-        //string[] traits
+        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), "Activations:");
+        db.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 15), new Vector2(3, 1), "Health:");
+        tb = new TextButton(new Vector2(12, 15), new Vector2(1, 1), "+", delegate { AddActivation(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        int offset = 16;
+        int index;
+        for (index = 0; index < 6; index++)
+        {
+            if (monsterComponent.activations.Length > index)
+            {
+                int i = index;
+                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), monsterComponent.activations[index]);
+                db.AddBorder();
+                db.ApplyTag("editor");
+                tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), "-", delegate { RemoveActivation(i); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
+        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), "Traits:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), "+", delegate { AddTrait(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        offset = 16;
+        for (index = 0; index < 6; index++)
+        {
+            if (monsterComponent.traits.Length > index)
+            {
+                int i = index;
+                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1), monsterComponent.traits[index]);
+                db.AddBorder();
+                db.ApplyTag("editor");
+                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "-", delegate { RemoveTrait(i); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
+        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), "Health:");
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
-            healthDBE = new DialogBoxEditable(new Vector2(3, 15), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
+            healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
             healthDBE.ApplyTag("editor");
             healthDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 15), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
+                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 15), new Vector2(3, 1), "Set", delegate { SetHealth(); });
+            tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Set", delegate { SetHealth(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -207,6 +249,50 @@ public class EditorComponentUniqueMonster : EditorComponent
     public void SetInfo()
     {
         monsterComponent.info = new Assets.Scripts.Content.StringKey("Monster Info");
+        Update();
+    }
+
+    public void AddActivation()
+    {
+
+    }
+
+    public void RemoveActivation(int index)
+    {
+        string[] newA = new string[monsterComponent.activations.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < monsterComponent.activations.Length; i++)
+        {
+            if (i != index)
+            {
+                newA[j++] = monsterComponent.activations[i];
+            }
+        }
+
+        monsterComponent.activations = newA;
+        Update();
+    }
+
+    public void AddTrait()
+    {
+
+    }
+
+    public void RemoveTrait(int index)
+    {
+        string[] newT = new string[monsterComponent.traits.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < monsterComponent.traits.Length; i++)
+        {
+            if (i != index)
+            {
+                newT[j++] = monsterComponent.traits[i];
+            }
+        }
+
+        monsterComponent.traits = newT;
         Update();
     }
 
