@@ -1,8 +1,8 @@
 ﻿namespace OggVorbisEncoder.Setup
 {
-    public interface IMappingTemplate
+    public class IMappingTemplate
     {
-        Mapping[] Mapping { get; }
-        IResidueTemplate[] ResidueTemplate { get; }
+        Mapping[] Mapping;
+        IResidueTemplate[] ResidueTemplate;
     }
 }

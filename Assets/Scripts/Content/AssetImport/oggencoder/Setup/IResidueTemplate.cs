@@ -1,14 +1,14 @@
 ﻿namespace OggVorbisEncoder.Setup
 {
-    public interface IResidueTemplate
+    public class IResidueTemplate
     {
-        ResidueType ResidueType { get; }
-        ResidueLimitType LimitType { get; }
-        int Grouping { get; }
-        Residue Residue { get; }
-        IStaticCodeBook BookAux { get; }
-        IStaticCodeBook BookAuxManaged { get; }
-        IStaticBookBlock BooksBase { get; }
-        IStaticBookBlock BooksBaseManaged { get; }
+        ResidueType ResidueType;
+        ResidueLimitType LimitType;
+        int Grouping;
+        Residue Residue;
+        IStaticCodeBook BookAux;
+        IStaticCodeBook BookAuxManaged;
+        IStaticBookBlock BooksBase;
+        IStaticBookBlock BooksBaseManaged;
     }
 }
