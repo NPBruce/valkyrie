@@ -11,7 +11,7 @@ namespace OggVorbisEncoder.Lookups
         private readonly Residue _residue;
         private readonly int _stages;
 
-        public ResidueLookup(Residue residue, IReadOnlyList<CodeBook> fullBooks)
+        public ResidueLookup(Residue residue, List<CodeBook> fullBooks)
         {
             if (residue.ResidueType != ResidueType.Two)
                 throw new NotImplementedException("ResidueTypes other than 'Two' are not yet implemented");
@@ -217,7 +217,7 @@ namespace OggVorbisEncoder.Lookups
             return null;
         }
 
-        private int[][] ResTwoClass(IReadOnlyList<int[]> couples, int channels)
+        private int[][] ResTwoClass(List<int[]> couples, int channels)
         {
             var n = _residue.End - _residue.Begin;
 

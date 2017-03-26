@@ -7,6 +7,6 @@
             Block = block;
         }
 
-        public int[] Block { get; }
+        public int[] Block;
     }
 }

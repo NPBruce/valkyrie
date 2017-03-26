@@ -37,48 +37,49 @@ namespace OggVorbisEncoder.Setup
         /// <summary>
         ///     0 to 15
         /// </summary>
-        public int[] PartitionClass { get; } // VIF_PARTS length
+        public int[] PartitionClass; // VIF_PARTS length
 
         /// <summary>
         ///     1 to 8
         /// </summary>
-        public int[] ClassDimensions { get; }
+        public int[] ClassDimensions;
 
         /// <summary>
         ///     0,1,2,3 (bits: 1&lt;&lt;n poss)
         /// </summary>
-        public int[] ClassSubs { get; }
+        public int[] ClassSubs;
 
         /// <summary>
         ///     subs ^ dim entries
         /// </summary>
-        public int[] ClassBook { get; }
+        public int[] ClassBook;
 
         /// <summary>
         ///     [VIF_CLASS][subs] [VIF_CLASS][8]
         /// </summary>
-        public int[][] ClassSubBook { get; }
+        public int[][] ClassSubBook;
 
         /// <summary>
         ///     1 2 3 or 4
         /// </summary>
-        public int Mult { get; }
+        public int Mult;
 
         /// <summary>
         ///     first two implicit
         /// </summary>
-        public int[] PostList { get; }
+        public int[] PostList;
 
         /* encode side analysis parameters */
-        public float MaxOver { get; }
-        public float MaxUnder { get; }
-        public float MaxError { get; }
-        public float TwoFitWeight { get; }
-        public float TwoFitAtten { get; }
+        public float MaxOver;
+        public float MaxUnder;
+        public float MaxError;
+        public float TwoFitWeight;
+        public float TwoFitAtten;
         public int N { get; set; }
 
-        public Floor Clone() =>
-            new Floor(
+        public Floor Clone()
+        {
+            return new Floor(
                 PartitionClass.ToArray(),
                 ClassDimensions.ToArray(),
                 ClassSubs.ToArray(),
@@ -92,5 +93,6 @@ namespace OggVorbisEncoder.Setup
                 TwoFitWeight,
                 TwoFitAtten,
                 N);
+        }
     }
 }

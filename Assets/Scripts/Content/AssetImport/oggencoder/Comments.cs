@@ -7,7 +7,7 @@ namespace OggVorbisEncoder
     {
         private readonly List<string> _userComments = new List<string>();
 
-        public IReadOnlyList<string> UserComments => _userComments;
+        public List<string> UserComments { get { return _userComments; } }
 
         public void AddTag(string tag, string contents)
         {

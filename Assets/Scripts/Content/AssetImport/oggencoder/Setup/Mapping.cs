@@ -12,10 +12,10 @@ namespace OggVorbisEncoder.Setup
             int[] couplingMag,
             int[] couplingAng)
         {
-            if (floorSubMap?.Length != residueSubMap?.Length)
+            if (floorSubMap != null && residueSubMap != null && floorSubMap.Length != residueSubMap.Length)
                 throw new ArgumentException("{nameof(floorSubMap)} and {nameof(residueSubMap)} must be the same size");
 
-            if (couplingMag?.Length != couplingAng?.Length)
+            if (couplingMag != null && couplingAng != null && couplingMag.Length != couplingAng.Length)
                 throw new ArgumentException("{nameof(couplingMag)} and {nameof(couplingAng)} must be the same size");
 
             ChannelMuxList = channelMuxList;
@@ -25,23 +25,26 @@ namespace OggVorbisEncoder.Setup
             CouplingAng = couplingAng;
         }
 
-        public int SubMaps => FloorSubMap.Length;
+        public int SubMaps { get { return FloorSubMap.Length; } }
 
-        public int[] ChannelMuxList { get; } // up to 256 channels in a Vorbis stream
+        public int[] ChannelMuxList; // up to 256 channels in a Vorbis stream
 
-        public int[] FloorSubMap { get; } // [mux] submap to floors
-        public int[] ResidueSubMap { get; } // [mux] submap to residue
+        public int[] FloorSubMap; // [mux] submap to floors
+        public int[] ResidueSubMap; // [mux] submap to residue
 
-        public int CouplingSteps => CouplingMag.Length;
+        public int CouplingSteps { get { return CouplingMag.Length; } }
 
-        public int[] CouplingMag { get; }
-        public int[] CouplingAng { get; }
+        public int[] CouplingMag;
+        public int[] CouplingAng;
 
-        public Mapping Clone() => new Mapping(
+        public Mapping Clone()
+        {
+            return new Mapping(
             ChannelMuxList.ToArray(),
             FloorSubMap.ToArray(),
             ResidueSubMap.ToArray(),
             CouplingMag.ToArray(),
             CouplingAng.ToArray());
+        }
     }
 }

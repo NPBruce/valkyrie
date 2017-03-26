@@ -14,7 +14,7 @@ namespace OggVorbisEncoder.Lookups
         private const int EnvelopeMinStretch = 2;
         private const int EnvelopeMaxStretch = 12; // One third full block
         private readonly EnvelopeBand[] _bands;
-        private readonly IReadOnlyList<EnvelopeFilterState> _filters;
+        private readonly List<EnvelopeFilterState> _filters;
         private readonly MdctLookup _mdctLookup;
 
         private readonly float[] _mdctWindow;
@@ -165,7 +165,7 @@ namespace OggVorbisEncoder.Lookups
         }
 
         private int AmpPcm(
-            IReadOnlyList<float> pcm,
+            List<float> pcm,
             int pcmOffset,
             int filterOffset)
         {

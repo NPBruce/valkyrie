@@ -14,7 +14,7 @@ namespace OggVorbisEncoder
             Offset = offset;
         }
 
-        public int Offset { get; }
+        public int Offset;
 
         public T this[int index]
         {
@@ -22,9 +22,9 @@ namespace OggVorbisEncoder
             set { _array[Offset + index] = value; }
         }
 
-        public int Count => _array.Count - Offset;
+        public int Count { get { return _array.Count - Offset; } }
 
-        public bool IsReadOnly { get; } = false;
+        public bool IsReadOnly = false;
 
         public IEnumerator<T> GetEnumerator()
         {

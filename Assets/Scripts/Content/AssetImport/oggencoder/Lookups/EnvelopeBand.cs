@@ -20,8 +20,8 @@ namespace OggVorbisEncoder.Lookups
             Total = (float) (1.0/Total);
         }
 
-        public int Begin { get; }
-        public float[] Window { get; }
-        public float Total { get; }
+        public int Begin;
+        public float[] Window;
+        public float Total;
     }
 }

@@ -37,23 +37,25 @@ namespace OggVorbisEncoder.Setup
             SlidingLowPass = slidingLowPass.Select(s => s.ToFixedLength(PacketBlobs)).ToArray();
         }
 
-        public int EighthOctaveLines { get; }
+        public int EighthOctaveLines;
 
         // for block long/short tuning; encode only 
-        public float[] PreEchoThreshold { get; }
-        public float[] PostEchoThreshold { get; }
-        public float StretchPenalty { get; }
-        public float PreEchoMinEnergy { get; }
+        public float[] PreEchoThreshold;
+        public float[] PostEchoThreshold;
+        public float StretchPenalty;
+        public float PreEchoMinEnergy;
         public float AmpMaxAttPerSec { get; set; }
 
         // channel coupling config 
-        public int[] CouplingPerKilohertz { get; }
-        public int[][] CouplingPointLimit { get; }
+        public int[] CouplingPerKilohertz;
+        public int[][] CouplingPointLimit;
         public int[] CouplingPrePointAmp { get; set; }
         public int[] CouplingPostPointAmp { get; set; }
-        public int[][] SlidingLowPass { get; }
+        public int[][] SlidingLowPass;
 
-        public PsyGlobal Clone() => new PsyGlobal(
+        public PsyGlobal Clone()
+        {
+            return new PsyGlobal(
             EighthOctaveLines,
             PreEchoThreshold.ToArray(),
             PostEchoThreshold.ToArray(),
@@ -65,5 +67,6 @@ namespace OggVorbisEncoder.Setup
             CouplingPrePointAmp.ToArray(),
             CouplingPostPointAmp.ToArray(),
             SlidingLowPass.Select(s => s.ToArray()).ToArray());
+        }
     }
 }

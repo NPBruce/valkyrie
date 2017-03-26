@@ -22,13 +22,13 @@
             Grouping = grouping;
         }
 
-        public ResidueType ResidueType { get; }
-        public ResidueLimitType LimitType { get; }
-        public int Grouping { get; }
-        public Residue Residue { get; }
-        public IStaticCodeBook BookAux { get; }
-        public IStaticCodeBook BookAuxManaged { get; }
-        public IStaticBookBlock BooksBase { get; }
-        public IStaticBookBlock BooksBaseManaged { get; }
+        public ResidueType ResidueType;
+        public ResidueLimitType LimitType;
+        public int Grouping;
+        public Residue Residue;
+        public IStaticCodeBook BookAux;
+        public IStaticCodeBook BookAuxManaged;
+        public IStaticBookBlock BooksBase;
+        public IStaticBookBlock BooksBaseManaged;
     }
 }

@@ -18,7 +18,7 @@ namespace OggVorbisEncoder.Lookups
             fdrffti(n);
         }
 
-        public int N { get; }
+        public int N;
 
         private void fdrffti(int n)
         {

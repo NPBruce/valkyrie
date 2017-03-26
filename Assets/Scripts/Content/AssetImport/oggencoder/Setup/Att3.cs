@@ -9,8 +9,8 @@
             Decay = decay;
         }
 
-        public int[] Att { get; }
-        public float Boost { get; }
-        public float Decay { get; }
+        public int[] Att;
+        public float Boost;
+        public float Decay;
     }
 }

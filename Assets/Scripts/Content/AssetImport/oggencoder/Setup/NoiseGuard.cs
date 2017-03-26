@@ -9,8 +9,8 @@
             Fixed = fix;
         }
 
-        public int Low { get; }
-        public int High { get; }
-        public int Fixed { get; }
+        public int Low;
+        public int High;
+        public int Fixed;
     }
 }

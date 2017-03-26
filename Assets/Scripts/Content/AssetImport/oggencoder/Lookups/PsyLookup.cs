@@ -208,7 +208,7 @@ namespace OggVorbisEncoder.Lookups
                         athc[j],
                         100f - j*10f - Level0);
 
-                    MaxCurve(athc[j], workc[i][j]);
+                    MaxCurve(athc[j], new List<float>(workc[i][j]));
                 }
 
                 /* Now limit the louder curves.
@@ -223,8 +223,8 @@ namespace OggVorbisEncoder.Lookups
 
                 for (var j = 1; j < Levels; j++)
                 {
-                    MinCurve(athc[j], athc[j - 1]);
-                    MinCurve(workc[i][j], athc[j]);
+                    MinCurve(athc[j], new List<float>(athc[j - 1]));
+                    MinCurve(workc[i][j], new List<float>(athc[j]));
                 }
             }
 
@@ -386,8 +386,8 @@ namespace OggVorbisEncoder.Lookups
         }
 
         public void OffsetAndMix(
-            IReadOnlyList<float> noise,
-            IReadOnlyList<float> tone,
+            List<float> noise,
+            List<float> tone,
             int offsetIndex,
             IList<float> logmask,
             IList<float> mdct,
@@ -645,8 +645,8 @@ namespace OggVorbisEncoder.Lookups
             int blobno,
             PsyGlobal psyGlobal,
             Mapping mapping,
-            IReadOnlyList<float[]> mdct,
-            IReadOnlyList<int[]> iwork,
+            List<float[]> mdct,
+            List<int[]> iwork,
             bool[] nonzero,
             int slidingLowpass,
             int channels)
@@ -1101,14 +1101,14 @@ namespace OggVorbisEncoder.Lookups
             }
         }
 
-        private static void MinCurve(IList<float> c1, IReadOnlyList<float> c2)
+        private static void MinCurve(IList<float> c1, List<float> c2)
         {
             for (var i = 0; i < EhmerMax; i++)
                 if (c2[i] < c1[i])
                     c1[i] = c2[i];
         }
 
-        private static void MaxCurve(IList<float> c1, IReadOnlyList<float> c2)
+        private static void MaxCurve(IList<float> c1, List<float> c2)
         {
             for (var i = 0; i < EhmerMax; i++)
                 if (c2[i] > c1[i])
@@ -1121,11 +1121,20 @@ namespace OggVorbisEncoder.Lookups
                 curve[i] += att;
         }
 
-        private static double ToOctave(double n) => Math.Log(n)*1.442695f - 5.965784f;
+        private static double ToOctave(double n)
+        {
+            return Math.Log(n) * 1.442695f - 5.965784f;
+        }
 
-        private static double FromOctave(double n) => Math.Exp((n + 5.965784f)*.693147f);
+        private static double FromOctave(double n)
+        {
+            return Math.Exp((n + 5.965784f) * .693147f);
+        }
 
-        private static double ToBark(double n) => 13.1f*Math.Atan(.00074f*n) + 2.24f*Math.Atan(n*n*1.85e-8f) + 1e-4f*n;
+        private static double ToBark(double n)
+        {
+            return 13.1f * Math.Atan(.00074f * n) + 2.24f * Math.Atan(n * n * 1.85e-8f) + 1e-4f * n;
+        }
 
         private class ApComparer : IComparer<OffsetArray<float>>
         {
@@ -1140,13 +1149,13 @@ namespace OggVorbisEncoder.Lookups
 
         #region SOURCE DATA
 
-        private static readonly IReadOnlyList<float> StereoThresholdsLimit = new[]
+        private static readonly List<float> StereoThresholdsLimit = new[]
             {0, .5f, 1, 1.5f, 2, 2.5f, 4.5f, 8.5f, 9e10f};
 
-        private static readonly IReadOnlyList<float> StereoThresholds = new[]
+        private static readonly List<float> StereoThresholds = new[]
             {0, .5f, 1, 1.5f, 2.5f, 4.5f, 8.5f, 16.5f, 9e10f};
 
-        private static readonly IReadOnlyList<float> DecibelLookup = new[]
+        private static readonly List<float> DecibelLookup = new[]
         {
             1.0649863e-07f, 1.1341951e-07f, 1.2079015e-07f, 1.2863978e-07f,
             1.3699951e-07f, 1.4590251e-07f, 1.5538408e-07f, 1.6548181e-07f,

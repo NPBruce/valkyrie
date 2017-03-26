@@ -32,7 +32,7 @@ namespace OggVorbisEncoder
             _buffer = new byte[initialBufferSize];
         }
 
-        private int Bytes => _endByte + (_endBit + 7)/8;
+        private int Bytes { get { return _endByte + (_endBit + 7) / 8; } }
 
         public void WriteBook(CodeBook book, int a)
         {

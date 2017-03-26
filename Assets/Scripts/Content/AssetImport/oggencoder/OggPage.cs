@@ -25,11 +25,11 @@ namespace OggVorbisEncoder
         ///     The page header for this page. The exact contents of this header
         ///     are defined in the framing spec document.
         /// </summary>
-        public byte[] Header { get; }
+        public byte[] Header;
 
         /// <summary>
         ///     The data for this page.
         /// </summary>
-        public byte[] Body { get; }
+        public byte[] Body;
     }
 }

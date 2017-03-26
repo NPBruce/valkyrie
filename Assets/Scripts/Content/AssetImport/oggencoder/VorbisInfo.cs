@@ -21,13 +21,13 @@ namespace OggVorbisEncoder
             BitRateNominal = bitRateNominal;
         }
 
-        public int Channels { get; }
+        public int Channels;
 
-        public int SampleRate { get; }
+        public int SampleRate;
 
-        public int BitRateNominal { get; }
+        public int BitRateNominal;
 
-        public CodecSetup CodecSetup { get; }
+        public CodecSetup CodecSetup;
 
         public static VorbisInfo InitVariableBitRate(int channels, int sampleRate, float baseQuality)
         {
@@ -261,9 +261,9 @@ namespace OggVorbisEncoder
         private static void PsyParamSetup(
             CodecSetup codecSetup,
             int encodeSetupBaseSetting,
-            IReadOnlyList<int> noiseNormalStart,
-            IReadOnlyList<int> noiseNormalPartition,
-            IReadOnlyList<double> noiseNormalThreshold)
+            List<int> noiseNormalStart,
+            List<int> noiseNormalPartition,
+            List<double> noiseNormalThreshold)
         {
             var block = codecSetup.PsyParams.Count;
 
@@ -280,9 +280,9 @@ namespace OggVorbisEncoder
         private static void FloorSetup(
             CodecSetup codecSetup,
             int encodeSetupBaseSetting,
-            IReadOnlyList<IStaticCodeBook[]> templateFloorBooks,
-            IReadOnlyList<Floor> templateFloorParams,
-            IReadOnlyList<int> templateFloorMappings)
+            List<IStaticCodeBook[]> templateFloorBooks,
+            List<Floor> templateFloorParams,
+            List<int> templateFloorMappings)
         {
             var sourceIndex = templateFloorMappings[encodeSetupBaseSetting];
             var clonedFloor = templateFloorParams[sourceIndex].Clone();
@@ -324,7 +324,7 @@ namespace OggVorbisEncoder
             CodecSetup codecSetup,
             int sampleRate,
             int channels,
-            IReadOnlyList<IMappingTemplate> templateMaps)
+            List<IMappingTemplate> templateMaps)
         {
             var encodeSetupBaseSetting = (int) codecSetup.EncodeSetup.BaseSetting;
             var map = templateMaps[encodeSetupBaseSetting].Mapping;
@@ -484,8 +484,8 @@ namespace OggVorbisEncoder
         private static void GlobalPsychSetup(
             CodecSetup codecSetup,
             double encodeSetupTriggerSetting,
-            IReadOnlyList<PsyGlobal> templateGlobalParams,
-            IReadOnlyList<double> templateGlobalMapping)
+            List<PsyGlobal> templateGlobalParams,
+            List<double> templateGlobalMapping)
         {
             var setting = (int) encodeSetupTriggerSetting;
             var ds = encodeSetupTriggerSetting - setting;
@@ -523,7 +523,7 @@ namespace OggVorbisEncoder
         private static void GlobalStereo(
             CodecSetup codecSetup,
             int sampleRate,
-            IReadOnlyList<AdjStereo> templateStereoModes)
+            List<AdjStereo> templateStereoModes)
         {
             var setting = (int) codecSetup.EncodeSetup.BaseSetting;
             var ds = codecSetup.EncodeSetup.BaseSetting - setting;
@@ -569,8 +569,8 @@ namespace OggVorbisEncoder
         private static void BlockSizeSetup(
             CodecSetup codecSetup,
             int index,
-            IReadOnlyList<int> templateBlockSizeShort,
-            IReadOnlyList<int> templateBlockSizeLong)
+            List<int> templateBlockSizeShort,
+            List<int> templateBlockSizeLong)
         {
             var blockshort = templateBlockSizeShort[index];
             var blocklong = templateBlockSizeLong[index];
@@ -582,9 +582,9 @@ namespace OggVorbisEncoder
             CodecSetup codecSetup,
             double toneMaskSetting,
             int block,
-            IReadOnlyList<Att3> templatePsyToneMasterAtt,
-            IReadOnlyList<int> templatePsyTone0Decibel,
-            IReadOnlyList<AdjBlock> templatePsyToneAdjLong)
+            List<Att3> templatePsyToneMasterAtt,
+            List<int> templatePsyTone0Decibel,
+            List<AdjBlock> templatePsyToneAdjLong)
         {
             var setting = (int) toneMaskSetting;
             var ds = toneMaskSetting - setting;
@@ -619,8 +619,8 @@ namespace OggVorbisEncoder
             CodecSetup codecSetup,
             double noiseCompandSetting,
             int block,
-            IReadOnlyList<CompandBlock> templatePsyNoiseCompand,
-            IReadOnlyList<double> templatePsyNoiseCompandShortMapping)
+            List<CompandBlock> templatePsyNoiseCompand,
+            List<double> templatePsyNoiseCompandShortMapping)
         {
             var setting = (int) noiseCompandSetting;
             var ds = noiseCompandSetting - setting;
@@ -647,7 +647,7 @@ namespace OggVorbisEncoder
             CodecSetup codecSetup,
             double tonePeakLimitSetting,
             int block,
-            IReadOnlyList<int> templatePsyToneDecibelSuppress)
+            List<int> templatePsyToneDecibelSuppress)
         {
             var setting = (int) tonePeakLimitSetting;
             var ds = tonePeakLimitSetting - setting;
@@ -661,9 +661,9 @@ namespace OggVorbisEncoder
             CodecSetup codecSetup,
             double noiseBiasSetting,
             int block,
-            IReadOnlyList<int> templatePsyNoiseDecibelSuppress,
-            IReadOnlyList<Noise3> templatePsyNoiseBiasLong,
-            IReadOnlyList<NoiseGuard> templatePsyNoiseGuards)
+            List<int> templatePsyNoiseDecibelSuppress,
+            List<Noise3> templatePsyNoiseBiasLong,
+            List<NoiseGuard> templatePsyNoiseGuards)
         {
             var setting = (int) noiseBiasSetting;
             var ds = noiseBiasSetting - setting;

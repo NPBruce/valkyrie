@@ -2,7 +2,7 @@
 {
     public class Page8_1 : IStaticCodeBook
     {
-        public int AllocedP { get; } = 0;
+        public int AllocedP = 0;
         public int Dimensions = 2;
 
         public byte[] LengthList = {

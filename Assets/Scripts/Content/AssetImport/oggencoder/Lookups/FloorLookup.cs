@@ -416,7 +416,7 @@ namespace OggVorbisEncoder.Lookups
             return y0 + off;
         }
 
-        private static int PostY(IReadOnlyList<int> a, IReadOnlyList<int> b, int pos)
+        private static int PostY(List<int> a, List<int> b, int pos)
         {
             if (a[pos] < 0)
                 return b[pos];

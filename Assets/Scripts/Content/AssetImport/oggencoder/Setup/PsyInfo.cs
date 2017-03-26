@@ -82,13 +82,13 @@ namespace OggVorbisEncoder.Setup
             private set { _toneAtt = value.ToFixedLength(Bands); }
         }
 
-        public int NoiseMaskP { get; }
+        public int NoiseMaskP;
         public float NoiseMaxSuppress { get; set; }
-        public float NoiseWindowLow { get; }
-        public float NoiseWindowHigh { get; }
-        public int NoiseWindowLowMin { get; set; }
-        public int NoiseWindowHighMin { get; set; }
-        public int NoiseWindowFixed { get; set; }
+        public float NoiseWindowLow;
+        public float NoiseWindowHigh;
+        public int NoiseWindowLowMin;
+        public int NoiseWindowHighMin;
+        public int NoiseWindowFixed;
 
         public float[][] NoiseOffset
         {
@@ -113,7 +113,9 @@ namespace OggVorbisEncoder.Setup
         public int NormalPartition { get; set; }
         public double NormalThreshold { get; set; }
 
-        public PsyInfo Clone() => new PsyInfo(
+        public PsyInfo Clone()
+        {
+            return new PsyInfo(
             BlockFlag,
             AthAdjAtt,
             AthMaxAtt,
@@ -136,5 +138,6 @@ namespace OggVorbisEncoder.Setup
             NormalStart,
             NormalPartition,
             NormalThreshold);
+        }
     }
 }

@@ -43,12 +43,12 @@ namespace OggVorbisEncoder
                 AmplitudeTrackDbPerSec = -99999;
         }
 
-        public ISetupTemplate Template { get; }
-        public double BaseSetting { get; }
-        public double LowPassKilohertz { get; }
-        public double AthFloatingDecibel { get; }
-        public double AthAbsoluteDecibel { get; }
-        public double AmplitudeTrackDbPerSec { get; }
+        public ISetupTemplate Template;
+        public double BaseSetting;
+        public double LowPassKilohertz;
+        public double AthFloatingDecibel;
+        public double AthAbsoluteDecibel;
+        public double AmplitudeTrackDbPerSec;
 
         public static EncodeSetup GetBestMatch(
             int channels,

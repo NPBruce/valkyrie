@@ -23,7 +23,7 @@ namespace OggVorbisEncoder
         private readonly float[][] _pcm;
 
         private readonly VorbisInfo _vorbisInfo;
-        private readonly IReadOnlyList<int> _window;
+        private readonly List<int> _window;
 
         private int _centerWindow;
         private int _currentWindow;
@@ -39,7 +39,7 @@ namespace OggVorbisEncoder
             VorbisInfo vorbisInfo,
             LookupCollection lookups,
             float[][] pcm,
-            IReadOnlyList<int> window,
+            List<int> window,
             int centerWindow)
         {
             _vorbisInfo = vorbisInfo;
@@ -114,7 +114,7 @@ namespace OggVorbisEncoder
         }
 
         private static void UpdatePcmFromLpcPredict(
-            IReadOnlyList<float> lpcCoeff,
+            List<float> lpcCoeff,
             IList<float> data,
             int offset,
             int m,
@@ -468,10 +468,10 @@ namespace OggVorbisEncoder
             int pcmEnd,
             EncodeBuffer buffer,
             Mapping mapping,
-            IReadOnlyList<int[]> work,
-            IReadOnlyList<int[][]> floorPosts,
+            List<int[]> work,
+            List<int[][]> floorPosts,
             PsyLookup psyLookup,
-            IReadOnlyList<float[]> gmdct)
+            List<float[]> gmdct)
         {
             var codecSetup = _vorbisInfo.CodecSetup;
             var channels = pcm.Length;
@@ -668,9 +668,9 @@ namespace OggVorbisEncoder
             int pcmEnd,
             Mapping mapping,
             IList<int[][]> floorPosts,
-            IReadOnlyList<float[]> gmdct,
+            List<float[]> gmdct,
             PsyLookup psyLookup,
-            IReadOnlyList<float> localAmpMax)
+            List<float> localAmpMax)
         {
             var noise = new float[pcmEnd/2];
             var tone = new float[pcmEnd/2];

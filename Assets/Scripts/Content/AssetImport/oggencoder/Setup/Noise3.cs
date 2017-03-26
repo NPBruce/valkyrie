@@ -7,6 +7,6 @@
             Data = data;
         }
 
-        public int[][] Data { get; }
+        public int[][] Data;
     }
 }

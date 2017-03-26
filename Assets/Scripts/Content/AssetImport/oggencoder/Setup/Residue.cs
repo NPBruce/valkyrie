@@ -28,21 +28,22 @@
             ResidueType = residueType;
         }
 
-        public int Begin { get; }
+        public int Begin;
         public int End { get; set; }
-        public int Partitions { get; }
-        public int PartitionValues { get; }
+        public int Partitions;
+        public int PartitionValues;
         public int GroupBook { get; set; }
-        public int[] SecondStages { get; }
-        public int[] BookList { get; }
-        public int[] ClassMetric1 { get; }
-        public int[] ClassMetric2 { get; }
+        public int[] SecondStages;
+        public int[] BookList;
+        public int[] ClassMetric1;
+        public int[] ClassMetric2;
 
-        public ResidueType ResidueType { get; }
-        public int Grouping { get; }
+        public ResidueType ResidueType;
+        public int Grouping;
 
         public Residue Clone(ResidueType residueTypeOverride, int groupingOverride)
-            => new Residue(
+        {
+            return new Residue(
                 Begin,
                 End,
                 groupingOverride,
@@ -54,5 +55,6 @@
                 ClassMetric1,
                 ClassMetric2,
                 residueTypeOverride);
+        }
     }
 }

@@ -14,9 +14,9 @@
             LowPassKilohertz = lowPassKilohertz;
         }
 
-        public int[] Pre { get; }
-        public int[] Post { get; }
-        public float[] Kilohertz { get; }
-        public float[] LowPassKilohertz { get; }
+        public int[] Pre;
+        public int[] Post;
+        public float[] Kilohertz;
+        public float[] LowPassKilohertz;
     }
 }

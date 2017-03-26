@@ -39,19 +39,19 @@ namespace OggVorbisEncoder.Setup
         /// <summary>
         ///     codebook dimensions (elements per vector)
         /// </summary>
-        public int Dimensions { get; }
+        public int Dimensions;
 
         /// <summary>
         ///     codebook entries
         /// </summary>
-        public int Entries { get; }
+        public int Entries;
 
         /// <summary>
         ///     populated codebook entries
         /// </summary>
-        public int UsedEntries { get; }
+        public int UsedEntries;
 
-        public IStaticCodeBook StaticBook { get; }
+        public IStaticCodeBook StaticBook;
 
         /* for encode, the below are entry-ordered, fully populated */
         /* for decode, the below are ordered by bitreversed codeword and only
@@ -60,31 +60,31 @@ namespace OggVorbisEncoder.Setup
         /// <summary>
         ///     list of dim*entries actual entry values
         /// </summary>
-        public float[] ValueList { get; }
+        public float[] ValueList;
 
         /// <summary>
         ///     list of bitstream codewords for each entry
         /// </summary>
-        public uint[] CodeList { get; }
+        public uint[] CodeList;
 
         /// <summary>
         ///     only used if sparseness collapsed
         /// </summary>
-        public int[] DecIndex { get; }
+        public int[] DecIndex;
 
-        public byte[] DecCodeLengths { get; }
+        public byte[] DecCodeLengths;
 
 
-        public uint[] DecFirstTable { get; }
+        public uint[] DecFirstTable;
 
-        public int DecFirstTableN { get; }
+        public int DecFirstTableN;
 
-        public int DecMaxLength { get; }
+        public int DecMaxLength;
 
         /* The current encoder uses only centered, integer-only lattice books. */
-        public int QuantValues { get; }
-        public int MinVal { get; }
-        public int Delta { get; }
+        public int QuantValues;
+        public int MinVal;
+        public int Delta;
 
         public static CodeBook InitEncode(IStaticCodeBook source)
         {

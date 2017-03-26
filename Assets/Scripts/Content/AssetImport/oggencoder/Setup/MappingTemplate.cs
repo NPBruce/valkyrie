@@ -10,7 +10,7 @@
             ResidueTemplate = residueTemplate;
         }
 
-        public Mapping[] Mapping { get; }
-        public IResidueTemplate[] ResidueTemplate { get; }
+        public Mapping[] Mapping;
+        public IResidueTemplate[] ResidueTemplate;
     }
 }
