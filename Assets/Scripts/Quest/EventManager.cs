@@ -87,7 +87,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            ValkyrieDebug.Log("Warning: Missing event called: " + name);
+            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
             return;
         }
 
@@ -123,14 +123,14 @@ public class EventManager
         // Add set flags
         foreach (string s in e.qEvent.setFlags)
         {
-            ValkyrieDebug.Log("Notice: Setting quest flag: " + s + System.Environment.NewLine);
+            game.quest.log.Add(new Quest.LogEntry("Notice: Setting quest flag: " + s, true));
             game.quest.flags.Add(s);
         }
 
         // Remove clear flags
         foreach (string s in e.qEvent.clearFlags)
         {
-            ValkyrieDebug.Log("Notice: Clearing quest flag: " + s + System.Environment.NewLine);
+            game.quest.log.Add(new Quest.LogEntry("Notice: Clearing quest flag: " + s, true));
             game.quest.flags.Remove(s);
         }
 
@@ -196,13 +196,13 @@ public class EventManager
         {
             if (e.qEvent.threat != 0)
             {
-                ValkyrieDebug.Log("Setting threat to: " + e.qEvent.threat + System.Environment.NewLine);
+                game.quest.log.Add(new Quest.LogEntry("Setting threat to: " + e.qEvent.threat, true));
             }
             game.quest.threat = e.qEvent.threat;
         }
         else if (e.qEvent.threat != 0)
         {
-            ValkyrieDebug.Log("Changing threat by: " + e.qEvent.threat + System.Environment.NewLine);
+            game.quest.log.Add(new Quest.LogEntry("Changing threat by: " + e.qEvent.threat, true));
         }
 
         // Add delayed events
@@ -367,7 +367,7 @@ public class EventManager
             }
             catch (System.Exception)
             {
-                ValkyrieDebug.Log("Warning: Invalid random clause in event dialog: " + text + System.Environment.NewLine);
+                game.quest.log.Add(new Quest.LogEntry("Warning: Invalid random clause in event dialog: " + text, true));
             }
 
             // Fix new lines and replace symbol text with special characters

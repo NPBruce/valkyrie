@@ -43,7 +43,7 @@ public class Quest
     public Stack<string> undo;
 
     // Event Log
-    public List<string> log;
+    public List<LogEntry> log;
 
     // game state variables
     public int round = 1;
@@ -84,7 +84,7 @@ public class Quest
         eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
-        log = new List<string>();
+        log = new List<LogEntry>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -294,10 +294,10 @@ public class Quest
         }
 
         // Restore event log
-        log = new List<string>();
+        log = new List<LogEntry>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
         {
-            log.Add(kv.Key);
+            log.Add(new LogEntry(kv.Key, kv.Value));
         }
 
         // Update the screen
@@ -564,10 +564,11 @@ public class Quest
             r += kv.Value.ToString(kv.Key);
         }
 
-        r += "[Log]\r\n";
-        foreach (string s in log)
+        r += "[Log]" + nl;
+        int i = 0;
+        foreach (LogEntry e in log)
         {
-            r += s;
+            r += e.ToString(i++);
         }
 
         return r;
@@ -679,7 +680,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.tokens.ContainsKey(tokenName))
             {
-                ValkyrieDebug.Log("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName);
+                game.quest.log.Add(new Quest.LogEntry("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName, true));
                 // Catch for older quests with different types (0.4.0 or older)
                 if (game.cd.tokens.ContainsKey("TokenSearch"))
                 {
@@ -787,7 +788,7 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                ValkyrieDebug.Log("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName);
+                game.quest.log.Add(new Quest.LogEntry("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName, true));
             }
 
             // State with white (used for alpha)
@@ -1081,6 +1082,65 @@ public class Quest
         mythos,
         monsters,
         horror
+    }
+
+    public class LogEntry
+    {
+        string entry;
+        bool valkyrie = false;
+        bool editor = false;
+
+        public LogEntry(string e, bool editorIn = false, bool valkyrieIn = false)
+        {
+            entry = e;
+            editor = editorIn;
+            valkyrie = valkyrieIn;
+        }
+
+        public LogEntry(string type, string e)
+        {
+            if (type.IndexOf("valkyrie") == 0)
+            {
+                valkyrie = true;
+            }
+            if (type.IndexOf("editor") == 0)
+            {
+                editor = true;
+            }
+            entry = e;
+        }
+
+        public string ToString(int id)
+        {
+            string r = "";
+            if (valkyrie)
+            {
+                r += "valkyrie" + id + "=";
+            }
+            else if (editor)
+            {
+                r += "editor" + id + "=";
+            }
+            else
+            {
+                r += "quest" + id + "=";
+            }
+            r += entry.Replace("\n", "\\n") + System.Environment.NewLine;
+            return r;
+        }
+
+        public string GetEntry()
+        {
+            if (valkyrie && !Application.isEditor)
+            {
+                return "";
+            }
+            if (editor && !Application.isEditor)
+            {
+                return "";
+            }
+            return entry.Replace("\\n", "\n") + "\n\n";
+        }
     }
 }
 

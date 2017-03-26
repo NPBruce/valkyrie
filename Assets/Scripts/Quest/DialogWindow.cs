@@ -27,6 +27,7 @@ public class DialogWindow {
             if (!game.quest.heroSelection.ContainsKey(eventData.qEvent.heroListName))
             {
                 ValkyrieDebug.Log("Warning: Hero selection in event: " + eventData.qEvent.sectionName + " from event " + eventData.qEvent.heroListName + " with no data.");
+                game.quest.log.Add(new Quest.LogEntry("Warning: Hero selection in event: " + eventData.qEvent.sectionName + " from event " + eventData.qEvent.heroListName + " with no data.", true));
             }
             else
             {
@@ -197,7 +198,7 @@ public class DialogWindow {
         }
 
         // Add this to the log
-        game.quest.log.Add(text.Replace("\n", "\\n"));
+        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
         // Event manager handles the aftermath
         game.quest.eManager.EndEvent(num-1);
