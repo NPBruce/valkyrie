@@ -9,6 +9,8 @@ public class EditorComponentUniqueMonster : EditorComponent
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
     EditorSelectionList baseESL;
+    EditorSelectionList activationsESL;
+    EditorSelectionList traitsESL;
 
     public EditorComponentUniqueMonster(string nameIn) : base()
     {
@@ -254,7 +256,33 @@ public class EditorComponentUniqueMonster : EditorComponent
 
     public void AddActivation()
     {
+        List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
 
+        Game game = Game.Get();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.Activation)
+            {
+                activations.Add(new EditorSelectionList.SelectionListEntry(kv.Key.Substring("Activation".Length)));
+            }
+        }
+
+        activationsESL = new EditorSelectionList("Select Activation", activations, delegate { SelectAddActivation(); });
+        activationsESL.SelectItem();
+    }
+
+    public void SelectAddActivation()
+    {
+        string[] newA = new string[monsterComponent.activations.Length + 1];
+        int i;
+        for (i = 0; i < monsterComponent.activations.Length; i++)
+        {
+            newA[i] = monsterComponent.activations[i];
+        }
+
+        newA[i] = activationsESL.selection;
+        monsterComponent.activations = newA;
+        Update();
     }
 
     public void RemoveActivation(int index)
@@ -276,7 +304,39 @@ public class EditorComponentUniqueMonster : EditorComponent
 
     public void AddTrait()
     {
+        HashSet<string> traits = new HashSet<string>();
 
+        Game game = Game.Get();
+        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        {
+
+            foreach (string s in kv.Value.traits)
+            {
+                traits.Add(s);
+            }
+        }
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
+        traitsESL = new EditorSelectionList("Select Activation", list, delegate { SelectAddTraits(); });
+        traitsESL.SelectItem();
+    }
+
+    public void SelectAddTraits()
+    {
+        string[] newT = new string[monsterComponent.traits.Length + 1];
+        int i;
+        for (i = 0; i < monsterComponent.traits.Length; i++)
+        {
+            newT[i] = monsterComponent.traits[i];
+        }
+
+        newT[i] = traitsESL.selection;
+        monsterComponent.traits = newT;
+        Update();
     }
 
     public void RemoveTrait(int index)
