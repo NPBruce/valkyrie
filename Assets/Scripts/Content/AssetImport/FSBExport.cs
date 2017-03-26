@@ -136,6 +136,43 @@ class FSBExport
         }
     }
 
+    public static void RebuildHeader(Ogg ogg)
+    {
+        // out id comment setup
+    }
+
+    public static Header[] GenerateHeaders()
+    {
+        int[] rates = { 8000, 11000, 16000, 22050, 24000, 32000, 44100, 48000 };
+        Dictionary<uint, Header> dict = new Dictionary<uint, Header>();
+
+        for (int quality = 1; quality <= 100; ++quality)
+        {
+            for (int channels = 1; channels <= 2; ++channels)
+            {
+                foreach (int rate in rates)
+                {
+                    Header h = new Header(channels, rate, quality);
+                }
+            }
+        }
+        return null;
+    }
+
+    public class Header
+    {
+        //public uint crc32;
+        //public int blocksize_short;
+        //public int blocksize_long;
+        //public uint setup_header_size;
+        //public char[] setup_header;
+
+        public Header(int channels, int rate, int quality)
+        {
+            float vorbis_quality = ((quality - 1) + (quality - 100) * 0.1f) / 99.0f;
+        }
+    }
+
     public class Ogg
     {
         public uint frequency = 0;
