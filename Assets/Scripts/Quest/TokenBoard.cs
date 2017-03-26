@@ -181,6 +181,14 @@ public class TokenBoard : MonoBehaviour {
 
             UnityEngine.UI.Image iconFrame = borderObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
+            if (sizeX == 3)
+            {
+                frameTex = Resources.Load("sprites/borders/Frame_Monster_2x3") as Texture2D;
+            }
+            if (sizeX == 2 && sizeY == 1)
+            {
+                frameTex = Resources.Load("sprites/borders/Frame_Monster_1x2") as Texture2D;
+            }
             iconFrame.sprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
             iconFrame.rectTransform.sizeDelta = new Vector2(sizeX, sizeY);
 
