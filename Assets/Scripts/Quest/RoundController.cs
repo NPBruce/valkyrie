@@ -139,14 +139,14 @@ public class RoundController {
                     {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
-                    // Otherwise look for the activation in contend data
+                    // Otherwise look for the activation in content data
                     else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
                     {
                         adList.Add(game.cd.activations["MonsterActivation" + s]);
                     }
                     else // Invalid activation
                     {
-                        ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+                        game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
                     }
                 }
             }
@@ -200,20 +200,20 @@ public class RoundController {
         }
 
         // If no minion activation just do master
-        if (m.currentActivation.ad.minionActions == null)
+        if (m.currentActivation.ad.minionActions.key.Length == 0)
         {
             m.minionStarted = true;
             m.masterStarted = true;
-            new ActivateDialog(m, true);
+            new ActivateDialog(m, true, true);
             return false;
         }
 
         // If no master activation just do minion
-        if (m.currentActivation.ad.masterActions == null)
+        if (m.currentActivation.ad.masterActions.key.Length == 0)
         {
             m.minionStarted = true;
             m.masterStarted = true;
-            new ActivateDialog(m, false);
+            new ActivateDialog(m, false, true);
             return false;
         }
 

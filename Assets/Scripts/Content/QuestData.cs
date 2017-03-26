@@ -376,7 +376,7 @@ public class QuestData
             // First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
-                mTypes = data["monster"].Split(' ');
+                mTypes = data["monster"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -387,7 +387,7 @@ public class QuestData
             mTraits = new string[0];
             if (data.ContainsKey("traits"))
             {
-                mTraits = data["traits"].Split(' ');
+                mTraits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             // Array of placements by hero count
@@ -397,7 +397,7 @@ public class QuestData
                 placement[i] = new string[0];
                 if (data.ContainsKey("placement" + i))
                 {
-                    placement[i] = data["placement" + i].Split(' ');
+                    placement[i] = data["placement" + i].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 }
             }
 
@@ -567,7 +567,7 @@ public class QuestData
                     {
                         if (data["event" + buttonNum].Trim().Length > 0)
                         {
-                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                         }
                         else
                         {
@@ -591,7 +591,7 @@ public class QuestData
             {
                 if (data.ContainsKey("event"))
                 {
-                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                    nextEvent.Add(new List<string>(data["event"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                 }
                 else
                 {
@@ -613,7 +613,7 @@ public class QuestData
 
                 if (data.ContainsKey("failevent"))
                 {
-                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    nextEvent.Add(new List<string>(data["failevent"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                     if (data.ContainsKey("failtext"))
                     {
                         buttons.Add(data["failtext"]);
@@ -658,7 +658,7 @@ public class QuestData
             // Display hidden components (space separated list)
             if (data.ContainsKey("add"))
             {
-                addComponents = data["add"].Split(' ');
+                addComponents = data["add"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -668,7 +668,7 @@ public class QuestData
             // Hide components (space separated list)
             if (data.ContainsKey("remove"))
             {
-                removeComponents = data["remove"].Split(' ');
+                removeComponents = data["remove"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -684,7 +684,7 @@ public class QuestData
             // Flags required to trigger (space separated list)
             if (data.ContainsKey("flags"))
             {
-                flags = data["flags"].Split(' ');
+                flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -694,7 +694,7 @@ public class QuestData
             // Flags to set trigger (space separated list)
             if (data.ContainsKey("set"))
             {
-                setFlags = data["set"].Split(' ');
+                setFlags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -704,7 +704,7 @@ public class QuestData
             // Flags to clear trigger (space separated list)
             if (data.ContainsKey("clear"))
             {
-                clearFlags = data["clear"].Split(' ');
+                clearFlags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -734,7 +734,7 @@ public class QuestData
             if (data.ContainsKey("delayedevents"))
             {
                 // List is space separated
-                string[] de = data["delayedevents"].Split(' ');
+                string[] de = data["delayedevents"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in de)
                 {
                     int delay;
@@ -1280,7 +1280,7 @@ public class QuestData
             traits = new string[0];
             if (data.ContainsKey("traits"))
             {
-                traits = data["traits"].Split(" ".ToCharArray());
+                traits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             if (data.ContainsKey("image"))
@@ -1302,7 +1302,7 @@ public class QuestData
             activations = new string[0];
             if (data.ContainsKey("activation"))
             {
-                activations = data["activation"].Split(' ');
+                activations = data["activation"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             if (data.ContainsKey("health"))
@@ -1504,7 +1504,7 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
             {
-                itemName = data["itemname"].Split(' ');
+                itemName = data["itemname"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -1512,7 +1512,7 @@ public class QuestData
             }
             if (data.ContainsKey("traits"))
             {
-                traits = data["traits"].Split(' ');
+                traits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -1597,7 +1597,7 @@ public class QuestData
             }
             if (iniData.ContainsKey("packs"))
             {
-                packs = iniData["packs"].Split(' ');
+                packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {

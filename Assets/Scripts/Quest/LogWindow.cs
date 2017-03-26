@@ -13,7 +13,13 @@ public class LogWindow
             Object.Destroy(go);
 
         // white background because font rendering is broken
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), System.String.Join("\n\n",game.quest.log.ToArray()).Replace("\\n", "\n"), Color.black, new Color(1, 1, 1, 0.9f));
+        string log = "";
+        foreach (Quest.LogEntry e in game.quest.log)
+        {
+            log += e.GetEntry();
+        }
+        log.Trim('\n');
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), log, Color.black, new Color(1, 1, 1, 0.9f));
         db.AddBorder();
         // This material works for the mask, but only renders in black
         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
