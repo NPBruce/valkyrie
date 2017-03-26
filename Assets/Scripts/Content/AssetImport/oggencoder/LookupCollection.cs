@@ -72,16 +72,16 @@ namespace OggVorbisEncoder
 
             var residue = new ResidueLookup[codecSetup.ResidueParams.Count];
             for (var i = 0; i < residue.Length; i++)
-                residue[i] = new ResidueLookup(codecSetup.ResidueParams[i], codecSetup.FullBooks);
+                residue[i] = new ResidueLookup(codecSetup.ResidueParams[i], new List<CodeBook>(codecSetup.FullBooks));
 
             return new LookupCollection(
                 envelope,
-                transform,
+                new List<MdctLookup>(transform),
                 psyGlobal,
-                psyLookup,
-                fftLookup,
-                floor,
-                residue);
+                new List<PsyLookup>(psyLookup),
+                new List<DrftLookup>(fftLookup),
+                new List<FloorLookup>(floor),
+                new List<ResidueLookup>(residue));
         }
     }
 }

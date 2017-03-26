@@ -42,8 +42,8 @@ namespace OggVorbisEncoder
             BlockSizeSetup(
                 codecSetup,
                 (int) encodeSetup.BaseSetting,
-                template.BlockSizeShort,
-                template.BlockSizeLong);
+                new List<int>(template.BlockSizeShort),
+                new List<int>(template.BlockSizeLong));
 
             var singleBlock = codecSetup.BlockSizes[0]
                               == codecSetup.BlockSizes[1];
@@ -54,52 +54,52 @@ namespace OggVorbisEncoder
                 FloorSetup(
                     codecSetup,
                     (int) encodeSetup.BaseSetting,
-                    template.FloorBooks,
-                    template.FloorParams,
-                    floorMappings);
+                    new List<IStaticCodeBook[]>(template.FloorBooks),
+                    new List<Floor>(template.FloorParams),
+                    new List<int>(floorMappings));
 
             // setup of [mostly] short Block detection and stereo
             GlobalPsychSetup(
                 codecSetup,
                 encodeSetup.BaseSetting,
-                template.GlobalParams,
-                template.GlobalMapping);
+                new List<PsyGlobal>(template.GlobalParams),
+                new List<double>(template.GlobalMapping));
 
             GlobalStereo(
                 codecSetup,
                 sampleRate,
-                template.StereoModes);
+                new List<AdjStereo>(template.StereoModes));
 
             // basic psych setup and noise normalization 
             PsyParamSetup(
                 codecSetup,
                 (int) encodeSetup.BaseSetting,
-                template.PsyNoiseNormalStart[0],
-                template.PsyNoiseNormalPartition[0],
-                template.PsyNoiseNormalThreshold);
+                new List<int>(template.PsyNoiseNormalStart[0]),
+                new List<int>(template.PsyNoiseNormalPartition[0]),
+                new List<double>(template.PsyNoiseNormalThreshold));
 
             PsyParamSetup(
                 codecSetup,
                 (int) encodeSetup.BaseSetting,
-                template.PsyNoiseNormalStart[0],
-                template.PsyNoiseNormalPartition[0],
-                template.PsyNoiseNormalThreshold);
+                new List<int>(template.PsyNoiseNormalStart[0]),
+                new List<int>(template.PsyNoiseNormalPartition[0]),
+                new List<double>(template.PsyNoiseNormalThreshold));
 
             if (!singleBlock)
             {
                 PsyParamSetup(
                     codecSetup,
                     (int) encodeSetup.BaseSetting,
-                    template.PsyNoiseNormalStart[1],
-                    template.PsyNoiseNormalPartition[1],
-                    template.PsyNoiseNormalThreshold);
+                    new List<int>(template.PsyNoiseNormalStart[1]),
+                    new List<int>(template.PsyNoiseNormalPartition[1]),
+                    new List<double>(template.PsyNoiseNormalThreshold));
 
                 PsyParamSetup(
                     codecSetup,
                     (int) encodeSetup.BaseSetting,
-                    template.PsyNoiseNormalStart[1],
-                    template.PsyNoiseNormalPartition[1],
-                    template.PsyNoiseNormalThreshold);
+                    new List<int>(template.PsyNoiseNormalStart[1]),
+                    new List<int>(template.PsyNoiseNormalPartition[1]),
+                    new List<double>(template.PsyNoiseNormalThreshold));
             }
 
             // tone masking setup 
@@ -107,17 +107,17 @@ namespace OggVorbisEncoder
                 codecSetup,
                 encodeSetup.BaseSetting,
                 0,
-                template.PsyToneMasterAtt,
-                template.PsyTone0Decibel,
-                template.PsyToneAdjImpulse);
+                new List<Att3>(template.PsyToneMasterAtt),
+                new List<int>(template.PsyTone0Decibel),
+                new List<AdjBlock>(template.PsyToneAdjImpulse));
 
             ToneMaskSetup(
                 codecSetup,
                 encodeSetup.BaseSetting,
                 1,
-                template.PsyToneMasterAtt,
-                template.PsyTone0Decibel,
-                template.PsyToneAdjOther);
+                new List<Att3>(template.PsyToneMasterAtt),
+                new List<int>(template.PsyTone0Decibel),
+                new List<AdjBlock>(template.PsyToneAdjOther));
 
             if (!singleBlock)
             {
@@ -125,17 +125,17 @@ namespace OggVorbisEncoder
                     codecSetup,
                     encodeSetup.BaseSetting,
                     2,
-                    template.PsyToneMasterAtt,
-                    template.PsyTone0Decibel,
-                    template.PsyToneAdjOther);
+                    new List<Att3>(template.PsyToneMasterAtt),
+                    new List<int>(template.PsyTone0Decibel),
+                    new List<AdjBlock>(template.PsyToneAdjOther));
 
                 ToneMaskSetup(
                     codecSetup,
                     encodeSetup.BaseSetting,
                     3,
-                    template.PsyToneMasterAtt,
-                    template.PsyTone0Decibel,
-                    template.PsyToneAdjLong);
+                    new List<Att3>(template.PsyToneMasterAtt),
+                    new List<int>(template.PsyTone0Decibel),
+                    new List<AdjBlock>(template.PsyToneAdjLong));
             }
 
             // noise compand setup 
@@ -143,15 +143,15 @@ namespace OggVorbisEncoder
                 codecSetup,
                 encodeSetup.BaseSetting,
                 0,
-                template.PsyNoiseCompand,
-                template.PsyNoiseCompandShortMapping);
+                new List<CompandBlock>(template.PsyNoiseCompand),
+                new List<double>(template.PsyNoiseCompandShortMapping));
 
             CompandSetup(
                 codecSetup,
                 encodeSetup.BaseSetting,
                 1,
-                template.PsyNoiseCompand,
-                template.PsyNoiseCompandShortMapping);
+                new List<CompandBlock>(template.PsyNoiseCompand),
+                new List<double>(template.PsyNoiseCompandShortMapping));
 
             if (!singleBlock)
             {
@@ -159,15 +159,15 @@ namespace OggVorbisEncoder
                     codecSetup,
                     encodeSetup.BaseSetting,
                     2,
-                    template.PsyNoiseCompand,
-                    template.PsyNoiseCompandLongMapping);
+                    new List<CompandBlock>(template.PsyNoiseCompand),
+                    new List<double>(template.PsyNoiseCompandLongMapping));
 
                 CompandSetup(
                     codecSetup,
                     encodeSetup.BaseSetting,
                     3,
-                    template.PsyNoiseCompand,
-                    template.PsyNoiseCompandLongMapping);
+                    new List<CompandBlock>(template.PsyNoiseCompand),
+                    new List<double>(template.PsyNoiseCompandLongMapping));
             }
 
             // peak guarding setup  
@@ -175,13 +175,13 @@ namespace OggVorbisEncoder
                 codecSetup,
                 encodeSetup.BaseSetting,
                 0,
-                template.PsyToneDecibelSuppress);
+                new List<int>(template.PsyToneDecibelSuppress));
 
             PeakSetup(
                 codecSetup,
                 encodeSetup.BaseSetting,
                 1,
-                template.PsyToneDecibelSuppress);
+                new List<int>(template.PsyToneDecibelSuppress));
 
             if (!singleBlock)
             {
@@ -189,13 +189,13 @@ namespace OggVorbisEncoder
                     codecSetup,
                     encodeSetup.BaseSetting,
                     2,
-                    template.PsyToneDecibelSuppress);
+                    new List<int>(template.PsyToneDecibelSuppress));
 
                 PeakSetup(
                     codecSetup,
                     encodeSetup.BaseSetting,
                     3,
-                    template.PsyToneDecibelSuppress);
+                    new List<int>(template.PsyToneDecibelSuppress));
             }
 
             // noise bias setup 
@@ -203,17 +203,17 @@ namespace OggVorbisEncoder
                 codecSetup,
                 encodeSetup.BaseSetting,
                 0,
-                template.PsyNoiseDecibelSuppress,
-                template.PsyNoiseBiasImpulse,
-                template.PsyNoiseGuards);
+                new List<int>(template.PsyNoiseDecibelSuppress),
+                new List<Noise3>(template.PsyNoiseBiasImpulse),
+                new List<NoiseGuard>(template.PsyNoiseGuards));
 
             NoiseBiasSetup(
                 codecSetup,
                 encodeSetup.BaseSetting,
                 1,
-                template.PsyNoiseDecibelSuppress,
-                template.PsyNoiseBiasPadding,
-                template.PsyNoiseGuards);
+                new List<int>(template.PsyNoiseDecibelSuppress),
+                new List<Noise3>(template.PsyNoiseBiasPadding),
+                new List<NoiseGuard>(template.PsyNoiseGuards));
 
             if (!singleBlock)
             {
@@ -221,17 +221,17 @@ namespace OggVorbisEncoder
                     codecSetup,
                     encodeSetup.BaseSetting,
                     2,
-                    template.PsyNoiseDecibelSuppress,
-                    template.PsyNoiseBiasTrans,
-                    template.PsyNoiseGuards);
+                    new List<int>(template.PsyNoiseDecibelSuppress),
+                    new List<Noise3>(template.PsyNoiseBiasTrans),
+                    new List<NoiseGuard>(template.PsyNoiseGuards));
 
                 NoiseBiasSetup(
                     codecSetup,
                     encodeSetup.BaseSetting,
                     3,
-                    template.PsyNoiseDecibelSuppress,
-                    template.PsyNoiseBiasLong,
-                    template.PsyNoiseGuards);
+                    new List<int>(template.PsyNoiseDecibelSuppress),
+                    new List<Noise3>(template.PsyNoiseBiasLong),
+                    new List<NoiseGuard>(template.PsyNoiseGuards));
             }
 
             AthSetup(codecSetup, 0);
@@ -247,7 +247,7 @@ namespace OggVorbisEncoder
                 codecSetup,
                 sampleRate,
                 channels,
-                template.Maps);
+                new List<IMappingTemplate>(template.Maps));
 
             var bitRateNominal = GetApproxBitRate(encodeSetup, channels);
 
