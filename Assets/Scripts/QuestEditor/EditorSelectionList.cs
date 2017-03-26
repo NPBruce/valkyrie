@@ -56,6 +56,27 @@ public class EditorSelectionList
         // Title
         db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
 
+        List<SelectionListEntry> filtered = items;
+        if (filter.Count > 0)
+        {
+            filtered = new List<SelectionListEntry>();
+            foreach (SelectionListEntry e in items)
+            {
+                bool valid = true;
+                foreach (string s in filter)
+                {
+                    if (!e.filter.Contains(s))
+                    {
+                        valid = false;
+                    }
+                }
+                if (valid)
+                {
+                    filtered.Add(e);
+                }
+            }
+        }
+
         float offset = 2f;
         TextButton tb = null;
 
@@ -81,35 +102,28 @@ public class EditorSelectionList
             }
             else
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); }, Color.gray);
+                bool valid = false;
+                foreach (SelectionListEntry e in filtered)
+                {
+                    if (e.filter.Contains(tmp))
+                    {
+                        valid = true;
+                    }
+                }
+                if (valid)
+                {
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); }, Color.gray);
+                }
+                else
+                {
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { ; }, new Color(0.5f, 0, 0));
+                }
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             hOffset += width;
         }
 
         if (traits.Count > 0) offset += 2;
-
-        List<SelectionListEntry> filtered = items;
-        if (filter.Count > 0)
-        {
-            filtered = new List<SelectionListEntry>();
-            foreach (SelectionListEntry e in items)
-            {
-                bool valid = true;
-                foreach (string s in filter)
-                {
-                    if (!e.filter.Contains(s))
-                    {
-                        valid = false;
-                    }
-                }
-                if (valid)
-                {
-                    filtered.Add(e);
-                }
-            }
-        }
-
         perPage = 27 - Mathf.RoundToInt(offset);
 
         // All items on this page
