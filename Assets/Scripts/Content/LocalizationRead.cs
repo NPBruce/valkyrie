@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Assets.Scripts.Content
@@ -93,12 +94,18 @@ namespace Assets.Scripts.Content
         {
             string output = input.key;
             // While there are more lookups
-            while (output.IndexOf("{ffg:") != -1)
+
+            string regexKey = "{(ffg|val|qst):";
+
+            //while (output.IndexOf("{ffg:") != -1)
+            while (Regex.Match(output,regexKey).Success)
             {
+                int pos = Regex.Match(output, regexKey).Index;
                 // Can be nested
                 int bracketLevel = 1;
                 // Start of lookup
-                int lookupStart = output.IndexOf("{ffg:") + "{ffg:".Length;
+                // ffg val and qst has the same length
+                int lookupStart = pos + "{ffg:".Length;
 
                 // Loop to find end of lookup
                 int lookupEnd = lookupStart;
@@ -125,14 +132,15 @@ namespace Assets.Scripts.Content
                 result = result.Replace("[i]", "<i>").Replace("[/i]", "</i>");
                 result = result.Replace("[b]", "<b>").Replace("[/b]", "</b>");
                 // Replace the lookup
-                output = output.Replace("{ffg:" + lookup + "}", result);
+                string key = output.Substring(pos - 1, 3);
+                output = output.Replace("{" + key + ":" + lookup + "}", result);
             }
             return output;
         }
 
         /// <summary>
         /// Look up a key in the FFG text Localization. Can have parameters divided by ":"
-        /// Example: A_GOES_B_MESSAGE:Peter:Dinning Room
+        /// Example: A_GOES_B_MESSAGE:{A}:Peter:{B}:Dinning Room
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
