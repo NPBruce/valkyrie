@@ -2,7 +2,7 @@
 {
     public class IMappingTemplate
     {
-        Mapping[] Mapping;
-        IResidueTemplate[] ResidueTemplate;
+        public Mapping[] Mapping;
+        public IResidueTemplate[] ResidueTemplate;
     }
 }

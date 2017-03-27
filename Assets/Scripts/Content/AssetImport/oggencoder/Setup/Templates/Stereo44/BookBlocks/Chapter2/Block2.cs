@@ -2,7 +2,7 @@
 {
     public class Block2 : IStaticBookBlock
     {
-        public IStaticCodeBook[][] Books =
+        new public IStaticCodeBook[][] Books =
         {
             new IStaticCodeBook[] {null},
             new IStaticCodeBook[] {null, null, new Page1()},

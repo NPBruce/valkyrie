@@ -102,8 +102,8 @@ namespace OggVorbisEncoder
                     if (n > ci.BlockSizes[1])
                         n = ci.BlockSizes[1];
 
-                    PopulateLpcFromPcm(lpc, _pcm[channel], _eofFlag - n, n, order);
-                    UpdatePcmFromLpcPredict(lpc, _pcm[channel], _eofFlag, order, _pcmCurrent - _eofFlag);
+                    PopulateLpcFromPcm(new List<float>(lpc), _pcm[channel], _eofFlag - n, n, order);
+                    UpdatePcmFromLpcPredict(new List<float>(lpc), _pcm[channel], _eofFlag, order, _pcmCurrent - _eofFlag);
                 }
                 else
                 {
@@ -715,8 +715,8 @@ namespace OggVorbisEncoder
                 //performing bitrate management, the line fit is performed
                 //multiple times for up/down tweakage on demand. 
                 psyLookup.OffsetAndMix(
-                    noise,
-                    tone,
+                    new List<float>(noise),
+                    new List<float>(tone),
                     1,
                     pcm,
                     gmdct[channel],

@@ -2,6 +2,6 @@
 {
     public class IStaticBookBlock
     {
-        IStaticCodeBook[][] Books;
+        public IStaticCodeBook[][] Books;
     }
 }

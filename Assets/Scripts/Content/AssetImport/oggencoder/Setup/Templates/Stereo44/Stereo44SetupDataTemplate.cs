@@ -91,9 +91,9 @@
         public int[][] PsyNoiseNormalStart = {NoiseStartShort44, NoiseStartLong44};
         public int[][] PsyNoiseNormalPartition = {NoisePartShort44, NoisePartLong44};
         public double[] PsyNoiseNormalThreshold = NoiseThresh44;
-        public int[] PsyAthFloat = Psy.AthFloater;
-        public int[] PsyAthAbs = Psy44.AthAbs;
-        public double[] PsyLowPass = Psy44.Lowpass;
+        new public int[] PsyAthFloat = Psy.AthFloater;
+        new public int[] PsyAthAbs = Psy44.AthAbs;
+        new public double[] PsyLowPass = Psy44.Lowpass;
         public PsyGlobal[] GlobalParams = Psy44.Global;
         public double[] GlobalMapping = Psy44.GlobalMapping;
         public AdjStereo[] StereoModes = Psy44.StereoModes;

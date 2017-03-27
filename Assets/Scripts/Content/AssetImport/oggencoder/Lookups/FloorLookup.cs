@@ -170,8 +170,8 @@ namespace OggVorbisEncoder.Lookups
                             // A note: we want to bound/minimize *local*, not global, error 
                             var lx = _floor.PostList[ln];
                             var hx = _floor.PostList[hn];
-                            var ly = PostY(fitValueA, fitValueB, ln);
-                            var hy = PostY(fitValueA, fitValueB, hn);
+                            var ly = PostY(new List<int>(fitValueA), new List<int>(fitValueB), ln);
+                            var hy = PostY(new List<int>(fitValueA), new List<int>(fitValueB), hn);
 
                             if ((ly == -1) || (hy == -1))
                                 throw new InvalidOperationException("An error occurred during minimization");
@@ -238,8 +238,8 @@ namespace OggVorbisEncoder.Lookups
 
                 var output = new int[_posts];
 
-                output[0] = PostY(fitValueA, fitValueB, 0);
-                output[1] = PostY(fitValueA, fitValueB, 1);
+                output[0] = PostY(new List<int>(fitValueA), new List<int>(fitValueB), 0);
+                output[1] = PostY(new List<int>(fitValueA), new List<int>(fitValueB), 1);
 
                 // fill in posts marked as not using a fit; we will zero
                 // back out to 'unused' when encoding them so int as curve
@@ -254,7 +254,7 @@ namespace OggVorbisEncoder.Lookups
                     y1 = output[hn];
 
                     var predicted = RenderPoint(x0, x1, y0, y1, _floor.PostList[i]);
-                    var vx = PostY(fitValueA, fitValueB, i);
+                    var vx = PostY(new List<int>(fitValueA), new List<int>(fitValueB), i);
 
                     if ((vx >= 0) && (predicted != vx))
                         output[i] = vx;

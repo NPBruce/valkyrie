@@ -24,7 +24,7 @@ namespace OggVorbisEncoder
 
         public int Count { get { return _array.Count - Offset; } }
 
-        public bool IsReadOnly = false;
+        public bool IsReadOnly { get { return false; } }
 
         public IEnumerator<T> GetEnumerator()
         {

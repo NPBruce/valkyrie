@@ -2,13 +2,13 @@
 {
     public class IResidueTemplate
     {
-        ResidueType ResidueType;
-        ResidueLimitType LimitType;
-        int Grouping;
-        Residue Residue;
-        IStaticCodeBook BookAux;
-        IStaticCodeBook BookAuxManaged;
-        IStaticBookBlock BooksBase;
-        IStaticBookBlock BooksBaseManaged;
+        public ResidueType ResidueType;
+        public ResidueLimitType LimitType;
+        public int Grouping;
+        public Residue Residue;
+        public IStaticCodeBook BookAux;
+        public IStaticCodeBook BookAuxManaged;
+        public IStaticBookBlock BooksBase;
+        public IStaticBookBlock BooksBaseManaged;
     }
 }
