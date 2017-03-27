@@ -504,6 +504,7 @@ public class QuestData
         public int maxHeroes = 0;
         public string[] addComponents;
         public string[] removeComponents;
+        public List<VarOperation> operations;
         public string[] flags;
         public string[] setFlags;
         public string[] clearFlags;
@@ -525,6 +526,7 @@ public class QuestData
             buttons = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
+            operations = new List<VarOperation>();
             flags = new string[0];
             setFlags = new string[0];
             clearFlags = new string[0];
@@ -671,6 +673,16 @@ public class QuestData
             if (data.ContainsKey("trigger"))
             {
                 trigger = data["trigger"];
+            }
+
+            operations = new List<VarOperation>();
+            if (data.ContainsKey("operations"))
+            {
+                string[] flag_array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flag_array)
+                {
+                    operations.Add(new VarOperation(s));
+                }
             }
 
             // Flags required to trigger (space separated list)
@@ -898,6 +910,17 @@ public class QuestData
             {
                 r += "trigger=" + trigger + nl;
             }
+
+            if (operations.Length > 0)
+            {
+                r += "opertaions=";
+                foreach (VarOperation o in operations)
+                {
+                    r += o.ToString() + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
             if (flags.Length > 0)
             {
                 r += "flags=";
@@ -964,6 +987,25 @@ public class QuestData
                 r += "yposition=" + location.y + nl;
             }
             return r;
+        }
+
+        public class VarOperation
+        {
+            public string var;
+            public string operation;
+            public string value;
+
+            public VarOperation(string in)
+            {
+                var = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
+                operation = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
+                value = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+            }
+
+            override public string ToString()
+            {
+                return var + ',' + operation + ',' + value;
+            }
         }
 
         // Delayed events have a name and delay value
@@ -1541,7 +1583,8 @@ public class QuestData
     public class Quest
     {
         public static int minumumFormat = 0;
-        public static int currentFormat = 2;
+        // Increment during changes, and again at release
+        public static int currentFormat = 1;
         public int format = 0;
         public bool valid = false;
         public string path = "";
