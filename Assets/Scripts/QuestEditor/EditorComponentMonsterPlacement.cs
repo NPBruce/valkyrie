@@ -74,13 +74,13 @@ public class EditorComponentMonsterPlacement : EditorComponent
     {
         Game game = Game.Get();
 
-        List<string> mplaces = new List<string>();
-        mplaces.Add("{NEW:MPlace}");
+        List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
+        mplaces.Add(new EditorSelectionList.SelectionListEntry("{NEW:MPlace}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
             {
-                mplaces.Add(kv.Key);
+                mplaces.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
 

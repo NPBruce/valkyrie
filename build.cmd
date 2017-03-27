@@ -5,6 +5,7 @@ mkdir build\batch
 xcopy /E /Y build\unity build\batch
 copy LICENSE build\batch
 copy NOTICE build\batch
+copy .NET-Ogg-Vorbis-Encoder-LICENSE build\batch
 copy dotnetzip-license.rtf build\batch
 mkdir build\batch\valkyrie_Data\content
 mkdir build\batch\valkyrie_Data\quests

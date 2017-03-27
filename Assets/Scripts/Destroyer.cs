@@ -55,6 +55,8 @@ public class Destroyer {
         Game game = Game.Get();
 
         game.heroCanvas.Clean();
+        game.cc.maxLimit = false;
+        game.cc.minLimit = false;
 
         // Clear up all data
         game.cd = null;

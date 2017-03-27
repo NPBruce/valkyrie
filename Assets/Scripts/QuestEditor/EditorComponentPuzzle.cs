@@ -87,10 +87,10 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void Class()
     {
-        List<string> puzzleClass = new List<string>();
-        puzzleClass.Add("slide");
-        puzzleClass.Add("code");
-        puzzleClass.Add("image");
+        List<EditorSelectionList.SelectionListEntry> puzzleClass = new List<EditorSelectionList.SelectionListEntry>();
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("slide"));
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("code"));
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("image"));
         classList = new EditorSelectionList("Select Class", puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
@@ -107,13 +107,13 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void Skill()
     {
-        List<string> skill = new List<string>();
-        skill.Add("{will} " + EventManager.SymbolReplace("{will}"));
-        skill.Add("{strength} " + EventManager.SymbolReplace("{strength}"));
-        skill.Add("{agility} " + EventManager.SymbolReplace("{agility}"));
-        skill.Add("{lore} " + EventManager.SymbolReplace("{lore}"));
-        skill.Add("{influence} " + EventManager.SymbolReplace("{influence}"));
-        skill.Add("{observation} " + EventManager.SymbolReplace("{observation}"));
+        List<EditorSelectionList.SelectionListEntry> skill = new List<EditorSelectionList.SelectionListEntry>();
+        skill.Add(new EditorSelectionList.SelectionListEntry("{will} " + EventManager.SymbolReplace("{will}")));
+        skill.Add(new EditorSelectionList.SelectionListEntry("{strength} " + EventManager.SymbolReplace("{strength}")));
+        skill.Add(new EditorSelectionList.SelectionListEntry("{agility} " + EventManager.SymbolReplace("{agility}")));
+        skill.Add(new EditorSelectionList.SelectionListEntry("{lore} " + EventManager.SymbolReplace("{lore}")));
+        skill.Add(new EditorSelectionList.SelectionListEntry("{influence} " + EventManager.SymbolReplace("{influence}")));
+        skill.Add(new EditorSelectionList.SelectionListEntry("{observation} " + EventManager.SymbolReplace("{observation}")));
         skillList = new EditorSelectionList("Select Skill", skill, delegate { SelectSkill(); });
         skillList.SelectItem();
     }
@@ -138,10 +138,10 @@ public class EditorComponentPuzzle : EditorComponent
     
     public void Image()
     {
-        List<string> puzzleImage = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
         {
-            puzzleImage.Add(kv.Key);
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
         imageList = new EditorSelectionList("Select Image", puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();

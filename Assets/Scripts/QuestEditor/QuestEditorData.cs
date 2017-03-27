@@ -154,14 +154,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> tiles = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> tiles = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        tiles.Add("{NEW:Tile}");
+        tiles.Add(new EditorSelectionList.SelectionListEntry("{NEW:Tile}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Tile)
             {
-                tiles.Add(kv.Key);
+                tiles.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", tiles, delegate { game.qed.SelectComponent(); });
@@ -173,14 +173,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> doors = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> doors = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        doors.Add("{NEW:Door}");
+        doors.Add(new EditorSelectionList.SelectionListEntry("{NEW:Door}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Door)
             {
-                doors.Add(kv.Key);
+                doors.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", doors, delegate { game.qed.SelectComponent(); });
@@ -192,14 +192,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> tokens = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> tokens = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        tokens.Add("{NEW:Token}");
+        tokens.Add(new EditorSelectionList.SelectionListEntry("{NEW:Token}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Token)
             {
-                tokens.Add(kv.Key);
+                tokens.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", tokens, delegate { game.qed.SelectComponent(); });
@@ -211,14 +211,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add("{NEW:Monster}");
+        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:Monster}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Monster)
             {
-                monsters.Add(kv.Key);
+                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", monsters, delegate { game.qed.SelectComponent(); });
@@ -230,14 +230,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> mplaces = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        mplaces.Add("{NEW:MPlace}");
+        mplaces.Add(new EditorSelectionList.SelectionListEntry("{NEW:MPlace}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
             {
-                mplaces.Add(kv.Key);
+                mplaces.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", mplaces, delegate { game.qed.SelectComponent(); });
@@ -249,16 +249,16 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> events = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        events.Add("{NEW:Event}");
+        events.Add(new EditorSelectionList.SelectionListEntry("{NEW:Event}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
                 if (!kv.Value.GetType().IsSubclassOf(typeof(QuestData.Event)))
                 {
-                    events.Add(kv.Key);
+                    events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
                 }
             }
         }
@@ -271,14 +271,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> puzzle = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> puzzle = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        puzzle.Add("{NEW:Puzzle}");
+        puzzle.Add(new EditorSelectionList.SelectionListEntry("{NEW:Puzzle}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Puzzle)
             {
-                puzzle.Add(kv.Key);
+                puzzle.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
         game.qed.esl = new EditorSelectionList("Select Item", puzzle, delegate { game.qed.SelectComponent(); });
@@ -290,14 +290,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> items = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        items.Add("{NEW:Item}");
+        items.Add(new EditorSelectionList.SelectionListEntry("{NEW:Item}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Item)
             {
-                items.Add(kv.Key);
+                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
 
@@ -310,14 +310,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> monsters = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add("{NEW:UniqueMonster}");
+        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:UniqueMonster}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.UniqueMonster)
             {
-                monsters.Add(kv.Key);
+                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
 
@@ -330,14 +330,14 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> activations = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        activations.Add("{NEW:Activation}");
+        activations.Add(new EditorSelectionList.SelectionListEntry("{NEW:Activation}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
             {
-                activations.Add(kv.Key);
+                activations.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
 
@@ -573,7 +573,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Tile" + index, new QuestData.Tile("Tile" + index));
+        QuestData.Tile tile = new QuestData.Tile("Tile" + index);
+        game.quest.qd.components.Add("Tile" + index, tile);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        tile.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
+        tile.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
+
         game.quest.Add("Tile" + index);
         SelectComponent("Tile" + index);
     }
@@ -587,7 +593,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Door" + index, new QuestData.Door("Door" + index));
+        QuestData.Door door = new QuestData.Door("Door" + index);
+        game.quest.qd.components.Add("Door" + index, door);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        door.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
+        door.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
+
         game.quest.Add("Door" + index);
         SelectComponent("Door" + index);
     }
@@ -601,7 +613,13 @@ public class QuestEditorData {
         {
             index++;
         }
-        game.quest.qd.components.Add("Token" + index, new QuestData.Token("Token" + index));
+        QuestData.Token token = new QuestData.Token("Token" + index);
+        game.quest.qd.components.Add("Token" + index, token);
+
+        CameraController cc = GameObject.FindObjectOfType<CameraController>();
+        token.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
+        token.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
+
         game.quest.Add("Token" + index);
         SelectComponent("Token" + index);
     }
@@ -702,15 +720,15 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> toDelete = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> toDelete = new List<EditorSelectionList.SelectionListEntry>();
 
         // List all components of this type
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Key.IndexOf(type) == 0)
             {
-                toDelete.Add(kv.Key);
-                toDelete.Add("");
+                toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
             }
         }
         // Create list for user
@@ -723,13 +741,13 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
 
-        List<string> toDelete = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> toDelete = new List<EditorSelectionList.SelectionListEntry>();
 
         // List all components
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            toDelete.Add(kv.Key);
-            toDelete.Add("");
+            toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
         }
         // Create list for user
         esl = new EditorSelectionList("Component to Delete:", toDelete, delegate { SelectToDelete(); });

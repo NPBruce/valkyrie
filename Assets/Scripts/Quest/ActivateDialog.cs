@@ -7,14 +7,14 @@ public class ActivateDialog {
     public bool master;
 
     // Create an activation window, if master is false then it is for minions
-    public ActivateDialog(Quest.Monster m, bool masterIn)
+    public ActivateDialog(Quest.Monster m, bool masterIn, bool singleStep = false)
     {
         monster = m;
         master = masterIn;
-        CreateWindow();
+        CreateWindow(singleStep);
     }
 
-    virtual public void CreateWindow()
+    virtual public void CreateWindow(bool singleStep = false)
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -40,14 +40,25 @@ public class ActivateDialog {
         // Activation box
         string activationText = "";
         // Create header
-        if (master)
+        if (singleStep)
+        {
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Actions");
+        }
+        else if (master)
         {
             db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
-            activationText = monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n");
         }
         else
         {
             db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
+        }
+
+        if (master)
+        {
+            activationText = monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n");
+        }
+        else
+        {
             activationText = monster.currentActivation.ad.minionActions.Translate().Replace("\\n", "\n");
         }
         db.AddBorder();
@@ -56,7 +67,7 @@ public class ActivateDialog {
 
         // Create activation text box
         db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
-        if (master)
+        if (master && !singleStep)
         {
             db.AddBorder(Color.red);
         }
@@ -68,7 +79,11 @@ public class ActivateDialog {
         offset += 7.5f;
 
         // Create finished button
-        if (master)
+        if (singleStep)
+        {
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Activated", delegate { activated(); });
+        }
+        else if (master)
         {
             new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
         }

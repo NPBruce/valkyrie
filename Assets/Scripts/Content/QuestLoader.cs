@@ -252,7 +252,7 @@ public class QuestLoader {
 
             if (d.ContainsKey("packs") && d["packs"].Length > 0)
             {
-                packs = d["packs"].Split(' ');
+                packs = d["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {

@@ -27,6 +27,7 @@ public class DialogWindow {
             if (!game.quest.heroSelection.ContainsKey(eventData.qEvent.heroListName))
             {
                 ValkyrieDebug.Log("Warning: Hero selection in event: " + eventData.qEvent.sectionName + " from event " + eventData.qEvent.heroListName + " with no data.");
+                game.quest.log.Add(new Quest.LogEntry("Warning: Hero selection in event: " + eventData.qEvent.sectionName + " from event " + eventData.qEvent.heroListName + " with no data.", true));
             }
             else
             {
@@ -58,9 +59,9 @@ public class DialogWindow {
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
         db.Destroy();
         
-        if (offset < 8)
+        if (offset < 4)
         {
-            offset = 8;
+            offset = 4;
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), text);
@@ -75,6 +76,13 @@ public class DialogWindow {
             length = 16f;
             hOffset = UIScaler.GetHCenter(-8f);
         }
+        else
+        {
+            if (eventData.qEvent.cancelable)
+            {
+                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            }
+        }
         foreach (EventButton eb in eventData.GetButtons())
         {
             int numTmp = num++;
@@ -83,16 +91,9 @@ public class DialogWindow {
         }
 
         // Do we have a cancel button?
-        if (eventData.qEvent.cancelable)
+        if (eventData.qEvent.cancelable && (eventData.GetButtons().Count > 2))
         {
-            if (eventData.GetButtons().Count > 2)
-            {
-                new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-            }
-            else
-            {
-                new TextButton(new Vector2(11, 9f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
-            }
+            new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
         }
 
     }
@@ -197,7 +198,7 @@ public class DialogWindow {
         }
 
         // Add this to the log
-        game.quest.log.Add(text.Replace("\n", "\\n"));
+        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
         // Event manager handles the aftermath
         game.quest.eManager.EndEvent(num-1);
