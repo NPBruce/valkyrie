@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using OggVorbisEncoder;
 
 class FSBExport
 {
@@ -114,11 +115,11 @@ class FSBExport
 
             if (i == 0)
             {
-                WriteFile(data, file, (int)fileOffset, (int)size, ogg);
+                WriteFile(stream, file, (int)fileOffset, (int)size, ogg);
             }
             else
             {
-                WriteFile(data, file + i, (int)fileOffset, (int)size, ogg);
+                WriteFile(stream, file + i, (int)fileOffset, (int)size, ogg);
             }
 
             stream.Position = nextFilePos;
@@ -126,11 +127,85 @@ class FSBExport
         stream.Dispose(true);
     }
 
-    public static void WriteFile(byte[] data, string file, int offset, int size, Ogg ogg)
+    public static void WriteFile(Unity_Studio.EndianStream stream, string file, int offset, int size, Ogg ogg)
     {
         // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(file, FileMode.Create)))
         {
+            // Only support header CRC 3605052372 for now
+            OggVorbisHeader head = new OggVorbisHeader();
+
+            HeaderPacketBuilder hpb = new HeaderPacketBuilder();
+            CodecSetup cSetup = new CodecSetup(null);
+            cSetup.BlockSizes[0] = 256;
+            cSetup.BlockSizes[1] = 2048;
+
+            VorbisInfo info = new VorbisInfo(cSetup, (int)ogg.channels, (int)ogg.frequency, 0);
+
+            OggPacket headerInfo = hpb.BuildInfoPacket(info);
+
+            Comments comments = new Comments();
+            if (ogg.loopStart > 0 && ogg.loopEnd > 0)
+            {
+                comments.AddTag("LOOP_START", ogg.loopStart.ToString());
+                comments.AddTag("LOOP_END", ogg.loopEnd.ToString());
+            }
+            OggPacket headerComment = hpb.BuildCommentsPacket(comments);
+            OggPacket headerSetup = new OggPacket(OggVorbisHeader.GetHeader(ogg.crc32), false, 0, 2);
+
+            OggStream output = new OggStream(1);
+            output.PacketIn(headerInfo);
+            output.PacketIn(headerComment);
+            output.PacketIn(headerSetup);
+
+            stream.Position = offset;
+
+            UInt16 packetSize = stream.ReadUInt16();
+            int prevPacketNo = 2;
+            int prevGranulePos = 0;
+
+            while (packetSize > 0)
+            {
+                OggPacket packet = new OggPacket(stream.ReadBytes(packetSize), false, 0, prevPacketNo + 1);
+
+                byte firstByte = packet.PacketData[0];
+
+                // OK for stereo
+                int granuleSize = 128;
+                if ((firstByte & 2) != 0)
+                {
+                    granuleSize = 1024;
+                }
+
+                if (ogg.channels == 1)
+                {
+                    granuleSize /= 4;
+                }    
+                packet.GranulePosition = prevGranulePos + granuleSize;
+                
+                if (stream.Position + 2 < offset + size)
+                {
+                    packetSize = stream.ReadUInt16();
+                }
+                else
+                {
+                    packetSize = 0;
+                }
+                packet.EndOfStream = packetSize == 0;
+                prevGranulePos = packet.GranulePosition;
+                prevPacketNo = packet.PacketNumber;
+
+                output.PacketIn(packet);
+                OggPage page = null;
+                if (output.PageOut(out page, true))
+                {
+                    writer.Write(page.Header);
+                    writer.Write(page.Body);
+                }
+            }
+
+            //float vorbis_quality = ((ogg.quality - 1) + (ogg.quality - 100) * 0.1f) / 99.0f;
+            //VorbisInfo.InitVariableBitRate(ogg.channels, ogg.frequency, ogg.)
             //writer.Write();
             writer.Close();
         }
@@ -170,6 +245,9 @@ class FSBExport
         public Header(int channels, int rate, int quality)
         {
             float vorbis_quality = ((quality - 1) + (quality - 100) * 0.1f) / 99.0f;
+            VorbisInfo info = VorbisInfo.InitVariableBitRate(channels, rate, vorbis_quality);
+            // missing OV_ECTL_COUPLING_SET to 1, is this needed?
+
         }
     }
 
