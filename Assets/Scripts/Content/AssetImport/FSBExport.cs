@@ -175,6 +175,8 @@ class FSBExport
                 {
                     blockSize = 2048;
                 }
+                // I don't know why!
+                blockSize = 1024;
                 packet.GranulePosition = prevGranulePos + (blockSize / 4);
                 
                 if (stream.Position + 2 < offset + size)
