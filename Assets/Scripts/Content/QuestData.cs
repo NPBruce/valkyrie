@@ -175,6 +175,7 @@ public class QuestData
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
                 tileSideName = kv.Key;
+                break;
             }
         }
 
@@ -351,10 +352,11 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             mTypes = new string[1];
-            // This gets the last type available, because we need something
+            // This gets the first type available, because we need something
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
                 mTypes[0] = kv.Key;
+                break;
             }
             mTraits = new string[0];
 
@@ -498,7 +500,6 @@ public class QuestData
         public string trigger = "";
         public List<List<string>> nextEvent;
         public string heroListName = "";
-        public int gold = 0;
         public int minHeroes = 0;
         public int maxHeroes = 0;
         public string[] addComponents;
@@ -583,7 +584,7 @@ public class QuestData
                 buttonNum++;
             }
 
-            // Legacy support
+            // Legacy support (Depreciated, format 0)
             if (nextEvent.Count == 0)
             {
                 if (data.ContainsKey("event"))
@@ -628,12 +629,6 @@ public class QuestData
                 heroListName = data["hero"];
             }
 
-            // alter party gold (currently unused)
-            if (data.ContainsKey("gold"))
-            {
-                int.TryParse(data["gold"], out gold);
-            }
-            
             // Success quota
             if (data.ContainsKey("quota"))
             {
@@ -868,10 +863,6 @@ public class QuestData
             if (!heroListName.Equals(""))
             {
                 r += "hero=" + heroListName + nl;
-            }
-            if (gold != 0)
-            {
-                r += "gold=" + gold + nl;
             }
             if (quota != 0)
             {
@@ -1549,6 +1540,7 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
+        public static int minumumFormat = 0;
         public static int currentFormat = 2;
         public int format = 0;
         public bool valid = false;
@@ -1588,7 +1580,7 @@ public class QuestData
                 int.TryParse(iniData["format"], out format);
             }
 
-            if (format > currentFormat)
+            if (format > currentFormat || format < minumumFormat)
             {
                 return false;
             }
