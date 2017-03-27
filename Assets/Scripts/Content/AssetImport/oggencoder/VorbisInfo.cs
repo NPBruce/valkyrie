@@ -9,7 +9,7 @@ namespace OggVorbisEncoder
     {
         private static readonly Mode[] ModeTemplate = {new Mode(0, 0, 0, 0), new Mode(1, 0, 0, 1)};
 
-        private VorbisInfo(
+        public VorbisInfo(
             CodecSetup codecSetup,
             int channels,
             int sampleRate,

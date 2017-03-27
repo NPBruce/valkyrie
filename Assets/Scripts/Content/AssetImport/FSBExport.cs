@@ -136,10 +136,22 @@ class FSBExport
             OggVorbisHeader head = new OggVorbisHeader();
 
             HeaderPacketBuilder hpb = new HeaderPacketBuilder();
-            VorbisInfo info = VorbisInfo.InitVariableBitRate((int)ogg.channels, (int)ogg.frequency, 1);
+            CodecSetup cSetup = new CodecSetup(null);
+            cSetup.BlockSizes[0] = 256;
+            cSetup.BlockSizes[1] = 2048;
+
+            VorbisInfo info = new VorbisInfo(cSetup, (int)ogg.channels, (int)ogg.frequency, 0);
+
             OggPacket headerInfo = hpb.BuildInfoPacket(info);
-            OggPacket headerComment = hpb.BuildCommentsPacket(new Comments());
-            OggPacket headerSetup = hpb.BuildBooksPacket(info);
+
+            Comments comments = new Comments();
+            if (ogg.loopStart > 0 && ogg.loopEnd > 0)
+            {
+                comments.AddTag("LOOP_START", ogg.loopStart.ToString());
+                comments.AddTag("LOOP_END", ogg.loopEnd.ToString());
+            }
+            OggPacket headerComment = hpb.BuildCommentsPacket(comments);
+            OggPacket headerSetup = new OggPacket(OggVorbisHeader.setup_header, false, 0, 2);
 
             OggStream output = new OggStream(1);
             output.PacketIn(headerInfo);
@@ -156,25 +168,13 @@ class FSBExport
             {
                 OggPacket packet = new OggPacket(stream.ReadBytes(packetSize), false, 0, prevPacketNo + 1);
 
-                int modes = info.CodecSetup.ModeParams.Count - 1;
-                int readBits = 0;
-
-                for (readBits = 0; modes > 0;  readBits++)
-                {
-                    modes >>= 1;
-                }
                 byte firstByte = packet.PacketData[0];
 
-                // ingore first bit
-                firstByte >>= 1;
-
-                byte[] mask = {0x00,0x01,0x03,0x07,0x0f,0x1f,0x3f,0x7f,0xff};
-
-                firstByte &= mask[readBits];
-
-                int flag = info.CodecSetup.ModeParams[firstByte].BlockFlag;
-
-                int blockSize = info.CodecSetup.BlockSizes[flag];
+                int blockSize = 256;
+                if ((firstByte & 2) != 0)
+                {
+                    blockSize = 2048;
+                }
                 packet.GranulePosition = prevGranulePos + (blockSize / 4);
                 
                 if (stream.Position + 2 < offset + size)
@@ -190,6 +190,12 @@ class FSBExport
                 prevPacketNo = packet.PacketNumber;
 
                 output.PacketIn(packet);
+                OggPage page = null;
+                if (output.PageOut(out page, true))
+                {
+                    writer.Write(page.Header);
+                    writer.Write(page.Body);
+                }
             }
 
             //float vorbis_quality = ((ogg.quality - 1) + (ogg.quality - 100) * 0.1f) / 99.0f;
