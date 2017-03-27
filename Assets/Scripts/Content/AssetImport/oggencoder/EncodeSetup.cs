@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using OggVorbisEncoder.Setup;
 using OggVorbisEncoder.Setup.Templates.Stereo44;
-using OggVorbisEncoder.Setup.Templates.Mono44;
 
 namespace OggVorbisEncoder
 {
@@ -102,7 +101,6 @@ namespace OggVorbisEncoder
         {
             List<ISetupTemplate> list = new List<ISetupTemplate>();
             list.Add(new Stereo44SetupDataTemplate());
-            list.Add(new Mono44SetupDataTemplate());
             return list;
                 //new 44_uncoupled(),
                 //new 32_stereo(),
