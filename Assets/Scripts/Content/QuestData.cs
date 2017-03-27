@@ -1552,7 +1552,7 @@ public class QuestData
         public static int currentFormat = 2;
         public int format = 0;
         public bool valid = false;
-        public string path;
+        public string path = "";
         // Quest name
         public string name = "";
         // Quest description (currently unused)
@@ -1566,59 +1566,75 @@ public class QuestData
         // Content packs required for quest
         public string[] packs;
 
-        // Create from ini data
-        public Quest(Dictionary<string, string> iniData, string pathIn = "")
+        // Create from path
+        public Quest(pathIn)
         {
             path = pathIn;
+            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
+            valid = Populate(iniData);
+        }
+
+        // Create from ini data
+        public Quest(Dictionary<string, string> iniData)
+        {
+            valid = Populate(iniData);
+        }
+
+        // Create from ini data
+        public void Populate(Dictionary<string, string> iniData)
+        {
             if (iniData.ContainsKey("format"))
             {
                 int.TryParse(iniData["format"], out format);
             }
 
-            if (format <= currentFormat)
+            if (format > currentFormat)
             {
-                valid = true;
-                if (iniData.ContainsKey("name"))
-                {
-                    name = iniData["name"];
-                }
-                else
-                {
-                    ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
-                    return;
-                }
-
-                // Default to D2E to support historical quests (Depreciated, format 0)
-                type = "D2E";
-                if (iniData.ContainsKey("type"))
-                {
-                    type = iniData["type"];
-                }
-                if (iniData.ContainsKey("description"))
-                {
-                    description = iniData["description"];
-                }
-                if (iniData.ContainsKey("minorperil"))
-                {
-                    int.TryParse(iniData["minorperil"], out minorPeril);
-                }
-                if (iniData.ContainsKey("majorperil"))
-                {
-                    int.TryParse(iniData["majorperil"], out majorPeril);
-                }
-                if (iniData.ContainsKey("deadlyperil"))
-                {
-                    int.TryParse(iniData["deadlyperil"], out deadlyPeril);
-                }
-                if (iniData.ContainsKey("packs"))
-                {
-                    packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                }
-                else
-                {
-                    packs = new string[0];
-                }
+                return false;
             }
+
+            if (iniData.ContainsKey("name"))
+            {
+                name = iniData["name"];
+            }
+            else
+            {
+                ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
+                return false;
+            }
+
+            // Default to D2E to support historical quests (Depreciated, format 0)
+            type = "D2E";
+            if (iniData.ContainsKey("type"))
+            {
+                type = iniData["type"];
+            }
+            if (iniData.ContainsKey("description"))
+            {
+                description = iniData["description"];
+            }
+            if (iniData.ContainsKey("minorperil"))
+            {
+                int.TryParse(iniData["minorperil"], out minorPeril);
+            }
+            if (iniData.ContainsKey("majorperil"))
+            {
+                int.TryParse(iniData["majorperil"], out majorPeril);
+            }
+            if (iniData.ContainsKey("deadlyperil"))
+            {
+                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
+            }
+            if (iniData.ContainsKey("packs"))
+            {
+                packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                packs = new string[0];
+            }
+
+            return true;
         }
 
         // Save to string (editor)

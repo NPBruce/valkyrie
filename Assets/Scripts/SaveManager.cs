@@ -71,6 +71,14 @@ class SaveManager
                 ZipFile zip = ZipFile.Read(SaveFile());
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
 
+                // Check that quest in save is valid
+                QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
+                if (!q.valid)
+                {
+                    ValkyrieDebug.Log("Error: save is from a newer version." + System.Environment.NewLine);
+                    Destroyer.MainMenu();
+                }
+
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
 
                 IniData saveData = IniRead.ReadFromString(data);

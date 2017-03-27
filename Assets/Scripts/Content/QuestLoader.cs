@@ -29,7 +29,7 @@ public class QuestLoader {
             // load quest
             Quest q = new Quest(p);
             // Check quest is valid and of the right type
-            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
+            if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 // Are all expansions selected?
                 if (q.GetMissingPacks().Count == 0 || !checkContent)
@@ -66,7 +66,7 @@ public class QuestLoader {
             // read quest
             Quest q = new Quest(p);
             // Check if valid and correct type
-            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
+            if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
             }
@@ -91,7 +91,7 @@ public class QuestLoader {
             // read quest
             Quest q = new Quest(p);
             // Check if valid and correct type
-            if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
+            if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
             {
                 quests.Add(p, q);
             }
