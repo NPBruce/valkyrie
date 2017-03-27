@@ -90,6 +90,10 @@ class FSBExport
                 if (dataByte == 0x16)
                 {
                     ogg.crc32 = stream.ReadUInt32();
+                    if (ogg.crc32 != 3605052372)
+                    {
+                        ogg.crc32 = ogg.crc32;
+                    }
                     extraLen -= 4;
                 }
                 stream.Position += extraLen;
@@ -151,7 +155,7 @@ class FSBExport
                 comments.AddTag("LOOP_END", ogg.loopEnd.ToString());
             }
             OggPacket headerComment = hpb.BuildCommentsPacket(comments);
-            OggPacket headerSetup = new OggPacket(OggVorbisHeader.setup_header, false, 0, 2);
+            OggPacket headerSetup = new OggPacket(OggVorbisHeader.GetHeader(ogg.crc32), false, 0, 2);
 
             OggStream output = new OggStream(1);
             output.PacketIn(headerInfo);
