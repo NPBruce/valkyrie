@@ -41,11 +41,24 @@ public class QuestDownload : MonoBehaviour
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits(-2f), 21f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, UIScaler.GetWidthUnits(-3f) * UIScaler.GetPixelsPerUnit());
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         TextButton tb;
         // Start here
         int offset = 5;
         // Loop through all available quests
-        // FIXME: this isn't paged Dictionary<string, Dictionary<string, string>> data;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
             string file = kv.Key + ".valkyrie";
@@ -58,28 +71,36 @@ public class QuestDownload : MonoBehaviour
                 int.TryParse(remoteManifest.Get(kv.Key, "version"), out remoteVersion);
                 if (localVersion < remoteVersion)
                 {
-                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  [Update] " + kv.Value["name"], delegate { Selection(file); }, Color.blue, offset);
+                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  [Update] " + kv.Value["name"], delegate { Selection(file); }, Color.black, offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.5f, 0.5f, 1f);
+                    tb.background.transform.parent = scrollArea.transform;
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + kv.Value["name"], Color.grey);
+                    db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + kv.Value["name"], Color.black);
                     db.AddBorder();
-                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.05f, 0.05f, 0.05f);
+                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.04f, 0.04f, 0.04f);
+                    db.background.transform.parent = scrollArea.transform;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + kv.Value["name"], delegate { Selection(file); }, Color.white, offset);
+                tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + kv.Value["name"], delegate { Selection(file); }, Color.black, offset);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 0.5f, 1f);
+                tb.background.transform.parent = scrollArea.transform;
             }
             offset += 2;
         }
+
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
         tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
         tb.SetFont(game.gameType.GetHeaderFont());
