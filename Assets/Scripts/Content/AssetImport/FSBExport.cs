@@ -90,10 +90,6 @@ class FSBExport
                 if (dataByte == 0x16)
                 {
                     ogg.crc32 = stream.ReadUInt32();
-                    if (ogg.crc32 != 3605052372)
-                    {
-                        ogg.crc32 = ogg.crc32;
-                    }
                     extraLen -= 4;
                 }
                 stream.Position += extraLen;
@@ -174,14 +170,18 @@ class FSBExport
 
                 byte firstByte = packet.PacketData[0];
 
-                int blockSize = 256;
+                // OK for stereo
+                int granuleSize = 128;
                 if ((firstByte & 2) != 0)
                 {
-                    blockSize = 2048;
+                    granuleSize = 1024;
                 }
-                // I don't know why!
-                blockSize = 1024;
-                packet.GranulePosition = prevGranulePos + (blockSize / 4);
+
+                if (ogg.channels == 1)
+                {
+                    granuleSize /= 4;
+                }    
+                packet.GranulePosition = prevGranulePos + granuleSize;
                 
                 if (stream.Position + 2 < offset + size)
                 {
