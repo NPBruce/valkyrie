@@ -225,13 +225,19 @@ public class QuestLoader {
             path = p;
             Dictionary<string, string> d = IniRead.ReadFromIni(p + "/quest.ini", "Quest");
 
+            
+            if (d.ContainsKey("type"))
+            {
+                type = d["type"];
+            }
+
             if (d.ContainsKey("type"))
             {
                 type = d["type"];
             }
             else
             {
-                // Default to D2E to support historical quests
+                // Default to D2E to support historical quests (Depreciated, format 0)
                 type = "D2E";
             }
 

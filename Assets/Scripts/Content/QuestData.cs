@@ -194,7 +194,7 @@ public class QuestData
             if (data.ContainsKey("side"))
             {
                 tileSideName = data["side"];
-                // 'TileSide' prefix is optional, test both
+                // 'TileSide' prefix is optional, test both (Depreciated, format 0)
                 if (tileSideName.IndexOf("TileSide") != 0)
                 {
                     tileSideName = "TileSide" + tileSideName;
@@ -302,7 +302,7 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
-            // default token type is TokenSearch, this is content data name
+            // default token type is TokenSearch, this is content data name (Depreciated, format 0)
             tokenName = "TokenSearch";
             if (data.ContainsKey("type"))
             {
@@ -321,10 +321,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if(!tokenName.Equals("TokenSearch"))
-            {
-                r += "type=" + tokenName + nl;
-            }
+            r += "type=" + tokenName + nl;
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
@@ -1552,6 +1549,10 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
+        public static int currentFormat = 2;
+        // Quest name
+        public int format = 0;
+        public bool valid = false;
         // Quest name
         public string name = "";
         // Quest description (currently unused)
@@ -1568,40 +1569,54 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
-            if (iniData.ContainsKey("name"))
+            if (iniData.ContainsKey("format"))
             {
-                name = iniData["name"];
+                int.TryParse(iniData["format"], out format);
             }
 
-            // Default to D2E to support historical quests
-            type = "D2E";
-            if (iniData.ContainsKey("type"))
+            if (format <=> currentFormat)
             {
-                type = iniData["type"];
-            }
-            if (iniData.ContainsKey("description"))
-            {
-                description = iniData["description"];
-            }
-            if (iniData.ContainsKey("minorperil"))
-            {
-                int.TryParse(iniData["minorperil"], out minorPeril);
-            }
-            if (iniData.ContainsKey("majorperil"))
-            {
-                int.TryParse(iniData["majorperil"], out majorPeril);
-            }
-            if (iniData.ContainsKey("deadlyperil"))
-            {
-                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
-            }
-            if (iniData.ContainsKey("packs"))
-            {
-                packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-            }
-            else
-            {
-                packs = new string[0];
+                valid = true;
+                if (iniData.ContainsKey("name"))
+                {
+                    name = iniData["name"];
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
+                    return;
+                }
+
+                // Default to D2E to support historical quests (Depreciated, format 0)
+                type = "D2E";
+                if (iniData.ContainsKey("type"))
+                {
+                    type = iniData["type"];
+                }
+                if (iniData.ContainsKey("description"))
+                {
+                    description = iniData["description"];
+                }
+                if (iniData.ContainsKey("minorperil"))
+                {
+                    int.TryParse(iniData["minorperil"], out minorPeril);
+                }
+                if (iniData.ContainsKey("majorperil"))
+                {
+                    int.TryParse(iniData["majorperil"], out majorPeril);
+                }
+                if (iniData.ContainsKey("deadlyperil"))
+                {
+                    int.TryParse(iniData["deadlyperil"], out deadlyPeril);
+                }
+                if (iniData.ContainsKey("packs"))
+                {
+                    packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                }
+                else
+                {
+                    packs = new string[0];
+                }
             }
         }
 
@@ -1610,9 +1625,9 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
+            r += "format=" + currentFormat + nl;
             r += "name=" + name + nl;
             r += "description=" + description + nl;
-            // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
             if (minorPeril != 7)
             {
