@@ -7,9 +7,9 @@ namespace Assets.Scripts.UI.Screens
     public class QuestSelectionScreen
     {
 
-        public Dictionary<string, QuestLoader.Quest> questList;
+        public Dictionary<string, QuestData.Quest> questList;
 
-        public QuestSelectionScreen(Dictionary<string, QuestLoader.Quest> ql)
+        public QuestSelectionScreen(Dictionary<string, QuestData.Quest> ql)
         {
             questList = ql;
             Game game = Game.Get();
@@ -44,7 +44,7 @@ namespace Assets.Scripts.UI.Screens
             // Start here
             int offset = 5;
             // Loop through all available quests
-            foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+            foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
                 if (q.Value.Get.GetMissingPacks().Count == 0)
                 {
@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Loop through all unavailable quests
-            foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+            foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
                 if (q.Value.GetMissingPacks().Count > 0)
                 {

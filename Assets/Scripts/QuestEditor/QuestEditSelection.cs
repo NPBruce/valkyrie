@@ -5,7 +5,7 @@ using System.IO;
 
 public class QuestEditSelection
 {
-    public Dictionary<string, QuestLoader.Quest> questList;
+    public Dictionary<string, QuestData.Quest> questList;
 
     // Create a pack with list of quests to edit
     public QuestEditSelection()
@@ -41,7 +41,7 @@ public class QuestEditSelection
         // List of quests
         int offset = 5;
         TextButton tb;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.black, offset);
@@ -104,7 +104,7 @@ public class QuestEditSelection
         // List of quests
         int offset = 5;
         TextButton tb;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Delete(key); }, Color.black, offset);
@@ -178,7 +178,7 @@ public class QuestEditSelection
         // List of quests
         int offset = 5;
         TextButton tb;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Copy(key); }, Color.black, offset);

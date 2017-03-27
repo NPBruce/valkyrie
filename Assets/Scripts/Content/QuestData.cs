@@ -1550,9 +1550,9 @@ public class QuestData
     public class Quest
     {
         public static int currentFormat = 2;
-        // Quest name
         public int format = 0;
         public bool valid = false;
+        public string path;
         // Quest name
         public string name = "";
         // Quest description (currently unused)
@@ -1567,14 +1567,15 @@ public class QuestData
         public string[] packs;
 
         // Create from ini data
-        public Quest(Dictionary<string, string> iniData)
+        public Quest(Dictionary<string, string> iniData, string pathIn = "")
         {
+            path = pathIn;
             if (iniData.ContainsKey("format"))
             {
                 int.TryParse(iniData["format"], out format);
             }
 
-            if (format <=> currentFormat)
+            if (format <= currentFormat)
             {
                 valid = true;
                 if (iniData.ContainsKey("name"))
@@ -1651,6 +1652,19 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
+            return r;
+        }
+
+        public List<string> GetMissingPacks(List<string> selected)
+        {
+            List<string> r = new List<string>();
+            foreach (string s in packs)
+            {
+                if (!selected.Contains(s))
+                {
+                    r.Add(s);
+                }
+            }
             return r;
         }
     }

@@ -127,7 +127,7 @@ public class Game : MonoBehaviour {
         }
 
         // Get a list of available quests
-        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+        Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
         new QuestSelectionScreen(ql);
@@ -156,7 +156,7 @@ public class Game : MonoBehaviour {
     }
 
     // This is called when a quest is selected
-    public void StartQuest(QuestLoader.Quest q)
+    public void StartQuest(QuestData.Quest q)
     {
         // Fetch all of the quest data and initialise the quest
         quest = new Quest(q);

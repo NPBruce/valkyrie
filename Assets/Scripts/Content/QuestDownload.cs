@@ -7,7 +7,7 @@ using Assets.Scripts.UI.Screens;
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
 {
-    public Dictionary<string, QuestLoader.Quest> questList;
+    public Dictionary<string, QuestData.Quest> questList;
     public WWW download;
     public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/";
     public Game game;
@@ -111,7 +111,7 @@ public class QuestDownload : MonoBehaviour
     {
         Destroyer.Dialog();
         // Get a list of available quests
-        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+        Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
         new QuestSelectionScreen(ql);

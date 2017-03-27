@@ -63,7 +63,7 @@ public class Quest
     public Game game;
 
     // Construct a new quest from quest data
-    public Quest(QuestLoader.Quest q)
+    public Quest(QuestData.Quest q)
     {
         game = Game.Get();
 
