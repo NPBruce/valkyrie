@@ -385,10 +385,9 @@ public class FetchContent {
         Directory.CreateDirectory(ContentData.ContentPath() + gameType);
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg");
         Directory.CreateDirectory(ContentData.ContentPath() + gameType + "/ffg/audio");
-        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/audio/" + asset.Text;
-        string fileName = fileCandidate + asset.extension;
 
-        m_AudioClip = new Unity_Studio.AudioClip(asset, true);
+        string fileCandidate = ContentData.ContentPath() + gameType + "/ffg/audio/" + asset.Text;
+        string fileName = fileCandidate + ".ogg";
         // This should apend a postfix to the name to avoid collisions, but as we import multiple times
         // This is broken
         while (File.Exists(fileName))
@@ -396,12 +395,9 @@ public class FetchContent {
             return;// Fixme;
         }
 
-        // Write to disk
-        using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
-        {
-            writer.Write(m_AudioClip.m_AudioData);
-            writer.Close();
-        }
+        // Pass to FSB Export
+        m_AudioClip = new Unity_Studio.AudioClip(asset, true);
+        FSBExport.Write(m_AudioClip.m_AudioData, fileName);
     }
 
     // Save text to file
