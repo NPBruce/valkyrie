@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using OggVorbisEncoder;
 
 class FSBExport
 {
@@ -114,11 +115,11 @@ class FSBExport
 
             if (i == 0)
             {
-                WriteFile(data, file, (int)fileOffset, (int)size, ogg);
+                WriteFile(stream, file, (int)fileOffset, (int)size, ogg);
             }
             else
             {
-                WriteFile(data, file + i, (int)fileOffset, (int)size, ogg);
+                WriteFile(stream, file + i, (int)fileOffset, (int)size, ogg);
             }
 
             stream.Position = nextFilePos;
@@ -126,11 +127,73 @@ class FSBExport
         stream.Dispose(true);
     }
 
-    public static void WriteFile(byte[] data, string file, int offset, int size, Ogg ogg)
+    public static void WriteFile(Unity_Studio.EndianStream stream, string file, int offset, int size, Ogg ogg)
     {
         // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(file, FileMode.Create)))
         {
+            // Only support header CRC 3605052372 for now
+            OggVorbisHeader head = new OggVorbisHeader();
+
+            HeaderPacketBuilder hpb = new HeaderPacketBuilder();
+            VorbisInfo info = VorbisInfo.InitVariableBitRate((int)ogg.channels, (int)ogg.frequency, 1);
+            OggPacket headerInfo = hpb.BuildInfoPacket(info);
+            OggPacket headerComment = hpb.BuildCommentsPacket(new Comments());
+            OggPacket headerSetup = hpb.BuildBooksPacket(info);
+
+            OggStream output = new OggStream(1);
+            output.PacketIn(headerInfo);
+            output.PacketIn(headerComment);
+            output.PacketIn(headerSetup);
+
+            stream.Position = offset;
+
+            UInt16 packetSize = stream.ReadUInt16();
+            int prevPacketNo = 2;
+            int prevGranulePos = 0;
+
+            while (packetSize > 0)
+            {
+                OggPacket packet = new OggPacket(stream.ReadBytes(packetSize), false, 0, prevPacketNo + 1);
+
+                int modes = info.CodecSetup.ModeParams.Count - 1;
+                int readBits = 0;
+
+                for (readBits = 0; modes > 0;  readBits++)
+                {
+                    modes >>= 1;
+                }
+                byte firstByte = packet.PacketData[0];
+
+                // ingore first bit
+                firstByte >>= 1;
+
+                byte[] mask = {0x00,0x01,0x03,0x07,0x0f,0x1f,0x3f,0x7f,0xff};
+
+                firstByte &= mask[readBits];
+
+                int flag = info.CodecSetup.ModeParams[firstByte].BlockFlag;
+
+                int blockSize = info.CodecSetup.BlockSizes[flag];
+                packet.GranulePosition = prevGranulePos + (blockSize / 4);
+                
+                if (stream.Position + 2 < offset + size)
+                {
+                    packetSize = stream.ReadUInt16();
+                }
+                else
+                {
+                    packetSize = 0;
+                }
+                packet.EndOfStream = packetSize == 0;
+                prevGranulePos = packet.GranulePosition;
+                prevPacketNo = packet.PacketNumber;
+
+                output.PacketIn(packet);
+            }
+
+            //float vorbis_quality = ((ogg.quality - 1) + (ogg.quality - 100) * 0.1f) / 99.0f;
+            //VorbisInfo.InitVariableBitRate(ogg.channels, ogg.frequency, ogg.)
             //writer.Write();
             writer.Close();
         }
@@ -170,6 +233,9 @@ class FSBExport
         public Header(int channels, int rate, int quality)
         {
             float vorbis_quality = ((quality - 1) + (quality - 100) * 0.1f) / 99.0f;
+            VorbisInfo info = VorbisInfo.InitVariableBitRate(channels, rate, vorbis_quality);
+            // missing OV_ECTL_COUPLING_SET to 1, is this needed?
+
         }
     }
 
