@@ -9,7 +9,7 @@ using Ionic.Zip;
 public class QuestLoader {
 
     // Return a dictionary of all available quests
-    public static Dictionary<string, Quest> GetQuests()
+    public static Dictionary<string, Quest> GetQuests(bool checkContent = false)
     {
         Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
 
@@ -31,17 +31,12 @@ public class QuestLoader {
             // Check quest is valid and of the right type
             if (!q.name.Equals("") && q.type.Equals(Game.Get().gameType.TypeName()))
             {
-                // Check that we have required expansions
-                bool expansionsOK = true;
-                foreach (string s in q.packs)
+                // Are all expansions selected?
+                if (q.GetMissingPacks().Count == 0 || !checkContent)
                 {
-                    if (!game.cd.GetEnabledPackIDs().Contains(s))
-                    {
-                        expansionsOK = false;
-                    }
+                    // Add quest to quest list
+                    quests.Add(p, q);
                 }
-                // Add quest to quest list
-                if (expansionsOK) quests.Add(p, q);
             }
         }
 
@@ -264,6 +259,19 @@ public class QuestLoader {
             {
                 description = d["description"];
             }
+        }
+
+        public List<string> GetMissingPacks(List<string> selected)
+        {
+            List<string> r = new List<string>();
+            foreach (string s in packs)
+            {
+                if (!selected.Contains(s))
+                {
+                    r.Add(s);
+                }
+            }
+            return r;
         }
     }
 }

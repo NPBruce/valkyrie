@@ -148,6 +148,18 @@ public class ContentData {
         return names;
     }
 
+    public string GetContentName(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return cp.name;
+            }
+        }
+        return "";
+    }
+
     // Return a list of names for all enbaled content packs
     public List<string> GetEnabledPacks()
     {
