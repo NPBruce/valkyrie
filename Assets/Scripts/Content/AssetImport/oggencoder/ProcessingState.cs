@@ -227,10 +227,10 @@ namespace OggVorbisEncoder
                     work[j] = _pcm[channel][_pcmCurrent - j - 1];
 
                 // prime as above 
-                PopulateLpcFromPcm(lpc, work, 0, _pcmCurrent - _centerWindow, order);
+                PopulateLpcFromPcm(new List<float>(lpc), work, 0, _pcmCurrent - _centerWindow, order);
 
                 // run the predictor filter 
-                UpdatePcmFromLpcPredict(lpc, work, _pcmCurrent - _centerWindow, order, _centerWindow);
+                UpdatePcmFromLpcPredict(new List<float>(lpc), work, _pcmCurrent - _centerWindow, order, _centerWindow);
 
                 for (var j = 0; j < _pcmCurrent; j++)
                     _pcm[channel][_pcmCurrent - j - 1] = work[j];
@@ -400,7 +400,7 @@ namespace OggVorbisEncoder
         public static ProcessingState Create(VorbisInfo info)
         {
             if (info == null)
-                throw new ArgumentNullException(nameof(info));
+                throw new ArgumentNullException("info");
 
             var codecSetup = info.CodecSetup;
 
@@ -424,7 +424,7 @@ namespace OggVorbisEncoder
                 info,
                 lookups,
                 pcm,
-                window,
+                new List<int>(window),
                 centerWindow);
         }
 
@@ -457,8 +457,8 @@ namespace OggVorbisEncoder
             var buffer = new EncodeBuffer();
 
             TransformPcm(pcm, pcmEnd, work, gmdct, localAmpMax);
-            ApplyMasks(pcm, pcmEnd, mapping, floorPosts, gmdct, psyLookup, localAmpMax);
-            Encode(pcm, pcmEnd, buffer, mapping, work, floorPosts, psyLookup, gmdct);
+            ApplyMasks(pcm, pcmEnd, mapping, floorPosts, new List<float[]>(gmdct), psyLookup, new List<float>(localAmpMax));
+            Encode(pcm, pcmEnd, buffer, mapping, new List<int[]>(work), new List<int[][]>(floorPosts), psyLookup, new List<float[]>(gmdct));
 
             return buffer.GetBytes();
         }

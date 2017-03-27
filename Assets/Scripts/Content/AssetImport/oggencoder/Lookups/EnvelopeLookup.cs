@@ -54,10 +54,10 @@ namespace OggVorbisEncoder.Lookups
             _bands[5] = new EnvelopeBand(17, 8);
             _bands[6] = new EnvelopeBand(22, 8);
 
-            _filters = Enumerable
+            _filters = new List<EnvelopeFilterState>(Enumerable
                 .Range(0, PsyGlobal.EnvelopeBands*info.Channels)
                 .Select(s => new EnvelopeFilterState())
-                .ToArray();
+                .ToArray());
 
             _mark = new int[WindowLength];
         }
@@ -117,7 +117,7 @@ namespace OggVorbisEncoder.Lookups
 
                 for (var channel = 0; channel < pcm.Length; channel++)
                     ret |= AmpPcm(
-                        pcm[channel],
+                        new List<float>(pcm[channel]),
                         SearchStep*j,
                         channel*PsyGlobal.EnvelopeBands);
 

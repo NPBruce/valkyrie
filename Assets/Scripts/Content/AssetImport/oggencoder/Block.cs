@@ -2076,16 +2076,16 @@ namespace OggVorbisEncoder
             1.0000000000F, 1.0000000000F, 1.0000000000F, 1.0000000000F
         };
 
-        public static readonly List<List<float>> Windows = new[]
+        public static readonly List<List<float>> Windows = new List<List<float>>
         {
-            Win64,
-            Win128,
-            Win256,
-            Win512,
-            Win1024,
-            Win2038,
-            Win4096,
-            Win8192
+            new List<float>(Win64),
+            new List<float>(Win128),
+            new List<float>(Win256),
+            new List<float>(Win512),
+            new List<float>(Win1024),
+            new List<float>(Win2038),
+            new List<float>(Win4096),
+            new List<float>(Win8192)
         };
     }
 }

@@ -7,8 +7,8 @@ namespace OggVorbisEncoder
 {
     public class EncodeSetup
     {
-        private static readonly Lazy<IEnumerable<ISetupTemplate>> SetupTemplates =
-            new Lazy<IEnumerable<ISetupTemplate>>(CreateTemplates);
+        private static readonly List<ISetupTemplate> SetupTemplates =
+            CreateTemplates();
 
         public EncodeSetup(ISetupTemplate template, double baseSetting)
         {
@@ -55,7 +55,7 @@ namespace OggVorbisEncoder
             int sampleRate,
             float quality)
         {
-            foreach (var template in SetupTemplates.Value)
+            foreach (var template in SetupTemplates)
             {
                 if ((template.CouplingRestriction != -1)
                     && (template.CouplingRestriction != channels))
@@ -97,11 +97,11 @@ namespace OggVorbisEncoder
             throw new InvalidOperationException("No matching template found");
         }
 
-        private static IEnumerable<ISetupTemplate> CreateTemplates()
+        private static List<ISetupTemplate> CreateTemplates()
         {
-            return new[]
-            {
-                new Stereo44SetupDataTemplate()
+            List<ISetupTemplate> list = new List<ISetupTemplate>();
+            list.Add(new Stereo44SetupDataTemplate());
+            return list;
                 //new 44_uncoupled(),
                 //new 32_stereo(),
                 //new 32_uncoupled(),
@@ -117,7 +117,6 @@ namespace OggVorbisEncoder
                 //new X_uncoupled(),
                 //new XX_stereo(),
                 //new XX_uncoupled()
-            };
         }
     }
 }

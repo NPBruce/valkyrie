@@ -212,7 +212,7 @@ namespace OggVorbisEncoder.Lookups
         {
             for (var channel = 0; channel < channels; channel++)
                 if (nonzero[channel])
-                    return ResTwoClass(couples, channels);
+                    return ResTwoClass(new List<int[]>(couples), channels);
 
             return null;
         }

@@ -1149,13 +1149,13 @@ namespace OggVorbisEncoder.Lookups
 
         #region SOURCE DATA
 
-        private static readonly List<float> StereoThresholdsLimit = new[]
+        private static readonly List<float> StereoThresholdsLimit = new List<float>
             {0, .5f, 1, 1.5f, 2, 2.5f, 4.5f, 8.5f, 9e10f};
 
-        private static readonly List<float> StereoThresholds = new[]
+        private static readonly List<float> StereoThresholds = new List<float>
             {0, .5f, 1, 1.5f, 2.5f, 4.5f, 8.5f, 16.5f, 9e10f};
 
-        private static readonly List<float> DecibelLookup = new[]
+        private static readonly List<float> DecibelLookup = new List<float>
         {
             1.0649863e-07f, 1.1341951e-07f, 1.2079015e-07f, 1.2863978e-07f,
             1.3699951e-07f, 1.4590251e-07f, 1.5538408e-07f, 1.6548181e-07f,
