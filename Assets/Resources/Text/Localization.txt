@@ -29,6 +29,13 @@ ICON_PRODUCT_MAD21,,,,,,,,,
 ICON_PRODUCT_MAD22,,,,,,,,,
 ICON_PRODUCT_MAD23,,,,,,,,,
 //COMMONS
+CONTENT_IMPORT,Import Content,Importar Contenido,,,,,,,
+CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,,,,,,
+CONTENT_IMPORTING,Importing...,Importando...,,,,,,,
+EXIT,Exit,Salir,,,,,,,
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
+D2E_APP_NOT_FOUND,"Unable to locate Road to Legend, install via Steam","Imposible localizar ""Road to Legend"", instalar desde Steam,,,,,,,
 //MOM
+MOM_NAME,Mansions of Madness Second Edition,Las Mansiones de la Locura: Segunda Edición,,,,,,,
+MOM_APP_NOT_FOUND,"Unable to locate Mansions of Madness, install via Steam","Imposible localizar ""Mansions of Madness"", instalar desde Steam,,,,,,,
