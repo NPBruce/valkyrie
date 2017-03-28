@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.Content;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
@@ -37,7 +38,11 @@ public class QuestDownload : MonoBehaviour
         }
 
         // Heading
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Download " + game.gameType.QuestName());
+        DialogBox db = new DialogBox(
+            new Vector2(2, 1), 
+            new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
+            new StringKey("val","QUEST_NAME_DOWNLOAD",game.gameType.QuestName())
+            );
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Used to create text buttons for the UI
 public class TextButton {
@@ -26,25 +27,25 @@ public class TextButton {
     // size: size in scale units
     // text: text on the button
     // call: function to call on press
-    public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call)
+    public TextButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call)
     {
-        createButton(location, size, text, call, Color.white, 0);
+        createButton(location, size, textKey, call, Color.white, 0);
     }
 
     // Draw a button, as above with:
     // colour: colour for the text and border
     // id: unique identifier for Unity (default 0)
-    public TextButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour, int id = 0)
+    public TextButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call, Color colour, int id = 0)
     {
-        createButton(location, size, text, call, colour, id);
+        createButton(location, size, textKey, call, colour, id);
     }
 
     // Internal function to create button from constructors
-    void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour, int id)
+    void createButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call, Color colour, int id)
     {
         // Create objects
-        button = new GameObject("button" + text + id);
-        background = new GameObject("buttonBg" + text + id);
+        button = new GameObject("button" + textKey + id);
+        background = new GameObject("buttonBg" + textKey + id);
         border = new RectangleBorder(background.transform, colour, size);
 
         // Mark it as dialog (this can be changed with applytag)
@@ -80,7 +81,7 @@ public class TextButton {
 
         uiText = button.AddComponent<UnityEngine.UI.Text>();
         uiText.color = colour;
-        uiText.text = text;
+        uiText.text = textKey.Translate();
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;

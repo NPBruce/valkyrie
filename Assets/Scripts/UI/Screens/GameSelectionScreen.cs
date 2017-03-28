@@ -63,7 +63,12 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             // Draw D2E button
-            TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), new Vector2(30, 4f), D2E_NAME.Translate(), delegate { D2E(); }, startColor);
+            TextButton tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), 
+                new Vector2(30, 4f), 
+                D2E_NAME.Translate(), 
+                delegate { D2E(); }, 
+                startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 

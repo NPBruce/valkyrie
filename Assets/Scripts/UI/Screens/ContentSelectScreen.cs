@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for content (expansions) selection page
     public class ContentSelectScreen
     {
+        private StringKey SELECT_EXPANSION = new StringKey("{val:SELECT_EXPANSION}");
+        private StringKey BACK = new StringKey("{val:BACK}");
+
         public Game game;
         // List of expansions selected by ID
         public List<string> selected;
@@ -50,7 +54,11 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw a header
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Select Expansion Content");
+            DialogBox db = new DialogBox(
+                new Vector2(2, 1), 
+                new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
+                SELECT_EXPANSION.Translate()
+                );
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -98,7 +106,13 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Button for back to main menu
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+            tb = new TextButton(
+                new Vector2(1, UIScaler.GetBottom(-3)), 
+                new Vector2(8, 2), 
+                BACK.Translate(), 
+                delegate { Destroyer.MainMenu(); }, 
+                Color.red);
+
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 

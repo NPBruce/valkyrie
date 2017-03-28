@@ -6,6 +6,10 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
+        private StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
+        private StringKey BACK = new StringKey("val", "BACK");
+
         Game game = Game.Get();
 
         // array of text buttons with all languages
@@ -30,12 +34,20 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             // Options screen text
-            DialogBox dbTittle = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Options");
+            DialogBox dbTittle = new DialogBox(
+                new Vector2(2, 1), 
+                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
+                OPTIONS.Translate()
+                );
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             dbTittle.SetFont(game.gameType.GetHeaderFont());
 
             // Select langauge text
-            DialogBox dbLanguage = new DialogBox(new Vector2(2, 4), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Choose Language");
+            DialogBox dbLanguage = new DialogBox(
+                new Vector2(2, 4), 
+                new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
+                CHOOSE_LANG.Translate()
+                );
             dbLanguage.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             dbLanguage.SetFont(game.gameType.GetHeaderFont());
 
@@ -71,7 +83,12 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Button for back to main menu
-            TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+            TextButton tb = new TextButton(
+                new Vector2(1, UIScaler.GetBottom(-3)), 
+                new Vector2(8, 2), 
+                BACK.Translate(),
+                delegate { Destroyer.MainMenu(); }, 
+                Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 

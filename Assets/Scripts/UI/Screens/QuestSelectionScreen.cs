@@ -22,7 +22,10 @@ namespace Assets.Scripts.UI.Screens
                 Object.Destroy(go);
 
             // Heading
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Select " + game.gameType.QuestName());
+            DialogBox db = new DialogBox(
+                new Vector2(2, 1), 
+                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
+                "Select " + game.gameType.QuestName());
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -35,7 +38,11 @@ namespace Assets.Scripts.UI.Screens
             {
                 string key = q.Key;
                 // Size is 1.2 to be clear of characters with tails
-                tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.white, offset);
+                tb = new TextButton(
+                    new Vector2(2, offset), 
+                    new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), 
+                    "  " + q.Value.name, 
+                    delegate { Selection(key); }, Color.white, offset);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
