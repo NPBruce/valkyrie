@@ -56,6 +56,7 @@ public class SetWindow
     {
         Game game = Game.Get();
         game.quest.flags.Add("#eliminated");
+        game.vars.SetValue("#eliminated", 1);
         new SetWindow();
     }
 }
