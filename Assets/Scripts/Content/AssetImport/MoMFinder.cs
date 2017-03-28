@@ -25,10 +25,18 @@ public class MoMFinder : AppFinder {
     }
     override public string DataDirectory()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "/Contents/Resources";
+        }
         return "/Mansions of Madness_Data";
     }
     override public string Executable()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "Mansions of Madness.app";
+        }
         return "Mansions of Madness.exe";
     }
 
