@@ -6,10 +6,8 @@ public class EditorComponentEventNextEvent : EditorComponent
 {
     QuestData.Event eventComponent;
     List<DialogBoxEditable> buttonDBE;
-    List<DialogBoxEditable> delayedEventsDBE;
     DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
-    EditorSelectionList delayedEventESL;
 
     public EditorComponentEventNextEvent(string nameIn) : base()
     {
@@ -120,31 +118,27 @@ public class EditorComponentEventNextEvent : EditorComponent
             offset++;
         }
 
-        offset++;
-        db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Delayed Events:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddDelayedEvent(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        index = 0;
-        delayedEventsDBE = new List<DialogBoxEditable>();
-        foreach (QuestData.Event.DelayedEvent de in eventComponent.delayedEvents)
+        if (eventComponent.delayedEvents.Count > 0)
         {
-            int i = index++;
-
-            DialogBoxEditable dbeDelay = new DialogBoxEditable(new Vector2(0, offset), new Vector2(2, 1), de.delay.ToString(), delegate { SetDelayedEvent(i); });
-            dbeDelay.ApplyTag("editor");
-            dbeDelay.AddBorder();
-            delayedEventsDBE.Add(dbeDelay);
-
-            db = new DialogBox(new Vector2(2, offset), new Vector2(17, 1), de.eventName);
-            db.AddBorder();
+            offset++;
+            db = new DialogBox(new Vector2(0, offset), new Vector2(20, 1), "DEPRECIATED Delayed Events:", Color.red);
             db.ApplyTag("editor");
-            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "-", delegate { RemoveDelayedEvent(i); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+
+            index = 0;
+            foreach (QuestData.Event.DelayedEvent de in eventComponent.delayedEvents)
+            {
+                int i = index++;
+                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), de.delay.ToString());
+                db.AddBorder();
+                db.ApplyTag("editor");
+
+                db = new DialogBox(new Vector2(2, offset), new Vector2(17, 1), de.eventName);
+                db.AddBorder();
+                db.ApplyTag("editor");
+                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "-", delegate { RemoveDelayedEvent(i); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
         }
         
         if (eventComponent.locationSpecified)
@@ -222,35 +216,6 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void RemoveEvent(int index, int button)
     {
         eventComponent.nextEvent[button - 1].RemoveAt(index);
-        Update();
-    }
-
-    public void AddDelayedEvent()
-    {
-        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
-
-        Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Event)
-            {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
-            }
-        }
-
-        delayedEventESL = new EditorSelectionList("Select Event", events, delegate { SelectAddDelayedEvent(); });
-        delayedEventESL.SelectItem();
-    }
-
-    public void SelectAddDelayedEvent()
-    {
-        eventComponent.delayedEvents.Add(new QuestData.Event.DelayedEvent(0, delayedEventESL.selection));
-        Update();
-    }
-
-    public void SetDelayedEvent(int i)
-    {
-        int.TryParse(delayedEventsDBE[i].uiInput.text, out eventComponent.delayedEvents[i].delay);
         Update();
     }
 
