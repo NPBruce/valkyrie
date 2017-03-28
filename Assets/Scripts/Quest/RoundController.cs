@@ -5,6 +5,9 @@ using System.Collections.Generic;
 // This class controls the progression of activations and events
 public class RoundController {
 
+    // Latch activations finished incase more monsters come
+    bool activationsFinished = false;
+
     // A hero has finished their turn
     virtual public void HeroActivated()
     {
@@ -23,6 +26,7 @@ public class RoundController {
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
         {
+            activationsFinished = true;
             EndRound();
         }
     }
@@ -277,19 +281,9 @@ public class RoundController {
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
-        // Check if all heros have finished
-        foreach (Quest.Hero h in game.quest.heroes)
-        {
-            if (!h.activated && h.heroData != null) return;
-        }
+        if (!activationsFinished) return;
 
-        // Check if all monsters have finished
-        foreach (Quest.Monster m in game.quest.monsters)
-        {
-            if (!m.activated) return;
-        }
-
-        // Check for delayed events
+        // Check for delayed events (depreciated)
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
             if (de.delay == game.quest.round)
@@ -302,6 +296,7 @@ public class RoundController {
         }
 
         // Clean up for next round
+        activationsFinished = false;
         // Clear hero activations
         foreach (Quest.Hero h in game.quest.heroes)
         {
