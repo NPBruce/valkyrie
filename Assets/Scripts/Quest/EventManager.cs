@@ -293,7 +293,7 @@ public class EventManager
             // replaces all occurances with the one hero
             text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
 
-            // Random numbers in events
+            // Random numbers in events (depreciated)
             try
             {
                 // Find first random number tag
@@ -318,6 +318,27 @@ public class EventManager
             catch (System.Exception)
             {
                 game.quest.log.Add(new Quest.LogEntry("Warning: Invalid random clause in event dialog: " + text, true));
+            }
+
+            // Variables in events
+            try
+            {
+                // Find first random number tag
+                int index = text.IndexOf("{var:");
+                // loop through event text
+                while (index != -1)
+                {
+                    // find end of tag
+                    string statement = text.Substring(index, text.IndexOf("}", index) + 1 - index);
+                    // Replace with variable data
+                    text = text.Replace(statement, game.quest.vars.GetValue(statement.Substring(5, statement.Length - 6)).ToString());
+                    //find next random tag
+                    index = text.IndexOf("{var:");
+                }
+            }
+            catch (System.Exception)
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Invalid var clause in event dialog: " + text, true));
             }
 
             // Fix new lines and replace symbol text with special characters
