@@ -505,6 +505,7 @@ public class QuestData
         public string[] addComponents;
         public string[] removeComponents;
         public List<VarOperation> operations;
+        public List<VarOperation> conditions;
         public bool cancelable = false;
         public bool highlight = false;
         public List<DelayedEvent> delayedEvents;
@@ -522,6 +523,7 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
+            conditions = new List<VarOperation>();
             delayedEvents = new List<DelayedEvent>();
             minCam = false;
             maxCam = false;
@@ -669,10 +671,20 @@ public class QuestData
             operations = new List<VarOperation>();
             if (data.ContainsKey("operations"))
             {
-                string[] flag_array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in flag_array)
+                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
                 {
                     operations.Add(new VarOperation(s));
+                }
+            }
+
+            conditions = new List<VarOperation>();
+            if (data.ContainsKey("conditions"))
+            {
+                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    conditions.Add(new VarOperation(s));
                 }
             }
 
@@ -684,23 +696,23 @@ public class QuestData
                 {
                     if (s.Equals("#hero2"))
                     {
-                        operations.Add(new VarOperation("#heroes,==,2"));
+                        conditions.Add(new VarOperation("#heroes,==,2"));
                     }
                     else if (s.Equals("#hero3"))
                     {
-                        operations.Add(new VarOperation("#heroes,==,3"));
+                        conditions.Add(new VarOperation("#heroes,==,3"));
                     }
                     else if (s.Equals("#hero4"))
                     {
-                        operations.Add(new VarOperation("#heroes,==,4"));
+                        conditions.Add(new VarOperation("#heroes,==,4"));
                     }
                     else if (s.Equals("#hero5"))
                     {
-                        operations.Add(new VarOperation("#heroes,==,5"));
+                        conditions.Add(new VarOperation("#heroes,==,5"));
                     }
                     else
                     {
-                        operations.Add(new VarOperation(s + ",>,0"));
+                        conditions.Add(new VarOperation(s + ",>,0"));
                     }
                 }
             }
@@ -927,6 +939,16 @@ public class QuestData
             {
                 r += "opertaions=";
                 foreach (VarOperation o in operations)
+                {
+                    r += o.ToString() + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            if (conditions.Count > 0)
+            {
+                r += "conditions=";
+                foreach (VarOperation o in conditions)
                 {
                     r += o.ToString() + " ";
                 }

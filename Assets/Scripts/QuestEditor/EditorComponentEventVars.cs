@@ -63,25 +63,22 @@ public class EditorComponentEventVars : EditorComponent
         tb.ApplyTag("editor");
 
         offset++;
-        foreach (QuestData.Event.VarOperation op in eventComponent.operations)
+        foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
-            if (!(op.operation.Equals("+") || op.operation.Equals("-") || op.operation.Equals("=")))
-            {
-                QuestData.Event.VarOperation tmp = op;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetTestOpp(tmp); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                offset++;
-            }
+            QuestData.Event.VarOperation tmp = op;
+            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
+            db.AddBorder();
+            db.ApplyTag("editor");
+            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetTestOpp(tmp); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            offset++;
         }
 
         offset++;
@@ -95,27 +92,20 @@ public class EditorComponentEventVars : EditorComponent
         offset++;
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
-            if (op.operation.Equals("+")
-                || op.operation.Equals("-")
-                || op.operation.Equals("*")
-                || op.operation.Equals("/")
-                || op.operation.Equals("="))
-            {
-                QuestData.Event.VarOperation tmp = op;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetAssignOpp(tmp); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-                offset++;
-            }
+            QuestData.Event.VarOperation tmp = op;
+            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
+            db.AddBorder();
+            db.ApplyTag("editor");
+            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetAssignOpp(tmp); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            offset++;
         }
 
         if (eventComponent.locationSpecified)
@@ -177,7 +167,15 @@ public class EditorComponentEventVars : EditorComponent
                     {
                         vars.Add(op.var);
                     }
-                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]))
+                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+                    {
+                        vars.Add(op.value);
+                    }
+                }
+                foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
+                {
+                    vars.Add(op.var);
+                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
                     {
                         vars.Add(op.var);
                     }
@@ -200,22 +198,40 @@ public class EditorComponentEventVars : EditorComponent
 
         if (op.var.Equals("{NEW}"))
         {
-            varText = new QuestEditorTextEdit("Var Name:", "", delegate { NewVar(op); });
+            varText = new QuestEditorTextEdit("Var Name:", "", delegate { NewVar(op, test); });
             varText.EditText();
         }
         else
         {
-            eventComponent.operations.Add(op);
+            if (test)
+            {
+                eventComponent.conditions.Add(op);
+            }
+            else
+            {
+                eventComponent.operations.Add(op);
+            }
             Update();
         }
     }
 
-    public void NewVar(QuestData.Event.VarOperation op)
+    public void NewVar(QuestData.Event.VarOperation op, bool test)
     {
         op.var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
         if (op.var.Length > 0)
         {
-            eventComponent.operations.Add(op);
+            if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
+            {
+                op.var = "flag" + op.var;
+            }
+            if (test)
+            {
+                eventComponent.conditions.Add(op);
+            }
+            else
+            {
+                eventComponent.operations.Add(op);
+            }
         }
         Update();
     }
@@ -280,9 +296,7 @@ public class EditorComponentEventVars : EditorComponent
 
     public void SelectSetValue(QuestData.Event.VarOperation op)
     {
-        op.value = varESL.selection;
-
-        if (op.var.Equals("{NUMBER}"))
+        if (varESL.selection.Equals("{NUMBER}"))
         {
             varText = new QuestEditorTextEdit("Number:", "", delegate { SetNumValue(op); });
             varText.EditText();
@@ -304,7 +318,10 @@ public class EditorComponentEventVars : EditorComponent
 
     public void RemoveOp(QuestData.Event.VarOperation op)
     {
-        eventComponent.operations.Remove(op);
+        if (eventComponent.operations.Contains(op))
+            eventComponent.operations.Remove(op);
+        if (eventComponent.conditions.Contains(op))
+            eventComponent.conditions.Remove(op);
         Update();
     }
 }

@@ -405,7 +405,7 @@ public class EventManager
         // Is this event disabled?
         public bool Disabled()
         {
-            return !game.quest.vars.Test(qEvent.operations);
+            return !game.quest.vars.Test(qEvent.conditions);
         }
     }
 

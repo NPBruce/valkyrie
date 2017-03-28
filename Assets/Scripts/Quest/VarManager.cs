@@ -54,7 +54,7 @@ public class VarManager
         {
             return r;
         }
-        if (char.IsNumber(op.value[0]))
+        if (char.IsNumber(op.value[0]) || op.value[0] == '-' || op.value[0] == '.')
         {
             float.TryParse(op.value, out r);
             return r;
@@ -148,8 +148,8 @@ public class VarManager
             return (vars[op.var] < value);
         }
 
-        // Don't test assign operations
-        return true;
+        // unknown tests fail
+        return false;
     }
     
     public bool Test(List<QuestData.Event.VarOperation> ops)
