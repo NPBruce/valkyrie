@@ -120,8 +120,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         if (eventComponent.delayedEvents.Count > 0)
         {
-            offset++;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(20, 1), "DEPRECIATED Delayed Events:", Color.red);
+            db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), "DEPRECIATED Delayed Events:", Color.red);
             db.ApplyTag("editor");
 
             index = 0;
