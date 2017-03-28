@@ -25,10 +25,18 @@ public class RtLFinder : AppFinder {
 
     override public string DataDirectory()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "/Contents/Resources";
+        }
         return "/Road to Legend_Data";
     }
     override public string Executable()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "Descent Road to Legend.app";
+        }
         return "Road to Legend.exe";
     }
     // RtL does not obfuscate text
