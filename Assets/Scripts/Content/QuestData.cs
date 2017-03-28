@@ -712,7 +712,7 @@ public class QuestData
                     }
                     else
                     {
-                        conditions.Add(new VarOperation(s + ",>,0"));
+                        conditions.Add(new VarOperation("flag" + s + ",>,0"));
                     }
                 }
             }
@@ -723,7 +723,7 @@ public class QuestData
                 string[] flags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    operations.Add(new VarOperation(s + ",=,1"));
+                    operations.Add(new VarOperation("flag" + s + ",=,1"));
                 }
             }
 
@@ -733,7 +733,7 @@ public class QuestData
                 string[] flags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    operations.Add(new VarOperation(s + ",=,0"));
+                    operations.Add(new VarOperation("flag" + s + ",=,0"));
                 }
             }
 
