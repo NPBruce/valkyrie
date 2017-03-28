@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class EditorComponentEventVars : EditorComponent
 {
     QuestData.Event eventComponent;
-    EditorSelectionList flagsESL;
-    QuestEditorTextEdit newFlagText;
+    EditorSelectionList varESL;
+    QuestEditorTextEdit varText;
 
     public EditorComponentEventVars(string nameIn) : base()
     {
@@ -55,67 +55,66 @@ public class EditorComponentEventVars : EditorComponent
         tb.ApplyTag("editor");
         
         float offset = 2;
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), "Flags:");
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Tests:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), "+", delegate { AddFlag("flag"); }, Color.green);
+        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "+", delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(7, offset), new Vector2(5, 1), "Set:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(12, offset), new Vector2(1, 1), "+", delegate { AddFlag("set"); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(14, offset), new Vector2(5, 1), "Clear:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { AddFlag("clear"); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        int index;
-        for (index = 0; index < 8; index++)
+        offset++;
+        foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
-            if (eventComponent.flags.Length > index)
+            if (!(op.operation.Equals("+") || op.operation.Equals("-") || op.operation.Equals("=")))
             {
-                int i = index;
-                db = new DialogBox(new Vector2(0, offset + index), new Vector2(5, 1), eventComponent.flags[index]);
+                QuestData.Event.VarOperation tmp = op;
+                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(5, offset + index), new Vector2(1, 1), "-", delegate { FlagRemove(i); }, Color.red);
+                tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetTestOpp(tmp); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
+                tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+                tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+                offset++;
             }
         }
 
-        for (index = 0; index < 8; index++)
-        {
-            if (eventComponent.setFlags.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(7, offset + index), new Vector2(5, 1), eventComponent.setFlags[index]);
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(12, offset + index), new Vector2(1, 1), "-", delegate { FlagSetRemove(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-            }
-        }
+        offset++;
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Assign:");
+        db.ApplyTag("editor");
 
-        for (index = 0; index < 8; index++)
+        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "+", delegate { AddAssignOp(); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        offset++;
+        foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
-            if (eventComponent.clearFlags.Length > index)
+            if (op.operation.Equals("+")
+                || op.operation.Equals("-")
+                || op.operation.Equals("*")
+                || op.operation.Equals("/")
+                || op.operation.Equals("="))
             {
-                int i = index;
-                db = new DialogBox(new Vector2(14, offset + index), new Vector2(5, 1), eventComponent.clearFlags[index]);
+                QuestData.Event.VarOperation tmp = op;
+                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset + index), new Vector2(1, 1), "-", delegate { FlagClearRemove(i); }, Color.red);
+                tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetAssignOpp(tmp); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
+                tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+                tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+                offset++;
             }
         }
 
@@ -129,10 +128,46 @@ public class EditorComponentEventVars : EditorComponent
         }
     }
 
-    public void AddFlag(string type)
+    public void AddTestOp()
     {
-        HashSet<string> flags = new HashSet<string>();
-        flags.Add("{NEW}");
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"));
+        foreach (string s in GetQuestVars())
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
+        varESL = new EditorSelectionList("Select Var", list, delegate { SelectAddOp(); });
+        varESL.SelectItem();
+    }
+
+    public void AddAssignOp()
+    {
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
+        foreach (string s in GetQuestVars())
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
+        }
+
+        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#round", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "Valkyrie"));
+        foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
+        {
+            if (pack.id.Length > 0)
+            {
+                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
+            }
+        }
+        varESL = new EditorSelectionList("Select Var", list, delegate { SelectAddOp(false); });
+        varESL.SelectItem();
+    }
+
+    public HashSet<string> GetQuestVars()
+    {
+        HashSet<string> vars = new HashSet<string>();
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -140,138 +175,139 @@ public class EditorComponentEventVars : EditorComponent
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (string s in e.flags)
+                foreach (QuestData.Event.VarOperation op in eventComponent.operations)
                 {
-                    if (s.IndexOf("#") != 0) flags.Add(s);
-                }
-                foreach (string s in e.setFlags) flags.Add(s);
-                foreach (string s in e.clearFlags) flags.Add(s);
-            }
-        }
-
-        if (type.Equals("flag"))
-        {
-            flags.Add("#monsters");
-            flags.Add("#2hero");
-            flags.Add("#3hero");
-            flags.Add("#4hero");
-            flags.Add("#5hero");
-            foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
-            {
-                if (pack.id.Length > 0)
-                {
-                    flags.Add("#" + pack.id);
+                    if (op.var.Length > 0 && op.var[0] != '#')
+                    {
+                        flags.Add(op.var);
+                    }
+                    if (op.value.Length > 0 && op.value[0] != '#' && !Char.IsNumber(op.value[0]))
+                    {
+                        flags.Add(op.var);
+                    }
                 }
             }
         }
-
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        foreach (string s in flags)
-        {
-            if (type.Equals("flag"))
-            {
-                if (s.Length > 0 && s[0] == '#')
-                {
-                    list.Add(new EditorSelectionList.SelectionListEntry(s, "Valkyrie"));
-                }
-                else
-                {
-                    list.Add(new EditorSelectionList.SelectionListEntry(s, "User"));
-                }
-            }
-            else
-            {
-                list.Add(new EditorSelectionList.SelectionListEntry(s));
-            }
-        }
-        flagsESL = new EditorSelectionList("Select Flag", list, delegate { SelectAddFlag(type); });
-        flagsESL.SelectItem();
     }
 
-    public void SelectAddFlag(string type)
+    public void SelectAddOp(bool test = true)
     {
-        if (flagsESL.selection.Equals("{NEW}"))
+        QuestData.Event.VarOperation op = new QuestData.Event.VarOperation();
+        op.var = varESL.selection;
+        op.operation = "=";
+        if (test)
         {
-            newFlagText = new QuestEditorTextEdit("Flag Name:", "", delegate { NewFlag(type); });
-            newFlagText.EditText();
+            op.operation = "==";
+        }
+        op.value = "0";
+
+        if (op.var.Equals("{NEW}"))
+        {
+            varText = new QuestEditorTextEdit("Var Name:", "", delegate { NewVar(op); });
+            varText.EditText();
         }
         else
         {
-            SelectAddFlag(type, flagsESL.selection);
+            eventComponent.operations.Add(op);
+            Update();
         }
     }
 
-    public void SelectAddFlag(string type, string name)
+    public void NewVar(QuestData.Event.VarOperation op)
     {
-        if (name.Equals("")) return;
-        if (type.Equals("flag"))
+        op.var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
+        if (op.var.Length > 0)
         {
-            System.Array.Resize(ref eventComponent.flags, eventComponent.flags.Length + 1);
-            eventComponent.flags[eventComponent.flags.Length - 1] = name;
-        }
-
-        if (type.Equals("set"))
-        {
-            System.Array.Resize(ref eventComponent.setFlags, eventComponent.setFlags.Length + 1);
-            eventComponent.setFlags[eventComponent.setFlags.Length - 1] = name;
-        }
-
-        if (type.Equals("clear"))
-        {
-            System.Array.Resize(ref eventComponent.clearFlags, eventComponent.clearFlags.Length + 1);
-            eventComponent.clearFlags[eventComponent.clearFlags.Length - 1] = name;
+            eventComponent.operations.Add(op);
         }
         Update();
     }
 
-    public void NewFlag(string type)
+    public void SetTestOpp(QuestData.Event.VarOperation op)
     {
-        string name = System.Text.RegularExpressions.Regex.Replace(newFlagText.value, "[^A-Za-z0-9_]", "");
-        SelectAddFlag(type, name);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("=="));
+        list.Add(new EditorSelectionList.SelectionListEntry("!="));
+        list.Add(new EditorSelectionList.SelectionListEntry(">="));
+        list.Add(new EditorSelectionList.SelectionListEntry("<="));
+        list.Add(new EditorSelectionList.SelectionListEntry(">"));
+        list.Add(new EditorSelectionList.SelectionListEntry("<"));
+        varESL = new EditorSelectionList("Select Op", list, delegate { SelectSetOp(op); });
+        varESL.SelectItem();
     }
 
-    public void FlagRemove(int index)
+    public void SetAssignOpp(QuestData.Event.VarOperation op)
     {
-        string[] flags = new string[eventComponent.flags.Length - 1];
-        int j = 0;
-        for (int i = 0; i < eventComponent.flags.Length; i++)
-        {
-            if (i != index)
-            {
-                flags[j++] = eventComponent.flags[i];
-            }
-        }
-        eventComponent.flags = flags;
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("="));
+        list.Add(new EditorSelectionList.SelectionListEntry("+"));
+        list.Add(new EditorSelectionList.SelectionListEntry("-"));
+        list.Add(new EditorSelectionList.SelectionListEntry("*"));
+        list.Add(new EditorSelectionList.SelectionListEntry("/"));
+        varESL = new EditorSelectionList("Select Op", list, delegate { SelectSetOp(op); });
+        varESL.SelectItem();
+    }
+
+    public void SelectSetOp(QuestData.Event.VarOperation op)
+    {
+        op.operation = varESL.selection;;
         Update();
     }
 
-    public void FlagSetRemove(int index)
+    public void SetValue(QuestData.Event.VarOperation op)
     {
-        string[] flags = new string[eventComponent.setFlags.Length - 1];
-        int j = 0;
-        for (int i = 0; i < eventComponent.setFlags.Length; i++)
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("{NUMBER}", "Quest"));
+        foreach (string s in GetQuestVars())
         {
-            if (i != index)
+            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
+        }
+
+        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#round", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "Valkyrie"));
+        foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
+        {
+            if (pack.id.Length > 0)
             {
-                flags[j++] = eventComponent.setFlags[i];
+                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
             }
         }
-        eventComponent.setFlags = flags;
+
+        varESL = new EditorSelectionList("Select Value", list, delegate { SelectSetValue(op); });
+        varESL.SelectItem();
+    }
+
+
+    public void SelectSetValue(QuestData.Event.VarOperation op)
+    {
+        op.value = varESL.selection;
+
+        if (op.var.Equals("{NUMBER}"))
+        {
+            varText = new QuestEditorTextEdit("Number:", "", delegate { SetNumValue(op); });
+            varText.EditText();
+        }
+        else
+        {
+            op.value = varESL.selection;
+            Update();
+        }
+    }
+
+    public void SetNumValue(QuestData.Event.VarOperation op)
+    {
+        float value = 0;
+        float.TryParse(varText.value, out value);
+        op.value = value.ToString();
         Update();
     }
 
-    public void FlagClearRemove(int index)
+    public void RemoveOp(QuestData.Event.VarOperation op)
     {
-        string[] flags = new string[eventComponent.clearFlags.Length - 1];
-        int j = 0;
-        for (int i = 0; i < eventComponent.clearFlags.Length; i++)
-        {
-            if (i != index)
-            {
-                flags[j++] = eventComponent.clearFlags[i];
-            }
-        }
-        eventComponent.clearFlags = flags;
+        eventComponent.operations.Remove(op);
         Update();
     }
 }
