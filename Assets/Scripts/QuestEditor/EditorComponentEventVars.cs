@@ -163,10 +163,7 @@ public class EditorComponentEventVars : EditorComponent
                 QuestData.Event e = kv.Value as QuestData.Event;
                 foreach (QuestData.Event.VarOperation op in e.operations)
                 {
-                    if (op.var.Length > 0 && op.var[0] != '#')
-                    {
-                        vars.Add(op.var);
-                    }
+                    vars.Add(op.var);
                     if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
                     {
                         vars.Add(op.value);
@@ -174,10 +171,13 @@ public class EditorComponentEventVars : EditorComponent
                 }
                 foreach (QuestData.Event.VarOperation op in e.conditions)
                 {
-                    vars.Add(op.var);
-                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+                    if (op.var.Length > 0 && op.var[0] != '#')
                     {
                         vars.Add(op.var);
+                    }
+                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+                    {
+                        vars.Add(op.value);
                     }
                 }
             }

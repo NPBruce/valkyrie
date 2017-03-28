@@ -694,25 +694,32 @@ public class QuestData
                 string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    if (s.Equals("#hero2"))
+                    if (s.Equals("#2hero"))
                     {
                         conditions.Add(new VarOperation("#heroes,==,2"));
                     }
-                    else if (s.Equals("#hero3"))
+                    else if (s.Equals("#3hero"))
                     {
                         conditions.Add(new VarOperation("#heroes,==,3"));
                     }
-                    else if (s.Equals("#hero4"))
+                    else if (s.Equals("#4hero"))
                     {
                         conditions.Add(new VarOperation("#heroes,==,4"));
                     }
-                    else if (s.Equals("#hero5"))
+                    else if (s.Equals("#5hero"))
                     {
                         conditions.Add(new VarOperation("#heroes,==,5"));
                     }
                     else
                     {
-                        conditions.Add(new VarOperation("flag" + s + ",>,0"));
+                        if (s[0] == '#')
+                        {
+                            conditions.Add(new VarOperation(s + ",>,0"));
+                        }
+                        else
+                        {
+                            conditions.Add(new VarOperation("flag" + s + ",>,0"));
+                        }
                     }
                 }
             }
