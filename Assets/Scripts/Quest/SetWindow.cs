@@ -14,7 +14,7 @@ public class SetWindow
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), "");
         db.AddBorder();
 
-        if (game.quest.flags.Contains("#fire"))
+        if (game.quest.vars.GetValue("#fire") > 0)
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), "Clear Fire", delegate { ClearFire(); });
         }
@@ -22,7 +22,7 @@ public class SetWindow
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), "Set Fire", delegate { SetFire(); });
         }
-        if (game.quest.flags.Contains("#eliminated"))
+        if (game.quest.vars.GetValue("#eliminated") > 0)
         {
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), "Investigator Eliminated", Color.gray);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
@@ -39,21 +39,21 @@ public class SetWindow
     public void SetFire()
     {
         Game game = Game.Get();
-        game.quest.flags.Add("#fire");
+        game.quest.vars.SetValue("#fire", 1);
         new SetWindow();
     }
 
     public void ClearFire()
     {
         Game game = Game.Get();
-        game.quest.flags.Remove("#fire");
+        game.quest.vars.SetValue("#fire", 0);
         new SetWindow();
     }
 
     public void Eliminate()
     {
         Game game = Game.Get();
-        game.quest.flags.Add("#eliminated");
+        game.quest.vars.SetValue("#eliminated", 1);
         new SetWindow();
     }
 }

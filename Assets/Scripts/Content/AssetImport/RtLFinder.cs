@@ -10,7 +10,7 @@ public class RtLFinder : AppFinder {
     // If an import wasn't performed with this Valkyrie version or higher reimport
     override public string RequiredValkyrieVersion()
     {
-        return "0.2.3";
+        return "0.7.2";
     }
     // Steam app ID
     override public string AppId()
