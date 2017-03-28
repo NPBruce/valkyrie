@@ -445,8 +445,6 @@ public class EventManager
                     return true;
             }
             return game.quest.vars.Test(e.qEvents.operations);
-            // No missing flags
-            return false;
         }
     }
 

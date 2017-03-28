@@ -23,6 +23,16 @@ public class VarManager
         }
     }
 
+    public void SetValue(string var, float value)
+    {
+        if (!vars.Contains(var))
+        {
+            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
+            vars.Add(op.var, 0);
+        }
+        vars[op.var] = value;
+    }
+
     public float GetOpValue(QuestData.Event.VarOperation op)
     {
         if (!vars.Contains(op.var))
@@ -60,6 +70,11 @@ public class VarManager
     {
         float value = GetOpValue(op)
 
+        if (op.var[0] == '#')
+        {
+            return;
+        }
+
         if (op.operation.Equals("+"))
         {
             vars[op.var] += value;
@@ -70,6 +85,12 @@ public class VarManager
         {
             vars[op.var] -= value;
             Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Subtracting: " + value + " from quest var: " + op.var + " result: " + vars[op.var], true));
+        }
+
+        if (op.operation.Equals("="))
+        {
+            vars[op.var] = value;
+            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Setting: " + op.var + " to: " + value, true));
         }
     }
 

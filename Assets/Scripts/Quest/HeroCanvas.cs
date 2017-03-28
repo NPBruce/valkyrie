@@ -260,6 +260,7 @@ public class HeroCanvas : MonoBehaviour {
 
         // Set quest flag based on hero count
         game.quest.flags.Add("#" + heroCount + "hero");
+        game.vars.SetValue("#heroes", heroCount);
 
         game.quest.heroesSelected = true;
 

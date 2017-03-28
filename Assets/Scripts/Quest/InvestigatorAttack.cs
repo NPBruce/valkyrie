@@ -103,6 +103,8 @@ public class InvestigatorAttack
             game.quest.flags.Remove("#monsters");
         }
 
+        game.vars.SetValue("#monsters", game.quest.monsters.Count);
+
         // Trigger defeated event
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         // If unique trigger defeated unique event

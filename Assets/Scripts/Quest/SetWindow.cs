@@ -40,6 +40,7 @@ public class SetWindow
     {
         Game game = Game.Get();
         game.quest.flags.Add("#fire");
+        game.vars.SetValue("#fire", 1);
         new SetWindow();
     }
 
@@ -47,6 +48,7 @@ public class SetWindow
     {
         Game game = Game.Get();
         game.quest.flags.Remove("#fire");
+        game.vars.SetValue("#fire", 0);
         new SetWindow();
     }
 
