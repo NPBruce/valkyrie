@@ -505,9 +505,6 @@ public class QuestData
         public string[] addComponents;
         public string[] removeComponents;
         public List<VarOperation> operations;
-        public string[] flags;
-        public string[] setFlags;
-        public string[] clearFlags;
         public bool cancelable = false;
         public bool highlight = false;
         public float threat;
@@ -527,9 +524,6 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            flags = new string[0];
-            setFlags = new string[0];
-            clearFlags = new string[0];
             threat = 0;
             delayedEvents = new List<DelayedEvent>();
             minCam = false;
@@ -685,34 +679,53 @@ public class QuestData
                 }
             }
 
-            // Flags required to trigger (space separated list)
+            // Flags required to trigger (space separated list Depreciated format 0)
             if (data.ContainsKey("flags"))
             {
-                flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-            }
-            else
-            {
-                flags = new string[0];
+                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    if (s.Equals("#hero2")
+                    {
+                        operations.Add(new VarOperation("#heroes", "==", "2"));
+                    }
+                    else if (s.Equals("#hero3")
+                    {
+                        operations.Add(new VarOperation("#heroes", "==", "3"));
+                    }
+                    else if (s.Equals("#hero4")
+                    {
+                        operations.Add(new VarOperation("#heroes", "==", "4"));
+                    }
+                    else if (s.Equals("#hero5")
+                    {
+                        operations.Add(new VarOperation("#heroes", "==", "5"));
+                    }
+                    else
+                    {
+                        operations.Add(new VarOperation(s, ">", "0"));
+                    }
+                }
             }
 
-            // Flags to set trigger (space separated list)
+            // Flags to set (space separated list Depreciated format 0)
             if (data.ContainsKey("set"))
             {
-                setFlags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-            }
-            else
-            {
-                setFlags = new string[0];
+                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    operations.Add(new VarOperation(s, "=", "1"));
+                }
             }
 
-            // Flags to clear trigger (space separated list)
+            // Flags to clear (space separated list Depreciated format 0)
             if (data.ContainsKey("clear"))
             {
-                clearFlags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-            }
-            else
-            {
-                clearFlags = new string[0];
+                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    operations.Add(new VarOperation(s, "=", "0"));
+                }
             }
 
             // Threat modifier
@@ -917,34 +930,6 @@ public class QuestData
                 foreach (VarOperation o in operations)
                 {
                     r += o.ToString() + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-
-            if (flags.Length > 0)
-            {
-                r += "flags=";
-                foreach (string s in flags)
-                {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (setFlags.Length > 0)
-            {
-                r += "set=";
-                foreach (string s in setFlags)
-                {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (clearFlags.Length > 0)
-            {
-                r += "clear=";
-                foreach (string s in clearFlags)
-                {
-                    r += s + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }

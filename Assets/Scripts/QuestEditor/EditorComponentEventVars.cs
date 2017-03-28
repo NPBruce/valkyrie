@@ -118,10 +118,6 @@ public class EditorComponentEventVars : EditorComponent
             }
         }
 
-        tb = new TextButton(new Vector2(2, 28), new Vector2(18, 1), "Flags WARNING: DEPRECIATED", delegate { QuestEditorData.SelectAsEventFlags(name); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
         if (eventComponent.locationSpecified)
         {
             game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", "editor");
@@ -179,15 +175,16 @@ public class EditorComponentEventVars : EditorComponent
                 {
                     if (op.var.Length > 0 && op.var[0] != '#')
                     {
-                        flags.Add(op.var);
+                        vars.Add(op.var);
                     }
                     if (op.value.Length > 0 && op.value[0] != '#' && !Char.IsNumber(op.value[0]))
                     {
-                        flags.Add(op.var);
+                        vars.Add(op.var);
                     }
                 }
             }
         }
+        return vars;
     }
 
     public void SelectAddOp(bool test = true)

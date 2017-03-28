@@ -120,20 +120,6 @@ public class EventManager
         // Event may have been disabled since added
         if (e.Disabled()) return;
 
-        // Add set flags
-        foreach (string s in e.qEvent.setFlags)
-        {
-            game.quest.log.Add(new Quest.LogEntry("Notice: Setting quest flag: " + s, true));
-            game.quest.flags.Add(s);
-        }
-
-        // Remove clear flags
-        foreach (string s in e.qEvent.clearFlags)
-        {
-            game.quest.log.Add(new Quest.LogEntry("Notice: Clearing quest flag: " + s, true));
-            game.quest.flags.Remove(s);
-        }
-
         // Perform var operations
         game.quest.vars.Perform(e.qEvents.operations);
 
@@ -144,11 +130,6 @@ public class EventManager
         // If this is a monster event then add the monster group
         if (e is MonsterEvent)
         {
-            // Set monster tag if not already
-            game.quest.flags.Add("#monsters");
-
-            game.quest.vars.SetValue("#monsters", game.quest.mosnters.Count);
-
             MonsterEvent qe = (MonsterEvent)e;
 
             // Is this type new?
@@ -167,6 +148,8 @@ public class EventManager
             {
                 game.quest.monsters.Add(new Quest.Monster(qe));
                 game.monsterCanvas.UpdateList();
+                // Update monster var
+                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
             }
             // There is an existing group, but now it is unique
             else if (qe.qMonster.unique)
@@ -439,13 +422,6 @@ public class EventManager
         // Is this event disabled?
         public bool Disabled()
         {
-            // Check all flags
-            foreach (string s in qEvent.flags)
-            {
-                // Is the flag missing from the quest?
-                if (!game.quest.flags.Contains(s))
-                    return true;
-            }
             return game.quest.vars.Test(e.qEvents.operations);
         }
     }

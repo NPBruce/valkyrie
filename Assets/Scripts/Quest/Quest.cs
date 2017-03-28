@@ -12,9 +12,6 @@ public class Quest
     // components on the board (tiles, tokens, doors)
     public Dictionary<string, BoardComponent> boardItems;
 
-    // A list of flags that have been set during the quest
-    public HashSet<string> flags;
-
     // vars for the quest
     public VarManger vars;
 
@@ -78,7 +75,6 @@ public class Quest
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
-        flags = new HashSet<string>();
         vars = new VarManger();
         items = new HashSet<string>();
         monsters = new List<Monster>();
@@ -97,13 +93,12 @@ public class Quest
             heroes.Add(new Hero(null, i));
         }
 
-        // Set quest flags for selected expansions
+        // Set quest vars for selected expansions
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (packs != null)
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                flags.Add("#" + kv.Key);
                 vars.SetValue("#" + kv.Key, 1);
             }
         }
@@ -202,14 +197,6 @@ public class Quest
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
             }
-        }
-
-        // Set flags
-        flags = new HashSet<string>();
-        Dictionary<string, string> saveFlags = saveData.Get("Flags");
-        foreach (KeyValuePair<string, string> kv in saveFlags)
-        {
-            flags.Add(kv.Key);
         }
 
         Dictionary<string, string> saveVars = saveData.Get("Vars");
@@ -522,12 +509,6 @@ public class Quest
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
         {
             r += kv.Key + nl;
-        }
-
-        r += "[Flags]" + nl;
-        foreach (string s in flags)
-        {
-            r += s + nl;
         }
 
         r += vars.ToString();

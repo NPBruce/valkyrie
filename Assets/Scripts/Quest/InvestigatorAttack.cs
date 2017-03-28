@@ -96,13 +96,6 @@ public class InvestigatorAttack
         game.quest.monsters.Remove(monster);
         game.monsterCanvas.UpdateList();
 
-        // Check if all monsters gone
-        if (game.quest.monsters.Count == 0)
-        {
-            // clear monster flag
-            game.quest.flags.Remove("#monsters");
-        }
-
         game.vars.SetValue("#monsters", game.quest.monsters.Count);
 
         // Trigger defeated event

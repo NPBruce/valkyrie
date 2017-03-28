@@ -39,7 +39,6 @@ public class SetWindow
     public void SetFire()
     {
         Game game = Game.Get();
-        game.quest.flags.Add("#fire");
         game.vars.SetValue("#fire", 1);
         new SetWindow();
     }
@@ -47,7 +46,6 @@ public class SetWindow
     public void ClearFire()
     {
         Game game = Game.Get();
-        game.quest.flags.Remove("#fire");
         game.vars.SetValue("#fire", 0);
         new SetWindow();
     }
@@ -55,7 +53,6 @@ public class SetWindow
     public void Eliminate()
     {
         Game game = Game.Get();
-        game.quest.flags.Add("#eliminated");
         game.vars.SetValue("#eliminated", 1);
         new SetWindow();
     }

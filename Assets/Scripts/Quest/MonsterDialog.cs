@@ -70,13 +70,6 @@ public class MonsterDialog
         game.quest.monsters.Remove(monster);
         updateDisplay();
 
-        // Check if all monsters gone
-        if (game.quest.monsters.Count == 0)
-        {
-            // clear monster flag
-            game.quest.flags.Remove("#monsters");
-        }
-
         game.vars.SetValue("#monsters", game.quest.monsters.Count);
         
         // Trigger defeated event
