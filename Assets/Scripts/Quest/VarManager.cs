@@ -11,7 +11,7 @@ public class VarManager
         vars = new Dictionary<string, float>();
     }
 
-    public VarManager(KeyValuePair<string, string> data)
+    public VarManager(Dictionary<string, string> data)
     {
         vars = new Dictionary<string, float>();
 
@@ -25,26 +25,26 @@ public class VarManager
 
     public void SetValue(string var, float value)
     {
-        if (!vars.Contains(var))
+        if (!vars.ContainsKey(var))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
-            vars.Add(op.var, 0);
+            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var, true));
+            vars.Add(var, 0);
         }
-        vars[op.var] = value;
+        vars[var] = value;
     }
 
     public float GetValue(string var)
     {
-        if (!vars.Contains(var))
+        if (!vars.ContainsKey(var))
         {
             return 0;
         }
-        return vars[op.var];
+        return vars[var];
     }
 
     public float GetOpValue(QuestData.Event.VarOperation op)
     {
-        if (!vars.Contains(op.var))
+        if (!vars.ContainsKey(op.var))
         {
             Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
             vars.Add(op.var, 0);
@@ -54,20 +54,20 @@ public class VarManager
         {
             return r;
         }
-        if (Char.IsNumber(op.value[0])
+        if (char.IsNumber(op.value[0]))
         {
-            float.TryParse(op.value, r);
+            float.TryParse(op.value, out r);
             return r;
         }
         if (op.value.IndexOf("#rand") == 0)
         {
             int randLimit;
-            int.TryParse(op.value.Substring(5), out randLimit)
+            int.TryParse(op.value.Substring(5), out randLimit);
             r = Random.Range(1, randLimit + 1);
             return r;
         }
         // value is var
-        if (!vars.Contains(op.value))
+        if (!vars.ContainsKey(op.value))
         {
             Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
             vars.Add(op.value, 0);
@@ -77,7 +77,7 @@ public class VarManager
 
     public void Perform(QuestData.Event.VarOperation op)
     {
-        float value = GetOpValue(op)
+        float value = GetOpValue(op);
 
         if (op.var[0] == '#')
         {
@@ -117,35 +117,35 @@ public class VarManager
 
     public bool Test(QuestData.Event.VarOperation op)
     {
-        float value = GetOpValue(op)
+        float value = GetOpValue(op);
         if (op.operation.Equals("=="))
         {
-            return (vars[op.var] == value)
+            return (vars[op.var] == value);
         }
 
         if (op.operation.Equals("!="))
         {
-            return (vars[op.var] != value)
+            return (vars[op.var] != value);
         }
 
         if (op.operation.Equals(">="))
         {
-            return (vars[op.var] >= value)
+            return (vars[op.var] >= value);
         }
 
         if (op.operation.Equals("<="))
         {
-            return (vars[op.var] <= value)
+            return (vars[op.var] <= value);
         }
 
         if (op.operation.Equals(">"))
         {
-            return (vars[op.var] > value)
+            return (vars[op.var] > value);
         }
 
         if (op.operation.Equals("<"))
         {
-            return (vars[op.var] < value)
+            return (vars[op.var] < value);
         }
 
         // Don't test assign operations
@@ -156,7 +156,7 @@ public class VarManager
     {
         foreach (QuestData.Event.VarOperation op in ops)
         {
-            if !Test(op)
+            if (!Test(op))
             {
                 return false;
             }
@@ -168,7 +168,7 @@ public class VarManager
     {
         foreach (QuestData.Event.VarOperation op in ops)
         {
-            Perform(op)
+            Perform(op);
         }
     }
 

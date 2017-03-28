@@ -24,7 +24,7 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits(-2f), 21f), "");
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -32,8 +32,7 @@ public class QuestEditSelection
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
         scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, UIScaler.GetWidthUnits(-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
@@ -87,7 +86,7 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits(-2f), 21f), "");
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -95,8 +94,7 @@ public class QuestEditSelection
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
         scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, UIScaler.GetWidthUnits(-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
@@ -161,7 +159,7 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits(-2f), 21f), "");
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -169,8 +167,7 @@ public class QuestEditSelection
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
         scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, UIScaler.GetWidthUnits(-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;

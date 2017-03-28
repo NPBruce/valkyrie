@@ -99,7 +99,7 @@ public class EventManager
         if (e.Disabled()) return;
 
         // Perform var operations
-        game.quest.vars.Perform(e.qEvents.operations);
+        game.quest.vars.Perform(e.qEvent.operations);
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -405,7 +405,7 @@ public class EventManager
         // Is this event disabled?
         public bool Disabled()
         {
-            return game.quest.vars.Test(e.qEvents.operations);
+            return game.quest.vars.Test(qEvent.operations);
         }
     }
 

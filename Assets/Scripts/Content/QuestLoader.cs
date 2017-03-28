@@ -9,9 +9,9 @@ using Ionic.Zip;
 public class QuestLoader {
 
     // Return a dictionary of all available quests
-    public static Dictionary<string, Quest> GetQuests(bool checkContent = false)
+    public static Dictionary<string, QuestData.Quest> GetQuests(bool checkContent = false)
     {
-        Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
+        Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
         Game game = Game.Get();
         // Look in the user application data directory
@@ -27,12 +27,12 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             // load quest
-            Quest q = new Quest(p);
+            QuestData.Quest q = new QuestData.Quest(p);
             // Check quest is valid and of the right type
-            if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
+            if (q.valid && q.type.Equals(game.gameType.TypeName()))
             {
                 // Are all expansions selected?
-                if (q.GetMissingPacks().Count == 0 || !checkContent)
+                if (q.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count == 0 || !checkContent)
                 {
                     // Add quest to quest list
                     quests.Add(p, q);
@@ -45,9 +45,9 @@ public class QuestLoader {
     }
 
     // Return list of quests available in the user path (includes packages)
-    public static Dictionary<string, Quest> GetUserQuests()
+    public static Dictionary<string, QuestData.Quest> GetUserQuests()
     {
-        Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
+        Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
         // Clean up extracted packages
         CleanTemp();
@@ -64,7 +64,7 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             // read quest
-            Quest q = new Quest(p);
+            QuestData.Quest q = new QuestData.Quest(p);
             // Check if valid and correct type
             if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
             {
@@ -76,9 +76,9 @@ public class QuestLoader {
     }
 
     // Return list of quests available in the user path unpackaged (editable)
-    public static Dictionary<string, Quest> GetUserUnpackedQuests()
+    public static Dictionary<string, QuestData.Quest> GetUserUnpackedQuests()
     {
-        Dictionary<string, Quest> quests = new Dictionary<string, Quest>();
+        Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
         // Read user application data for quests
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
@@ -89,7 +89,7 @@ public class QuestLoader {
         foreach (string p in questDirectories)
         {
             // read quest
-            Quest q = new Quest(p);
+            QuestData.Quest q = new QuestData.Quest(p);
             // Check if valid and correct type
             if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
             {

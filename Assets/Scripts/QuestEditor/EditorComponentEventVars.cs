@@ -85,7 +85,7 @@ public class EditorComponentEventVars : EditorComponent
         }
 
         offset++;
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Assign:");
+        db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Assign:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "+", delegate { AddAssignOp(); }, Color.green);
@@ -177,7 +177,7 @@ public class EditorComponentEventVars : EditorComponent
                     {
                         vars.Add(op.var);
                     }
-                    if (op.value.Length > 0 && op.value[0] != '#' && !Char.IsNumber(op.value[0]))
+                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]))
                     {
                         vars.Add(op.var);
                     }

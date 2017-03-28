@@ -33,7 +33,7 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(9, 1), "Required Expansions:");
+        DialogBox db = new DialogBox(new Vector2(0, 6), new Vector2(9, 1), "Required Expansions:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(9, 6), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);

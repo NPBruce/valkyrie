@@ -39,21 +39,21 @@ public class SetWindow
     public void SetFire()
     {
         Game game = Game.Get();
-        game.vars.SetValue("#fire", 1);
+        game.quest.vars.SetValue("#fire", 1);
         new SetWindow();
     }
 
     public void ClearFire()
     {
         Game game = Game.Get();
-        game.vars.SetValue("#fire", 0);
+        game.quest.vars.SetValue("#fire", 0);
         new SetWindow();
     }
 
     public void Eliminate()
     {
         Game game = Game.Get();
-        game.vars.SetValue("#eliminated", 1);
+        game.quest.vars.SetValue("#eliminated", 1);
         new SetWindow();
     }
 }

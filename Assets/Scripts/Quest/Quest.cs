@@ -13,7 +13,7 @@ public class Quest
     public Dictionary<string, BoardComponent> boardItems;
 
     // vars for the quest
-    public VarManger vars;
+    public VarManager vars;
 
     // A list of items that have been given to the investigators
     public HashSet<string> items;
@@ -69,7 +69,7 @@ public class Quest
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
-        vars = new VarManger();
+        vars = new VarManager();
         items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
@@ -191,7 +191,7 @@ public class Quest
         }
 
         Dictionary<string, string> saveVars = saveData.Get("Vars");
-        vars = new VarManger(saveVars)
+        vars = new VarManager(saveVars);
 
         // Set items
         items = new HashSet<string>();

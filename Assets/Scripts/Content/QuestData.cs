@@ -25,7 +25,7 @@ public class QuestData
     Game game;
 
     // Create from quest loader entry
-    public QuestData(QuestLoader.Quest q)
+    public QuestData(QuestData.Quest q)
     {
         questPath = q.path + "/quest.ini";
         LoadQuestData();
@@ -682,25 +682,25 @@ public class QuestData
                 string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    if (s.Equals("#hero2")
+                    if (s.Equals("#hero2"))
                     {
-                        operations.Add(new VarOperation("#heroes", "==", "2"));
+                        operations.Add(new VarOperation("#heroes,==,2"));
                     }
-                    else if (s.Equals("#hero3")
+                    else if (s.Equals("#hero3"))
                     {
-                        operations.Add(new VarOperation("#heroes", "==", "3"));
+                        operations.Add(new VarOperation("#heroes,==,3"));
                     }
-                    else if (s.Equals("#hero4")
+                    else if (s.Equals("#hero4"))
                     {
-                        operations.Add(new VarOperation("#heroes", "==", "4"));
+                        operations.Add(new VarOperation("#heroes,==,4"));
                     }
-                    else if (s.Equals("#hero5")
+                    else if (s.Equals("#hero5"))
                     {
-                        operations.Add(new VarOperation("#heroes", "==", "5"));
+                        operations.Add(new VarOperation("#heroes,==,5"));
                     }
                     else
                     {
-                        operations.Add(new VarOperation(s, ">", "0"));
+                        operations.Add(new VarOperation(s + ",>,0"));
                     }
                 }
             }
@@ -711,7 +711,7 @@ public class QuestData
                 string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    operations.Add(new VarOperation(s, "=", "1"));
+                    operations.Add(new VarOperation(s + ",=,1"));
                 }
             }
 
@@ -721,7 +721,7 @@ public class QuestData
                 string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
-                    operations.Add(new VarOperation(s, "=", "0"));
+                    operations.Add(new VarOperation(s + ",=,0"));
                 }
             }
 
@@ -735,12 +735,12 @@ public class QuestData
                     if (data["threat"][0].Equals('@'))
                     {
                         float.TryParse(data["threat"].Substring(1), out threat);
-                        operations.Add(new VarOperation("threat", "=", threat));
+                        operations.Add(new VarOperation("threat,=," + threat));
                     }
                     else
                     {
                         float.TryParse(data["threat"], out threat);
-                        operations.Add(new VarOperation("threat", "+", threat));
+                        operations.Add(new VarOperation("threat,+," + threat));
                     }
                 }
             }
@@ -923,7 +923,7 @@ public class QuestData
                 r += "trigger=" + trigger + nl;
             }
 
-            if (operations.Length > 0)
+            if (operations.Count > 0)
             {
                 r += "opertaions=";
                 foreach (VarOperation o in operations)
@@ -933,6 +933,7 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
+            // Depreciated
             if (delayedEvents.Count > 0)
             {
                 r += "delayedevents=";
@@ -966,15 +967,19 @@ public class QuestData
 
         public class VarOperation
         {
-            public string var;
-            public string operation;
-            public string value;
+            public string var = "";
+            public string operation = "";
+            public string value = "";
 
-            public VarOperation(string in)
+            public VarOperation()
             {
-                var = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
-                operation = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
-                value = in.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+            }
+
+            public VarOperation(string inOp)
+            {
+                var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
+                operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
+                value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
             }
 
             override public string ToString()
@@ -1573,7 +1578,7 @@ public class QuestData
         public string[] packs;
 
         // Create from path
-        public Quest(pathIn)
+        public Quest(string pathIn)
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
@@ -1587,7 +1592,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public void Populate(Dictionary<string, string> iniData)
+        public bool Populate(Dictionary<string, string> iniData)
         {
             if (iniData.ContainsKey("format"))
             {
@@ -1605,7 +1610,7 @@ public class QuestData
             }
             else
             {
-                ValkyrieDebug.Log("Warning: Failed to get name data out of " + p + "/content_pack.ini!");
+                ValkyrieDebug.Log("Warning: Failed to get name data out of " + path + "/quest.ini!");
                 return false;
             }
 

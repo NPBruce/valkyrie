@@ -26,7 +26,7 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits(-2f), 21f), "");
+            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
             db.AddBorder();
             db.background.AddComponent<UnityEngine.UI.Mask>();
             UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -34,23 +34,22 @@ namespace Assets.Scripts.UI.Screens
             GameObject scrollArea = new GameObject("scroll");
             RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
             scrollArea.transform.parent = db.background.transform;
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, UIScaler.GetWidthUnits(-3f) * UIScaler.GetPixelsPerUnit());
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
 
             TextButton tb;
             // Start here
-            int offset = 5;
+            float offset = 5;
             // Loop through all available quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.Get.GetMissingPacks().Count == 0)
+                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count == 0)
                 {
                     string key = q.Key;
                     // Size is 1.2 to be clear of characters with tails
-                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.black, offset);
+                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.black, (int)offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -63,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all unavailable quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.GetMissingPacks().Count > 0)
+                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count > 0)
                 {
                     // Size is 1.2 to be clear of characters with tails
                     db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, Color.black);
@@ -71,18 +70,18 @@ namespace Assets.Scripts.UI.Screens
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
                     db.background.transform.parent = scrollArea.transform;
-                    offset += 1.2;
-                    foreach (string s in q.Value.GetMissingPacks())
+                    offset += 1.2f;
+                    foreach (string s in q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()))
                     {
-                        db = new DialogBox(new Vector2(4, offset), new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f), " Requires:  " + game.cp.GetContentName(s), Color.black);
+                        db = new DialogBox(new Vector2(4, offset), new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f), " Requires:  " + game.cd.GetContentName(s), Color.black);
                         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                         db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                         db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
                         db.background.transform.parent = scrollArea.transform;
-                        offset += 1.2;
+                        offset += 1.2f;
                     }
                 }
-                offset += 0.8;
+                offset += 0.8f;
             }
 
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());

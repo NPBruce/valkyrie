@@ -256,7 +256,7 @@ public class RoundController {
         }
         if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            game.quest.vars.SetValue("#eliminatedprev", 1))
+            game.quest.vars.SetValue("#eliminatedprev", 1);
         }
 
         // This will cause the end of the round if nothing was added
@@ -319,7 +319,7 @@ public class RoundController {
         // Increment the round
         game.quest.round++;
 
-        game.quest.vars.SetValue("#round", game.quest.round)
+        game.quest.vars.SetValue("#round", game.quest.round);
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

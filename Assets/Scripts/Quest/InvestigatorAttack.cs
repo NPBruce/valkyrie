@@ -96,7 +96,7 @@ public class InvestigatorAttack
         game.quest.monsters.Remove(monster);
         game.monsterCanvas.UpdateList();
 
-        game.vars.SetValue("#monsters", game.quest.monsters.Count);
+        game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
 
         // Trigger defeated event
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
