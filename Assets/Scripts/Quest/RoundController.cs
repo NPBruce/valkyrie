@@ -247,16 +247,16 @@ public class RoundController {
 
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
-        // Queue end of this round events
+        // Queue end of this round events (depriciated)
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
 
-        if (game.quest.flags.Contains("#eliminatedprev"))
+        if (game.quest.vars.GetValue("#eliminatedprev") > 0)
         {
             game.quest.eManager.EventTriggerType("Eliminated", false);
         }
-        if (game.quest.flags.Contains("#eliminated"))
+        if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            game.quest.flags.Add("#eliminatedprev");
+            game.quest.vars.SetValue("#eliminatedprev", 1))
         }
 
         // This will cause the end of the round if nothing was added
@@ -343,6 +343,8 @@ public class RoundController {
         // Increment the round
         game.quest.round++;
         game.quest.threat += 1;
+
+        game.quest.vars.SetValue("#round", game.quest.round))
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

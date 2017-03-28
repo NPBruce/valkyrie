@@ -147,6 +147,8 @@ public class EventManager
             // Set monster tag if not already
             game.quest.flags.Add("#monsters");
 
+            game.quest.vars.SetValue("#monsters", game.quest.mosnters.Count);
+
             MonsterEvent qe = (MonsterEvent)e;
 
             // Is this type new?

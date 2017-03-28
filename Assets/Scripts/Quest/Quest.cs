@@ -104,6 +104,7 @@ public class Quest
             foreach (KeyValuePair<string, string> kv in packs)
             {
                 flags.Add("#" + kv.Key);
+                vars.SetValue("#" + kv.Key, 1);
             }
         }
     }

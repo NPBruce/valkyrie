@@ -33,6 +33,15 @@ public class VarManager
         vars[op.var] = value;
     }
 
+    public float GetValue(string var)
+    {
+        if (!vars.Contains(var))
+        {
+            return 0;
+        }
+        return vars[op.var];
+    }
+
     public float GetOpValue(QuestData.Event.VarOperation op)
     {
         if (!vars.Contains(op.var))
@@ -50,7 +59,7 @@ public class VarManager
             float.TryParse(op.value, r);
             return r;
         }
-        if (op.value.IndexOf("#Rand") == 0)
+        if (op.value.IndexOf("#rand") == 0)
         {
             int randLimit;
             int.TryParse(op.value.Substring(5), out randLimit)
