@@ -23,6 +23,7 @@ abstract public class AppFinder
     {
         if (Application.platform == RuntimePlatform.OSXPlayer)
         {
+            ValkyrieDebug.Log("Attempting to locate AppId " + AppId() + " on MacOS.");
             System.Diagnostics.ProcessStartInfo processStartInfo;
             System.Diagnostics.Process process;
 
@@ -37,6 +38,7 @@ abstract public class AppFinder
             processStartInfo.FileName = "system_profiler";
 
             process = new System.Diagnostics.Process();
+            ValkyrieDebug.Log("Starting system_profiler.");
             process.StartInfo = processStartInfo;
             // enable raising events because Process does not raise events by default
             process.EnableRaisingEvents = true;
@@ -58,12 +60,18 @@ abstract public class AppFinder
             process.WaitForExit();
             process.CancelOutputRead();
 
+            
             string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            ValkyrieDebug.Log("Number of lines returned: " + output.Count);
+            ValkyrieDebug.Log("Looking for: " + "/" + Executable());
             // Quick hack rather than doing XML properly
             foreach (string s in output)
             {
+
                 if (s.IndexOf("/" + Executable()) > 0)
                 {
+                    ValkyrieDebug.Log("Found Line: " + s);
                     location = s.Trim();
                 }
             }
@@ -85,6 +93,7 @@ abstract public class AppFinder
 
         exeLocation += location + "/" + Executable();
         location += DataDirectory();
+        ValkyrieDebug.Log("Asset location: " + location);
     }
 
     // Read version of executable from app
