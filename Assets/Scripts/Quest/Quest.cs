@@ -211,6 +211,9 @@ public class Quest
             flags.Add(kv.Key);
         }
 
+        Dictionary<string, string> saveVars = saveData.Get("Vars");
+        vars = new VarManger(saveVars)
+
         // Set items
         items = new HashSet<string>();
         Dictionary<string, string> saveItems = saveData.Get("Items");
@@ -525,6 +528,8 @@ public class Quest
         {
             r += s + nl;
         }
+
+        r += vars.ToString();
 
         r += "[Items]" + nl;
         foreach (string s in items)

@@ -11,7 +11,19 @@ public class VarManager
         vars = new Dictionary<string, float>();
     }
 
-    public float GetValue(QuestData.Event.VarOperation op)
+    public VarManager(KeyValuePair<string, string> data)
+    {
+        vars = new Dictionary<string, float>();
+
+        foreach (KeyValuePair<string, string> kv in data)
+        {
+            float value = 0;
+            float.TryParse(kv.Value, out value);
+            vars.Add(kv.Key, value);
+        }
+    }
+
+    public float GetOpValue(QuestData.Event.VarOperation op)
     {
         if (!vars.Contains(op.var))
         {
@@ -46,7 +58,7 @@ public class VarManager
 
     public void Perform(QuestData.Event.VarOperation op)
     {
-        float value = GetValue(op)
+        float value = GetOpValue(op)
 
         if (op.operation.Equals("+"))
         {
@@ -63,7 +75,7 @@ public class VarManager
 
     public bool Test(QuestData.Event.VarOperation op)
     {
-        float value = GetValue(op)
+        float value = GetOpValue(op)
         if (op.operation.Equals("=="))
         {
             return (vars[op.var] == value)
@@ -116,5 +128,17 @@ public class VarManager
         {
             Perform(op)
         }
+    }
+
+    override public string ToString()
+    {
+        string nl = System.Environment.NewLine;
+        string r = "[Vars]" + nl;
+
+        foreach (KeyValuePair<string, float> kv in vars)
+        {
+            r += kv.Key + "=" + kv.Value.ToString() + nl;
+        }
+        return r + nl;
     }
 }

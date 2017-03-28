@@ -134,6 +134,9 @@ public class EventManager
             game.quest.flags.Remove(s);
         }
 
+        // Perform var operations
+        game.quest.vars.Perform(e.qEvents.operations);
+
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
@@ -441,6 +444,7 @@ public class EventManager
                 if (!game.quest.flags.Contains(s))
                     return true;
             }
+            return game.quest.vars.Test(e.qEvents.operations);
             // No missing flags
             return false;
         }
