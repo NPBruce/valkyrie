@@ -33,14 +33,14 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 6), new Vector2(9, 1), "Required Expansions:");
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), "Required Expansions:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(9, 6), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        int offset = 7;
+        int offset = 12;
         int index;
         for (index = 0; index < 15; index++)
         {

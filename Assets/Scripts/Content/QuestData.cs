@@ -708,7 +708,7 @@ public class QuestData
             // Flags to set (space separated list Depreciated format 0)
             if (data.ContainsKey("set"))
             {
-                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] flags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
                     operations.Add(new VarOperation(s + ",=,1"));
@@ -718,7 +718,7 @@ public class QuestData
             // Flags to clear (space separated list Depreciated format 0)
             if (data.ContainsKey("clear"))
             {
-                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] flags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in flags)
                 {
                     operations.Add(new VarOperation(s + ",=,0"));
