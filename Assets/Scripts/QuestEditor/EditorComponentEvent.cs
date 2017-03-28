@@ -96,7 +96,7 @@ public class EditorComponentEvent : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Flags", delegate { QuestEditorData.SelectAsEventFlags(name); });
+        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Vars", delegate { QuestEditorData.SelectAsEventVars(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
