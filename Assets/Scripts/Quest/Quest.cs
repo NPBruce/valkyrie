@@ -15,6 +15,9 @@ public class Quest
     // A list of flags that have been set during the quest
     public HashSet<string> flags;
 
+    // vars for the quest
+    public VarManger vars;
+
     // A list of items that have been given to the investigators
     public HashSet<string> items;
 
@@ -76,6 +79,7 @@ public class Quest
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
         flags = new HashSet<string>();
+        vars = new VarManger();
         items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
