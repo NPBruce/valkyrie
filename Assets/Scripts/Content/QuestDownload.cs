@@ -50,6 +50,7 @@ public class QuestDownload : MonoBehaviour
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
         scrollArea.transform.parent = db.background.transform;
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
@@ -74,7 +75,7 @@ public class QuestDownload : MonoBehaviour
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.5f, 0.5f, 1f);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 1f);
                     tb.background.transform.parent = scrollArea.transform;
                 }
                 else
@@ -93,7 +94,7 @@ public class QuestDownload : MonoBehaviour
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 0.5f, 1f);
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                 tb.background.transform.parent = scrollArea.transform;
             }
             offset += 2;

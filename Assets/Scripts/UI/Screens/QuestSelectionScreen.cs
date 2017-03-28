@@ -34,6 +34,7 @@ namespace Assets.Scripts.UI.Screens
             GameObject scrollArea = new GameObject("scroll");
             RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
             scrollArea.transform.parent = db.background.transform;
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
             scrollRect.content = scrollInnerRect;
@@ -53,7 +54,7 @@ namespace Assets.Scripts.UI.Screens
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.5f, 0.5f, 1f);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     tb.background.transform.parent = scrollArea.transform;
                     offset += 2;
                 }
