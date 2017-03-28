@@ -7,7 +7,6 @@ public class EditorComponentEvent : EditorComponent
     QuestData.Event eventComponent;
 
     DialogBoxEditable eventTextDBE;
-    DialogBoxEditable threatDBE;
     EditorSelectionList triggerESL;
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
@@ -138,19 +137,6 @@ public class EditorComponentEvent : EditorComponent
         tb = new TextButton(new Vector2(14, 13), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(17, 12), new Vector2(3, 1), "Threat");
-        db.ApplyTag("editor");
-
-        string absLabel = "";
-        if (eventComponent.absoluteThreat) absLabel = "@";
-        tb = new TextButton(new Vector2(17, 13), new Vector2(1, 1), absLabel, delegate { ToggleAbsThreat(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        threatDBE = new DialogBoxEditable(new Vector2(18, 13), new Vector2(2, 1), eventComponent.threat.ToString(), delegate { UpdateThreat(); });
-        threatDBE.ApplyTag("editor");
-        threatDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Add Components:");
         db.ApplyTag("editor");
@@ -379,18 +365,6 @@ public class EditorComponentEvent : EditorComponent
         {
             int.TryParse(heroCountESL.selection, out eventComponent.minHeroes);
         }
-        Update();
-    }
-
-    public void ToggleAbsThreat()
-    {
-        eventComponent.absoluteThreat = !eventComponent.absoluteThreat;
-        Update();
-    }
-
-    public void UpdateThreat()
-    {
-        float.TryParse(threatDBE.uiInput.text, out eventComponent.threat);
         Update();
     }
 

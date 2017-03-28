@@ -48,16 +48,10 @@ public class Quest
     // game state variables
     public int round = 1;
     public int morale = 0;
-    public float threat = 0;
     public MoMPhase phase = MoMPhase.investigator;
 
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
-
-    // Have the perils been triggered?
-    public bool minorPeril = false;
-    public bool majorPeril = false;
-    public bool deadlyPeril = false;
 
     // Reference back to the game object
     public Game game;
@@ -135,9 +129,6 @@ public class Quest
         {
             phase = MoMPhase.horror;
         }
-        bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
-        bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
-        bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
 
         // Set camera
         float camx, camy, camz;
@@ -464,7 +455,6 @@ public class Quest
         r += "path=" + qd.questPath + nl;
         r += "round=" + round+ nl;
         r += "morale=" + morale + nl;
-        r += "threat=" + threat + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
@@ -474,9 +464,6 @@ public class Quest
             r += "horror=false" + nl;
         }
         r += "heroesSelected=" + heroesSelected + nl;
-        r += "minorPeril=" + minorPeril + nl;
-        r += "majorPeril=" + majorPeril + nl;
-        r += "deadlyPeril=" + deadlyPeril + nl;
         r += "camx=" + game.cc.gameObject.transform.position.x + nl;
         r += "camy=" + game.cc.gameObject.transform.position.y + nl;
         r += "camz=" + game.cc.gameObject.transform.position.z + nl;

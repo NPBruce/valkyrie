@@ -507,8 +507,6 @@ public class QuestData
         public List<VarOperation> operations;
         public bool cancelable = false;
         public bool highlight = false;
-        public float threat;
-        public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
         public bool minCam = false;
@@ -524,7 +522,6 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            threat = 0;
             delayedEvents = new List<DelayedEvent>();
             minCam = false;
             maxCam = false;
@@ -728,20 +725,22 @@ public class QuestData
                 }
             }
 
-            // Threat modifier
+            // Threat modifier (Depreciated format 0)
             if (data.ContainsKey("threat"))
             {
                 if (data["threat"].Length != 0)
                 {
+                    float threat = 0;
                     // '@' at the start makes modifier absolute
                     if (data["threat"][0].Equals('@'))
                     {
-                        absoluteThreat = true;
                         float.TryParse(data["threat"].Substring(1), out threat);
+                        operations.Add(new VarOperation("threat", "=", threat));
                     }
                     else
                     {
                         float.TryParse(data["threat"], out threat);
+                        operations.Add(new VarOperation("threat", "+", threat));
                     }
                 }
             }
@@ -944,15 +943,6 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            if (threat != 0)
-            {
-                r += "threat=";
-                if (absoluteThreat)
-                {
-                    r += "@";
-                }
-                r += threat + nl;
-            }
             if (randomEvents)
             {
                 r += "randomevents=true" + nl;
@@ -1579,10 +1569,6 @@ public class QuestData
         public string description = "";
         // quest type (MoM, D2E)
         public string type;
-        // threat levels to trigger perils
-        public int minorPeril = 7;
-        public int majorPeril = 10;
-        public int deadlyPeril = 12;
         // Content packs required for quest
         public string[] packs;
 
@@ -1633,18 +1619,6 @@ public class QuestData
             {
                 description = iniData["description"];
             }
-            if (iniData.ContainsKey("minorperil"))
-            {
-                int.TryParse(iniData["minorperil"], out minorPeril);
-            }
-            if (iniData.ContainsKey("majorperil"))
-            {
-                int.TryParse(iniData["majorperil"], out majorPeril);
-            }
-            if (iniData.ContainsKey("deadlyperil"))
-            {
-                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
-            }
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -1666,18 +1640,6 @@ public class QuestData
             r += "name=" + name + nl;
             r += "description=" + description + nl;
             r += "type=" + Game.Get().gameType.TypeName() + nl;
-            if (minorPeril != 7)
-            {
-                r += "minorperil=" + minorPeril + nl;
-            }
-            if (majorPeril != 10)
-            {
-                r += "majorperil=" + majorPeril + nl;
-            }
-            if (deadlyPeril != 12)
-            {
-                r += "deadlyperil=" + deadlyPeril + nl;
-            }
             if (packs.Length > 0)
             {
                 r += "packs=";

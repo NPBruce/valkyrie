@@ -1072,7 +1072,6 @@ public class PerilData : QuestData.Event
     new public static string type = "Peril";
     public string monster = "";
     public int priority = 0;
-    public PerilType pType = PerilType.na;
 
     public PerilData(string name, Dictionary<string, string> data) : base(name, data)
     {
@@ -1085,25 +1084,5 @@ public class PerilData : QuestData.Event
         {
             int.TryParse(data["priority"], out priority);
         }
-        if (name.IndexOf("PerilMinor") == 0)
-        {
-            pType = PerilType.minor;
-        }
-        if (name.IndexOf("PerilMajor") == 0)
-        {
-            pType = PerilType.major;
-        }
-        if (name.IndexOf("PerilDeadly") == 0)
-        {
-            pType = PerilType.deadly;
-        }
-    }
-
-    public enum PerilType
-    {
-        na,
-        minor,
-        major,
-        deadly
     }
 }

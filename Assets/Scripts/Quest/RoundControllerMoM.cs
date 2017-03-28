@@ -148,7 +148,6 @@ public class RoundControllerMoM : RoundController
         game.quest.round++;
         game.quest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
-        game.quest.threat += 1;
 
         // Update monster display
         game.monsterCanvas.UpdateStatus();
