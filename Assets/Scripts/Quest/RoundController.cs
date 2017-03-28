@@ -344,7 +344,7 @@ public class RoundController {
         game.quest.round++;
         game.quest.threat += 1;
 
-        game.quest.vars.SetValue("#round", game.quest.round))
+        game.quest.vars.SetValue("#round", game.quest.round)
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
