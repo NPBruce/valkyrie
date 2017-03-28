@@ -80,7 +80,7 @@ abstract public class AppFinder
             }
             if (locaton.Length == 0)
             {
-                string xmlFile = System.Environment.SpecialFolder.ApplicationData + "/Valkyrie/apps.xml"
+                string xmlFile = Application.dataPath + "/apps.xml"
                 ValkyrieDebug.Log("Could not find, looking for prefetched XML: " + xmlFile);
                 if (File.Exists(xmlFile))
                 {
