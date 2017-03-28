@@ -247,16 +247,16 @@ public class RoundController {
 
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
-        // Queue end of this round events
+        // Queue end of this round events (depriciated)
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
 
-        if (game.quest.flags.Contains("#eliminatedprev"))
+        if (game.quest.vars.GetValue("#eliminatedprev") > 0)
         {
             game.quest.eManager.EventTriggerType("Eliminated", false);
         }
-        if (game.quest.flags.Contains("#eliminated"))
+        if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            game.quest.flags.Add("#eliminatedprev");
+            game.quest.vars.SetValue("#eliminatedprev", 1);
         }
 
         // This will cause the end of the round if nothing was added
@@ -301,30 +301,6 @@ public class RoundController {
             }
         }
 
-        // Check if we are due for a minor peril
-        if (!game.quest.minorPeril && game.quest.qd.quest.minorPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
-            game.quest.minorPeril = true;
-            return;
-        }
-
-        // Check if we are due for a major peril
-        if (!game.quest.majorPeril && game.quest.qd.quest.majorPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.major);
-            game.quest.majorPeril = true;
-            return;
-        }
-
-        // Check if we are due for a deadly peril
-        if (!game.quest.deadlyPeril && game.quest.qd.quest.deadlyPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.deadly);
-            game.quest.deadlyPeril = true;
-            return;
-        }
-
         // Clean up for next round
         // Clear hero activations
         foreach (Quest.Hero h in game.quest.heroes)
@@ -342,7 +318,8 @@ public class RoundController {
 
         // Increment the round
         game.quest.round++;
-        game.quest.threat += 1;
+
+        game.quest.vars.SetValue("#round", game.quest.round);
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

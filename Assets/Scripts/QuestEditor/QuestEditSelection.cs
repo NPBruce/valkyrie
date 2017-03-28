@@ -5,7 +5,7 @@ using System.IO;
 
 public class QuestEditSelection
 {
-    public Dictionary<string, QuestLoader.Quest> questList;
+    public Dictionary<string, QuestData.Quest> questList;
 
     // Create a pack with list of quests to edit
     public QuestEditSelection()
@@ -24,19 +24,35 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         // List of quests
-        // FIXME: requires paging
         int offset = 5;
         TextButton tb;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.white, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Selection(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
             offset += 2;
         }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
         // Main menu
         tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
@@ -71,19 +87,36 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         // List of quests
-        // FIXME: requires paging
-        TextButton tb;
         int offset = 5;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        TextButton tb;
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Delete(key); }, Color.red, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Delete(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 0f, 0f);
+            tb.background.transform.parent = scrollArea.transform;
             offset += 2;
         }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
+
         // Back to edit list
         tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelDelete(); }, Color.red);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
@@ -128,19 +161,36 @@ public class QuestEditSelection
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(Game.Get().gameType.GetHeaderFont());
 
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         // List of quests
-        // FIXME: requires paging
-        TextButton tb;
         int offset = 5;
-        foreach (KeyValuePair<string, QuestLoader.Quest> q in questList)
+        TextButton tb;
+        foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), "  " + q.Value.name, delegate { Copy(key); }, Color.white, offset);
+            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, delegate { Copy(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
             offset += 2;
         }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
+
         // Back to edit selection
         tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { CancelCopy(); }, Color.red);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());

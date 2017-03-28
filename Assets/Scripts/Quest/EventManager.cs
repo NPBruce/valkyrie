@@ -41,32 +41,10 @@ public class EventManager
         }
 
         // Add game content perils as available events
-        // This is needed as perils may raise other peril events
         foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
         {
             events.Add(kv.Key, new Peril(kv.Key));
         }
-    }
-
-    // Queue a peril event of a type
-    public void RaisePeril(PerilData.PerilType type)
-    {
-        List<string> list = new List<string>();
-        // Find all matching perils
-        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
-        {
-            if (kv.Value.pType == type)
-            {
-                Peril p = new Peril(kv.Key);
-                // If peril is valid add to list
-                if (!p.Disabled())
-                {
-                    list.Add(kv.Key);
-                }
-            }
-        }
-        // Queue a random valid peril
-        QueueEvent(list[Random.Range(0, list.Count)]);
     }
 
     // Queue all events by trigger, optionally start
@@ -120,19 +98,8 @@ public class EventManager
         // Event may have been disabled since added
         if (e.Disabled()) return;
 
-        // Add set flags
-        foreach (string s in e.qEvent.setFlags)
-        {
-            game.quest.log.Add(new Quest.LogEntry("Notice: Setting quest flag: " + s, true));
-            game.quest.flags.Add(s);
-        }
-
-        // Remove clear flags
-        foreach (string s in e.qEvent.clearFlags)
-        {
-            game.quest.log.Add(new Quest.LogEntry("Notice: Clearing quest flag: " + s, true));
-            game.quest.flags.Remove(s);
-        }
+        // Perform var operations
+        game.quest.vars.Perform(e.qEvent.operations);
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -141,9 +108,6 @@ public class EventManager
         // If this is a monster event then add the monster group
         if (e is MonsterEvent)
         {
-            // Set monster tag if not already
-            game.quest.flags.Add("#monsters");
-
             MonsterEvent qe = (MonsterEvent)e;
 
             // Is this type new?
@@ -162,6 +126,8 @@ public class EventManager
             {
                 game.quest.monsters.Add(new Quest.Monster(qe));
                 game.monsterCanvas.UpdateList();
+                // Update monster var
+                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
             }
             // There is an existing group, but now it is unique
             else if (qe.qMonster.unique)
@@ -188,22 +154,6 @@ public class EventManager
         game.quest.Add(e.qEvent.addComponents);
         // Remove board components
         game.quest.Remove(e.qEvent.removeComponents);
-        // Adjust threat
-        game.quest.threat += e.qEvent.threat;
-
-        // Set absolute threat
-        if (e.qEvent.absoluteThreat)
-        {
-            if (e.qEvent.threat != 0)
-            {
-                game.quest.log.Add(new Quest.LogEntry("Setting threat to: " + e.qEvent.threat, true));
-            }
-            game.quest.threat = e.qEvent.threat;
-        }
-        else if (e.qEvent.threat != 0)
-        {
-            game.quest.log.Add(new Quest.LogEntry("Changing threat by: " + e.qEvent.threat, true));
-        }
 
         // Add delayed events
         foreach (QuestData.Event.DelayedEvent de in e.qEvent.delayedEvents)
@@ -343,7 +293,7 @@ public class EventManager
             // replaces all occurances with the one hero
             text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
 
-            // Random numbers in events
+            // Random numbers in events (depreciated)
             try
             {
                 // Find first random number tag
@@ -368,6 +318,27 @@ public class EventManager
             catch (System.Exception)
             {
                 game.quest.log.Add(new Quest.LogEntry("Warning: Invalid random clause in event dialog: " + text, true));
+            }
+
+            // Variables in events
+            try
+            {
+                // Find first random number tag
+                int index = text.IndexOf("{var:");
+                // loop through event text
+                while (index != -1)
+                {
+                    // find end of tag
+                    string statement = text.Substring(index, text.IndexOf("}", index) + 1 - index);
+                    // Replace with variable data
+                    text = text.Replace(statement, game.quest.vars.GetValue(statement.Substring(5, statement.Length - 6)).ToString());
+                    //find next random tag
+                    index = text.IndexOf("{var:");
+                }
+            }
+            catch (System.Exception)
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Invalid var clause in event dialog: " + text, true));
             }
 
             // Fix new lines and replace symbol text with special characters
@@ -434,15 +405,7 @@ public class EventManager
         // Is this event disabled?
         public bool Disabled()
         {
-            // Check all flags
-            foreach (string s in qEvent.flags)
-            {
-                // Is the flag missing from the quest?
-                if (!game.quest.flags.Contains(s))
-                    return true;
-            }
-            // No missing flags
-            return false;
+            return !game.quest.vars.Test(qEvent.conditions);
         }
     }
 

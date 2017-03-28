@@ -12,8 +12,8 @@ public class Quest
     // components on the board (tiles, tokens, doors)
     public Dictionary<string, BoardComponent> boardItems;
 
-    // A list of flags that have been set during the quest
-    public HashSet<string> flags;
+    // vars for the quest
+    public VarManager vars;
 
     // A list of items that have been given to the investigators
     public HashSet<string> items;
@@ -48,22 +48,16 @@ public class Quest
     // game state variables
     public int round = 1;
     public int morale = 0;
-    public float threat = 0;
     public MoMPhase phase = MoMPhase.investigator;
 
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
 
-    // Have the perils been triggered?
-    public bool minorPeril = false;
-    public bool majorPeril = false;
-    public bool deadlyPeril = false;
-
     // Reference back to the game object
     public Game game;
 
     // Construct a new quest from quest data
-    public Quest(QuestLoader.Quest q)
+    public Quest(QuestData.Quest q)
     {
         game = Game.Get();
 
@@ -75,7 +69,7 @@ public class Quest
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
-        flags = new HashSet<string>();
+        vars = new VarManager();
         items = new HashSet<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
@@ -93,13 +87,13 @@ public class Quest
             heroes.Add(new Hero(null, i));
         }
 
-        // Set quest flags for selected expansions
+        // Set quest vars for selected expansions
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (packs != null)
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                flags.Add("#" + kv.Key);
+                vars.SetValue("#" + kv.Key, 1);
             }
         }
     }
@@ -135,9 +129,6 @@ public class Quest
         {
             phase = MoMPhase.horror;
         }
-        bool.TryParse(saveData.Get("Quest", "minorPeril"), out minorPeril);
-        bool.TryParse(saveData.Get("Quest", "majorPeril"), out majorPeril);
-        bool.TryParse(saveData.Get("Quest", "deadlyPeril"), out deadlyPeril);
 
         // Set camera
         float camx, camy, camz;
@@ -199,13 +190,8 @@ public class Quest
             }
         }
 
-        // Set flags
-        flags = new HashSet<string>();
-        Dictionary<string, string> saveFlags = saveData.Get("Flags");
-        foreach (KeyValuePair<string, string> kv in saveFlags)
-        {
-            flags.Add(kv.Key);
-        }
+        Dictionary<string, string> saveVars = saveData.Get("Vars");
+        vars = new VarManager(saveVars);
 
         // Set items
         items = new HashSet<string>();
@@ -469,7 +455,6 @@ public class Quest
         r += "path=" + qd.questPath + nl;
         r += "round=" + round+ nl;
         r += "morale=" + morale + nl;
-        r += "threat=" + threat + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
@@ -479,9 +464,6 @@ public class Quest
             r += "horror=false" + nl;
         }
         r += "heroesSelected=" + heroesSelected + nl;
-        r += "minorPeril=" + minorPeril + nl;
-        r += "majorPeril=" + majorPeril + nl;
-        r += "deadlyPeril=" + deadlyPeril + nl;
         r += "camx=" + game.cc.gameObject.transform.position.x + nl;
         r += "camy=" + game.cc.gameObject.transform.position.y + nl;
         r += "camz=" + game.cc.gameObject.transform.position.z + nl;
@@ -516,11 +498,7 @@ public class Quest
             r += kv.Key + nl;
         }
 
-        r += "[Flags]" + nl;
-        foreach (string s in flags)
-        {
-            r += s + nl;
-        }
+        r += vars.ToString();
 
         r += "[Items]" + nl;
         foreach (string s in items)
