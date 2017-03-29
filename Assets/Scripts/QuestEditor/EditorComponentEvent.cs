@@ -269,41 +269,49 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General"));
         }
 
         if (noMorale)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General"));
         }
 
         if (eliminated)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General"));
         }
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos"));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos", "General"));
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound");
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "General");
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound");
+        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound", "General");
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key);
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Monsters");
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters");
+        }
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.UniqueMonster)
+            {
+                triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest");
+            }
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
