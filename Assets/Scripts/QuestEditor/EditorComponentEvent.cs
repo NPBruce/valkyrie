@@ -296,21 +296,21 @@ public class EditorComponentEvent : EditorComponent
 
         triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos", "General"));
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "General");
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "General"));
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound", "General");
+        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound", "General"));
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Monsters");
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters");
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Monsters"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters"));
         }
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.UniqueMonster)
             {
-                triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest");
+                triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
             }
         }
 

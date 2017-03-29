@@ -63,7 +63,7 @@ abstract public class AppFinder
             
             string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-            ValkyrieDebug.Log("Number of lines returned: " + output.Count);
+            ValkyrieDebug.Log("Number of lines returned: " + output.Length);
             ValkyrieDebug.Log("Looking for: " + "/" + Executable());
             // Quick hack rather than doing XML properly
             foreach (string s in output)
@@ -74,18 +74,18 @@ abstract public class AppFinder
                     ValkyrieDebug.Log("Found Line: " + s);
                     location = s.Trim();
                     // Removing <string> and </string>
-                    location = location.Substring(8, location.Length - 17)
+                    location = location.Substring(8, location.Length - 17);
                     ValkyrieDebug.Log("Using location: " + location);
                 }
             }
-            if (locaton.Length == 0)
+            if (location.Length == 0)
             {
-                string xmlFile = Application.dataPath + "/apps.xml"
+                string xmlFile = Application.dataPath + "/apps.xml";
                 ValkyrieDebug.Log("Could not find, looking for prefetched XML: " + xmlFile);
                 if (File.Exists(xmlFile))
                 {
                     string[] lines = System.IO.File.ReadAllLines(xmlFile);
-                    ValkyrieDebug.Log("Number of lines returned: " + output.Count);
+                    ValkyrieDebug.Log("Number of lines returned: " + output.Length);
                     ValkyrieDebug.Log("Looking for: " + "/" + Executable());
                     // Quick hack rather than doing XML properly
                     foreach (string s in lines)
@@ -96,7 +96,7 @@ abstract public class AppFinder
                             ValkyrieDebug.Log("Found Line: " + s);
                             location = s.Trim();
                             // Removing <string> and </string>
-                            location = location.Substring(8, location.Length - 17)
+                            location = location.Substring(8, location.Length - 17);
                             ValkyrieDebug.Log("Using location: " + location);
                         }
                     }
@@ -106,7 +106,7 @@ abstract public class AppFinder
                     ValkyrieDebug.Log("Could not find prefetched XML.");
                 }
             }
-            if (locaton.Length == 0)
+            if (location.Length == 0)
             {
                 location = "~/Library/Application Support/Steam/steamapps/common/Mansions of Madness/Mansions of Madness.app";
                 ValkyrieDebug.Log("Could not find, using magic locatoin: " + location);
