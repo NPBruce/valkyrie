@@ -179,7 +179,10 @@ public class VarManager
 
         foreach (KeyValuePair<string, float> kv in vars)
         {
-            r += kv.Key + "=" + kv.Value.ToString() + nl;
+            if (kv.Value != 0)
+            {
+                r += kv.Key + "=" + kv.Value.ToString() + nl;
+            }
         }
         return r + nl;
     }
