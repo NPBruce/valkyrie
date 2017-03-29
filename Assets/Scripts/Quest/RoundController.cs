@@ -319,5 +319,8 @@ public class RoundController {
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
         game.heroCanvas.UpdateStatus();
+
+        // Start of round events
+        game.quest.eManager.EventTriggerType("StartRound");
     }
 }

@@ -206,7 +206,9 @@ public class Game : MonoBehaviour {
         // Draw next stage button if required
         stageUI = new NextStageButton();
 
-        // Start the quest
+        // Start round events
+        game.quest.eManager.EventTriggerType("StartRound", false);
+        // Start the quest (top of stack)
         quest.eManager.EventTriggerType("EventStart");
     }
 
