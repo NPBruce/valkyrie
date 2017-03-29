@@ -1,8 +1,9 @@
 1: Update version number
-2: Build (unity)
-3: build.bat
-4: Test
-5: Merge to master
-6: Tag
-7: Write changelog
-8: Release
+2: Update questdata version (if required)
+3: Build (unity)
+4: build.bat
+5: Test
+6: Merge to master
+7: Tag
+8: Write changelog
+9: Release

@@ -11,7 +11,7 @@ public class MoMFinder : AppFinder {
     // If an import wasn't performed with this Valkyrie version or higher reimport
     override public string RequiredValkyrieVersion()
     {
-        return "0.5.4";
+        return "0.7.2";
     }
     // Steam app ID
     override public string AppId()
@@ -25,10 +25,18 @@ public class MoMFinder : AppFinder {
     }
     override public string DataDirectory()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "/Contents/Resources";
+        }
         return "/Mansions of Madness_Data";
     }
     override public string Executable()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "Mansions of Madness.app";
+        }
         return "Mansions of Madness.exe";
     }
 

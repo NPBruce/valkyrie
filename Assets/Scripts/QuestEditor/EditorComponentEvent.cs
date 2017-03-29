@@ -7,7 +7,6 @@ public class EditorComponentEvent : EditorComponent
     QuestData.Event eventComponent;
 
     DialogBoxEditable eventTextDBE;
-    DialogBoxEditable threatDBE;
     EditorSelectionList triggerESL;
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
@@ -96,7 +95,7 @@ public class EditorComponentEvent : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Flags", delegate { QuestEditorData.SelectAsEventFlags(name); });
+        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Vars", delegate { QuestEditorData.SelectAsEventVars(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -114,52 +113,39 @@ public class EditorComponentEvent : EditorComponent
         db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), "Trigger:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 12), new Vector2(8, 1), eventComponent.trigger, delegate { SetTrigger(); });
+        tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), eventComponent.trigger, delegate { SetTrigger(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), "Selection:");
+        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), "Selection:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 13), new Vector2(8, 1), eventComponent.heroListName, delegate { SetHighlight(); });
+        tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), eventComponent.heroListName, delegate { SetHighlight(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(12, 12), new Vector2(2, 1), "Min");
+        db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), "Min");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(12, 13), new Vector2(2, 1), eventComponent.minHeroes.ToString(), delegate { SetHeroCount(false); });
+        tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes.ToString(), delegate { SetHeroCount(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(14, 12), new Vector2(2, 1), "Max");
+        db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), "Max");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(14, 13), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
+        tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(17, 12), new Vector2(3, 1), "Threat");
+        db = new DialogBox(new Vector2(0, 16), new Vector2(9, 1), "Add Components:");
         db.ApplyTag("editor");
 
-        string absLabel = "";
-        if (eventComponent.absoluteThreat) absLabel = "@";
-        tb = new TextButton(new Vector2(17, 13), new Vector2(1, 1), absLabel, delegate { ToggleAbsThreat(); });
+        tb = new TextButton(new Vector2(9, 16), new Vector2(1, 1), "+", delegate { AddVisibility(true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        threatDBE = new DialogBoxEditable(new Vector2(18, 13), new Vector2(2, 1), eventComponent.threat.ToString(), delegate { UpdateThreat(); });
-        threatDBE.ApplyTag("editor");
-        threatDBE.AddBorder();
-
-        db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Add Components:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(9, 15), new Vector2(1, 1), "+", delegate { AddVisibility(true); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        int offset = 16;
+        int offset = 17;
         int index;
         for (index = 0; index < 12; index++)
         {
@@ -175,14 +161,14 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(10, 15), new Vector2(9, 1), "Remove Components:");
+        db = new DialogBox(new Vector2(10, 16), new Vector2(9, 1), "Remove Components:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), "+", delegate { AddVisibility(false); }, Color.green);
+        tb = new TextButton(new Vector2(19, 16), new Vector2(1, 1), "+", delegate { AddVisibility(false); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        offset = 16;
+        offset = 17;
         for (index = 0; index < 12; index++)
         {
             if (eventComponent.removeComponents.Length > index)
@@ -283,44 +269,49 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General"));
         }
 
         if (noMorale)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General"));
         }
 
         if (eliminated)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", Color.grey));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General", Color.grey));
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General"));
         }
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos"));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos", "General"));
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "Round"));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "General"));
+
+        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound", "General"));
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Defeated"));
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Defeated"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Monsters"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters"));
         }
 
-        for (int i = 1; i <= 40; i++)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, "Round"));
+            if (kv.Value is QuestData.UniqueMonster)
+            {
+                triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
+            }
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
@@ -379,18 +370,6 @@ public class EditorComponentEvent : EditorComponent
         {
             int.TryParse(heroCountESL.selection, out eventComponent.minHeroes);
         }
-        Update();
-    }
-
-    public void ToggleAbsThreat()
-    {
-        eventComponent.absoluteThreat = !eventComponent.absoluteThreat;
-        Update();
-    }
-
-    public void UpdateThreat()
-    {
-        float.TryParse(threatDBE.uiInput.text, out eventComponent.threat);
         Update();
     }
 

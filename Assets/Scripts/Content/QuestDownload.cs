@@ -8,9 +8,10 @@ using Assets.Scripts.Content;
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
 {
-    private StringKey BACK = new StringKey("{val:BACK}");
+    private StringKey BACK = new StringKey("val","BACK");
+    private StringKey EMPTY = new StringKey("val","EMPTY");
+    public Dictionary<string, QuestData.Quest> questList;
 
-    public Dictionary<string, QuestLoader.Quest> questList;
     public WWW download;
     public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/";
     public Game game;
@@ -48,11 +49,24 @@ public class QuestDownload : MonoBehaviour
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), EMPTY);
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
         TextButton tb;
         // Start here
         int offset = 5;
         // Loop through all available quests
-        // FIXME: this isn't paged Dictionary<string, Dictionary<string, string>> data;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
             string file = kv.Key + ".valkyrie";
@@ -67,47 +81,57 @@ public class QuestDownload : MonoBehaviour
                 {
                     tb = new TextButton(
                         new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), 
+                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
                         //TODO: the name should be another key in near future. now is a nonLookup key
-                        new StringKey("val", "QUEST_NAME_UPDATE",new StringKey(kv.Value["name"],false)),                        
-                        delegate { Selection(file); }, Color.blue, offset);
+                        new StringKey("val", "QUEST_NAME_UPDATE", new StringKey(kv.Value["name"], false)),
+                        delegate { Selection(file); }, 
+                        Color.black, offset);
+
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 1f);
+                    tb.background.transform.parent = scrollArea.transform;
                 }
                 else
                 {
+
                     db = new DialogBox(
                         new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), 
-                        new StringKey("val","INDENT",new StringKey(kv.Value["name"],false)),
-                        Color.grey);
+                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                        Color.black);
                     db.AddBorder();
-                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.05f, 0.05f, 0.05f);
+                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.04f, 0.04f, 0.04f);
+                    db.background.transform.parent = scrollArea.transform;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 }
             }
             else
             {
                 tb = new TextButton(
                     new Vector2(2, offset), 
-                    new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f),
+                    new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
                     new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
                     delegate { Selection(file); }, 
-                    Color.white, offset);
+                    Color.black, offset);
+
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0.1f);
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                tb.background.transform.parent = scrollArea.transform;
             }
             offset += 2;
         }
 
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
+
         tb = new TextButton(
             new Vector2(1, UIScaler.GetBottom(-3)), 
-            new Vector2(8, 2), 
-            BACK, 
-            delegate { Cancel(); }, 
-            Color.red);
+            new Vector2(8, 2), BACK, delegate { Cancel(); }, Color.red);
+
         tb.SetFont(game.gameType.GetHeaderFont());
     }
 
@@ -116,7 +140,7 @@ public class QuestDownload : MonoBehaviour
     {
         Destroyer.Dialog();
         // Get a list of available quests
-        Dictionary<string, QuestLoader.Quest> ql = QuestLoader.GetQuests();
+        Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
 
         // Pull up the quest selection page
         new QuestSelectionScreen(ql);
