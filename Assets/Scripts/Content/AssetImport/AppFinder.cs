@@ -15,7 +15,7 @@ abstract public class AppFinder
     public abstract string Executable();
     public abstract string RequiredFFGVersion();
     public abstract string RequiredValkyrieVersion();
-    public string location;
+    public string location = "";
     public string exeLocation;
     public abstract int ObfuscateKey();
 
