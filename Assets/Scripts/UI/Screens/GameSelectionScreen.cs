@@ -66,7 +66,7 @@ namespace Assets.Scripts.UI.Screens
             TextButton tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), 
                 new Vector2(30, 4f), 
-                D2E_NAME.Translate(), 
+                D2E_NAME, 
                 delegate { D2E(); }, 
                 startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
@@ -75,14 +75,14 @@ namespace Assets.Scripts.UI.Screens
             // Draw D2E import button
             if (fcD2E.importAvailable)
             {
-                string text = fcD2E.NeedImport() ? CONTENT_IMPORT.Translate() : CONTENT_REIMPORT.Translate();
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), text, delegate { Import("D2E"); });
+                StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), keyText, delegate { Import("D2E"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND.Translate(), Color.red);
+                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND, Color.red);
                 db.AddBorder();
             }
 
@@ -92,24 +92,24 @@ namespace Assets.Scripts.UI.Screens
             {
                 startColor = Color.gray;
             }
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), MOM_NAME.Translate(), delegate { MoM(); }, startColor);
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), MOM_NAME, delegate { MoM(); }, startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             // Draw MoM import button
             if (fcMoM.importAvailable)
             {
-                string text = fcMoM.NeedImport() ? CONTENT_IMPORT.Translate() : CONTENT_REIMPORT.Translate();
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), text, delegate { Import("MoM"); });
+                StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), keyText, delegate { Import("MoM"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND.Translate(), Color.red);
+                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND, Color.red);
                 db.AddBorder();
             }
 
-            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), EXIT.Translate(), delegate { Exit(); }, Color.red);
+            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), EXIT, delegate { Exit(); }, Color.red);
         }
 
         // Start game as D2E
@@ -129,7 +129,7 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
             // Display message
-            DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING.Translate());
+            DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             // Perform importing later, to ensure message is displayed first
             Game.Get().CallAfterFrame(delegate { PerformImport(type); });

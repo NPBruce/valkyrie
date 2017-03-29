@@ -1,9 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Assets.Scripts.Content;
+using UnityEngine;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class SetWindow
 {
+    private StringKey EMPTY = new StringKey("val", "EMPTY");
+    private StringKey SET_FIRE = new StringKey("val", "SET_FIRE");
+    private StringKey CLEAR_FIRE = new StringKey("val", "CLEAR_FIRE");
+    private StringKey INVESTIGATOR_ELIMINATED = new StringKey("val", "INVESTIGATOR_ELIMINATED");
+    private StringKey CLOSE = new StringKey("val", "CLOSE");
+
     // Construct and display
     public SetWindow()
     {
@@ -11,29 +17,29 @@ public class SetWindow
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), "");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), EMPTY);
         db.AddBorder();
 
         if (game.quest.flags.Contains("#fire"))
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), "Clear Fire", delegate { ClearFire(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), CLEAR_FIRE, delegate { ClearFire(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), "Set Fire", delegate { SetFire(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), SET_FIRE, delegate { SetFire(); });
         }
         if (game.quest.flags.Contains("#eliminated"))
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), "Investigator Eliminated", Color.gray);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), INVESTIGATOR_ELIMINATED, Color.gray);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.AddBorder();
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), "Investigator Eliminated", delegate { Eliminate(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), INVESTIGATOR_ELIMINATED, delegate { Eliminate(); });
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 17f), new Vector2(6, 2), "Close", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 17f), new Vector2(6, 2), CLOSE, delegate { Destroyer.Dialog(); });
     }
 
     public void SetFire()

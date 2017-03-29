@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for quest selection window
     public class QuestSelectionScreen
     {
+        private StringKey BACK = new StringKey("val", "BACK");
+        private StringKey DOWNLOAD = new StringKey("val", "DOWNLOAD");
 
         public Dictionary<string, QuestLoader.Quest> questList;
 
@@ -25,7 +28,8 @@ namespace Assets.Scripts.UI.Screens
             DialogBox db = new DialogBox(
                 new Vector2(2, 1), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                "Select " + game.gameType.QuestName());
+                new StringKey("val","SELECT",game.gameType.QuestName())
+                );
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -41,7 +45,8 @@ namespace Assets.Scripts.UI.Screens
                 tb = new TextButton(
                     new Vector2(2, offset), 
                     new Vector2(UIScaler.GetWidthUnits() - 4, 1.2f), 
-                    "  " + q.Value.name, 
+                    // The name will be multilanguage
+                    new StringKey("val","INDENT",new StringKey(q.Value.name,false)), 
                     delegate { Selection(key); }, Color.white, offset);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -49,10 +54,10 @@ namespace Assets.Scripts.UI.Screens
                 offset += 2;
             }
 
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
+            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), BACK, delegate { Cancel(); }, Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());
 
-            tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "Download", delegate { Download(); }, Color.green);
+            tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), DOWNLOAD, delegate { Download(); }, Color.green);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 

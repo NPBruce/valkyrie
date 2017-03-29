@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
+using Assets.Scripts.Content;
 
 public class PuzzleSlideWindow
 {
+    private StringKey EMPTY = new StringKey("val", "EMPTY");
+    private StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
+    private StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
+    private StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
+    private StringKey CLOSE = new StringKey("val", "CLOSE");
+
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
     public PuzzleSlide puzzle;
@@ -36,7 +39,7 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), EMPTY);
         db.AddBorder();
 
         // Puzzle goes here
@@ -54,36 +57,36 @@ public class PuzzleSlideWindow
             CreateBlock(b, transBg, b.target);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f), "Skill:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f), SKILL_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), EventManager.SymbolReplace(questPuzzle.skill));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
-
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f), "Moves:");
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), (puzzle.moves - lastMoves).ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), questPuzzle.skill);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 17f), new Vector2(6f, 2f), "Total Moves:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f), MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), puzzle.moves.ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), new StringKey((puzzle.moves - lastMoves).ToString(),false));
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 17f), new Vector2(6f, 2f), TOTAL_MOVES_DOTS);
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
         }
     }
 

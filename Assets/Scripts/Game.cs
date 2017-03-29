@@ -183,7 +183,7 @@ public class Game : MonoBehaviour {
         DialogBox db = new DialogBox(
             new Vector2(8, 1), 
             new Vector2(UIScaler.GetWidthUnits() - 16, 3), 
-            new StringKey("val","SELECT_HEROES",gameType.HeroesName())
+            new StringKey("val","SELECT",gameType.HeroesName())
             );
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(gameType.GetHeaderFont());

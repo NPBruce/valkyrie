@@ -7,8 +7,9 @@ namespace Assets.Scripts.UI.Screens
     // Class for content (expansions) selection page
     public class ContentSelectScreen
     {
-        private StringKey SELECT_EXPANSION = new StringKey("{val:SELECT_EXPANSION}");
-        private StringKey BACK = new StringKey("{val:BACK}");
+        private StringKey SELECT_EXPANSION = new StringKey("val","SELECT_EXPANSION");
+        private StringKey BACK = new StringKey("val","BACK");
+        private StringKey EMPTY = new StringKey("val","EMPTY");
 
         public Game game;
         // List of expansions selected by ID
@@ -57,7 +58,7 @@ namespace Assets.Scripts.UI.Screens
             DialogBox db = new DialogBox(
                 new Vector2(2, 1), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
-                SELECT_EXPANSION.Translate()
+                SELECT_EXPANSION
                 );
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
@@ -83,13 +84,13 @@ namespace Assets.Scripts.UI.Screens
                     // Draw normally if selected, dark if not
                     if (selected.Contains(id))
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Unselect(id); });
+                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), EMPTY, delegate { Unselect(id); });
                         tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
+                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), EMPTY, delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
                         tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
                     }
@@ -109,7 +110,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
                 new Vector2(8, 2), 
-                BACK.Translate(), 
+                BACK, 
                 delegate { Destroyer.MainMenu(); }, 
                 Color.red);
 

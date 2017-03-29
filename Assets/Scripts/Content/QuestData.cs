@@ -1059,7 +1059,7 @@ public class QuestData
     {
         new public static string type = "Puzzle";
         public string puzzleClass = "slide";
-        public string skill = "{observation}";
+        public StringKey skill = new StringKey("val", "ICON_SKILL_OBSERVATION");
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
         public string imageType = "";
@@ -1085,7 +1085,7 @@ public class QuestData
             }
             if (data.ContainsKey("skill"))
             {
-                skill = data["skill"];
+                skill = new StringKey(data["skill"],false);
             }
             if (data.ContainsKey("puzzlelevel"))
             {

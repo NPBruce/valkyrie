@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Special class for the Menu button present while in a quest
 public class LogButton
 {
+    private StringKey LOG = new StringKey("val", "log");
+
     public LogButton()
     {
         Game game = Game.Get();
@@ -13,7 +16,7 @@ public class LogButton
 
         if (game.gameType is MoMGameType) return;
 
-        qb = new TextButton(new Vector2(UIScaler.GetRight(-7), UIScaler.GetBottom(-3)), new Vector2(6, 2), "Log", delegate { Log(); });
+        qb = new TextButton(new Vector2(UIScaler.GetRight(-7), UIScaler.GetBottom(-3)), new Vector2(6, 2), LOG, delegate { Log(); });
         qb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
         qb.ApplyTag("questui");

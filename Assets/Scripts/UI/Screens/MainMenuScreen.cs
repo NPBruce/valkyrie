@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
+            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), new StringKey("Valkyrie",false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.UI.Screens
             TextButton tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 5), 
                 new Vector2(12, 2f), 
-                new StringKey("val","START_QUEST",game.gameType.QuestName()).Translate(), 
+                new StringKey("val","START_QUEST",game.gameType.QuestName()), 
                 delegate { Start(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -41,7 +41,7 @@ namespace Assets.Scripts.UI.Screens
                 tb = new TextButton(
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
-                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()).Translate(),
+                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
                     delegate { SaveManager.Load(); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
                 tb.SetFont(game.gameType.GetHeaderFont());
@@ -51,7 +51,7 @@ namespace Assets.Scripts.UI.Screens
                 db = new DialogBox(
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
-                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()).Translate(),
+                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
                     Color.red);
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.SetFont(game.gameType.GetHeaderFont());
@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), 
                 new Vector2(12, 2f), 
-                SELECT_CONTENT.Translate(), 
+                SELECT_CONTENT, 
                 delegate { Content(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -71,7 +71,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14),
                 new Vector2(12, 2f),
-                new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()).Translate(),
+                new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()),
                 delegate { Editor(); });
 
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
@@ -81,7 +81,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), 
                 new Vector2(12, 2f), 
-                ABOUT.Translate(), 
+                ABOUT, 
                 delegate { About(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -90,7 +90,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), 
                 new Vector2(12, 2f), 
-                OPTIONS.Translate(), 
+                OPTIONS, 
                 delegate { Config(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -99,7 +99,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), 
                 new Vector2(12, 2f), 
-                EXIT.Translate(), 
+                EXIT, 
                 delegate { Exit(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -161,19 +161,19 @@ namespace Assets.Scripts.UI.Screens
             DialogBox db = new DialogBox(
                 new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 10f), 
                 new Vector2(30, 6), 
-                ABOUT_FFG.Translate());
+                ABOUT_FFG);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
             db = new DialogBox(
                 new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), 
                 new Vector2(30, 5), 
-                ABOUT_LIBS.Translate());
+                ABOUT_LIBS);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
                 new Vector2(8, 2), 
-                BACK.Translate(), 
+                BACK, 
                 delegate { Destroyer.MainMenu(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(Game.Get().gameType.GetHeaderFont());

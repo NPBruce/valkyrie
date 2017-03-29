@@ -37,7 +37,7 @@ namespace Assets.Scripts.UI.Screens
             DialogBox dbTittle = new DialogBox(
                 new Vector2(2, 1), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                OPTIONS.Translate()
+                OPTIONS
                 );
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             dbTittle.SetFont(game.gameType.GetHeaderFont());
@@ -46,7 +46,7 @@ namespace Assets.Scripts.UI.Screens
             DialogBox dbLanguage = new DialogBox(
                 new Vector2(2, 4), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
-                CHOOSE_LANG.Translate()
+                CHOOSE_LANG
                 );
             dbLanguage.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             dbLanguage.SetFont(game.gameType.GetHeaderFont());
@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI.Screens
                 languageTextButtons[position] = new TextButton(
                     new Vector2(UIScaler.GetHCenter() - 4, verticalStart + (2f * position)),
                     new Vector2(8, 1.8f),
-                    currentLanguage,
+                    new StringKey(currentLanguage,false),
                     delegate { SelectLang(position); },
                     currentColor
                     );
@@ -86,7 +86,7 @@ namespace Assets.Scripts.UI.Screens
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
                 new Vector2(8, 2), 
-                BACK.Translate(),
+                BACK,
                 delegate { Destroyer.MainMenu(); }, 
                 Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());

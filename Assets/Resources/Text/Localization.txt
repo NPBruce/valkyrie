@@ -22,7 +22,7 @@ CONTENT_IMPORT,Import Content,Importar Contenido,,,,,,,
 CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,,,,,,
 CONTENT_IMPORTING,Importing...,Importando...,,,,,,,
 EXIT,Exit,Salir,,,,,,,
-SELECT_HEROES,Select {0},Selección de {0},,,,,,,
+SELECT,Select {0},Selección de {0},,,,,,,
 BACK,Back,Volver,,,,,,,
 FINISHED,Finished,Terminado,,,,,,,
 SELECT_EXPANSION,Select Expansion Content,Elige Colección de Expansiones,,,,,,,
@@ -31,9 +31,15 @@ LOAD_QUEST,Load {0},Cargar {0},,,,,,,
 SELECT_CONTENT,Select Content,Mi Colección,,,,,,,
 QUEST_NAME_EDITOR,{0} Editor,Editar {0},,,,,,, 
 QUEST_NAME_DOWNLOAD,Download {0},Descargar {0},,,,,,, 
+QUEST_NAME_UPDATE,"  [Update] {0}","  [Actualizar] {0}",,,,,,,
+INDENT,"  {0}","  {0}",,,,,,,
 ABOUT,About,Acerca de,,,,,,,
+EMPTY,,,,,,,,,
 OPTIONS,Options,Opciones,,,,,,,
+DOWNLOAD,Download,Descargar,,,,,,,
 CHOOSE_LANG,Choose Language,Elige Idioma,,,,,,,
+MENU,Menu,Menú,,,,,,,
+LOG,Log,Log,,,,,,,
 ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders."
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder."
 //D2E
@@ -48,4 +54,11 @@ MOM_APP_NOT_FOUND,"Unable to locate Mansions of Madness, install via Steam","Imp
 MOM_HERO_NAME,Investigator,Investigador,,,,,,,
 MOM_HEROES_NAME,Investigators,Investigadores,,,,,,,
 MOM_QUEST_NAME,Scenario,Escenario,,,,,,,
-
+CLEAR_FIRE,Clear Fire,Quitar fuego,,,,,,,
+SKILL_DOTS,Skill:,Habilidad:,,,,,,,
+MOVES_DOTS,Moves:,Movimientos:,,,,,,,
+TOTAL_MOVES_DOTS,Total Moves:,Movimientos Totales:,,,,,,,
+//Inherited from FFG localization files
+SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
+INVESTIGATOR_ELIMINATED,Investigator Eliminated,Investigador eliminado,Investigateur éliminé,Ermittler ausgeschieden,Investigatore Eliminato,Investigador Eliminado,Wyeliminowano badacza,探索者の死亡,調查員被消滅
+CLOSE,Close,Cerrar,Fermer,Schließen,Chiudi,Fechar,Zamknij,閉じる,關閉
