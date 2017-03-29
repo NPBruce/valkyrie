@@ -23,6 +23,7 @@ abstract public class AppFinder
     {
         if (Application.platform == RuntimePlatform.OSXPlayer)
         {
+            ValkyrieDebug.Log("Attempting to locate AppId " + AppId() + " on MacOS.");
             System.Diagnostics.ProcessStartInfo processStartInfo;
             System.Diagnostics.Process process;
 
@@ -37,6 +38,7 @@ abstract public class AppFinder
             processStartInfo.FileName = "system_profiler";
 
             process = new System.Diagnostics.Process();
+            ValkyrieDebug.Log("Starting system_profiler.");
             process.StartInfo = processStartInfo;
             // enable raising events because Process does not raise events by default
             process.EnableRaisingEvents = true;
@@ -58,14 +60,56 @@ abstract public class AppFinder
             process.WaitForExit();
             process.CancelOutputRead();
 
+            
             string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            ValkyrieDebug.Log("Number of lines returned: " + output.Length);
+            ValkyrieDebug.Log("Looking for: " + "/" + Executable());
             // Quick hack rather than doing XML properly
             foreach (string s in output)
             {
+
                 if (s.IndexOf("/" + Executable()) > 0)
                 {
+                    ValkyrieDebug.Log("Found Line: " + s);
                     location = s.Trim();
+                    // Removing <string> and </string>
+                    location = location.Substring(8, location.Length - 17);
+                    ValkyrieDebug.Log("Using location: " + location);
                 }
+            }
+            if (location.Length == 0)
+            {
+                string xmlFile = Application.dataPath + "/apps.xml";
+                ValkyrieDebug.Log("Could not find, looking for prefetched XML: " + xmlFile);
+                if (File.Exists(xmlFile))
+                {
+                    string[] lines = System.IO.File.ReadAllLines(xmlFile);
+                    ValkyrieDebug.Log("Number of lines returned: " + output.Length);
+                    ValkyrieDebug.Log("Looking for: " + "/" + Executable());
+                    // Quick hack rather than doing XML properly
+                    foreach (string s in lines)
+                    {
+
+                        if (s.IndexOf("/" + Executable()) > 0)
+                        {
+                            ValkyrieDebug.Log("Found Line: " + s);
+                            location = s.Trim();
+                            // Removing <string> and </string>
+                            location = location.Substring(8, location.Length - 17);
+                            ValkyrieDebug.Log("Using location: " + location);
+                        }
+                    }
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Could not find prefetched XML.");
+                }
+            }
+            if (location.Length == 0)
+            {
+                location = "~/Library/Application Support/Steam/steamapps/common/Mansions of Madness/Mansions of Madness.app";
+                ValkyrieDebug.Log("Could not find, using magic locatoin: " + location);
             }
         }
         else
@@ -85,6 +129,7 @@ abstract public class AppFinder
 
         exeLocation += location + "/" + Executable();
         location += DataDirectory();
+        ValkyrieDebug.Log("Asset location: " + location);
     }
 
     // Read version of executable from app
