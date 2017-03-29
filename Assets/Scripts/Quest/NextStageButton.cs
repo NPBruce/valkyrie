@@ -7,14 +7,17 @@ public class NextStageButton
     // Construct and display
     public NextStageButton()
     {
-        if (Game.Get().gameType.DisplayHeroes()) return;
+        Game game = Game.Get();
+        if (game.gameType.DisplayHeroes()) return;
         TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "->", delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         tb = new TextButton(new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "Log", delegate { Log(); });
+        tb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "Set", delegate { Set(); });
+        tb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         Update();
