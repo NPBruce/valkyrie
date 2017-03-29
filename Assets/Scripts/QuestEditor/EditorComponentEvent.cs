@@ -296,17 +296,14 @@ public class EditorComponentEvent : EditorComponent
 
         triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos"));
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "Round"));
+        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound");
+
+        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound");
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Defeated"));
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Defeated"));
-        }
-
-        for (int i = 1; i <= 40; i++)
-        {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound" + i, "Round"));
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key);
+            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key);
         }
 
         triggerESL = new EditorSelectionList("Select Trigger", triggers, delegate { SelectEventTrigger(); });
