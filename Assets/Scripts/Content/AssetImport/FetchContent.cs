@@ -78,6 +78,10 @@ public class FetchContent {
     public string fetchAppVersion()
     {
         string appVersion = "";
+        if (!File.Exists(finder.location + "/resources.assets"))
+        {
+            ValkyrieDebug.Log("Could not find main assets file: " + finder.location + "/resources.assets");
+        }
         try
         {
             // We assume that the version asset is in resources.assets

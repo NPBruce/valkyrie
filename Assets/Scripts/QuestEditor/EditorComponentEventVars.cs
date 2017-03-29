@@ -192,7 +192,7 @@ public class EditorComponentEventVars : EditorComponent
         op.operation = "=";
         if (test)
         {
-            op.operation = "==";
+            op.operation = ">";
         }
         op.value = "0";
 

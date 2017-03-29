@@ -154,7 +154,7 @@ public class ContentData {
         {
             if (cp.id.Equals(id))
             {
-                return cp.name;
+                return new StringKey(cp.name).Translate();
             }
         }
         return "";
