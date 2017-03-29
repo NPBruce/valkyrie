@@ -27,7 +27,7 @@ public class MoMFinder : AppFinder {
     {
         if (Application.platform == RuntimePlatform.OSXPlayer)
         {
-            return "/Contents/Resources";
+            return "/Contents/Resources/Data";
         }
         return "/Mansions of Madness_Data";
     }
