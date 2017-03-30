@@ -89,7 +89,7 @@ class SaveManager
 
                 saveData.Get("Quest","valkyrie");
 
-                if (FetchContent.VersionNewerOrEqual(game.version, saveData.Get("Quest", "valkyrie")))
+                if (FetchContent.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Error: save is from a future version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
