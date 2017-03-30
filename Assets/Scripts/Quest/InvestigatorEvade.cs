@@ -15,6 +15,19 @@ public class InvestigatorEvade {
                 evades.Add(kv.Value);
             }
         }
+
+        QuestMonster qm = m.monsterData as QuestMonster;
+        if (evades.Count == 0 && qm != null && qm.derivedType.Length > 0)
+        {
+            foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
+            {
+                if (qm.derivedType.Equals("Monster" + kv.Value.monster))
+                {
+                    evades.Add(kv.Value);
+                }
+            }
+        }
+
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
