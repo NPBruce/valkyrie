@@ -7,9 +7,6 @@ public class EditorComponentQuest : EditorComponent
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable dbe1;
     public DialogBoxEditable dbe2;
-    // ...unless the component uses the list here instead
-    public List<DialogBoxEditable> dbeList;
-
     EditorSelectionList packESL;
 
     // Quest is a special component with meta data
@@ -36,41 +33,16 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(8, 1), "Minor Peril Level:");
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), "Required Expansions:");
         db.ApplyTag("editor");
 
-        dbeList = new List<DialogBoxEditable>();
-        DialogBoxEditable dbeTmp = new DialogBoxEditable(new Vector2(8, 11), new Vector2(3, 1), game.quest.qd.quest.minorPeril.ToString(), delegate { UpdatePeril(0); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 12), new Vector2(8, 1), "Major Peril Level:");
-        db.ApplyTag("editor");
-
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 12), new Vector2(3, 1), game.quest.qd.quest.majorPeril.ToString(), delegate { UpdatePeril(1); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 13), new Vector2(8, 1), "Deadly Peril Level:");
-        db.ApplyTag("editor");
-
-        dbeTmp = new DialogBoxEditable(new Vector2(8, 13), new Vector2(3, 1), game.quest.qd.quest.deadlyPeril.ToString(), delegate { UpdatePeril(2); });
-        dbeTmp.ApplyTag("editor");
-        dbeTmp.AddBorder();
-        dbeList.Add(dbeTmp);
-
-        db = new DialogBox(new Vector2(0, 15), new Vector2(9, 1), "Required Expansions:");
-        db.ApplyTag("editor");
-
-        tb = new TextButton(new Vector2(9, 15), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        int offset = 16;
+        int offset = 12;
         int index;
-        for (index = 0; index < 8; index++)
+        for (index = 0; index < 15; index++)
         {
             if (game.quest.qd.quest.packs.Length > index)
             {
@@ -105,32 +77,15 @@ public class EditorComponentQuest : EditorComponent
             game.quest.qd.quest.description = dbe2.uiInput.text;
     }
 
-    public void UpdatePeril(int level)
-    {
-        if (level == 0)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.minorPeril);
-        }
-        if (level == 1)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.majorPeril);
-        }
-        if (level == 2)
-        {
-            int.TryParse(dbeList[level].uiInput.text, out Game.Get().quest.qd.quest.deadlyPeril);
-        }
-        Update();
-    }
-
     public void QuestAddPack()
     {
-        List<string> packs = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> packs = new List<EditorSelectionList.SelectionListEntry>();
 
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                packs.Add(pack.id);
+                packs.Add(new EditorSelectionList.SelectionListEntry(pack.id));
             }
         }
 

@@ -50,7 +50,7 @@ public class QuestMonster : MonsterData
 
         // Read info from quest data or base type
         info = new StringKey(EventManager.SymbolReplace(qm.info.key), false);
-        if (info == null && baseObject != null)
+        if (info.key.Length == 0 && baseObject != null)
         {
             info = baseObject.info;
         }

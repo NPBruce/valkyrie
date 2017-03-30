@@ -67,10 +67,10 @@ public class DialogBox {
 
         RectTransform transBt = textObj.AddComponent<RectTransform>();
         transBt.SetParent(transBg);
-
         transBt.localPosition = Vector2.zero;
         transBt.localScale = transBg.localScale;
         transBt.sizeDelta = transBg.sizeDelta;
+        transBt.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.1f * UIScaler.GetPixelsPerUnit(), transBt.sizeDelta.x - (0.1f * UIScaler.GetPixelsPerUnit()));
 
         textObj.AddComponent<CanvasRenderer>();
         background.AddComponent<CanvasRenderer>();

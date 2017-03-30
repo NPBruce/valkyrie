@@ -260,6 +260,7 @@ public class MonsterCanvas : MonoBehaviour
             else if (m.unique)
             {
                 // green frame
+                icon.color = Color.white;
                 if (iconFrame != null)
                 {
                     iconFrame.color = new Color(0.6f, 1f, 0.6f, 1);

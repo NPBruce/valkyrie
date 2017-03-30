@@ -19,6 +19,7 @@ public class ContentData {
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
     public Dictionary<string, PuzzleData> puzzles;
+    public Dictionary<string, AudioData> audio;
 
     public static string ContentPath()
     {
@@ -68,6 +69,9 @@ public class ContentData {
 
         // This has all avilable puzzle images
         puzzles = new Dictionary<string, PuzzleData>();
+
+        // This has all avilable puzzle images
+        audio = new Dictionary<string, AudioData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
@@ -142,6 +146,18 @@ public class ContentData {
             names.Add(cp.name);
         }
         return names;
+    }
+
+    public string GetContentName(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return new StringKey(cp.name).Translate();
+            }
+        }
+        return "";
     }
 
     // Return a list of names for all enbaled content packs
@@ -515,6 +531,26 @@ public class ContentData {
             {
                 puzzles.Remove(name);
                 puzzles.Add(name, d);
+            }
+        }
+
+        // Is this a "Audio" entry?
+        if (name.IndexOf(AudioData.type) == 0)
+        {
+            AudioData d = new AudioData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!audio.ContainsKey(name))
+            {
+                audio.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (audio[name].priority < d.priority)
+            {
+                audio.Remove(name);
+                audio.Add(name, d);
             }
         }
     }
@@ -924,7 +960,6 @@ public class HorrorData : GenericData
     }
 }
 
-
 // Class for Puzzle images
 public class PuzzleData : GenericData
 {
@@ -932,6 +967,21 @@ public class PuzzleData : GenericData
 
     public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+    }
+}
+
+// Class for Audio
+public class AudioData : GenericData
+{
+    public static new string type = "Audio";
+    public string file = "";
+
+    public AudioData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        if (content.ContainsKey("file"))
+        {
+            file = path + "/" + content["file"];
+        }
     }
 }
 
@@ -1022,7 +1072,6 @@ public class PerilData : QuestData.Event
     new public static string type = "Peril";
     public string monster = "";
     public int priority = 0;
-    public PerilType pType = PerilType.na;
 
     public PerilData(string name, Dictionary<string, string> data) : base(name, data)
     {
@@ -1035,25 +1084,5 @@ public class PerilData : QuestData.Event
         {
             int.TryParse(data["priority"], out priority);
         }
-        if (name.IndexOf("PerilMinor") == 0)
-        {
-            pType = PerilType.minor;
-        }
-        if (name.IndexOf("PerilMajor") == 0)
-        {
-            pType = PerilType.major;
-        }
-        if (name.IndexOf("PerilDeadly") == 0)
-        {
-            pType = PerilType.deadly;
-        }
-    }
-
-    public enum PerilType
-    {
-        na,
-        minor,
-        major,
-        deadly
     }
 }

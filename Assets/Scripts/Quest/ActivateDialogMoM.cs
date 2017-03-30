@@ -9,7 +9,7 @@ public class ActivateDialogMoM : ActivateDialog
     {
     }
 
-    override public void CreateWindow()
+    override public void CreateWindow(bool singleStep = false)
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

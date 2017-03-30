@@ -87,11 +87,11 @@ public class EditorComponentItem : EditorComponent
     public void AddItem()
     {
         Game game = Game.Get();
-        Dictionary<string, Color> items = new Dictionary<string, Color>();
+        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
 
         if (itemComponent.traits.Length > 0)
         {
-            items.Add("", Color.white);
+            items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
         }
 
         HashSet<string> usedItems = new HashSet<string>();
@@ -110,18 +110,27 @@ public class EditorComponentItem : EditorComponent
         foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
         {
             string display = kv.Key;
+            List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                if (s.Length == 0)
+                {
+                    sets.Add("base");
+                }
+                else
+                {
+                    display += " " + s;
+                    sets.Add(s);
+                }
             }
 
             if (usedItems.Contains(kv.Key))
             {
-                items.Add(display, Color.grey);
+                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
             }
             else
             {
-                items.Add(display, Color.white);
+                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
             }
         }
         itemESL = new EditorSelectionList("Select Item", items, delegate { SelectAddItem(); });
@@ -170,7 +179,11 @@ public class EditorComponentItem : EditorComponent
             }
         }
 
-        List<string> list = new List<string>(traits);
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in traits)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
+        }
         traitESL = new EditorSelectionList("Select Trait", list, delegate { SelectAddTrait(); });
         traitESL.SelectItem();
     }

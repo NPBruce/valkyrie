@@ -85,7 +85,7 @@ public class EditorComponentActivation : EditorComponent
         }
         else
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "Not First", delegate { ToggleMinionFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");

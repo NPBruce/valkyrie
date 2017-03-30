@@ -10,7 +10,7 @@ public class RtLFinder : AppFinder {
     // If an import wasn't performed with this Valkyrie version or higher reimport
     override public string RequiredValkyrieVersion()
     {
-        return "0.2.3";
+        return "0.7.2";
     }
     // Steam app ID
     override public string AppId()
@@ -25,10 +25,18 @@ public class RtLFinder : AppFinder {
 
     override public string DataDirectory()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "/Contents/Resources";
+        }
         return "/Road to Legend_Data";
     }
     override public string Executable()
     {
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            return "Descent Road to Legend.app";
+        }
         return "Road to Legend.exe";
     }
     // RtL does not obfuscate text

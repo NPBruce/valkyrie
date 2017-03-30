@@ -5,6 +5,9 @@ using System.Collections.Generic;
 // This class controls the progression of activations and events
 public class RoundController {
 
+    // Latch activations finished incase more monsters come
+    bool activationsFinished = false;
+
     // A hero has finished their turn
     virtual public void HeroActivated()
     {
@@ -23,6 +26,7 @@ public class RoundController {
         // If everyone has finished move to next round
         if (monstersActivated && herosActivated)
         {
+            activationsFinished = true;
             EndRound();
         }
     }
@@ -54,6 +58,7 @@ public class RoundController {
             // If both started then it is complete
             if (m.minionStarted && m.masterStarted)
             {
+                activationsFinished = true;
                 m.activated = true;
             }
         }
@@ -139,14 +144,14 @@ public class RoundController {
                     {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
-                    // Otherwise look for the activation in contend data
+                    // Otherwise look for the activation in content data
                     else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
                     {
                         adList.Add(game.cd.activations["MonsterActivation" + s]);
                     }
                     else // Invalid activation
                     {
-                        ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName);
+                        game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
                     }
                 }
             }
@@ -200,20 +205,20 @@ public class RoundController {
         }
 
         // If no minion activation just do master
-        if (m.currentActivation.ad.minionActions == null)
+        if (m.currentActivation.ad.minionActions.key.Length == 0)
         {
             m.minionStarted = true;
             m.masterStarted = true;
-            new ActivateDialog(m, true);
+            new ActivateDialog(m, true, true);
             return false;
         }
 
         // If no master activation just do minion
-        if (m.currentActivation.ad.masterActions == null)
+        if (m.currentActivation.ad.masterActions.key.Length == 0)
         {
             m.minionStarted = true;
             m.masterStarted = true;
-            new ActivateDialog(m, false);
+            new ActivateDialog(m, false, true);
             return false;
         }
 
@@ -247,16 +252,16 @@ public class RoundController {
 
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
-        // Queue end of this round events
+        // Queue end of this round events (depriciated)
         game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
 
-        if (game.quest.flags.Contains("#eliminatedprev"))
+        if (game.quest.vars.GetValue("#eliminatedprev") > 0)
         {
             game.quest.eManager.EventTriggerType("Eliminated", false);
         }
-        if (game.quest.flags.Contains("#eliminated"))
+        if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            game.quest.flags.Add("#eliminatedprev");
+            game.quest.vars.SetValue("#eliminatedprev", 1);
         }
 
         // This will cause the end of the round if nothing was added
@@ -277,19 +282,9 @@ public class RoundController {
         if (game.quest.eManager.eventStack.Count > 0)
             return;
 
-        // Check if all heros have finished
-        foreach (Quest.Hero h in game.quest.heroes)
-        {
-            if (!h.activated && h.heroData != null) return;
-        }
+        if (!activationsFinished) return;
 
-        // Check if all monsters have finished
-        foreach (Quest.Monster m in game.quest.monsters)
-        {
-            if (!m.activated) return;
-        }
-
-        // Check for delayed events
+        // Check for delayed events (depreciated)
         foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
         {
             if (de.delay == game.quest.round)
@@ -301,31 +296,8 @@ public class RoundController {
             }
         }
 
-        // Check if we are due for a minor peril
-        if (!game.quest.minorPeril && game.quest.qd.quest.minorPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.minor);
-            game.quest.minorPeril = true;
-            return;
-        }
-
-        // Check if we are due for a major peril
-        if (!game.quest.majorPeril && game.quest.qd.quest.majorPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.major);
-            game.quest.majorPeril = true;
-            return;
-        }
-
-        // Check if we are due for a deadly peril
-        if (!game.quest.deadlyPeril && game.quest.qd.quest.deadlyPeril <= game.quest.round)
-        {
-            game.quest.eManager.RaisePeril(PerilData.PerilType.deadly);
-            game.quest.deadlyPeril = true;
-            return;
-        }
-
         // Clean up for next round
+        activationsFinished = false;
         // Clear hero activations
         foreach (Quest.Hero h in game.quest.heroes)
         {
@@ -342,10 +314,14 @@ public class RoundController {
 
         // Increment the round
         game.quest.round++;
-        game.quest.threat += 1;
+
+        game.quest.vars.SetValue("#round", game.quest.round);
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
         game.heroCanvas.UpdateStatus();
+
+        // Start of round events
+        game.quest.eManager.EventTriggerType("StartRound");
     }
 }

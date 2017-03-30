@@ -79,10 +79,10 @@ public class EditorComponentDoor : EditorComponent
 
     public void Colour()
     {
-        List<string> colours = new List<string>();
+        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
         {
-            colours.Add(kv.Key);
+            colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
         colorList = new EditorSelectionList("Select Item", colours, delegate { SelectColour(); });
         colorList.SelectItem();

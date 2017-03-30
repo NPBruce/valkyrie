@@ -25,7 +25,7 @@ public class QuestData
     Game game;
 
     // Create from quest loader entry
-    public QuestData(QuestLoader.Quest q)
+    public QuestData(QuestData.Quest q)
     {
         questPath = q.path + "/quest.ini";
         LoadQuestData();
@@ -175,6 +175,7 @@ public class QuestData
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
                 tileSideName = kv.Key;
+                break;
             }
         }
 
@@ -194,7 +195,7 @@ public class QuestData
             if (data.ContainsKey("side"))
             {
                 tileSideName = data["side"];
-                // 'TileSide' prefix is optional, test both
+                // 'TileSide' prefix is optional, test both (Depreciated, format 0)
                 if (tileSideName.IndexOf("TileSide") != 0)
                 {
                     tileSideName = "TileSide" + tileSideName;
@@ -302,7 +303,7 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
-            // default token type is TokenSearch, this is content data name
+            // default token type is TokenSearch, this is content data name (Depreciated, format 0)
             tokenName = "TokenSearch";
             if (data.ContainsKey("type"))
             {
@@ -321,10 +322,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if(!tokenName.Equals("TokenSearch"))
-            {
-                r += "type=" + tokenName + nl;
-            }
+            r += "type=" + tokenName + nl;
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
@@ -354,10 +352,11 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             mTypes = new string[1];
-            // This gets the last type available, because we need something
+            // This gets the first type available, because we need something
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
                 mTypes[0] = kv.Key;
+                break;
             }
             mTraits = new string[0];
 
@@ -376,7 +375,7 @@ public class QuestData
             // First try to a list of specific types
             if (data.ContainsKey("monster"))
             {
-                mTypes = data["monster"].Split(' ');
+                mTypes = data["monster"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -387,7 +386,7 @@ public class QuestData
             mTraits = new string[0];
             if (data.ContainsKey("traits"))
             {
-                mTraits = data["traits"].Split(' ');
+                mTraits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             // Array of placements by hero count
@@ -397,7 +396,7 @@ public class QuestData
                 placement[i] = new string[0];
                 if (data.ContainsKey("placement" + i))
                 {
-                    placement[i] = data["placement" + i].Split(' ');
+                    placement[i] = data["placement" + i].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 }
             }
 
@@ -501,18 +500,14 @@ public class QuestData
         public string trigger = "";
         public List<List<string>> nextEvent;
         public string heroListName = "";
-        public int gold = 0;
         public int minHeroes = 0;
         public int maxHeroes = 0;
         public string[] addComponents;
         public string[] removeComponents;
-        public string[] flags;
-        public string[] setFlags;
-        public string[] clearFlags;
+        public List<VarOperation> operations;
+        public List<VarOperation> conditions;
         public bool cancelable = false;
         public bool highlight = false;
-        public float threat;
-        public bool absoluteThreat = false;
         public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
         public bool minCam = false;
@@ -527,10 +522,8 @@ public class QuestData
             buttons = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
-            flags = new string[0];
-            setFlags = new string[0];
-            clearFlags = new string[0];
-            threat = 0;
+            operations = new List<VarOperation>();
+            conditions = new List<VarOperation>();
             delayedEvents = new List<DelayedEvent>();
             minCam = false;
             maxCam = false;
@@ -567,7 +560,7 @@ public class QuestData
                     {
                         if (data["event" + buttonNum].Trim().Length > 0)
                         {
-                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(' ')));
+                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                         }
                         else
                         {
@@ -586,12 +579,12 @@ public class QuestData
                 buttonNum++;
             }
 
-            // Legacy support
+            // Legacy support (Depreciated, format 0)
             if (nextEvent.Count == 0)
             {
                 if (data.ContainsKey("event"))
                 {
-                    nextEvent.Add(new List<string>(data["event"].Split(' ')));
+                    nextEvent.Add(new List<string>(data["event"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                 }
                 else
                 {
@@ -613,7 +606,7 @@ public class QuestData
 
                 if (data.ContainsKey("failevent"))
                 {
-                    nextEvent.Add(new List<string>(data["failevent"].Split(' ')));
+                    nextEvent.Add(new List<string>(data["failevent"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                     if (data.ContainsKey("failtext"))
                     {
                         buttons.Add(data["failtext"]);
@@ -631,12 +624,6 @@ public class QuestData
                 heroListName = data["hero"];
             }
 
-            // alter party gold (currently unused)
-            if (data.ContainsKey("gold"))
-            {
-                int.TryParse(data["gold"], out gold);
-            }
-            
             // Success quota
             if (data.ContainsKey("quota"))
             {
@@ -658,7 +645,7 @@ public class QuestData
             // Display hidden components (space separated list)
             if (data.ContainsKey("add"))
             {
-                addComponents = data["add"].Split(' ');
+                addComponents = data["add"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -668,7 +655,7 @@ public class QuestData
             // Hide components (space separated list)
             if (data.ContainsKey("remove"))
             {
-                removeComponents = data["remove"].Split(' ');
+                removeComponents = data["remove"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -681,50 +668,98 @@ public class QuestData
                 trigger = data["trigger"];
             }
 
-            // Flags required to trigger (space separated list)
+            operations = new List<VarOperation>();
+            if (data.ContainsKey("operations"))
+            {
+                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    operations.Add(new VarOperation(s));
+                }
+            }
+
+            conditions = new List<VarOperation>();
+            if (data.ContainsKey("conditions"))
+            {
+                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    conditions.Add(new VarOperation(s));
+                }
+            }
+
+            // Flags required to trigger (space separated list Depreciated format 0)
             if (data.ContainsKey("flags"))
             {
-                flags = data["flags"].Split(' ');
-            }
-            else
-            {
-                flags = new string[0];
+                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    if (s.Equals("#2hero"))
+                    {
+                        conditions.Add(new VarOperation("#heroes,==,2"));
+                    }
+                    else if (s.Equals("#3hero"))
+                    {
+                        conditions.Add(new VarOperation("#heroes,==,3"));
+                    }
+                    else if (s.Equals("#4hero"))
+                    {
+                        conditions.Add(new VarOperation("#heroes,==,4"));
+                    }
+                    else if (s.Equals("#5hero"))
+                    {
+                        conditions.Add(new VarOperation("#heroes,==,5"));
+                    }
+                    else
+                    {
+                        if (s[0] == '#')
+                        {
+                            conditions.Add(new VarOperation(s + ",>,0"));
+                        }
+                        else
+                        {
+                            conditions.Add(new VarOperation("flag" + s + ",>,0"));
+                        }
+                    }
+                }
             }
 
-            // Flags to set trigger (space separated list)
+            // Flags to set (space separated list Depreciated format 0)
             if (data.ContainsKey("set"))
             {
-                setFlags = data["set"].Split(' ');
-            }
-            else
-            {
-                setFlags = new string[0];
+                string[] flags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    operations.Add(new VarOperation("flag" + s + ",=,1"));
+                }
             }
 
-            // Flags to clear trigger (space separated list)
+            // Flags to clear (space separated list Depreciated format 0)
             if (data.ContainsKey("clear"))
             {
-                clearFlags = data["clear"].Split(' ');
-            }
-            else
-            {
-                clearFlags = new string[0];
+                string[] flags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in flags)
+                {
+                    operations.Add(new VarOperation("flag" + s + ",=,0"));
+                }
             }
 
-            // Threat modifier
+            // Threat modifier (Depreciated format 0)
             if (data.ContainsKey("threat"))
             {
                 if (data["threat"].Length != 0)
                 {
+                    float threat = 0;
                     // '@' at the start makes modifier absolute
                     if (data["threat"][0].Equals('@'))
                     {
-                        absoluteThreat = true;
                         float.TryParse(data["threat"].Substring(1), out threat);
+                        operations.Add(new VarOperation("threat,=," + threat));
                     }
                     else
                     {
                         float.TryParse(data["threat"], out threat);
+                        operations.Add(new VarOperation("threat,+," + threat));
                     }
                 }
             }
@@ -734,7 +769,7 @@ public class QuestData
             if (data.ContainsKey("delayedevents"))
             {
                 // List is space separated
-                string[] de = data["delayedevents"].Split(' ');
+                string[] de = data["delayedevents"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in de)
                 {
                     int delay;
@@ -872,10 +907,6 @@ public class QuestData
             {
                 r += "hero=" + heroListName + nl;
             }
-            if (gold != 0)
-            {
-                r += "gold=" + gold + nl;
-            }
             if (quota != 0)
             {
                 r += "quota=" + quota + nl;
@@ -910,34 +941,28 @@ public class QuestData
             {
                 r += "trigger=" + trigger + nl;
             }
-            if (flags.Length > 0)
+
+            if (operations.Count > 0)
             {
-                r += "flags=";
-                foreach (string s in flags)
+                r += "operations=";
+                foreach (VarOperation o in operations)
                 {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (setFlags.Length > 0)
-            {
-                r += "set=";
-                foreach (string s in setFlags)
-                {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-            if (clearFlags.Length > 0)
-            {
-                r += "clear=";
-                foreach (string s in clearFlags)
-                {
-                    r += s + " ";
+                    r += o.ToString() + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
+            if (conditions.Count > 0)
+            {
+                r += "conditions=";
+                foreach (VarOperation o in conditions)
+                {
+                    r += o.ToString() + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            // Depreciated
             if (delayedEvents.Count > 0)
             {
                 r += "delayedevents=";
@@ -948,15 +973,6 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            if (threat != 0)
-            {
-                r += "threat=";
-                if (absoluteThreat)
-                {
-                    r += "@";
-                }
-                r += threat + nl;
-            }
             if (randomEvents)
             {
                 r += "randomevents=true" + nl;
@@ -976,6 +992,29 @@ public class QuestData
                 r += "yposition=" + location.y + nl;
             }
             return r;
+        }
+
+        public class VarOperation
+        {
+            public string var = "";
+            public string operation = "";
+            public string value = "";
+
+            public VarOperation()
+            {
+            }
+
+            public VarOperation(string inOp)
+            {
+                var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
+                operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
+                value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+            }
+
+            override public string ToString()
+            {
+                return var + ',' + operation + ',' + value;
+            }
         }
 
         // Delayed events have a name and delay value
@@ -1141,6 +1180,8 @@ public class QuestData
         public string sectionName;
         // image for display
         public UnityEngine.UI.Image image;
+        // comment for developers
+        public string comment = "";
 
         // Create new component in editor
         public QuestComponent(string nameIn)
@@ -1169,6 +1210,10 @@ public class QuestData
             {
                 locationSpecified = true;
                 float.TryParse(data["yposition"], out location.y);
+            }
+            if (data.ContainsKey("comment"))
+            {
+                comment = data["comment"];
             }
         }
 
@@ -1221,7 +1266,10 @@ public class QuestData
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
             }
-
+            if (comment.Length > 0)
+            {
+                r += "comment=" + comment + nl;
+            }
             return r;
         }
     }
@@ -1271,7 +1319,7 @@ public class QuestData
             traits = new string[0];
             if (data.ContainsKey("traits"))
             {
-                traits = data["traits"].Split(" ".ToCharArray());
+                traits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             if (data.ContainsKey("image"))
@@ -1293,7 +1341,7 @@ public class QuestData
             activations = new string[0];
             if (data.ContainsKey("activation"))
             {
-                activations = data["activation"].Split(' ');
+                activations = data["activation"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             if (data.ContainsKey("health"))
@@ -1495,7 +1543,7 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
             {
-                itemName = data["itemname"].Split(' ');
+                itemName = data["itemname"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -1503,7 +1551,7 @@ public class QuestData
             }
             if (data.ContainsKey("traits"))
             {
-                traits = data["traits"].Split(' ');
+                traits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -1543,28 +1591,59 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
+        public static int minumumFormat = 0;
+        // Increment during changes, and again at release
+        public static int currentFormat = 1;
+        public int format = 0;
+        public bool valid = false;
+        public string path = "";
         // Quest name
         public string name = "";
         // Quest description (currently unused)
         public string description = "";
         // quest type (MoM, D2E)
         public string type;
-        // threat levels to trigger perils
-        public int minorPeril = 7;
-        public int majorPeril = 10;
-        public int deadlyPeril = 12;
         // Content packs required for quest
         public string[] packs;
+
+        // Create from path
+        public Quest(string pathIn)
+        {
+            path = pathIn;
+            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
+            valid = Populate(iniData);
+        }
 
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
+            valid = Populate(iniData);
+        }
+
+        // Create from ini data
+        public bool Populate(Dictionary<string, string> iniData)
+        {
+            if (iniData.ContainsKey("format"))
+            {
+                int.TryParse(iniData["format"], out format);
+            }
+
+            if (format > currentFormat || format < minumumFormat)
+            {
+                return false;
+            }
+
             if (iniData.ContainsKey("name"))
             {
                 name = iniData["name"];
             }
+            else
+            {
+                ValkyrieDebug.Log("Warning: Failed to get name data out of " + path + "/quest.ini!");
+                return false;
+            }
 
-            // Default to D2E to support historical quests
+            // Default to D2E to support historical quests (Depreciated, format 0)
             type = "D2E";
             if (iniData.ContainsKey("type"))
             {
@@ -1574,26 +1653,16 @@ public class QuestData
             {
                 description = iniData["description"];
             }
-            if (iniData.ContainsKey("minorperil"))
-            {
-                int.TryParse(iniData["minorperil"], out minorPeril);
-            }
-            if (iniData.ContainsKey("majorperil"))
-            {
-                int.TryParse(iniData["majorperil"], out majorPeril);
-            }
-            if (iniData.ContainsKey("deadlyperil"))
-            {
-                int.TryParse(iniData["deadlyperil"], out deadlyPeril);
-            }
             if (iniData.ContainsKey("packs"))
             {
-                packs = iniData["packs"].Split(' ');
+                packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
                 packs = new string[0];
             }
+
+            return true;
         }
 
         // Save to string (editor)
@@ -1601,22 +1670,10 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = "[Quest]" + nl;
+            r += "format=" + currentFormat + nl;
             r += "name=" + name + nl;
             r += "description=" + description + nl;
-            // Set this so that old quests have a type applied
             r += "type=" + Game.Get().gameType.TypeName() + nl;
-            if (minorPeril != 7)
-            {
-                r += "minorperil=" + minorPeril + nl;
-            }
-            if (majorPeril != 10)
-            {
-                r += "majorperil=" + majorPeril + nl;
-            }
-            if (deadlyPeril != 12)
-            {
-                r += "deadlyperil=" + deadlyPeril + nl;
-            }
             if (packs.Length > 0)
             {
                 r += "packs=";
@@ -1627,6 +1684,19 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
+            return r;
+        }
+
+        public List<string> GetMissingPacks(List<string> selected)
+        {
+            List<string> r = new List<string>();
+            foreach (string s in packs)
+            {
+                if (!selected.Contains(s))
+                {
+                    r.Add(s);
+                }
+            }
             return r;
         }
     }

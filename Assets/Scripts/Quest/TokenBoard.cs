@@ -74,11 +74,24 @@ public class TokenBoard : MonoBehaviour {
             if (h.heroData != null) count++;
         }
 
-        // Check for a placement list at this hero count
-        if (me.qMonster.placement[count].Length == 0)
+        if (game.gameType is MoMGameType)
         {
-            // group placement
-            AddAreaMonster(me.qMonster);
+            Texture2D newTex = ContentData.FileToTexture(me.cMonster.image);
+            AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
+        }
+        // Check for a placement list at this hero count
+        else if (me.qMonster.placement[count].Length == 0)
+        {
+            if (me.cMonster.ContainsTrait("lieutenant"))
+            {
+                Texture2D newTex = ContentData.FileToTexture(me.cMonster.image);
+                AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
+            }
+            else
+            {
+                // group placement
+                AddAreaMonster(me.qMonster);
+            }
         }
         else
         {
@@ -125,45 +138,96 @@ public class TokenBoard : MonoBehaviour {
     }
 
     // Add a placement image
-    public void AddPlacedMonsterImg(string place, Texture2D newTex, int x, int y)
+    public void AddPlacedMonsterImg(string place, Texture2D newTex, int sizeX, int sizeY, float posX = 0, float posY = 0)
     {
         Game game = Game.Get();
-        Sprite tileSprite;
+        Sprite iconSprite;
 
         // Check that placement name exists
-        if (!game.quest.qd.components.ContainsKey(place))
+        if (!game.quest.qd.components.ContainsKey(place) && place.Length > 0)
         {
             ValkyrieDebug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
         }
 
-        QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
-
         // Create object
+        GameObject circleObject = new GameObject("MonsterSpawnBorder" + place);
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
+        GameObject borderObject = new GameObject("MonsterSpawnBorder" + place);
         gameObject.tag = "dialog";
-
+        borderObject.tag = "dialog";
+        circleObject.tag = "dialog";
+        circleObject.transform.parent = game.tokenCanvas.transform;
         gameObject.transform.parent = game.tokenCanvas.transform;
+        borderObject.transform.parent = game.tokenCanvas.transform;
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
-        tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        if (mp.master)
-        {
-            image.color = Color.red;
-        }
-        image.sprite = tileSprite;
-        image.rectTransform.sizeDelta = new Vector2(x, y);
-        // Move to get the top left square corner at 0,0
-        gameObject.transform.Translate(Vector3.right * (float)(x - 1) / 2f, Space.World);
-        gameObject.transform.Translate(Vector3.down * (float)(y - 1) / 2f, Space.World);
+        iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        image.sprite = iconSprite;
+        image.rectTransform.sizeDelta = new Vector2(sizeX, sizeY);
 
-        if (mp.rotate)
+        UnityEngine.UI.Image iconFrame = null;
+        if (game.gameType is D2EGameType)
         {
-            gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
+            // Move to get the top left square corner at 0,0
+            gameObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
+            gameObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
+            borderObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
+            borderObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
+
+            image.rectTransform.sizeDelta = new Vector2(sizeX * 0.83f, sizeY * 0.83f);
+
+            borderObject.AddComponent<CanvasRenderer>();
+            borderObject.AddComponent<RectTransform>();
+
+            iconFrame = borderObject.AddComponent<UnityEngine.UI.Image>();
+            Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
+            if (sizeX == 3)
+            {
+                frameTex = Resources.Load("sprites/borders/Frame_Monster_2x3") as Texture2D;
+            }
+            if (sizeX == 2 && sizeY == 1)
+            {
+                frameTex = Resources.Load("sprites/borders/Frame_Monster_1x2") as Texture2D;
+            }
+            iconFrame.sprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+            iconFrame.rectTransform.sizeDelta = new Vector2(sizeX, sizeY);
+        }
+
+        if (place.Length > 0)
+        {
+            QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
+            posX = mp.location.x;
+            posY = mp.location.y;
+            
+            circleObject.transform.Translate(Vector3.right * (float)(sizeX - 1) / 2f, Space.World);
+            circleObject.transform.Translate(Vector3.down * (float)(sizeY - 1) / 2f, Space.World);
+
+            circleObject.AddComponent<CanvasRenderer>();
+            circleObject.AddComponent<RectTransform>();
+
+            UnityEngine.UI.Image iconCicle = circleObject.AddComponent<UnityEngine.UI.Image>();
+            Texture2D circleTex = Resources.Load("sprites/target") as Texture2D;
+            iconCicle.sprite = Sprite.Create(circleTex, new Rect(0, 0, circleTex.width, circleTex.height), Vector2.zero, 1);
+            iconCicle.rectTransform.sizeDelta = new Vector2(sizeX * 1.08f, sizeY * 1.08f);
+
+            if (mp.master)
+            {
+                iconCicle.color = Color.red;
+            }
+
+            if (mp.rotate)
+            {
+                gameObject.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
+                iconFrame.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
+                iconCicle.transform.RotateAround(Vector3.zero, Vector3.forward, -90);
+            }
         }
         // Move to square
-        gameObject.transform.Translate(new Vector3(mp.location.x, mp.location.y, 0), Space.World);
+        gameObject.transform.Translate(new Vector3(posX, posY, 0), Space.World);
+        borderObject.transform.Translate(new Vector3(posX, posY, 0), Space.World);
+        circleObject.transform.Translate(new Vector3(posX, posY, 0), Space.World);
     }
 
 
