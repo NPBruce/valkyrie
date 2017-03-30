@@ -8,8 +8,6 @@ using Assets.Scripts.Content;
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
 {
-    private StringKey BACK = new StringKey("val","BACK");
-    private StringKey EMPTY = new StringKey("val","EMPTY");
     public Dictionary<string, QuestData.Quest> questList;
 
     public WWW download;
@@ -49,7 +47,7 @@ public class QuestDownload : MonoBehaviour
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), EMPTY);
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), CommonStringKeys.EMPTY);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -130,7 +128,7 @@ public class QuestDownload : MonoBehaviour
 
         tb = new TextButton(
             new Vector2(1, UIScaler.GetBottom(-3)), 
-            new Vector2(8, 2), BACK, delegate { Cancel(); }, Color.red);
+            new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
 
         tb.SetFont(game.gameType.GetHeaderFont());
     }

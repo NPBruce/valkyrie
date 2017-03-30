@@ -7,14 +7,12 @@ using Assets.Scripts.Content;
 
 public class PuzzleCodeWindow
 {
-    private readonly StringKey EMPTY = new StringKey("val", "EMPTY");
     private readonly StringKey PUZZLE_GUESS = new StringKey("val", "PUZZLE_GUESS");
     private readonly StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
     private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val","ICON_SUCCESS_RESULT");
     private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
     private readonly StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
     private readonly StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
-    private readonly StringKey CLOSE = new StringKey("val", "CLOSE");
 
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
@@ -47,7 +45,7 @@ public class PuzzleCodeWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), EMPTY);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), CommonStringKeys.EMPTY);
         db.AddBorder();
 
         // Puzzle goes here
@@ -79,7 +77,7 @@ public class PuzzleCodeWindow
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), EMPTY, Color.white);
+                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), CommonStringKeys.EMPTY, Color.white);
                     db.AddBorder();
                 }
                 hPos += 2.5f;
@@ -96,7 +94,7 @@ public class PuzzleCodeWindow
         db.AddBorder();
 
         // Guesses window
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), EMPTY);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), CommonStringKeys.EMPTY);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -166,12 +164,12 @@ public class PuzzleCodeWindow
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
         }
     }

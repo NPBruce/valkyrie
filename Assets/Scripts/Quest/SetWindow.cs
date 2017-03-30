@@ -4,11 +4,9 @@ using UnityEngine;
 // Next stage button is used by MoM to move between investigators and monsters
 public class SetWindow
 {
-    private StringKey EMPTY = new StringKey("val", "EMPTY");
     private StringKey SET_FIRE = new StringKey("val", "SET_FIRE");
     private StringKey CLEAR_FIRE = new StringKey("val", "CLEAR_FIRE");
     private StringKey INVESTIGATOR_ELIMINATED = new StringKey("val", "INVESTIGATOR_ELIMINATED");
-    private StringKey CLOSE = new StringKey("val", "CLOSE");
 
     // Construct and display
     public SetWindow()

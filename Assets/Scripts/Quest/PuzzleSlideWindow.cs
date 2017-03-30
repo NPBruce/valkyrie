@@ -3,11 +3,10 @@ using Assets.Scripts.Content;
 
 public class PuzzleSlideWindow
 {
-    private StringKey EMPTY = new StringKey("val", "EMPTY");
     private StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
     private StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
     private StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
-    private StringKey CLOSE = new StringKey("val", "CLOSE");
+
 
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
@@ -39,7 +38,7 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), EMPTY);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), CommonStringKeys.EMPTY);
         db.AddBorder();
 
         // Puzzle goes here
@@ -80,12 +79,12 @@ public class PuzzleSlideWindow
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
         }
     }

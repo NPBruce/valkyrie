@@ -9,7 +9,6 @@ using Assets.Scripts.UI.Screens;
 public class Game : MonoBehaviour {
 
     // Localization Strings
-    private StringKey BACK = new StringKey("val","BACK");
     private StringKey FINISHED = new StringKey("val","FINISHED");
 
     // This is populated at run time from the text asset
@@ -192,7 +191,7 @@ public class Game : MonoBehaviour {
         TextButton cancelSelection = new TextButton(
             new Vector2(1, UIScaler.GetBottom(-3)), 
             new Vector2(8, 2), 
-            BACK, 
+            CommonStringKeys.BACK, 
             delegate { Destroyer.QuestSelect(); }, 
             Color.red);
 
