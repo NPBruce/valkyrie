@@ -89,16 +89,18 @@ class SaveManager
 
                 saveData.Get("Quest","valkyrie");
 
-                if (FetchContent.VersionNewerOrEqual(game.version, saveData.Get("Quest", "valkyrie")))
+                if (FetchContent.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Error: save is from a future version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
+                    return;
                 }
 
                 if (!FetchContent.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Error: save is from an old unsupported version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
+                    return;
                 }
 
                 Destroyer.Dialog();
