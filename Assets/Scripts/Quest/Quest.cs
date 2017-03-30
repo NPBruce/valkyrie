@@ -452,6 +452,9 @@ public class Quest
         // General quest state block
         string r = "[Quest]" + nl;
 
+        // Save valkyrie version
+        r += "valkyrie=" + game.version + nl;
+
         r += "path=" + qd.questPath + nl;
         r += "round=" + round+ nl;
         r += "morale=" + morale + nl;
