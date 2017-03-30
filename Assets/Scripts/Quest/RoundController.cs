@@ -58,7 +58,6 @@ public class RoundController {
             // If both started then it is complete
             if (m.minionStarted && m.masterStarted)
             {
-                activationsFinished = true;
                 m.activated = true;
             }
         }
@@ -80,6 +79,7 @@ public class RoundController {
             if (ActivateMonster())
             {
                 // Evenyone has finished, move to next round
+                activationsFinished = true;
                 EndRound();
             }
         }
