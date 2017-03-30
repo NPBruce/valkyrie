@@ -243,6 +243,15 @@ public class IniData
         data[section].Remove(name);
     }
 
+
+    // Remove a section by name
+    public void Remove(string section)
+    {
+        if (!data.ContainsKey(section)) return;
+
+        data.Remove(section);
+    }
+
     // Get section data, returns null if not found
     public Dictionary<string, string> Get(string section)
     {
