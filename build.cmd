@@ -18,7 +18,7 @@ rmdir /s /q build\batch\valkyrie_Data\content\MoM\ffg
 
 mkdir build\batchMac\macos.app
 mkdir build\batchMac\macos.app\Contents
-xcopy /E /Y build\batch\valkyrie_Data build\batchMac\macos.app\Contents
+xcopy /E /Y build\batch\valkyrie_Data build\batchMac\Valkyrie.app\Contents
 
 xcopy /E /Y build\win build\batch
 

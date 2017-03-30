@@ -146,6 +146,8 @@ public class RoundControllerMoM : RoundController
 
         // Advance to next round
         game.quest.round++;
+        game.quest.vars.SetValue("#round", game.quest.round);
+
         game.quest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
 

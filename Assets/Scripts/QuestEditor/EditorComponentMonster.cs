@@ -183,6 +183,15 @@ public class EditorComponentMonster : EditorComponent
     {
         Game game = Game.Get();
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.UniqueMonster)
+            {
+                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
+            }
+        }
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
@@ -209,6 +218,15 @@ public class EditorComponentMonster : EditorComponent
     {
         Game game = Game.Get();
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.UniqueMonster)
+            {
+                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
+            }
+        }
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
