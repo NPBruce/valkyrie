@@ -7,8 +7,6 @@ namespace Assets.Scripts.UI.Screens
     // Class for quest selection window
     public class QuestSelectionScreen
     {
-        private StringKey BACK = new StringKey("val", "BACK");
-        private StringKey EMPTY = new StringKey("val", "EMPTY");
         private StringKey DOWNLOAD = new StringKey("val", "DOWNLOAD");
 
         public Dictionary<string, QuestData.Quest> questList;
@@ -34,7 +32,7 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), EMPTY);
+            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), StringKey.NULL);
             db.AddBorder();
             db.background.AddComponent<UnityEngine.UI.Mask>();
             UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -108,7 +106,7 @@ namespace Assets.Scripts.UI.Screens
 
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), BACK, delegate { Cancel(); }, Color.red);
+            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
 
             tb.SetFont(game.gameType.GetHeaderFont());
 

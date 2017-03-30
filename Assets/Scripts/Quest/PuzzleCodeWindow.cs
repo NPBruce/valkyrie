@@ -8,11 +8,8 @@ using Assets.Scripts.Content;
 public class PuzzleCodeWindow
 {
     private readonly StringKey PUZZLE_GUESS = new StringKey("val", "PUZZLE_GUESS");
-    private readonly StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
     private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val","ICON_SUCCESS_RESULT");
     private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
-    private readonly StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
-    private readonly StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
 
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
@@ -45,7 +42,8 @@ public class PuzzleCodeWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), CommonStringKeys.EMPTY);
+        DialogBox db = new DialogBox(
+            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here
@@ -77,7 +75,7 @@ public class PuzzleCodeWindow
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), CommonStringKeys.EMPTY, Color.white);
+                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), StringKey.NULL, Color.white);
                     db.AddBorder();
                 }
                 hPos += 2.5f;
@@ -86,7 +84,7 @@ public class PuzzleCodeWindow
 
         new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), PUZZLE_GUESS, delegate { Guess(); });
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), SKILL_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), CommonStringKeys.SKILL_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f), questPuzzle.skill);
@@ -94,7 +92,7 @@ public class PuzzleCodeWindow
         db.AddBorder();
 
         // Guesses window
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), CommonStringKeys.EMPTY);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -148,14 +146,14 @@ public class PuzzleCodeWindow
         }
         scrollRect.verticalNormalizedPosition = 0f;
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), CommonStringKeys.MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), new StringKey((puzzle.guess.Count - previousMoves).ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), TOTAL_MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), CommonStringKeys.TOTAL_MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), new StringKey(puzzle.guess.Count.ToString(),false));

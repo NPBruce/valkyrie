@@ -1097,7 +1097,7 @@ public class QuestData
     public class Puzzle : Event
     {
         new public static string type = "Puzzle";
-        public StringKey puzzleClass = new StringKey("val", "PUZZLE_CLASS_SLIDE");
+        public StringKey puzzleClass = new StringKey("val", "PUZZLE_SLIDE_CLASS");
         public StringKey skill = new StringKey("val", "ICON_SKILL_OBSERVATION");
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
@@ -1283,7 +1283,7 @@ public class QuestData
         public string monsterName = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public StringKey info = StringKey.EmptyStringKey;
+        public StringKey info = StringKey.NULL;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1430,17 +1430,17 @@ public class QuestData
         //TODO: abilities are loaded from ffg strings, but it can be edited
         // for ffg abilities this field will be a key but for edited ability
         // after localization for quests, all abilityes will be keys.
-        public StringKey ability = StringKey.EmptyStringKey;
+        public StringKey ability = StringKey.NULL;
         // same as ability
-        public StringKey minionActions = StringKey.EmptyStringKey;
+        public StringKey minionActions = StringKey.NULL;
         // same as ability
-        public StringKey masterActions = StringKey.EmptyStringKey;
+        public StringKey masterActions = StringKey.NULL;
         public bool minionFirst = false;
         public bool masterFirst = false;
         // same as ability
-        public StringKey moveButton = StringKey.EmptyStringKey;
+        public StringKey moveButton = StringKey.NULL;
         // same as ability
-        public StringKey move = StringKey.EmptyStringKey;
+        public StringKey move = StringKey.NULL;
 
         // Create new (editor)
         public Activation(string s) : base(s)

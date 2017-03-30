@@ -60,7 +60,7 @@ public class ActivateDialogMoM : ActivateDialog
 
         offset += 4.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { activated(); });
 
         DrawMonsterIcon();
     }
@@ -84,7 +84,7 @@ public class ActivateDialogMoM : ActivateDialog
 
         offset += 4.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { activated(); });
 
         DrawMonsterIcon();
     }

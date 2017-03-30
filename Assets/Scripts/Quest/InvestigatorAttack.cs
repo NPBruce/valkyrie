@@ -80,7 +80,7 @@ public class InvestigatorAttack
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
         }
 
         DrawMonsterIcon();

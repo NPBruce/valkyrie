@@ -3,10 +3,6 @@ using Assets.Scripts.Content;
 
 public class PuzzleSlideWindow
 {
-    private StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
-    private StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
-    private StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
-
 
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
@@ -38,7 +34,8 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), CommonStringKeys.EMPTY);
+        DialogBox db = new DialogBox(
+            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here
@@ -56,21 +53,21 @@ public class PuzzleSlideWindow
             CreateBlock(b, transBg, b.target);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f), SKILL_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f), CommonStringKeys.SKILL_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), questPuzzle.skill);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f), MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f), CommonStringKeys.MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), new StringKey((puzzle.moves - lastMoves).ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 17f), new Vector2(6f, 2f), TOTAL_MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 17f), new Vector2(6f, 2f), CommonStringKeys.TOTAL_MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));

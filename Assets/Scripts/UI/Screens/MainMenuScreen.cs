@@ -9,10 +9,8 @@ namespace Assets.Scripts.UI.Screens
         private StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
         private StringKey ABOUT = new StringKey("val", "ABOUT");
         private StringKey OPTIONS = new StringKey("val", "OPTIONS");
-        private StringKey EXIT = new StringKey("val", "EXIT");
         private StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
         private StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
-        private StringKey BACK = new StringKey("val","BACK");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public MainMenuScreen()
@@ -99,7 +97,7 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(
                 new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), 
                 new Vector2(12, 2f), 
-                EXIT, 
+                CommonStringKeys.EXIT, 
                 delegate { Exit(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
@@ -172,8 +170,8 @@ namespace Assets.Scripts.UI.Screens
 
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
-                new Vector2(8, 2), 
-                BACK, 
+                new Vector2(8, 2),
+                CommonStringKeys.BACK, 
                 delegate { Destroyer.MainMenu(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(Game.Get().gameType.GetHeaderFont());

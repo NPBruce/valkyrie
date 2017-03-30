@@ -8,7 +8,6 @@ namespace Assets.Scripts.UI.Screens
     {
         private StringKey OPTIONS = new StringKey("val", "OPTIONS");
         private StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
-        private StringKey BACK = new StringKey("val", "BACK");
 
         Game game = Game.Get();
 
@@ -85,8 +84,8 @@ namespace Assets.Scripts.UI.Screens
             // Button for back to main menu
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
-                new Vector2(8, 2), 
-                BACK,
+                new Vector2(8, 2),
+                CommonStringKeys.BACK,
                 delegate { Destroyer.MainMenu(); }, 
                 Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());

@@ -22,6 +22,7 @@ ICON_PRODUCT_MAD23,,,,,,,,,
 CONTENT_IMPORT,Import Content,Importar Contenido,,,,,,,
 CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,,,,,,
 CONTENT_IMPORTING,Importing...,Importando...,,,,,,,
+E,E,E,,,,,,,
 EXIT,Exit,Salir,,,,,,,
 SELECT,Select {0},Selección de {0},,,,,,,
 BACK,Back,Volver,,,,,,,
@@ -44,6 +45,29 @@ MENU,Menu,Menú,,,,,,,
 LOG,Log,Log,,,,,,,
 ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders."
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder."
+EVENT,Event,Evento,,,,,,,
+TRIGGER,Trigger,Activador,,,,,,,
+CANCEL,Cancel,Cancelar,,,,,,,
+MONSTER,Monster,Monstruo,,,,,,,
+BASE_DOTS,Base:,Base:,,,,,,,
+POSITION_TYPE_UNUSED,Unused,No Usado,,,,,,,
+POSITION_TYPE_HIGHLIGHT,Highlight,Destacado,,,,,,,
+PLACEMENT,Placement,Colocación,,,,,,,
+MONSTER_UNIQUE,Unique,Único,,,,,,,
+MONSTER_NORMAL,Normal,Normal,,,,,,,
+MONSTER_MASTER,Master,Maestro,,,,,,,
+MONSTER_MINION,Minion,Esbirro,,,,,,,
+UNIQUE_TITLE_DOTS,Unique Title:,Título de Único,,,,,,,
+UNIQUE_INFO_DOTS,Unique Information:,Información de Único:,,,,,,,
+TYPES_DOTS,Types:,Tipos:,,,,,,,
+TRAITS_DOTS,Traits:,Atributos:,,,,,,,
+SAVE,Save,Guardar,,,,,,,
+RELOAD,Reload,Recargar,,,,,,,
+MAIN_MENU,Main Menu,Menú Principal,,,,,,,
+ROTATE_TO,"Rotate: {0}","Rotar: {0}",,,,,,, 
+COLOR,Colour,Color,,,,,,,
+NAME_DOTS,Name:,Nombre:,,,,,,,
+NUMBER,Number,Número,,,,,,,
 
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
@@ -63,12 +87,48 @@ SKILL_DOTS,Skill:,Habilidad:,,,,,,,
 MOVES_DOTS,Moves:,Movimientos:,,,,,,,
 TOTAL_MOVES_DOTS,Total Moves:,Movimientos Totales:,,,,,,,
 
-"Puzzle"
-PUZZLE_CLASS_SLIDE,slide,cerradura,,,,,,,
+PUZZLE,Puzzle,Puzzle,,,,,,,
+PUZZLE_CLASS_SELECT,Select Class,Escoger Tipo,,,,,,,
+PUZZLE_SLIDE_CLASS,slide,mecanismo,,,,,,,
+PUZZLE_CODE_CLASS,code,código,,,,,,,
+PUZZLE_IMAGE_CLASS,image,mosaico,,,,,,,
+PUZZLE_SELECT_SKILL,Select Skill,Escoger Habilidad,,,,,,,
+PUZZLE_SELECT_IMAGE,Select Image,Escoger Imagen,,,,,,,
+PUZZLE_CLASS_DOTS,Class:,Tipo:,,,,,,,
+PUZZLE_LEVEL_DOTS,Level:,Dificultad:,,,,,,,
+PUZZLE_IMAGE_DOTS,Image:,Imagen:,,,,,,,
+PUZZLE_ALT_LEVEL_DOTS,Alt Level:,Dificultad Alternativa:,,,,,,,
 
+LOG,Log,Log,,,,,,,
+SET,Set,Set,,,,,,,
+RESET,Reset,Reset,,,,,,,
+SELECT_ITEM,Select Item,Escoger Elemento,,,,,,,
+
+TYPE,Type,Tipo,,,,,,,
+QUEST,Quest,Escenario,,,,,,,
+TILE,Tile,Tablero,,,,,,,
+DELETE,Delete,Eliminar,,,,,,,
+DOOR,Door,Puerta,,,,,,,
+TOKEN,Token,Marcador,,,,,,,
+MPLACE,MPlace,Posición,,,,,,,
+ITEM,Item,Objeto,,,,,,,
+UNIQUE_MONSTER,Unique Monster,Monstruo Único,,,,,,,
+ACTIVATION,Activation,Activación,,,,,,,
+COMPONENT_TO_DELETE,"Component to Delete:",Componente a Eliminar,,,,,,,
 
 //Inherited from FFG localization files
 SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
 INVESTIGATOR_ELIMINATED,Investigator Eliminated,Investigador eliminado,Investigateur éliminé,Ermittler ausgeschieden,Investigatore Eliminato,Investigador Eliminado,Wyeliminowano badacza,探索者の死亡,調查員被消滅
 CLOSE,Close,Cerrar,Fermer,Schließen,Chiudi,Fechar,Zamknij,閉じる,關閉
 PUZZLE_GUESS,Guess,Resolver,Proposer,Raten,Indovina,Tentar,Sprawdź,入力,猜測
+
+UP,Up,Arriba,Haut,Oben,Su,Para Cima,Góra,上,上
+DOWN,Down,Abajo,Bas,Unten,Giù,Para Baixo,Dół,下,下
+LEFT,Left,Izquierda,Gauche,Links,Sinistra,Para a Esquerda,Lewo,左,左
+RIGHT,Right,Derecha,Droite,Rechts,Destra,Para a Direita,Prawo,右,右
+
+PHASE_INVESTIGATOR,INVESTIGATOR PHASE,FASE DE LOS INVESTIGADORES,Phase d'Investigateur,ERMITTLERPHASE,FASE DEGLI INVESTIGATORI,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
+PHASE_MYTHOS,MYTHOS PHASE,FASE DE MITOS,Phase de Mythe,MYTHOSPHASE,FASE DEI MITI,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
+MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
+HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
+END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟

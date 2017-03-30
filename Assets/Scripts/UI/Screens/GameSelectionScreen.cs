@@ -18,7 +18,6 @@ namespace Assets.Scripts.UI.Screens
         private StringKey MOM_NAME = new StringKey("{val:MOM_NAME}");
         private StringKey MOM_APP_NOT_FOUND = new StringKey("{val:MOM_APP_NOT_FOUND}");
         private StringKey CONTENT_IMPORTING = new StringKey("{val:CONTENT_IMPORTING}");
-        private StringKey EXIT = new StringKey("{val:EXIT}");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -109,7 +108,7 @@ namespace Assets.Scripts.UI.Screens
                 db.AddBorder();
             }
 
-            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), EXIT, delegate { Exit(); }, Color.red);
+            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.EXIT, delegate { Exit(); }, Color.red);
         }
 
         // Start game as D2E
