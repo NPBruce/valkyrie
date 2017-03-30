@@ -1,9 +1,19 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 public class EditorComponentPuzzle : EditorComponent
 {
+    private readonly StringKey EMPTY = new StringKey("val", "EMPTY");
+    private readonly StringKey PUZZLE_GUESS = new StringKey("val", "PUZZLE_GUESS");
+    private readonly StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
+    private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val", "ICON_SUCCESS_RESULT");
+    private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
+    private readonly StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
+    private readonly StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
+    private readonly StringKey CLOSE = new StringKey("val", "CLOSE");
+
     QuestData.Puzzle puzzleComponent;
     EditorSelectionList classList;
     EditorSelectionList imageList;
@@ -25,7 +35,7 @@ public class EditorComponentPuzzle : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Puzzle", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), PUZZLE, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
@@ -46,10 +56,10 @@ public class EditorComponentPuzzle : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), "Skill:");
+        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), SKILL_DOTS);
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 4), new Vector2(2, 1), EventManager.SymbolReplace(puzzleComponent.skill), delegate { Skill(); });
+        tb = new TextButton(new Vector2(3, 4), new Vector2(2, 1), puzzleComponent.skill, delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

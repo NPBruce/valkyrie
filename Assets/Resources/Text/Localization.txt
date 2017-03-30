@@ -17,6 +17,7 @@ ICON_PRODUCT_MAD20,,,,,,,,,
 ICON_PRODUCT_MAD21,,,,,,,,,
 ICON_PRODUCT_MAD22,,,,,,,,,
 ICON_PRODUCT_MAD23,,,,,,,,,
+
 //COMMONS
 CONTENT_IMPORT,Import Content,Importar Contenido,,,,,,,
 CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,,,,,,
@@ -43,12 +44,14 @@ MENU,Menu,Menú,,,,,,,
 LOG,Log,Log,,,,,,,
 ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders."
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder."
+
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
 D2E_APP_NOT_FOUND,"Unable to locate Road to Legend, install via Steam","Imposible localizar ""Road to Legend"", instalar desde Steam,,,,,,,
 D2E_HERO_NAME,Hero,Héroe,,,,,,,
 D2E_HEROES_NAME,Heroes,Héroes,,,,,,,
 D2E_QUEST_NAME,Quest,Aventura,,,,,,,
+
 //MOM
 MOM_NAME,Mansions of Madness Second Edition,Las Mansiones de la Locura: Segunda Edición,,,,,,,
 MOM_APP_NOT_FOUND,"Unable to locate Mansions of Madness, install via Steam","Imposible localizar ""Mansions of Madness"", instalar desde Steam,,,,,,,
@@ -59,7 +62,13 @@ CLEAR_FIRE,Clear Fire,Quitar fuego,,,,,,,
 SKILL_DOTS,Skill:,Habilidad:,,,,,,,
 MOVES_DOTS,Moves:,Movimientos:,,,,,,,
 TOTAL_MOVES_DOTS,Total Moves:,Movimientos Totales:,,,,,,,
+
+"Puzzle"
+PUZZLE_CLASS_SLIDE,slide,cerradura,,,,,,,
+
+
 //Inherited from FFG localization files
 SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
 INVESTIGATOR_ELIMINATED,Investigator Eliminated,Investigador eliminado,Investigateur éliminé,Ermittler ausgeschieden,Investigatore Eliminato,Investigador Eliminado,Wyeliminowano badacza,探索者の死亡,調查員被消滅
 CLOSE,Close,Cerrar,Fermer,Schließen,Chiudi,Fechar,Zamknij,閉じる,關閉
+PUZZLE_GUESS,Guess,Resolver,Proposer,Raten,Indovina,Tentar,Sprawdź,入力,猜測

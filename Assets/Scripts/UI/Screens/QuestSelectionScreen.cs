@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI.Screens
     public class QuestSelectionScreen
     {
         private StringKey BACK = new StringKey("val", "BACK");
+        private StringKey EMPTY = new StringKey("val", "EMPTY");
         private StringKey DOWNLOAD = new StringKey("val", "DOWNLOAD");
 
         public Dictionary<string, QuestData.Quest> questList;
@@ -33,7 +34,7 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
+            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), EMPTY);
             db.AddBorder();
             db.background.AddComponent<UnityEngine.UI.Mask>();
             UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
