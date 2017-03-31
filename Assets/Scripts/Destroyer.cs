@@ -76,5 +76,6 @@ public class Destroyer {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
+        game.logWindow = null;
     }
 }

@@ -17,9 +17,11 @@ public class LogWindow
         Update();
     }
 
-    public void Update()
+    public void Update(toggle = false)
     {
+        developerToggle ^= toggle;
         Game game = Game.Get();
+        game.logWindow = this;
         // white background because font rendering is broken
         string log = "";
         foreach (Quest.LogEntry e in game.quest.log)

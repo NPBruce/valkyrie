@@ -44,6 +44,8 @@ public class Game : MonoBehaviour {
     public RoundController roundControl;
     // Class for stage control UI
     public NextStageButton stageUI;
+    // Class log window
+    public LogWindow logWindow;
 
     // Current language
     public string currentLang;
@@ -233,6 +235,14 @@ public class Game : MonoBehaviour {
         if (quest != null)
         {
             quest.Update();
+        }
+
+        if (Input.GetKey("right alt") || input.GetKey("left alt"))
+        {
+            if (input.GetKeyDown("d") && logWindow != null)
+            {
+                logWindow.Update(true);
+            }
         }
     }
 
