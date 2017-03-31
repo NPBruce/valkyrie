@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using Read64bitRegistryFrom32bitApp;
+using System.Xml;
 
 // Class to find FFG app installed
 abstract public class AppFinder
@@ -61,31 +62,25 @@ abstract public class AppFinder
 			process.WaitForExit();
 			process.CancelOutputRead();
 
-
-            
             string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-            ValkyrieDebug.Log("Number of lines returned: " + output.Length);
-
             if (output.Length == 1)
-            {
-                ValkyrieDebug.Log(output[0]);
+			{
+				ValkyrieDebug.Log("---------");
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(output[0]);
+
+				XmlNodeList parentNode = xmlDoc.GetElementsByTagName("string");
+				foreach (XmlNode childrenNode in parentNode)
+				{
+					var innerText = childrenNode.InnerText;
+					if (innerText.IndexOf(Executable()) > 0)
+					{
+						ValkyrieDebug.Log("Found Path -> " + innerText);
+						location = innerText;
+					}
+				}
             }
 
-            ValkyrieDebug.Log("Looking for: " + "/" + Executable());
-            // Quick hack rather than doing XML properly
-            foreach (string s in output)
-            {
-
-                if (s.IndexOf("/" + Executable()) > 0)
-                {
-                    ValkyrieDebug.Log("Found Line: " + s);
-                    location = s.Trim();
-                    // Removing <string> and </string>
-                    location = location.Substring(8, location.Length - 17);
-                    ValkyrieDebug.Log("Using location: " + location);
-                }
-            }
             if (location.Length == 0)
             {
                 location = "~/Library/Application Support/Steam/steamapps/common/Mansions of Madness/Mansions of Madness.app";
