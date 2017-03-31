@@ -78,7 +78,6 @@ public class LogWindow
 
         // List of vars
         float offset = 1;
-        TextButton tb;
         valueDBE = new Dictionary<string, DialogBoxEditable>();
         foreach (KeyValuePair<string, float> kv in Game.Get().quest.vars.vars)
         {
