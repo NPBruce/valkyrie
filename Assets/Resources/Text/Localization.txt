@@ -19,6 +19,9 @@ ICON_PRODUCT_MAD22,,,,,,,,,�
 ICON_PRODUCT_MAD23,,,,,,,,,
 
 //COMMONS
+
+X_COLON,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:
+
 CONTENT_IMPORT,Import Content,Importar Contenido,,,,,,,
 CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,,,,,,
 CONTENT_IMPORTING,Importing...,Importando...,,,,,,,
@@ -68,6 +71,14 @@ ROTATE_TO,"Rotate: {0}","Rotar: {0}",,,,,,,
 COLOR,Colour,Color,,,,,,,
 NAME_DOTS,Name:,Nombre:,,,,,,,
 NUMBER,Number,Número,,,,,,,
+// Activation
+ABILITY,Ability,Capacidad,,,,,,,
+"First"
+"Not First"
+"Initial Message:"
+"Unable Button:"
+"Attack Message:"
+"No Attack Message:"
 
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,

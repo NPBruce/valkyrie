@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Window with Monster activation
 public class ActivateDialogMoM : ActivateDialog

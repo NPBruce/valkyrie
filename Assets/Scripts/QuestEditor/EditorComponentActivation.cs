@@ -5,6 +5,10 @@ using Assets.Scripts.Content;
 
 public class EditorComponentActivation : EditorComponent
 {
+    private readonly StringKey ABILITY = new StringKey("val","ABILITY");
+    private readonly StringKey MONSTER_MASTER = new StringKey("val", "MONSTER_MASTER");
+    private readonly StringKey MONSTER_MINION = new StringKey("val", "MONSTER_MINION");
+
     QuestData.Activation activationComponent;
     DialogBoxEditable abilityDBE;
     DialogBoxEditable moveButtonDBE;
@@ -55,14 +59,14 @@ public class EditorComponentActivation : EditorComponent
 
     public void Activation()
     {
-        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), "Ability:");
+        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), new StringKey("val","X_COLON",ABILITY));
         db.ApplyTag("editor");
 
         abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability.Translate(), delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 10), new Vector2(15, 1), "Master:");
+        db = new DialogBox(new Vector2(0, 10), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MASTER));
         db.ApplyTag("editor");
         TextButton tb = null;
         if (activationComponent.masterFirst)
@@ -80,7 +84,7 @@ public class EditorComponentActivation : EditorComponent
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 19), new Vector2(15, 1), "Minion:");
+        db = new DialogBox(new Vector2(0, 19), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MINION));
         db.ApplyTag("editor");
         if (activationComponent.minionFirst)
         {

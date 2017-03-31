@@ -92,7 +92,8 @@ public class EditorComponentPuzzle : EditorComponent
                 db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1), PUZZLE_IMAGE_DOTS);
                 db.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(3, 10), new Vector2(8, 1), puzzleComponent.imageType, delegate { Image(); });
+                tb = new TextButton(new Vector2(3, 10), new Vector2(8, 1), 
+                    new StringKey(puzzleComponent.imageType,false), delegate { Image(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -106,19 +107,20 @@ public class EditorComponentPuzzle : EditorComponent
     public void Class()
     {
         List<EditorSelectionList.SelectionListEntry> puzzleClass = new List<EditorSelectionList.SelectionListEntry>();
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_SLIDE_CLASS")));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_CODE_CLASS")));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_IMAGE_CLASS")));
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_SLIDE_CLASS").key));
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_CODE_CLASS").key));
+        puzzleClass.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "PUZZLE_IMAGE_CLASS").key));
         classList = new EditorSelectionList(PUZZLE_CLASS_SELECT, puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
 
     public void SelectClass()
     {
-        puzzleComponent.puzzleClass = classList.selection;
+        // the selection has the key (ie:{val:PUZZLE_SLIDE_CLASS}) so we can build the StringKey.
+        puzzleComponent.puzzleClass = new StringKey(classList.selection);
         if (!puzzleComponent.puzzleClass.key.Equals("PUZZLE_IMAGE_CLASS"))
         {
-            puzzleComponent.imageType = StringKey.NULL;
+            puzzleComponent.imageType = "";
         }
         Update();
     }
@@ -126,19 +128,19 @@ public class EditorComponentPuzzle : EditorComponent
     public void Skill()
     {
         List<EditorSelectionList.SelectionListEntry> skills = new List<EditorSelectionList.SelectionListEntry>();
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_WILL")));
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_STRENGTH")));
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_AGILITY")));
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_LORE")));
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_INFLUENCE")));
-        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_OBSERVATION")));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_WILL").key));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_STRENGTH").key));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_AGILITY").key));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_LORE").key));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_INFLUENCE").key));
+        skills.Add(new EditorSelectionList.SelectionListEntry(new StringKey("val", "ICON_SKILL_OBSERVATION").key));
         skillList = new EditorSelectionList(PUZZLE_SELECT_SKILL, skills, delegate { SelectSkill(); });
         skillList.SelectItem();
     }
 
     public void SelectSkill()
     {
-        puzzleComponent.skill = skillList.selection;
+        puzzleComponent.skill = new StringKey(skillList.selection);
         Update();
     }
 

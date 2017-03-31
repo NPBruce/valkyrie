@@ -16,11 +16,8 @@ public class LogButton
 
         if (game.gameType is MoMGameType) return;
 
-<<<<<<< HEAD
-        qb = new TextButton(new Vector2(UIScaler.GetRight(-6.5f), UIScaler.GetBottom(-2.5f)), new Vector2(6, 2), LOG, delegate { Log(); });
-=======
-        qb = new TextButton(new Vector2(5.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), "Log", delegate { Log(); });
->>>>>>> 60b8b01694a79c1fb12fe0d9bcfe32ca36991bb4
+
+        qb = new TextButton(new Vector2(5.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), LOG, delegate { Log(); });
         qb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
         qb.ApplyTag("questui");

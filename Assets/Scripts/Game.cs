@@ -167,7 +167,7 @@ public class Game : MonoBehaviour {
             new Vector2(UIScaler.GetRight(-9), 
             UIScaler.GetBottom(-3)), 
             new Vector2(8, 2), 
-            FINISHED, 
+            CommonStringKeys.FINISHED, 
             delegate { EndSelection(); }, 
             Color.green);
 

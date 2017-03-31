@@ -38,7 +38,7 @@ public class EditorComponentMonster : EditorComponent
         CameraController.SetCamera(monsterComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), MONSTER, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.MONSTER, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
@@ -219,9 +219,9 @@ public class EditorComponentMonster : EditorComponent
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(new StringKey(display,false), sets));
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
-        monsterTypeESL = new EditorSelectionList(SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
+        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
     }
 
@@ -254,9 +254,9 @@ public class EditorComponentMonster : EditorComponent
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(new StringKey(display,false), sets));
+            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
-        monsterTypeESL = new EditorSelectionList(SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
+        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();
     }
 
@@ -264,7 +264,7 @@ public class EditorComponentMonster : EditorComponent
     {
         if (replace)
         {
-            monsterComponent.mTypes[pos] = monsterTypeESL.selection.key.Split(" ".ToCharArray())[0];
+            monsterComponent.mTypes[pos] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
         }
         else
         {
@@ -275,7 +275,7 @@ public class EditorComponentMonster : EditorComponent
             {
                 if (j == pos && i == j)
                 {
-                    newM[i] = monsterTypeESL.selection.key.Split(" ".ToCharArray())[0];
+                    newM[i] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
                 }
                 else
                 {
@@ -324,15 +324,15 @@ public class EditorComponentMonster : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(new StringKey(s,false)));
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        monsterTraitESL = new EditorSelectionList(SELECT_ITEM, list, delegate { SelectMonsterTraitReplace(pos); });
+        monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTraitReplace(pos); });
         monsterTraitESL.SelectItem();
     }
 
     public void SelectMonsterTraitReplace(int pos)
     {
-        monsterComponent.mTraits[pos] = monsterTraitESL.selection.key;
+        monsterComponent.mTraits[pos] = monsterTraitESL.selection;
         Update();
     }
 
@@ -351,9 +351,9 @@ public class EditorComponentMonster : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(new StringKey(s, false)));
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        monsterTraitESL = new EditorSelectionList(SELECT_ITEM, list, delegate { SelectMonsterTrait(); });
+        monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTrait(); });
         monsterTraitESL.SelectItem();
     }
 
@@ -367,7 +367,7 @@ public class EditorComponentMonster : EditorComponent
             newM[i] = monsterComponent.mTraits[i];
         }
 
-        newM[i] = monsterTraitESL.selection.key;
+        newM[i] = monsterTraitESL.selection;
         monsterComponent.mTraits = newM;
         Update();
     }
