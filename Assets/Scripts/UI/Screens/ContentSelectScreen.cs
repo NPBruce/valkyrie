@@ -86,7 +86,7 @@ namespace Assets.Scripts.UI.Screens
                     Texture2D tex = ContentData.FileToTexture(cp.image);
                     Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
-                    tb = new TextButton(new Vector2(2.5, offset + 0.5f), new Vector2(6, 6), "", delegate { Select(id); });
+                    tb = new TextButton(new Vector2(2.5f, offset + 0.5f), new Vector2(6, 6), "", delegate { Select(id); });
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                     tb.background.transform.parent = scrollArea.transform;
 
@@ -106,7 +106,7 @@ namespace Assets.Scripts.UI.Screens
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     tb.background.transform.parent = scrollArea.transform;
 
-                    offset += 7.5;
+                    offset += 7.5f;
                 }
             }
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 4) * UIScaler.GetPixelsPerUnit());

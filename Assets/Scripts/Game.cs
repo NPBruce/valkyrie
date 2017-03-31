@@ -237,9 +237,9 @@ public class Game : MonoBehaviour {
             quest.Update();
         }
 
-        if (Input.GetKey("right alt") || input.GetKey("left alt"))
+        if (Input.GetKey("right alt") || Input.GetKey("left alt"))
         {
-            if (input.GetKeyDown("d") && logWindow != null)
+            if (Input.GetKeyDown("d") && logWindow != null)
             {
                 logWindow.Update(true);
             }

@@ -521,7 +521,7 @@ public class EventManager
             while (index != -1)
             {
                 // find end of tag
-                string statement = output.Substring(index, text.IndexOf("}", index) + 1 - index);
+                string statement = output.Substring(index, output.IndexOf("}", index) + 1 - index);
                 // Replace with variable data
                 output = output.Replace(statement, game.quest.vars.GetValue(statement.Substring(5, statement.Length - 6)).ToString());
                 //find next random tag
