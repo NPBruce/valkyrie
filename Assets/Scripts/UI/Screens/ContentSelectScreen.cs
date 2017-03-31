@@ -54,12 +54,23 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            // Location for first pack
-            float x = 1;
-            float y = 4;
+            db = new DialogBox(new Vector2(1, 4f), new Vector2(UIScaler.GetWidthUnits()-2f, 22f), "");
+            db.AddBorder();
+            db.background.AddComponent<UnityEngine.UI.Mask>();
+            UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+            GameObject scrollArea = new GameObject("scroll");
+            RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+            scrollArea.transform.parent = db.background.transform;
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
+
+            scrollRect.content = scrollInnerRect;
+            scrollRect.horizontal = false;
 
             TextButton tb;
-            // Draw all packs to the screen
+            // Start here
+            float offset = 4;
             // Note this is currently unordered
             foreach (ContentData.ContentPack cp in game.cd.allPacks)
             {
@@ -68,34 +79,37 @@ namespace Assets.Scripts.UI.Screens
                 {
                     string id = cp.id;
 
+                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits()-5f, 6.5f), "", delegate { Select(id); });
+                    tb.background.transform.parent = scrollArea.transform;
+
                     // Create a sprite with the pack's image
                     Texture2D tex = ContentData.FileToTexture(cp.image);
                     Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
+                    tb = new TextButton(new Vector2(2.5f, offset + 0.5f), new Vector2(6, 6), "", delegate { Select(id); });
+                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                    tb.background.transform.parent = scrollArea.transform;
+
                     // Draw normally if selected, dark if not
                     if (selected.Contains(id))
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Unselect(id); });
-                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), "", delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
-                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
                     }
-                    // Move to next on the right
-                    x += 7;
 
-                    // Check to move down to next row
-                    if (x > UIScaler.GetRight(-7))
-                    {
-                        x = 1;
-                        y += 7;
-                    }
+                    tb = new TextButton(new Vector2(9, offset + 1.75f), new Vector2(UIScaler.GetWidthUnits()-12.5f, 4), game.cd.GetContentName(id), delegate { Select(id); }, Color.black);
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    tb.background.transform.parent = scrollArea.transform;
+
+                    offset += 7.5f;
                 }
             }
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 4) * UIScaler.GetPixelsPerUnit());
 
             // Button for back to main menu
             tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);

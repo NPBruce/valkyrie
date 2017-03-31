@@ -34,6 +34,9 @@ public class CameraController : MonoBehaviour {
     public Vector3 mouseDownCamPosition;
     // Mouse position on mouse down
     public Vector2 mouseDownMousePosition;
+    // camera pan disable
+    public bool panDisable = false;
+
 
     public Game game;
 
@@ -107,7 +110,7 @@ public class CameraController : MonoBehaviour {
             mouseDownMousePosition = GetMouseBoardPlane();
         }
         // If mouse is held down update camera
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !panDisable)
         {
             Vector2 bPos = GetMouseBoardPlane();
             gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,

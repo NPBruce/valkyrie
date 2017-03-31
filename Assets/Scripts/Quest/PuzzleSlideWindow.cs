@@ -15,6 +15,7 @@ public class PuzzleSlideWindow
     {
         eventData = e;
         Game game = Game.Get();
+        game.cc.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 

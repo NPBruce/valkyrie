@@ -1110,13 +1110,13 @@ public class Quest
             return r;
         }
 
-        public string GetEntry()
+        public string GetEntry(bool editorSet = false)
         {
             if (valkyrie && !Application.isEditor)
             {
                 return "";
             }
-            if (editor && !Application.isEditor)
+            if (editor && !editorSet)
             {
                 return "";
             }

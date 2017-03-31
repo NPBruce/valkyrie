@@ -162,7 +162,8 @@ class FSBExport
 
             UInt16 packetSize = stream.ReadUInt16();
             int prevPacketNo = 2;
-            int prevGranulePos = 0;
+            int GranulePos = 0;
+            int prevSamples = 0;
 
             while (packetSize > 0)
             {
@@ -171,18 +172,24 @@ class FSBExport
                 byte firstByte = packet.PacketData[0];
 
                 // OK for stereo
-                int granuleSize = 128;
+                int noSamples = 256;
                 if ((firstByte & 2) != 0)
                 {
-                    granuleSize = 1024;
+                    noSamples = 2048;
                 }
-
+                // No idea why, perhaps sample rates are wrong
                 if (ogg.channels == 1)
                 {
-                    granuleSize /= 4;
-                }    
-                packet.GranulePosition = prevGranulePos + granuleSize;
-                
+                    noSamples /= 4;
+                }
+
+                if (prevSamples != 0)
+                {
+                    GranulePos += (prevSamples + noSamples) / 4;
+                }
+                packet.GranulePosition = GranulePos;
+                prevSamples = noSamples;
+
                 if (stream.Position + 2 < offset + size)
                 {
                     packetSize = stream.ReadUInt16();
@@ -192,7 +199,6 @@ class FSBExport
                     packetSize = 0;
                 }
                 packet.EndOfStream = packetSize == 0;
-                prevGranulePos = packet.GranulePosition;
                 prevPacketNo = packet.PacketNumber;
 
                 output.PacketIn(packet);
