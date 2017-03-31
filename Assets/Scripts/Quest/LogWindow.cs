@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Assets.Scripts.Content;
+using UnityEngine;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class LogWindow
@@ -19,7 +19,10 @@ public class LogWindow
             log += e.GetEntry();
         }
         log.Trim('\n');
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), log, Color.black, new Color(1, 1, 1, 0.9f));
+        DialogBox db = new DialogBox(
+            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), 
+            new StringKey(log,false),
+            Color.black, new Color(1, 1, 1, 0.9f));
         db.AddBorder();
         // This material works for the mask, but only renders in black
         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -32,6 +35,6 @@ public class LogWindow
 
         UnityEngine.UI.Mask mask = db.background.AddComponent<UnityEngine.UI.Mask>();
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), "Close", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
     }
 }

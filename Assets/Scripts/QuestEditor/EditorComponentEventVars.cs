@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 public class EditorComponentEventVars : EditorComponent
 {
@@ -50,7 +51,7 @@ public class EditorComponentEventVars : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
         
@@ -58,7 +59,8 @@ public class EditorComponentEventVars : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Tests:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "+", delegate { AddTestOp(); }, Color.green);
+        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+            CommonStringKeys.PLUS, delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -75,7 +77,8 @@ public class EditorComponentEventVars : EditorComponent
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
-            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+                CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             offset++;
@@ -85,7 +88,8 @@ public class EditorComponentEventVars : EditorComponent
         db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Assign:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "+", delegate { AddAssignOp(); }, Color.green);
+        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+            CommonStringKeys.PLUS, delegate { AddAssignOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -102,7 +106,8 @@ public class EditorComponentEventVars : EditorComponent
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
-            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), "-", delegate { RemoveOp(tmp); }, Color.red);
+            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+                CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             offset++;

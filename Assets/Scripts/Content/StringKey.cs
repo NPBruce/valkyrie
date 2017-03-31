@@ -8,7 +8,7 @@
         /// <summary>
         /// Empty string Key
         /// </summary>
-        public static StringKey EmptyStringKey = new StringKey("");
+        public static StringKey NULL = new StringKey("",false);
 
         public string key { get; set; }
 

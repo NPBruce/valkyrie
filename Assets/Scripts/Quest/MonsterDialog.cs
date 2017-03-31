@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Class for creation of monster selection options
 public class MonsterDialog
@@ -30,17 +31,22 @@ public class MonsterDialog
         // Work out where on the screen to display
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Information", delegate { Info(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Force Activate", delegate { Activate(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), "Defeated", delegate { Defeated(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), 
+            "Information", delegate { Info(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), 
+            "Force Activate", delegate { Activate(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), 
+            "Defeated", delegate { Defeated(); });
         if (monster.unique)
         {
             // If there is a unique option the offset needs to be increased
             offset += 3.5f;
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3), "Unique\nDefeated", delegate { UniqueDefeated(); });
+            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3), 
+                "Unique\nDefeated", delegate { UniqueDefeated(); });
         }
         // FIXME: This doesn't fit if there is a unique monster in the last space
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2),
+            CommonStringKeys.CANCEL, delegate { OnCancel(); });
     }
 
     // Monster Information

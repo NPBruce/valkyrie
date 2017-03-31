@@ -1,23 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class NextStageButton
 {
+    private readonly StringKey PHASE_INVESTIGATOR = new StringKey("var", "PHASE_INVESTIGATOR");
+    private readonly StringKey PHASE_MYTHOS = new StringKey("var", "PHASE_MYTHOS");
+    private readonly StringKey MONSTER_STEP = new StringKey("var", "MONSTER_STEP");
+    private readonly StringKey HORROR_STEP = new StringKey("var", "HORROR_STEP");
+
     // Construct and display
     public NextStageButton()
     {
-        Game game = Game.Get();
-        if (game.gameType.DisplayHeroes()) return;
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "->", delegate { Next(); });
+        if (Game.Get().gameType.DisplayHeroes()) return;
+        TextButton tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
+            CommonStringKeys.TAB, delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "Log", delegate { Log(); });
-        tb.SetFont(game.gameType.GetHeaderFont());
+        tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            CommonStringKeys.LOG, delegate { Log(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), "Set", delegate { Set(); });
-        tb.SetFont(game.gameType.GetHeaderFont());
+        tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            CommonStringKeys.SET, delegate { Set(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         Update();
@@ -32,22 +41,22 @@ public class NextStageButton
         DialogBox db;
         if (Game.Get().quest.phase == Quest.MoMPhase.horror)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), "Horror Phase");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), HORROR_STEP);
             db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         else if (Game.Get().quest.phase == Quest.MoMPhase.mythos)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), "Mythos Phase");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), PHASE_MYTHOS);
             db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         else if (Game.Get().quest.phase == Quest.MoMPhase.monsters)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), "Monster Phase");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), MONSTER_STEP);
             db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         else
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), "Investigator Phase");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), PHASE_INVESTIGATOR);
             db.SetFont(Game.Get().gameType.GetHeaderFont());
         }
         db.ApplyTag("uiphase");

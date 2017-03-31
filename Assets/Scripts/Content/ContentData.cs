@@ -782,10 +782,10 @@ public class MonsterData : GenericData
 public class ActivationData : GenericData
 {
     public StringKey ability = new StringKey("-", false);
-    public StringKey minionActions = StringKey.EmptyStringKey;
-    public StringKey masterActions = StringKey.EmptyStringKey;
-    public StringKey moveButton = StringKey.EmptyStringKey;
-    public StringKey move = StringKey.EmptyStringKey;
+    public StringKey minionActions = StringKey.NULL;
+    public StringKey masterActions = StringKey.NULL;
+    public StringKey moveButton = StringKey.NULL;
+    public StringKey move = StringKey.NULL;
     public static new string type = "MonsterActivation";
     public bool masterFirst = false;
     public bool minionFirst = false;
@@ -882,7 +882,7 @@ public class AttackData : GenericData
     public static new string type = "Attack";
 
     // Attack text
-    public StringKey text = StringKey.EmptyStringKey;
+    public StringKey text = StringKey.NULL;
     // Target type (human, spirit...)
     public string target = "";
     // Attack type (heavy, unarmed)
@@ -916,7 +916,7 @@ public class EvadeData : GenericData
     public static new string type = "Evade";
 
     // Evade text
-    public StringKey text = StringKey.EmptyStringKey;
+    public StringKey text = StringKey.NULL;
     public string monster = "";
 
     public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -941,7 +941,7 @@ public class HorrorData : GenericData
     public static new string type = "Horror";
 
     // Evade text
-    public StringKey text = StringKey.EmptyStringKey;
+    public StringKey text = StringKey.NULL;
     public string monster = "";
 
     public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
@@ -989,7 +989,7 @@ public class AudioData : GenericData
 public class GenericData
 {
     // name from section title or data
-    public StringKey name = StringKey.EmptyStringKey;
+    public StringKey name = StringKey.NULL;
     // sets from which this belogs (expansions)
     public List<string> sets;
     // section name

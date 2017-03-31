@@ -7,9 +7,6 @@ using Assets.Scripts.Content;
 
 public class PuzzleImageWindow
 {
-    private StringKey SKILL_DOTS = new StringKey("val", "SKILL_DOTS");
-    private StringKey MOVES_DOTS = new StringKey("val", "MOVES_DOTS");
-    private StringKey TOTAL_MOVES_DOTS = new StringKey("val", "TOTAL_MOVES_DOTS");
 
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
@@ -73,12 +70,15 @@ public class PuzzleImageWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), CommonStringKeys.EMPTY);
+        DialogBox db = new DialogBox(
+            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), 
+            new Vector2(28f, 22f), 
+            StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 8f), new Vector2(3f, 2f), SKILL_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 8f), new Vector2(3f, 2f), CommonStringKeys.SKILL_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 10f), new Vector2(3f, 2f), questPuzzle.skill);
@@ -91,14 +91,14 @@ public class PuzzleImageWindow
             Draw(kv.Key, kv.Value, solved);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), CommonStringKeys.MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), new StringKey((puzzle.moves - previousMoves).ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), TOTAL_MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), CommonStringKeys.TOTAL_MOVES_DOTS);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));
@@ -107,12 +107,12 @@ public class PuzzleImageWindow
 
         if (solved)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CLOSE, delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
         }
     }

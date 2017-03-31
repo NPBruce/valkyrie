@@ -15,7 +15,7 @@ public class SetWindow
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), EMPTY);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), StringKey.NULL);
         db.AddBorder();
 
         if (game.quest.vars.GetValue("#fire") > 0)
@@ -37,7 +37,7 @@ public class SetWindow
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), INVESTIGATOR_ELIMINATED, delegate { Eliminate(); });
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 17f), new Vector2(6, 2), CLOSE, delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 17f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
     }
 
     public void SetFire()

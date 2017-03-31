@@ -100,7 +100,7 @@ public class InvestigatorItems
                 y++;
             }
         }
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 27f), new Vector2(12, 2), "Finished", delegate { game.QuestStartEvent(); });
+        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 27f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { game.QuestStartEvent(); });
         tb.SetFont(game.gameType.GetHeaderFont());
     }
 }

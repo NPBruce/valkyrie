@@ -8,9 +8,6 @@ using Assets.Scripts.UI.Screens;
 // There is one object of this class and it is used to find most game components
 public class Game : MonoBehaviour {
 
-    // Localization Strings
-    private StringKey FINISHED = new StringKey("val","FINISHED");
-
     // This is populated at run time from the text asset
     public string version = "";
 

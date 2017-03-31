@@ -47,7 +47,7 @@ public class QuestDownload : MonoBehaviour
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), CommonStringKeys.EMPTY);
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();

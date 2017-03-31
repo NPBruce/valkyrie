@@ -8,8 +8,6 @@ namespace Assets.Scripts.UI.Screens
     public class ContentSelectScreen
     {
         private StringKey SELECT_EXPANSION = new StringKey("val","SELECT_EXPANSION");
-        private StringKey BACK = new StringKey("val","BACK");
-        private StringKey EMPTY = new StringKey("val","EMPTY");
 
         public Game game;
         // List of expansions selected by ID
@@ -84,13 +82,13 @@ namespace Assets.Scripts.UI.Screens
                     // Draw normally if selected, dark if not
                     if (selected.Contains(id))
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), EMPTY, delegate { Unselect(id); });
+                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), StringKey.NULL, delegate { Unselect(id); });
                         tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), EMPTY, delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
+                        tb = new TextButton(new Vector2(x, y), new Vector2(6, 6), StringKey.NULL, delegate { Select(id); }, new Color(0.3f, 0.3f, 0.3f));
                         tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
                     }
@@ -109,8 +107,8 @@ namespace Assets.Scripts.UI.Screens
             // Button for back to main menu
             tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
-                new Vector2(8, 2), 
-                BACK, 
+                new Vector2(8, 2),
+                CommonStringKeys.BACK, 
                 delegate { Destroyer.MainMenu(); }, 
                 Color.red);
 
