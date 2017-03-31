@@ -6,6 +6,8 @@ using Ionic.Zip;
 // This class provides functions to load and save games.
 class SaveManager
 {
+    public static string minValkyieVersion = "0.7.3";
+
     // This gets the path to the save game file.  Only one file is used/supported per game type.
     public static string SaveFile()
     {
@@ -75,14 +77,31 @@ class SaveManager
                 QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
                 if (!q.valid)
                 {
-                    ValkyrieDebug.Log("Error: save is from a newer version." + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
                 }
 
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
 
                 IniData saveData = IniRead.ReadFromString(data);
+
                 saveData.data["Quest"]["path"] = Path.GetTempPath() + "/Valkyrie/Load/quest/quest.ini";
+
+                saveData.Get("Quest","valkyrie");
+
+                if (FetchContent.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
+                {
+                    ValkyrieDebug.Log("Error: save is from a future version." + System.Environment.NewLine);
+                    Destroyer.MainMenu();
+                    return;
+                }
+
+                if (!FetchContent.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
+                {
+                    ValkyrieDebug.Log("Error: save is from an old unsupported version." + System.Environment.NewLine);
+                    Destroyer.MainMenu();
+                    return;
+                }
 
                 Destroyer.Dialog();
 

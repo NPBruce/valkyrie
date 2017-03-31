@@ -15,6 +15,19 @@ public class HorrorCheck {
                 horrors.Add(kv.Value);
             }
         }
+
+        QuestMonster qm = m.monsterData as QuestMonster;
+        if (horrors.Count == 0 && qm != null && qm.derivedType.Length > 0)
+        {
+            foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
+            {
+                if (qm.derivedType.Equals("Monster" + kv.Value.monster))
+                {
+                    horrors.Add(kv.Value);
+                }
+            }
+        }
+
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);

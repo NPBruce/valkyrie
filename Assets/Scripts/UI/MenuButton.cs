@@ -13,12 +13,20 @@ public class MenuButton {
         // For the editor button is moved to the right
         if (Game.Get().editMode)
         {
+<<<<<<< HEAD
             qb = new TextButton(new Vector2(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), MENU, delegate { Menu(); }, Color.red);
+=======
+            qb = new TextButton(new Vector2(UIScaler.GetRight(-5.5f), UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), "Menu", delegate { Menu(); });
+>>>>>>> 60b8b01694a79c1fb12fe0d9bcfe32ca36991bb4
             qb.SetFont(game.gameType.GetHeaderFont());
         }
         else
         {
+<<<<<<< HEAD
             qb = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), MENU, delegate { Menu(); }, Color.red);
+=======
+            qb = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), "Menu", delegate { Menu(); });
+>>>>>>> 60b8b01694a79c1fb12fe0d9bcfe32ca36991bb4
             qb.SetFont(game.gameType.GetHeaderFont());
         }
 

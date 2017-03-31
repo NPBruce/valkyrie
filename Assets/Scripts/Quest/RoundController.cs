@@ -79,6 +79,7 @@ public class RoundController {
             if (ActivateMonster())
             {
                 // Evenyone has finished, move to next round
+                activationsFinished = true;
                 EndRound();
             }
         }

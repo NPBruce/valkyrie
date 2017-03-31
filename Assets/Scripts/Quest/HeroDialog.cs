@@ -18,11 +18,11 @@ public class HeroDialog{
         if (hero.activated)
         {
             // Grey button with no action
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "Activated", delegate { noAction(); }, Color.gray);
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { noAction(); }, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "Activated", delegate { activated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { activated(); });
         }
 
         // Is this hero defeated?

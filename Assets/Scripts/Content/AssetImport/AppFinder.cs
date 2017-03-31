@@ -15,7 +15,7 @@ abstract public class AppFinder
     public abstract string Executable();
     public abstract string RequiredFFGVersion();
     public abstract string RequiredValkyrieVersion();
-    public string location;
+    public string location = "";
     public string exeLocation;
     public abstract int ObfuscateKey();
 
@@ -64,6 +64,12 @@ abstract public class AppFinder
             string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             ValkyrieDebug.Log("Number of lines returned: " + output.Length);
+
+            if (output.Length == 1)
+            {
+                ValkyrieDebug.Log(output[0]);
+            }
+
             ValkyrieDebug.Log("Looking for: " + "/" + Executable());
             // Quick hack rather than doing XML properly
             foreach (string s in output)
@@ -76,34 +82,6 @@ abstract public class AppFinder
                     // Removing <string> and </string>
                     location = location.Substring(8, location.Length - 17);
                     ValkyrieDebug.Log("Using location: " + location);
-                }
-            }
-            if (location.Length == 0)
-            {
-                string xmlFile = Application.dataPath + "/apps.xml";
-                ValkyrieDebug.Log("Could not find, looking for prefetched XML: " + xmlFile);
-                if (File.Exists(xmlFile))
-                {
-                    string[] lines = System.IO.File.ReadAllLines(xmlFile);
-                    ValkyrieDebug.Log("Number of lines returned: " + output.Length);
-                    ValkyrieDebug.Log("Looking for: " + "/" + Executable());
-                    // Quick hack rather than doing XML properly
-                    foreach (string s in lines)
-                    {
-
-                        if (s.IndexOf("/" + Executable()) > 0)
-                        {
-                            ValkyrieDebug.Log("Found Line: " + s);
-                            location = s.Trim();
-                            // Removing <string> and </string>
-                            location = location.Substring(8, location.Length - 17);
-                            ValkyrieDebug.Log("Using location: " + location);
-                        }
-                    }
-                }
-                else
-                {
-                    ValkyrieDebug.Log("Could not find prefetched XML.");
                 }
             }
             if (location.Length == 0)

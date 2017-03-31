@@ -100,7 +100,7 @@ public class QuestDownload : MonoBehaviour
                         new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
                         Color.black);
                     db.AddBorder();
-                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.04f, 0.04f, 0.04f);
+                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);
                     db.background.transform.parent = scrollArea.transform;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -160,6 +160,22 @@ public class QuestDownload : MonoBehaviour
             writer.Write(download.bytes);
             writer.Close();
         }
+
+        string section = file.Substring(0, file.Length - ".valkyrie".Length);
+        int localVersion, remoteVersion;
+        int.TryParse(localManifest.Get(section, "version"), out localVersion);
+        int.TryParse(remoteManifest.Get(section, "version"), out remoteVersion);
+
+        localManifest.Remove(section);
+        localManifest.Add(section, remoteManifest.Get(section));
+
+
+        if (File.Exists(saveLocation() + "/manifest.ini"))
+        {
+            File.Delete(saveLocation() + "/manifest.ini");
+        }
+        File.WriteAllText(saveLocation() + "/manifest.ini", localManifest.ToString());
+
         Destroyer.Dialog();
         DrawList();
     }

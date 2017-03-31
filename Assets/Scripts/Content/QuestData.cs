@@ -944,7 +944,7 @@ public class QuestData
 
             if (operations.Count > 0)
             {
-                r += "opertaions=";
+                r += "operations=";
                 foreach (VarOperation o in operations)
                 {
                     r += o.ToString() + " ";
