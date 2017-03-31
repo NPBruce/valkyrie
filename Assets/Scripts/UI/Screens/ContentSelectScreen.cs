@@ -10,6 +10,8 @@ namespace Assets.Scripts.UI.Screens
         // List of expansions selected by ID
         public List<string> selected;
 
+        public Dictionary<string, List<TextButton>> buttons;
+
         // Create page
         public ContentSelectScreen()
         {
@@ -27,11 +29,11 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw to the screen
-            Update();
+            Draw();
         }
 
         // Draw the expansions on the screen, highlighting those that are enabled
-        public void Update()
+        public void Draw()
         {
             // Clean up
             Destroyer.Dialog();
@@ -68,9 +70,11 @@ namespace Assets.Scripts.UI.Screens
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
 
-            TextButton tb;
+            buttons = new Dictionary<string, List<TextButton>>();
             // Start here
-            float offset = 4;
+            float offset = 4.5f;
+            TextButton tb = null;
+            bool left = true;
             // Note this is currently unordered
             foreach (ContentData.ContentPack cp in game.cd.allPacks)
             {
@@ -78,35 +82,62 @@ namespace Assets.Scripts.UI.Screens
                 if (cp.id.Length > 0)
                 {
                     string id = cp.id;
-
-                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits()-5f, 6.5f), "", delegate { Select(id); });
-                    tb.background.transform.parent = scrollArea.transform;
+                    buttons.Add(id, new List<TextButton>());
+                    Color bgColor = Color.white;
+                    if (!selected.Contains(id))
+                    {
+                        bgColor = new Color(0.3f, 0.3f, 0.3f);
+                    }
 
                     // Create a sprite with the pack's image
                     Texture2D tex = ContentData.FileToTexture(cp.image);
                     Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
-                    tb = new TextButton(new Vector2(2.5f, offset + 0.5f), new Vector2(6, 6), "", delegate { Select(id); });
-                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-                    tb.background.transform.parent = scrollArea.transform;
-
-                    // Draw normally if selected, dark if not
-                    if (selected.Contains(id))
+                    if (left)
                     {
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                        tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), "", delegate { Select(id); });
                     }
                     else
                     {
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f, 0.3f, 0.3f);
+                        tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { Select(id); });
                     }
+                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                    tb.background.transform.parent = scrollArea.transform;
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
+                    buttons[id].Add(tb);
 
-                    tb = new TextButton(new Vector2(9, offset + 1.75f), new Vector2(UIScaler.GetWidthUnits()-12.5f, 4), game.cd.GetContentName(id), delegate { Select(id); }, Color.black);
+                    if (left)
+                    {
+                        tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + game.cd.GetContentName(id), delegate { Select(id); }, Color.clear);
+                    }
+                    else
+                    {
+                        tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + game.cd.GetContentName(id), delegate { Select(id); }, Color.clear);
+                    }
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
+                    tb.background.transform.parent = scrollArea.transform;
+                    buttons[id].Add(tb);
+
+                    if (left)
+                    {
+                        tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), game.cd.GetContentName(id), delegate { Select(id); }, Color.black);
+                    }
+                    else
+                    {
+                        tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), game.cd.GetContentName(id), delegate { Select(id); }, Color.black);
+                    }
+                    tb.setColor(Color.clear);
+                    tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+                    tb.SetFont(game.gameType.GetHeaderFont());
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
                     tb.background.transform.parent = scrollArea.transform;
+                    buttons[id].Add(tb);
 
-                    offset += 7.5f;
+                    left = !left;
+                    offset += 4f;
                 }
             }
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 4) * UIScaler.GetPixelsPerUnit());
@@ -115,19 +146,38 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
+        
+        public void Update()
+        {
+            foreach (KeyValuePair<string, List<TextButton>> kv in buttons)
+            {
+                foreach (TextButton tb in kv.Value)
+                {
+                    if (game.config.data.Get(game.gameType.TypeName() + "Packs") != null
+                        && game.config.data.Get(game.gameType.TypeName() + "Packs").ContainsKey(kv.Key))
+                    {
+                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    }
+                    else
+                    {
+                        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
+                    }
+                }
+            }
+        }
 
         // set a pack as selected by id
         public void Select(string id)
         {
-            game.config.data.Add(game.gameType.TypeName() + "Packs", id, "");
-            game.config.Save();
-            Update();
-        }
-
-        // set a pack as unselected by id
-        public void Unselect(string id)
-        {
-            game.config.data.Remove(game.gameType.TypeName() + "Packs", id);
+            if (game.config.data.Get(game.gameType.TypeName() + "Packs") != null
+                && game.config.data.Get(game.gameType.TypeName() + "Packs").ContainsKey(id))
+            {
+                game.config.data.Remove(game.gameType.TypeName() + "Packs", id);
+            }
+            else
+            {
+                game.config.data.Add(game.gameType.TypeName() + "Packs", id, "");
+            }
             game.config.Save();
             Update();
         }

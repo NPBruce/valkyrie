@@ -12,17 +12,17 @@ public class LogWindow
     // Construct and display
     public LogWindow()
     {
-        // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
         Update();
     }
 
     public void Update(bool toggle = false)
     {
+        Destroyer.Dialog();
+
         developerToggle ^= toggle;
         Game game = Game.Get();
         game.logWindow = this;
+        game.cc.panDisable = true;
         // white background because font rendering is broken
         string log = "";
         foreach (Quest.LogEntry e in game.quest.log)
