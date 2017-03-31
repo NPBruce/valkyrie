@@ -26,10 +26,10 @@ public class LogWindow
         string log = "";
         foreach (Quest.LogEntry e in game.quest.log)
         {
-            log += e.GetEntry();
+            log += e.GetEntry(developerToggle);
         }
         log.Trim('\n');
-        if (Application.isEditor ^ developerToggle)
+        if (developerToggle)
         {
             DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), log, Color.black, new Color(1, 1, 1, 0.9f));
         }
@@ -51,7 +51,7 @@ public class LogWindow
 
         new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), "Close", delegate { Destroyer.Dialog(); });
 
-        if (Application.isEditor ^ developerToggle)
+        if (developerToggle)
         {
             DrawVarList();
         }
