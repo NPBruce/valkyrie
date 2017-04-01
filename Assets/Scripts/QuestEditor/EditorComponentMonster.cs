@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EditorComponentMonster : EditorComponent
+public class EditorComponentSpawn : EditorComponent
 {
-    QuestData.Monster monsterComponent;
+    QuestData.Spawn monsterComponent;
 
     DialogBoxEditable uniqueTitleDBE;
     DialogBoxEditable uniqueTextDBE;
@@ -12,10 +12,10 @@ public class EditorComponentMonster : EditorComponent
     EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
 
-    public EditorComponentMonster(string nameIn) : base()
+    public EditorComponentSpawn(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Monster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -27,12 +27,12 @@ public class EditorComponentMonster : EditorComponent
         CameraController.SetCamera(monsterComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Spawn", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Monster".Length), delegate { QuestEditorData.ListMonster(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Spawn".Length), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

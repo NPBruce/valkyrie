@@ -2,15 +2,15 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EditorComponentMonsterPlacement : EditorComponent
+public class EditorComponentSpawnPlacement : EditorComponent
 {
-    QuestData.Monster monsterComponent;
+    QuestData.Spawn monsterComponent;
     EditorSelectionList monsterPlaceESL;
 
-    public EditorComponentMonsterPlacement(string nameIn) : base()
+    public EditorComponentSpawnPlacement(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Monster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -22,12 +22,12 @@ public class EditorComponentMonsterPlacement : EditorComponent
         CameraController.SetCamera(monsterComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Monster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Spawn", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Monster".Length), delegate { QuestEditorData.ListMonster(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Spawn".Length), delegate { QuestEditorData.ListMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

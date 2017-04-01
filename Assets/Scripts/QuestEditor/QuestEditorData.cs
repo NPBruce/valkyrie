@@ -102,10 +102,10 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 8), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Token"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 10), new Vector2(9, 1), "Monster", delegate { ListMonster(); });
+        tb = new TextButton(new Vector2(22, 10), new Vector2(9, 1), "Spawn", delegate { ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Monster"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Spawn"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 12), new Vector2(9, 1), "MPlace", delegate { ListMPlace(); });
@@ -206,17 +206,17 @@ public class QuestEditorData {
         game.qed.esl.SelectItem();
     }
 
-    // Create selection list for monsters
-    public static void ListMonster()
+    // Create selection list for monster spawns
+    public static void ListSpawn()
     {
         Game game = Game.Get();
 
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:Monster}"));
+        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:Spawn}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Monster)
+            if (kv.Value is QuestData.Spawn)
             {
                 monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
@@ -379,9 +379,9 @@ public class QuestEditorData {
             qed.NewToken();
             return;
         }
-        if (name.Equals("{NEW:Monster}"))
+        if (name.Equals("{NEW:Spawn}"))
         {
-            qed.NewMonster();
+            qed.NewSpawn();
             return;
         }
         if (name.Equals("{NEW:MPlace}"))
@@ -437,9 +437,9 @@ public class QuestEditorData {
             SelectAsToken(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Monster)
+        if (game.quest.qd.components[name] is QuestData.Spawn)
         {
-            SelectAsMonster(name);
+            SelectAsSpawn(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.MPlace)
@@ -522,17 +522,17 @@ public class QuestEditorData {
         game.qed.NewSelection(new EditorComponentEventNextEvent(name));
     }
 
-    public static void SelectAsMonster(string name)
+    public static void SelectAsSpawn(string name)
     {
         Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentMonster(name));
+        game.qed.NewSelection(new EditorComponentSpawn(name));
     }
 
     // Mosters can be opened as a placement list page
-    public static void SelectAsMonsterPlacement(string name)
+    public static void SelectAsSpawnPlacement(string name)
     {
         Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentMonsterPlacement(name));
+        game.qed.NewSelection(new EditorComponentSpawnPlacement(name));
     }
 
     public static void SelectAsMPlace(string name)
@@ -624,17 +624,17 @@ public class QuestEditorData {
         SelectComponent("Token" + index);
     }
 
-    public void NewMonster()
+    public void NewSpawn()
     {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Monster" + index))
+        while (game.quest.qd.components.ContainsKey("Spawn" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Monster" + index, new QuestData.Monster("Monster" + index));
-        SelectComponent("Monster" + index);
+        game.quest.qd.components.Add("Spawn" + index, new QuestData.Spawn("Spawn" + index));
+        SelectComponent("Spawn" + index);
     }
 
     public void NewMPlace()
