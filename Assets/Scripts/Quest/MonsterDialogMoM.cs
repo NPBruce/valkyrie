@@ -11,6 +11,7 @@ public class MonsterDialogMoM : MonsterDialog
 
     public override void CreateWindow()
     {
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Get the offset position of the monster
         int index = 0;
@@ -22,19 +23,20 @@ public class MonsterDialogMoM : MonsterDialog
             }
         }
 
-        float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
+        DrawMonster(monster);
 
         // In horror phase we do horror checks
         if (game.quest.phase == Quest.MoMPhase.horror)
         {
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Horror Check", delegate { Horror(); });
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), "Horror Check", delegate { Horror(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 4.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
         }
         else
         { // In investigator phase we do attacks and evades
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), " Attack", delegate { Attack(); });
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), "Evade", delegate { Evade(); });
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+            DrawMonsterHealth(monster, delegate { CreateWindow(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), " Attack", delegate { Attack(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), "Evade", delegate { Evade(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
         }
     }
 
@@ -81,6 +83,79 @@ public class MonsterDialogMoM : MonsterDialog
             iconDupe.rectTransform.sizeDelta = new Vector2(4f * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
         }
     }
+
+    public static void DrawMonsterHealth(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    {
+        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
+
+        DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2), (health).ToString(), Color.red);
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        if (monster.damage == 0)
+        {
+            new TextButton(new Vector2(1f, 9), new Vector2(2, 2), "-", delegate { MonsterDamageDec(monster, call); }, Color.grey);
+        }
+        else
+        {
+            new TextButton(new Vector2(1f, 9), new Vector2(2, 2), "-", delegate { MonsterDamageDec(monster, call); }, Color.red);
+        }
+
+        db = new DialogBox(new Vector2(4f, 9), new Vector2(2, 2), (monster.damage).ToString(), Color.red);
+        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        db.AddBorder();
+
+        if (monster.damage == health)
+        {
+            new TextButton(new Vector2(7f, 9), new Vector2(2, 2), "+", delegate { MonsterDamageInc(monster, call); }, Color.grey);
+            new TextButton(new Vector2(2, 11.5f), new Vector2(6, 2), "Defeated", delegate { Defeated(monster); }, Color.red);
+        }
+        else
+        {
+            new TextButton(new Vector2(7f, 9), new Vector2(2, 2), "+", delegate { MonsterDamageInc(monster, call); }, Color.red);
+        }
+    }
+
+    public static void Defeated(Quest.Monster monster)
+    {
+        Destroyer.Dialog();
+        Game game = Game.Get();
+        // Remove this monster group
+        game.quest.monsters.Remove(monster);
+        game.monsterCanvas.UpdateList();
+
+        game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+
+        // Trigger defeated event
+        game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
+        // If unique trigger defeated unique event
+        if (monster.unique)
+        {
+            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+        }
+    }
+
+    public static void MonsterDamageDec(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    {
+        monster.damage -= 1;
+        if (monster.damage < 0)
+        {
+            monster.damage = 0;
+        }
+        call();
+    }
+
+    public static void MonsterDamageInc(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    {
+        monster.damage += 1;
+        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
+        if (monster.damage > health)
+        {
+            monster.damage = health;
+        }
+        call();
+    }
+
 
     public void Attack()
     {
