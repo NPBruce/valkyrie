@@ -45,6 +45,9 @@ public class Quest
     // Event Log
     public List<LogEntry> log;
 
+    // Dictionary of picked monster types
+    public Dictionary<string, string> monsterSelect;
+
     // game state variables
     public int round = 1;
     public int morale = 0;
@@ -79,6 +82,7 @@ public class Quest
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
         log = new List<LogEntry>();
+        monsterSelect = new Dictionary<string, string>();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -284,6 +288,13 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
         {
             log.Add(new LogEntry(kv.Key, kv.Value));
+        }
+
+        // Restore monster select
+        monsterSelect = new Dictionary<string, string>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("SelectMonster"))
+        {
+            monsterSelect.Add(kv.Key, kv.Value);
         }
 
         // Update the screen
@@ -550,6 +561,12 @@ public class Quest
         foreach (LogEntry e in log)
         {
             r += e.ToString(i++);
+        }
+
+        r += "[SelectMonster]" + nl;
+        foreach (KeyValuePair<string, string> kv in monsterSelect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
         }
 
         return r;
