@@ -475,7 +475,7 @@ public class QuestData
             for (int i = 0; i < mTypes.Length; i++)
             {
                 // Placement used is being renamed
-                if (mTypes[i].Equals(oldName))
+                if (mTypes[i].Equals(oldName) && oldName.IndexOf("Monster") != 0)
                 {
                     mTypes[i] = newName;
                 }
