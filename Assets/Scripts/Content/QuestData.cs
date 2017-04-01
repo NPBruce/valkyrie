@@ -514,7 +514,7 @@ public class QuestData
             }
             if (mTraitsPool.Length > 0)
             {
-                r += "traits=";
+                r += "traitpool=";
                 foreach (string s in mTraitsPool)
                 {
                     r += s + " ";
