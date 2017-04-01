@@ -29,7 +29,7 @@ public class EventManager
             if (kv.Value is QuestData.Event)
             {
                 // If the event is a monster type cast it
-                if (kv.Value is QuestData.Monster)
+                if (kv.Value is QuestData.Spawn)
                 {
                     events.Add(kv.Key, new MonsterEvent(kv.Key));
                 }
@@ -391,13 +391,13 @@ public class EventManager
     // Monster event extends event for adding monsters
     public class MonsterEvent : Event
     {
-        public QuestData.Monster qMonster;
+        public QuestData.Spawn qMonster;
         public MonsterData cMonster;
 
         public MonsterEvent(string name) : base(name)
         {
             // cast the monster event
-            qMonster = qEvent as QuestData.Monster;
+            qMonster = qEvent as QuestData.Spawn;
 
             // If there are no traits try to find a type that is valid
             // Searches is specified order
@@ -407,9 +407,9 @@ public class EventManager
                 foreach (string t in qMonster.mTypes)
                 {
                     // Monster type might be a unique for this quest
-                    if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                    if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.CustomMonster)
                     {
-                        cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                        cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.CustomMonster);
                     }
                     // Monster type might exist in content packs, 'Monster' is optional
                     else if (game.cd.monsters.ContainsKey(t))

@@ -35,9 +35,9 @@ public class EditorComponentEvent : EditorComponent
         {
             type = QuestData.Door.type;
         }
-        if (eventComponent is QuestData.Monster)
+        if (eventComponent is QuestData.Spawn)
         {
-            type = QuestData.Monster.type;
+            type = QuestData.Spawn.type;
         }
         if (eventComponent is QuestData.Token)
         {
@@ -308,7 +308,7 @@ public class EditorComponentEvent : EditorComponent
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.UniqueMonster)
+            if (kv.Value is QuestData.CustomMonster)
             {
                 triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
             }

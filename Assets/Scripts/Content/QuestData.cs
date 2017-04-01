@@ -19,6 +19,9 @@ public class QuestData
     // Location of the quest.ini file
     public string questPath = "";
 
+    // Dictionary of items to rename on reading
+    public Dictionary<string, string> rename;
+
     // Data from 'Quest' section
     public Quest quest;
 
@@ -81,11 +84,22 @@ public class QuestData
                 ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
                 Application.Quit();
             }
+
+            rename = new Dictionary<string, string>();
             // Loop through all ini sections
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
                 AddData(section.Key, section.Value, Path.GetDirectoryName(f));
+            }
+
+            // Update all references to this component
+            foreach (QuestComponent qc in components.Values)
+            {
+                foreach (KeyValuePair<string, string> kv in rename)
+                {
+                    qc.ChangeReference(kv.Key, kv.Value);
+                }
             }
         }
     }
@@ -126,10 +140,18 @@ public class QuestData
             Event c = new Event(name, content);
             components.Add(name, c);
         }
-        if (name.IndexOf(Monster.type) == 0)
+        if (name.IndexOf(Spawn.type) == 0)
         {
-            Monster c = new Monster(name, content, game);
+            Spawn c = new Spawn(name, content, game);
             components.Add(name, c);
+        }
+        // Depreciated (format 1)
+        if (name.IndexOf("Monster") == 0)
+        {
+            string fixedName = "Spawn" + name.Substring("Monster".Length);
+            rename.Add(name, fixedName);
+            Spawn c = new Spawn(fixedName, content, game);
+            components.Add(fixedName, c);
         }
         if (name.IndexOf(MPlace.type) == 0)
         {
@@ -146,9 +168,17 @@ public class QuestData
             Puzzle c = new Puzzle(name, content);
             components.Add(name, c);
         }
+        // Depreciated (format 1)
         if (name.IndexOf("UniqueMonster") == 0)
         {
-            UniqueMonster c = new UniqueMonster(name, content, path);
+            string fixedName = "CustomMonster" + name.Substring("UniqueMonster".Length);
+            rename.Add(name, fixedName);
+            CustomMonster c = new CustomMonster(fixedName, content, path);
+            components.Add(fixedName, c);
+        }
+        if (name.IndexOf("CustomMonster") == 0)
+        {
+            CustomMonster c = new CustomMonster(name, content, path);
             components.Add(name, c);
         }
         if (name.IndexOf("Activation") == 0)
@@ -332,10 +362,10 @@ public class QuestData
     }
 
 
-    // Monster items are monster group placement events
-    public class Monster : Event
+    // Spawn items are monster group placement events
+    public class Spawn : Event
     {
-        new public static string type = "Monster";
+        new public static string type = "Spawn";
         // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
@@ -345,7 +375,7 @@ public class QuestData
         public string[] mTraits;
 
         // Create new with name (used by editor)
-        public Monster(string s) : base(s)
+        public Spawn(string s) : base(s)
         {
             // Location defaults to specified
             locationSpecified = true;
@@ -369,7 +399,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Monster(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public Spawn(string name, Dictionary<string, string> data, Game game) : base(name, data)
         {
             typeDynamic = type;
             // First try to a list of specific types
@@ -417,6 +447,8 @@ public class QuestData
         // When changing the name placement event need to update in array
         override public void ChangeReference(string oldName, string newName)
         {
+            base.ChangeReference(oldName, newName);
+
             for (int j = 0; j < placement.Length; j++)
             {
                 for (int i = 0; i < placement[j].Length; i++)
@@ -429,6 +461,17 @@ public class QuestData
                 }
                 // If any were replaced with "", remove them
                 placement[j] = RemoveFromArray(placement[j], "");
+            }
+
+            for (int i = 0; i < mTypes.Length; i++)
+            {
+                // Placement used is being renamed
+                if (mTypes[i].Equals(oldName))
+                {
+                    mTypes[i] = newName;
+                }
+                // If any were replaced with "", remove them
+                mTypes = RemoveFromArray(mTypes, "");
             }
         }
 
@@ -825,6 +868,16 @@ public class QuestData
                 {
                     removed = nextEvent[i].Remove("");
                 }
+            }
+
+            // If CustomMonster renamed update trigger
+            if (trigger.IndexOf("Defeated" + oldName) == 0)
+            {
+                trigger = "Defeated" + newName;
+            }
+            if (trigger.IndexOf("DefeatedUnique" + oldName) == 0)
+            {
+                trigger = "DefeatedUnique" + newName;
             }
 
             // component to add renamed
@@ -1275,9 +1328,9 @@ public class QuestData
     }
 
     // Monster defined in the quest
-    public class UniqueMonster : QuestComponent
+    public class CustomMonster : QuestComponent
     {
-        new public static string type = "UniqueMonster";
+        new public static string type = "CustomMonster";
         // A bast type is used for default values
         public string baseMonster = "";
         public string monsterName = "";
@@ -1291,7 +1344,7 @@ public class QuestData
         public bool healthDefined = false;
 
         // Create new with name (editor)
-        public UniqueMonster(string s) : base(s)
+        public CustomMonster(string s) : base(s)
         {
             monsterName = sectionName;
             activations = new string[0];
@@ -1300,7 +1353,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
+        public CustomMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
             typeDynamic = type;
             path = pathIn;
@@ -1593,7 +1646,7 @@ public class QuestData
     {
         public static int minumumFormat = 0;
         // Increment during changes, and again at release
-        public static int currentFormat = 1;
+        public static int currentFormat = 2;
         public int format = 0;
         public bool valid = false;
         public string path = "";
