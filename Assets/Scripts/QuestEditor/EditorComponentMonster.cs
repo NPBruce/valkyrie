@@ -103,7 +103,8 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        for (int i = 0; i < 8; i++)
+        int i = 0;
+        for (i = 0; i < 8; i++)
         {
             if (monsterComponent.mTypes.Length > i)
             {
@@ -129,25 +130,49 @@ public class EditorComponentSpawn : EditorComponent
         }
 
 
-        db = new DialogBox(new Vector2(14, 20), new Vector2(3, 1), "Traits:");
+        db = new DialogBox(new Vector2(14, 20), new Vector2(3, 1), "Req Traits:");
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 20), new Vector2(1, 1), "+", delegate { MonsterTraitsAdd(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        for (int i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++)
         {
-            if (monsterComponent.mTraits.Length > i)
+            if (monsterComponent.mTraitsRequired.Length > i)
             {
                 int mSlot = i;
-                string mName = monsterComponent.mTraits[i];
+                string mName = monsterComponent.mTraitsRequired[i];
 
                 tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), "-", delegate { MonsterTraitsRemove(mSlot); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), mName, delegate { MonsterTraitReplace(mSlot); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+
+        db = new DialogBox(new Vector2(14, i), new Vector2(3, 1), "Pool Traits:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(19, i++), new Vector2(1, 1), "+", delegate { MonsterTraitsAdd(true); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        for (int j = 0; j < 8; j++)
+        {
+            if (monsterComponent.mTraitsPool.Length > j)
+            {
+                int mSlot = j;
+                string mName = monsterComponent.mTraitsPool[j];
+
+                tb = new TextButton(new Vector2(14, 22 + i + j), new Vector2(1, 1), "-", delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+
+                tb = new TextButton(new Vector2(15, 22 + i + j), new Vector2(5, 1), mName, delegate { MonsterTraitReplace(mSlot, true); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -279,7 +304,7 @@ public class EditorComponentSpawn : EditorComponent
 
     public void MonsterTypeRemove(int pos)
     {
-        if ((monsterComponent.mTypes.Length == 1) && (monsterComponent.mTraits.Length == 0))
+        if ((monsterComponent.mTypes.Length == 1) && (monsterComponent.mTraitsRequired.Length == 0) && (monsterComponent.mTraitsPool.Length == 0))
         {
             return;
         }
@@ -299,7 +324,7 @@ public class EditorComponentSpawn : EditorComponent
         Update();
     }
 
-    public void MonsterTraitReplace(int pos)
+    public void MonsterTraitReplace(int pos, bool pool = false)
     {
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
@@ -315,17 +340,24 @@ public class EditorComponentSpawn : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTraitReplace(pos); });
+        monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTraitReplace(pos, pool); });
         monsterTraitESL.SelectItem();
     }
 
-    public void SelectMonsterTraitReplace(int pos)
+    public void SelectMonsterTraitReplace(int pos, bool pool = false)
     {
-        monsterComponent.mTraits[pos] = monsterTraitESL.selection;
+        if (pool)
+        {
+            monsterComponent.mTraitsPool[pos] = monsterTraitESL.selection;
+        }
+        else
+        {
+            monsterComponent.mTraitsRequired[pos] = monsterTraitESL.selection;
+        }
         Update();
     }
 
-    public void MonsterTraitsAdd()
+    public void MonsterTraitsAdd(bool pool = false)
     {
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
@@ -342,44 +374,77 @@ public class EditorComponentSpawn : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTrait(); });
+        monsterTraitESL = new EditorSelectionList("Select Item", list, delegate { SelectMonsterTrait(pool); });
         monsterTraitESL.SelectItem();
     }
 
-    public void SelectMonsterTrait()
+    public void SelectMonsterTrait(bool pool = false)
     {
-        string[] newM = new string[monsterComponent.mTraits.Length + 1];
-
-        int i;
-        for (i = 0; i < monsterComponent.mTraits.Length; i++)
+        if (pool)
         {
-            newM[i] = monsterComponent.mTraits[i];
-        }
+            string[] newM = new string[monsterComponent.mTraitsPool.Length + 1];
 
-        newM[i] = monsterTraitESL.selection;
-        monsterComponent.mTraits = newM;
+            int i;
+            for (i = 0; i < monsterComponent.mTraitsPool.Length; i++)
+            {
+                newM[i] = monsterComponent.mTraitsPool[i];
+            }
+
+            newM[i] = monsterTraitESL.selection;
+            monsterComponent.mTraitsPool = newM;
+        }
+        else
+        {
+            string[] newM = new string[monsterComponent.mTraitsRequired.Length + 1];
+
+            int i;
+            for (i = 0; i < monsterComponent.mTraitsRequired.Length; i++)
+            {
+                newM[i] = monsterComponent.mTraitsRequired[i];
+            }
+
+            newM[i] = monsterTraitESL.selection;
+            monsterComponent.mTraitsRequired = newM;
+        }
         Update();
     }
 
-    public void MonsterTraitsRemove(int pos)
+    public void MonsterTraitsRemove(int pos, bool pool = false)
     {
-        if ((monsterComponent.mTypes.Length == 0) && (monsterComponent.mTraits.Length == 1))
+        if ((monsterComponent.mTypes.Length + monsterComponent.mTraitsPool.Length + monsterComponent.mTraitsRequired.Length) <= 1)
         {
             return;
         }
-
-        string[] newM = new string[monsterComponent.mTraits.Length - 1];
-
-        int j = 0;
-        for (int i = 0; i < monsterComponent.mTraits.Length; i++)
+        if (pool)
         {
-            if (i != pos || i != j)
+            string[] newM = new string[monsterComponent.mTraitsPool.Length - 1];
+
+            int j = 0;
+            for (int i = 0; i < monsterComponent.mTraitsPool.Length; i++)
             {
-                newM[j] = monsterComponent.mTraits[i];
-                j++;
+                if (i != pos || i != j)
+                {
+                    newM[j] = monsterComponent.mTraitsPool[i];
+                    j++;
+                }
             }
+            monsterComponent.mTraitsPool = newM;
         }
-        monsterComponent.mTraits = newM;
+        else
+        {
+            string[] newM = new string[monsterComponent.mTraitsRequired.Length - 1];
+
+            int j = 0;
+            for (int i = 0; i < monsterComponent.mTraitsRequired.Length; i++)
+            {
+                if (i != pos || i != j)
+                {
+                    newM[j] = monsterComponent.mTraitsRequired[i];
+                    j++;
+                }
+            }
+            monsterComponent.mTraitsRequired = newM;
+        }
         Update();
     }
 }

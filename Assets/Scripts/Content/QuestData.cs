@@ -372,7 +372,8 @@ public class QuestData
         public string uniqueTitle = "";
         public string uniqueText = "";
         public string[] mTypes;
-        public string[] mTraits;
+        public string[] mTraitsRequired;
+        public string[] mTraitsPool;
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -388,7 +389,8 @@ public class QuestData
                 mTypes[0] = kv.Key;
                 break;
             }
-            mTraits = new string[0];
+            mTraitsRequired = new string[0];
+            mTraitsPool = new string[0];
 
             // Initialise array
             placement = new string[game.gameType.MaxHeroes() + 1][];
@@ -413,10 +415,17 @@ public class QuestData
             }
 
             // A list of traits to match
-            mTraits = new string[0];
+            mTraitsRequired = new string[0];
             if (data.ContainsKey("traits"))
             {
-                mTraits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                mTraitsRequired = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            }
+
+            // A list of traits to match
+            mTraitsPool = new string[0];
+            if (data.ContainsKey("traitpool"))
+            {
+                mTraitsPool = data["traitpool"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
             }
 
             // Array of placements by hero count
@@ -494,16 +503,25 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            if (mTraits.Length > 0)
+            if (mTraitsRequired.Length > 0)
             {
                 r += "traits=";
-                foreach (string s in mTraits)
+                foreach (string s in mTraitsRequired)
                 {
                     r += s + " ";
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            for(int i = 0; i < placement.Length; i++)
+            if (mTraitsPool.Length > 0)
+            {
+                r += "traits=";
+                foreach (string s in mTraitsPool)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+            for (int i = 0; i < placement.Length; i++)
             {
                 if (placement[i].Length > 0)
                 {

@@ -402,7 +402,7 @@ public class EventManager
             // If there are no traits try to find a type that is valid
             // Searches is specified order
             // FIXME: is this reverse order?
-            if (qMonster.mTraits.Length == 0)
+            if (qMonster.mTraitsRequired.Length == 0 && qMonster.mTraitsPool.Length == 0)
             {
                 foreach (string t in qMonster.mTypes)
                 {
@@ -434,7 +434,7 @@ public class EventManager
                 foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
                 {
                     bool allFound = true;
-                    foreach (string t in qMonster.mTraits)
+                    foreach (string t in qMonster.mTraitsRequired)
                     {
                         // Does the monster have this trait?
                         if (!kv.Value.ContainsTrait(t))
@@ -443,6 +443,18 @@ public class EventManager
                             allFound = false;
                         }
                     }
+
+                    // Must have one of these traits
+                    bool oneFound = (qMonster.mTraitsPool.Length == 0);
+                    foreach (string t in qMonster.mTraitsPool)
+                    {
+                        // Does the monster have this trait?
+                        if (kv.Value.ContainsTrait(t))
+                        {
+                            oneFound = true;
+                        }
+                    }
+
                     bool exclude = false;
                     foreach (string t in qMonster.mTypes)
                     {
@@ -456,7 +468,7 @@ public class EventManager
                         }
                     }
                     // Monster has all traits
-                    if (allFound && !exclude)
+                    if (allFound && oneFound && !exclude)
                     {
                         list.Add(kv.Value);
                     }
