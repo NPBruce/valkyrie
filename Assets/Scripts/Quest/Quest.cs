@@ -100,6 +100,49 @@ public class Quest
                 vars.SetValue("#" + kv.Key, 1);
             }
         }
+
+        // Determine monster types
+        List<QuestData.Spawn> pool = new List<QuestData.Spawn>();
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+        {
+            QuestData.Spawn qs = kv.Value as QuestData.Spawn;
+            if (qs != null)
+            {
+                if ((qs.mTraitsPool.Length + qs.mTraitsRequired.Length) > 0)
+                {
+                    pool.Add(qs);
+                }
+                else
+                {
+                    foreach (string t in qs.mTypes)
+                    {
+                        // Monster type might be a unique for this quest
+                        if (game.quest.qd.components.ContainsKey(t))
+                        {
+                            monsterSelect.Add(kv.Key, t);
+                        }
+                        // Monster type might exist in content packs, 'Monster' is optional
+                        else if (game.cd.monsters.ContainsKey(t))
+                        {
+                            monsterSelect.Add(kv.Key, t);
+                        }
+                        else
+                        {
+                            ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + kv.Key);
+                            Destroyer.MainMenu();
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (string key in monsterSelect.Keys)
+        {
+            if (monsterSelect.ContainsKey(monsterSelect[key]))
+            {
+                monsterSelect[key] = monsterSelect[monsterSelect[key]];
+            }
+        }
     }
 
     // Construct a quest from save data string
