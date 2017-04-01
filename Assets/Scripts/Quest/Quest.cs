@@ -78,11 +78,13 @@ public class Quest
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
-        eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
         log = new List<LogEntry>();
         monsterSelect = new Dictionary<string, string>();
+
+        GenerateMonsterSelection();
+        eManager = new EventManager();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -100,7 +102,11 @@ public class Quest
                 vars.SetValue("#" + kv.Key, 1);
             }
         }
+    }
 
+
+    public void GenerateMonsterSelection()
+    {
         // Determine monster types
         bool progress = false;
         bool force = false;
@@ -223,6 +229,7 @@ public class Quest
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
                 Destroyer.MainMenu();
+                return false;
             }
 
             // Pick monster at random from candidates
@@ -298,6 +305,8 @@ public class Quest
         // Set static quest data
         string questPath = saveData.Get("Quest", "path");
         qd = new QuestData(questPath);
+
+        GenerateMonsterSelection();
 
         // Clear all tokens
         game.tokenBoard.Clear();
@@ -418,38 +427,6 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
         {
             log.Add(new LogEntry(kv.Key, kv.Value));
-        }
-
-        // Restore monster select
-        monsterSelect = new Dictionary<string, string>();
-        foreach (KeyValuePair<string, string> kv in saveData.Get("SelectMonster"))
-        {
-            monsterSelect.Add(kv.Key, kv.Value);
-        }
-
-        // Determine monster types (Support for depreciated saves)
-        bool progress = false;
-        bool force = false;
-        bool done = false;
-        while (done)
-        {
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
-            {
-                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
-                if (qs != null)
-                {
-                    progress |= AttemptMonsterMatch(qs, force);
-                    if (progress && force) force = false;
-                }
-            }
-            if (!progress && !force)
-            {
-                force = true;
-            }
-            else if (!progress && force)
-            {
-                done = true;
-            }
         }
 
         // Update the screen
