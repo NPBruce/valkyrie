@@ -27,7 +27,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Spawn".Length), delegate { QuestEditorData.ListMonster(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Spawn".Length), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

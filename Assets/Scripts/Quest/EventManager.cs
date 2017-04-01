@@ -407,9 +407,9 @@ public class EventManager
                 foreach (string t in qMonster.mTypes)
                 {
                     // Monster type might be a unique for this quest
-                    if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.UniqueMonster)
+                    if (game.quest.qd.components.ContainsKey(t) && game.quest.qd.components[t] is QuestData.CustomMonster)
                     {
-                        cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.UniqueMonster);
+                        cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.CustomMonster);
                     }
                     // Monster type might exist in content packs, 'Monster' is optional
                     else if (game.cd.monsters.ContainsKey(t))

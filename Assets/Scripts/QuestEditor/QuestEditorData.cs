@@ -132,10 +132,10 @@ public class QuestEditorData {
         tb = new TextButton(new Vector2(32, 18), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("Item"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 20), new Vector2(9, 1), "UniqueMonster", delegate { ListUniqueMonster(); });
+        tb = new TextButton(new Vector2(22, 20), new Vector2(9, 1), "CustomMonster", delegate { ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("UniqueMonster"); }, Color.red);
+        tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), "Delete", delegate { game.qed.DeleteComponent("CustomMonster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(22, 22), new Vector2(9, 1), "Activation", delegate { ListActivation(); });
@@ -306,16 +306,16 @@ public class QuestEditorData {
     }
 
     // Create selection list for unique monsters
-    public static void ListUniqueMonster()
+    public static void ListCustomMonster()
     {
         Game game = Game.Get();
 
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:UniqueMonster}"));
+        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:CustomMonster}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.UniqueMonster)
+            if (kv.Value is QuestData.CustomMonster)
             {
                 monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
@@ -394,9 +394,9 @@ public class QuestEditorData {
             qed.NewItem();
             return;
         }
-        if (name.Equals("{NEW:UniqueMonster}"))
+        if (name.Equals("{NEW:CustomMonster}"))
         {
-            qed.NewUniqueMonster();
+            qed.NewCustomMonster();
             return;
         }
         if (name.Equals("{NEW:Activation}"))
@@ -457,9 +457,9 @@ public class QuestEditorData {
             SelectAsItem(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.UniqueMonster)
+        if (game.quest.qd.components[name] is QuestData.CustomMonster)
         {
-            SelectAsUniqueMonster(name);
+            SelectAsCustomMonster(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Activation)
@@ -552,10 +552,10 @@ public class QuestEditorData {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentItem(name));
     }
-    public static void SelectAsUniqueMonster(string name)
+    public static void SelectAsCustomMonster(string name)
     {
         Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentUniqueMonster(name));
+        game.qed.NewSelection(new EditorComponentCustomMonster(name));
     }
     public static void SelectAsActivation(string name)
     {
@@ -689,17 +689,17 @@ public class QuestEditorData {
         SelectComponent("Item" + index);
     }
 
-    public void NewUniqueMonster()
+    public void NewCustomMonster()
     {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("UniqueMonster" + index))
+        while (game.quest.qd.components.ContainsKey("CustomMonster" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("UniqueMonster" + index, new QuestData.UniqueMonster("UniqueMonster" + index));
-        SelectComponent("UniqueMonster" + index);
+        game.quest.qd.components.Add("CustomMonster" + index, new QuestData.CustomMonster("CustomMonster" + index));
+        SelectComponent("CustomMonster" + index);
     }
 
     public void NewActivation()

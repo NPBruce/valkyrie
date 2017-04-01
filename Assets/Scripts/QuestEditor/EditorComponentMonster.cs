@@ -67,7 +67,7 @@ public class EditorComponentSpawn : EditorComponent
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
-        tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { QuestEditorData.SelectAsMonsterPlacement(name); });
+        tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -186,7 +186,7 @@ public class EditorComponentSpawn : EditorComponent
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.UniqueMonster)
+            if (kv.Value is QuestData.CustomMonster)
             {
                 monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
             }
@@ -221,7 +221,7 @@ public class EditorComponentSpawn : EditorComponent
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.UniqueMonster)
+            if (kv.Value is QuestData.CustomMonster)
             {
                 monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
             }

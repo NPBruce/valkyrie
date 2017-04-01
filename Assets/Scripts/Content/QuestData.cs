@@ -168,9 +168,17 @@ public class QuestData
             Puzzle c = new Puzzle(name, content);
             components.Add(name, c);
         }
+        // Depreciated (format 1)
         if (name.IndexOf("UniqueMonster") == 0)
         {
-            UniqueMonster c = new UniqueMonster(name, content, path);
+            string fixedName = "CustomMonster" + name.Substring("UniqueMonster".Length);
+            rename.Add(name, fixedName);
+            CustomMonster c = new CustomMonster(fixedName, content, path);
+            components.Add(fixedName, c);
+        }
+        if (name.IndexOf("CustomMonster") == 0)
+        {
+            CustomMonster c = new CustomMonster(name, content, path);
             components.Add(name, c);
         }
         if (name.IndexOf("Activation") == 0)
@@ -1297,9 +1305,9 @@ public class QuestData
     }
 
     // Monster defined in the quest
-    public class UniqueMonster : QuestComponent
+    public class CustomMonster : QuestComponent
     {
-        new public static string type = "UniqueMonster";
+        new public static string type = "CustomMonster";
         // A bast type is used for default values
         public string baseMonster = "";
         public string monsterName = "";
@@ -1313,7 +1321,7 @@ public class QuestData
         public bool healthDefined = false;
 
         // Create new with name (editor)
-        public UniqueMonster(string s) : base(s)
+        public CustomMonster(string s) : base(s)
         {
             monsterName = sectionName;
             activations = new string[0];
@@ -1322,7 +1330,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public UniqueMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
+        public CustomMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
         {
             typeDynamic = type;
             path = pathIn;

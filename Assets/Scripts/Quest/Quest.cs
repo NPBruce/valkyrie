@@ -981,9 +981,9 @@ public class Quest
                 monsterData = game.cd.monsters[data["type"]];
             }
             // Check if type is a special quest specific type
-            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.UniqueMonster)
+            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.CustomMonster)
             {
-                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.UniqueMonster);
+                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.CustomMonster);
             }
 
             // If we have already selected an activation find it
