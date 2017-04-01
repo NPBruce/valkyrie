@@ -67,6 +67,24 @@ namespace Assets.Scripts.UI.Screens
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
+            GameObject scrollBarObj = new GameObject("scrollbar");
+            scrollBarObj.transform.parent = db.background.transform;
+            RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
+            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+            UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+            scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+            scrollRect.verticalScrollbar = scrollBar;
+
+            GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+            scrollBarHandle.transform.parent = scrollBarObj.transform;
+            //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+            scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+            scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+            scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+            scrollBar.handleRect.offsetMin = Vector2.zero;
+            scrollBar.handleRect.offsetMax = Vector2.zero;
+
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
 
@@ -140,7 +158,7 @@ namespace Assets.Scripts.UI.Screens
                     offset += 4f;
                 }
             }
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 4) * UIScaler.GetPixelsPerUnit());
+            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
 
             // Button for back to main menu
             tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
