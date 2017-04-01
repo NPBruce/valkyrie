@@ -62,7 +62,7 @@ public class MonsterDialog
     // Defeated monsters
     public void Defeated()
     {
-        Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
