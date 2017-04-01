@@ -300,7 +300,7 @@ public class Quest
             int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
         }
 
-        // Populate DelayedEvents
+        // Populate DelayedEvents (depreciated)
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
         foreach (string de in saveDelayed)
@@ -312,7 +312,13 @@ public class Quest
         string questPath = saveData.Get("Quest", "path");
         qd = new QuestData(questPath);
 
-        GenerateMonsterSelection();
+        monsterSelect = saveData.Get("SelectMonster");
+        if (monsterSelect == null)
+        {
+            // Support old saves
+            monsterSelect = new Dictionary<string, string>();
+            GenerateMonsterSelection();
+        }
 
         // Clear all tokens
         game.tokenBoard.Clear();
@@ -1128,6 +1134,12 @@ public class Quest
             int.TryParse(data["duplicate"], out duplicate);
             uniqueText = data["uniqueText"];
             uniqueTitle = data["uniqueTitle"];
+
+            // Support old saves (deprectiated)
+            if (data["type"].IndexOf("UniqueMonster") == 0)
+            {
+                data["type"] = "CustomMonster" + data["type"].Substring("UniqueMonster".Length);
+            }
 
             // Find base type
             Game game = Game.Get();
