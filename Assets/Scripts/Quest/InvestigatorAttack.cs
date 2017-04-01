@@ -48,7 +48,18 @@ public class InvestigatorAttack
             offset += 2.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset), new Vector2(8, 2), "Cancel", delegate { Destroyer.Dialog(); }, Color.red);
+        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
+        if (monster.damage == health)
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset), new Vector2(8, 2), "Cancel", delegate { ; }, Color.gray);
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset), new Vector2(8, 2), "Cancel", delegate { Destroyer.Dialog(); });
+        }
+
+        MonsterDialogMoM.DrawMonster(monster);
+        MonsterDialogMoM.DrawMonsterHealth(monster, delegate { AttackOptions(); });
     }
 
     public void Attack(string type)
@@ -76,7 +87,7 @@ public class InvestigatorAttack
         int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
         if (monster.damage == health)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Defeated", delegate { Defeated(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { ; }, Color.grey);
         }
         else
         {
@@ -84,74 +95,6 @@ public class InvestigatorAttack
         }
 
         MonsterDialogMoM.DrawMonster(monster);
-
-        MonsterHealth();
-    }
-
-    public void Defeated()
-    {
-        Destroyer.Dialog();
-        Game game = Game.Get();
-        // Remove this monster group
-        game.quest.monsters.Remove(monster);
-        game.monsterCanvas.UpdateList();
-
-        game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
-
-        // Trigger defeated event
-        game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
-        // If unique trigger defeated unique event
-        if (monster.unique)
-        {
-            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
-        }
-    }
-
-    public void MonsterHealth()
-    {
-
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-        if (monster.damage == health)
-        {
-            new TextButton(new Vector2(1f, 10f), new Vector2(2, 2), "-", delegate { MonsterHealthDec(); }, Color.grey);
-        }
-        else
-        {
-            new TextButton(new Vector2(1f, 10f), new Vector2(2, 2), "-", delegate { MonsterHealthDec(); }, Color.red);
-        }
-
-        DialogBox db = new DialogBox(new Vector2(4f, 10f), new Vector2(2, 2), (health - monster.damage).ToString(), Color.red);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
-
-        if (monster.damage == 0)
-        {
-            new TextButton(new Vector2(7f, 10f), new Vector2(2, 2), "+", delegate { MonsterHealthInc(); }, Color.grey);
-        }
-        else
-        {
-            new TextButton(new Vector2(7f, 10f), new Vector2(2, 2), "+", delegate { MonsterHealthInc(); }, Color.red);
-        }
-    }
-
-    public void MonsterHealthInc()
-    {
-        monster.damage -= 1;
-        if (monster.damage < 0)
-        {
-            monster.damage = 0;
-        }
-        Attack();
-    }
-
-    public void MonsterHealthDec()
-    {
-        monster.damage += 1;
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-        if (monster.damage > health)
-        {
-            monster.damage = health;
-        }
-        Attack();
+        MonsterDialogMoM.DrawMonsterHealth(monster, delegate { Attack(); });
     }
 }

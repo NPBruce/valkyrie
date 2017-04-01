@@ -43,7 +43,15 @@ public class InvestigatorEvade {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
         db.AddBorder();
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        int health = Mathf.RoundToInt(m.monsterData.health) + Game.Get().quest.GetHeroCount();
+        if (m.damage == health)
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { ; }, Color.gray);
+        }
+        else
+        {
+            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), "Finished", delegate { Destroyer.Dialog(); });
+        }
 
         MonsterDialogMoM.DrawMonster(m);
         MonsterDialogMoM.DrawMonsterHealth(m, delegate { Draw(); });

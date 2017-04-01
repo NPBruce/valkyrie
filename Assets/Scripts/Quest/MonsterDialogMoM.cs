@@ -36,7 +36,15 @@ public class MonsterDialogMoM : MonsterDialog
             DrawMonsterHealth(monster, delegate { CreateWindow(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), " Attack", delegate { Attack(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), "Evade", delegate { Evade(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+            int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
+            if (monster.damage == health)
+            {
+                new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), "Cancel", delegate { ; }, Color.gray);
+            }
+            else
+            {
+                new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+            }
         }
     }
 
