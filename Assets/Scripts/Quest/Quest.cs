@@ -154,7 +154,7 @@ public class Quest
                     return false;
                 }
                 string monster = t;
-                if (monster.IndexOf("Monster") != 0)
+                if (monster.IndexOf("Monster") != 0 && monster.IndexOf("CustomMonster") != 0)
                 {
                     monster = "Monster" + monster;
                 }

@@ -401,8 +401,7 @@ public class EventManager
 
             if (!game.quest.monsterSelect.ContainsKey(qMonster.sectionName))
             {
-                ValkyrieDebug.Log("Error: Monster type unknown in event: " + qMonster.sectionName);
-                Destroyer.MainMenu();
+                ValkyrieDebug.Log("Warning: Monster type unknown in event: " + qMonster.sectionName);
                 return;
             }
             string t = game.quest.monsterSelect[qMonster.sectionName];
