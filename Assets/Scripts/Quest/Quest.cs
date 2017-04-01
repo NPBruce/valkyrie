@@ -111,8 +111,9 @@ public class Quest
         bool progress = false;
         bool force = false;
         bool done = false;
-        while (done)
+        while (!done)
         {
+            progress = false;
             foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
             {
                 QuestData.Spawn qs = kv.Value as QuestData.Spawn;
@@ -152,16 +153,21 @@ public class Quest
                 {
                     return false;
                 }
-                // Monster type might be a unique for this quest
-                if (game.quest.qd.components.ContainsKey(t))
+                string monster = t;
+                if (monster.IndexOf("Monster") != 0)
                 {
-                    monsterSelect.Add(spawn.sectionName, t);
+                    monster = "Monster" + monster;
+                }
+                // Monster type might be a unique for this quest
+                if (game.quest.qd.components.ContainsKey(monster))
+                {
+                    monsterSelect.Add(spawn.sectionName, monster);
                     return true;
                 }
                 // Monster type might exist in content packs, 'Monster' is optional
-                else if (game.cd.monsters.ContainsKey(t))
+                else if (game.cd.monsters.ContainsKey(monster))
                 {
-                    monsterSelect.Add(spawn.sectionName, t);
+                    monsterSelect.Add(spawn.sectionName, monster);
                     return true;
                 }
             }
