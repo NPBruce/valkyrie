@@ -857,6 +857,13 @@ public class QuestData
                 }
             }
 
+            // If CustomMonster renamed update trigger
+            if (newName.IndexOf("CustomMonster") == 0
+                && trigger.IndexOf("Defeated" + oldName) == 0)
+            {
+                trigger = "Defeated" + newName;
+            }
+
             // component to add renamed
             for (int i = 0; i < addComponents.Length; i++)
             {
