@@ -102,47 +102,134 @@ public class Quest
         }
 
         // Determine monster types
-        List<QuestData.Spawn> pool = new List<QuestData.Spawn>();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+        bool progress = false;
+        bool force = false;
+        bool done = false;
+        while (done)
         {
-            QuestData.Spawn qs = kv.Value as QuestData.Spawn;
-            if (qs != null)
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
             {
-                if ((qs.mTraitsPool.Length + qs.mTraitsRequired.Length) > 0)
+                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
+                if (qs != null)
                 {
-                    pool.Add(qs);
+                    progress |= AttemptMonsterMatch(qs, force);
+                    if (progress && force) force = false;
+                }
+            }
+            if (!progress && !force)
+            {
+                force = true;
+            }
+            else if (!progress && force)
+            {
+                done = true;
+            }
+        }
+    }
+
+    public bool AttemptMonsterMatch(QuestData.Spawn spawn, bool force = true)
+    {
+        if (monsterSelect.ContainsKey(spawn.sectionName))
+        {
+            return false;
+        }
+        if ((spawn.mTraitsPool.Length + spawn.mTraitsRequired.Length) == 0)
+        {
+            foreach (string t in spawn.mTypes)
+            {
+                if (monsterSelect.ContainsKey(t))
+                {
+                    monsterSelect.Add(spawn.sectionName, monsterSelect[t]);
+                    return true;
+                }
+                if (t.IndexOf("Spawn") == 0)
+                {
+                    return false;
+                }
+                // Monster type might be a unique for this quest
+                if (game.quest.qd.components.ContainsKey(t))
+                {
+                    monsterSelect.Add(spawn.sectionName, t);
+                    return true;
+                }
+                // Monster type might exist in content packs, 'Monster' is optional
+                else if (game.cd.monsters.ContainsKey(t))
+                {
+                    monsterSelect.Add(spawn.sectionName, t);
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            // List of exclusions
+            List<string> exclude = new List<string>();
+            foreach (string t in spawn.mTypes)
+            {
+                if (monsterSelect.ContainsKey(t))
+                {
+                    exclude.Add(monsterSelect[t]);
+                }
+                else if (t.IndexOf("Spawn") == 0 && !force)
+                {
+                    return false;
                 }
                 else
                 {
-                    foreach (string t in qs.mTypes)
-                    {
-                        // Monster type might be a unique for this quest
-                        if (game.quest.qd.components.ContainsKey(t))
-                        {
-                            monsterSelect.Add(kv.Key, t);
-                        }
-                        // Monster type might exist in content packs, 'Monster' is optional
-                        else if (game.cd.monsters.ContainsKey(t))
-                        {
-                            monsterSelect.Add(kv.Key, t);
-                        }
-                        else
-                        {
-                            ValkyrieDebug.Log("Error: Cannot find monster and no traits provided in event: " + kv.Key);
-                            Destroyer.MainMenu();
-                        }
-                    }
+                    exclude.Add(t);
                 }
             }
-        }
 
-        foreach (string key in monsterSelect.Keys)
-        {
-            if (monsterSelect.ContainsKey(monsterSelect[key]))
+            // Start a list of matches
+            List<string> list = new List<string>();
+            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
             {
-                monsterSelect[key] = monsterSelect[monsterSelect[key]];
+                bool allFound = true;
+                foreach (string t in spawn.mTraitsRequired)
+                {
+                    // Does the monster have this trait?
+                    if (!kv.Value.ContainsTrait(t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (spawn.mTraitsPool.Length == 0);
+                foreach (string t in spawn.mTraitsPool)
+                {
+                    // Does the monster have this trait?
+                    if (kv.Value.ContainsTrait(t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // Monster has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
             }
+
+            if (list.Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
+                Destroyer.MainMenu();
+            }
+
+            // Pick monster at random from candidates
+            monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
+            return true;
         }
+        return false;
     }
 
     // Construct a quest from save data string
