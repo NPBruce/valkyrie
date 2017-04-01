@@ -447,6 +447,8 @@ public class QuestData
         // When changing the name placement event need to update in array
         override public void ChangeReference(string oldName, string newName)
         {
+            base.ChangeReference(oldName, newName);
+
             for (int j = 0; j < placement.Length; j++)
             {
                 for (int i = 0; i < placement[j].Length; i++)
@@ -459,6 +461,17 @@ public class QuestData
                 }
                 // If any were replaced with "", remove them
                 placement[j] = RemoveFromArray(placement[j], "");
+            }
+
+            for (int i = 0; i < mTypes.Length; i++)
+            {
+                // Placement used is being renamed
+                if (mTypes[i].Equals(oldName))
+                {
+                    mTypes[i] = newName;
+                }
+                // If any were replaced with "", remove them
+                mTypes = RemoveFromArray(mTypes, "");
             }
         }
 
@@ -858,10 +871,13 @@ public class QuestData
             }
 
             // If CustomMonster renamed update trigger
-            if (newName.IndexOf("CustomMonster") == 0
-                && trigger.IndexOf("Defeated" + oldName) == 0)
+            if (trigger.IndexOf("Defeated" + oldName) == 0)
             {
                 trigger = "Defeated" + newName;
+            }
+            if (trigger.IndexOf("DefeatedUnique" + oldName) == 0)
+            {
+                trigger = "DefeatedUnique" + newName;
             }
 
             // component to add renamed
