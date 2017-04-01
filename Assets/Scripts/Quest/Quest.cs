@@ -427,6 +427,31 @@ public class Quest
             monsterSelect.Add(kv.Key, kv.Value);
         }
 
+        // Determine monster types (Support for depreciated saves)
+        bool progress = false;
+        bool force = false;
+        bool done = false;
+        while (done)
+        {
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+            {
+                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
+                if (qs != null)
+                {
+                    progress |= AttemptMonsterMatch(qs, force);
+                    if (progress && force) force = false;
+                }
+            }
+            if (!progress && !force)
+            {
+                force = true;
+            }
+            else if (!progress && force)
+            {
+                done = true;
+            }
+        }
+
         // Update the screen
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
