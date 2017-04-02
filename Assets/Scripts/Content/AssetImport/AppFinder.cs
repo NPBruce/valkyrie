@@ -71,7 +71,7 @@ abstract public class AppFinder
                 ValkyrieDebug.Log("Name Index: " + foundAt);
                 int startPos = output.LastIndexOf("<string>", foundAt) + 8;
                 ValkyrieDebug.Log("Start Index: " + startPos);
-                location = output.Substring(startPos, output.IndexOf("</string>") - startPos).Trim();
+                location = output.Substring(startPos, output.IndexOf("</string>", startPos) - startPos).Trim();
                 ValkyrieDebug.Log("Using location: " + location);
             }
             if (location.Length == 0)
