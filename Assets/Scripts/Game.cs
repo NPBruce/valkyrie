@@ -46,6 +46,9 @@ public class Game : MonoBehaviour {
     public NextStageButton stageUI;
     // Class log window
     public LogWindow logWindow;
+    // Class for stage control UI
+
+    public Audio audioControl;
 
     // Current language
     public string currentLang;
@@ -76,6 +79,8 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+        GameObject go = new GameObject("audio");
+        audioControl = go.AddComponent<Audio>();
 
         if (config.data.Get("UserConfig") == null)
         {
