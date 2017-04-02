@@ -9,7 +9,7 @@ public class HeroSelection {
     public Dictionary<string, List<TextButton>> buttons;
 
     // Create page of options
-    public HeroSelection(Quest.Hero h)
+    public HeroSelection()
     {
         Draw();
 	}
@@ -24,9 +24,10 @@ public class HeroSelection {
         List<string> heroList = new List<string>(game.cd.heros.Keys);
         heroList.Sort();
 
-        DialogBox db = new DialogBox(new Vector2(1, 4f), new Vector2(UIScaler.GetWidthUnits() - 2f, 22f), "");
+        DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), "");
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
+        db.ApplyTag("heroselect");
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -39,7 +40,7 @@ public class HeroSelection {
         scrollBarObj.transform.parent = db.background.transform;
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 6.5f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
         UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
         scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
         scrollRect.verticalScrollbar = scrollBar;
@@ -56,8 +57,6 @@ public class HeroSelection {
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
 
-
-
         float offset = 4.5f;
         TextButton tb = null;
         bool left = true;
@@ -73,36 +72,38 @@ public class HeroSelection {
 
             if (left)
             {
-                tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
             }
             else
             {
-                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
             tb.background.transform.parent = scrollArea.transform;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.ApplyTag("heroselect");
             buttons[hero].Add(tb);
 
             if (left)
             {
-                tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(9.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), "", delegate { Select(hero); }, Color.clear);
             }
             else
             {
-                tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), "", delegate { Select(hero); }, Color.clear);
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag("heroselect");
             buttons[hero].Add(tb);
 
             if (left)
             {
-                tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+                tb = new TextButton(new Vector2(10.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
             }
             else
             {
-                tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+                tb = new TextButton(new Vector2(12.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
             }
             tb.setColor(Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
@@ -111,10 +112,11 @@ public class HeroSelection {
             //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag("heroselect");
             buttons[hero].Add(tb);
 
             left = !left;
-            offset += 4f;
+            offset += 2.25f;
         }
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
     }

@@ -178,6 +178,8 @@ public class Game : MonoBehaviour {
         db.SetFont(gameType.GetHeaderFont());
         db.ApplyTag("heroselect");
 
+        new HeroSelection();
+
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
