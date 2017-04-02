@@ -28,12 +28,90 @@ namespace Assets.Scripts.UI.Screens
                 Application.Quit();
             }
 
-            // Draw to the screen
-            Draw();
+            if (game.cd.packType.Count > 1)
+            {
+                DrawTypeList();
+            }
+            else
+            {
+                // Will only do one
+                foreach (string s in game.cd.packType)
+                {
+                    DrawList(s);
+                }
+            }
         }
 
+        public void DrawTypeList()
+        {
+            // Clean up
+            Destroyer.Dialog();
+
+            // Draw a header
+            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Select Expansion Content");
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            db.SetFont(game.gameType.GetHeaderFont());
+
+            // Start here
+            float offset = 4.5f;
+            TextButton tb = null;
+            bool left = true;
+            // Note this is currently unordered
+            foreach (string type in game.cd.packType)
+            {
+                // Create a sprite with the pack's image
+                //Texture2D tex = ContentData.FileToTexture(cp.image);
+                //Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
+                if (left)
+                {
+                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), "", delegate { DrawList(type); });
+                }
+                else
+                {
+                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { DrawList(type); });
+                }
+                //tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+
+                if (left)
+                {
+                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + type, delegate { DrawList(type); }, Color.clear);
+                }
+                else
+                {
+                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + type, delegate { DrawList(type); }, Color.clear);
+                }
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+
+                if (left)
+                {
+                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "", delegate { DrawList(type); }, Color.black);
+                }
+                else
+                {
+                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "", delegate { DrawList(type); }, Color.black);
+                }
+                tb.setColor(Color.clear);
+                tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
+                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+                tb.SetFont(game.gameType.GetHeaderFont());
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+
+                left = !left;
+                offset += 4f;
+            }
+
+            // Button for back to main menu
+            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); });
+            tb.SetFont(game.gameType.GetHeaderFont());
+        }
+
+
         // Draw the expansions on the screen, highlighting those that are enabled
-        public void Draw()
+        public void DrawList(string type = "")
         {
             // Clean up
             Destroyer.Dialog();
@@ -97,7 +175,7 @@ namespace Assets.Scripts.UI.Screens
             foreach (ContentData.ContentPack cp in game.cd.allPacks)
             {
                 // If the id is "" this is base content and can be ignored
-                if (cp.id.Length > 0)
+                if (cp.id.Length > 0 && cp.type.Equals(type))
                 {
                     string id = cp.id;
                     buttons.Add(id, new List<TextButton>());
