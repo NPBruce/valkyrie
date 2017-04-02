@@ -9,6 +9,7 @@ namespace Assets.Scripts.Content
     {
         private static string VAL = "val";
 
+        public static readonly StringKey X_COLON = new StringKey(VAL, "X_COLON");
         public static readonly StringKey BACK = new StringKey(VAL, "BACK");
         public static readonly StringKey CLOSE = new StringKey(VAL, "CLOSE");
         public static readonly StringKey EXIT = new StringKey(VAL,"EXIT");
@@ -20,13 +21,13 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MINUS = new StringKey("+", false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
-        public static readonly StringKey TRAITS_DOTS = new StringKey(VAL, "TRAITS_DOTS");
+        public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
         public static readonly StringKey FINISHED = new StringKey("val", "FINISHED");
 
-        public static readonly StringKey SKILL_DOTS = new StringKey(VAL, "SKILL_DOTS");
-        public static readonly StringKey MOVES_DOTS = new StringKey(VAL, "MOVES_DOTS");
-        public static readonly StringKey TOTAL_MOVES_DOTS = new StringKey(VAL, "TOTAL_MOVES_DOTS");
+        public static readonly StringKey SKILL = new StringKey(VAL, "SKILL");
+        public static readonly StringKey MOVES = new StringKey(VAL, "MOVES");
+        public static readonly StringKey TOTAL_MOVES = new StringKey(VAL, "TOTAL_MOVES");
 
         public static readonly StringKey TYPE = new StringKey(VAL, "TYPE");
         public static readonly StringKey SELECT_ITEM = new StringKey(VAL, "SELECT_ITEM");

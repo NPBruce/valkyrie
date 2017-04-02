@@ -10,9 +10,9 @@ public class EditorComponentMonster : EditorComponent
     private readonly StringKey MONSTER_UNIQUE = new StringKey("val", "MONSTER_UNIQUE");
     private readonly StringKey MONSTER_NORMAL = new StringKey("val", "MONSTER_NORMAL");
 
-    private readonly StringKey UNIQUE_TITLE_DOTS = new StringKey("val", "UNIQUE_TITLE_DOTS");
-    private readonly StringKey UNIQUE_INFO_DOTS = new StringKey("val", "UNIQUE_INFO_DOTS");
-    private readonly StringKey TYPES_DOTS = new StringKey("val", "TYPES_DOTS");
+    private readonly StringKey UNIQUE_TITLE = new StringKey("val", "UNIQUE_TITLE");
+    private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");
+    private readonly StringKey TYPES = new StringKey("val", "TYPES");
 
 
     QuestData.Monster monsterComponent;
@@ -93,21 +93,24 @@ public class EditorComponentMonster : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), UNIQUE_TITLE_DOTS);
+        db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1),
+            new StringKey("val", "X_COLON", UNIQUE_TITLE));
         db.ApplyTag("editor");
 
         uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
         uniqueTitleDBE.ApplyTag("editor");
         uniqueTitleDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), UNIQUE_INFO_DOTS);
+        db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1),
+            new StringKey("val", "X_COLON", UNIQUE_INFO));
         db.ApplyTag("editor");
 
         uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
         uniqueTextDBE.ApplyTag("editor");
         uniqueTextDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), TYPES_DOTS);
+        db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", TYPES));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(12, 20), new Vector2(1, 1), CommonStringKeys.PLUS , delegate { MonsterTypeAdd(0); }, Color.green);
@@ -140,7 +143,8 @@ public class EditorComponentMonster : EditorComponent
         }
 
 
-        db = new DialogBox(new Vector2(14, 20), new Vector2(3, 1), CommonStringKeys.TRAITS_DOTS);
+        db = new DialogBox(new Vector2(14, 20), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 20), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(); }, Color.green);

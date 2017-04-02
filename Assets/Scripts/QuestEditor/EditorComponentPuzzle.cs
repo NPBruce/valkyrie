@@ -7,13 +7,13 @@ public class EditorComponentPuzzle : EditorComponent
 {
     private readonly StringKey PUZZLE_GUESS = new StringKey("val", "PUZZLE_GUESS");
     private readonly StringKey PUZZLE = new StringKey("val", "PUZZLE");
-    private readonly StringKey PUZZLE_CLASS_DOTS = new StringKey("val", "PUZZLE_CLASS_DOTS");
+    private readonly StringKey PUZZLE_CLASS = new StringKey("val", "PUZZLE_CLASS");
     private readonly StringKey PUZZLE_CLASS_SELECT = new StringKey("val", "PUZZLE_CLASS_SELECT");
     private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val", "ICON_SUCCESS_RESULT");
     private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
-    private readonly StringKey PUZZLE_LEVEL_DOTS = new StringKey("val", "PUZZLE_LEVEL_DOTS");
-    private readonly StringKey PUZZLE_IMAGE_DOTS = new StringKey("val", "PUZZLE_IMAGE_DOTS");
-    private readonly StringKey PUZZLE_ALT_LEVEL_DOTS = new StringKey("val", "PUZZLE_ALT_LEVEL_DOTS");
+    private readonly StringKey PUZZLE_LEVEL = new StringKey("val", "PUZZLE_LEVEL");
+    private readonly StringKey PUZZLE_IMAGE = new StringKey("val", "PUZZLE_IMAGE");
+    private readonly StringKey PUZZLE_ALT_LEVEL = new StringKey("val", "PUZZLE_ALT_LEVEL");
     private readonly StringKey PUZZLE_SELECT_SKILL = new StringKey("val", "PUZZLE_SELECT_SKILL");
     private readonly StringKey PUZZLE_SELECT_IMAGE = new StringKey("val", "PUZZLE_SELECT_IMAGE");
 
@@ -57,21 +57,24 @@ public class EditorComponentPuzzle : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), PUZZLE_CLASS_DOTS);
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", PUZZLE_CLASS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 2), new Vector2(8, 1), puzzleComponent.puzzleClass, delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), CommonStringKeys.SKILL_DOTS);
+        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 4), new Vector2(2, 1), puzzleComponent.skill, delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1), PUZZLE_LEVEL_DOTS);
+        db = new DialogBox(new Vector2(0, 6), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", PUZZLE_LEVEL));
         db.ApplyTag("editor");
 
         levelDBE = new DialogBoxEditable(new Vector2(3, 6), new Vector2(2, 1), puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
@@ -80,7 +83,8 @@ public class EditorComponentPuzzle : EditorComponent
 
         if (!puzzleComponent.puzzleClass.key.Equals("PUZZLE_SLIDE_CLASS"))
         {
-            db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1), PUZZLE_ALT_LEVEL_DOTS);
+            db = new DialogBox(new Vector2(0, 8), new Vector2(3, 1),
+                new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
             db.ApplyTag("editor");
 
             altLevelDBE = new DialogBoxEditable(new Vector2(3, 8), new Vector2(2, 1), puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
@@ -89,7 +93,8 @@ public class EditorComponentPuzzle : EditorComponent
 
             if (puzzleComponent.puzzleClass.key.Equals("PUZZLE_IMAGE_CLASS"))
             {
-                db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1), PUZZLE_IMAGE_DOTS);
+                db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1),
+                    new StringKey("val", "X_COLON", PUZZLE_IMAGE));
                 db.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(3, 10), new Vector2(8, 1), 
@@ -161,7 +166,7 @@ public class EditorComponentPuzzle : EditorComponent
         List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(new StringKey(kv.Key,false)));
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
         imageList = new EditorSelectionList(PUZZLE_SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();

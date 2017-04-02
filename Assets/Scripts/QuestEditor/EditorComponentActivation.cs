@@ -8,6 +8,13 @@ public class EditorComponentActivation : EditorComponent
     private readonly StringKey ABILITY = new StringKey("val","ABILITY");
     private readonly StringKey MONSTER_MASTER = new StringKey("val", "MONSTER_MASTER");
     private readonly StringKey MONSTER_MINION = new StringKey("val", "MONSTER_MINION");
+    private readonly StringKey FIRST = new StringKey("val", "FIRST");
+    private readonly StringKey NOT_FIRST = new StringKey("val", "NOT_FIRST");
+    private readonly StringKey INITIAL_MESSAGE = new StringKey("val", "INITIAL_MESSAGE");
+    private readonly StringKey UNABLE_BUTTON = new StringKey("val", "UNABLE_BUTTON");
+    private readonly StringKey ATTACK_MESSAGE = new StringKey("val", "ATTACK_MESSAGE");
+    private readonly StringKey NO_ATTACK_MESSAGE = new StringKey("val", "NO_ATTACK_MESSAGE");
+
 
     QuestData.Activation activationComponent;
     DialogBoxEditable abilityDBE;
@@ -71,11 +78,11 @@ public class EditorComponentActivation : EditorComponent
         TextButton tb = null;
         if (activationComponent.masterFirst)
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "First", delegate { ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), FIRST, delegate { ToggleMasterFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), "Not First", delegate { ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMasterFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -88,11 +95,11 @@ public class EditorComponentActivation : EditorComponent
         db.ApplyTag("editor");
         if (activationComponent.minionFirst)
         {
-            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "First", delegate { ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), FIRST, delegate { ToggleMinionFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), "Not First", delegate { ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMinionFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -104,27 +111,27 @@ public class EditorComponentActivation : EditorComponent
 
     public void MoMActivation()
     {
-        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), "Initial Message:");
+        DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), INITIAL_MESSAGE);
         db.ApplyTag("editor");
 
         abilityDBE = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 8), activationComponent.ability.Translate(), delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), "Unable Button:");
+        db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), UNABLE_BUTTON);
 
         moveButtonDBE = new DialogBoxEditable(new Vector2(10, 10), new Vector2(10, 1), activationComponent.moveButton.Translate(), delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag("editor");
         moveButtonDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 11), new Vector2(20, 1), "Attack Message:");
+        db = new DialogBox(new Vector2(0, 11), new Vector2(20, 1), ATTACK_MESSAGE);
         db.ApplyTag("editor");
 
         masterActionsDBE = new DialogBoxEditable(new Vector2(0, 12), new Vector2(20, 8), activationComponent.masterActions.Translate(), delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 20), new Vector2(20, 1), "No Attack Message:");
+        db = new DialogBox(new Vector2(0, 20), new Vector2(20, 1), NO_ATTACK_MESSAGE);
         db.ApplyTag("editor");
 
         moveDBE = new DialogBoxEditable(new Vector2(0, 21), new Vector2(20, 8), activationComponent.move.Translate(), delegate { UpdateMove(); });

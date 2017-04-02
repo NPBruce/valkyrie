@@ -10,6 +10,10 @@ public class EditorComponentEventNextEvent : EditorComponent
     DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
 
+    private readonly StringKey QUOTA = new StringKey("val","QUOTA");
+    private readonly StringKey BUTTONS = new StringKey("val","BUTTONS");
+    private readonly StringKey DELAYED_EVENTS = new StringKey("val", "DELAYED_EVENTS");
+
     public EditorComponentEventNextEvent(string nameIn) : base()
     {
         Game game = Game.Get();
@@ -42,12 +46,15 @@ public class EditorComponentEventNextEvent : EditorComponent
             type = QuestData.Token.type;
         }
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), type, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), new StringKey(type,false), 
+            delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring(type.Length), delegate { QuestEditorData.ListEvent(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
+            new StringKey(name.Substring(type.Length),false), 
+            delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -59,18 +66,18 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), randomButton, delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey(randomButton,false), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), "Quota:");
+        DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), new StringKey("val","X_COLON",QUOTA));
         db.ApplyTag("editor");
 
         quotaDBE = new DialogBoxEditable(new Vector2(6, 1), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });
         quotaDBE.ApplyTag("editor");
         quotaDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(8, 1), new Vector2(11, 1), "Buttons:");
+        db = new DialogBox(new Vector2(8, 1), new Vector2(11, 1), new StringKey("val","X_COLON",BUTTONS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1),
@@ -105,7 +112,7 @@ public class EditorComponentEventNextEvent : EditorComponent
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), s);
+                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), new StringKey(s,false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1),
@@ -128,18 +135,20 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         if (eventComponent.delayedEvents.Count > 0)
         {
-            db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), "DEPRECIATED Delayed Events:", Color.red);
+            db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), DELAYED_EVENTS, Color.red);
             db.ApplyTag("editor");
 
             index = 0;
             foreach (QuestData.Event.DelayedEvent de in eventComponent.delayedEvents)
             {
                 int i = index++;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), de.delay.ToString());
+                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), 
+                    new StringKey(de.delay.ToString(),false));
                 db.AddBorder();
                 db.ApplyTag("editor");
 
-                db = new DialogBox(new Vector2(2, offset), new Vector2(17, 1), de.eventName);
+                db = new DialogBox(new Vector2(2, offset), new Vector2(17, 1), 
+                    new StringKey(de.eventName,false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), 

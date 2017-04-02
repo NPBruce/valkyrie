@@ -4,8 +4,8 @@ using Assets.Scripts.Content;
 
 public class EditorComponentUniqueMonster : EditorComponent
 {
-    private readonly StringKey BASE_DOTS = new StringKey("val", "BASE_DOTS");
-    private readonly StringKey NAME_DOTS = new StringKey("val", "NAME_DOTS");
+    private readonly StringKey BASE = new StringKey("val", "BASE");
+    private readonly StringKey NAME = new StringKey("val", "NAME");
 
     QuestData.UniqueMonster monsterComponent;
     DialogBoxEditable nameDBE;
@@ -49,7 +49,8 @@ public class EditorComponentUniqueMonster : EditorComponent
         tb.ApplyTag("editor");
 
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), BASE_DOTS);
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", BASE));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 2), new Vector2(18, 1), 
@@ -59,7 +60,8 @@ public class EditorComponentUniqueMonster : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), NAME_DOTS);
+        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", NAME));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.Length > 0)
         {

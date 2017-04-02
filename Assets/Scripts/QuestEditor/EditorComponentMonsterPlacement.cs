@@ -45,7 +45,8 @@ public class EditorComponentMonsterPlacement : EditorComponent
         for (int heroes = 2; heroes < 5; heroes++)
         {
             int h = heroes;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), heroes + " Heros:");
+            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), 
+                new StringKey("var", "NUMBER_HEROS", new StringKey(heroes.ToString(),false)) );
             db.ApplyTag("editor");
 
             tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, 
@@ -64,7 +65,8 @@ public class EditorComponentMonsterPlacement : EditorComponent
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
 
-                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), place, delegate { QuestEditorData.SelectComponent(place); });
+                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), 
+                        new StringKey(place,false), delegate { QuestEditorData.SelectComponent(place); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }

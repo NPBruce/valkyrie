@@ -84,7 +84,8 @@ public class PuzzleCodeWindow
 
         new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), PUZZLE_GUESS, delegate { Guess(); });
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), CommonStringKeys.SKILL_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), 
+            new StringKey("val","X_COLON",CommonStringKeys.SKILL));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f), questPuzzle.skill);
@@ -146,14 +147,16 @@ public class PuzzleCodeWindow
         }
         scrollRect.verticalNormalizedPosition = 0f;
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), CommonStringKeys.MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f),
+            new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), new StringKey((puzzle.guess.Count - previousMoves).ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), CommonStringKeys.TOTAL_MOVES_DOTS);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f),
+            new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), new StringKey(puzzle.guess.Count.ToString(),false));

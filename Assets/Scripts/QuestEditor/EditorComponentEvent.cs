@@ -5,6 +5,20 @@ using Assets.Scripts.Content;
 
 public class EditorComponentEvent : EditorComponent
 {
+    private readonly StringKey MIN_CAM = new StringKey("val", "MIN_CAM");
+    private readonly StringKey MAX_CAM = new StringKey("val", "MAX_CAM");
+    private readonly StringKey UNUSED = new StringKey("val", "UNUSED");
+    private readonly StringKey HIGHLIGHT = new StringKey("val", "HIGHLIGHT");
+    private readonly StringKey CAMERA = new StringKey("val", "CAMERA");
+    private readonly StringKey REMOVE_COMPONENTS = new StringKey("val", "REMOVE_COMPONENTS");
+    private readonly StringKey ADD_COMPONENTS = new StringKey("val", "ADD_COMPONENTS");
+    private readonly StringKey MAX = new StringKey("val", "MAX");
+    private readonly StringKey MIN = new StringKey("val", "MIN");
+    private readonly StringKey DIALOG = new StringKey("val", "DIALOG");
+    private readonly StringKey NEXT_EVENTS = new StringKey("val", "NEXT_EVENTS");
+    private readonly StringKey VARS = new StringKey("val", "VARS");
+    private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
+
     QuestData.Event eventComponent;
 
     DialogBoxEditable eventTextDBE;
@@ -45,7 +59,8 @@ public class EditorComponentEvent : EditorComponent
             type = QuestData.Token.type;
         }
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), type, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
+            new StringKey(type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
@@ -78,72 +93,76 @@ public class EditorComponentEvent : EditorComponent
         {
             if (eventComponent.minCam)
             {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Min Cam", delegate { PositionTypeCycle(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), MIN_CAM, delegate { PositionTypeCycle(); });
             }
             else if (eventComponent.maxCam)
             {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Max Cam", delegate { PositionTypeCycle(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), MAX_CAM, delegate { PositionTypeCycle(); });
             }
             else if (!eventComponent.locationSpecified)
             {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Unused", delegate { PositionTypeCycle(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), UNUSED, delegate { PositionTypeCycle(); });
             }
             else if (eventComponent.highlight)
             {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Highlight", delegate { PositionTypeCycle(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), HIGHLIGHT, delegate { PositionTypeCycle(); });
             }
             else
             {
-                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), "Camera", delegate { PositionTypeCycle(); });
+                tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), CAMERA, delegate { PositionTypeCycle(); });
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
 
-        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), "Vars", delegate { QuestEditorData.SelectAsEventVars(name); });
+        tb = new TextButton(new Vector2(12, 2), new Vector2(3, 1), VARS, delegate { QuestEditorData.SelectAsEventVars(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(16, 2), new Vector2(4, 1), "Next Events", delegate { QuestEditorData.SelectAsEventNextEvent(name); });
+        tb = new TextButton(new Vector2(16, 2), new Vector2(4, 1), NEXT_EVENTS, delegate { QuestEditorData.SelectAsEventNextEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), "Dialog:");
+        db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), new StringKey("var","X_COLON", DIALOG));
         db.ApplyTag("editor");
 
         eventTextDBE = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), eventComponent.originalText, delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), "Trigger:");
+        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), new StringKey("var","X_COLON",CommonStringKeys.TRIGGER));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), eventComponent.trigger, delegate { SetTrigger(); });
+        tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), 
+            new StringKey(eventComponent.trigger,false), delegate { SetTrigger(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), "Selection:");
+        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), new StringKey("var", "X_COLON", SELECTION));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), eventComponent.heroListName, delegate { SetHighlight(); });
+        tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), 
+            new StringKey(eventComponent.heroListName,false), delegate { SetHighlight(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), "Min");
+        db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), MIN);
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes.ToString(), delegate { SetHeroCount(false); });
+        tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), 
+            new StringKey(eventComponent.minHeroes.ToString(),false), delegate { SetHeroCount(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), "Max");
+        db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), MAX);
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
+        tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), 
+            new StringKey(eventComponent.maxHeroes.ToString(),false), delegate { SetHeroCount(true); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 16), new Vector2(9, 1), "Add Components:");
+        db = new DialogBox(new Vector2(0, 16), new Vector2(9, 1), ADD_COMPONENTS);
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(9, 16), new Vector2(1, 1), CommonStringKeys.PLUS, 
@@ -170,7 +189,7 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(10, 16), new Vector2(9, 1), "Remove Components:");
+        db = new DialogBox(new Vector2(10, 16), new Vector2(9, 1), REMOVE_COMPONENTS);
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 16), new Vector2(1, 1), 
