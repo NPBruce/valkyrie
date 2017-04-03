@@ -70,6 +70,12 @@ public class Audio : MonoBehaviour
         if (file.Length > 0) StartCoroutine(PlayEffect(file));
     }
 
+    public void PlayTest()
+    {
+        AudioClip test = (AudioClip)Resources.Load("test");
+        audioSourceEffect.PlayOneShot(test, effectVolume);
+    }
+
     public IEnumerator PlayMusic(List<string> fileNames)
     {
         music = new List<AudioClip>();

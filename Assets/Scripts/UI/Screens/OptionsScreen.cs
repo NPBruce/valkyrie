@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -119,6 +120,10 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerUp;
+            entry.callback.AddListener(delegate { PlayTestSound(); });
+            effectSlideObj.AddComponent<EventTrigger>().triggers.Add(entry);
             new RectangleBorder(effectSlideObj.transform, Color.white, new Vector2(effectSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), effectSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
             GameObject effectFill = new GameObject("effectFill");
@@ -140,6 +145,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
+            effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
 
             GameObject effectFillRev = new GameObject("effectFillRev");
             effectFillRev.tag = "dialog";
@@ -203,7 +209,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - musicSlide.value;
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
-            game.audioControl.effectVolume = musicSlide.value;
+            game.audioControl.audioSource.volume = musicSlide.value;
         }
 
         private void UpdateMusicRev()
@@ -211,7 +217,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = 1 - musicSlideRev.value;
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
-            game.audioControl.effectVolume = musicSlide.value;
+            game.audioControl.audioSource.volume = musicSlide.value;
         }
 
         private void UpdateEffects()
@@ -219,7 +225,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRev.value = 1 - effectSlide.value;
             game.config.data.Add("UserConfig", "effects", effectSlide.value.ToString());
             game.config.Save();
-            game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.effectVolume = effectSlide.value;
         }
 
         private void UpdateEffectsRev()
@@ -227,7 +233,12 @@ namespace Assets.Scripts.UI.Screens
             effectSlide.value = 1 - effectSlideRev.value;
             game.config.data.Add("UserConfig", "effects", effectSlide.value.ToString());
             game.config.Save();
-            game.audioControl.audioSource.volume = effectSlide.value;
+            game.audioControl.effectVolume = effectSlide.value;
+        }
+
+        private void PlayTestSound()
+        {
+            game.audioControl.PlayTest();
         }
 
         /// <summary>
