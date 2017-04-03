@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // Hero selection options
 // This comes up when selection a hero icon to pick hero
@@ -24,7 +25,7 @@ public class HeroSelection {
         List<string> heroList = new List<string>(game.cd.heros.Keys);
         heroList.Sort();
 
-        DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), "");
+        DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         db.ApplyTag("heroselect");
@@ -72,11 +73,13 @@ public class HeroSelection {
 
             if (left)
             {
-                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), 
+                    StringKey.NULL, delegate { Select(hero); });
             }
             else
             {
-                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), 
+                    StringKey.NULL, delegate { Select(hero); });
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
             tb.background.transform.parent = scrollArea.transform;
@@ -86,11 +89,13 @@ public class HeroSelection {
 
             if (left)
             {
-                tb = new TextButton(new Vector2(9.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(9.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f),
+                    StringKey.NULL, delegate { Select(hero); }, Color.clear);
             }
             else
             {
-                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), 
+                    StringKey.NULL, delegate { Select(hero); }, Color.clear);
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
@@ -99,11 +104,13 @@ public class HeroSelection {
 
             if (left)
             {
-                tb = new TextButton(new Vector2(10.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+                tb = new TextButton(new Vector2(10.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), 
+                    game.cd.heros[hero].name, delegate { Select(hero); }, Color.black);
             }
             else
             {
-                tb = new TextButton(new Vector2(12.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+                tb = new TextButton(new Vector2(12.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), 
+                    game.cd.heros[hero].name, delegate { Select(hero); }, Color.black);
             }
             tb.setColor(Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;

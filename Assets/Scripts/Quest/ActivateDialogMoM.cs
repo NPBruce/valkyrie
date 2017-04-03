@@ -17,7 +17,7 @@ public class ActivateDialogMoM : ActivateDialog
             Object.Destroy(go);
 
         // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9f), 0.5f), new Vector2(18, 2), monster.monsterData.name.Translate());
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9f), 0.5f), new Vector2(18, 2), monster.monsterData.name);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -37,7 +37,7 @@ public class ActivateDialogMoM : ActivateDialog
         new TextButton(
             new Vector2(UIScaler.GetHCenter(-9f), offset), 
             new Vector2(18, 2), 
-            monster.currentActivation.ad.moveButton.Translate(), 
+            monster.currentActivation.ad.moveButton, 
             delegate { CreateMoveWindow(); });
 
         MonsterDialogMoM.DrawMonster(monster);
@@ -48,7 +48,7 @@ public class ActivateDialogMoM : ActivateDialog
         Destroyer.Dialog();
 
         // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name.Translate());
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -56,7 +56,7 @@ public class ActivateDialogMoM : ActivateDialog
         db = new DialogBox(
             new Vector2(10, offset), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            monster.currentActivation.ad.masterActions.Translate());
+            monster.currentActivation.ad.masterActions);
         db.AddBorder();
 
         offset += 4.5f;
@@ -75,12 +75,13 @@ public class ActivateDialogMoM : ActivateDialog
         }
 
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name.Translate());
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         float offset = 2.5f;
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.move.Replace("\\n", "\n"));
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
+            new StringKey(monster.currentActivation.move.Replace("\\n", "\n"),false));
         db.AddBorder();
 
         offset += 4.5f;

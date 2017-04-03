@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Content;
+using UnityEngine;
 
 // Window with Monster activation
 public class ActivateDialog {
     // The monster that raises this dialog
     public Quest.Monster monster;
     public bool master;
+    private readonly StringKey ACTIONS = new StringKey("val", "ACTIONS");
+    private readonly StringKey MONSTER_MASTER = new StringKey("val", "MONSTER_MASTER");
+    private readonly StringKey MONSTER_MINION = new StringKey("val", "MONSTER_MINION");
+    private readonly StringKey ACTIVATED = new StringKey("val", "ACTIVATED");
 
     // Create an activation window, if master is false then it is for minions
     public ActivateDialog(Quest.Monster m, bool masterIn, bool singleStep = false)
@@ -24,15 +29,17 @@ public class ActivateDialog {
         DialogBox db = new DialogBox(
             new Vector2(15, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
-            monster.monsterData.name.Translate());
+            monster.monsterData.name);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         float offset = 2.5f;
         if (monster.currentActivation.effect.Length > 0)
         {
+            string effect = monster.currentActivation.effect.Replace("\\n", "\n");
             // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
+                new StringKey(effect,false));
             db.AddBorder();
             offset += 4.5f;
         }
@@ -42,15 +49,15 @@ public class ActivateDialog {
         // Create header
         if (singleStep)
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Actions");
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), ACTIONS);
         }
         else if (master)
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), MONSTER_MASTER, Color.red);
         }
         else
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), MONSTER_MINION);
         }
 
         if (master)
@@ -66,7 +73,8 @@ public class ActivateDialog {
         offset += 2;
 
         // Create activation text box
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7),
+            new StringKey(activationText,false));
         if (master && !singleStep)
         {
             db.AddBorder(Color.red);
@@ -81,15 +89,17 @@ public class ActivateDialog {
         // Create finished button
         if (singleStep)
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), ACTIVATED, delegate { activated(); });
         }
         else if (master)
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2),
+                new StringKey("val","X_ACTIVATED",MONSTER_MASTER ), delegate { activated(); }, Color.red);
         }
         else
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
+            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2),
+                new StringKey("val", "X_ACTIVATED", MONSTER_MINION), delegate { activated(); });
         }
     }
 

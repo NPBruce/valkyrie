@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Editable text box for use in quest editor
 public class QuestEditorTextEdit {
@@ -31,11 +32,11 @@ public class QuestEditorTextEdit {
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 6), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 6), StringKey.NULL);
         db.AddBorder();
 
         // Heading
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
+        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), new StringKey(title,false));
 
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
@@ -69,11 +70,11 @@ public class QuestEditorTextEdit {
         iField.textComponent = uiText;
         iField.text = value;
 
-        TextButton tb = new TextButton(new Vector2(23f, 4), new Vector2(6, 1), "OK", OKButton);
+        TextButton tb = new TextButton(new Vector2(23f, 4), new Vector2(6, 1), CommonStringKeys.OK, OKButton);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31f, 4), new Vector2(6, 1), "Cancel", cancelCall);
+        tb = new TextButton(new Vector2(31f, 4), new Vector2(6, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }

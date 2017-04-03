@@ -88,11 +88,11 @@ public class InvestigatorItems
             Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), "");
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), StringKey.NULL);
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
             db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name.Translate());
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name);
 
             x++;
             if (x > 4)

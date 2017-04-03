@@ -14,8 +14,8 @@ public class EditorComponentSpawn : EditorComponent
     private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");
     private readonly StringKey TYPES = new StringKey("val", "TYPES");
     
-    private readonly readonly StringKey REQ_TRAITS = new StringKey(VAL, "REQ_TRAITS");
-    private readonly readonly StringKey POOL_TRAITS = new StringKey(VAL, "POOL_TRAITS");
+    private readonly StringKey REQ_TRAITS = new StringKey("val", "REQ_TRAITS");
+    private readonly StringKey POOL_TRAITS = new StringKey("val", "POOL_TRAITS");
     
     
     QuestData.Spawn monsterComponent;

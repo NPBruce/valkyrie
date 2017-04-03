@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Monster information dialog (additional rules)
 public class InfoDialog {
@@ -16,22 +17,25 @@ public class InfoDialog {
         DialogBox db = new DialogBox(
             new Vector2(10, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 12), 
-            m.monsterData.info.Translate());
+            m.monsterData.info);
         db.AddBorder();
 
         // Unique monsters have additional info
         if (m.unique)
         {
-            db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), m.uniqueTitle, Color.red);
+            db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), 
+                new StringKey(m.uniqueTitle,false), Color.red);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.AddBorder();
-            db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), EventManager.SymbolReplace(m.uniqueText.Replace("\\n", "\n")));
+            string uniqueText = EventManager.SymbolReplace(m.uniqueText.Replace("\\n", "\n"));
+            db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8),
+                new StringKey(uniqueText,false));
             db.AddBorder(Color.red);
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 23.5f), new Vector2(10, 2), "Close", delegate { onClose(); });
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 23.5f), new Vector2(10, 2), CommonStringKeys.CLOSE, delegate { onClose(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), "Close", delegate { onClose(); });
+            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), CommonStringKeys.CLOSE, delegate { onClose(); });
         }
     }
 

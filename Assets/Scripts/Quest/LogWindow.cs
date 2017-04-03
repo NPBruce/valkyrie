@@ -95,7 +95,7 @@ public class LogWindow
                 db.AddBorder();
 
                 DialogBoxEditable dbe = new DialogBoxEditable(new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), 
-                new StringKey(kv.Value.ToString(),false), delegate { UpdateValue(key); }, Color.black, Color.white);
+                kv.Value.ToString(), delegate { UpdateValue(key); }, Color.black, Color.white);
                 dbe.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 dbe.background.transform.parent = scrollArea.transform;
                 dbe.AddBorder();

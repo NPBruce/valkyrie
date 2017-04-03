@@ -41,7 +41,7 @@ public class InvestigatorEvade {
     public void Draw()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), text);
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), new StringKey(text,false));
         db.AddBorder();
 
         int health = Mathf.RoundToInt(m.monsterData.health) + Game.Get().quest.GetHeroCount();

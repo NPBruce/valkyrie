@@ -21,6 +21,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MINUS = new StringKey("+", false);
         public static readonly StringKey TAB = new StringKey("->",false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
+        public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
@@ -37,6 +38,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey QUEST = new StringKey(VAL, "QUEST");
         public static readonly StringKey TILE = new StringKey(VAL, "TILE");
         public static readonly StringKey DELETE = new StringKey(VAL, "DELETE");
+        public static readonly StringKey COPY = new StringKey(VAL, "COPY");
+        public static readonly StringKey NEW = new StringKey(VAL, "NEW");
         public static readonly StringKey DOOR = new StringKey(VAL, "DOOR");
         public static readonly StringKey TOKEN = new StringKey(VAL, "TOKEN");
         public static readonly StringKey MONSTER = new StringKey(VAL, "MONSTER");

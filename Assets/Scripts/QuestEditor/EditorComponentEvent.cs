@@ -18,7 +18,7 @@ public class EditorComponentEvent : EditorComponent
     private readonly StringKey NEXT_EVENTS = new StringKey("val", "NEXT_EVENTS");
     private readonly StringKey VARS = new StringKey("val", "VARS");
     private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
-    private readonly StringKey AUDIO = new StringKey(VAL, "AUDIO");
+    private readonly StringKey AUDIO = new StringKey("val", "AUDIO");
 
     QuestData.Event eventComponent;
 
@@ -380,7 +380,7 @@ public class EditorComponentEvent : EditorComponent
             audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
 
-        audioESL = new EditorSelectionList("Select Audio", audio, delegate { SelectEventAudio(); });
+        audioESL = new EditorSelectionList(new StringKey("val","SELECT",new StringKey("val","AUDIO")), audio, delegate { SelectEventAudio(); });
         audioESL.SelectItem();
     }
 

@@ -29,7 +29,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-        new StringKey(name.Substring(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
+        new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

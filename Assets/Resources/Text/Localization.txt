@@ -50,10 +50,12 @@ ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Game
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder."
 EVENT,Event,Evento,,,,,,,
 TRIGGER,Trigger,Activador,,,,,,,
+OK,Ok,Ok,,,,,,,
 CANCEL,Cancel,Cancelar,,,,,,,
 MONSTER,Monster,Monstruo,,,,,,,
 SPAWN,Spawn,Generar,,,,,,,
 BASE,Base,Base,,,,,,,
+POSITION,Position,Posición,,,,,,,
 POSITION_TYPE_UNUSED,Unused,No Usado,,,,,,,
 POSITION_TYPE_HIGHLIGHT,Highlight,Destacado,,,,,,,
 PLACEMENT,Placement,Colocación,,,,,,,
@@ -71,7 +73,9 @@ AUDIO,Audio,Audio,,,,,,,
 SAVE,Save,Guardar,,,,,,,
 RELOAD,Reload,Recargar,,,,,,,
 MAIN_MENU,Main Menu,Menú Principal,,,,,,,
+UNDO,Undo,Deshacer,,,,,,,
 ROTATE_TO,"Rotate: {0}","Rotar: {0}",,,,,,, 
+ROTATION,"Rotation ({0})","Rotación ({0})",,,,,,, 
 COLOR,Colour,Color,,,,,,,
 NAME,Name,Nombre,,,,,,,
 NUMBER,Number,Número,,,,,,,
@@ -102,6 +106,14 @@ MAX,Max,Max,,,,,,,
 ADD_COMPONENTS,"Add Components:","Añadir Componentes:",,,,,,,
 REMOVE_COMPONENTS,"Remove Components:","Eliminar Componentes:",,,,,,,
 
+// ACTIVATION
+ACTIONS,Actions,Acciones,,,,,,,
+ACTIVATED,Activated,Activado,,,,,,,
+X_ACTIVATED,{0} Activated,{0} Activado,,,,,,,
+
+// import
+REQUIRED_EXPANSIONS,Required Expansions:,Expansiones Requeridas:,,,,,,,
+SELECT_PACK,Select Pack,Selección de Paquetes,,,,,,,
 
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
@@ -142,6 +154,10 @@ TYPE,Type,Tipo,,,,,,,
 QUEST,Quest,Escenario,,,,,,,
 TILE,Tile,Tablero,,,,,,,
 DELETE,Delete,Eliminar,,,,,,,
+SELECT_TO_DELETE,Select {0} To Delete,Selección de {0} a Eliminar,,,,,,,
+SELECT_TO_COPY,Select {0} To Copy,Selección de {0} a Copiar,,,,,,,
+COPY,Copy,Copiar,,,,,,,
+NEW,New,Nuevo,,,,,,,
 DOOR,Door,Puerta,,,,,,,
 TOKEN,Token,Marcador,,,,,,,
 MPLACE,MPlace,Posición,,,,,,,
@@ -153,6 +169,21 @@ COMPONENT_TO_DELETE,"Component to Delete:",Componente a Eliminar,,,,,,,
 
 // Events
 QUOTA,Quota,Cuota,,,,,,,
+
+// Variables
+TESTS,Tests,Tests,,,,,,,
+VAR,Var,Variable,,,,,,,
+OP,Op,Operador,,,,,,,
+VALUE,Value,Valor,,,,,,,
+ASSIGN,Assign,Asignar,,,,,,,
+
+// MONSTER COMBAT
+ATTACK,Attack,Atacar,,,,,,,
+HORROR_CHECK,Horror Check,Horror,,,,,,,
+EVADE,Evade,Esquivar,,,,,,,
+DEFEATED,Defeated,Derrotado,,,,,,,
+RECOVER,Recover,Recupear,,,,,,,
+END_TURN,End Turn,Fin del Turno,,,,,,,
 
 //Inherited from FFG localization files
 SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
@@ -170,3 +201,12 @@ PHASE_MYTHOS,MYTHOS PHASE,FASE DE MITOS,Phase de Mythe,MYTHOSPHASE,FASE DEI MITI
 MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
 HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
 END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟
+
+ATTACK_PROMPT,What type of weapon will you attack with?,¿Con qué tipo de arma vas a atacar?,Avec quel type d’arme allez-vous attaquer ?,Mit welcher Art von Waffe willst du angreifen?,Con quale tipo di arma vuoi attaccare?,Com que tipo de arma você quer atacar?,Jakim rodzajem broni atakujesz?,どの種類の武器で攻撃しますか？,你想在攻擊時使用哪種類型的武器？
+ATTACK_WITH_HEAVY_WEAPON, Attack with a [i]Heavy Weapon[/i], Atacar con un [i]Arma pesada[/i], Attaquer avec une [i]Arme Lourde[/i], Mit einer [i]schweren Waffe[/i] angreifen, Attacca con un’[i]Arma Pesante[/i], Atacar com uma [i]Arma Pesada[/i], Atak [i]Ciężką bronią[/i], [i]大型武器[/i]で攻撃, 使用重型武器攻擊
+ATTACK_WITH_BLADED_WEAPON, Attack with a [i]Bladed Weapon[/i], Atacar con un [i]Arma de filo[/i], Attaquer avec une [i]Arme Tranchante[/i], Mit einer [i]Klingenwaffe[/i] angreifen, Attacca con un’[i]Arma da Taglio[/i], Atacar com uma [i]Arma Branca[/i], Atak [i]Bronią sieczną[/i], [i]鋭利武器[/i]で攻撃, 使用銳器攻擊
+ATTACK_WITH_FIREARM, Attack with a [i]Firearm[/i], Atacar con un [i]Arma de fuego[/i], Attaquer avec une [i]Arme à feu[/i], Mit einer [i]Schusswaffe[/i] angreifen, Attacca con un’[i]Arma da Fuoco[/i], Atacar com uma [i]Arma de Fogo[/i], Atak [i]Bronią palną[/i], [i]銃火器[/i]で攻撃, 使用槍械攻擊
+ATTACK_WITH_SPELL, Attack with a Spell, Atacar con un Hechizo, Attaquer avec un Sort, Mit einem Zauber angreifen, Attacca con un Incantesimo, Atacar com um Feitiço, Atak Zaklęciem, 呪文で攻撃, 使用法術攻擊
+ATTACK_WITH_UNARMED, Attack Unarmed, Atacar sin arma, Attaquer à mains nues, Unbewaffnet angreifen, Attacca Senza Armi, Atacar Desarmado, Atak bez broni, 素手で攻撃, 徒手攻擊
+
+ACTION_X, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}

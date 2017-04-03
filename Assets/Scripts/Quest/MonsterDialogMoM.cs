@@ -6,6 +6,11 @@ using Assets.Scripts.Content;
 // Extends the standard class for MoM
 public class MonsterDialogMoM : MonsterDialog
 {
+    private static readonly StringKey DEFEATED = new StringKey("val", "DEFEATED");
+    private readonly StringKey EVADE = new StringKey("val", "EVADE");
+    private readonly StringKey ATTACK = new StringKey("val", "ATTACK");
+    private readonly StringKey HORROR_CHECK = new StringKey("val", "HORROR_CHECK");
+
     public MonsterDialogMoM(Quest.Monster m) : base(m)
     {
     }
@@ -29,14 +34,15 @@ public class MonsterDialogMoM : MonsterDialog
         // In horror phase we do horror checks
         if (game.quest.phase == Quest.MoMPhase.horror)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), "Horror Check", delegate { Horror(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), HORROR_CHECK, delegate { Horror(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 4.5f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { OnCancel(); });
         }
         else
         { // In investigator phase we do attacks and evades
             DrawMonsterHealth(monster, delegate { CreateWindow(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), " Attack", delegate { Attack(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), "Evade", delegate { Evade(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2),
+                new StringKey("val","ACTION_X",ATTACK), delegate { Attack(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), EVADE, delegate { Evade(); });
             int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
             if (monster.damage == health)
             {
@@ -97,7 +103,8 @@ public class MonsterDialogMoM : MonsterDialog
     {
         int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
 
-        DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2), (health).ToString(), Color.red);
+        DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2),
+            new StringKey((health).ToString(),false), Color.red);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -110,14 +117,15 @@ public class MonsterDialogMoM : MonsterDialog
             new TextButton(new Vector2(1f, 9), new Vector2(2, 2), CommonStringKeys.MINUS, delegate { MonsterDamageDec(monster, call); }, Color.red);
         }
 
-        db = new DialogBox(new Vector2(4f, 9), new Vector2(2, 2), (monster.damage).ToString(), Color.red);
+        db = new DialogBox(new Vector2(4f, 9), new Vector2(2, 2),
+            new StringKey((monster.damage).ToString(),false), Color.red);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (monster.damage == health)
         {
             new TextButton(new Vector2(7f, 9), new Vector2(2, 2), CommonStringKeys.PLUS, delegate { MonsterDamageInc(monster, call); }, Color.grey);
-            new TextButton(new Vector2(2, 11.5f), new Vector2(6, 2), "Defeated", delegate { Defeated(monster); }, Color.red);
+            new TextButton(new Vector2(2, 11.5f), new Vector2(6, 2), DEFEATED, delegate { Defeated(monster); }, Color.red);
         }
         else
         {

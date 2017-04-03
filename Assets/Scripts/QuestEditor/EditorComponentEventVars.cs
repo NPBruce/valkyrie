@@ -5,6 +5,12 @@ using Assets.Scripts.Content;
 
 public class EditorComponentEventVars : EditorComponent
 {
+    private readonly StringKey TESTS = new StringKey("val","TESTS");
+    private readonly StringKey VAR = new StringKey("val", "VAR");
+    private readonly StringKey OP = new StringKey("val", "OP");
+    private readonly StringKey VALUE = new StringKey("val", "VALUE");
+    private readonly StringKey ASSIGN = new StringKey("val", "ASSIGN");
+
     QuestData.Event eventComponent;
     EditorSelectionList varESL;
     QuestEditorTextEdit varText;
@@ -41,12 +47,14 @@ public class EditorComponentEventVars : EditorComponent
             type = QuestData.Token.type;
         }
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), type, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
+            new StringKey(type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring(type.Length), delegate { QuestEditorData.ListEvent(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1),
+            new StringKey(name.Substring(type.Length),false), delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -56,7 +64,8 @@ public class EditorComponentEventVars : EditorComponent
         tb.ApplyTag("editor");
         
         float offset = 2;
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Tests:");
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
+            new StringKey("val","X_COLON",TESTS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -68,13 +77,16 @@ public class EditorComponentEventVars : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
             QuestData.Event.VarOperation tmp = op;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
+            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
+                new StringKey(op.var,false));
             db.AddBorder();
             db.ApplyTag("editor");
-            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetTestOpp(tmp); });
+            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
+                new StringKey(op.operation, false), delegate { SetTestOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
-            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
+                new StringKey(op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -85,7 +97,8 @@ public class EditorComponentEventVars : EditorComponent
         }
 
         offset++;
-        db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), "Assign:");
+        db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1),
+            new StringKey("val","X_COLON",ASSIGN));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -97,13 +110,16 @@ public class EditorComponentEventVars : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
             QuestData.Event.VarOperation tmp = op;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), op.var);
+            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
+                new StringKey(op.var,false));
             db.AddBorder();
             db.ApplyTag("editor");
-            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), op.operation, delegate { SetAssignOpp(tmp); });
+            tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
+                new StringKey(op.operation, false), delegate { SetAssignOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
-            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1), op.value, delegate { SetValue(tmp); });
+            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
+                new StringKey(op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -127,7 +143,7 @@ public class EditorComponentEventVars : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        varESL = new EditorSelectionList("Select Var", list, delegate { SelectAddOp(); });
+        varESL = new EditorSelectionList(new StringKey("var", "SELECT", VAR), list, delegate { SelectAddOp(); });
         varESL.SelectItem();
     }
 
@@ -152,7 +168,7 @@ public class EditorComponentEventVars : EditorComponent
                 list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
             }
         }
-        varESL = new EditorSelectionList("Select Var", list, delegate { SelectAddOp(false); });
+        varESL = new EditorSelectionList(new StringKey("var", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
     }
 
@@ -250,7 +266,7 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("<="));
         list.Add(new EditorSelectionList.SelectionListEntry(">"));
         list.Add(new EditorSelectionList.SelectionListEntry("<"));
-        varESL = new EditorSelectionList("Select Op", list, delegate { SelectSetOp(op); });
+        varESL = new EditorSelectionList(new StringKey("var", "SELECT", OP), list, delegate { SelectSetOp(op); });
         varESL.SelectItem();
     }
 
@@ -262,7 +278,7 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("-"));
         list.Add(new EditorSelectionList.SelectionListEntry("*"));
         list.Add(new EditorSelectionList.SelectionListEntry("/"));
-        varESL = new EditorSelectionList("Select Op", list, delegate { SelectSetOp(op); });
+        varESL = new EditorSelectionList(new StringKey("var", "SELECT", OP), list, delegate { SelectSetOp(op); });
         varESL.SelectItem();
     }
 
@@ -294,7 +310,7 @@ public class EditorComponentEventVars : EditorComponent
             }
         }
 
-        varESL = new EditorSelectionList("Select Value", list, delegate { SelectSetValue(op); });
+        varESL = new EditorSelectionList(new StringKey("var","SELECT",VALUE), list, delegate { SelectSetValue(op); });
         varESL.SelectItem();
     }
 
