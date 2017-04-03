@@ -125,14 +125,14 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), new StringKey("var","X_COLON", DIALOG));
+        db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), new StringKey("val","X_COLON", DIALOG));
         db.ApplyTag("editor");
 
         eventTextDBE = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), eventComponent.originalText, delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), new StringKey("var","X_COLON",CommonStringKeys.TRIGGER));
+        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), new StringKey("val","X_COLON",CommonStringKeys.TRIGGER));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), 
@@ -140,14 +140,14 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), new StringKey("var", "X_COLON", AUDIO));
+        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), new StringKey("val", "X_COLON", AUDIO));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 13), new Vector2(10, 1), new StringKey(eventComponent.audio,false), delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), new StringKey("var", "X_COLON", SELECTION));
+        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), 
@@ -459,7 +459,7 @@ public class EditorComponentEvent : EditorComponent
         }
 
         visibilityESL = new EditorSelectionList( 
-            new StringKey("val","SELECT",CommonStringKeys.EVENT),
+            new StringKey("val","SELECT",CommonStringKeys.TILE),
             components, delegate { SelectAddVisibility(add); });
         visibilityESL.SelectItem();
     }

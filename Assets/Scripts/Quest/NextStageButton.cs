@@ -5,10 +5,10 @@ using Assets.Scripts.Content;
 // Next stage button is used by MoM to move between investigators and monsters
 public class NextStageButton
 {
-    private readonly StringKey PHASE_INVESTIGATOR = new StringKey("var", "PHASE_INVESTIGATOR");
-    private readonly StringKey PHASE_MYTHOS = new StringKey("var", "PHASE_MYTHOS");
-    private readonly StringKey MONSTER_STEP = new StringKey("var", "MONSTER_STEP");
-    private readonly StringKey HORROR_STEP = new StringKey("var", "HORROR_STEP");
+    private readonly StringKey PHASE_INVESTIGATOR = new StringKey("val", "PHASE_INVESTIGATOR");
+    private readonly StringKey PHASE_MYTHOS = new StringKey("val", "PHASE_MYTHOS");
+    private readonly StringKey MONSTER_STEP = new StringKey("val", "MONSTER_STEP");
+    private readonly StringKey HORROR_STEP = new StringKey("val", "HORROR_STEP");
 
     // Construct and display
     public NextStageButton()

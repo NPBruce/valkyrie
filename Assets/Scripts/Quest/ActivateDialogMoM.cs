@@ -5,6 +5,8 @@ using Assets.Scripts.Content;
 // Window with Monster activation
 public class ActivateDialogMoM : ActivateDialog
 {
+    private readonly StringKey MONSTER_ATTACKS = new StringKey("val", "MONSTER_ATTACKS");
+
     // Create an activation window, if master is false then it is for minions
     public ActivateDialogMoM(Quest.Monster m) : base(m, true)
     {
@@ -25,12 +27,14 @@ public class ActivateDialogMoM : ActivateDialog
         if (monster.currentActivation.effect.Length > 0)
         {
             // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
+            string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
+                new StringKey(textKey,false));
             db.AddBorder();
             offset += 4.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), "The monster attacks.", delegate { CreateAttackWindow(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), MONSTER_ATTACKS, delegate { CreateAttackWindow(); });
 
         offset += 2.5f;
 

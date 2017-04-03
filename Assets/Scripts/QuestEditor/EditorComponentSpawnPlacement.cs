@@ -43,7 +43,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         for (int heroes = 2; heroes < 5; heroes++)
         {
             int h = heroes;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("var", "NUMBER_HEROS", new StringKey(heroes.ToString(),false)));
+            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "NUMBER_HEROS", new StringKey(heroes.ToString(),false)));
             db.ApplyTag("editor");
 
             tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterPlaceAdd(h); }, Color.green);

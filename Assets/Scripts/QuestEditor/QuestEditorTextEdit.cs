@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Content;
 
 // Editable text box for use in quest editor
 public class QuestEditorTextEdit {
 
     public string value = "";
-    public string title;
+    public StringKey title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     public UnityEngine.UI.InputField iField;
 
     // Create a new text box with title, initial value and call back
-    public QuestEditorTextEdit(string t, string initial, UnityEngine.Events.UnityAction call)
+    public QuestEditorTextEdit(StringKey t, string initial, UnityEngine.Events.UnityAction call)
     {
         value = initial;
         title = t;
@@ -36,7 +35,7 @@ public class QuestEditorTextEdit {
         db.AddBorder();
 
         // Heading
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), new StringKey(title,false));
+        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
 
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");

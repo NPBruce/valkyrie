@@ -7,6 +7,11 @@ public class MonsterDialog
 {
     public Quest.Monster monster;
 
+    private readonly StringKey DEFEATED = new StringKey("val", "DEFEATED");
+    private readonly StringKey FORCE_ACTIVATE = new StringKey("val", "FORCE_ACTIVATE");
+    private readonly StringKey INFORMATION = new StringKey("val", "INFORMATION");
+    private readonly StringKey UNIQUE_DEFEATED = new StringKey("val", "UNIQUE_DEFEATED");
+
     // Constuct the button list
     public MonsterDialog(Quest.Monster m)
     {
@@ -31,18 +36,18 @@ public class MonsterDialog
         // Work out where on the screen to display
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), 
-            "Information", delegate { Info(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2), 
-            "Force Activate", delegate { Activate(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2),
+            INFORMATION, delegate { Info(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2),
+            FORCE_ACTIVATE, delegate { Activate(); });
         new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), 
-            "Defeated", delegate { Defeated(); });
+            DEFEATED, delegate { Defeated(); });
         if (monster.unique)
         {
             // If there is a unique option the offset needs to be increased
             offset += 3.5f;
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3), 
-                "Unique\nDefeated", delegate { UniqueDefeated(); });
+            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3),
+                UNIQUE_DEFEATED, delegate { UniqueDefeated(); });
         }
         // FIXME: This doesn't fit if there is a unique monster in the last space
         new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2),

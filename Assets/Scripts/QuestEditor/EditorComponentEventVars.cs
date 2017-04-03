@@ -10,10 +10,13 @@ public class EditorComponentEventVars : EditorComponent
     private readonly StringKey OP = new StringKey("val", "OP");
     private readonly StringKey VALUE = new StringKey("val", "VALUE");
     private readonly StringKey ASSIGN = new StringKey("val", "ASSIGN");
+    private readonly StringKey VAR_NAME = new StringKey("val", "VAR_NAME");
+    private readonly StringKey NUMBER = new StringKey("val", "NUMBER");
 
     QuestData.Event eventComponent;
     EditorSelectionList varESL;
     QuestEditorTextEdit varText;
+
 
     public EditorComponentEventVars(string nameIn) : base()
     {
@@ -143,7 +146,7 @@ public class EditorComponentEventVars : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        varESL = new EditorSelectionList(new StringKey("var", "SELECT", VAR), list, delegate { SelectAddOp(); });
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(); });
         varESL.SelectItem();
     }
 
@@ -168,7 +171,7 @@ public class EditorComponentEventVars : EditorComponent
                 list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
             }
         }
-        varESL = new EditorSelectionList(new StringKey("var", "SELECT", VAR), list, delegate { SelectAddOp(false); });
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
     }
 
@@ -219,7 +222,7 @@ public class EditorComponentEventVars : EditorComponent
 
         if (op.var.Equals("{NEW}"))
         {
-            varText = new QuestEditorTextEdit("Var Name:", "", delegate { NewVar(op, test); });
+            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewVar(op, test); });
             varText.EditText();
         }
         else
@@ -266,7 +269,7 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("<="));
         list.Add(new EditorSelectionList.SelectionListEntry(">"));
         list.Add(new EditorSelectionList.SelectionListEntry("<"));
-        varESL = new EditorSelectionList(new StringKey("var", "SELECT", OP), list, delegate { SelectSetOp(op); });
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", OP), list, delegate { SelectSetOp(op); });
         varESL.SelectItem();
     }
 
@@ -278,7 +281,7 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("-"));
         list.Add(new EditorSelectionList.SelectionListEntry("*"));
         list.Add(new EditorSelectionList.SelectionListEntry("/"));
-        varESL = new EditorSelectionList(new StringKey("var", "SELECT", OP), list, delegate { SelectSetOp(op); });
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", OP), list, delegate { SelectSetOp(op); });
         varESL.SelectItem();
     }
 
@@ -310,7 +313,7 @@ public class EditorComponentEventVars : EditorComponent
             }
         }
 
-        varESL = new EditorSelectionList(new StringKey("var","SELECT",VALUE), list, delegate { SelectSetValue(op); });
+        varESL = new EditorSelectionList(new StringKey("val","SELECT",VALUE), list, delegate { SelectSetValue(op); });
         varESL.SelectItem();
     }
 
@@ -319,7 +322,7 @@ public class EditorComponentEventVars : EditorComponent
     {
         if (varESL.selection.Equals("{NUMBER}"))
         {
-            varText = new QuestEditorTextEdit("Number:", "", delegate { SetNumValue(op); });
+            varText = new QuestEditorTextEdit(new StringKey("val","X_COLON",NUMBER), "", delegate { SetNumValue(op); });
             varText.EditText();
         }
         else

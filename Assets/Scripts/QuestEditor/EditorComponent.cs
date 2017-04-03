@@ -16,6 +16,7 @@ public class EditorComponent {
 
     // This is used for creating the component rename dialog
     QuestEditorTextEdit rename;
+    private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
 
     // Update redraws the selection UI
     virtual public void Update()
@@ -81,7 +82,7 @@ public class EditorComponent {
     public void Rename()
     {
         string name = component.sectionName.Substring(component.typeDynamic.Length);
-        rename =  new QuestEditorTextEdit("Component Name:", name, delegate { RenameFinished(); });
+        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, delegate { RenameFinished(); });
         rename.EditText();
     }
 

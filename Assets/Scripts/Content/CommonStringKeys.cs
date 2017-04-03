@@ -9,6 +9,9 @@ namespace Assets.Scripts.Content
     {
         private static string VAL = "val";
 
+        /// <summary>
+        /// StringKey with pattern {0}:
+        /// </summary>
         public static readonly StringKey X_COLON = new StringKey(VAL, "X_COLON");
         public static readonly StringKey BACK = new StringKey(VAL, "BACK");
         public static readonly StringKey CLOSE = new StringKey(VAL, "CLOSE");

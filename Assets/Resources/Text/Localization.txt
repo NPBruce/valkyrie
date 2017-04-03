@@ -46,8 +46,8 @@ DOWNLOAD,Download,Descargar,,,,,,,
 CHOOSE_LANG,Choose Language,Elige Idioma,,,,,,,
 MENU,Menu,Menú,,,,,,,
 LOG,Log,Log,,,,,,,
-ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders."
-ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder."
+ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.","Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.",,,,,,,
+ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.","Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.",,,,,,,
 EVENT,Event,Evento,,,,,,,
 TRIGGER,Trigger,Activador,,,,,,,
 OK,Ok,Ok,,,,,,,
@@ -79,6 +79,7 @@ ROTATION,"Rotation ({0})","Rotación ({0})",,,,,,,
 COLOR,Colour,Color,,,,,,,
 NAME,Name,Nombre,,,,,,,
 NUMBER,Number,Número,,,,,,,
+
 // Activation
 ABILITY,Ability,Capacidad,,,,,,,
 FIRST,First,Primero,,,,,,,
@@ -90,7 +91,8 @@ NO_ATTACK_MESSAGE,No Attack Message:,Mensaje no Ataca:,,,,,,,
 BUTTONS,Buttons,Botones,,,,,,,
 DELAYED_EVENTS,"DEPRECIATED Delayed Events:",DEPRECIADO Eventos Atrasados:,,,,,,,
 NUMBER_HEROS,{0} Heros:,{0} Héroes:,,,,,,,
-
+HEALTH,Health,Salud,,,,,,,
+COMPONENT_NAME,Component Name:,Nombre del Componente:,,,,,,,
 //EVENT
 MIN_CAM,Min Cam,Cam Min,,,,,,,
 MAX_CAM,Max Cam,Cam Max,,,,,,,
@@ -110,6 +112,8 @@ REMOVE_COMPONENTS,"Remove Components:","Eliminar Componentes:",,,,,,,
 ACTIONS,Actions,Acciones,,,,,,,
 ACTIVATED,Activated,Activado,,,,,,,
 X_ACTIVATED,{0} Activated,{0} Activado,,,,,,,
+INFORMATION,Information,Información,,,,,,,
+UNIQUE_DEFEATED,Unique\nDefeated,Único\nDerrotado,,,,,,,
 
 // import
 REQUIRED_EXPANSIONS,Required Expansions:,Expansiones Requeridas:,,,,,,,
@@ -117,7 +121,7 @@ SELECT_PACK,Select Pack,Selección de Paquetes,,,,,,,
 
 //D2E
 D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,,,,,,
-D2E_APP_NOT_FOUND,"Unable to locate Road to Legend, install via Steam","Imposible localizar ""Road to Legend"", instalar desde Steam,,,,,,,
+D2E_APP_NOT_FOUND,"Unable to locate Road to Legend, install via Steam","Imposible localizar ""Road to Legend"", instalar desde Steam",,,,,,,
 D2E_HERO_NAME,Hero,Héroe,,,,,,,
 D2E_HEROES_NAME,Heroes,Héroes,,,,,,,
 D2E_QUEST_NAME,Quest,Aventura,,,,,,,
@@ -162,9 +166,11 @@ DOOR,Door,Puerta,,,,,,,
 TOKEN,Token,Marcador,,,,,,,
 MPLACE,MPlace,Posición,,,,,,,
 ITEM,Item,Objeto,,,,,,,
+STARTING_ITEM,Starting Items,Equipo Inicial,,,,,,,
 UNIQUE_MONSTER,Unique Monster,Monstruo Único,,,,,,,
 CUSTOM_MONSTER,Custom Monster,Monstruo Personalizado,,,,,,,
 ACTIVATION,Activation,Activación,,,,,,,
+ACTIVATIONS,Activations,Activaciones,,,,,,,
 COMPONENT_TO_DELETE,"Component to Delete:",Componente a Eliminar,,,,,,,
 
 // Events
@@ -173,17 +179,22 @@ QUOTA,Quota,Cuota,,,,,,,
 // Variables
 TESTS,Tests,Tests,,,,,,,
 VAR,Var,Variable,,,,,,,
+VAR_NAME,Var Name:,Nombre Variable:,,,,,,,
 OP,Op,Operador,,,,,,,
 VALUE,Value,Valor,,,,,,,
 ASSIGN,Assign,Asignar,,,,,,,
 
 // MONSTER COMBAT
+MONSTER_ATTACKS,The monster attacks.,El monstruo ataca.,,,,,,,
 ATTACK,Attack,Atacar,,,,,,,
 HORROR_CHECK,Horror Check,Horror,,,,,,,
 EVADE,Evade,Esquivar,,,,,,,
 DEFEATED,Defeated,Derrotado,,,,,,,
 RECOVER,Recover,Recupear,,,,,,,
 END_TURN,End Turn,Fin del Turno,,,,,,,
+FORCE_ACTIVATE,Force Activate,Forzar Activación,,,,,,,
+INFO,Info,Información,,,,,,,
+
 
 //Inherited from FFG localization files
 SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火

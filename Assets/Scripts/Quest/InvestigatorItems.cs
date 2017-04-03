@@ -6,6 +6,8 @@ using Assets.Scripts.Content;
 // Window with starting Investigator items
 public class InvestigatorItems
 {
+    private readonly StringKey STARTING_ITEM = new StringKey("val", "STARTING_ITEM");
+
     public InvestigatorItems()
     {
         Game game = Game.Get();
@@ -77,7 +79,7 @@ public class InvestigatorItems
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 2), "Starting Items");
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 2), STARTING_ITEM);
         db.SetFont(Game.Get().gameType.GetHeaderFont());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 

@@ -7,6 +7,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     private readonly StringKey BASE = new StringKey("val", "BASE");
     private readonly StringKey NAME = new StringKey("val", "NAME");
+    private readonly StringKey ACTIVATIONS = new StringKey("val","ACTIVATIONS");
+    private readonly StringKey INFO = new StringKey("val", "INFO");
+    private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
 
     QuestData.CustomMonster monsterComponent;
     
@@ -16,6 +19,7 @@ public class EditorComponentCustomMonster : EditorComponent
     EditorSelectionList baseESL;
     EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
+
 
     public EditorComponentCustomMonster(string nameIn) : base()
 
@@ -85,7 +89,7 @@ public class EditorComponentCustomMonster : EditorComponent
         //string imagePath
         //string imagePlace
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
+        db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), new StringKey("val","X_COLON",INFO));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.key.Length > 0)
         {
@@ -107,7 +111,7 @@ public class EditorComponentCustomMonster : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), "Activations:");
+        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), new StringKey("val","X_COLON",ACTIVATIONS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(12, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddActivation(); }, Color.green);
@@ -121,7 +125,8 @@ public class EditorComponentCustomMonster : EditorComponent
             if (monsterComponent.activations.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), monsterComponent.activations[index]);
+                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), 
+                    new StringKey(monsterComponent.activations[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), 
@@ -131,7 +136,7 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), "Traits:");
+        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), new StringKey("val","X_COLON", CommonStringKeys.TRAITS));
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
@@ -144,7 +149,8 @@ public class EditorComponentCustomMonster : EditorComponent
             if (monsterComponent.traits.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1), monsterComponent.traits[index]);
+                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1),
+                    new StringKey(monsterComponent.traits[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
@@ -154,7 +160,7 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), "Health:");
+        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
