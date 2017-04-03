@@ -383,6 +383,8 @@ public class QuestEditSelection
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
+        game.audioControl.Music(new List<string>());
+
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
         game.quest = new Quest(questList[key]);

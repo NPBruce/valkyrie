@@ -72,28 +72,28 @@ public class HeroSelection {
 
             if (left)
             {
-                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(7.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), "", delegate { Select(hero); }, Color.clear);
             }
             else
             {
-                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
+                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 18, 1.5f), "", delegate { Select(hero); }, Color.clear);
             }
-            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
-            tb.background.transform.parent = scrollArea.transform;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag("heroselect");
             buttons[hero].Add(tb);
 
             if (left)
             {
-                tb = new TextButton(new Vector2(9.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); }, Color.clear);
             }
             else
             {
-                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), "", delegate { Select(hero); }, Color.clear);
+                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); }, Color.clear);
             }
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
             tb.background.transform.parent = scrollArea.transform;
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.ApplyTag("heroselect");
             buttons[hero].Add(tb);
 

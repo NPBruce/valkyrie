@@ -4,17 +4,34 @@ using System.Collections.Generic;
 
 public class Audio : MonoBehaviour
 {
-    AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioSource audioSourceEffect;
+    public GameObject effectsObject;
     public AudioClip eventClip;
     public List<AudioClip> music;
     public bool fadeOut = false;
     public int musicIndex = 0;
+    public float effectVolume;
 
     void Start()
     {
+        Game game = Game.Get();
         audioSource = gameObject.AddComponent<AudioSource>();
-        gameObject.transform.parent = Game.Get().cc.gameObject.transform;
+        float mVolume;
+        string vSet = game.config.data.Get("UserConfig", "music");
+        float.TryParse(vSet, out mVolume);
+        if (vSet.Length == 0) mVolume = 1;
+        audioSource.volume = mVolume;
+
+        gameObject.transform.parent = game.cc.gameObject.transform;
         music = new List<AudioClip>();
+
+        effectsObject = new GameObject("audioeffects");
+        effectsObject.transform.parent = game.cc.gameObject.transform;
+        audioSourceEffect = effectsObject.AddComponent<AudioSource>();
+        vSet = game.config.data.Get("UserConfig", "effects");
+        float.TryParse(vSet, out effectVolume);
+        if (vSet.Length == 0) effectVolume = 1;
     }
 
     private void FixedUpdate()
@@ -31,6 +48,7 @@ public class Audio : MonoBehaviour
         }
         if (!audioSource.isPlaying)
         {
+            audioSource.volume = 1;
             UpdateMusic();
         }
     }
@@ -49,7 +67,13 @@ public class Audio : MonoBehaviour
 
     public void Play(string file)
     {
-        if (file.Length > 0) PlayEffect(file);
+        if (file.Length > 0) StartCoroutine(PlayEffect(file));
+    }
+
+    public void PlayTest()
+    {
+        AudioClip test = (AudioClip)Resources.Load("test");
+        audioSourceEffect.PlayOneShot(test, effectVolume);
     }
 
     public IEnumerator PlayMusic(List<string> fileNames)
@@ -67,10 +91,9 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
-        music = new List<AudioClip>();
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
-        audioSource.PlayOneShot(file.audioClip);
+        audioSourceEffect.PlayOneShot(file.audioClip, effectVolume);
     }
 
     public void UpdateMusic()
@@ -84,7 +107,6 @@ public class Audio : MonoBehaviour
         {
             musicIndex = 0;
         }
-        audioSource.volume = 1;
         audioSource.clip = music[musicIndex];
         audioSource.Play();
         // Set next music
