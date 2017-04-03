@@ -31,6 +31,7 @@ public class Audio : MonoBehaviour
         }
         if (!audioSource.isPlaying)
         {
+            audioSource.volume = 1;
             UpdateMusic();
         }
     }
@@ -84,7 +85,6 @@ public class Audio : MonoBehaviour
         {
             musicIndex = 0;
         }
-        audioSource.volume = 1;
         audioSource.clip = music[musicIndex];
         audioSource.Play();
         // Set next music
