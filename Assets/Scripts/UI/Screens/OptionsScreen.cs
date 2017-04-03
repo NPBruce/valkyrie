@@ -60,6 +60,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             GameObject musicSlideObj = new GameObject("musicSlide");
+            musicSlideObj.tag = "dialog";
             musicSlideObj.transform.parent = game.uICanvas.transform;
             musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
@@ -69,6 +70,7 @@ namespace Assets.Scripts.UI.Screens
             new RectangleBorder(musicSlideObj.transform, Color.white, new Vector2(musicSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), musicSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
             GameObject musicFill = new GameObject("musicfill");
+            musicFill.tag = "dialog";
             musicFill.transform.parent = musicSlideObj.transform;
             musicFill.AddComponent<UnityEngine.UI.Image>();
             musicFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
@@ -78,6 +80,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Double slide is a hack because I can't get a click in the space to work otherwise
             GameObject musicSlideObjRev = new GameObject("musicSlideRev");
+            musicSlideObjRev.tag = "dialog";
             musicSlideObjRev.transform.parent = game.uICanvas.transform;
             musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
@@ -87,6 +90,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
 
             GameObject musicFillRev = new GameObject("musicfillrev");
+            musicFillRev.tag = "dialog";
             musicFillRev.transform.parent = musicSlideObjRev.transform;
             musicFillRev.AddComponent<UnityEngine.UI.Image>();
             musicFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
@@ -94,12 +98,60 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.fillRect.offsetMin = Vector2.zero;
             musicSlideRev.fillRect.offsetMax = Vector2.zero;
 
+
+            musicSlide.value = mVolume;
+            musicSlideRev.value = 1 - mVolume;
+
             db = new DialogBox(new Vector2(2, 14), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Effects");
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            musicSlide.value = mVolume;
-            musicSlideRev.value = 1 - mVolume;
+            float eVolume;
+            vSet = game.config.data.Get("UserConfig", "effects");
+            float.TryParse(vSet, out eVolume);
+            if (vSet.Length == 0) eVolume = 1;
+
+            GameObject effectSlideObj = new GameObject("effectSlide");
+            effectSlideObj.tag = "dialog";
+            effectSlideObj.transform.parent = game.uICanvas.transform;
+            effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
+            RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
+            new RectangleBorder(effectSlideObj.transform, Color.white, new Vector2(effectSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), effectSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
+
+            GameObject effectFill = new GameObject("effectFill");
+            effectFill.tag = "dialog";
+            effectFill.transform.parent = effectSlideObj.transform;
+            effectFill.AddComponent<UnityEngine.UI.Image>();
+            effectFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            effectSlide.fillRect = effectFill.GetComponent<RectTransform>();
+            effectSlide.fillRect.offsetMin = Vector2.zero;
+            effectSlide.fillRect.offsetMax = Vector2.zero;
+
+            // Double slide is a hack because I can't get a click in the space to work otherwise
+            GameObject effectSlideObjRev = new GameObject("effectSlideRev");
+            effectSlideObjRev.tag = "dialog";
+            effectSlideObjRev.transform.parent = game.uICanvas.transform;
+            effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
+            RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
+            effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
+
+            GameObject effectFillRev = new GameObject("effectFillRev");
+            effectFillRev.tag = "dialog";
+            effectFillRev.transform.parent = effectSlideObjRev.transform;
+            effectFillRev.AddComponent<UnityEngine.UI.Image>();
+            effectFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
+            effectSlideRev.fillRect = effectFillRev.GetComponent<RectTransform>();
+            effectSlideRev.fillRect.offsetMin = Vector2.zero;
+            effectSlideRev.fillRect.offsetMax = Vector2.zero;
+
+            effectSlide.value = eVolume;
+            effectSlideRev.value = 1 - eVolume;
         }
 
 
@@ -151,7 +203,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - musicSlide.value;
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
-            game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.effectVolume = musicSlide.value;
         }
 
         private void UpdateMusicRev()
@@ -159,7 +211,23 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = 1 - musicSlideRev.value;
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
+            game.audioControl.effectVolume = musicSlide.value;
+        }
+
+        private void UpdateEffects()
+        {
+            effectSlideRev.value = 1 - effectSlide.value;
+            game.config.data.Add("UserConfig", "effects", effectSlide.value.ToString());
+            game.config.Save();
             game.audioControl.audioSource.volume = musicSlide.value;
+        }
+
+        private void UpdateEffectsRev()
+        {
+            effectSlide.value = 1 - effectSlideRev.value;
+            game.config.data.Add("UserConfig", "effects", effectSlide.value.ToString());
+            game.config.Save();
+            game.audioControl.audioSource.volume = effectSlide.value;
         }
 
         /// <summary>

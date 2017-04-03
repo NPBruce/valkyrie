@@ -11,6 +11,7 @@ public class Audio : MonoBehaviour
     public List<AudioClip> music;
     public bool fadeOut = false;
     public int musicIndex = 0;
+    public float effectVolume;
 
     void Start()
     {
@@ -28,6 +29,9 @@ public class Audio : MonoBehaviour
         effectsObject = new GameObject("audioeffects");
         effectsObject.transform.parent = game.cc.gameObject.transform;
         audioSourceEffect = effectsObject.AddComponent<AudioSource>();
+        vSet = game.config.data.Get("UserConfig", "effects");
+        float.TryParse(vSet, out effectVolume);
+        if (vSet.Length == 0) effectVolume = 1;
     }
 
     private void FixedUpdate()
@@ -83,7 +87,7 @@ public class Audio : MonoBehaviour
     {
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
-        audioSourceEffect.PlayOneShot(file.audioClip);
+        audioSourceEffect.PlayOneShot(file.audioClip, effectVolume);
     }
 
     public void UpdateMusic()
