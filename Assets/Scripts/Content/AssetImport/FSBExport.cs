@@ -177,11 +177,6 @@ class FSBExport
                 {
                     noSamples = 2048;
                 }
-                // No idea why, perhaps sample rates are wrong
-                if (ogg.channels == 1)
-                {
-                    noSamples /= 4;
-                }
 
                 if (prevSamples != 0)
                 {

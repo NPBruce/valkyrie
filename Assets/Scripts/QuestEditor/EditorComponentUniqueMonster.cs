@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EditorComponentUniqueMonster : EditorComponent
+public class EditorComponentCustomMonster : EditorComponent
 {
-    QuestData.UniqueMonster monsterComponent;
+    QuestData.CustomMonster monsterComponent;
     DialogBoxEditable nameDBE;
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
@@ -12,10 +12,10 @@ public class EditorComponentUniqueMonster : EditorComponent
     EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
 
-    public EditorComponentUniqueMonster(string nameIn) : base()
+    public EditorComponentCustomMonster(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.UniqueMonster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.CustomMonster;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -26,12 +26,12 @@ public class EditorComponentUniqueMonster : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "UniqueMonster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "CustomMonster", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("UniqueMonster".Length), delegate { QuestEditorData.ListUniqueMonster(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("CustomMonster".Length), delegate { QuestEditorData.ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

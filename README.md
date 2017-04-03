@@ -15,3 +15,7 @@ FFG apps can be downloaded from steam:
 
 * __Descent: Road to Legend:__ http://store.steampowered.com/app/477200/
 * __Mansions of Madness:__ http://store.steampowered.com/app/478980/
+
+# NOTE
+This is being made obsolete, in future please use this link:
+https://github.com/NPBruce/valkyrie/wiki

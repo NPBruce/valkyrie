@@ -11,7 +11,7 @@ public class MoMFinder : AppFinder {
     // If an import wasn't performed with this Valkyrie version or higher reimport
     override public string RequiredValkyrieVersion()
     {
-        return "0.7.2";
+        return "0.8.2";
     }
     // Steam app ID
     override public string AppId()

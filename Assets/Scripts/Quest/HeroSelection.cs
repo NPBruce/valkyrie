@@ -6,154 +6,123 @@ using System.Collections.Generic;
 // This comes up when selection a hero icon to pick hero
 public class HeroSelection {
 
+    public Dictionary<string, List<TextButton>> buttons;
+
     // Create page of options
-	public HeroSelection(Quest.Hero h)
+    public HeroSelection()
     {
-        RenderPage(h.id, 0);
+        Draw();
 	}
 
-    // Render hero buttons, starting at scroll offset
-    public void RenderPage(int heroId, int offset)
+    public void Draw()
     {
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        // Clean up
+        Destroyer.Dialog();
 
         Game game = Game.Get();
-
-        // Starting array position
-        float x = 8;
-        float y = 5 - (5f * offset);
-
-        // If we haven't scrolled down
-        if (y > 4)
-        {
-            // Create an 'empty' button to clear selection
-            HeroSelectButton(new Vector2(x, y), null, heroId);
-        }
-
         // Get all available heros
         List<string> heroList = new List<string>(game.cd.heros.Keys);
         heroList.Sort();
 
-        bool prevPage = false;
-        bool nextPage = false;
+        DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), "");
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        db.ApplyTag("heroselect");
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit());
+
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.parent = db.background.transform;
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 6.5f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+
+        float offset = 4.5f;
+        TextButton tb = null;
+        bool left = true;
+        buttons = new Dictionary<string, List<TextButton>>();
+
         foreach (string hero in heroList)
         {
-            // Shift to the right
-            x += 5f;
-            // If too far right move down
-            if (x > UIScaler.GetRight(-13))
-            {
-                x = 8;
-                y += 5f;
-            }
+            buttons.Add(hero, new List<TextButton>());
 
-            // If too far down set scroll down
-            if (y >= 24)
+            // Should be game type specific
+            Texture2D newTex = ContentData.FileToTexture(game.cd.heros[hero].image);
+            Sprite heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+
+            if (left)
             {
-                nextPage = true;
-            }
-            // If too high set scroll up
-            else if (y < 4)
-            {
-                prevPage = true;
+                tb = new TextButton(new Vector2(5f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
             }
             else
-            { // hero in scroll range
-                bool disabled = false;
-                foreach (Quest.Hero hIt in game.quest.heroes)
-                {
-                    if ((hIt.heroData == game.cd.heros[hero]) && (hIt.id != heroId))
-                    {
-                        // Hero already picked
-                        disabled = true;
-                    }
-                }
-                HeroSelectButton(new Vector2(x, y), game.cd.heros[hero], heroId, disabled);
+            {
+                tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), "", delegate { Select(hero); });
             }
-        }
+            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
+            tb.background.transform.parent = scrollArea.transform;
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.ApplyTag("heroselect");
+            buttons[hero].Add(tb);
 
-        // Are we scrolling?
-        if (prevPage || nextPage)
-        {
-            PrevButton(!prevPage, heroId, offset);
-            NextButton(!nextPage, heroId, offset);
+            if (left)
+            {
+                tb = new TextButton(new Vector2(9.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), "", delegate { Select(hero); }, Color.clear);
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), "", delegate { Select(hero); }, Color.clear);
+            }
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag("heroselect");
+            buttons[hero].Add(tb);
+
+            if (left)
+            {
+                tb = new TextButton(new Vector2(10.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(12.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), game.cd.heros[hero].name.Translate(), delegate { Select(hero); }, Color.black);
+            }
+            tb.setColor(Color.clear);
+            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+            //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag("heroselect");
+            buttons[hero].Add(tb);
+
+            left = !left;
+            offset += 2.25f;
         }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
     }
 
-    // Create a button for a hero selection option
-    public void HeroSelectButton(Vector2 position, HeroData hd, int id, bool disabled = false)
+    public void Select(string name)
     {
-        Sprite heroSprite;
-        // Should be game type specific
-        Texture2D newTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
-        string name = "";
-
-        // is this an empty hero option?
-        if (hd != null)
-        {
-            newTex = ContentData.FileToTexture(hd.image);
-            name = hd.sectionName;
-        }
-
-        GameObject heroImg = new GameObject("heroImg" + name);
-        heroImg.tag = "dialog";
-
-        Game game = Game.Get();
-        heroImg.transform.parent = game.uICanvas.transform;
-
-        RectTransform trans = heroImg.AddComponent<RectTransform>();
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, position.y * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, position.x * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
-        heroImg.AddComponent<CanvasRenderer>();
-
-
-        UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
-        heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-        image.sprite = heroSprite;
-        image.rectTransform.sizeDelta = new Vector2(4.25f * UIScaler.GetPixelsPerUnit(), 4.25f * UIScaler.GetPixelsPerUnit());
-
-        UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
-        button.interactable = !disabled;
-        button.onClick.AddListener(delegate { SelectHero(id, name); });
-    }
-
-
-
-    public void PrevButton(bool disabled, int heroId, int offset)
-    {
-        if (disabled)
-        {
-            new TextButton(new Vector2(UIScaler.GetRight(-8), 6), new Vector2(2, 4), "/\\", delegate { noAction(); }, Color.gray);
-        }
-        else
-        {
-            new TextButton(new Vector2(UIScaler.GetRight(-8), 6), new Vector2(2, 4), "/\\", delegate { RenderPage(heroId, offset - 1); });
-        }
-    }
-
-    public void NextButton(bool disabled, int heroId, int offset)
-    {
-        if (disabled)
-        {
-            new TextButton(new Vector2(UIScaler.GetRight(-8), 19), new Vector2(2, 4), "\\/", delegate { noAction(); }, Color.gray);
-        }
-        else
-        {
-            new TextButton(new Vector2(UIScaler.GetRight(-8), 19), new Vector2(2, 4), "\\/", delegate { RenderPage(heroId, offset + 1); });
-        }
-    }
-
-    public void noAction()
-    {
-        return;
-    }
-
-    public void SelectHero(int id, string name)
-    {
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
-
         Game game = Game.Get();
         HeroData hData = null;
         foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
@@ -166,13 +135,23 @@ public class HeroSelection {
         }
         foreach (Quest.Hero h in game.quest.heroes)
         {
-            if (h.id == id)
+            if (hData == h.heroData)
             {
-                h.heroData = hData;
-                break;
+                return;
             }
         }
-
-        game.heroCanvas.UpdateImages();
+        foreach (Quest.Hero h in game.quest.heroes)
+        {
+            if (h.heroData == null)
+            {
+                foreach (TextButton tb in buttons[name])
+                {
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
+                }
+                h.heroData = hData;
+                game.heroCanvas.UpdateImages();
+                return;
+            }
+        }
     }
 }

@@ -37,6 +37,7 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
+        Game.Get().cc.panDisable = true;
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
         db.AddBorder();
 

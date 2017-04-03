@@ -46,6 +46,9 @@ public class Game : MonoBehaviour {
     public NextStageButton stageUI;
     // Class log window
     public LogWindow logWindow;
+    // Class for stage control UI
+
+    public Audio audioControl;
 
     // Current language
     public string currentLang;
@@ -76,6 +79,8 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+        GameObject go = new GameObject("audio");
+        audioControl = go.AddComponent<Audio>();
 
         if (config.data.Get("UserConfig") == null)
         {
@@ -177,6 +182,8 @@ public class Game : MonoBehaviour {
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(gameType.GetHeaderFont());
         db.ApplyTag("heroselect");
+
+        new HeroSelection();
 
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());

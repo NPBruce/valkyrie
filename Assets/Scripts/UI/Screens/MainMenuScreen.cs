@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI.Screens;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Assets.Scripts.UI.Screens
 {
@@ -12,6 +13,23 @@ namespace Assets.Scripts.UI.Screens
             // This will destroy all, because we shouldn't have anything left at the main menu
             Destroyer.Destroy();
             Game game = Game.Get();
+
+            game.cd = new ContentData(game.gameType.DataDirectory());
+            // Check if we found anything
+            if (game.cd.GetPacks().Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                Application.Quit();
+            }
+            // Load base
+            game.cd.LoadContentID("");
+
+            List<string> music = new List<string>();
+            foreach (AudioData ad in game.cd.audio.Values)
+            {
+                if (ad.menu) music.Add(ad.file);
+            }
+            game.audioControl.Music(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
