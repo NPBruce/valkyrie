@@ -118,10 +118,10 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), "Audio:");
+        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), "Audio:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), eventComponent.audio, delegate { SetAudio(); });
+        tb = new TextButton(new Vector2(4, 13), new Vector2(10, 1), eventComponent.audio, delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
