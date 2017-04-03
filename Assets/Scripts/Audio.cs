@@ -68,7 +68,6 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
-        music = new List<AudioClip>();
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
         audioSource.PlayOneShot(file.audioClip);

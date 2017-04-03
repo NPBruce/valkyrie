@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -334,9 +335,15 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetAudio()
     {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         Game game = Game.Get();
         List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
         audio.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
 
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
@@ -351,11 +358,17 @@ public class EditorComponentEvent : EditorComponent
     {
         Game game = Game.Get();
         eventComponent.audio = audioESL.selection;
-        game.audioControl.Play(game.cd.audio[audioESL.selection].file);
+        if (game.cd.audio.ContainsKey(eventComponent.audio))
+        {
+            game.audioControl.Play(game.cd.audio[eventComponent.audio].file);
+        }
+        else
+        {
+            string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/" + eventComponent.audio;
+            game.audioControl.Play(path);
+        }
         Update();
     }
-
-
 
     public void SetHighlight()
     {
