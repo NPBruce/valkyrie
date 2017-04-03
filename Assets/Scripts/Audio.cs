@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class Audio : MonoBehaviour
 {
-    AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioSource audioSourceEffect;
+    public GameObject effectsObject;
     public AudioClip eventClip;
     public List<AudioClip> music;
     public bool fadeOut = false;
@@ -12,9 +14,20 @@ public class Audio : MonoBehaviour
 
     void Start()
     {
+        Game game = Game.Get();
         audioSource = gameObject.AddComponent<AudioSource>();
-        gameObject.transform.parent = Game.Get().cc.gameObject.transform;
+        float mVolume;
+        string vSet = game.config.data.Get("UserConfig", "music");
+        float.TryParse(vSet, out mVolume);
+        if (vSet.Length == 0) mVolume = 1;
+        audioSource.volume = mVolume;
+
+        gameObject.transform.parent = game.cc.gameObject.transform;
         music = new List<AudioClip>();
+
+        effectsObject = new GameObject("audioeffects");
+        effectsObject.transform.parent = game.cc.gameObject.transform;
+        audioSourceEffect = effectsObject.AddComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -70,7 +83,7 @@ public class Audio : MonoBehaviour
     {
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
-        audioSource.PlayOneShot(file.audioClip);
+        audioSourceEffect.PlayOneShot(file.audioClip);
     }
 
     public void UpdateMusic()
