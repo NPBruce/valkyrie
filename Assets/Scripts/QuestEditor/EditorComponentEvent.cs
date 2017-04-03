@@ -340,7 +340,7 @@ public class EditorComponentEvent : EditorComponent
 
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
-            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
         }
 
         audioESL = new EditorSelectionList("Select Audio", audio, delegate { SelectEventAudio(); });
