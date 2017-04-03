@@ -47,6 +47,11 @@ public class Audio : MonoBehaviour
         StartCoroutine(PlayMusic(fileNames));
     }
 
+    public void Play(string file)
+    {
+        if (file.Length > 0) PlayEffect(file);
+    }
+
     public IEnumerator PlayMusic(List<string> fileNames)
     {
         music = new List<AudioClip>();
@@ -58,6 +63,14 @@ public class Audio : MonoBehaviour
         }
         musicIndex = 0;
         if (audioSource.isPlaying) fadeOut = true;
+    }
+
+    public IEnumerator PlayEffect(string fileName)
+    {
+        music = new List<AudioClip>();
+        WWW file = new WWW(@"file://" + fileName);
+        yield return file;
+        audioSource.PlayOneShot(file.audioClip);
     }
 
     public void UpdateMusic()

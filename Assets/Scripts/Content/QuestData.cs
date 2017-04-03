@@ -574,6 +574,7 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
+        public string audio = "";
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -857,6 +858,12 @@ public class QuestData
                 locationSpecified = false;
                 bool.TryParse(data["maxcam"], out maxCam);
             }
+            // Randomise next event setting
+            if (data.ContainsKey("audio"))
+            {
+                locationSpecified = false;
+                audio = data["audio"];
+            }
         }
 
         // Check all references when a component name is changed
@@ -1061,6 +1068,11 @@ public class QuestData
             {
                 r += "xposition=" + location.x + nl;
                 r += "yposition=" + location.y + nl;
+            }
+
+            if (audio.Length > 0)
+            {
+                r += "audio=" + audio + nl;
             }
             return r;
         }
