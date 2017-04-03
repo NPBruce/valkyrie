@@ -278,5 +278,13 @@ public class HeroCanvas : MonoBehaviour {
         {
             new InvestigatorItems();
         }
+
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.quest) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
     }
 }

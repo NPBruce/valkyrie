@@ -983,12 +983,22 @@ public class AudioData : GenericData
 {
     public static new string type = "Audio";
     public string file = "";
+    public bool menu = false;
+    public bool quest = false;
 
     public AudioData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
         if (content.ContainsKey("file"))
         {
             file = path + "/" + content["file"];
+        }
+        if (content.ContainsKey("menu"))
+        {
+            bool.TryParse(content["menu"], out menu);
+        }
+        if (content.ContainsKey("quest"))
+        {
+            bool.TryParse(content["quest"], out quest);
         }
     }
 }
