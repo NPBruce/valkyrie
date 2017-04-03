@@ -349,7 +349,9 @@ public class EditorComponentEvent : EditorComponent
 
     public void SelectEventAudio()
     {
+        Game game = Game.Get();
         eventComponent.audio = audioESL.selection;
+        game.audioControl.Play(game.cd.audio[audioESL.selection].file);
         Update();
     }
 

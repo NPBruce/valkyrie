@@ -49,7 +49,7 @@ public class Audio : MonoBehaviour
 
     public void Play(string file)
     {
-        if (file.Length > 0) PlayEffect(file);
+        if (file.Length > 0) StartCoroutine(PlayEffect(file));
     }
 
     public IEnumerator PlayMusic(List<string> fileNames)
