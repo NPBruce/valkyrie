@@ -11,6 +11,7 @@ public class EditorComponentEvent : EditorComponent
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
+    EditorSelectionList audioESL;
 
     public EditorComponentEvent(string nameIn) : base()
     {
@@ -114,6 +115,13 @@ public class EditorComponentEvent : EditorComponent
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), eventComponent.trigger, delegate { SetTrigger(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(0, 12), new Vector2(4, 1), "Audio:");
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), eventComponent.audio, delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -323,6 +331,29 @@ public class EditorComponentEvent : EditorComponent
         eventComponent.trigger = triggerESL.selection;
         Update();
     }
+
+    public void SetAudio()
+    {
+        Game game = Game.Get();
+        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
+        audio.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+        }
+
+        audioESL = new EditorSelectionList("Select Audio", audio, delegate { SelectEventAudio(); });
+        audioESL.SelectItem();
+    }
+
+    public void SelectEventAudio()
+    {
+        eventComponent.audio = audioESL.selection;
+        Update();
+    }
+
+
 
     public void SetHighlight()
     {
