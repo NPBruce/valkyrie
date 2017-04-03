@@ -143,11 +143,11 @@ public class EditorComponentPuzzle : EditorComponent
         List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length), "File"));
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length), "File"));
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
         }
         foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
         {
