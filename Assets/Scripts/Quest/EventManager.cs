@@ -85,8 +85,9 @@ public class EventManager
     // Trigger next event in stack
     public void TriggerEvent()
     {
+        Game game = Game.Get();
         // First check if things need to be added to the queue at end round
-        Game.Get().roundControl.CheckNewRound();
+        game.roundControl.CheckNewRound();
 
         // No events to trigger
         if (eventStack.Count == 0) return;
@@ -97,6 +98,16 @@ public class EventManager
 
         // Event may have been disabled since added
         if (e.Disabled()) return;
+
+        // Play audio
+        if (game.cd.audio.ContainsKey(e.qEvent.audio))
+        {
+            game.audioControl.Play(game.cd.audio[e.qEvent.audio].file);
+        }
+        else
+        {
+            game.audioControl.Play(e.qEvent.audio);
+        }
 
         // Perform var operations
         game.quest.vars.Perform(e.qEvent.operations);
