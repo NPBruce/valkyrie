@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 public class EditorComponentPuzzle : EditorComponent
 {
@@ -163,10 +164,19 @@ public class EditorComponentPuzzle : EditorComponent
     
     public void Image()
     {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        {
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
         foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "MoM"));
         }
         imageList = new EditorSelectionList(PUZZLE_SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();

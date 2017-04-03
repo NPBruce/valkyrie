@@ -84,25 +84,20 @@ public class LogWindow
         valueDBE = new Dictionary<string, DialogBoxEditable>();
         foreach (KeyValuePair<string, float> kv in Game.Get().quest.vars.vars)
         {
-            if (kv.Value != 0)
-            {
-                string key = kv.Key;
+            string key = kv.Key;
 
-                db = new DialogBox(new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), 
-                new StringKey(key,false), Color.black, Color.white);
-                db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                db.background.transform.parent = scrollArea.transform;
-                db.AddBorder();
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), new StringKey(key,false), Color.black, Color.white);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            db.background.transform.parent = scrollArea.transform;
+            db.AddBorder();
 
-                DialogBoxEditable dbe = new DialogBoxEditable(new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), 
-                kv.Value.ToString(), delegate { UpdateValue(key); }, Color.black, Color.white);
-                dbe.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                dbe.background.transform.parent = scrollArea.transform;
-                dbe.AddBorder();
-                valueDBE.Add(key, dbe);
+            DialogBoxEditable dbe = new DialogBoxEditable(new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), kv.Value.ToString(), delegate { UpdateValue(key); }, Color.black, Color.white);
+            dbe.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            dbe.background.transform.parent = scrollArea.transform;
+            dbe.AddBorder();
+            valueDBE.Add(key, dbe);
 
-                offset += 1.4f;
-            }
+            offset += 1.4f;
         }
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 1) * UIScaler.GetPixelsPerUnit());
     }
