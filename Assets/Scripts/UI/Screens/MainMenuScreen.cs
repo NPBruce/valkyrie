@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             Game game = Game.Get();
 
-            game.audioControl.Music("content/MoM/ffg/audio/MainMenu_01.ogg");
+            game.audioControl.Music(game.gameType.DataDirectory() + "ffg/audio/MainMenu_01.ogg");
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");

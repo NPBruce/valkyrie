@@ -8,6 +8,7 @@ public class Audio : MonoBehaviour
     void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
+        gameObject.transform.parent = Game.Get().cc.gameObject.transform;
     }
 
     public void Music(string fileName)
@@ -17,9 +18,9 @@ public class Audio : MonoBehaviour
 
     public IEnumerator LoadMusic(string fileName)
     {
-        WWW file = new WWW(fileName);
+        WWW file = new WWW(@"file://" + fileName);
         yield return file;
         audioSource.clip = file.audioClip;
-        //audioSource.Play();
+        audioSource.Play();
     }
 }
