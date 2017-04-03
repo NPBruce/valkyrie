@@ -39,5 +39,7 @@ public class HorrorCheck {
         db.AddBorder();
 
         new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
+
+        MonsterDialogMoM.DrawMonster(m);
     }
 }

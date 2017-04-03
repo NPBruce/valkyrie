@@ -18,6 +18,7 @@ public class EditorComponentEvent : EditorComponent
     private readonly StringKey NEXT_EVENTS = new StringKey("val", "NEXT_EVENTS");
     private readonly StringKey VARS = new StringKey("val", "VARS");
     private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
+    private readonly StringKey AUDIO = new StringKey(VAL, "AUDIO");
 
     QuestData.Event eventComponent;
 
@@ -26,6 +27,7 @@ public class EditorComponentEvent : EditorComponent
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
+    EditorSelectionList audioESL;
 
     public EditorComponentEvent(string nameIn) : base()
     {
@@ -50,9 +52,9 @@ public class EditorComponentEvent : EditorComponent
         {
             type = QuestData.Door.type;
         }
-        if (eventComponent is QuestData.Monster)
+        if (eventComponent is QuestData.Spawn)
         {
-            type = QuestData.Monster.type;
+            type = QuestData.Spawn.type;
         }
         if (eventComponent is QuestData.Token)
         {
@@ -135,6 +137,13 @@ public class EditorComponentEvent : EditorComponent
 
         tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), 
             new StringKey(eventComponent.trigger,false), delegate { SetTrigger(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag("editor");
+
+        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), new StringKey("var", "X_COLON", AUDIO));
+        db.ApplyTag("editor");
+
+        tb = new TextButton(new Vector2(4, 13), new Vector2(10, 1), new StringKey(eventComponent.audio,false), delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -342,7 +351,7 @@ public class EditorComponentEvent : EditorComponent
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.UniqueMonster)
+            if (kv.Value is QuestData.CustomMonster)
             {
                 triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
             }
@@ -359,6 +368,31 @@ public class EditorComponentEvent : EditorComponent
         eventComponent.trigger = triggerESL.selection;
         Update();
     }
+
+    public void SetAudio()
+    {
+        Game game = Game.Get();
+        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
+        audio.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+        }
+
+        audioESL = new EditorSelectionList("Select Audio", audio, delegate { SelectEventAudio(); });
+        audioESL.SelectItem();
+    }
+
+    public void SelectEventAudio()
+    {
+        Game game = Game.Get();
+        eventComponent.audio = audioESL.selection;
+        game.audioControl.Play(game.cd.audio[audioESL.selection].file);
+        Update();
+    }
+
+
 
     public void SetHighlight()
     {

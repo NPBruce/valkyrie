@@ -61,28 +61,18 @@ abstract public class AppFinder
             process.CancelOutputRead();
 
             
-            string[] output = outputBuilder.ToString().Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-            ValkyrieDebug.Log("Number of lines returned: " + output.Length);
-
-            if (output.Length == 1)
-            {
-                ValkyrieDebug.Log(output[0]);
-            }
+            string output = outputBuilder.ToString();
 
             ValkyrieDebug.Log("Looking for: " + "/" + Executable());
             // Quick hack rather than doing XML properly
-            foreach (string s in output)
+            int foundAt = output.IndexOf("/" + Executable());
+            if (foundAt > 0)
             {
-
-                if (s.IndexOf("/" + Executable()) > 0)
-                {
-                    ValkyrieDebug.Log("Found Line: " + s);
-                    location = s.Trim();
-                    // Removing <string> and </string>
-                    location = location.Substring(8, location.Length - 17);
-                    ValkyrieDebug.Log("Using location: " + location);
-                }
+                ValkyrieDebug.Log("Name Index: " + foundAt);
+                int startPos = output.LastIndexOf("<string>", foundAt) + 8;
+                ValkyrieDebug.Log("Start Index: " + startPos);
+                location = output.Substring(startPos, output.IndexOf("</string>", startPos) - startPos).Trim();
+                ValkyrieDebug.Log("Using location: " + location);
             }
             if (location.Length == 0)
             {

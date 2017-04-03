@@ -2,12 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class EditorComponentUniqueMonster : EditorComponent
+public class EditorComponentCustomMonster : EditorComponent
 {
+
     private readonly StringKey BASE = new StringKey("val", "BASE");
     private readonly StringKey NAME = new StringKey("val", "NAME");
 
-    QuestData.UniqueMonster monsterComponent;
+    QuestData.CustomMonster monsterComponent;
+    
     DialogBoxEditable nameDBE;
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
@@ -15,11 +17,11 @@ public class EditorComponentUniqueMonster : EditorComponent
     EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
 
+    public EditorComponentCustomMonster(string nameIn) : base()
 
-    public EditorComponentUniqueMonster(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.UniqueMonster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.CustomMonster;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -30,16 +32,12 @@ public class EditorComponentUniqueMonster : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), 
-            CommonStringKeys.UNIQUE_MONSTER, 
-            delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), 
-            new StringKey(name.Substring("UniqueMonster".Length),false),
-            delegate { QuestEditorData.ListUniqueMonster(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), new StringKey(name.Substring("CustomMonster".Length),false), delegate { QuestEditorData.ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");

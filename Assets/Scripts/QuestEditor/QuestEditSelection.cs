@@ -35,6 +35,24 @@ public class QuestEditSelection
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.parent = db.background.transform;
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 21 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
+
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
 
@@ -97,6 +115,24 @@ public class QuestEditSelection
         scrollArea.transform.parent = db.background.transform;
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.parent = db.background.transform;
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 21 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
@@ -171,6 +207,24 @@ public class QuestEditSelection
         scrollArea.transform.parent = db.background.transform;
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.parent = db.background.transform;
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 21 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
@@ -328,6 +382,8 @@ public class QuestEditSelection
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
+
+        game.audioControl.Music(new List<string>());
 
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);

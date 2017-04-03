@@ -79,6 +79,7 @@ class SaveManager
                 {
                     ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
+                    return;
                 }
 
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");

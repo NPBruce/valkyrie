@@ -20,6 +20,7 @@ public class PuzzleImageWindow
     {
         eventData = e;
         Game game = Game.Get();
+        game.cc.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
@@ -70,10 +71,8 @@ public class PuzzleImageWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), 
-            new Vector2(28f, 22f), 
-            StringKey.NULL);
+        Game.Get().cc.panDisable = true;
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here

@@ -20,6 +20,7 @@ public class ContentData {
     public Dictionary<string, PerilData> perils;
     public Dictionary<string, PuzzleData> puzzles;
     public Dictionary<string, AudioData> audio;
+    public HashSet<string> packType;
 
     public static string ContentPath()
     {
@@ -73,6 +74,8 @@ public class ContentData {
         // This has all avilable puzzle images
         audio = new Dictionary<string, AudioData>();
 
+        packType = new HashSet<string>();
+
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
         foreach (string p in contentFiles)
@@ -113,6 +116,10 @@ public class ContentData {
 
             // Black description isn't fatal
             pack.description = d.Get("ContentPack", "description");
+
+            // Some packs have a type
+            pack.type = d.Get("ContentPack", "type");
+            packType.Add(pack.type);
 
             // Get all the other ini files in the pack
             List<string> files = new List<string>();
@@ -562,6 +569,7 @@ public class ContentData {
         public string image;
         public string description;
         public string id;
+        public string type;
         public List<string> iniFiles;
     }
 
@@ -975,12 +983,22 @@ public class AudioData : GenericData
 {
     public static new string type = "Audio";
     public string file = "";
+    public bool menu = false;
+    public bool quest = false;
 
     public AudioData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
         if (content.ContainsKey("file"))
         {
             file = path + "/" + content["file"];
+        }
+        if (content.ContainsKey("menu"))
+        {
+            bool.TryParse(content["menu"], out menu);
+        }
+        if (content.ContainsKey("quest"))
+        {
+            bool.TryParse(content["quest"], out quest);
         }
     }
 }

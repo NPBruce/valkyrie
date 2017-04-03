@@ -19,10 +19,12 @@ namespace Assets.Scripts.Content
         public static readonly StringKey POSITION_FREE = new StringKey("~", false);
         public static readonly StringKey PLUS = new StringKey("+", false);
         public static readonly StringKey MINUS = new StringKey("+", false);
+        public static readonly StringKey TAB = new StringKey("->",false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
+
         public static readonly StringKey FINISHED = new StringKey("val", "FINISHED");
 
         public static readonly StringKey SKILL = new StringKey(VAL, "SKILL");
@@ -38,14 +40,16 @@ namespace Assets.Scripts.Content
         public static readonly StringKey DOOR = new StringKey(VAL, "DOOR");
         public static readonly StringKey TOKEN = new StringKey(VAL, "TOKEN");
         public static readonly StringKey MONSTER = new StringKey(VAL, "MONSTER");
+        public static readonly StringKey SPAWN = new StringKey(VAL, "SPAWN");
         public static readonly StringKey MPLACE = new StringKey(VAL, "MPLACE");
         public static readonly StringKey PUZZLE = new StringKey(VAL, "PUZZLE");
         public static readonly StringKey ITEM = new StringKey(VAL, "ITEM");
         public static readonly StringKey UNIQUE_MONSTER = new StringKey(VAL, "UNIQUE_MONSTER");
+        public static readonly StringKey CUSTOM_MONSTER = new StringKey(VAL, "CUSTOM_MONSTER");
         public static readonly StringKey ACTIVATION = new StringKey(VAL, "ACTIVATION");
         public static readonly StringKey NUMBER = new StringKey(VAL, "NUMBER");
         public static readonly StringKey TRIGGER = new StringKey(VAL, "TRIGGER");
-        public static readonly StringKey TAB = new StringKey("->",false);
+
         public static readonly StringKey LOG = new StringKey(VAL, "LOG");
         public static readonly StringKey SET = new StringKey(VAL, "SET");
         public static readonly StringKey RESET = new StringKey(VAL, "RESET");
