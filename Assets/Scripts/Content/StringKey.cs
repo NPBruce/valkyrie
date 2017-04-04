@@ -13,7 +13,6 @@
         public string key { get; set; }
 
         private bool preventLookup = false;
-        private string v;
 
         /// <summary>
         /// Basic constructor from a key

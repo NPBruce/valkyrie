@@ -13,10 +13,10 @@ public class EditorComponentPuzzle : EditorComponent
     private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val", "ICON_SUCCESS_RESULT");
     private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
     private readonly StringKey PUZZLE_LEVEL = new StringKey("val", "PUZZLE_LEVEL");
-    private readonly StringKey PUZZLE_IMAGE = new StringKey("val", "PUZZLE_IMAGE");
+    private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
     private readonly StringKey PUZZLE_ALT_LEVEL = new StringKey("val", "PUZZLE_ALT_LEVEL");
     private readonly StringKey PUZZLE_SELECT_SKILL = new StringKey("val", "PUZZLE_SELECT_SKILL");
-    private readonly StringKey PUZZLE_SELECT_IMAGE = new StringKey("val", "PUZZLE_SELECT_IMAGE");
+    private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
     QuestData.Puzzle puzzleComponent;
     EditorSelectionList classList;
@@ -95,7 +95,7 @@ public class EditorComponentPuzzle : EditorComponent
             if (puzzleComponent.puzzleClass.key.Equals("PUZZLE_IMAGE_CLASS"))
             {
                 db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1),
-                    new StringKey("val", "X_COLON", PUZZLE_IMAGE));
+                    new StringKey("val", "X_COLON", IMAGE));
                 db.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(3, 10), new Vector2(8, 1), 
@@ -178,7 +178,7 @@ public class EditorComponentPuzzle : EditorComponent
         {
             puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "MoM"));
         }
-        imageList = new EditorSelectionList(PUZZLE_SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
+        imageList = new EditorSelectionList(SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();
     }
 

@@ -12,6 +12,11 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey ACTIVATIONS = new StringKey("val","ACTIVATIONS");
     private readonly StringKey INFO = new StringKey("val", "INFO");
     private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
+    private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
+    private readonly StringKey PLACE_IMG = new StringKey("val", "PLACE_IMG");
+    private readonly StringKey RESET = new StringKey("val", "RESET");
+    private readonly StringKey SET = new StringKey("val", "SET");
+    private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
 
     QuestData.CustomMonster monsterComponent;
     
@@ -180,44 +185,46 @@ public class EditorComponentCustomMonster : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), "Image:");
+        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), new StringKey("val","X_COLON",IMAGE));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
-            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), monsterComponent.imagePath, delegate { SetImage(); });
+            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), 
+                new StringKey(monsterComponent.imagePath,false), delegate { SetImage(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Reset", delegate { ClearImage(); });
+                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), RESET, delegate { ClearImage(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Set", delegate { SetImage(); });
+            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), SET, delegate { SetImage(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
 
-        db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), "Place Img:");
+        db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), PLACE_IMG);
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
         {
-            tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), monsterComponent.imagePath, delegate { SetImagePlace(); });
+            tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), 
+                new StringKey(monsterComponent.imagePath,false), delegate { SetImagePlace(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Reset", delegate { ClearImagePlace(); });
+                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), RESET, delegate { ClearImagePlace(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Set", delegate { SetImagePlace(); });
+            tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), SET, delegate { SetImagePlace(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -456,7 +463,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
         }
-        imageESL = new EditorSelectionList("Select Image", list, delegate { SelectImage(); });
+        imageESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
         imageESL.SelectItem();
     }
 
@@ -484,7 +491,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
         }
-        placeESL = new EditorSelectionList("Select Image", list, delegate { SelectImagePlace(); });
+        placeESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImagePlace(); });
         placeESL.SelectItem();
     }
 

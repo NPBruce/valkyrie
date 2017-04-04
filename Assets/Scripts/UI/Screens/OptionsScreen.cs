@@ -7,8 +7,10 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
-        private StringKey OPTIONS = new StringKey("val", "OPTIONS");
-        private StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
+        private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private readonly StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
+        private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
+        private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
 
         Game game = Game.Get();
 
@@ -59,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
 
         private void CreateAudioElements()
         {
-            DialogBox db = new DialogBox(new Vector2(2, 8), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Music");
+            DialogBox db = new DialogBox(new Vector2(2, 8), new Vector2(UIScaler.GetWidthUnits() - 4, 2), MUSIC);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -111,7 +113,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
-            db = new DialogBox(new Vector2(2, 14), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Effects");
+            db = new DialogBox(new Vector2(2, 14), new Vector2(UIScaler.GetWidthUnits() - 4, 2), EFFECTS);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
