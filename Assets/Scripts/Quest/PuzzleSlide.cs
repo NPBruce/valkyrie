@@ -9,6 +9,53 @@ public class PuzzleSlide : Puzzle
 
     public PuzzleSlide(int depth)
     {
+        if (depth < 1)
+        {
+            depth = 1;
+        }
+        if (depth > 10)
+        {
+            depth = 10;
+        }
+        List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
+        // Fix
+        IniData puzzles = IniRead.ReadFromString((text)Resources.Load("puzzle.ini"));
+        foreach (Dictionary<string, string> p in puzzles.data)
+        {
+            int moves = 1;
+            int.TryParse(p["moves"], out moves);
+            if (moves == depth)
+            {
+                options.Add(p);
+            }
+        }
+        Loadpuzzle(options[Random.Range(0, options.Count)]);
+    }
+
+    public PuzzleSlide(Dictionary<string, string> data)
+    {
+        Loadpuzzle(data);
+    }
+
+    public Loadpuzzle(Dictionary<string, string> data)
+    {
+        puzzle = new List<Block>();
+        foreach (KeyValuePair<string, string> kv in data)
+        {
+            if (kv.Key.Equals("moves"))
+            {
+                int.TryParse(kv.Value, out moves);
+            }
+            else
+            {
+                puzzle.Add(new Block(kv.Value));
+            }
+        }
+    }
+
+    // Too slow and memory consuming
+    public void GeneratePuzzle(int moves)
+    {
         puzzle = new List<Block>();
         puzzle.Add(new Block());
 
@@ -30,22 +77,6 @@ public class PuzzleSlide : Puzzle
             if (steps > depth)
             {
                 RemoveBlock();
-            }
-        }
-    }
-
-    public PuzzleSlide(Dictionary<string, string> data)
-    {
-        puzzle = new List<Block>();
-        foreach (KeyValuePair<string, string> kv in data)
-        {
-            if (kv.Key.Equals("moves"))
-            {
-                int.TryParse(kv.Value, out moves);
-            }
-            else
-            {
-                puzzle.Add(new Block(kv.Value));
             }
         }
     }
