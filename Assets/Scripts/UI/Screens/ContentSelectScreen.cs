@@ -28,6 +28,8 @@ namespace Assets.Scripts.UI.Screens
                 Application.Quit();
             }
 
+            // load base to get types
+            game.cd.LoadContentID("");
             if (game.cd.packTypes.Count > 1)
             {
                 DrawTypeList();
@@ -237,7 +239,14 @@ namespace Assets.Scripts.UI.Screens
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
 
             // Button for back to main menu
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+            if (game.cd.packTypes.Count > 1)
+            {
+                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { DrawTypeList(); }, Color.red);
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
+            }
             tb.SetFont(game.gameType.GetHeaderFont());
         }
         
