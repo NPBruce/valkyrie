@@ -65,6 +65,19 @@ public class Audio : MonoBehaviour
         StartCoroutine(PlayMusic(fileNames));
     }
 
+    public void PlayTrait(string trait)
+    {
+        List<string> files = new List<string>();
+        foreach (AudioData ad in Game.Get().cd.audio)
+        {
+            if (ad.ContainsTrait(trait))
+            {
+                files.Add(ad.file);
+            }
+        }
+        if (files.Count > 0) StartCoroutine(PlayEffect(files[Random.Range(0, files.Count)]));
+    }
+
     public void Play(string file)
     {
         if (file.Length > 0) StartCoroutine(PlayEffect(file));
