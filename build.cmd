@@ -38,6 +38,7 @@ xcopy /E /Y build\macos build\batchMac
 rem I clean macos because I don't trust unity
 rmdir /s /q build\macos
 mkdir build\macos
+mkdir build\macos\Valkyrie.app
 
 rem read build version
 set /p version=<Assets\Resources\version.txt
