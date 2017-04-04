@@ -7,6 +7,7 @@ using Assets.Scripts.Content;
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
 
+    public List<string> loadedPacks;
     public List<ContentPack> allPacks;
     public Dictionary<string, PackTypeData> packTypes;
     public Dictionary<string, TileSideData> tileSides;
@@ -35,6 +36,9 @@ public class ContentData {
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {
+        // This is pack type for sorting packs
+        loadedPacks = new List<string>();
+
         // This is pack type for sorting packs
         packTypes = new Dictionary<string, PackTypeData>();
 
@@ -121,6 +125,14 @@ public class ContentData {
             // Some packs have a type
             pack.type = d.Get("ContentPack", "type");
 
+            // Get cloned packs
+            string cloneString = d.Get("ContentPack", "clone");
+            clone = new List<string>();
+            foreach (string s in cloneString.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            {
+                clone.Add(s);
+            }
+
             // Get all the other ini files in the pack
             List<string> files = new List<string>();
             // content_pack file is included
@@ -167,50 +179,10 @@ public class ContentData {
         return "";
     }
 
-    // Return a list of names for all enbaled content packs
-    public List<string> GetEnabledPacks()
-    {
-        Game game = Game.Get();
-        List<string> names = new List<string>();
-        // Get list of configured packs
-        Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        foreach (ContentPack cp in allPacks)
-        {
-            // base pack
-            if (cp.id.Length == 0)
-            {
-                names.Add(cp.name);
-            }
-            // Selected expansion
-            if (setPacks != null && setPacks.ContainsKey(cp.id))
-            {
-                names.Add(cp.name);
-            }
-        }
-        return names;
-    }
-
     // Return a list of id for all enbaled content packs
-    public List<string> GetEnabledPackIDs()
+    public List<string> GetLoadedPackIDs()
     {
-        Game game = Game.Get();
-        List<string> ids = new List<string>();
-        // Read from config
-        Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        foreach (ContentPack cp in allPacks)
-        {
-            // Base pack
-            if (cp.id.Length == 0)
-            {
-                ids.Add(cp.id);
-            }
-            // Enabled expansion
-            if (setPacks != null && setPacks.ContainsKey(cp.id))
-            {
-                ids.Add(cp.id);
-            }
-        }
-        return ids;
+        return loadedPacks;
     }
 
     // This loads content from a pack by name
@@ -254,7 +226,13 @@ public class ContentData {
             foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
                 AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
+                loadedPacks.Add(cp.id);
             }
+        }
+
+        foreach (string s in cp.clone)
+        {
+            LoadContentID(s);
         }
     }
 
@@ -597,6 +575,7 @@ public class ContentData {
         public string id;
         public string type;
         public List<string> iniFiles;
+        public List<string> clone;
     }
 
     // Get a unity texture from a file (dds or other unity supported format)

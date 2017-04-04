@@ -127,10 +127,15 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
-        // Load selected packs
-        foreach(string pack in cd.GetEnabledPacks())
+        // Load configured packs
+        cd.LoadContentID("");
+        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        if (packs != null)
         {
-            cd.LoadContent(pack);
+            foreach (KeyValuePair<string, string> kv in packs)
+            {
+                cd.LoadContentID(pack);
+            }
         }
 
         // Get a list of available quests

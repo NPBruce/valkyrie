@@ -32,7 +32,7 @@ public class QuestLoader {
             if (q.valid && q.type.Equals(game.gameType.TypeName()))
             {
                 // Are all expansions selected?
-                if (q.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count == 0 || !checkContent)
+                if (q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0 || !checkContent)
                 {
                     // Add quest to quest list
                     quests.Add(p, q);
