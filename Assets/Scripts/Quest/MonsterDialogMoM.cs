@@ -142,6 +142,8 @@ public class MonsterDialogMoM : MonsterDialog
         game.monsterCanvas.UpdateList();
 
         game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+        
+        game.audioControl.PlayTrait("defeated");
 
         // Trigger defeated event
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);

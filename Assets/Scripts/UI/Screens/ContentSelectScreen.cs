@@ -31,17 +31,15 @@ namespace Assets.Scripts.UI.Screens
                 Application.Quit();
             }
 
-            if (game.cd.packType.Count > 1)
+            // load base to get types
+            game.cd.LoadContentID("");
+            if (game.cd.packTypes.Count > 1)
             {
                 DrawTypeList();
             }
             else
             {
-                // Will only do one
-                foreach (string s in game.cd.packType)
-                {
-                    DrawList(s);
-                }
+                DrawList("");
             }
         }
 
@@ -60,40 +58,42 @@ namespace Assets.Scripts.UI.Screens
             TextButton tb = null;
             bool left = true;
             // Note this is currently unordered
-            foreach (string type in game.cd.packType)
+            foreach (PackTypeData type in game.cd.packTypes.Values)
             {
-                // Create a sprite with the pack's image
-                //Texture2D tex = ContentData.FileToTexture(cp.image);
-                //Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+                // Create a sprite with the category image
+                Texture2D tex = ContentData.FileToTexture(type.image);
+                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
+                string typeId = type.sectionName.Substring("PackType".Length);
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(type); });
+                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(typeId); });
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(type); });
+                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(typeId); });
                 }
-                //tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), new StringKey("val", "INDENT", new StringKey(type,false)), delegate { DrawList(type); }, Color.clear);
+                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), StringKey.NULL, delegate { DrawList(typeId); }, Color.clear);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), new StringKey("val", "INDENT", new StringKey(type,false)), delegate { DrawList(type); }, Color.clear);
+                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), StringKey.NULL, delegate { DrawList(typeId); }, Color.clear);
                 }
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), StringKey.NULL, delegate { DrawList(type); }, Color.black);
+                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), type.name, delegate { DrawList(typeId); }, Color.black);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), StringKey.NULL, delegate { DrawList(type); }, Color.black);
+                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), type.name, delegate { DrawList(typeId); }, Color.black);
                 }
                 tb.setColor(Color.clear);
                 tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
@@ -246,13 +246,14 @@ namespace Assets.Scripts.UI.Screens
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
 
             // Button for back to main menu
-            tb = new TextButton(
-                new Vector2(1, UIScaler.GetBottom(-3)), 
-                new Vector2(8, 2),
-                CommonStringKeys.BACK, 
-                delegate { Destroyer.MainMenu(); }, 
-                Color.red);
-
+            if (game.cd.packTypes.Count > 1)
+            {
+                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { DrawTypeList(); }, Color.red);
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+            }
             tb.SetFont(game.gameType.GetHeaderFont());
         }
         

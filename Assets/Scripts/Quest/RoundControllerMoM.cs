@@ -153,5 +153,10 @@ public class RoundControllerMoM : RoundController
 
         // Update monster display
         game.monsterCanvas.UpdateStatus();
+
+        game.audioControl.PlayTrait("newround");
+
+        // Start of round events
+        game.quest.eManager.EventTriggerType("StartRound");
     }
 }

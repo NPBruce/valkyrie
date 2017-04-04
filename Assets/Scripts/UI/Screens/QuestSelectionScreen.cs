@@ -70,7 +70,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all available quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count == 0)
+                if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0)
                 {
                     string key = q.Key;
                     // Size is 1.2 to be clear of characters with tails
@@ -91,7 +91,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all unavailable quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count > 0)
+                if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
                 {
                     // Size is 1.2 to be clear of characters with tails
                     db = new DialogBox(
@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI.Screens
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
                     db.background.transform.parent = scrollArea.transform;
                     offset += 1.2f;
-                    foreach (string s in q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()))
+                    foreach (string s in q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()))
                     {
                         db = new DialogBox(
                             new Vector2(4, offset), 
