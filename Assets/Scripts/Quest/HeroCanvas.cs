@@ -189,6 +189,14 @@ public class HeroCanvas : MonoBehaviour {
             }
         }
 
+        // Game hasn't started, remove any selected hero
+        if (!game.quest.heroesSelected)
+        {
+            target.heroData = null;
+            UpdateImages();
+            return;
+        }
+
         // If there are any other dialogs
         if (GameObject.FindGameObjectWithTag("dialog") != null)
         {
@@ -208,18 +216,6 @@ public class HeroCanvas : MonoBehaviour {
         {
             new HeroDialog(target);
         }
-        // Game hasn't started, open hero selection options
-        if (!game.quest.heroesSelected)
-        {
-            // Dim selected frame
-            icon_frames[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
-            if (icons[id].color.a > 0)
-            {
-                // Dim selected hero if picked
-                icons[id].color = new Color((float)0.3, (float)0.3, (float)0.3);
-            }
-            new HeroSelection(target);
-        }
     }
 
     // End hero selection and reorder heroselect
@@ -229,8 +225,7 @@ public class HeroCanvas : MonoBehaviour {
     {
         int heroCount = 0;
 
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
-            return;
+        Destroyer.Dialog();
 
         // Count number of selected heroes
         Game game = Game.Get();
@@ -283,5 +278,13 @@ public class HeroCanvas : MonoBehaviour {
         {
             new InvestigatorItems();
         }
+
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
     }
 }

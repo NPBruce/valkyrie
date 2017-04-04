@@ -31,6 +31,24 @@ namespace Assets.Scripts.UI.Screens
             db.background.AddComponent<UnityEngine.UI.Mask>();
             UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
+            GameObject scrollBarObj = new GameObject("scrollbar");
+            scrollBarObj.transform.parent = db.background.transform;
+            RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 21 * UIScaler.GetPixelsPerUnit());
+            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+            UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+            scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+            scrollRect.verticalScrollbar = scrollBar;
+
+            GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+            scrollBarHandle.transform.parent = scrollBarObj.transform;
+            //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+            scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+            scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+            scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+            scrollBar.handleRect.offsetMin = Vector2.zero;
+            scrollBar.handleRect.offsetMax = Vector2.zero;
+
             GameObject scrollArea = new GameObject("scroll");
             RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
             scrollArea.transform.parent = db.background.transform;
@@ -46,7 +64,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all available quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count == 0)
+                if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0)
                 {
                     string key = q.Key;
                     // Size is 1.2 to be clear of characters with tails
@@ -63,7 +81,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all unavailable quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
-                if (q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()).Count > 0)
+                if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
                 {
                     // Size is 1.2 to be clear of characters with tails
                     db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + q.Value.name, Color.black);
@@ -72,7 +90,7 @@ namespace Assets.Scripts.UI.Screens
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
                     db.background.transform.parent = scrollArea.transform;
                     offset += 1.2f;
-                    foreach (string s in q.Value.GetMissingPacks(game.cd.GetEnabledPackIDs()))
+                    foreach (string s in q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()))
                     {
                         db = new DialogBox(new Vector2(4, offset), new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f), " Requires:  " + game.cd.GetContentName(s), Color.black);
                         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");

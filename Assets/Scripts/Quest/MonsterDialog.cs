@@ -62,7 +62,7 @@ public class MonsterDialog
     // Defeated monsters
     public void Defeated()
     {
-        Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
@@ -71,6 +71,8 @@ public class MonsterDialog
         updateDisplay();
 
         game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+
+        game.audioControl.PlayTrait("defeated");
         
         // Trigger defeated event
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);

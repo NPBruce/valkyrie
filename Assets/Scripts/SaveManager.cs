@@ -70,6 +70,7 @@ class SaveManager
                     Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie/Load");
                 }
 
+                Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
                 ZipFile zip = ZipFile.Read(SaveFile());
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
 
@@ -79,6 +80,7 @@ class SaveManager
                 {
                     ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
+                    return;
                 }
 
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
@@ -148,8 +150,9 @@ class SaveManager
                 game.stageUI = new NextStageButton();
             }
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            e = e;
             ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile());
             Application.Quit();
         }

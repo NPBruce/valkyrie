@@ -232,7 +232,7 @@ public class TokenBoard : MonoBehaviour {
 
 
     // Add a signal to place a monster group
-    public void AddAreaMonster(QuestData.Monster m)
+    public void AddAreaMonster(QuestData.Spawn m)
     {
         Game game = Game.Get();
         Sprite tileSprite;

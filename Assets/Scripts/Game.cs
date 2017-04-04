@@ -44,6 +44,11 @@ public class Game : MonoBehaviour {
     public RoundController roundControl;
     // Class for stage control UI
     public NextStageButton stageUI;
+    // Class log window
+    public LogWindow logWindow;
+    // Class for stage control UI
+
+    public Audio audioControl;
 
     // Current language
     public string currentLang;
@@ -74,6 +79,8 @@ public class Game : MonoBehaviour {
         // Create some things
         uiScaler = new UIScaler(uICanvas);
         config = new ConfigFile();
+        GameObject go = new GameObject("audio");
+        audioControl = go.AddComponent<Audio>();
 
         if (config.data.Get("UserConfig") == null)
         {
@@ -120,10 +127,15 @@ public class Game : MonoBehaviour {
             Application.Quit();
         }
 
-        // Load selected packs
-        foreach(string pack in cd.GetEnabledPacks())
+        // Load configured packs
+        cd.LoadContentID("");
+        Dictionary<string, string> packs = config.data.Get(gameType.TypeName() + "Packs");
+        if (packs != null)
         {
-            cd.LoadContent(pack);
+            foreach (KeyValuePair<string, string> kv in packs)
+            {
+                cd.LoadContentID(kv.Key);
+            }
         }
 
         // Get a list of available quests
@@ -175,6 +187,8 @@ public class Game : MonoBehaviour {
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(gameType.GetHeaderFont());
         db.ApplyTag("heroselect");
+
+        new HeroSelection();
 
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());
@@ -233,6 +247,14 @@ public class Game : MonoBehaviour {
         if (quest != null)
         {
             quest.Update();
+        }
+
+        if (Input.GetKey("right alt") || Input.GetKey("left alt"))
+        {
+            if (Input.GetKeyDown("d") && logWindow != null)
+            {
+                logWindow.Update(true);
+            }
         }
     }
 

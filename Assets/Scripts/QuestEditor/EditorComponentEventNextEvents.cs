@@ -32,9 +32,9 @@ public class EditorComponentEventNextEvent : EditorComponent
         {
             type = QuestData.Door.type;
         }
-        if (eventComponent is QuestData.Monster)
+        if (eventComponent is QuestData.Spawn)
         {
-            type = QuestData.Monster.type;
+            type = QuestData.Spawn.type;
         }
         if (eventComponent is QuestData.Token)
         {

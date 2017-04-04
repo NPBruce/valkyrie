@@ -8,7 +8,7 @@ public class QuestMonster : MonsterData
     public string derivedType = "";
 
     // Construct with quest data
-    public QuestMonster(QuestData.UniqueMonster qm) : base()
+    public QuestMonster(QuestData.CustomMonster qm) : base()
     {
         Game game = Game.Get();
 

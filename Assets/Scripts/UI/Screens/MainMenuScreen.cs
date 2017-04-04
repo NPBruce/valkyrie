@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI.Screens;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Assets.Scripts.UI.Screens
 {
@@ -12,6 +13,23 @@ namespace Assets.Scripts.UI.Screens
             // This will destroy all, because we shouldn't have anything left at the main menu
             Destroyer.Destroy();
             Game game = Game.Get();
+
+            game.cd = new ContentData(game.gameType.DataDirectory());
+            // Check if we found anything
+            if (game.cd.GetPacks().Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                Application.Quit();
+            }
+            // Load base
+            game.cd.LoadContentID("");
+
+            List<string> music = new List<string>();
+            foreach (AudioData ad in game.cd.audio.Values)
+            {
+                if (ad.ContainsTrait("menu")) music.Add(ad.file);
+            }
+            game.audioControl.Music(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
@@ -52,15 +70,14 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), new Vector2(12, 2f), "About", delegate { About(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
-            /*
+            
             // Configuration menu
             tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "Options", delegate { Config(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
-            */
 
             // Exit Valkyrie
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "Exit", delegate { Exit(); });
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), "Exit", delegate { Exit(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
         }

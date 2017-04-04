@@ -45,6 +45,9 @@ public class Quest
     // Event Log
     public List<LogEntry> log;
 
+    // Dictionary of picked monster types
+    public Dictionary<string, string> monsterSelect;
+
     // game state variables
     public int round = 1;
     public int morale = 0;
@@ -75,10 +78,13 @@ public class Quest
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
-        eManager = new EventManager();
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
         log = new List<LogEntry>();
+        monsterSelect = new Dictionary<string, string>();
+
+        GenerateMonsterSelection();
+        eManager = new EventManager();
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
@@ -88,14 +94,154 @@ public class Quest
         }
 
         // Set quest vars for selected expansions
-        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        if (packs != null)
+        foreach (string s in game.cd.GetLoadedPackIDs())
         {
-            foreach (KeyValuePair<string, string> kv in packs)
+            if (s.Length > 0)
             {
-                vars.SetValue("#" + kv.Key, 1);
+                vars.SetValue("#" + s, 1);
             }
         }
+    }
+
+
+    public void GenerateMonsterSelection()
+    {
+        // Determine monster types
+        bool progress = false;
+        bool force = false;
+        bool done = false;
+        while (!done)
+        {
+            progress = false;
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+            {
+                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
+                if (qs != null)
+                {
+                    progress |= AttemptMonsterMatch(qs, force);
+                    if (progress && force) force = false;
+                }
+            }
+            if (!progress && !force)
+            {
+                force = true;
+            }
+            else if (!progress && force)
+            {
+                done = true;
+            }
+        }
+    }
+
+    public bool AttemptMonsterMatch(QuestData.Spawn spawn, bool force = true)
+    {
+        if (monsterSelect.ContainsKey(spawn.sectionName))
+        {
+            return false;
+        }
+        if ((spawn.mTraitsPool.Length + spawn.mTraitsRequired.Length) == 0)
+        {
+            foreach (string t in spawn.mTypes)
+            {
+                if (monsterSelect.ContainsKey(t))
+                {
+                    monsterSelect.Add(spawn.sectionName, monsterSelect[t]);
+                    return true;
+                }
+                if (t.IndexOf("Spawn") == 0)
+                {
+                    return false;
+                }
+                string monster = t;
+                if (monster.IndexOf("Monster") != 0 && monster.IndexOf("CustomMonster") != 0)
+                {
+                    monster = "Monster" + monster;
+                }
+                // Monster type might be a unique for this quest
+                if (game.quest.qd.components.ContainsKey(monster))
+                {
+                    monsterSelect.Add(spawn.sectionName, monster);
+                    return true;
+                }
+                // Monster type might exist in content packs, 'Monster' is optional
+                else if (game.cd.monsters.ContainsKey(monster))
+                {
+                    monsterSelect.Add(spawn.sectionName, monster);
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            // List of exclusions
+            List<string> exclude = new List<string>();
+            foreach (string t in spawn.mTypes)
+            {
+                if (monsterSelect.ContainsKey(t))
+                {
+                    exclude.Add(monsterSelect[t]);
+                }
+                else if (t.IndexOf("Spawn") == 0 && !force)
+                {
+                    return false;
+                }
+                else
+                {
+                    exclude.Add(t);
+                }
+            }
+
+            // Start a list of matches
+            List<string> list = new List<string>();
+            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+            {
+                bool allFound = true;
+                foreach (string t in spawn.mTraitsRequired)
+                {
+                    // Does the monster have this trait?
+                    if (!kv.Value.ContainsTrait(t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (spawn.mTraitsPool.Length == 0);
+                foreach (string t in spawn.mTraitsPool)
+                {
+                    // Does the monster have this trait?
+                    if (kv.Value.ContainsTrait(t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // Monster has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
+                Destroyer.MainMenu();
+                return false;
+            }
+
+            // Pick monster at random from candidates
+            monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
+            return true;
+        }
+        return false;
     }
 
     // Construct a quest from save data string
@@ -153,7 +299,7 @@ public class Quest
             int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
         }
 
-        // Populate DelayedEvents
+        // Populate DelayedEvents (depreciated)
         delayedEvents = new List<QuestData.Event.DelayedEvent>();
         string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
         foreach (string de in saveDelayed)
@@ -164,6 +310,14 @@ public class Quest
         // Set static quest data
         string questPath = saveData.Get("Quest", "path");
         qd = new QuestData(questPath);
+
+        monsterSelect = saveData.Get("SelectMonster");
+        if (monsterSelect == null)
+        {
+            // Support old saves
+            monsterSelect = new Dictionary<string, string>();
+            GenerateMonsterSelection();
+        }
 
         // Clear all tokens
         game.tokenBoard.Clear();
@@ -490,7 +644,7 @@ public class Quest
         r += nl;
 
         r += "[Packs]" + nl;
-        foreach (string pack in game.cd.GetEnabledPackIDs())
+        foreach (string pack in game.cd.GetLoadedPackIDs())
         {
             r += pack + nl;
         }
@@ -550,6 +704,12 @@ public class Quest
         foreach (LogEntry e in log)
         {
             r += e.ToString(i++);
+        }
+
+        r += "[SelectMonster]" + nl;
+        foreach (KeyValuePair<string, string> kv in monsterSelect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
         }
 
         return r;
@@ -974,6 +1134,12 @@ public class Quest
             uniqueText = data["uniqueText"];
             uniqueTitle = data["uniqueTitle"];
 
+            // Support old saves (deprectiated)
+            if (data["type"].IndexOf("UniqueMonster") == 0)
+            {
+                data["type"] = "CustomMonster" + data["type"].Substring("UniqueMonster".Length);
+            }
+
             // Find base type
             Game game = Game.Get();
             if (game.cd.monsters.ContainsKey(data["type"]))
@@ -981,9 +1147,9 @@ public class Quest
                 monsterData = game.cd.monsters[data["type"]];
             }
             // Check if type is a special quest specific type
-            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.UniqueMonster)
+            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.CustomMonster)
             {
-                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.UniqueMonster);
+                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.CustomMonster);
             }
 
             // If we have already selected an activation find it
@@ -1110,13 +1276,13 @@ public class Quest
             return r;
         }
 
-        public string GetEntry()
+        public string GetEntry(bool editorSet = false)
         {
             if (valkyrie && !Application.isEditor)
             {
                 return "";
             }
-            if (editor && !Application.isEditor)
+            if (editor && !editorSet)
             {
                 return "";
             }

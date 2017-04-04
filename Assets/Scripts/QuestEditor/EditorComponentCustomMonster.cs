@@ -1,21 +1,24 @@
 using UnityEngine;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EditorComponentUniqueMonster : EditorComponent
+public class EditorComponentCustomMonster : EditorComponent
 {
-    QuestData.UniqueMonster monsterComponent;
+    QuestData.CustomMonster monsterComponent;
     DialogBoxEditable nameDBE;
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
     EditorSelectionList baseESL;
     EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
+    EditorSelectionList imageESL;
+    EditorSelectionList placeESL;
 
-    public EditorComponentUniqueMonster(string nameIn) : base()
+    public EditorComponentCustomMonster(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.UniqueMonster;
+        monsterComponent = game.quest.qd.components[nameIn] as QuestData.CustomMonster;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -26,12 +29,12 @@ public class EditorComponentUniqueMonster : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "UniqueMonster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "CustomMonster", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("UniqueMonster".Length), delegate { QuestEditorData.ListUniqueMonster(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("CustomMonster".Length), delegate { QuestEditorData.ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -44,7 +47,7 @@ public class EditorComponentUniqueMonster : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Base:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 2), new Vector2(18, 1), monsterComponent.baseMonster, delegate { SetBase(); });
+        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), monsterComponent.baseMonster, delegate { SetBase(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -68,9 +71,6 @@ public class EditorComponentUniqueMonster : EditorComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
-
-        //string imagePath
-        //string imagePlace
 
         db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
         db.ApplyTag("editor");
@@ -155,6 +155,48 @@ public class EditorComponentUniqueMonster : EditorComponent
         else
         {
             tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Set", delegate { SetHealth(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), "Image:");
+        db.ApplyTag("editor");
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
+        {
+            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), monsterComponent.imagePath, delegate { SetImage(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            if (monsterComponent.baseMonster.Length > 0)
+            {
+                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Reset", delegate { ClearImage(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Set", delegate { SetImage(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), "Place Img:");
+        db.ApplyTag("editor");
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
+        {
+            tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), monsterComponent.imagePath, delegate { SetImagePlace(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+            if (monsterComponent.baseMonster.Length > 0)
+            {
+                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Reset", delegate { ClearImagePlace(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Set", delegate { SetImagePlace(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -372,6 +414,62 @@ public class EditorComponentUniqueMonster : EditorComponent
     {
         monsterComponent.health = 0;
         monsterComponent.healthDefined = true;
+        Update();
+    }
+
+    public void SetImage()
+    {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+        }
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+        }
+        imageESL = new EditorSelectionList("Select Image", list, delegate { SelectImage(); });
+        imageESL.SelectItem();
+    }
+
+    public void SelectImage()
+    {
+        monsterComponent.imagePath = imageESL.selection;
+        Update();
+    }
+
+    public void ClearImage()
+    {
+        monsterComponent.imagePath = "";
+        Update();
+    }
+
+    public void SetImagePlace()
+    {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+        }
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+        }
+        placeESL = new EditorSelectionList("Select Image", list, delegate { SelectImagePlace(); });
+        placeESL.SelectItem();
+    }
+
+    public void SelectImagePlace()
+    {
+        monsterComponent.imagePlace = placeESL.selection;
+        Update();
+    }
+
+    public void ClearImagePlace()
+    {
+        monsterComponent.imagePlace = "";
         Update();
     }
 }
