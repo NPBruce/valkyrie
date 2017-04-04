@@ -68,7 +68,7 @@ public class Audio : MonoBehaviour
     public void PlayTrait(string trait)
     {
         List<string> files = new List<string>();
-        foreach (AudioData ad in Game.Get().cd.audio)
+        foreach (AudioData ad in Game.Get().cd.audio.Values)
         {
             if (ad.ContainsTrait(trait))
             {

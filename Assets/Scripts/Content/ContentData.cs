@@ -127,10 +127,10 @@ public class ContentData {
 
             // Get cloned packs
             string cloneString = d.Get("ContentPack", "clone");
-            clone = new List<string>();
+            pack.clone = new List<string>();
             foreach (string s in cloneString.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
             {
-                clone.Add(s);
+                pack.clone.Add(s);
             }
 
             // Get all the other ini files in the pack
@@ -249,21 +249,21 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if(!packType.ContainsKey(name))
+            if(!packTypes.ContainsKey(name))
             {
-                packType.Add(name, d);
+                packTypes.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if(packType[name].priority < d.priority)
+            else if(packTypes[name].priority < d.priority)
             {
-                packType.Remove(name);
-                packType.Add(name, d);
+                packTypes.Remove(name);
+                packTypes.Add(name, d);
             }
             // items of the same priority belong to multiple packs
-            else if (packType[name].priority == d.priority)
+            else if (packTypes[name].priority == d.priority)
             {
-                packType[name].sets.Add(packID);
+                packTypes[name].sets.Add(packID);
             }
         }
 
