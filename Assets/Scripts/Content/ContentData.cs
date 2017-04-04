@@ -8,6 +8,7 @@ using Assets.Scripts.Content;
 public class ContentData {
 
     public List<ContentPack> allPacks;
+    public Dictionary<string, PackTypeData> packTypes;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heros;
     public Dictionary<string, ItemData> items;
@@ -20,7 +21,6 @@ public class ContentData {
     public Dictionary<string, PerilData> perils;
     public Dictionary<string, PuzzleData> puzzles;
     public Dictionary<string, AudioData> audio;
-    public HashSet<string> packType;
 
     public static string ContentPath()
     {
@@ -35,6 +35,9 @@ public class ContentData {
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {
+        // This is pack type for sorting packs
+        packTypes = new Dictionary<string, PackTypeData>();
+
         // This is all of the available sides of tiles (not currently tracking physical tiles)
         tileSides = new Dictionary<string, TileSideData>();
 
@@ -73,8 +76,6 @@ public class ContentData {
 
         // This has all avilable puzzle images
         audio = new Dictionary<string, AudioData>();
-
-        packType = new HashSet<string>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
@@ -119,7 +120,6 @@ public class ContentData {
 
             // Some packs have a type
             pack.type = d.Get("ContentPack", "type");
-            packType.Add(pack.type);
 
             // Get all the other ini files in the pack
             List<string> files = new List<string>();
@@ -263,6 +263,32 @@ public class ContentData {
     // path is relative and is used for images or other paths in the content
     void AddContent(string name, Dictionary<string, string> content, string path, string packID)
     {
+        // Is this a "PackType" entry?
+        if(name.IndexOf(PackTypeData.type) == 0)
+        {
+            PackTypeData d = new PackTypeData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if(!packType.ContainsKey(name))
+            {
+                packType.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if(packType[name].priority < d.priority)
+            {
+                packType.Remove(name);
+                packType.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (packType[name].priority == d.priority)
+            {
+                packType[name].sets.Add(packID);
+            }
+        }
+
         // Is this a "TileSide" entry?
         if(name.IndexOf(TileSideData.type) == 0)
         {
@@ -659,6 +685,16 @@ public class ContentData {
         subTexture.SetPixels(pix);
         subTexture.Apply();
         return subTexture;
+    }
+}
+
+// Class for tile specific data
+public class PackTypeData : GenericData
+{
+    public static new string type = "PackType";
+
+    public PackTypeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
     }
 }
 

@@ -57,11 +57,11 @@ namespace Assets.Scripts.UI.Screens
             TextButton tb = null;
             bool left = true;
             // Note this is currently unordered
-            foreach (string type in game.cd.packType)
+            foreach (PackTypeData type in game.cd.packTypes.Values)
             {
-                // Create a sprite with the pack's image
-                //Texture2D tex = ContentData.FileToTexture(cp.image);
-                //Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+                // Create a sprite with the category image
+                Texture2D tex = ContentData.FileToTexture(type.image);
+                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
                 if (left)
                 {
@@ -71,16 +71,16 @@ namespace Assets.Scripts.UI.Screens
                 {
                     tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { DrawList(type); });
                 }
-                //tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + type, delegate { DrawList(type); }, Color.clear);
+                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + type.name.Translate(), delegate { DrawList(type.sectionName.Substring("PackType".Length)); }, Color.clear);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + type, delegate { DrawList(type); }, Color.clear);
+                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + type.name.Translate(), delegate { DrawList(type.sectionName.Substring("PackType".Length)); }, Color.clear);
                 }
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
