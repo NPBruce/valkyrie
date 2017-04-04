@@ -67,34 +67,38 @@ public class EditorComponentSpawn : EditorComponent
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
-        tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
 
-        if (monsterComponent.unique)
+        if (game.gameType is D2EGameType)
         {
-            tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Unique", delegate { UniqueToggle(); });
+            tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), "Placement", delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        
+            if (monsterComponent.unique)
+            {
+                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Unique", delegate { UniqueToggle(); });
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Normal", delegate { UniqueToggle(); });
+            }
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+
+            db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
+            db.ApplyTag("editor");
+
+            uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
+            uniqueTitleDBE.ApplyTag("editor");
+            uniqueTitleDBE.AddBorder();
+
+            db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), "Unique Information:");
+            db.ApplyTag("editor");
+
+            uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
+            uniqueTextDBE.ApplyTag("editor");
+            uniqueTextDBE.AddBorder();
         }
-        else
-        {
-            tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Normal", delegate { UniqueToggle(); });
-        }
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
-
-        db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), "Unique Title:");
-        db.ApplyTag("editor");
-
-        uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
-        uniqueTitleDBE.ApplyTag("editor");
-        uniqueTitleDBE.AddBorder();
-
-        db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), "Unique Information:");
-        db.ApplyTag("editor");
-
-        uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
-        uniqueTextDBE.ApplyTag("editor");
-        uniqueTextDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), "Types:");
         db.ApplyTag("editor");

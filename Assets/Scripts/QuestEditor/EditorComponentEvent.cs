@@ -130,26 +130,29 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), "Selection:");
-        db.ApplyTag("editor");
+        if (game.gameType is D2EGameType)
+        {
+            db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), "Selection:");
+            db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), eventComponent.heroListName, delegate { SetHighlight(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), eventComponent.heroListName, delegate { SetHighlight(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), "Min");
-        db.ApplyTag("editor");
+            db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), "Min");
+            db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes.ToString(), delegate { SetHeroCount(false); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes.ToString(), delegate { SetHeroCount(false); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), "Max");
-        db.ApplyTag("editor");
+            db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), "Max");
+            db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes.ToString(), delegate { SetHeroCount(true); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
 
         db = new DialogBox(new Vector2(0, 16), new Vector2(9, 1), "Add Components:");
         db.ApplyTag("editor");
