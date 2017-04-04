@@ -45,6 +45,10 @@ public class EditorComponentEvent : EditorComponent
         {
             type = QuestData.Token.type;
         }
+        if (eventComponent is QuestData.Puzzle)
+        {
+            type = QuestData.Puzzle.type;
+        }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), type, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();

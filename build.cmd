@@ -19,8 +19,8 @@ rem create inner structure
 mkdir build\batch\valkyrie_Data
 mkdir build\batch\valkyrie_Data\content
 mkdir build\batchMac
-mkdir build\batchMac\macos.app
-mkdir build\batchMac\macos.app\Contents
+mkdir build\batchMac\Valkyrie.app
+mkdir build\batchMac\Valkyrie.app\Contents
 
 rem copy content from source to win release
 xcopy /E /Y content build\batch\valkyrie_Data\content
