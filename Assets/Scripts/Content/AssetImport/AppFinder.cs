@@ -74,11 +74,6 @@ abstract public class AppFinder
                 location = output.Substring(startPos, output.IndexOf("</string>", startPos) - startPos).Trim();
                 ValkyrieDebug.Log("Using location: " + location);
             }
-            if (location.Length == 0)
-            {
-                location = "~/Library/Application Support/Steam/steamapps/common/Mansions of Madness/Mansions of Madness.app";
-                ValkyrieDebug.Log("Could not find, using magic locatoin: " + location);
-            }
         }
         else
         {

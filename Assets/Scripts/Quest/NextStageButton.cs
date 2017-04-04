@@ -68,6 +68,11 @@ public class NextStageButton
         // Add to undo stack
         game.quest.Save();
 
+        if (game.quest.phase == Quest.MoMPhase.monsters)
+        {
+            game.audioControl.PlayTrait("horror");
+        }
+
         if (game.quest.phase == Quest.MoMPhase.horror)
         {
             game.roundControl.EndRound();

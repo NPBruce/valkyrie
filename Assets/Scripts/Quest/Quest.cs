@@ -94,12 +94,11 @@ public class Quest
         }
 
         // Set quest vars for selected expansions
-        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
-        if (packs != null)
+        foreach (string s in game.cd.GetLoadedPackIDs())
         {
-            foreach (KeyValuePair<string, string> kv in packs)
+            if (s.Length > 0)
             {
-                vars.SetValue("#" + kv.Key, 1);
+                vars.SetValue("#" + s, 1);
             }
         }
     }
@@ -645,7 +644,7 @@ public class Quest
         r += nl;
 
         r += "[Packs]" + nl;
-        foreach (string pack in game.cd.GetEnabledPackIDs())
+        foreach (string pack in game.cd.GetLoadedPackIDs())
         {
             r += pack + nl;
         }

@@ -861,7 +861,6 @@ public class QuestData
             // Randomise next event setting
             if (data.ContainsKey("audio"))
             {
-                locationSpecified = false;
                 audio = data["audio"];
             }
         }
