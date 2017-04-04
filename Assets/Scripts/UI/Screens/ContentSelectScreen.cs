@@ -28,17 +28,13 @@ namespace Assets.Scripts.UI.Screens
                 Application.Quit();
             }
 
-            if (game.cd.packType.Count > 1)
+            if (game.cd.packTypes.Count > 1)
             {
                 DrawTypeList();
             }
             else
             {
-                // Will only do one
-                foreach (string s in game.cd.packType)
-                {
-                    DrawList(s);
-                }
+                DrawList("");
             }
         }
 
@@ -63,34 +59,36 @@ namespace Assets.Scripts.UI.Screens
                 Texture2D tex = ContentData.FileToTexture(type.image);
                 Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
+                string typeId = type.sectionName.Substring("PackType".Length);
+
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), "", delegate { DrawList(type); });
+                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), "", delegate { DrawList(typeId); });
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { DrawList(type); });
+                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), "", delegate { DrawList(typeId); });
                 }
                 tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + type.name.Translate(), delegate { DrawList(type.sectionName.Substring("PackType".Length)); }, Color.clear);
+                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "  " + type.name.Translate(), delegate { DrawList(typeId); }, Color.clear);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + type.name.Translate(), delegate { DrawList(type.sectionName.Substring("PackType".Length)); }, Color.clear);
+                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "  " + type.name.Translate(), delegate { DrawList(typeId); }, Color.clear);
                 }
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "", delegate { DrawList(type); }, Color.black);
+                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), "", delegate { DrawList(typeId); }, Color.black);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "", delegate { DrawList(type); }, Color.black);
+                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), "", delegate { DrawList(typeId); }, Color.black);
                 }
                 tb.setColor(Color.clear);
                 tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;

@@ -129,12 +129,12 @@ public class Game : MonoBehaviour {
 
         // Load configured packs
         cd.LoadContentID("");
-        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        Dictionary<string, string> packs = config.data.Get(gameType.TypeName() + "Packs");
         if (packs != null)
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                cd.LoadContentID(pack);
+                cd.LoadContentID(kv.Key);
             }
         }
 
