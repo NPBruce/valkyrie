@@ -15,10 +15,10 @@ public class HeroDialog{
     {
         float offset = ((hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f)) + HeroCanvas.offsetStart;
         // Has this hero been activated?
-        if (hero.activated)
+        if (hero.activated || (GameObject.FindGameObjectWithTag("activation") != null))
         {
             // Grey button with no action
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { noAction(); }, Color.gray);
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { ; }, Color.gray);
         }
         else
         {
@@ -38,15 +38,10 @@ public class HeroDialog{
         new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
-    // Null function for activated hero
-    public void noAction()
-    {
-    }
-
     // Hero defeated
     public void defeated()
     {
-        destroy();
+        Dialog.Destroy();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
@@ -59,7 +54,7 @@ public class HeroDialog{
     // Hero restored
     public void restored()
     {
-        destroy();
+        Dialog.Destroy();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
@@ -70,7 +65,7 @@ public class HeroDialog{
     // Activated hero
     public void activated()
     {
-        destroy();
+        Dialog.Destroy();
         Game game = Game.Get();
         // Save state to undo stack
         game.quest.Save();
@@ -86,19 +81,12 @@ public class HeroDialog{
     // Cancel cleans up
     public void onCancel()
     {
-        destroy();
+        Dialog.Destroy();
     }
 
     public void updateDisplay()
     {
         Game game = Game.Get();
         game.heroCanvas.UpdateStatus();
-    }
-
-    public void destroy()
-    {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
     }
 }
