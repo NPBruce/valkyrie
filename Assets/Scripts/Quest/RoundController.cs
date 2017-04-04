@@ -321,6 +321,8 @@ public class RoundController {
         game.monsterCanvas.UpdateStatus();
         game.heroCanvas.UpdateStatus();
 
+        game.audioControl.PlayTrait("newround");
+
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
     }
