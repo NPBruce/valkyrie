@@ -7,7 +7,7 @@ public class HeroDialog{
     public Quest.Hero hero;
     private readonly StringKey RECOVER = new StringKey("val","RECOVER");
     private readonly StringKey END_TURN = new StringKey("val", "END_TURN");
-    private readonly StringKey DEFEATED = new StringKey("val", "DEFEATED");
+    private readonly StringKey KO = new StringKey("val", "KO");
 
     public HeroDialog(Quest.Hero h)
     {
@@ -36,7 +36,7 @@ public class HeroDialog{
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), DEFEATED, delegate { defeated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), KO, delegate { defeated(); });
         }
 
         new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });

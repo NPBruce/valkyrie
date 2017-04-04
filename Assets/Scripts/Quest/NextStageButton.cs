@@ -15,17 +15,17 @@ public class NextStageButton
     {
         if (Game.Get().gameType.DisplayHeroes()) return;
         TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
+            new Vector2(UIScaler.GetHCenter(17f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
             CommonStringKeys.TAB, delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            new Vector2(UIScaler.GetHCenter(-15f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
             CommonStringKeys.LOG, delegate { Log(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
         tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            new Vector2(UIScaler.GetHCenter(-11f), UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), 
             CommonStringKeys.SET, delegate { Set(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
@@ -38,27 +38,27 @@ public class NextStageButton
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("uiphase"))
             Object.Destroy(go);
 
-        DialogBox db;
+        StringKey phase;
         if (Game.Get().quest.phase == Quest.MoMPhase.horror)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), HORROR_STEP);
-            db.SetFont(Game.Get().gameType.GetHeaderFont());
+            phase = HORROR_STEP;
         }
         else if (Game.Get().quest.phase == Quest.MoMPhase.mythos)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), PHASE_MYTHOS);
-            db.SetFont(Game.Get().gameType.GetHeaderFont());
+            phase = PHASE_MYTHOS;
         }
         else if (Game.Get().quest.phase == Quest.MoMPhase.monsters)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), MONSTER_STEP);
-            db.SetFont(Game.Get().gameType.GetHeaderFont());
+            phase = MONSTER_STEP;
         }
         else
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), PHASE_INVESTIGATOR);
-            db.SetFont(Game.Get().gameType.GetHeaderFont());
+            phase = PHASE_INVESTIGATOR;
         }
+
+        DialogBox db;
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(23, 2), phase);
+        db.SetFont(Game.Get().gameType.GetHeaderFont());
         db.ApplyTag("uiphase");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();

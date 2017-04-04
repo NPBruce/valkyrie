@@ -58,7 +58,8 @@ public class PuzzleSlideWindow
             new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), questPuzzle.skill);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), 
+            new StringKey(questPuzzle.skill,false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

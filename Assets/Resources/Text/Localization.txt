@@ -78,8 +78,8 @@ INFO,Info,Información,,,,,,,
 INFORMATION,Information,Información,,,,,,,
 INITIAL_MESSAGE,Initial Message:,Mensaje Inicial:,,,,,,,
 ITEM,Item,Objeto,,,,,,,
+KO,KO,KO,,,,,,,
 LOAD_QUEST,Load {0},Cargar {0},,,,,,,
-LOG,Log,Log,,,,,,,
 LOG,Log,Log,,,,,,,
 MAIN_MENU,Main Menu,Menú Principal,,,,,,,
 MAX,Max,Max,,,,,,,
@@ -122,16 +122,16 @@ POSITION,Position,Posición,,,,,,,
 POSITION_TYPE_HIGHLIGHT,Highlight,Destacado,,,,,,,
 POSITION_TYPE_UNUSED,Unused,No Usado,,,,,,,
 PUZZLE,Puzzle,Puzzle,,,,,,,
-PUZZLE_ALT_LEVEL,Alt Level,Dificultad Alternativa,,,,,,,
+PUZZLE_ALT_LEVEL,Alt Level,Dificultad Alt.,,,,,,,
 PUZZLE_CLASS,Class,Tipo,,,,,,,
 PUZZLE_CLASS_SELECT,Select Class,Escoger Tipo,,,,,,,
-PUZZLE_CODE_CLASS,code,código,,,,,,,
-PUZZLE_IMAGE,Image,Imagen,,,,,,,
+IMAGE,Image,Imagen,,,,,,,
 
-PUZZLE_IMAGE_CLASS,image,mosaico,,,,,,,
 PUZZLE_LEVEL,Level,Dificultad,,,,,,,
 PUZZLE_SELECT_IMAGE,Select Image,Escoger Imagen,,,,,,,
 PUZZLE_SELECT_SKILL,Select Skill,Escoger Habilidad,,,,,,,
+PUZZLE_IMAGE_CLASS,image,mosaico,,,,,,,
+PUZZLE_CODE_CLASS,code,código,,,,,,,
 PUZZLE_SLIDE_CLASS,slide,mecanismo,,,,,,,
 QUEST,Quest,Escenario,,,,,,,
 QUEST_NAME_DOWNLOAD,Download {0},Descargar {0},,,,,,, 
@@ -146,7 +146,7 @@ REQUIRED_EXPANSIONS,Required Expansions:,Expansiones Requeridas:,,,,,,,
 REQUIRES_EXPANSION," Requires:  {0}"," Requiere: {0}",,,,,,,
 
 REQ_TRAITS,Req. Traits:,Atributos Req.:,,,,,,,
-RESET,Reset,Reset,,,,,,,
+RESET,Reset,Restablecer,,,,,,,
 ROTATE_TO,"Rotate: {0}","Rotar: {0}",,,,,,, 
 ROTATION,"Rotation ({0})","Rotación ({0})",,,,,,, 
 SAVE,Save,Guardar,,,,,,,
@@ -158,7 +158,7 @@ SELECT_ITEM,Select Item,Escoger Elemento,,,,,,,
 SELECT_PACK,Select Pack,Selección de Paquetes,,,,,,,
 SELECT_TO_COPY,Select {0} To Copy,Selección de {0} a Copiar,,,,,,,
 SELECT_TO_DELETE,Select {0} To Delete,Selección de {0} a Eliminar,,,,,,,
-SET,Set,Set,,,,,,,
+SET,Set,Cambiar,,,,,,,
 SKILL,Skill,Habilidad,,,,,,,
 SPAWN,Spawn,Generar,,,,,,,
 STARTING_ITEM,Starting Items,Equipo Inicial,,,,,,,
@@ -199,8 +199,8 @@ DOWN,Down,Abajo,Bas,Unten,Giù,Para Baixo,Dół,下,下
 LEFT,Left,Izquierda,Gauche,Links,Sinistra,Para a Esquerda,Lewo,左,左
 RIGHT,Right,Derecha,Droite,Rechts,Destra,Para a Direita,Prawo,右,右
 
-PHASE_INVESTIGATOR,INVESTIGATOR PHASE,FASE DE LOS INVESTIGADORES,Phase d'Investigateur,ERMITTLERPHASE,FASE DEGLI INVESTIGATORI,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
-PHASE_MYTHOS,MYTHOS PHASE,FASE DE MITOS,Phase de Mythe,MYTHOSPHASE,FASE DEI MITI,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
+PHASE_INVESTIGATOR,Investigator Phase,Fase de los Investigadores,Phase d'Investigateur,Ermittlerphase,Fase Degli Investigatori,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
+PHASE_MYTHOS,Mythos Phase,Fase de Mitos,Phase de Mythe,Mythosphase,Fase Dei Miti,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
 MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
 HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
 END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟

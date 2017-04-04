@@ -1179,8 +1179,8 @@ public class QuestData
     public class Puzzle : Event
     {
         new public static string type = "Puzzle";
-        public StringKey puzzleClass = new StringKey("val", "PUZZLE_SLIDE_CLASS");
-        public StringKey skill = new StringKey("val", "ICON_SKILL_OBSERVATION");
+        public string puzzleClass = "slide";
+        public string skill = "{observation}";
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
         public string imageType = "";
@@ -1198,7 +1198,7 @@ public class QuestData
 
             if (data.ContainsKey("class"))
             {
-                puzzleClass = new StringKey(data["class"]);
+                puzzleClass = data["class"];
             }
             if (data.ContainsKey("image"))
             {
@@ -1206,7 +1206,7 @@ public class QuestData
             }
             if (data.ContainsKey("skill"))
             {
-                skill = new StringKey(data["skill"],false);
+                skill = data["skill"];
             }
             if (data.ContainsKey("puzzlelevel"))
             {

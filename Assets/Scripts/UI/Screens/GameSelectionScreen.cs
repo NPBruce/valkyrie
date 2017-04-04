@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND, Color.red);
+                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), MOM_APP_NOT_FOUND, Color.red);
                 db.AddBorder();
             }
 

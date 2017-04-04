@@ -42,14 +42,14 @@ namespace Assets.Scripts.UI.Screens
         {
             // Options screen text
             DialogBox dbTittle = new DialogBox(
-                new Vector2(2, 1), 
+                new Vector2(0, 1), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
                 OPTIONS
                 );
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             dbTittle.SetFont(game.gameType.GetHeaderFont());
 
-            //CreateLanguageElements();
+            CreateLanguageElements();
 
             CreateAudioElements();
 
@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
 
         private void CreateAudioElements()
         {
-            DialogBox db = new DialogBox(new Vector2(2, 8), new Vector2(UIScaler.GetWidthUnits() - 4, 2), MUSIC);
+            DialogBox db = new DialogBox(new Vector2(28, 8), new Vector2(10, 2), MUSIC);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
             new RectangleBorder(musicSlideObj.transform, Color.white, new Vector2(musicSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), musicSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
@@ -96,7 +96,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
 
@@ -113,7 +113,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
-            db = new DialogBox(new Vector2(2, 14), new Vector2(UIScaler.GetWidthUnits() - 4, 2), EFFECTS);
+            db = new DialogBox(new Vector2(28, 14), new Vector2(10, 2), EFFECTS);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -128,7 +128,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerUp;
@@ -152,7 +152,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
             effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
@@ -179,7 +179,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Select langauge text
             DialogBox dbLanguage = new DialogBox(
-                new Vector2(2, 4), 
+                new Vector2(-10, 4), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
                 CHOOSE_LANG
                 );
@@ -209,7 +209,7 @@ namespace Assets.Scripts.UI.Screens
                     currentColor = Color.white;
                 }
                 languageTextButtons[position] = new TextButton(
-                    new Vector2(UIScaler.GetHCenter() - 4, verticalStart + (2f * position)),
+                    new Vector2(UIScaler.GetHCenter() - 16, verticalStart + (2f * position)),
                     new Vector2(8, 1.8f),
                     new StringKey(currentLanguage,false),
                     delegate { SelectLang(position); },
