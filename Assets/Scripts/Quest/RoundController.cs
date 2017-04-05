@@ -80,8 +80,14 @@ public class RoundController {
             {
                 // Evenyone has finished, move to next round
                 activationsFinished = true;
+                game.quest.AdjustMorale(0);
                 EndRound();
             }
+        }
+        else
+        {
+            // Trigger morale event if required
+            game.quest.AdjustMorale(0);
         }
     }
 

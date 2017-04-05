@@ -13,6 +13,11 @@ public class GameMenu {
             return;
         }
 
+        if (GameObject.FindGameObjectWithTag("activation") != null)
+        {
+            return;
+        }
+
         // Border around menu items
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), "");
         db.AddBorder();
