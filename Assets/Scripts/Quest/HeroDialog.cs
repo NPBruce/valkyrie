@@ -41,7 +41,7 @@ public class HeroDialog{
     // Hero defeated
     public void defeated()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
@@ -54,7 +54,7 @@ public class HeroDialog{
     // Hero restored
     public void restored()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
         game.quest.Save();
@@ -65,7 +65,7 @@ public class HeroDialog{
     // Activated hero
     public void activated()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
         // Save state to undo stack
         game.quest.Save();
@@ -81,7 +81,7 @@ public class HeroDialog{
     // Cancel cleans up
     public void onCancel()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
     }
 
     public void updateDisplay()

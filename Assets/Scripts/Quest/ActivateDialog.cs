@@ -17,7 +17,7 @@ public class ActivateDialog {
     virtual public void CreateWindow(bool singleStep = false)
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
-        Dialog.Destroy();
+        Destroyer.Dialog();
 
         // ability box - name header
         DialogBox db = new DialogBox(

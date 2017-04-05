@@ -31,13 +31,13 @@ public class MonsterDialog
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
         new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Information", delegate { Info(); });
-        offset += 2.5;
+        offset += 2.5f;
         if (GameObject.FindGameObjectWithTag("activation") == null)
         {
             new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Force Activate", delegate { Activate(); });
-            offset += 2.5;
+            offset += 2.5f;
             new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Defeated", delegate { Defeated(); });
-            offset += 2.5;
+            offset += 2.5f;
             if (monster.unique)
             {
                 // If there is a unique option the offset needs to be increased
@@ -46,7 +46,7 @@ public class MonsterDialog
             }
         }
         // FIXME: This doesn't fit if there is a unique monster in the last space
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), "Cancel", delegate { OnCancel(); });
     }
 
     // Monster Information
