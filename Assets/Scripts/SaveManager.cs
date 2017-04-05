@@ -30,7 +30,6 @@ class SaveManager
                 Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save");
             }
 
-            QuestLoader.CleanTemp();
             if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
             {
                 Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
@@ -41,9 +40,9 @@ class SaveManager
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile());
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Warning: Unable to write to save file.");
+            ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
     }
 
@@ -152,8 +151,7 @@ class SaveManager
         }
         catch (System.Exception e)
         {
-            e = e;
-            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile());
+            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile() + " " + e.Message);
             Application.Quit();
         }
     }

@@ -18,8 +18,9 @@ public class PuzzleSlide : Puzzle
             depth = 10;
         }
         List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
-        // Fix
-        IniData puzzles = IniRead.ReadFromString(((TextAsset)Resources.Load("slidepuzzles.ini")).text);
+        TextAsset textAsset = (TextAsset)Resources.Load("slidepuzzles");
+        string puzzleText = textAsset.text;
+        IniData puzzles = IniRead.ReadFromString(puzzleText);
         foreach (Dictionary<string, string> p in puzzles.data.Values)
         {
             int moves = 1;
