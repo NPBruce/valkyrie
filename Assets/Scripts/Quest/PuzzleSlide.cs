@@ -19,7 +19,7 @@ public class PuzzleSlide : Puzzle
         }
         List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
         // Fix
-        IniData puzzles = IniRead.ReadFromString((text)Resources.Load("puzzle.ini"));
+        IniData puzzles = IniRead.ReadFromString((text)Resources.Load("slidepuzzles.ini"));
         foreach (Dictionary<string, string> p in puzzles.data)
         {
             int moves = 1;
