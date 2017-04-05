@@ -17,23 +17,24 @@ public class ActivateDialog {
     virtual public void CreateWindow(bool singleStep = false)
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        Destroyer.Dialog();
 
         // ability box - name header
-        DialogBox db = new DialogBox(
+        TextButton tb = new TextButton(
             new Vector2(15, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
-            monster.monsterData.name.Translate());
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+            monster.monsterData.name.Translate(),
+            delegate { new InfoDialog(monster); });
+        tb.ApplyTag("activation");
 
+        DialogBox db = null;
         float offset = 2.5f;
         if (monster.currentActivation.effect.Length > 0)
         {
             // ability text
             db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
             db.AddBorder();
+            db.ApplyTag("activation");
             offset += 4.5f;
         }
 
@@ -62,6 +63,7 @@ public class ActivateDialog {
             activationText = monster.currentActivation.ad.minionActions.Translate().Replace("\\n", "\n");
         }
         db.AddBorder();
+        db.ApplyTag("activation");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         offset += 2;
 
@@ -75,37 +77,33 @@ public class ActivateDialog {
         {
             db.AddBorder();
         }
+        db.ApplyTag("activation");
 
         offset += 7.5f;
 
         // Create finished button
         if (singleStep)
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Activated", delegate { activated(); });
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Activated", delegate { activated(); });
         }
         else if (master)
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
         }
         else
         {
-            new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
         }
+        tb.ApplyTag("activation");
     }
 
     public void activated()
     {
-        // Destroy this dialog to close
-        destroy();
+        // Disable if there is a menu open
+        if (GameObject.FindGameObjectWithTag("dialog") != null) return;
 
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("activation"))
+            Object.Destroy(go);
         Game.Get().roundControl.MonsterActivated();
     }
-
-    public void destroy()
-    {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
-    }
-
 }

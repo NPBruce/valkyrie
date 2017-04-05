@@ -27,7 +27,7 @@ public class RtLFinder : AppFinder {
     {
         if (Application.platform == RuntimePlatform.OSXPlayer)
         {
-            return "/Contents/Resources";
+            return "/Contents/Resources/Data";
         }
         return "/Road to Legend_Data";
     }

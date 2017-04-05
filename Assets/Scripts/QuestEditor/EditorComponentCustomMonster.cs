@@ -72,25 +72,28 @@ public class EditorComponentCustomMonster : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
-        db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.key.Length > 0)
+        if (game.gameType is D2EGameType)
         {
-            infoDBE = new DialogBoxEditable(new Vector2(0, 7), new Vector2(20, 8), monsterComponent.info.Translate(), delegate { UpdateInfo(); });
-            infoDBE.ApplyTag("editor");
-            infoDBE.AddBorder();
-            if (monsterComponent.baseMonster.Length > 0)
+            db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
+            db.ApplyTag("editor");
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.key.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Reset", delegate { ClearInfo(); });
+                infoDBE = new DialogBoxEditable(new Vector2(0, 7), new Vector2(20, 8), monsterComponent.info.Translate(), delegate { UpdateInfo(); });
+                infoDBE.ApplyTag("editor");
+                infoDBE.AddBorder();
+                if (monsterComponent.baseMonster.Length > 0)
+                {
+                    tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Reset", delegate { ClearInfo(); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.ApplyTag("editor");
+                }
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Set", delegate { SetInfo(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
-        }
-        else
-        {
-            tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Set", delegate { SetInfo(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
         }
 
         db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), "Activations:");
@@ -138,25 +141,28 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), "Health:");
-        db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
+        if (game.gameType is MoMGameType)
         {
-            healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
-            healthDBE.ApplyTag("editor");
-            healthDBE.AddBorder();
-            if (monsterComponent.baseMonster.Length > 0)
+            db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), "Health:");
+            db.ApplyTag("editor");
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
             {
-                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
+                healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
+                healthDBE.ApplyTag("editor");
+                healthDBE.AddBorder();
+                if (monsterComponent.baseMonster.Length > 0)
+                {
+                    tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.ApplyTag("editor");
+                }
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Set", delegate { SetHealth(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
-        }
-        else
-        {
-            tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Set", delegate { SetHealth(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
         }
 
         db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), "Image:");
@@ -180,25 +186,28 @@ public class EditorComponentCustomMonster : EditorComponent
             tb.ApplyTag("editor");
         }
 
-        db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), "Place Img:");
-        db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
+        if (game.gameType is D2EGameType)
         {
-            tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), monsterComponent.imagePath, delegate { SetImagePlace(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
-            if (monsterComponent.baseMonster.Length > 0)
+            db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), "Place Img:");
+            db.ApplyTag("editor");
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Reset", delegate { ClearImagePlace(); });
+                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), monsterComponent.imagePath, delegate { SetImagePlace(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+                if (monsterComponent.baseMonster.Length > 0)
+                {
+                    tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Reset", delegate { ClearImagePlace(); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.ApplyTag("editor");
+                }
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Set", delegate { SetImagePlace(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
-        }
-        else
-        {
-            tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Set", delegate { SetImagePlace(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
         }
     }
 
