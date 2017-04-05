@@ -471,6 +471,8 @@ public class Quest
         // Test for no morale ending
         if (morale < 0)
         {
+            // Hold loss during activation
+            if (GameObject.FindGameObjectWithTag("activation") != null) return;
             morale = 0;
             game.moraleDisplay.Update();
             eManager.EventTriggerType("NoMorale");
