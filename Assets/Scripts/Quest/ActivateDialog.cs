@@ -20,14 +20,14 @@ public class ActivateDialog {
         Destroyer.Dialog();
 
         // ability box - name header
-        DialogBox db = new DialogBox(
+        TextButton tb = new TextButton(
             new Vector2(15, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
-            monster.monsterData.name.Translate());
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
-        db.ApplyTag("activation");
+            monster.monsterData.name.Translate(),
+            delegate { new InfoDialog(monster); });
+        tb.ApplyTag("activation");
 
+        DialogBox db = null;
         float offset = 2.5f;
         if (monster.currentActivation.effect.Length > 0)
         {
@@ -81,7 +81,6 @@ public class ActivateDialog {
 
         offset += 7.5f;
 
-        TextButton tb = null;
         // Create finished button
         if (singleStep)
         {
