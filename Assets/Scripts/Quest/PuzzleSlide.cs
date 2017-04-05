@@ -9,6 +9,54 @@ public class PuzzleSlide : Puzzle
 
     public PuzzleSlide(int depth)
     {
+        if (depth < 1)
+        {
+            depth = 1;
+        }
+        if (depth > 7)
+        {
+            depth = 7;
+        }
+        List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
+        TextAsset textAsset = (TextAsset)Resources.Load("slidepuzzles");
+        string puzzleText = textAsset.text;
+        IniData puzzles = IniRead.ReadFromString(puzzleText);
+        foreach (Dictionary<string, string> p in puzzles.data.Values)
+        {
+            int moves = 1;
+            int.TryParse(p["moves"], out moves);
+            if (moves == depth)
+            {
+                options.Add(p);
+            }
+        }
+        Loadpuzzle(options[Random.Range(0, options.Count)]);
+    }
+
+    public PuzzleSlide(Dictionary<string, string> data)
+    {
+        Loadpuzzle(data);
+    }
+
+    public void Loadpuzzle(Dictionary<string, string> data)
+    {
+        puzzle = new List<Block>();
+        foreach (KeyValuePair<string, string> kv in data)
+        {
+            if (kv.Key.Equals("moves"))
+            {
+                int.TryParse(kv.Value, out moves);
+            }
+            else
+            {
+                puzzle.Add(new Block(kv.Value));
+            }
+        }
+    }
+
+    // Too slow and memory consuming
+    public void GeneratePuzzle(int depth)
+    {
         puzzle = new List<Block>();
         puzzle.Add(new Block());
 
@@ -30,22 +78,6 @@ public class PuzzleSlide : Puzzle
             if (steps > depth)
             {
                 RemoveBlock();
-            }
-        }
-    }
-
-    public PuzzleSlide(Dictionary<string, string> data)
-    {
-        puzzle = new List<Block>();
-        foreach (KeyValuePair<string, string> kv in data)
-        {
-            if (kv.Key.Equals("moves"))
-            {
-                int.TryParse(kv.Value, out moves);
-            }
-            else
-            {
-                puzzle.Add(new Block(kv.Value));
             }
         }
     }
