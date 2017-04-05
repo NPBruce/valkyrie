@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Content;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -191,6 +192,8 @@ namespace Assets.Scripts.UI.Screens
             // It can change in future
 
             string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
+            // For now, English and Spanish languages available.
+            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
@@ -215,6 +218,14 @@ namespace Assets.Scripts.UI.Screens
                     delegate { SelectLang(position); },
                     currentColor
                     );
+
+                if (!enabled_langs.Contains(currentLanguage))
+                {
+                    languageTextButtons[position].setColor(Color.red);
+                    languageTextButtons[position].setActive(false);
+                }
+
+
             }
         }
 

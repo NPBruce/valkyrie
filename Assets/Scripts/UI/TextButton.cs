@@ -13,6 +13,7 @@ public class TextButton {
     public RectangleBorder border;
 
     public UnityEngine.UI.Text uiText;
+    private UnityEngine.UI.Button uiButton;
 
     // Function to alter the tag of the button (unity classification)
     public void ApplyTag(string tag)
@@ -75,7 +76,7 @@ public class TextButton {
         // Background is partially transparent black
         uiImage.color = new Color(0, 0, 0, (float)0.9);
 
-        UnityEngine.UI.Button uiButton = background.AddComponent<UnityEngine.UI.Button>();
+        uiButton = background.AddComponent<UnityEngine.UI.Button>();
         uiButton.interactable = true;
         uiButton.onClick.AddListener(call);
 
@@ -103,6 +104,16 @@ public class TextButton {
     {
         uiText.color = c;
         border.color = c;
+    }
+
+    /// <summary>
+    /// Sets the active status of the button to enable/disable it
+    /// </summary>
+    /// <param name="newActiveStatus">new status</param>
+    public void setActive(bool newActiveStatus)
+    {
+        uiButton.interactable = newActiveStatus;
+        
     }
 
     public void Destroy()
