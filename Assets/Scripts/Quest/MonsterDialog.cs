@@ -36,28 +36,34 @@ public class MonsterDialog
         // Work out where on the screen to display
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2),
-            INFORMATION, delegate { Info(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 2.5f), new Vector2(10, 2),
-            FORCE_ACTIVATE, delegate { Activate(); });
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 5f), new Vector2(10, 2), 
-            DEFEATED, delegate { Defeated(); });
-        if (monster.unique)
+        if (GameObject.FindGameObjectWithTag("activation") != null)
         {
-            // If there is a unique option the offset needs to be increased
-            offset += 3.5f;
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 4f), new Vector2(10, 3),
-                UNIQUE_DEFEATED, delegate { UniqueDefeated(); });
+            offset += 2.8f;
+        }
+
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), INFORMATION, delegate { Info(); });
+        offset += 2.5f;
+        if (GameObject.FindGameObjectWithTag("activation") == null)
+        {
+            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), FORCE_ACTIVATE, delegate { Activate(); });
+            offset += 2.5f;
+            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), DEFEATED, delegate { Defeated(); });
+            offset += 2.5f;
+            if (monster.unique)
+            {
+                // If there is a unique option the offset needs to be increased
+                new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 3), UNIQUE_DEFEATED, delegate { UniqueDefeated(); });
+                offset += 3.5f;
+            }
         }
         // FIXME: This doesn't fit if there is a unique monster in the last space
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset + 7.5f), new Vector2(10, 2),
-            CommonStringKeys.CANCEL, delegate { OnCancel(); });
+        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { OnCancel(); });
     }
 
     // Monster Information
     public void Info()
     {
-        Destroy();
+        Destroyer.Dialog();
         new InfoDialog(monster);
     }
 
@@ -98,7 +104,7 @@ public class MonsterDialog
     public void UniqueDefeated()
     {
         Game game = Game.Get();
-        Destroy();
+        Destroyer.Dialog();
         // Add to undo stack
         game.quest.Save();
         // Monster is no longer unique
@@ -111,7 +117,7 @@ public class MonsterDialog
     // Cancel cleans up
     public void OnCancel()
     {
-        Destroy();
+        Destroyer.Dialog();
     }
 
     // Update the list of monsters
@@ -119,12 +125,5 @@ public class MonsterDialog
     {
         Game game = Game.Get();
         game.monsterCanvas.UpdateList();
-    }
-
-    public void Destroy()
-    {
-        // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
     }
 }

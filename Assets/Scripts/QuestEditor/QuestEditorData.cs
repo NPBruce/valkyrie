@@ -85,70 +85,88 @@ public class QuestEditorData {
             );
 
         // Buttons for each component type (and delete buttons)
-        TextButton tb = new TextButton(new Vector2(22, 2), new Vector2(9, 1), CommonStringKeys.QUEST, delegate { SelectQuest(); });
+        float offset = 2;
+        TextButton tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.QUEST, delegate { SelectQuest(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 4), new Vector2(9, 1), CommonStringKeys.TILE, delegate { ListTile(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TILE, delegate { ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 4), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Tile"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Tile"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 6), new Vector2(9, 1), CommonStringKeys.DOOR, delegate { ListDoor(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TOKEN, delegate { ListToken(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 6), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Door"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Token"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 8), new Vector2(9, 1), CommonStringKeys.TOKEN, delegate { ListToken(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.SPAWN, delegate { ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 8), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Token"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Spawn"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 10), new Vector2(9, 1), CommonStringKeys.SPAWN, delegate { ListSpawn(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.EVENT, delegate { ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 10), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Spawn"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 12), new Vector2(9, 1), CommonStringKeys.MPLACE, delegate { ListMPlace(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 12), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("MPlace"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("CustomMonster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 14), new Vector2(9, 1), CommonStringKeys.EVENT, delegate { ListEvent(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.ACTIVATION, delegate { ListActivation(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 14), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Event"); }, Color.red);
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 16), new Vector2(9, 1), CommonStringKeys.PUZZLE, delegate { ListPuzzle(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        if (game.gameType is D2EGameType)
+        {
+            offset += 2;
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.DOOR, delegate { ListDoor(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 16), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Door"); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 18), new Vector2(9, 1), CommonStringKeys.ITEM, delegate { ListItem(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            offset += 2;
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.MPLACE, delegate { ListMPlace(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 18), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Item"); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("MPlace"); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        }
 
-        tb = new TextButton(new Vector2(22, 20), new Vector2(9, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { ListCustomMonster(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        if (game.gameType is MoMGameType)
+        {
+            offset += 2;
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.PUZZLE, delegate { ListPuzzle(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(32, 20), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("CustomMonster"); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        
+            offset += 2;
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.ITEM, delegate { ListItem(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(22, 22), new Vector2(9, 1), CommonStringKeys.ACTIVATION, delegate { ListActivation(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        }
 
-        tb = new TextButton(new Vector2(32, 22), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        tb = new TextButton(new Vector2(25.5f, 24), new Vector2(9, 1), CommonStringKeys.CANCEL, delegate { Cancel(); });
+        offset += 2;
+        tb = new TextButton(new Vector2(25.5f, offset), new Vector2(9, 1), CommonStringKeys.CANCEL, delegate { Cancel(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }

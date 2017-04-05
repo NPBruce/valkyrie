@@ -65,7 +65,8 @@
                 return LocalizationRead.DictLookup(this);
             } else
             {
-                return key;
+                //non heys can have newline characters
+                return key.Replace("\\n", System.Environment.NewLine);
             }
                  
         }
@@ -76,7 +77,7 @@
         /// <returns>key</returns>
         public override string ToString()
         {
-            return key;
+            return key.Replace(System.Environment.NewLine, "\\n");
         }
     }
 }
