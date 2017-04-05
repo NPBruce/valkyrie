@@ -54,16 +54,16 @@ public class PuzzleSlideWindow
             CreateBlock(b, transBg, b.target);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 3f), new Vector2(6f, 2f),
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6f), 3f), new Vector2(10f, 2f),
             new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), 
-            new StringKey(questPuzzle.skill,false));
+            new StringKey(EventManager.SymbolReplace(questPuzzle.skill),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 12.5f), new Vector2(6f, 2f),
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6f), 12.5f), new Vector2(7f, 2f),
             new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
