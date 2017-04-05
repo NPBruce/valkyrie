@@ -47,8 +47,15 @@ public class HeroDialog{
         game.quest.Save();
         hero.defeated = true;
         updateDisplay();
-        // This can trigger events
-        game.quest.AdjustMorale(-1);
+        // This can trigger events, delay events if activation present
+        if (GameObject.FindGameObjectWithTag("activation") != null)
+        {
+            game.quest.AdjustMorale(-1, true);
+        }
+        else
+        {
+            game.quest.AdjustMorale(-1);
+        }
     }
 
     // Hero restored
