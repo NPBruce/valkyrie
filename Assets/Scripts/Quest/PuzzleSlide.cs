@@ -19,8 +19,8 @@ public class PuzzleSlide : Puzzle
         }
         List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
         // Fix
-        IniData puzzles = IniRead.ReadFromString((text)Resources.Load("slidepuzzles.ini"));
-        foreach (Dictionary<string, string> p in puzzles.data)
+        IniData puzzles = IniRead.ReadFromString(((TextAsset)Resources.Load("slidepuzzles.ini")).text);
+        foreach (Dictionary<string, string> p in puzzles.data.Values)
         {
             int moves = 1;
             int.TryParse(p["moves"], out moves);
@@ -37,7 +37,7 @@ public class PuzzleSlide : Puzzle
         Loadpuzzle(data);
     }
 
-    public Loadpuzzle(Dictionary<string, string> data)
+    public void Loadpuzzle(Dictionary<string, string> data)
     {
         puzzle = new List<Block>();
         foreach (KeyValuePair<string, string> kv in data)
@@ -54,7 +54,7 @@ public class PuzzleSlide : Puzzle
     }
 
     // Too slow and memory consuming
-    public void GeneratePuzzle(int moves)
+    public void GeneratePuzzle(int depth)
     {
         puzzle = new List<Block>();
         puzzle.Add(new Block());
