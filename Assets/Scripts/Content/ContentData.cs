@@ -7,7 +7,7 @@ using Assets.Scripts.Content;
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {
 
-    public List<string> loadedPacks;
+    public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
     public Dictionary<string, PackTypeData> packTypes;
     public Dictionary<string, TileSideData> tileSides;
@@ -37,7 +37,7 @@ public class ContentData {
     public ContentData(string path)
     {
         // This is pack type for sorting packs
-        loadedPacks = new List<string>();
+        loadedPacks = new HashSet<string>();
 
         // This is pack type for sorting packs
         packTypes = new Dictionary<string, PackTypeData>();
@@ -182,7 +182,7 @@ public class ContentData {
     // Return a list of id for all enbaled content packs
     public List<string> GetLoadedPackIDs()
     {
-        return loadedPacks;
+        return new List<string>(loadedPacks);
     }
 
     // This loads content from a pack by name

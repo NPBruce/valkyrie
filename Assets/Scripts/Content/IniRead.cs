@@ -108,12 +108,21 @@ public static class IniRead{
                 int equalsLocation = l.IndexOf('=');
                 // Add data as entry with no value
                 if (equalsLocation == -1)
-                    entryData.Add(l.Trim(), "");
+                {
+                    if (entryData.ContainsKey(l.Trim()))
+                    {
+                        ValkyrieDebug.Log("Warning: duplicate \"" + l.Trim() + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
+                    }
+                    else
+                    {
+                        entryData.Add(l.Trim(), "");
+                    }
+                }
                 // If there is an = add data as key and value
                 else
                 {
                     string key = l.Substring(0, equalsLocation).Trim();
-                    if(entryData.ContainsKey(key))
+                    if (entryData.ContainsKey(key))
                     {
                         ValkyrieDebug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
                     }
