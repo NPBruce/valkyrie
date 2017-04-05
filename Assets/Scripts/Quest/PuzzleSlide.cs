@@ -13,9 +13,9 @@ public class PuzzleSlide : Puzzle
         {
             depth = 1;
         }
-        if (depth > 10)
+        if (depth > 7)
         {
-            depth = 10;
+            depth = 7;
         }
         List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
         TextAsset textAsset = (TextAsset)Resources.Load("slidepuzzles");
