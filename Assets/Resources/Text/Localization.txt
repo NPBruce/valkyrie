@@ -20,7 +20,7 @@ ICON_PRODUCT_MAD23,,,,,,,,,
 
 // TEXTS
 
-ABILITY,Ability,Capacidad,,,,,,,
+ABILITY,Ability,Capacidad,,Fähigkeit,,,,,
 ABOUT,About,Acerca de,,,,,,,
 ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.","Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.",,,,,,,
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.","Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.",,,,,,,
