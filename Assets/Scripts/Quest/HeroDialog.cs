@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Assets.Scripts.Content;
 
 // Class for creation of hero control button menu
 public class HeroDialog{
     public Quest.Hero hero;
-    private readonly StringKey RECOVER = new StringKey("val","RECOVER");
-    private readonly StringKey END_TURN = new StringKey("val", "END_TURN");
-    private readonly StringKey KO = new StringKey("val", "KO");
 
     public HeroDialog(Quest.Hero h)
     {
@@ -22,24 +18,24 @@ public class HeroDialog{
         if (hero.activated || (GameObject.FindGameObjectWithTag("activation") != null))
         {
             // Grey button with no action
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), END_TURN, delegate { ; }, Color.gray);
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { ; }, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), END_TURN, delegate { activated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), "End Turn", delegate { activated(); });
         }
 
         // Is this hero defeated?
         if (hero.defeated)
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), RECOVER, delegate { restored(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "Recover", delegate { restored(); });
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), KO, delegate { defeated(); });
+            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), "KO", delegate { defeated(); });
         }
 
-        new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+        new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), "Cancel", delegate { onCancel(); });
     }
 
     // Hero defeated

@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Content;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,11 +7,6 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
-        private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
-        private readonly StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
-        private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
-        private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
-
         Game game = Game.Get();
 
         // array of text buttons with all languages
@@ -42,27 +36,22 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             // Options screen text
-            DialogBox dbTittle = new DialogBox(
-                new Vector2(0, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                OPTIONS
-                );
+            DialogBox dbTittle = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Options");
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             dbTittle.SetFont(game.gameType.GetHeaderFont());
 
-            CreateLanguageElements();
+            //CreateLanguageElements();
 
             CreateAudioElements();
 
             // Button for back to main menu
-            TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), 
-                CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+            TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); }, Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 
         private void CreateAudioElements()
         {
-            DialogBox db = new DialogBox(new Vector2(28, 8), new Vector2(10, 2), MUSIC);
+            DialogBox db = new DialogBox(new Vector2(2, 8), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Music");
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -77,7 +66,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
             new RectangleBorder(musicSlideObj.transform, Color.white, new Vector2(musicSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), musicSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
@@ -97,7 +86,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
 
@@ -114,7 +103,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
-            db = new DialogBox(new Vector2(28, 14), new Vector2(10, 2), EFFECTS);
+            db = new DialogBox(new Vector2(2, 14), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Effects");
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
@@ -129,7 +118,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerUp;
@@ -153,7 +142,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(0) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
             effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
@@ -179,11 +168,7 @@ namespace Assets.Scripts.UI.Screens
         private void CreateLanguageElements()
         {
             // Select langauge text
-            DialogBox dbLanguage = new DialogBox(
-                new Vector2(-10, 4), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
-                CHOOSE_LANG
-                );
+            DialogBox dbLanguage = new DialogBox(new Vector2(2, 4), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Choose Language");
             dbLanguage.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             dbLanguage.SetFont(game.gameType.GetHeaderFont());
 
@@ -192,8 +177,6 @@ namespace Assets.Scripts.UI.Screens
             // It can change in future
 
             string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
-            // For now, English and Spanish languages available.
-            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
@@ -212,20 +195,12 @@ namespace Assets.Scripts.UI.Screens
                     currentColor = Color.white;
                 }
                 languageTextButtons[position] = new TextButton(
-                    new Vector2(UIScaler.GetHCenter() - 16, verticalStart + (2f * position)),
+                    new Vector2(UIScaler.GetHCenter() - 4, verticalStart + (2f * position)),
                     new Vector2(8, 1.8f),
-                    new StringKey(currentLanguage,false),
+                    currentLanguage,
                     delegate { SelectLang(position); },
                     currentColor
                     );
-
-                if (!enabled_langs.Contains(currentLanguage))
-                {
-                    languageTextButtons[position].setColor(Color.red);
-                    languageTextButtons[position].setActive(false);
-                }
-
-
             }
         }
 

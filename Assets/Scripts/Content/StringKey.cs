@@ -8,7 +8,7 @@
         /// <summary>
         /// Empty string Key
         /// </summary>
-        public static StringKey NULL = new StringKey("",false);
+        public static StringKey EmptyStringKey = new StringKey("");
 
         public string key { get; set; }
 
@@ -22,27 +22,6 @@
         {
             key = newKey;
             preventLookup = !doLookup;
-        }
-
-        /// <summary>
-        /// Constructor from a dict, key and one parameter
-        /// </summary>
-        /// <param name="dict">dict to lookup</param>
-        /// <param name="newKey">key to translate</param>
-        /// <param name="numberZeroParam">first param for {0} replace</param>
-        public StringKey(string dict, string newKey, StringKey numberZeroKeyParam)
-        {
-            key = "{" + dict + ":" + newKey + ":{0}:" + numberZeroKeyParam.key + "}";
-        }
-
-        /// <summary>
-        /// Constructor with dict and key
-        /// </summary>
-        /// <param name="dict">dict to lookup</param>
-        /// <param name="newKey">key to lookup</param>
-        public StringKey(string dict, string newKey)
-        {
-            key = "{" + dict + ":" + newKey + "}";
         }
 
         /// <summary>
@@ -62,11 +41,10 @@
         {
             if (this.isKey() && !preventLookup)
             {
-                return LocalizationRead.DictLookup(this);
+                return LocalizationRead.FFGLookup(this);
             } else
             {
-                //non heys can have newline characters
-                return key.Replace("\\n", System.Environment.NewLine);
+                return key;
             }
                  
         }
@@ -77,7 +55,7 @@
         /// <returns>key</returns>
         public override string ToString()
         {
-            return key.Replace(System.Environment.NewLine, "\\n");
+            return key;
         }
     }
 }

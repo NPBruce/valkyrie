@@ -1,15 +1,10 @@
-﻿using Assets.Scripts.Content;
-using UnityEngine;
+﻿using UnityEngine;
 
 // Window with Monster activation
 public class ActivateDialog {
     // The monster that raises this dialog
     public Quest.Monster monster;
     public bool master;
-    private readonly StringKey ACTIONS = new StringKey("val", "ACTIONS");
-    private readonly StringKey MONSTER_MASTER = new StringKey("val", "MONSTER_MASTER");
-    private readonly StringKey MONSTER_MINION = new StringKey("val", "MONSTER_MINION");
-    private readonly StringKey ACTIVATED = new StringKey("val", "ACTIVATED");
 
     // Create an activation window, if master is false then it is for minions
     public ActivateDialog(Quest.Monster m, bool masterIn, bool singleStep = false)
@@ -28,7 +23,7 @@ public class ActivateDialog {
         TextButton tb = new TextButton(
             new Vector2(15, 0.5f), 
             new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
-            monster.monsterData.name,
+            monster.monsterData.name.Translate(),
             delegate { new InfoDialog(monster); });
         tb.ApplyTag("activation");
 
@@ -36,10 +31,8 @@ public class ActivateDialog {
         float offset = 2.5f;
         if (monster.currentActivation.effect.Length > 0)
         {
-            string effect = monster.currentActivation.effect.Replace("\\n", "\n");
             // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(effect,false));
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
             db.AddBorder();
             db.ApplyTag("activation");
             offset += 4.5f;
@@ -50,24 +43,24 @@ public class ActivateDialog {
         // Create header
         if (singleStep)
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), ACTIONS);
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Actions");
         }
         else if (master)
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), MONSTER_MASTER, Color.red);
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Master", Color.red);
         }
         else
         {
-            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), MONSTER_MINION);
+            db = new DialogBox(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minion");
         }
 
         if (master)
         {
-            activationText = monster.currentActivation.ad.masterActions.Translate();
+            activationText = monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n");
         }
         else
         {
-            activationText = monster.currentActivation.ad.minionActions.Translate();
+            activationText = monster.currentActivation.ad.minionActions.Translate().Replace("\\n", "\n");
         }
         db.AddBorder();
         db.ApplyTag("activation");
@@ -75,8 +68,7 @@ public class ActivateDialog {
         offset += 2;
 
         // Create activation text box
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7),
-            new StringKey(activationText,false));
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7), activationText);
         if (master && !singleStep)
         {
             db.AddBorder(Color.red);
@@ -92,15 +84,15 @@ public class ActivateDialog {
         // Create finished button
         if (singleStep)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), ACTIVATED, delegate { activated(); });
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Activated", delegate { activated(); });
         }
         else if (master)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), new StringKey("val","X_ACTIVATED",MONSTER_MASTER ), delegate { activated(); }, Color.red);
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Masters Activated", delegate { activated(); }, Color.red);
         }
         else
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), new StringKey("val", "X_ACTIVATED", MONSTER_MINION), delegate { activated(); });
+            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), "Minions Activated", delegate { activated(); });
         }
         tb.ApplyTag("activation");
     }

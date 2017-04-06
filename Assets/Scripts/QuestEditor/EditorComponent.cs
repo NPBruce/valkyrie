@@ -1,11 +1,10 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 // Super class for all editor selectable components
 // Handles UI and editing
 public class EditorComponent {
-
     // Reference to the selected component
     public QuestData.QuestComponent component;
     // These are used to latch if a position button has been pressed
@@ -16,7 +15,6 @@ public class EditorComponent {
 
     // This is used for creating the component rename dialog
     QuestEditorTextEdit rename;
-    private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
 
     // Update redraws the selection UI
     virtual public void Update()
@@ -24,7 +22,7 @@ public class EditorComponent {
         Clean();
 
         // Back button is common to all components
-        TextButton tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        TextButton tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), "Back", delegate { QuestEditorData.Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
     }
@@ -82,7 +80,7 @@ public class EditorComponent {
     public void Rename()
     {
         string name = component.sectionName.Substring(component.typeDynamic.Length);
-        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, delegate { RenameFinished(); });
+        rename =  new QuestEditorTextEdit("Component Name:", name, delegate { RenameFinished(); });
         rename.EditText();
     }
 

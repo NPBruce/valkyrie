@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 public class EditorComponentToken : EditorComponent
 {
@@ -23,45 +22,41 @@ public class EditorComponentToken : EditorComponent
         Game game = Game.Get();
         CameraController.SetCamera(tokenComponent.location);
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.TOKEN, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Token", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("Token".Length),false), delegate { QuestEditorData.ListToken(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("Token".Length), delegate { QuestEditorData.ListToken(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP , delegate { GetPosition(); });
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
+        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), "~", delegate { GetPosition(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val", "ROTATION", new StringKey(tokenComponent.rotation.ToString(), false)),
-            delegate { Rotate(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + tokenComponent.rotation + ")", delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), 
-            new StringKey(tokenComponent.tokenName,false), delegate { Type(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), tokenComponent.tokenName, delegate { Type(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
+        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -82,7 +77,7 @@ public class EditorComponentToken : EditorComponent
 
     public void Type()
     {
-        typeList = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TOKEN), GetTokenNames(), delegate { SelectType(); });
+        typeList = new EditorSelectionList("Select Token", GetTokenNames(), delegate { SelectType(); });
         typeList.SelectItem();
     }
 

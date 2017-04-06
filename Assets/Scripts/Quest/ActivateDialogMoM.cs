@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Assets.Scripts.Content;
 
 // Window with Monster activation
 public class ActivateDialogMoM : ActivateDialog
 {
-    private readonly StringKey MONSTER_ATTACKS = new StringKey("val", "MONSTER_ATTACKS");
-
     // Create an activation window, if master is false then it is for minions
     public ActivateDialogMoM(Quest.Monster m) : base(m, true)
     {
@@ -19,7 +16,7 @@ public class ActivateDialogMoM : ActivateDialog
             Object.Destroy(go);
 
         // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9f), 0.5f), new Vector2(18, 2), monster.monsterData.name);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9f), 0.5f), new Vector2(18, 2), monster.monsterData.name.Translate());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -27,21 +24,19 @@ public class ActivateDialogMoM : ActivateDialog
         if (monster.currentActivation.effect.Length > 0)
         {
             // ability text
-            string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(textKey,false));
+            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.effect.Replace("\\n", "\n"));
             db.AddBorder();
             offset += 4.5f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), MONSTER_ATTACKS, delegate { CreateAttackWindow(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-9f), offset), new Vector2(18, 2), "The monster attacks.", delegate { CreateAttackWindow(); });
 
         offset += 2.5f;
 
         new TextButton(
             new Vector2(UIScaler.GetHCenter(-9f), offset), 
             new Vector2(18, 2), 
-            monster.currentActivation.ad.moveButton, 
+            monster.currentActivation.ad.moveButton.Translate(), 
             delegate { CreateMoveWindow(); });
 
         MonsterDialogMoM.DrawMonster(monster);
@@ -52,7 +47,7 @@ public class ActivateDialogMoM : ActivateDialog
         Destroyer.Dialog();
 
         // ability box - name header
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name.Translate());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -60,12 +55,12 @@ public class ActivateDialogMoM : ActivateDialog
         db = new DialogBox(
             new Vector2(10, offset), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            monster.currentActivation.ad.masterActions);
+            monster.currentActivation.ad.masterActions.Translate().Replace("\\n", "\n"));
         db.AddBorder();
 
         offset += 4.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { activated(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
 
         MonsterDialogMoM.DrawMonster(monster);
     }
@@ -79,18 +74,17 @@ public class ActivateDialogMoM : ActivateDialog
         }
 
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name);
+        DialogBox db = new DialogBox(new Vector2(15, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 30, 2), monster.monsterData.name.Translate());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         float offset = 2.5f;
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            new StringKey(monster.currentActivation.move.Replace("\\n", "\n"),false));
+        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), monster.currentActivation.move.Replace("\\n", "\n"));
         db.AddBorder();
 
         offset += 4.5f;
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { activated(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), "Finished", delegate { activated(); });
 
         MonsterDialogMoM.DrawMonster(monster);
     }
