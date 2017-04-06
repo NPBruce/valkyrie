@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 public class EditorComponentMPlace : EditorComponent
 {
@@ -22,48 +21,36 @@ public class EditorComponentMPlace : EditorComponent
         CameraController.SetCamera(mPlaceComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.MPLACE, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "MPlace", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("MPlace".Length),false), 
-            delegate { QuestEditorData.ListMPlace(); });
+        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), name.Substring("MPlace".Length), delegate { QuestEditorData.ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        StringKey rotateKey = new StringKey("val","RIGHT");
-        if (mPlaceComponent.rotate)
-        {
-            rotateKey = new StringKey("val", "DOWN");
-        }
-
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val","ROTATE_TO",rotateKey), 
-            delegate { Rotate(); });
-
+        string r = "Right";
+        if (mPlaceComponent.rotate) r = "Down";
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotate: " + r, delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        StringKey mast = new StringKey("val","MINION");
-        if (mPlaceComponent.master)
-        {
-            mast = new StringKey("val","MASTER");
-        }
+        string mast = "Minion";
+        if (mPlaceComponent.master) mast = "Master";
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), mast, delegate { MasterToggle(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");

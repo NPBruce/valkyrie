@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 public class EditorComponentTile : EditorComponent
 {
@@ -23,34 +22,32 @@ public class EditorComponentTile : EditorComponent
         Game game = Game.Get();
         CameraController.SetCamera(tileComponent.location);
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.TILE, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Tile", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Tile".Length),false), delegate { QuestEditorData.ListTile(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Tile".Length), delegate { QuestEditorData.ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), new StringKey(tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), tileComponent.tileSideName, delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1), CommonStringKeys.POSITION);
+        DialogBox db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1), "Position");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 4), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+        tb = new TextButton(new Vector2(4, 4), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(tileComponent.rotation.ToString(),false)), delegate { TileRotate(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Rotation (" + tileComponent.rotation + ")", delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -102,8 +99,7 @@ public class EditorComponentTile : EditorComponent
                 sides.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
             }
         }
-        tileESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });
+        tileESL = new EditorSelectionList("Select Tile Side", sides, delegate { SelectTileSide(); });
         tileESL.SelectItem();
     }
 

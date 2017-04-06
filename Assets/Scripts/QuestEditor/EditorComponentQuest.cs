@@ -1,13 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 public class EditorComponentQuest : EditorComponent
 {
-    private readonly StringKey SELECT_PACK = new StringKey("val", "SELECT_PACK");
-    private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
-
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable dbe1;
     public DialogBoxEditable dbe2;
@@ -25,8 +21,7 @@ public class EditorComponentQuest : EditorComponent
     {
         base.Update();
         Game game = Game.Get();
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
-            CommonStringKeys.QUEST, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), "Quest", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -38,10 +33,10 @@ public class EditorComponentQuest : EditorComponent
         dbe2.ApplyTag("editor");
         dbe2.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), REQUIRED_EXPANSIONS);
+        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), "Required Expansions:");
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), "+", delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -52,12 +47,10 @@ public class EditorComponentQuest : EditorComponent
             if (game.quest.qd.quest.packs.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(game.quest.qd.quest.packs[index],false));
+                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), game.quest.qd.quest.packs[index]);
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
-                    CommonStringKeys.MINUS, delegate { QuestRemovePack(i); }, Color.red);
+                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), "-", delegate { QuestRemovePack(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -96,7 +89,7 @@ public class EditorComponentQuest : EditorComponent
             }
         }
 
-        packESL = new EditorSelectionList(SELECT_PACK, packs, delegate { SelectQuestAddPack(); });
+        packESL = new EditorSelectionList("Select Pack", packs, delegate { SelectQuestAddPack(); });
         packESL.SelectItem();
     }
 

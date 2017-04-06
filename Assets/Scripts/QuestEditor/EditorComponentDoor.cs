@@ -1,12 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 
 public class EditorComponentDoor : EditorComponent
 {
-    private readonly StringKey COLOR = new StringKey("val", "COLOR");
-
     QuestData.Door doorComponent;
     // List to select door colour
     EditorSelectionList colorList;
@@ -26,42 +23,37 @@ public class EditorComponentDoor : EditorComponent
         Game game = Game.Get();
         CameraController.SetCamera(doorComponent.location);
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), 
-            CommonStringKeys.DOOR, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Door", delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Door".Length),false), 
-            delegate { QuestEditorData.ListDoor(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Door".Length), delegate { QuestEditorData.ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), "Position");
         db.ApplyTag("editor");
 
         // This is a snapped position
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), "><", delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(doorComponent.rotation.ToString(),false)), 
-            delegate { Rotate(); });
+        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), "Rotation (" + doorComponent.rotation + ")", delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), COLOR, delegate { Colour(); });
+        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), "Color", delegate { Colour(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
+        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), "Event", delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -92,7 +84,7 @@ public class EditorComponentDoor : EditorComponent
         {
             colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
-        colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectColour(); });
+        colorList = new EditorSelectionList("Select Item", colours, delegate { SelectColour(); });
         colorList.SelectItem();
     }
 
