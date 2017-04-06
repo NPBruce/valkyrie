@@ -431,10 +431,21 @@ public class EditorComponentEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> components = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
+        if (!add)
+        {
+            components.Add(new EditorSelectionList.SelectionListEntry("#boardcomponents", "Special"));
+            components.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Special"));
+        }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token)
-            components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+            {
+                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+            }
+            if (kv.Value is QuestData.Spawn && !add)
+            {
+                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+            }
         }
 
         visibilityESL = new EditorSelectionList("Select Event", components, delegate { SelectAddVisibility(add); });
