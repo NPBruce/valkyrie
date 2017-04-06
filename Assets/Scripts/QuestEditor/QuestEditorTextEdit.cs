@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts.Content;
 
 // Editable text box for use in quest editor
 public class QuestEditorTextEdit {
 
     public string value = "";
-    public string title;
+    public StringKey title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     public UnityEngine.UI.InputField iField;
 
     // Create a new text box with title, initial value and call back
-    public QuestEditorTextEdit(string t, string initial, UnityEngine.Events.UnityAction call)
+    public QuestEditorTextEdit(StringKey t, string initial, UnityEngine.Events.UnityAction call)
     {
         value = initial;
         title = t;
@@ -31,7 +31,7 @@ public class QuestEditorTextEdit {
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 6), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 6), StringKey.NULL);
         db.AddBorder();
 
         // Heading
@@ -69,11 +69,11 @@ public class QuestEditorTextEdit {
         iField.textComponent = uiText;
         iField.text = value;
 
-        TextButton tb = new TextButton(new Vector2(23f, 4), new Vector2(6, 1), "OK", OKButton);
+        TextButton tb = new TextButton(new Vector2(23f, 4), new Vector2(6, 1), CommonStringKeys.OK, OKButton);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31f, 4), new Vector2(6, 1), "Cancel", cancelCall);
+        tb = new TextButton(new Vector2(31f, 4), new Vector2(6, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }

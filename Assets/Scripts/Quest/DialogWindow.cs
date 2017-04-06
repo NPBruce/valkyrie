@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // Class for creation of a dialog window with buttons and handling button press
 // This is used for display of event information
@@ -55,7 +56,7 @@ public class DialogWindow {
     {
         // Draw text
         text = eventData.GetText();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), text);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), new StringKey(text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
         db.Destroy();
         
@@ -64,7 +65,8 @@ public class DialogWindow {
             offset = 4;
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), text);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
+            new StringKey(text,false));
         db.AddBorder();
 
         offset += 1f;
@@ -80,20 +82,21 @@ public class DialogWindow {
         {
             if (eventData.qEvent.cancelable)
             {
-                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
             }
         }
         foreach (EventButton eb in eventData.GetButtons())
         {
             int numTmp = num++;
-            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), eb.label, delegate { onButton(numTmp); }, eb.colour);
+            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), 
+                new StringKey(eb.label,false), delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable && (eventData.GetButtons().Count > 2))
         {
-            new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
         }
 
     }
@@ -101,38 +104,40 @@ public class DialogWindow {
     public void CreateQuotaWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), eventData.GetText());
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
+            new StringKey(eventData.GetText(),false));
         db.AddBorder();
 
         if (quota == 0)
         {
-            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), "-", delegate { ; }, Color.grey);
+            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { ; }, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), "-", delegate { quotaDec(); }, Color.white);
+            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota.ToString());
+        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), new StringKey(quota.ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (quota >= 10)
         {
-            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { ; }, Color.grey);
+            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { ; }, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), "+", delegate { quotaInc(); }, Color.white);
+            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { quotaInc(); }, Color.white);
         }
 
         // Only one button, action depends on quota
-        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { onQuota(); }, Color.white);
+        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
+            new StringKey(eventData.GetButtons()[0].label,false), delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), 11.5f), new Vector2(8f, 2), "Cancel", delegate { onCancel(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), 11.5f), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
         }
 
     }

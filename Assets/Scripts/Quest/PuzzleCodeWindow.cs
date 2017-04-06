@@ -3,14 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Assets.Scripts.Content;
 
 public class PuzzleCodeWindow
 {
+    private readonly StringKey PUZZLE_GUESS = new StringKey("val", "PUZZLE_GUESS");
+    private readonly StringKey ICON_SUCCESS_RESULT = new StringKey("val","ICON_SUCCESS_RESULT");
+    private readonly StringKey ICON_INVESTIGATION_RESULT = new StringKey("val", "ICON_INVESTIGATION_RESULT");
+
     public EventManager.Event eventData;
     QuestData.Puzzle questPuzzle;
     public PuzzleCode puzzle;
     public List<int> guess;
     public int previousMoves = 0;
+
 
     public PuzzleCodeWindow(EventManager.Event e)
     {
@@ -36,7 +42,8 @@ public class PuzzleCodeWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), "");
+        DialogBox db = new DialogBox(
+            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here
@@ -47,7 +54,10 @@ public class PuzzleCodeWindow
             for (int i = 1; i <= questPuzzle.puzzleAltLevel; i++)
             {
                 int tmp = i;
-                tb = new TextButton(new Vector2(hPos, 1.5f), new Vector2(2f, 2), i.ToString(), delegate { GuessAdd(tmp); }, Color.black);
+                tb = new TextButton(
+                    new Vector2(hPos, 1.5f), new Vector2(2f, 2), 
+                    new StringKey(i.ToString(),false), 
+                    delegate { GuessAdd(tmp); }, Color.black);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
                 hPos += 2.5f;
             }
@@ -57,29 +67,34 @@ public class PuzzleCodeWindow
                 if (guess.Count >= i)
                 {
                     int tmp = i - 1;
-                    tb = new TextButton(new Vector2(hPos, 4f), new Vector2(2f, 2f), guess[tmp].ToString(), delegate { GuessRemove(tmp); }, Color.black);
+                    tb = new TextButton(
+                        new Vector2(hPos, 4f), new Vector2(2f, 2f), 
+                        new StringKey(guess[tmp].ToString(),false), 
+                        delegate { GuessRemove(tmp); }, Color.black);
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), "", Color.white);
+                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), StringKey.NULL, Color.white);
                     db.AddBorder();
                 }
                 hPos += 2.5f;
             }
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), "Guess", delegate { Guess(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), PUZZLE_GUESS, delegate { Guess(); });
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), "Skill:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), 
+            new StringKey("val","X_COLON",CommonStringKeys.SKILL));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f), EventManager.SymbolReplace(questPuzzle.skill));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f),
+            new StringKey(EventManager.SymbolReplace(questPuzzle.skill), false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         // Guesses window
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), "");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -99,7 +114,10 @@ public class PuzzleCodeWindow
             hPos = UIScaler.GetHCenter(-13f);
             foreach (int i in g.guess)
             {
-                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), i.ToString(), Color.black, new Color(1, 1, 1, 0.9f));
+                db = new DialogBox(
+                    new Vector2(hPos, vPos), new Vector2(2f, 2f), 
+                    new StringKey(i.ToString(),false), 
+                    Color.black, new Color(1, 1, 1, 0.9f));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.background.transform.parent = scrollArea.transform;
@@ -110,7 +128,7 @@ public class PuzzleCodeWindow
             hPos = UIScaler.GetHCenter();
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "", Color.black, new Color(1, 1, 1, 0.9f));
+                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_SUCCESS_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.background.transform.parent = scrollArea.transform;
@@ -119,7 +137,7 @@ public class PuzzleCodeWindow
             }
             for (int i = 0; i < g.CorrectType(); i++)
             {
-                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), "", Color.black, new Color(1, 1, 1, 0.9f));
+                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_INVESTIGATION_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.background.transform.parent = scrollArea.transform;
@@ -130,29 +148,31 @@ public class PuzzleCodeWindow
         }
         scrollRect.verticalNormalizedPosition = 0f;
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f), "Moves:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f),
+            new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), (puzzle.guess.Count - previousMoves).ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), new StringKey((puzzle.guess.Count - previousMoves).ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f), "Total Moves:");
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f),
+            new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), puzzle.guess.Count.ToString());
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), new StringKey(puzzle.guess.Count.ToString(),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate {; }, Color.grey);
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate { Finished(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), "Close", delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), eventData.GetButtons()[0].label, delegate {; }, Color.grey);
+            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
         }
     }
 
@@ -166,7 +186,10 @@ public class PuzzleCodeWindow
         guess.Add(symbolType);
 
         int tmp = guess.Count - 1;
-        new TextButton(new Vector2(hPos, 4f), new Vector2(2f, 2f), symbolType.ToString(), delegate { GuessRemove(tmp); });
+        new TextButton(
+            new Vector2(hPos, 4f), new Vector2(2f, 2f), 
+            new StringKey(symbolType.ToString(),false), 
+            delegate { GuessRemove(tmp); });
     }
 
     public void GuessRemove(int symbolPos)
