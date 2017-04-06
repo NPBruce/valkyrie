@@ -105,7 +105,7 @@ public class ActivateDialog {
         tb.ApplyTag("activation");
     }
 
-    public void activated()
+    virtual public void activated()
     {
         // Disable if there is a menu open
         if (GameObject.FindGameObjectWithTag("dialog") != null) return;
