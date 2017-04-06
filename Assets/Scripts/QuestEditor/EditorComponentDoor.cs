@@ -52,7 +52,7 @@ public class EditorComponentDoor : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(doorComponent.rotation.ToString(),false)), 
+            new StringKey("val","ROTATION",doorComponent.rotation), 
             delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");

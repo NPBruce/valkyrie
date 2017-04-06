@@ -96,7 +96,7 @@ public class PuzzleImageWindow
             new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), 20f), new Vector2(3f, 2f), new StringKey((puzzle.moves - previousMoves).ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), 20f), new Vector2(3f, 2f), puzzle.moves - previousMoves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -104,7 +104,7 @@ public class PuzzleImageWindow
             new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 20f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 20f), new Vector2(3f, 2f), puzzle.moves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

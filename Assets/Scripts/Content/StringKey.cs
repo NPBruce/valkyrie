@@ -36,6 +36,17 @@
         }
 
         /// <summary>
+        /// Constructor from a dict, key and one parameter
+        /// </summary>
+        /// <param name="dict">dict to lookup</param>
+        /// <param name="newKey">key to translate</param>
+        /// <param name="numberZeroParam">first param for {0} replace</param>
+        public StringKey(string dict, string newKey, int numberZeroNumParam)
+        {
+            key = "{" + dict + ":" + newKey + ":{0}:" + numberZeroNumParam.ToString() + "}";
+        }
+
+        /// <summary>
         /// Constructor with dict and key
         /// </summary>
         /// <param name="dict">dict to lookup</param>

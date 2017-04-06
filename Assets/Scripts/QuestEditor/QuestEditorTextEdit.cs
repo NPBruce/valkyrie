@@ -11,7 +11,7 @@ public class QuestEditorTextEdit {
     public UnityEngine.UI.InputField iField;
 
     // Create a new text box with title, initial value and call back
-    public QuestEditorTextEdit(StringKey t, string initial, UnityEngine.Events.UnityAction call)
+    public QuestEditorTextEdit(StringKey t, string initial, string localizationKey, UnityEngine.Events.UnityAction call)
     {
         value = initial;
         title = t;

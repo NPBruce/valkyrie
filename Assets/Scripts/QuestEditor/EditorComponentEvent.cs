@@ -164,14 +164,14 @@ public class EditorComponentEvent : EditorComponent
             db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), MIN);
             db.ApplyTag("editor");
 
-            tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), new StringKey(eventComponent.minHeroes.ToString(),false), delegate { SetHeroCount(false); });
+            tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
             db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), MAX);
             db.ApplyTag("editor");
 
-            tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), new StringKey(eventComponent.maxHeroes.ToString(),false), delegate { SetHeroCount(true); });
+            tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -280,9 +280,9 @@ public class EditorComponentEvent : EditorComponent
 
     public void UpdateText()
     {
-        if (!eventTextDBE.uiInput.text.Equals(""))
+        if (!eventTextDBE.Text.Equals(""))
         {
-            eventComponent.originalText = eventTextDBE.uiInput.text;
+            eventComponent.originalText = eventTextDBE.Text;
         }
     }
 

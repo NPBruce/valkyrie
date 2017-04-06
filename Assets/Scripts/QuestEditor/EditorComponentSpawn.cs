@@ -214,12 +214,12 @@ public class EditorComponentSpawn : EditorComponent
 
     public void UpdateUniqueTitle()
     {
-        monsterComponent.uniqueTitle = uniqueTitleDBE.uiInput.text;
+        monsterComponent.uniqueTitle = uniqueTitleDBE.Text;
     }
 
     public void UpdateUniqueText()
     {
-        monsterComponent.uniqueText = uniqueTextDBE.uiInput.text;
+        monsterComponent.uniqueText = uniqueTextDBE.Text;
     }
 
     public void MonsterTypeAdd(int pos)

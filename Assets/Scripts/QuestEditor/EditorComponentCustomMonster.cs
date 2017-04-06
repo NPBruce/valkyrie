@@ -295,9 +295,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateName()
     {
-        if (!nameDBE.uiInput.text.Equals(""))
+        if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName = nameDBE.uiInput.text;
+            monsterComponent.monsterName = nameDBE.Text;
         }
     }
 
@@ -315,9 +315,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateInfo()
     {
-        if (!infoDBE.uiInput.text.Equals(""))
+        if (!infoDBE.Text.Equals(""))
         {
-            monsterComponent.info = new StringKey(infoDBE.uiInput.text);
+            monsterComponent.info = new StringKey(infoDBE.Text);
         }
     }
 
@@ -441,7 +441,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateHealth()
     {
-        int.TryParse(healthDBE.uiInput.text, out monsterComponent.health);
+        int.TryParse(healthDBE.Text, out monsterComponent.health);
     }
 
     public void ClearHealth()

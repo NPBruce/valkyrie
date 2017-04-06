@@ -65,7 +65,7 @@ public class PuzzleSlideWindow
             new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), new StringKey((puzzle.moves - lastMoves).ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), puzzle.moves - lastMoves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -73,7 +73,7 @@ public class PuzzleSlideWindow
             new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), puzzle.moves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

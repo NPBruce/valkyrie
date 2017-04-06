@@ -1,38 +1,76 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
 public class DialogBoxEditable
 {
-    public GameObject textObj;
-    public GameObject background;
-    public GameObject inputObj;
-    public UnityEngine.UI.InputField uiInput;
+    private GameObject textObj;
+    private GameObject background;
+    private GameObject inputObj;
+    /// <summary>
+    /// Small text to show translation info
+    /// </summary>
+    private GameObject translationTextObj;
+
+    private UnityEngine.UI.InputField uiInput;
 
     public void ApplyTag(string tag)
     {
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
+        translationTextObj.tag = tag;
     }
 
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
+    /// <summary>
+    /// Dialog Box editable with white text and black background
+    /// </summary>
+    /// <param name="location">Vector of location of the dialog</param>
+    /// <param name="size">Vector of size of the dialog</param>
+    /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="call">event to call when interacting with the dialog</param>
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, string localizationKey, UnityEngine.Events.UnityAction<string> call)
     {
-        createDialog(location, size, text, call, Color.white, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, localizationKey, call, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
+    /// <summary>
+    /// Dialog Box editable with black background
+    /// </summary>
+    /// <param name="location">Vector of location of the dialog</param>
+    /// <param name="size">Vector of size of the dialog</param>
+    /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="call">event to call when interacting with the dialog</param>
+    /// <param name="fgColour">color or the font inside dialog</param>
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, string localizationKey, UnityEngine.Events.UnityAction<string> call, Color fgColour)
     {
-        createDialog(location, size, text, call, fgColour, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, localizationKey, call, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    /// <summary>
+    /// Dialog Box editable
+    /// </summary>
+    /// <param name="location">Vector of location of the dialog</param>
+    /// <param name="size">Vector of size of the dialog</param>
+    /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="call">event to call when interacting with the dialog</param>
+    /// <param name="fgColour">color or the font inside dialog</param>
+    /// <param name="bgColour">backgroudn color of the dialog</param>
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, string localizationKey, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
-        createDialog(location, size, text, call, fgColour, bgColour);
+        createDialog(location, size, text, localizationKey, call, fgColour, bgColour);
     }
 
-    void createDialog(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    /// <summary>
+    /// Main constructor for dialog box editable
+    /// </summary>
+    /// <param name="location">Vector of location of the dialog</param>
+    /// <param name="size">Vector of size of the dialog</param>
+    /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="call">event to call when interacting with the dialog</param>
+    /// <param name="fgColour">color or the font inside dialog</param>
+    /// <param name="bgColour">backgroudn color of the dialog</param>
+    void createDialog(Vector2 location, Vector2 size, string text, string localizationKey, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
         string objName = text;
@@ -45,16 +83,20 @@ public class DialogBoxEditable
         textObj = new GameObject("text" + objName);
         background = new GameObject("textBg" + objName);
         inputObj = new GameObject("textIn" + objName);
+        translationTextObj = new GameObject("translationText" + objName);
+
         // Mark it as dialog
         textObj.tag = "dialog";
         background.tag = "dialog";
         inputObj.tag = "dialog";
+        translationTextObj.tag = "dialog";
 
         Game game = Game.Get();
 
         background.transform.parent = game.uICanvas.transform;
         inputObj.transform.parent = background.transform;
         textObj.transform.parent = inputObj.transform;
+        translationTextObj.transform.parent = background.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
@@ -70,9 +112,12 @@ public class DialogBoxEditable
         transTx.localScale = transIn.localScale;
         transTx.sizeDelta = transIn.sizeDelta;
 
+        RectTransform transTran = translationTextObj.AddComponent<RectTransform>();
+
         textObj.AddComponent<CanvasRenderer>();
         background.AddComponent<CanvasRenderer>();
         inputObj.AddComponent<CanvasRenderer>();
+        translationTextObj.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Image uiImage = background.AddComponent<UnityEngine.UI.Image>();
         uiImage.color = bgColour;
@@ -83,6 +128,15 @@ public class DialogBoxEditable
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
+
+        UnityEngine.UI.Text uiTranslationText = translationTextObj.AddComponent<UnityEngine.UI.Text>();
+        // Very dark text
+        uiTranslationText.color = new Color(0.2f,0.2f,0.2f);
+        uiTranslationText.alignment = TextAnchor.LowerRight;
+        uiTranslationText.font = game.gameType.GetFont();
+        uiTranslationText.material = uiText.font.material;
+        // Smallest
+        uiTranslationText.fontSize = 8;
 
         uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
 
@@ -100,5 +154,16 @@ public class DialogBoxEditable
     {
         UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+    }
+
+    public string Text
+    {
+        get { return uiInput.text; }
+    }
+
+    public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)
+    {
+        this.textObj.GetComponent<UnityEngine.UI.Text>().material = mat;
+        this.background.transform.parent = trans;
     }
 }

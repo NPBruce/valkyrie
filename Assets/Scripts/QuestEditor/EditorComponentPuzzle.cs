@@ -153,13 +153,13 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void UpdateLevel()
     {
-        int.TryParse(levelDBE.uiInput.text, out puzzleComponent.puzzleLevel);
+        int.TryParse(levelDBE.Text, out puzzleComponent.puzzleLevel);
         Update();
     }
 
     public void UpdateAltLevel()
     {
-        int.TryParse(altLevelDBE.uiInput.text, out puzzleComponent.puzzleAltLevel);
+        int.TryParse(altLevelDBE.Text, out puzzleComponent.puzzleAltLevel);
         Update();
     }
     

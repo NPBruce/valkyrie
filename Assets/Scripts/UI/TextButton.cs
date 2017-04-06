@@ -23,30 +23,64 @@ public class TextButton {
         border.SetTag(tag);
     }
 
-    // Draw a button (white)
-    // location: position in scale units
-    // size: size in scale units
-    // text: text on the button
-    // call: function to call on press
+    /// <summary>
+    /// Draw a button (white) with localization string key
+    /// </summary>
+    /// <param name="location">position vector in scale units</param>
+    /// <param name="size">size vector in scale units</param>
+    /// <param name="textKey">localization string key</param>
+    /// <param name="call">function to call on press</param>
     public TextButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call)
     {
-        createButton(location, size, textKey, call, Color.white, 0);
+        createButton(location, size, textKey.Translate(), call, Color.white, 0);
     }
 
-    // Draw a button, as above with:
-    // colour: colour for the text and border
-    // id: unique identifier for Unity (default 0)
+    /// <summary>
+    /// Draw a button with localization string key
+    /// </summary>
+    /// <param name="location">position vector in scale units</param>
+    /// <param name="size">size vector in scale units</param>
+    /// <param name="textKey">localization string key</param>
+    /// <param name="call">function to call on press</param>
+    /// <param name="colour">colour for the text and border</param>
+    /// <param name="id">unique identifier for Unity (default 0)</param>
     public TextButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call, Color colour, int id = 0)
     {
-        createButton(location, size, textKey, call, colour, id);
+        createButton(location, size, textKey.Translate(), call, colour, id);
+    }
+
+    /// <summary>
+    /// Draw a button (white) with localization string key
+    /// </summary>
+    /// <param name="location">position vector in scale units</param>
+    /// <param name="size">size vector in scale units</param>
+    /// <param name="number">localization string key</param>
+    /// <param name="call">function to call on press</param>
+    public TextButton(Vector2 location, Vector2 size, int number, UnityEngine.Events.UnityAction call)
+    {
+        createButton(location, size, number.ToString(), call, Color.white, 0);
+    }
+
+    /// <summary>
+    /// Draw a button with localization string key
+    /// </summary>
+    /// <param name="location">position vector in scale units</param>
+    /// <param name="size">size vector in scale units</param>
+    /// <param name="number">localization string key</param>
+    /// <param name="call">function to call on press</param>
+    /// <param name="colour">colour for the text and border</param>
+    /// <param name="id">unique identifier for Unity (default 0)</param>
+    public TextButton(Vector2 location, Vector2 size, int number, UnityEngine.Events.UnityAction call, Color colour, int id = 0)
+    {
+        createButton(location, size, number.ToString(), call, colour, id);
     }
 
     // Internal function to create button from constructors
-    void createButton(Vector2 location, Vector2 size, StringKey textKey, UnityEngine.Events.UnityAction call, Color colour, int id)
+    void createButton(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction call, Color colour, int id)
     {
         // Create objects
-        button = new GameObject("button" + textKey + id);
-        background = new GameObject("buttonBg" + textKey + id);
+        button = new GameObject("button" + text + id);
+        background = new GameObject("buttonBg" + text + id);
         border = new RectangleBorder(background.transform, colour, size);
 
         // Mark it as dialog (this can be changed with applytag)
@@ -82,7 +116,7 @@ public class TextButton {
 
         uiText = button.AddComponent<UnityEngine.UI.Text>();
         uiText.color = colour;
-        uiText.text = textKey.Translate();
+        uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;

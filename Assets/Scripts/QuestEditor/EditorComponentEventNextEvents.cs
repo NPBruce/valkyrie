@@ -142,8 +142,7 @@ public class EditorComponentEventNextEvent : EditorComponent
             foreach (QuestData.Event.DelayedEvent de in eventComponent.delayedEvents)
             {
                 int i = index++;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), 
-                    new StringKey(de.delay.ToString(),false));
+                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), de.delay);
                 db.AddBorder();
                 db.ApplyTag("editor");
 
@@ -172,7 +171,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void SetQuota()
     {
-        int.TryParse(quotaDBE.uiInput.text, out eventComponent.quota);
+        int.TryParse(quotaDBE.Text, out eventComponent.quota);
         Update();
     }
 
@@ -204,7 +203,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        eventComponent.buttons[number - 1] = buttonDBE[number - 1].uiInput.text;
+        eventComponent.buttons[number - 1] = buttonDBE[number - 1].Text;
     }
 
     public void AddEvent(int index, int button)

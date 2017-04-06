@@ -68,11 +68,11 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!dbe1.uiInput.text.Equals(""))
+        if (!dbe1.Text.Equals(""))
         {
             // TODO: Me must, search quest dictionary for the key and change its
             // translation to the current language
-            game.quest.qd.quest.name = dbe1.uiInput.text;
+            game.quest.qd.quest.name = dbe1.Text;
         }
     }
 
@@ -80,8 +80,8 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!dbe2.uiInput.text.Equals(""))
-            game.quest.qd.quest.description = dbe2.uiInput.text;
+        if (!dbe2.Text.Equals(""))
+            game.quest.qd.quest.description = dbe2.Text;
     }
 
     public void QuestAddPack()

@@ -141,41 +141,41 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateAbility()
     {
-        if (!abilityDBE.uiInput.text.Equals(""))
+        if (!abilityDBE.Text.Equals(""))
         {
-            activationComponent.ability = new StringKey(abilityDBE.uiInput.text);
+            activationComponent.ability = new StringKey(abilityDBE.Text);
         }
     }
 
     public void UpdateMoveButton()
     {
-        if (!moveButtonDBE.uiInput.text.Equals(""))
+        if (!moveButtonDBE.Text.Equals(""))
         {
-            activationComponent.moveButton = new StringKey(moveButtonDBE.uiInput.text);
+            activationComponent.moveButton = new StringKey(moveButtonDBE.Text);
         }
     }
 
     public void UpdateMasterActions()
     {
-        if (!masterActionsDBE.uiInput.text.Equals(""))
+        if (!masterActionsDBE.Text.Equals(""))
         {
-            activationComponent.masterActions = new StringKey(masterActionsDBE.uiInput.text);
+            activationComponent.masterActions = new StringKey(masterActionsDBE.Text);
         }
     }
 
     public void UpdateMinionActions()
     {
-        if (!minionActionsDBE.uiInput.text.Equals(""))
+        if (!minionActionsDBE.Text.Equals(""))
         {
-            activationComponent.minionActions = new StringKey(minionActionsDBE.uiInput.text);
+            activationComponent.minionActions = new StringKey(minionActionsDBE.Text);
         }
     }
 
     public void UpdateMove()
     {
-        if (!moveDBE.uiInput.text.Equals(""))
+        if (!moveDBE.Text.Equals(""))
         {
-            activationComponent.move = new StringKey(moveDBE.uiInput.text);
+            activationComponent.move = new StringKey(moveDBE.Text);
         }
     }
 

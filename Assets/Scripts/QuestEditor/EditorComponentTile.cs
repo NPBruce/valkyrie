@@ -50,7 +50,7 @@ public class EditorComponentTile : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(tileComponent.rotation.ToString(),false)), delegate { TileRotate(); });
+            new StringKey("val","ROTATION",tileComponent.rotation), delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

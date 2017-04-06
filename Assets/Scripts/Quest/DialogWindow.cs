@@ -117,7 +117,7 @@ public class DialogWindow {
             new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), new StringKey(quota.ToString(),false));
+        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
