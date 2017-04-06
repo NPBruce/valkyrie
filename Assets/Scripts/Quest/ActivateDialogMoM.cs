@@ -88,4 +88,10 @@ public class ActivateDialogMoM : ActivateDialog
 
         MonsterDialogMoM.DrawMonster(monster);
     }
+
+    override public void activated()
+    {
+        Destroyer.Dialog();
+        Game.Get().roundControl.MonsterActivated();
+    }
 }
