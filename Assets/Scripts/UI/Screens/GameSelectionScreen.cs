@@ -11,6 +11,14 @@ namespace Assets.Scripts.UI.Screens
         FetchContent fcD2E;
         FetchContent fcMoM;
 
+        private StringKey D2E_NAME = new StringKey("{val:D2E_NAME}");
+        private StringKey CONTENT_IMPORT = new StringKey("{val:CONTENT_IMPORT}");
+        private StringKey CONTENT_REIMPORT = new StringKey("{val:CONTENT_REIMPORT}");
+        private StringKey D2E_APP_NOT_FOUND = new StringKey("{val:D2E_APP_NOT_FOUND}");
+        private StringKey MOM_NAME = new StringKey("{val:MOM_NAME}");
+        private StringKey MOM_APP_NOT_FOUND = new StringKey("{val:MOM_APP_NOT_FOUND}");
+        private StringKey CONTENT_IMPORTING = new StringKey("{val:CONTENT_IMPORTING}");
+
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
         {
@@ -54,21 +62,26 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             // Draw D2E button
-            TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), new Vector2(30, 4f), "Descent: Journeys in the Dark Second Edition", delegate { D2E(); }, startColor);
+            TextButton tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), 
+                new Vector2(30, 4f), 
+                D2E_NAME, 
+                delegate { D2E(); }, 
+                startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             // Draw D2E import button
             if (fcD2E.importAvailable)
             {
-                string text = fcD2E.NeedImport() ? "Import Content" : "Reimport Content";
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), text, delegate { Import("D2E"); });
+                StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), keyText, delegate { Import("D2E"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), "Unable to locate Road to Legend, install via Steam", Color.red);
+                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND, Color.red);
                 db.AddBorder();
             }
 
@@ -78,24 +91,24 @@ namespace Assets.Scripts.UI.Screens
             {
                 startColor = Color.gray;
             }
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), "Mansions of Madness Second Edition", delegate { MoM(); }, startColor);
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), MOM_NAME, delegate { MoM(); }, startColor);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             // Draw MoM import button
             if (fcMoM.importAvailable)
             {
-                string text = fcMoM.NeedImport() ? "Import Content" : "Reimport Content";
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), text, delegate { Import("MoM"); });
+                StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), keyText, delegate { Import("MoM"); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), "Unable to locate Mansions of Madness, install via Steam", Color.red);
+                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), MOM_APP_NOT_FOUND, Color.red);
                 db.AddBorder();
             }
 
-            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Exit", delegate { Exit(); }, Color.red);
+            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.EXIT, delegate { Exit(); }, Color.red);
         }
 
         // Start game as D2E
@@ -115,7 +128,7 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
             // Display message
-            DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), "Importing...");
+            DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             // Perform importing later, to ensure message is displayed first
             Game.Get().CallAfterFrame(delegate { PerformImport(type); });
@@ -136,7 +149,9 @@ namespace Assets.Scripts.UI.Screens
         }
 
         /// <summary>
-        /// After selecting game, we load the localization file
+        /// After selecting game, we load the localization file.
+        /// Deppends on the gameType selected.
+        /// There are two Localization.txt, one for D2E and one for MoM
         /// </summary>
         private void loadLocalization()
         {
@@ -146,8 +161,8 @@ namespace Assets.Scripts.UI.Screens
                 // FFG default language is allways English
                 LocalizationRead.ffgDict = new DictionaryI18n(
                     System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
-                    DictionaryI18n.DEFAULT_LANG);
-                LocalizationRead.ffgDict.setCurrentLanguage(Game.Get().currentLang);
+                    DictionaryI18n.DEFAULT_LANG,
+                    Game.Get().currentLang);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Create a box with text
 public class DialogBox {
@@ -20,30 +21,30 @@ public class DialogBox {
     // location: position in scale units
     // size: size in scale units
     // text: text to display
-    public DialogBox(Vector2 location, Vector2 size, string text)
+    public DialogBox(Vector2 location, Vector2 size, StringKey text)
     {
         createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
     // Create text on the screen, as above with
     // fgColour: color for the text, border if used
-    public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour)
+    public DialogBox(Vector2 location, Vector2 size, StringKey text, Color fgColour)
     {
         createDialog(location, size, text, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
     // Create text on the screen, as above with
     // bgColour: color for the background
-    public DialogBox(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
+    public DialogBox(Vector2 location, Vector2 size, StringKey text, Color fgColour, Color bgColour)
     {
         createDialog(location, size, text, fgColour, bgColour);
     }
 
     // Internal function to create the text from constructors
-    void createDialog(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
+    void createDialog(Vector2 location, Vector2 size, StringKey textKey, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
-        string objName = text;
+        string objName = textKey.key;
         if (objName.Length > 10)
         {
             objName = objName.Substring(0, 10);
@@ -80,7 +81,7 @@ public class DialogBox {
 
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
         uiText.color = fgColour;
-        uiText.text = text;
+        uiText.text = textKey.Translate();
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;

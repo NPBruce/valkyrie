@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // Paged list of items to select from
 // Used by quest editor
 public class EditorSelectionList
 {
     // Selection made
-    public string selection = "";
+    public string selection = null;
     // List of items to select
     public List<SelectionListEntry> items;
-    public string title;
+    public StringKey title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     // Page offset
@@ -21,10 +22,10 @@ public class EditorSelectionList
     public int perPage = 20;
 
     // Create editor selection clist with title, list, colour and callback
-    public EditorSelectionList(string t, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
+    public EditorSelectionList(StringKey newTitle, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
     {
         items = list;
-        title = t;
+        title = newTitle;
         returnCall = call;
         filter = new HashSet<string>();
         traits = new HashSet<string>();
@@ -50,7 +51,7 @@ public class EditorSelectionList
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 30), "");
+        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 30), StringKey.NULL);
         db.AddBorder();
 
         // Title
@@ -83,7 +84,7 @@ public class EditorSelectionList
         float hOffset = 22;
         foreach (string s in traits)
         {
-            db = new DialogBox(Vector2.zero, new Vector2(10, 1), s);
+            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(s,false));
             float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
             db.Destroy();
             if (hOffset + width > 40)
@@ -94,11 +95,11 @@ public class EditorSelectionList
             string tmp = s;
             if (filter.Count == 0)
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); });
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp,false), delegate { SetFilter(s); });
             }
             else if (filter.Contains(s))
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { ClearFilter(s); });
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp,false), delegate { ClearFilter(s); });
             }
             else
             {
@@ -112,11 +113,11 @@ public class EditorSelectionList
                 }
                 if (valid)
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { SetFilter(s); }, Color.gray);
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp, false), delegate { SetFilter(s); }, Color.gray);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), tmp, delegate { ; }, new Color(0.5f, 0, 0));
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp, false), delegate { ; }, new Color(0.5f, 0, 0));
                 }
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -133,7 +134,7 @@ public class EditorSelectionList
             if (filtered.Count > i)
             {
                 string key = filtered[i].name;
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), key, delegate { SelectComponent(key); }, filtered[i].color);
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), new StringKey(key,false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             offset += 1;
@@ -143,16 +144,16 @@ public class EditorSelectionList
         {
             // Prev button
             offset += 1;
-            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), "<", delegate { PreviousPage(); });
+            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), new StringKey("<",false), delegate { PreviousPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             // Next button
-            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), ">", delegate { NextPage(); });
+            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), new StringKey(">", false), delegate { NextPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
         // Cancel button
-        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), "Cancel", cancelCall);
+        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
@@ -206,42 +207,42 @@ public class EditorSelectionList
         public string name = "";
         public List<string> filter;
 
-        public SelectionListEntry(string nameIn)
+        public SelectionListEntry(string nameKeyIn)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = new List<string>();
         }
 
-        public SelectionListEntry(string nameIn, Color c)
+        public SelectionListEntry(string nameKeyIn, Color c)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = new List<string>();
             color = c;
         }
 
-        public SelectionListEntry(string nameIn, List<string> l)
+        public SelectionListEntry(string nameKeyIn, List<string> l)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = l;
         }
 
-        public SelectionListEntry(string nameIn, string l)
+        public SelectionListEntry(string nameKeyIn, string l)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = new List<string>();
             filter.Add(l);
         }
 
-        public SelectionListEntry(string nameIn, List<string> l, Color c)
+        public SelectionListEntry(string nameKeyIn, List<string> l, Color c)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = l;
             color = c;
         }
 
-        public SelectionListEntry(string nameIn, string l, Color c)
+        public SelectionListEntry(string nameKeyIn, string l, Color c)
         {
-            name = nameIn;
+            name = nameKeyIn;
             filter = new List<string>();
             filter.Add(l);
             color = c;

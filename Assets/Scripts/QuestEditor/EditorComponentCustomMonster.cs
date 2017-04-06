@@ -2,10 +2,22 @@ using UnityEngine;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 public class EditorComponentCustomMonster : EditorComponent
 {
+
+    private readonly StringKey BASE = new StringKey("val", "BASE");
+    private readonly StringKey NAME = new StringKey("val", "NAME");
+    private readonly StringKey ACTIVATIONS = new StringKey("val","ACTIVATIONS");
+    private readonly StringKey INFO = new StringKey("val", "INFO");
+    private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
+    private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
+    private readonly StringKey PLACE_IMG = new StringKey("val", "PLACE_IMG");
+    private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
+
     QuestData.CustomMonster monsterComponent;
+    
     DialogBoxEditable nameDBE;
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
@@ -15,7 +27,9 @@ public class EditorComponentCustomMonster : EditorComponent
     EditorSelectionList imageESL;
     EditorSelectionList placeESL;
 
+
     public EditorComponentCustomMonster(string nameIn) : base()
+
     {
         Game game = Game.Get();
         monsterComponent = game.quest.qd.components[nameIn] as QuestData.CustomMonster;
@@ -29,29 +43,31 @@ public class EditorComponentCustomMonster : EditorComponent
         base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), "CustomMonster", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), name.Substring("CustomMonster".Length), delegate { QuestEditorData.ListCustomMonster(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), new StringKey(name.Substring("CustomMonster".Length),false), delegate { QuestEditorData.ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1), "Base:");
+        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", BASE));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), monsterComponent.baseMonster, delegate { SetBase(); });
+        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), new StringKey(monsterComponent.baseMonster,false),  delegate { SetBase(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1), "Name:");
+        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1),
+            new StringKey("val", "X_COLON", NAME));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.Length > 0)
         {
@@ -60,46 +76,49 @@ public class EditorComponentCustomMonster : EditorComponent
             nameDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), "Reset", delegate { ClearName(); });
+                tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), 
+                    CommonStringKeys.RESET, delegate { ClearName(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), "Set", delegate { SetName(); });
+            tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1),
+                CommonStringKeys.SET, delegate { SetName(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), "Info:");
+            db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), new StringKey("val","X_COLON",INFO));
             db.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.key.Length > 0)
             {
-                infoDBE = new DialogBoxEditable(new Vector2(0, 7), new Vector2(20, 8), monsterComponent.info.Translate(), delegate { UpdateInfo(); });
+                infoDBE = new DialogBoxEditable(new Vector2(0, 7), new Vector2(20, 8), 
+                    monsterComponent.info.Translate(), delegate { UpdateInfo(); });
                 infoDBE.ApplyTag("editor");
                 infoDBE.AddBorder();
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Reset", delegate { ClearInfo(); });
+                    tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearInfo(); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), "Set", delegate { SetInfo(); });
+                tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetInfo(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
-        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), "Activations:");
+        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), new StringKey("val","X_COLON",ACTIVATIONS));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(12, 15), new Vector2(1, 1), "+", delegate { AddActivation(); }, Color.green);
+        tb = new TextButton(new Vector2(12, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddActivation(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -110,19 +129,21 @@ public class EditorComponentCustomMonster : EditorComponent
             if (monsterComponent.activations.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), monsterComponent.activations[index]);
+                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), 
+                    new StringKey(monsterComponent.activations[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), "-", delegate { RemoveActivation(i); }, Color.red);
+                tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), 
+                    CommonStringKeys.MINUS, delegate { RemoveActivation(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
-        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), "Traits:");
+        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), new StringKey("val","X_COLON", CommonStringKeys.TRAITS));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), "+", delegate { AddTrait(); }, Color.green);
+        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -132,79 +153,84 @@ public class EditorComponentCustomMonster : EditorComponent
             if (monsterComponent.traits.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1), monsterComponent.traits[index]);
+                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1),
+                    new StringKey(monsterComponent.traits[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "-", delegate { RemoveTrait(i); }, Color.red);
+                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
+                    delegate { RemoveTrait(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
+
         if (game.gameType is MoMGameType)
         {
-            db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), "Health:");
+            db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
             db.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
             {
-                healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), monsterComponent.health.ToString(), delegate { UpdateHealth(); });
+                healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), 
+                monsterComponent.health.ToString(), delegate { UpdateHealth(); });
                 healthDBE.ApplyTag("editor");
                 healthDBE.AddBorder();
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Reset", delegate { ClearHealth(); });
+                    tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearHealth(); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), "Set", delegate { SetHealth(); });
+                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetHealth(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
-        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), "Image:");
+        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), new StringKey("val","X_COLON",IMAGE));
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
-            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), monsterComponent.imagePath, delegate { SetImage(); });
+            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), 
+                new StringKey(monsterComponent.imagePath,false), delegate { SetImage(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Reset", delegate { ClearImage(); });
+                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImage(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), "Set", delegate { SetImage(); });
+            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImage(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), "Place Img:");
+            db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), PLACE_IMG);
             db.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
             {
-                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), monsterComponent.imagePath, delegate { SetImagePlace(); });
+                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), new StringKey(monsterComponent.imagePath,false), delegate { SetImagePlace(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Reset", delegate { ClearImagePlace(); });
+                    tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImagePlace(); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), "Set", delegate { SetImagePlace(); });
+                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImagePlace(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -236,7 +262,9 @@ public class EditorComponentCustomMonster : EditorComponent
             baseMonster.Add(new EditorSelectionList.SelectionListEntry(display, sets));
         }
 
-        baseESL = new EditorSelectionList("Select Event", baseMonster, delegate { SelectSetBase(); });
+        baseESL = new EditorSelectionList(
+            new StringKey("val", "SELECT", CommonStringKeys.EVENT),
+            baseMonster, delegate { SelectSetBase(); });
         baseESL.SelectItem();
     }
 
@@ -289,19 +317,19 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!infoDBE.uiInput.text.Equals(""))
         {
-            monsterComponent.info = new Assets.Scripts.Content.StringKey(infoDBE.uiInput.text);
+            monsterComponent.info = new StringKey(infoDBE.uiInput.text);
         }
     }
 
     public void ClearInfo()
     {
-        monsterComponent.info = Assets.Scripts.Content.StringKey.EmptyStringKey;
+        monsterComponent.info = StringKey.NULL;
         Update();
     }
 
     public void SetInfo()
     {
-        monsterComponent.info = new Assets.Scripts.Content.StringKey("Monster Info");
+        monsterComponent.info = new StringKey("Monster Info");
         Update();
     }
 
@@ -318,7 +346,9 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        activationsESL = new EditorSelectionList("Select Activation", activations, delegate { SelectAddActivation(); });
+        activationsESL = new EditorSelectionList(
+            new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION),
+            activations, delegate { SelectAddActivation(); });
         activationsESL.SelectItem();
     }
 
@@ -372,7 +402,9 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
-        traitsESL = new EditorSelectionList("Select Activation", list, delegate { SelectAddTraits(); });
+        traitsESL = new EditorSelectionList(
+            new StringKey("val","SELECT",CommonStringKeys.ACTIVATION), 
+            list, delegate { SelectAddTraits(); });
         traitsESL.SelectItem();
     }
 
@@ -438,7 +470,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
         }
-        imageESL = new EditorSelectionList("Select Image", list, delegate { SelectImage(); });
+        imageESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
         imageESL.SelectItem();
     }
 
@@ -466,7 +498,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
         }
-        placeESL = new EditorSelectionList("Select Image", list, delegate { SelectImagePlace(); });
+        placeESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImagePlace(); });
         placeESL.SelectItem();
     }
 

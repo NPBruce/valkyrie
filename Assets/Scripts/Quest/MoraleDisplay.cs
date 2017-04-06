@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Content;
 
 // Used to display remaining morale
 public class MoraleDisplay {
@@ -9,7 +10,7 @@ public class MoraleDisplay {
     public MoraleDisplay()
     {
         Game game = Game.Get();
-        md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), game.quest.morale.ToString(), Color.red);
+        md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), new StringKey(game.quest.morale.ToString(),false), Color.red);
         md.textObj.tag = "questui";
         md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         md.background.tag = "questui";

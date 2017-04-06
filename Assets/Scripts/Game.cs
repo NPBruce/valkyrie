@@ -90,18 +90,16 @@ public class Game : MonoBehaviour {
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
-
-        // TODO: Here the ValkyrieDict should be loaded
-        /*
         try
         {
-            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromLocalization("", currentLang);
+            TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
+            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromTextAsset(localizationFile, currentLang);
+            LocalizationRead.valkyrieDict.setCurrentLanguage(currentLang);
         }
         catch (System.Exception e)
         {
             ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
         }
-        */
 
         roundControl = new RoundController();
 
@@ -177,20 +175,31 @@ public class Game : MonoBehaviour {
         heroCanvas.SetupUI();
 
         // Add a finished button to start the quest
-        TextButton endSelection = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), "Finished", delegate { EndSelection(); }, Color.green);
+        TextButton endSelection = new TextButton(
+            new Vector2(UIScaler.GetRight(-9), 
+            UIScaler.GetBottom(-3)), 
+            new Vector2(8, 2), 
+            CommonStringKeys.FINISHED, 
+            delegate { EndSelection(); }, 
+            Color.green);
+
         endSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
         endSelection.ApplyTag("heroselect");
 
         // Add a title to the page
-        DialogBox db = new DialogBox(new Vector2(8, 1), new Vector2(UIScaler.GetWidthUnits() - 16, 3), "Select " + gameType.HeroesName());
+        DialogBox db = new DialogBox(
+            new Vector2(8, 1), 
+            new Vector2(UIScaler.GetWidthUnits() - 16, 3), 
+            new StringKey("val","SELECT",gameType.HeroesName())
+            );
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(gameType.GetHeaderFont());
         db.ApplyTag("heroselect");
 
         new HeroSelection();
 
-        TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.QuestSelect(); }, Color.red);
+        TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
         cancelSelection.ApplyTag("heroselect");
