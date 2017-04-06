@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 public class EditorComponentSpawnPlacement : EditorComponent
 {
@@ -22,17 +23,18 @@ public class EditorComponentSpawnPlacement : EditorComponent
         CameraController.SetCamera(monsterComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), "Spawn", delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.SPAWN, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), name.Substring("Spawn".Length), delegate { QuestEditorData.ListSpawn(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
+        new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), "E", delegate { Rename(); });
+        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -41,10 +43,10 @@ public class EditorComponentSpawnPlacement : EditorComponent
         for (int heroes = 2; heroes < 5; heroes++)
         {
             int h = heroes;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), heroes + " Heros:");
+            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "NUMBER_HEROS", new StringKey(heroes.ToString(),false)));
             db.ApplyTag("editor");
 
-            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), "+", delegate { MonsterPlaceAdd(h); }, Color.green);
+            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterPlaceAdd(h); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
@@ -55,11 +57,11 @@ public class EditorComponentSpawnPlacement : EditorComponent
                     int mSlot = i;
                     string place = monsterComponent.placement[heroes][i];
 
-                    tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), "-", delegate { MonsterPlaceRemove(h, mSlot); }, Color.red);
+                    tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterPlaceRemove(h, mSlot); }, Color.red);
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
 
-                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), place, delegate { QuestEditorData.SelectComponent(place); });
+                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), new StringKey(place,false), delegate { QuestEditorData.SelectComponent(place); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }
@@ -88,7 +90,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         {
             return;
         }
-        monsterPlaceESL = new EditorSelectionList("Select Item", mplaces, delegate { MonsterPlaceAddSelection(heroes); });
+        monsterPlaceESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, mplaces, delegate { MonsterPlaceAddSelection(heroes); });
         monsterPlaceESL.SelectItem();
     }
 

@@ -464,17 +464,22 @@ public class Quest
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
-    public void AdjustMorale(int m)
+    // Delay is used if we can't raise the nomorale event at this point (need to recall this later)
+    public void AdjustMorale(int m, bool delay = false)
     {
         Game game = Game.Get();
         morale += m;
         // Test for no morale ending
         if (morale < 0)
         {
-            // Hold loss during activation
-            if (GameObject.FindGameObjectWithTag("activation") != null) return;
             morale = 0;
             game.moraleDisplay.Update();
+            // Hold loss during activation
+            if (delay)
+            {
+                morale = -1;
+                return;
+            }
             eManager.EventTriggerType("NoMorale");
         }
         game.moraleDisplay.Update();

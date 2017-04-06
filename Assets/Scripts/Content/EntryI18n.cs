@@ -32,15 +32,17 @@ namespace Assets.Scripts.Content
         /// <summary>
         /// Constructor with the complete localisation elements
         /// </summary>
-        /// <param name="completeLocalisationString"></param>
-        public EntryI18n(DictionaryI18n dict,string completeLocalisationString)
+        /// <param name="completeLocalizationString"></param>
+        public EntryI18n(DictionaryI18n dict,string completeLocalizationString)
         {
             referedDictionary = dict;
 
-            if (completeLocalisationString.Contains(QUOTES))
+            string newLinedCompleteLocalizationString = completeLocalizationString.Replace("\\n", System.Environment.NewLine);
+
+            if (newLinedCompleteLocalizationString.Contains(QUOTES))
             {
                 // with quotes, commas inside quotes isn't considered separator
-                List<string> partialTranslation = new List<string>(completeLocalisationString.Split(COMMA));
+                List<string> partialTranslation = new List<string>(newLinedCompleteLocalizationString.Split(COMMA));
                 List<string> finalTranslation = new List<string>();
                 string currentTranslation = "";
                 bool oddity = false;
@@ -77,12 +79,12 @@ namespace Assets.Scripts.Content
             else
             {
                 // Without quotes, all commas are separators
-                translations = completeLocalisationString.Split(COMMA);
+                translations = newLinedCompleteLocalizationString.Split(COMMA);
             }
 
             if (translations.Length > dict.getLanguages().Length)
             {
-                ValkyrieDebug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n: " + completeLocalisationString + System.Environment.NewLine);
+                ValkyrieDebug.Log("Incoherent DictI18n with " + dict.getLanguages().Length + " languages including StringI18n with " + translations.Length + " languages : " + newLinedCompleteLocalizationString + System.Environment.NewLine);
             }
         }
 
@@ -158,21 +160,24 @@ namespace Assets.Scripts.Content
             StringBuilder result = new StringBuilder();
 
             bool first = true;
+            string currentTranslation;
             foreach (string oneTranslation in translations)
             {
+                currentTranslation = oneTranslation.Replace(System.Environment.NewLine,"\\n");
+
                 if (!first)
                 {
                     result.Append(COMMA);
                 }
 
-                if (oneTranslation.Contains(COMMA) || oneTranslation.Contains(QUOTES))
+                if (currentTranslation.Contains(COMMA) || currentTranslation.Contains(QUOTES))
                 {
                     // The serializable text should repeat mid quotes and add initial and final quotes
-                    result.Append(QUOTES).Append(oneTranslation.Replace(QUOTES.ToString(),"\"\"")).Append(QUOTES);
+                    result.Append(QUOTES).Append(currentTranslation.Replace(QUOTES.ToString(),"\"\"")).Append(QUOTES);
                 }
                 else
                 {
-                    result.Append(oneTranslation);
+                    result.Append(currentTranslation);
                 }
 
                 if (first)
