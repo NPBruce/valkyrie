@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.Content;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
 {
     public Dictionary<string, QuestData.Quest> questList;
+
     public WWW download;
     public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/";
     public Game game;
@@ -37,11 +39,15 @@ public class QuestDownload : MonoBehaviour
         }
 
         // Heading
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Download " + game.gameType.QuestName());
+        DialogBox db = new DialogBox(
+            new Vector2(2, 1), 
+            new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
+            new StringKey("val","QUEST_NAME_DOWNLOAD",game.gameType.QuestName())
+            );
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), "");
+        db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -89,7 +95,14 @@ public class QuestDownload : MonoBehaviour
                 int.TryParse(remoteManifest.Get(kv.Key, "version"), out remoteVersion);
                 if (localVersion < remoteVersion)
                 {
-                    tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  [Update] " + kv.Value["name"], delegate { Selection(file); }, Color.black, offset);
+                    tb = new TextButton(
+                        new Vector2(2, offset), 
+                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        //TODO: the name should be another key in near future. now is a nonLookup key
+                        new StringKey("val", "QUEST_NAME_UPDATE", new StringKey(kv.Value["name"], false)),
+                        delegate { Selection(file); }, 
+                        Color.black, offset);
+
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -98,7 +111,12 @@ public class QuestDownload : MonoBehaviour
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + kv.Value["name"], Color.black);
+
+                    db = new DialogBox(
+                        new Vector2(2, offset), 
+                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                        Color.black);
                     db.AddBorder();
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);
                     db.background.transform.parent = scrollArea.transform;
@@ -108,7 +126,13 @@ public class QuestDownload : MonoBehaviour
             }
             else
             {
-                tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f), "  " + kv.Value["name"], delegate { Selection(file); }, Color.black, offset);
+                tb = new TextButton(
+                    new Vector2(2, offset), 
+                    new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                    new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                    delegate { Selection(file); }, 
+                    Color.black, offset);
+
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -120,7 +144,10 @@ public class QuestDownload : MonoBehaviour
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
-        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Cancel(); }, Color.red);
+        tb = new TextButton(
+            new Vector2(1, UIScaler.GetBottom(-3)), 
+            new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
+
         tb.SetFont(game.gameType.GetHeaderFont());
     }
 

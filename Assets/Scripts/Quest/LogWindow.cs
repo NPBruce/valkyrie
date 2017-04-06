@@ -1,3 +1,4 @@
+﻿using Assets.Scripts.Content;
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,15 +31,17 @@ public class LogWindow
             log += e.GetEntry(developerToggle);
         }
         log.Trim('\n');
+
         DialogBox db = null;
         if (developerToggle)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), log, Color.black, new Color(1, 1, 1, 0.9f));
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), new StringKey(log,false), Color.black, new Color(1, 1, 1, 0.9f));
         }
         else
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), log, Color.black, new Color(1, 1, 1, 0.9f));
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), new StringKey(log,false), Color.black, new Color(1, 1, 1, 0.9f));
         }
+
         db.AddBorder();
         // This material works for the mask, but only renders in black
         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -51,7 +54,7 @@ public class LogWindow
 
         UnityEngine.UI.Mask mask = db.background.AddComponent<UnityEngine.UI.Mask>();
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), "Close", delegate { Destroyer.Dialog(); });
+        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
 
         if (developerToggle)
         {
@@ -62,7 +65,7 @@ public class LogWindow
     public void DrawVarList()
     {
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(2f), 0.5f), new Vector2(16, 24.5f), "");
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(2f), 0.5f), new Vector2(16, 24.5f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -83,7 +86,7 @@ public class LogWindow
         {
             string key = kv.Key;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), key, Color.black, Color.white);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), new StringKey(key,false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             db.background.transform.parent = scrollArea.transform;
             db.AddBorder();

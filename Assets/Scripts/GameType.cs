@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Assets.Scripts.Content;
+using System;
 using UnityEngine;
 
 // GameType manages setting that are specific to the game type
 public abstract class GameType
 {
     public abstract string DataDirectory();
-    public abstract string HeroName();
-    public abstract string HeroesName();
-    public abstract string QuestName();
+    public abstract StringKey HeroName();
+    public abstract StringKey HeroesName();
+    public abstract StringKey QuestName();
     public abstract int MaxHeroes();
     public abstract bool DisplayHeroes();
     public abstract float TilePixelPerSquare();
@@ -31,19 +32,19 @@ public class NoGameType : GameType
         return ContentData.ContentPath();
     }
 
-    public override string HeroName()
+    public override StringKey HeroName()
     {
-        return "Hero";
+        return new StringKey("{val:D2E_HERO_NAME}");
     }
 
-    public override string HeroesName()
+    public override StringKey HeroesName()
     {
-        return "Heroes";
+        return new StringKey("{val:D2E_HEROES_NAME}");
     }
 
-    public override string QuestName()
+    public override StringKey QuestName()
     {
-        return "Quest";
+        return new StringKey("{val:D2E_QUEST_NAME}");
     }
 
     public override Font GetFont()
@@ -112,19 +113,19 @@ public class D2EGameType : GameType
         return ContentData.ContentPath() + "D2E/";
     }
 
-    public override string HeroName()
+    public override StringKey HeroName()
     {
-        return "Hero";
+        return new StringKey("{val:D2E_HERO_NAME}");
     }
 
-    public override string HeroesName()
+    public override StringKey HeroesName()
     {
-        return "Heroes";
+        return new StringKey("{val:D2E_HEROES_NAME}");
     }
 
-    public override string QuestName()
+    public override StringKey QuestName()
     {
-        return "Quest";
+        return new StringKey("{val:D2E_QUEST_NAME}");
     }
 
     // There are actually two fonts, should expand to include header/text
@@ -191,19 +192,19 @@ class MoMGameType : GameType
         return ContentData.ContentPath() + "MoM/";
     }
 
-    public override string HeroName()
+    public override StringKey HeroName()
     {
-        return "Investigator";
+        return new StringKey("{val:MOM_HERO_NAME}");
     }
 
-    public override string HeroesName()
+    public override StringKey HeroesName()
     {
-        return "Investigators";
+        return new StringKey("{val:MOM_HEROES_NAME}");
     }
 
-    public override string QuestName()
+    public override StringKey QuestName()
     {
-        return "Scenario";
+        return new StringKey("{val:MOM_QUEST_NAME}");
     }
 
     public override Font GetFont()

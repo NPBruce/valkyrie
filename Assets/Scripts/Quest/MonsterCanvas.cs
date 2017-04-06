@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // This class controls the list of monsters
 public class MonsterCanvas : MonoBehaviour
 {
+    private readonly StringKey UP_ARROW = new StringKey("/\\", false);
+    private readonly StringKey DOWN_ARROW = new StringKey("\\/", false);
+
     // offset stores the scoll position, reset at creation
     public int offset = 0;
     // This is assumed in a few places, can't just be changed
@@ -58,12 +62,12 @@ public class MonsterCanvas : MonoBehaviour
         // If at top
         if (offset == 0)
         {
-            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), "/\\", delegate { noAction(); }, Color.gray);
+            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { noAction(); }, Color.gray);
             up.ApplyTag("monsters");
         }
         else
         { // Scroll up active
-            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), "/\\", delegate { Move(-1); });
+            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { Move(-1); });
             up.ApplyTag("monsters");
         }
     }
@@ -80,12 +84,12 @@ public class MonsterCanvas : MonoBehaviour
         // If at buttom
         if (game.quest.monsters.Count - offset <  6)
         {
-            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), "\\/", delegate { noAction(); }, Color.gray);
+            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { noAction(); }, Color.gray);
             down.ApplyTag("monsters");
         }
         else
         { // Scroll down active
-            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), "\\/", delegate { Move(); });
+            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { Move(); });
             down.ApplyTag("monsters");
         }
     }
