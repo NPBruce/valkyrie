@@ -568,7 +568,7 @@ public class Quest
             boardItems[name].Remove();
             boardItems.Remove(name);
         }
-        if (monsterSelect.ContainsKey(name)
+        if (monsterSelect.ContainsKey(name))
         {
             List<Monster> toRemove = new List<Monster>();
             foreach (Monster m in monsters)
@@ -579,17 +579,17 @@ public class Quest
                 }
             }
 
-            foreach (Monster m in ToRemove)
+            foreach (Monster m in toRemove)
             {
-                monsters.Remove(monster);
-                updateDisplay();
+                monsters.Remove(m);
+                game.monsterCanvas.UpdateList();
                 game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
             }
         }
         if (name.Equals("#monsters"))
         {
-            monsters.CLear();
-            updateDisplay();
+            monsters.Clear();
+            game.monsterCanvas.UpdateList();
             game.quest.vars.SetValue("#monsters", 0);
         }
         if (name.Equals("#boardcomponents"))
@@ -598,7 +598,7 @@ public class Quest
             {
                 bc.Remove();
             }
-            boardItems.CLear();
+            boardItems.Clear();
         }
     }
 

@@ -231,13 +231,13 @@ public class EditorComponentEventNextEvent : EditorComponent
         string toAdd = addEventESL.selection;
         if (addEventESL.selection.Equals("{NEW:Event}"))
         {
-            int index = 0;
-            while (game.quest.qd.components.ContainsKey("Event" + index))
+            int i = 0;
+            while (Game.Get().quest.qd.components.ContainsKey("Event" + i))
             {
-                index++;
+                i++;
             }
-            toAdd = "Event" + index;
-            game.quest.qd.components.Add("Event" + index, new QuestData.Event("Event" + index));
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
         }
         eventComponent.nextEvent[button - 1].Insert(index, toAdd);
         Update();

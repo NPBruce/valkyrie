@@ -317,8 +317,8 @@ public class EventManager
                 int next = text.IndexOf(":", start);
                 int end = text.IndexOf(":", next);
                 if (end < 0) end = text.Length - 1;
-                text = new StringKey(text.Substring(start, (next - start) - 1).Translate();
-                text = text.Replace(text.Substring(next, end - next), hero.name.Translate();
+                text = new StringKey(text.Substring(start, (next - start) - 1)).Translate();
+                text = text.Replace(text.Substring(next, end - next), hero.name.Translate());
             }
 
             // Random numbers in events (depreciated)

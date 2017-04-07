@@ -163,7 +163,7 @@ public class HeroSelection {
         foreach (KeyValuePair<string, List<TextButton>> kv in buttons)
         {
             Color c = Color.white;
-            foreach (Quest.Hero h in game.quest.heroes)
+            foreach (Quest.Hero h in Game.Get().quest.heroes)
             {
                 if (h.heroData != null && h.heroData.sectionName.Equals(kv.Key))
                 {
