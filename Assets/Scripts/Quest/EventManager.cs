@@ -304,6 +304,23 @@ public class EventManager
             // replaces all occurances with the one hero
             text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
 
+            // Random heroes can have custom lookups
+            if (text.StartsWith("{rnd:hero:"))
+            {
+                HeroData hero = game.quest.GetRandomHero().heroData;
+                int start = "{rnd:hero:".Length;
+                if (!hero.ContainsTrait("male"))
+                {
+                    start = text.IndexOf(":", start) + 1;
+                    start = text.IndexOf(":", start) + 1;
+                }
+                int next = text.IndexOf(":", start);
+                int end = text.IndexOf(":", next);
+                if (end < 0) end = text.Length - 1;
+                text = new StringKey(text.Substring(start, (next - start) - 1).Translate();
+                text = text.Replace(text.Substring(next, end - next), hero.name.Translate();
+            }
+
             // Random numbers in events (depreciated)
             try
             {
