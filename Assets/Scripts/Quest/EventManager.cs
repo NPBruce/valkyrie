@@ -311,14 +311,33 @@ public class EventManager
                 int start = "{rnd:hero:".Length;
                 if (!hero.ContainsTrait("male"))
                 {
+                    if (text[start] == '{')
+                    {
+                        start = text.IndexOf("}", start);
+                    }
                     start = text.IndexOf(":", start) + 1;
+                    if (text[start] == '{')
+                    {
+                        start = text.IndexOf("}", start);
+                    }
                     start = text.IndexOf(":", start) + 1;
                 }
-                int next = text.IndexOf(":", start);
-                int end = text.IndexOf(":", next);
+                int next = start;
+                if (text[next] == '{')
+                {
+                    next = text.IndexOf("}", next);
+                }
+                next = text.IndexOf(":", next) + 1;
+                int end = next;
+                if (text[end] == '{')
+                {
+                    end = text.IndexOf("}", end);
+                }
+                end = text.IndexOf(":", end);
                 if (end < 0) end = text.Length - 1;
+                string toReplace = text.Substring(next, end - next);
                 text = new StringKey(text.Substring(start, (next - start) - 1)).Translate();
-                text = text.Replace(text.Substring(next, end - next), hero.name.Translate());
+                text = text.Replace(toReplace, hero.name.Translate());
             }
 
             // Random numbers in events (depreciated)
