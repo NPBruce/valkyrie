@@ -157,4 +157,24 @@ public class HeroSelection {
             }
         }
     }
+
+    public void Update()
+    {
+        foreach (KeyValuePair<string, List<TextButton>> kv in buttons)
+        {
+            Color c = Color.white;
+            foreach (Quest.Hero h in game.quest.heroes)
+            {
+                if (h.heroData != null && h.heroData.sectionName.Equals(kv.Key))
+                {
+                    c = new Color(0.4f, 0.4f, 0.4f);
+                }
+            }
+
+            foreach (TextButton tb in kv.Value)
+            {
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = c;
+            }
+        }
+    }
 }
