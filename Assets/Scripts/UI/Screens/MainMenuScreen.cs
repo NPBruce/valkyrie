@@ -1,3 +1,4 @@
+﻿using Assets.Scripts.Content;
 ﻿using Assets.Scripts.UI.Screens;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,12 @@ namespace Assets.Scripts.UI.Screens
     // Class for creation and management of the main menu
     public class MainMenuScreen
     {
+        private StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
+        private StringKey ABOUT = new StringKey("val", "ABOUT");
+        private StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
+        private StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
+
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public MainMenuScreen()
         {
@@ -32,52 +39,81 @@ namespace Assets.Scripts.UI.Screens
             game.audioControl.Music(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), "Valkyrie");
+            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), new StringKey("Valkyrie",false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
             // Button for start quest/scenario
-            TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 5), new Vector2(12, 2f), "Start " + game.gameType.QuestName(), delegate { Start(); });
+            TextButton tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 5), 
+                new Vector2(12, 2f), 
+                new StringKey("val","START_QUEST",game.gameType.QuestName()), 
+                delegate { Start(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
 
             // Load save game (enabled if exists)
             if (SaveManager.SaveExists())
             {
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), delegate { SaveManager.Load(); });
+                tb = new TextButton(
+                    new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
+                    new Vector2(12, 2f),
+                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
+                    delegate { SaveManager.Load(); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
                 tb.SetFont(game.gameType.GetHeaderFont());
             }
             else
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), new Vector2(12, 2f), "Load " + game.gameType.QuestName(), Color.red);
+                db = new DialogBox(
+                    new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
+                    new Vector2(12, 2f),
+                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
+                    Color.red);
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.SetFont(game.gameType.GetHeaderFont());
                 db.AddBorder();
             }
 
             // Content selection page
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), new Vector2(12, 2f), "Select Content", delegate { Content(); });
+            tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), 
+                new Vector2(12, 2f), 
+                SELECT_CONTENT, 
+                delegate { Content(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
 
             // Quest/Scenario editor
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14), new Vector2(12, 2f), game.gameType.QuestName() + " Editor", delegate { Editor(); });
+            tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14),
+                new Vector2(12, 2f),
+                new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()),
+                delegate { Editor(); });
+
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
 
             // About page (managed in this class)
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), new Vector2(12, 2f), "About", delegate { About(); });
+            tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), 
+                new Vector2(12, 2f), 
+                ABOUT, 
+                delegate { About(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
             
             // Configuration menu
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), new Vector2(12, 2f), "Options", delegate { Config(); });
+            tb = new TextButton(
+                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), 
+                new Vector2(12, 2f), 
+                OPTIONS, 
+                delegate { Config(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
 
             // Exit Valkyrie
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), "Exit", delegate { Exit(); });
+            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), CommonStringKeys.EXIT,  delegate { Exit(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
@@ -135,13 +171,23 @@ namespace Assets.Scripts.UI.Screens
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
 
-            DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 10f), new Vector2(30, 6), "Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.");
+            DialogBox db = new DialogBox(
+                new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 10f), 
+                new Vector2(30, 6), 
+                ABOUT_FFG);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-            db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), new Vector2(30, 5), "Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.");
+            db = new DialogBox(
+                new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), 
+                new Vector2(30, 5), 
+                ABOUT_LIBS);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-            TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), "Back", delegate { Destroyer.MainMenu(); });
+            TextButton tb = new TextButton(
+                new Vector2(1, UIScaler.GetBottom(-3)), 
+                new Vector2(8, 2),
+                CommonStringKeys.BACK, 
+                delegate { Destroyer.MainMenu(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(Game.Get().gameType.GetHeaderFont());
         }

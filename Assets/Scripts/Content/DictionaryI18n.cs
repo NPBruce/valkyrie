@@ -50,12 +50,15 @@ namespace Assets.Scripts.Content
         /// Dictionary constructor from a localizacion file and default language
         /// </summary>
         /// <param name="languagesList"></param>
-        public DictionaryI18n(string[] languagesAndTexts, string newDefaultLanguage)
+        public DictionaryI18n(string[] languagesAndTexts, string newDefaultLanguage,string newCurrentLanguage)
         {
             // Set languages list with first line of file
             languages = languagesAndTexts[0].Split(COMMA);
             // Get default language
             setDefaultLanguage(newDefaultLanguage);
+            // set current language
+            setCurrentLanguage(newCurrentLanguage);
+
             // Create dictionary with file lines capacity
             dict = new Dictionary<string, EntryI18n>(languagesAndTexts.Length);
             //Load raw dictionary
