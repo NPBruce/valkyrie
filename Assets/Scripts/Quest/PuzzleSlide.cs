@@ -37,6 +37,7 @@ public class PuzzleSlide : Puzzle
             }
         }
         Loadpuzzle(options[Random.Range(0, options.Count)]);
+        moves = 0;
     }
 
     public PuzzleSlide(Dictionary<string, string> data)
