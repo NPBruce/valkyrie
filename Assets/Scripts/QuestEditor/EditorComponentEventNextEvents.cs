@@ -211,6 +211,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
+        events.Add(new EditorSelectionList.SelectionListEntry("{NEW:Event}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
@@ -226,7 +227,18 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void SelectAddEvent(int index, int button)
     {
-        eventComponent.nextEvent[button - 1].Insert(index, addEventESL.selection);
+        string toAdd = addEventESL.selection;
+        if (addEventESL.selection.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (Game.Get().quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+        eventComponent.nextEvent[button - 1].Insert(index, toAdd);
         Update();
     }
 

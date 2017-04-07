@@ -62,7 +62,7 @@
         /// <returns>true if string must be translated</returns>
         private bool isKey()
         {
-            return key.StartsWith("{");
+            return key.StartsWith("{") && !key.StartsWith("{rnd:") && !key.StartsWith("{var");
         }
 
         /// <summary>
