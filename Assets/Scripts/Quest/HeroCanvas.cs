@@ -12,6 +12,7 @@ public class HeroCanvas : MonoBehaviour {
     // This is assumed in a number of places
     public static float heroSize = 4;
     public static float offsetStart = 3.75f;
+    public HeroSelection heroSelection;
 
     // Called when a quest is started, draws to screen
     public void SetupUI() {
@@ -194,6 +195,7 @@ public class HeroCanvas : MonoBehaviour {
         {
             target.heroData = null;
             UpdateImages();
+            if (heroSelection != null) heroSelection.Update();
             return;
         }
 
@@ -239,6 +241,7 @@ public class HeroCanvas : MonoBehaviour {
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
+        heroSelection = null;
 
         // Reorder heros so that selected heroes are first
         for (int i = 0; i < game.quest.heroes.Count - 1; i++)

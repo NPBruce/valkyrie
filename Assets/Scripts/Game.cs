@@ -197,7 +197,7 @@ public class Game : MonoBehaviour {
         db.SetFont(gameType.GetHeaderFont());
         db.ApplyTag("heroselect");
 
-        new HeroSelection();
+        heroCanvas.heroSelection = new HeroSelection();
 
         TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());

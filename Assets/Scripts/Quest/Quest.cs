@@ -563,10 +563,43 @@ public class Quest
     // Remove an activate component
     public void Remove(string name)
     {
-        if (!boardItems.ContainsKey(name)) return;
+        if (boardItems.ContainsKey(name))
+        {
+            boardItems[name].Remove();
+            boardItems.Remove(name);
+        }
+        if (monsterSelect.ContainsKey(name))
+        {
+            List<Monster> toRemove = new List<Monster>();
+            foreach (Monster m in monsters)
+            {
+                if (m.monsterData.sectionName.Equals(monsterSelect[name]))
+                {
+                    toRemove.Add(m);
+                }
+            }
 
-        boardItems[name].Remove();
-        boardItems.Remove(name);
+            foreach (Monster m in toRemove)
+            {
+                monsters.Remove(m);
+                game.monsterCanvas.UpdateList();
+                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+            }
+        }
+        if (name.Equals("#monsters"))
+        {
+            monsters.Clear();
+            game.monsterCanvas.UpdateList();
+            game.quest.vars.SetValue("#monsters", 0);
+        }
+        if (name.Equals("#boardcomponents"))
+        {
+            foreach (BoardComponent bc in boardItems.Values)
+            {
+                bc.Remove();
+            }
+            boardItems.Clear();
+        }
     }
 
     // Remove all active components
