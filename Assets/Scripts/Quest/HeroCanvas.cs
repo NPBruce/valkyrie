@@ -93,6 +93,7 @@ public class HeroCanvas : MonoBehaviour {
         if (game.gameType is MoMGameType)
         {
             image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.9f, heroSize * UIScaler.GetPixelsPerUnit() * 0.9f);
+            heroFrame.transform.SetAsLastSibling();
         }
         image.color = Color.clear;
 
