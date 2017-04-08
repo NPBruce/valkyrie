@@ -165,6 +165,39 @@ public class QuestDownload : MonoBehaviour
             offset += 2;
         }
 
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in localManifest.data)
+        {
+            // Only looking for files missing from remote
+            if (remoteManifest.data.ContainsKey(kv.Key)) continue;
+
+            string file = kv.Key + ".valkyrie";
+            // Size is 1.2 to be clear of characters with tails
+            if (File.Exists(saveLocation() + "/" + file))
+            {
+                db = new DialogBox(
+                    new Vector2(2, offset),
+                    new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
+                    new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                    Color.black);
+                db.AddBorder();
+                db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);
+                db.background.transform.parent = scrollArea.transform;
+                db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                tb = new TextButton(
+                    new Vector2(UIScaler.GetWidthUnits() - 6, offset),
+                    new Vector2(3, 1.2f),
+                    new StringKey("val", "DELETE"),
+                    delegate { Delete(file); },
+                    Color.black, offset);
+
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
+                tb.background.transform.parent = scrollArea.transform;
+            }
+        }
+
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
         tb = new TextButton(
