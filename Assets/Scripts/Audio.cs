@@ -104,6 +104,10 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
+        if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            fileName = "/" + fileName;
+        }
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
         if (file.error != null)
