@@ -97,7 +97,7 @@ public class QuestDownload : MonoBehaviour
                 {
                     tb = new TextButton(
                         new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
                         //TODO: the name should be another key in near future. now is a nonLookup key
                         new StringKey("val", "QUEST_NAME_UPDATE", new StringKey(kv.Value["name"], false)),
                         delegate { Selection(file); }, 
@@ -108,13 +108,24 @@ public class QuestDownload : MonoBehaviour
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 1f);
                     tb.background.transform.parent = scrollArea.transform;
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetWidthUnits() - 6, offset),
+                        new Vector2(3, 1.2f),
+                        new StringKey("val", "DELETE"),
+                        delegate { Delete(file); },
+                        Color.black, offset);
+
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
+                    tb.background.transform.parent = scrollArea.transform;
                 }
                 else
                 {
 
                     db = new DialogBox(
                         new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
                         new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
                         Color.black);
                     db.AddBorder();
@@ -122,6 +133,18 @@ public class QuestDownload : MonoBehaviour
                     db.background.transform.parent = scrollArea.transform;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
                     db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetWidthUnits() - 6, offset),
+                        new Vector2(3, 1.2f),
+                        new StringKey("val", "DELETE"),
+                        delegate { Delete(file); },
+                        Color.black, offset);
+
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
+                    tb.background.transform.parent = scrollArea.transform;
+
                 }
             }
             else
@@ -166,6 +189,14 @@ public class QuestDownload : MonoBehaviour
     {
         string package = serverLocation + game.gameType.TypeName() + "/" + file;
         StartCoroutine(Download(package, delegate { Save(file); }));
+    }
+
+    public void Delete(string file)
+    {
+        string toDelete = saveLocation() + "/" + file;
+        File.Delete(saveLocation() + "/" + file);
+        Destroyer.Dialog();
+        DrawList();
     }
 
     public void Save(string file)
