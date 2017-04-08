@@ -106,7 +106,14 @@ public class Audio : MonoBehaviour
     {
         WWW file = new WWW(@"file://" + fileName);
         yield return file;
-        audioSourceEffect.PlayOneShot(file.audioClip, effectVolume);
+        if (file.error != null)
+        {
+            ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + file.error);
+        }
+        else
+        {
+            audioSourceEffect.PlayOneShot(file.audioClip, effectVolume);
+        }
     }
 
     public void UpdateMusic()
