@@ -12,6 +12,7 @@ public class HeroCanvas : MonoBehaviour {
     // This is assumed in a number of places
     public static float heroSize = 4;
     public static float offsetStart = 3.75f;
+    public HeroSelection heroSelection;
 
     // Called when a quest is started, draws to screen
     public void SetupUI() {
@@ -39,15 +40,21 @@ public class HeroCanvas : MonoBehaviour {
         Sprite heroSprite;
         Sprite frameSprite;
 
-        // FIXME: should be game type specific
         Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
+        if (game.gameType is MoMGameType)
+        {
+            frameTex = Resources.Load("sprites/borders/momframeempty") as Texture2D;
+        }
 
         string heroName = h.id.ToString();
 
-        // If hero selected use blue frame (FIX for game type)
         if (h.heroData != null)
         {
             frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
+            if (game.gameType is MoMGameType)
+            {
+                frameTex = Resources.Load("sprites/borders/momframe") as Texture2D;
+            }
             heroName = h.heroData.name.Translate();
         }
 
@@ -83,6 +90,11 @@ public class HeroCanvas : MonoBehaviour {
 
         icons.Add(h.id, image);
         image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
+        if (game.gameType is MoMGameType)
+        {
+            image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.9f, heroSize * UIScaler.GetPixelsPerUnit() * 0.9f);
+            heroFrame.transform.SetAsLastSibling();
+        }
         image.color = Color.clear;
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
@@ -147,6 +159,10 @@ public class HeroCanvas : MonoBehaviour {
         foreach (Quest.Hero h in game.quest.heroes)
         {
             Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
+            if (game.gameType is MoMGameType)
+            {
+                frameTex = Resources.Load("sprites/borders/momframeempty") as Texture2D;
+            }
             icons[h.id].color = Color.clear;
             icon_frames[h.id].color = Color.clear;
 
@@ -159,6 +175,10 @@ public class HeroCanvas : MonoBehaviour {
             {
 
                 frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
+                if (game.gameType is MoMGameType)
+                {
+                    frameTex = Resources.Load("sprites/borders/momframe") as Texture2D;
+                }
                 Texture2D heroTex = ContentData.FileToTexture(h.heroData.image);
 
                 Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
@@ -194,6 +214,7 @@ public class HeroCanvas : MonoBehaviour {
         {
             target.heroData = null;
             UpdateImages();
+            if (heroSelection != null) heroSelection.Update();
             return;
         }
 
@@ -239,6 +260,7 @@ public class HeroCanvas : MonoBehaviour {
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
             Object.Destroy(go);
+        heroSelection = null;
 
         // Reorder heros so that selected heroes are first
         for (int i = 0; i < game.quest.heroes.Count - 1; i++)

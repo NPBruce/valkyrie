@@ -13,24 +13,31 @@ public class PuzzleSlide : Puzzle
         {
             depth = 1;
         }
-        if (depth > 7)
-        {
-            depth = 7;
-        }
         List<Dictionary<string, string>> options = new List<Dictionary<string, string>>();
         TextAsset textAsset = (TextAsset)Resources.Load("slidepuzzles");
         string puzzleText = textAsset.text;
         IniData puzzles = IniRead.ReadFromString(puzzleText);
-        foreach (Dictionary<string, string> p in puzzles.data.Values)
+
+        while (options.Count == 0)
         {
-            int moves = 1;
-            int.TryParse(p["moves"], out moves);
-            if (moves == depth)
+            foreach (Dictionary<string, string> p in puzzles.data.Values)
             {
-                options.Add(p);
+                int moves = 1;
+                int.TryParse(p["moves"], out moves);
+                if (moves == depth)
+                {
+                    options.Add(p);
+                }
+            }
+            depth--;
+            if (depth == 0)
+            {
+                ValkyrieDebug.Log("Error: Unable to find puzzle.");
+                Application.Quit();
             }
         }
         Loadpuzzle(options[Random.Range(0, options.Count)]);
+        moves = 0;
     }
 
     public PuzzleSlide(Dictionary<string, string> data)

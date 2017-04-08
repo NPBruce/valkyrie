@@ -104,9 +104,9 @@ public class EventManager
         {
             game.audioControl.Play(game.cd.audio[e.qEvent.audio].file);
         }
-        else
+        else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(e.qEvent.audio);
+            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
         // Perform var operations
@@ -303,6 +303,42 @@ public class EventManager
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
             text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
+
+            // Random heroes can have custom lookups
+            if (text.StartsWith("{rnd:hero:"))
+            {
+                HeroData hero = game.quest.GetRandomHero().heroData;
+                int start = "{rnd:hero:".Length;
+                if (!hero.ContainsTrait("male"))
+                {
+                    if (text[start] == '{')
+                    {
+                        start = text.IndexOf("}", start);
+                    }
+                    start = text.IndexOf(":", start) + 1;
+                    if (text[start] == '{')
+                    {
+                        start = text.IndexOf("}", start);
+                    }
+                    start = text.IndexOf(":", start) + 1;
+                }
+                int next = start;
+                if (text[next] == '{')
+                {
+                    next = text.IndexOf("}", next);
+                }
+                next = text.IndexOf(":", next) + 1;
+                int end = next;
+                if (text[end] == '{')
+                {
+                    end = text.IndexOf("}", end);
+                }
+                end = text.IndexOf(":", end);
+                if (end < 0) end = text.Length - 1;
+                string toReplace = text.Substring(next, end - next);
+                text = new StringKey(text.Substring(start, (next - start) - 1)).Translate();
+                text = text.Replace(toReplace, hero.name.Translate());
+            }
 
             // Random numbers in events (depreciated)
             try

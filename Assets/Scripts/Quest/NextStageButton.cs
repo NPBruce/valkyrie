@@ -15,20 +15,23 @@ public class NextStageButton
     {
         if (Game.Get().gameType.DisplayHeroes()) return;
         TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(17f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
+            new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
             CommonStringKeys.TAB, delegate { Next(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-15f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
             CommonStringKeys.LOG, delegate { Log(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-11f), UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), 
+            new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
             CommonStringKeys.SET, delegate { Set(); });
         // Untag as dialog so this isn't cleared away
         tb.ApplyTag("questui");
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
         Update();
     }
 
@@ -57,7 +60,7 @@ public class NextStageButton
         }
 
         DialogBox db;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(23, 2), phase);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase);
         db.SetFont(Game.Get().gameType.GetHeaderFont());
         db.ApplyTag("uiphase");
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
