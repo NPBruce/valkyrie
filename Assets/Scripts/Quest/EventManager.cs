@@ -104,9 +104,9 @@ public class EventManager
         {
             game.audioControl.Play(game.cd.audio[e.qEvent.audio].file);
         }
-        else
+        else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(e.qEvent.audio);
+            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
         // Perform var operations
