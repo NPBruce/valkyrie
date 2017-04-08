@@ -141,18 +141,6 @@ public class EditorComponentEventVars : EditorComponent
     public void AddTestOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"));
-        foreach (string s in GetQuestVars())
-        {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
-        }
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(); });
-        varESL.SelectItem();
-    }
-
-    public void AddAssignOp()
-    {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
         foreach (string s in GetQuestVars())
         {
@@ -170,6 +158,19 @@ public class EditorComponentEventVars : EditorComponent
             {
                 list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
             }
+        }
+
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(); });
+        varESL.SelectItem();
+    }
+
+    public void AddAssignOp()
+    {
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"));
+        foreach (string s in GetQuestVars())
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
         varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
