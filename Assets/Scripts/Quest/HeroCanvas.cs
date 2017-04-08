@@ -40,25 +40,6 @@ public class HeroCanvas : MonoBehaviour {
         Sprite heroSprite;
         Sprite frameSprite;
 
-        GameObject heroImg = new GameObject("heroImg" + heroName);
-        heroImg.tag = "herodisplay";
-        heroImg.transform.parent = game.uICanvas.transform;
-        RectTransform trans = heroImg.AddComponent<RectTransform>();
-
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        offset += heroSize + 0.5f;
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        heroImg.AddComponent<CanvasRenderer>();
-        UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
-
-        icons.Add(h.id, image);
-        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
-        if (game.gameType is MoMGameType)
-        {
-            image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.9f, heroSize * UIScaler.GetPixelsPerUnit() * 0.9f);
-        }
-        image.color = Color.clear;
-
         Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
         if (game.gameType is MoMGameType)
         {
@@ -95,6 +76,25 @@ public class HeroCanvas : MonoBehaviour {
         UnityEngine.UI.Button buttonFrame = heroFrame.AddComponent<UnityEngine.UI.Button>();
         buttonFrame.interactable = true;
         buttonFrame.onClick.AddListener(delegate { HeroDiag(h.id); });
+
+        GameObject heroImg = new GameObject("heroImg" + heroName);
+        heroImg.tag = "herodisplay";
+        heroImg.transform.parent = game.uICanvas.transform;
+        RectTransform trans = heroImg.AddComponent<RectTransform>();
+
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        offset += heroSize + 0.5f;
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        heroImg.AddComponent<CanvasRenderer>();
+        UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
+
+        icons.Add(h.id, image);
+        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
+        if (game.gameType is MoMGameType)
+        {
+            image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.9f, heroSize * UIScaler.GetPixelsPerUnit() * 0.9f);
+        }
+        image.color = Color.clear;
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
