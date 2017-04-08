@@ -40,15 +40,40 @@ public class HeroCanvas : MonoBehaviour {
         Sprite heroSprite;
         Sprite frameSprite;
 
-        // FIXME: should be game type specific
+        GameObject heroImg = new GameObject("heroImg" + heroName);
+        heroImg.tag = "herodisplay";
+        heroImg.transform.parent = game.uICanvas.transform;
+        RectTransform trans = heroImg.AddComponent<RectTransform>();
+
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        offset += heroSize + 0.5f;
+        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
+        heroImg.AddComponent<CanvasRenderer>();
+        UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
+
+        icons.Add(h.id, image);
+        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
+        if (game.gameType is MoMGameType)
+        {
+            image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.9f, heroSize * UIScaler.GetPixelsPerUnit() * 0.9f);
+        }
+        image.color = Color.clear;
+
         Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
+        if (game.gameType is MoMGameType)
+        {
+            frameTex = Resources.Load("sprites/borders/momframeempty") as Texture2D;
+        }
 
         string heroName = h.id.ToString();
 
-        // If hero selected use blue frame (FIX for game type)
         if (h.heroData != null)
         {
             frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
+            if (game.gameType is MoMGameType)
+            {
+                frameTex = Resources.Load("sprites/borders/momframe") as Texture2D;
+            }
             heroName = h.heroData.name.Translate();
         }
 
@@ -70,21 +95,6 @@ public class HeroCanvas : MonoBehaviour {
         UnityEngine.UI.Button buttonFrame = heroFrame.AddComponent<UnityEngine.UI.Button>();
         buttonFrame.interactable = true;
         buttonFrame.onClick.AddListener(delegate { HeroDiag(h.id); });
-
-        GameObject heroImg = new GameObject("heroImg" + heroName);
-        heroImg.tag = "herodisplay";
-        heroImg.transform.parent = game.uICanvas.transform;
-        RectTransform trans = heroImg.AddComponent<RectTransform>();
-
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        offset += heroSize + 0.5f;
-        trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        heroImg.AddComponent<CanvasRenderer>();
-        UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();
-
-        icons.Add(h.id, image);
-        image.rectTransform.sizeDelta = new Vector2(heroSize * UIScaler.GetPixelsPerUnit() * 0.8f, heroSize * UIScaler.GetPixelsPerUnit() * 0.8f);
-        image.color = Color.clear;
 
         UnityEngine.UI.Button button = heroImg.AddComponent<UnityEngine.UI.Button>();
         button.interactable = true;
@@ -148,6 +158,10 @@ public class HeroCanvas : MonoBehaviour {
         foreach (Quest.Hero h in game.quest.heroes)
         {
             Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
+            if (game.gameType is MoMGameType)
+            {
+                frameTex = Resources.Load("sprites/borders/momframeempty") as Texture2D;
+            }
             icons[h.id].color = Color.clear;
             icon_frames[h.id].color = Color.clear;
 
@@ -160,6 +174,10 @@ public class HeroCanvas : MonoBehaviour {
             {
 
                 frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
+                if (game.gameType is MoMGameType)
+                {
+                    frameTex = Resources.Load("sprites/borders/momframe") as Texture2D;
+                }
                 Texture2D heroTex = ContentData.FileToTexture(h.heroData.image);
 
                 Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
