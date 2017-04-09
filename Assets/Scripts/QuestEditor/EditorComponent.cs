@@ -120,4 +120,20 @@ public class EditorComponent {
         // Reselect with new name
         QuestEditorData.SelectComponent(component.sectionName);
     }
+
+    /// <summary>
+    /// Updates de dicionary with new text and generates a StringKey element
+    /// </summary>
+    /// <param name="key">key to update/create</param>
+    /// <param name="text">text in current language</param>
+    /// <returns></returns>
+    protected StringKey updateDictionaryTextAndGenKey(string key,string text)
+    {
+        // update or create scenario text in current language
+        LocalizationRead.updateScenarioText(key, text);
+
+        //return the stringkey
+        return new StringKey("qst", key);
+
+    }
 }

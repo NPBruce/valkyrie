@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
@@ -76,16 +75,21 @@ public class QuestEditSelection
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
         // Main menu
-        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
+        tb = new TextButton(
+            new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Delete a user quest
-        tb = new TextButton(new Vector2((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.DELETE, delegate { Delete(); }, Color.red);
+        tb = new TextButton(
+            new Vector2((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.DELETE, delegate { Delete(); }, Color.red);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Copy a quest
-        tb = new TextButton(new Vector2((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.COPY, delegate { Copy(); });
+        tb = new TextButton(
+            new Vector2((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.COPY, delegate { Copy(); });
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         // Create a new quest
-        tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.NEW, delegate { NewQuest(); });
+        tb = new TextButton(
+            new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), 
+            CommonStringKeys.NEW, delegate { NewQuest(); });
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
     }
 

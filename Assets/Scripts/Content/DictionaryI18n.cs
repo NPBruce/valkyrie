@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
+
 
 namespace Assets.Scripts.Content
 {
@@ -71,7 +72,26 @@ namespace Assets.Scripts.Content
         /// <param name="currentKeyValues">line of localization file</param>
         public void Add(EntryI18n currentKeyValues)
         {
-            dict.Add(currentKeyValues.key, currentKeyValues);
+            dict[currentKeyValues.key] = currentKeyValues;
+        }
+
+        /// <summary>
+        /// Add dict entries from another dict merging rawdata
+        /// </summary>
+        /// <param name="dictToCombine"></param>
+        public void Add(DictionaryI18n dictToCombine)
+        {
+            if (dictToCombine != null)
+            {
+                foreach (string key in dictToCombine.dict.Keys)
+                {
+                    dict[key] = dictToCombine.dict[key];
+                }
+
+                int array1OriginalLength = rawDict.Length;
+                System.Array.Resize<string>(ref rawDict, array1OriginalLength + dictToCombine.rawDict.Length);
+                System.Array.Copy(dictToCombine.rawDict, 0, rawDict, array1OriginalLength, dictToCombine.rawDict.Length);
+            }
         }
 
         /// <summary>
@@ -162,7 +182,7 @@ namespace Assets.Scripts.Content
             int index = pos + 1;
             while(!EntryFinished(r) && index < rawDict.Length)
             {
-                r += Environment.NewLine + rawDict[index++];
+                r += System.Environment.NewLine + rawDict[index++];
             }
             return r;
         }
@@ -195,6 +215,32 @@ namespace Assets.Scripts.Content
             }
 
             return !quote;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+
+            // We first generate the languages line
+            bool first = true;
+            foreach(string lang in languages)
+            {
+                if (first)
+                { first = false; }
+                else
+                { result.Append(COMMA); }
+
+                result.Append(lang);
+            }
+            result.AppendLine();
+
+            // and then generate the multilanguage string for each entry
+            foreach(EntryI18n entry in this.dict.Values)
+            {
+                result.AppendLine(entry.ToString());
+            }
+
+            return result.ToString();
         }
     }
 }

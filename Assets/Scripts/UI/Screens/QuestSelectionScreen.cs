@@ -124,11 +124,15 @@ namespace Assets.Scripts.UI.Screens
 
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
+            tb = new TextButton(
+                new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), 
+                CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
 
             tb.SetFont(game.gameType.GetHeaderFont());
 
-            tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), DOWNLOAD, delegate { Download(); }, Color.green);
+            tb = new TextButton(
+                new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), 
+                DOWNLOAD, delegate { Download(); }, Color.green);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 

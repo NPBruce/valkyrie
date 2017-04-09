@@ -10,16 +10,18 @@ public class DialogBoxEditable
     /// <summary>
     /// Small text to show translation info
     /// </summary>
-    private GameObject translationTextObj;
+    //private GameObject translationTextObj;
 
     private UnityEngine.UI.InputField uiInput;
+
+    private string translationKey;
 
     public void ApplyTag(string tag)
     {
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
-        translationTextObj.tag = tag;
+        //translationTextObj.tag = tag;
     }
 
     /// <summary>
@@ -80,23 +82,25 @@ public class DialogBoxEditable
         }
         // Create an object
 
+        translationKey = localizationKey;
+
         textObj = new GameObject("text" + objName);
         background = new GameObject("textBg" + objName);
         inputObj = new GameObject("textIn" + objName);
-        translationTextObj = new GameObject("translationText" + objName);
+        //translationTextObj = new GameObject("translationText" + objName);
 
         // Mark it as dialog
         textObj.tag = "dialog";
         background.tag = "dialog";
         inputObj.tag = "dialog";
-        translationTextObj.tag = "dialog";
+        //translationTextObj.tag = "dialog";
 
         Game game = Game.Get();
 
         background.transform.parent = game.uICanvas.transform;
         inputObj.transform.parent = background.transform;
         textObj.transform.parent = inputObj.transform;
-        translationTextObj.transform.parent = background.transform;
+        //translationTextObj.transform.parent = background.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
@@ -112,12 +116,15 @@ public class DialogBoxEditable
         transTx.localScale = transIn.localScale;
         transTx.sizeDelta = transIn.sizeDelta;
 
-        RectTransform transTran = translationTextObj.AddComponent<RectTransform>();
+        //RectTransform transTran = translationTextObj.AddComponent<RectTransform>();
+        //transTran.SetParent(transBg);
+        //transTran.localScale = transBg.localScale;
+        //transTran.sizeDelta = transBg.sizeDelta;
 
         textObj.AddComponent<CanvasRenderer>();
         background.AddComponent<CanvasRenderer>();
         inputObj.AddComponent<CanvasRenderer>();
-        translationTextObj.AddComponent<CanvasRenderer>();
+        //translationTextObj.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Image uiImage = background.AddComponent<UnityEngine.UI.Image>();
         uiImage.color = bgColour;
@@ -129,14 +136,15 @@ public class DialogBoxEditable
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
 
-        UnityEngine.UI.Text uiTranslationText = translationTextObj.AddComponent<UnityEngine.UI.Text>();
+        //UnityEngine.UI.Text uiTranslationText = translationTextObj.AddComponent<UnityEngine.UI.Text>();
         // Very dark text
-        uiTranslationText.color = new Color(0.2f,0.2f,0.2f);
-        uiTranslationText.alignment = TextAnchor.LowerRight;
-        uiTranslationText.font = game.gameType.GetFont();
-        uiTranslationText.material = uiText.font.material;
-        // Smallest
-        uiTranslationText.fontSize = 8;
+        //uiTranslationText.color = new Color(0.2f,0.2f,0.2f);
+        //uiTranslationText.alignment = TextAnchor.LowerRight;
+        //uiTranslationText.font = game.gameType.GetFont();
+        //uiTranslationText.material = uiText.font.material;
+        //// Smallest
+        //uiTranslationText.fontSize = 8;
+        //uiTranslationText.text = translationKey;
 
         uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
 

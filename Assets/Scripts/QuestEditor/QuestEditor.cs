@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using Assets.Scripts.Content;
 
 // Quest editor static helper class
 public class QuestEditor {
@@ -53,10 +56,12 @@ public class QuestEditor {
     {
         Game game = Game.Get();
         // Add a comment at the start of the quest with the editor version
-        string content = "; Saved by version: " + game.version + System.Environment.NewLine;
+        StringBuilder content = new StringBuilder()
+            .Append("; Saved by version: ")
+            .AppendLine(game.version);
 
         // Save quest meta content to a string
-        content += game.quest.qd.quest.ToString() + System.Environment.NewLine;
+        content.AppendLine(game.quest.qd.quest.ToString());
 
         // Add all quest components
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -64,15 +69,21 @@ public class QuestEditor {
             // Skip peril, not a quest component
             if (!(kv.Value is PerilData))
             {
-                content += System.Environment.NewLine;
-                content += kv.Value.ToString();
+                content.AppendLine().Append(kv.Value);
             }
         }
 
         // Write to disk
         try
         {
-            System.IO.File.WriteAllText(game.quest.qd.questPath, content);
+            File.WriteAllText(game.quest.qd.questPath, content.ToString());
+            if (LocalizationRead.scenarioDict != null)
+            {
+                File.WriteAllText(
+                    Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
+                    LocalizationRead.scenarioDict.ToString()
+                    );
+            }
         }
         catch (System.Exception)
         {

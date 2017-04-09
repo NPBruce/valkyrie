@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
+using System.Text;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -14,7 +15,9 @@ public class QuestData
     public Dictionary<string, ActivationData> questActivations;
 
     // List of ini files containing quest data
-    List<string> files;
+    List<string> iniFiles;
+    // List of localization files containing quest texts
+    List<string> localizationFiles;
 
     // Location of the quest.ini file
     public string questPath = "";
@@ -60,21 +63,46 @@ public class QuestData
         }
 
         // List of data files
-        files = new List<string>();
+        iniFiles = new List<string>();
+        localizationFiles = new List<string>();
         // The main data file is included
-        files.Add(questPath);
+        iniFiles.Add(questPath);
 
         // Find others (no addition files is not fatal)
-        if(questIniData.Get("QuestData") != null)
+        if (questIniData.Get("QuestData") != null)
         {
             foreach (string file in questIniData.Get("QuestData").Keys)
             {
-                // path is relative to the main file (absolute not supported)
-                files.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                if (file != null && file.Length > 0)
+                {
+                    // path is relative to the main file (absolute not supported)
+                    iniFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                }
             }
         }
+        else
+        {
+            ValkyrieDebug.Log("No QuestData extra files");
+        }
 
-        foreach (string f in files)
+        // Find Localization texts
+        if (questIniData.Get("QuestText") != null)
+        {
+            foreach (string file in questIniData.Get("QuestText").Keys)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    // path is relative to the main file (absolute not supported)
+                    localizationFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                }
+            }
+        }
+        else
+        {
+            ValkyrieDebug.Log("No QuestText extra files");
+        }
+
+        foreach (string f in iniFiles)
         {
             // Read each file
             questIniData = IniRead.ReadFromIni(f);
@@ -101,6 +129,17 @@ public class QuestData
                     qc.ChangeReference(kv.Key, kv.Value);
                 }
             }
+        }
+
+        // New dictionary without entries
+        LocalizationRead.scenarioDict = new DictionaryI18n(
+            new string[1] { DictionaryI18n.FFG_LANGS }, quest.defaultLanguage, game.currentLang);
+
+        foreach (string file in localizationFiles)
+        {
+            LocalizationRead.scenarioDict.Add(
+                LocalizationRead.ReadFromFilePath(file, quest.defaultLanguage, game.currentLang)
+                );
         }
     }
 
@@ -1264,7 +1303,11 @@ public class QuestData
         public UnityEngine.UI.Image image;
         // comment for developers
         public string comment = "";
-
+        private static char DOT = '.';
+        public string genKey(string element)
+        {
+            return new StringBuilder(sectionName).Append(DOT).Append(element).ToString();
+        }
         // Create new component in editor
         public QuestComponent(string nameIn)
         {
@@ -1362,7 +1405,7 @@ public class QuestData
         new public static string type = "CustomMonster";
         // A bast type is used for default values
         public string baseMonster = "";
-        public string monsterName = "";
+        public StringKey monsterName = StringKey.NULL;
         public string imagePath = "";
         public string imagePlace = "";
         public StringKey info = StringKey.NULL;
@@ -1524,6 +1567,13 @@ public class QuestData
         // same as ability
         public StringKey move = StringKey.NULL;
 
+        public string ability_key { get { return genKey("ability"); } }
+        public string minion_key { get { return genKey("minion"); } }
+        public string master_key { get { return genKey("master"); } }
+        public string movebutton_key { get { return genKey("movebutton"); } }
+        public string move_key { get { return genKey("move"); } }
+
+
         // Create new (editor)
         public Activation(string s) : base(s)
         {
@@ -1536,23 +1586,23 @@ public class QuestData
             typeDynamic = type;
             if (data.ContainsKey("ability"))
             {
-                ability = new StringKey(data["ability"], false);
+                ability = new StringKey(data["ability"]);
             }
             if (data.ContainsKey("master"))
             {
-                masterActions = new StringKey(data["master"], false);
+                masterActions = new StringKey(data["master"]);
             }
             if (data.ContainsKey("minion"))
             {
-                minionActions = new StringKey(data["minion"], false);
+                minionActions = new StringKey(data["minion"]);
             }
             if (data.ContainsKey("move"))
             {
-                move = new StringKey(data["move"], false);
+                move = new StringKey(data["move"]);
             }
             if (data.ContainsKey("movebutton"))
             {
-                moveButton = new StringKey(data["movebutton"], false);
+                moveButton = new StringKey(data["movebutton"]);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1675,7 +1725,7 @@ public class QuestData
     {
         public static int minumumFormat = 0;
         // Increment during changes, and again at release
-        public static int currentFormat = 2;
+        public static int currentFormat = 3;
         public int format = 0;
         public bool valid = false;
         public string path = "";
@@ -1687,7 +1737,8 @@ public class QuestData
         public string type;
         // Content packs required for quest
         public string[] packs;
-
+        // Default language for the text
+        public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
         // Create from path
         public Quest(string pathIn)
         {
@@ -1744,6 +1795,11 @@ public class QuestData
                 packs = new string[0];
             }
 
+            if (iniData.ContainsKey("defaultLanguage"))
+            {
+                defaultLanguage = iniData["defaultLanguage"];
+            }            
+
             return true;
         }
 
@@ -1751,22 +1807,33 @@ public class QuestData
         override public string ToString()
         {
             string nl = System.Environment.NewLine;
-            string r = "[Quest]" + nl;
-            r += "format=" + currentFormat + nl;
-            r += "name=" + name + nl;
-            r += "description=" + description + nl;
-            r += "type=" + Game.Get().gameType.TypeName() + nl;
+            StringBuilder r = new StringBuilder();
+            r.AppendLine("[Quest]");
+            r.Append("format=").AppendLine(currentFormat.ToString());
+            r.Append("name=").AppendLine(name);
+            r.Append("description=").AppendLine(description);
+            r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
+            r.Append("defaultLanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)
             {
-                r += "packs=";
+                r.Append("packs=");
+                bool first = true;
                 foreach (string s in packs)
                 {
-                    r += s + " ";
+                    if (first)
+                    {
+                        first = false;
+                    } else
+                    {
+                        r.Append(" ");
+                    }
+                    r.Append(s);
                 }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r.AppendLine();
             }
+            r.AppendLine().AppendLine("[QuestText]").AppendLine("Localization.txt");
 
-            return r;
+            return r.ToString();
         }
 
         public List<string> GetMissingPacks(List<string> selected)

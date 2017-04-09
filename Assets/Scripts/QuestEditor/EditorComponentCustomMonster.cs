@@ -71,7 +71,10 @@ public class EditorComponentCustomMonster : EditorComponent
         db.ApplyTag("editor");
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.Length > 0)
         {
-            nameDBE = new DialogBoxEditable(new Vector2(3, 4), new Vector2(14, 1), monsterComponent.monsterName, delegate { UpdateName(); });
+            nameDBE = new DialogBoxEditable(
+                new Vector2(3, 4), new Vector2(14, 1), 
+                monsterComponent.monsterName, 
+                delegate { UpdateName(); });
             nameDBE.ApplyTag("editor");
             nameDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
