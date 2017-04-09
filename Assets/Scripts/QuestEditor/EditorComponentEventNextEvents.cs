@@ -73,7 +73,10 @@ public class EditorComponentEventNextEvent : EditorComponent
         DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), new StringKey("val","X_COLON",QUOTA));
         db.ApplyTag("editor");
 
-        quotaDBE = new DialogBoxEditable(new Vector2(6, 1), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });
+        // Quota dont need translation
+        quotaDBE = new DialogBoxEditable(
+            new Vector2(6, 1), new Vector2(2, 1),
+            eventComponent.quota.ToString(), "", delegate { SetQuota(); });
         quotaDBE.ApplyTag("editor");
         quotaDBE.AddBorder();
 
@@ -92,9 +95,13 @@ public class EditorComponentEventNextEvent : EditorComponent
         foreach (List<string> l in eventComponent.nextEvent)
         {
             int buttonTmp = button++;
-            string buttonLabel = eventComponent.buttons[buttonTmp - 1];
+            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
 
-            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(2, offset), new Vector2(15, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
+            DialogBoxEditable buttonEdit = new DialogBoxEditable(
+                new Vector2(2, offset), new Vector2(15, 1), 
+                buttonLabel.Translate(), 
+                eventComponent.button_key + buttonTmp.ToString(),
+                delegate { UpdateButtonLabel(buttonTmp); });
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
@@ -180,16 +187,16 @@ public class EditorComponentEventNextEvent : EditorComponent
         eventComponent.nextEvent.Insert(number, new List<string>());
         if (eventComponent.nextEvent.Count == 1)
         {
-            eventComponent.buttons.Add("Confirm");
+            eventComponent.buttons.Add(CommonStringKeys.CONFIRM);
         }
-        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals("Confirm"))
+        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals(CommonStringKeys.CONFIRM))
         {
-            eventComponent.buttons[0] = "Pass";
-            eventComponent.buttons.Add("Fail");
+            eventComponent.buttons[0] = CommonStringKeys.PASS;
+            eventComponent.buttons.Add(CommonStringKeys.FAIL);
         }
         else
         {
-            eventComponent.buttons.Insert(number, "Button " + (number + 1));
+            eventComponent.buttons.Insert(number, new StringKey ("Button " + (number + 1),false));
         }
         Update();
     }
@@ -203,7 +210,8 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        eventComponent.buttons[number - 1] = buttonDBE[number - 1].Text;
+        eventComponent.buttons[number - 1] =
+            updateDictionaryTextAndGenKey(eventComponent.button_key + number.ToString(), buttonDBE[number - 1].Text);
     }
 
     public void AddEvent(int index, int button)

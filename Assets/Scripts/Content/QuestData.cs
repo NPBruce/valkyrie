@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
 using System.Text;
+using System;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -296,6 +297,7 @@ public class QuestData
     // Doors are like tokens but placed differently and have different defaults
     public class Door : Event
     {
+        private readonly StringKey EVENT_DOOR_DEFAULT_TEXT = new StringKey("val", "EVENT_DOOR_DEFAULT_TEXT");
         new public static string type = "Door";
         public int rotation = 0;
         public GameObject gameObject;
@@ -306,7 +308,7 @@ public class QuestData
         {
             locationSpecified = true;
             typeDynamic = type;
-            text = "You can open this door with an \"Open Door\" action.";
+            text = EVENT_DOOR_DEFAULT_TEXT;
             cancelable = true;
         }
 
@@ -408,11 +410,14 @@ public class QuestData
         // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
-        public string uniqueTitle = "";
-        public string uniqueText = "";
+        public StringKey uniqueTitle = StringKey.NULL;
+        public StringKey uniqueText = StringKey.NULL;
         public string[] mTypes;
         public string[] mTraitsRequired;
         public string[] mTraitsPool;
+
+        public string uniquetitle_key { get { return genKey("uniquetitle"); } }
+        public string uniquetext_key { get { return genKey("uniquetext"); } }
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -484,11 +489,11 @@ public class QuestData
             }
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitle = data["uniquetitle"];
+                uniqueTitle = new StringKey(data["uniquetitle"]);
             }
             if (data.ContainsKey("uniquetext"))
             {
-                uniqueText = data["uniquetext"];
+                uniqueText = new StringKey(data["uniquetext"]);
             }
         }
 
@@ -594,9 +599,10 @@ public class QuestData
     public class Event : QuestComponent
     {
         new public static string type = "Event";
-        public string text = "";
-        public string originalText = "";
-        public List<string> buttons;
+
+        public StringKey text = StringKey.NULL;
+        public StringKey originalText = StringKey.NULL;
+        public List<StringKey> buttons;
         public string trigger = "";
         public List<List<string>> nextEvent;
         public string heroListName = "";
@@ -615,12 +621,15 @@ public class QuestData
         public int quota = 0;
         public string audio = "";
 
+        public string originaltext_key { get { return genKey("originaltext"); } }
+        public string button_key { get { return genKey("button"); } }
+
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
             typeDynamic = type;
             nextEvent = new List<List<string>>();
-            buttons = new List<string>();
+            buttons = new List<StringKey>();
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
@@ -637,7 +646,7 @@ public class QuestData
             // Text to be displayed
             if (data.ContainsKey("text"))
             {
-                text = data["text"];
+                text = new StringKey(data["text"]);
             }
             originalText = text;
 
@@ -648,14 +657,14 @@ public class QuestData
             }
 
             nextEvent = new List<List<string>>();
-            buttons = new List<string>();
+            buttons = new List<StringKey>();
             int buttonNum = 1;
             bool moreEvents = true;
             while (moreEvents)
             {
                 if (data.ContainsKey("button" + buttonNum))
                 {
-                    buttons.Add(data["button" + buttonNum]);
+                    buttons.Add(new StringKey(data["button" + buttonNum]));
 
                     if (data.ContainsKey("event" + buttonNum))
                     {
@@ -694,15 +703,15 @@ public class QuestData
 
                 if (data.ContainsKey("confirmtext"))
                 {
-                    buttons.Add(data["confirmtext"]);
+                    buttons.Add(new StringKey(data["confirmtext"]));
                 }
                 else if (data.ContainsKey("failevent"))
                 {
-                    buttons.Add("Pass");
+                    buttons.Add(CommonStringKeys.PASS);
                 }
                 else
                 {
-                    buttons.Add("Confirm");
+                    buttons.Add(CommonStringKeys.CONFIRM);
                 }
 
                 if (data.ContainsKey("failevent"))
@@ -710,11 +719,11 @@ public class QuestData
                     nextEvent.Add(new List<string>(data["failevent"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
                     if (data.ContainsKey("failtext"))
                     {
-                        buttons.Add(data["failtext"]);
+                        buttons.Add(new StringKey(data["failtext"]));
                     }
                     else
                     {
-                        buttons.Add("Fail");
+                        buttons.Add(CommonStringKeys.FAIL);
                     }
                 }
             }
@@ -991,7 +1000,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "text=\"" + originalText + "\"" + nl;
+            r += "text=" + (originalText.isKey()?originalText.key:"\"" + originalText.key + "\"") + nl;
 
             if (highlight)
             {
@@ -1014,9 +1023,9 @@ public class QuestData
             }
 
             buttonNum = 1;
-            foreach (string s in buttons)
+            foreach (StringKey s in buttons)
             {
-                r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
+                r += "button" + buttonNum++ + "=" + (s.key.StartsWith("{")?s.key:"\"" + s.key + "\"") + nl;
             }
 
             if (!heroListName.Equals(""))
@@ -1415,17 +1424,22 @@ public class QuestData
         public int health = 0;
         public bool healthDefined = false;
 
-        // Create new with name (editor)
-        public CustomMonster(string s) : base(s)
+        public string monstername_key { get { return genKey("monstername"); } }
+        public string info_key { get { return genKey("info"); } }
+
+    // Create new with name (editor)
+    public CustomMonster(string s) : base(s)
         {
-            monsterName = sectionName;
+            // The initial name of a monster is the component name. It wont be translated.
+            // If renamed,the translation key will be created
+            monsterName = new StringKey(sectionName,false);
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
         }
 
         // Create from ini data
-        public CustomMonster(string name, Dictionary<string, string> data, string pathIn) : base(name, data)
+        public CustomMonster(string iniName, Dictionary<string, string> data, string pathIn) : base(iniName, data)
         {
             typeDynamic = type;
             path = pathIn;
@@ -1434,11 +1448,14 @@ public class QuestData
             {
                 baseMonster = data["base"];
             }
-
-            monsterName = name;
+            
             if (data.ContainsKey("name"))
             {
-                monsterName = data["name"];
+                monsterName = new StringKey(data["name"]);
+            }
+            else
+            {
+                monsterName = new StringKey(iniName, false);
             }
 
             traits = new string[0];
@@ -1454,7 +1471,7 @@ public class QuestData
 
             if (data.ContainsKey("info"))
             {
-                info = new StringKey(data["info"], false);
+                info = new StringKey(data["info"]);
             }
 
             imagePlace = imagePath;
@@ -1499,52 +1516,41 @@ public class QuestData
         // Save to string (editor)
         override public string ToString()
         {
-            string nl = System.Environment.NewLine;
-            string r = base.ToString();
+            StringBuilder r = new StringBuilder().Append(base.ToString());
 
             if (baseMonster.Length > 0)
             {
-                r += "base=" + baseMonster + nl;
+                r.Append("base=").AppendLine(baseMonster);
             }
-            if (monsterName.Length > 0)
+            if (monsterName.key.Length > 0)
             {
-                r += "name=" + monsterName + nl;
+                r.Append("name=").AppendLine(monsterName.key);
             }
             if (traits.Length > 0)
             {
-                r += "traits=";
-                foreach (string s in traits)
-                {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r.Append("traits=").AppendLine(string.Join(" ",traits));
             }
             if (info != null)
             {
-                r += "info=" + info + nl;
+                r.Append("info=").AppendLine(info.key);
             }
             if (imagePath.Length > 0)
             {
-                r += "image=" + info + nl;
+                r.Append("image=").AppendLine(imagePath);
             }
             if (imagePlace.Length > 0)
             {
-                r += "imageplace=" + info + nl;
+                r.Append("imageplace=").AppendLine(imagePlace);
             }
             if (activations.Length > 0)
             {
-                r += "activation=";
-                foreach (string s in activations)
-                {
-                    r += s + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r.Append("activation=").AppendLine(string.Join(" ", activations));
             }
             if (healthDefined)
             {
-                r += "health=" + health.ToString() + nl;
+                r.Append("health=").AppendLine(health.ToString());
             }
-            return r;
+            return r.ToString();
         }
     }
 
@@ -1730,15 +1736,19 @@ public class QuestData
         public bool valid = false;
         public string path = "";
         // Quest name
-        public string name = "";
+        public StringKey name = StringKey.NULL;
         // Quest description (currently unused)
-        public string description = "";
+        public StringKey description = StringKey.NULL;
         // quest type (MoM, D2E)
         public string type;
         // Content packs required for quest
         public string[] packs;
         // Default language for the text
         public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
+
+        public string name_key { get { return "quest.name"; } }
+        public string description_key { get { return "quest.description"; } }
+
         // Create from path
         public Quest(string pathIn)
         {
@@ -1768,7 +1778,7 @@ public class QuestData
 
             if (iniData.ContainsKey("name"))
             {
-                name = iniData["name"];
+                name = new StringKey(iniData["name"]);
             }
             else
             {
@@ -1784,7 +1794,7 @@ public class QuestData
             }
             if (iniData.ContainsKey("description"))
             {
-                description = iniData["description"];
+                description = new StringKey(iniData["description"]);
             }
             if (iniData.ContainsKey("packs"))
             {
@@ -1810,8 +1820,8 @@ public class QuestData
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
             r.Append("format=").AppendLine(currentFormat.ToString());
-            r.Append("name=").AppendLine(name);
-            r.Append("description=").AppendLine(description);
+            r.Append("name=").AppendLine(name.key);
+            r.Append("description=").AppendLine(description.key);
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultLanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)

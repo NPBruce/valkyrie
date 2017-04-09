@@ -59,5 +59,9 @@ namespace Assets.Scripts.Content
         public static readonly StringKey LOG = new StringKey(VAL, "LOG");
         public static readonly StringKey SET = new StringKey(VAL, "SET");
         public static readonly StringKey RESET = new StringKey(VAL, "RESET");
+
+        public static readonly StringKey PASS = new StringKey("val", "PASS");
+        public static readonly StringKey CONFIRM = new StringKey("val", "CONFIRM");
+        public static readonly StringKey FAIL = new StringKey("val", "FAIL");
     }
 }

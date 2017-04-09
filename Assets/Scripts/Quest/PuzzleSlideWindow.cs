@@ -80,12 +80,16 @@ public class PuzzleSlideWindow
         if (puzzle.Solved())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
+            new TextButton(
+                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
+                eventData.GetButtons()[0].label, delegate { Finished(); });
         }
         else
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
+            new TextButton(
+                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
+                eventData.GetButtons()[0].label, delegate {; }, Color.grey);
         }
     }
 

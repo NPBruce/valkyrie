@@ -64,7 +64,7 @@ public class QuestEditSelection
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",new StringKey(q.Value.name,false)), delegate { Selection(key); }, Color.black, offset);
+                new StringKey("val","INDENT",q.Value.name), delegate { Selection(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -152,7 +152,7 @@ public class QuestEditSelection
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",new StringKey(q.Value.name,false)), delegate { Delete(key); }, Color.black, offset);
+                new StringKey("val","INDENT",q.Value.name), delegate { Delete(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -247,7 +247,7 @@ public class QuestEditSelection
         {
             string key = q.Key;
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",new StringKey(q.Value.name,false)), delegate { Copy(key); }, Color.black, offset);
+                new StringKey("val","INDENT",q.Value.name), delegate { Copy(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

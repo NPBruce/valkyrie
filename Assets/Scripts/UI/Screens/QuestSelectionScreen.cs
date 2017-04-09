@@ -77,7 +77,7 @@ namespace Assets.Scripts.UI.Screens
                     tb = new TextButton(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", new StringKey(q.Value.name, false)),
+                        new StringKey("val", "INDENT", q.Value.name),
                         delegate { Selection(key); }, Color.black, (int)offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -97,7 +97,7 @@ namespace Assets.Scripts.UI.Screens
                     db = new DialogBox(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", new StringKey(q.Value.name, false)),
+                        new StringKey("val", "INDENT", q.Value.name),
                         Color.black);
                     db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
