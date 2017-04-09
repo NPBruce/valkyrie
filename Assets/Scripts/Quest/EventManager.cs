@@ -5,7 +5,6 @@ using Assets.Scripts.Content;
 // Class for managing quest events
 public class EventManager
 {
-    private readonly StringKey MONSTER_MASTER_X = new StringKey("val", "MONSTER_MASTER_X");
     // A dictionary of available events
     public Dictionary<string, Event> events;
 

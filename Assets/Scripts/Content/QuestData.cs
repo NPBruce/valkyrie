@@ -1828,18 +1828,7 @@ public class QuestData
             {
                 r.Append("packs=");
                 bool first = true;
-                foreach (string s in packs)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    } else
-                    {
-                        r.Append(" ");
-                    }
-                    r.Append(s);
-                }
-                r.AppendLine();
+                r.AppendLine(string.Join(" ", packs));
             }
             r.AppendLine().AppendLine("[QuestText]").AppendLine("Localization.txt");
 

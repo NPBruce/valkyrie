@@ -76,13 +76,16 @@ public class QuestEditor {
         // Write to disk
         try
         {
-            File.WriteAllText(game.quest.qd.questPath, content.ToString());
+            string ini_file = content.ToString();
+            string localization_file = null;
+            File.WriteAllText(game.quest.qd.questPath, ini_file);
             if (LocalizationRead.scenarioDict != null)
             {
+                localization_file = LocalizationRead.scenarioDict.ToString();
+                // TODO: Remove from localization file unused keys.(After renaming or deleting)
                 File.WriteAllText(
                     Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
-                    LocalizationRead.scenarioDict.ToString()
-                    );
+                    localization_file);
             }
         }
         catch (System.Exception)

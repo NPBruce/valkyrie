@@ -176,6 +176,23 @@ namespace Assets.Scripts.Content
             }
         }
 
+        /// <summary>
+        /// Create entries for every raw data.
+        /// Repeated data will replace so the last
+        /// in the array will persist.
+        /// </summary>
+        public void flushRaw()
+        {
+            foreach(string rawLine in rawDict)
+            {
+                // Process non language list line
+                if (!rawLine.StartsWith("."))
+                {
+                    Add(new EntryI18n(this, rawLine));
+                }
+            }
+        }
+
         public string GetEntry(int pos)
         {
             string r = rawDict[pos];
@@ -222,20 +239,13 @@ namespace Assets.Scripts.Content
             StringBuilder result = new StringBuilder();
 
             // We first generate the languages line
-            bool first = true;
-            foreach(string lang in languages)
-            {
-                if (first)
-                { first = false; }
-                else
-                { result.Append(COMMA); }
+            result.AppendLine(string.Join(COMMA.ToString(), languages));
 
-                result.Append(lang);
-            }
-            result.AppendLine();
+            // Force raw data to enter the dictionary
+            flushRaw();
 
             // and then generate the multilanguage string for each entry
-            foreach(EntryI18n entry in this.dict.Values)
+            foreach(EntryI18n entry in dict.Values)
             {
                 result.AppendLine(entry.ToString());
             }
