@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Content;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -1125,8 +1126,8 @@ public class Quest
 
         // Quest specific info
         public bool unique = false;
-        public string uniqueText = "";
-        public string uniqueTitle = "";
+        public StringKey uniqueText = StringKey.NULL;
+        public StringKey uniqueTitle = StringKey.NULL;
         // Activation is reset each round so that master/minion use the same data and forcing doesn't re roll
         // Note that in RtL forcing activation WILL reroll the selected activation
         public ActivationInstance currentActivation;
@@ -1171,8 +1172,8 @@ public class Quest
             bool.TryParse(data["unique"], out unique);
             int.TryParse(data["damage"], out damage);
             int.TryParse(data["duplicate"], out duplicate);
-            uniqueText = data["uniqueText"];
-            uniqueTitle = data["uniqueTitle"];
+            uniqueText = new StringKey(data["uniqueText"]);
+            uniqueTitle = new StringKey(data["uniqueTitle"]);
 
             // Support old saves (deprectiated)
             if (data["type"].IndexOf("UniqueMonster") == 0)

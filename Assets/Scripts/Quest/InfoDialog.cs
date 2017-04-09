@@ -24,10 +24,10 @@ public class InfoDialog {
         if (m.unique)
         {
             db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), 
-                new StringKey(m.uniqueTitle,false), Color.red);
+                m.uniqueTitle, Color.red);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.AddBorder();
-            string uniqueText = EventManager.SymbolReplace(m.uniqueText.Replace("\\n", "\n"));
+            string uniqueText = EventManager.SymbolReplace(m.uniqueText.Translate().Replace("\\n", "\n"));
             db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8),
                 new StringKey(uniqueText,false));
             db.AddBorder(Color.red);

@@ -60,7 +60,7 @@
         /// Check if the StringKey object is a localization key
         /// </summary>
         /// <returns>true if string must be translated</returns>
-        private bool isKey()
+        public bool isKey()
         {
             return key.StartsWith("{") && !key.StartsWith("{rnd:") && !key.StartsWith("{var");
         }

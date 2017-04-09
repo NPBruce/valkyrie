@@ -82,7 +82,8 @@ public class EditorComponent {
     public void Rename()
     {
         string name = component.sectionName.Substring(component.typeDynamic.Length);
-        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, delegate { RenameFinished(); });
+        //The component name wont be translated but all name relative keys need to be updated
+        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, "",delegate { RenameFinished(); });
         rename.EditText();
     }
 
@@ -109,6 +110,10 @@ public class EditorComponent {
         {
             kv.Value.ChangeReference(component.sectionName, name);
         }
+
+        // Old Localization Entryes need to be renamed? Maybe not
+        // Change all entrys related with old name to key new name
+        //LocalizationRead.scenarioDict.ChangeReference(component.sectionName, name);
 
         // Remove component by old name
         game.quest.qd.components.Remove(component.sectionName);

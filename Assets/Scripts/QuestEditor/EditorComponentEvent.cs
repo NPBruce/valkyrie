@@ -133,7 +133,11 @@ public class EditorComponentEvent : EditorComponent
         db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), new StringKey("val","X_COLON", DIALOG));
         db.ApplyTag("editor");
 
-        eventTextDBE = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 8), eventComponent.originalText, delegate { UpdateText(); });
+        eventTextDBE = new DialogBoxEditable(
+            new Vector2(0, 4), new Vector2(20, 8), 
+            eventComponent.originalText.Translate(), 
+            eventComponent.originaltext_key,
+            delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();
 
@@ -282,7 +286,8 @@ public class EditorComponentEvent : EditorComponent
     {
         if (!eventTextDBE.Text.Equals(""))
         {
-            eventComponent.originalText = eventTextDBE.Text;
+            eventComponent.originalText =
+                updateDictionaryTextAndGenKey(eventComponent.originaltext_key, eventTextDBE.Text);
         }
     }
 
