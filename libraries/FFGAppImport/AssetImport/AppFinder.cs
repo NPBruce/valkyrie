@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using System.Text;
 using Read64bitRegistryFrom32bitApp;
+using ValkyrieTools;
 
 namespace FFGAppImport
 {
@@ -26,7 +27,7 @@ namespace FFGAppImport
             platform = p;
             if (p == Platform.MacOS)
             {
-                //ValkyrieDebug.Log("Attempting to locate AppId " + AppId() + " on MacOS.");
+                ValkyrieDebug.Log("Attempting to locate AppId " + AppId() + " on MacOS.");
                 System.Diagnostics.ProcessStartInfo processStartInfo;
                 System.Diagnostics.Process process;
 
@@ -41,7 +42,7 @@ namespace FFGAppImport
                 processStartInfo.FileName = "system_profiler";
 
                 process = new System.Diagnostics.Process();
-                //ValkyrieDebug.Log("Starting system_profiler.");
+                ValkyrieDebug.Log("Starting system_profiler.");
                 process.StartInfo = processStartInfo;
                 // enable raising events because Process does not raise events by default
                 process.EnableRaisingEvents = true;
@@ -66,16 +67,16 @@ namespace FFGAppImport
 
                 string output = outputBuilder.ToString();
 
-                //ValkyrieDebug.Log("Looking for: " + "/" + Executable());
+                ValkyrieDebug.Log("Looking for: " + "/" + Executable());
                 // Quick hack rather than doing XML properly
                 int foundAt = output.IndexOf("/" + Executable());
                 if (foundAt > 0)
                 {
-                    //ValkyrieDebug.Log("Name Index: " + foundAt);
+                    ValkyrieDebug.Log("Name Index: " + foundAt);
                     int startPos = output.LastIndexOf("<string>", foundAt) + 8;
-                    //ValkyrieDebug.Log("Start Index: " + startPos);
+                    ValkyrieDebug.Log("Start Index: " + startPos);
                     location = output.Substring(startPos, output.IndexOf("</string>", startPos) - startPos).Trim();
-                    //ValkyrieDebug.Log("Using location: " + location);
+                    ValkyrieDebug.Log("Using location: " + location);
                 }
             }
             else
@@ -95,7 +96,7 @@ namespace FFGAppImport
 
             exeLocation += location + "/" + Executable();
             location += DataDirectory();
-            //ValkyrieDebug.Log("Asset location: " + location);
+            ValkyrieDebug.Log("Asset location: " + location);
         }
 
         // Read version of executable from app

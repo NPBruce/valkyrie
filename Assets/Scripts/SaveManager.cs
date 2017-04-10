@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
+using ValkyrieTools;
 
 // This class provides functions to load and save games.
 class SaveManager

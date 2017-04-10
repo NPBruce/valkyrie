@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using ValkyrieTools;
 
 // Class to manage all data for the current quest
 public class Quest

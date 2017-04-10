@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity_Studio;
 using System.IO;
+using ValkyrieTools;
 
 namespace FFGAppImport
 {
@@ -89,7 +90,7 @@ namespace FFGAppImport
             string appVersion = "";
             if (!File.Exists(finder.location + "/resources.assets"))
             {
-                //ValkyrieDebug.Log("Could not find main assets file: " + finder.location + "/resources.assets");
+                ValkyrieDebug.Log("Could not find main assets file: " + finder.location + "/resources.assets");
             }
             try
             {
@@ -151,7 +152,7 @@ namespace FFGAppImport
             // Legacy assets not supported, shouldn't be old
             if (assetsFile.fileGen < 15)
             {
-                //ValkyrieDebug.Log("Invalid asset file: " + assetFile);
+                ValkyrieDebug.Log("Invalid asset file: " + assetFile);
                 return;
             }
 
@@ -221,7 +222,7 @@ namespace FFGAppImport
             }
             catch (System.Exception)
             {
-                //ValkyrieDebug.Log("Warning: Unable to create import log");
+                ValkyrieDebug.Log("Warning: Unable to create import log");
             }
         }
 
@@ -235,7 +236,7 @@ namespace FFGAppImport
             }
             catch (System.Exception)
             {
-                //ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
+                ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
                 return false;
             }
             if (Directory.Exists(contentPath + gameType + "/ffg")) return false;

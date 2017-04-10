@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FFGAppImport
+namespace ValkyrieTools
 {
 
     // Helper class to read an ini file into a nested dictionary

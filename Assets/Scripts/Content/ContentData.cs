@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 // This class reads and stores all of the content for a base game and expansions
 public class ContentData {

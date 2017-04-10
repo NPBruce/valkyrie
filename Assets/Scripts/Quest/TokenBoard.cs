@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ValkyrieTools;
 
 // Class for managing token and door operation
 // One object is created and attached to the token canvas
