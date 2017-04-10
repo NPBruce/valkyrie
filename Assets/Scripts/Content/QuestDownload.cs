@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour

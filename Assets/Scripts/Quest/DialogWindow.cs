@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 // Class for creation of a dialog window with buttons and handling button press
 // This is used for display of event information

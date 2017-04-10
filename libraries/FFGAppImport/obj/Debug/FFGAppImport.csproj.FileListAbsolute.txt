@@ -1,0 +1,5 @@
+c:\users\bruce\documents\visual studio 2015\Projects\FFGAppImport\FFGAppImport\bin\Debug\FFGAppImport.dll
+c:\users\bruce\documents\visual studio 2015\Projects\FFGAppImport\FFGAppImport\bin\Debug\FFGAppImport.pdb
+c:\users\bruce\documents\visual studio 2015\Projects\FFGAppImport\FFGAppImport\obj\Debug\FFGAppImport.dll
+c:\users\bruce\documents\visual studio 2015\Projects\FFGAppImport\FFGAppImport\obj\Debug\FFGAppImport.pdb
+C:\Users\Bruce\Documents\Visual Studio 2015\Projects\FFGAppImport\FFGAppImport\obj\Debug\FFGAppImport.csprojResolveAssemblyReference.cache
