@@ -139,6 +139,5 @@ public class EditorComponent {
 
         //return the stringkey
         return new StringKey("qst", key);
-
     }
 }

@@ -96,6 +96,10 @@ namespace Assets.Scripts.Content
             {
                 return translations[0];
             }
+            set
+            {
+                translations[0] = value;
+            }
         }
 
         public string getSpecificLanguageString(int nLanguage)
@@ -169,7 +173,9 @@ namespace Assets.Scripts.Content
             {
                 if (oneTranslation != null)
                 {
-                    currentTranslation = oneTranslation.Replace(System.Environment.NewLine, "\\n");
+                    currentTranslation = oneTranslation
+                        .Replace(System.Environment.NewLine, "\\n")
+                        .Replace("\r","\\n");
 
                     if (!first)
                     {

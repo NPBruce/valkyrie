@@ -502,6 +502,14 @@ public class QuestData
         {
             base.ChangeReference(oldName, newName);
 
+            // it wasn't renamed yet so the _key items will point to old keys.
+            // new key can be created by replacing the left part of the . whith new name
+            if (sectionName.Equals(oldName) && newName != "")
+            {
+                uniqueTitle = AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
+                uniqueText = AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
+            }
+
             for (int j = 0; j < placement.Length; j++)
             {
                 for (int i = 0; i < placement[j].Length; i++)
@@ -536,7 +544,8 @@ public class QuestData
 
             int textStart = r.IndexOf("text=");
             int textEnd = r.IndexOf("\n", textStart);
-            r = r.Substring(0, textStart) + "text=\"" + originalText + "\"" + r.Substring(textEnd);
+            r = r.Substring(0, textStart) + "text=" + 
+                (originalText.isKey() ? originalText.key :"\"" + originalText + "\"") + r.Substring(textEnd);
 
             if (mTypes.Length > 0)
             {
@@ -583,11 +592,13 @@ public class QuestData
             }
             if (!uniqueTitle.Equals(""))
             {
-                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+                r += "uniquetitle=" + 
+                    (uniqueTitle.isKey()?uniqueTitle.key: "\"" + uniqueTitle + "\"") + nl;
             }
             if (!uniqueText.Equals(""))
             {
-                r += "uniquetext=\"" + uniqueText + "\"" + nl;
+                r += "uniquetext=" + 
+                    (uniqueText.isKey() ? uniqueText.key : "\"" + uniqueText + "\"") + nl;
             }
 
             return r;
@@ -916,6 +927,15 @@ public class QuestData
         // Check all references when a component name is changed
         override public void ChangeReference(string oldName, string newName)
         {
+            if (sectionName.Equals(oldName) && newName != "")
+            {                
+                originalText = AfterRenameUpdateDictionaryTextAndGenKey(originaltext_key, newName);
+                for (int pos = 0;pos < buttons.Count;pos++)
+                {
+                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(button_key + (pos + 1).ToString(), newName);
+                }                 
+            }
+
             // hero list event is changed
             if (heroListName.Equals(oldName))
             {
@@ -1388,6 +1408,25 @@ public class QuestData
         {
             // Rename to "" is taken to be delete
             ChangeReference(refName, "");
+        }
+
+        /// <summary>
+        /// Updates de dicionary with new text and generates a StringKey element
+        /// </summary>
+        /// <param name="key">key to update/create</param>
+        /// <param name="text">text in current language</param>
+        /// <returns></returns>
+        protected StringKey AfterRenameUpdateDictionaryTextAndGenKey(string oldkey, string newName)
+        {
+            string[] split = oldkey.Split('.');
+            string newKey = new StringBuilder()
+                .Append(newName).Append('.').Append(split[1]).ToString();
+
+            // update or create scenario text in current language
+            LocalizationRead.replaceScenarioText(oldkey, newKey);
+
+            //return the stringkey
+            return new StringKey("qst", newKey);
         }
 
         // Save to string (editor)
