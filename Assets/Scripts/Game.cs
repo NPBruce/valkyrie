@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using ValkyrieTools;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 // Monster information dialog (additional rules)
 public class InfoDialog {

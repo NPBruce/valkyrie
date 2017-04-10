@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
+using ValkyrieTools;
 
 // Class for getting lists of quest with details
 // TODO: work out why this is so slow
