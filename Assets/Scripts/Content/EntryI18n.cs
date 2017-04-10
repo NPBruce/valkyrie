@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ValkyrieTools;
 
 namespace Assets.Scripts.Content
 {

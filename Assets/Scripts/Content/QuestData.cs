@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
-using System.Text;
-using System;
+using ValkyrieTools;
 
 // Class to manage all static data for the current quest
 public class QuestData
