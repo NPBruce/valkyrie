@@ -270,11 +270,11 @@ public class QuestEditSelection
 
         // Find a new unique directory name
         int i = 1;
-        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
 
         // Copy files
         try
@@ -358,11 +358,11 @@ public class QuestEditSelection
 
         // Find an available unique directory name
         int i = 1;
-        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName() + i))
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i))
         {
             i++;
         }
-        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName() + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
 
         try
         {
@@ -372,15 +372,15 @@ public class QuestEditSelection
 
             // Create basic quest info
             questData[0] = "[Quest]";
-            questData[1] = "name=Editor " + game.gameType.QuestName() + " " + i;
+            questData[1] = "name=Editor " + game.gameType.QuestName().Translate() + " " + i;
             questData[2] = "type=" + game.gameType.TypeName();
 
             // Write quest file
             File.WriteAllLines(targetLocation + "/quest.ini", questData);
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Error: Failed to create new quest.");
+            ValkyrieDebug.Log("Error: Failed to create new quest: " + e.Message);
             Application.Quit();
         }
         // Back to edit selection
