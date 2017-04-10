@@ -72,6 +72,7 @@ class SaveManager
                 Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
                 ZipFile zip = ZipFile.Read(SaveFile());
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
+                zip.Dispose();
 
                 // Check that quest in save is valid
                 QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");

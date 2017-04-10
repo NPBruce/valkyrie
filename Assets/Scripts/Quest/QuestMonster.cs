@@ -85,7 +85,7 @@ public class QuestMonster : MonsterData
         }
 
         health = qm.health;
-        if (qm.healthDefined && baseObject != null)
+        if (!qm.healthDefined && baseObject != null)
         {
             health = baseObject.health;
         }

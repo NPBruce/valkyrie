@@ -146,6 +146,7 @@ public class QuestLoader {
             {
                 ZipFile zip = ZipFile.Read(f);
                 zip.ExtractAll(extractedPath);
+                zip.Dispose();
             }
             catch (System.Exception)
             {
