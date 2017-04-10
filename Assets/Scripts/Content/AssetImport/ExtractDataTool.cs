@@ -351,7 +351,7 @@ class ExtractDataTool
                 int indexStart = allText.IndexOf(label);
                 string instruction = allText.Substring(indexStart, allText.IndexOf("\n", indexStart) - indexStart);
                 string altmove = label.Substring(0, label.Length - 2) + "00";
-                if ((instruction.IndexOf("toward the nearest") > 0) && (instruction.IndexOf("toward the nearest within range") < 0))
+                if ((instruction.IndexOf("toward the nearest") > 0) && (instruction.IndexOf("toward the nearest within range") < 0) && (instruction.IndexOf("toward the nearest investigator within range") < 0))
                 {
                     movealt.Add("");
                 }
@@ -384,19 +384,19 @@ class ExtractDataTool
                     movealt.Add("");
                 }
 
-                if (instruction.IndexOf("toward the investigator within range") > 0)
+                if (instruction.IndexOf("toward the investigator within range") > 0  && (instruction.IndexOf("nvestigator in its space") < 0))
                 {
                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
-                else if (instruction.IndexOf("toward the nearest investigator within range") > 0)
+                else if (instruction.IndexOf("toward the nearest investigator within range") > 0 && (instruction.IndexOf("nvestigator in its space") < 0))
                 {
                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
-                else if (instruction.IndexOf("to the nearest investigator within range") > 0)
+                else if (instruction.IndexOf("to the nearest investigator within range") > 0 && (instruction.IndexOf("nvestigator in its space") < 0))
                 {
                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
-                else if (instruction.IndexOf("toward the farthest investigator within range") > 0)
+                else if (instruction.IndexOf("toward the farthest investigator within range") > 0 && (instruction.IndexOf("nvestigator in its space") < 0))
                 {
                     movebutton.Add("{ffg:UI_NOT_IN_RANGE}");
                 }
