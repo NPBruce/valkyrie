@@ -234,12 +234,17 @@ namespace Assets.Scripts.Content
             return !quote;
         }
 
-        public override string ToString()
+        /// <summary>
+        /// Serialization of dictionary.
+        /// To save Localization.file
+        /// </summary>
+        /// <returns></returns>
+        public List<string> Serialize()
         {
-            StringBuilder result = new StringBuilder();
+            List<string> result = new List<string>();
 
             // We first generate the languages line
-            result.AppendLine(string.Join(COMMA.ToString(), languages));
+            result.Add(string.Join(COMMA.ToString(), languages));
 
             // Force raw data to enter the dictionary
             flushRaw();
@@ -247,10 +252,10 @@ namespace Assets.Scripts.Content
             // and then generate the multilanguage string for each entry
             foreach(EntryI18n entry in dict.Values)
             {
-                result.AppendLine(entry.ToString());
+                result.Add(entry.ToString());
             }
 
-            return result.ToString();
+            return result;
         }
     }
 }

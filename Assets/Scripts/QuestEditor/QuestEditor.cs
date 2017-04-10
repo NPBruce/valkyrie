@@ -77,15 +77,16 @@ public class QuestEditor {
         try
         {
             string ini_file = content.ToString();
-            string localization_file = null;
+            List<string> localization_file = null;
             File.WriteAllText(game.quest.qd.questPath, ini_file);
             if (LocalizationRead.scenarioDict != null)
             {
-                localization_file = LocalizationRead.scenarioDict.ToString();
-                // TODO: Remove from localization file unused keys.(After renaming or deleting)
+                localization_file = LocalizationRead.scenarioDict.Serialize();
+                removeUnusedStringKeys(localization_file, ini_file);
+
                 File.WriteAllText(
                     Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
-                    localization_file);
+                    string.Join(System.Environment.NewLine, localization_file.ToArray()));
             }
         }
         catch (System.Exception)
@@ -96,5 +97,23 @@ public class QuestEditor {
 
         // Reload quest
         Reload();
+    }
+
+    /// <summary>
+    /// Find each stringkey in dictionary inside the ini file. If doesn't appear, it is unused, can be removed
+    /// </summary>
+    /// <param name="localization_file"></param>
+    /// <param name="ini_file"></param>
+    public static void removeUnusedStringKeys(List<string> localization_file, string ini_file)
+    {
+        // Search each line except first one
+        for (int pos = localization_file.Count - 1; pos > 1; pos--)
+        {
+            string key = "{qst:" + localization_file[pos].Split(',')[0] + "}";
+            if (!ini_file.Contains(key))
+            {
+                localization_file.RemoveAt(pos);
+            }
+        }
     }
 }
