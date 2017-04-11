@@ -691,8 +691,8 @@ public class QuestData
                 foreach (string s in array)
                 {
                     // Support old internal var names (depreciated, format 2)
-                    string name = UpdateVarName(s);
-                    operations.Add(new VarOperation(name));
+                    string varName = UpdateVarName(s);
+                    operations.Add(new VarOperation(varName));
                 }
             }
 
@@ -703,8 +703,8 @@ public class QuestData
                 foreach (string s in array)
                 {
                     // Support old internal var names (depreciated, format 2)
-                    string name = UpdateVarName(s);
-                    conditions.Add(new VarOperation(name));
+                    string varName = UpdateVarName(s);
+                    conditions.Add(new VarOperation(varName));
                 }
             }
 

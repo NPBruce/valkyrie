@@ -162,7 +162,7 @@ public class PuzzleCode : Puzzle
 
             for (int i = 0; i < guess.Count; i++)
             {
-                if (guess[i] && answer.state[i]) continue;
+                if (guess[i] == answer.state[i]) continue;
                 
                 for (int j = 0; j < answer.state.Count; j++)
                 {

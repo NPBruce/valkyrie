@@ -260,7 +260,7 @@ public class RoundController {
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
         // Queue end of this round events (depriciated)
-        int round = Mathf.RoundToInt(game.quest.var.GetValue("#round"));
+        int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round"));
         game.quest.eManager.EventTriggerType("EndRound" + round, false);
 
         if (game.quest.vars.GetValue("#eliminatedprev") > 0)
@@ -309,7 +309,7 @@ public class RoundController {
         }
 
         // Increment the round
-        int round = Mathf.RoundToInt(game.quest.var.GetValue("#round")) + 1;
+        int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
         game.quest.vars.SetValue("#round", round);
 
         // Update monster and hero display

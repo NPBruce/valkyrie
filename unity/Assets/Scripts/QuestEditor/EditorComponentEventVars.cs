@@ -164,7 +164,7 @@ public class EditorComponentEventVars : EditorComponent
     public void AddAssignOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"), "Quest");
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
         list.AddRange(GetQuestVars());
         varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
@@ -198,7 +198,7 @@ public class EditorComponentEventVars : EditorComponent
         }
 
 
-        foreach (PerilData e in game.cd.perils)
+        foreach (PerilData e in game.cd.perils.Values)
         {
             foreach (string s in ExtractVarsFromEvent(e))
             {
@@ -327,10 +327,7 @@ public class EditorComponentEventVars : EditorComponent
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         list.Add(new EditorSelectionList.SelectionListEntry("{NUMBER}", "Quest"));
-        foreach (string s in GetQuestVars())
-        {
-            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
-        }
+        list.AddRange(GetQuestVars());
 
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
         list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
