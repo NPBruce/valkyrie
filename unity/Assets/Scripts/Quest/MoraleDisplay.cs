@@ -11,6 +11,10 @@ public class MoraleDisplay {
     {
         Game game = Game.Get();
         int morale = Mathf.RoundToInt(game.quest.vars.GetValue("$morale"));
+        if (morale < 0)
+        {
+            morale = 0;
+        }
         md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), new StringKey(morale.ToString(),false), Color.red);
         md.textObj.tag = "questui";
         md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
@@ -23,6 +27,10 @@ public class MoraleDisplay {
     {
         Game game = Game.Get();
         int morale = Mathf.RoundToInt(game.quest.vars.GetValue("$morale"));
+        if (morale < 0)
+        {
+            morale = 0;
+        }
         md.textObj.GetComponent<UnityEngine.UI.Text>().text = morale.ToString();
     }
 }

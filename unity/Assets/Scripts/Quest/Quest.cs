@@ -330,6 +330,13 @@ public class Quest
             }
         }
 
+        // Restore event log
+        log = new List<LogEntry>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
+        {
+            log.Add(new LogEntry(kv.Key, kv.Value));
+        }
+
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
 
@@ -344,7 +351,7 @@ public class Quest
         {
             int round = 0;
             int.TryParse(saveData.Get("Quest", "round"), out round);
-            vars.SetValue("$round", round);
+            vars.SetValue("#round", round);
         }
 
         // Set items
@@ -431,13 +438,6 @@ public class Quest
             int value;
             int.TryParse(kv.Value, out value);
             eventQuota.Add(kv.Key, value);
-        }
-
-        // Restore event log
-        log = new List<LogEntry>();
-        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
-        {
-            log.Add(new LogEntry(kv.Key, kv.Value));
         }
 
         // Update the screen
