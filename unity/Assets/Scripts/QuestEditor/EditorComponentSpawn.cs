@@ -22,6 +22,8 @@ public class EditorComponentSpawn : EditorComponent
 
     DialogBoxEditable uniqueTitleDBE;
     DialogBoxEditable uniqueTextDBE;
+    DialogBoxEditable healthDBE;
+    DialogBoxEditable healthHeroDBE;
 
     EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
@@ -90,28 +92,47 @@ public class EditorComponentSpawn : EditorComponent
         
             if (monsterComponent.unique)
             {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
+                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+
+                db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+                db.ApplyTag("editor");
+
+                healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
+                monsterComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
+                healthDBE.ApplyTag("editor");
+                healthDBE.AddBorder();
+
+                db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
+                db.ApplyTag("editor");
+
+                healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
+                monsterComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
+                healthHeroDBE.ApplyTag("editor");
+                healthHeroDBE.AddBorder();
+
+
+                db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
+                db.ApplyTag("editor");
+
+                uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
+                uniqueTitleDBE.ApplyTag("editor");
+                uniqueTitleDBE.AddBorder();
+
+                db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
+                db.ApplyTag("editor");
+
+                uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
+                uniqueTextDBE.ApplyTag("editor");
+                uniqueTextDBE.AddBorder();
             }
             else
             {
                 tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
             }
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
-
-            db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
-            db.ApplyTag("editor");
-
-            uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
-            uniqueTitleDBE.ApplyTag("editor");
-            uniqueTitleDBE.AddBorder();
-
-            db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
-            db.ApplyTag("editor");
-
-            uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
-            uniqueTextDBE.ApplyTag("editor");
-            uniqueTextDBE.AddBorder();
         }
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), new StringKey("val", "X_COLON", TYPES));
@@ -211,6 +232,17 @@ public class EditorComponentSpawn : EditorComponent
         Update();
     }
 
+    public void UpdateHealth()
+    {
+        float.TryParse(healthDBE.uiInput.text, ut monsterComponent.uniqueHealthBase);
+        Update();
+    }
+
+    public void UpdateHealthHero()
+    {
+        float.TryParse(healthHeroDBE.uiInput.text, ut monsterComponent.uniqueHealthHero);
+        Update();
+    }
 
     public void UpdateUniqueTitle()
     {

@@ -366,6 +366,8 @@ public class QuestData
         public bool unique = false;
         public string uniqueTitle = "";
         public string uniqueText = "";
+        public float uniqueHealthBase = 0;
+        public float uniqueHealthHero = 0;
         public string[] mTypes;
         public string[] mTraitsRequired;
         public string[] mTraitsPool;
@@ -445,6 +447,14 @@ public class QuestData
             if (data.ContainsKey("uniquetext"))
             {
                 uniqueText = data["uniquetext"];
+            }
+            if (data.ContainsKey("uniquehealth"))
+            {
+                float.TryParse(data["uniquehealth"], out uniqueHealthBase);
+            }
+            if (data.ContainsKey("uniquehealthhero"))
+            {
+                float.TryParse(data["uniquehealthhero"], out uniqueHealthHero);
             }
         }
 
@@ -531,16 +541,17 @@ public class QuestData
             if(unique)
             {
                 r += "unique=true" + nl;
+                r += "uniquehealth=" + uniqueHealthBase + nl;
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
+                if (!uniqueTitle.Equals(""))
+                {
+                    r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+                }
+                if (!uniqueText.Equals(""))
+                {
+                    r += "uniquetext=\"" + uniqueText + "\"" + nl;
+                }
             }
-            if (!uniqueTitle.Equals(""))
-            {
-                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
-            }
-            if (!uniqueText.Equals(""))
-            {
-                r += "uniquetext=\"" + uniqueText + "\"" + nl;
-            }
-
             return r;
         }
     }

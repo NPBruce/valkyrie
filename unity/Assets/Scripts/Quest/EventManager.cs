@@ -147,6 +147,7 @@ public class EventManager
                 oldMonster.unique = true;
                 oldMonster.uniqueText = qe.qMonster.uniqueText;
                 oldMonster.uniqueTitle = qe.GetUniqueTitle();
+                oldMonster.healthMod = Mathf.RoundToInt(qe.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * qe.qMonster.uniqueHealthHero));
             }
 
             // Display the location(s)

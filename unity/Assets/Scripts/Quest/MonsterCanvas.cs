@@ -204,9 +204,9 @@ public class MonsterCanvas : MonoBehaviour
                 buttonFrame.interactable = true;
                 buttonFrame.onClick.AddListener(delegate { MonsterDiag(); });
 
-                if (m.GetHealth() > 0)
+                if (m.healthMod != 0)
                 {
-                    TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), m.GetHealth().ToString(), delegate { MonsterDiag(); }, Color.red);
+                    TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), m.healthMod.ToString(), delegate { MonsterDiag(); }, Color.red);
                 }
             }
 
