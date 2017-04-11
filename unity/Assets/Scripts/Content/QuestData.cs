@@ -690,9 +690,7 @@ public class QuestData
                 string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    // Support old internal var names (depreciated, format 2)
-                    string varName = UpdateVarName(s);
-                    operations.Add(new VarOperation(varName));
+                    operations.Add(new VarOperation(s));
                 }
             }
 
@@ -702,9 +700,7 @@ public class QuestData
                 string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    // Support old internal var names (depreciated, format 2)
-                    string varName = UpdateVarName(s);
-                    conditions.Add(new VarOperation(varName));
+                    conditions.Add(new VarOperation(s));
                 }
             }
 
@@ -730,55 +726,6 @@ public class QuestData
             {
                 audio = data["audio"];
             }
-        }
-
-        private string UpdateVarName(string s)
-        {
-            string prefix = "";
-            if (s.Equals("perilMinor")) prefix = "$";
-            if (s.Equals("perilMajor")) prefix = "$";
-            if (s.Equals("perilDeadly")) prefix = "$";
-
-            if (s.Equals("mythosHelp")) prefix = "$";
-            if (s.Equals("mythosFlavor")) prefix = "$";
-            if (s.Equals("mythosMinor")) prefix = "$";
-            if (s.Equals("mythosMajor")) prefix = "$";
-            if (s.Equals("mythosDeadly")) prefix = "$";
-
-            if (s.Equals("mythosIndoors")) prefix = "$";
-            if (s.Equals("mythosOutdoors")) prefix = "$";
-
-            if (s.Equals("mythosStreetCorner")) prefix = "$";
-            if (s.Equals("mythosAlleyCorner")) prefix = "$";
-            if (s.Equals("mythosAlley")) prefix = "$";
-            if (s.Equals("mythosStreet")) prefix = "$";
-            if (s.Equals("mythosHall")) prefix = "$";
-            if (s.Equals("mythosLibrary")) prefix = "$";
-            if (s.Equals("mythosKitchen")) prefix = "$";
-            if (s.Equals("mythosBallroom")) prefix = "$";
-            if (s.Equals("mythosCrypt")) prefix = "$";
-            if (s.Equals("mythosGraveyard")) prefix = "$";
-            if (s.Equals("mythosMorgue")) prefix = "$";
-            if (s.Equals("mythosBeach")) prefix = "$";
-            if (s.Equals("mythosDock")) prefix = "$";
-            if (s.Equals("mythosPier")) prefix = "$";
-            if (s.Equals("mythosBathroom")) prefix = "$";
-            if (s.Equals("mythosOffice")) prefix = "$";
-            if (s.Equals("mythosStudy")) prefix = "$";
-            if (s.Equals("mythosTownSquare")) prefix = "$";
-            if (s.Equals("mythosLounge")) prefix = "$";
-            if (s.Equals("mythosStairs")) prefix = "$";
-            if (s.Equals("mythosRiver")) prefix = "$";
-            if (s.Equals("mythosDiningRoom")) prefix = "$";
-            if (s.Equals("mythosBedroom")) prefix = "$";
-            if (s.Equals("mythosStorageRoom")) prefix = "$";
-            if (s.Equals("mythosHallStairs")) prefix = "$";
-            if (s.Equals("mythosAtticStorage")) prefix = "$";
-
-            if (s.Equals("mythosDarkness")) prefix = "$";
-            if (s.Equals("mythosDiscardItem")) prefix = "$";
-            if (s.Equals("mythosKey")) prefix = "$";
-            return prefix + s;
         }
 
         // Check all references when a component name is changed
@@ -977,11 +924,65 @@ public class QuestData
                 var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
                 operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
                 value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+
+                // Support old internal var names (depreciated, format 2)
+                var = UpdateVarName(var);
+                value = UpdateVarName(value);
             }
 
             override public string ToString()
             {
                 return var + ',' + operation + ',' + value;
+            }
+
+
+            private string UpdateVarName(string s)
+            {
+                string prefix = "";
+                if (s.Equals("perilMinor")) prefix = "$";
+                if (s.Equals("perilMajor")) prefix = "$";
+                if (s.Equals("perilDeadly")) prefix = "$";
+
+                if (s.Equals("mythosHelp")) prefix = "$";
+                if (s.Equals("mythosFlavor")) prefix = "$";
+                if (s.Equals("mythosMinor")) prefix = "$";
+                if (s.Equals("mythosMajor")) prefix = "$";
+                if (s.Equals("mythosDeadly")) prefix = "$";
+
+                if (s.Equals("mythosIndoors")) prefix = "$";
+                if (s.Equals("mythosOutdoors")) prefix = "$";
+
+                if (s.Equals("mythosStreetCorner")) prefix = "$";
+                if (s.Equals("mythosAlleyCorner")) prefix = "$";
+                if (s.Equals("mythosAlley")) prefix = "$";
+                if (s.Equals("mythosStreet")) prefix = "$";
+                if (s.Equals("mythosHall")) prefix = "$";
+                if (s.Equals("mythosLibrary")) prefix = "$";
+                if (s.Equals("mythosKitchen")) prefix = "$";
+                if (s.Equals("mythosBallroom")) prefix = "$";
+                if (s.Equals("mythosCrypt")) prefix = "$";
+                if (s.Equals("mythosGraveyard")) prefix = "$";
+                if (s.Equals("mythosMorgue")) prefix = "$";
+                if (s.Equals("mythosBeach")) prefix = "$";
+                if (s.Equals("mythosDock")) prefix = "$";
+                if (s.Equals("mythosPier")) prefix = "$";
+                if (s.Equals("mythosBathroom")) prefix = "$";
+                if (s.Equals("mythosOffice")) prefix = "$";
+                if (s.Equals("mythosStudy")) prefix = "$";
+                if (s.Equals("mythosTownSquare")) prefix = "$";
+                if (s.Equals("mythosLounge")) prefix = "$";
+                if (s.Equals("mythosStairs")) prefix = "$";
+                if (s.Equals("mythosRiver")) prefix = "$";
+                if (s.Equals("mythosDiningRoom")) prefix = "$";
+                if (s.Equals("mythosBedroom")) prefix = "$";
+                if (s.Equals("mythosStorageRoom")) prefix = "$";
+                if (s.Equals("mythosHallStairs")) prefix = "$";
+                if (s.Equals("mythosAtticStorage")) prefix = "$";
+
+                if (s.Equals("mythosDarkness")) prefix = "$";
+                if (s.Equals("mythosDiscardItem")) prefix = "$";
+                if (s.Equals("mythosKey")) prefix = "$";
+                return prefix + s;
             }
         }
     }
