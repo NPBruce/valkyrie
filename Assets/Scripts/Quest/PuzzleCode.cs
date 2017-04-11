@@ -162,14 +162,19 @@ public class PuzzleCode : Puzzle
 
             for (int i = 0; i < guess.Count; i++)
             {
-                bool done = false;
+                if (guess[i] && answer.state[i]) continue;
+                
                 for (int j = 0; j < answer.state.Count; j++)
                 {
-                    if (!done && i != j && !used[j] && answer.state[j] == guess[i] && answer.state[j] != guess[j])
+                    if (i == j) continue;
+                    if (used[j]) continue;
+                    if (answer.state[j] == guess[j]) continue;
+                    
+                    if (answer.state[j] == guess[i])
                     {
                         r++;
-                        done = true;
                         used[j] = true;
+                        break;
                     }
                 }
             }
