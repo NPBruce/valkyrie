@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using ValkyrieTools;
 
 namespace Assets.Scripts.Content
 {
@@ -212,6 +213,21 @@ namespace Assets.Scripts.Content
             entry.currentLanguageString = text;
         }
 
+        /// <summary>
+        /// Replaces all dictionary entries with old key and replaces with the new one
+        /// </summary>
+        /// <param name="oldKey"></param>
+        /// <param name="newKey"></param>
+        public static void replaceScenarioText(string oldKey,string newKey)
+        {
+            EntryI18n entry;
+            // Search for localization string 
+            if (scenarioDict.tryGetValue(oldKey, out entry))
+            {
+                entry.key = newKey;
+                scenarioDict.Add(entry);
+            }
+        }
 
         /// <summary>
         /// Transform a ffg key (without ffg prefig, into current language text

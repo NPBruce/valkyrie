@@ -252,6 +252,7 @@ namespace Assets.Scripts.Content
             // and then generate the multilanguage string for each entry
             foreach(EntryI18n entry in dict.Values)
             {
+                // Replace real carry returns with the \n text.
                 result.Add(entry.ToString());
             }
 

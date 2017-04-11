@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
+using FFGAppImport;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -8,8 +9,8 @@ namespace Assets.Scripts.UI.Screens
     // and import controls
     public class GameSelectionScreen
     {
-        FetchContent fcD2E;
-        FetchContent fcMoM;
+        FFGImport fcD2E;
+        FFGImport fcMoM;
 
         private StringKey D2E_NAME = new StringKey("{val:D2E_NAME}");
         private StringKey CONTENT_IMPORT = new StringKey("{val:CONTENT_IMPORT}");
@@ -30,8 +31,19 @@ namespace Assets.Scripts.UI.Screens
             game.gameType = new NoGameType();
 
             // Get the current content for games
-            fcD2E = new FetchContent("D2E");
-            fcMoM = new FetchContent("MoM");
+            if (Application.platform == RuntimePlatform.OSXPlayer)
+            {
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, ContentData.ContentPath(), Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, ContentData.ContentPath(), Application.isEditor);
+            }
+            else
+            {
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
+            }
+            string log;
+            fcD2E.Inspect(out log);
+            fcMoM.Inspect(out log);
 
             // Banner Image
             Sprite bannerSprite;
@@ -72,7 +84,7 @@ namespace Assets.Scripts.UI.Screens
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             // Draw D2E import button
-            if (fcD2E.importAvailable)
+            if (fcD2E.ImportAvailable())
             {
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), keyText, delegate { Import("D2E"); });
@@ -96,7 +108,7 @@ namespace Assets.Scripts.UI.Screens
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
 
             // Draw MoM import button
-            if (fcMoM.importAvailable)
+            if (fcMoM.ImportAvailable())
             {
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), keyText, delegate { Import("MoM"); });
@@ -169,13 +181,14 @@ namespace Assets.Scripts.UI.Screens
         // Import (called once message displayed)
         private void PerformImport(string type)
         {
+            string log;
             if (type.Equals("D2E"))
             {
-                fcD2E.Import();
+                fcD2E.Import(out log);
             }
             if (type.Equals("MoM"))
             {
-                fcMoM.Import();
+                fcMoM.Import(out log);
             }
             Destroyer.Dialog();
             new GameSelectionScreen();

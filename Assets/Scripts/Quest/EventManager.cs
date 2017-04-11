@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 // Class for managing quest events
 public class EventManager

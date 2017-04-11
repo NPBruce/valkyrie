@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 public class QuestEditSelection
 {
