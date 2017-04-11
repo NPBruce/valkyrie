@@ -142,21 +142,18 @@ public class EditorComponentEventVars : EditorComponent
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
-        foreach (string s in GetQuestVars())
-        {
-            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
-        }
+        list.AddRange(GetQuestVars());
 
-        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#round", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
+                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "#"));
             }
         }
 
@@ -167,18 +164,16 @@ public class EditorComponentEventVars : EditorComponent
     public void AddAssignOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"));
-        foreach (string s in GetQuestVars())
-        {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
-        }
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}"), "Quest");
+        list.AddRange(GetQuestVars());
         varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
     }
 
-    public HashSet<string> GetQuestVars()
+    public List<EditorSelectionList.SelectionListEntry> GetQuestVars()
     {
         HashSet<string> vars = new HashSet<string>();
+        HashSet<string> dollarVars = new HashSet<string>();
 
         Game game = Game.Get();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -191,23 +186,55 @@ public class EditorComponentEventVars : EditorComponent
                     vars.Add(op.var);
                     if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
                     {
-                        vars.Add(op.value);
+                        if (op.value[0] == '$')
+                        {
+                            dollarVars.Add(op.value);
+                        }
+                        else
+                        {
+                            vars.Add(op.value);
+                        }
                     }
                 }
                 foreach (QuestData.Event.VarOperation op in e.conditions)
                 {
                     if (op.var.Length > 0 && op.var[0] != '#')
                     {
-                        vars.Add(op.var);
+                        if (op.var[0] == '$')
+                        {
+                            dollarVars.Add(op.var);
+                        }
+                        else
+                        {
+                            vars.Add(op.var);
+                        }
                     }
                     if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
                     {
-                        vars.Add(op.value);
+                        if (op.value[0] == '$')
+                        {
+                            dollarVars.Add(op.value);
+                        }
+                        else
+                        {
+                            vars.Add(op.value);
+                        }
                     }
                 }
             }
         }
-        return vars;
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in vars)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
+        }
+        foreach (string s in dollarVars)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s, "$"));
+        }
+
+        return list;
     }
 
     public void SelectAddOp(bool test = true)
