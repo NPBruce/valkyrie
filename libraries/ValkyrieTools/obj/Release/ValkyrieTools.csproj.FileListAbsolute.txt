@@ -5,3 +5,5 @@ C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\obj\Release\V
 C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.pdb
 C:\Users\Bruce\Documents\valkyrie\valkyrie\Assets\Plugins\ValkyrieTools.dll
 C:\Users\Bruce\Documents\valkyrie\valkyrie\Assets\Plugins\ValkyrieTools.pdb
+C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\ValkyrieTools.dll
+C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\ValkyrieTools.pdb
