@@ -23,7 +23,7 @@ namespace ValkyrieTools
             }
             catch (System.Exception ex)
             {
-                //ValkyrieDebug.Log(ex.Message);
+                ValkyrieDebug.Log(ex.Message);
                 return null;
             }
             // Parse text data
@@ -90,7 +90,7 @@ namespace ValkyrieTools
                     {
                         if (!output.Add(entryName, entryData))
                         {
-                            //ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
+                            ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
                         }
                     }
                     // create new data for new section
@@ -100,7 +100,7 @@ namespace ValkyrieTools
                     // Blank section names not allowed, but not fatal
                     if (entryName.Equals(""))
                     {
-                        //ValkyrieDebug.Log("Warning: empty section in " + path + " will be ignored.");
+                        ValkyrieDebug.Log("Warning: empty section in " + path + " will be ignored.");
                     }
                 }
                 // If the line is not a comment (starts with ;)
@@ -112,7 +112,7 @@ namespace ValkyrieTools
                     {
                         if (entryData.ContainsKey(l.Trim()))
                         {
-                            //ValkyrieDebug.Log("Warning: duplicate \"" + l.Trim() + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
+                            ValkyrieDebug.Log("Warning: duplicate \"" + l.Trim() + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
                         }
                         else
                         {
@@ -125,7 +125,7 @@ namespace ValkyrieTools
                         string key = l.Substring(0, equalsLocation).Trim();
                         if (entryData.ContainsKey(key))
                         {
-                            //ValkyrieDebug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
+                            ValkyrieDebug.Log("Warning: duplicate \"" + key + "\" data in section \"" + entryName + "\" in " + path + " will be ignored.");
                         }
                         else
                         {
@@ -137,7 +137,7 @@ namespace ValkyrieTools
                     // This won't go anywhere if we don't have a section
                     if (entryName.Equals(""))
                     {
-                        //ValkyrieDebug.Log("Warning: data without section in " + path + " will be ignored.");
+                        ValkyrieDebug.Log("Warning: data without section in " + path + " will be ignored.");
                     }
                 }
             }
@@ -147,7 +147,7 @@ namespace ValkyrieTools
             {
                 if (!output.Add(entryName, entryData))
                 {
-                    //ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
+                    ValkyrieDebug.Log("Warning: duplicate section \"" + entryName + "\" in " + path + " will be ignored.");
                 }
             }
 

@@ -12,7 +12,7 @@ namespace FFGAppImport
         public Platform platform;
         public string path;
         public bool editor;
-        public FetchContent fc;
+        FetchContent fc;
 
         public FFGImport(GameType t, Platform p, string contentPath, bool e = false)
         {
@@ -22,10 +22,9 @@ namespace FFGAppImport
             editor = e;
         }
 
-        public bool Inspect(out string log)
+        public bool Inspect()
         {
             fc = new FetchContent(this);
-            log = "Doing stuff!\n";
             return true;
         }
 
@@ -39,10 +38,9 @@ namespace FFGAppImport
             return fc.importAvailable;
         }
 
-        public bool Import(out string log)
+        public bool Import()
         {
             fc.Import();
-            log = "Doing stuff!\n";
             return true;
         }
     }

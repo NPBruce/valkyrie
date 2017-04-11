@@ -2,18 +2,18 @@
 {
     public class Line128X4Sub2 : IStaticCodeBook
     {
-        public int Dimensions = 1;
+        new public int Dimensions = 1;
 
-        public byte[] LengthList = {
+        new public byte[] LengthList = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 4, 3, 4, 3,
             4, 4, 5, 4, 5, 4, 6, 5, 6
         };
 
-        public CodeBookMapType MapType = CodeBookMapType.None;
-        public int QuantMin = 0;
-        public int QuantDelta = 0;
-        public int Quant = 0;
-        public int QuantSequenceP = 0;
-        public int[] QuantList = null;
+        new public CodeBookMapType MapType = CodeBookMapType.None;
+        new public int QuantMin = 0;
+        new public int QuantDelta = 0;
+        new public int Quant = 0;
+        new public int QuantSequenceP = 0;
+        new public int[] QuantList = null;
     }
 }
