@@ -226,11 +226,6 @@ public class QuestData
             if (data.ContainsKey("side"))
             {
                 tileSideName = data["side"];
-                // 'TileSide' prefix is optional, test both (Depreciated, format 0)
-                if (tileSideName.IndexOf("TileSide") != 0)
-                {
-                    tileSideName = "TileSide" + tileSideName;
-                }
             }
             else
             {
@@ -334,8 +329,7 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
-            // default token type is TokenSearch, this is content data name (Depreciated, format 0)
-            tokenName = "TokenSearch";
+            tokenName = "";
             if (data.ContainsKey("type"))
             {
                 tokenName = data["type"];
@@ -570,7 +564,6 @@ public class QuestData
         public List<VarOperation> conditions;
         public bool cancelable = false;
         public bool highlight = false;
-        public List<DelayedEvent> delayedEvents;
         public bool randomEvents = false;
         public bool minCam = false;
         public bool maxCam = false;
@@ -587,7 +580,6 @@ public class QuestData
             removeComponents = new string[0];
             operations = new List<VarOperation>();
             conditions = new List<VarOperation>();
-            delayedEvents = new List<DelayedEvent>();
             minCam = false;
             maxCam = false;
         }
@@ -640,45 +632,6 @@ public class QuestData
                     moreEvents = false;
                 }
                 buttonNum++;
-            }
-
-            // Legacy support (Depreciated, format 0)
-            if (nextEvent.Count == 0)
-            {
-                if (data.ContainsKey("event"))
-                {
-                    nextEvent.Add(new List<string>(data["event"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
-                }
-                else
-                {
-                    nextEvent.Add(new List<string>());
-                }
-
-                if (data.ContainsKey("confirmtext"))
-                {
-                    buttons.Add(data["confirmtext"]);
-                }
-                else if (data.ContainsKey("failevent"))
-                {
-                    buttons.Add("Pass");
-                }
-                else
-                {
-                    buttons.Add("Confirm");
-                }
-
-                if (data.ContainsKey("failevent"))
-                {
-                    nextEvent.Add(new List<string>(data["failevent"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
-                    if (data.ContainsKey("failtext"))
-                    {
-                        buttons.Add(data["failtext"]);
-                    }
-                    else
-                    {
-                        buttons.Add("Fail");
-                    }
-                }
             }
 
             // Heros from another event can be hilighted
@@ -755,97 +708,6 @@ public class QuestData
                 }
             }
 
-            // Flags required to trigger (space separated list Depreciated format 0)
-            if (data.ContainsKey("flags"))
-            {
-                string[] flags = data["flags"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in flags)
-                {
-                    if (s.Equals("#2hero"))
-                    {
-                        conditions.Add(new VarOperation("#heroes,==,2"));
-                    }
-                    else if (s.Equals("#3hero"))
-                    {
-                        conditions.Add(new VarOperation("#heroes,==,3"));
-                    }
-                    else if (s.Equals("#4hero"))
-                    {
-                        conditions.Add(new VarOperation("#heroes,==,4"));
-                    }
-                    else if (s.Equals("#5hero"))
-                    {
-                        conditions.Add(new VarOperation("#heroes,==,5"));
-                    }
-                    else
-                    {
-                        if (s[0] == '#')
-                        {
-                            conditions.Add(new VarOperation(s + ",>,0"));
-                        }
-                        else
-                        {
-                            conditions.Add(new VarOperation("flag" + s + ",>,0"));
-                        }
-                    }
-                }
-            }
-
-            // Flags to set (space separated list Depreciated format 0)
-            if (data.ContainsKey("set"))
-            {
-                string[] flags = data["set"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in flags)
-                {
-                    operations.Add(new VarOperation("flag" + s + ",=,1"));
-                }
-            }
-
-            // Flags to clear (space separated list Depreciated format 0)
-            if (data.ContainsKey("clear"))
-            {
-                string[] flags = data["clear"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in flags)
-                {
-                    operations.Add(new VarOperation("flag" + s + ",=,0"));
-                }
-            }
-
-            // Threat modifier (Depreciated format 0)
-            if (data.ContainsKey("threat"))
-            {
-                if (data["threat"].Length != 0)
-                {
-                    float threat = 0;
-                    // '@' at the start makes modifier absolute
-                    if (data["threat"][0].Equals('@'))
-                    {
-                        float.TryParse(data["threat"].Substring(1), out threat);
-                        operations.Add(new VarOperation("threat,=," + threat));
-                    }
-                    else
-                    {
-                        float.TryParse(data["threat"], out threat);
-                        operations.Add(new VarOperation("threat,+," + threat));
-                    }
-                }
-            }
-
-            // Read list of delayed events
-            delayedEvents = new List<DelayedEvent>();
-            if (data.ContainsKey("delayedevents"))
-            {
-                // List is space separated
-                string[] de = data["delayedevents"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in de)
-                {
-                    int delay;
-                    // : separates delay and event name
-                    int.TryParse(s.Substring(0, s.IndexOf(":")), out delay);
-                    string eventName = s.Substring(s.IndexOf(":") + 1);
-                    delayedEvents.Add(new DelayedEvent(delay, eventName));
-                }
-            }
             // Randomise next event setting
             if (data.ContainsKey("randomevents"))
             {
@@ -979,25 +841,6 @@ public class QuestData
             }
             // If component is deleted, trim array
             removeComponents = RemoveFromArray(removeComponents, "");
-
-            // delayed event renamed, create new list and move across
-            List<DelayedEvent> deList = new List<DelayedEvent>();
-            foreach (DelayedEvent de in delayedEvents)
-            {
-                if (de.eventName.Equals(oldName))
-                {
-                    if (newName.Length > 0)
-                    {
-                        deList.Add(new DelayedEvent(de.delay, newName));
-                    }
-                }
-                else
-                {
-                    deList.Add(de);
-                }
-            }
-            // Update list
-            delayedEvents = deList;
         }
 
         // Save event to string (editor)
@@ -1093,17 +936,6 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            // Depreciated
-            if (delayedEvents.Count > 0)
-            {
-                r += "delayedevents=";
-                foreach (DelayedEvent de in delayedEvents)
-                {
-                    r += de.delay + ":" + de.eventName + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-
             if (randomEvents)
             {
                 r += "randomevents=true" + nl;
@@ -1150,30 +982,6 @@ public class QuestData
             override public string ToString()
             {
                 return var + ',' + operation + ',' + value;
-            }
-        }
-
-        // Delayed events have a name and delay value
-        public class DelayedEvent
-        {
-            public string eventName = "";
-            public int delay = 0;
-
-            public DelayedEvent(int d, string e)
-            {
-                delay = d;
-                eventName = e;
-            }
-
-            public DelayedEvent(string data)
-            {
-                int colon = data.IndexOf(":");
-                if (colon == -1)
-                {
-                    return;
-                }
-                int.TryParse(data.Substring(0, colon), out delay);
-                eventName = data.Substring(colon + 1);
             }
         }
     }
@@ -1727,7 +1535,7 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
-        public static int minumumFormat = 0;
+        public static int minumumFormat = 1;
         // Increment during changes, and again at release
         public static int currentFormat = 3;
         public int format = 0;
@@ -1779,8 +1587,7 @@ public class QuestData
                 return false;
             }
 
-            // Default to D2E to support historical quests (Depreciated, format 0)
-            type = "D2E";
+            type = "";
             if (iniData.ContainsKey("type"))
             {
                 type = iniData["type"];

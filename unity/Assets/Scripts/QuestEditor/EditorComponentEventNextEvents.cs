@@ -12,7 +12,6 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     private readonly StringKey QUOTA = new StringKey("val","QUOTA");
     private readonly StringKey BUTTONS = new StringKey("val","BUTTONS");
-    private readonly StringKey DELAYED_EVENTS = new StringKey("val", "DELAYED_EVENTS");
 
     public EditorComponentEventNextEvent(string nameIn) : base()
     {
@@ -133,31 +132,6 @@ public class EditorComponentEventNextEvent : EditorComponent
             offset++;
         }
 
-        if (eventComponent.delayedEvents.Count > 0)
-        {
-            db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), DELAYED_EVENTS, Color.red);
-            db.ApplyTag("editor");
-
-            index = 0;
-            foreach (QuestData.Event.DelayedEvent de in eventComponent.delayedEvents)
-            {
-                int i = index++;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), 
-                    new StringKey(de.delay.ToString(),false));
-                db.AddBorder();
-                db.ApplyTag("editor");
-
-                db = new DialogBox(new Vector2(2, offset), new Vector2(17, 1), 
-                    new StringKey(de.eventName,false));
-                db.AddBorder();
-                db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), 
-                    CommonStringKeys.MINUS, delegate { RemoveDelayedEvent(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-            }
-        }
-        
         if (eventComponent.locationSpecified)
         {
             game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", "editor");
@@ -246,12 +220,6 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void RemoveEvent(int index, int button)
     {
         eventComponent.nextEvent[button - 1].RemoveAt(index);
-        Update();
-    }
-
-    public void RemoveDelayedEvent(int i)
-    {
-        eventComponent.delayedEvents.RemoveAt(i);
         Update();
     }
 }

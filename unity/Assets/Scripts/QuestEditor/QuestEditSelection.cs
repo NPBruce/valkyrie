@@ -365,12 +365,13 @@ public class QuestEditSelection
         {
             Directory.CreateDirectory(targetLocation);
 
-            string[] questData = new string[3];
+            string[] questData = new string[4];
 
             // Create basic quest info
             questData[0] = "[Quest]";
             questData[1] = "name=Editor " + game.gameType.QuestName().Translate() + " " + i;
             questData[2] = "type=" + game.gameType.TypeName();
+            questData[3] = "format=" + QuestData.Quest.currentFormat;
 
             // Write quest file
             File.WriteAllLines(targetLocation + "/quest.ini", questData);

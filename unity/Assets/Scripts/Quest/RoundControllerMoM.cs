@@ -115,19 +115,6 @@ public class RoundControllerMoM : RoundController
             return;
         }
 
-        // Check all delayed events
-        foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
-        {
-            // Is the delay up?
-            if (de.delay == game.quest.round)
-            {
-                // Trigger the event, then return
-                game.quest.delayedEvents.Remove(de);
-                game.quest.eManager.QueueEvent(de.eventName);
-                return;
-            }
-        }
-
         // Finishing the round
         // Clear all investigator activated
         foreach (Quest.Hero h in game.quest.heroes)

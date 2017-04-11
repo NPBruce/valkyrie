@@ -31,9 +31,6 @@ public class Quest
     // Event manager handles the events
     public EventManager eManager;
 
-    // A list of events to be triggered at the end of a later round
-    public List<QuestData.Event.DelayedEvent> delayedEvents;
-
     // List of heros and their status
     public List<Hero> heroes;
 
@@ -77,7 +74,6 @@ public class Quest
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
-        delayedEvents = new List<QuestData.Event.DelayedEvent>();
         undo = new Stack<string>();
         log = new List<LogEntry>();
         monsterSelect = new Dictionary<string, string>();
@@ -295,14 +291,6 @@ public class Quest
             game.cc.maxLimit = true;
             int.TryParse(saveData.Get("Quest", "camxmax"), out game.cc.maxPanX);
             int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
-        }
-
-        // Populate DelayedEvents (depreciated)
-        delayedEvents = new List<QuestData.Event.DelayedEvent>();
-        string[] saveDelayed = saveData.Get("Quest", "DelayedEvents").Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-        foreach (string de in saveDelayed)
-        {
-            delayedEvents.Add(new QuestData.Event.DelayedEvent(de));
         }
 
         // Set static quest data
@@ -687,14 +675,6 @@ public class Quest
             r += "camxmax=" + game.cc.maxPanX + nl;
             r += "camymax=" + game.cc.maxPanY + nl;
         }
-        r += "DelayedEvents=";
-
-        // Delayed events have a delay and a name ':' separated
-        foreach (QuestData.Event.DelayedEvent de in delayedEvents)
-        {
-            r += de.delay + ":" + de.eventName + " ";
-        }
-        r += nl;
 
         r += "[Packs]" + nl;
         foreach (string pack in game.cd.GetLoadedPackIDs())

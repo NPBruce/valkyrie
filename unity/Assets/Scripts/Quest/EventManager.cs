@@ -167,12 +167,6 @@ public class EventManager
         // Remove board components
         game.quest.Remove(e.qEvent.removeComponents);
 
-        // Add delayed events
-        foreach (QuestData.Event.DelayedEvent de in e.qEvent.delayedEvents)
-        {
-            game.quest.delayedEvents.Add(new QuestData.Event.DelayedEvent(de.delay + game.quest.round, de.eventName));
-        }
-
         // Move camera
         if (e.qEvent.locationSpecified)
         {
@@ -293,12 +287,6 @@ public class EventManager
             if (qEvent is PerilData)
             {
                 text = new StringKey(qEvent.text).Translate();
-            }
-
-            // Default door text (depreciated)
-            if (qEvent is QuestData.Door && text.Length == 0)
-            {
-                text = "You can open this door with an \"Open Door\" action.";
             }
 
             // Find and replace rnd:hero with a hero
