@@ -103,8 +103,7 @@ public class MonsterDialogMoM : MonsterDialog
     {
         int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
 
-        DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2),
-            new StringKey((health).ToString(),false), Color.red);
+        DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2), health, Color.red);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -117,8 +116,7 @@ public class MonsterDialogMoM : MonsterDialog
             new TextButton(new Vector2(1f, 9), new Vector2(2, 2), CommonStringKeys.MINUS, delegate { MonsterDamageDec(monster, call); }, Color.red);
         }
 
-        db = new DialogBox(new Vector2(4f, 9), new Vector2(2, 2),
-            new StringKey((monster.damage).ToString(),false), Color.red);
+        db = new DialogBox(new Vector2(4f, 9), new Vector2(2, 2), monster.damage, Color.red);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

@@ -36,6 +36,17 @@
         }
 
         /// <summary>
+        /// Constructor from a dict, key and one parameter
+        /// </summary>
+        /// <param name="dict">dict to lookup</param>
+        /// <param name="newKey">key to translate</param>
+        /// <param name="numberZeroParam">first param for {0} replace</param>
+        public StringKey(string dict, string newKey, int numberZeroNumParam)
+        {
+            key = "{" + dict + ":" + newKey + ":{0}:" + numberZeroNumParam.ToString() + "}";
+        }
+
+        /// <summary>
         /// Constructor with dict and key
         /// </summary>
         /// <param name="dict">dict to lookup</param>
@@ -49,7 +60,7 @@
         /// Check if the StringKey object is a localization key
         /// </summary>
         /// <returns>true if string must be translated</returns>
-        private bool isKey()
+        public bool isKey()
         {
             return key.StartsWith("{") && !key.StartsWith("{rnd:") && !key.StartsWith("{var");
         }

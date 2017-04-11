@@ -23,15 +23,13 @@ public class QuestMonster : MonsterData
             baseObject = game.cd.monsters[qm.baseMonster];
         }
 
-        // TODO: We get only the name inherited from fixed
-        // monsters. It can be edited in next Pull Request
-        // when Valkyrie is translated
-        // Set name
-        name = new StringKey(qm.monsterName, false);
         // If name not set use base type
         if (name.key.Length == 0 && baseObject != null)
         {
             name = baseObject.name;
+        } else
+        {
+            name = qm.monsterName;
         }
 
         // Initialise sets

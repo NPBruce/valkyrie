@@ -77,8 +77,9 @@ public class EditorComponentPuzzle : EditorComponent
             new StringKey("val", "X_COLON", PUZZLE_LEVEL));
         db.ApplyTag("editor");
 
+        // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, 6), new Vector2(2, 1), 
-            puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
+            puzzleComponent.puzzleLevel.ToString(), "", delegate { UpdateLevel(); });
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
@@ -88,8 +89,9 @@ public class EditorComponentPuzzle : EditorComponent
                 new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
             db.ApplyTag("editor");
 
+            // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(2, 1), 
-                puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
+                puzzleComponent.puzzleAltLevel.ToString(), "",delegate { UpdateAltLevel(); });
             altLevelDBE.ApplyTag("editor");
             altLevelDBE.AddBorder();
 
@@ -153,13 +155,13 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void UpdateLevel()
     {
-        int.TryParse(levelDBE.uiInput.text, out puzzleComponent.puzzleLevel);
+        int.TryParse(levelDBE.Text, out puzzleComponent.puzzleLevel);
         Update();
     }
 
     public void UpdateAltLevel()
     {
-        int.TryParse(altLevelDBE.uiInput.text, out puzzleComponent.puzzleAltLevel);
+        int.TryParse(altLevelDBE.Text, out puzzleComponent.puzzleAltLevel);
         Update();
     }
     

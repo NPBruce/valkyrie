@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Content;
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 // Next stage button is used by MoM to move between investigators and monsters
@@ -86,14 +85,19 @@ public class LogWindow
         {
             string key = kv.Key;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), new StringKey(key,false), Color.black, Color.white);
+            db = new DialogBox(
+                new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), 
+                new StringKey(key,false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             db.background.transform.parent = scrollArea.transform;
             db.AddBorder();
-
-            DialogBoxEditable dbe = new DialogBoxEditable(new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), kv.Value.ToString(), delegate { UpdateValue(key); }, Color.black, Color.white);
-            dbe.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            dbe.background.transform.parent = scrollArea.transform;
+            // Variables value modify dont need localization
+            DialogBoxEditable dbe = new DialogBoxEditable(
+                new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), 
+                kv.Value.ToString(), 
+                "",
+                delegate { UpdateValue(key); }, Color.black, Color.white);
+            dbe.setMaterialAndBackgroundTransformParent((Material)Resources.Load("Fonts/FontMaterial"),scrollArea.transform);
             dbe.AddBorder();
             valueDBE.Add(key, dbe);
 
@@ -105,7 +109,7 @@ public class LogWindow
     public void UpdateValue(string key)
     {
         float value;
-        float.TryParse(valueDBE[key].uiInput.text, out value);
+        float.TryParse(valueDBE[key].Text, out value);
         Game.Get().quest.vars.SetValue(key, value);
         Destroyer.Dialog();
         Update();

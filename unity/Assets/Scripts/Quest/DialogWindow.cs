@@ -90,7 +90,7 @@ public class DialogWindow {
         {
             int numTmp = num++;
             new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), 
-                new StringKey(eb.label,false), delegate { onButton(numTmp); }, eb.colour);
+                eb.label, delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
 
@@ -118,7 +118,7 @@ public class DialogWindow {
             new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), new StringKey(quota.ToString(),false));
+        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -132,8 +132,9 @@ public class DialogWindow {
         }
 
         // Only one button, action depends on quota
-        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
-            new StringKey(eventData.GetButtons()[0].label,false), delegate { onQuota(); }, Color.white);
+        new TextButton(
+            new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
+            eventData.GetButtons()[0].label, delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
@@ -253,10 +254,10 @@ public class DialogWindow {
 
     public class EventButton
     {
-        public string label = "";
+        public StringKey label = StringKey.NULL;
         public Color colour = Color.white;
 
-        public EventButton(string l)
+        public EventButton(StringKey l)
         {
             label = l;
         }

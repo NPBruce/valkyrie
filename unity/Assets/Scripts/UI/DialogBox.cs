@@ -17,34 +17,90 @@ public class DialogBox {
         background.tag = tag;
     }
 
-    // Create text on the screen
-    // location: position in scale units
-    // size: size in scale units
-    // text: text to display
+    /// <summary>
+    /// Create text on the screen
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="text">localization key to display</param>
     public DialogBox(Vector2 location, Vector2 size, StringKey text)
     {
-        createDialog(location, size, text, Color.white, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text.Translate(), Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
-    // Create text on the screen, as above with
-    // fgColour: color for the text, border if used
+    /// <summary>
+    /// Create text on the screen
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="number">number to display</param>
+    public DialogBox(Vector2 location, Vector2 size, int number)
+    {
+        createDialog(location, size, number.ToString(), Color.white, new Color(0, 0, 0, (float)0.9));
+    }
+
+    /// <summary>
+    /// Create text on the screen, as above with 
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="text">localization key to display</param>
+    /// <param name="fgColour">color for the text, border if used</param>
     public DialogBox(Vector2 location, Vector2 size, StringKey text, Color fgColour)
     {
-        createDialog(location, size, text, fgColour, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text.Translate(), fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
-    // Create text on the screen, as above with
-    // bgColour: color for the background
+    /// <summary>
+    /// Create text on the screen, as above with 
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="number">number to display</param>
+    /// <param name="fgColour">color for the text, border if used</param>
+    public DialogBox(Vector2 location, Vector2 size, int number, Color fgColour)
+    {
+        createDialog(location, size, number.ToString(), fgColour, new Color(0, 0, 0, (float)0.9));
+    }
+
+    /// <summary>
+    /// Create text on the screen, as above with
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="text">localization key to display</param>
+    /// <param name="fgColour">color for the text, border if used</param>
+    /// <param name="bgColour">color for the background</param>
     public DialogBox(Vector2 location, Vector2 size, StringKey text, Color fgColour, Color bgColour)
     {
-        createDialog(location, size, text, fgColour, bgColour);
+        createDialog(location, size, text.Translate(), fgColour, bgColour);
     }
 
-    // Internal function to create the text from constructors
-    void createDialog(Vector2 location, Vector2 size, StringKey textKey, Color fgColour, Color bgColour)
+    /// <summary>
+    /// Create text on the screen, as above with
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="number">localization key to display</param>
+    /// <param name="fgColour">color for the text, border if used</param>
+    /// <param name="bgColour">color for the background</param>
+    public DialogBox(Vector2 location, Vector2 size, int number, Color fgColour, Color bgColour)
+    {
+        createDialog(location, size, number.ToString(), fgColour, bgColour);
+    }
+
+    /// <summary>
+    /// Internal function to create the text from constructors
+    /// </summary>
+    /// <param name="location">position in scale units</param>
+    /// <param name="size">size in scale units</param>
+    /// <param name="text">localization key to display</param>
+    /// <param name="fgColour">color for the text, border if used</param>
+    /// <param name="bgColour">color for the background</param>
+    void createDialog(Vector2 location, Vector2 size, string text, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
-        string objName = textKey.key;
+        string objName = text;
         if (objName.Length > 10)
         {
             objName = objName.Substring(0, 10);
@@ -81,7 +137,7 @@ public class DialogBox {
 
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
         uiText.color = fgColour;
-        uiText.text = textKey.Translate();
+        uiText.text = text;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;

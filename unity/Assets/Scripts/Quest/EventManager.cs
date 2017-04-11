@@ -283,11 +283,7 @@ public class EventManager
         // Get the text to display for the event
         virtual public string GetText()
         {
-            string text = qEvent.text;
-            if (qEvent is PerilData)
-            {
-                text = new StringKey(qEvent.text).Translate();
-            }
+            string text = qEvent.text.Translate();
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
@@ -372,24 +368,24 @@ public class EventManager
 
             if (qEvent is PerilData)
             {
-                foreach (string s in qEvent.buttons)
+                foreach (StringKey s in qEvent.buttons)
                 {
-                    buttons.Add(new DialogWindow.EventButton(new StringKey(s).Translate()));
+                    buttons.Add(new DialogWindow.EventButton(s));
                 }
                 return buttons;
             }
 
-            foreach (string s in qEvent.buttons)
+            foreach (StringKey s in qEvent.buttons)
             {
-                DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(s));
+                DialogWindow.EventButton eb = new DialogWindow.EventButton(s);
                 // Hack for pass/fail color buttons
                 if (qEvent.nextEvent.Count == 2)
                 {
-                    if (buttons.Count == 0 && eb.label.Equals("Pass"))
+                    if (buttons.Count == 0 && eb.label.Equals(CommonStringKeys.PASS))
                     {
                         eb.colour = Color.green;
                     }
-                    if (buttons.Count == 1 && eb.label.Equals("Fail"))
+                    if (buttons.Count == 1 && eb.label.Equals(CommonStringKeys.FAIL))
                     {
                         eb.colour = Color.red;
                     }
@@ -459,14 +455,21 @@ public class EventManager
         }
 
         // Unique monsters can have a special name
-        public string GetUniqueTitle()
+        public StringKey GetUniqueTitle()
         {
             // Default to Master {type}
-            if (qMonster.uniqueTitle.Equals(""))
+            if (qMonster.uniqueTitle.key.Length == 0)
             {
-                return "Master " + cMonster.name;
+                return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
+            } else if (qMonster.uniqueTitle.isKey())
+            {
+                return new StringKey(qMonster.uniqueTitle.key.Replace("}", ":{type}:" + cMonster.name.key));
+            } else
+            {
+                // non key stringkey
+                return new StringKey(qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
             }
-            return qMonster.uniqueTitle.Replace("{type}", cMonster.name.Translate());
+            
         }
     }
 

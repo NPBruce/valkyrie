@@ -82,7 +82,8 @@ public class EditorComponent {
     public void Rename()
     {
         string name = component.sectionName.Substring(component.typeDynamic.Length);
-        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, delegate { RenameFinished(); });
+        //The component name wont be translated but all name relative keys need to be updated
+        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, "",delegate { RenameFinished(); });
         rename.EditText();
     }
 
@@ -110,6 +111,10 @@ public class EditorComponent {
             kv.Value.ChangeReference(component.sectionName, name);
         }
 
+        // Old Localization Entryes need to be renamed? Maybe not
+        // Change all entrys related with old name to key new name
+        //LocalizationRead.scenarioDict.ChangeReference(component.sectionName, name);
+
         // Remove component by old name
         game.quest.qd.components.Remove(component.sectionName);
         game.quest.Remove(component.sectionName);
@@ -119,5 +124,20 @@ public class EditorComponent {
         game.quest.Add(component.sectionName);
         // Reselect with new name
         QuestEditorData.SelectComponent(component.sectionName);
+    }
+
+    /// <summary>
+    /// Updates de dicionary with new text and generates a StringKey element
+    /// </summary>
+    /// <param name="key">key to update/create</param>
+    /// <param name="text">text in current language</param>
+    /// <returns></returns>
+    protected StringKey updateDictionaryTextAndGenKey(string key,string text)
+    {
+        // update or create scenario text in current language
+        LocalizationRead.updateScenarioText(key, text);
+
+        //return the stringkey
+        return new StringKey("qst", key);
     }
 }

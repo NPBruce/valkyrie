@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
+
 
 namespace Assets.Scripts.Content
 {
@@ -71,7 +72,26 @@ namespace Assets.Scripts.Content
         /// <param name="currentKeyValues">line of localization file</param>
         public void Add(EntryI18n currentKeyValues)
         {
-            dict.Add(currentKeyValues.key, currentKeyValues);
+            dict[currentKeyValues.key] = currentKeyValues;
+        }
+
+        /// <summary>
+        /// Add dict entries from another dict merging rawdata
+        /// </summary>
+        /// <param name="dictToCombine"></param>
+        public void Add(DictionaryI18n dictToCombine)
+        {
+            if (dictToCombine != null)
+            {
+                foreach (string key in dictToCombine.dict.Keys)
+                {
+                    dict[key] = dictToCombine.dict[key];
+                }
+
+                int array1OriginalLength = rawDict.Length;
+                System.Array.Resize<string>(ref rawDict, array1OriginalLength + dictToCombine.rawDict.Length);
+                System.Array.Copy(dictToCombine.rawDict, 0, rawDict, array1OriginalLength, dictToCombine.rawDict.Length);
+            }
         }
 
         /// <summary>
@@ -156,13 +176,30 @@ namespace Assets.Scripts.Content
             }
         }
 
+        /// <summary>
+        /// Create entries for every raw data.
+        /// Repeated data will replace so the last
+        /// in the array will persist.
+        /// </summary>
+        public void flushRaw()
+        {
+            foreach(string rawLine in rawDict)
+            {
+                // Process non language list line
+                if (!rawLine.StartsWith("."))
+                {
+                    Add(new EntryI18n(this, rawLine));
+                }
+            }
+        }
+
         public string GetEntry(int pos)
         {
             string r = rawDict[pos];
             int index = pos + 1;
             while(!EntryFinished(r) && index < rawDict.Length)
             {
-                r += Environment.NewLine + rawDict[index++];
+                r += System.Environment.NewLine + rawDict[index++];
             }
             return r;
         }
@@ -195,6 +232,31 @@ namespace Assets.Scripts.Content
             }
 
             return !quote;
+        }
+
+        /// <summary>
+        /// Serialization of dictionary.
+        /// To save Localization.file
+        /// </summary>
+        /// <returns></returns>
+        public List<string> Serialize()
+        {
+            List<string> result = new List<string>();
+
+            // We first generate the languages line
+            result.Add(string.Join(COMMA.ToString(), languages));
+
+            // Force raw data to enter the dictionary
+            flushRaw();
+
+            // and then generate the multilanguage string for each entry
+            foreach(EntryI18n entry in dict.Values)
+            {
+                // Replace real carry returns with the \n text.
+                result.Add(entry.ToString());
+            }
+
+            return result;
         }
     }
 }
