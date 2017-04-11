@@ -174,60 +174,39 @@ public class EditorComponentEventVars : EditorComponent
     {
         HashSet<string> vars = new HashSet<string>();
         HashSet<string> dollarVars = new HashSet<string>();
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
+
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (QuestData.Event.VarOperation op in e.operations)
+                foreach (string s in ExtractVarsFromEvent(e))
                 {
-                    vars.Add(op.var);
-                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+                    if (s[0] != '$')
                     {
-                        if (op.value[0] == '$')
-                        {
-                            dollarVars.Add(op.value);
-                        }
-                        else
-                        {
-                            vars.Add(op.value);
-                        }
-                    }
-                }
-                foreach (QuestData.Event.VarOperation op in e.conditions)
-                {
-                    if (op.var.Length > 0 && op.var[0] != '#')
-                    {
-                        if (op.var[0] == '$')
-                        {
-                            dollarVars.Add(op.var);
-                        }
-                        else
-                        {
-                            vars.Add(op.var);
-                        }
-                    }
-                    if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
-                    {
-                        if (op.value[0] == '$')
-                        {
-                            dollarVars.Add(op.value);
-                        }
-                        else
-                        {
-                            vars.Add(op.value);
-                        }
+                        vars.Add(s);
                     }
                 }
             }
         }
-
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in vars)
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
+        }
+
+
+        foreach (PerilData e in game.cd.perils)
+        {
+            foreach (string s in ExtractVarsFromEvent(e))
+            {
+                if (s[0] == '$')
+                {
+                    dollarVars.Add(s);
+                }
+            }
         }
         foreach (string s in dollarVars)
         {
@@ -235,6 +214,31 @@ public class EditorComponentEventVars : EditorComponent
         }
 
         return list;
+    }
+
+    private HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
+    {
+        HashSet<string> vars = new HashSet<string>();
+        foreach (QuestData.Event.VarOperation op in e.operations)
+        {
+            vars.Add(op.var);
+            if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+            {
+                vars.Add(op.value);
+            }
+        }
+        foreach (QuestData.Event.VarOperation op in e.conditions)
+        {
+            if (op.var.Length > 0 && op.var[0] != '#')
+            {
+                vars.Add(op.var);
+            }
+            if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
+            {
+                vars.Add(op.value);
+            }
+        }
+        return vars;
     }
 
     public void SelectAddOp(bool test = true)
