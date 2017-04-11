@@ -216,7 +216,7 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        quest.morale = count;
+        quest.vars.SetValue("$morale", count);
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }

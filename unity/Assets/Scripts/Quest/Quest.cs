@@ -51,7 +51,6 @@ public class Quest
 
     // game state variables
     public int round = 1;
-    public int morale = 0;
     public MoMPhase phase = MoMPhase.investigator;
 
     // This is true once heros are selected and the quest is started
@@ -268,7 +267,7 @@ public class Quest
 
         // Get state
         int.TryParse(saveData.Get("Quest", "round"), out round);
-        int.TryParse(saveData.Get("Quest", "morale"), out morale);
+
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
         bool horror;
         bool.TryParse(saveData.Get("Quest", "horror"), out horror);
@@ -347,6 +346,14 @@ public class Quest
 
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
+
+        // Compat with depreciated 0.8.7 and earlier save
+        if (saveData.Get("Quest", "morale").Length > 0)
+        {
+            int morale = 0;
+            int.TryParse(saveData.Get("Quest", "morale"), out morale);
+            vars.SetValue("$morale", morale);
+        }
 
         // Set items
         items = new HashSet<string>();
@@ -469,7 +476,10 @@ public class Quest
     public void AdjustMorale(int m, bool delay = false)
     {
         Game game = Game.Get();
-        morale += m;
+        
+        float morale = vars.GetValue("$morale") + m;
+        vars.SetValue("$morale", morale);        
+
         // Test for no morale ending
         if (morale < 0)
         {
@@ -652,7 +662,6 @@ public class Quest
 
         r += "path=" + qd.questPath + nl;
         r += "round=" + round+ nl;
-        r += "morale=" + morale + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
