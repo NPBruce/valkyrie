@@ -1,0 +1,214 @@
+.,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese
+// ICONS
+ICON_SKILL_STRENGTH,,,,,,,,,
+ICON_SKILL_AGILITY,,,,,,,,,
+ICON_SKILL_OBSERVATION,,,,,,,,,
+ICON_SKILL_LORE,,,,,,,,,
+ICON_SKILL_INFLUENCE,,,,,,,,,
+ICON_SKILL_WILL,,,,,,,,,
+ICON_ACTION,,,,,,,,,
+ICON_SUCCESS_RESULT,,,,,,,,,
+ICON_INVESTIGATION_RESULT,,,,,,,,,
+ICON_PRODUCT_MAD00
+ICON_PRODUCT_MAD01,,,,,,,,,
+ICON_PRODUCT_MAD06,,,,,,,,,
+ICON_PRODUCT_MAD09,,,,,,,,,
+ICON_PRODUCT_MAD20,,,,,,,,,
+ICON_PRODUCT_MAD21,,,,,,,,,
+ICON_PRODUCT_MAD22,,,,,,,,,
+ICON_PRODUCT_MAD23,,,,,,,,,
+
+// TEXTS
+
+ABILITY,Ability,Capacidad,,Fähigkeit,Abilità,,,,
+ABOUT,About,Acerca de,,Über Valkyie,Informazioni su,,,,
+ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.","Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.",,"Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen Rechteinhabern.","Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi.",,,,
+ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.","Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.",,"Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.","Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder",,,,
+ACTIONS,Actions,Acciones,,Aktionen,Azioni,,,,
+ACTIVATED,Activated,Activado,,Aktiviert,Attivo,,,,
+ACTIVATION,Activation,Activación,,Aktivierung,Attivazione,,,,
+ACTIVATIONS,Activations,Activaciones,,Aktivierungen,Attivazioni,,,,
+ADD_COMPONENTS,"Add Components:","Añadir Componentes:",,Erweiterungen hinzufügen:,"Aggiunge Contenuti",,,,
+ASSIGN,Assign,Asignar,,Hinzu,Assegna,,,,
+ATTACK,Attack,Atacar,,Angriff,Attacca,,,,
+ATTACK_MESSAGE,Attack Message:,Mensaje Ataca:,,Angriffsmeldung:,Messaggio d'attacco,,,,
+AUDIO,Audio,Audio,,Audio,Audio,,,,
+BACK,Back,Volver,,Zurück,Indietro,,,,
+BASE,Base,Base,,Basis,Base,,,,
+BUTTONS,Buttons,Botones,,Buttons,Pulsanti,,,,
+CAMERA,Camera,Cámara,,Kamera,Camera,,,,
+CANCEL,Cancel,Cancelar,,Abbrechen,Annulla,,,,
+CHOOSE_LANG,Choose Language,Elige Idioma,,Sprache wählen,Lingua,,,,
+CLEAR_FIRE,Clear Fire,Quitar fuego,,Feuer gelöscht,Incendio Estinto,,,,
+COLOR,Colour,Color,,Farbe,Colore,,,,
+COMPONENT_NAME,Component Name:,Nombre del Componente:,,Name der Erweiterung,Contenuto,,,,
+COMPONENT_TO_DELETE,"Component to Delete:","Componente a Eliminar:",,"Zu löschende Erweiterung:","Contenuto da Eliminare",,,,
+CONTENT_IMPORT,Import Content,Importar Contenido,,Importiere Inhalt,Contenuto Importante,,,,
+CONTENT_IMPORTING,Importing...,Importando...,,Importiere...,Importante...,,,,
+CONTENT_REIMPORT,Reimport Content,Reimportar Contenido,,Reimportiere Inhalt,Reimporta Contenuto,,,,
+COPY,Copy,Copiar,,Kopieren,Copia,,,,
+CUSTOM_MONSTER,CustomMonster,Monstruo Personalizado,,Spezial-Monster,Mostro personalizzato,,,,
+D2E_APP_NOT_FOUND,"Unable to locate Road to Legend, install via Steam","Imposible localizar ""Road to Legend"", instalar desde Steam",,"""Road to Legend""-Installation konnte nicht gefunden werden, bitte über Steam installieren","Impossibile trovare "Road of Legend", installato con Steam",,,,
+D2E_HEROES_NAME,Heroes,Héroes,,Helden,Eroi,,,,
+D2E_HERO_NAME,Hero,Héroe,,Held,Eroe,,,,
+D2E_NAME,Descent: Journeys in the Dark Second Edition,Descent: Viaje a las Profundidades Segunda Edición,,Descent 2. Edition: Die Reise ins Dunkel,Descent: Viaggi nelle Tenebre - Seconda Edizione,,,,
+D2E_QUEST_NAME,Quest,Aventura,,Quest,Scenario,,,,
+DEFEATED,Defeated,Derrotado,,Besiegt,Sconfitta,,,,
+DELETE,Delete,Eliminar,,Löschen,Cancella,,,,
+DIALOG,Dialog,Diálogo,,Dialog,Dialogo,,,,
+DOOR,Door,Puerta,,Tür,Porta,,,,
+DOWNLOAD,Download,Descargar,,Download,Scaricamento,,,,
+E,E,E,,E,E,,,,
+EFFECTS,Effects,Efectos,,Auswirkungen,Effetti,,,,
+EMPTY,,,,,,,,,
+END_TURN,End Turn,Fin del Turno,,Letzter Zug,Fine Turno,,,,
+EVADE,Evade,Esquivar,,Ausweichen,Evadi,,,,
+EVENT,Event,Evento,,Ereignis,Evento,,,,
+EXIT,Exit,Salir,,Verlassen,Uscita,,,,
+FINISHED,Finished,Terminado,,Beendet,Fine,,,,
+FIRST,First,Primero,,Erster,Primo,,,,
+FORCE_ACTIVATE,Force Activate,Forzar Activación,,Erzwinge Aktivierung,Attivazione forzata,,,,
+
+HEALTH,Health,Salud,,Ausdauer,Salute,,,,
+HIGHLIGHT,Highlight,Destacar,Markieren,In evidenza,,,,
+HORROR_CHECK,Horror Check,Horror,,Horrortest,Prova di Orrore,,,,
+INDENT,"  {0}","  {0}",,"  {0}","  {0}",,,,
+INFO,Info,Información,,Info,info,,,,
+INFORMATION,Information,Información,,Information,Informazioni,,,,
+INITIAL_MESSAGE,Initial Message:,Mensaje Inicial:,,Eingangstext:,Messaggio iniziale,,,,
+ITEM,Item,Objeto,,Gegenstand,Oggetto,,,,
+KO,KO,KO,,KO,,,,,
+LOAD_QUEST,Load {0},Cargar {0},,Lade {0},Carica {0},,,,
+LOG,Log,Log,,Log,Log,,,,
+MAIN_MENU,Main Menu,Menú Principal,,Hauptmenü,Menu Principale,,,,
+MAX,Max,Max,,Max,Max,,,,
+MAX_CAM,Max Cam,Cam Max,,Kam Max,Cam Max,,,,
+MENU,Menu,Menú,,Menü,Men,Menu,,,
+MIN,Min,Min,,Min,Min,,,,
+MIN_CAM,Min Cam,Cam Min,,Kam Min,Cam Min,,,,
+MOM_APP_NOT_FOUND,"Unable to locate Mansions of Madness, install via Steam","Imposible localizar ""Mansions of Madness"", instalar desde Steam,,"""Villen des Wahnsinns""-Installation konnte nicht gefunden werden, bitte über Steam installieren","Impossibile trovare "Le Case della Follia", installato con Steam",,,,
+MOM_HEROES_NAME,Investigators,Investigadores,,Ermittler,Investigatori,,,,
+MOM_HERO_NAME,Investigator,Investigador,,Ermittler,Investigatore,,,,
+MOM_NAME,Mansions of Madness Second Edition,Las Mansiones de la Locura: Segunda Edición,,Villen des Wahnsinns: 2. Edition,Le Case della Follia Seconda Edizione,,,,
+MOM_QUEST_NAME,Scenario,Escenario,,Scenario,Scenario,,,,
+MONSTER,Monster,Monstruo,,Monster,Mostro,,,,
+MONSTER_ATTACKS,The monster attacks.,El monstruo ataca.,,Das Monster greift an.,Il mostro attacca,,,,
+MONSTER_MASTER,Master,Maestro,,Elite,Maggiore,,,,
+MONSTER_MINION,Minion,Esbirro,,Minion,Minore,,,,
+MONSTER_NORMAL,Normal,Normal,,Normal,Normale,,,,
+
+MONSTER_UNIQUE,Unique,Único,,Unique,Unico,,,,
+MOVES,Moves,Movimientos,,Züge,Movimenti,,,,
+MPLACE,MPlace,Posición,,MPosition,Posizione,,,,
+MUSIC,Music,Música,,Musik,Musica,,,,
+NAME,Name,Nombre,,Name,Nome,,,,
+NEW,New,Nuevo,,Neu,Nuovo,,,,
+
+NEXT_EVENTS,Next Events,Siguientes Eventos,,Nächstes Ereignis,Evento Successivo,,,,
+NOT_FIRST,Not First,No Primero,,Nicht zuerst,Non Primo,,,,
+NO_ATTACK_MESSAGE,No Attack Message:,Mensaje no Ataca:,,Kein-Angriff-Meldung:,Messaggio,,,,
+
+NUMBER,Number,Número,,Nummer,Numero,,,,
+NUMBER_HEROS,{0} Heros:,{0} Héroes:,,{0} Helden:,{0} Eroi:,,,,
+OK,Ok,Ok,,Ok,Ok,,,,
+OP,Op,Operador,,Op,Opera,,,,
+OPTIONS,Options,Opciones,,Optionen,Opzioni,,,,
+PLACEMENT,Placement,Colocación,,Platzierung,Posizione,,,,
+
+PLACE_IMG,Place Img:,Poner Img:,,Platz. Bild:,Posiziona Img:,,,,
+POOL_TRAITS,Pool Traits:,Atributos Posibles:,,Poolmerkmale:,Tratti Pubblici,,,,
+POSITION,Position,Posición,,Position,Posizione,,,,
+POSITION_TYPE_HIGHLIGHT,Highlight,Destacado,,Markieren,Evidenzia,,,,
+POSITION_TYPE_UNUSED,Unused,No Usado,,Unbenutzt,Inutilizzato,,,,
+PUZZLE,Puzzle,Puzzle,,Puzzle,Puzzle,,,,
+PUZZLE_ALT_LEVEL,Alt Level,Dificultad Alt.,,Schwierigkeit,Difficoltà,,,,
+PUZZLE_CLASS,Class,Tipo,,Klasse,Tipo,,,,
+PUZZLE_CLASS_SELECT,Select Class,Escoger Tipo,,Klasse wählen,Seleziona Tipo,,,,
+IMAGE,Image,Imagen,,Bild,Immagine,,,,
+
+PUZZLE_LEVEL,Level,Dificultad,,Level,Difficoltà,,,,
+PUZZLE_SELECT_IMAGE,Select Image,Escoger Imagen,,Bild wählen,Seleziona Immagine,,,,
+PUZZLE_SELECT_SKILL,Select Skill,Escoger Habilidad,,Fähigkeit wählen,Seleziona Abilità,,,,
+PUZZLE_IMAGE_CLASS,image,mosaico,,bild,mosaico,,,,
+PUZZLE_CODE_CLASS,code,código,,code,codice,,,,
+PUZZLE_SLIDE_CLASS,slide,mecanismo,,schieberaetsel,meccanismo,,,,
+QUEST,Quest,Escenario,,Quest,Scenario,,,,
+QUEST_NAME_DOWNLOAD,Download {0},Descargar {0},,Download {0},Scarica {0},,,, 
+QUEST_NAME_EDITOR,{0} Editor,Editar {0},,{0}-Editor,{0} Editor,,,, 
+QUEST_NAME_UPDATE,"  [Update] {0}","  [Actualizar] {0}",,"  [Update] {0}","  [Aggiorna] {0}",,,,
+QUOTA,Quota,Cuota,,Quote,Quota,,,,
+RECOVER,Recover,Recupear,,Erholen,Recupera,,,,
+
+RELOAD,Reload,Recargar,,Aktualisieren,Ricarica,,,,
+REMOVE_COMPONENTS,"Remove Components:","Eliminar Componentes:",,"Erweiterungen entfernen:","Rimuovi Componente",,,,
+REQUIRED_EXPANSIONS,Required Expansions:,Expansiones Requeridas:,,Erforderliche Erweiterungen:,Espansioni Richieste:,,,,
+REQUIRES_EXPANSION," Requires:  {0}"," Requiere: {0}",," Benötigt:  {0}"," Richieste: {0}",,,,
+
+REQ_TRAITS,Req. Traits:,Atributos Req.:,,Ben. Fähigk.:,Tratti Richiesti:,,,,
+RESET,Reset,Restablecer,,Zurücksetzen,Reset,,,,
+ROTATE_TO,"Rotate: {0}","Rotar: {0}",,"Rotiere: {0}","Rotazione: {0}",,,,, 
+ROTATION,"Rotation ({0})","Rotación ({0})",,"Rotation ({0})","Rotazione ({0})",,,, 
+SAVE,Save,Guardar,,Speichern,Salva,,,,
+SELECT,Select {0},Selección de {0},,{0} ausgewählt,Seleziona {0},,,,
+SELECTION,Selection,Selección,,Auswahl,Selezione,,,,
+SELECT_CONTENT,Select Content,Mi Colección,,Inhalt wählen,Seleziona Contenuto,,,,
+SELECT_EXPANSION,Select Expansion Content,Elige Colección de Expansiones,,Erweiterungsinhalt auswählen,Seleziona Espansione,,,,
+SELECT_ITEM,Select Item,Escoger Elemento,,Gegenstand auswählen,Seleziona Oggetto,,,,
+SELECT_PACK,Select Pack,Selección de Paquetes,,Paket auswählen,Seleziona Pacchetto,,,,
+SELECT_TO_COPY,Select {0} To Copy,Selección de {0} a Copiar,,{0} zum Kopieren ausgewählt,Selezione {0} da Copiare,,,,
+SELECT_TO_DELETE,Select {0} To Delete,Selección de {0} a Eliminar,,{0} zur Löschung ausgewählt,Selezione {0} da Cancellare,,,,,
+SET,Set,Cambiar,,Setze,Set,,,,
+SKILL,Skill,Atributo,,Fähigkeit,Abilità,,,,
+SPAWN,Spawn,Generar,,Spawn,Genera,,,,
+STARTING_ITEM,Starting Items,Equipo Inicial,,Startgegenstände,Oggetti Iniziali,,,,
+START_QUEST,Start {0},Iniciar {0},,Starte {0},Inizio {0},,,,
+
+TESTS,Tests,Tests,,Tests,Prove,,,,
+TILE,Tile,Tablero,,Teil,Tessera,,,,
+
+TOKEN,Token,Marcador,,Marker,Segnalino,,,,
+TOTAL_MOVES,Total Moves,Total Movims.,,Züge (insgesamt),Movimento Totale,,,,
+TRAITS,Traits,Atributos,,Fertigkeiten,Tratti,,,,
+TRIGGER,Trigger,Activador,,Auslöser,Attivatore,,,,
+TYPE,Type,Tipo,,Typ,Tipo,,,,
+TYPES,Types,Tipos,,Typen,Tipi,,,,
+UNABLE_BUTTON,Unable Button:,Botón No Puede:,,Unmöglich-Button:,Pulsante Disabilitato:,,,,
+
+UNDO,Undo,Deshacer,,Rückgängig,Indietro,,,,
+UNIQUE_DEFEATED,Unique\nDefeated,Único\nDerrotado,,Unique\nBesiegt,Unico\nSconfitta,,,,
+UNIQUE_INFO,Unique Information,Información de Único,,Unique-Information,Unica Informazione,,,,
+UNIQUE_MONSTER,Unique Monster,Monstruo Único,,Unique-Monster,Mostro Unico,,,,
+UNIQUE_TITLE,Unique Title,Título de Único,,Unique-Titel,Titolo Unico,,,,
+UNUSED,Unused,No Usado,,Unbenutzt,Non Usato,,,,
+VALUE,Value,Valor,,Wert,Valore,,,,
+VAR,Var,Variable,,Var,Var,,,,
+VARS,Vars,Vars,,Vars,Vars,,,,
+VAR_NAME,Var Name:,Nombre Variable:,,Var-Name:,Var Nome:,,,,
+X_ACTIVATED,{0} Activated,{0} Activado,,{0} aktiviert,Attivo,{0},,,,
+X_COLON,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:
+
+//Inherited from FFG localization files
+SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
+INVESTIGATOR_ELIMINATED,Investigator Eliminated,Investigador eliminado,Investigateur éliminé,Ermittler ausgeschieden,Investigatore Eliminato,Investigador Eliminado,Wyeliminowano badacza,探索者の死亡,調查員被消滅
+CLOSE,Close,Cerrar,Fermer,Schließen,Chiudi,Fechar,Zamknij,閉じる,關閉
+PUZZLE_GUESS,Guess,Resolver,Proposer,Raten,Indovina,Tentar,Sprawdź,入力,猜測
+
+UP,Up,Arriba,Haut,Oben,Su,Para Cima,Góra,上,上
+DOWN,Down,Abajo,Bas,Unten,Giù,Para Baixo,Dół,下,下
+LEFT,Left,Izquierda,Gauche,Links,Sinistra,Para a Esquerda,Lewo,左,左
+RIGHT,Right,Derecha,Droite,Rechts,Destra,Para a Direita,Prawo,右,右
+
+PHASE_INVESTIGATOR,Investigator Phase,Fase de los Investigadores,Phase d'Investigateur,Ermittlerphase,Fase Degli Investigatori,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
+PHASE_MYTHOS,Mythos Phase,Fase de Mitos,Phase de Mythe,Mythosphase,Fase Dei Miti,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
+MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
+HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
+END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟
+
+ATTACK_PROMPT,What type of weapon will you attack with?,¿Con qué tipo de arma vas a atacar?,Avec quel type d’arme allez-vous attaquer ?,Mit welcher Art von Waffe willst du angreifen?,Con quale tipo di arma vuoi attaccare?,Com que tipo de arma você quer atacar?,Jakim rodzajem broni atakujesz?,どの種類の武器で攻撃しますか？,你想在攻擊時使用哪種類型的武器？
+ATTACK_WITH_HEAVY_WEAPON, Attack with a [i]Heavy Weapon[/i], Atacar con un [i]Arma pesada[/i], Attaquer avec une [i]Arme Lourde[/i], Mit einer [i]schweren Waffe[/i] angreifen, Attacca con un’[i]Arma Pesante[/i], Atacar com uma [i]Arma Pesada[/i], Atak [i]Ciężką bronią[/i], [i]大型武器[/i]で攻撃, 使用重型武器攻擊
+ATTACK_WITH_BLADED_WEAPON, Attack with a [i]Bladed Weapon[/i], Atacar con un [i]Arma de filo[/i], Attaquer avec une [i]Arme Tranchante[/i], Mit einer [i]Klingenwaffe[/i] angreifen, Attacca con un’[i]Arma da Taglio[/i], Atacar com uma [i]Arma Branca[/i], Atak [i]Bronią sieczną[/i], [i]鋭利武器[/i]で攻撃, 使用銳器攻擊
+ATTACK_WITH_FIREARM, Attack with a [i]Firearm[/i], Atacar con un [i]Arma de fuego[/i], Attaquer avec une [i]Arme à feu[/i], Mit einer [i]Schusswaffe[/i] angreifen, Attacca con un’[i]Arma da Fuoco[/i], Atacar com uma [i]Arma de Fogo[/i], Atak [i]Bronią palną[/i], [i]銃火器[/i]で攻撃, 使用槍械攻擊
+ATTACK_WITH_SPELL, Attack with a Spell, Atacar con un Hechizo, Attaquer avec un Sort, Mit einem Zauber angreifen, Attacca con un Incantesimo, Atacar com um Feitiço, Atak Zaklęciem, 呪文で攻撃, 使用法術攻擊
+ATTACK_WITH_UNARMED, Attack Unarmed, Atacar sin arma, Attaquer à mains nues, Unbewaffnet angreifen, Attacca Senza Armi, Atacar Desarmado, Atak bez broni, 素手で攻撃, 徒手攻擊
+
+ACTION_X, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}
