@@ -1,9 +1,32 @@
+PreRelease:
 1: Update version number
 2: Update questdata version (if required)
-3: Build (unity)
-4: build.bat
-5: Test
-6: Merge to master
+3: build1.bat
+4: Build (unity)
+5: build2.bat
+6: Test
+7: Tag
+9: Write changelog
+10: Release
+
+Stable Release:
+1: Merge to master from PreRelease tag
+2: Update version number
+3: build1.bat
+4: Build (unity)
+5: build2.bat
+6: Tag
+7: Write changelog
+8: Release
+
+Bugfix Release:
+1: Merge to master from fix branch
+2: Update questdata version (if required)
+2: Update version number
+3: build1.bat
+4: Build (unity)
+5: build2.bat
+6: Test
 7: Tag
 8: Write changelog
 9: Release

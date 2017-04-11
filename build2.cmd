@@ -1,12 +1,3 @@
-rem cleanup
-rmdir /s /q build\batch
-rmdir /s /q build\batchMac
-
-rem create base structure
-mkdir build
-mkdir build\batch
-mkdir build\batchMac
-
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
 copy NOTICE build\batch\NOTICE.txt
@@ -34,11 +25,6 @@ rem copy over windows build
 xcopy /E /Y build\win build\batch
 rem copy over macos build
 xcopy /E /Y build\macos build\batchMac
-
-rem I clean macos because I don't trust unity
-rmdir /s /q build\macos
-mkdir build\macos
-mkdir build\macos\Valkyrie.app
 
 rem read build version
 set /p version=<Assets\Resources\version.txt
