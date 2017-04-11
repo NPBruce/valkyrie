@@ -50,7 +50,6 @@ public class Quest
     public Dictionary<string, string> monsterSelect;
 
     // game state variables
-    public int round = 1;
     public MoMPhase phase = MoMPhase.investigator;
 
     // This is true once heros are selected and the quest is started
@@ -101,6 +100,7 @@ public class Quest
                 vars.SetValue("#" + s, 1);
             }
         }
+        vars.SetValue("#round", 1);
     }
 
 
@@ -266,8 +266,6 @@ public class Quest
         game.quest = this;
 
         // Get state
-        int.TryParse(saveData.Get("Quest", "round"), out round);
-
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
         bool horror;
         bool.TryParse(saveData.Get("Quest", "horror"), out horror);
@@ -353,6 +351,12 @@ public class Quest
             int morale = 0;
             int.TryParse(saveData.Get("Quest", "morale"), out morale);
             vars.SetValue("$morale", morale);
+        }
+        if (saveData.Get("Quest", "round").Length > 0)
+        {
+            int round = 0;
+            int.TryParse(saveData.Get("Quest", "round"), out round);
+            vars.SetValue("$round", round);
         }
 
         // Set items
@@ -661,7 +665,6 @@ public class Quest
         r += "valkyrie=" + game.version + nl;
 
         r += "path=" + qd.questPath + nl;
-        r += "round=" + round+ nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;

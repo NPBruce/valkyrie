@@ -260,7 +260,8 @@ public class RoundController {
         // Queue end of all round events
         game.quest.eManager.EventTriggerType("EndRound", false);
         // Queue end of this round events (depriciated)
-        game.quest.eManager.EventTriggerType("EndRound" + game.quest.round, false);
+        int round = Mathf.RoundToInt(game.quest.var.GetValue("#round"));
+        game.quest.eManager.EventTriggerType("EndRound" + round, false);
 
         if (game.quest.vars.GetValue("#eliminatedprev") > 0)
         {
@@ -291,18 +292,6 @@ public class RoundController {
 
         if (!activationsFinished) return;
 
-        // Check for delayed events (depreciated)
-        foreach (QuestData.Event.DelayedEvent de in game.quest.delayedEvents)
-        {
-            if (de.delay == game.quest.round)
-            {
-                // Trigger delayed event
-                game.quest.delayedEvents.Remove(de);
-                game.quest.eManager.QueueEvent(de.eventName);
-                return;
-            }
-        }
-
         // Clean up for next round
         activationsFinished = false;
         // Clear hero activations
@@ -320,9 +309,8 @@ public class RoundController {
         }
 
         // Increment the round
-        game.quest.round++;
-
-        game.quest.vars.SetValue("#round", game.quest.round);
+        int round = Mathf.RoundToInt(game.quest.var.GetValue("#round")) + 1;
+        game.quest.vars.SetValue("#round", round);
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
