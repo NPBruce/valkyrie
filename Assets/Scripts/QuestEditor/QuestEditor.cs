@@ -77,11 +77,11 @@ public class QuestEditor {
         try
         {
             string ini_file = content.ToString();
-            List<string> localization_file = null;
             File.WriteAllText(game.quest.qd.questPath, ini_file);
             if (LocalizationRead.scenarioDict != null)
             {
-                localization_file = LocalizationRead.scenarioDict.Serialize();
+                List<string> localization_file = LocalizationRead.scenarioDict.Serialize();
+
                 removeUnusedStringKeys(localization_file, ini_file);
 
                 File.WriteAllText(
