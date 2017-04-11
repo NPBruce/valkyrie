@@ -194,7 +194,7 @@ namespace Assets.Scripts.UI.Screens
 
             string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
             // For now, English and Spanish languages available.
-            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,Italian,German".Split(','));
+            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
