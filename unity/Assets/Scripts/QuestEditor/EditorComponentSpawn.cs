@@ -141,7 +141,7 @@ public class EditorComponentSpawn : EditorComponent
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(12, 21 + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTypeAdd(mSlot + 1); }, Color.green);
+                tb = new TextButton(new Vector2(12, 21 + i), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTypeAdd(mSlot + 1); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
