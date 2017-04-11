@@ -1202,6 +1202,11 @@ public class Quest
             }
         }
 
+        public int GetHealth()
+        {
+            int health = Mathf.RoundToInt(monsterData.health + (Game.Get().quest.GetHeroCount() * monsterData.health));
+        }
+
         // Activation instance is requresd to track variables in the activation
         public class ActivationInstance
         {

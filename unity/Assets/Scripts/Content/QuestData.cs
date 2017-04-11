@@ -1232,7 +1232,8 @@ public class QuestData
         public string[] activations;
         public string[] traits;
         public string path = "";
-        public int health = 0;
+        public float healthBase = 0;
+        public float healthPerHero = 0;
         public bool healthDefined = false;
 
         // Create new with name (editor)
@@ -1292,7 +1293,12 @@ public class QuestData
             if (data.ContainsKey("health"))
             {
                 healthDefined = true;
-                int.TryParse(data["health"], out health);
+                float.TryParse(data["health"], out healthBase);
+            }
+            if (data.ContainsKey("healthperhero"))
+            {
+                healthDefined = true;
+                float.TryParse(data["heahealthperherolth"], out healthPerHero);
             }
         }
 
@@ -1362,7 +1368,8 @@ public class QuestData
             }
             if (healthDefined)
             {
-                r += "health=" + health.ToString() + nl;
+                r += "health=" + healthBase.ToString() + nl;
+                r += "health=" + healthPerHero.ToString() + nl;
             }
             return r;
         }

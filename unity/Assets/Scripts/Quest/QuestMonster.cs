@@ -84,10 +84,12 @@ public class QuestMonster : MonsterData
             useMonsterTypeActivations = true;
         }
 
-        health = qm.health;
+        healthBase = qm.healthBase;
+        healthPerHero = qm.healthPerHero;
         if (!qm.healthDefined && baseObject != null)
         {
-            health = baseObject.health;
+            healthBase = baseObject.healthBase;
+            healthPerHero = baseObject.healthPerHero;
         }
     }
 }

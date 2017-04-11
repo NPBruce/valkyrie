@@ -43,8 +43,7 @@ public class MonsterDialogMoM : MonsterDialog
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2),
                 new StringKey("val","ACTION_X",ATTACK), delegate { Attack(); });
             new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), EVADE, delegate { Evade(); });
-            int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-            if (monster.damage == health)
+            if (monster.damage == monster.GetHealth())
             {
                 new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { ; }, Color.gray);
             }
@@ -101,10 +100,8 @@ public class MonsterDialogMoM : MonsterDialog
 
     public static void DrawMonsterHealth(Quest.Monster monster, UnityEngine.Events.UnityAction call)
     {
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-
         DialogBox db = new DialogBox(new Vector2(0.2f, 0.2f), new Vector2(2, 2),
-            new StringKey((health).ToString(),false), Color.red);
+            new StringKey(monster.GetHealth().ToString(),false), Color.red);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -122,7 +119,7 @@ public class MonsterDialogMoM : MonsterDialog
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
-        if (monster.damage == health)
+        if (monster.damage == monster.GetHealth())
         {
             new TextButton(new Vector2(7f, 9), new Vector2(2, 2), CommonStringKeys.PLUS, delegate { MonsterDamageInc(monster, call); }, Color.grey);
             new TextButton(new Vector2(2, 11.5f), new Vector2(6, 2), DEFEATED, delegate { Defeated(monster); }, Color.red);
@@ -167,10 +164,9 @@ public class MonsterDialogMoM : MonsterDialog
     public static void MonsterDamageInc(Quest.Monster monster, UnityEngine.Events.UnityAction call)
     {
         monster.damage += 1;
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-        if (monster.damage > health)
+        if (monster.damage > monster.GetHealth())
         {
-            monster.damage = health;
+            monster.damage = monster.GetHealth();
         }
         call();
     }
