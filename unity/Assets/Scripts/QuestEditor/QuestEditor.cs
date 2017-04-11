@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts.Content;
 using System.Collections.Generic;
 using ValkyrieTools;
+using System.IO;
+using System.Text;
 
 // Quest editor static helper class
 public class QuestEditor {
