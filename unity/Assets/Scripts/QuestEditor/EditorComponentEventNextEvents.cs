@@ -164,19 +164,8 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void AddButton(int number)
     {
         eventComponent.nextEvent.Insert(number, new List<string>());
-        if (eventComponent.nextEvent.Count == 1)
-        {
-            eventComponent.buttons.Add("Confirm");
-        }
-        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals("Confirm"))
-        {
-            eventComponent.buttons[0] = "Pass";
-            eventComponent.buttons.Add("Fail");
-        }
-        else
-        {
-            eventComponent.buttons.Insert(number, "Button " + (number + 1));
-        }
+        eventComponent.buttons.Insert(number, "Button " + (number + 1));
+        eventComponent.buttonColors.Insert(number, "white");
         Update();
     }
 

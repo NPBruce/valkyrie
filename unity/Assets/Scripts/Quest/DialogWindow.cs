@@ -87,8 +87,8 @@ public class DialogWindow {
             if (length > buttonWidth)
             {
                 buttonWidth = length;
-                hOffset = UIScaler.GetHCenter(length / 2);
-                hOffsetCancel = UIScaler.GetHCenter(length / 2);
+                hOffset = UIScaler.GetHCenter(-length / 2);
+                hOffsetCancel = UIScaler.GetHCenter(-4);
                 offsetCancel = offset + (2.5f * buttons.Count);
             }
             db.Destroy();
