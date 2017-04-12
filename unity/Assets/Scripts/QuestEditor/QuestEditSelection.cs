@@ -369,16 +369,42 @@ public class QuestEditSelection
         {
             Directory.CreateDirectory(targetLocation);
 
-            string[] questData = new string[4];
+            string[] questData = new string[9];
+
+            string uid = QuestData.Quest.genUid();
+            string key = "name-" + uid;
+            StringKey nameKey = new StringKey("qst", key);
 
             // Create basic quest info
             questData[0] = "[Quest]";
-            questData[1] = "name=Editor " + game.gameType.QuestName().Translate() + " " + i;
-            questData[2] = "type=" + game.gameType.TypeName();
-            questData[3] = "format=" + QuestData.Quest.currentFormat;
+            questData[1] = "uid=" + uid ;
+            questData[2] = "name=" + nameKey.key;
+            questData[3] = "type=" + game.gameType.TypeName();
+            questData[4] = "format=" + QuestData.Quest.currentFormat;
+            questData[5] = "currentlanguage=" + game.currentLang;
+            questData[6] = "";
+            questData[7] = "[QuestText]";
+            questData[8] = "Localization.txt";
 
             // Write quest file
             File.WriteAllLines(targetLocation + "/quest.ini", questData);
+
+            // Create new dictionary
+            DictionaryI18n newScenarioDict = new DictionaryI18n(
+            new string[1] { DictionaryI18n.FFG_LANGS }, game.currentLang, game.currentLang);
+
+            // Add quest name to dictionary
+            EntryI18n nameEntry = new EntryI18n(key,newScenarioDict);
+            nameEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i;
+            newScenarioDict.Add(nameEntry);
+
+            // Generate localization file
+            List<string> localization_file = newScenarioDict.Serialize();
+
+            // Write localization file
+            File.WriteAllText(
+                targetLocation + "/Localization.txt",
+                string.Join(System.Environment.NewLine, localization_file.ToArray()));
         }
         catch (System.Exception e)
         {

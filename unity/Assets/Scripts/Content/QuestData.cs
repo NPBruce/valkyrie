@@ -1645,8 +1645,10 @@ public class QuestData
         public string[] packs;
         // Default language for the text
         public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
+        // unique id
+        private string uid = "";
 
-        public string name_key { get { return "quest.name"; } }
+        public string name_key { get { return "name-" + uid; } }
         public string description_key { get { return "quest.description"; } }
 
         // Create from path
@@ -1663,9 +1665,22 @@ public class QuestData
             valid = Populate(iniData);
         }
 
-        // Create from ini data
+        /// <summary>
+        /// Create from ini data
+        /// </summary>
+        /// <param name="iniData">ini data to populate quest</param>
+        /// <returns>true if the quest is valid</returns>
         public bool Populate(Dictionary<string, string> iniData)
         {
+            if (iniData.ContainsKey("uid"))
+            {
+                uid = iniData["uid"];
+            } else
+            {
+                // if there is no uid, we generate one
+                uid = genUid();
+            }
+
             if (iniData.ContainsKey("format"))
             {
                 int.TryParse(iniData["format"], out format);
@@ -1704,12 +1719,29 @@ public class QuestData
                 packs = new string[0];
             }
 
-            if (iniData.ContainsKey("defaultLanguage"))
+            if (iniData.ContainsKey("defaultlanguage"))
             {
-                defaultLanguage = iniData["defaultLanguage"];
+                defaultLanguage = iniData["defaultlanguage"];
             }            
 
             return true;
+        }
+
+        private const int UID_LEN = 15;
+        private static readonly char[] CHAR_RANGE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+        /// <summary>
+        /// Generate a unique ID for each Quest
+        /// </summary>
+        /// <returns>unique ID of desired lenght</returns>
+        public static string genUid()
+        {
+            StringBuilder code = new StringBuilder(15);
+            while (code.Length < UID_LEN)
+            {
+                code.Append(CHAR_RANGE[Random.Range(0, CHAR_RANGE.Length)]);
+            }
+            return code.ToString();
         }
 
         // Save to string (editor)
@@ -1718,11 +1750,12 @@ public class QuestData
             string nl = System.Environment.NewLine;
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
+            r.Append("uid=").AppendLine(uid);
             r.Append("format=").AppendLine(currentFormat.ToString());
             r.Append("name=").AppendLine(name.key);
             r.Append("description=").AppendLine(description.key);
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
-            r.Append("defaultLanguage=").AppendLine(defaultLanguage);
+            r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)
             {
                 r.Append("packs=");
