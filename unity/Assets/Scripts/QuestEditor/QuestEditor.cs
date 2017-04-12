@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts.Content;
 using System.Collections.Generic;
 using ValkyrieTools;
+using System.IO;
+using System.Text;
 
 // Quest editor static helper class
 public class QuestEditor {
@@ -105,7 +107,7 @@ public class QuestEditor {
     public static void removeUnusedStringKeys(List<string> localization_file, string ini_file)
     {
         // Search each line except first one
-        for (int pos = localization_file.Count - 1; pos > 1; pos--)
+        for (int pos = localization_file.Count - 1; pos > 0; pos--)
         {
             string key = "{qst:" + localization_file[pos].Split(',')[0] + "}";
             if (!ini_file.Contains(key))

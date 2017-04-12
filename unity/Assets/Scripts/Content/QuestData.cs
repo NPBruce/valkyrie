@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
 // Class to manage all static data for the current quest
 public class QuestData
 {
+    public static readonly StringKey EVENT_DOOR_DEFAULT_TEXT = new StringKey("val", "EVENT_DOOR_DEFAULT_TEXT");
+
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
 
@@ -1724,7 +1726,6 @@ public class QuestData
             if (packs.Length > 0)
             {
                 r.Append("packs=");
-                bool first = true;
                 r.AppendLine(string.Join(" ", packs));
             }
             r.AppendLine().AppendLine("[QuestText]").AppendLine("Localization.txt");

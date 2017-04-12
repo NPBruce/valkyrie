@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using Assets.Scripts.Content;
 using ValkyrieTools;
 
 // Class to manage all data for the current quest
