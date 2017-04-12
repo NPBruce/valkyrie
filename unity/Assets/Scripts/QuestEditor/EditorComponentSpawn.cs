@@ -12,6 +12,8 @@ public class EditorComponentSpawn : EditorComponent
 
     private readonly StringKey UNIQUE_TITLE = new StringKey("val", "UNIQUE_TITLE");
     private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");
+    private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
+    private readonly StringKey HEALTH_HERO = new StringKey("val", "HEALTH_HERO");
     private readonly StringKey TYPES = new StringKey("val", "TYPES");
     
     private readonly StringKey REQ_TRAITS = new StringKey("val", "REQ_TRAITS");
@@ -233,13 +235,13 @@ public class EditorComponentSpawn : EditorComponent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.uiInput.text, ut monsterComponent.uniqueHealthBase);
+        float.TryParse(healthDBE.uiInput.text, out monsterComponent.uniqueHealthBase);
         Update();
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.uiInput.text, ut monsterComponent.uniqueHealthHero);
+        float.TryParse(healthHeroDBE.uiInput.text, out monsterComponent.uniqueHealthHero);
         Update();
     }
 

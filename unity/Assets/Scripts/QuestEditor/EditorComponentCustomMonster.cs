@@ -171,7 +171,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
             healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(3, 1), 
-            monsterComponent.health.ToString(), delegate { UpdateHealth(); });
+            monsterComponent.healthBase.ToString(), delegate { UpdateHealth(); });
             healthDBE.ApplyTag("editor");
             healthDBE.AddBorder();
 
@@ -447,7 +447,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.uiInput.text, out monsterComponent.health);
+        float.TryParse(healthDBE.uiInput.text, out monsterComponent.healthBase);
     }
 
     public void UpdateHealthHero()
@@ -457,16 +457,16 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void ClearHealth()
     {
-        monsterComponent.health = 0;
-        monsterComponent.healthHero = 0;
+        monsterComponent.healthBase = 0;
+        monsterComponent.healthPerHero = 0;
         monsterComponent.healthDefined = false;
         Update();
     }
 
     public void SetHealth()
     {
-        monsterComponent.health = 0;
-        monsterComponent.healthHero = 0;
+        monsterComponent.healthBase = 0;
+        monsterComponent.healthPerHero = 0;
         monsterComponent.healthDefined = true;
         Update();
     }

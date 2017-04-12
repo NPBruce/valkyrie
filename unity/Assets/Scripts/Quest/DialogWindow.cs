@@ -81,7 +81,7 @@ public class DialogWindow {
         foreach (EventButton eb in buttons)
         {
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset),
-                new StringKey(eb.label,false), delegate { onButton(numTmp); });
+                new StringKey(eb.label,false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
             if (length > buttonWidth)
@@ -98,7 +98,7 @@ public class DialogWindow {
         foreach (EventButton eb in buttons)
         {
             int numTmp = num++;
-            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), 
+            new TextButton(new Vector2(hOffset, offset), new Vector2(buttonWidth, 2), 
                 new StringKey(eb.label,false), delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
@@ -272,7 +272,7 @@ public class DialogWindow {
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
+                Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
             }
 
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)

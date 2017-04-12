@@ -371,15 +371,16 @@ public class EventManager
                 return buttons;
             }
 
-            for (int i = 0; i < qEvent.buttons.Count)
+            for (int i = 0; i < qEvent.buttons.Count; i++)
             {
+                DialogWindow.EventButton eb;
                 if (qEvent is PerilData)
                 {
-                    DialogWindow.EventButton eb = new DialogWindow.EventButton(new StringKey(qEvent.buttons[i]).Translate(), qEvent.buttonColors[i]);
+                    eb = new DialogWindow.EventButton(new StringKey(qEvent.buttons[i]).Translate(), qEvent.buttonColors[i]);
                 }
                 else
                 {
-                    DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(qEvent.buttons[i]), qEvent.buttonColors[i]);
+                    eb = new DialogWindow.EventButton(SymbolReplace(qEvent.buttons[i]), qEvent.buttonColors[i]);
                 }
                 buttons.Add(eb);
             }

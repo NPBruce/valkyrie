@@ -44,7 +44,7 @@ public class InvestigatorEvade {
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), new StringKey(text,false));
         db.AddBorder();
 
-        if (m.damage == monster.GetHealth())
+        if (m.damage == m.GetHealth())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { ; }, Color.gray);
         }

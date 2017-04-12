@@ -9,6 +9,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     List<DialogBoxEditable> buttonDBE;
     DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
+    EditorSelectionList colorESL;
 
     private readonly StringKey QUOTA = new StringKey("val","QUOTA");
     private readonly StringKey BUTTONS = new StringKey("val","BUTTONS");
@@ -193,13 +194,13 @@ public class EditorComponentEventNextEvent : EditorComponent
         {
             colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
         }
-        colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
-        colorList.SelectItem();
+        colorESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
+        colorESL.SelectItem();
     }
 
     public void SelectButtonColour(int number)
     {
-        eventComponent.buttonColors[number - 1] = colorList.selection;
+        eventComponent.buttonColors[number - 1] = colorESL.selection;
         Update();
     }
 
