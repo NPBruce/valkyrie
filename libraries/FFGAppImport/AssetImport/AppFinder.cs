@@ -98,19 +98,5 @@ namespace FFGAppImport
             location += DataDirectory();
             ValkyrieDebug.Log("Asset location: " + location);
         }
-
-        // Read version of executable from app
-        // Note: This is usually not updated by FFG and is not used for validity checks
-        public string AppVersion()
-        {
-            string ffgVersion = "";
-            try
-            {
-                System.Diagnostics.FileVersionInfo info = System.Diagnostics.FileVersionInfo.GetVersionInfo(exeLocation);
-                ffgVersion = info.ProductVersion;
-            }
-            catch (System.Exception) { }
-            return ffgVersion;
-        }
     }
 }

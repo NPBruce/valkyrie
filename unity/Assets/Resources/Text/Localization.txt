@@ -71,6 +71,7 @@ FIRST,First,Primero,Premier,Erster,Primo,,,,
 FORCE_ACTIVATE,Force Activate,Forzar Activación,Forcer l'activation,Erzwinge Aktivierung,Attivazione forzata,,,,
 
 HEALTH,Health,Salud,Santé,Ausdauer,Salute,,,,
+HEALTH_HERO,Per Hero,Por héroe,Per Hero,Pro Held,per eroe,,,,
 HIGHLIGHT,Highlight,Destacar,Mettre en valeur,Markieren,In evidenza,,,,
 HORROR_CHECK,Horror Check,Horror,Test d'horreur,Horrortest,Prova di Orrore,,,,
 INDENT,"  {0}","  {0}","  {0}","  {0}","  {0}",,,,

@@ -147,6 +147,7 @@ public class EventManager
                 oldMonster.unique = true;
                 oldMonster.uniqueText = qe.qMonster.uniqueText;
                 oldMonster.uniqueTitle = qe.GetUniqueTitle();
+                oldMonster.healthMod = Mathf.RoundToInt(qe.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * qe.qMonster.uniqueHealthHero));
             }
 
             // Display the location(s)
@@ -370,33 +371,19 @@ public class EventManager
                 return buttons;
             }
 
-            if (qEvent is PerilData)
+            for (int i = 0; i < qEvent.buttons.Count; i++)
             {
-                foreach (string s in qEvent.buttons)
+                DialogWindow.EventButton eb;
+                if (qEvent is PerilData)
                 {
-                    buttons.Add(new DialogWindow.EventButton(new StringKey(s).Translate()));
+                    eb = new DialogWindow.EventButton(new StringKey(qEvent.buttons[i]).Translate(), qEvent.buttonColors[i]);
                 }
-                return buttons;
-            }
-
-            foreach (string s in qEvent.buttons)
-            {
-                DialogWindow.EventButton eb = new DialogWindow.EventButton(SymbolReplace(s));
-                // Hack for pass/fail color buttons
-                if (qEvent.nextEvent.Count == 2)
+                else
                 {
-                    if (buttons.Count == 0 && eb.label.Equals("Pass"))
-                    {
-                        eb.colour = Color.green;
-                    }
-                    if (buttons.Count == 1 && eb.label.Equals("Fail"))
-                    {
-                        eb.colour = Color.red;
-                    }
+                    eb = new DialogWindow.EventButton(SymbolReplace(qEvent.buttons[i]), qEvent.buttonColors[i]);
                 }
                 buttons.Add(eb);
             }
-
             return buttons;
         }
 

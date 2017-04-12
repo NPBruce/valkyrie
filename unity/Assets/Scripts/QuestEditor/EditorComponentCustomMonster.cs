@@ -12,6 +12,7 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey ACTIVATIONS = new StringKey("val","ACTIVATIONS");
     private readonly StringKey INFO = new StringKey("val", "INFO");
     private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
+    private readonly StringKey HEALTH_HERO = new StringKey("val", "HEALTH_HERO");
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
     private readonly StringKey PLACE_IMG = new StringKey("val", "PLACE_IMG");
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
@@ -21,6 +22,7 @@ public class EditorComponentCustomMonster : EditorComponent
     DialogBoxEditable nameDBE;
     DialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
+    DialogBoxEditable healthHeroDBE;
     EditorSelectionList baseESL;
     EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
@@ -164,30 +166,34 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-
-        if (game.gameType is MoMGameType)
+        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+        db.ApplyTag("editor");
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
-            db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+            healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(3, 1), 
+            monsterComponent.healthBase.ToString(), delegate { UpdateHealth(); });
+            healthDBE.ApplyTag("editor");
+            healthDBE.AddBorder();
+
+            db = new DialogBox(new Vector2(6, 22), new Vector2(8, 1), new StringKey("val","X_COLON",HEALTH_HERO));
             db.ApplyTag("editor");
-            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
+
+            healthHeroDBE = new DialogBoxEditable(new Vector2(14, 22), new Vector2(3, 1), 
+            monsterComponent.healthPerHero.ToString(), delegate { UpdateHealthHero(); });
+            healthHeroDBE.ApplyTag("editor");
+            healthHeroDBE.AddBorder();
+            if (monsterComponent.baseMonster.Length > 0)
             {
-                healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(14, 1), 
-                monsterComponent.health.ToString(), delegate { UpdateHealth(); });
-                healthDBE.ApplyTag("editor");
-                healthDBE.AddBorder();
-                if (monsterComponent.baseMonster.Length > 0)
-                {
-                    tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearHealth(); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.ApplyTag("editor");
-                }
-            }
-            else
-            {
-                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetHealth(); });
+                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearHealth(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetHealth(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
         }
 
         db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), new StringKey("val","X_COLON",IMAGE));
@@ -441,19 +447,26 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateHealth()
     {
-        int.TryParse(healthDBE.uiInput.text, out monsterComponent.health);
+        float.TryParse(healthDBE.uiInput.text, out monsterComponent.healthBase);
+    }
+
+    public void UpdateHealthHero()
+    {
+        float.TryParse(healthHeroDBE.uiInput.text, out monsterComponent.healthPerHero);
     }
 
     public void ClearHealth()
     {
-        monsterComponent.health = 0;
+        monsterComponent.healthBase = 0;
+        monsterComponent.healthPerHero = 0;
         monsterComponent.healthDefined = false;
         Update();
     }
 
     public void SetHealth()
     {
-        monsterComponent.health = 0;
+        monsterComponent.healthBase = 0;
+        monsterComponent.healthPerHero = 0;
         monsterComponent.healthDefined = true;
         Update();
     }

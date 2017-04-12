@@ -366,6 +366,8 @@ public class QuestData
         public bool unique = false;
         public string uniqueTitle = "";
         public string uniqueText = "";
+        public float uniqueHealthBase = 0;
+        public float uniqueHealthHero = 0;
         public string[] mTypes;
         public string[] mTraitsRequired;
         public string[] mTraitsPool;
@@ -445,6 +447,14 @@ public class QuestData
             if (data.ContainsKey("uniquetext"))
             {
                 uniqueText = data["uniquetext"];
+            }
+            if (data.ContainsKey("uniquehealth"))
+            {
+                float.TryParse(data["uniquehealth"], out uniqueHealthBase);
+            }
+            if (data.ContainsKey("uniquehealthhero"))
+            {
+                float.TryParse(data["uniquehealthhero"], out uniqueHealthHero);
             }
         }
 
@@ -531,16 +541,25 @@ public class QuestData
             if(unique)
             {
                 r += "unique=true" + nl;
+                r += "uniquehealth=" + uniqueHealthBase + nl;
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
+                if (!uniqueTitle.Equals(""))
+                {
+                    r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+                }
+                if (!uniqueText.Equals(""))
+                {
+                    r += "uniquetext=\"" + uniqueText + "\"" + nl;
+                }
             }
-            if (!uniqueTitle.Equals(""))
+            if(uniqueHealthBase != 0)
             {
-                r += "uniquetitle=\"" + uniqueTitle + "\"" + nl;
+                r += "uniquehealth=" + uniqueHealthBase + nl;
             }
-            if (!uniqueText.Equals(""))
+            if(uniqueHealthHero != 0)
             {
-                r += "uniquetext=\"" + uniqueText + "\"" + nl;
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
             }
-
             return r;
         }
     }
@@ -553,6 +572,7 @@ public class QuestData
         public string text = "";
         public string originalText = "";
         public List<string> buttons;
+        public List<string> buttonColors;
         public string trigger = "";
         public List<List<string>> nextEvent;
         public string heroListName = "";
@@ -576,6 +596,7 @@ public class QuestData
             typeDynamic = type;
             nextEvent = new List<List<string>>();
             buttons = new List<string>();
+            buttonColors = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
@@ -603,6 +624,7 @@ public class QuestData
 
             nextEvent = new List<List<string>>();
             buttons = new List<string>();
+            buttonColors = new List<string>();
             int buttonNum = 1;
             bool moreEvents = true;
             while (moreEvents)
@@ -626,12 +648,33 @@ public class QuestData
                     {
                         nextEvent.Add(new List<string>());
                     }
+                    if (data.ContainsKey("buttoncolor" + buttonNum))
+                    {
+                        buttonColors.Add(data["buttoncolor" + buttonNum]);
+                    }
+                    else
+                    {
+                        buttonColors.Add("white");
+                    }
                 }
                 else
                 {
                     moreEvents = false;
                 }
                 buttonNum++;
+            }
+
+            // Depreciated support for format 2
+            if (nextEvent.Count == 2)
+            {
+                if (buttons[0].Equals("Pass"))
+                {
+                    buttonColors[0] = "green";
+                }
+                if (buttons[1].Equals("Fail"))
+                {
+                    buttonColors[1] = "red";
+                }
             }
 
             // Heros from another event can be hilighted
@@ -822,6 +865,15 @@ public class QuestData
             foreach (string s in buttons)
             {
                 r += "button" + buttonNum++ + "=\"" + s + "\"" + nl;
+            }
+
+            buttonNum = 1;
+            foreach (string s in buttonColors)
+            {
+                if (!s.Equals("white"))
+                {
+                    r += "buttoncolor" + buttonNum++ + "=\"" + s + "\"" + nl;
+                }
             }
 
             if (!heroListName.Equals(""))
@@ -1232,7 +1284,8 @@ public class QuestData
         public string[] activations;
         public string[] traits;
         public string path = "";
-        public int health = 0;
+        public float healthBase = 0;
+        public float healthPerHero = 0;
         public bool healthDefined = false;
 
         // Create new with name (editor)
@@ -1292,7 +1345,12 @@ public class QuestData
             if (data.ContainsKey("health"))
             {
                 healthDefined = true;
-                int.TryParse(data["health"], out health);
+                float.TryParse(data["health"], out healthBase);
+            }
+            if (data.ContainsKey("healthperhero"))
+            {
+                healthDefined = true;
+                float.TryParse(data["healthperhero"], out healthPerHero);
             }
         }
 
@@ -1362,7 +1420,8 @@ public class QuestData
             }
             if (healthDefined)
             {
-                r += "health=" + health.ToString() + nl;
+                r += "health=" + healthBase.ToString() + nl;
+                r += "healthperhero=" + healthPerHero.ToString() + nl;
             }
             return r;
         }

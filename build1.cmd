@@ -12,5 +12,8 @@ rmdir /s /q build\macos
 mkdir build\macos
 mkdir build\macos\Valkyrie.app
 
+rem Because reasons
+set Target=
+
 rem Build libraries
-C:/Windows/Microsoft.NET/Framework/v3.5/msbuild.exe libraries/libraries.sln /nologo /p:Configuration="Release"
+C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe libraries/libraries.sln /nologo /p:Configuration="Release" /p:NoWarn=0108
