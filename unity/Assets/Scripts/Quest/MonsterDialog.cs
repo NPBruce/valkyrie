@@ -109,6 +109,7 @@ public class MonsterDialog
         game.quest.Save();
         // Monster is no longer unique
         monster.unique = false;
+        monster.healthMod = 0;
         game.monsterCanvas.UpdateStatus();
         // Trigger unique defeated event
         game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);

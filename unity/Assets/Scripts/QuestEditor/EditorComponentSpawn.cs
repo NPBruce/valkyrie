@@ -84,6 +84,22 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+        db.ApplyTag("editor");
+
+        healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
+        monsterComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
+        healthDBE.ApplyTag("editor");
+        healthDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
+        db.ApplyTag("editor");
+
+        healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
+        monsterComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
+        healthHeroDBE.ApplyTag("editor");
+        healthHeroDBE.AddBorder();
+
         if (game.gameType is D2EGameType)
         {
             tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), CommonStringKeys.PLACEMENT, delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
@@ -95,23 +111,6 @@ public class EditorComponentSpawn : EditorComponent
                 tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-
-                db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
-                db.ApplyTag("editor");
-
-                healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
-                monsterComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
-                healthDBE.ApplyTag("editor");
-                healthDBE.AddBorder();
-
-                db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
-                db.ApplyTag("editor");
-
-                healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
-                monsterComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
-                healthHeroDBE.ApplyTag("editor");
-                healthHeroDBE.AddBorder();
-
 
                 db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
                 db.ApplyTag("editor");

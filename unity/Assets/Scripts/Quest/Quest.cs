@@ -1134,11 +1134,7 @@ public class Quest
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
-            healthMod = GetHealth();
-            if (unique)
-            {
-                healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
-            }
+            healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
 
             Game game = Game.Get();
             HashSet<int> dupe = new HashSet<int>();
@@ -1211,7 +1207,7 @@ public class Quest
 
         public int GetHealth()
         {
-            int health = Mathf.RoundToInt(monsterData.health + (Game.Get().quest.GetHeroCount() * monsterData.health));
+            return Mathf.RoundToInt(monsterData.healthBase + (Game.Get().quest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
         }
 
         // Activation instance is requresd to track variables in the activation

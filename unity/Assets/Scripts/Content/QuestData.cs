@@ -1309,7 +1309,7 @@ public class QuestData
             if (data.ContainsKey("healthperhero"))
             {
                 healthDefined = true;
-                float.TryParse(data["heahealthperherolth"], out healthPerHero);
+                float.TryParse(data["healthperhero"], out healthPerHero);
             }
         }
 
