@@ -552,6 +552,14 @@ public class QuestData
                     r += "uniquetext=\"" + uniqueText + "\"" + nl;
                 }
             }
+            if(uniqueHealthBase != 0)
+            {
+                r += "uniquehealth=" + uniqueHealthBase + nl;
+            }
+            if(uniqueHealthHero != 0)
+            {
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
+            }
             return r;
         }
     }
