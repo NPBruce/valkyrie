@@ -1421,7 +1421,7 @@ public class QuestData
             if (healthDefined)
             {
                 r += "health=" + healthBase.ToString() + nl;
-                r += "health=" + healthPerHero.ToString() + nl;
+                r += "healthperhero=" + healthPerHero.ToString() + nl;
             }
             return r;
         }

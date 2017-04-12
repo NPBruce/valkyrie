@@ -130,7 +130,7 @@ public class EditorComponentSpawn : EditorComponent
             }
             else
             {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
+                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
