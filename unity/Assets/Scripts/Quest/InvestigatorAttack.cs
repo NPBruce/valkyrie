@@ -52,8 +52,7 @@ public class InvestigatorAttack
             offset += 2.5f;
         }
 
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-        if (monster.damage == health)
+        if (monster.damage == monster.GetHealth())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset), new Vector2(8, 2), CommonStringKeys.CANCEL, delegate { ; }, Color.gray);
         }
@@ -88,9 +87,7 @@ public class InvestigatorAttack
             new StringKey(attackText,false));
         db.AddBorder();
 
-
-        int health = Mathf.RoundToInt(monster.monsterData.health) + Game.Get().quest.GetHeroCount();
-        if (monster.damage == health)
+        if (monster.damage == monster.GetHealth())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { ; }, Color.grey);
         }

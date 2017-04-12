@@ -10,10 +10,10 @@ namespace FFGAppImport
     // Used to import content from FFG apps
     public class FetchContent
     {
-        public FFGImport importData;
-        public List<AssetsFile> assetFiles; // All asset files
-        public string gameType;
-        public string contentPath;
+        FFGImport importData;
+        List<AssetsFile> assetFiles; // All asset files
+        string gameType;
+        string contentPath;
         AppFinder finder = null;
         public bool importAvailable;
         string logFile;

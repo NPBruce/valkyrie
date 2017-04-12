@@ -5,3 +5,8 @@ C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\obj\Release\FF
 C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\obj\Release\FFGAppImport.pdb
 C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\FFGAppImport.dll
 C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\FFGAppImport.pdb
+C:\git_external\valkyrie\unity\Assets\Plugins\FFGAppImport.dll
+C:\git_external\valkyrie\unity\Assets\Plugins\FFGAppImport.pdb
+C:\git_external\valkyrie\libraries\FFGAppImport\obj\Release\FFGAppImport.csprojResolveAssemblyReference.cache
+C:\git_external\valkyrie\libraries\FFGAppImport\obj\Release\FFGAppImport.dll
+C:\git_external\valkyrie\libraries\FFGAppImport\obj\Release\FFGAppImport.pdb

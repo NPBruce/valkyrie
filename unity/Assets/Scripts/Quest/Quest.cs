@@ -1120,6 +1120,8 @@ public class Quest
         public bool unique = false;
         public string uniqueText = "";
         public string uniqueTitle = "";
+        public int healthMod = 0;
+
         // Activation is reset each round so that master/minion use the same data and forcing doesn't re roll
         // Note that in RtL forcing activation WILL reroll the selected activation
         public ActivationInstance currentActivation;
@@ -1132,6 +1134,7 @@ public class Quest
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
+            healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
 
             Game game = Game.Get();
             HashSet<int> dupe = new HashSet<int>();
@@ -1200,6 +1203,11 @@ public class Quest
                 }
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
+        }
+
+        public int GetHealth()
+        {
+            return Mathf.RoundToInt(monsterData.healthBase + (Game.Get().quest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
         }
 
         // Activation instance is requresd to track variables in the activation

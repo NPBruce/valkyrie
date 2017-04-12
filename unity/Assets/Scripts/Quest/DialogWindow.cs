@@ -69,37 +69,45 @@ public class DialogWindow {
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
             new StringKey(text,false));
         db.AddBorder();
-
         offset += 1f;
-        int num = 1;
-        float length = 8f;
+
+        // Determine button size
+        float buttonWidth = 8;
         float hOffset = UIScaler.GetWidthUnits() - 19f;
-        if (eventData.GetButtons().Count > 2)
+        float hOffsetCancel = 11;
+        float offsetCancel = offset;
+
+        List<DialogWindow.EventButton> buttons = eventData.GetButtons();
+        foreach (EventButton eb in buttons)
         {
-            length = 16f;
-            hOffset = UIScaler.GetHCenter(-8f);
-        }
-        else
-        {
-            if (eventData.qEvent.cancelable)
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset),
+                new StringKey(eb.label,false));
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
+            if (length > buttonWidth)
             {
-                new TextButton(new Vector2(11, offset), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+                buttonWidth = length;
+                hOffset = UIScaler.GetHCenter(-length / 2);
+                hOffsetCancel = UIScaler.GetHCenter(-4);
+                offsetCancel = offset + (2.5f * buttons.Count);
             }
+            db.Destroy();
         }
-        foreach (EventButton eb in eventData.GetButtons())
+
+        int num = 1;
+        foreach (EventButton eb in buttons)
         {
             int numTmp = num++;
-            new TextButton(new Vector2(hOffset, offset), new Vector2(length, 2), 
+            new TextButton(new Vector2(hOffset, offset), new Vector2(buttonWidth, 2), 
                 new StringKey(eb.label,false), delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
 
         // Do we have a cancel button?
-        if (eventData.qEvent.cancelable && (eventData.GetButtons().Count > 2))
+        if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(hOffset, offset), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+            new TextButton(new Vector2(hOffsetCancel, offsetCancel), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
         }
-
     }
 
     public void CreateQuotaWindow()
@@ -256,9 +264,21 @@ public class DialogWindow {
         public string label = "";
         public Color colour = Color.white;
 
-        public EventButton(string l)
+        public EventButton(string l, string c)
         {
             label = l;
+            string colorRGB = ColorUtil.FromName(c);      
+
+            // Check format is valid
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
+            }
+
+            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
+            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
         }
     }
 }
