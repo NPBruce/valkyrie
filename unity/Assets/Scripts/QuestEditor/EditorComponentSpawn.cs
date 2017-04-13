@@ -12,6 +12,8 @@ public class EditorComponentSpawn : EditorComponent
 
     private readonly StringKey UNIQUE_TITLE = new StringKey("val", "UNIQUE_TITLE");
     private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");
+    private readonly StringKey HEALTH = new StringKey("val", "HEALTH");
+    private readonly StringKey HEALTH_HERO = new StringKey("val", "HEALTH_HERO");
     private readonly StringKey TYPES = new StringKey("val", "TYPES");
     
     private readonly StringKey REQ_TRAITS = new StringKey("val", "REQ_TRAITS");
@@ -22,6 +24,8 @@ public class EditorComponentSpawn : EditorComponent
 
     DialogBoxEditable uniqueTitleDBE;
     DialogBoxEditable uniqueTextDBE;
+    DialogBoxEditable healthDBE;
+    DialogBoxEditable healthHeroDBE;
 
     EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
@@ -82,6 +86,24 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
+        db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+        db.ApplyTag("editor");
+
+        // Dumbers dont need translation
+        healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
+        spawnComponent.uniqueHealthBase.ToString(), "",delegate { UpdateHealth(); });
+        healthDBE.ApplyTag("editor");
+        healthDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
+        db.ApplyTag("editor");
+
+        // Numbers dont need translation
+        healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
+        spawnComponent.uniqueHealthHero.ToString(), "",delegate { UpdateHealthHero(); });
+        healthHeroDBE.ApplyTag("editor");
+        healthHeroDBE.AddBorder();
+
         if (game.gameType is D2EGameType)
         {
             tb = new TextButton(
@@ -93,28 +115,23 @@ public class EditorComponentSpawn : EditorComponent
         
             if (spawnComponent.unique)
             {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
-            }
-            else
-            {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
-            }
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
 
-            db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
-            db.ApplyTag("editor");
+                db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
+                db.ApplyTag("editor");
 
-            uniqueTitleDBE = new DialogBoxEditable(
-                new Vector2(5, 8), new Vector2(15, 1), 
-                spawnComponent.uniqueTitle.Translate(), 
-                spawnComponent.uniquetitle_key,
+                uniqueTitleDBE = new DialogBoxEditable(
+                    new Vector2(5, 8), new Vector2(15, 1),
+                    spawnComponent.uniqueTitle.Translate(),
+                    spawnComponent.uniquetitle_key,
                 delegate { UpdateUniqueTitle(); });
-            uniqueTitleDBE.ApplyTag("editor");
-            uniqueTitleDBE.AddBorder();
+                uniqueTitleDBE.ApplyTag("editor");
+                uniqueTitleDBE.AddBorder();
 
-            db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
-            db.ApplyTag("editor");
+                db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
+                db.ApplyTag("editor");
 
             uniqueTextDBE = new DialogBoxEditable(
                 new Vector2(0, 11), new Vector2(20, 8), 
@@ -123,6 +140,13 @@ public class EditorComponentSpawn : EditorComponent
                 delegate { UpdateUniqueText(); });
             uniqueTextDBE.ApplyTag("editor");
             uniqueTextDBE.AddBorder();
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag("editor");
+            }
         }
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), new StringKey("val", "X_COLON", TYPES));
@@ -222,6 +246,17 @@ public class EditorComponentSpawn : EditorComponent
         Update();
     }
 
+    public void UpdateHealth()
+    {
+        float.TryParse(healthDBE.Text, out spawnComponent.uniqueHealthBase);
+        Update();
+    }
+
+    public void UpdateHealthHero()
+    {
+        float.TryParse(healthHeroDBE.Text, out spawnComponent.uniqueHealthHero);
+        Update();
+    }
 
     public void UpdateUniqueTitle()
     {

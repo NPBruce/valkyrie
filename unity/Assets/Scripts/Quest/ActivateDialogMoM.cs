@@ -72,7 +72,7 @@ public class ActivateDialogMoM : ActivateDialog
 
     public void CreateMoveWindow()
     {
-        if (monster.currentActivation.ad.move.key.Length == 0)
+        if (monster.currentActivation.ad.move.fullKey.Length == 0)
         {
             activated();
             return;

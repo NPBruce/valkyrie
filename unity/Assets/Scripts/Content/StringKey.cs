@@ -10,7 +10,11 @@
         /// </summary>
         public static StringKey NULL = new StringKey("",false);
 
-        public string key { get; set; }
+        /// <summary>
+        /// Complete key.
+        /// IE: {qst:MONSTER_NAME}
+        /// </summary>
+        public string fullKey { get; set; }
 
         private bool preventLookup = false;
 
@@ -20,7 +24,7 @@
         /// <param name="newKey">key to translate</param>
         public StringKey(string newKey, bool doLookup = true)
         {
-            key = newKey;
+            fullKey = newKey;
             preventLookup = !doLookup;
         }
 
@@ -32,7 +36,18 @@
         /// <param name="numberZeroParam">first param for {0} replace</param>
         public StringKey(string dict, string newKey, StringKey numberZeroKeyParam)
         {
-            key = "{" + dict + ":" + newKey + ":{0}:" + numberZeroKeyParam.key + "}";
+            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroKeyParam.fullKey + "}";
+        }
+
+        /// <summary>
+        /// Constructor from a dict, key and one parameter
+        /// </summary>
+        /// <param name="dict">dict to lookup</param>
+        /// <param name="newKey">key to translate</param>
+        /// <param name="numberZeroParam">first param for {0} replace</param>
+        public StringKey(string dict, string newKey, string numberZeroParam)
+        {
+            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroParam + "}";
         }
 
         /// <summary>
@@ -43,7 +58,7 @@
         /// <param name="numberZeroParam">first param for {0} replace</param>
         public StringKey(string dict, string newKey, int numberZeroNumParam)
         {
-            key = "{" + dict + ":" + newKey + ":{0}:" + numberZeroNumParam.ToString() + "}";
+            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroNumParam.ToString() + "}";
         }
 
         /// <summary>
@@ -53,7 +68,7 @@
         /// <param name="newKey">key to lookup</param>
         public StringKey(string dict, string newKey)
         {
-            key = "{" + dict + ":" + newKey + "}";
+            fullKey = "{" + dict + ":" + newKey + "}";
         }
 
         /// <summary>
@@ -62,7 +77,7 @@
         /// <returns>true if string must be translated</returns>
         public bool isKey()
         {
-            return key.StartsWith("{") && !key.StartsWith("{rnd:") && !key.StartsWith("{var");
+            return fullKey.StartsWith("{") && !fullKey.StartsWith("{rnd:") && !fullKey.StartsWith("{var");
         }
 
         /// <summary>
@@ -77,7 +92,7 @@
             } else
             {
                 //non heys can have newline characters
-                return key.Replace("\\n", System.Environment.NewLine);
+                return fullKey.Replace("\\n", System.Environment.NewLine);
             }
                  
         }
@@ -88,7 +103,7 @@
         /// <returns>key</returns>
         public override string ToString()
         {
-            return key.Replace(System.Environment.NewLine, "\\n");
+            return fullKey.Replace(System.Environment.NewLine, "\\n");
         }
     }
 }

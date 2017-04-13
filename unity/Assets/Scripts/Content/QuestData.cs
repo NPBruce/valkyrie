@@ -406,6 +406,8 @@ public class QuestData
         public bool unique = false;
         public StringKey uniqueTitle = StringKey.NULL;
         public StringKey uniqueText = StringKey.NULL;
+        public float uniqueHealthBase = 0;
+        public float uniqueHealthHero = 0;
         public string[] mTypes;
         public string[] mTraitsRequired;
         public string[] mTraitsPool;
@@ -489,6 +491,14 @@ public class QuestData
             {
                 uniqueText = new StringKey(data["uniquetext"]);
             }
+            if (data.ContainsKey("uniquehealth"))
+            {
+                float.TryParse(data["uniquehealth"], out uniqueHealthBase);
+            }
+            if (data.ContainsKey("uniquehealthhero"))
+            {
+                float.TryParse(data["uniquehealthhero"], out uniqueHealthHero);
+            }
         }
 
         // When changing the name placement event need to update in array
@@ -539,7 +549,7 @@ public class QuestData
             int textStart = r.IndexOf("text=");
             int textEnd = r.IndexOf("\n", textStart);
             r = r.Substring(0, textStart) + "text=" + 
-                (originalText.isKey() ? originalText.key :"\"" + originalText + "\"") + r.Substring(textEnd);
+                (originalText.isKey() ? originalText.fullKey :"\"" + originalText + "\"") + r.Substring(textEnd);
 
             if (mTypes.Length > 0)
             {
@@ -583,18 +593,27 @@ public class QuestData
             if(unique)
             {
                 r += "unique=true" + nl;
+                r += "uniquehealth=" + uniqueHealthBase + nl;
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
+                if (!uniqueTitle.Equals(""))
+                {
+                    r += "uniquetitle=" +
+                    (uniqueTitle.isKey() ? uniqueTitle.fullKey : "\"" + uniqueTitle + "\"") + nl;
+                }
+                if (!uniqueText.Equals(""))
+                {
+                    r += "uniquetext=" +
+                        (uniqueText.isKey() ? uniqueText.fullKey : "\"" + uniqueText + "\"") + nl;
+                }
             }
-            if (!uniqueTitle.Equals(""))
+            if(uniqueHealthBase != 0)
             {
-                r += "uniquetitle=" + 
-                    (uniqueTitle.isKey()?uniqueTitle.key: "\"" + uniqueTitle + "\"") + nl;
+                r += "uniquehealth=" + uniqueHealthBase + nl;
             }
-            if (!uniqueText.Equals(""))
+            if(uniqueHealthHero != 0)
             {
-                r += "uniquetext=" + 
-                    (uniqueText.isKey() ? uniqueText.key : "\"" + uniqueText + "\"") + nl;
+                r += "uniquehealthhero=" + uniqueHealthHero + nl;
             }
-
             return r;
         }
     }
@@ -608,6 +627,7 @@ public class QuestData
         public StringKey text = StringKey.NULL;
         public StringKey originalText = StringKey.NULL;
         public List<StringKey> buttons;
+        public List<string> buttonColors;
         public string trigger = "";
         public List<List<string>> nextEvent;
         public string heroListName = "";
@@ -634,6 +654,7 @@ public class QuestData
             typeDynamic = type;
             nextEvent = new List<List<string>>();
             buttons = new List<StringKey>();
+            buttonColors = new List<string>();
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
@@ -661,6 +682,7 @@ public class QuestData
 
             nextEvent = new List<List<string>>();
             buttons = new List<StringKey>();
+            buttonColors = new List<string>();
             int buttonNum = 1;
             bool moreEvents = true;
             while (moreEvents)
@@ -684,6 +706,14 @@ public class QuestData
                     {
                         nextEvent.Add(new List<string>());
                     }
+                    if (data.ContainsKey("buttoncolor" + buttonNum))
+                    {
+                        buttonColors.Add(data["buttoncolor" + buttonNum]);
+                    }
+                    else
+                    {
+                        buttonColors.Add("white");
+                    }
                 }
                 else
                 {
@@ -691,6 +721,20 @@ public class QuestData
                 }
                 buttonNum++;
             }
+
+            // Depreciated support for format 2
+            if (nextEvent.Count == 2)
+            {
+                if (buttons[0].Equals(CommonStringKeys.PASS))
+                {
+                    buttonColors[0] = "green";
+                }
+                if (buttons[1].Equals(CommonStringKeys.FAIL))
+                {
+                    buttonColors[1] = "red";
+                }
+            }
+
             // Heros from another event can be hilighted
             if (data.ContainsKey("hero"))
             {
@@ -862,7 +906,7 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "text=" + (originalText.isKey()?originalText.key:"\"" + originalText.key + "\"") + nl;
+            r += "text=" + (originalText.isKey()?originalText.fullKey:"\"" + originalText.fullKey + "\"") + nl;
 
             if (highlight)
             {
@@ -887,7 +931,16 @@ public class QuestData
             buttonNum = 1;
             foreach (StringKey s in buttons)
             {
-                r += "button" + buttonNum++ + "=" + (s.key.StartsWith("{")?s.key:"\"" + s.key + "\"") + nl;
+                r += "button" + buttonNum++ + "=" + (s.fullKey.StartsWith("{")?s.fullKey:"\"" + s.fullKey + "\"") + nl;
+            }
+
+            buttonNum = 1;
+            foreach (string s in buttonColors)
+            {
+                if (!s.Equals("white"))
+                {
+                    r += "buttoncolor" + buttonNum++ + "=\"" + s + "\"" + nl;
+                }
             }
 
             if (!heroListName.Equals(""))
@@ -1321,7 +1374,8 @@ public class QuestData
         public string[] activations;
         public string[] traits;
         public string path = "";
-        public int health = 0;
+        public float healthBase = 0;
+        public float healthPerHero = 0;
         public bool healthDefined = false;
 
         public string monstername_key { get { return genKey("monstername"); } }
@@ -1389,7 +1443,12 @@ public class QuestData
             if (data.ContainsKey("health"))
             {
                 healthDefined = true;
-                int.TryParse(data["health"], out health);
+                float.TryParse(data["health"], out healthBase);
+            }
+            if (data.ContainsKey("healthperhero"))
+            {
+                healthDefined = true;
+                float.TryParse(data["healthperhero"], out healthPerHero);
             }
         }
 
@@ -1422,9 +1481,9 @@ public class QuestData
             {
                 r.Append("base=").AppendLine(baseMonster);
             }
-            if (monsterName.key.Length > 0)
+            if (monsterName.fullKey.Length > 0)
             {
-                r.Append("name=").AppendLine(monsterName.key);
+                r.Append("name=").AppendLine(monsterName.fullKey);
             }
             if (traits.Length > 0)
             {
@@ -1432,7 +1491,7 @@ public class QuestData
             }
             if (info != null)
             {
-                r.Append("info=").AppendLine(info.key);
+                r.Append("info=").AppendLine(info.fullKey);
             }
             if (imagePath.Length > 0)
             {
@@ -1448,7 +1507,8 @@ public class QuestData
             }
             if (healthDefined)
             {
-                r.Append("health=").AppendLine(health.ToString());
+                r.Append("health=").AppendLine(healthBase.ToString());
+                r.Append("healthperhero=").AppendLine(healthPerHero.ToString());
             }
             return r.ToString();
         }
@@ -1538,11 +1598,11 @@ public class QuestData
             {
                 r += "minion=" + minionActions + nl;
             }
-            if (move.key.Length > 0)
+            if (move.fullKey.Length > 0)
             {
                 r += "move=" + move + nl;
             }
-            if (moveButton.key.Length > 0)
+            if (moveButton.fullKey.Length > 0)
             {
                 r += "movebutton=" + moveButton + nl;
             }
@@ -1645,10 +1705,10 @@ public class QuestData
         public string[] packs;
         // Default language for the text
         public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
-        // unique id
-        private string uid = "";
+        // raw localization dictionary
+        public DictionaryI18n localizationDict;
 
-        public string name_key { get { return "name-" + uid; } }
+        public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
 
         // Create from path
@@ -1657,6 +1717,12 @@ public class QuestData
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
             valid = Populate(iniData);
+
+            if (valid)
+            {
+                localizationDict = 
+                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt",defaultLanguage,defaultLanguage);
+            }
         }
 
         // Create from ini data
@@ -1672,15 +1738,6 @@ public class QuestData
         /// <returns>true if the quest is valid</returns>
         public bool Populate(Dictionary<string, string> iniData)
         {
-            if (iniData.ContainsKey("uid"))
-            {
-                uid = iniData["uid"];
-            } else
-            {
-                // if there is no uid, we generate one
-                uid = genUid();
-            }
-
             if (iniData.ContainsKey("format"))
             {
                 int.TryParse(iniData["format"], out format);
@@ -1750,10 +1807,9 @@ public class QuestData
             string nl = System.Environment.NewLine;
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
-            r.Append("uid=").AppendLine(uid);
             r.Append("format=").AppendLine(currentFormat.ToString());
-            r.Append("name=").AppendLine(name.key);
-            r.Append("description=").AppendLine(description.key);
+            r.Append("name=").AppendLine(name.fullKey);
+            r.Append("description=").AppendLine(description.fullKey);
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)

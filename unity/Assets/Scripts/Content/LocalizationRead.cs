@@ -94,7 +94,7 @@ namespace Assets.Scripts.Content
         /// <returns>Translation to current language</returns>
         public static string DictLookup(StringKey input)
         {
-            string output = input.key;
+            string output = input.fullKey;
             // While there are more lookups
 
             string regexKey = "{(ffg|val|qst):";

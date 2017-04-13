@@ -2,9 +2,9 @@
 {
     public class ChapterNegOneShortManaged : IStaticCodeBook
     {
-        public int Dimensions = 2;
+        new public int Dimensions = 2;
 
-        public byte[] LengthList = {
+        new public byte[] LengthList = {
             5, 6, 12, 14, 12, 14, 16, 17, 18, 4, 2, 5, 11, 7, 10, 12,
             14, 15, 9, 4, 5, 11, 7, 10, 13, 15, 18, 15, 6, 7, 5, 6,
             8, 11, 13, 16, 11, 5, 6, 5, 5, 6, 9, 13, 15, 12, 5, 7,
@@ -13,11 +13,11 @@
             9
         };
 
-        public CodeBookMapType MapType = CodeBookMapType.None;
-        public int QuantMin = 0;
-        public int QuantDelta = 0;
-        public int Quant = 0;
-        public int QuantSequenceP = 0;
-        public int[] QuantList = null;
+        new public CodeBookMapType MapType = CodeBookMapType.None;
+        new public int QuantMin = 0;
+        new public int QuantDelta = 0;
+        new public int Quant = 0;
+        new public int QuantSequenceP = 0;
+        new public int[] QuantList = null;
     }
 }

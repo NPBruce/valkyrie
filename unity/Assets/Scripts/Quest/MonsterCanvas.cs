@@ -203,6 +203,12 @@ public class MonsterCanvas : MonoBehaviour
                 UnityEngine.UI.Button buttonFrame = mImgFrame.AddComponent<UnityEngine.UI.Button>();
                 buttonFrame.interactable = true;
                 buttonFrame.onClick.AddListener(delegate { MonsterDiag(); });
+
+                if (m.GetHealth() != 0)
+                {
+                    TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), new StringKey(m.GetHealth().ToString(), false), delegate { MonsterDiag(); }, Color.red);
+                    tb.ApplyTag("monsters");
+                }
             }
 
             iconDupe = null;
@@ -225,6 +231,7 @@ public class MonsterCanvas : MonoBehaviour
                 buttonDupe.interactable = true;
                 buttonDupe.onClick.AddListener(delegate { MonsterDiag(); });
             }
+
             Update();
         }
 

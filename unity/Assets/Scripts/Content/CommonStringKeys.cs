@@ -22,6 +22,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey POSITION_FREE = new StringKey("~", false);
         public static readonly StringKey PLUS = new StringKey("+", false);
         public static readonly StringKey MINUS = new StringKey("-", false);
+        public static readonly StringKey HASH = new StringKey("#", false);
         public static readonly StringKey TAB = new StringKey("->",false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");

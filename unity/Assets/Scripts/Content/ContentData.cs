@@ -768,7 +768,8 @@ public class MonsterData : GenericData
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
-    public float health = 0;
+    public float healthBase = 0;
+    public float healthPerHero = 0;
     
     // This constuctor only exists for the quest version of this class to use to do nothing
     public MonsterData()
@@ -797,7 +798,11 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("health"))
         {
-            float.TryParse(content["health"], out health);
+            float.TryParse(content["health"], out healthBase);
+        }
+        if (content.ContainsKey("healthperhero"))
+        {
+            float.TryParse(content["healthperhero"], out healthPerHero);
         }
     }
 }

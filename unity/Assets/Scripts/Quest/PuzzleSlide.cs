@@ -62,52 +62,9 @@ public class PuzzleSlide : Puzzle
         }
     }
 
-    // Too slow and memory consuming
-    public void GeneratePuzzle(int depth)
-    {
-        puzzle = new List<Block>();
-        puzzle.Add(new Block());
-
-        // Start with 4 blocks
-        AddBlock();
-        AddBlock();
-        AddBlock();
-        AddBlock();
-
-        PuzzleSlideSolver solve = new PuzzleSlideSolver();
-        int steps = 0;
-        while (steps != depth)
-        {
-            steps = solve.Solve(puzzle, depth);
-            if (steps < depth)
-            {
-                AddBlock();
-            }
-            if (steps > depth)
-            {
-                RemoveBlock();
-            }
-        }
-    }
-
     public bool Solved()
     {
         return (puzzle[0].xpos == 6);
-    }
-
-    public void AddBlock()
-    {
-        Block b = new Block(Random.Range(0, 255));
-        while (b.Blocks(puzzle))
-        {
-            b = new Block(Random.Range(0, 255));
-        }
-        puzzle.Add(b);
-    }
-
-    public void RemoveBlock()
-    {
-        puzzle.RemoveAt(Random.Range(1, puzzle.Count));
     }
 
     public static bool Empty(List<Block> state, int x, int y)

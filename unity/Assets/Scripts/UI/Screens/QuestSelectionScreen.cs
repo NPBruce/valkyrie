@@ -73,11 +73,14 @@ namespace Assets.Scripts.UI.Screens
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0)
                 {
                     string key = q.Key;
+                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    string translation = q.Value.name.Translate();
+
                     // Size is 1.2 to be clear of characters with tails
                     tb = new TextButton(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", q.Value.name),
+                        new StringKey("val", "INDENT", translation),
                         delegate { Selection(key); }, Color.black, (int)offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -93,11 +96,15 @@ namespace Assets.Scripts.UI.Screens
             {
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
                 {
+                    string key = q.Key;
+                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    string translation = q.Value.name.Translate();
+
                     // Size is 1.2 to be clear of characters with tails
                     db = new DialogBox(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", q.Value.name),
+                        new StringKey("val", "INDENT", translation),
                         Color.black);
                     db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

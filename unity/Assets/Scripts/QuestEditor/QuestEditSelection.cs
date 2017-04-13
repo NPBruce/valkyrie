@@ -64,8 +64,11 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.scenarioDict = q.Value.localizationDict;
+            string translation = q.Value.name.Translate();
+
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",q.Value.name), delegate { Selection(key); }, Color.black, offset);
+                new StringKey("val","INDENT",translation), delegate { Selection(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -152,8 +155,11 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.scenarioDict = q.Value.localizationDict;
+            string translation = q.Value.name.Translate();
+
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",q.Value.name), delegate { Delete(key); }, Color.black, offset);
+                new StringKey("val","INDENT",translation), delegate { Delete(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -247,6 +253,9 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.scenarioDict = q.Value.localizationDict;
+            string translation = q.Value.name.Translate();
+
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
                 new StringKey("val","INDENT",q.Value.name), delegate { Copy(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -369,34 +378,39 @@ public class QuestEditSelection
         {
             Directory.CreateDirectory(targetLocation);
 
-            string[] questData = new string[9];
+            List<string> questData = new List<string>();
 
-            string uid = QuestData.Quest.genUid();
-            string key = "name-" + uid;
-            StringKey nameKey = new StringKey("qst", key);
+            string nameKey = "quest.name";
+            StringKey nameStringKey = new StringKey("qst", nameKey);
+            string descriptionKey = "quest.description";
+            StringKey descriptionStringKey = new StringKey("qst", descriptionKey);
 
             // Create basic quest info
-            questData[0] = "[Quest]";
-            questData[1] = "uid=" + uid ;
-            questData[2] = "name=" + nameKey.key;
-            questData[3] = "type=" + game.gameType.TypeName();
-            questData[4] = "format=" + QuestData.Quest.currentFormat;
-            questData[5] = "currentlanguage=" + game.currentLang;
-            questData[6] = "";
-            questData[7] = "[QuestText]";
-            questData[8] = "Localization.txt";
+            questData.Add("[Quest]");
+            questData.Add("name=" + nameStringKey.fullKey);
+            questData.Add("description=" + descriptionStringKey.fullKey);
+            questData.Add("type=" + game.gameType.TypeName());
+            questData.Add("format=" + QuestData.Quest.currentFormat);
+            questData.Add("defaultlanguage=" + game.currentLang); 
+            questData.Add("");
+            questData.Add("[QuestText]");
+            questData.Add("Localization.txt");
 
             // Write quest file
-            File.WriteAllLines(targetLocation + "/quest.ini", questData);
+            File.WriteAllLines(targetLocation + "/quest.ini", questData.ToArray());
 
             // Create new dictionary
             DictionaryI18n newScenarioDict = new DictionaryI18n(
             new string[1] { DictionaryI18n.FFG_LANGS }, game.currentLang, game.currentLang);
 
             // Add quest name to dictionary
-            EntryI18n nameEntry = new EntryI18n(key,newScenarioDict);
+            EntryI18n nameEntry = new EntryI18n(nameKey,newScenarioDict);
             nameEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i;
             newScenarioDict.Add(nameEntry);
+            // Add quest description to dictionary
+            EntryI18n descriptionEntry = new EntryI18n(descriptionKey, newScenarioDict);
+            descriptionEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i + "...";
+            newScenarioDict.Add(descriptionEntry);
 
             // Generate localization file
             List<string> localization_file = newScenarioDict.Serialize();

@@ -9,6 +9,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     List<DialogBoxEditable> buttonDBE;
     DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
+    EditorSelectionList colorESL;
 
     private readonly StringKey QUOTA = new StringKey("val","QUOTA");
     private readonly StringKey BUTTONS = new StringKey("val","BUTTONS");
@@ -94,13 +95,24 @@ public class EditorComponentEventNextEvent : EditorComponent
         foreach (List<string> l in eventComponent.nextEvent)
         {
             int buttonTmp = button++;
+
             StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
+            string colorRGB = ColorUtil.FromName(eventComponent.buttonColors[buttonTmp - 1]);
+            Color c = Color.white;
+            c[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            c[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            c[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+
+            tb = new TextButton(new Vector2(2, offset), new Vector2(1, 1),
+                CommonStringKeys.HASH, delegate { SetButtonColor(buttonTmp); }, c);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
 
             DialogBoxEditable buttonEdit = new DialogBoxEditable(
-                new Vector2(2, offset), new Vector2(15, 1), 
-                buttonLabel.Translate(), 
-                eventComponent.button_key + buttonTmp.ToString(),
+                new Vector2(3, offset), new Vector2(14, 1), 
+                buttonLabel.Translate(), eventComponent.button_key,
                 delegate { UpdateButtonLabel(buttonTmp); });
+
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
@@ -160,19 +172,8 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void AddButton(int number)
     {
         eventComponent.nextEvent.Insert(number, new List<string>());
-        if (eventComponent.nextEvent.Count == 1)
-        {
-            eventComponent.buttons.Add(CommonStringKeys.CONFIRM);
-        }
-        else if (eventComponent.nextEvent.Count == 2 && eventComponent.buttons[0].Equals(CommonStringKeys.CONFIRM))
-        {
-            eventComponent.buttons[0] = CommonStringKeys.PASS;
-            eventComponent.buttons.Add(CommonStringKeys.FAIL);
-        }
-        else
-        {
-            eventComponent.buttons.Insert(number, new StringKey ("Button " + (number + 1),false));
-        }
+        eventComponent.buttons.Insert(number, new StringKey("Button " + (number + 1), false));
+        eventComponent.buttonColors.Insert(number, "white");
         Update();
     }
 
@@ -180,6 +181,23 @@ public class EditorComponentEventNextEvent : EditorComponent
     {
         eventComponent.nextEvent.RemoveAt(number - 1);
         eventComponent.buttons.RemoveAt(number - 1);
+        Update();
+    }
+
+    public void SetButtonColor(int number)
+    {
+        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        {
+            colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+        }
+        colorESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
+        colorESL.SelectItem();
+    }
+
+    public void SelectButtonColour(int number)
+    {
+        eventComponent.buttonColors[number - 1] = colorESL.selection;
         Update();
     }
 

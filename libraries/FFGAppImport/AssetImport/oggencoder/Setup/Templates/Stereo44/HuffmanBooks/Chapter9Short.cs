@@ -2,9 +2,9 @@
 {
     public class Chapter9Short : IStaticCodeBook
     {
-        public int Dimensions = 2;
+        new public int Dimensions = 2;
 
-        public byte[] LengthList = {
+        new public byte[] LengthList = {
             5, 13, 18, 16, 17, 17, 19, 18, 19, 19, 5, 7, 10, 11, 12, 12,
             13, 16, 17, 18, 6, 6, 7, 7, 9, 9, 10, 14, 17, 19, 8, 7,
             6, 5, 6, 7, 9, 12, 19, 17, 8, 7, 7, 6, 5, 6, 8, 11,
@@ -14,11 +14,11 @@
             9, 8, 10, 13
         };
 
-        public CodeBookMapType MapType = CodeBookMapType.None;
-        public int QuantMin = 0;
-        public int QuantDelta = 0;
-        public int Quant = 0;
-        public int QuantSequenceP = 0;
-        public int[] QuantList = null;
+        new public CodeBookMapType MapType = CodeBookMapType.None;
+        new public int QuantMin = 0;
+        new public int QuantDelta = 0;
+        new public int Quant = 0;
+        new public int QuantSequenceP = 0;
+        new public int[] QuantList = null;
     }
 }

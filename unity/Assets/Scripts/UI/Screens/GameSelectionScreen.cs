@@ -42,8 +42,8 @@ namespace Assets.Scripts.UI.Screens
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
             }
             string log;
-            fcD2E.Inspect(out log);
-            fcMoM.Inspect(out log);
+            fcD2E.Inspect();
+            fcMoM.Inspect();
 
             // Banner Image
             Sprite bannerSprite;
@@ -184,11 +184,11 @@ namespace Assets.Scripts.UI.Screens
             string log;
             if (type.Equals("D2E"))
             {
-                fcD2E.Import(out log);
+                fcD2E.Import();
             }
             if (type.Equals("MoM"))
             {
-                fcMoM.Import(out log);
+                fcMoM.Import();
             }
             Destroyer.Dialog();
             new GameSelectionScreen();

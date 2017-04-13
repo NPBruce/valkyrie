@@ -65,41 +65,41 @@
             new AdjBlock(new[] {-16, -16, -16, -16, -16, -16, -16, -15, -14, -14, -14, -12, -9, -4, -2, -2, 0}) /* 10 */
         };
 
-        public int Mappings { get { return SampleRateMapping.Length - 1; } }
-        public double[] SampleRateMapping = SampleRateMapping44Stereo;
-        public double[] QualityMapping = QualityMapping44;
-        public int CouplingRestriction = 2;
-        public int SampleRateMinRestriction = 40000;
-        public int SampleRateMaxRestriction = 50000;
-        public int[] BlockSizeShort = BlocksizeShort44;
-        public int[] BlockSizeLong = BlocksizeLong44;
-        public Att3[] PsyToneMasterAtt = Psy44.ToneMasterAtt;
-        public int[] PsyTone0Decibel = Psy.ToneZeroDecibel;
-        public int[] PsyToneDecibelSuppress = Psy.ToneSuppress;
-        public AdjBlock[] PsyToneAdjImpulse = VpToneMaskAdjOtherBlock;
-        public AdjBlock[] PsyToneAdjLong = VpToneMaskAdjLongBlock;
-        public AdjBlock[] PsyToneAdjOther = VpToneMaskAdjOtherBlock;
-        public NoiseGuard[] PsyNoiseGuards = Psy44.NoiseGuards;
-        public Noise3[] PsyNoiseBiasImpulse = Psy.NoiseBiasImpulseValues;
-        public Noise3[] PsyNoiseBiasPadding = Psy.NoiseBiasPaddingValues;
-        public Noise3[] PsyNoiseBiasTrans = Psy.NoiseBiasTransition;
-        public Noise3[] PsyNoiseBiasLong = Psy.NoiseBiasLongBlock;
-        public int[] PsyNoiseDecibelSuppress = Psy.NoiseSuppress;
-        public CompandBlock[] PsyNoiseCompand = Psy44.Compand;
-        public double[] PsyNoiseCompandShortMapping = Psy.CompandShortMapping;
-        public double[] PsyNoiseCompandLongMapping = Psy.CompandLongMapping;
-        public int[][] PsyNoiseNormalStart = {NoiseStartShort44, NoiseStartLong44};
-        public int[][] PsyNoiseNormalPartition = {NoisePartShort44, NoisePartLong44};
-        public double[] PsyNoiseNormalThreshold = NoiseThresh44;
+        new public int Mappings { get { return SampleRateMapping.Length - 1; } }
+        new public double[] SampleRateMapping = SampleRateMapping44Stereo;
+        new public double[] QualityMapping = QualityMapping44;
+        new public int CouplingRestriction = 2;
+        new public int SampleRateMinRestriction = 40000;
+        new public int SampleRateMaxRestriction = 50000;
+        new public int[] BlockSizeShort = BlocksizeShort44;
+        new public int[] BlockSizeLong = BlocksizeLong44;
+        new public Att3[] PsyToneMasterAtt = Psy44.ToneMasterAtt;
+        new public int[] PsyTone0Decibel = Psy.ToneZeroDecibel;
+        new public int[] PsyToneDecibelSuppress = Psy.ToneSuppress;
+        new public AdjBlock[] PsyToneAdjImpulse = VpToneMaskAdjOtherBlock;
+        new public AdjBlock[] PsyToneAdjLong = VpToneMaskAdjLongBlock;
+        new public AdjBlock[] PsyToneAdjOther = VpToneMaskAdjOtherBlock;
+        new public NoiseGuard[] PsyNoiseGuards = Psy44.NoiseGuards;
+        new public Noise3[] PsyNoiseBiasImpulse = Psy.NoiseBiasImpulseValues;
+        new public Noise3[] PsyNoiseBiasPadding = Psy.NoiseBiasPaddingValues;
+        new public Noise3[] PsyNoiseBiasTrans = Psy.NoiseBiasTransition;
+        new public Noise3[] PsyNoiseBiasLong = Psy.NoiseBiasLongBlock;
+        new public int[] PsyNoiseDecibelSuppress = Psy.NoiseSuppress;
+        new public CompandBlock[] PsyNoiseCompand = Psy44.Compand;
+        new public double[] PsyNoiseCompandShortMapping = Psy.CompandShortMapping;
+        new public double[] PsyNoiseCompandLongMapping = Psy.CompandLongMapping;
+        new public int[][] PsyNoiseNormalStart = {NoiseStartShort44, NoiseStartLong44};
+        new public int[][] PsyNoiseNormalPartition = {NoisePartShort44, NoisePartLong44};
+        new public double[] PsyNoiseNormalThreshold = NoiseThresh44;
         new public int[] PsyAthFloat = Psy.AthFloater;
         new public int[] PsyAthAbs = Psy44.AthAbs;
         new public double[] PsyLowPass = Psy44.Lowpass;
-        public PsyGlobal[] GlobalParams = Psy44.Global;
-        public double[] GlobalMapping = Psy44.GlobalMapping;
-        public AdjStereo[] StereoModes = Psy44.StereoModes;
-        public IStaticCodeBook[][] FloorBooks = SharedFloors.FloorBooks;
-        public Floor[] FloorParams = SharedFloors.Floor;
-        public int[][] FloorMappings = FloorMapping44;
-        public IMappingTemplate[] Maps = Residue44.MapRes44Stereo;
+        new public PsyGlobal[] GlobalParams = Psy44.Global;
+        new public double[] GlobalMapping = Psy44.GlobalMapping;
+        new public AdjStereo[] StereoModes = Psy44.StereoModes;
+        new public IStaticCodeBook[][] FloorBooks = SharedFloors.FloorBooks;
+        new public Floor[] FloorParams = SharedFloors.Floor;
+        new public int[][] FloorMappings = FloorMapping44;
+        new public IMappingTemplate[] Maps = Residue44.MapRes44Stereo;
     }
 }

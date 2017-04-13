@@ -24,7 +24,7 @@ public class QuestMonster : MonsterData
         }
 
         // If name not set use base type
-        if (name.key.Length == 0 && baseObject != null)
+        if (name.fullKey.Length == 0 && baseObject != null)
         {
             name = baseObject.name;
         } else
@@ -47,8 +47,8 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = new StringKey(EventManager.SymbolReplace(qm.info.key), false);
-        if (info.key.Length == 0 && baseObject != null)
+        info = new StringKey(EventManager.SymbolReplace(qm.info.fullKey), false);
+        if (info.fullKey.Length == 0 && baseObject != null)
         {
             info = baseObject.info;
         }
@@ -82,10 +82,12 @@ public class QuestMonster : MonsterData
             useMonsterTypeActivations = true;
         }
 
-        health = qm.health;
+        healthBase = qm.healthBase;
+        healthPerHero = qm.healthPerHero;
         if (!qm.healthDefined && baseObject != null)
         {
-            health = baseObject.health;
+            healthBase = baseObject.healthBase;
+            healthPerHero = baseObject.healthPerHero;
         }
     }
 }
@@ -96,13 +98,13 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        ability = new StringKey(EventManager.SymbolReplace(qa.ability.key), false);
-        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.key), false);
-        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.key), false);
+        ability = new StringKey(EventManager.SymbolReplace(qa.ability.fullKey), false);
+        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.fullKey), false);
+        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.fullKey), false);
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
-        move = new StringKey(EventManager.SymbolReplace(qa.move.key), false);
-        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.key), false);
+        move = new StringKey(EventManager.SymbolReplace(qa.move.fullKey), false);
+        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.fullKey), false);
         sectionName = qa.sectionName;
     }
 }
