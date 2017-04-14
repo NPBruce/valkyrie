@@ -29,7 +29,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-        new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
+        new StringKey(null, name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -61,7 +61,8 @@ public class EditorComponentSpawnPlacement : EditorComponent
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
 
-                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), new StringKey(place,false), delegate { QuestEditorData.SelectComponent(place); });
+                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), 
+                        new StringKey(null, place,false), delegate { QuestEditorData.SelectComponent(place); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }

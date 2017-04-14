@@ -1386,7 +1386,7 @@ public class QuestData
         {
             // The initial name of a monster is the component name. It wont be translated.
             // If renamed,the translation key will be created
-            monsterName = new StringKey(sectionName,false);
+            monsterName = new StringKey(null,sectionName,false);
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1409,7 +1409,7 @@ public class QuestData
             }
             else
             {
-                monsterName = new StringKey(iniName, false);
+                monsterName = new StringKey(null,iniName, false);
             }
 
             traits = new string[0];

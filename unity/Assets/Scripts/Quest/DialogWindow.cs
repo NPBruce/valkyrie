@@ -57,7 +57,8 @@ public class DialogWindow {
     {
         // Draw text
         text = eventData.GetText();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), new StringKey(text, false));
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
+            new StringKey(null, text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
         db.Destroy();
         
@@ -67,7 +68,7 @@ public class DialogWindow {
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
-            new StringKey(text,false));
+            new StringKey(null, text, false));
         db.AddBorder();
         offset += 1f;
 
@@ -113,7 +114,7 @@ public class DialogWindow {
     {
         // Draw text
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(eventData.GetText(),false));
+            new StringKey(null, eventData.GetText(),false));
         db.AddBorder();
 
         if (quota == 0)

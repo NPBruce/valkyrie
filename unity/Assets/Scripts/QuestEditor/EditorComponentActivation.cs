@@ -44,7 +44,7 @@ public class EditorComponentActivation : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("Activation".Length),false), 
+            new StringKey(null, name.Substring("Activation".Length),false), 
             delegate { QuestEditorData.ListActivation(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

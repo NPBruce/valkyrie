@@ -86,7 +86,7 @@ public class PuzzleCodeWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f),
-            new StringKey(EventManager.SymbolReplace(questPuzzle.skill), false));
+            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill), false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -188,7 +188,7 @@ public class PuzzleCodeWindow
         int tmp = guess.Count - 1;
         new TextButton(
             new Vector2(hPos, 4f), new Vector2(2f, 2f), 
-            new StringKey(symbolType.ToString(),false), 
+            new StringKey(null, symbolType.ToString(),false), 
             delegate { GuessRemove(tmp); });
     }
 

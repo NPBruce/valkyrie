@@ -174,7 +174,7 @@ public class ContentData {
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey(cp.name).Translate();
+                return new StringKey(null,cp.name,false).Translate();
             }
         }
         return "";
@@ -764,7 +764,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public StringKey info = new StringKey("-", false);
+    public StringKey info = new StringKey(null,"-", false);
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -810,7 +810,7 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public StringKey ability = new StringKey("-", false);
+    public StringKey ability = new StringKey(null,"-", false);
     public StringKey minionActions = StringKey.NULL;
     public StringKey masterActions = StringKey.NULL;
     public StringKey moveButton = StringKey.NULL;
@@ -1048,7 +1048,7 @@ public class GenericData
             name = new StringKey(content["name"]);
         } else
         {
-            name = new StringKey(name_ini.Substring(type.Length));
+            name = new StringKey(null,name_ini.Substring(type.Length));
         }
 
 

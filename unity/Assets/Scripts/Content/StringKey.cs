@@ -1,4 +1,8 @@
-﻿namespace Assets.Scripts.Content
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Assets.Scripts.Content
 {
     /// <summary>
     /// Represents a string corresponding to a Localization string key
@@ -8,68 +12,133 @@
         /// <summary>
         /// Empty string Key
         /// </summary>
-        public static StringKey NULL = new StringKey("",false);
+        public static StringKey NULL = new StringKey(null,"",false);
 
         /// <summary>
         /// Complete key.
         /// IE: {qst:MONSTER_NAME}
         /// </summary>
-        public string fullKey { get; set; }
+        public string fullKey
+        {
+            get
+            {
+                if (dict == null)
+                {
+                    return key;
+                }
+                else
+                {
+                    StringBuilder result = new StringBuilder()
+                        .Append('{')
+                        .Append(dict)
+                        .Append(':')
+                        .Append(key);
+
+                    if (parameters != null && parameters.Count > 0)
+                    {
+                        foreach (string param in parameters)
+                        {
+                            result.Append(':').Append(param);
+                        }
+                    }
+                    return result.Append('}').ToString();
+                }
+            }
+        }
+
+        private string dict;
+
+        private string key;
+
+        private List<string> parameters = null;
 
         private bool preventLookup = false;
+
+        private const string regexKey = "{(ffg|val|qst):";
+
+        public StringKey(string unknownKey)
+        {
+
+            if (Regex.Match(unknownKey, regexKey).Success)
+            {
+                string[] parts = unknownKey.Split("{:}".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+
+                dict = parts[0];
+                key = parts[1];
+                parameters = new List<string>();
+                for (int pos = 2; pos < parts.Length;pos ++)
+                {
+                    parameters.Add(parts[pos]);
+                }
+
+                preventLookup = false;
+            } else
+            {
+                dict = null;
+                key = unknownKey;
+                preventLookup = true;
+            }
+        }
+
 
         /// <summary>
         /// Basic constructor from a key
         /// </summary>
         /// <param name="newKey">key to translate</param>
-        public StringKey(string newKey, bool doLookup = true)
+        public StringKey(string newDict, string newKey, bool doLookup = true)
         {
-            fullKey = newKey;
+            dict = newDict;
+            key = newKey;
             preventLookup = !doLookup;
         }
 
         /// <summary>
         /// Constructor from a dict, key and one parameter
         /// </summary>
-        /// <param name="dict">dict to lookup</param>
+        /// <param name="newDict">dict to lookup</param>
         /// <param name="newKey">key to translate</param>
         /// <param name="numberZeroParam">first param for {0} replace</param>
-        public StringKey(string dict, string newKey, StringKey numberZeroKeyParam)
+        public StringKey(string newDict, string newKey, StringKey numberZeroKeyParam)
+            : this(newDict,newKey,numberZeroKeyParam.fullKey) { }
+
+        /// <summary>
+        /// Constructor from a dict, key and one parameter
+        /// </summary>
+        /// <param name="newDict">dict to lookup</param>
+        /// <param name="newKey">key to translate</param>
+        /// <param name="numberZeroParam">first param for {0} replace</param>
+        public StringKey(string newDict, string newKey, string numberZeroParam)
         {
-            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroKeyParam.fullKey + "}";
+            dict = newDict;
+            key = newKey;
+            parameters = new List<string>();
+            parameters.Add("{0}");
+            parameters.Add(numberZeroParam);
         }
 
         /// <summary>
         /// Constructor from a dict, key and one parameter
         /// </summary>
-        /// <param name="dict">dict to lookup</param>
         /// <param name="newKey">key to translate</param>
-        /// <param name="numberZeroParam">first param for {0} replace</param>
-        public StringKey(string dict, string newKey, string numberZeroParam)
+        /// <param name="param1">first param</param>
+        /// <param name="param2">second param</param>
+        public StringKey(StringKey templateStringKey, string param1, string param2)
         {
-            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroParam + "}";
+            dict = templateStringKey.dict;
+            key = templateStringKey.key;
+            parameters = new List<string>();
+            parameters.Add(param1);
+            parameters.Add(param2);
         }
 
         /// <summary>
         /// Constructor from a dict, key and one parameter
         /// </summary>
-        /// <param name="dict">dict to lookup</param>
+        /// <param name="newDict">dict to lookup</param>
         /// <param name="newKey">key to translate</param>
         /// <param name="numberZeroParam">first param for {0} replace</param>
-        public StringKey(string dict, string newKey, int numberZeroNumParam)
-        {
-            fullKey = "{" + dict + ":" + newKey + ":{0}:" + numberZeroNumParam.ToString() + "}";
-        }
-
-        /// <summary>
-        /// Constructor with dict and key
-        /// </summary>
-        /// <param name="dict">dict to lookup</param>
-        /// <param name="newKey">key to lookup</param>
-        public StringKey(string dict, string newKey)
-        {
-            fullKey = "{" + dict + ":" + newKey + "}";
-        }
+        public StringKey(string newDict, string newKey, int numberZeroNumParam)
+            : this(newDict, newKey, numberZeroNumParam.ToString()) { }
 
         /// <summary>
         /// Check if the StringKey object is a localization key
@@ -77,7 +146,7 @@
         /// <returns>true if string must be translated</returns>
         public bool isKey()
         {
-            return fullKey.StartsWith("{") && !fullKey.StartsWith("{rnd:") && !fullKey.StartsWith("{var");
+            return (dict != null);
         }
 
         /// <summary>
@@ -86,7 +155,7 @@
         /// <returns>the text in the current language</returns>
         public string Translate()
         {
-            if (this.isKey() && !preventLookup)
+            if (isKey() && !preventLookup)
             {
                 return LocalizationRead.DictLookup(this);
             } else

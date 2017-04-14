@@ -46,14 +46,15 @@ public class EditorComponentEventNextEvent : EditorComponent
             type = QuestData.Token.type;
         }
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), new StringKey(type,false), 
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
+            new StringKey(null,type,false), 
             delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring(type.Length),false), 
+            new StringKey(null,name.Substring(type.Length),false), 
             delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -66,7 +67,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey(randomButton,false), delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey(null,randomButton,false), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -130,7 +131,8 @@ public class EditorComponentEventNextEvent : EditorComponent
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), new StringKey(s,false));
+                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), 
+                    new StringKey(null,s,false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1),
@@ -172,7 +174,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void AddButton(int number)
     {
         eventComponent.nextEvent.Insert(number, new List<string>());
-        eventComponent.buttons.Insert(number, new StringKey("Button " + (number + 1), false));
+        eventComponent.buttons.Insert(number, new StringKey(null,"Button " + (number + 1), false));
         eventComponent.buttonColors.Insert(number, "white");
         Update();
     }

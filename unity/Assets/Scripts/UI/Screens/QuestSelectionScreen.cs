@@ -117,7 +117,7 @@ namespace Assets.Scripts.UI.Screens
                             new Vector2(4, offset), 
                             new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f),
                             // TODO: Expansion names should be keys too
-                            new StringKey("val", "REQUIRES_EXPANSION", new StringKey(game.cd.GetContentName(s), false)),                    
+                            new StringKey("val", "REQUIRES_EXPANSION", game.cd.GetContentName(s)),                    
                             Color.black);
                         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                         db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

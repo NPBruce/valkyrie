@@ -100,7 +100,7 @@ public class QuestDownload : MonoBehaviour
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
                         //TODO: the name should be another key in near future. now is a nonLookup key
-                        new StringKey("val", "QUEST_NAME_UPDATE", new StringKey(kv.Value["name"], false)),
+                        new StringKey("val", "QUEST_NAME_UPDATE", kv.Value["name"]),
                         delegate { Selection(file); }, 
                         Color.black, offset);
 
@@ -127,7 +127,7 @@ public class QuestDownload : MonoBehaviour
                     db = new DialogBox(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
-                        new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                        new StringKey("val", "INDENT", kv.Value["name"]),
                         Color.black);
                     db.AddBorder();
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);
@@ -153,7 +153,7 @@ public class QuestDownload : MonoBehaviour
                 tb = new TextButton(
                     new Vector2(2, offset), 
                     new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                    new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                    new StringKey("val", "INDENT", kv.Value["name"]),
                     delegate { Selection(file); }, 
                     Color.black, offset);
 
@@ -178,7 +178,7 @@ public class QuestDownload : MonoBehaviour
                 db = new DialogBox(
                     new Vector2(2, offset),
                     new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
-                    new StringKey("val", "INDENT", new StringKey(kv.Value["name"], false)),
+                    new StringKey("val", "INDENT", kv.Value["name"]),
                     Color.black);
                 db.AddBorder();
                 db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);

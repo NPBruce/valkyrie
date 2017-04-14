@@ -61,7 +61,7 @@ public class EditorComponentQuest : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(game.quest.qd.quest.packs[index],false));
+                    new StringKey(null, game.quest.qd.quest.packs[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),

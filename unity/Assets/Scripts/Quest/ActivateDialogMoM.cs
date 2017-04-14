@@ -29,7 +29,7 @@ public class ActivateDialogMoM : ActivateDialog
             // ability text
             string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
             db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(textKey,false));
+                new StringKey(null, textKey,false));
             db.AddBorder();
             offset += 4.5f;
         }
@@ -85,7 +85,7 @@ public class ActivateDialogMoM : ActivateDialog
 
         float offset = 2.5f;
         db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            new StringKey(monster.currentActivation.move.Replace("\\n", "\n"),false));
+            new StringKey(null, monster.currentActivation.move.Replace("\\n", "\n"),false));
         db.AddBorder();
 
         offset += 4.5f;

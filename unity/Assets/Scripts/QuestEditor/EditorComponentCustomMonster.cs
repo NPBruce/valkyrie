@@ -50,7 +50,8 @@ public class EditorComponentCustomMonster : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), new StringKey(name.Substring("CustomMonster".Length),false), delegate { QuestEditorData.ListCustomMonster(); });
+        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), 
+            new StringKey(null,name.Substring("CustomMonster".Length),false), delegate { QuestEditorData.ListCustomMonster(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -64,7 +65,8 @@ public class EditorComponentCustomMonster : EditorComponent
             new StringKey("val", "X_COLON", BASE));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), new StringKey(monsterComponent.baseMonster,false),  delegate { SetBase(); });
+        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), 
+            new StringKey(null,monsterComponent.baseMonster,false),  delegate { SetBase(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -138,7 +140,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), 
-                    new StringKey(monsterComponent.activations[index],false));
+                    new StringKey(null,monsterComponent.activations[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), 
@@ -162,7 +164,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1),
-                    new StringKey(monsterComponent.traits[index],false));
+                    new StringKey(null,monsterComponent.traits[index],false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
@@ -207,7 +209,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
             tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), 
-                new StringKey(monsterComponent.imagePath,false), delegate { SetImage(); });
+                new StringKey(null,monsterComponent.imagePath,false), delegate { SetImage(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length > 0)
@@ -230,7 +232,8 @@ public class EditorComponentCustomMonster : EditorComponent
             db.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
             {
-                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), new StringKey(monsterComponent.imagePath,false), delegate { SetImagePlace(); });
+                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), 
+                    new StringKey(null,monsterComponent.imagePath,false), delegate { SetImagePlace(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
                 if (monsterComponent.baseMonster.Length > 0)

@@ -47,7 +47,7 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = new StringKey(EventManager.SymbolReplace(qm.info.fullKey), false);
+        info = new StringKey(null, EventManager.SymbolReplace(qm.info.fullKey), false);
         if (info.fullKey.Length == 0 && baseObject != null)
         {
             info = baseObject.info;
@@ -98,13 +98,13 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        ability = new StringKey(EventManager.SymbolReplace(qa.ability.fullKey), false);
-        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.fullKey), false);
-        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.fullKey), false);
+        ability = qa.ability;
+        masterActions = qa.masterActions;
+        minionActions = qa.minionActions;
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
-        move = new StringKey(EventManager.SymbolReplace(qa.move.fullKey), false);
-        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.fullKey), false);
+        move = qa.move;
+        moveButton = qa.moveButton;
         sectionName = qa.sectionName;
     }
 }

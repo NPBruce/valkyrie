@@ -34,11 +34,13 @@ public class LogWindow
         DialogBox db = null;
         if (developerToggle)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), new StringKey(log,false), Color.black, new Color(1, 1, 1, 0.9f));
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), 
+                new StringKey(null, log, false), Color.black, new Color(1, 1, 1, 0.9f));
         }
         else
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), new StringKey(log,false), Color.black, new Color(1, 1, 1, 0.9f));
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), 
+                new StringKey(null, log, false), Color.black, new Color(1, 1, 1, 0.9f));
         }
 
         db.AddBorder();
@@ -87,7 +89,7 @@ public class LogWindow
 
             db = new DialogBox(
                 new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), 
-                new StringKey(key,false), Color.black, Color.white);
+                new StringKey(null, key, false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             db.background.transform.parent = scrollArea.transform;
             db.AddBorder();

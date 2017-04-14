@@ -28,7 +28,7 @@ public class EditorComponentMPlace : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("MPlace".Length),false), 
+            new StringKey(null,name.Substring("MPlace".Length),false), 
             delegate { QuestEditorData.ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

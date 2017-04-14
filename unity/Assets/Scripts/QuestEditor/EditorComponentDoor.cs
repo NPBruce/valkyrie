@@ -33,7 +33,7 @@ public class EditorComponentDoor : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Door".Length),false), 
+            new StringKey(null,name.Substring("Door".Length),false), 
             delegate { QuestEditorData.ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;

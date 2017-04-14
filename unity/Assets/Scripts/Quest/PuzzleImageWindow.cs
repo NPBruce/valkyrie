@@ -82,7 +82,7 @@ public class PuzzleImageWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 10f), new Vector2(3f, 2f),
-            new StringKey(EventManager.SymbolReplace(questPuzzle.skill),false));
+            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

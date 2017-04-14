@@ -450,11 +450,11 @@ public class EventManager
                 return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
             } else if (qMonster.uniqueTitle.isKey())
             {
-                return new StringKey(qMonster.uniqueTitle.fullKey.Replace("}", ":{type}:" + cMonster.name.fullKey));
+                return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
             } else
             {
                 // non key stringkey
-                return new StringKey(qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
+                return new StringKey(null,qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
             }
             
         }

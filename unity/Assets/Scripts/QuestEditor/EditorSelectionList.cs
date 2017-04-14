@@ -84,7 +84,7 @@ public class EditorSelectionList
         float hOffset = 22;
         foreach (string s in traits)
         {
-            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(s,false));
+            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, s,false));
             float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
             db.Destroy();
             if (hOffset + width > 40)
@@ -95,11 +95,13 @@ public class EditorSelectionList
             string tmp = s;
             if (filter.Count == 0)
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp,false), delegate { SetFilter(s); });
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
+                    new StringKey(null, tmp, false), delegate { SetFilter(s); });
             }
             else if (filter.Contains(s))
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp,false), delegate { ClearFilter(s); });
+                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
+                    new StringKey(null, tmp, false), delegate { ClearFilter(s); });
             }
             else
             {
@@ -113,11 +115,13 @@ public class EditorSelectionList
                 }
                 if (valid)
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp, false), delegate { SetFilter(s); }, Color.gray);
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
+                        new StringKey(null, tmp, false), delegate { SetFilter(s); }, Color.gray);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), new StringKey(tmp, false), delegate { ; }, new Color(0.5f, 0, 0));
+                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
+                        new StringKey(null, tmp, false), delegate { ; }, new Color(0.5f, 0, 0));
                 }
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -134,7 +138,8 @@ public class EditorSelectionList
             if (filtered.Count > i)
             {
                 string key = filtered[i].name;
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), new StringKey(key,false), delegate { SelectComponent(key); }, filtered[i].color);
+                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
+                    new StringKey(null, key, false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             offset += 1;
@@ -144,11 +149,11 @@ public class EditorSelectionList
         {
             // Prev button
             offset += 1;
-            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), new StringKey("<",false), delegate { PreviousPage(); });
+            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), new StringKey(null, "<", false), delegate { PreviousPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             // Next button
-            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), new StringKey(">", false), delegate { NextPage(); });
+            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), new StringKey(null, ">", false), delegate { NextPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }

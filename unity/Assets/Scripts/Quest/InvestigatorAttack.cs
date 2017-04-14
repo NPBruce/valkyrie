@@ -48,7 +48,7 @@ public class InvestigatorAttack
             // Make first character upper case
             string nameType = System.Char.ToUpper(type[0]) + type.Substring(1);
             new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), 
-                new StringKey(nameType,false), delegate { Attack(tmpType); });
+                new StringKey(null, nameType, false), delegate { Attack(tmpType); });
             offset += 2.5f;
         }
 
@@ -84,7 +84,7 @@ public class InvestigatorAttack
     {
         Destroyer.Dialog();
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(attackText,false));
+            new StringKey(null, attackText, false));
         db.AddBorder();
 
         if (monster.damage == monster.GetHealth())

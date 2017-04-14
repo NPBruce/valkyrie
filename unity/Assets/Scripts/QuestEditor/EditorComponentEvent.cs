@@ -67,13 +67,13 @@ public class EditorComponentEvent : EditorComponent
         }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
-            new StringKey(type,false), delegate { QuestEditorData.TypeSelect(); });
+            new StringKey(null,type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring(type.Length),false), 
+            new StringKey(null,name.Substring(type.Length),false), 
             delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -145,14 +145,16 @@ public class EditorComponentEvent : EditorComponent
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 12), new Vector2(10, 1), 
-            new StringKey(eventComponent.trigger,false), delegate { SetTrigger(); });
+            new StringKey(null,eventComponent.trigger,false), delegate { SetTrigger(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), new StringKey("val", "X_COLON", AUDIO));
+        db = new DialogBox(new Vector2(0, 13), new Vector2(4, 1), 
+            new StringKey("val", "X_COLON", AUDIO));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 13), new Vector2(10, 1), new StringKey(eventComponent.audio,false), delegate { SetAudio(); });
+        tb = new TextButton(new Vector2(4, 13), new Vector2(10, 1), 
+            new StringKey(null,eventComponent.audio,false), delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -161,7 +163,8 @@ public class EditorComponentEvent : EditorComponent
             db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
             db.ApplyTag("editor");
 
-            tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), new StringKey(eventComponent.heroListName,false), delegate { SetHighlight(); });
+            tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), 
+                new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
@@ -196,7 +199,7 @@ public class EditorComponentEvent : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(eventComponent.addComponents[index],false)
+                    new StringKey(null,eventComponent.addComponents[index],false)
                     );
                 db.AddBorder();
                 db.ApplyTag("editor");
@@ -223,7 +226,7 @@ public class EditorComponentEvent : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(10, offset), new Vector2(9, 1), 
-                    new StringKey(eventComponent.removeComponents[index],false)
+                    new StringKey(null,eventComponent.removeComponents[index],false)
                     );
                 db.AddBorder();
                 db.ApplyTag("editor");

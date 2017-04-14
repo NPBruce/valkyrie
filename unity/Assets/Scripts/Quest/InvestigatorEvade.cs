@@ -41,7 +41,8 @@ public class InvestigatorEvade {
     public void Draw()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), new StringKey(text,false));
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
+            new StringKey(null, text, false));
         db.AddBorder();
 
         if (m.damage == m.GetHealth())

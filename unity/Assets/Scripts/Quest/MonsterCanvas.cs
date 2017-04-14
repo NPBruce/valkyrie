@@ -6,8 +6,8 @@ using Assets.Scripts.Content;
 // This class controls the list of monsters
 public class MonsterCanvas : MonoBehaviour
 {
-    private readonly StringKey UP_ARROW = new StringKey("/\\", false);
-    private readonly StringKey DOWN_ARROW = new StringKey("\\/", false);
+    private readonly StringKey UP_ARROW = new StringKey(null, "/\\", false);
+    private readonly StringKey DOWN_ARROW = new StringKey(null, "\\/", false);
 
     // offset stores the scoll position, reset at creation
     public int offset = 0;
@@ -206,7 +206,10 @@ public class MonsterCanvas : MonoBehaviour
 
                 if (m.GetHealth() != 0)
                 {
-                    TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), new StringKey(m.GetHealth().ToString(), false), delegate { MonsterDiag(); }, Color.red);
+                    TextButton tb = new TextButton(
+                        new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), 
+                        new StringKey(null,m.GetHealth().ToString(), false), 
+                        delegate { MonsterDiag(); }, Color.red);
                     tb.ApplyTag("monsters");
                 }
             }

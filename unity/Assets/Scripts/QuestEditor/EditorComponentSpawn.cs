@@ -50,7 +50,8 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
+            new StringKey(null,name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -172,7 +173,7 @@ public class EditorComponentSpawn : EditorComponent
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(1, 21 + i), new Vector2(11, 1), new StringKey(mName,false), delegate { MonsterTypeReplace(mSlot); });
+                tb = new TextButton(new Vector2(1, 21 + i), new Vector2(11, 1), new StringKey(null,mName,false), delegate { MonsterTypeReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
@@ -197,11 +198,13 @@ public class EditorComponentSpawn : EditorComponent
                 int mSlot = i;
                 string mName = spawnComponent.mTraitsRequired[i];
 
-                tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
+                tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), 
+                    CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), new StringKey(mName,false), delegate { MonsterTraitReplace(mSlot); });
+                tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), 
+                    new StringKey(null, mName,false), delegate { MonsterTraitReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -221,11 +224,13 @@ public class EditorComponentSpawn : EditorComponent
                 int mSlot = j;
                 string mName = spawnComponent.mTraitsPool[j];
 
-                tb = new TextButton(new Vector2(14, 22 + spawnComponent.mTraitsRequired.Length + j), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
+                tb = new TextButton(new Vector2(14, 22 + spawnComponent.mTraitsRequired.Length + j), 
+                    new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(15, 22 + spawnComponent.mTraitsRequired.Length + j), new Vector2(5, 1), new StringKey(mName,false), delegate { MonsterTraitReplace(mSlot, true); });
+                tb = new TextButton(new Vector2(15, 22 + spawnComponent.mTraitsRequired.Length + j), 
+                    new Vector2(5, 1), new StringKey(null, mName,false), delegate { MonsterTraitReplace(mSlot, true); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
