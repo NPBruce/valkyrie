@@ -54,6 +54,7 @@ namespace FFGAppImport
     public enum Platform
     {
         Windows,
-        MacOS
+        MacOS,
+        Linux
     }
 }
