@@ -79,6 +79,10 @@ namespace FFGAppImport
                     ValkyrieDebug.Log("Using location: " + location);
                 }
             }
+            else if (platform == Platform.Linux)
+            {
+
+            }
             else
             {
                 // Attempt to get steam install location (current 32/64 level)

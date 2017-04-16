@@ -19,12 +19,13 @@ mkdir build\batch\valkyrie_Data\content
 mkdir build\batchMac\Valkyrie.app
 mkdir build\batchMac\Valkyrie.app\Contents
 mkdir build\batchLinux\valkyrie-linux-%version%
+mkdir build\batchLinux\valkyrie-linux-%version%\valkyrie_Data
+mkdir build\batchLinux\valkyrie-linux-%version%\valkyrie_Data\content
 
 mkdir build\win
 mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
-mkdir build\linux\valkyrie-linux-%version%
 
 rem Because reasons
 set Target=
@@ -35,7 +36,7 @@ C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe libraries/libraries.sl
 rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
-"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie-linux-%version%
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
@@ -54,14 +55,14 @@ rmdir /s /q build\batch\valkyrie_Data\content\MoM\ffg
 rem copy content from win to macos
 xcopy /I /E /Y build\batch\valkyrie_Data build\batchMac\Valkyrie.app\Contents
 rem copy content from win to linux
-xcopy /I /E /Y build\batch\valkyrie_Data build\batchLinux\valkyrie-linux-%version%
+xcopy /I /E /Y build\batch\valkyrie_Data build\batchLinux\valkyrie-linux-%version%\valkyrie_Data
 
 rem copy over windows build
 xcopy /E /Y build\win build\batch
 rem copy over macos build
 xcopy /E /Y build\macos build\batchMac
 rem copy over linux build
-xcopy /E /Y build\linux build\batchLinux
+xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%version%
 
 rem delete previous build
 del build\valkyrie-win-%version%.zip
