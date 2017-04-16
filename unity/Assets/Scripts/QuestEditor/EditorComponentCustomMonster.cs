@@ -29,6 +29,7 @@ public class EditorComponentCustomMonster : EditorComponent
     EditorSelectionList imageESL;
     EditorSelectionList placeESL;
 
+    // TODO: Translate expansion traits, translate base monster names.
 
     public EditorComponentCustomMonster(string nameIn) : base()
 
@@ -164,7 +165,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1),
-                    new StringKey(null,monsterComponent.traits[index],false));
+                    new StringKey("val",monsterComponent.traits[index]));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
@@ -423,7 +424,7 @@ public class EditorComponentCustomMonster : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         traitsESL = new EditorSelectionList(
             new StringKey("val","SELECT",CommonStringKeys.ACTIVATION), 

@@ -195,6 +195,125 @@ X_ACTIVATED,{0} Activated,{0} Activado,{0} Activé,{0} aktiviert,Attivo,{0},,,,
 
 X_COLON,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:
 
+//TRAITS
+// regex from ab to ab,Ab,,,,,,,
+// ^(([a-z])([a-z]*))\r\n  replace with \1,\U\2\E\3,,,,,,,,\r\n
+
+//Packs
+BtT,BtT ,BtT ,BtT ,BtT ,BtT ,BtT ,BtT ,BtT ,BtT 
+CotW,CotW ,CotW ,CotW ,CotW ,CotW ,CotW ,CotW ,CotW ,CotW 
+FA,FA ,FA ,FA ,FA ,FA ,FA ,FA ,FA ,FA 
+MoM1E,MoM1E ,MoM1E ,MoM1E ,MoM1E ,MoM1E ,MoM1E ,MoM1E ,MoM1E ,MoM1E 
+base,base ,base ,base ,base ,base ,base ,base ,base ,base 
+RN,RN ,RN ,RN ,RN ,RN ,RN ,RN ,RN ,RN 
+SM,SM ,SM ,SM ,SM ,SM ,SM ,SM ,SM ,SM 
+
+//Items
+weapon,Weapon,Arma,,,,,,,
+firearm,Firearm,Arma de Fuego,,,,,,,
+heavyweapon,Heavy Weapon,Arma Contundente,,,,,,,
+tome,Tome,Tomo,,,,,,,
+equipment,Equipment,Equipo,,,,,,,
+lightsource,Lightsource,Fuente de Luz,,,,,,,
+bladedweapon,Bladed Weapon,Arma de Filo,,,,,,,
+key,Key,Llave,,,,,,,
+evidence,Evidence,Pista,,,,,,,
+ally,Ally,Aliado,,,,,,,
+
+//Audio
+menu,Menu,Menú,,,,,,,
+music,Music,Música,,,,,,,
+quest,Quest,Escenario,,,,,,,
+defeated,Defeated,Derrotado,,,,,,,
+newround,New Round,Nueva Ronda,,,,,,,
+attack,Attack,Ataque,,,,,,,
+unarmed,Unarmed,Sin Arma,,,,,,,
+horror,Horror,Horror,,,,,,,
+search,Search,Búsqueda,,,,,,,
+explore,Explore,Exploración,,,,,,,
+
+//Heroes
+latari,Latari,Latari,,,,,,,
+dwarf,Dwarf,Enano,,,,,,,
+gnome,Gnome,Gnomo,,,,,,,
+male,Male,Hombre,,,,,,,
+female,Female,Mujer,,,,,,,
+
+//monsters
+undead,Undead,No Muerto,,,,,,,
+humanoid,Humanoid,Humanoide,,,,,,,
+spirit,Spirit,Espíritu,,,,,,,
+beast,Beast,Bestia,,,,,,,
+agent,Agent,Agente,,,,,,,
+lieutenant,Lieutenant,Teniente,,,,,,,
+small,Small,Pequeño,,,,,,,
+medium,Medium,Mediano,,,,,,,
+huge,Huge,Gigante,,,,,,,
+massive,Massive,Masivo,,,,,,,
+building,Building,Edificio,,,,,,,
+melee,Melee,Melé,,,,,,,
+ranged,Ranged,Distancia,,,,,,,
+goblin,Goblin,Goblin,,,,,,,
+cursed,Cursed,Maldito,,,,,,,
+cave,Cave,Cueva,,,,,,,
+wilderness,Wilderness,Naturaleza,,,,,,,
+civilized,Civilized,Civilización,,,,,,,
+dark,Dark,Oscuridad,,,,,,,
+mountain,Mountain,Montaña,,,,,,,
+cold,Cold,Frío,,,,,,,
+hot,Hot,Caliente,,,,,,,
+water,Water,Agua,,,,,,,
+
+//Tiles
+basement,Basement,Sótano,,,,,,,
+river,River,Río,,,,,,,
+street,Street,Calle,,,,,,,
+hallway,Hallway,Pasillo,,,,,,,
+bathroom,Bathroom,Baño,,,,,,,
+bedroom,Bedroom,Dormitorio,,,,,,,
+kitcken,Kitcken,Cocina,,,,,,,
+dock,Dock,Muelle,,,,,,,
+storage,Storage,Almacén,,,,,,,
+outside,Outside,Exterior,,,,,,,
+inside,Inside,Interior,,,,,,,
+small,Small,Pequeño,,,,,,,
+medium,Medium,Mediano,,,,,,,
+big,Big,Grande,,,,,,,
+transition,Transition,Transición,,,,,,,
+throne,Throne,Trono,,,,,,,
+pit,Pit,Abismo,,,,,,,
+farm,Farm,Granja,,,,,,,
+tomb,Tomb,Tumba,,,,,,,
+library,Library,Biblioteca,,,,,,,
+graves,Graves,Cementerio,,,,,,,
+bridge,Bridge,Puente,,,,,,,
+stairs,Stairs,Escaleras,,,,,,,
+torture,Torture,Tortura,,,,,,,
+tents,Tents,Tiendas,,,,,,,
+stables,Stables,Establos,,,,,,,
+hall,Hall,Salón,,,,,,,
+bedroom,Bedroom,Dormitorio,,,,,,,
+city,City,Ciudad,,,,,,,
+fountain,Fountain,Fuente,,,,,,,
+blackrealm,Blackrealm,Reino de Oscuridad,,,,,,,
+altar,Altar,Altar,,,,,,,
+beds,Beds,Camas,,,,,,,
+study,Study,Estudio,,,,,,,
+prison,Prison,Prisión,,,,,,,
+plinth,Plinth,Pedestal,,,,,,,
+tavern,Tavern,Taberna,,,,,,,
+statues,Statues,Estatuas,,,,,,,
+drawbridge,Drawbridge,Puente Levadizo,,,,,,,
+rubble,Rubble,Escombros,,,,,,,
+treasure,Treasure,Tesoro,,,,,,,
+stone,Stone,Piedra,,,,,,,
+dirt,Dirt,Mugre,,,,,,,
+timber,Timber,Madera,,,,,,,
+snow,Snow,Nieve,,,,,,,
+lava,Lava,Lava,,,,,,,
+swamp,Swamp,Pantano,,,,,,,
+sludge,Sludge,Lodo,,,,,,
+
 //Inherited from FFG localization files
 SET_FIRE,Set Fire,Prender fuego,Mettre le feu,Feuer legen,Incendia,Tocar Fogo,Podpalenie,炎トークンを置く,點火
 INVESTIGATOR_ELIMINATED,Investigator Eliminated,Investigador eliminado,Investigateur éliminé,Ermittler ausgeschieden,Investigatore Eliminato,Investigador Eliminado,Wyeliminowano badacza,探索者の死亡,調查員被消滅

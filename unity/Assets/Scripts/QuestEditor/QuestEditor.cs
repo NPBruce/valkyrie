@@ -78,6 +78,7 @@ public class QuestEditor {
         {
             string ini_file = content.ToString();
             File.WriteAllText(game.quest.qd.questPath, ini_file);
+
             if (LocalizationRead.scenarioDict != null)
             {
                 List<string> localization_file = LocalizationRead.scenarioDict.Serialize();

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
@@ -7,6 +6,8 @@ using Assets.Scripts.Content;
 // Used by quest editor
 public class EditorSelectionList
 {
+    private const string VAL = "val";
+
     // Selection made
     public string selection = null;
     // List of items to select
@@ -21,7 +22,13 @@ public class EditorSelectionList
     public HashSet<string> traits;
     public int perPage = 20;
 
-    // Create editor selection clist with title, list, colour and callback
+    /// <summary>
+    /// Create editor selection clist with title, list, colour and callback.
+    /// Creates a list of possible traits extracted from items
+    /// </summary>
+    /// <param name="newTitle">title of the dialog</param>
+    /// <param name="list">list of selectable items</param>
+    /// <param name="call">callback delegate</param>
     public EditorSelectionList(StringKey newTitle, List<SelectionListEntry> list, UnityEngine.Events.UnityAction call)
     {
         items = list;
@@ -69,6 +76,7 @@ public class EditorSelectionList
                     if (!e.filter.Contains(s))
                     {
                         valid = false;
+                        break;
                     }
                 }
                 if (valid)
@@ -82,9 +90,10 @@ public class EditorSelectionList
         TextButton tb = null;
 
         float hOffset = 22;
-        foreach (string s in traits)
+        foreach (string trait in traits)
         {
-            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, s,false));
+            // Traits are in val dictionary
+            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(VAL, trait));
             float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
             db.Destroy();
             if (hOffset + width > 40)
@@ -92,16 +101,16 @@ public class EditorSelectionList
                 hOffset = 22;
                 offset++;
             }
-            string tmp = s;
+            string tmp = trait;
             if (filter.Count == 0)
             {
                 tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(null, tmp, false), delegate { SetFilter(s); });
+                    new StringKey(VAL, tmp), delegate { SetFilter(trait); });
             }
-            else if (filter.Contains(s))
+            else if (filter.Contains(trait))
             {
                 tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(null, tmp, false), delegate { ClearFilter(s); });
+                    new StringKey(VAL, tmp), delegate { ClearFilter(trait); });
             }
             else
             {
@@ -111,17 +120,18 @@ public class EditorSelectionList
                     if (e.filter.Contains(tmp))
                     {
                         valid = true;
+                        break;
                     }
                 }
                 if (valid)
                 {
                     tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(null, tmp, false), delegate { SetFilter(s); }, Color.gray);
+                        new StringKey(VAL, tmp), delegate { SetFilter(trait); }, Color.gray);
                 }
                 else
                 {
                     tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(null, tmp, false), delegate { ; }, new Color(0.5f, 0, 0));
+                        new StringKey(VAL, tmp), delegate { ; }, new Color(0.5f, 0, 0));
                 }
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -137,9 +147,10 @@ public class EditorSelectionList
             // limit to array length
             if (filtered.Count > i)
             {
-                string key = filtered[i].name;
+                // Print the name but select the key
+                string key = filtered[i].key;
                 tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
-                    new StringKey(null, key, false), delegate { SelectComponent(key); }, filtered[i].color);
+                    new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             offset += 1;
@@ -206,21 +217,54 @@ public class EditorSelectionList
         returnCall();
     }
 
+    /// <summary>
+    /// Selection list entry
+    /// </summary>
     public class SelectionListEntry
     {
         public Color color = Color.white;
         public string name = "";
+        public string key = "";
         public List<string> filter;
 
+        public static SelectionListEntry BuildNameKeyItem(string namekey)
+        {
+            SelectionListEntry entry = new SelectionListEntry();
+            entry.name = new StringKey(VAL,namekey).Translate();
+            entry.key = namekey;
+            return entry;
+        }
+
+        public static SelectionListEntry BuildNameKeyItem(string name, string key)
+        {
+            SelectionListEntry entry = new SelectionListEntry();
+            entry.name = name;
+            entry.key = key;
+            return entry;
+        }
+
+        public static SelectionListEntry BuildNameKeyTraitsItem(string name, string key, List<string> traits)
+        {
+            SelectionListEntry entry = BuildNameKeyItem(name, key);
+            entry.filter = traits;
+            return entry;
+        }
+
+        private SelectionListEntry()
+        {
+            filter = new List<string>();
+        }
         public SelectionListEntry(string nameKeyIn)
         {
             name = nameKeyIn;
+            key = name;
             filter = new List<string>();
         }
 
         public SelectionListEntry(string nameKeyIn, Color c)
         {
             name = nameKeyIn;
+            key = name;
             filter = new List<string>();
             color = c;
         }
@@ -228,12 +272,14 @@ public class EditorSelectionList
         public SelectionListEntry(string nameKeyIn, List<string> l)
         {
             name = nameKeyIn;
+            key = name;
             filter = l;
         }
 
         public SelectionListEntry(string nameKeyIn, string l)
         {
             name = nameKeyIn;
+            key = name;
             filter = new List<string>();
             filter.Add(l);
         }
@@ -241,6 +287,7 @@ public class EditorSelectionList
         public SelectionListEntry(string nameKeyIn, List<string> l, Color c)
         {
             name = nameKeyIn;
+            key = name;
             filter = l;
             color = c;
         }
@@ -248,6 +295,7 @@ public class EditorSelectionList
         public SelectionListEntry(string nameKeyIn, string l, Color c)
         {
             name = nameKeyIn;
+            key = name;
             filter = new List<string>();
             filter.Add(l);
             color = c;

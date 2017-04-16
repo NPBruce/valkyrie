@@ -178,15 +178,15 @@ namespace Assets.Scripts.Content
 
         /// <summary>
         /// Create entries for every raw data.
-        /// Repeated data will replace so the last
-        /// in the array will persist.
+        /// Repeated data will not replace
         /// </summary>
         public void flushRaw()
         {
             foreach(string rawLine in rawDict)
             {
-                // Process non language list line
-                if (!rawLine.StartsWith("."))
+                string key = rawLine.Split(COMMA)[0];
+                // Process non repeated list line
+                if (!dict.ContainsKey(key))
                 {
                     Add(new EntryI18n(this, rawLine));
                 }

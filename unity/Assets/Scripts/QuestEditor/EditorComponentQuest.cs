@@ -61,7 +61,7 @@ public class EditorComponentQuest : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(null, game.quest.qd.quest.packs[index],false));
+                    new StringKey("val", game.quest.qd.quest.packs[index]));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
@@ -102,7 +102,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (pack.id.Length > 0)
             {
-                packs.Add(new EditorSelectionList.SelectionListEntry(pack.id));
+                packs.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(pack.id));
             }
         }
 

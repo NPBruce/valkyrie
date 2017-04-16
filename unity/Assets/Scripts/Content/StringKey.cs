@@ -48,7 +48,7 @@ namespace Assets.Scripts.Content
 
         private string dict;
 
-        private string key;
+        public readonly string key;
 
         private List<string> parameters = null;
 

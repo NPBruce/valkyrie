@@ -1083,15 +1083,14 @@ public class GenericData
     // Does the component contain a trait?
     public bool ContainsTrait(string trait)
     {
-        bool t = false;
         foreach (string s in traits)
         {
             if (trait.Equals(s))
             {
-                t = true;
+                return true;
             }
         }
-        return t;
+        return false;
     }
 }
 
