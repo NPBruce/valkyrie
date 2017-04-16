@@ -75,7 +75,7 @@ public class EditorComponentItem : EditorComponent
         {
             int tmp = i;
             db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), 
-                new StringKey(null,itemComponent.traits[i],false));
+                new StringKey("val",itemComponent.traits[i]));
             db.ApplyTag("editor");
 
             if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0)
@@ -186,7 +186,7 @@ public class EditorComponentItem : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         traitESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TRAITS), list, delegate { SelectAddTrait(); });
         traitESL.SelectItem();

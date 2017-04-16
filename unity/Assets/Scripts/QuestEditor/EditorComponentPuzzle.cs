@@ -116,9 +116,9 @@ public class EditorComponentPuzzle : EditorComponent
     public void Class()
     {
         List<EditorSelectionList.SelectionListEntry> puzzleClass = new List<EditorSelectionList.SelectionListEntry>();
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("slide"));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("code"));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("image"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("slide"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("code"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("image"));
         classList = new EditorSelectionList(PUZZLE_CLASS_SELECT, puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
