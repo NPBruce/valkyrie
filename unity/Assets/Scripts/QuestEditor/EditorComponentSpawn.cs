@@ -204,7 +204,7 @@ public class EditorComponentSpawn : EditorComponent
                 tb.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), 
-                    new StringKey(null, mName,false), delegate { MonsterTraitReplace(mSlot); });
+                    new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -230,7 +230,7 @@ public class EditorComponentSpawn : EditorComponent
                 tb.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(15, 22 + spawnComponent.mTraitsRequired.Length + j), 
-                    new Vector2(5, 1), new StringKey(null, mName,false), delegate { MonsterTraitReplace(mSlot, true); });
+                    new Vector2(5, 1), new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot, true); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -423,7 +423,7 @@ public class EditorComponentSpawn : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTraitReplace(pos, pool); });
         monsterTraitESL.SelectItem();
@@ -457,7 +457,7 @@ public class EditorComponentSpawn : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTrait(pool); });
         monsterTraitESL.SelectItem();

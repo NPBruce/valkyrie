@@ -59,8 +59,9 @@ public class EditorComponentPuzzle : EditorComponent
             new StringKey("val", "X_COLON", PUZZLE_CLASS));
         db.ApplyTag("editor");
 
+        // Translate puzzle type trait
         tb = new TextButton(new Vector2(5, 2), new Vector2(8, 1), 
-            new StringKey(null,puzzleComponent.puzzleClass,false), delegate { Class(); });
+            new StringKey("val",puzzleComponent.puzzleClass), delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

@@ -67,7 +67,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey(null,randomButton,false), delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
