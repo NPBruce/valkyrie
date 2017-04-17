@@ -27,6 +27,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
+        public static readonly StringKey NONE = new StringKey(VAL, "NONE");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
 

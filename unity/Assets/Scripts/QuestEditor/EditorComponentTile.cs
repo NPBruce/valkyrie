@@ -80,27 +80,27 @@ public class EditorComponentTile : EditorComponent
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             string display = kv.Key;
-            List<string> sets = new List<string>(kv.Value.traits);
+            List<string> traits = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
                 if (s.Length == 0)
                 {
-                    sets.Add("base");
+                    traits.Add("base");
                 }
                 else
                 {
                     display += " " + s;
-                    sets.Add(s);
+                    traits.Add(s);
                 }
             }
 
             if (usedSides.Contains(kv.Key))
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.grey));
             }
             else
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.white));
             }
         }
         tileESL = new EditorSelectionList(

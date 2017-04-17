@@ -141,7 +141,7 @@ public class EditorComponentEventVars : EditorComponent
     public void AddTestOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
+        list.Add(new EditorSelectionList.SelectionListEntry(CommonStringKeys.NEW.Translate(), "Quest"));
         list.AddRange(GetQuestVars());
 
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
@@ -164,7 +164,7 @@ public class EditorComponentEventVars : EditorComponent
     public void AddAssignOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
+        list.Add(new EditorSelectionList.SelectionListEntry(CommonStringKeys.NEW.Translate(), "Quest"));
         list.AddRange(GetQuestVars());
         varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
@@ -327,7 +327,7 @@ public class EditorComponentEventVars : EditorComponent
     public void SetValue(QuestData.Event.VarOperation op)
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NUMBER}", "Quest"));
+        list.Add(new EditorSelectionList.SelectionListEntry(CommonStringKeys.NUMBER.Translate(), "Quest"));
         list.AddRange(GetQuestVars());
 
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));

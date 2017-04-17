@@ -191,7 +191,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
         {
-            colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
         }
         colorESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
         colorESL.SelectItem();
@@ -214,7 +214,8 @@ public class EditorComponentEventNextEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
-        events.Add(new EditorSelectionList.SelectionListEntry("{NEW:Event}"));
+        events.Add(new EditorSelectionList.SelectionListEntry(
+            new StringKey("val","NEW_X",CommonStringKeys.EVENT).Translate(),"{NEW:Event}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)

@@ -109,6 +109,8 @@ MPLACE,MPlace,Posición,Position,MPosition,Posizione,,,,
 MUSIC,Music,Música,Musique,Musik,Musica,,,,
 NAME,Name,Nombre,Nom,Name,Nome,,,,
 NEW,New,Nuevo,Nouveau,Neu,Nuovo,,,,
+NEW_X,{New {0}},{Nuevo {0}},{Nouveau {0}},{Neu {0}},{Nuovo {0}},,,,
+NONE,{None},{Ninguno},,,,,,,
 
 NEXT_EVENTS,Next Events,Siguientes Eventos,Evénements suivants,Nächstes Ereignis,Evento Successivo,,,,
 NOT_FIRST,Not First,No Primero,Pas en premier,Nicht zuerst,Non Primo,,,,

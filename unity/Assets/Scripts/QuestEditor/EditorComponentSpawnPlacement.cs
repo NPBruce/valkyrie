@@ -78,7 +78,8 @@ public class EditorComponentSpawnPlacement : EditorComponent
         Game game = Game.Get();
 
         List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
-        mplaces.Add(new EditorSelectionList.SelectionListEntry("{NEW:MPlace}"));
+        mplaces.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.MPLACE).Translate(),"{NEW:MPlace}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)

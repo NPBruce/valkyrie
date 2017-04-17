@@ -258,7 +258,7 @@ public class EditorComponentCustomMonster : EditorComponent
         List<EditorSelectionList.SelectionListEntry> baseMonster = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
-        baseMonster.Add(new EditorSelectionList.SelectionListEntry("{NONE}"));
+        baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(CommonStringKeys.NONE.Translate(),"{NONE}"));
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             string display = kv.Key;
