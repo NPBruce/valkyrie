@@ -80,7 +80,7 @@ public class EditorComponentPuzzle : EditorComponent
 
         // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, 6), new Vector2(2, 1), 
-            puzzleComponent.puzzleLevel.ToString(), "", delegate { UpdateLevel(); });
+            puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
         levelDBE.ApplyTag("editor");
         levelDBE.AddBorder();
 
@@ -92,7 +92,7 @@ public class EditorComponentPuzzle : EditorComponent
 
             // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(2, 1), 
-                puzzleComponent.puzzleAltLevel.ToString(), "",delegate { UpdateAltLevel(); });
+                puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
             altLevelDBE.ApplyTag("editor");
             altLevelDBE.AddBorder();
 

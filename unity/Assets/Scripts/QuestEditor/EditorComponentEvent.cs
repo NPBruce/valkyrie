@@ -134,8 +134,7 @@ public class EditorComponentEvent : EditorComponent
 
         eventTextDBE = new DialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 8), 
-            eventComponent.originalText.Translate(), 
-            eventComponent.originaltext_key,
+            eventComponent.originalText.Translate(),
             delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();

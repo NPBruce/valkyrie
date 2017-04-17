@@ -255,7 +255,7 @@ public class EditorComponentEventVars : EditorComponent
         if (op.var.Equals("{NEW}"))
         {
             // Var name doesn localize
-            varText = new QuestEditorTextEdit(VAR_NAME, "", "", delegate { NewVar(op, test); });
+            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewVar(op, test); });
             varText.EditText();
         }
         else
@@ -355,7 +355,7 @@ public class EditorComponentEventVars : EditorComponent
             // Vars doesnt localize
             varText = new QuestEditorTextEdit(
                 new StringKey("val","X_COLON",NUMBER), 
-                "", "", delegate { SetNumValue(op); });
+                "", delegate { SetNumValue(op); });
             varText.EditText();
         }
         else

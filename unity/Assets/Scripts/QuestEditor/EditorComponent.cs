@@ -83,7 +83,7 @@ public class EditorComponent {
     {
         string name = component.sectionName.Substring(component.typeDynamic.Length);
         //The component name wont be translated but all name relative keys need to be updated
-        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name, "",delegate { RenameFinished(); });
+        rename =  new QuestEditorTextEdit(COMPONENT_NAME, name,delegate { RenameFinished(); });
         rename.EditText();
     }
 
