@@ -81,7 +81,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.label);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
             if (length > buttonWidth)
@@ -99,7 +99,7 @@ public class DialogWindow {
         {
             int numTmp = num++;
             new TextButton(new Vector2(hOffset, offset), new Vector2(buttonWidth, 2), 
-                eb.label, delegate { onButton(numTmp); }, eb.colour);
+                eb.GetLabel(), delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
 
@@ -142,7 +142,7 @@ public class DialogWindow {
         // Only one button, action depends on quota
         new TextButton(
             new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
-            eventData.GetButtons()[0].label, delegate { onQuota(); }, Color.white);
+            eventData.GetButtons()[0].GetLabel(), delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
@@ -262,7 +262,7 @@ public class DialogWindow {
 
     public class EventButton
     {
-        public StringKey label = StringKey.NULL;
+        StringKey label = StringKey.NULL;
         public Color colour = Color.white;
 
         public EventButton(StringKey newLabel,string newColour)
@@ -280,6 +280,11 @@ public class DialogWindow {
             colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
             colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
             colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+        }
+
+        public StringKey GetLabel()
+        {
+            return new StringKey(null, EventManager.SymbolReplace(label.Translate()), false);
         }
     }
 }

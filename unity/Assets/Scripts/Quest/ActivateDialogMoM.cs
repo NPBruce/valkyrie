@@ -60,7 +60,7 @@ public class ActivateDialogMoM : ActivateDialog
         db = new DialogBox(
             new Vector2(10, offset), 
             new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            monster.currentActivation.ad.masterActions);
+            new StringKey(null, EventManager.SymbolReplace(monster.currentActivation.ad.masterActions.Translate()), false));
         db.AddBorder();
 
         offset += 4.5f;

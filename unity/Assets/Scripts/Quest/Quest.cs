@@ -1228,6 +1228,7 @@ public class Quest
                 {
                     effect = ad.ability.Translate().Replace("{0}", monsterName);
                     move = ad.move.Translate().Replace("{0}", monsterName);
+                    move = EventManager.SymbolReplace(move).Replace("\\n", "\n");
                 }
                 else
                 {
@@ -1235,7 +1236,7 @@ public class Quest
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines
-                effect.Replace("\\n", "\n");
+                effect = EventManager.SymbolReplace(effect).Replace("\\n", "\n");
             }
         }
 
