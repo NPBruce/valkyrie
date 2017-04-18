@@ -23,15 +23,13 @@ public class QuestMonster : MonsterData
             baseObject = game.cd.monsters[qm.baseMonster];
         }
 
-        // TODO: We get only the name inherited from fixed
-        // monsters. It can be edited in next Pull Request
-        // when Valkyrie is translated
-        // Set name
-        name = new StringKey(qm.monsterName, false);
         // If name not set use base type
-        if (name.key.Length == 0 && baseObject != null)
+        if (name.fullKey.Length == 0 && baseObject != null)
         {
             name = baseObject.name;
+        } else
+        {
+            name = qm.monsterName;
         }
 
         // Initialise sets
@@ -49,8 +47,8 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = new StringKey(EventManager.SymbolReplace(qm.info.key), false);
-        if (info.key.Length == 0 && baseObject != null)
+        info = new StringKey(null, EventManager.SymbolReplace(qm.info.fullKey), false);
+        if (info.fullKey.Length == 0 && baseObject != null)
         {
             info = baseObject.info;
         }
@@ -100,13 +98,13 @@ public class QuestActivation : ActivationData
     public QuestActivation(QuestData.Activation qa) : base()
     {
         // Read data from activation
-        ability = new StringKey(EventManager.SymbolReplace(qa.ability.key), false);
-        masterActions = new StringKey(EventManager.SymbolReplace(qa.masterActions.key), false);
-        minionActions = new StringKey(EventManager.SymbolReplace(qa.minionActions.key), false);
+        ability = qa.ability;
+        masterActions = qa.masterActions;
+        minionActions = qa.minionActions;
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
-        move = new StringKey(EventManager.SymbolReplace(qa.move.key), false);
-        moveButton = new StringKey(EventManager.SymbolReplace(qa.moveButton.key), false);
+        move = qa.move;
+        moveButton = qa.moveButton;
         sectionName = qa.sectionName;
     }
 }

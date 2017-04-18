@@ -44,7 +44,7 @@ public class EditorComponentPuzzle : EditorComponent
 
         tb = new TextButton(
             new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Puzzle".Length),false), 
+            new StringKey(null,name.Substring("Puzzle".Length),false), 
             delegate { QuestEditorData.ListPuzzle(); });
 
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -59,8 +59,9 @@ public class EditorComponentPuzzle : EditorComponent
             new StringKey("val", "X_COLON", PUZZLE_CLASS));
         db.ApplyTag("editor");
 
+        // Translate puzzle type trait
         tb = new TextButton(new Vector2(5, 2), new Vector2(8, 1), 
-            new StringKey(puzzleComponent.puzzleClass,false), delegate { Class(); });
+            new StringKey("val",puzzleComponent.puzzleClass), delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -69,7 +70,7 @@ public class EditorComponentPuzzle : EditorComponent
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(5, 4), new Vector2(6, 1), 
-            new StringKey(puzzleComponent.skill,false), delegate { Skill(); });
+            new StringKey(null, puzzleComponent.skill,false), delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -77,6 +78,7 @@ public class EditorComponentPuzzle : EditorComponent
             new StringKey("val", "X_COLON", PUZZLE_LEVEL));
         db.ApplyTag("editor");
 
+        // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, 6), new Vector2(2, 1), 
             puzzleComponent.puzzleLevel.ToString(), delegate { UpdateLevel(); });
         levelDBE.ApplyTag("editor");
@@ -88,6 +90,7 @@ public class EditorComponentPuzzle : EditorComponent
                 new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
             db.ApplyTag("editor");
 
+            // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(2, 1), 
                 puzzleComponent.puzzleAltLevel.ToString(), delegate { UpdateAltLevel(); });
             altLevelDBE.ApplyTag("editor");
@@ -100,7 +103,7 @@ public class EditorComponentPuzzle : EditorComponent
                 db.ApplyTag("editor");
 
                 tb = new TextButton(new Vector2(5, 10), new Vector2(8, 1), 
-                    new StringKey(puzzleComponent.imageType,false), delegate { Image(); });
+                    new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
@@ -114,9 +117,9 @@ public class EditorComponentPuzzle : EditorComponent
     public void Class()
     {
         List<EditorSelectionList.SelectionListEntry> puzzleClass = new List<EditorSelectionList.SelectionListEntry>();
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("slide"));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("code"));
-        puzzleClass.Add(new EditorSelectionList.SelectionListEntry("image"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("slide"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("code"));
+        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("image"));
         classList = new EditorSelectionList(PUZZLE_CLASS_SELECT, puzzleClass, delegate { SelectClass(); });
         classList.SelectItem();
     }
@@ -153,13 +156,13 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void UpdateLevel()
     {
-        int.TryParse(levelDBE.uiInput.text, out puzzleComponent.puzzleLevel);
+        int.TryParse(levelDBE.Text, out puzzleComponent.puzzleLevel);
         Update();
     }
 
     public void UpdateAltLevel()
     {
-        int.TryParse(altLevelDBE.uiInput.text, out puzzleComponent.puzzleAltLevel);
+        int.TryParse(altLevelDBE.Text, out puzzleComponent.puzzleAltLevel);
         Update();
     }
     

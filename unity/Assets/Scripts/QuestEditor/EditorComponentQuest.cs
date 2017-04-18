@@ -9,8 +9,8 @@ public class EditorComponentQuest : EditorComponent
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
     // When a component has editable boxes they use these, so that the value can be read
-    public DialogBoxEditable dbe1;
-    public DialogBoxEditable dbe2;
+    public DialogBoxEditable nameDBE;
+    public DialogBoxEditable descriptionDBE;
     EditorSelectionList packESL;
 
     // Quest is a special component with meta data
@@ -30,13 +30,19 @@ public class EditorComponentQuest : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        dbe1 = new DialogBoxEditable(new Vector2(0, 2), new Vector2(20, 1), game.quest.qd.quest.name, delegate { UpdateQuestName(); });
-        dbe1.ApplyTag("editor");
-        dbe1.AddBorder();
+        nameDBE = new DialogBoxEditable(
+            new Vector2(0, 2), new Vector2(20, 1), 
+            game.quest.qd.quest.name.Translate(), 
+            delegate { UpdateQuestName(); });
+        nameDBE.ApplyTag("editor");
+        nameDBE.AddBorder();
 
-        dbe2 = new DialogBoxEditable(new Vector2(0, 4), new Vector2(20, 6), game.quest.qd.quest.description, delegate { UpdateQuestDesc(); });
-        dbe2.ApplyTag("editor");
-        dbe2.AddBorder();
+        descriptionDBE = new DialogBoxEditable(
+            new Vector2(0, 4), new Vector2(20, 6), 
+            game.quest.qd.quest.description.Translate(),
+            delegate { UpdateQuestDesc(); });
+        descriptionDBE.ApplyTag("editor");
+        descriptionDBE.AddBorder();
 
         DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), REQUIRED_EXPANSIONS);
         db.ApplyTag("editor");
@@ -53,7 +59,7 @@ public class EditorComponentQuest : EditorComponent
             {
                 int i = index;
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(game.quest.qd.quest.packs[index],false));
+                    new StringKey("val", game.quest.qd.quest.packs[index]));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
@@ -68,11 +74,10 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!dbe1.uiInput.text.Equals(""))
+        if (!nameDBE.Text.Equals(""))
         {
-            // TODO: Me must, search quest dictionary for the key and change its
-            // translation to the current language
-            game.quest.qd.quest.name = dbe1.uiInput.text;
+            game.quest.qd.quest.name =
+                updateDictionaryTextAndGenKey(game.quest.qd.quest.name_key, nameDBE.Text);
         }
     }
 
@@ -80,8 +85,11 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!dbe2.uiInput.text.Equals(""))
-            game.quest.qd.quest.description = dbe2.uiInput.text;
+        if (!descriptionDBE.Text.Equals(""))
+        {
+            game.quest.qd.quest.description =
+                updateDictionaryTextAndGenKey(game.quest.qd.quest.description_key, descriptionDBE.Text);
+        }
     }
 
     public void QuestAddPack()
@@ -92,7 +100,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (pack.id.Length > 0)
             {
-                packs.Add(new EditorSelectionList.SelectionListEntry(pack.id));
+                packs.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(pack.id));
             }
         }
 

@@ -20,7 +20,7 @@ public class EditorComponentSpawn : EditorComponent
     private readonly StringKey POOL_TRAITS = new StringKey("val", "POOL_TRAITS");
     
     
-    QuestData.Spawn monsterComponent;
+    QuestData.Spawn spawnComponent;
 
     DialogBoxEditable uniqueTitleDBE;
     DialogBoxEditable uniqueTextDBE;
@@ -33,8 +33,8 @@ public class EditorComponentSpawn : EditorComponent
     public EditorComponentSpawn(string nameIn) : base()
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
-        component = monsterComponent;
+        spawnComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
+        component = spawnComponent;
         name = component.sectionName;
         Update();
     }
@@ -42,7 +42,7 @@ public class EditorComponentSpawn : EditorComponent
     override public void Update()
     {
         base.Update();
-        CameraController.SetCamera(monsterComponent.location);
+        CameraController.SetCamera(spawnComponent.location);
         Game game = Game.Get();
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.SPAWN, delegate { QuestEditorData.TypeSelect(); });
@@ -50,7 +50,8 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
+        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
+            new StringKey(null,name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -71,7 +72,7 @@ public class EditorComponentSpawn : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        if (!monsterComponent.locationSpecified)
+        if (!spawnComponent.locationSpecified)
         {
             tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), POSITION_TYPE_UNUSED, delegate { PositionTypeCycle(); });
         }
@@ -89,26 +90,31 @@ public class EditorComponentSpawn : EditorComponent
         db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
         db.ApplyTag("editor");
 
+        // Dumbers dont need translation
         healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
-        monsterComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
+        spawnComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
         healthDBE.ApplyTag("editor");
         healthDBE.AddBorder();
 
         db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
         db.ApplyTag("editor");
 
+        // Numbers dont need translation
         healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
-        monsterComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
+        spawnComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
         healthHeroDBE.ApplyTag("editor");
         healthHeroDBE.AddBorder();
 
         if (game.gameType is D2EGameType)
         {
-            tb = new TextButton(new Vector2(12, 4), new Vector2(8, 1), CommonStringKeys.PLACEMENT, delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
+            tb = new TextButton(
+                new Vector2(12, 4), new Vector2(8, 1), 
+                CommonStringKeys.PLACEMENT, 
+                delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         
-            if (monsterComponent.unique)
+            if (spawnComponent.unique)
             {
                 tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -117,16 +123,22 @@ public class EditorComponentSpawn : EditorComponent
                 db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
                 db.ApplyTag("editor");
 
-                uniqueTitleDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(15, 1), monsterComponent.uniqueTitle, delegate { UpdateUniqueTitle(); });
+                uniqueTitleDBE = new DialogBoxEditable(
+                    new Vector2(5, 8), new Vector2(15, 1),
+                    spawnComponent.uniqueTitle.Translate(),
+                delegate { UpdateUniqueTitle(); });
                 uniqueTitleDBE.ApplyTag("editor");
                 uniqueTitleDBE.AddBorder();
 
                 db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
                 db.ApplyTag("editor");
 
-                uniqueTextDBE = new DialogBoxEditable(new Vector2(0, 11), new Vector2(20, 8), monsterComponent.uniqueText, delegate { UpdateUniqueText(); });
-                uniqueTextDBE.ApplyTag("editor");
-                uniqueTextDBE.AddBorder();
+            uniqueTextDBE = new DialogBoxEditable(
+                new Vector2(0, 11), new Vector2(20, 8), 
+                spawnComponent.uniqueText.Translate(),
+                delegate { UpdateUniqueText(); });
+            uniqueTextDBE.ApplyTag("editor");
+            uniqueTextDBE.AddBorder();
             }
             else
             {
@@ -146,10 +158,10 @@ public class EditorComponentSpawn : EditorComponent
         int i = 0;
         for (i = 0; i < 8; i++)
         {
-            if (monsterComponent.mTypes.Length > i)
+            if (spawnComponent.mTypes.Length > i)
             {
                 int mSlot = i;
-                string mName = monsterComponent.mTypes[i];
+                string mName = spawnComponent.mTypes[i];
                 if (mName.IndexOf("Monster") == 0)
                 {
                     mName = mName.Substring("Monster".Length);
@@ -159,7 +171,7 @@ public class EditorComponentSpawn : EditorComponent
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(1, 21 + i), new Vector2(11, 1), new StringKey(mName,false), delegate { MonsterTypeReplace(mSlot); });
+                tb = new TextButton(new Vector2(1, 21 + i), new Vector2(11, 1), new StringKey(null,mName,false), delegate { MonsterTypeReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
@@ -179,80 +191,92 @@ public class EditorComponentSpawn : EditorComponent
 
         for (i = 0; i < 8; i++)
         {
-            if (monsterComponent.mTraitsRequired.Length > i)
+            if (spawnComponent.mTraitsRequired.Length > i)
             {
                 int mSlot = i;
-                string mName = monsterComponent.mTraitsRequired[i];
+                string mName = spawnComponent.mTraitsRequired[i];
 
-                tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
+                tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), 
+                    CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), new StringKey(mName,false), delegate { MonsterTraitReplace(mSlot); });
+                tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), 
+                    new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
-        db = new DialogBox(new Vector2(14, 21 + monsterComponent.mTraitsRequired.Length), new Vector2(3, 1), POOL_TRAITS);
+        db = new DialogBox(new Vector2(14, 21 + spawnComponent.mTraitsRequired.Length), new Vector2(3, 1), POOL_TRAITS);
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 21 + monsterComponent.mTraitsRequired.Length), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(true); }, Color.green);
+        tb = new TextButton(new Vector2(19, 21 + spawnComponent.mTraitsRequired.Length), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         for (int j = 0; j < 8; j++)
         {
-            if (monsterComponent.mTraitsPool.Length > j)
+            if (spawnComponent.mTraitsPool.Length > j)
             {
                 int mSlot = j;
-                string mName = monsterComponent.mTraitsPool[j];
+                string mName = spawnComponent.mTraitsPool[j];
 
-                tb = new TextButton(new Vector2(14, 22 + monsterComponent.mTraitsRequired.Length + j), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
+                tb = new TextButton(new Vector2(14, 22 + spawnComponent.mTraitsRequired.Length + j), 
+                    new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(15, 22 + monsterComponent.mTraitsRequired.Length + j), new Vector2(5, 1), new StringKey(mName,false), delegate { MonsterTraitReplace(mSlot, true); });
+                tb = new TextButton(new Vector2(15, 22 + spawnComponent.mTraitsRequired.Length + j), 
+                    new Vector2(5, 1), new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot, true); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
             }
         }
 
-        game.tokenBoard.AddHighlight(monsterComponent.location, "MonsterLoc", "editor");
+        game.tokenBoard.AddHighlight(spawnComponent.location, "MonsterLoc", "editor");
     }
 
     public void PositionTypeCycle()
     {
-        monsterComponent.locationSpecified = !monsterComponent.locationSpecified;
+        spawnComponent.locationSpecified = !spawnComponent.locationSpecified;
         Update();
     }
 
     public void UniqueToggle()
     {
-        monsterComponent.unique = !monsterComponent.unique;
+        spawnComponent.unique = !spawnComponent.unique;
         Update();
     }
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.uiInput.text, out monsterComponent.uniqueHealthBase);
+        float.TryParse(healthDBE.Text, out spawnComponent.uniqueHealthBase);
         Update();
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.uiInput.text, out monsterComponent.uniqueHealthHero);
+        float.TryParse(healthHeroDBE.Text, out spawnComponent.uniqueHealthHero);
         Update();
     }
 
     public void UpdateUniqueTitle()
     {
-        monsterComponent.uniqueTitle = uniqueTitleDBE.uiInput.text;
+        if (!uniqueTitleDBE.Text.Equals(""))
+        {
+            spawnComponent.uniqueTitle =
+                updateDictionaryTextAndGenKey(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
+        }
     }
 
     public void UpdateUniqueText()
     {
-        monsterComponent.uniqueText = uniqueTextDBE.uiInput.text;
+        if (!uniqueTextDBE.Text.Equals(""))
+        {
+            spawnComponent.uniqueText =
+                updateDictionaryTextAndGenKey(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
+        }
     }
 
     public void MonsterTypeAdd(int pos)
@@ -337,11 +361,11 @@ public class EditorComponentSpawn : EditorComponent
     {
         if (replace)
         {
-            monsterComponent.mTypes[pos] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
+            spawnComponent.mTypes[pos] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
         }
         else
         {
-            string[] newM = new string[monsterComponent.mTypes.Length + 1];
+            string[] newM = new string[spawnComponent.mTypes.Length + 1];
 
             int j = 0;
             for (int i = 0; i < newM.Length; i++)
@@ -352,34 +376,34 @@ public class EditorComponentSpawn : EditorComponent
                 }
                 else
                 {
-                    newM[i] = monsterComponent.mTypes[j];
+                    newM[i] = spawnComponent.mTypes[j];
                     j++;
                 }
             }
-            monsterComponent.mTypes = newM;
+            spawnComponent.mTypes = newM;
         }
         Update();
     }
 
     public void MonsterTypeRemove(int pos)
     {
-        if ((monsterComponent.mTypes.Length == 1) && (monsterComponent.mTraitsRequired.Length == 0) && (monsterComponent.mTraitsPool.Length == 0))
+        if ((spawnComponent.mTypes.Length == 1) && (spawnComponent.mTraitsRequired.Length == 0) && (spawnComponent.mTraitsPool.Length == 0))
         {
             return;
         }
 
-        string[] newM = new string[monsterComponent.mTypes.Length - 1];
+        string[] newM = new string[spawnComponent.mTypes.Length - 1];
 
         int j = 0;
-        for (int i = 0; i < monsterComponent.mTypes.Length; i++)
+        for (int i = 0; i < spawnComponent.mTypes.Length; i++)
         {
             if (i != pos || i != j)
             {
-                newM[j] = monsterComponent.mTypes[i];
+                newM[j] = spawnComponent.mTypes[i];
                 j++;
             }
         }
-        monsterComponent.mTypes = newM;
+        spawnComponent.mTypes = newM;
         Update();
     }
 
@@ -397,7 +421,7 @@ public class EditorComponentSpawn : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTraitReplace(pos, pool); });
         monsterTraitESL.SelectItem();
@@ -407,11 +431,11 @@ public class EditorComponentSpawn : EditorComponent
     {
         if (pool)
         {
-            monsterComponent.mTraitsPool[pos] = monsterTraitESL.selection;
+            spawnComponent.mTraitsPool[pos] = monsterTraitESL.selection;
         }
         else
         {
-            monsterComponent.mTraitsRequired[pos] = monsterTraitESL.selection;
+            spawnComponent.mTraitsRequired[pos] = monsterTraitESL.selection;
         }
         Update();
     }
@@ -431,7 +455,7 @@ public class EditorComponentSpawn : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTrait(pool); });
         monsterTraitESL.SelectItem();
@@ -441,68 +465,68 @@ public class EditorComponentSpawn : EditorComponent
     {
         if (pool)
         {
-            string[] newM = new string[monsterComponent.mTraitsPool.Length + 1];
+            string[] newM = new string[spawnComponent.mTraitsPool.Length + 1];
 
             int i;
-            for (i = 0; i < monsterComponent.mTraitsPool.Length; i++)
+            for (i = 0; i < spawnComponent.mTraitsPool.Length; i++)
             {
-                newM[i] = monsterComponent.mTraitsPool[i];
+                newM[i] = spawnComponent.mTraitsPool[i];
             }
 
             newM[i] = monsterTraitESL.selection;
-            monsterComponent.mTraitsPool = newM;
+            spawnComponent.mTraitsPool = newM;
         }
         else
         {
-            string[] newM = new string[monsterComponent.mTraitsRequired.Length + 1];
+            string[] newM = new string[spawnComponent.mTraitsRequired.Length + 1];
 
             int i;
-            for (i = 0; i < monsterComponent.mTraitsRequired.Length; i++)
+            for (i = 0; i < spawnComponent.mTraitsRequired.Length; i++)
             {
-                newM[i] = monsterComponent.mTraitsRequired[i];
+                newM[i] = spawnComponent.mTraitsRequired[i];
             }
 
             newM[i] = monsterTraitESL.selection;
-            monsterComponent.mTraitsRequired = newM;
+            spawnComponent.mTraitsRequired = newM;
         }
         Update();
     }
 
     public void MonsterTraitsRemove(int pos, bool pool = false)
     {
-        if ((monsterComponent.mTypes.Length + monsterComponent.mTraitsPool.Length + monsterComponent.mTraitsRequired.Length) <= 1)
+        if ((spawnComponent.mTypes.Length + spawnComponent.mTraitsPool.Length + spawnComponent.mTraitsRequired.Length) <= 1)
         {
             return;
         }
         if (pool)
         {
-            string[] newM = new string[monsterComponent.mTraitsPool.Length - 1];
+            string[] newM = new string[spawnComponent.mTraitsPool.Length - 1];
 
             int j = 0;
-            for (int i = 0; i < monsterComponent.mTraitsPool.Length; i++)
+            for (int i = 0; i < spawnComponent.mTraitsPool.Length; i++)
             {
                 if (i != pos || i != j)
                 {
-                    newM[j] = monsterComponent.mTraitsPool[i];
+                    newM[j] = spawnComponent.mTraitsPool[i];
                     j++;
                 }
             }
-            monsterComponent.mTraitsPool = newM;
+            spawnComponent.mTraitsPool = newM;
         }
         else
         {
-            string[] newM = new string[monsterComponent.mTraitsRequired.Length - 1];
+            string[] newM = new string[spawnComponent.mTraitsRequired.Length - 1];
 
             int j = 0;
-            for (int i = 0; i < monsterComponent.mTraitsRequired.Length; i++)
+            for (int i = 0; i < spawnComponent.mTraitsRequired.Length; i++)
             {
                 if (i != pos || i != j)
                 {
-                    newM[j] = monsterComponent.mTraitsRequired[i];
+                    newM[j] = spawnComponent.mTraitsRequired[i];
                     j++;
                 }
             }
-            monsterComponent.mTraitsRequired = newM;
+            spawnComponent.mTraitsRequired = newM;
         }
         Update();
     }

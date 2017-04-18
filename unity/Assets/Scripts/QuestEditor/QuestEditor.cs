@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Assets.Scripts.Content;
 using System.Collections.Generic;
 using ValkyrieTools;
+using System.IO;
+using System.Text;
 
 // Quest editor static helper class
 public class QuestEditor {
@@ -54,10 +56,12 @@ public class QuestEditor {
     {
         Game game = Game.Get();
         // Add a comment at the start of the quest with the editor version
-        string content = "; Saved by version: " + game.version + System.Environment.NewLine;
+        StringBuilder content = new StringBuilder()
+            .Append("; Saved by version: ")
+            .AppendLine(game.version);
 
         // Save quest meta content to a string
-        content += game.quest.qd.quest.ToString() + System.Environment.NewLine;
+        content.AppendLine(game.quest.qd.quest.ToString());
 
         // Add all quest components
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -65,15 +69,26 @@ public class QuestEditor {
             // Skip peril, not a quest component
             if (!(kv.Value is PerilData))
             {
-                content += System.Environment.NewLine;
-                content += kv.Value.ToString();
+                content.AppendLine().Append(kv.Value);
             }
         }
 
         // Write to disk
         try
         {
-            System.IO.File.WriteAllText(game.quest.qd.questPath, content);
+            string ini_file = content.ToString();
+            File.WriteAllText(game.quest.qd.questPath, ini_file);
+
+            if (LocalizationRead.scenarioDict != null)
+            {
+                List<string> localization_file = LocalizationRead.scenarioDict.Serialize();
+
+                removeUnusedStringKeys(localization_file, ini_file);
+
+                File.WriteAllText(
+                    Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
+                    string.Join(System.Environment.NewLine, localization_file.ToArray()));
+            }
         }
         catch (System.Exception)
         {
@@ -83,5 +98,23 @@ public class QuestEditor {
 
         // Reload quest
         Reload();
+    }
+
+    /// <summary>
+    /// Find each stringkey in dictionary inside the ini file. If doesn't appear, it is unused, can be removed
+    /// </summary>
+    /// <param name="localization_file"></param>
+    /// <param name="ini_file"></param>
+    public static void removeUnusedStringKeys(List<string> localization_file, string ini_file)
+    {
+        // Search each line except first one
+        for (int pos = localization_file.Count - 1; pos > 0; pos--)
+        {
+            string key = "{qst:" + localization_file[pos].Split(',')[0] + "}";
+            if (!ini_file.Contains(key))
+            {
+                localization_file.RemoveAt(pos);
+            }
+        }
     }
 }

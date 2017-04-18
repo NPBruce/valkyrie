@@ -41,7 +41,8 @@ namespace Assets.Scripts.UI.Screens
             game.audioControl.Music(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), new StringKey("Valkyrie",false));
+            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
+                new StringKey(null, "Valkyrie", false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 

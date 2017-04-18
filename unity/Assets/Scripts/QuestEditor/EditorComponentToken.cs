@@ -29,7 +29,7 @@ public class EditorComponentToken : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("Token".Length),false), delegate { QuestEditorData.ListToken(); });
+            new StringKey(null, name.Substring("Token".Length),false), delegate { QuestEditorData.ListToken(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -51,13 +51,14 @@ public class EditorComponentToken : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val", "ROTATION", new StringKey(tokenComponent.rotation.ToString(), false)),
+            new StringKey("val", "ROTATION", 
+            new StringKey(null, tokenComponent.rotation.ToString(), false)),
             delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), 
-            new StringKey(tokenComponent.tokenName,false), delegate { Type(); });
+            new StringKey(null, tokenComponent.tokenName,false), delegate { Type(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 

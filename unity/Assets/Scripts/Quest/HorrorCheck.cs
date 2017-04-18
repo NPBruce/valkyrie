@@ -35,7 +35,7 @@ public class HorrorCheck {
 
         string text = horrors[Random.Range(0, horrors.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(text,false));
+            new StringKey(null, text,false));
         db.AddBorder();
 
         new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });

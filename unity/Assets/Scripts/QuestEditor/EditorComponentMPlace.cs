@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts.Content;
 
 public class EditorComponentMPlace : EditorComponent
@@ -28,7 +26,7 @@ public class EditorComponentMPlace : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring("MPlace".Length),false), 
+            new StringKey(null,name.Substring("MPlace".Length),false), 
             delegate { QuestEditorData.ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -59,10 +57,10 @@ public class EditorComponentMPlace : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        StringKey mast = new StringKey("val","MINION");
+        StringKey mast = new StringKey("val","MONSTER_MINION");
         if (mPlaceComponent.master)
         {
-            mast = new StringKey("val","MASTER");
+            mast = new StringKey("val","MONSTER_MASTER");
         }
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), mast, delegate { MasterToggle(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();

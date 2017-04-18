@@ -29,7 +29,7 @@ public class EditorComponentItem : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Item".Length),false), delegate { QuestEditorData.ListItem(); });
+            new StringKey(null,name.Substring("Item".Length),false), delegate { QuestEditorData.ListItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -50,7 +50,7 @@ public class EditorComponentItem : EditorComponent
         {
             int tmp = i;
             db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
-                new StringKey(itemComponent.itemName[i],false));
+                new StringKey(null,itemComponent.itemName[i],false));
             db.ApplyTag("editor");
 
             if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1)
@@ -75,7 +75,7 @@ public class EditorComponentItem : EditorComponent
         {
             int tmp = i;
             db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), 
-                new StringKey(itemComponent.traits[i],false));
+                new StringKey("val",itemComponent.traits[i]));
             db.ApplyTag("editor");
 
             if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0)
@@ -186,7 +186,7 @@ public class EditorComponentItem : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in traits)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
         traitESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TRAITS), list, delegate { SelectAddTrait(); });
         traitESL.SelectItem();

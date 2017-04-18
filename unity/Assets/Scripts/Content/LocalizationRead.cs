@@ -94,7 +94,7 @@ namespace Assets.Scripts.Content
         /// <returns>Translation to current language</returns>
         public static string DictLookup(StringKey input)
         {
-            string output = input.key;
+            string output = input.fullKey;
             // While there are more lookups
 
             string regexKey = "{(ffg|val|qst):";
@@ -195,6 +195,39 @@ namespace Assets.Scripts.Content
             return fetched;
         }
 
+        /// <summary>
+        /// Sets a dictionary entry for key and text.Creates or replaces
+        /// </summary>
+        /// <param name="key">key of the string</param>
+        /// <param name="text">text to insert in current language</param>
+        public static void updateScenarioText(string key, string text)
+        {
+            EntryI18n entry;
+            // Search for localization string 
+            if (!scenarioDict.tryGetValue(key, out entry))
+            {
+                // if not exists, we create a new one
+                entry = new EntryI18n(key,scenarioDict);
+            }
+
+            entry.currentLanguageString = text;
+        }
+
+        /// <summary>
+        /// Replaces all dictionary entries with old key and replaces with the new one
+        /// </summary>
+        /// <param name="oldKey"></param>
+        /// <param name="newKey"></param>
+        public static void replaceScenarioText(string oldKey,string newKey)
+        {
+            EntryI18n entry;
+            // Search for localization string 
+            if (scenarioDict.tryGetValue(oldKey, out entry))
+            {
+                entry.key = newKey;
+                scenarioDict.Add(entry);
+            }
+        }
 
         /// <summary>
         /// Transform a ffg key (without ffg prefig, into current language text

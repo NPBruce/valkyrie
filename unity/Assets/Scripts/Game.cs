@@ -95,7 +95,7 @@ public class Game : MonoBehaviour {
         {
             TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
             LocalizationRead.valkyrieDict = LocalizationRead.ReadFromTextAsset(localizationFile, currentLang);
-            LocalizationRead.valkyrieDict.setCurrentLanguage(currentLang);
+            LocalizationRead.changeCurrentLangTo(currentLang);
         }
         catch (System.Exception e)
         {

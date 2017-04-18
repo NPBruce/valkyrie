@@ -46,14 +46,15 @@ public class EditorComponentEventNextEvent : EditorComponent
             type = QuestData.Token.type;
         }
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), new StringKey(type,false), 
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
+            new StringKey(null,type,false), 
             delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(name.Substring(type.Length),false), 
+            new StringKey(null,name.Substring(type.Length),false), 
             delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -66,14 +67,17 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey(randomButton,false), delegate { ToggleRandom(); });
+        tb = new TextButton(new Vector2(0, 1), new Vector2(3, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         DialogBox db = new DialogBox(new Vector2(3, 1), new Vector2(3, 1), new StringKey("val","X_COLON",QUOTA));
         db.ApplyTag("editor");
 
-        quotaDBE = new DialogBoxEditable(new Vector2(6, 1), new Vector2(2, 1), eventComponent.quota.ToString(), delegate { SetQuota(); });
+        // Quota dont need translation
+        quotaDBE = new DialogBoxEditable(
+            new Vector2(6, 1), new Vector2(2, 1),
+            eventComponent.quota.ToString(), delegate { SetQuota(); });
         quotaDBE.ApplyTag("editor");
         quotaDBE.AddBorder();
 
@@ -92,7 +96,8 @@ public class EditorComponentEventNextEvent : EditorComponent
         foreach (List<string> l in eventComponent.nextEvent)
         {
             int buttonTmp = button++;
-            string buttonLabel = eventComponent.buttons[buttonTmp - 1];
+
+            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
             string colorRGB = ColorUtil.FromName(eventComponent.buttonColors[buttonTmp - 1]);
             Color c = Color.white;
             c[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
@@ -104,7 +109,11 @@ public class EditorComponentEventNextEvent : EditorComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
-            DialogBoxEditable buttonEdit = new DialogBoxEditable(new Vector2(3, offset), new Vector2(14, 1), buttonLabel, delegate { UpdateButtonLabel(buttonTmp); });
+            DialogBoxEditable buttonEdit = new DialogBoxEditable(
+                new Vector2(3, offset), new Vector2(14, 1), 
+                buttonLabel.Translate(),
+                delegate { UpdateButtonLabel(buttonTmp); });
+
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
@@ -122,7 +131,8 @@ public class EditorComponentEventNextEvent : EditorComponent
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), new StringKey(s,false));
+                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), 
+                    new StringKey(null,s,false));
                 db.AddBorder();
                 db.ApplyTag("editor");
                 tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1),
@@ -157,14 +167,14 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void SetQuota()
     {
-        int.TryParse(quotaDBE.uiInput.text, out eventComponent.quota);
+        int.TryParse(quotaDBE.Text, out eventComponent.quota);
         Update();
     }
 
     public void AddButton(int number)
     {
         eventComponent.nextEvent.Insert(number, new List<string>());
-        eventComponent.buttons.Insert(number, "Button " + (number + 1));
+        eventComponent.buttons.Insert(number, new StringKey(null,"Button " + (number + 1), false));
         eventComponent.buttonColors.Insert(number, "white");
         Update();
     }
@@ -181,7 +191,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
         {
-            colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
         }
         colorESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
         colorESL.SelectItem();
@@ -195,7 +205,8 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        eventComponent.buttons[number - 1] = buttonDBE[number - 1].uiInput.text;
+        eventComponent.buttons[number - 1] =
+            updateDictionaryTextAndGenKey(eventComponent.button_key + number.ToString(), buttonDBE[number - 1].Text);
     }
 
     public void AddEvent(int index, int button)
@@ -203,7 +214,8 @@ public class EditorComponentEventNextEvent : EditorComponent
         List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
-        events.Add(new EditorSelectionList.SelectionListEntry("{NEW:Event}"));
+        events.Add(new EditorSelectionList.SelectionListEntry(
+            new StringKey("val","NEW_X",CommonStringKeys.EVENT).Translate(),"{NEW:Event}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)

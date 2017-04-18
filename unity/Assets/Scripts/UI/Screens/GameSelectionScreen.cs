@@ -12,13 +12,13 @@ namespace Assets.Scripts.UI.Screens
         FFGImport fcD2E;
         FFGImport fcMoM;
 
-        private StringKey D2E_NAME = new StringKey("{val:D2E_NAME}");
-        private StringKey CONTENT_IMPORT = new StringKey("{val:CONTENT_IMPORT}");
-        private StringKey CONTENT_REIMPORT = new StringKey("{val:CONTENT_REIMPORT}");
-        private StringKey D2E_APP_NOT_FOUND = new StringKey("{val:D2E_APP_NOT_FOUND}");
-        private StringKey MOM_NAME = new StringKey("{val:MOM_NAME}");
-        private StringKey MOM_APP_NOT_FOUND = new StringKey("{val:MOM_APP_NOT_FOUND}");
-        private StringKey CONTENT_IMPORTING = new StringKey("{val:CONTENT_IMPORTING}");
+        private StringKey D2E_NAME = new StringKey("val","D2E_NAME");
+        private StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
+        private StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
+        private StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
+        private StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
+        private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
+        private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()

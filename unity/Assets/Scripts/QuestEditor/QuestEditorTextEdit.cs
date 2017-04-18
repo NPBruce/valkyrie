@@ -59,13 +59,13 @@ public class QuestEditorTextEdit {
         textObj.AddComponent<CanvasRenderer>();
 
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
-        iField = inputObj.AddComponent<UnityEngine.UI.InputField>();
 
         uiText.color = Color.white;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material; 
         uiText.fontSize = UIScaler.GetSmallFont();
 
+        iField = inputObj.AddComponent<UnityEngine.UI.InputField>();
         iField.textComponent = uiText;
         iField.text = value;
 
