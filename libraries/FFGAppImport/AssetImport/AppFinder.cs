@@ -98,7 +98,7 @@ namespace FFGAppImport
                 }
             }
 
-            if (location.Length == 0)
+            if (location == null || location.Length == 0)
             {
                 string[] args = System.Environment.GetCommandLineArgs();
                 for (int i = 0; i < (args.Length - 1); i++)
