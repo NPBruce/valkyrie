@@ -54,7 +54,7 @@ namespace Assets.Scripts.Content
 
         private bool preventLookup = false;
 
-        private const string regexKey = "{(ffg|val|qst):";
+        private const string regexKey = "^{(ffg|val|qst):";
 
         public StringKey(string unknownKey)
         {
