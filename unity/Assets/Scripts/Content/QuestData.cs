@@ -725,11 +725,11 @@ public class QuestData
             // Depreciated support for format 2
             if (nextEvent.Count == 2)
             {
-                if (buttons[0].Equals(CommonStringKeys.PASS))
+                if (buttons[0].key.Equals("Pass"))
                 {
                     buttonColors[0] = "green";
                 }
-                if (buttons[1].Equals(CommonStringKeys.FAIL))
+                if (buttons[1].key.Equals("Fail"))
                 {
                     buttonColors[1] = "red";
                 }
