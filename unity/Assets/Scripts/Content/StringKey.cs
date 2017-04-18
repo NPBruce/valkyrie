@@ -141,11 +141,13 @@ namespace Assets.Scripts.Content
         /// <summary>
         /// Search in current dictionary the text translated to the current language
         /// </summary>
+        /// <param name="emptyIfNotFound">If true return "" on missing key</param>
         /// <returns>the text in the current language</returns>
-        public string Translate()
+        public string Translate(bool emptyIfNotFound = false)
         {
             if (isKey() && !preventLookup)
             {
+                if (emptyIfNotFound && !KeyExists()) return "";
                 return LocalizationRead.DictLookup(this);
             } else
             {

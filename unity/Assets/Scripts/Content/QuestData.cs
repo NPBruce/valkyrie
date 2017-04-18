@@ -1380,6 +1380,7 @@ public class QuestData
         public CustomMonster(string s) : base(s)
         {
             LocalizationRead.updateScenarioText(monstername_key, sectionName);
+            LocalizationRead.updateScenarioText(info_key, "");
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1501,20 +1502,8 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
-        //TODO: abilities are loaded from ffg strings, but it can be edited
-        // for ffg abilities this field will be a key but for edited ability
-        // after localization for quests, all abilityes will be keys.
-        public StringKey ability = StringKey.NULL;
-        // same as ability
-        public StringKey minionActions = StringKey.NULL;
-        // same as ability
-        public StringKey masterActions = StringKey.NULL;
         public bool minionFirst = false;
         public bool masterFirst = false;
-        // same as ability
-        public StringKey moveButton = StringKey.NULL;
-        // same as ability
-        public StringKey move = StringKey.NULL;
 
         public string ability_key { get { return genKey("ability"); } }
         public string minion_key { get { return genKey("minion"); } }
@@ -1522,10 +1511,16 @@ public class QuestData
         public string movebutton_key { get { return genKey("movebutton"); } }
         public string move_key { get { return genKey("move"); } }
 
+        public StringKey ability { get { return new StringKey(ability_key); } }
+        public StringKey minionActions { get { return new StringKey(minion_key); } }
+        public StringKey masterActions { get { return new StringKey(master_key); } }
+        public StringKey moveButton { get { return new StringKey(movebutton_key); } }
+        public StringKey move { get { return new StringKey(move_key); } }
 
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            LocalizationRead.updateScenarioText(ability_key, "");
             typeDynamic = type;
         }
 
@@ -1533,25 +1528,30 @@ public class QuestData
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
+            // Depreciated (format 2)
             if (data.ContainsKey("ability"))
             {
-                ability = new StringKey(data["ability"]);
+                LocalizationRead.updateScenarioText(ability_key, data["ability"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("master"))
             {
-                masterActions = new StringKey(data["master"]);
+                LocalizationRead.updateScenarioText(minion_key, data["master"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("minion"))
             {
-                minionActions = new StringKey(data["minion"]);
+                LocalizationRead.updateScenarioText(master_key, data["minion"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("move"))
             {
-                move = new StringKey(data["move"]);
+                LocalizationRead.updateScenarioText(movebutton_key, data["move"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("movebutton"))
             {
-                moveButton = new StringKey(data["movebutton"]);
+                LocalizationRead.updateScenarioText(move_key, data["movebutton"]);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1569,26 +1569,6 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if (ability != null)
-            {
-                r += "ability=" + ability + nl;
-            }
-            if (masterActions != null)
-            {
-                r += "master=" + masterActions + nl;
-            }
-            if (minionActions != null)
-            {
-                r += "minion=" + minionActions + nl;
-            }
-            if (move.fullKey.Length > 0)
-            {
-                r += "move=" + move + nl;
-            }
-            if (moveButton.fullKey.Length > 0)
-            {
-                r += "movebutton=" + moveButton + nl;
-            }
             if (minionFirst)
             {
                 r += "minionfirst=" + minionFirst.ToString() + nl;
