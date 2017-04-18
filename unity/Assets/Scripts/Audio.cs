@@ -13,16 +13,16 @@ public class Audio : MonoBehaviour
     public bool fadeOut = false;
     public int musicIndex = 0;
     public float effectVolume;
+    public float musicVolume;
 
     void Start()
     {
         Game game = Game.Get();
         audioSource = gameObject.AddComponent<AudioSource>();
-        float mVolume;
         string vSet = game.config.data.Get("UserConfig", "music");
-        float.TryParse(vSet, out mVolume);
-        if (vSet.Length == 0) mVolume = 1;
-        audioSource.volume = mVolume;
+        float.TryParse(vSet, out musicVolume);
+        if (vSet.Length == 0) musicVolume = 1;
+        audioSource.volume = musicVolume;
 
         gameObject.transform.parent = game.cc.gameObject.transform;
         music = new List<AudioClip>();
@@ -49,7 +49,7 @@ public class Audio : MonoBehaviour
         }
         if (!audioSource.isPlaying)
         {
-            audioSource.volume = 1;
+            audioSource.volume = musicVolume;
             UpdateMusic();
         }
     }

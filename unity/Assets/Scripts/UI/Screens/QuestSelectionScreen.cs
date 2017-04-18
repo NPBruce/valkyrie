@@ -73,11 +73,14 @@ namespace Assets.Scripts.UI.Screens
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0)
                 {
                     string key = q.Key;
+                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    string translation = q.Value.name.Translate();
+
                     // Size is 1.2 to be clear of characters with tails
                     tb = new TextButton(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", new StringKey(q.Value.name, false)),
+                        new StringKey("val", "INDENT", translation),
                         delegate { Selection(key); }, Color.black, (int)offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -93,11 +96,15 @@ namespace Assets.Scripts.UI.Screens
             {
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
                 {
+                    string key = q.Key;
+                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    string translation = q.Value.name.Translate();
+
                     // Size is 1.2 to be clear of characters with tails
                     db = new DialogBox(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", new StringKey(q.Value.name, false)),
+                        new StringKey("val", "INDENT", translation),
                         Color.black);
                     db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                     db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -110,7 +117,7 @@ namespace Assets.Scripts.UI.Screens
                             new Vector2(4, offset), 
                             new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f),
                             // TODO: Expansion names should be keys too
-                            new StringKey("val", "REQUIRES_EXPANSION", new StringKey(game.cd.GetContentName(s), false)),                    
+                            new StringKey("val", "REQUIRES_EXPANSION", game.cd.GetContentName(s)),                    
                             Color.black);
                         db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                         db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -124,11 +131,15 @@ namespace Assets.Scripts.UI.Screens
 
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
 
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
+            tb = new TextButton(
+                new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), 
+                CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
 
             tb.SetFont(game.gameType.GetHeaderFont());
 
-            tb = new TextButton(new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), DOWNLOAD, delegate { Download(); }, Color.green);
+            tb = new TextButton(
+                new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), 
+                DOWNLOAD, delegate { Download(); }, Color.green);
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 

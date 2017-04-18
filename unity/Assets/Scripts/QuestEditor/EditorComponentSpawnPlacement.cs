@@ -29,7 +29,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-        new StringKey(name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
+        new StringKey(null, name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -43,7 +43,7 @@ public class EditorComponentSpawnPlacement : EditorComponent
         for (int heroes = 2; heroes < 5; heroes++)
         {
             int h = heroes;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "NUMBER_HEROS", new StringKey(heroes.ToString(),false)));
+            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "NUMBER_HEROS", heroes));
             db.ApplyTag("editor");
 
             tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterPlaceAdd(h); }, Color.green);
@@ -61,7 +61,8 @@ public class EditorComponentSpawnPlacement : EditorComponent
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
 
-                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), new StringKey(place,false), delegate { QuestEditorData.SelectComponent(place); });
+                    tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), 
+                        new StringKey(null, place,false), delegate { QuestEditorData.SelectComponent(place); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.ApplyTag("editor");
                 }
@@ -77,7 +78,8 @@ public class EditorComponentSpawnPlacement : EditorComponent
         Game game = Game.Get();
 
         List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
-        mplaces.Add(new EditorSelectionList.SelectionListEntry("{NEW:MPlace}"));
+        mplaces.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.MPLACE).Translate(),"{NEW:MPlace}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)

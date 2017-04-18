@@ -34,17 +34,17 @@ public class NoGameType : GameType
 
     public override StringKey HeroName()
     {
-        return new StringKey("{val:D2E_HERO_NAME}");
+        return new StringKey("val","D2E_HERO_NAME");
     }
 
     public override StringKey HeroesName()
     {
-        return new StringKey("{val:D2E_HEROES_NAME}");
+        return new StringKey("val","D2E_HEROES_NAME");
     }
 
     public override StringKey QuestName()
     {
-        return new StringKey("{val:D2E_QUEST_NAME}");
+        return new StringKey("val", "D2E_QUEST_NAME");
     }
 
     public override Font GetFont()
@@ -115,17 +115,17 @@ public class D2EGameType : GameType
 
     public override StringKey HeroName()
     {
-        return new StringKey("{val:D2E_HERO_NAME}");
+        return new StringKey("val", "D2E_HERO_NAME");
     }
 
     public override StringKey HeroesName()
     {
-        return new StringKey("{val:D2E_HEROES_NAME}");
+        return new StringKey("val", "D2E_HEROES_NAME");
     }
 
     public override StringKey QuestName()
     {
-        return new StringKey("{val:D2E_QUEST_NAME}");
+        return new StringKey("val", "D2E_QUEST_NAME");
     }
 
     // There are actually two fonts, should expand to include header/text
@@ -194,17 +194,17 @@ class MoMGameType : GameType
 
     public override StringKey HeroName()
     {
-        return new StringKey("{val:MOM_HERO_NAME}");
+        return new StringKey("val", "MOM_HERO_NAME");
     }
 
     public override StringKey HeroesName()
     {
-        return new StringKey("{val:MOM_HEROES_NAME}");
+        return new StringKey("val", "MOM_HEROES_NAME");
     }
 
     public override StringKey QuestName()
     {
-        return new StringKey("{val:MOM_QUEST_NAME}");
+        return new StringKey("val", "MOM_QUEST_NAME");
     }
 
     public override Font GetFont()

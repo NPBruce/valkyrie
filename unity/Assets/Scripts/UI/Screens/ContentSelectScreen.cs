@@ -212,11 +212,16 @@ namespace Assets.Scripts.UI.Screens
 
                     if (left)
                     {
-                        tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), new StringKey("val", "INDENT", new StringKey(game.cd.GetContentName(id),false)), delegate { Select(id); }, Color.clear);
+                        tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), 
+                            new StringKey("val", "INDENT", game.cd.GetContentName(id)), 
+                            delegate { Select(id); }, Color.clear);
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), new StringKey("val", "INDENT", new StringKey(game.cd.GetContentName(id),false)), delegate { Select(id); }, Color.clear);
+                        tb = new TextButton(new Vector2(10, offset + 1.5f), 
+                            new Vector2(UIScaler.GetWidthUnits() - 20, 3), 
+                            new StringKey("val", "INDENT", game.cd.GetContentName(id)), 
+                            delegate { Select(id); }, Color.clear);
                     }
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
                     tb.background.transform.parent = scrollArea.transform;
@@ -224,11 +229,17 @@ namespace Assets.Scripts.UI.Screens
 
                     if (left)
                     {
-                        tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), new StringKey(game.cd.GetContentName(id), false), delegate { Select(id); }, Color.black);
+                        tb = new TextButton(new Vector2(9, offset + 1.5f), 
+                            new Vector2(UIScaler.GetWidthUnits() - 19, 3), 
+                            new StringKey(null,game.cd.GetContentName(id), false), 
+                            delegate { Select(id); }, Color.black);
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), new StringKey(game.cd.GetContentName(id), false), delegate { Select(id); }, Color.black);
+                        tb = new TextButton(new Vector2(11, offset + 1.5f), 
+                            new Vector2(UIScaler.GetWidthUnits() - 20, 3), 
+                            new StringKey(null, game.cd.GetContentName(id), false), 
+                            delegate { Select(id); }, Color.black);
                     }
                     tb.setColor(Color.clear);
                     tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;

@@ -18,15 +18,16 @@ namespace Assets.Scripts.Content
         public static readonly StringKey EXIT = new StringKey(VAL,"EXIT");
         public static readonly StringKey E = new StringKey(VAL, "E");
         public static readonly StringKey POSITION = new StringKey(VAL, "POSITION");
-        public static readonly StringKey POSITION_SNAP = new StringKey("><",false);
-        public static readonly StringKey POSITION_FREE = new StringKey("~", false);
-        public static readonly StringKey PLUS = new StringKey("+", false);
-        public static readonly StringKey MINUS = new StringKey("-", false);
-        public static readonly StringKey HASH = new StringKey("#", false);
-        public static readonly StringKey TAB = new StringKey("->",false);
+        public static readonly StringKey POSITION_SNAP = new StringKey(null,"><",false);
+        public static readonly StringKey POSITION_FREE = new StringKey(null,"~", false);
+        public static readonly StringKey PLUS = new StringKey(null,"+", false);
+        public static readonly StringKey MINUS = new StringKey(null,"-", false);
+        public static readonly StringKey HASH = new StringKey(null,"#", false);
+        public static readonly StringKey TAB = new StringKey(null,"->",false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
+        public static readonly StringKey NONE = new StringKey(VAL, "NONE");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
 

@@ -39,7 +39,7 @@ public class ActivateDialog {
             string effect = monster.currentActivation.effect.Replace("\\n", "\n");
             // ability text
             db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(effect,false));
+                new StringKey(null, effect, false));
             db.AddBorder();
             db.ApplyTag("activation");
             offset += 4.5f;
@@ -63,11 +63,11 @@ public class ActivateDialog {
 
         if (master)
         {
-            activationText = monster.currentActivation.ad.masterActions.Translate();
+            activationText = EventManager.SymbolReplace(monster.currentActivation.ad.masterActions.Translate());
         }
         else
         {
-            activationText = monster.currentActivation.ad.minionActions.Translate();
+            activationText = EventManager.SymbolReplace(monster.currentActivation.ad.minionActions.Translate());
         }
         db.AddBorder();
         db.ApplyTag("activation");
@@ -76,7 +76,7 @@ public class ActivateDialog {
 
         // Create activation text box
         db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7),
-            new StringKey(activationText,false));
+            new StringKey(null, activationText, false));
         if (master && !singleStep)
         {
             db.AddBorder(Color.red);

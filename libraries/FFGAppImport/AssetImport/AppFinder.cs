@@ -79,6 +79,10 @@ namespace FFGAppImport
                     ValkyrieDebug.Log("Using location: " + location);
                 }
             }
+            else if (platform == Platform.Linux)
+            {
+
+            }
             else
             {
                 // Attempt to get steam install location (current 32/64 level)
@@ -94,6 +98,25 @@ namespace FFGAppImport
                 }
             }
 
+            if (location == null || location.Length == 0)
+            {
+                string[] args = System.Environment.GetCommandLineArgs();
+                for (int i = 0; i < (args.Length - 1); i++)
+                {
+                    if (args[i] == "-import")
+                    {
+                        location = args[i + 1];
+                        if (location.Length > 0)
+                        {
+                            if (location[location.Length - 1] == '/' || location[location.Length - 1] == '\\')
+                            {
+                                location = location.Substring(0, location.Length - 1);
+                            }
+                        }
+                        ValkyrieDebug.Log("Using import flag location: " + location);
+                    }
+                }
+            }
             exeLocation += location + "/" + Executable();
             location += DataDirectory();
             ValkyrieDebug.Log("Asset location: " + location);

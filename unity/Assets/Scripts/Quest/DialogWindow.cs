@@ -57,7 +57,8 @@ public class DialogWindow {
     {
         // Draw text
         text = eventData.GetText();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), new StringKey(text, false));
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
+            new StringKey(null, text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
         db.Destroy();
         
@@ -67,7 +68,7 @@ public class DialogWindow {
         }
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
-            new StringKey(text,false));
+            new StringKey(null, text, false));
         db.AddBorder();
         offset += 1f;
 
@@ -80,8 +81,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset),
-                new StringKey(eb.label,false));
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
             if (length > buttonWidth)
@@ -99,7 +99,7 @@ public class DialogWindow {
         {
             int numTmp = num++;
             new TextButton(new Vector2(hOffset, offset), new Vector2(buttonWidth, 2), 
-                new StringKey(eb.label,false), delegate { onButton(numTmp); }, eb.colour);
+                eb.GetLabel(), delegate { onButton(numTmp); }, eb.colour);
             offset += 2.5f;
         }
 
@@ -114,7 +114,7 @@ public class DialogWindow {
     {
         // Draw text
         DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(eventData.GetText(),false));
+            new StringKey(null, eventData.GetText(),false));
         db.AddBorder();
 
         if (quota == 0)
@@ -126,7 +126,7 @@ public class DialogWindow {
             new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), new StringKey(quota.ToString(),false));
+        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -140,8 +140,9 @@ public class DialogWindow {
         }
 
         // Only one button, action depends on quota
-        new TextButton(new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
-            new StringKey(eventData.GetButtons()[0].label,false), delegate { onQuota(); }, Color.white);
+        new TextButton(
+            new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
+            eventData.GetButtons()[0].GetLabel(), delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
@@ -261,13 +262,13 @@ public class DialogWindow {
 
     public class EventButton
     {
-        public string label = "";
+        StringKey label = StringKey.NULL;
         public Color colour = Color.white;
 
-        public EventButton(string l, string c)
+        public EventButton(StringKey newLabel,string newColour)
         {
-            label = l;
-            string colorRGB = ColorUtil.FromName(c);      
+            label = newLabel;
+            string colorRGB = ColorUtil.FromName(newColour);      
 
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
@@ -279,6 +280,11 @@ public class DialogWindow {
             colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
             colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
             colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+        }
+
+        public StringKey GetLabel()
+        {
+            return new StringKey(null, EventManager.SymbolReplace(label.Translate()), false);
         }
     }
 }
