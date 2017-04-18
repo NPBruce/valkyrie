@@ -216,6 +216,9 @@ public class ContentData {
     // Duplicate content will be replaced by the higher priority value
     void LoadContent(ContentPack cp)
     {
+        // Don't reload content
+        if (loadedPacks.Contains(cp.id)) return;
+
         foreach(string ini in cp.iniFiles)
         {
             IniData d = IniRead.ReadFromIni(ini);
@@ -227,9 +230,9 @@ public class ContentData {
             foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
                 AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
-                loadedPacks.Add(cp.id);
             }
         }
+        loadedPacks.Add(cp.id);
 
         foreach (string s in cp.clone)
         {
