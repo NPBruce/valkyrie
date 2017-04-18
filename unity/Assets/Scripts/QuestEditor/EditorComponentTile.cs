@@ -29,7 +29,7 @@ public class EditorComponentTile : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Tile".Length),false), delegate { QuestEditorData.ListTile(); });
+            new StringKey(null, name.Substring("Tile".Length),false), delegate { QuestEditorData.ListTile(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -38,7 +38,8 @@ public class EditorComponentTile : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), new StringKey(tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
+        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), 
+            new StringKey(null, tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -50,7 +51,7 @@ public class EditorComponentTile : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(tileComponent.rotation.ToString(),false)), delegate { TileRotate(); });
+            new StringKey("val","ROTATION",tileComponent.rotation), delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -79,27 +80,27 @@ public class EditorComponentTile : EditorComponent
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             string display = kv.Key;
-            List<string> sets = new List<string>(kv.Value.traits);
+            List<string> traits = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
                 if (s.Length == 0)
                 {
-                    sets.Add("base");
+                    traits.Add("base");
                 }
                 else
                 {
                     display += " " + s;
-                    sets.Add(s);
+                    traits.Add(s);
                 }
             }
 
             if (usedSides.Contains(kv.Key))
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.grey));
             }
             else
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
+                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.white));
             }
         }
         tileESL = new EditorSelectionList(

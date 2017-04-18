@@ -178,7 +178,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> tiles = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        tiles.Add(new EditorSelectionList.SelectionListEntry("{NEW:Tile}"));
+        tiles.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.TILE).Translate(),"{NEW:Tile}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Tile)
@@ -197,7 +198,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> doors = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        doors.Add(new EditorSelectionList.SelectionListEntry("{NEW:Door}"));
+        doors.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.DOOR).Translate(),"{NEW:Door}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Door)
@@ -216,7 +218,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> tokens = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        tokens.Add(new EditorSelectionList.SelectionListEntry("{NEW:Token}"));
+        tokens.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.TOKEN).Translate(),"{NEW:Token}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Token)
@@ -235,7 +238,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:Spawn}"));
+        monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.SPAWN).Translate() ,"{NEW:Spawn}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Spawn)
@@ -254,7 +258,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        mplaces.Add(new EditorSelectionList.SelectionListEntry("{NEW:MPlace}"));
+        mplaces.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.MPLACE).Translate(),"{NEW:MPlace}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
@@ -273,7 +278,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        events.Add(new EditorSelectionList.SelectionListEntry("{NEW:Event}"));
+        events.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.EVENT).Translate(),"{NEW:Event}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
@@ -295,7 +301,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> puzzle = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        puzzle.Add(new EditorSelectionList.SelectionListEntry("{NEW:Puzzle}"));
+        puzzle.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.PUZZLE).Translate(),"{NEW:Puzzle}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Puzzle)
@@ -314,7 +321,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        items.Add(new EditorSelectionList.SelectionListEntry("{NEW:Item}"));
+        items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.ITEM).Translate(),"{NEW:Item}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Item)
@@ -334,7 +342,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        monsters.Add(new EditorSelectionList.SelectionListEntry("{NEW:CustomMonster}"));
+        monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.CUSTOM_MONSTER).Translate(),"{NEW:CustomMonster}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
@@ -354,7 +363,8 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        activations.Add(new EditorSelectionList.SelectionListEntry("{NEW:Activation}"));
+        activations.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",CommonStringKeys.ACTIVATION).Translate(),"{NEW:Activation}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)

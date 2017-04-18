@@ -46,11 +46,11 @@ namespace FFGAppImport
             // Add version found to log
             if (ffgVersion.Length != 0)
             {
-                //log += "FFG " + type + " Version Found: " + ffgVersion + System.Environment.NewLine;
+                ValkyrieDebug.Log("FFG " + gameType + " Version Found: " + ffgVersion + System.Environment.NewLine);
             }
             else
             {
-                //log += "FFG " + type + " not found." + System.Environment.NewLine;
+                ValkyrieDebug.Log("FFG " + gameType + " not found." + System.Environment.NewLine);
             }
 
             // Check if version is acceptable for import

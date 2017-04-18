@@ -51,13 +51,13 @@ public class EditorComponentEventVars : EditorComponent
         }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
-            new StringKey(type,false), delegate { QuestEditorData.TypeSelect(); });
+            new StringKey(null,type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1),
-            new StringKey(name.Substring(type.Length),false), delegate { QuestEditorData.ListEvent(); });
+            new StringKey(null,name.Substring(type.Length),false), delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -81,15 +81,15 @@ public class EditorComponentEventVars : EditorComponent
         {
             QuestData.Event.VarOperation tmp = op;
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
-                new StringKey(op.var,false));
+                new StringKey(null,op.var,false));
             db.AddBorder();
             db.ApplyTag("editor");
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
-                new StringKey(op.operation, false), delegate { SetTestOpp(tmp); });
+                new StringKey(null,op.operation, false), delegate { SetTestOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
-                new StringKey(op.value, false), delegate { SetValue(tmp); });
+                new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -114,15 +114,15 @@ public class EditorComponentEventVars : EditorComponent
         {
             QuestData.Event.VarOperation tmp = op;
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
-                new StringKey(op.var,false));
+                new StringKey(null,op.var,false));
             db.AddBorder();
             db.ApplyTag("editor");
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
-                new StringKey(op.operation, false), delegate { SetAssignOpp(tmp); });
+                new StringKey(null,op.operation, false), delegate { SetAssignOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
-                new StringKey(op.value, false), delegate { SetValue(tmp); });
+                new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
@@ -141,7 +141,7 @@ public class EditorComponentEventVars : EditorComponent
     public void AddTestOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
         list.AddRange(GetQuestVars());
 
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
@@ -164,7 +164,7 @@ public class EditorComponentEventVars : EditorComponent
     public void AddAssignOp()
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW}", "Quest"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
         list.AddRange(GetQuestVars());
         varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
         varESL.SelectItem();
@@ -254,6 +254,7 @@ public class EditorComponentEventVars : EditorComponent
 
         if (op.var.Equals("{NEW}"))
         {
+            // Var name doesn localize
             varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewVar(op, test); });
             varText.EditText();
         }
@@ -326,7 +327,7 @@ public class EditorComponentEventVars : EditorComponent
     public void SetValue(QuestData.Event.VarOperation op)
     {
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("{NUMBER}", "Quest"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", "Quest"));
         list.AddRange(GetQuestVars());
 
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
@@ -351,7 +352,10 @@ public class EditorComponentEventVars : EditorComponent
     {
         if (varESL.selection.Equals("{NUMBER}"))
         {
-            varText = new QuestEditorTextEdit(new StringKey("val","X_COLON",NUMBER), "", delegate { SetNumValue(op); });
+            // Vars doesnt localize
+            varText = new QuestEditorTextEdit(
+                new StringKey("val","X_COLON",NUMBER), 
+                "", delegate { SetNumValue(op); });
             varText.EditText();
         }
         else

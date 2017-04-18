@@ -57,7 +57,7 @@ public class PuzzleSlideWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), 
-            new StringKey(EventManager.SymbolReplace(questPuzzle.skill),false));
+            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -65,7 +65,7 @@ public class PuzzleSlideWindow
             new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), new StringKey((puzzle.moves - lastMoves).ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 14.5f), new Vector2(3f, 2f), puzzle.moves - lastMoves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -73,19 +73,23 @@ public class PuzzleSlideWindow
             new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), new StringKey(puzzle.moves.ToString(),false));
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 19f), new Vector2(3f, 2f), puzzle.moves);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (puzzle.Solved())
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate { Finished(); });
+            new TextButton(
+                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
+                eventData.GetButtons()[0].GetLabel(), delegate { Finished(); });
         }
         else
         {
             new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), new StringKey(eventData.GetButtons()[0].label,false), delegate {; }, Color.grey);
+            new TextButton(
+                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
+                eventData.GetButtons()[0].GetLabel(), delegate {; }, Color.grey);
         }
     }
 
@@ -174,7 +178,7 @@ public class PuzzleSlideWindow
         }
         blockGO.tag = "dialog";
 
-        Game game = Game.Get();
+        //Game game = Game.Get();
         blockGO.transform.parent = pos;
 
         RectTransform transBg = blockGO.AddComponent<RectTransform>();

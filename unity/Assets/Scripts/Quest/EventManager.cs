@@ -284,11 +284,7 @@ public class EventManager
         // Get the text to display for the event
         virtual public string GetText()
         {
-            string text = qEvent.text;
-            if (qEvent is PerilData)
-            {
-                text = new StringKey(qEvent.text).Translate();
-            }
+            string text = qEvent.text.Translate();
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
@@ -376,11 +372,11 @@ public class EventManager
                 DialogWindow.EventButton eb;
                 if (qEvent is PerilData)
                 {
-                    eb = new DialogWindow.EventButton(new StringKey(qEvent.buttons[i]).Translate(), qEvent.buttonColors[i]);
+                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
                 }
                 else
                 {
-                    eb = new DialogWindow.EventButton(SymbolReplace(qEvent.buttons[i]), qEvent.buttonColors[i]);
+                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
                 }
                 buttons.Add(eb);
             }
@@ -446,14 +442,21 @@ public class EventManager
         }
 
         // Unique monsters can have a special name
-        public string GetUniqueTitle()
+        public StringKey GetUniqueTitle()
         {
             // Default to Master {type}
-            if (qMonster.uniqueTitle.Equals(""))
+            if (qMonster.uniqueTitle.fullKey.Length == 0)
             {
-                return "Master " + cMonster.name;
+                return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
+            } else if (qMonster.uniqueTitle.isKey())
+            {
+                return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
+            } else
+            {
+                // non key stringkey
+                return new StringKey(null,qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
             }
-            return qMonster.uniqueTitle.Replace("{type}", cMonster.name.Translate());
+            
         }
     }
 

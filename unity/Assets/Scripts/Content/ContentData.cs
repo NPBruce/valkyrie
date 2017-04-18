@@ -174,7 +174,7 @@ public class ContentData {
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey(cp.name).Translate();
+                return new StringKey(null,cp.name,false).Translate();
             }
         }
         return "";
@@ -216,6 +216,9 @@ public class ContentData {
     // Duplicate content will be replaced by the higher priority value
     void LoadContent(ContentPack cp)
     {
+        // Don't reload content
+        if (loadedPacks.Contains(cp.id)) return;
+
         foreach(string ini in cp.iniFiles)
         {
             IniData d = IniRead.ReadFromIni(ini);
@@ -227,9 +230,9 @@ public class ContentData {
             foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
             {
                 AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
-                loadedPacks.Add(cp.id);
             }
         }
+        loadedPacks.Add(cp.id);
 
         foreach (string s in cp.clone)
         {
@@ -764,7 +767,7 @@ public class ItemData : GenericData
 // Class for Hero specific data
 public class MonsterData : GenericData
 {
-    public StringKey info = new StringKey("-", false);
+    public StringKey info = new StringKey(null,"-", false);
     public string imagePlace;
     public static new string type = "Monster";
     public string[] activations;
@@ -810,7 +813,7 @@ public class MonsterData : GenericData
 // Class for Activation specific data
 public class ActivationData : GenericData
 {
-    public StringKey ability = new StringKey("-", false);
+    public StringKey ability = new StringKey(null,"-", false);
     public StringKey minionActions = StringKey.NULL;
     public StringKey masterActions = StringKey.NULL;
     public StringKey moveButton = StringKey.NULL;
@@ -1048,7 +1051,7 @@ public class GenericData
             name = new StringKey(content["name"]);
         } else
         {
-            name = new StringKey(name_ini.Substring(type.Length));
+            name = new StringKey(null,name_ini.Substring(type.Length));
         }
 
 
@@ -1083,15 +1086,14 @@ public class GenericData
     // Does the component contain a trait?
     public bool ContainsTrait(string trait)
     {
-        bool t = false;
         foreach (string s in traits)
         {
             if (trait.Equals(s))
             {
-                t = true;
+                return true;
             }
         }
-        return t;
+        return false;
     }
 }
 

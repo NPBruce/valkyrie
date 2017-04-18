@@ -33,7 +33,7 @@ public class EditorComponentDoor : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(name.Substring("Door".Length),false), 
+            new StringKey(null,name.Substring("Door".Length),false), 
             delegate { QuestEditorData.ListDoor(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
@@ -52,7 +52,7 @@ public class EditorComponentDoor : EditorComponent
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val","ROTATION",new StringKey(doorComponent.rotation.ToString(),false)), 
+            new StringKey("val","ROTATION",doorComponent.rotation), 
             delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
@@ -90,7 +90,7 @@ public class EditorComponentDoor : EditorComponent
         List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
         {
-            colours.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
         }
         colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectColour(); });
         colorList.SelectItem();
