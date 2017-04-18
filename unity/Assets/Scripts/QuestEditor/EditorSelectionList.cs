@@ -243,6 +243,14 @@ public class EditorSelectionList
             return entry;
         }
 
+        public static SelectionListEntry BuildNameKeyTraitItem(string name, string key, string trait)
+        {
+            SelectionListEntry entry = BuildNameKeyItem(name, key);
+            entry.filter = new List<string>();
+            entry.filter.Add(trait);
+            return entry;
+        }
+
         public static SelectionListEntry BuildNameKeyTraitsItem(string name, string key, List<string> traits)
         {
             SelectionListEntry entry = BuildNameKeyItem(name, key);
