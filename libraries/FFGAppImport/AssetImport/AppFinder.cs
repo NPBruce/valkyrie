@@ -106,6 +106,13 @@ namespace FFGAppImport
                     if (args[i] == "-import")
                     {
                         location = args[i + 1];
+                        if (location.Length > 0)
+                        {
+                            if (location[location.Length - 1] == '/' || location[location.Length - 1] == '\\')
+                            {
+                                location = location.Substring(0, location.Length - 1);
+                            }
+                        }
                         ValkyrieDebug.Log("Using import flag location: " + location);
                     }
                 }
