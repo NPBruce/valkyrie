@@ -98,6 +98,18 @@ namespace FFGAppImport
                 }
             }
 
+            if (location.Length == 0)
+            {
+                string[] args = System.Environment.GetCommandLineArgs();
+                for (int i = 0; i < (args.Length - 1); i++)
+                {
+                    if (args[i] == "-import")
+                    {
+                        location = args[i + 1];
+                        ValkyrieDebug.Log("Using import flag location: " + location);
+                    }
+                }
+            }
             exeLocation += location + "/" + Executable();
             location += DataDirectory();
             ValkyrieDebug.Log("Asset location: " + location);
