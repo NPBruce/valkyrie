@@ -41,7 +41,7 @@ namespace Assets.Scripts.UI.Screens
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
             }
-            string log;
+
             fcD2E.Inspect();
             fcMoM.Inspect();
 
@@ -181,7 +181,6 @@ namespace Assets.Scripts.UI.Screens
         // Import (called once message displayed)
         private void PerformImport(string type)
         {
-            string log;
             if (type.Equals("D2E"))
             {
                 fcD2E.Import();

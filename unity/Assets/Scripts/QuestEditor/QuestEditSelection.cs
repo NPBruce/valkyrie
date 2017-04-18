@@ -254,8 +254,6 @@ public class QuestEditSelection
         {
             string key = q.Key;
             LocalizationRead.scenarioDict = q.Value.localizationDict;
-            string translation = q.Value.name.Translate();
-
             tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
                 new StringKey("val","INDENT",q.Value.name), delegate { Copy(key); }, Color.black, offset);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();

@@ -34,12 +34,8 @@ namespace Assets.Scripts.Content
                         .Append(':')
                         .Append(key);
 
-                    if (parameters != null && parameters.Count > 0)
-                    {
-                        foreach (string param in parameters)
-                        {
-                            result.Append(':').Append(param);
-                        }
+                    if (parameters != null) { 
+                        result.Append(':').Append(parameters);
                     }
                     return result.Append('}').ToString();
                 }
@@ -50,7 +46,7 @@ namespace Assets.Scripts.Content
 
         public readonly string key;
 
-        private List<string> parameters = null;
+        private string parameters = null;
 
         private bool preventLookup = false;
 
@@ -58,19 +54,16 @@ namespace Assets.Scripts.Content
 
         public StringKey(string unknownKey)
         {
-
             if (Regex.Match(unknownKey, regexKey).Success)
             {
-                string[] parts = unknownKey.Split("{:}".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = unknownKey.Substring(1,unknownKey.Length -2).Split(":".ToCharArray(), 3, System.StringSplitOptions.RemoveEmptyEntries);
 
                 dict = parts[0];
                 key = parts[1];
-                parameters = new List<string>();
-                for (int pos = 2; pos < parts.Length;pos ++)
+                if (parts.Length == 3)
                 {
-                    parameters.Add(parts[pos]);
+                    parameters = parts[2];
                 }
-
                 preventLookup = false;
             } else
             {
@@ -111,9 +104,7 @@ namespace Assets.Scripts.Content
         {
             dict = newDict;
             key = newKey;
-            parameters = new List<string>();
-            parameters.Add("{0}");
-            parameters.Add(numberZeroParam);
+            parameters = "{0}:"+ numberZeroParam;
         }
 
         /// <summary>
@@ -126,9 +117,7 @@ namespace Assets.Scripts.Content
         {
             dict = templateStringKey.dict;
             key = templateStringKey.key;
-            parameters = new List<string>();
-            parameters.Add(param1);
-            parameters.Add(param2);
+            parameters = param1 + ":" + param2;
         }
 
         /// <summary>

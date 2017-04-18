@@ -178,7 +178,7 @@ public class PuzzleSlideWindow
         }
         blockGO.tag = "dialog";
 
-        Game game = Game.Get();
+        //Game game = Game.Get();
         blockGO.transform.parent = pos;
 
         RectTransform transBg = blockGO.AddComponent<RectTransform>();

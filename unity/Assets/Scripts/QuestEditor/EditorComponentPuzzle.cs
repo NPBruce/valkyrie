@@ -35,7 +35,7 @@ public class EditorComponentPuzzle : EditorComponent
     override public void Update()
     {
         base.Update();
-        Game game = Game.Get();
+        //Game game = Game.Get();
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), PUZZLE, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
