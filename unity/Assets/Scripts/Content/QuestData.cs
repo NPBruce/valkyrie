@@ -1374,6 +1374,7 @@ public class QuestData
         public string info_key { get { return genKey("info"); } }
 
         public StringKey monsterName { get { return new StringKey(monstername_key); } }
+        public StringKey info { get { return new StringKey(info_key); } }
 
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
@@ -1412,9 +1413,10 @@ public class QuestData
                 imagePath = data["image"];
             }
 
+            // Depreciated (format 2)
             if (data.ContainsKey("info"))
             {
-                info = new StringKey(data["info"]);
+                LocalizationRead.updateScenarioText(info_key, data["info"]);
             }
 
             imagePlace = imagePath;
@@ -1473,10 +1475,6 @@ public class QuestData
             if (traits.Length > 0)
             {
                 r.Append("traits=").AppendLine(string.Join(" ",traits));
-            }
-            if (info != null)
-            {
-                r.Append("info=").AppendLine(info.fullKey);
             }
             if (imagePath.Length > 0)
             {
