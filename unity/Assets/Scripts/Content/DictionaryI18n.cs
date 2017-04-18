@@ -94,6 +94,14 @@ namespace Assets.Scripts.Content
             }
         }
 
+        public void Remove(string key)
+        {
+            if (dict.ContainsKey(key))
+            {
+                dict.Remove(key);
+            }
+        }
+
         /// <summary>
         /// Method for getting all languages of this dictionary 
         /// </summary>

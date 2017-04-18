@@ -288,7 +288,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (baseESL.selection.Equals("{NONE}"))
         {
             monsterComponent.baseMonster = "";
-            if (monsterComponent.monsterName.fullKey.Length == 0)
+            if (!monsterComponent.monsterName.KeyExists())
             {
                 SetName();
             }
@@ -312,20 +312,19 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName = 
-                updateDictionaryTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
         }
     }
 
     public void ClearName()
     {
-        monsterComponent.monsterName = StringKey.NULL;
+        LocalizationRead.scenarioDict.Remove(monsterComponent.monstername_key);
         Update();
     }
 
     public void SetName()
     {
-        monsterComponent.monsterName = NAME;
+        LocalizationRead.updateScenarioText(monsterComponent.monstername_key, NAME.Translate());
         Update();
     }
 
@@ -333,8 +332,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName =
-                updateDictionaryTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
         }
 
         if (!infoDBE.Text.Equals(""))

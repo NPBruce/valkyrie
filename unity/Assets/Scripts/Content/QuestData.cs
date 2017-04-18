@@ -404,8 +404,6 @@ public class QuestData
         // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
-        public StringKey uniqueTitle = StringKey.NULL;
-        public StringKey uniqueText = StringKey.NULL;
         public float uniqueHealthBase = 0;
         public float uniqueHealthHero = 0;
         public string[] mTypes;
@@ -414,6 +412,9 @@ public class QuestData
 
         public string uniquetitle_key { get { return genKey("uniquetitle"); } }
         public string uniquetext_key { get { return genKey("uniquetext"); } }
+
+        public StringKey uniqueTitle { get { return new StringKey(uniquetitle_key); } }
+        public StringKey uniqueText { get { return new StringKey(uniquetext_key); } }
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -483,13 +484,15 @@ public class QuestData
             {
                 bool.TryParse(data["unique"], out unique);
             }
+            // depreciated (format 2)
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitle = new StringKey(data["uniquetitle"]);
+                LocalizationRead.updateScenarioText(uniquetitle_key, data["uniquetitle"]);
             }
+            // depreciated (format 2)
             if (data.ContainsKey("uniquetext"))
             {
-                uniqueText = new StringKey(data["uniquetext"]);
+                LocalizationRead.updateScenarioText(uniquetext_key, data["uniquetext"]);
             }
             if (data.ContainsKey("uniquehealth"))
             {
@@ -510,8 +513,8 @@ public class QuestData
             // new key can be created by replacing the left part of the . whith new name
             if (sectionName.Equals(oldName) && newName != "")
             {
-                uniqueTitle = AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
-                uniqueText = AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
             }
 
             for (int j = 0; j < placement.Length; j++)
@@ -595,16 +598,6 @@ public class QuestData
                 r += "unique=true" + nl;
                 r += "uniquehealth=" + uniqueHealthBase + nl;
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
-                if (!uniqueTitle.Equals(""))
-                {
-                    r += "uniquetitle=" +
-                    (uniqueTitle.isKey() ? uniqueTitle.fullKey : "\"" + uniqueTitle + "\"") + nl;
-                }
-                if (!uniqueText.Equals(""))
-                {
-                    r += "uniquetext=" +
-                        (uniqueText.isKey() ? uniqueText.fullKey : "\"" + uniqueText + "\"") + nl;
-                }
             }
             if(uniqueHealthBase != 0)
             {
@@ -1367,7 +1360,6 @@ public class QuestData
         new public static string type = "CustomMonster";
         // A bast type is used for default values
         public string baseMonster = "";
-        public StringKey monsterName = StringKey.NULL;
         public string imagePath = "";
         public string imagePlace = "";
         public StringKey info = StringKey.NULL;
@@ -1381,12 +1373,12 @@ public class QuestData
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
 
-    // Create new with name (editor)
-    public CustomMonster(string s) : base(s)
+        public StringKey monsterName { get { return new StringKey(monstername_key); } }
+
+        // Create new with name (editor)
+        public CustomMonster(string s) : base(s)
         {
-            // The initial name of a monster is the component name. It wont be translated.
-            // If renamed,the translation key will be created
-            monsterName = new StringKey(null,sectionName,false);
+            LocalizationRead.updateScenarioText(monstername_key, sectionName);
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1403,13 +1395,10 @@ public class QuestData
                 baseMonster = data["base"];
             }
             
+            // Depreciated (format 2)
             if (data.ContainsKey("name"))
             {
-                monsterName = new StringKey(data["name"]);
-            }
-            else
-            {
-                monsterName = new StringKey(null,iniName, false);
+                LocalizationRead.updateScenarioText(monstername_key, data["name"]);
             }
 
             traits = new string[0];
@@ -1480,10 +1469,6 @@ public class QuestData
             if (baseMonster.Length > 0)
             {
                 r.Append("base=").AppendLine(baseMonster);
-            }
-            if (monsterName.fullKey.Length > 0)
-            {
-                r.Append("name=").AppendLine(monsterName.fullKey);
             }
             if (traits.Length > 0)
             {

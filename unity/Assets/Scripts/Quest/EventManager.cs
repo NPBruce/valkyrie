@@ -445,18 +445,14 @@ public class EventManager
         public StringKey GetUniqueTitle()
         {
             // Default to Master {type}
-            if (qMonster.uniqueTitle.fullKey.Length == 0)
+            if (qMonster.uniqueTitle.KeyExists())
             {
                 return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
-            } else if (qMonster.uniqueTitle.isKey())
+            }
+            else (qMonster.uniqueTitle.isKey())
             {
                 return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
-            } else
-            {
-                // non key stringkey
-                return new StringKey(null,qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
             }
-            
         }
     }
 

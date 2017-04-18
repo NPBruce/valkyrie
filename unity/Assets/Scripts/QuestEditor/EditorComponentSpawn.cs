@@ -246,6 +246,11 @@ public class EditorComponentSpawn : EditorComponent
     public void UniqueToggle()
     {
         spawnComponent.unique = !spawnComponent.unique;
+        if (!spawnComponent.unique)
+        {
+            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetitle_key);
+            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetext_key);
+        }
         Update();
     }
 
@@ -265,8 +270,7 @@ public class EditorComponentSpawn : EditorComponent
     {
         if (!uniqueTitleDBE.Text.Equals(""))
         {
-            spawnComponent.uniqueTitle =
-                updateDictionaryTextAndGenKey(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
         }
     }
 
@@ -274,8 +278,7 @@ public class EditorComponentSpawn : EditorComponent
     {
         if (!uniqueTextDBE.Text.Equals(""))
         {
-            spawnComponent.uniqueText =
-                updateDictionaryTextAndGenKey(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
         }
     }
 

@@ -152,7 +152,15 @@ namespace Assets.Scripts.Content
                 //non heys can have newline characters
                 return fullKey.Replace("\\n", System.Environment.NewLine);
             }
-                 
+        }
+
+        public bool KeyExists()
+        {
+            if (isKey() && !preventLookup)
+            {
+                return LocalizationRead.DictLookup(this);
+            }
+            return false;
         }
 
         /// <summary>

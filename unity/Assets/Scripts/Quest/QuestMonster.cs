@@ -24,7 +24,7 @@ public class QuestMonster : MonsterData
         }
 
         // If name not set use base type
-        if (name.fullKey.Length == 0 && baseObject != null)
+        if (!qm.monsterName.KeyExists() && baseObject != null)
         {
             name = baseObject.name;
         } else

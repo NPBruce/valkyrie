@@ -145,6 +145,46 @@ namespace Assets.Scripts.Content
             return output;
         }
 
+        public static bool CheckLookup(StringKey input)
+        {
+            string output = input.fullKey;
+            // While there are more lookups
+
+            string regexKey = "{(ffg|val|qst):";
+            if (!Regex.Match(output, regexKey).Success) return false;
+
+            int pos = Regex.Match(output, regexKey).Index;
+            // Can be nested
+            int bracketLevel = 1;
+            // Start of lookup
+            // ffg val and qst has the same length
+            int lookupStart = pos + "{ffg:".Length;
+
+            // Loop to find end of lookup
+            int lookupEnd = lookupStart;
+            while (bracketLevel > 0)
+            {
+                lookupEnd++;
+                if (output[lookupEnd].Equals('{'))
+                {
+                    bracketLevel++;
+                }
+                if (output[lookupEnd].Equals('}'))
+                {
+                    bracketLevel--;
+                }
+            }
+
+            // Extract lookup key
+            string lookup = output.Substring(lookupStart, lookupEnd - lookupStart);
+
+            // dict
+            string dict = output.Substring(pos + 1, 3);
+
+            // Get key result
+            return CheckDictQuery(dict,lookup);
+        }
+
         /// <summary>
         /// Look up a key in the FFG text Localization. Can have parameters divided by ":"
         /// Example: A_GOES_B_MESSAGE:{A}:Peter:{B}:Dinning Room
@@ -193,6 +233,44 @@ namespace Assets.Scripts.Content
                 fetched = fetched.Replace(elements[i - 1], elements[i]);
             }
             return fetched;
+        }
+
+        private static bool CheckDictQuery(string dict, string input)
+        {
+            int bracketLevel = 0;
+            int lastSection = 0;
+            List<string> elements = new List<string>();
+
+            // Separate the input into sections
+            for (int index = 0; index < input.Length; index++)
+            {
+                if (input[index].Equals('{'))
+                {
+                    bracketLevel++;
+                }
+                if (input[index].Equals('}'))
+                {
+                    bracketLevel--;
+                }
+                // Section divider
+                if (input[index].Equals(':'))
+                {
+                    // Not in brackets
+                    if (bracketLevel == 0)
+                    {
+                        // Add previous element
+                        elements.Add(input.Substring(lastSection, index - lastSection));
+                        lastSection = index + 1;
+                    }
+                }
+            }
+            // Add previous element
+            elements.Add(input.Substring(lastSection, input.Length - lastSection));
+
+            DictionaryI18n currentDict = selectDictionary(dict);
+            if (currentDict == null) return false;
+            EntryI18n valueOut;
+            return currentDict.tryGetValue(elements[0], out valueOut))
         }
 
         /// <summary>
