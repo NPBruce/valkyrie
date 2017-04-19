@@ -312,8 +312,8 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName = 
-                updateDictionaryTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+            monsterComponent.monsterName =
+                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
         }
     }
 
@@ -334,13 +334,13 @@ public class EditorComponentCustomMonster : EditorComponent
         if (!nameDBE.Text.Equals(""))
         {
             monsterComponent.monsterName =
-                updateDictionaryTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
         }
 
         if (!infoDBE.Text.Equals(""))
         {
             monsterComponent.info =
-                updateDictionaryTextAndGenKey(monsterComponent.info_key, infoDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.info_key, infoDBE.Text);
         }
     }
 

@@ -200,7 +200,7 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="key">key of the string</param>
         /// <param name="text">text to insert in current language</param>
-        public static void updateScenarioText(string key, string text)
+        public static StringKey updateScenarioTextAndGenKey(string key, string text)
         {
             EntryI18n entry;
             // Search for localization string 
@@ -211,6 +211,9 @@ namespace Assets.Scripts.Content
             }
 
             entry.currentLanguageString = text;
+
+            //return the stringkey
+            return new StringKey("qst", key);
         }
 
         /// <summary>

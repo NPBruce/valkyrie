@@ -1784,22 +1784,6 @@ public class QuestData
             return true;
         }
 
-        private const int UID_LEN = 15;
-        private static readonly char[] CHAR_RANGE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
-
-        /// <summary>
-        /// Generate a unique ID for each Quest
-        /// </summary>
-        /// <returns>unique ID of desired lenght</returns>
-        public static string genUid()
-        {
-            StringBuilder code = new StringBuilder(15);
-            while (code.Length < UID_LEN)
-            {
-                code.Append(CHAR_RANGE[Random.Range(0, CHAR_RANGE.Length)]);
-            }
-            return code.ToString();
-        }
 
         // Save to string (editor)
         override public string ToString()

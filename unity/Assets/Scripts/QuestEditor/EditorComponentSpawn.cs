@@ -266,7 +266,7 @@ public class EditorComponentSpawn : EditorComponent
         if (!uniqueTitleDBE.Text.Equals(""))
         {
             spawnComponent.uniqueTitle =
-                updateDictionaryTextAndGenKey(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
         }
     }
 
@@ -275,7 +275,7 @@ public class EditorComponentSpawn : EditorComponent
         if (!uniqueTextDBE.Text.Equals(""))
         {
             spawnComponent.uniqueText =
-                updateDictionaryTextAndGenKey(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
         }
     }
 

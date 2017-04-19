@@ -206,7 +206,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     public void UpdateButtonLabel(int number)
     {
         eventComponent.buttons[number - 1] =
-            updateDictionaryTextAndGenKey(eventComponent.button_key + number.ToString(), buttonDBE[number - 1].Text);
+            LocalizationRead.updateScenarioTextAndGenKey(eventComponent.button_key + number.ToString(), buttonDBE[number - 1].Text);
     }
 
     public void AddEvent(int index, int button)

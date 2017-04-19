@@ -167,7 +167,7 @@ public class EditorComponentActivation : EditorComponent
         {
             //insert the text in the current language
             activationComponent.ability =
-                updateDictionaryTextAndGenKey(activationComponent.ability_key, abilityDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(activationComponent.ability_key, abilityDBE.Text);
         }
     }
 
@@ -176,8 +176,8 @@ public class EditorComponentActivation : EditorComponent
         if (!moveButtonDBE.Text.Equals(""))
         {
             //insert the text in the current language
-            activationComponent.moveButton = 
-                updateDictionaryTextAndGenKey(activationComponent.movebutton_key, moveButtonDBE.Text);
+            activationComponent.moveButton =
+                LocalizationRead.updateScenarioTextAndGenKey(activationComponent.movebutton_key, moveButtonDBE.Text);
         }
     }
 
@@ -186,7 +186,7 @@ public class EditorComponentActivation : EditorComponent
         if (!masterActionsDBE.Text.Equals(""))
         {
             activationComponent.masterActions =
-                updateDictionaryTextAndGenKey(activationComponent.master_key, masterActionsDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(activationComponent.master_key, masterActionsDBE.Text);
         }
     }
 
@@ -195,7 +195,7 @@ public class EditorComponentActivation : EditorComponent
         if (!minionActionsDBE.Text.Equals(""))
         {
             activationComponent.minionActions =
-                updateDictionaryTextAndGenKey(activationComponent.minion_key, minionActionsDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(activationComponent.minion_key, minionActionsDBE.Text);
         }
     }
 
@@ -204,7 +204,7 @@ public class EditorComponentActivation : EditorComponent
         if (!moveDBE.Text.Equals(""))
         {
             activationComponent.move =
-                updateDictionaryTextAndGenKey(activationComponent.move_key, moveDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(activationComponent.move_key, moveDBE.Text);
         }
     }
 

@@ -77,7 +77,7 @@ public class EditorComponentQuest : EditorComponent
         if (!nameDBE.Text.Equals(""))
         {
             game.quest.qd.quest.name =
-                updateDictionaryTextAndGenKey(game.quest.qd.quest.name_key, nameDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(game.quest.qd.quest.name_key, nameDBE.Text);
         }
     }
 
@@ -88,7 +88,7 @@ public class EditorComponentQuest : EditorComponent
         if (!descriptionDBE.Text.Equals(""))
         {
             game.quest.qd.quest.description =
-                updateDictionaryTextAndGenKey(game.quest.qd.quest.description_key, descriptionDBE.Text);
+                LocalizationRead.updateScenarioTextAndGenKey(game.quest.qd.quest.description_key, descriptionDBE.Text);
         }
     }
 
