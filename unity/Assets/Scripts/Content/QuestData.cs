@@ -1650,10 +1650,6 @@ public class QuestData
         public int format = 0;
         public bool valid = false;
         public string path = "";
-        // Quest name
-        public StringKey name = StringKey.NULL;
-        // Quest description (currently unused)
-        public StringKey description = StringKey.NULL;
         // quest type (MoM, D2E)
         public string type;
         // Content packs required for quest
@@ -1665,6 +1661,9 @@ public class QuestData
 
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+
+        public StringKey name { get { return new StringKey(name_key); } }
+        public StringKey description { get { return new StringKey(description_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -1703,14 +1702,11 @@ public class QuestData
                 return false;
             }
 
+            // Depreciated (format 2)
             if (iniData.ContainsKey("name"))
             {
-                name = new StringKey(iniData["name"]);
-            }
-            else
-            {
-                ValkyrieDebug.Log("Warning: Failed to get name data out of " + path + "/quest.ini!");
-                return false;
+                LocalizationRead.scenarioDict = localizationDict;
+                LocalizationRead.updateScenarioText(name_key, data["name"]);
             }
 
             type = "";
@@ -1718,10 +1714,13 @@ public class QuestData
             {
                 type = iniData["type"];
             }
+            // Depreciated (format 2)
             if (iniData.ContainsKey("description"))
             {
-                description = new StringKey(iniData["description"]);
+                LocalizationRead.scenarioDict = localizationDict;
+                LocalizationRead.updateScenarioText(description_key, data["description"]);
             }
+
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -1763,8 +1762,6 @@ public class QuestData
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
             r.Append("format=").AppendLine(currentFormat.ToString());
-            r.Append("name=").AppendLine(name.fullKey);
-            r.Append("description=").AppendLine(description.fullKey);
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)
