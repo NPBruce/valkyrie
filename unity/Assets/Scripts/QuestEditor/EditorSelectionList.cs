@@ -258,6 +258,14 @@ public class EditorSelectionList
             return entry;
         }
 
+        public static SelectionListEntry BuildNameKeyTraitsColorItem(string name, string key, List<string> traits, Color newColor)
+        {
+            SelectionListEntry entry = BuildNameKeyItem(name, key);
+            entry.filter = traits;
+            entry.color = newColor;
+            return entry;
+        }
+
         private SelectionListEntry()
         {
             filter = new List<string>();

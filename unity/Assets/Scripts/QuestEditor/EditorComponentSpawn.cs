@@ -316,7 +316,8 @@ public class EditorComponentSpawn : EditorComponent
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
+            monsters.Add(
+                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(kv.Value.name.Translate(),display, sets));
         }
         monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
@@ -351,7 +352,8 @@ public class EditorComponentSpawn : EditorComponent
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
+            monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
+                kv.Value.name.Translate(),display, sets));
         }
         monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();

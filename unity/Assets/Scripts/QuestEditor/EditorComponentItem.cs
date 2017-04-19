@@ -128,14 +128,15 @@ public class EditorComponentItem : EditorComponent
                 }
             }
 
+            Color buttonColor = Color.white;
             if (usedItems.Contains(kv.Key))
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
+                buttonColor = Color.grey;
+
             }
-            else
-            {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
-            }
+
+            items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
+                kv.Value.name.Translate(), display, sets, buttonColor));
         }
         itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectAddItem(); });
         itemESL.SelectItem();

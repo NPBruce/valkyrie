@@ -94,14 +94,15 @@ public class EditorComponentTile : EditorComponent
                 }
             }
 
+            Color buttonColor = Color.white;
+
             if (usedSides.Contains(kv.Key))
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.grey));
+                buttonColor = Color.grey;
             }
-            else
-            {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.white));
-            }
+
+            sides.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
+                kv.Value.name.Translate(),display, traits, buttonColor));
         }
         tileESL = new EditorSelectionList(
             new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });
