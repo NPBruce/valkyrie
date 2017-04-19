@@ -274,7 +274,7 @@ public class EditorComponentCustomMonster : EditorComponent
                     sets.Add(s);
                 }
             }
-            baseMonster.Add(new EditorSelectionList.SelectionListEntry(display, sets));
+            baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(kv.Value.name.Translate(),display, sets));
         }
 
         baseESL = new EditorSelectionList(
