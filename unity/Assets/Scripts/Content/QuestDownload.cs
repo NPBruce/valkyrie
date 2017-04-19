@@ -188,6 +188,10 @@ public class QuestDownload : MonoBehaviour
         {
             // Only looking for files missing from remote
             if (remoteManifest.data.ContainsKey(kv.Key)) continue;
+            string type = localManifest.Get(kv.Key, "type");
+
+            // Only looking for packages of this game type
+            if (!game.gameType.TypeName().Equals(type)) return;
 
             string file = kv.Key + ".valkyrie";
             // Size is 1.2 to be clear of characters with tails
