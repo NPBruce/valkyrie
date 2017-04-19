@@ -118,7 +118,7 @@ public class QuestDownload : MonoBehaviour
                 string localHash = localManifest.Get(kv.Key, "version");
                 string remoteHash = remoteManifest.Get(kv.Key, "version");
 
-                if (!localHash.Equals(remoteHash)
+                if (!localHash.Equals(remoteHash))
                 {
                     tb = new TextButton(
                         new Vector2(2, offset), 
