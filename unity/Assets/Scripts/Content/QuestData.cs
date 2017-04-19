@@ -639,7 +639,6 @@ public class QuestData
         public string audio = "";
 
         public string originaltext_key { get { return genKey("originaltext"); } }
-        public string button_key { get { return genKey("button"); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -676,55 +675,63 @@ public class QuestData
             nextEvent = new List<List<string>>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
-            int buttonNum = 1;
-            bool moreEvents = true;
-            while (moreEvents)
+
+            int buttonCount = 0;
+            if (data.ContainsKey("buttons"))
+            {
+                int.TryParse(data["buttons"], out buttonCount);
+            }
+
+            // Depreciated button count test (format 2)
+            for (int buttonNum = buttonCount; buttonNum <= 10; buttonNum++)
             {
                 if (data.ContainsKey("button" + buttonNum))
                 {
-                    buttons.Add(new StringKey(data["button" + buttonNum]));
+                    buttonCount = buttonNum;
+                }
+                if (data.ContainsKey("event" + buttonNum))
+                {
+                    buttonCount = buttonNum;
+                }
+            }
 
-                    if (data.ContainsKey("event" + buttonNum))
+            for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
+            {
+                buttons.Add(new StringKey(genKey("button" + buttonNum)));
+                // Depreciated (format 2)
+                if (data.ContainsKey("button" + buttonNum))
+                {
+                    LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
+                }
+
+                if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
+                {
+                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
+                }
+                else
+                {
+                    nextEvent.Add(new List<string>());
+                }
+
+                if (data.ContainsKey("buttoncolor" + buttonNum))
+                {
+                    buttonColors.Add(data["buttoncolor" + buttonNum]);
+                }
+                else
+                {
+                    // Depreciated support for format 2
+                    if (buttonCount == 2 && buttonNum == 1 && data.ContainsKey("button1") && data["button1"].Equals("Pass"))
                     {
-                        if (data["event" + buttonNum].Trim().Length > 0)
-                        {
-                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
-                        }
-                        else
-                        {
-                            nextEvent.Add(new List<string>());
-                        }
+                        buttonColors.Add("green");
                     }
-                    else
+                    if (buttonCount == 2 && buttonNum == 2 && data.ContainsKey("button2") && data["button2"].Equals("Fail"))
                     {
-                        nextEvent.Add(new List<string>());
-                    }
-                    if (data.ContainsKey("buttoncolor" + buttonNum))
-                    {
-                        buttonColors.Add(data["buttoncolor" + buttonNum]);
+                        buttonColors.Add("red");
                     }
                     else
                     {
                         buttonColors.Add("white");
                     }
-                }
-                else
-                {
-                    moreEvents = false;
-                }
-                buttonNum++;
-            }
-
-            // Depreciated support for format 2
-            if (nextEvent.Count == 2)
-            {
-                if (buttons[0].key.Equals("Pass"))
-                {
-                    buttonColors[0] = "green";
-                }
-                if (buttons[1].key.Equals("Fail"))
-                {
-                    buttonColors[1] = "red";
                 }
             }
 
@@ -830,7 +837,7 @@ public class QuestData
                 originalText = AfterRenameUpdateDictionaryTextAndGenKey(originaltext_key, newName);
                 for (int pos = 0;pos < buttons.Count;pos++)
                 {
-                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(button_key + (pos + 1).ToString(), newName);
+                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (buttonNum + 1).ToString()), newName);
                 }                 
             }
 
@@ -906,6 +913,8 @@ public class QuestData
                 r += "highlight=true" + nl;
             }
 
+            r += "buttons=" + buttons.Count + nl;
+
             int buttonNum = 1;
             foreach (List<string> l in nextEvent)
             {
@@ -919,12 +928,6 @@ public class QuestData
                     r = r.Substring(0, r.Length - 1);
                 }
                 r += nl;
-            }
-
-            buttonNum = 1;
-            foreach (StringKey s in buttons)
-            {
-                r += "button" + buttonNum++ + "=" + (s.fullKey.StartsWith("{")?s.fullKey:"\"" + s.fullKey + "\"") + nl;
             }
 
             buttonNum = 1;
