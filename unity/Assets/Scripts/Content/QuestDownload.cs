@@ -106,13 +106,19 @@ public class QuestDownload : MonoBehaviour
             LocalizationRead.scenarioDict = localizationDict;
             string questName = new StringKey("qst", kv.Key + ".name").Translate();
 
+            int remoteFormat = 0;
+            int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
+            bool formatOK = (remoteFormat >= QuestData.Quest.minumumFormat) && (remoteFormat <= QuestData.Quest.currentFormat)
+
+            if (!formatOK) continue;
+
             // Size is 1.2 to be clear of characters with tails
             if (File.Exists(saveLocation() + "/" + file))
             {
                 string localHash = localManifest.Get(kv.Key, "version");
                 string remoteHash = remoteManifest.Get(kv.Key, "version");
 
-                if (!localHash.Equals(remoteHash))
+                if (!localHash.Equals(remoteHash)
                 {
                     tb = new TextButton(
                         new Vector2(2, offset), 
