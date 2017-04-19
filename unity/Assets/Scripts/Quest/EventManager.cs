@@ -284,7 +284,7 @@ public class EventManager
         // Get the text to display for the event
         virtual public string GetText()
         {
-            string text = qEvent.text.Translate();
+            string text = qEvent.text.Translate(true);
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero

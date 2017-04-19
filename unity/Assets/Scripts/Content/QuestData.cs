@@ -8,8 +8,6 @@ using ValkyrieTools;
 // Class to manage all static data for the current quest
 public class QuestData
 {
-    public static readonly StringKey EVENT_DOOR_DEFAULT_TEXT = new StringKey("val", "EVENT_DOOR_DEFAULT_TEXT");
-
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
 
@@ -303,7 +301,6 @@ public class QuestData
         {
             locationSpecified = true;
             typeDynamic = type;
-            text = EVENT_DOOR_DEFAULT_TEXT;
             cancelable = true;
         }
 
@@ -549,11 +546,6 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            int textStart = r.IndexOf("text=");
-            int textEnd = r.IndexOf("\n", textStart);
-            r = r.Substring(0, textStart) + "text=" + 
-                (originalText.isKey() ? originalText.fullKey :"\"" + originalText + "\"") + r.Substring(textEnd);
-
             if (mTypes.Length > 0)
             {
                 r += "monster=";
@@ -617,8 +609,6 @@ public class QuestData
     {
         new public static string type = "Event";
 
-        public StringKey text = StringKey.NULL;
-        public StringKey originalText = StringKey.NULL;
         public List<StringKey> buttons;
         public List<string> buttonColors;
         public string trigger = "";
@@ -638,7 +628,9 @@ public class QuestData
         public int quota = 0;
         public string audio = "";
 
-        public string originaltext_key { get { return genKey("originaltext"); } }
+        public string text_key { get { return genKey("text"); } }
+
+        public StringKey text { get { return new StringKey(text_key); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -659,12 +651,11 @@ public class QuestData
         public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
-            // Text to be displayed
+            // Depreciated (format 2)
             if (data.ContainsKey("text"))
             {
-                text = new StringKey(data["text"]);
+                LocalizationRead.updateScenarioText(text_key, data["text"]);
             }
-            originalText = text;
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
@@ -834,7 +825,7 @@ public class QuestData
         {
             if (sectionName.Equals(oldName) && newName != "")
             {                
-                originalText = AfterRenameUpdateDictionaryTextAndGenKey(originaltext_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(text_key, newName);
                 for (int pos = 0;pos < buttons.Count;pos++)
                 {
                     buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (buttonNum + 1).ToString()), newName);
@@ -905,8 +896,6 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = base.ToString();
-
-            r += "text=" + (originalText.isKey()?originalText.fullKey:"\"" + originalText.fullKey + "\"") + nl;
 
             if (highlight)
             {
