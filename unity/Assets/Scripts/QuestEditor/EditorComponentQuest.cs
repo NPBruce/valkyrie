@@ -39,7 +39,7 @@ public class EditorComponentQuest : EditorComponent
 
         descriptionDBE = new DialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 6), 
-            game.quest.qd.quest.description.Translate(),
+            game.quest.qd.quest.description.Translate(true),
             delegate { UpdateQuestDesc(); });
         descriptionDBE.ApplyTag("editor");
         descriptionDBE.AddBorder();
@@ -76,8 +76,7 @@ public class EditorComponentQuest : EditorComponent
 
         if (!nameDBE.Text.Equals(""))
         {
-            game.quest.qd.quest.name =
-                updateDictionaryTextAndGenKey(game.quest.qd.quest.name_key, nameDBE.Text);
+            updateDictionaryTextAndGenKey(game.quest.qd.quest.name_key, nameDBE.Text);
         }
     }
 
@@ -87,8 +86,11 @@ public class EditorComponentQuest : EditorComponent
 
         if (!descriptionDBE.Text.Equals(""))
         {
-            game.quest.qd.quest.description =
-                updateDictionaryTextAndGenKey(game.quest.qd.quest.description_key, descriptionDBE.Text);
+            updateDictionaryTextAndGenKey(game.quest.qd.quest.description_key, descriptionDBE.Text);
+        }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
         }
     }
 

@@ -378,15 +378,8 @@ public class QuestEditSelection
 
             List<string> questData = new List<string>();
 
-            string nameKey = "quest.name";
-            StringKey nameStringKey = new StringKey("qst", nameKey);
-            string descriptionKey = "quest.description";
-            StringKey descriptionStringKey = new StringKey("qst", descriptionKey);
-
             // Create basic quest info
             questData.Add("[Quest]");
-            questData.Add("name=" + nameStringKey.fullKey);
-            questData.Add("description=" + descriptionStringKey.fullKey);
             questData.Add("type=" + game.gameType.TypeName());
             questData.Add("format=" + QuestData.Quest.currentFormat);
             questData.Add("defaultlanguage=" + game.currentLang); 
@@ -402,10 +395,12 @@ public class QuestEditSelection
             new string[1] { DictionaryI18n.FFG_LANGS }, game.currentLang, game.currentLang);
 
             // Add quest name to dictionary
+            string nameKey = "quest.name";
             EntryI18n nameEntry = new EntryI18n(nameKey,newScenarioDict);
             nameEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i;
             newScenarioDict.Add(nameEntry);
             // Add quest description to dictionary
+            string descriptionKey = "quest.description";
             EntryI18n descriptionEntry = new EntryI18n(descriptionKey, newScenarioDict);
             descriptionEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i + "...";
             newScenarioDict.Add(descriptionEntry);

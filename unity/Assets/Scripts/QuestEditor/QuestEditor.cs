@@ -150,8 +150,6 @@ public class QuestEditor {
             {
                 List<string> localization_file = LocalizationRead.scenarioDict.Serialize();
 
-                removeUnusedStringKeys(localization_file, ini_content);
-
                 File.WriteAllText(
                     Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
                     string.Join(System.Environment.NewLine, localization_file.ToArray()));
