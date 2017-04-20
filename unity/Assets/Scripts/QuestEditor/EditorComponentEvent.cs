@@ -134,7 +134,7 @@ public class EditorComponentEvent : EditorComponent
 
         eventTextDBE = new DialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 8), 
-            eventComponent.originalText.Translate(),
+            eventComponent.text.Translate(true),
             delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();
@@ -287,8 +287,11 @@ public class EditorComponentEvent : EditorComponent
     {
         if (!eventTextDBE.Text.Equals(""))
         {
-            eventComponent.originalText =
-                LocalizationRead.updateScenarioTextAndGenKey(eventComponent.originaltext_key, eventTextDBE.Text);
+            LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
+        }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
         }
     }
 

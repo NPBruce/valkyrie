@@ -74,7 +74,7 @@ public class EditorComponentCustomMonster : EditorComponent
         db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1),
             new StringKey("val", "X_COLON", NAME));
         db.ApplyTag("editor");
-        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.fullKey.Length > 0)
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.KeyExists())
         {
             nameDBE = new DialogBoxEditable(
                 new Vector2(3, 4), new Vector2(14, 1), 
@@ -102,7 +102,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), new StringKey("val","X_COLON",INFO));
             db.ApplyTag("editor");
-            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.fullKey.Length > 0)
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
                 infoDBE = new DialogBoxEditable(
                     new Vector2(0, 7), new Vector2(20, 8), 
@@ -288,11 +288,11 @@ public class EditorComponentCustomMonster : EditorComponent
         if (baseESL.selection.Equals("{NONE}"))
         {
             monsterComponent.baseMonster = "";
-            if (monsterComponent.monsterName.fullKey.Length == 0)
+            if (!monsterComponent.monsterName.KeyExists())
             {
                 SetName();
             }
-            if (monsterComponent.info.fullKey.Length == 0)
+            if (!monsterComponent.info.KeyExists())
             {
                 SetInfo();
             }
@@ -312,20 +312,19 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName =
-                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
         }
     }
 
     public void ClearName()
     {
-        monsterComponent.monsterName = StringKey.NULL;
+        LocalizationRead.scenarioDict.Remove(monsterComponent.monstername_key);
         Update();
     }
 
     public void SetName()
     {
-        monsterComponent.monsterName = NAME;
+        LocalizationRead.updateScenarioText(monsterComponent.monstername_key, NAME.Translate());
         Update();
     }
 
@@ -333,26 +332,24 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!nameDBE.Text.Equals(""))
         {
-            monsterComponent.monsterName =
-                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
         }
 
         if (!infoDBE.Text.Equals(""))
         {
-            monsterComponent.info =
-                LocalizationRead.updateScenarioTextAndGenKey(monsterComponent.info_key, infoDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.info_key, infoDBE.Text);
         }
     }
 
     public void ClearInfo()
     {
-        monsterComponent.info = StringKey.NULL;
+        LocalizationRead.scenarioDict.Remove(monsterComponent.info_key);
         Update();
     }
 
     public void SetInfo()
     {
-        monsterComponent.info = INFO;
+        LocalizationRead.updateScenarioText(monsterComponent.info_key, INFO.Translate());
         Update();
     }
 
