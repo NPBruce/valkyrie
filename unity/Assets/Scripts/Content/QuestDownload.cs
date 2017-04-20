@@ -43,7 +43,7 @@ public class QuestDownload : MonoBehaviour
 
     public void ReadManifest()
     {
-        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, DictionaryI18n.DEFAULT_LANG);
+        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
 

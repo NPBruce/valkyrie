@@ -102,6 +102,10 @@ public class QuestData
             ValkyrieDebug.Log("No QuestText extra files");
         }
 
+        // New dictionary without entries
+        LocalizationRead.scenarioDict = new DictionaryI18n(
+            new string[1] { DictionaryI18n.FFG_LANGS }, quest.defaultLanguage, game.currentLang);
+
         foreach (string f in iniFiles)
         {
             // Read each file
@@ -130,10 +134,6 @@ public class QuestData
                 }
             }
         }
-
-        // New dictionary without entries
-        LocalizationRead.scenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, quest.defaultLanguage, game.currentLang);
 
         foreach (string file in localizationFiles)
         {
@@ -630,7 +630,7 @@ public class QuestData
 
         public string text_key { get { return genKey("text"); } }
 
-        public StringKey text { get { return new StringKey(text_key); } }
+        virtual public StringKey text { get { return new StringKey(text_key); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -648,11 +648,11 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data) : base(name, data)
+        public Event(string name, Dictionary<string, string> data, bool external = false) : base(name, data)
         {
             typeDynamic = type;
             // Depreciated (format 2)
-            if (data.ContainsKey("text"))
+            if (data.ContainsKey("text") && !external)
             {
                 LocalizationRead.updateScenarioText(text_key, data["text"]);
             }
@@ -690,7 +690,7 @@ public class QuestData
             {
                 buttons.Add(new StringKey(genKey("button" + buttonNum)));
                 // Depreciated (format 2)
-                if (data.ContainsKey("button" + buttonNum))
+                if (data.ContainsKey("button" + buttonNum) && !external)
                 {
                     LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
                 }

@@ -1101,19 +1101,38 @@ public class GenericData
 public class PerilData : QuestData.Event
 {
     new public static string type = "Peril";
-    public string monster = "";
     public int priority = 0;
 
-    public PerilData(string name, Dictionary<string, string> data) : base(name, data)
+    new public StringKey text;
+
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data, true)
     {
         typeDynamic = type;
-        if (data.ContainsKey("monster"))
-        {
-            monster = data["monster"];
-        }
         if (data.ContainsKey("priority"))
         {
             int.TryParse(data["priority"], out priority);
+        }
+
+        if (data.ContainsKey("text"))
+        {
+            text = new StringKey(data["text"]);
+        }
+
+        if (data.ContainsKey("text"))
+        {
+            text = new StringKey(data["text"]);
+        }
+
+        for (int i = 0; i <= buttons.Count; i++)
+        {
+            if (data.ContainsKey("button" + i))
+            {
+                buttons[i] = new StringKey(data["button" + i]);
+            }
+            else
+            {
+                buttons[i] = StringKey.NULL;
+            }
         }
     }
 }
