@@ -104,7 +104,7 @@ public class QuestData
 
         // New dictionary without entries
         LocalizationRead.scenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, quest.defaultLanguage, game.currentLang);
+            new string[1] { DictionaryI18n.FFG_LANGS }, DictionaryI18n.DEFAULT_LANG, game.currentLang);
 
         foreach (string f in iniFiles)
         {
@@ -1669,18 +1669,25 @@ public class QuestData
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
-            valid = Populate(iniData);
-
-            if (valid)
+            localizationDict =
+                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, defaultLanguage);
+            if (localizationDict == null)
             {
-                localizationDict = 
-                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt",defaultLanguage,defaultLanguage);
+                localizationDict = new DictionaryI18n(
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
             }
+            valid = Populate(iniData);
         }
 
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
+            localizationDict = LocalizationRead.scenarioDict;
+            if (localizationDict == null)
+            {
+                localizationDict = new DictionaryI18n(
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
+            }
             valid = Populate(iniData);
         }
 
@@ -1732,7 +1739,8 @@ public class QuestData
             if (iniData.ContainsKey("defaultlanguage"))
             {
                 defaultLanguage = iniData["defaultlanguage"];
-            }            
+                localizationDict.setDefaultLanguage(defaultLanguage);
+            }
 
             return true;
         }

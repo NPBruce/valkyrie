@@ -1123,11 +1123,11 @@ public class PerilData : QuestData.Event
             text = new StringKey(data["text"]);
         }
 
-        for (int i = 0; i <= buttons.Count; i++)
+        for (int i = 0; i < buttons.Count; i++)
         {
-            if (data.ContainsKey("button" + i))
+            if (data.ContainsKey("button" + (i + 1)))
             {
-                buttons[i] = new StringKey(data["button" + i]);
+                buttons[i] = new StringKey(data["button" + (i + 1)]);
             }
             else
             {
