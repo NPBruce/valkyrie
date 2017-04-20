@@ -410,8 +410,8 @@ public class QuestData
         public string uniquetitle_key { get { return genKey("uniquetitle"); } }
         public string uniquetext_key { get { return genKey("uniquetext"); } }
 
-        public StringKey uniqueTitle { get { return new StringKey(uniquetitle_key); } }
-        public StringKey uniqueText { get { return new StringKey(uniquetext_key); } }
+        public StringKey uniqueTitle { get { return new StringKey(genQuery("uniquetitle")); } }
+        public StringKey uniqueText { get { return new StringKey(genQuery("uniquetext")); } }
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -630,7 +630,7 @@ public class QuestData
 
         public string text_key { get { return genKey("text"); } }
 
-        virtual public StringKey text { get { return new StringKey(text_key); } }
+        virtual public StringKey text { get { return new StringKey(genQuery("text")); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -688,11 +688,11 @@ public class QuestData
 
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
-                buttons.Add(new StringKey(genKey("button" + buttonNum)));
+                buttons.Add(new StringKey(genQuery("button" + buttonNum)));
                 // Depreciated (format 2)
                 if (data.ContainsKey("button" + buttonNum) && !external)
                 {
-                    LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
+                    LocalizationRead.updateScenarioText(genQuery("button" + buttonNum), data["button" + buttonNum]);
                 }
 
                 if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
@@ -1236,6 +1236,12 @@ public class QuestData
         {
             return new StringBuilder(sectionName).Append(DOT).Append(element).ToString();
         }
+
+        public string genQuery(string element)
+        {
+            return "{qst:" + sectionName + DOT + element + "}";
+        }
+
         // Create new component in editor
         public QuestComponent(string nameIn)
         {
@@ -1364,8 +1370,8 @@ public class QuestData
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
 
-        public StringKey monsterName { get { return new StringKey(monstername_key); } }
-        public StringKey info { get { return new StringKey(info_key); } }
+        public StringKey monsterName { get { return new StringKey(genQuery("monstername")); } }
+        public StringKey info { get { return new StringKey(genQuery("info")); } }
 
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
@@ -1502,11 +1508,11 @@ public class QuestData
         public string movebutton_key { get { return genKey("movebutton"); } }
         public string move_key { get { return genKey("move"); } }
 
-        public StringKey ability { get { return new StringKey(ability_key); } }
-        public StringKey minionActions { get { return new StringKey(minion_key); } }
-        public StringKey masterActions { get { return new StringKey(master_key); } }
-        public StringKey moveButton { get { return new StringKey(movebutton_key); } }
-        public StringKey move { get { return new StringKey(move_key); } }
+        public StringKey ability { get { return new StringKey(genQuery("ability")); } }
+        public StringKey minionActions { get { return new StringKey(genQuery("minion")); } }
+        public StringKey masterActions { get { return new StringKey(genQuery("master")); } }
+        public StringKey moveButton { get { return new StringKey(genQuery("movebutton")); } }
+        public StringKey move { get { return new StringKey(genQuery("move")); } }
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1661,8 +1667,8 @@ public class QuestData
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
 
-        public StringKey name { get { return new StringKey(name_key); } }
-        public StringKey description { get { return new StringKey(description_key); } }
+        public StringKey name { get { return new StringKey("qst", name_key); } }
+        public StringKey description { get { return new StringKey("qst", description_key); } }
 
         // Create from path
         public Quest(string pathIn)
