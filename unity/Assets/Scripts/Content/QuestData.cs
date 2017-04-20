@@ -609,6 +609,7 @@ public class QuestData
     {
         new public static string type = "Event";
 
+        public bool display = true;
         public List<StringKey> buttons;
         public List<string> buttonColors;
         public string trigger = "";
@@ -651,10 +652,23 @@ public class QuestData
         public Event(string name, Dictionary<string, string> data, bool external = false) : base(name, data)
         {
             typeDynamic = type;
+
+            if (data.ContainsKey("display"))
+            {
+                bool.TryParse(data["display"], out display);
+            }
+
             // Depreciated (format 2)
             if (data.ContainsKey("text") && !external)
             {
-                LocalizationRead.updateScenarioText(text_key, data["text"]);
+                if (data["text"].Length == 0)
+                {
+                    display = false;
+                }
+                else
+                {
+                    LocalizationRead.updateScenarioText(text_key, data["text"]);
+                }
             }
 
             // Should the target location by highlighted?
@@ -690,7 +704,7 @@ public class QuestData
             {
                 buttons.Add(new StringKey(genQuery("button" + buttonNum)));
                 // Depreciated (format 2)
-                if (data.ContainsKey("button" + buttonNum) && !external)
+                if (data.ContainsKey("button" + buttonNum) && !external && display)
                 {
                     LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
                 }
@@ -704,7 +718,7 @@ public class QuestData
                     nextEvent.Add(new List<string>());
                 }
 
-                if (data.ContainsKey("buttoncolor" + buttonNum))
+                if (data.ContainsKey("buttoncolor" + buttonNum) && display)
                 {
                     buttonColors.Add(data["buttoncolor" + buttonNum]);
                 }
@@ -896,6 +910,11 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = base.ToString();
+
+            if (!display)
+            {
+                r += "display=false" + nl;
+            }
 
             if (highlight)
             {
