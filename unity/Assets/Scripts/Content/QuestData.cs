@@ -692,7 +692,7 @@ public class QuestData
                 // Depreciated (format 2)
                 if (data.ContainsKey("button" + buttonNum) && !external)
                 {
-                    LocalizationRead.updateScenarioText(genQuery("button" + buttonNum), data["button" + buttonNum]);
+                    LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
                 }
 
                 if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))

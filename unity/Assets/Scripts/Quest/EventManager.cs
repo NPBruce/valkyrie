@@ -369,16 +369,7 @@ public class EventManager
 
             for (int i = 0; i < qEvent.buttons.Count; i++)
             {
-                DialogWindow.EventButton eb;
-                if (qEvent is PerilData)
-                {
-                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
-                }
-                else
-                {
-                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
-                }
-                buttons.Add(eb);
+                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]));
             }
             return buttons;
         }
