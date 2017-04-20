@@ -102,6 +102,22 @@ namespace Assets.Scripts.Content
             }
         }
 
+        public void RemoveKeyPrefix(string prefix)
+        {
+            List<string> toRemove = new List<string>();
+            foreach (string s in dict.Keys)
+            {
+                if (s.IndexOf(prefix) == 0)
+                {
+                    toRemove.Add(s);
+                }
+            }
+            foreach (string s in toRemove)
+            {
+                Remove(s);
+            }
+        }
+
         /// <summary>
         /// Method for getting all languages of this dictionary 
         /// </summary>
