@@ -22,13 +22,13 @@ public class QuestDownload : MonoBehaviour
     {
         game = Game.Get();
         // For development builds use the development branch of the store
-        if (IsNumber(game.version[game.version.length - 1]))
+        if (char.IsNumber(game.version[game.version.Length - 1]))
         {
-            serverLocation += "master/"
+            serverLocation += "master/";
         }
         else
         {
-            serverLocation += "development/"
+            serverLocation += "development/";
         }
         string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
         StartCoroutine(Download(remoteManifest, delegate { DownloadDictionary(); }));
@@ -43,7 +43,7 @@ public class QuestDownload : MonoBehaviour
 
     public void ReadManifest()
     {
-        localizationDict = LocalizationRead.ReadFromString(download.text);
+        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, DictionaryI18n.DEFAULT_LANG);
         DrawList();
     }
 
@@ -108,7 +108,7 @@ public class QuestDownload : MonoBehaviour
 
             int remoteFormat = 0;
             int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
-            bool formatOK = (remoteFormat >= QuestData.Quest.minumumFormat) && (remoteFormat <= QuestData.Quest.currentFormat)
+            bool formatOK = (remoteFormat >= QuestData.Quest.minumumFormat) && (remoteFormat <= QuestData.Quest.currentFormat);
 
             if (!formatOK) continue;
 

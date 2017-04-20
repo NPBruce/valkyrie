@@ -828,7 +828,7 @@ public class QuestData
                 AfterRenameUpdateDictionaryTextAndGenKey(text_key, newName);
                 for (int pos = 0;pos < buttons.Count;pos++)
                 {
-                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (buttonNum + 1).ToString()), newName);
+                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (pos + 1).ToString()), newName);
                 }                 
             }
 
@@ -1354,7 +1354,6 @@ public class QuestData
         public string baseMonster = "";
         public string imagePath = "";
         public string imagePlace = "";
-        public StringKey info = StringKey.NULL;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1706,7 +1705,7 @@ public class QuestData
             if (iniData.ContainsKey("name"))
             {
                 LocalizationRead.scenarioDict = localizationDict;
-                LocalizationRead.updateScenarioText(name_key, data["name"]);
+                LocalizationRead.updateScenarioText(name_key, iniData["name"]);
             }
 
             type = "";
@@ -1718,7 +1717,7 @@ public class QuestData
             if (iniData.ContainsKey("description"))
             {
                 LocalizationRead.scenarioDict = localizationDict;
-                LocalizationRead.updateScenarioText(description_key, data["description"]);
+                LocalizationRead.updateScenarioText(description_key, iniData["description"]);
             }
 
             if (iniData.ContainsKey("packs"))

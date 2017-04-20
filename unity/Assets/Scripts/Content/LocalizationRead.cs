@@ -270,7 +270,7 @@ namespace Assets.Scripts.Content
             DictionaryI18n currentDict = selectDictionary(dict);
             if (currentDict == null) return false;
             EntryI18n valueOut;
-            return currentDict.tryGetValue(elements[0], out valueOut))
+            return currentDict.tryGetValue(elements[0], out valueOut);
         }
 
         /// <summary>

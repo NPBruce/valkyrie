@@ -160,7 +160,7 @@ namespace Assets.Scripts.Content
         {
             if (isKey() && !preventLookup)
             {
-                return LocalizationRead.DictLookup(this);
+                return LocalizationRead.CheckLookup(this);
             }
             return false;
         }

@@ -447,12 +447,9 @@ public class EventManager
             // Default to Master {type}
             if (qMonster.uniqueTitle.KeyExists())
             {
-                return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
+                return new StringKey("val", "MONSTER_MASTER_X", cMonster.name);
             }
-            else (qMonster.uniqueTitle.isKey())
-            {
-                return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
-            }
+            return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
         }
     }
 
