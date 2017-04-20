@@ -715,7 +715,7 @@ public class QuestData
                     {
                         buttonColors.Add("green");
                     }
-                    if (buttonCount == 2 && buttonNum == 2 && data.ContainsKey("button2") && data["button2"].Equals("Fail"))
+                    else if (buttonCount == 2 && buttonNum == 2 && data.ContainsKey("button2") && data["button2"].Equals("Fail"))
                     {
                         buttonColors.Add("red");
                     }
