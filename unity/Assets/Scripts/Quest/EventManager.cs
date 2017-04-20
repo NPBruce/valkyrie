@@ -284,7 +284,7 @@ public class EventManager
         // Get the text to display for the event
         virtual public string GetText()
         {
-            string text = qEvent.text.Translate();
+            string text = qEvent.text.Translate(true);
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
@@ -369,16 +369,7 @@ public class EventManager
 
             for (int i = 0; i < qEvent.buttons.Count; i++)
             {
-                DialogWindow.EventButton eb;
-                if (qEvent is PerilData)
-                {
-                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
-                }
-                else
-                {
-                    eb = new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]);
-                }
-                buttons.Add(eb);
+                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]));
             }
             return buttons;
         }
@@ -445,18 +436,11 @@ public class EventManager
         public StringKey GetUniqueTitle()
         {
             // Default to Master {type}
-            if (qMonster.uniqueTitle.fullKey.Length == 0)
+            if (qMonster.uniqueTitle.KeyExists())
             {
-                return new StringKey("val","MONSTER_MASTER_X", cMonster.name);
-            } else if (qMonster.uniqueTitle.isKey())
-            {
-                return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
-            } else
-            {
-                // non key stringkey
-                return new StringKey(null,qMonster.uniqueTitle.Translate().Replace("{type}", cMonster.name.Translate()));
+                return new StringKey("val", "MONSTER_MASTER_X", cMonster.name);
             }
-            
+            return new StringKey(qMonster.uniqueTitle,"{type}",cMonster.name.fullKey);
         }
     }
 

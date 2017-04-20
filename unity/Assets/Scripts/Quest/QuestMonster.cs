@@ -24,7 +24,7 @@ public class QuestMonster : MonsterData
         }
 
         // If name not set use base type
-        if (name.fullKey.Length == 0 && baseObject != null)
+        if (!qm.monsterName.KeyExists() && baseObject != null)
         {
             name = baseObject.name;
         } else
@@ -48,7 +48,7 @@ public class QuestMonster : MonsterData
 
         // Read info from quest data or base type
         info = new StringKey(null, EventManager.SymbolReplace(qm.info.fullKey), false);
-        if (info.fullKey.Length == 0 && baseObject != null)
+        if (!info.KeyExists() && baseObject != null)
         {
             info = baseObject.info;
         }
@@ -99,12 +99,32 @@ public class QuestActivation : ActivationData
     {
         // Read data from activation
         ability = qa.ability;
+        if (!ability.KeyExists())
+        {
+            ability = StringKey.NULL;
+        }
         masterActions = qa.masterActions;
+        if (!masterActions.KeyExists())
+        {
+            masterActions = StringKey.NULL;
+        }
         minionActions = qa.minionActions;
+        if (!minionActions.KeyExists())
+        {
+            minionActions = StringKey.NULL;
+        }
         minionFirst = qa.minionFirst;
         masterFirst = qa.masterFirst;
         move = qa.move;
+        if (!move.KeyExists())
+        {
+            move = StringKey.NULL;
+        }
         moveButton = qa.moveButton;
+        if (!moveButton.KeyExists())
+        {
+            moveButton = StringKey.NULL;
+        }
         sectionName = qa.sectionName;
     }
 }

@@ -85,16 +85,18 @@ public class EditorComponentEventNextEvent : EditorComponent
         db.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(19, 1), new Vector2(1, 1),
-            CommonStringKeys.PLUS, delegate { AddButton(0); }, Color.green);
+            CommonStringKeys.PLUS, delegate { AddButton(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
         int offset = 2;
         int button = 1;
         int index = 0;
+        int lastButtonOffset = 0;
         buttonDBE = new List<DialogBoxEditable>();
         foreach (List<string> l in eventComponent.nextEvent)
         {
+            lastButtonOffset = offset;
             int buttonTmp = button++;
 
             StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
@@ -110,18 +112,13 @@ public class EditorComponentEventNextEvent : EditorComponent
             tb.ApplyTag("editor");
 
             DialogBoxEditable buttonEdit = new DialogBoxEditable(
-                new Vector2(3, offset), new Vector2(14, 1), 
+                new Vector2(3, offset++), new Vector2(14, 1), 
                 buttonLabel.Translate(),
                 delegate { UpdateButtonLabel(buttonTmp); });
 
             buttonEdit.ApplyTag("editor");
             buttonEdit.AddBorder();
             buttonDBE.Add(buttonEdit);
-
-            tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1),
-                CommonStringKeys.MINUS, delegate { RemoveButton(buttonTmp); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
 
             index = 0;
             foreach (string s in l)
@@ -145,13 +142,17 @@ public class EditorComponentEventNextEvent : EditorComponent
                 CommonStringKeys.PLUS, delegate { AddEvent(tmp, buttonTmp); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
-
-            tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), 
-                CommonStringKeys.PLUS, delegate { AddButton(buttonTmp); }, Color.green);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
             offset++;
         }
+
+        if (lastButtonOffset != 0)
+        {
+            tb = new TextButton(new Vector2(17, lastButtonOffset), new Vector2(1, 1),
+                CommonStringKeys.MINUS, delegate { RemoveButton(); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+        
 
         if (eventComponent.locationSpecified)
         {
@@ -171,18 +172,23 @@ public class EditorComponentEventNextEvent : EditorComponent
         Update();
     }
 
-    public void AddButton(int number)
+    public void AddButton()
     {
-        eventComponent.nextEvent.Insert(number, new List<string>());
-        eventComponent.buttons.Insert(number, new StringKey(null,"Button " + (number + 1), false));
-        eventComponent.buttonColors.Insert(number, "white");
+        int count = eventComponent.nextEvent.Count + 1;
+        eventComponent.nextEvent.Add(new List<string>());
+        eventComponent.buttons.Add(new StringKey(eventComponent.genKey("button" + count)));
+        eventComponent.buttonColors.Add("white");
+        LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), "Button " + count);
         Update();
     }
 
-    public void RemoveButton(int number)
+    public void RemoveButton()
     {
-        eventComponent.nextEvent.RemoveAt(number - 1);
-        eventComponent.buttons.RemoveAt(number - 1);
+        int count = eventComponent.nextEvent.Count;
+        eventComponent.nextEvent.RemoveAt(count - 1);
+        eventComponent.buttons.RemoveAt(count - 1);
+        eventComponent.buttonColors.RemoveAt(count - 1);
+        LocalizationRead.scenarioDict.Remove(eventComponent.genKey("button" + count));
         Update();
     }
 
@@ -205,8 +211,10 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        eventComponent.buttons[number - 1] =
-            updateDictionaryTextAndGenKey(eventComponent.button_key + number.ToString(), buttonDBE[number - 1].Text);
+        if (!buttonDBE[number].Text.Equals(""))
+        {
+            LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonDBE[number].Text);
+        }
     }
 
     public void AddEvent(int index, int button)

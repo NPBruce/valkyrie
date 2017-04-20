@@ -93,7 +93,7 @@ public class EditorComponentActivation : EditorComponent
 
         masterActionsDBE = new DialogBoxEditable(
             new Vector2(0, 11), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(),
+            activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -113,7 +113,7 @@ public class EditorComponentActivation : EditorComponent
 
         minionActionsDBE = new DialogBoxEditable(
             new Vector2(0, 20), new Vector2(20, 8), 
-            activationComponent.minionActions.Translate(),
+            activationComponent.minionActions.Translate(true),
             delegate { UpdateMinionActions(); });
         minionActionsDBE.ApplyTag("editor");
         minionActionsDBE.AddBorder();
@@ -126,7 +126,7 @@ public class EditorComponentActivation : EditorComponent
 
         abilityDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
-            activationComponent.ability.Translate(),
+            activationComponent.ability.Translate(true),
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
@@ -135,7 +135,7 @@ public class EditorComponentActivation : EditorComponent
 
         moveButtonDBE = new DialogBoxEditable(
             new Vector2(10, 10), new Vector2(10, 1), 
-            activationComponent.moveButton.Translate(),
+            activationComponent.moveButton.Translate(true),
             delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag("editor");
         moveButtonDBE.AddBorder();
@@ -145,7 +145,7 @@ public class EditorComponentActivation : EditorComponent
 
         masterActionsDBE = new DialogBoxEditable(
             new Vector2(0, 12), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(),
+            activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -155,7 +155,7 @@ public class EditorComponentActivation : EditorComponent
 
         moveDBE = new DialogBoxEditable(
             new Vector2(0, 21), new Vector2(20, 8), 
-            activationComponent.move.Translate(),
+            activationComponent.move.Translate(true),
             delegate { UpdateMove(); });
         moveDBE.ApplyTag("editor");
         moveDBE.AddBorder();
@@ -166,8 +166,7 @@ public class EditorComponentActivation : EditorComponent
         if (!abilityDBE.Text.Equals(""))
         {
             //insert the text in the current language
-            activationComponent.ability =
-                updateDictionaryTextAndGenKey(activationComponent.ability_key, abilityDBE.Text);
+            LocalizationRead.updateScenarioText(activationComponent.ability_key, abilityDBE.Text);
         }
     }
 
@@ -176,8 +175,7 @@ public class EditorComponentActivation : EditorComponent
         if (!moveButtonDBE.Text.Equals(""))
         {
             //insert the text in the current language
-            activationComponent.moveButton = 
-                updateDictionaryTextAndGenKey(activationComponent.movebutton_key, moveButtonDBE.Text);
+            LocalizationRead.updateScenarioText(activationComponent.movebutton_key, moveButtonDBE.Text);
         }
     }
 
@@ -185,8 +183,11 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!masterActionsDBE.Text.Equals(""))
         {
-            activationComponent.masterActions =
-                updateDictionaryTextAndGenKey(activationComponent.master_key, masterActionsDBE.Text);
+            LocalizationRead.updateScenarioText(activationComponent.master_key, masterActionsDBE.Text);
+        }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(activationComponent.master_key);
         }
     }
 
@@ -194,8 +195,11 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!minionActionsDBE.Text.Equals(""))
         {
-            activationComponent.minionActions =
-                updateDictionaryTextAndGenKey(activationComponent.minion_key, minionActionsDBE.Text);
+            LocalizationRead.updateScenarioText(activationComponent.minion_key, minionActionsDBE.Text);
+        }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(activationComponent.minion_key);
         }
     }
 
@@ -203,8 +207,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (!moveDBE.Text.Equals(""))
         {
-            activationComponent.move =
-                updateDictionaryTextAndGenKey(activationComponent.move_key, moveDBE.Text);
+            LocalizationRead.updateScenarioText(activationComponent.move_key, moveDBE.Text);
         }
     }
 
