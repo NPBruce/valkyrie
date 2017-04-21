@@ -1,7 +1,5 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using ValkyrieTools;
@@ -85,6 +83,7 @@ namespace Assets.Scripts.Content
             return new DictionaryI18n(lines, newDefaultLang, newCurrentLang);
         }
 
+        private const int RECURSIVE_LIMIT = 10;
 
         // Check for FFG text lookups and insert required text
         /// <summary>
@@ -98,9 +97,11 @@ namespace Assets.Scripts.Content
             // While there are more lookups
 
             string regexKey = "{(ffg|val|qst):";
+            // Count the number of replaces. One lookup should not replace more than RECURSIVE_LIMIT elements.
+            int recursiveCount = 0;
 
             //while (output.IndexOf("{ffg:") != -1)
-            while (Regex.Match(output,regexKey).Success)
+            while (Regex.Match(output,regexKey).Success && recursiveCount < RECURSIVE_LIMIT)
             {
                 int pos = Regex.Match(output, regexKey).Index;
                 // Can be nested
@@ -141,7 +142,15 @@ namespace Assets.Scripts.Content
                 // Replace the lookup
 
                 output = output.Replace("{" + dict + ":" + lookup + "}", result);
+                // Increase the recursive count
+                recursiveCount++;
             }
+
+            if (recursiveCount == RECURSIVE_LIMIT)
+            {
+                ValkyrieDebug.Log("ERROR Recursive loop limit reached translating " + input.fullKey + ". Dictionary entry must be fixed.");
+            }
+
             return output;
         }
 

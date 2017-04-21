@@ -256,7 +256,7 @@ public class QuestDownload : MonoBehaviour
     public void Delete(string file)
     {
         string toDelete = saveLocation() + "/" + file;
-        File.Delete(saveLocation() + "/" + file);
+        File.Delete(toDelete);
         Destroyer.Dialog();
         DrawList();
     }
