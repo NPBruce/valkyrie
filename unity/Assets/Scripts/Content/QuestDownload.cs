@@ -12,22 +12,38 @@ public class QuestDownload : MonoBehaviour
     public Dictionary<string, QuestData.Quest> questList;
 
     public WWW download;
-    public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/";
+    public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
     public Game game;
     IniData remoteManifest;
     IniData localManifest;
+    DictionaryI18n localizationDict;
 
     void Start()
     {
         game = Game.Get();
+        // For development builds use the development branch of the store
+        if (char.IsNumber(game.version[game.version.Length - 1]))
+        {
+            serverLocation += "master/";
+        }
+        else
+        {
+            serverLocation += "development/";
+        }
         string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
-        StartCoroutine(Download(remoteManifest, delegate { ReadManifest(); }));
+        StartCoroutine(Download(remoteManifest, delegate { DownloadDictionary(); }));
+    }
+
+    public void DownloadDictionary()
+    {
+        remoteManifest = IniRead.ReadFromString(download.text);
+        string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
+        StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
     }
 
     public void ReadManifest()
     {
-        remoteManifest = IniRead.ReadFromString(download.text);
-
+        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
 
@@ -87,20 +103,28 @@ public class QuestDownload : MonoBehaviour
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
             string file = kv.Key + ".valkyrie";
+            LocalizationRead.scenarioDict = localizationDict;
+            string questName = new StringKey("qst", kv.Key + ".name").Translate();
+
+            int remoteFormat = 0;
+            int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
+            bool formatOK = (remoteFormat >= QuestData.Quest.minumumFormat) && (remoteFormat <= QuestData.Quest.currentFormat);
+
+            if (!formatOK) continue;
+
             // Size is 1.2 to be clear of characters with tails
             if (File.Exists(saveLocation() + "/" + file))
             {
-                int localVersion = 0;
-                int remoteVersion = 0;
-                int.TryParse(localManifest.Get(kv.Key, "version"), out localVersion);
-                int.TryParse(remoteManifest.Get(kv.Key, "version"), out remoteVersion);
-                if (localVersion < remoteVersion)
+                string localHash = localManifest.Get(kv.Key, "version");
+                string remoteHash = remoteManifest.Get(kv.Key, "version");
+
+                if (!localHash.Equals(remoteHash))
                 {
                     tb = new TextButton(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
                         //TODO: the name should be another key in near future. now is a nonLookup key
-                        new StringKey("val", "QUEST_NAME_UPDATE", kv.Value["name"]),
+                        new StringKey("val", "QUEST_NAME_UPDATE", questName),
                         delegate { Selection(file); }, 
                         Color.black, offset);
 
@@ -127,7 +151,7 @@ public class QuestDownload : MonoBehaviour
                     db = new DialogBox(
                         new Vector2(2, offset), 
                         new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
-                        new StringKey("val", "INDENT", kv.Value["name"]),
+                        new StringKey("val", "INDENT", questName),
                         Color.black);
                     db.AddBorder();
                     db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);
@@ -153,7 +177,7 @@ public class QuestDownload : MonoBehaviour
                 tb = new TextButton(
                     new Vector2(2, offset), 
                     new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                    new StringKey("val", "INDENT", kv.Value["name"]),
+                    new StringKey("val", "INDENT", questName),
                     delegate { Selection(file); }, 
                     Color.black, offset);
 
@@ -170,6 +194,10 @@ public class QuestDownload : MonoBehaviour
         {
             // Only looking for files missing from remote
             if (remoteManifest.data.ContainsKey(kv.Key)) continue;
+            string type = localManifest.Get(kv.Key, "type");
+
+            // Only looking for packages of this game type
+            if (!game.gameType.TypeName().Equals(type)) return;
 
             string file = kv.Key + ".valkyrie";
             // Size is 1.2 to be clear of characters with tails
@@ -178,7 +206,7 @@ public class QuestDownload : MonoBehaviour
                 db = new DialogBox(
                     new Vector2(2, offset),
                     new Vector2(UIScaler.GetWidthUnits() - 8, 1.2f),
-                    new StringKey("val", "INDENT", kv.Value["name"]),
+                    new StringKey("val", "INDENT", file),
                     Color.black);
                 db.AddBorder();
                 db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.07f, 0.07f, 0.07f);

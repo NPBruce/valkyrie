@@ -8,8 +8,6 @@ using ValkyrieTools;
 // Class to manage all static data for the current quest
 public class QuestData
 {
-    public static readonly StringKey EVENT_DOOR_DEFAULT_TEXT = new StringKey("val", "EVENT_DOOR_DEFAULT_TEXT");
-
     // All components in the quest
     public Dictionary<string, QuestComponent> components;
 
@@ -104,6 +102,10 @@ public class QuestData
             ValkyrieDebug.Log("No QuestText extra files");
         }
 
+        // New dictionary without entries
+        LocalizationRead.scenarioDict = new DictionaryI18n(
+            new string[1] { DictionaryI18n.FFG_LANGS }, DictionaryI18n.DEFAULT_LANG, game.currentLang);
+
         foreach (string f in iniFiles)
         {
             // Read each file
@@ -132,10 +134,6 @@ public class QuestData
                 }
             }
         }
-
-        // New dictionary without entries
-        LocalizationRead.scenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, quest.defaultLanguage, game.currentLang);
 
         foreach (string file in localizationFiles)
         {
@@ -303,7 +301,6 @@ public class QuestData
         {
             locationSpecified = true;
             typeDynamic = type;
-            text = EVENT_DOOR_DEFAULT_TEXT;
             cancelable = true;
         }
 
@@ -404,8 +401,6 @@ public class QuestData
         // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
-        public StringKey uniqueTitle = StringKey.NULL;
-        public StringKey uniqueText = StringKey.NULL;
         public float uniqueHealthBase = 0;
         public float uniqueHealthHero = 0;
         public string[] mTypes;
@@ -414,6 +409,9 @@ public class QuestData
 
         public string uniquetitle_key { get { return genKey("uniquetitle"); } }
         public string uniquetext_key { get { return genKey("uniquetext"); } }
+
+        public StringKey uniqueTitle { get { return new StringKey(genQuery("uniquetitle")); } }
+        public StringKey uniqueText { get { return new StringKey(genQuery("uniquetext")); } }
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -483,13 +481,15 @@ public class QuestData
             {
                 bool.TryParse(data["unique"], out unique);
             }
+            // depreciated (format 2)
             if (data.ContainsKey("uniquetitle"))
             {
-                uniqueTitle = new StringKey(data["uniquetitle"]);
+                LocalizationRead.updateScenarioText(uniquetitle_key, data["uniquetitle"]);
             }
+            // depreciated (format 2)
             if (data.ContainsKey("uniquetext"))
             {
-                uniqueText = new StringKey(data["uniquetext"]);
+                LocalizationRead.updateScenarioText(uniquetext_key, data["uniquetext"]);
             }
             if (data.ContainsKey("uniquehealth"))
             {
@@ -510,8 +510,8 @@ public class QuestData
             // new key can be created by replacing the left part of the . whith new name
             if (sectionName.Equals(oldName) && newName != "")
             {
-                uniqueTitle = AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
-                uniqueText = AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
             }
 
             for (int j = 0; j < placement.Length; j++)
@@ -545,11 +545,6 @@ public class QuestData
         {
             string nl = System.Environment.NewLine;
             string r = base.ToString();
-
-            int textStart = r.IndexOf("text=");
-            int textEnd = r.IndexOf("\n", textStart);
-            r = r.Substring(0, textStart) + "text=" + 
-                (originalText.isKey() ? originalText.fullKey :"\"" + originalText + "\"") + r.Substring(textEnd);
 
             if (mTypes.Length > 0)
             {
@@ -595,16 +590,6 @@ public class QuestData
                 r += "unique=true" + nl;
                 r += "uniquehealth=" + uniqueHealthBase + nl;
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
-                if (!uniqueTitle.Equals(""))
-                {
-                    r += "uniquetitle=" +
-                    (uniqueTitle.isKey() ? uniqueTitle.fullKey : "\"" + uniqueTitle + "\"") + nl;
-                }
-                if (!uniqueText.Equals(""))
-                {
-                    r += "uniquetext=" +
-                        (uniqueText.isKey() ? uniqueText.fullKey : "\"" + uniqueText + "\"") + nl;
-                }
             }
             if(uniqueHealthBase != 0)
             {
@@ -624,8 +609,6 @@ public class QuestData
     {
         new public static string type = "Event";
 
-        public StringKey text = StringKey.NULL;
-        public StringKey originalText = StringKey.NULL;
         public List<StringKey> buttons;
         public List<string> buttonColors;
         public string trigger = "";
@@ -645,8 +628,9 @@ public class QuestData
         public int quota = 0;
         public string audio = "";
 
-        public string originaltext_key { get { return genKey("originaltext"); } }
-        public string button_key { get { return genKey("button"); } }
+        public string text_key { get { return genKey("text"); } }
+
+        virtual public StringKey text { get { return new StringKey(genQuery("text")); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -664,15 +648,14 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data) : base(name, data)
+        public Event(string name, Dictionary<string, string> data, bool external = false) : base(name, data)
         {
             typeDynamic = type;
-            // Text to be displayed
-            if (data.ContainsKey("text"))
+            // Depreciated (format 2)
+            if (data.ContainsKey("text") && !external)
             {
-                text = new StringKey(data["text"]);
+                LocalizationRead.updateScenarioText(text_key, data["text"]);
             }
-            originalText = text;
 
             // Should the target location by highlighted?
             if (data.ContainsKey("highlight"))
@@ -683,55 +666,63 @@ public class QuestData
             nextEvent = new List<List<string>>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
-            int buttonNum = 1;
-            bool moreEvents = true;
-            while (moreEvents)
+
+            int buttonCount = 0;
+            if (data.ContainsKey("buttons"))
+            {
+                int.TryParse(data["buttons"], out buttonCount);
+            }
+
+            // Depreciated button count test (format 2)
+            for (int buttonNum = buttonCount; buttonNum <= 10; buttonNum++)
             {
                 if (data.ContainsKey("button" + buttonNum))
                 {
-                    buttons.Add(new StringKey(data["button" + buttonNum]));
+                    buttonCount = buttonNum;
+                }
+                if (data.ContainsKey("event" + buttonNum))
+                {
+                    buttonCount = buttonNum;
+                }
+            }
 
-                    if (data.ContainsKey("event" + buttonNum))
+            for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
+            {
+                buttons.Add(new StringKey(genQuery("button" + buttonNum)));
+                // Depreciated (format 2)
+                if (data.ContainsKey("button" + buttonNum) && !external)
+                {
+                    LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
+                }
+
+                if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
+                {
+                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
+                }
+                else
+                {
+                    nextEvent.Add(new List<string>());
+                }
+
+                if (data.ContainsKey("buttoncolor" + buttonNum))
+                {
+                    buttonColors.Add(data["buttoncolor" + buttonNum]);
+                }
+                else
+                {
+                    // Depreciated support for format 2
+                    if (buttonCount == 2 && buttonNum == 1 && data.ContainsKey("button1") && data["button1"].Equals("Pass"))
                     {
-                        if (data["event" + buttonNum].Trim().Length > 0)
-                        {
-                            nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
-                        }
-                        else
-                        {
-                            nextEvent.Add(new List<string>());
-                        }
+                        buttonColors.Add("green");
                     }
-                    else
+                    else if (buttonCount == 2 && buttonNum == 2 && data.ContainsKey("button2") && data["button2"].Equals("Fail"))
                     {
-                        nextEvent.Add(new List<string>());
-                    }
-                    if (data.ContainsKey("buttoncolor" + buttonNum))
-                    {
-                        buttonColors.Add(data["buttoncolor" + buttonNum]);
+                        buttonColors.Add("red");
                     }
                     else
                     {
                         buttonColors.Add("white");
                     }
-                }
-                else
-                {
-                    moreEvents = false;
-                }
-                buttonNum++;
-            }
-
-            // Depreciated support for format 2
-            if (nextEvent.Count == 2)
-            {
-                if (buttons[0].key.Equals("Pass"))
-                {
-                    buttonColors[0] = "green";
-                }
-                if (buttons[1].key.Equals("Fail"))
-                {
-                    buttonColors[1] = "red";
                 }
             }
 
@@ -834,10 +825,10 @@ public class QuestData
         {
             if (sectionName.Equals(oldName) && newName != "")
             {                
-                originalText = AfterRenameUpdateDictionaryTextAndGenKey(originaltext_key, newName);
+                AfterRenameUpdateDictionaryTextAndGenKey(text_key, newName);
                 for (int pos = 0;pos < buttons.Count;pos++)
                 {
-                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(button_key + (pos + 1).ToString(), newName);
+                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (pos + 1).ToString()), newName);
                 }                 
             }
 
@@ -906,12 +897,12 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "text=" + (originalText.isKey()?originalText.fullKey:"\"" + originalText.fullKey + "\"") + nl;
-
             if (highlight)
             {
                 r += "highlight=true" + nl;
             }
+
+            r += "buttons=" + buttons.Count + nl;
 
             int buttonNum = 1;
             foreach (List<string> l in nextEvent)
@@ -926,12 +917,6 @@ public class QuestData
                     r = r.Substring(0, r.Length - 1);
                 }
                 r += nl;
-            }
-
-            buttonNum = 1;
-            foreach (StringKey s in buttons)
-            {
-                r += "button" + buttonNum++ + "=" + (s.fullKey.StartsWith("{")?s.fullKey:"\"" + s.fullKey + "\"") + nl;
             }
 
             buttonNum = 1;
@@ -1251,6 +1236,12 @@ public class QuestData
         {
             return new StringBuilder(sectionName).Append(DOT).Append(element).ToString();
         }
+
+        public string genQuery(string element)
+        {
+            return "{qst:" + sectionName + DOT + element + "}";
+        }
+
         // Create new component in editor
         public QuestComponent(string nameIn)
         {
@@ -1367,10 +1358,8 @@ public class QuestData
         new public static string type = "CustomMonster";
         // A bast type is used for default values
         public string baseMonster = "";
-        public StringKey monsterName = StringKey.NULL;
         public string imagePath = "";
         public string imagePlace = "";
-        public StringKey info = StringKey.NULL;
         public string[] activations;
         public string[] traits;
         public string path = "";
@@ -1381,12 +1370,14 @@ public class QuestData
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
 
-    // Create new with name (editor)
-    public CustomMonster(string s) : base(s)
+        public StringKey monsterName { get { return new StringKey(genQuery("monstername")); } }
+        public StringKey info { get { return new StringKey(genQuery("info")); } }
+
+        // Create new with name (editor)
+        public CustomMonster(string s) : base(s)
         {
-            // The initial name of a monster is the component name. It wont be translated.
-            // If renamed,the translation key will be created
-            monsterName = new StringKey(null,sectionName,false);
+            LocalizationRead.updateScenarioText(monstername_key, sectionName);
+            LocalizationRead.updateScenarioText(info_key, "");
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1403,13 +1394,10 @@ public class QuestData
                 baseMonster = data["base"];
             }
             
+            // Depreciated (format 2)
             if (data.ContainsKey("name"))
             {
-                monsterName = new StringKey(data["name"]);
-            }
-            else
-            {
-                monsterName = new StringKey(null,iniName, false);
+                LocalizationRead.updateScenarioText(monstername_key, data["name"]);
             }
 
             traits = new string[0];
@@ -1423,9 +1411,10 @@ public class QuestData
                 imagePath = data["image"];
             }
 
+            // Depreciated (format 2)
             if (data.ContainsKey("info"))
             {
-                info = new StringKey(data["info"]);
+                LocalizationRead.updateScenarioText(info_key, data["info"]);
             }
 
             imagePlace = imagePath;
@@ -1481,17 +1470,9 @@ public class QuestData
             {
                 r.Append("base=").AppendLine(baseMonster);
             }
-            if (monsterName.fullKey.Length > 0)
-            {
-                r.Append("name=").AppendLine(monsterName.fullKey);
-            }
             if (traits.Length > 0)
             {
                 r.Append("traits=").AppendLine(string.Join(" ",traits));
-            }
-            if (info != null)
-            {
-                r.Append("info=").AppendLine(info.fullKey);
             }
             if (imagePath.Length > 0)
             {
@@ -1518,20 +1499,8 @@ public class QuestData
     public class Activation : QuestComponent
     {
         new public static string type = "Activation";
-        //TODO: abilities are loaded from ffg strings, but it can be edited
-        // for ffg abilities this field will be a key but for edited ability
-        // after localization for quests, all abilityes will be keys.
-        public StringKey ability = StringKey.NULL;
-        // same as ability
-        public StringKey minionActions = StringKey.NULL;
-        // same as ability
-        public StringKey masterActions = StringKey.NULL;
         public bool minionFirst = false;
         public bool masterFirst = false;
-        // same as ability
-        public StringKey moveButton = StringKey.NULL;
-        // same as ability
-        public StringKey move = StringKey.NULL;
 
         public string ability_key { get { return genKey("ability"); } }
         public string minion_key { get { return genKey("minion"); } }
@@ -1539,10 +1508,16 @@ public class QuestData
         public string movebutton_key { get { return genKey("movebutton"); } }
         public string move_key { get { return genKey("move"); } }
 
+        public StringKey ability { get { return new StringKey(genQuery("ability")); } }
+        public StringKey minionActions { get { return new StringKey(genQuery("minion")); } }
+        public StringKey masterActions { get { return new StringKey(genQuery("master")); } }
+        public StringKey moveButton { get { return new StringKey(genQuery("movebutton")); } }
+        public StringKey move { get { return new StringKey(genQuery("move")); } }
 
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            LocalizationRead.updateScenarioText(ability_key, "");
             typeDynamic = type;
         }
 
@@ -1550,25 +1525,30 @@ public class QuestData
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
+            // Depreciated (format 2)
             if (data.ContainsKey("ability"))
             {
-                ability = new StringKey(data["ability"]);
+                LocalizationRead.updateScenarioText(ability_key, data["ability"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("master"))
             {
-                masterActions = new StringKey(data["master"]);
+                LocalizationRead.updateScenarioText(minion_key, data["master"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("minion"))
             {
-                minionActions = new StringKey(data["minion"]);
+                LocalizationRead.updateScenarioText(master_key, data["minion"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("move"))
             {
-                move = new StringKey(data["move"]);
+                LocalizationRead.updateScenarioText(movebutton_key, data["move"]);
             }
+            // Depreciated (format 2)
             if (data.ContainsKey("movebutton"))
             {
-                moveButton = new StringKey(data["movebutton"]);
+                LocalizationRead.updateScenarioText(move_key, data["movebutton"]);
             }
             if (data.ContainsKey("minionfirst"))
             {
@@ -1586,26 +1566,6 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            if (ability != null)
-            {
-                r += "ability=" + ability + nl;
-            }
-            if (masterActions != null)
-            {
-                r += "master=" + masterActions + nl;
-            }
-            if (minionActions != null)
-            {
-                r += "minion=" + minionActions + nl;
-            }
-            if (move.fullKey.Length > 0)
-            {
-                r += "move=" + move + nl;
-            }
-            if (moveButton.fullKey.Length > 0)
-            {
-                r += "movebutton=" + moveButton + nl;
-            }
             if (minionFirst)
             {
                 r += "minionfirst=" + minionFirst.ToString() + nl;
@@ -1695,10 +1655,6 @@ public class QuestData
         public int format = 0;
         public bool valid = false;
         public string path = "";
-        // Quest name
-        public StringKey name = StringKey.NULL;
-        // Quest description (currently unused)
-        public StringKey description = StringKey.NULL;
         // quest type (MoM, D2E)
         public string type;
         // Content packs required for quest
@@ -1711,23 +1667,33 @@ public class QuestData
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
 
+        public StringKey name { get { return new StringKey("qst", name_key); } }
+        public StringKey description { get { return new StringKey("qst", description_key); } }
+
         // Create from path
         public Quest(string pathIn)
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
-            valid = Populate(iniData);
-
-            if (valid)
+            localizationDict =
+                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, defaultLanguage);
+            if (localizationDict == null)
             {
-                localizationDict = 
-                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt",defaultLanguage,defaultLanguage);
+                localizationDict = new DictionaryI18n(
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
             }
+            valid = Populate(iniData);
         }
 
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
+            localizationDict = LocalizationRead.scenarioDict;
+            if (localizationDict == null)
+            {
+                localizationDict = new DictionaryI18n(
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
+            }
             valid = Populate(iniData);
         }
 
@@ -1748,14 +1714,11 @@ public class QuestData
                 return false;
             }
 
+            // Depreciated (format 2)
             if (iniData.ContainsKey("name"))
             {
-                name = new StringKey(iniData["name"]);
-            }
-            else
-            {
-                ValkyrieDebug.Log("Warning: Failed to get name data out of " + path + "/quest.ini!");
-                return false;
+                LocalizationRead.scenarioDict = localizationDict;
+                LocalizationRead.updateScenarioText(name_key, iniData["name"]);
             }
 
             type = "";
@@ -1763,10 +1726,13 @@ public class QuestData
             {
                 type = iniData["type"];
             }
+            // Depreciated (format 2)
             if (iniData.ContainsKey("description"))
             {
-                description = new StringKey(iniData["description"]);
+                LocalizationRead.scenarioDict = localizationDict;
+                LocalizationRead.updateScenarioText(description_key, iniData["description"]);
             }
+
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -1779,7 +1745,8 @@ public class QuestData
             if (iniData.ContainsKey("defaultlanguage"))
             {
                 defaultLanguage = iniData["defaultlanguage"];
-            }            
+                localizationDict.setDefaultLanguage(defaultLanguage);
+            }
 
             return true;
         }
@@ -1792,8 +1759,6 @@ public class QuestData
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
             r.Append("format=").AppendLine(currentFormat.ToString());
-            r.Append("name=").AppendLine(name.fullKey);
-            r.Append("description=").AppendLine(description.fullKey);
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)

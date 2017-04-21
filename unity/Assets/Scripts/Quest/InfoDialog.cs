@@ -22,7 +22,7 @@ public class InfoDialog {
         db.AddBorder();
 
         // Unique monsters have additional info
-        if (m.unique)
+        if (m.unique && m.uniqueText.KeyExists())
         {
             db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), 
                 m.uniqueTitle, Color.red);

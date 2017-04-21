@@ -803,6 +803,8 @@ public class QuestEditorData {
             game.quest.qd.components.Remove(esl.selection);
         }
 
+        LocalizationRead.scenarioDict.RemoveKeyPrefix(esl.selection);
+
         // Clean up the current quest environment
         game.quest.Remove(esl.selection);
 
