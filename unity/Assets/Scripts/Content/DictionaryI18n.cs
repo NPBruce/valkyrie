@@ -102,9 +102,27 @@ namespace Assets.Scripts.Content
             }
         }
 
+        private void RemoveRaw(string key)
+        {
+            RemoveRawPrefix(key + ",");
+        }
+
+        private void RemoveRawPrefix(string key)
+        {
+            List<string> newRaw = new List<string>();
+            foreach (string s in rawDict)
+            {
+                if (s.IndexOf(key) != 0)
+                {
+                    newRaw.Add(s);
+                }
+            }
+            rawDict = newRaw.ToArray();
+        }
+
         public void RemoveKeyPrefix(string prefix)
         {
-            List<string> toRemove = new List<string>();
+            HashSet<string> toRemove = new HashSet<string>();
             foreach (string s in dict.Keys)
             {
                 if (s.IndexOf(prefix) == 0)
@@ -116,6 +134,7 @@ namespace Assets.Scripts.Content
             {
                 Remove(s);
             }
+            RemoveRawPrefix(prefix);
         }
 
         /// <summary>
