@@ -197,9 +197,15 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
-        if (name.IndexOf(Item.type) == 0)
+        if (name.IndexOf(StartingItem.type) == 0)
         {
-            Item c = new Item(name, content);
+            StartingItem c = new StartingItem(name, content);
+            components.Add(name, c);
+        }
+        // Depreciated (format 2)
+        if (name.IndexOf("Item") == 0)
+        {
+            StartingItem c = new StartingItem(name, content);
             components.Add(name, c);
         }
         if (name.IndexOf(Puzzle.type) == 0)
@@ -1599,14 +1605,14 @@ public class QuestData
 
 
     // Scenario starting item
-    public class Item : QuestComponent
+    public class StartingItem : QuestComponent
     {
-        new public static string type = "Item";
+        new public static string type = "StartingItem";
         public string[] itemName;
         public string[] traits;
 
         // Create new (editor)
-        public Item(string s) : base(s)
+        public StartingItem(string s) : base(s)
         {
             typeDynamic = type;
             itemName = new string[0];
@@ -1615,7 +1621,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Item(string name, Dictionary<string, string> data) : base(name, data)
+        public StartingItem(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
             if (data.ContainsKey("itemname"))

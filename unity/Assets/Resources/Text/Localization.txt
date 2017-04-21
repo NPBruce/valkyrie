@@ -165,7 +165,8 @@ SELECT_TO_DELETE,Select {0} To Delete,Selección de {0} a Eliminar,Sélectionner
 SET,Set,Cambiar,Appliquer,Setze,Set,,,,
 SKILL,Skill,Atributo,Compétence,Fähigkeit,Abilità,,,,
 SPAWN,Spawn,Generar,Générer,Spawn,Generazione,,,,
-STARTING_ITEM,Starting Items,Equipo Inicial,Objets de départ,Startgegenstände,Oggetti Iniziali,,,,
+STARTING_ITEM,StartingItem,EquipoInicial,ObjetDeDépart,Anfangsposten,ElementoIniziale,,,,
+STARTING_ITEMS,Starting Items,Equipo Inicial,Objets de départ,Startgegenstände,Oggetti Iniziali,,,,
 START_QUEST,Start {0},Iniciar {0},Démarrer {0},Starte {0},Inizio {0},,,,
 
 TESTS,Tests,Tests,Tests,Tests,Prove,,,,
