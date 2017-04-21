@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
@@ -93,12 +93,14 @@ public class EditorComponentToken : EditorComponent
 
         foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            //StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             foreach (string s in kv.Value.sets)
             {
-                display += " " + s;
+                display.Append(" ").Append(s);
+                //localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
             }
-            names.Add(new EditorSelectionList.SelectionListEntry(display));
+            names.Add( new EditorSelectionList.SelectionListEntry(display.ToString()));
         }
         return names;
     }

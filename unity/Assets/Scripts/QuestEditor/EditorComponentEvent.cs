@@ -287,7 +287,7 @@ public class EditorComponentEvent : EditorComponent
     {
         if (!eventTextDBE.Text.Equals(""))
         {
-            updateDictionaryTextAndGenKey(eventComponent.text_key, eventTextDBE.Text);
+            LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
         }
         else
         {

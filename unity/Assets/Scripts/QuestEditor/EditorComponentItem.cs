@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
@@ -113,7 +113,8 @@ public class EditorComponentItem : EditorComponent
 
         foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
@@ -123,19 +124,21 @@ public class EditorComponentItem : EditorComponent
                 }
                 else
                 {
-                    display += " " + s;
+                    display.Append(" ").Append(s);
+                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
                     sets.Add(s);
                 }
             }
 
+            Color buttonColor = Color.white;
             if (usedItems.Contains(kv.Key))
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.grey));
+                buttonColor = Color.grey;
+
             }
-            else
-            {
-                items.Add(new EditorSelectionList.SelectionListEntry(display, sets, Color.white));
-            }
+
+            items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
+                localizedDisplay.ToString(), display.ToString(), sets, buttonColor));
         }
         itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectAddItem(); });
         itemESL.SelectItem();

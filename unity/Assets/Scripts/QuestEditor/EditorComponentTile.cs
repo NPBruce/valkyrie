@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
@@ -79,7 +79,8 @@ public class EditorComponentTile : EditorComponent
         List<EditorSelectionList.SelectionListEntry> sides = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             List<string> traits = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
@@ -89,19 +90,20 @@ public class EditorComponentTile : EditorComponent
                 }
                 else
                 {
-                    display += " " + s;
+                    display.Append(" ").Append(s);
                     traits.Add(s);
                 }
             }
 
+            Color buttonColor = Color.white;
+
             if (usedSides.Contains(kv.Key))
             {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.grey));
+                buttonColor = Color.grey;
             }
-            else
-            {
-                sides.Add(new EditorSelectionList.SelectionListEntry(display, traits, Color.white));
-            }
+
+            sides.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
+                localizedDisplay.ToString(),display.ToString(), traits, buttonColor));
         }
         tileESL = new EditorSelectionList(
             new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });

@@ -410,8 +410,8 @@ public class QuestData
         public string uniquetitle_key { get { return genKey("uniquetitle"); } }
         public string uniquetext_key { get { return genKey("uniquetext"); } }
 
-        public StringKey uniqueTitle { get { return new StringKey(genQuery("uniquetitle")); } }
-        public StringKey uniqueText { get { return new StringKey(genQuery("uniquetext")); } }
+        public StringKey uniqueTitle { get { return genQuery("uniquetitle"); } }
+        public StringKey uniqueText { get { return genQuery("uniquetext"); } }
 
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
@@ -482,12 +482,12 @@ public class QuestData
                 bool.TryParse(data["unique"], out unique);
             }
             // depreciated (format 2)
-            if (data.ContainsKey("uniquetitle"))
+            if (data.ContainsKey("uniquetitle") && !data["uniquetitle"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(uniquetitle_key, data["uniquetitle"]);
             }
             // depreciated (format 2)
-            if (data.ContainsKey("uniquetext"))
+            if (data.ContainsKey("uniquetext") && !data["uniquetext"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(uniquetext_key, data["uniquetext"]);
             }
@@ -630,7 +630,7 @@ public class QuestData
 
         public string text_key { get { return genKey("text"); } }
 
-        virtual public StringKey text { get { return new StringKey(genQuery("text")); } }
+        virtual public StringKey text { get { return genQuery("text"); } }
 
         // Create a new event with name (editor)
         public Event(string s) : base(s)
@@ -652,7 +652,7 @@ public class QuestData
         {
             typeDynamic = type;
             // Depreciated (format 2)
-            if (data.ContainsKey("text") && !external)
+            if (data.ContainsKey("text") && !data["text"].StartsWith("{qst:") && !external)
             {
                 LocalizationRead.updateScenarioText(text_key, data["text"]);
             }
@@ -688,9 +688,9 @@ public class QuestData
 
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
-                buttons.Add(new StringKey(genQuery("button" + buttonNum)));
+                buttons.Add(genQuery("button" + buttonNum));
                 // Depreciated (format 2)
-                if (data.ContainsKey("button" + buttonNum) && !external)
+                if (data.ContainsKey("button" + buttonNum) && !data["button" + buttonNum].StartsWith("{qst:") && !external)
                 {
                     LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
                 }
@@ -1237,9 +1237,9 @@ public class QuestData
             return new StringBuilder(sectionName).Append(DOT).Append(element).ToString();
         }
 
-        public string genQuery(string element)
+        public StringKey genQuery(string element)
         {
-            return "{qst:" + sectionName + DOT + element + "}";
+            return new StringKey("qst", sectionName + DOT + element);
         }
 
         // Create new component in editor
@@ -1370,8 +1370,8 @@ public class QuestData
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
 
-        public StringKey monsterName { get { return new StringKey(genQuery("monstername")); } }
-        public StringKey info { get { return new StringKey(genQuery("info")); } }
+        public StringKey monsterName { get { return genQuery("monstername"); } }
+        public StringKey info { get { return genQuery("info"); } }
 
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
@@ -1395,7 +1395,7 @@ public class QuestData
             }
             
             // Depreciated (format 2)
-            if (data.ContainsKey("name"))
+            if (data.ContainsKey("name") && !data["name"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(monstername_key, data["name"]);
             }
@@ -1412,7 +1412,7 @@ public class QuestData
             }
 
             // Depreciated (format 2)
-            if (data.ContainsKey("info"))
+            if (data.ContainsKey("info") && !data["info"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(info_key, data["info"]);
             }
@@ -1508,11 +1508,11 @@ public class QuestData
         public string movebutton_key { get { return genKey("movebutton"); } }
         public string move_key { get { return genKey("move"); } }
 
-        public StringKey ability { get { return new StringKey(genQuery("ability")); } }
-        public StringKey minionActions { get { return new StringKey(genQuery("minion")); } }
-        public StringKey masterActions { get { return new StringKey(genQuery("master")); } }
-        public StringKey moveButton { get { return new StringKey(genQuery("movebutton")); } }
-        public StringKey move { get { return new StringKey(genQuery("move")); } }
+        public StringKey ability { get { return genQuery("ability"); } }
+        public StringKey minionActions { get { return genQuery("minion"); } }
+        public StringKey masterActions { get { return genQuery("master"); } }
+        public StringKey moveButton { get { return genQuery("movebutton"); } }
+        public StringKey move { get { return genQuery("move"); } }
 
         // Create new (editor)
         public Activation(string s) : base(s)
@@ -1526,27 +1526,27 @@ public class QuestData
         {
             typeDynamic = type;
             // Depreciated (format 2)
-            if (data.ContainsKey("ability"))
+            if (data.ContainsKey("ability") && !data["ability"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(ability_key, data["ability"]);
             }
             // Depreciated (format 2)
-            if (data.ContainsKey("master"))
+            if (data.ContainsKey("master") && !data["master"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(minion_key, data["master"]);
             }
             // Depreciated (format 2)
-            if (data.ContainsKey("minion"))
+            if (data.ContainsKey("minion") && !data["minion"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(master_key, data["minion"]);
             }
             // Depreciated (format 2)
-            if (data.ContainsKey("move"))
+            if (data.ContainsKey("move") && !data["move"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(movebutton_key, data["move"]);
             }
             // Depreciated (format 2)
-            if (data.ContainsKey("movebutton"))
+            if (data.ContainsKey("movebutton") && !data["movebutton"].StartsWith("{qst:"))
             {
                 LocalizationRead.updateScenarioText(move_key, data["movebutton"]);
             }
@@ -1715,7 +1715,7 @@ public class QuestData
             }
 
             // Depreciated (format 2)
-            if (iniData.ContainsKey("name"))
+            if (iniData.ContainsKey("name") && !iniData["name"].StartsWith("{qst:"))
             {
                 LocalizationRead.scenarioDict = localizationDict;
                 LocalizationRead.updateScenarioText(name_key, iniData["name"]);
@@ -1727,7 +1727,7 @@ public class QuestData
                 type = iniData["type"];
             }
             // Depreciated (format 2)
-            if (iniData.ContainsKey("description"))
+            if (iniData.ContainsKey("description") && !iniData["description"].StartsWith("{qst:"))
             {
                 LocalizationRead.scenarioDict = localizationDict;
                 LocalizationRead.updateScenarioText(description_key, iniData["description"]);
@@ -1751,22 +1751,6 @@ public class QuestData
             return true;
         }
 
-        private const int UID_LEN = 15;
-        private static readonly char[] CHAR_RANGE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
-
-        /// <summary>
-        /// Generate a unique ID for each Quest
-        /// </summary>
-        /// <returns>unique ID of desired lenght</returns>
-        public static string genUid()
-        {
-            StringBuilder code = new StringBuilder(15);
-            while (code.Length < UID_LEN)
-            {
-                code.Append(CHAR_RANGE[Random.Range(0, CHAR_RANGE.Length)]);
-            }
-            return code.ToString();
-        }
 
         // Save to string (editor)
         override public string ToString()

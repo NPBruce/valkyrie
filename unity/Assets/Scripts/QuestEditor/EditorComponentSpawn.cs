@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
@@ -305,7 +305,8 @@ public class EditorComponentSpawn : EditorComponent
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
@@ -315,11 +316,14 @@ public class EditorComponentSpawn : EditorComponent
                 }
                 else
                 {
-                    display += " " + s;
+                    display.Append(" ").Append(s);
+                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
+            monsters.Add(
+                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
+                    localizedDisplay.ToString(),display.ToString(), sets));
         }
         monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
         monsterTypeESL.SelectItem();
@@ -340,7 +344,8 @@ public class EditorComponentSpawn : EditorComponent
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
@@ -350,11 +355,13 @@ public class EditorComponentSpawn : EditorComponent
                 }
                 else
                 {
-                    display += " " + s;
+                    display.Append(" ").Append(s);
+                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
                     sets.Add(s);
                 }
             }
-            monsters.Add(new EditorSelectionList.SelectionListEntry(display, sets));
+            monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
+                localizedDisplay.ToString(),display.ToString(), sets));
         }
         monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
         monsterTypeESL.SelectItem();
