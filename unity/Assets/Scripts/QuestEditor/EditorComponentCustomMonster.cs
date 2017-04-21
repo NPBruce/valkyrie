@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -260,7 +261,8 @@ public class EditorComponentCustomMonster : EditorComponent
         baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(CommonStringKeys.NONE.Translate(),"{NONE}"));
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            string display = kv.Key;
+            StringBuilder display = new StringBuilder().Append(kv.Key);
+            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
             List<string> sets = new List<string>(kv.Value.traits);
             foreach (string s in kv.Value.sets)
             {
@@ -270,11 +272,14 @@ public class EditorComponentCustomMonster : EditorComponent
                 }
                 else
                 {
-                    display += " " + s;
+                    display.Append(" ").Append(s);
+                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
                     sets.Add(s);
                 }
             }
-            baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(kv.Value.name.Translate(),display, sets));
+            baseMonster.Add(
+                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
+                    localizedDisplay.ToString(),display.ToString(), sets));
         }
 
         baseESL = new EditorSelectionList(

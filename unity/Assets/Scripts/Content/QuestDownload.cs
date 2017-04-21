@@ -197,7 +197,7 @@ public class QuestDownload : MonoBehaviour
             string type = localManifest.Get(kv.Key, "type");
 
             // Only looking for packages of this game type
-            if (!game.gameType.TypeName().Equals(type)) return;
+            if (!game.gameType.TypeName().Equals(type)) continue;
 
             string file = kv.Key + ".valkyrie";
             // Size is 1.2 to be clear of characters with tails
