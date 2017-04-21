@@ -6,7 +6,7 @@ using Assets.Scripts.Content;
 // Window with starting Investigator items
 public class InvestigatorItems
 {
-    private readonly StringKey STARTING_ITEM = new StringKey("val", "STARTING_ITEM");
+    private readonly StringKey STARTING_ITEMS = new StringKey("val", "STARTING_ITEMS");
 
     public InvestigatorItems()
     {
@@ -26,7 +26,7 @@ public class InvestigatorItems
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestData.Item item = kv.Value as QuestData.Item;
+            QuestData.StartingItem item = kv.Value as QuestData.StartingItem;
             if (item != null)
             {
                 // Specific items
@@ -79,7 +79,7 @@ public class InvestigatorItems
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 2), STARTING_ITEM);
+        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 2), STARTING_ITEMS);
         db.SetFont(Game.Get().gameType.GetHeaderFont());
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 

@@ -158,10 +158,10 @@ public class QuestEditorData {
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         
             offset += 2;
-            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.ITEM, delegate { ListItem(); });
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.STARTING_ITEM, delegate { ListStartingItem(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Item"); }, Color.red);
+            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("StartingItem"); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
 
@@ -315,17 +315,17 @@ public class QuestEditorData {
     }
 
     // Create selection list for items
-    public static void ListItem()
+    public static void ListStartingItem()
     {
         Game game = Game.Get();
 
         List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
         items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.ITEM).Translate(),"{NEW:Item}"));
+            new StringKey("val","NEW_X",CommonStringKeys.STARTING_ITEM).Translate(),"{NEW:StartingItem}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Item)
+            if (kv.Value is QuestData.StartingItem)
             {
                 items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
@@ -421,9 +421,9 @@ public class QuestEditorData {
             qed.NewMPlace();
             return;
         }
-        if (name.Equals("{NEW:Item}"))
+        if (name.Equals("{NEW:StartingItem}"))
         {
-            qed.NewItem();
+            qed.NewStartingItem();
             return;
         }
         if (name.Equals("{NEW:CustomMonster}"))
@@ -484,9 +484,9 @@ public class QuestEditorData {
             SelectAsPuzzle(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Item)
+        if (game.quest.qd.components[name] is QuestData.StartingItem)
         {
-            SelectAsItem(name);
+            SelectAsStartingItem(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.CustomMonster)
@@ -579,7 +579,7 @@ public class QuestEditorData {
         game.qed.NewSelection(new EditorComponentPuzzle(name));
     }
 
-    public static void SelectAsItem(string name)
+    public static void SelectAsStartingItem(string name)
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentItem(name));
@@ -708,17 +708,17 @@ public class QuestEditorData {
         SelectComponent("Puzzle" + index);
     }
     
-    public void NewItem()
+    public void NewStartingItem()
     {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Item" + index))
+        while (game.quest.qd.components.ContainsKey("StartingItem" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Item" + index, new QuestData.Item("Item" + index));
-        SelectComponent("Item" + index);
+        game.quest.qd.components.Add("StartingItem" + index, new QuestData.StartingItem("StartingItem" + index));
+        SelectComponent("StartingItem" + index);
     }
 
     public void NewCustomMonster()

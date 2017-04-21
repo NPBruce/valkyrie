@@ -5,14 +5,14 @@ using Assets.Scripts.Content;
 
 public class EditorComponentItem : EditorComponent
 {
-    QuestData.Item itemComponent;
+    QuestData.StartingItem itemComponent;
     EditorSelectionList itemESL;
     EditorSelectionList traitESL;
 
     public EditorComponentItem(string nameIn) : base()
     {
         Game game = Game.Get();
-        itemComponent = game.quest.qd.components[nameIn] as QuestData.Item;
+        itemComponent = game.quest.qd.components[nameIn] as QuestData.StartingItem;
         component = itemComponent;
         name = component.sectionName;
         Update();
@@ -23,13 +23,13 @@ public class EditorComponentItem : EditorComponent
         base.Update();
         //Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.ITEM, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.STARTING_ITEM, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(null,name.Substring("Item".Length),false), delegate { QuestEditorData.ListItem(); });
+            new StringKey(null,name.Substring("StartingItem".Length),false), delegate { QuestEditorData.ListStartingItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -101,7 +101,7 @@ public class EditorComponentItem : EditorComponent
         HashSet<string> usedItems = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestData.Item i = kv.Value as QuestData.Item;
+            QuestData.StartingItem i = kv.Value as QuestData.StartingItem;
             if (i != null)
             {
                 if (i.traits.Length == 0)

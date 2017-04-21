@@ -288,10 +288,12 @@ public class EditorComponentEvent : EditorComponent
         if (!eventTextDBE.Text.Equals(""))
         {
             LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
+            eventComponent.display = true;
         }
         else
         {
             LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
+            eventComponent.display = false;
         }
     }
 
