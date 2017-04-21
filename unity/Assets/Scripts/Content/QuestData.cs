@@ -205,8 +205,9 @@ public class QuestData
         // Depreciated (format 2)
         if (name.IndexOf("Item") == 0)
         {
-            StartingItem c = new StartingItem(name, content);
-            components.Add(name, c);
+            string fixedName = "StartingItem" + name.Substring("Item".Length);
+            StartingItem c = new StartingItem(fixedName, content);
+            components.Add(fixedName, c);
         }
         if (name.IndexOf(Puzzle.type) == 0)
         {
