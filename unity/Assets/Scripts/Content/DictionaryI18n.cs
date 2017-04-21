@@ -100,6 +100,7 @@ namespace Assets.Scripts.Content
             {
                 dict.Remove(key);
             }
+            RemoveRaw(key);
         }
 
         private void RemoveRaw(string key)
@@ -135,6 +136,38 @@ namespace Assets.Scripts.Content
                 Remove(s);
             }
             RemoveRawPrefix(prefix);
+        }
+
+        public void RenamePrefix(string oldPrefix, string newPrefix)
+        {
+            HashSet<string> toRemove = new HashSet<string>();
+            List<EntryI18n> toAdd = new List<EntryI18n>();
+            foreach (string s in dict.Keys)
+            {
+                if (s.IndexOf(oldPrefix) == 0)
+                {
+                    string newKey = newPrefix + s.Substring(oldPrefix.Length);
+                    EntryI18n e = dict[s];
+                    e.key = newKey;
+                    toAdd.Add(e);
+                    toRemove.Add(s);
+                }
+            }
+            foreach (string s in toRemove)
+            {
+                Remove(s);
+            }
+            foreach (EntryI18n e in toAdd)
+            {
+                dict.Add(e.key, e);
+            }
+            for (int i = 0; i < rawDict.Length; i++)
+            {
+                if (rawDict[i].IndexOf(oldPrefix) == 0)
+                {
+                    rawDict[i] = newPrefix + rawDict[i].Substring(oldPrefix.Length);
+                }
+            }
         }
 
         /// <summary>
