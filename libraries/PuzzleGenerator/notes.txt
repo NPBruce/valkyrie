@@ -1,0 +1,5 @@
+This was used to generate slide puzzles but I haven't bothered to fix up the project since moving it into the repo.
+
+Note that this requires a LOT of memory.  If you want a chance of generating 8+ step puzzles you want 16GB of ram and a bit of time to let it run.
+
+Needs to be build for 64 bit.

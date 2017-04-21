@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFGAppImport", "FFGAppImport\FFGAppImport.csproj", "{F6151E78-A984-415C-9F2C-551F145BB493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValkyrieTools", "ValkyrieTools\ValkyrieTools.csproj", "{E0926125-3544-4592-9F07-9D13EA7CDCA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportTest", "ImportTest\ImportTest.csproj", "{E3369EE9-B885-4324-8C1D-D74BE64D299E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6151E78-A984-415C-9F2C-551F145BB493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6151E78-A984-415C-9F2C-551F145BB493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6151E78-A984-415C-9F2C-551F145BB493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6151E78-A984-415C-9F2C-551F145BB493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

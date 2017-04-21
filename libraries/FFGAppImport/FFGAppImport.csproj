@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F6151E78-A984-415C-9F2C-551F145BB493}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FFGAppImport</RootNamespace>
+    <AssemblyName>FFGAppImport</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0108</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\unity\Assets\Plugins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssetImport\AppFinder.cs" />
+    <Compile Include="AssetImport\Unity_Studio\AssetPreloadData.cs" />
+    <Compile Include="AssetImport\Unity_Studio\AssetsFile.cs" />
+    <Compile Include="AssetImport\Unity_Studio\AudioClip.cs" />
+    <Compile Include="AssetImport\Unity_Studio\BuildSettings.cs" />
+    <Compile Include="AssetImport\Unity_Studio\ClassIDReference.cs" />
+    <Compile Include="AssetImport\Unity_Studio\EndianStream.cs" />
+    <Compile Include="AssetImport\ExtractDataTool.cs" />
+    <Compile Include="AssetImport\FetchContent.cs" />
+    <Compile Include="AssetImport\Unity_Studio\Font.cs" />
+    <Compile Include="AssetImport\FSBExport.cs" />
+    <Compile Include="AssetImport\Unity_Studio\GameObject.cs" />
+    <Compile Include="AssetImport\Unity_Studio\helpers.cs" />
+    <Compile Include="AssetImport\MoMFinder.cs" />
+    <Compile Include="AssetImport\oggencoder\ArrayExtensions.cs" />
+    <Compile Include="AssetImport\oggencoder\Block.cs" />
+    <Compile Include="AssetImport\oggencoder\CodecSetup.cs" />
+    <Compile Include="AssetImport\oggencoder\Comments.cs" />
+    <Compile Include="AssetImport\oggencoder\EncodeBuffer.cs" />
+    <Compile Include="AssetImport\oggencoder\EncodeSetup.cs" />
+    <Compile Include="AssetImport\oggencoder\Encoding.cs" />
+    <Compile Include="AssetImport\oggencoder\FloatExtensions.cs" />
+    <Compile Include="AssetImport\oggencoder\HeaderPacketBuilder.cs" />
+    <Compile Include="AssetImport\oggencoder\LookupCollection.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\Delta.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\DrftLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\EnvelopeBand.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\EnvelopeFilterState.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\EnvelopeLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\FloorLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\MdctLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\PsyGlobalLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\PsyLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\Lookups\ResidueLookup.cs" />
+    <Compile Include="AssetImport\oggencoder\OffsetArray.cs" />
+    <Compile Include="AssetImport\oggencoder\OggPacket.cs" />
+    <Compile Include="AssetImport\oggencoder\OggPage.cs" />
+    <Compile Include="AssetImport\oggencoder\OggStream.cs" />
+    <Compile Include="AssetImport\oggencoder\ProcessingState.cs" />
+    <Compile Include="AssetImport\oggencoder\Properties\AssemblyInfo.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\AdjBlock.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\AdjStereo.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Att3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\CodeBook.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\CodeBookMapType.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\CompandBlock.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Floor.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\IMappingTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\IResidueTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\ISetupTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\IStaticBookBlock.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\IStaticCodeBook.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Mapping.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\MappingTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Mode.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Noise3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\NoiseGuard.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\PsyGlobal.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\PsyInfo.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Residue.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\ResidueLimitType.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\ResidueTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\ResidueType.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27Class2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27Class3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27Class4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_0Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_1Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_2Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_2Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_3Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_3Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_3Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_4Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_4Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line1024X27_4Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11Class2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11Class3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_0Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_1Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_2Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_2Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_2Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_3Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_3Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X11_3Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17Class2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17Class3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_0Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_1Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_2Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_2Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_2Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_3Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_3Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X17_3Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128x4Class0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X4Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X4Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X4Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X4Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7Class0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_0Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_0Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_0Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_1Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line128X7_1Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27Class2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27Class3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27Class4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_0Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_1Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_2Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_2Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_3Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_3Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_3Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_4Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_4Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line2048X27_4Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4Class0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4LowClass0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4LowSub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4LowSub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4LowSub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4LowSub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X4Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7Class0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_0Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_0Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_0Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_1Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line256X7_1Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17Class1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17Class2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17Class3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_0Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_1Sub0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_1Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_2Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_2Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_2Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_3Sub1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_3Sub2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\FloorBooks\Line512X17_3Sub3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Psy.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\SharedFloors.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Block0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter0\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Block1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter1\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Block2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page6.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter2\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Block3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page6.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter3\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Block4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page6.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter4\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Block5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page6.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter5\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Block6.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page5_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page5_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter6\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Block7.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page5_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page5_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter7\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Block8.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page5_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page5_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter8\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Block9.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page5_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page5_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page9_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page9_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\Chapter9\Page9_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\BlockNegOne.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ChapterNegOne\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\ManagedBlock0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter0\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\ManagedBlock1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapter1\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\ManagedBlockNegOne.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page3.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page4.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page5.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page6_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page6_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page7_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page7_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page8_0.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page8_1.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\BookBlocks\ManagedChapterNegOne\Page8_2.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter0Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter0LongManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter0Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter0ShortManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter1Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter1LongManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter1Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter1ShortManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter2Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter2Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter3Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter3Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter4Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter4Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter5Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter5Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter6Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter6Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter7Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter7Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter8Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter8Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter9Long.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\Chapter9Short.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\ChapterNegOneLong.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\ChapterNegOneLongManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\ChapterNegOneShort.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\HuffmanBooks\ChapterNegOneShortManaged.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\Psy44.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\Residue44.cs" />
+    <Compile Include="AssetImport\oggencoder\Setup\Templates\Stereo44\Stereo44SetupDataTemplate.cs" />
+    <Compile Include="AssetImport\oggencoder\StaticCodeBookExtensions.cs" />
+    <Compile Include="AssetImport\oggencoder\VorbisInfo.cs" />
+    <Compile Include="AssetImport\OggVorbisHeader.cs" />
+    <Compile Include="AssetImport\Registry.cs" />
+    <Compile Include="AssetImport\RtLFinder.cs" />
+    <Compile Include="AssetImport\Unity_Studio\TextAsset.cs" />
+    <Compile Include="AssetImport\Unity_Studio\Texture2D.cs" />
+    <Compile Include="AssetImport\Unity_Studio\Transform.cs" />
+    <Compile Include="FFGAppImport.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ValkyrieTools\ValkyrieTools.csproj">
+      <Project>{e0926125-3544-4592-9f07-9d13ea7cdca6}</Project>
+      <Name>ValkyrieTools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

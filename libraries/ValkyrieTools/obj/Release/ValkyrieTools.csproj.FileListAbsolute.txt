@@ -1,0 +1,14 @@
+C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.csprojResolveAssemblyReference.cache
+C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\bin\Release\ValkyrieTools.dll
+C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\bin\Release\ValkyrieTools.pdb
+C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.dll
+C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.pdb
+C:\Users\Bruce\Documents\valkyrie\valkyrie\Assets\Plugins\ValkyrieTools.dll
+C:\Users\Bruce\Documents\valkyrie\valkyrie\Assets\Plugins\ValkyrieTools.pdb
+C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\ValkyrieTools.dll
+C:\Users\Bruce\Documents\valkyrie\valkyrie\unity\Assets\Plugins\ValkyrieTools.pdb
+C:\git_external\valkyrie\unity\Assets\Plugins\ValkyrieTools.dll
+C:\git_external\valkyrie\unity\Assets\Plugins\ValkyrieTools.pdb
+C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.csprojResolveAssemblyReference.cache
+C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.dll
+C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.pdb
