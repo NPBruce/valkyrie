@@ -233,7 +233,8 @@ public class Game : MonoBehaviour {
         // Start round events
         quest.eManager.EventTriggerType("StartRound", false);
         // Start the quest (top of stack)
-        quest.eManager.EventTriggerType("EventStart");
+        quest.eManager.EventTriggerType("EventStart", false);
+        quest.eManager.TriggerEvent();
     }
 
     // On quitting

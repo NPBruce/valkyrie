@@ -707,6 +707,12 @@ public class QuestData
                 }
             }
 
+            // Displayed events must have a button
+            if (display && buttonCount == 0)
+            {
+                buttonCount = 1;
+            }
+
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
                 buttons.Add(genQuery("button" + buttonNum));
