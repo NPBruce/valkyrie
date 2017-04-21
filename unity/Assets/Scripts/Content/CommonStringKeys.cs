@@ -52,6 +52,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MPLACE = new StringKey(VAL, "MPLACE");
         public static readonly StringKey PUZZLE = new StringKey(VAL, "PUZZLE");
         public static readonly StringKey ITEM = new StringKey(VAL, "ITEM");
+        public static readonly StringKey STARTING_ITEM = new StringKey(VAL, "STARTING_ITEM");
         public static readonly StringKey UNIQUE_MONSTER = new StringKey(VAL, "UNIQUE_MONSTER");
         public static readonly StringKey CUSTOM_MONSTER = new StringKey(VAL, "CUSTOM_MONSTER");
         public static readonly StringKey ACTIVATION = new StringKey(VAL, "ACTIVATION");

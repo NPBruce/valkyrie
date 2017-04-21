@@ -151,7 +151,7 @@ public class EventManager
             }
 
             // Display the location(s)
-            if (qe.qEvent.locationSpecified && e.GetText().Length > 0)
+            if (qe.qEvent.locationSpecified && e.qEvent.display)
             {
                 game.tokenBoard.AddMonster(qe);
             }
@@ -203,7 +203,7 @@ public class EventManager
         }
 
         // Only raise dialog if there is text, otherwise auto confirm
-        if (e.GetText().Length == 0)
+        if (!e.qEvent.display)
         {
             EndEvent();
         }
