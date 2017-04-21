@@ -1103,7 +1103,8 @@ public class PerilData : QuestData.Event
     new public static string type = "Peril";
     public int priority = 0;
 
-    new public StringKey text;
+    public StringKey perilText;
+    override public StringKey text { get { return perilText; } }
 
     public PerilData(string name, Dictionary<string, string> data) : base(name, data, true)
     {
@@ -1115,12 +1116,7 @@ public class PerilData : QuestData.Event
 
         if (data.ContainsKey("text"))
         {
-            text = new StringKey(data["text"]);
-        }
-
-        if (data.ContainsKey("text"))
-        {
-            text = new StringKey(data["text"]);
+            perilText = new StringKey(data["text"]);
         }
 
         for (int i = 0; i < buttons.Count; i++)

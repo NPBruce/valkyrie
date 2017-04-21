@@ -666,13 +666,13 @@ public class QuestData
             }
 
             // Depreciated (format 2)
-            if (data.ContainsKey("text") && !data["text"].StartsWith("{qst:") && !external)
+            if (data.ContainsKey("text") && !data["text"].StartsWith("{qst:"))
             {
                 if (data["text"].Length == 0)
                 {
                     display = false;
                 }
-                else
+                else if (!external)
                 {
                     LocalizationRead.updateScenarioText(text_key, data["text"]);
                 }
