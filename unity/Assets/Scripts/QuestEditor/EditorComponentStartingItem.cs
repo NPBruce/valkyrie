@@ -3,13 +3,13 @@ using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class EditorComponentItem : EditorComponent
+public class EditorComponentStartingItem : EditorComponent
 {
     QuestData.StartingItem itemComponent;
     EditorSelectionList itemESL;
     EditorSelectionList traitESL;
 
-    public EditorComponentItem(string nameIn) : base()
+    public EditorComponentStartingItem(string nameIn) : base()
     {
         Game game = Game.Get();
         itemComponent = game.quest.qd.components[nameIn] as QuestData.StartingItem;
@@ -23,12 +23,12 @@ public class EditorComponentItem : EditorComponent
         base.Update();
         //Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.STARTING_ITEM, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.STARTING_ITEM, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
+        tb = new TextButton(new Vector2(3, 0), new Vector2(14, 1), 
             new StringKey(null,name.Substring("StartingItem".Length),false), delegate { QuestEditorData.ListStartingItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
