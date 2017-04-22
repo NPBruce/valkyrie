@@ -28,7 +28,7 @@ public class EditorComponentStartingItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(14, 1), 
+        tb = new TextButton(new Vector2(5, 0), new Vector2(14, 1), 
             new StringKey(null,name.Substring("StartingItem".Length),false), delegate { QuestEditorData.ListStartingItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
