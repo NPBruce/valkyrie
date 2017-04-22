@@ -1192,7 +1192,7 @@ public class QuestData
             nextEvent.Add(new List<string>());
             buttonColors.Add("white");
             buttons.Add(genQuery("button1"));
-            LocalizationRead.updateScenarioText(genKey("button1"), "Continue");
+            LocalizationRead.updateScenarioText(genKey("button1"), "Complete");
         }
 
         // Construct from ini data

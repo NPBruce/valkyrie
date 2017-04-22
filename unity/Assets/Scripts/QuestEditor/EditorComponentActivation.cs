@@ -177,6 +177,10 @@ public class EditorComponentActivation : EditorComponent
             //insert the text in the current language
             LocalizationRead.updateScenarioText(activationComponent.movebutton_key, moveButtonDBE.Text);
         }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(activationComponent.movebutton_key);
+        }
     }
 
     public void UpdateMasterActions()
@@ -208,6 +212,10 @@ public class EditorComponentActivation : EditorComponent
         if (!moveDBE.Text.Equals(""))
         {
             LocalizationRead.updateScenarioText(activationComponent.move_key, moveDBE.Text);
+        }
+        else
+        {
+            LocalizationRead.scenarioDict.Remove(activationComponent.move_key);
         }
     }
 

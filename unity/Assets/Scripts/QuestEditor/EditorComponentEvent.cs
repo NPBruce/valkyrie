@@ -289,6 +289,13 @@ public class EditorComponentEvent : EditorComponent
         {
             LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
             eventComponent.display = true;
+            if (eventComponent.buttons.Count == 0)
+            {
+                eventComponent.buttons.Add(eventComponent.genQuery("button1"));
+                eventComponent.nextEvent.Add(new List<string>());
+                eventComponent.buttonColors.Add("white");
+                LocalizationRead.updateScenarioText(eventComponent.genKey("button1"), "Continue");
+            }
         }
         else
         {
