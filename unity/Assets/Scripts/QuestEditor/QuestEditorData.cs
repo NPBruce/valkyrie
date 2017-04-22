@@ -582,7 +582,7 @@ public class QuestEditorData {
     public static void SelectAsStartingItem(string name)
     {
         Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentItem(name));
+        game.qed.NewSelection(new EditorComponentStartingItem(name));
     }
     public static void SelectAsCustomMonster(string name)
     {

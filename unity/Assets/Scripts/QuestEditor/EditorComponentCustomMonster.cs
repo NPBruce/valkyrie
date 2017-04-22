@@ -335,11 +335,6 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateInfo()
     {
-        if (!nameDBE.Text.Equals(""))
-        {
-            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
-        }
-
         if (!infoDBE.Text.Equals(""))
         {
             LocalizationRead.updateScenarioText(monsterComponent.info_key, infoDBE.Text);

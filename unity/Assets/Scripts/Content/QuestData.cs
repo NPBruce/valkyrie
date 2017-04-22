@@ -643,6 +643,7 @@ public class QuestData
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
+            display = false;
             typeDynamic = type;
             nextEvent = new List<List<string>>();
             buttons = new List<StringKey>();
@@ -1188,6 +1189,10 @@ public class QuestData
         public Puzzle(string s) : base(s)
         {
             typeDynamic = type;
+            nextEvent.Add(new List<string>());
+            buttonColors.Add("white");
+            buttons.Add(genQuery("button1"));
+            LocalizationRead.updateScenarioText(genKey("button1"), "Complete");
         }
 
         // Construct from ini data
@@ -1409,7 +1414,7 @@ public class QuestData
         public CustomMonster(string s) : base(s)
         {
             LocalizationRead.updateScenarioText(monstername_key, sectionName);
-            LocalizationRead.updateScenarioText(info_key, "");
+            LocalizationRead.updateScenarioText(info_key, "-");
             activations = new string[0];
             traits = new string[0];
             typeDynamic = type;
@@ -1549,7 +1554,7 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
-            LocalizationRead.updateScenarioText(ability_key, "");
+            LocalizationRead.updateScenarioText(ability_key, "-");
             typeDynamic = type;
         }
 

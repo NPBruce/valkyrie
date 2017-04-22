@@ -106,13 +106,13 @@ public class EditorComponentEventNextEvent : EditorComponent
             c[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
             c[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
 
-            tb = new TextButton(new Vector2(2, offset), new Vector2(1, 1),
-                CommonStringKeys.HASH, delegate { SetButtonColor(buttonTmp); }, c);
+            tb = new TextButton(new Vector2(0, offset), new Vector2(3, 1),
+                new StringKey("val", "COLOR"), delegate { SetButtonColor(buttonTmp); }, c);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
 
             DialogBoxEditable buttonEdit = new DialogBoxEditable(
-                new Vector2(3, offset++), new Vector2(14, 1), 
+                new Vector2(3, offset++), new Vector2(16, 1), 
                 buttonLabel.Translate(),
                 delegate { UpdateButtonLabel(buttonTmp); });
 
@@ -128,11 +128,11 @@ public class EditorComponentEventNextEvent : EditorComponent
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
-                db = new DialogBox(new Vector2(1, offset), new Vector2(17, 1), 
+                db = new DialogBox(new Vector2(1, offset), new Vector2(18, 1), 
                     new StringKey(null,s,false));
                 db.AddBorder();
                 db.ApplyTag("editor");
-                tb = new TextButton(new Vector2(18, offset++), new Vector2(1, 1),
+                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag("editor");
@@ -147,7 +147,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
         if (lastButtonOffset != 0)
         {
-            tb = new TextButton(new Vector2(17, lastButtonOffset), new Vector2(1, 1),
+            tb = new TextButton(new Vector2(19, lastButtonOffset), new Vector2(1, 1),
                 CommonStringKeys.MINUS, delegate { RemoveButton(); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
@@ -176,7 +176,7 @@ public class EditorComponentEventNextEvent : EditorComponent
     {
         int count = eventComponent.nextEvent.Count + 1;
         eventComponent.nextEvent.Add(new List<string>());
-        eventComponent.buttons.Add(new StringKey(eventComponent.genKey("button" + count)));
+        eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
         eventComponent.buttonColors.Add("white");
         LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), "Button " + count);
         Update();
@@ -211,9 +211,9 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        if (!buttonDBE[number].Text.Equals(""))
+        if (!buttonDBE[number - 1].Text.Equals(""))
         {
-            LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonDBE[number].Text);
+            LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonDBE[number - 1].Text);
         }
     }
 
