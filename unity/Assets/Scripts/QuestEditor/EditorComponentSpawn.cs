@@ -251,6 +251,11 @@ public class EditorComponentSpawn : EditorComponent
             LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetitle_key);
             LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetext_key);
         }
+        else
+        {
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, spawnComponent.sectionName);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, "-");
+        }
         Update();
     }
 
