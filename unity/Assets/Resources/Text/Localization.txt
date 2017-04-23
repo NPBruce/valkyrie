@@ -67,7 +67,7 @@ END_TURN,End Turn,Fin del Turno,Fin du tour,Letzter Zug,Fine Turno,,,,
 EVADE,Evade,Esquivar,Evasion,Ausweichen,Evadi,,,,
 EVENT,Event,Evento,Evénement,Ereignis,Evento,,,,
 EXIT,Exit,Salir,Sortir,Verlassen,Esci,,,,
-FINISHED,Finished,Terminado,Terminé,Beendet,Continua,,,,
+FINISHED,Finished,Terminado,Terminé,Fertig,Continua,,,,
 FIRST,First,Primero,Premier,Erster,Primo,,,,
 FORCE_ACTIVATE,Force Activate,Forzar Activación,Forcer l'activation,Erzwinge Aktivierung,Attivazione forzata,,,,
 
