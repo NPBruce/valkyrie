@@ -359,7 +359,7 @@ RIGHT,Right,Derecha,Droite,Rechts,Destra,Para a Direita,Prawo,右,右
 PHASE_INVESTIGATOR,Investigator Phase,Fase de los Investigadores,Phase d'Investigateur,Ermittlerphase,Fase Degli Investigatori,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
 PHASE_MYTHOS,Mythos Phase,Fase de Mitos,Phase de Mythe,Mythosphase,Fase Dei Miti,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
 MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
-HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
+HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Mythosphase,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
 END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟
 
 ATTACK_PROMPT,What type of weapon will you attack with?,¿Con qué tipo de arma vas a atacar?,Avec quel type d’arme allez-vous attaquer ?,Mit welcher Art von Waffe willst du angreifen?,Con quale tipo di arma vuoi attaccare?,Com que tipo de arma você quer atacar?,Jakim rodzajem broni atakujesz?,どの種類の武器で攻撃しますか？,你想在攻擊時使用哪種類型的武器？
