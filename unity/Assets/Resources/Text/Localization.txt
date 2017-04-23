@@ -21,7 +21,7 @@ ICON_PRODUCT_MAD23,,,,,,,,,
 // TEXTS
 
 ABILITY,Ability,Capacidad,Capacité,Fähigkeit,Abilità,,,,
-ABOUT,About,Acerca de,A propos,Über Valkyie,Informazioni su,,,,
+ABOUT,About,Acerca de,A propos,Über Valkyrie,Informazioni su,,,,
 ABOUT_FFG,"Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.","Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.","Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.","Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen Rechteinhabern.","Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi.",,,,
 ABOUT_LIBS,"Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.","Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.","Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.","Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.","Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder",,,,
 ACTIONS,Actions,Acciones,Actions,Aktionen,Azioni,,,,
@@ -67,7 +67,7 @@ END_TURN,End Turn,Fin del Turno,Fin du tour,Letzter Zug,Fine Turno,,,,
 EVADE,Evade,Esquivar,Evasion,Ausweichen,Evadi,,,,
 EVENT,Event,Evento,Evénement,Ereignis,Evento,,,,
 EXIT,Exit,Salir,Sortir,Verlassen,Esci,,,,
-FINISHED,Finished,Terminado,Terminé,Beendet,Continua,,,,
+FINISHED,Finished,Terminado,Terminé,Fertig,Continua,,,,
 FIRST,First,Primero,Premier,Erster,Primo,,,,
 FORCE_ACTIVATE,Force Activate,Forzar Activación,Forcer l'activation,Erzwinge Aktivierung,Attivazione forzata,,,,
 
@@ -359,7 +359,7 @@ RIGHT,Right,Derecha,Droite,Rechts,Destra,Para a Direita,Prawo,右,右
 PHASE_INVESTIGATOR,Investigator Phase,Fase de los Investigadores,Phase d'Investigateur,Ermittlerphase,Fase Degli Investigatori,Fase de Investigação,Faza badaczy,探索者フェイズ,調查階段
 PHASE_MYTHOS,Mythos Phase,Fase de Mitos,Phase de Mythe,Mythosphase,Fase Dei Miti,Fase do Mito,Faza mitów,神話フェイズ,神秘階段
 MONSTER_STEP,Monster Step,Paso de activación de monstruos,Étape de monstre,Monsterschritt,Sottofase dei Mostri,Passo dos Monstros,Etap potworów,モンスターの活動ステップ,怪物步驟
-HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Horrorschritt,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
+HORROR_STEP,Horror Step,Paso de Horror,Étape d'horreur,Mythosphase,Sottofase di Orrore,Passo dos Horrores,Etap przerażenia,恐怖判定ステップ,恐怖步驟
 END_PHASE,End Phase,Fin de la fase,Terminer la phase,Phase beenden,Fine Fase,Fim de Fase,Koniec fazy,フェイズ終了,結束步驟
 
 ATTACK_PROMPT,What type of weapon will you attack with?,¿Con qué tipo de arma vas a atacar?,Avec quel type d’arme allez-vous attaquer ?,Mit welcher Art von Waffe willst du angreifen?,Con quale tipo di arma vuoi attaccare?,Com que tipo de arma você quer atacar?,Jakim rodzajem broni atakujesz?,どの種類の武器で攻撃しますか？,你想在攻擊時使用哪種類型的武器？
