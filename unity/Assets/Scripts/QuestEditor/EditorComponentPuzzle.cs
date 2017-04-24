@@ -150,7 +150,7 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void SelectSkill()
     {
-        puzzleComponent.skill = skillList.selection;
+        puzzleComponent.skill = skillList.selection.Substring(0, skillList.selection.IndexOf(" "));
         Update();
     }
 
