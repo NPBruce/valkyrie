@@ -111,7 +111,7 @@ public class EditorComponent {
             kv.Value.ChangeReference(component.sectionName, name);
         }
 
-        LocalizationRead.scenarioDict.RenamePrefix(component.sectionName, name);
+        LocalizationRead.scenarioDict.RenamePrefix(component.sectionName + ".", name + ".");
 
         // Old Localization Entryes need to be renamed? Maybe not
         // Change all entrys related with old name to key new name

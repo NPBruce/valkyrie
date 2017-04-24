@@ -131,6 +131,7 @@ public class QuestData
                 foreach (KeyValuePair<string, string> kv in rename)
                 {
                     qc.ChangeReference(kv.Key, kv.Value);
+                    LocalizationRead.scenarioDict.RenamePrefix(kv.Key + ".", kv.Value + ".");
                 }
             }
         }
@@ -513,14 +514,6 @@ public class QuestData
         {
             base.ChangeReference(oldName, newName);
 
-            // it wasn't renamed yet so the _key items will point to old keys.
-            // new key can be created by replacing the left part of the . whith new name
-            if (sectionName.Equals(oldName) && newName != "")
-            {
-                AfterRenameUpdateDictionaryTextAndGenKey(uniquetitle_key, newName);
-                AfterRenameUpdateDictionaryTextAndGenKey(uniquetext_key, newName);
-            }
-
             for (int j = 0; j < placement.Length; j++)
             {
                 for (int i = 0; i < placement[j].Length; i++)
@@ -851,15 +844,6 @@ public class QuestData
         // Check all references when a component name is changed
         override public void ChangeReference(string oldName, string newName)
         {
-            if (sectionName.Equals(oldName) && newName != "")
-            {                
-                AfterRenameUpdateDictionaryTextAndGenKey(text_key, newName);
-                for (int pos = 0;pos < buttons.Count;pos++)
-                {
-                    buttons[pos] = AfterRenameUpdateDictionaryTextAndGenKey(genKey("button" + (pos + 1).ToString()), newName);
-                }                 
-            }
-
             // hero list event is changed
             if (heroListName.Equals(oldName))
             {
