@@ -105,6 +105,7 @@ public class RoundControllerMoM : RoundController
                 game.quest.phase = Quest.MoMPhase.horror;
                 game.stageUI.Update();
                 EndRound();
+                return;
             }
         }
 
