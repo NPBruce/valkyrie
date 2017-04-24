@@ -844,6 +844,14 @@ public class QuestData
         // Check all references when a component name is changed
         override public void ChangeReference(string oldName, string newName)
         {
+            if (sectionName.Equals(oldName) && newName != "")
+            {
+                for (int i = 1; i <= buttons.Count; i++)
+                {
+                    buttons[i - 1] = new StringKey("qst", newName + '.' + "button" + i);
+                }
+            }
+
             // hero list event is changed
             if (heroListName.Equals(oldName))
             {
