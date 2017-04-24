@@ -1562,12 +1562,12 @@ public class QuestData
             // Depreciated (format 2)
             if (data.ContainsKey("master") && !data["master"].StartsWith("{qst:"))
             {
-                LocalizationRead.updateScenarioText(minion_key, data["master"]);
+                LocalizationRead.updateScenarioText(master_key, data["master"]);
             }
             // Depreciated (format 2)
             if (data.ContainsKey("minion") && !data["minion"].StartsWith("{qst:"))
             {
-                LocalizationRead.updateScenarioText(master_key, data["minion"]);
+                LocalizationRead.updateScenarioText(minion_key, data["minion"]);
             }
             // Depreciated (format 2)
             if (data.ContainsKey("move") && !data["move"].StartsWith("{qst:"))
