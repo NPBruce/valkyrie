@@ -98,7 +98,12 @@ public class EventManager
         currentEvent = e;
 
         // Event may have been disabled since added
-        if (e.Disabled()) return;
+        if (e.Disabled())
+        {
+            currentEvent = null;
+            TriggerEvent();
+            return;
+        }
 
         // Play audio
         if (game.cd.audio.ContainsKey(e.qEvent.audio))
