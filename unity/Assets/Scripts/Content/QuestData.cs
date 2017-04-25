@@ -185,14 +185,6 @@ public class QuestData
             Spawn c = new Spawn(name, content, game);
             components.Add(name, c);
         }
-        // Depreciated (format 1)
-        if (name.IndexOf("Monster") == 0)
-        {
-            string fixedName = "Spawn" + name.Substring("Monster".Length);
-            rename.Add(name, fixedName);
-            Spawn c = new Spawn(fixedName, content, game);
-            components.Add(fixedName, c);
-        }
         if (name.IndexOf(MPlace.type) == 0)
         {
             MPlace c = new MPlace(name, content);
@@ -203,32 +195,17 @@ public class QuestData
             StartingItem c = new StartingItem(name, content);
             components.Add(name, c);
         }
-        // Depreciated (format 2)
-        if (name.IndexOf("Item") == 0)
-        {
-            string fixedName = "StartingItem" + name.Substring("Item".Length);
-            StartingItem c = new StartingItem(fixedName, content);
-            components.Add(fixedName, c);
-        }
         if (name.IndexOf(Puzzle.type) == 0)
         {
             Puzzle c = new Puzzle(name, content);
             components.Add(name, c);
         }
-        // Depreciated (format 1)
-        if (name.IndexOf("UniqueMonster") == 0)
-        {
-            string fixedName = "CustomMonster" + name.Substring("UniqueMonster".Length);
-            rename.Add(name, fixedName);
-            CustomMonster c = new CustomMonster(fixedName, content, path);
-            components.Add(fixedName, c);
-        }
-        if (name.IndexOf("CustomMonster") == 0)
+        if (name.IndexOf(CustomMonster.type) == 0)
         {
             CustomMonster c = new CustomMonster(name, content, path);
             components.Add(name, c);
         }
-        if (name.IndexOf("Activation") == 0)
+        if (name.IndexOf(Activation.type) == 0)
         {
             Activation c = new Activation(name, content);
             components.Add(name, c);
@@ -489,16 +466,6 @@ public class QuestData
             {
                 bool.TryParse(data["unique"], out unique);
             }
-            // depreciated (format 2)
-            if (data.ContainsKey("uniquetitle") && !data["uniquetitle"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(uniquetitle_key, data["uniquetitle"]);
-            }
-            // depreciated (format 2)
-            if (data.ContainsKey("uniquetext") && !data["uniquetext"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(uniquetext_key, data["uniquetext"]);
-            }
             if (data.ContainsKey("uniquehealth"))
             {
                 float.TryParse(data["uniquehealth"], out uniqueHealthBase);
@@ -650,26 +617,13 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data, bool external = false) : base(name, data)
+        public Event(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
 
             if (data.ContainsKey("display"))
             {
                 bool.TryParse(data["display"], out display);
-            }
-
-            // Depreciated (format 2)
-            if (data.ContainsKey("text") && !data["text"].StartsWith("{qst:"))
-            {
-                if (data["text"].Length == 0)
-                {
-                    display = false;
-                }
-                else if (!external)
-                {
-                    LocalizationRead.updateScenarioText(text_key, data["text"]);
-                }
             }
 
             // Should the target location by highlighted?
@@ -688,19 +642,6 @@ public class QuestData
                 int.TryParse(data["buttons"], out buttonCount);
             }
 
-            // Depreciated button count test (format 2)
-            for (int buttonNum = buttonCount; buttonNum <= 10; buttonNum++)
-            {
-                if (data.ContainsKey("button" + buttonNum))
-                {
-                    buttonCount = buttonNum;
-                }
-                if (data.ContainsKey("event" + buttonNum))
-                {
-                    buttonCount = buttonNum;
-                }
-            }
-
             // Displayed events must have a button
             if (display && buttonCount == 0)
             {
@@ -710,12 +651,6 @@ public class QuestData
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
                 buttons.Add(genQuery("button" + buttonNum));
-                // Depreciated (format 2)
-                if (data.ContainsKey("button" + buttonNum) && !data["button" + buttonNum].StartsWith("{qst:") && !external && display)
-                {
-                    LocalizationRead.updateScenarioText(genKey("button" + buttonNum), data["button" + buttonNum]);
-                }
-
                 if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
                 {
                     nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
@@ -731,19 +666,7 @@ public class QuestData
                 }
                 else
                 {
-                    // Depreciated support for format 2
-                    if (buttonCount == 2 && buttonNum == 1 && data.ContainsKey("button1") && data["button1"].Equals("Pass"))
-                    {
-                        buttonColors.Add("green");
-                    }
-                    else if (buttonCount == 2 && buttonNum == 2 && data.ContainsKey("button2") && data["button2"].Equals("Fail"))
-                    {
-                        buttonColors.Add("red");
-                    }
-                    else
-                    {
-                        buttonColors.Add("white");
-                    }
+                    buttonColors.Add("white");
                 }
             }
 
@@ -1053,71 +976,14 @@ public class QuestData
                 var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
                 operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
                 value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
-
-                // Support old internal var names (depreciated, format 2)
-                var = UpdateVarName(var);
-                value = UpdateVarName(value);
             }
 
             override public string ToString()
             {
                 return var + ',' + operation + ',' + value;
             }
-
-
-            private string UpdateVarName(string s)
-            {
-                string prefix = "";
-                if (s.Equals("perilMinor")) prefix = "$";
-                if (s.Equals("perilMajor")) prefix = "$";
-                if (s.Equals("perilDeadly")) prefix = "$";
-
-                if (s.Equals("mythosHelp")) prefix = "$";
-                if (s.Equals("mythosFlavor")) prefix = "$";
-                if (s.Equals("mythosMinor")) prefix = "$";
-                if (s.Equals("mythosMajor")) prefix = "$";
-                if (s.Equals("mythosDeadly")) prefix = "$";
-
-                if (s.Equals("mythosIndoors")) prefix = "$";
-                if (s.Equals("mythosOutdoors")) prefix = "$";
-
-                if (s.Equals("mythosStreetCorner")) prefix = "$";
-                if (s.Equals("mythosAlleyCorner")) prefix = "$";
-                if (s.Equals("mythosAlley")) prefix = "$";
-                if (s.Equals("mythosStreet")) prefix = "$";
-                if (s.Equals("mythosHall")) prefix = "$";
-                if (s.Equals("mythosLibrary")) prefix = "$";
-                if (s.Equals("mythosKitchen")) prefix = "$";
-                if (s.Equals("mythosBallroom")) prefix = "$";
-                if (s.Equals("mythosCrypt")) prefix = "$";
-                if (s.Equals("mythosGraveyard")) prefix = "$";
-                if (s.Equals("mythosMorgue")) prefix = "$";
-                if (s.Equals("mythosBeach")) prefix = "$";
-                if (s.Equals("mythosDock")) prefix = "$";
-                if (s.Equals("mythosPier")) prefix = "$";
-                if (s.Equals("mythosBathroom")) prefix = "$";
-                if (s.Equals("mythosOffice")) prefix = "$";
-                if (s.Equals("mythosStudy")) prefix = "$";
-                if (s.Equals("mythosTownSquare")) prefix = "$";
-                if (s.Equals("mythosLounge")) prefix = "$";
-                if (s.Equals("mythosStairs")) prefix = "$";
-                if (s.Equals("mythosRiver")) prefix = "$";
-                if (s.Equals("mythosDiningRoom")) prefix = "$";
-                if (s.Equals("mythosBedroom")) prefix = "$";
-                if (s.Equals("mythosStorageRoom")) prefix = "$";
-                if (s.Equals("mythosHallStairs")) prefix = "$";
-                if (s.Equals("mythosAtticStorage")) prefix = "$";
-
-                if (s.Equals("mythosDarkness")) prefix = "$";
-                if (s.Equals("mythosDiscardItem")) prefix = "$";
-                if (s.Equals("mythosKey")) prefix = "$";
-                return prefix + s;
-            }
         }
     }
-
-
-
 
     // MPlaces are used to position individual monsters
     public class MPlace : QuestComponent
@@ -1424,12 +1290,6 @@ public class QuestData
                 baseMonster = data["base"];
             }
             
-            // Depreciated (format 2)
-            if (data.ContainsKey("name") && !data["name"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(monstername_key, data["name"]);
-            }
-
             traits = new string[0];
             if (data.ContainsKey("traits"))
             {
@@ -1439,12 +1299,6 @@ public class QuestData
             if (data.ContainsKey("image"))
             {
                 imagePath = data["image"];
-            }
-
-            // Depreciated (format 2)
-            if (data.ContainsKey("info") && !data["info"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(info_key, data["info"]);
             }
 
             imagePlace = imagePath;
@@ -1555,31 +1409,6 @@ public class QuestData
         public Activation(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
-            // Depreciated (format 2)
-            if (data.ContainsKey("ability") && !data["ability"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(ability_key, data["ability"]);
-            }
-            // Depreciated (format 2)
-            if (data.ContainsKey("master") && !data["master"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(master_key, data["master"]);
-            }
-            // Depreciated (format 2)
-            if (data.ContainsKey("minion") && !data["minion"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(minion_key, data["minion"]);
-            }
-            // Depreciated (format 2)
-            if (data.ContainsKey("move") && !data["move"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(movebutton_key, data["move"]);
-            }
-            // Depreciated (format 2)
-            if (data.ContainsKey("movebutton") && !data["movebutton"].StartsWith("{qst:"))
-            {
-                LocalizationRead.updateScenarioText(move_key, data["movebutton"]);
-            }
             if (data.ContainsKey("minionfirst"))
             {
                 bool.TryParse(data["minionfirst"], out minionFirst);
@@ -1679,7 +1508,7 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
-        public static int minumumFormat = 1;
+        public static int minumumFormat = 3;
         // Increment during changes, and again at release
         public static int currentFormat = 3;
         public int format = 0;
@@ -1744,23 +1573,10 @@ public class QuestData
                 return false;
             }
 
-            // Depreciated (format 2)
-            if (iniData.ContainsKey("name") && !iniData["name"].StartsWith("{qst:"))
-            {
-                LocalizationRead.scenarioDict = localizationDict;
-                LocalizationRead.updateScenarioText(name_key, iniData["name"]);
-            }
-
             type = "";
             if (iniData.ContainsKey("type"))
             {
                 type = iniData["type"];
-            }
-            // Depreciated (format 2)
-            if (iniData.ContainsKey("description") && !iniData["description"].StartsWith("{qst:"))
-            {
-                LocalizationRead.scenarioDict = localizationDict;
-                LocalizationRead.updateScenarioText(description_key, iniData["description"]);
             }
 
             if (iniData.ContainsKey("packs"))

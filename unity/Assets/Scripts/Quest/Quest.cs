@@ -339,20 +339,6 @@ public class Quest
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
 
-        // Compat with depreciated 0.8.7 and earlier save
-        if (saveData.Get("Quest", "morale").Length > 0)
-        {
-            int morale = 0;
-            int.TryParse(saveData.Get("Quest", "morale"), out morale);
-            vars.SetValue("$morale", morale);
-        }
-        if (saveData.Get("Quest", "round").Length > 0)
-        {
-            int round = 0;
-            int.TryParse(saveData.Get("Quest", "round"), out round);
-            vars.SetValue("#round", round);
-        }
-
         // Set items
         items = new HashSet<string>();
         Dictionary<string, string> saveItems = saveData.Get("Items");
