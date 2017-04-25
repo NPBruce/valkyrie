@@ -13,6 +13,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     private readonly StringKey QUOTA = new StringKey("val","QUOTA");
     private readonly StringKey BUTTONS = new StringKey("val","BUTTONS");
+    private readonly StringKey BUTTON = new StringKey("val", "BUTTON");
 
     public EditorComponentEventNextEvent(string nameIn) : base()
     {
@@ -178,7 +179,7 @@ public class EditorComponentEventNextEvent : EditorComponent
         eventComponent.nextEvent.Add(new List<string>());
         eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
         eventComponent.buttonColors.Add("white");
-        LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), "Button " + count);
+        LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), BUTTON.Translate() + count);
         Update();
     }
 

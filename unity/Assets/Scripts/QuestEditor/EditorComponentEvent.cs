@@ -19,6 +19,7 @@ public class EditorComponentEvent : EditorComponent
     private readonly StringKey VARS = new StringKey("val", "VARS");
     private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
     private readonly StringKey AUDIO = new StringKey("val", "AUDIO");
+    private readonly StringKey CONTINUE = new StringKey("val", "CONTINUE");
 
     QuestData.Event eventComponent;
 
@@ -28,6 +29,7 @@ public class EditorComponentEvent : EditorComponent
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
     EditorSelectionList audioESL;
+
 
     public EditorComponentEvent(string nameIn) : base()
     {
@@ -294,7 +296,8 @@ public class EditorComponentEvent : EditorComponent
                 eventComponent.buttons.Add(eventComponent.genQuery("button1"));
                 eventComponent.nextEvent.Add(new List<string>());
                 eventComponent.buttonColors.Add("white");
-                LocalizationRead.updateScenarioText(eventComponent.genKey("button1"), "Continue");
+                LocalizationRead.updateScenarioText(eventComponent.genKey("button1"), 
+                    CONTINUE.Translate());
             }
         }
         else
