@@ -21,12 +21,12 @@ C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\bin\Debug\Valk
 C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.dll
 C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\bin\Debug\ValkyrieTools.pdb
 C:\Users\Bruce\Documents\valkyrie\valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.xml
-C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.csprojResolveAssemblyReference.cache
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\FFGAppImport.dll
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\FFGAppImport.pdb
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\ValkyrieTools.dll
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.dll
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\ValkyrieTools.pdb
 C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.xml
+C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.csprojResolveAssemblyReference.cache
 C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.dll
 C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.pdb

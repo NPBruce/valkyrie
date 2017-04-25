@@ -1184,7 +1184,8 @@ public class QuestData
             nextEvent.Add(new List<string>());
             buttonColors.Add("white");
             buttons.Add(genQuery("button1"));
-            LocalizationRead.updateScenarioText(genKey("button1"), "Complete");
+            LocalizationRead.updateScenarioText(genKey("button1"),
+                new StringKey("val","PUZZLE_GUESS").Translate());
         }
 
         // Construct from ini data
@@ -1705,11 +1706,11 @@ public class QuestData
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
             localizationDict =
-                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, defaultLanguage);
+                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, Game.Get().currentLang);
             if (localizationDict == null)
             {
                 localizationDict = new DictionaryI18n(
-                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
             }
             valid = Populate(iniData);
         }
@@ -1721,7 +1722,7 @@ public class QuestData
             if (localizationDict == null)
             {
                 localizationDict = new DictionaryI18n(
-                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, defaultLanguage);
+                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
             }
             valid = Populate(iniData);
         }
