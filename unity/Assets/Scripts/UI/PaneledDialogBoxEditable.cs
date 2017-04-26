@@ -2,7 +2,7 @@
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
-public class RitchDialogBoxEditable
+public class PaneledDialogBoxEditable
 {
     private GameObject textObj;
     private GameObject background;
@@ -24,7 +24,7 @@ public class RitchDialogBoxEditable
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
     /// <param name="call">event to call when interacting with the dialog</param>
-    public RitchDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
     {
         createDialog(location, size, text, call, Color.white, new Color(0, 0, 0, (float)0.9));
     }
@@ -37,7 +37,7 @@ public class RitchDialogBoxEditable
     /// <param name="text">default text to put inside the dialog</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
-    public RitchDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
     {
         createDialog(location, size, text, call, fgColour, new Color(0, 0, 0, (float)0.9));
     }
@@ -51,7 +51,7 @@ public class RitchDialogBoxEditable
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    public RitchDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
         createDialog(location, size, text, call, fgColour, bgColour);
     }

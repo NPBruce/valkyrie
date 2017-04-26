@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.UI;
-using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -126,12 +124,6 @@ public class DialogBoxEditable
         uiInput.textComponent = uiText;
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
-        uiInput.onEndEdit.AddListener(delegate { endEdit(text); });
-    }
-
-    public void endEdit(string finalText)
-    {
-        CameraController.panDisable = false;
     }
 
     public void AddBorder()
@@ -141,7 +133,7 @@ public class DialogBoxEditable
 
     public void AddBorder(Color c)
     {
-        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
+        Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
     }
 
