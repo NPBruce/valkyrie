@@ -147,7 +147,6 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
@@ -330,16 +329,15 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", "Quest"));
         list.AddRange(GetQuestVars());
 
-        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#round", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
+                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "#"));
             }
         }
 

@@ -976,11 +976,21 @@ public class QuestData
                 var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
                 operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
                 value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+
+                // Support old internal var names (depreciated, format 3)
+                var = UpdateVarName(var);
+                value = UpdateVarName(value);
             }
 
             override public string ToString()
             {
                 return var + ',' + operation + ',' + value;
+            }
+
+            private string UpdateVarName(string s)
+            {
+                if (s.Equals("#fire")) return "$fire";
+                return s;
             }
         }
     }
@@ -1510,7 +1520,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 3;
+        public static int currentFormat = 4;
         public int format = 0;
         public bool valid = false;
         public string path = "";
