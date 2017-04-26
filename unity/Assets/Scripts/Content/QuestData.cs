@@ -558,11 +558,11 @@ public class QuestData
                 r += "uniquehealth=" + uniqueHealthBase + nl;
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
             }
-            if(uniqueHealthBase != 0)
+            if(uniqueHealthBase != 0 && !unique)
             {
                 r += "uniquehealth=" + uniqueHealthBase + nl;
             }
-            if(uniqueHealthHero != 0)
+            if(uniqueHealthHero != 0 && !unique)
             {
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
             }
