@@ -47,7 +47,7 @@ public class QuestMonster : MonsterData
         }
 
         // Read info from quest data or base type
-        info = new StringKey(null, EventManager.SymbolReplace(qm.info.Translate()), false);
+        info = new StringKey(null, EventManager.OutputSymbolReplace(qm.info.Translate()), false);
         if (!qm.info.KeyExists() && baseObject != null)
         {
             info = baseObject.info;
