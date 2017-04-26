@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.UI;
+using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -118,11 +121,17 @@ public class DialogBoxEditable
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
 
-        uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
+        uiInput = inputObj.AddComponent<PanCancelInputField>();
 
         uiInput.textComponent = uiText;
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
+        uiInput.onEndEdit.AddListener(delegate { endEdit(text); });
+    }
+
+    public void endEdit(string finalText)
+    {
+        CameraController.panDisable = false;
     }
 
     public void AddBorder()
