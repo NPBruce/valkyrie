@@ -1217,11 +1217,16 @@ public class Quest
             // String is populated on creation of the activation
             public string effect;
             public string move;
+            public string minionActions;
+            public string masterActions;
 
             // Construct activation
             public ActivationInstance(ActivationData contentActivation, string monsterName)
             {
                 ad = contentActivation;
+                minionActions = EventManager.SymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
+                masterActions = EventManager.SymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
+
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
                 if (Game.Get().gameType is MoMGameType)
