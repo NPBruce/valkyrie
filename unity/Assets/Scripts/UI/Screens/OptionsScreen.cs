@@ -44,7 +44,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Options screen text
             DialogBox dbTittle = new DialogBox(
-                new Vector2(0, 1), 
+                new Vector2(2, 1), 
                 new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
                 OPTIONS
                 );
