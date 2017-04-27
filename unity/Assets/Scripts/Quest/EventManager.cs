@@ -359,7 +359,7 @@ public class EventManager
             }
 
             // Fix new lines and replace symbol text with special characters
-            return SymbolReplace(text).Replace("\\n", "\n");
+            return OutputSymbolReplace(text).Replace("\\n", "\n");
         }
 
         public List<DialogWindow.EventButton> GetButtons()
@@ -462,8 +462,12 @@ public class EventManager
         }
     }
 
-    // Replace symbol markers with special characters
-    public static string SymbolReplace(string input)
+    /// <summary>
+    /// Replace symbol markers with special characters to be shown in Quest
+    /// </summary>
+    /// <param name="input">text to show</param>
+    /// <returns></returns>
+    public static string OutputSymbolReplace(string input)
     {
         string output = input;
         Game game = Game.Get();
@@ -520,6 +524,51 @@ public class EventManager
         output = output.Replace("{MAD21}", "");
         output = output.Replace("{MAD22}", "");
         output = output.Replace("{MAD23}", "");
+
+        return output;
+    }
+
+    /// <summary>
+    /// Replace symbol markers with special characters to be stored in editor
+    /// </summary>
+    /// <param name="input">text to store</param>
+    /// <returns></returns>
+    public static string InputSymbolReplace(string input)
+    {
+        string output = input;
+        Game game = Game.Get();        
+
+        output = output.Replace("≥", "{heart}");
+        output = output.Replace("∏", "{fatigue}");
+        output = output.Replace("∂", "{might}");
+        if (game.gameType is MoMGameType)
+        {
+            output = output.Replace("","{will}");
+            output = output.Replace("","{action}");
+        }
+        else
+        {
+            output = output.Replace("π","{will}");
+            output = output.Replace("∞","{action}");
+        }
+        output = output.Replace("∑", "{knowledge}");
+        output = output.Replace("μ", "{awareness}");
+        output = output.Replace("≤","{shield}" );
+        output = output.Replace( "±","{surge}");
+        output = output.Replace( "","{strength}");
+        output = output.Replace( "","{agility}");
+        output = output.Replace("","{lore}" );
+        output = output.Replace("","{influence}" );
+        output = output.Replace("","{observation}" );
+        output = output.Replace( "","{success}");
+        output = output.Replace("","{clue}" );
+        output = output.Replace("","{MAD01}");
+        output = output.Replace("","{MAD06}");
+        output = output.Replace("","{MAD09}");
+        output = output.Replace("","{MAD20}");
+        output = output.Replace("","{MAD21}");
+        output = output.Replace("","{MAD22}");
+        output = output.Replace("", "{MAD23}");
 
         return output;
     }
