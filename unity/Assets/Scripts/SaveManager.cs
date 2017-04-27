@@ -247,7 +247,6 @@ class SaveManager
             if (!File.Exists(SaveFile(num))) return;
             try
             {
-                saveTime = File.GetCreationTime(SaveFile(num));
                 if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
                 {
                     Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
@@ -301,6 +300,7 @@ class SaveManager
                         heroes.Add(hero);
                     }
                 }
+                saveTime = System.DateTime.Parse(saveData.Get("Quest", "time"));
 
                 valid = true;
             }

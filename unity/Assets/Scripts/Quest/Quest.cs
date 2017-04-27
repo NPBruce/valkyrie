@@ -634,6 +634,8 @@ public class Quest
         // General quest state block
         string r = "[Quest]" + nl;
 
+        r += "time=" + System.DateTime.Now.ToString() + nl;
+
         // Save valkyrie version
         r += "valkyrie=" + game.version + nl;
 

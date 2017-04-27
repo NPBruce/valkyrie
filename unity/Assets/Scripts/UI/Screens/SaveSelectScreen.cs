@@ -36,13 +36,14 @@ namespace Assets.Scripts.UI.Screens
             List<SaveManager.SaveData> saves = SaveManager.GetSaves();
             for (int i = 0; i < saves.Count; i++)
             {
+                int tmp = i;
                 if (saves[i].valid)
                 {
                     tb = new TextButton(
                         new Vector2(UIScaler.GetHCenter(-20), offset),
                         new Vector2(40, 4f),
                         new StringKey(null, saves[i].quest, false),
-                        delegate { SaveManager.Load(i); });
+                        delegate { SaveManager.Load(tmp); });
                 }
                 else
                 {
