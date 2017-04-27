@@ -10,14 +10,16 @@ class SaveManager
     public static string minValkyieVersion = "0.7.3";
 
     // This gets the path to the save game file.  Only one file is used/supported per game type.
-    public static string SaveFile()
+    public static string SaveFile(int num = 0)
     {
         Game game = Game.Get();
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save/save" + game.gameType.TypeName() + ".vSave";
+        string number = num.ToString();
+        if (num == 0) number = "Auto";
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
-    public static void Save()
+    public static void Save(int num = 0)
     {
         Game game = Game.Get();
         try
@@ -26,9 +28,13 @@ class SaveManager
             {
                 Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
             }
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save"))
+            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Save");
+                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName());
+            }
+            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save"))
+            {
+                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save");
             }
 
             if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
@@ -39,7 +45,7 @@ class SaveManager
             ZipFile zip = new ZipFile();
             zip.AddFile(Path.GetTempPath() + "/Valkyrie/save.ini", "");
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
-            zip.Save(SaveFile());
+            zip.Save(SaveFile(num));
         }
         catch (System.Exception e)
         {
@@ -50,16 +56,23 @@ class SaveManager
     // Check if a save game exists for the current game type
     public static bool SaveExists()
     {
-        return File.Exists(SaveFile());
+        for (int i = 0; i < 4; i++)
+        {
+            if (File.Exists(SaveFile(i)))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Load a saved game, does nothing if file does not exist
-    public static void Load()
+    public static void Load(int num = 0)
     {
         Game game = Game.Get();
         try
         {
-            if (File.Exists(SaveFile()))
+            if (File.Exists(SaveFile(num)))
             {
                 if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
                 {
@@ -71,7 +84,7 @@ class SaveManager
                 }
 
                 Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
-                ZipFile zip = ZipFile.Read(SaveFile());
+                ZipFile zip = ZipFile.Read(SaveFile(num));
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
                 zip.Dispose();
 
@@ -153,7 +166,7 @@ class SaveManager
         }
         catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile() + " " + e.Message);
+            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile(num) + " " + e.Message);
             Application.Quit();
         }
     }

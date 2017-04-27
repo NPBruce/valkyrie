@@ -35,25 +35,25 @@ namespace Assets.Scripts.UI.Screens
                 new Vector2(UIScaler.GetHCenter(-20), 5f),
                 new Vector2(40, 4f),
                 new StringKey(null, "AutoSave", false),
-                delegate { ; });
+                delegate { SaveManager.Load(0); });
 
             tb = new TextButton(
                 new Vector2(UIScaler.GetHCenter(-20), 10f),
                 new Vector2(40, 4f),
                 new StringKey(null, "Save1", false),
-                delegate { SaveManager.Load(); });
+                delegate { SaveManager.Load(1); });
 
             tb = new TextButton(
                 new Vector2(UIScaler.GetHCenter(-20), 15f),
                 new Vector2(40, 4f),
                 new StringKey(null, "Save2", false),
-                delegate { ; });
+                delegate { SaveManager.Load(2); });
 
             tb = new TextButton(
                 new Vector2(UIScaler.GetHCenter(-20), 20f),
                 new Vector2(40, 4f),
                 new StringKey(null, "Save3", false),
-                delegate { ; });
+                delegate { SaveManager.Load(3); });
 
             // Button for back to main menu
             tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),
