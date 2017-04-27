@@ -45,10 +45,8 @@ public class InvestigatorAttack
         foreach (string type in attackType)
         {
             string tmpType = type;
-            // Make first character upper case
-            string nameType = System.Char.ToUpper(type[0]) + type.Substring(1);
             new TextButton(new Vector2(UIScaler.GetHCenter(-6f), offset), new Vector2(12, 2), 
-                new StringKey(null, nameType, false), delegate { Attack(tmpType); });
+                new StringKey("val", tmpType), delegate { Attack(tmpType); });
             offset += 2.5f;
         }
 
