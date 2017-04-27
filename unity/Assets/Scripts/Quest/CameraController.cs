@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour {
     // How fast to move the screen when arrows used
     static float keyScrollRate = 0.3f;
     // How much to zoom in/out with wheel
-    static int mouseWheelScrollRate = 6;
+    static int mouseWheelScrollRate = 15;
     // Max zoom in
     static int maxZoom = -1;
     // Max zoom out

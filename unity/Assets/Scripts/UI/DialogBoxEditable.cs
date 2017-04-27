@@ -118,10 +118,12 @@ public class DialogBoxEditable
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
+        uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
 
         uiInput = inputObj.AddComponent<PanCancelInputField>();
 
         uiInput.textComponent = uiText;
+        uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
     }
