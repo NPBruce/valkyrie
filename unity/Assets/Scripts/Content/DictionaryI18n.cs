@@ -262,7 +262,7 @@ namespace Assets.Scripts.Content
             {
                 string key = rawLine.Split(COMMA)[0];
                 // Process non repeated list line
-                if (!dict.ContainsKey(key))
+                if (key != "." && !dict.ContainsKey(key))
                 {
                     Add(new EntryI18n(this, rawLine));
                 }

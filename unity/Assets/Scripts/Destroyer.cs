@@ -25,8 +25,7 @@ public class Destroyer {
     public static void Destroy()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        Dialog();
 
         // Clean up everything marked as 'monsters'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("monsters"))
@@ -76,7 +75,7 @@ public class Destroyer {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
-        Game.Get().cc.panDisable = false;
+        CameraController.panDisable = false;
         Game.Get().logWindow = null;
     }
 }

@@ -1,9 +1,8 @@
-﻿using Assets.Scripts.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
-public class DialogBoxEditable
+public class PaneledDialogBoxEditable
 {
     private GameObject textObj;
     private GameObject background;
@@ -25,7 +24,7 @@ public class DialogBoxEditable
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
     /// <param name="call">event to call when interacting with the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
     {
         createDialog(location, size, text, call, Color.white, new Color(0, 0, 0, (float)0.9));
     }
@@ -38,7 +37,7 @@ public class DialogBoxEditable
     /// <param name="text">default text to put inside the dialog</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
     {
         createDialog(location, size, text, call, fgColour, new Color(0, 0, 0, (float)0.9));
     }
@@ -52,7 +51,7 @@ public class DialogBoxEditable
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    public PaneledDialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
         createDialog(location, size, text, call, fgColour, bgColour);
     }
@@ -118,11 +117,13 @@ public class DialogBoxEditable
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
+        uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
 
-        uiInput = inputObj.AddComponent<PanCancelInputField>();
+        uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
 
         uiInput.textComponent = uiText;
         uiInput.text = text;
+        uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
         uiInput.onEndEdit.AddListener(call);
     }
 
@@ -133,7 +134,7 @@ public class DialogBoxEditable
 
     public void AddBorder(Color c)
     {
-        Rect rect = background.GetComponent<RectTransform>().rect;
+        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
     }
 

@@ -28,7 +28,7 @@ public class InfoDialog {
                 m.uniqueTitle, Color.red);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.AddBorder();
-            string uniqueText = EventManager.SymbolReplace(m.uniqueText.Translate().Replace("\\n", "\n"));
+            string uniqueText = EventManager.OutputSymbolReplace(m.uniqueText.Translate().Replace("\\n", "\n"));
             db = new DialogBox(new Vector2(10, 15f), new Vector2(UIScaler.GetWidthUnits() - 20, 8),
                 new StringKey(null, uniqueText, false));
             db.AddBorder(Color.red);

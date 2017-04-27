@@ -13,7 +13,7 @@ public class PuzzleSlideWindow
     {
         eventData = e;
         Game game = Game.Get();
-        game.cc.panDisable = true;
+        CameraController.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
@@ -33,7 +33,7 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        Game.Get().cc.panDisable = true;
+        CameraController.panDisable = true;
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
@@ -57,7 +57,7 @@ public class PuzzleSlideWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), 
-            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill),false));
+            new StringKey(null, EventManager.OutputSymbolReplace(questPuzzle.skill),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 

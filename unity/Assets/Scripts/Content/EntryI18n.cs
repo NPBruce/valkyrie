@@ -39,7 +39,7 @@ namespace Assets.Scripts.Content
         {
             referedDictionary = dict;
 
-            string newLinedCompleteLocalizationString = completeLocalizationString.Replace("\\n", System.Environment.NewLine);
+            string newLinedCompleteLocalizationString = completeLocalizationString.Replace("\\n", "\n");
 
             if (newLinedCompleteLocalizationString.Contains(QUOTES))
             {
@@ -174,8 +174,10 @@ namespace Assets.Scripts.Content
             {
                 if (oneTranslation != null)
                 {
+                    // All carryreturns are replaced
                     currentTranslation = oneTranslation
                         .Replace(System.Environment.NewLine, "\\n")
+                        .Replace("\n","\\n")
                         .Replace("\r","\\n");
 
                     if (!first)

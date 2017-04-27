@@ -39,6 +39,15 @@ public class MonsterCanvas : MonoBehaviour
             icons.Add(new MonsterIcon(m, index++));
         }
 
+        if (game.quest.monsters.Count - offset < 5)
+        {
+            offset = game.quest.monsters.Count - 5;
+            if (offset < 0)
+            {
+                offset = 0;
+            }
+        }
+
         // Draw scoll buttons if required
         DrawUp();
         DrawDown();

@@ -634,6 +634,8 @@ public class Quest
         // General quest state block
         string r = "[Quest]" + nl;
 
+        r += "time=" + System.DateTime.Now.ToString() + nl;
+
         // Save valkyrie version
         r += "valkyrie=" + game.version + nl;
 
@@ -1203,18 +1205,23 @@ public class Quest
             // String is populated on creation of the activation
             public string effect;
             public string move;
+            public string minionActions;
+            public string masterActions;
 
             // Construct activation
             public ActivationInstance(ActivationData contentActivation, string monsterName)
             {
                 ad = contentActivation;
+                minionActions = EventManager.OutputSymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
+                masterActions = EventManager.OutputSymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
+
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
                 if (Game.Get().gameType is MoMGameType)
                 {
                     effect = ad.ability.Translate().Replace("{0}", monsterName);
                     move = ad.move.Translate().Replace("{0}", monsterName);
-                    move = EventManager.SymbolReplace(move).Replace("\\n", "\n");
+                    move = EventManager.OutputSymbolReplace(move).Replace("\\n", "\n");
                 }
                 else
                 {
@@ -1222,7 +1229,7 @@ public class Quest
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines
-                effect = EventManager.SymbolReplace(effect).Replace("\\n", "\n");
+                effect = EventManager.OutputSymbolReplace(effect).Replace("\\n", "\n");
             }
         }
 

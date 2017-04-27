@@ -284,7 +284,7 @@ public class DialogWindow {
 
         public StringKey GetLabel()
         {
-            return new StringKey(null, EventManager.SymbolReplace(label.Translate()), false);
+            return new StringKey(null, EventManager.OutputSymbolReplace(label.Translate()), false);
         }
     }
 }
