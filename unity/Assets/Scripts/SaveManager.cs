@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
 using ValkyrieTools;
+using Assets.Scripts.Content;
 
 // This class provides functions to load and save games.
 class SaveManager
@@ -220,6 +221,94 @@ class SaveManager
             }
         }
         return false;
+    }
+
+    public static List<SaveData> GetSaves()
+    {
+        List<SaveData> saves = new List<SaveData>();
+        for (int i = 0; i < 4; i++)
+        {
+            saves.Add(new SaveData(i));
+        }
+        return saves;
+    }
+
+    public class SaveData
+    {
+        public bool valid = false;
+        public List<string> heroes;
+        public string quest;
+        public System.DateTime saveTime;
+
+        public SaveData(int num = 0)
+        {
+            heroes = new List<string>();
+            Game game = Game.Get();
+            if (!File.Exists(SaveFile(num))) return;
+            try
+            {
+                saveTime = File.GetCreationTime(SaveFile(num));
+                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+                {
+                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+                }
+                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie/Load"))
+                {
+                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie/Load");
+                }
+
+                Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
+                ZipFile zip = ZipFile.Read(SaveFile(num));
+                zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
+                zip.Dispose();
+
+                // Check that quest in save is valid
+                QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
+                if (!q.valid)
+                {
+                    ValkyrieDebug.Log("Warning: Save " + num + " contains unsupported quest version." + System.Environment.NewLine);
+                    return;
+                }
+
+                DictionaryI18n tmpDict = LocalizationRead.scenarioDict;
+                LocalizationRead.scenarioDict = q.localizationDict;
+                quest = q.name.Translate();
+                LocalizationRead.scenarioDict = tmpDict;
+
+                string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
+
+                IniData saveData = IniRead.ReadFromString(data);
+
+                saveData.Get("Quest", "valkyrie");
+
+                if (VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
+                {
+                    ValkyrieDebug.Log("Warning: Save " + num + " is from a future version." + System.Environment.NewLine);
+                    return;
+                }
+
+                if (!VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
+                {
+                    ValkyrieDebug.Log("Warning: Save " + num + " is from an old unsupported version." + System.Environment.NewLine);
+                    return;
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    string hero = saveData.Get("Hero" + i, "type");
+                    if (hero.Length > 0)
+                    {
+                        heroes.Add(hero);
+                    }
+                }
+
+                valid = true;
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log("Warning: Unable to open save file: " + SaveFile(num) + " " + e.Message);
+            }
+        }
     }
 }
 
