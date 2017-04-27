@@ -10,7 +10,7 @@ public class EditorComponentQuest : EditorComponent
 
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable nameDBE;
-    public DialogBoxEditable descriptionDBE;
+    public PaneledDialogBoxEditable descriptionDBE;
     EditorSelectionList packESL;
 
     // Quest is a special component with meta data
@@ -37,7 +37,7 @@ public class EditorComponentQuest : EditorComponent
         nameDBE.ApplyTag("editor");
         nameDBE.AddBorder();
 
-        descriptionDBE = new DialogBoxEditable(
+        descriptionDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 6), 
             game.quest.qd.quest.description.Translate(true),
             delegate { UpdateQuestDesc(); });
