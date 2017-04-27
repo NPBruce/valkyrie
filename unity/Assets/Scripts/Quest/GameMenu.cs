@@ -34,7 +34,7 @@ public class GameMenu {
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f), MAIN_MENU, delegate { Destroyer.MainMenu(); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f), MAIN_MENU, delegate { Quit(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
@@ -52,7 +52,13 @@ public class GameMenu {
 
     public static void Save()
     {
-        SaveManager.Save();
+        SaveManager.Save(1);
         Destroyer.Dialog();
+    }
+
+    public static void Quit()
+    {
+        SaveManager.Save(0);
+        Destroyer.MainMenu();
     }
 }

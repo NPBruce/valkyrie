@@ -124,7 +124,9 @@ public class PaneledDialogBoxEditable
         uiInput = inputObj.AddComponent<PanCancelInputField>();
 
         uiInput.textComponent = uiText;
-        uiInput.text = text;
+        uiText.text = text;
+        uiInput.text = uiText.text;
+        //uiInput.text = text;//.Replace("\n",System.Environment.NewLine);
         uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
         uiInput.onEndEdit.AddListener(call);
     }

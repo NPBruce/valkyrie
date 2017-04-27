@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
                     new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    delegate { SaveManager.Load(); });
+                    delegate { new SaveSelectScreen(); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
                 tb.SetFont(game.gameType.GetHeaderFont());
             }

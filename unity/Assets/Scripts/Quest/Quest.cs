@@ -339,20 +339,6 @@ public class Quest
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
 
-        // Compat with depreciated 0.8.7 and earlier save
-        if (saveData.Get("Quest", "morale").Length > 0)
-        {
-            int morale = 0;
-            int.TryParse(saveData.Get("Quest", "morale"), out morale);
-            vars.SetValue("$morale", morale);
-        }
-        if (saveData.Get("Quest", "round").Length > 0)
-        {
-            int round = 0;
-            int.TryParse(saveData.Get("Quest", "round"), out round);
-            vars.SetValue("#round", round);
-        }
-
         // Set items
         items = new HashSet<string>();
         Dictionary<string, string> saveItems = saveData.Get("Items");
@@ -647,6 +633,8 @@ public class Quest
         string nl = System.Environment.NewLine;
         // General quest state block
         string r = "[Quest]" + nl;
+
+        r += "time=" + System.DateTime.Now.ToString() + nl;
 
         // Save valkyrie version
         r += "valkyrie=" + game.version + nl;
@@ -1217,11 +1205,16 @@ public class Quest
             // String is populated on creation of the activation
             public string effect;
             public string move;
+            public string minionActions;
+            public string masterActions;
 
             // Construct activation
             public ActivationInstance(ActivationData contentActivation, string monsterName)
             {
                 ad = contentActivation;
+                minionActions = EventManager.OutputSymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
+                masterActions = EventManager.OutputSymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
+
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
                 if (Game.Get().gameType is MoMGameType)
