@@ -63,11 +63,11 @@ public class ActivateDialog {
 
         if (master)
         {
-            activationText = EventManager.OutputSymbolReplace(monster.currentActivation.ad.masterActions.Translate());
+            activationText = monster.currentActivation.masterActions;
         }
         else
         {
-            activationText = EventManager.OutputSymbolReplace(monster.currentActivation.ad.minionActions.Translate());
+            activationText = monster.currentActivation.minionActions;
         }
         db.AddBorder();
         db.ApplyTag("activation");
