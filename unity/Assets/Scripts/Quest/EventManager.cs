@@ -331,33 +331,6 @@ public class EventManager
                 text = text.Replace(toReplace, hero.name.Translate());
             }
 
-            // Random numbers in events (depreciated)
-            try
-            {
-                // Find first random number tag
-                int index = text.IndexOf("{rnd:");
-                // loop through event text
-                while (index != -1)
-                {
-                    // find end of tag
-                    string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
-                    // find separator
-                    int separator = rand.IndexOf(":", 5);
-                    // Parse min and max
-                    int min, max;
-                    int.TryParse(rand.Substring(5, separator - 5), out min);
-                    int.TryParse(rand.Substring(separator + 1, rand.Length - separator - 2), out max);
-                    // Replace with random number
-                    text = text.Replace(rand, Random.Range(min, max + 1).ToString());
-                    //find next random tag
-                    index = text.IndexOf("{rnd:");
-                }
-            }
-            catch (System.Exception)
-            {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Invalid random clause in event dialog: " + text, true));
-            }
-
             // Fix new lines and replace symbol text with special characters
             return OutputSymbolReplace(text).Replace("\\n", "\n");
         }
