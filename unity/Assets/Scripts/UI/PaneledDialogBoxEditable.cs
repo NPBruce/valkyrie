@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Assets.Scripts.UI;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -8,7 +9,7 @@ public class PaneledDialogBoxEditable
     private GameObject background;
     private GameObject inputObj;
 
-    private UnityEngine.UI.InputField uiInput;
+    private PanCancelInputField uiInput;
 
     public void ApplyTag(string tag)
     {
@@ -119,7 +120,8 @@ public class PaneledDialogBoxEditable
         uiText.fontSize = UIScaler.GetSmallFont();
         uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
 
-        uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
+
+        uiInput = inputObj.AddComponent<PanCancelInputField>();
 
         uiInput.textComponent = uiText;
         uiInput.text = text;
