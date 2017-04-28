@@ -186,6 +186,8 @@ TYPE,Type,Tipo,Type,Typ,Tipo,,,,
 TYPES,Types,Tipos,Types,Typen,Tipi,,,,
 UNABLE_BUTTON,Unable Button:,Botón No Puede:,Bouton impossible,Unmöglich-Button:,Pulsante Disabilitato:,,,,
 
+UI,UI,,,,,,,,
+
 UNDO,Undo,Deshacer,Défaire,Rückgängig,Indietro,,,,
 UNIQUE_DEFEATED,Unique\nDefeated,Único\nDerrotado,Unique\nBattu,Unique\nBesiegt,Unico\nSconfitto,,,,
 UNIQUE_INFO,Unique Information,Información de Único,Info unique,Unique-Information,Unica Informazione,,,,
