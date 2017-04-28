@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
 
 // Class to manage all data for the current quest
 public class Quest
 {
     // QuestData
     public QuestData qd;
+
+    // Original Quest Path
+    public string questPath = "";
 
     // components on the board (tiles, tokens, doors)
     public Dictionary<string, BoardComponent> boardItems;
@@ -64,6 +68,7 @@ public class Quest
 
         // Static data from the quest file
         qd = new QuestData(q);
+        questPath = Path.GetDirectoryName(qd.questPath);
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
@@ -261,8 +266,7 @@ public class Quest
         game.cc.maxLimit = false;
 
         // Set static quest data
-        string questPath = path;
-        qd = new QuestData(questPath);
+        qd = new QuestData(questPath + "/" + path);
 
         vars.TrimQuest();
 
@@ -364,8 +368,9 @@ public class Quest
         }
 
         // Set static quest data
-        string questPath = saveData.Get("Quest", "path");
-        qd = new QuestData(questPath);
+        qd = new QuestData(saveData.Get("Quest", "path"));
+
+        questPath = saveData.Get("Quest", "originalpath");
 
         monsterSelect = saveData.Get("SelectMonster");
         if (monsterSelect == null)
@@ -710,6 +715,7 @@ public class Quest
         r += "valkyrie=" + game.version + nl;
 
         r += "path=" + qd.questPath + nl;
+        r += "originalpath=" + questPath + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;

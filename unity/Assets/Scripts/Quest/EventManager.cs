@@ -90,7 +90,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            if (File.Exists(game.quest.qd.questPath + "/" + name))
+            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
             {
                 events.Add(name, new StartQuestEvent(name));
             }
@@ -132,7 +132,7 @@ public class EventManager
         if (e is StartQuestEvent)
         {
             // This loads the game
-            new Quest((e as StartQuestEvent).name);
+            game.quest.ChangeQuest((e as StartQuestEvent).name);
             return;
         }
 
@@ -151,7 +151,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
         // Perform var operations
