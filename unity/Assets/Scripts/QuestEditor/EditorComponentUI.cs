@@ -55,7 +55,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         locXDBE = new DialogBoxEditable(new Vector2(2, 5), new Vector2(3, 1),
-            uiComponent.location.x.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.location.x.ToString(), false, delegate { UpdateNumbers(); });
         locXDBE.ApplyTag("editor");
         locXDBE.AddBorder();
 
@@ -63,7 +63,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         locYDBE = new DialogBoxEditable(new Vector2(7, 5), new Vector2(3, 1),
-            uiComponent.location.y.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
         locYDBE.ApplyTag("editor");
         locYDBE.AddBorder();
 
@@ -74,7 +74,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         sizeXDBE = new DialogBoxEditable(new Vector2(2, 7), new Vector2(3, 1),
-            uiComponent.size.x.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.size.x.ToString(), false, delegate { UpdateNumbers(); });
         sizeXDBE.ApplyTag("editor");
         sizeXDBE.AddBorder();
 
@@ -82,7 +82,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         sizeYDBE = new DialogBoxEditable(new Vector2(7, 7), new Vector2(3, 1),
-            uiComponent.size.y.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.size.y.ToString(), false, delegate { UpdateNumbers(); });
         sizeYDBE.ApplyTag("editor");
         sizeYDBE.AddBorder();
 

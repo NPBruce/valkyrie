@@ -21,12 +21,25 @@ namespace Assets.Scripts.UI
             base.OnSelect(eventData);
         }
 
+        private int lastCaretPosition = 0;
+
+        /// <summary>
+        /// The caret reset after deselect. We must store one
+        /// in order to know where to insert special characters.
+        /// </summary>
+        /// <returns></returns>
+        public int getLastCaretPosition()
+        {
+            return lastCaretPosition;
+        }
+
         /// <summary>
         /// When deselecting the component, the pan is enabled
         /// </summary>
         /// <param name="eventData"></param>
         public override void OnDeselect(BaseEventData eventData)
         {
+            lastCaretPosition = this.caretPosition;
             CameraController.panDisable = false;
             base.OnDeselect(eventData);
         }

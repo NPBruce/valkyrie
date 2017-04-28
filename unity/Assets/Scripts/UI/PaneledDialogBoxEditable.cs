@@ -83,19 +83,16 @@ public class PaneledDialogBoxEditable
         TextButton tb = null;
         DialogBox db = null;
         StringKey translated = null;
-        float hOffset = location.x + 2f;
+        float hOffset = location.x;
         Dictionary<string, string> CHARS = null;
         EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
+        float width = size.x / CHARS.Keys.Count;
         if (CHARS != null)
         {
             foreach (string oneChar in CHARS.Keys)
             {
                 translated = new StringKey(null, oneChar);
                 // Traits are in val dictionary
-                db = new DialogBox(Vector2.zero, new Vector2(10, 1), translated);
-                // Calculate width
-                float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
-                db.Destroy();
                 if (hOffset + width > 40)
                 {
                     hOffset = 22;
@@ -131,13 +128,13 @@ public class PaneledDialogBoxEditable
         textObj.transform.parent = inputObj.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,  (location.y +1) * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,  (location.y +1) * UIScaler.GetPixelsPerUnit(), (size.y - 1) * UIScaler.GetPixelsPerUnit());
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
         RectTransform transIn = inputObj.AddComponent<RectTransform>();
         transIn.SetParent(transBg);
         transIn.localScale = transBg.localScale;
-        transIn.localPosition = Vector3.down; 
+        //transIn.localPosition = Vector3.down; 
         transIn.sizeDelta = transBg.sizeDelta;
 
         RectTransform transTx = textObj.AddComponent<RectTransform>();
@@ -154,13 +151,13 @@ public class PaneledDialogBoxEditable
         uiImage.color = bgColour;
 
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
+        uiText.color = Color.red;
         uiText.color = fgColour;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
         uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
-
 
         uiInput = inputObj.AddComponent<PanCancelInputField>();
 
@@ -174,7 +171,8 @@ public class PaneledDialogBoxEditable
 
     public void InsertCharacter(string specialChar)
     {
-        uiInput.text = uiInput.text.Insert(uiInput.caretPosition, specialChar);
+        uiInput.text = uiInput.text.Insert(uiInput.getLastCaretPosition(), specialChar);
+        uiInput.Select();
     }
 
     public void AddBorder()
@@ -184,7 +182,7 @@ public class PaneledDialogBoxEditable
 
     public void AddBorder(Color c)
     {
-        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
+        Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
     }
 
