@@ -89,6 +89,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
+            // TODO support new quest events.
             game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
             return;
         }
@@ -435,6 +436,14 @@ public class EventManager
         public bool Disabled()
         {
             return !game.quest.vars.Test(qEvent.conditions);
+        }
+    }
+
+    public class StartQuestEvent : Event
+    {
+        public StartQuestEvent(string name)
+        {
+            // Do Stuff
         }
     }
 
