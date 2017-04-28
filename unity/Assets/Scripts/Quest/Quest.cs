@@ -252,6 +252,77 @@ public class Quest
         LoadQuest(saveData);
     }
 
+    public void ChangeQuest(string path)
+    {
+        phase = MoMPhase.investigator;
+        game.cc.gameObject.transform.position = new Vector3(0, 0, 0);
+
+        game.cc.minLimit = false;
+        game.cc.maxLimit = false;
+
+        // Set static quest data
+        string questPath = path;
+        qd = new QuestData(questPath);
+
+        vars.TrimQuest();
+
+        undo = new Stack<string>();
+
+        // Initialise data
+        boardItems = new Dictionary<string, BoardComponent>();
+        monsters = new List<Monster>();
+        heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, Puzzle>();
+        eventQuota = new Dictionary<string, int>();
+        undo = new Stack<string>();
+        monsterSelect = new Dictionary<string, string>();
+
+        GenerateMonsterSelection();
+        eManager = new EventManager();
+
+        // Set quest vars for selected expansions
+        foreach (string s in game.cd.GetLoadedPackIDs())
+        {
+            if (s.Length > 0)
+            {
+                vars.SetValue("#" + s, 1);
+            }
+        }
+        vars.SetValue("#round", 1);
+
+        // Set quest flag based on hero count
+        int heroCount = 0;
+        foreach (Quest.Hero h in heroes)
+        {
+            if (h.heroData != null) heroCount++;
+        }
+        game.quest.vars.SetValue("#heroes", heroCount);
+
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
+        // Update the screen
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
+
+        if (game.gameType is D2EGameType)
+        {
+            // Start round events
+            eManager.EventTriggerType("StartRound", false);
+            // Start the quest (top of stack)
+            eManager.EventTriggerType("EventStart", false);
+            eManager.TriggerEvent();
+        }
+        else
+        {
+            new InvestigatorItems();
+        }
+    }
+
     // Read save data
     public void LoadQuest(IniData saveData)
     {

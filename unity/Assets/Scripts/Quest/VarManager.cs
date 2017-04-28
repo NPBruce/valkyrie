@@ -23,6 +23,17 @@ public class VarManager
         }
     }
 
+    public void TrimQuest()
+    {
+        Dictionary<string, float> newVars = new Dictionary<string, float>();
+        foreach (KeyValuePair<string, float> kv in vars)
+        {
+            if (kv.Key[0].Equals('%')) newVars.Add(kv.Key, kv.Value);
+            if (kv.Key.Equals("$morale")) newVars.Add(kv.Key, kv.Value);
+        }
+        vars = newVars;
+    }
+
     public void SetValue(string var, float value)
     {
         if (!vars.ContainsKey(var))
