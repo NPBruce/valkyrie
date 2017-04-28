@@ -2,6 +2,7 @@
 using UnityEngine;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
 
 // Class for managing quest events
 public class EventManager
@@ -89,9 +90,15 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            // TODO support new quest events.
-            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
-            return;
+            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
+            {
+                events.Add(name, new StartQuestEvent(name));
+            }
+            else
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
+                return;
+            }
         }
 
         // Don't queue disabled events
@@ -121,6 +128,14 @@ public class EventManager
         Event e = eventStack.Pop();
         currentEvent = e;
 
+        // Move to another quest
+        if (e is StartQuestEvent)
+        {
+            // This loads the game
+            game.quest.ChangeQuest((e as StartQuestEvent).name);
+            return;
+        }
+
         // Event may have been disabled since added
         if (e.Disabled())
         {
@@ -136,7 +151,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
         // Perform var operations
@@ -434,7 +449,7 @@ public class EventManager
         }
 
         // Is this event disabled?
-        public bool Disabled()
+        virtual public bool Disabled()
         {
             return !game.quest.vars.Test(qEvent.conditions);
         }
@@ -442,9 +457,16 @@ public class EventManager
 
     public class StartQuestEvent : Event
     {
-        public StartQuestEvent(string name) : base(name)
+        public string name;
+
+        public StartQuestEvent(string n) : base(n)
         {
-            // Do Stuff
+            name = n;
+        }
+
+        override public bool Disabled()
+        {
+            return false;
         }
     }
 
