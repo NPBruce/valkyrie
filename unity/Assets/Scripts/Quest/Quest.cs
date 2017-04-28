@@ -347,9 +347,6 @@ public class Quest
             items.Add(kv.Key);
         }
 
-        // Restart event EventManager
-        eManager = new EventManager();
-
         // Clean undo stack (we don't save undo stack)
         // When performing undo this is replaced later
         undo = new Stack<string>();
@@ -424,6 +421,8 @@ public class Quest
             int.TryParse(kv.Value, out value);
             eventQuota.Add(kv.Key, value);
         }
+
+        eManager = new EventManager(saveData.Get("EventManager"));
 
         // Update the screen
         game.monsterCanvas.UpdateList();
@@ -731,6 +730,8 @@ public class Quest
         {
             r += kv.Key + "=" + kv.Value + nl;
         }
+
+        r += eManager.ToString();
 
         return r;
     }

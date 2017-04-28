@@ -19,6 +19,16 @@ public class EventManager
 
     public EventManager()
     {
+        Init(null);
+    }
+
+    public EventManager(Dictionary<string, string> data)
+    {
+        Init(data);
+    }
+
+    public Init(Dictionary<string, string> data)
+    {
         game = Game.Get();
 
         events = new Dictionary<string, Event>();
@@ -45,6 +55,19 @@ public class EventManager
         foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
         {
             events.Add(kv.Key, new Peril(kv.Key));
+        }
+
+        if (data != null && data.ContainsKey("queue"))
+        {
+            foreach (string s in data["queue"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            {
+                eventStack.Push(events[s]);
+            }
+        }
+        if (data != null && data.ContainsKey("currentevent"))
+        {
+            currentEvent = events[data["currentevent"]];
+            ResumeEvent();
         }
     }
 
@@ -216,6 +239,43 @@ public class EventManager
         {
             new DialogWindow(e);
         }
+    }
+
+    public void ResumeEvent()
+    {
+        Event e = currentEvent;
+        if (e is MonsterEvent)
+            // Display the location(s)
+            if (e.qEvent.locationSpecified && e.qEvent.display)
+            {
+                game.tokenBoard.AddMonster(qe);
+            }
+        }
+
+        // Highlight a space on the board
+        if (e.qEvent.highlight)
+        {
+            game.tokenBoard.AddHighlight(e.qEvent);
+        }
+
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            QuestData.Puzzle p = e.qEvent as QuestData.Puzzle;
+            if (p.puzzleClass.Equals("slide"))
+            {
+                new PuzzleSlideWindow(e);
+            }
+            if (p.puzzleClass.Equals("code"))
+            {
+                new PuzzleCodeWindow(e);
+            }
+            if (p.puzzleClass.Equals("image"))
+            {
+                new PuzzleImageWindow(e);
+            }
+            return;
+        }
+        new DialogWindow(e);
     }
 
     // Event ended (pass or set as fail)
@@ -433,6 +493,24 @@ public class EventManager
             qEvent = game.cd.perils[name] as QuestData.Event;
             cPeril = qEvent as PerilData;
         }
+    }
+
+
+    public string ToString()
+    {
+        //Game game = Game.Get();
+        string nl = System.Environment.NewLine;
+        // General quest state block
+        string r = "[EventManager]" + nl;
+        r += "queue="
+        foreach (Event e in eventStack.ToArray())
+        {
+            r += e.qEvent.sectionName + " ";
+        }
+        r += nl;
+        if (currentEvent != null)
+        r += "currentevent=" currentEvent.qEvent.sectionName + nl;
+        return r;
     }
 
     /// <summary>
