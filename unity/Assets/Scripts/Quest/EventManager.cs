@@ -157,7 +157,10 @@ public class EventManager
         // Perform var operations
         game.quest.vars.Perform(e.qEvent.operations);
         // Update morale change
-        game.quest.AdjustMorale(0);
+        if (game.gameType is D2EGameType)
+        {
+            game.quest.AdjustMorale(0);
+        }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

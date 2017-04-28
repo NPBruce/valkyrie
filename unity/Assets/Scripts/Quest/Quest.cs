@@ -612,6 +612,10 @@ public class Quest
         {
             boardItems.Add(name, new Token((QuestData.Token)qc, game));
         }
+        if (qc is QuestData.UI)
+        {
+            boardItems.Add(name, new UI((QuestData.UI)qc, game));
+        }
     }
 
     // Remove a list of active components
@@ -964,6 +968,50 @@ public class Quest
         public override QuestData.Event GetEvent()
         {
             return qToken;
+        }
+
+        // Clean up
+        public override void Remove()
+        {
+            Object.Destroy(unityObject);
+        }
+    }
+
+    // Tokens are events that are tied to a token placed on the board
+    public class UI : BoardComponent
+    {
+        // Quest info on the token
+        public QuestData.UI qUI;
+
+        // Construct with quest info and reference to Game
+        public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
+        {
+            qUI = questUI;
+
+            Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+
+            // Create object
+            unityObject = new GameObject("Object" + qUI.sectionName);
+            unityObject.tag = "board";
+
+            unityObject.transform.parent = game.uICanvas.transform;
+
+            // Create the image
+            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.color = new Color(1, 1, 1, 0);
+            image.sprite = tileSprite;
+
+            //FIXME
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 200, 100);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 200, 100);
+            game.tokenBoard.Add(this);
+        }
+
+        // Tokens have an associated event to start on press
+        public override QuestData.Event GetEvent()
+        {
+            return qUI;
         }
 
         // Clean up
