@@ -63,7 +63,7 @@ class SaveManager
                 float xX = (float)i % (float)outTex.width;
                 float xY = Mathf.Floor((float)i / (float)outTex.width);
  
-                Vector2 vCenter = new Vector2((float)outTex.width, (float)outTex.width) / scale;
+                Vector2 vCenter = new Vector2(xX, xY) / scale;
 
                 int xXFrom = (int)Mathf.Max(Mathf.Floor(vCenter.x - (0.5f / scale)), 0);
                 int xXTo = (int)Mathf.Min(Mathf.Ceil(vCenter.x + (0.5f / scale)), screenSize.x);

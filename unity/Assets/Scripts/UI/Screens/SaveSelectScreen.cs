@@ -34,13 +34,13 @@ namespace Assets.Scripts.UI.Screens
             if (save)
             {
                 offset += 2;
-                new DialogBox(new Vector2(UIScaler.GetHCenter(-16) , offset), new Vector2(32, 24), StringKey.NULL);
+                new DialogBox(new Vector2(UIScaler.GetHCenter(-21), offset), new Vector2(42, 24), StringKey.NULL);
                 offset += 1;
             }
             // Options screen text
             DialogBox dbTittle = new DialogBox(
-                new Vector2(2, offset),
-                new Vector2(UIScaler.GetWidthUnits() - 4, 3),
+                new Vector2(UIScaler.GetHCenter(-10), offset),
+                new Vector2(20, 3),
                 SELECT_SAVE
                 );
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
