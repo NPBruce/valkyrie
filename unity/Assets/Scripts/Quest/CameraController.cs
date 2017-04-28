@@ -37,6 +37,7 @@ public class CameraController : MonoBehaviour {
     // Mouse position on mouse down
     public Vector2 mouseDownMousePosition;
 
+    public Texture2D screenShot;
 
     public Game game;
 
@@ -223,5 +224,19 @@ public class CameraController : MonoBehaviour {
             if (cc.camTarget.x > cc.maxPanX) cc.camTarget.x = cc.maxPanX;
             if (cc.camTarget.y > cc.maxPanY) cc.camTarget.y = cc.maxPanY;
         }
+    }
+
+    public void TakeScreenshot(UnityEngine.Events.UnityAction call)
+    {
+        StartCoroutine(IETakeScreenshot(call));
+    }
+
+    public IEnumerator IETakeScreenshot(UnityEngine.Events.UnityAction call)
+    {
+        yield return new WaitForEndOfFrame();
+        screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenShot.Apply();
+        call();
     }
 }

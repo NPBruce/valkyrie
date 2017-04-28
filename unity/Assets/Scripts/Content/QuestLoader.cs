@@ -10,7 +10,7 @@ using ValkyrieTools;
 public class QuestLoader {
 
     // Return a dictionary of all available quests
-    public static Dictionary<string, QuestData.Quest> GetQuests(bool checkContent = false)
+    public static Dictionary<string, QuestData.Quest> GetQuests(bool getHidden = false)
     {
         Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
@@ -32,8 +32,8 @@ public class QuestLoader {
             // Check quest is valid and of the right type
             if (q.valid && q.type.Equals(game.gameType.TypeName()))
             {
-                // Are all expansions selected?
-                if (q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0 || !checkContent)
+                // Is the quest hidden?
+                if (!q.hidden || getHidden)
                 {
                     // Add quest to quest list
                     quests.Add(p, q);

@@ -20,7 +20,12 @@ class SaveManager
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
-    public static void Save(int num = 0)
+    public static void Save(int num = 0, bool quit = false)
+    {
+        Game.Get().cc.TakeScreenshot(delegate { SaveWithScreen(num, quit); });
+    }
+
+    public static void SaveWithScreen(int num, bool quit = false)
     {
         Game game = Game.Get();
         try
@@ -43,14 +48,58 @@ class SaveManager
                 Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
             }
             File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
+
+            Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+
+            Color[] screenColor = game.cc.screenShot.GetPixels(0);
+
+            float scale = 4f / 30f;
+            Texture2D outTex = new Texture2D(Mathf.RoundToInt(screenSize.x * scale), Mathf.RoundToInt(screenSize.y * scale), TextureFormat.RGB24, false);
+ 
+            Color[] outColor = new Color[outTex.width * outTex.height];
+ 
+            for(int i = 0; i < outColor.Length; i++)
+            {
+                float xX = (float)i % (float)outTex.width;
+                float xY = Mathf.Floor((float)i / (float)outTex.width);
+ 
+                Vector2 vCenter = new Vector2(xX, xY) / scale;
+
+                int xXFrom = (int)Mathf.Max(Mathf.Floor(vCenter.x - (0.5f / scale)), 0);
+                int xXTo = (int)Mathf.Min(Mathf.Ceil(vCenter.x + (0.5f / scale)), screenSize.x);
+                int xYFrom = (int)Mathf.Max(Mathf.Floor(vCenter.y - (0.5f / scale)), 0);
+                int xYTo = (int)Mathf.Min(Mathf.Ceil(vCenter.y + (0.5f / scale)), screenSize.y);
+ 
+                Color oColorTemp = new Color();
+                float xGridCount = 0;
+                for(int iy = xYFrom; iy < xYTo; iy++)
+                {
+                    for(int ix = xXFrom; ix < xXTo; ix++)
+                    {
+                        oColorTemp += screenColor[(int)(((float)iy * screenSize.x) + ix)];
+                        xGridCount++;
+                    }
+                }
+                outColor[i] = oColorTemp / (float)xGridCount;
+            }
+
+            outTex.SetPixels(outColor);
+            outTex.Apply();
+            File.WriteAllBytes(Path.GetTempPath() + "/Valkyrie/image.png", outTex.EncodeToPNG());
+
             ZipFile zip = new ZipFile();
             zip.AddFile(Path.GetTempPath() + "/Valkyrie/save.ini", "");
+            zip.AddFile(Path.GetTempPath() + "/Valkyrie/image.png", "");
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }
         catch (System.Exception e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
+        }
+        if (quit)
+        {
+            Destroyer.MainMenu();
         }
     }
 
@@ -236,13 +285,12 @@ class SaveManager
     public class SaveData
     {
         public bool valid = false;
-        public List<string> heroes;
         public string quest;
         public System.DateTime saveTime;
+        public Texture2D image;
 
         public SaveData(int num = 0)
         {
-            heroes = new List<string>();
             Game game = Game.Get();
             if (!File.Exists(SaveFile(num))) return;
             try
@@ -260,6 +308,8 @@ class SaveManager
                 ZipFile zip = ZipFile.Read(SaveFile(num));
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
                 zip.Dispose();
+
+                image = ContentData.FileToTexture(Path.GetTempPath() + "/Valkyrie/Load/image.png");
 
                 // Check that quest in save is valid
                 QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
@@ -292,14 +342,6 @@ class SaveManager
                     return;
                 }
 
-                for (int i = 0; i < 6; i++)
-                {
-                    string hero = saveData.Get("Hero" + i, "type");
-                    if (hero.Length > 0)
-                    {
-                        heroes.Add(hero);
-                    }
-                }
                 saveTime = System.DateTime.Parse(saveData.Get("Quest", "time"));
 
                 valid = true;

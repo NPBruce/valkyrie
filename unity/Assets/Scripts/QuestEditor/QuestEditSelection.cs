@@ -202,7 +202,7 @@ public class QuestEditSelection
     public void Copy()
     {
         // Can copy all quests, not just user
-        questList = QuestLoader.GetQuests();
+        questList = QuestLoader.GetQuests(true);
         Game game = Game.Get();
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

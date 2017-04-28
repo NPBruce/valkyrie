@@ -154,10 +154,7 @@ public class TextButton {
     {
         Object.Destroy(button);
         Object.Destroy(background);
-        Object.Destroy(border.bLine[0]);
-        Object.Destroy(border.bLine[1]);
-        Object.Destroy(border.bLine[2]);
-        Object.Destroy(border.bLine[3]);
+        border.Destroy();
     }
 }
 

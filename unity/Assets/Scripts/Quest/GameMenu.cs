@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // In quest game menu
 public class GameMenu {
@@ -22,6 +23,13 @@ public class GameMenu {
             return;
         }
 
+        // Take screen shot for save before menu is drawn
+        game.cc.TakeScreenshot(delegate { Draw(); });
+    }
+
+    public static void Draw()
+    {
+        Game game = Game.Get();
         // Border around menu items
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), StringKey.NULL);
         db.AddBorder();
@@ -52,13 +60,13 @@ public class GameMenu {
 
     public static void Save()
     {
-        SaveManager.Save(1);
         Destroyer.Dialog();
+        new SaveSelectScreen(true);
     }
 
     public static void Quit()
     {
-        SaveManager.Save(0);
-        Destroyer.MainMenu();
+        Destroyer.Dialog();
+        SaveManager.Save(0, true);
     }
 }

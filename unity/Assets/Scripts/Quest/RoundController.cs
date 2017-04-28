@@ -320,5 +320,6 @@ public class RoundController {
 
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
+        SaveManager.Save(0);
     }
 }
