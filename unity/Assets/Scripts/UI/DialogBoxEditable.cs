@@ -24,10 +24,11 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call)
     {
-        createDialog(location, size, text, call, Color.white, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, multiline, call, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
     /// <summary>
@@ -36,11 +37,12 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour)
     {
-        createDialog(location, size, text, call, fgColour, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, multiline, call, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
     /// <summary>
@@ -49,12 +51,13 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
-        createDialog(location, size, text, call, fgColour, bgColour);
+        createDialog(location, size, text, multiline, call, fgColour, bgColour);
     }
 
     /// <summary>
@@ -63,10 +66,11 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    void createDialog(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    void createDialog(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
         string objName = text;
@@ -118,12 +122,18 @@ public class DialogBoxEditable
         uiText.font = game.gameType.GetFont();
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
-        uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+        if (multiline)
+        {
+            uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
+        }
 
         uiInput = inputObj.AddComponent<PanCancelInputField>();
-
         uiInput.textComponent = uiText;
-        uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
+        if (multiline)
+        {
+            uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
+        }
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
     }

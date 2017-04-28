@@ -32,7 +32,7 @@ public class EditorComponentQuest : EditorComponent
 
         nameDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 1), 
-            game.quest.qd.quest.name.Translate(), 
+            game.quest.qd.quest.name.Translate(), false, 
             delegate { UpdateQuestName(); });
         nameDBE.ApplyTag("editor");
         nameDBE.AddBorder();

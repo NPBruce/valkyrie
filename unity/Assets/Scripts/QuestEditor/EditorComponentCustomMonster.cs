@@ -79,7 +79,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             nameDBE = new DialogBoxEditable(
                 new Vector2(3, 4), new Vector2(14, 1), 
-                monsterComponent.monsterName.Translate(), 
+                monsterComponent.monsterName.Translate(), false,
                 delegate { UpdateName(); });
             nameDBE.ApplyTag("editor");
             nameDBE.AddBorder();
@@ -107,7 +107,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 infoDBE = new DialogBoxEditable(
                     new Vector2(0, 7), new Vector2(20, 8), 
-                    monsterComponent.info.Translate(), 
+                    monsterComponent.info.Translate(), true,
                     delegate { UpdateInfo(); });
                 infoDBE.ApplyTag("editor");
                 infoDBE.AddBorder();
@@ -180,7 +180,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
             healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(3, 1), 
-            monsterComponent.healthBase.ToString(), delegate { UpdateHealth(); });
+            monsterComponent.healthBase.ToString(), false, delegate { UpdateHealth(); });
             healthDBE.ApplyTag("editor");
             healthDBE.AddBorder();
 
@@ -188,7 +188,7 @@ public class EditorComponentCustomMonster : EditorComponent
             db.ApplyTag("editor");
 
             healthHeroDBE = new DialogBoxEditable(new Vector2(14, 22), new Vector2(3, 1), 
-            monsterComponent.healthPerHero.ToString(), delegate { UpdateHealthHero(); });
+            monsterComponent.healthPerHero.ToString(), false, delegate { UpdateHealthHero(); });
             healthHeroDBE.ApplyTag("editor");
             healthHeroDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)

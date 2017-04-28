@@ -72,7 +72,7 @@ public class EditorComponentActivation : EditorComponent
 
         abilityDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
-            activationComponent.ability.Translate(),
+            activationComponent.ability.Translate(), true, 
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
@@ -93,7 +93,7 @@ public class EditorComponentActivation : EditorComponent
 
         masterActionsDBE = new DialogBoxEditable(
             new Vector2(0, 11), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(true),
+            activationComponent.masterActions.Translate(true), true,
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -113,7 +113,7 @@ public class EditorComponentActivation : EditorComponent
 
         minionActionsDBE = new DialogBoxEditable(
             new Vector2(0, 20), new Vector2(20, 8), 
-            activationComponent.minionActions.Translate(true),
+            activationComponent.minionActions.Translate(true), true,
             delegate { UpdateMinionActions(); });
         minionActionsDBE.ApplyTag("editor");
         minionActionsDBE.AddBorder();
@@ -126,7 +126,7 @@ public class EditorComponentActivation : EditorComponent
 
         abilityDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
-            activationComponent.ability.Translate(true),
+            activationComponent.ability.Translate(true), true,
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
@@ -135,7 +135,7 @@ public class EditorComponentActivation : EditorComponent
 
         moveButtonDBE = new DialogBoxEditable(
             new Vector2(10, 10), new Vector2(10, 1), 
-            activationComponent.moveButton.Translate(true),
+            activationComponent.moveButton.Translate(true), false,
             delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag("editor");
         moveButtonDBE.AddBorder();
@@ -145,7 +145,7 @@ public class EditorComponentActivation : EditorComponent
 
         masterActionsDBE = new DialogBoxEditable(
             new Vector2(0, 12), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(true),
+            activationComponent.masterActions.Translate(true), true,
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -155,7 +155,7 @@ public class EditorComponentActivation : EditorComponent
 
         moveDBE = new DialogBoxEditable(
             new Vector2(0, 21), new Vector2(20, 8), 
-            activationComponent.move.Translate(true),
+            activationComponent.move.Translate(true), true,
             delegate { UpdateMove(); });
         moveDBE.ApplyTag("editor");
         moveDBE.AddBorder();
