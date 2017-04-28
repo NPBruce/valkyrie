@@ -43,8 +43,52 @@ class SaveManager
                 Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
             }
             File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
+
+            Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+            Texture2D screen = new Texture2D(screenSize.width, screenSize.height, TextureFormat.RGB24, false);
+            screen.ReadPixels(new Rect(0, 0, screenSize.width, screenSize.height), 0, 0);
+            screen.Apply());
+
+            Color[] screenColor = screen.GetPixels(0);
+
+            float scale = 4f / 30f;
+            Texture2D outTex = new Texture2D(Mathf.RoundToInt(screenSize.width * scale), Mathf.RoundToInt(screenSize.height * scale), TextureFormat.RGB24, false);
+ 
+            Color[] outColor = new Color[outTex.width * outTex.height];
+ 
+            for(i = 0; i < outColor.Length; i++)
+            {
+                float xX = (float)i % (float)outTex.width;
+                float xY = Mathf.Floor((float)i / (float)outTex.width);
+ 
+                Vector2 vCenter = new Vector2((float)outTex.width, (float)outTex.width) / scale;
+
+                int xXFrom = (int)Mathf.Max(Mathf.Floor(vCenter.x - (0.5f / scale)), 0);
+                int xXTo = (int)Mathf.Min(Mathf.Ceil(vCenter.x + (0.5f / scale)), screenSize.width);
+                int xYFrom = (int)Mathf.Max(Mathf.Floor(vCenter.y - (0.5f / scale)), 0);
+                int xYTo = (int)Mathf.Min(Mathf.Ceil(vCenter.y + (0.5f / scale)), screenSize.height);
+ 
+                Vector4 oColorTotal = new Vector4();
+                Color oColorTemp = new Color();
+                float xGridCount = 0;
+                for(int iy = xYFrom; iy < xYTo; iy++)
+                {
+                    for(int ix = xXFrom; ix < xXTo; ix++)
+                    {
+                        oColorTemp += aSourceColor[(int)(((float)iy * screenSize.width) + ix)];
+                        xGridCount++;
+                    }
+                }
+                outColor[i] = oColorTemp / (float)xGridCount;
+            }
+
+            outTex.SetPixels(outColor);
+            outTex.Apply();
+            File.WriteAllBytes(Path.GetTempPath() + "/Valkyrie/image.png", outTex.EncodeToPNG());
+
             ZipFile zip = new ZipFile();
             zip.AddFile(Path.GetTempPath() + "/Valkyrie/save.ini", "");
+            zip.AddFile(Path.GetTempPath() + "/Valkyrie/image.png", "");
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }

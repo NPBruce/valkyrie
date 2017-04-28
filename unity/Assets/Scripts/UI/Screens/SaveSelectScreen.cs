@@ -52,14 +52,15 @@ namespace Assets.Scripts.UI.Screens
                         new StringKey(null, "", false),
                         delegate { Select(tmp); });
 
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-20), offset),
-                        new Vector2(4f * 16f / 9f, 4f),
-                        new StringKey(null, "", false),
-                        delegate { Select(tmp); });
                     if (saves[i].image != null)
                     {
                         Sprite imgSprite = Sprite.Create(saves[i].image, new Rect(0, 0, saves[i].image.width, saves[i].image.height), Vector2.zero, 1);
+                        tb = new TextButton(
+                            new Vector2(UIScaler.GetHCenter(-20), offset),
+                            new Vector2(4f * (float)saves[i].image.width / (float)saves[i].image.height, 4f),
+                            new StringKey(null, "", false),
+                            delegate { Select(tmp); });
+
                         tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }

@@ -52,12 +52,13 @@ public class GameMenu {
 
     public static void Save()
     {
-        SaveManager.Save(1);
         Destroyer.Dialog();
+        SaveManager.Save(1);
     }
 
     public static void Quit()
     {
+        Destroyer.Dialog();
         SaveManager.Save(0);
         Destroyer.MainMenu();
     }
