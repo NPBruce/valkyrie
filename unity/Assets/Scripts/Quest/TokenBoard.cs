@@ -31,6 +31,12 @@ public class TokenBoard : MonoBehaviour {
         tc.Add(new TokenControl(t));
     }
 
+    // Add a UI
+    public void Add(Quest.UI ui)
+    {
+        tc.Add(new TokenControl(ui));
+    }
+
     // Class for tokens and doors that will get the onClick event
     public class TokenControl
     {

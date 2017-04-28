@@ -175,6 +175,11 @@ public class QuestData
             Token c = new Token(name, content, game);
             components.Add(name, c);
         }
+        if (name.IndexOf(UI.type) == 0)
+        {
+            UI c = new UI(name, content, game);
+            components.Add(name, c);
+        }
         if (name.IndexOf(Event.type) == 0)
         {
             Event c = new Event(name, content);
