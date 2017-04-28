@@ -260,7 +260,7 @@ public class Quest
     public void ChangeQuest(string path)
     {
         phase = MoMPhase.investigator;
-        game.cc.gameObject.transform.position = new Vector3(0, 0, 0);
+        game.cc.gameObject.transform.position = new Vector3(0, 0, -8);
 
         game.cc.minLimit = false;
         game.cc.maxLimit = false;
