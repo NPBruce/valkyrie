@@ -5,6 +5,8 @@ using Assets.Scripts.Content;
 
 public class EditorComponentQuest : EditorComponent
 {
+    private readonly StringKey HIDDEN = new StringKey("val", "HIDDEN");
+    private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
     private readonly StringKey SELECT_PACK = new StringKey("val", "SELECT_PACK");
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
@@ -44,14 +46,27 @@ public class EditorComponentQuest : EditorComponent
         descriptionDBE.ApplyTag("editor");
         descriptionDBE.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), REQUIRED_EXPANSIONS);
+        if (game.quest.qd.quest.hidden)
+        {
+            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ACTIVE, delegate { ToggleHidden(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        DialogBox db = new DialogBox(new Vector2(0, 13), new Vector2(9, 1), REQUIRED_EXPANSIONS);
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, 13), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        int offset = 12;
+        int offset = 14;
         int index;
         for (index = 0; index < 15; index++)
         {
@@ -92,6 +107,13 @@ public class EditorComponentQuest : EditorComponent
         {
             LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
         }
+    }
+
+    public void ToggleHidden()
+    {
+        Game game = Game.Get();
+        game.quest.qd.quest.hidden = !game.quest.qd.quest.hidden;
+        Update();
     }
 
     public void QuestAddPack()
