@@ -1522,6 +1522,7 @@ public class QuestData
         // Increment during changes, and again at release
         public static int currentFormat = 4;
         public int format = 0;
+        public bool hidden = false;
         public bool valid = false;
         public string path = "";
         // quest type (MoM, D2E)
@@ -1604,6 +1605,11 @@ public class QuestData
                 localizationDict.setDefaultLanguage(defaultLanguage);
             }
 
+            if (iniData.ContainsKey("hidden"))
+            {
+                bool.TryParse(iniData["hidden"], out hidden);
+            }
+
             return true;
         }
 
@@ -1615,6 +1621,7 @@ public class QuestData
             StringBuilder r = new StringBuilder();
             r.AppendLine("[Quest]");
             r.Append("format=").AppendLine(currentFormat.ToString());
+            r.Append("hidden=").AppendLine(hidden.ToString());
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             if (packs.Length > 0)
