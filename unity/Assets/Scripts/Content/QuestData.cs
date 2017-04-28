@@ -379,6 +379,65 @@ public class QuestData
     }
 
 
+    // UI is an image/button that is displayed to the user
+    public class UI : Event
+    {
+        new public static string type = "UI";
+        public string imageName = "";
+        public Vector2 size;
+
+        // Create new with name (used by editor)
+        public UI(string s) : base(s)
+        {
+            locationSpecified = true;
+            typeDynamic = type;
+            cancelable = true;
+            size = Vector2.zero;
+        }
+
+        // Create from ini data
+        public UI(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        {
+            locationSpecified = true;
+            typeDynamic = type;
+            // Tokens are cancelable because you can select then cancel
+            cancelable = true;
+
+            if (data.ContainsKey("image"))
+            {
+                imageName = data["image"];
+            }
+
+            size = Vector2.zero;
+            if (data.ContainsKey("sizex"))
+            {
+                float sizeX = 0;
+                float.TryParse(data["sizex"], out sizeX);
+                size.x = sizeX;
+            }
+            if (data.ContainsKey("sizey"))
+            {
+                float sizeY = 0;
+                float.TryParse(data["sizey"], out sizeY);
+                size.y = sizeY;
+            }
+        }
+
+        // Save to string (for editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+
+            r += "type=" + tokenName + nl;
+            if (rotation != 0)
+            {
+                r += "rotation=" + rotation + nl;
+            }
+            return r;
+        }
+    }
+
     // Spawn items are monster group placement events
     public class Spawn : Event
     {
