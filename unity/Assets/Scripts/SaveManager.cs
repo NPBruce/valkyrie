@@ -236,9 +236,9 @@ class SaveManager
     public class SaveData
     {
         public bool valid = false;
-        public List<string> heroes;
         public string quest;
         public System.DateTime saveTime;
+        public Texture2D image;
 
         public SaveData(int num = 0)
         {
@@ -260,6 +260,8 @@ class SaveManager
                 ZipFile zip = ZipFile.Read(SaveFile(num));
                 zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
                 zip.Dispose();
+
+                image = ContentData.FileToTexture(Path.GetTempPath() + "/Valkyrie/Load/image.png");
 
                 // Check that quest in save is valid
                 QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
@@ -292,14 +294,6 @@ class SaveManager
                     return;
                 }
 
-                for (int i = 0; i < 6; i++)
-                {
-                    string hero = saveData.Get("Hero" + i, "type");
-                    if (hero.Length > 0)
-                    {
-                        heroes.Add(hero);
-                    }
-                }
                 saveTime = System.DateTime.Parse(saveData.Get("Quest", "time"));
 
                 valid = true;

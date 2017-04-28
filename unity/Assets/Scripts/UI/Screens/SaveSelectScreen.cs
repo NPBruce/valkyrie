@@ -7,14 +7,22 @@ namespace Assets.Scripts.UI.Screens
     class SaveSelectScreen
     {
         public bool save;
+        List<SaveManager.SaveData> saves;
         Game game = Game.Get();
         private readonly StringKey SELECT_SAVE = new StringKey("val", "SELECT_SAVE");
+        private readonly StringKey SAVE = new StringKey("val", "SAVE");
+        private readonly StringKey AUTOSAVE = new StringKey("val", "AUTOSAVE");
 
         public SaveSelectScreen(bool performSave = false)
         {
             save = performSave;
-            // This will destroy all, because we shouldn't have anything left at the main menu
-            Destroyer.Destroy();
+            if (!save)
+            {
+                // This will destroy all, because we shouldn't have anything left at the main menu
+                Destroyer.Destroy();
+            }
+
+            saves = SaveManager.GetSaves();
 
             // Create elements for the screen
             CreateElements();
@@ -33,7 +41,6 @@ namespace Assets.Scripts.UI.Screens
 
             float offset = 5f;
             TextButton tb;
-            List<SaveManager.SaveData> saves = SaveManager.GetSaves();
             for (int i = 0; i < saves.Count; i++)
             {
                 int tmp = i;
@@ -42,8 +49,50 @@ namespace Assets.Scripts.UI.Screens
                     tb = new TextButton(
                         new Vector2(UIScaler.GetHCenter(-20), offset),
                         new Vector2(40, 4f),
+                        new StringKey(null, "", false),
+                        delegate { Select(tmp); });
+
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetHCenter(-20), offset),
+                        new Vector2(4f * 16f / 9f, 4f),
+                        new StringKey(null, "", false),
+                        delegate { Select(tmp); });
+                    if (saves[i].image != null)
+                    {
+                        Sprite imgSprite = Sprite.Create(saves[i].image, new Rect(0, 0, saves[i].image.width, saves[i].image.height), Vector2.zero, 1);
+                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    }
+
+                    string name = SAVE.Translate() + " " + i;
+                    if (i == 0)
+                    {
+                        name = AUTOSAVE.Translate();
+                    }
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetHCenter(-12), offset + 0.5f),
+                        new Vector2(10, 2f),
+                        new StringKey(null, name, false),
+                        delegate { Select(tmp); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    tb.border.Destroy();
+
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetHCenter(), offset + 0.5f),
+                        new Vector2(20, 2f),
+                        new StringKey(null, saves[i].saveTime.ToString(), false),
+                        delegate { Select(tmp); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+                    tb.border.Destroy();
+
+                    tb = new TextButton(
+                        new Vector2(UIScaler.GetHCenter(-12), offset + 2.6f),
+                        new Vector2(32, 1f),
                         new StringKey(null, saves[i].quest, false),
-                        delegate { SaveManager.Load(tmp); });
+                        delegate { Select(tmp); });
+                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    tb.border.Destroy();
                 }
                 else
                 {
@@ -51,7 +100,7 @@ namespace Assets.Scripts.UI.Screens
                         new Vector2(UIScaler.GetHCenter(-20), offset),
                         new Vector2(40, 4f),
                         new StringKey(null, "", false),
-                        delegate { ; }, Color.gray);
+                        delegate { Select(tmp); }, Color.gray);
                 }
                 offset += 5;
             }
@@ -60,6 +109,21 @@ namespace Assets.Scripts.UI.Screens
             tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),
                 CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
             tb.SetFont(game.gameType.GetHeaderFont());
+        }
+
+        public void Select(int num)
+        {
+            if (save)
+            {
+                SaveManager.Save(num);
+            }
+            else
+            {
+                if (saves[num].valid)
+                {
+                    SaveManager.Load(num);
+                }
+            }
         }
     }
 }
