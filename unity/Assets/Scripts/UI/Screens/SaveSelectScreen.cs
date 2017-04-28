@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI.Screens
             if (save)
             {
                 offset += 2;
-                new DialogBox(new Vector2(UIScaler.GetHCenter(-16) , offset), new Vector2(32, 24), "");
+                new DialogBox(new Vector2(UIScaler.GetHCenter(-16) , offset), new Vector2(32, 24), StringKey.NULL);
                 offset += 1;
             }
             // Options screen text
@@ -77,7 +77,7 @@ namespace Assets.Scripts.UI.Screens
                             new StringKey(null, "", false),
                             delegate { Select(tmp); });
 
-                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = imgSprite;
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }
 

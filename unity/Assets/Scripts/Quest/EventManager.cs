@@ -27,7 +27,7 @@ public class EventManager
         Init(data);
     }
 
-    public Init(Dictionary<string, string> data)
+    public void Init(Dictionary<string, string> data)
     {
         game = Game.Get();
 
@@ -248,10 +248,11 @@ public class EventManager
     {
         Event e = currentEvent;
         if (e is MonsterEvent)
+        {
             // Display the location(s)
             if (e.qEvent.locationSpecified && e.qEvent.display)
             {
-                game.tokenBoard.AddMonster(qe);
+                game.tokenBoard.AddMonster(e as MonsterEvent);
             }
         }
 
@@ -441,7 +442,7 @@ public class EventManager
 
     public class StartQuestEvent : Event
     {
-        public StartQuestEvent(string name)
+        public StartQuestEvent(string name) : base(name)
         {
             // Do Stuff
         }
@@ -507,20 +508,22 @@ public class EventManager
     }
 
 
-    public string ToString()
+    public override string ToString()
     {
         //Game game = Game.Get();
         string nl = System.Environment.NewLine;
         // General quest state block
         string r = "[EventManager]" + nl;
-        r += "queue="
+        r += "queue=";
         foreach (Event e in eventStack.ToArray())
         {
             r += e.qEvent.sectionName + " ";
         }
         r += nl;
         if (currentEvent != null)
-        r += "currentevent=" currentEvent.qEvent.sectionName + nl;
+        {
+            r += "currentevent=" + currentEvent.qEvent.sectionName + nl;
+        }
         return r;
     }
 

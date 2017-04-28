@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // In quest game menu
 public class GameMenu {
@@ -24,9 +25,9 @@ public class GameMenu {
 
         // Take screen shot for save before menu is drawn
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        Texture2D screen = new Texture2D(screenSize.width, screenSize.height, TextureFormat.RGB24, false);
-        screen.ReadPixels(new Rect(0, 0, screenSize.width, screenSize.height), 0, 0);
-        screen.Apply());
+        Texture2D screen = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        screen.ReadPixels(new Rect(0, 0, screenSize.x, screenSize.y), 0, 0);
+        screen.Apply();
 
 
         // Border around menu items

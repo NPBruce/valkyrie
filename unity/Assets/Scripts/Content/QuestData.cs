@@ -429,11 +429,9 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "type=" + tokenName + nl;
-            if (rotation != 0)
-            {
-                r += "rotation=" + rotation + nl;
-            }
+            r += "image=" + imageName + nl;
+            r += "sizex=" + size.x + nl;
+            r += "sizey=" + size.y + nl;
             return r;
         }
     }
