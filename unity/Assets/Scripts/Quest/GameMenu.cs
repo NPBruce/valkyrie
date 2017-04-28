@@ -24,12 +24,12 @@ public class GameMenu {
         }
 
         // Take screen shot for save before menu is drawn
-        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        Texture2D screen = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        screen.ReadPixels(new Rect(0, 0, screenSize.x, screenSize.y), 0, 0);
-        screen.Apply();
+        game.cc.TakeScreenshot(delegate { Draw(); });
+    }
 
-
+    public static void Draw()
+    {
+        Game game = Game.Get();
         // Border around menu items
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), StringKey.NULL);
         db.AddBorder();
@@ -38,7 +38,7 @@ public class GameMenu {
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 10), new Vector2(10, 2f), SAVE, delegate { Save(screen); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 10), new Vector2(10, 2f), SAVE, delegate { Save(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
@@ -58,16 +58,15 @@ public class GameMenu {
         game.quest.Undo();
     }
 
-    public static void Save(Texture2D screen)
+    public static void Save()
     {
         Destroyer.Dialog();
-        new SaveSelectScreen(true, screen);
+        new SaveSelectScreen(true);
     }
 
     public static void Quit()
     {
         Destroyer.Dialog();
-        SaveManager.Save(0);
-        Destroyer.MainMenu();
+        SaveManager.Save(0, true);
     }
 }

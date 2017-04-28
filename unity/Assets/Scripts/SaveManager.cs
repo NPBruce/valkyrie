@@ -20,7 +20,12 @@ class SaveManager
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
-    public static void Save(int num = 0, Texture2D screen = null)
+    public static void Save(int num = 0, bool quit = false)
+    {
+        Game.Get().cc.TakeScreenshot(delegate { SaveWithScreen(num, quit); });
+    }
+
+    public static void SaveWithScreen(int num, bool quit = false)
     {
         Game game = Game.Get();
         try
@@ -45,14 +50,8 @@ class SaveManager
             File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-            if (screen == null)
-            {
-                screen = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-                screen.ReadPixels(new Rect(0, 0, screenSize.x, screenSize.y), 0, 0);
-                screen.Apply();
-            }
 
-            Color[] screenColor = screen.GetPixels(0);
+            Color[] screenColor = game.cc.screenShot.GetPixels(0);
 
             float scale = 4f / 30f;
             Texture2D outTex = new Texture2D(Mathf.RoundToInt(screenSize.x * scale), Mathf.RoundToInt(screenSize.y * scale), TextureFormat.RGB24, false);
@@ -97,6 +96,10 @@ class SaveManager
         catch (System.Exception e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
+        }
+        if (quit)
+        {
+            Destroyer.MainMenu();
         }
     }
 

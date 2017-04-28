@@ -7,7 +7,6 @@ namespace Assets.Scripts.UI.Screens
     class SaveSelectScreen
     {
         public bool save;
-        Texture2D screen;
         List<SaveManager.SaveData> saves;
         Game game = Game.Get();
         private readonly StringKey SELECT_SAVE = new StringKey("val", "SELECT_SAVE");
@@ -22,7 +21,6 @@ namespace Assets.Scripts.UI.Screens
                 // This will destroy all, because we shouldn't have anything left at the main menu
                 Destroyer.Destroy();
             }
-            screen = s;
 
             saves = SaveManager.GetSaves();
 
@@ -90,7 +88,7 @@ namespace Assets.Scripts.UI.Screens
                     tb.border.Destroy();
 
                     tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(), offset + 0.5f),
+                        new Vector2(UIScaler.GetHCenter(-1), offset + 0.5f),
                         new Vector2(20, 2f),
                         new StringKey(null, saves[i].saveTime.ToString(), false),
                         delegate { Select(tmp); });
@@ -99,7 +97,7 @@ namespace Assets.Scripts.UI.Screens
 
                     tb = new TextButton(
                         new Vector2(UIScaler.GetHCenter(-12), offset + 2.6f),
-                        new Vector2(32, 1f),
+                        new Vector2(31, 1f),
                         new StringKey(null, saves[i].quest, false),
                         delegate { Select(tmp); });
                     tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -136,7 +134,8 @@ namespace Assets.Scripts.UI.Screens
         {
             if (save)
             {
-                SaveManager.Save(num, screen);
+                SaveManager.SaveWithScreen(num);
+                Destroyer.Dialog();
             }
             else
             {
