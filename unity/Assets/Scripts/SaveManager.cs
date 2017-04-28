@@ -20,7 +20,7 @@ class SaveManager
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
-    public static void Save(int num = 0)
+    public static void Save(int num = 0, Texture2D screen = null)
     {
         Game game = Game.Get();
         try
@@ -45,9 +45,12 @@ class SaveManager
             File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-            Texture2D screen = new Texture2D(screenSize.width, screenSize.height, TextureFormat.RGB24, false);
-            screen.ReadPixels(new Rect(0, 0, screenSize.width, screenSize.height), 0, 0);
-            screen.Apply());
+            if (screen == null)
+            {
+                Texture2D screen = new Texture2D(screenSize.width, screenSize.height, TextureFormat.RGB24, false);
+                screen.ReadPixels(new Rect(0, 0, screenSize.width, screenSize.height), 0, 0);
+                screen.Apply());
+            }
 
             Color[] screenColor = screen.GetPixels(0);
 

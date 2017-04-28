@@ -7,13 +7,14 @@ namespace Assets.Scripts.UI.Screens
     class SaveSelectScreen
     {
         public bool save;
+        Texture2D screen;
         List<SaveManager.SaveData> saves;
         Game game = Game.Get();
         private readonly StringKey SELECT_SAVE = new StringKey("val", "SELECT_SAVE");
         private readonly StringKey SAVE = new StringKey("val", "SAVE");
         private readonly StringKey AUTOSAVE = new StringKey("val", "AUTOSAVE");
 
-        public SaveSelectScreen(bool performSave = false)
+        public SaveSelectScreen(bool performSave = false, Texture2D s = null)
         {
             save = performSave;
             if (!save)
@@ -21,6 +22,7 @@ namespace Assets.Scripts.UI.Screens
                 // This will destroy all, because we shouldn't have anything left at the main menu
                 Destroyer.Destroy();
             }
+            screen = s;
 
             saves = SaveManager.GetSaves();
 
@@ -30,22 +32,36 @@ namespace Assets.Scripts.UI.Screens
 
         private void CreateElements()
         {
+            float offset = 1f;
+            if (save)
+            {
+                offset += 2;
+                new DialogBox(new Vector2(UIScaler.GetHCenter(-16) , offset), new Vector2(32, 24), "");
+                offset += 1;
+            }
             // Options screen text
             DialogBox dbTittle = new DialogBox(
-                new Vector2(2, 1),
+                new Vector2(2, offset),
                 new Vector2(UIScaler.GetWidthUnits() - 4, 3),
                 SELECT_SAVE
                 );
             dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             dbTittle.SetFont(game.gameType.GetHeaderFont());
 
-            float offset = 5f;
+            offset += 4;
             TextButton tb;
             for (int i = 0; i < saves.Count; i++)
             {
                 int tmp = i;
                 if (saves[i].valid)
                 {
+                    string name = SAVE.Translate() + " " + i;
+                    if (i == 0)
+                    {
+                        if (save) continue;
+                        name = AUTOSAVE.Translate();
+                    }
+
                     tb = new TextButton(
                         new Vector2(UIScaler.GetHCenter(-20), offset),
                         new Vector2(40, 4f),
@@ -65,11 +81,6 @@ namespace Assets.Scripts.UI.Screens
                         tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     }
 
-                    string name = SAVE.Translate() + " " + i;
-                    if (i == 0)
-                    {
-                        name = AUTOSAVE.Translate();
-                    }
                     tb = new TextButton(
                         new Vector2(UIScaler.GetHCenter(-12), offset + 0.5f),
                         new Vector2(10, 2f),
@@ -106,9 +117,18 @@ namespace Assets.Scripts.UI.Screens
                 offset += 5;
             }
 
-            // Button for back to main menu
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),
-                CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+            if (save)
+            {
+                // Button for cancel
+                tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4), 24), new Vector2(8, 2),
+                    CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
+            }
+            else
+            {
+                // Button for back to main menu
+                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),
+                    CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+            }
             tb.SetFont(game.gameType.GetHeaderFont());
         }
 
@@ -116,7 +136,7 @@ namespace Assets.Scripts.UI.Screens
         {
             if (save)
             {
-                SaveManager.Save(num);
+                SaveManager.Save(num, screen);
             }
             else
             {
