@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
 
 // Class to manage all data for the current quest
 public class Quest
 {
     // QuestData
     public QuestData qd;
+
+    // Original Quest Path
+    public string questPath = "";
 
     // components on the board (tiles, tokens, doors)
     public Dictionary<string, BoardComponent> boardItems;
@@ -64,6 +68,7 @@ public class Quest
 
         // Static data from the quest file
         qd = new QuestData(q);
+        questPath = Path.GetDirectoryName(qd.questPath);
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
@@ -252,6 +257,76 @@ public class Quest
         LoadQuest(saveData);
     }
 
+    public void ChangeQuest(string path)
+    {
+        phase = MoMPhase.investigator;
+        game.cc.gameObject.transform.position = new Vector3(0, 0, -8);
+
+        game.cc.minLimit = false;
+        game.cc.maxLimit = false;
+
+        // Set static quest data
+        qd = new QuestData(questPath + "/" + path);
+
+        vars.TrimQuest();
+
+        undo = new Stack<string>();
+
+        // Initialise data
+        boardItems = new Dictionary<string, BoardComponent>();
+        monsters = new List<Monster>();
+        heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, Puzzle>();
+        eventQuota = new Dictionary<string, int>();
+        undo = new Stack<string>();
+        monsterSelect = new Dictionary<string, string>();
+
+        GenerateMonsterSelection();
+        eManager = new EventManager();
+
+        // Set quest vars for selected expansions
+        foreach (string s in game.cd.GetLoadedPackIDs())
+        {
+            if (s.Length > 0)
+            {
+                vars.SetValue("#" + s, 1);
+            }
+        }
+        vars.SetValue("#round", 1);
+
+        // Set quest flag based on hero count
+        int heroCount = 0;
+        foreach (Quest.Hero h in heroes)
+        {
+            if (h.heroData != null) heroCount++;
+        }
+        game.quest.vars.SetValue("#heroes", heroCount);
+
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
+        // Update the screen
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
+
+        if (game.gameType is D2EGameType)
+        {
+            // Start round events
+            eManager.EventTriggerType("StartRound", false);
+            // Start the quest (top of stack)
+            eManager.EventTriggerType("EventStart", false);
+            eManager.TriggerEvent();
+        }
+        else
+        {
+            new InvestigatorItems();
+        }
+    }
+
     // Read save data
     public void LoadQuest(IniData saveData)
     {
@@ -293,8 +368,9 @@ public class Quest
         }
 
         // Set static quest data
-        string questPath = saveData.Get("Quest", "path");
-        qd = new QuestData(questPath);
+        qd = new QuestData(saveData.Get("Quest", "path"));
+
+        questPath = saveData.Get("Quest", "originalpath");
 
         monsterSelect = saveData.Get("SelectMonster");
         if (monsterSelect == null)
@@ -346,9 +422,6 @@ public class Quest
         {
             items.Add(kv.Key);
         }
-
-        // Restart event EventManager
-        eManager = new EventManager();
 
         // Clean undo stack (we don't save undo stack)
         // When performing undo this is replaced later
@@ -424,6 +497,8 @@ public class Quest
             int.TryParse(kv.Value, out value);
             eventQuota.Add(kv.Key, value);
         }
+
+        eManager = new EventManager(saveData.Get("EventManager"));
 
         // Update the screen
         game.monsterCanvas.UpdateList();
@@ -537,6 +612,10 @@ public class Quest
         {
             boardItems.Add(name, new Token((QuestData.Token)qc, game));
         }
+        if (qc is QuestData.UI)
+        {
+            boardItems.Add(name, new UI((QuestData.UI)qc, game));
+        }
     }
 
     // Remove a list of active components
@@ -640,6 +719,7 @@ public class Quest
         r += "valkyrie=" + game.version + nl;
 
         r += "path=" + qd.questPath + nl;
+        r += "originalpath=" + questPath + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
@@ -731,6 +811,8 @@ public class Quest
         {
             r += kv.Key + "=" + kv.Value + nl;
         }
+
+        r += eManager.ToString();
 
         return r;
     }
@@ -886,6 +968,50 @@ public class Quest
         public override QuestData.Event GetEvent()
         {
             return qToken;
+        }
+
+        // Clean up
+        public override void Remove()
+        {
+            Object.Destroy(unityObject);
+        }
+    }
+
+    // Tokens are events that are tied to a token placed on the board
+    public class UI : BoardComponent
+    {
+        // Quest info on the token
+        public QuestData.UI qUI;
+
+        // Construct with quest info and reference to Game
+        public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
+        {
+            qUI = questUI;
+
+            Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+
+            // Create object
+            unityObject = new GameObject("Object" + qUI.sectionName);
+            unityObject.tag = "board";
+
+            unityObject.transform.parent = game.uICanvas.transform;
+
+            // Create the image
+            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            image.color = new Color(1, 1, 1, 0);
+            image.sprite = tileSprite;
+
+            //FIXME
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 200, 100);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 200, 100);
+            game.tokenBoard.Add(this);
+        }
+
+        // Tokens have an associated event to start on press
+        public override QuestData.Event GetEvent()
+        {
+            return qUI;
         }
 
         // Clean up

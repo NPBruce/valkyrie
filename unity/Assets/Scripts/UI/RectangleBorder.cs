@@ -91,4 +91,12 @@ public class RectangleBorder{
         bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, size.y* UIScaler.GetPixelsPerUnit());
         bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, thick);
 	}
+
+    public void Destroy()
+    {
+        Object.Destroy(bLine[0]);
+        Object.Destroy(bLine[1]);
+        Object.Destroy(bLine[2]);
+        Object.Destroy(bLine[3]);
+    }
 }

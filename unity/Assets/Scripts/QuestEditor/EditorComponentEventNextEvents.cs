@@ -46,6 +46,14 @@ public class EditorComponentEventNextEvent : EditorComponent
         {
             type = QuestData.Token.type;
         }
+        if (eventComponent is QuestData.Puzzle)
+        {
+            type = QuestData.Puzzle.type;
+        }
+        if (eventComponent is QuestData.UI)
+        {
+            type = QuestData.UI.type;
+        }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
             new StringKey(null,type,false), 

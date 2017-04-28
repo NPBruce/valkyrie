@@ -66,6 +66,10 @@ public class EditorComponentEvent : EditorComponent
         {
             type = QuestData.Puzzle.type;
         }
+        if (eventComponent is QuestData.UI)
+        {
+            type = QuestData.UI.type;
+        }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
             new StringKey(null,type,false), delegate { QuestEditorData.TypeSelect(); });

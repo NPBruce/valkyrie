@@ -2,6 +2,7 @@
 using UnityEngine;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
 
 // Class for managing quest events
 public class EventManager
@@ -18,6 +19,16 @@ public class EventManager
     public Event currentEvent;
 
     public EventManager()
+    {
+        Init(null);
+    }
+
+    public EventManager(Dictionary<string, string> data)
+    {
+        Init(data);
+    }
+
+    public void Init(Dictionary<string, string> data)
     {
         game = Game.Get();
 
@@ -46,6 +57,19 @@ public class EventManager
         {
             events.Add(kv.Key, new Peril(kv.Key));
         }
+
+        if (data != null && data.ContainsKey("queue"))
+        {
+            foreach (string s in data["queue"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            {
+                eventStack.Push(events[s]);
+            }
+        }
+        if (data != null && data.ContainsKey("currentevent"))
+        {
+            currentEvent = events[data["currentevent"]];
+            ResumeEvent();
+        }
     }
 
     // Queue all events by trigger, optionally start
@@ -66,8 +90,15 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
-            return;
+            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
+            {
+                events.Add(name, new StartQuestEvent(name));
+            }
+            else
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
+                return;
+            }
         }
 
         // Don't queue disabled events
@@ -97,6 +128,14 @@ public class EventManager
         Event e = eventStack.Pop();
         currentEvent = e;
 
+        // Move to another quest
+        if (e is StartQuestEvent)
+        {
+            // This loads the game
+            game.quest.ChangeQuest((e as StartQuestEvent).name);
+            return;
+        }
+
         // Event may have been disabled since added
         if (e.Disabled())
         {
@@ -112,11 +151,16 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
         // Perform var operations
         game.quest.vars.Perform(e.qEvent.operations);
+        // Update morale change
+        if (game.gameType is D2EGameType)
+        {
+            game.quest.AdjustMorale(0);
+        }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
@@ -216,6 +260,44 @@ public class EventManager
         {
             new DialogWindow(e);
         }
+    }
+
+    public void ResumeEvent()
+    {
+        Event e = currentEvent;
+        if (e is MonsterEvent)
+        {
+            // Display the location(s)
+            if (e.qEvent.locationSpecified && e.qEvent.display)
+            {
+                game.tokenBoard.AddMonster(e as MonsterEvent);
+            }
+        }
+
+        // Highlight a space on the board
+        if (e.qEvent.highlight)
+        {
+            game.tokenBoard.AddHighlight(e.qEvent);
+        }
+
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            QuestData.Puzzle p = e.qEvent as QuestData.Puzzle;
+            if (p.puzzleClass.Equals("slide"))
+            {
+                new PuzzleSlideWindow(e);
+            }
+            if (p.puzzleClass.Equals("code"))
+            {
+                new PuzzleCodeWindow(e);
+            }
+            if (p.puzzleClass.Equals("image"))
+            {
+                new PuzzleImageWindow(e);
+            }
+            return;
+        }
+        new DialogWindow(e);
     }
 
     // Event ended (pass or set as fail)
@@ -370,9 +452,24 @@ public class EventManager
         }
 
         // Is this event disabled?
-        public bool Disabled()
+        virtual public bool Disabled()
         {
             return !game.quest.vars.Test(qEvent.conditions);
+        }
+    }
+
+    public class StartQuestEvent : Event
+    {
+        public string name;
+
+        public StartQuestEvent(string n) : base(n)
+        {
+            name = n;
+        }
+
+        override public bool Disabled()
+        {
+            return false;
         }
     }
 
@@ -433,6 +530,26 @@ public class EventManager
             qEvent = game.cd.perils[name] as QuestData.Event;
             cPeril = qEvent as PerilData;
         }
+    }
+
+
+    public override string ToString()
+    {
+        //Game game = Game.Get();
+        string nl = System.Environment.NewLine;
+        // General quest state block
+        string r = "[EventManager]" + nl;
+        r += "queue=";
+        foreach (Event e in eventStack.ToArray())
+        {
+            r += e.qEvent.sectionName + " ";
+        }
+        r += nl;
+        if (currentEvent != null)
+        {
+            r += "currentevent=" + currentEvent.qEvent.sectionName + nl;
+        }
+        return r;
     }
 
     /// <summary>
