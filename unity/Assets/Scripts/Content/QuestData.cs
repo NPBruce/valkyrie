@@ -389,7 +389,7 @@ public class QuestData
     {
         new public static string type = "UI";
         public string imageName = "";
-        public Vector2 size;
+        public float size = 1;
 
         // Create new with name (used by editor)
         public UI(string s) : base(s)
@@ -397,7 +397,6 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
-            size = Vector2.zero;
         }
 
         // Create from ini data
@@ -413,18 +412,9 @@ public class QuestData
                 imageName = data["image"];
             }
 
-            size = Vector2.zero;
-            if (data.ContainsKey("sizex"))
+            if (data.ContainsKey("size"))
             {
-                float sizeX = 0;
-                float.TryParse(data["sizex"], out sizeX);
-                size.x = sizeX;
-            }
-            if (data.ContainsKey("sizey"))
-            {
-                float sizeY = 0;
-                float.TryParse(data["sizey"], out sizeY);
-                size.y = sizeY;
+                float.TryParse(data["size"], out size);
             }
         }
 
@@ -435,8 +425,7 @@ public class QuestData
             string r = base.ToString();
 
             r += "image=" + imageName + nl;
-            r += "sizex=" + size.x + nl;
-            r += "sizey=" + size.y + nl;
+            r += "size=" + size + nl;
             return r;
         }
     }

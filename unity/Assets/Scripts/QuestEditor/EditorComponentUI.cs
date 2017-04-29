@@ -9,8 +9,7 @@ public class EditorComponentUI : EditorComponent
     EditorSelectionList imageList;
     DialogBoxEditable locXDBE;
     DialogBoxEditable locYDBE;
-    DialogBoxEditable sizeXDBE;
-    DialogBoxEditable sizeYDBE;
+    DialogBoxEditable sizeDBE;
 
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
@@ -67,28 +66,19 @@ public class EditorComponentUI : EditorComponent
         locYDBE.ApplyTag("editor");
         locYDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 6), new Vector2(10, 1), new StringKey("val", "SIZE"));
+        db = new DialogBox(new Vector2(0, 6), new Vector2(8, 1), new StringKey("val", "SIZE"));
         db.ApplyTag("editor");
 
-        db = new DialogBox(new Vector2(0, 7), new Vector2(2, 1), new StringKey(null, "X:", false));
-        db.ApplyTag("editor");
-
-        sizeXDBE = new DialogBoxEditable(new Vector2(2, 7), new Vector2(3, 1),
-            uiComponent.size.x.ToString(), delegate { UpdateNumbers(); });
-        sizeXDBE.ApplyTag("editor");
-        sizeXDBE.AddBorder();
-
-        db = new DialogBox(new Vector2(5, 7), new Vector2(2, 1), new StringKey(null, "Y:", false));
-        db.ApplyTag("editor");
-
-        sizeYDBE = new DialogBoxEditable(new Vector2(7, 7), new Vector2(3, 1),
-            uiComponent.size.y.ToString(), delegate { UpdateNumbers(); });
-        sizeYDBE.ApplyTag("editor");
-        sizeYDBE.AddBorder();
+        sizeDBE = new DialogBoxEditable(new Vector2(8, 6), new Vector2(3, 1),
+            uiComponent.size.ToString(), delegate { UpdateNumbers(); });
+        sizeDBE.ApplyTag("editor");
+        sizeDBE.AddBorder();
 
         tb = new TextButton(new Vector2(0, 9), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
+
+        game.quest.ChangeAlpha(uiComponent.sectionName, 1f);
     }
 
     public void SetImage()
@@ -110,6 +100,8 @@ public class EditorComponentUI : EditorComponent
     public void SelectImage()
     {
         uiComponent.imageName = imageList.selection;
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -123,14 +115,12 @@ public class EditorComponentUI : EditorComponent
         {
             float.TryParse(locYDBE.Text, out uiComponent.location.y);
         }
-        if (!sizeXDBE.Text.Equals(""))
+        if (!sizeDBE.Text.Equals(""))
         {
-            float.TryParse(sizeXDBE.Text, out uiComponent.size.x);
+            float.TryParse(sizeDBE.Text, out uiComponent.size);
         }
-        if (!sizeYDBE.Text.Equals(""))
-        {
-            float.TryParse(sizeYDBE.Text, out uiComponent.size.y);
-        }
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
         Update();
     }
 }

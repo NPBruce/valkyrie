@@ -267,6 +267,7 @@ public class Quest
 
         // Set static quest data
         qd = new QuestData(questPath + "/" + path);
+        questPath = Path.GetDirectoryName(qd.questPath);
 
         vars.TrimQuest();
 
@@ -298,7 +299,9 @@ public class Quest
         int heroCount = 0;
         foreach (Quest.Hero h in heroes)
         {
-            if (h.heroData != null) heroCount++;
+            h.activated = false;
+            h.defeated = false;
+            h.selected = false;
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
@@ -1002,9 +1005,16 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
+            // Position and Scale assume a 16x9 aspect
+            float templateHeight = (float)Screen.width * 9f / 16f;
+            float vOffset = ((float)Screen.height - templateHeight) / 2f;
+            float hSize = (float)Screen.width * qUI.size;
+            float vSize = hSize * (float)newTex.height / (float)newTex.width;
+            float hPos = (float)Screen.width * qUI.location.x;
+            float vPos = (templateHeight * qUI.location.y) + vOffset;
             //FIXME
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 200, 100);
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 200, 100);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vPos, vSize);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hPos, hSize);
             game.tokenBoard.Add(this);
         }
 
@@ -1013,6 +1023,18 @@ public class Quest
         {
             return qUI;
         }
+
+        // Set visible can control the transparency level of the component
+        public override void SetVisible(float alpha)
+        {
+            if (image == null)
+                return;
+            targetAlpha = alpha;
+            // Hide in editor
+            if (targetAlpha < 0.5f) targetAlpha = 0;
+            return;
+        }
+
 
         // Clean up
         public override void Remove()
