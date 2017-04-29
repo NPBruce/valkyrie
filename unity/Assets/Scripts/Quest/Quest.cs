@@ -991,13 +991,24 @@ public class Quest
         {
             qUI = questUI;
 
+            // Find quest UI panel
+            GameObject panel = GameObject.Find("QuestUIPanel");
+            if (panel == null)
+            {
+                // Create UI Panel
+                panel = new GameObject("QuestUIPanel");
+                panel.tag = "board";
+                panel.transform.parent = game.uICanvas.transform;
+                panel.transform.SetAsFirstSibling();
+            }
+
             Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
 
             // Create object
             unityObject = new GameObject("Object" + qUI.sectionName);
             unityObject.tag = "board";
 
-            unityObject.transform.parent = game.uICanvas.transform;
+            unityObject.transform.parent = panel.transform;
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
@@ -1012,9 +1023,8 @@ public class Quest
             float vSize = hSize * (float)newTex.height / (float)newTex.width;
             float hPos = (float)Screen.width * qUI.location.x;
             float vPos = (templateHeight * qUI.location.y) + vOffset;
-            //FIXME
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vPos, vSize);
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hPos, hSize);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vPos - (vSize / 2), vSize);
+            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hPos - (hSize / 2), hSize);
             game.tokenBoard.Add(this);
         }
 
