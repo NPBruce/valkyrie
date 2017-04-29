@@ -505,7 +505,7 @@ public class EditorComponentEvent : EditorComponent
         }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token)
+            if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token || kv.Value is QuestData.UI)
             {
                 components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
