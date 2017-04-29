@@ -672,6 +672,15 @@ public class Quest
         }
     }
 
+    public bool UIItemsPresent()
+    {
+        foreach (BoardComponent c in boardItems.Values)
+        {
+            if (c is UI) return true;
+        }
+        return false;
+    }
+
     // Remove all active components
     public void RemoveAll()
     {

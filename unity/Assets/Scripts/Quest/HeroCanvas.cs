@@ -235,7 +235,10 @@ public class HeroCanvas : MonoBehaviour {
         // We are in game and a valid hero was selected
         if (game.quest.heroesSelected && target.heroData != null)
         {
-            new HeroDialog(target);
+            if (!game.quest.UIItemsPresent())
+            {
+                new HeroDialog(target);
+            }
         }
     }
 

@@ -77,6 +77,8 @@ public class NextStageButton
 
         Game game = Game.Get();
 
+        if (game.quest.UIItemsPresent()) return;
+
         // Add to undo stack
         game.quest.Save();
 
