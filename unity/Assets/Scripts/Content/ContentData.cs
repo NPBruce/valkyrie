@@ -22,6 +22,7 @@ public class ContentData {
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
     public Dictionary<string, PuzzleData> puzzles;
+    public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
 
     public static string ContentPath()
@@ -78,6 +79,9 @@ public class ContentData {
 
         // This has all avilable puzzle images
         puzzles = new Dictionary<string, PuzzleData>();
+
+        // This has all avilable general images
+        images = new Dictionary<string, ImageData>();
 
         // This has all avilable puzzle images
         audio = new Dictionary<string, AudioData>();
@@ -549,6 +553,26 @@ public class ContentData {
             }
         }
 
+        // Is this a "Image" entry?
+        if (name.IndexOf(ImageData.type) == 0)
+        {
+            ImageData d = new ImageData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!images.ContainsKey(name))
+            {
+                images.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (images[name].priority < d.priority)
+            {
+                images.Remove(name);
+                images.Add(name, d);
+            }
+        }
+
         // Is this a "Audio" entry?
         if (name.IndexOf(AudioData.type) == 0)
         {
@@ -875,6 +899,16 @@ public class TokenData : GenericData
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
+        init(content);
+    }
+
+    public TokenData(string name, Dictionary<string, string> content, string path, string typeIn) : base(name, content, path, typeIn)
+    {
+        init(content);
+    }
+
+    public void init(Dictionary<string, string> content)
+    {
         if (content.ContainsKey("x"))
         {
             int.TryParse(content["x"], out x);
@@ -998,6 +1032,16 @@ public class PuzzleData : GenericData
     public static new string type = "Puzzle";
 
     public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+    }
+}
+
+// Class for images
+public class ImageData : TokenData
+{
+    public static new string type = "Image";
+
+    public ImageData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
     }
 }
