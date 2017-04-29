@@ -72,7 +72,7 @@ namespace Assets.Scripts.UI.Screens
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
                     new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    Color.red);
+                    Color.grey);
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.SetFont(game.gameType.GetHeaderFont());
                 db.AddBorder();
