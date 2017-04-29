@@ -1000,6 +1000,9 @@ public class Quest
                 panel.tag = "board";
                 panel.transform.parent = game.uICanvas.transform;
                 panel.transform.SetAsFirstSibling();
+                panel.AddComponent<RectTransform>();
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
             }
 
             Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
