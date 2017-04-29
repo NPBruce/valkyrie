@@ -79,6 +79,43 @@ public class EditorComponentUI : EditorComponent
         tb.ApplyTag("editor");
 
         game.quest.ChangeAlpha(uiComponent.sectionName, 1f);
+
+
+        // Create a grey zone outside of the 16x9 boundary
+        // Find quest UI panel
+        GameObject panel = GameObject.Find("QuestUIPanel");
+        if (panel == null)
+        {
+            // Create UI Panel
+            panel = new GameObject("QuestUIPanel");
+            panel.tag = "board";
+            panel.transform.parent = game.uICanvas.transform;
+            panel.transform.SetAsFirstSibling();
+            panel.AddComponent<RectTransform>();
+            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
+            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
+        }
+
+        // Create object
+        GameObject unityObject = new GameObject("greyzonetop");
+        unityObject.tag = "editor";
+        unityObject.transform.parent = panel.transform;
+        unityObject.AddComponent<UnityEngine.UI.Image>();
+        unityObject.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 0.5f);
+
+        // Position and Scale assume a 16x9 aspect
+        float templateHeight = (float)Screen.width * 9f / 16f;
+        float vOffset = ((float)Screen.height - templateHeight) / 2f;
+        unityObject.GetComponent<UnityEngine.UI.Image>().rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vOffset);
+        unityObject.GetComponent<UnityEngine.UI.Image>().rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, Screen.width);
+
+        unityObject = new GameObject("greyzonebuttom");
+        unityObject.tag = "editor";
+        unityObject.transform.parent = panel.transform;
+        unityObject.AddComponent<UnityEngine.UI.Image>();
+        unityObject.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 0.5f);
+        unityObject.GetComponent<UnityEngine.UI.Image>().rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, vOffset);
+        unityObject.GetComponent<UnityEngine.UI.Image>().rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, Screen.width);
     }
 
     public void SetImage()
