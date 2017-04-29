@@ -413,6 +413,10 @@ public class Quest
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
             }
+            if (kv.Key.IndexOf("UI") == 0)
+            {
+                boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
+            }
         }
 
         // Restore event log
