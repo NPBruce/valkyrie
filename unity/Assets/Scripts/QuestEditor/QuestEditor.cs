@@ -69,6 +69,7 @@ public class QuestEditor {
         content.AppendLine("tokens.ini");
         content.AppendLine("spawns.ini");
         content.AppendLine("monsters.ini");
+        content.AppendLine("ui.ini");
         content.AppendLine("other.ini");
 
         StringBuilder tiles = new StringBuilder()
@@ -88,6 +89,10 @@ public class QuestEditor {
             .AppendLine(game.version);
 
         StringBuilder monsters = new StringBuilder()
+            .Append("; Saved by version: ")
+            .AppendLine(game.version);
+
+        StringBuilder uis = new StringBuilder()
             .Append("; Saved by version: ")
             .AppendLine(game.version);
 
@@ -118,6 +123,10 @@ public class QuestEditor {
             {
                 monsters.AppendLine().Append(kv.Value);
             }
+            else if (kv.Value is QuestData.UI)
+            {
+                uis.AppendLine().Append(kv.Value);
+            }
             // Skip peril, not a quest component
             else if (!(kv.Value is PerilData))
             {
@@ -134,8 +143,8 @@ public class QuestEditor {
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/tokens.ini", tokens.ToString());
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/spawns.ini", spawns.ToString());
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/monsters.ini", monsters.ToString());
+            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/ui.ini", uis.ToString());
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/other.ini", other.ToString());
-
 
             string ini_content = content.ToString();
             ini_content += tiles.ToString();

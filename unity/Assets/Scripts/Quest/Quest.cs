@@ -259,6 +259,13 @@ public class Quest
 
     public void ChangeQuest(string path)
     {
+        Game game = Game.Get();
+
+        // Clean up everything marked as 'board'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+            Object.Destroy(go);
+        game.tokenBoard.tc.Clear();
+
         phase = MoMPhase.investigator;
         game.cc.gameObject.transform.position = new Vector3(0, 0, -8);
 
