@@ -130,6 +130,8 @@ namespace Assets.Scripts.UI.Screens
             if (!fcD2E.NeedImport())
             {
                 Game.Get().gameType = new D2EGameType();
+                Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
+                Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
                 Destroyer.MainMenu();
             }
@@ -155,6 +157,8 @@ namespace Assets.Scripts.UI.Screens
                 Game.Get().gameType = new MoMGameType();
                 // MoM also has a special reound controller
                 Game.Get().roundControl = new RoundControllerMoM();
+                Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
+                Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
                 Destroyer.MainMenu();
             }
