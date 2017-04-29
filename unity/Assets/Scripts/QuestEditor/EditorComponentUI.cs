@@ -87,11 +87,15 @@ public class EditorComponentUI : EditorComponent
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
+        foreach (KeyValuePair<string, ImageData> kv in Game.Get().cd.images)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "FFG"));
         }
         imageList = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
         imageList.SelectItem();

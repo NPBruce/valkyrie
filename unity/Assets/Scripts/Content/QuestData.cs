@@ -395,6 +395,8 @@ public class QuestData
         public UI(string s) : base(s)
         {
             locationSpecified = true;
+            location.x = 0.5f;
+            location.y = 0.5f;
             typeDynamic = type;
             cancelable = true;
         }

@@ -1014,7 +1014,17 @@ public class Quest
                 panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
             }
 
-            Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+            Texture2D newTex = null;
+            if (game.cd.images.ContainsKey(qUI.imageName))
+            {
+                Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
+                Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
+                newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+            }
+            else
+            {
+                newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+            }
 
             // Create object
             unityObject = new GameObject("Object" + qUI.sectionName);
