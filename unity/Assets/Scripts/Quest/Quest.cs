@@ -323,18 +323,12 @@ public class Quest
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
 
-        if (game.gameType is D2EGameType)
-        {
-            // Start round events
-            eManager.EventTriggerType("StartRound", false);
-            // Start the quest (top of stack)
-            eManager.EventTriggerType("EventStart", false);
-            eManager.TriggerEvent();
-        }
-        else
-        {
-            new InvestigatorItems();
-        }
+        // Start round events
+        eManager.EventTriggerType("StartRound", false);
+        // Start the quest (top of stack)
+        eManager.EventTriggerType("EventStart", false);
+        eManager.TriggerEvent();
+        SaveManager.Save(0);
     }
 
     // Read save data
