@@ -389,14 +389,15 @@ public class QuestData
     {
         new public static string type = "UI";
         public string imageName = "";
+        public bool verticalUnits = false;
+        public int hAlign = 0;
+        public int vAlign = 0;
         public float size = 1;
 
         // Create new with name (used by editor)
         public UI(string s) : base(s)
         {
             locationSpecified = true;
-            location.x = 0.5f;
-            location.y = 0.5f;
             typeDynamic = type;
             cancelable = true;
         }
@@ -414,9 +415,38 @@ public class QuestData
                 imageName = data["image"];
             }
 
+            if (data.ContainsKey("vunits"))
+            {
+                bool.TryParse(data["vunits"], out verticalUnits);
+            }
+
             if (data.ContainsKey("size"))
             {
                 float.TryParse(data["size"], out size);
+            }
+
+            if (data.ContainsKey("halign"))
+            {
+                if (data["halign"].Equals("left"))
+                {
+                    hAlign = -1;
+                }
+                if (data["halign"].Equals("right"))
+                {
+                    hAlign = 1;
+                }
+            }
+
+            if (data.ContainsKey("valign"))
+            {
+                if (data["valign"].Equals("top"))
+                {
+                    hAlign = -1;
+                }
+                if (data["valign"].Equals("bottom"))
+                {
+                    hAlign = 1;
+                }
             }
         }
 
@@ -428,6 +458,30 @@ public class QuestData
 
             r += "image=" + imageName + nl;
             r += "size=" + size + nl;
+
+            if (verticalUnits)
+            {
+                r += "vunits=" + verticalUnits + nl;
+            }
+
+            if (hAlign < 0)
+            {
+                r += "halign=left" + nl;
+            }
+            if (hAlign > 0)
+            {
+                r += "halign=right" + nl;
+            }
+
+            if (vAlign < 0)
+            {
+                r += "valign=top" + nl;
+            }
+            if (vAlign > 0)
+            {
+                r += "valign=bottom" + nl;
+            }
+
             return r;
         }
     }
