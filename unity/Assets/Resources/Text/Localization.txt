@@ -187,6 +187,10 @@ TYPES,Types,Tipos,Types,Typen,Tipi,,,,
 UNABLE_BUTTON,Unable Button:,Botón No Puede:,Bouton impossible,Unmöglich-Button:,Pulsante Disabilitato:,,,,
 
 UI,UI,,,,,,,,
+UNITS,Units,,,,,,,,
+HORIZONTAL,Horizontal,,,,,,,,
+VERTICAL,Vertical,,,,,,,,
+ALIGN,Align,,,,,,,,
 POSITION,Position,,,,,,,,
 SIZE,Size,,,,,,,,
 
