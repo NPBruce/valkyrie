@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI.Screens
 
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
+            scrollRect.scrollSensitivity = 27f;
 
             TextButton tb;
             // Start here
