@@ -165,7 +165,7 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (Quest.Hero h in game.quest.heroes)
             {
-                if (h != null && h.className.Length == 0) return;
+                if (h.heroData != null && h.className.Length == 0) return;
             }
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
                 Object.Destroy(go);
