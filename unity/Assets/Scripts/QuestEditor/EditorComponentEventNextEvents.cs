@@ -86,7 +86,8 @@ public class EditorComponentEventNextEvent : EditorComponent
         // Quota dont need translation
         quotaDBE = new DialogBoxEditable(
             new Vector2(6, 1), new Vector2(2, 1),
-            eventComponent.quota.ToString(), delegate { SetQuota(); });
+            eventComponent.quota.ToString(), false, 
+            delegate { SetQuota(); });
         quotaDBE.ApplyTag("editor");
         quotaDBE.AddBorder();
 
@@ -122,7 +123,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
             DialogBoxEditable buttonEdit = new DialogBoxEditable(
                 new Vector2(3, offset++), new Vector2(16, 1), 
-                buttonLabel.Translate(),
+                buttonLabel.Translate(), false,
                 delegate { UpdateButtonLabel(buttonTmp); });
 
             buttonEdit.ApplyTag("editor");

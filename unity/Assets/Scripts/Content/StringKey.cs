@@ -152,7 +152,7 @@ namespace Assets.Scripts.Content
             } else
             {
                 //non heys can have newline characters
-                return fullKey.Replace("\\n", System.Environment.NewLine);
+                return fullKey.Replace("\\n", "\n");
             }
         }
 
@@ -171,7 +171,7 @@ namespace Assets.Scripts.Content
         /// <returns>key</returns>
         public override string ToString()
         {
-            return fullKey.Replace(System.Environment.NewLine, "\\n");
+            return fullKey.Replace("\n", "\\n");
         }
     }
 }

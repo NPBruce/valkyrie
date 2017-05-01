@@ -689,5 +689,34 @@ public class EventManager
 
         return output;
     }
+
+    public static readonly Dictionary<string, Dictionary<string, string>> CHARS_MAP =
+        new Dictionary<string, Dictionary<string, string>>()
+                {
+                    { "D2E", new Dictionary<string,string>()
+                    {
+                        {"≥","{heart}"},
+                        {"∏","{fatigue}"},
+                        {"∂","{might}"},
+                        {"π","{will}"},
+                        {"∞","{action}"},
+                        {"∑","{knowledge}"},
+                        {"μ","{awareness}"},
+                        {"≤","{shield}" },
+                        {"±","{surge}"}
+                    } },
+                    { "MoM", new Dictionary<string,string>()
+                    {
+                        {"","{will}"},
+                        {"","{action}" },
+                        {"","{strength}"},
+                        {"","{agility}"},
+                        {"","{lore}"},
+                        {"","{influence}"},
+                        {"","{observation}"},
+                        {"","{success}"},
+                        {"","{clue}"}
+                    } }
+                };
 }
 
