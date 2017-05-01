@@ -52,8 +52,11 @@ public class ContentData {
         // Available heros
         heroes = new Dictionary<string, HeroData>();
 
-        // Available heros
+        // Available classes
         classes = new Dictionary<string, ClassData>();
+
+        // Available skills
+        skills = new Dictionary<string, SkillData>();
 
         // Available items
         items = new Dictionary<string, ItemData>();
