@@ -11,6 +11,8 @@ public class PaneledDialogBoxEditable
     private GameObject background;
     private GameObject inputObj;
 
+    private List<TextButton> specialCharsButtons;
+
     private PanCancelInputField uiInput;
 
     public void ApplyTag(string tag)
@@ -18,6 +20,10 @@ public class PaneledDialogBoxEditable
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
+        foreach (TextButton tb in specialCharsButtons)
+        {
+            tb.ApplyTag(tag);
+        }
     }
 
     /// <summary>
@@ -81,12 +87,12 @@ public class PaneledDialogBoxEditable
 
         float offset = location.y;
         TextButton tb = null;
-        DialogBox db = null;
         StringKey translated = null;
         float hOffset = location.x;
         Dictionary<string, string> CHARS = null;
         EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
         float width = size.x / CHARS.Keys.Count;
+        specialCharsButtons = new List<TextButton>();
         if (CHARS != null)
         {
             foreach (string oneChar in CHARS.Keys)
@@ -104,8 +110,10 @@ public class PaneledDialogBoxEditable
                     new Vector2(hOffset, offset), new Vector2(width, 1),
                     translated, 
                     delegate { InsertCharacter(translation); });
+                tb.ApplyTag("dialog");
 
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                specialCharsButtons.Add(tb);
                 hOffset += width;
             }
         }
