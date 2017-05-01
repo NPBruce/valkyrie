@@ -81,7 +81,6 @@ public class PaneledDialogBoxEditable
 
         float offset = location.y;
         TextButton tb = null;
-        DialogBox db = null;
         StringKey translated = null;
         float hOffset = location.x;
         Dictionary<string, string> CHARS = null;
