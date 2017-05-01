@@ -1256,6 +1256,7 @@ public class Quest
         public int id = 0;
         // Used for events that can select or highlight heros
         public bool selected;
+        public string className = "";
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
