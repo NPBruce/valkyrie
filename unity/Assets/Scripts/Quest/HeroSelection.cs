@@ -57,6 +57,7 @@ public class HeroSelection {
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         float offset = 4.5f;
         TextButton tb = null;

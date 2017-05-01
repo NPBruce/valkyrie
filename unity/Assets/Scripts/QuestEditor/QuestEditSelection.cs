@@ -57,6 +57,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;
@@ -148,6 +149,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;
@@ -246,6 +248,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;

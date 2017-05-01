@@ -52,6 +52,7 @@ public class LogWindow
         RectTransform textRect = db.textObj.GetComponent<RectTransform>();
         textRect.sizeDelta = new Vector2(textRect.rect.width, db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight);
         scrollRect.verticalNormalizedPosition = 0f;
+        scrollRect.scrollSensitivity = 27f;
 
         UnityEngine.UI.Mask mask = db.background.AddComponent<UnityEngine.UI.Mask>();
 
@@ -79,6 +80,7 @@ public class LogWindow
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of vars
         float offset = 1;

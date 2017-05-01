@@ -104,6 +104,7 @@ public class PuzzleCodeWindow
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         float vPos = 7f;
         foreach (PuzzleCode.CodeGuess g in puzzle.guess)
