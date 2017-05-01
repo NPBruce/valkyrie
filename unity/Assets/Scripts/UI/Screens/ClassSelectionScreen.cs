@@ -76,11 +76,54 @@ namespace Assets.Scripts.UI.Screens
                 scrollRect.horizontal = false;
 
                 float yOffset = 8f;
-                TextButton tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, 4f), CommonStringKeys.ACTIVATION, delegate { ; }, Color.clear);
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag("heroselect");
+
+                foreach (ClassData cd in game.cd.classes.Values)
+                {
+                    if (!cd.archetype.Equals(game.quest.heroes[i].heroData.archetype)) continue;
+
+                    db = new DialogBox(new Vector2(0, 0), new Vector2(7f, 1.2f), cd.name);
+                    float height = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit());
+                    db.Destroy();
+
+                    string className = cd.sectionName;
+                    bool available = true;
+                    bool pick = false;
+
+                    for (int j = 0; j < heroCount; j++)
+                    {
+                        if (game.quest.heroes[j].className.Equals(className))
+                        {
+                            available = false;
+                            if (i == j)
+                            {
+                                pick = true;
+                            }
+                        }
+                    }
+
+                    TextButton tb = null;
+                    if (available)
+                    {
+                        int tmp = i;
+                        tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, height + 1.5f), cd.name, delegate { Select(tmp, className); }, Color.clear);
+                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    }
+                    else
+                    {
+                        tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, height + 1.5f), cd.name, delegate {; }, Color.clear);
+                        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.2f, 0.2f, 0.2f);
+                        if (pick)
+                        {
+                            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
+                        }
+                    }
+                    tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
+                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    tb.background.transform.parent = scrollArea.transform;
+                    tb.ApplyTag("heroselect");
+
+                    yOffset += height + 2.5f;
+                }
 
                 scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (yOffset - 2.5f) * UIScaler.GetPixelsPerUnit());
 
@@ -100,7 +143,9 @@ namespace Assets.Scripts.UI.Screens
                 CommonStringKeys.FINISHED,
                 delegate { Finished(); },
                 Color.green);
-
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            db.SetFont(game.gameType.GetHeaderFont());
+            db.ApplyTag("heroselect");
 
             TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
             cancelSelection.SetFont(game.gameType.GetHeaderFont());
@@ -108,12 +153,23 @@ namespace Assets.Scripts.UI.Screens
             cancelSelection.ApplyTag("heroselect");
         }
 
+        public void Select(int hero, string className)
+        {
+            Game.Get().quest.heroes[hero].className = className;
+            Draw();
+        }
+
         public void Finished()
         {
+            Game game = Game.Get();
+
+            foreach (Quest.Hero h in game.quest.heroes)
+            {
+                if (h != null && h.className.Length == 0) return;
+            }
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
                 Object.Destroy(go);
 
-            Game game = Game.Get();
             game.moraleDisplay = new MoraleDisplay();
             game.QuestStartEvent();
         }

@@ -1256,6 +1256,7 @@ public class Quest
         public int id = 0;
         // Used for events that can select or highlight heros
         public bool selected;
+        public string className = "";
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
@@ -1270,6 +1271,10 @@ public class Quest
             bool.TryParse(data["activated"], out activated);
             bool.TryParse(data["defeated"], out defeated);
             int.TryParse(data["id"], out id);
+            if (data.ContainsKey("class"))
+            {
+                className = data["class"];
+            }
 
             Game game = Game.Get();
             // Saved content reference, look it up
@@ -1294,6 +1299,7 @@ public class Quest
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
+            r += "class=" + className + nl;
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;
