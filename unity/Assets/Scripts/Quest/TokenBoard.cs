@@ -216,6 +216,10 @@ public class TokenBoard : MonoBehaviour {
 
             UnityEngine.UI.Image iconCicle = circleObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D circleTex = Resources.Load("sprites/target") as Texture2D;
+            if (sizeX == 2 && sizeY == 1)
+            {
+                circleTex = Resources.Load("sprites/borders/Empty_Monster_1x2") as Texture2D;
+            }
             iconCicle.sprite = Sprite.Create(circleTex, new Rect(0, 0, circleTex.width, circleTex.height), Vector2.zero, 1);
             iconCicle.rectTransform.sizeDelta = new Vector2(sizeX * 1.08f, sizeY * 1.08f);
 

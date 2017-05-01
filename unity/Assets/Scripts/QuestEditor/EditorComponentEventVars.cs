@@ -284,6 +284,10 @@ public class EditorComponentEventVars : EditorComponent
         op.var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
         if (op.var.Length > 0)
         {
+            if (varText.value[0] == '%')
+            {
+                op.var = '%' + op.var;
+            }
             if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
             {
                 op.var = "var" + op.var;

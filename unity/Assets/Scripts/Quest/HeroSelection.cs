@@ -22,7 +22,7 @@ public class HeroSelection {
 
         Game game = Game.Get();
         // Get all available heros
-        List<string> heroList = new List<string>(game.cd.heros.Keys);
+        List<string> heroList = new List<string>(game.cd.heroes.Keys);
         heroList.Sort();
 
         DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), StringKey.NULL);
@@ -68,7 +68,7 @@ public class HeroSelection {
             buttons.Add(hero, new List<TextButton>());
 
             // Should be game type specific
-            Texture2D newTex = ContentData.FileToTexture(game.cd.heros[hero].image);
+            Texture2D newTex = ContentData.FileToTexture(game.cd.heroes[hero].image);
             Sprite heroSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
 
             if (left)
@@ -101,12 +101,12 @@ public class HeroSelection {
             if (left)
             {
                 tb = new TextButton(new Vector2(10.25f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 1.5f), 
-                    game.cd.heros[hero].name, delegate { Select(hero); }, Color.black);
+                    game.cd.heroes[hero].name, delegate { Select(hero); }, Color.black);
             }
             else
             {
                 tb = new TextButton(new Vector2(12.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 1.5f), 
-                    game.cd.heros[hero].name, delegate { Select(hero); }, Color.black);
+                    game.cd.heroes[hero].name, delegate { Select(hero); }, Color.black);
             }
             tb.setColor(Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
@@ -128,7 +128,7 @@ public class HeroSelection {
     {
         Game game = Game.Get();
         HeroData hData = null;
-        foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+        foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
         {
             if (hd.Value.sectionName.Equals(name))
             {

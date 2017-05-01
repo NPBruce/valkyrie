@@ -19,6 +19,9 @@ namespace Assets.Scripts.UI
         {
             CameraController.panDisable = true;
             base.OnSelect(eventData);
+            this.caretPosition = lastCaretPosition;
+            this.selectionAnchorPosition = lastCaretPosition;
+            this.selectionFocusPosition = lastCaretPosition;
         }
 
         private int lastCaretPosition = 0;
