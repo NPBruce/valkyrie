@@ -259,6 +259,13 @@ public class Quest
 
     public void ChangeQuest(string path)
     {
+        Game game = Game.Get();
+
+        // Clean up everything marked as 'board'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+            Object.Destroy(go);
+        game.tokenBoard.tc.Clear();
+
         phase = MoMPhase.investigator;
         game.cc.gameObject.transform.position = new Vector3(0, 0, -8);
 
@@ -267,6 +274,7 @@ public class Quest
 
         // Set static quest data
         qd = new QuestData(questPath + "/" + path);
+        questPath = Path.GetDirectoryName(qd.questPath);
 
         vars.TrimQuest();
 
@@ -298,7 +306,9 @@ public class Quest
         int heroCount = 0;
         foreach (Quest.Hero h in heroes)
         {
-            if (h.heroData != null) heroCount++;
+            h.activated = false;
+            h.defeated = false;
+            h.selected = false;
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
@@ -313,18 +323,12 @@ public class Quest
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
 
-        if (game.gameType is D2EGameType)
-        {
-            // Start round events
-            eManager.EventTriggerType("StartRound", false);
-            // Start the quest (top of stack)
-            eManager.EventTriggerType("EventStart", false);
-            eManager.TriggerEvent();
-        }
-        else
-        {
-            new InvestigatorItems();
-        }
+        // Start round events
+        eManager.EventTriggerType("StartRound", false);
+        // Start the quest (top of stack)
+        eManager.EventTriggerType("EventStart", false);
+        eManager.TriggerEvent();
+        SaveManager.Save(0);
     }
 
     // Read save data
@@ -402,6 +406,10 @@ public class Quest
             if (kv.Key.IndexOf("Tile") == 0)
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
+            }
+            if (kv.Key.IndexOf("UI") == 0)
+            {
+                boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
             }
         }
 
@@ -667,6 +675,15 @@ public class Quest
             }
             boardItems.Clear();
         }
+    }
+
+    public bool UIItemsPresent()
+    {
+        foreach (BoardComponent c in boardItems.Values)
+        {
+            if (c is UI) return true;
+        }
+        return false;
     }
 
     // Remove all active components
@@ -988,13 +1005,37 @@ public class Quest
         {
             qUI = questUI;
 
-            Texture2D newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+            // Find quest UI panel
+            GameObject panel = GameObject.Find("QuestUIPanel");
+            if (panel == null)
+            {
+                // Create UI Panel
+                panel = new GameObject("QuestUIPanel");
+                panel.tag = "board";
+                panel.transform.parent = game.uICanvas.transform;
+                panel.transform.SetAsFirstSibling();
+                panel.AddComponent<RectTransform>();
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
+            }
+
+            Texture2D newTex = null;
+            if (game.cd.images.ContainsKey(qUI.imageName))
+            {
+                Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
+                Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
+                newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+            }
+            else
+            {
+                newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+            }
 
             // Create object
             unityObject = new GameObject("Object" + qUI.sectionName);
             unityObject.tag = "board";
 
-            unityObject.transform.parent = game.uICanvas.transform;
+            unityObject.transform.parent = panel.transform;
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
@@ -1002,9 +1043,45 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
-            //FIXME
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 200, 100);
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 200, 100);
+            float unitScale = Screen.width;
+            float hSize = qUI.size * unitScale;
+            float vSize = hSize * (float)newTex.height / (float)newTex.width;
+            if (qUI.verticalUnits)
+            {
+                unitScale = Screen.height;
+                vSize = qUI.size * unitScale;
+                hSize = vSize * (float)newTex.width / (float)newTex.height;
+            }
+
+            float hOffset = qUI.location.x * unitScale;
+            float vOffset = qUI.location.y * unitScale;
+
+            if (qUI.hAlign < 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+            }
+            else if (qUI.hAlign > 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+            }
+            else
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+            }
+
+            if (qUI.vAlign < 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+            }
+            else if (qUI.vAlign > 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+            }
+            else
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+            }
+
             game.tokenBoard.Add(this);
         }
 
@@ -1013,6 +1090,18 @@ public class Quest
         {
             return qUI;
         }
+
+        // Set visible can control the transparency level of the component
+        public override void SetVisible(float alpha)
+        {
+            if (image == null)
+                return;
+            targetAlpha = alpha;
+            // Hide in editor
+            if (targetAlpha < 0.5f) targetAlpha = 0;
+            return;
+        }
+
 
         // Clean up
         public override void Remove()
@@ -1167,6 +1256,7 @@ public class Quest
         public int id = 0;
         // Used for events that can select or highlight heros
         public bool selected;
+        public string className = "";
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
@@ -1181,12 +1271,16 @@ public class Quest
             bool.TryParse(data["activated"], out activated);
             bool.TryParse(data["defeated"], out defeated);
             int.TryParse(data["id"], out id);
+            if (data.ContainsKey("class"))
+            {
+                className = data["class"];
+            }
 
             Game game = Game.Get();
             // Saved content reference, look it up
             if (data.ContainsKey("type"))
             {
-                foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+                foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
                 {
                     if (hd.Value.sectionName.Equals(data["type"]))
                     {
@@ -1205,6 +1299,7 @@ public class Quest
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
+            r += "class=" + className + nl;
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;

@@ -88,18 +88,22 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag("editor");
+        DialogBox db = null;
+        if (!(eventComponent is QuestData.UI))
+        {
+            db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
+            db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), 
-            CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1),
+                CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), 
-            CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+            tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1),
+                CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
 
         if (!eventComponent.GetType().IsSubclassOf(typeof(QuestData.Event)))
         {
@@ -501,7 +505,7 @@ public class EditorComponentEvent : EditorComponent
         }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token)
+            if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token || kv.Value is QuestData.UI)
             {
                 components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }

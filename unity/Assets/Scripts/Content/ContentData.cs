@@ -12,7 +12,9 @@ public class ContentData {
     public List<ContentPack> allPacks;
     public Dictionary<string, PackTypeData> packTypes;
     public Dictionary<string, TileSideData> tileSides;
-    public Dictionary<string, HeroData> heros;
+    public Dictionary<string, HeroData> heroes;
+    public Dictionary<string, ClassData> classes;
+    public Dictionary<string, SkillData> skills;
     public Dictionary<string, ItemData> items;
     public Dictionary<string, MonsterData> monsters;
     public Dictionary<string, ActivationData> activations;
@@ -22,6 +24,7 @@ public class ContentData {
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
     public Dictionary<string, PuzzleData> puzzles;
+    public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
 
     public static string ContentPath()
@@ -47,7 +50,13 @@ public class ContentData {
         tileSides = new Dictionary<string, TileSideData>();
 
         // Available heros
-        heros = new Dictionary<string, HeroData>();
+        heroes = new Dictionary<string, HeroData>();
+
+        // Available classes
+        classes = new Dictionary<string, ClassData>();
+
+        // Available skills
+        skills = new Dictionary<string, SkillData>();
 
         // Available items
         items = new Dictionary<string, ItemData>();
@@ -78,6 +87,9 @@ public class ContentData {
 
         // This has all avilable puzzle images
         puzzles = new Dictionary<string, PuzzleData>();
+
+        // This has all avilable general images
+        images = new Dictionary<string, ImageData>();
 
         // This has all avilable puzzle images
         audio = new Dictionary<string, AudioData>();
@@ -305,21 +317,73 @@ public class ContentData {
             if (d.name.Equals(""))
                 return;
             // If we don't already have one then add this
-            if (!heros.ContainsKey(name))
+            if (!heroes.ContainsKey(name))
             {
-                heros.Add(name, d);
+                heroes.Add(name, d);
                 d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
-            else if (heros[name].priority < d.priority)
+            else if (heroes[name].priority < d.priority)
             {
-                heros.Remove(name);
-                heros.Add(name, d);
+                heroes.Remove(name);
+                heroes.Add(name, d);
             }
             // items of the same priority belong to multiple packs
-            else if (heros[name].priority == d.priority)
+            else if (heroes[name].priority == d.priority)
             {
-                heros[name].sets.Add(packID);
+                heroes[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Class" entry?
+        if (name.IndexOf(ClassData.type) == 0)
+        {
+            ClassData d = new ClassData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!classes.ContainsKey(name))
+            {
+                classes.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (classes[name].priority < d.priority)
+            {
+                classes.Remove(name);
+                classes.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (classes[name].priority == d.priority)
+            {
+                classes[name].sets.Add(packID);
+            }
+        }
+
+        // Is this a "Skill" entry?
+        if (name.IndexOf(SkillData.type) == 0)
+        {
+            SkillData d = new SkillData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!skills.ContainsKey(name))
+            {
+                skills.Add(name, d);
+                d.sets.Add(packID);
+            }
+            // If we do replace if this has higher priority
+            else if (skills[name].priority < d.priority)
+            {
+                skills.Remove(name);
+                skills.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (skills[name].priority == d.priority)
+            {
+                skills[name].sets.Add(packID);
             }
         }
 
@@ -549,6 +613,26 @@ public class ContentData {
             }
         }
 
+        // Is this a "Image" entry?
+        if (name.IndexOf(ImageData.type) == 0)
+        {
+            ImageData d = new ImageData(name, content, path);
+            // Ignore invalid entry
+            if (d.name.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!images.ContainsKey(name))
+            {
+                images.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (images[name].priority < d.priority)
+            {
+                images.Remove(name);
+                images.Add(name, d);
+            }
+        }
+
         // Is this a "Audio" entry?
         if (name.IndexOf(AudioData.type) == 0)
         {
@@ -749,17 +833,66 @@ public class HeroData : GenericData
     }
 }
 
+// Class for Class specific data
+public class ClassData : GenericData
+{
+    public string archetype = "warrior";
+    public static new string type = "Class";
+    public List<string> items;
+
+    public ClassData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get archetype
+        if (content.ContainsKey("archetype"))
+        {
+            archetype = content["archetype"];
+        }
+        // Get starting item
+        items = new List<string>();
+        if (content.ContainsKey("items"))
+        {
+            items.AddRange(content["items"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+}
+
+// Class for Class specific data
+public class SkillData : GenericData
+{
+    public static new string type = "Skill";
+    public int xp = 0;
+
+    public SkillData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        // Get archetype
+        if (content.ContainsKey("xp"))
+        {
+            int.TryParse(content["xp"], out xp);
+        }
+    }
+}
+
 // Class for Item specific data
 public class ItemData : GenericData
 {
     public static new string type = "Item";
     public bool unique = false;
+    public int act = 0;
+    public int price = 0;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
         if (name.IndexOf("ItemUnique") == 0)
         {
             unique = true;
+        }
+        if (content.ContainsKey("act"))
+        {
+            int.TryParse(content["act"], out act);
+        }
+        if (content.ContainsKey("price"))
+        {
+            int.TryParse(content["price"], out price);
         }
     }
 }
@@ -874,6 +1007,16 @@ public class TokenData : GenericData
     public static new string type = "Token";
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+        init(content);
+    }
+
+    public TokenData(string name, Dictionary<string, string> content, string path, string typeIn) : base(name, content, path, typeIn)
+    {
+        init(content);
+    }
+
+    public void init(Dictionary<string, string> content)
     {
         if (content.ContainsKey("x"))
         {
@@ -998,6 +1141,16 @@ public class PuzzleData : GenericData
     public static new string type = "Puzzle";
 
     public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    {
+    }
+}
+
+// Class for images
+public class ImageData : TokenData
+{
+    public static new string type = "Image";
+
+    public ImageData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
     }
 }

@@ -177,8 +177,8 @@ public class Game : MonoBehaviour {
 
         // Add a finished button to start the quest
         TextButton endSelection = new TextButton(
-            new Vector2(UIScaler.GetRight(-9), 
-            UIScaler.GetBottom(-3)), 
+            new Vector2(UIScaler.GetRight(-8.5f), 
+            UIScaler.GetBottom(-2.5f)), 
             new Vector2(8, 2), 
             CommonStringKeys.FINISHED, 
             delegate { EndSelection(); }, 
@@ -200,7 +200,7 @@ public class Game : MonoBehaviour {
 
         heroCanvas.heroSelection = new HeroSelection();
 
-        TextButton cancelSelection = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
+        TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
         cancelSelection.ApplyTag("heroselect");
@@ -223,10 +223,19 @@ public class Game : MonoBehaviour {
 
     public void QuestStartEvent()
     {
+        // Start quest music
+        List<string> music = new List<string>();
+        foreach (AudioData ad in cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        audioControl.Music(music);
+
         Destroyer.Dialog();
         // Create the menu button
         new MenuButton();
         new LogButton();
+        new SkillButton();
         // Draw next stage button if required
         stageUI = new NextStageButton();
 

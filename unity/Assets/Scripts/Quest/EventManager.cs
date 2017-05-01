@@ -314,7 +314,20 @@ public class EventManager
         List<string> enabledEvents = new List<string>();
         foreach (string s in eventList)
         {
-            if (!game.quest.eManager.events[s].Disabled())
+            // Check if the event doesn't exists - quest fault
+            if (!events.ContainsKey(s))
+            {
+                if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                {
+                    events.Add(s, new StartQuestEvent(s));
+                    enabledEvents.Add(s);
+                }
+                else
+                {
+                    game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                }
+            }
+            else if (!game.quest.eManager.events[s].Disabled())
             {
                 enabledEvents.Add(s);
             }
@@ -444,6 +457,20 @@ public class EventManager
             {
                 foreach (string s in l)
                 {
+                    // Check if the event doesn't exists - quest fault
+                    if (!game.quest.eManager.events.ContainsKey(s))
+                    {
+                        if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                        {
+                            game.quest.eManager.events.Add(s, new StartQuestEvent(s));
+                            return true;
+                        }
+                        else
+                        {
+                            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                            return false;
+                        }
+                    }
                     if (!game.quest.eManager.events[s].Disabled()) return true;
                 }
             }
