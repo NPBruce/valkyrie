@@ -235,6 +235,7 @@ public class Game : MonoBehaviour {
         // Create the menu button
         new MenuButton();
         new LogButton();
+        new SkillButton();
         // Draw next stage button if required
         stageUI = new NextStageButton();
 

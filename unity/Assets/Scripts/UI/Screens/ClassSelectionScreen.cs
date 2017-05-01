@@ -41,6 +41,8 @@ namespace Assets.Scripts.UI.Screens
             if (heroCount < 4) xOffset += 4.5f;
             if (heroCount < 3) xOffset += 4.5f;
 
+            TextButton tb = null;
+
             for (int i = 0; i < heroCount; i++)
             {
                 db = new DialogBox(new Vector2(xOffset + 0.25f, 7f), new Vector2(8.5f, 20f), StringKey.NULL);
@@ -101,7 +103,6 @@ namespace Assets.Scripts.UI.Screens
                         }
                     }
 
-                    TextButton tb = null;
                     if (available)
                     {
                         int tmp = i;
@@ -136,16 +137,15 @@ namespace Assets.Scripts.UI.Screens
                 xOffset += 9f;
             }
             // Add a finished button to start the quest
-            TextButton endSelection = new TextButton(
+            tb = new TextButton(
                 new Vector2(UIScaler.GetRight(-8.5f),
                 UIScaler.GetBottom(-2.5f)),
                 new Vector2(8, 2),
                 CommonStringKeys.FINISHED,
                 delegate { Finished(); },
                 Color.green);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            db.SetFont(game.gameType.GetHeaderFont());
-            db.ApplyTag("heroselect");
+            tb.SetFont(game.gameType.GetHeaderFont());
+            tb.ApplyTag("heroselect");
 
             TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
             cancelSelection.SetFont(game.gameType.GetHeaderFont());
@@ -165,7 +165,7 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (Quest.Hero h in game.quest.heroes)
             {
-                if (h != null && h.className.Length == 0) return;
+                if (h.heroData != null && h.className.Length == 0) return;
             }
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
                 Object.Destroy(go);
