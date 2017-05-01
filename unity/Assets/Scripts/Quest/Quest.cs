@@ -1275,7 +1275,7 @@ public class Quest
             // Saved content reference, look it up
             if (data.ContainsKey("type"))
             {
-                foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+                foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
                 {
                     if (hd.Value.sectionName.Equals(data["type"]))
                     {
