@@ -323,18 +323,12 @@ public class Quest
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
 
-        if (game.gameType is D2EGameType)
-        {
-            // Start round events
-            eManager.EventTriggerType("StartRound", false);
-            // Start the quest (top of stack)
-            eManager.EventTriggerType("EventStart", false);
-            eManager.TriggerEvent();
-        }
-        else
-        {
-            new InvestigatorItems();
-        }
+        // Start round events
+        eManager.EventTriggerType("StartRound", false);
+        // Start the quest (top of stack)
+        eManager.EventTriggerType("EventStart", false);
+        eManager.TriggerEvent();
+        SaveManager.Save(0);
     }
 
     // Read save data
@@ -412,6 +406,10 @@ public class Quest
             if (kv.Key.IndexOf("Tile") == 0)
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
+            }
+            if (kv.Key.IndexOf("UI") == 0)
+            {
+                boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
             }
         }
 
@@ -1045,15 +1043,45 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
-            // Position and Scale assume a 16x9 aspect
-            float templateHeight = (float)Screen.width * 9f / 16f;
-            float vOffset = ((float)Screen.height - templateHeight) / 2f;
-            float hSize = (float)Screen.width * qUI.size;
+            float unitScale = Screen.width;
+            float hSize = qUI.size * unitScale;
             float vSize = hSize * (float)newTex.height / (float)newTex.width;
-            float hPos = (float)Screen.width * qUI.location.x;
-            float vPos = (templateHeight * qUI.location.y) + vOffset;
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vPos - (vSize / 2), vSize);
-            image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hPos - (hSize / 2), hSize);
+            if (qUI.verticalUnits)
+            {
+                unitScale = Screen.height;
+                vSize = qUI.size * unitScale;
+                hSize = vSize * (float)newTex.width / (float)newTex.height;
+            }
+
+            float hOffset = qUI.location.x * unitScale;
+            float vOffset = qUI.location.y * unitScale;
+
+            if (qUI.hAlign < 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+            }
+            else if (qUI.hAlign > 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+            }
+            else
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+            }
+
+            if (qUI.vAlign < 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+            }
+            else if (qUI.vAlign > 0)
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+            }
+            else
+            {
+                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+            }
+
             game.tokenBoard.Add(this);
         }
 

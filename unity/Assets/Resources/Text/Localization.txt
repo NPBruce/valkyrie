@@ -187,6 +187,10 @@ TYPES,Types,Tipos,Types,Typen,Tipi,,,,
 UNABLE_BUTTON,Unable Button:,Botón No Puede:,Bouton impossible,Unmöglich-Button:,Pulsante Disabilitato:,,,,
 
 UI,UI,,,,,,,,
+UNITS,Units,,,,,,,,
+HORIZONTAL,Horizontal,,,,,,,,
+VERTICAL,Vertical,,,,,,,,
+ALIGN,Align,,,,,,,,
 POSITION,Position,,,,,,,,
 SIZE,Size,,,,,,,,
 
@@ -351,6 +355,7 @@ navy,Navy,Azul Marino,Bleu marine,Marineblau,Azzurro,,,,
 image,Image,Mosaico,Image,Bild,Mosaico,,,,
 code,Code,Código,Code,Code,Codice,,,,
 slide,Slide,Mecanismo,Mécanisme,Schieberaetsel,Meccanismo,,,,
+SYMBOL,Symbol,,,,,,,,
 
 // Events
 Ordered,Ordered,Ordenado,Ordonné,Geordnet,Ordinato,,,,

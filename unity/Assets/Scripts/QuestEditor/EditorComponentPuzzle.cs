@@ -96,17 +96,14 @@ public class EditorComponentPuzzle : EditorComponent
             altLevelDBE.ApplyTag("editor");
             altLevelDBE.AddBorder();
 
-            if (puzzleComponent.puzzleClass.Equals("image"))
-            {
-                db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1),
-                    new StringKey("val", "X_COLON", IMAGE));
-                db.ApplyTag("editor");
+            db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1),
+                new StringKey("val", "X_COLON", IMAGE));
+            db.ApplyTag("editor");
 
-                tb = new TextButton(new Vector2(5, 10), new Vector2(8, 1), 
-                    new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
-            }
+            tb = new TextButton(new Vector2(5, 10), new Vector2(8, 1), 
+                new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
         }
 
         tb = new TextButton(new Vector2(0, 12), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
@@ -126,12 +123,12 @@ public class EditorComponentPuzzle : EditorComponent
 
     public void SelectClass()
     {
-        // the selection has the key (ie:{val:PUZZLE_SLIDE_CLASS}) so we can build the StringKey.
-        puzzleComponent.puzzleClass = classList.selection;
-        if (!puzzleComponent.puzzleClass.Equals("image"))
+        if (!puzzleComponent.puzzleClass.Equals(classList.selection))
         {
             puzzleComponent.imageType = "";
         }
+        // the selection has the key (ie:{val:PUZZLE_SLIDE_CLASS}) so we can build the StringKey.
+        puzzleComponent.puzzleClass = classList.selection;
         Update();
     }
 
@@ -168,19 +165,27 @@ public class EditorComponentPuzzle : EditorComponent
     
     public void Image()
     {
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
-        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        if (puzzleComponent.puzzleClass.Equals("code"))
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(""));
+            puzzleImage.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(new StringKey("val", "SYMBOL").Translate(), "symbol"));
         }
-        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        else
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
-        }
-        foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
-        {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "MoM"));
+            string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+            foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+            {
+                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            }
+            foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+            {
+                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            }
+            foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
+            {
+                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "MoM"));
+            }
         }
         imageList = new EditorSelectionList(SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
         imageList.SelectItem();
