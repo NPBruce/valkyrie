@@ -1300,12 +1300,15 @@ public class Quest
         // Used for events that can select or highlight heros
         public bool selected;
         public string className = "";
+        public List<string> skills;
+        public int xp = 0;
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
         {
             heroData = h;
             id = i;
+            skills = new List<string>();
         }
 
         // Construct with saved data
@@ -1331,6 +1334,26 @@ public class Quest
                     }
                 }
             }
+            skills = new List<string>();
+            if (data.ContainsKey("skills"))
+            {
+                skills.AddRange(data["skills"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+            }
+            if (data.ContainsKey("xp"))
+            {
+                int.TryParse(data["xp"], out xp);
+            }
+        }
+
+        public int AvailableXP()
+        {
+            Game game = Game.Get();
+            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$xp"));
+            foreach (string s in skills)
+            {
+                aXP -= game.cd.skills[s].xp;
+            }
+            return aXP;
         }
 
         // Save hero to string for saves/undo
@@ -1350,8 +1373,22 @@ public class Quest
             {
                 r += "type=" + heroData.sectionName + nl;
             }
+            if (skills.Count > 0)
+            {
+                r += "skills=";
+                foreach (string s in skills)
+                {
+                    r += s + ' ';
+                }
+                r += nl;
+            }
 
-            return r;
+            if (xp != 0)
+            {
+                r += "xp=" + xp + nl;
+            }
+
+            return r + nl;
         }
     }
 
