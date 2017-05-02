@@ -24,6 +24,7 @@ public class Destroyer {
     // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
+        Resources.UnloadUnusedAssets();
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
             Object.Destroy(go);
@@ -78,5 +79,6 @@ public class Destroyer {
             Object.Destroy(go);
         Game.Get().cc.panDisable = false;
         Game.Get().logWindow = null;
+        Resources.UnloadUnusedAssets();
     }
 }
