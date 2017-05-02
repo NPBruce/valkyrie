@@ -1040,7 +1040,7 @@ public class Quest
             unityObject.transform.parent = panel.transform;
 
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
-            if (newTex == null)
+            if (qUI.imageName.Length == 0)
             {
                 uiText = unityObject.AddComponent<UnityEngine.UI.Text>();
                 uiText.text = GetText();
