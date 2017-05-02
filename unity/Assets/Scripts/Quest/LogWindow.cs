@@ -52,6 +52,7 @@ public class LogWindow
         RectTransform textRect = db.textObj.GetComponent<RectTransform>();
         textRect.sizeDelta = new Vector2(textRect.rect.width, db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight);
         scrollRect.verticalNormalizedPosition = 0f;
+        scrollRect.scrollSensitivity = 27f;
 
         UnityEngine.UI.Mask mask = db.background.AddComponent<UnityEngine.UI.Mask>();
 
@@ -79,6 +80,7 @@ public class LogWindow
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of vars
         float offset = 1;
@@ -96,7 +98,7 @@ public class LogWindow
             // Variables value modify dont need localization
             DialogBoxEditable dbe = new DialogBoxEditable(
                 new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), 
-                kv.Value.ToString(),
+                kv.Value.ToString(), false, 
                 delegate { UpdateValue(key); }, Color.black, Color.white);
             dbe.setMaterialAndBackgroundTransformParent((Material)Resources.Load("Fonts/FontMaterial"),scrollArea.transform);
             dbe.AddBorder();

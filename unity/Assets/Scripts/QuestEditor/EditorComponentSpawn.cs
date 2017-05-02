@@ -92,7 +92,7 @@ public class EditorComponentSpawn : EditorComponent
 
         // Dumbers dont need translation
         healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
-        spawnComponent.uniqueHealthBase.ToString(), delegate { UpdateHealth(); });
+        spawnComponent.uniqueHealthBase.ToString(), false, delegate { UpdateHealth(); });
         healthDBE.ApplyTag("editor");
         healthDBE.AddBorder();
 
@@ -101,7 +101,7 @@ public class EditorComponentSpawn : EditorComponent
 
         // Numbers dont need translation
         healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
-        spawnComponent.uniqueHealthHero.ToString(), delegate { UpdateHealthHero(); });
+        spawnComponent.uniqueHealthHero.ToString(), false, delegate { UpdateHealthHero(); });
         healthHeroDBE.ApplyTag("editor");
         healthHeroDBE.AddBorder();
 
@@ -125,7 +125,7 @@ public class EditorComponentSpawn : EditorComponent
 
                 uniqueTitleDBE = new DialogBoxEditable(
                     new Vector2(5, 8), new Vector2(15, 1),
-                    spawnComponent.uniqueTitle.Translate(),
+                    spawnComponent.uniqueTitle.Translate(), false, 
                 delegate { UpdateUniqueTitle(); });
                 uniqueTitleDBE.ApplyTag("editor");
                 uniqueTitleDBE.AddBorder();
@@ -135,7 +135,7 @@ public class EditorComponentSpawn : EditorComponent
 
                 uniqueTextDBE = new DialogBoxEditable(
                 new Vector2(0, 11), new Vector2(20, 8), 
-                spawnComponent.uniqueText.Translate(),
+                spawnComponent.uniqueText.Translate(), true,
                 delegate { UpdateUniqueText(); });
                 uniqueTextDBE.ApplyTag("editor");
                 uniqueTextDBE.AddBorder();

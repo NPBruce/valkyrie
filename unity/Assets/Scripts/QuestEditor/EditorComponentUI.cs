@@ -107,7 +107,8 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         locXDBE = new DialogBoxEditable(new Vector2(2, 12), new Vector2(3, 1),
-            uiComponent.location.x.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.location.x.ToString(), false, delegate { UpdateNumbers(); });
+
         locXDBE.ApplyTag("editor");
         locXDBE.AddBorder();
 
@@ -115,7 +116,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         locYDBE = new DialogBoxEditable(new Vector2(7, 12), new Vector2(3, 1),
-            uiComponent.location.y.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
         locYDBE.ApplyTag("editor");
         locYDBE.AddBorder();
 
@@ -123,7 +124,7 @@ public class EditorComponentUI : EditorComponent
         db.ApplyTag("editor");
 
         sizeDBE = new DialogBoxEditable(new Vector2(8, 13), new Vector2(3, 1),
-            uiComponent.size.ToString(), delegate { UpdateNumbers(); });
+            uiComponent.size.ToString(), false, delegate { UpdateNumbers(); });
         sizeDBE.ApplyTag("editor");
         sizeDBE.AddBorder();
 
@@ -132,7 +133,6 @@ public class EditorComponentUI : EditorComponent
         tb.ApplyTag("editor");
 
         game.quest.ChangeAlpha(uiComponent.sectionName, 1f);
-
 
         // Create a grey zone outside of the 16x9 boundary
         // Find quest UI panel

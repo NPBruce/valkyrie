@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using Assets.Scripts.UI;
+using Assets.Scripts.Content;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -8,13 +11,19 @@ public class PaneledDialogBoxEditable
     private GameObject background;
     private GameObject inputObj;
 
-    private UnityEngine.UI.InputField uiInput;
+    private List<TextButton> specialCharsButtons;
+
+    private PanCancelInputField uiInput;
 
     public void ApplyTag(string tag)
     {
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
+        foreach (TextButton tb in specialCharsButtons)
+        {
+            tb.ApplyTag(tag);
+        }
     }
 
     /// <summary>
@@ -73,6 +82,42 @@ public class PaneledDialogBoxEditable
         {
             objName = objName.Substring(0, 10);
         }
+
+        // Create special characters
+
+        float offset = location.y;
+        TextButton tb = null;
+        StringKey translated = null;
+        float hOffset = location.x;
+        Dictionary<string, string> CHARS = null;
+        EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
+        float width = size.x / CHARS.Keys.Count;
+        specialCharsButtons = new List<TextButton>();
+        if (CHARS != null)
+        {
+            foreach (string oneChar in CHARS.Keys)
+            {
+                translated = new StringKey(null, oneChar);
+                // Traits are in val dictionary
+                if (hOffset + width > 40)
+                {
+                    hOffset = 22;
+                    offset++;
+                }
+                string translation = null;
+                CHARS.TryGetValue(oneChar,out translation);
+                tb = new TextButton(
+                    new Vector2(hOffset, offset), new Vector2(width, 1),
+                    translated, 
+                    delegate { InsertCharacter(translation); });
+                tb.ApplyTag("dialog");
+
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                specialCharsButtons.Add(tb);
+                hOffset += width;
+            }
+        }
+
         // Create an object
 
         textObj = new GameObject("text" + objName);
@@ -91,17 +136,19 @@ public class PaneledDialogBoxEditable
         textObj.transform.parent = inputObj.transform;
 
         RectTransform transBg = background.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,  (location.y +1) * UIScaler.GetPixelsPerUnit(), (size.y - 1) * UIScaler.GetPixelsPerUnit());
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
         RectTransform transIn = inputObj.AddComponent<RectTransform>();
         transIn.SetParent(transBg);
         transIn.localScale = transBg.localScale;
+        //transIn.localPosition = Vector3.down; 
         transIn.sizeDelta = transBg.sizeDelta;
 
         RectTransform transTx = textObj.AddComponent<RectTransform>();
         transTx.SetParent(transIn);
         transTx.localScale = transIn.localScale;
+        //transTx.localPosition = transIn.localPosition;
         transTx.sizeDelta = transIn.sizeDelta;
 
         textObj.AddComponent<CanvasRenderer>();
@@ -112,6 +159,7 @@ public class PaneledDialogBoxEditable
         uiImage.color = bgColour;
 
         UnityEngine.UI.Text uiText = textObj.AddComponent<UnityEngine.UI.Text>();
+        uiText.color = Color.red;
         uiText.color = fgColour;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = game.gameType.GetFont();
@@ -119,12 +167,20 @@ public class PaneledDialogBoxEditable
         uiText.fontSize = UIScaler.GetSmallFont();
         uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
 
-        uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
+        uiInput = inputObj.AddComponent<PanCancelInputField>();
 
         uiInput.textComponent = uiText;
-        uiInput.text = text;
+        // We must set first the multiline attribute in order
+        // to not lose the newlines inside variable text
         uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
+        uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
+    }
+
+    public void InsertCharacter(string specialChar)
+    {
+        uiInput.text = uiInput.text.Insert(uiInput.getLastCaretPosition(), specialChar);
+        uiInput.Select();
     }
 
     public void AddBorder()
@@ -134,7 +190,7 @@ public class PaneledDialogBoxEditable
 
     public void AddBorder(Color c)
     {
-        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
+        Rect rect = background.GetComponent<RectTransform>().rect;
         new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
     }
 
