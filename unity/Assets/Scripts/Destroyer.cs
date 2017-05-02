@@ -24,6 +24,7 @@ public class Destroyer {
     // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
+        Resources.UnloadUnusedAssets();
         // Clean up everything marked as 'dialog'
         Dialog();
 
@@ -77,5 +78,6 @@ public class Destroyer {
             Object.Destroy(go);
         CameraController.panDisable = false;
         Game.Get().logWindow = null;
+        Resources.UnloadUnusedAssets();
     }
 }
