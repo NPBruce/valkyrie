@@ -10,6 +10,9 @@ public class EditorComponentUI : EditorComponent
     DialogBoxEditable locXDBE;
     DialogBoxEditable locYDBE;
     DialogBoxEditable sizeDBE;
+    DialogBoxEditable textDBE;
+    DialogBoxEditable textSizeDBE;
+    EditorSelectionList colorList;
 
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
@@ -128,7 +131,33 @@ public class EditorComponentUI : EditorComponent
         sizeDBE.ApplyTag("editor");
         sizeDBE.AddBorder();
 
-        tb = new TextButton(new Vector2(0, 15), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
+        if (uiComponent.imageName.Length == 0)
+        {
+            textDBE = new DialogBoxEditable(
+                new Vector2(0, 15), new Vector2(20, 6),
+                game.quest.qd.quest.description.Translate(true),
+                true,
+                delegate { UpdateText(); });
+            textDBE.ApplyTag("editor");
+            textDBE.AddBorder();
+
+            db = new DialogBox(new Vector2(0, 23), new Vector2(7, 1), new StringKey("val", "TEXT_SIZE"));
+            db.ApplyTag("editor");
+
+            textSizeDBE = new DialogBoxEditable(new Vector2(7, 23), new Vector2(3, 1),
+                uiComponent.textSize.ToString(), false, delegate { UpdateTextSize(); });
+            textSizeDBE.ApplyTag("editor");
+            textSizeDBE.AddBorder();
+
+            db = new DialogBox(new Vector2(10, 23), new Vector2(5, 1), new StringKey("val", "COLOR"));
+            db.ApplyTag("editor");
+
+            tb = new TextButton(new Vector2(15, 23), new Vector2(5, 1), new StringKey(null, uiComponent.textColor, false), delegate { SetColour(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        tb = new TextButton(new Vector2(0, 25), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
@@ -215,6 +244,7 @@ public class EditorComponentUI : EditorComponent
     {
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry(""));
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
@@ -236,6 +266,14 @@ public class EditorComponentUI : EditorComponent
         uiComponent.imageName = imageList.selection;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
+        if (uiComponent.imageName.Length > 0)
+        {
+            LocalizationRead.scenarioDict.Remove(uiComponent.uitext_key);
+        }
+        else
+        {
+            LocalizationRead.updateScenarioText(uiComponent.uitext_key, "");
+        }
         Update();
     }
 
@@ -270,6 +308,46 @@ public class EditorComponentUI : EditorComponent
         {
             float.TryParse(sizeDBE.Text, out uiComponent.size);
         }
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    public void UpdateText()
+    {
+        Game game = Game.Get();
+
+        if (!textDBE.Text.Equals(""))
+        {
+            LocalizationRead.updateScenarioText(uiComponent.uitext_key, textDBE.Text);
+        }
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    public void UpdateTextSize()
+    {
+        float.TryParse(textSizeDBE.Text, out uiComponent.textSize);
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    public void SetColour()
+    {
+        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        {
+            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
+        }
+        colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectColour(); });
+        colorList.SelectItem();
+    }
+
+    public void SelectColour()
+    {
+        uiComponent.textColor = colorList.selection;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         Update();
