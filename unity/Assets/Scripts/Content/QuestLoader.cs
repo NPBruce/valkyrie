@@ -18,6 +18,7 @@ public class QuestLoader {
         // Look in the user application data directory
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
+        CleanTemp();
         // Get a list of quest directories (extract found packages)
         List<string> questDirectories = GetQuests(dataLocation);
 
@@ -121,7 +122,12 @@ public class QuestLoader {
                     quests.Add(p);
             }
         }
+        ExtractPackages(path);
 
+        return quests;
+    }
+
+    public static void ExtractPackages(string path);
         // Find all packages at path
         string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
         // Extract all packages

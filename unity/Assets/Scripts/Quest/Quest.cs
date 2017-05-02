@@ -276,6 +276,9 @@ public class Quest
         qd = new QuestData(questPath + "/" + path);
         questPath = Path.GetDirectoryName(qd.questPath);
 
+        // Extract packages in case needed
+        QuestLoader.ExtractPackages(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+
         vars.TrimQuest();
 
         undo = new Stack<string>();
