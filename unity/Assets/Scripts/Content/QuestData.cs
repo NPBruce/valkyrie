@@ -393,6 +393,12 @@ public class QuestData
         public int hAlign = 0;
         public int vAlign = 0;
         public float size = 1;
+        public float textSize = 1;
+        public string textColor = "white";
+
+        public string uitext_key { get { return genKey("uitext"); } }
+
+        public StringKey uiText { get { return genQuery("uitext"); } }
 
         // Create new with name (used by editor)
         public UI(string s) : base(s)
@@ -423,6 +429,16 @@ public class QuestData
             if (data.ContainsKey("size"))
             {
                 float.TryParse(data["size"], out size);
+            }
+
+            if (data.ContainsKey("textsize"))
+            {
+                float.TryParse(data["textsize"], out textSize);
+            }
+
+            if (data.ContainsKey("textcolor"))
+            {
+                textColor = data["textcolor"];
             }
 
             if (data.ContainsKey("halign"))
@@ -458,6 +474,16 @@ public class QuestData
 
             r += "image=" + imageName + nl;
             r += "size=" + size + nl;
+
+            if (textSize != 1)
+            {
+                r += "textsize=" + textSize + nl;
+            }
+
+            if (!textColor.Equals("white"))
+            {
+                r += "textcolor=" + textColor + nl;
+            }
 
             if (verticalUnits)
             {

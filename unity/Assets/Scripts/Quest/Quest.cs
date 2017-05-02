@@ -1000,6 +1000,8 @@ public class Quest
         // Quest info on the token
         public QuestData.UI qUI;
 
+        UnityEngine.UI.Text uiText;
+
         // Construct with quest info and reference to Game
         public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
         {
@@ -1037,11 +1039,25 @@ public class Quest
 
             unityObject.transform.parent = panel.transform;
 
-            // Create the image
-            image = unityObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-            image.color = new Color(1, 1, 1, 0);
-            image.sprite = tileSprite;
+            RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
+            if (newTex == null)
+            {
+                uiText = unityObject.AddComponent<UnityEngine.UI.Text>();
+                uiText.text = GetText();
+                uiText.alignment = TextAnchor.MiddleCenter;
+                uiText.font = game.gameType.GetFont();
+                uiText.material = uiText.font.material;
+                uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                SetColor(qUI.textColor);
+            }
+            else
+            {
+                // Create the image
+                image = unityObject.AddComponent<UnityEngine.UI.Image>();
+                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+                image.color = new Color(1, 1, 1, 0);
+                image.sprite = tileSprite;
+            }
 
             float unitScale = Screen.width;
             float hSize = qUI.size * unitScale;
@@ -1058,28 +1074,28 @@ public class Quest
 
             if (qUI.hAlign < 0)
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
             }
             else if (qUI.hAlign > 0)
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
             }
             else
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
             }
 
             if (qUI.vAlign < 0)
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
             }
             else if (qUI.vAlign > 0)
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
             }
             else
             {
-                image.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
             }
 
             game.tokenBoard.Add(this);
@@ -1091,17 +1107,35 @@ public class Quest
             return qUI;
         }
 
+        override public void SetColor(Color c)
+        {
+            if (image != null) image.color = c;
+            if (uiText != null) uiText.color = c;
+        }
+
+        override public Color GetColor()
+        {
+            if (image != null) return image.color;
+            if (uiText != null) return uiText.color;
+            return Color.clear;
+        }
+
         // Set visible can control the transparency level of the component
         public override void SetVisible(float alpha)
         {
-            if (image == null)
-                return;
             targetAlpha = alpha;
             // Hide in editor
             if (targetAlpha < 0.5f) targetAlpha = 0;
-            return;
         }
 
+        // Get the text to display on the UI
+        virtual public string GetText()
+        {
+            string text = qUI.uiText.Translate(true);
+
+            // Fix new lines and replace symbol text with special characters
+            return EventManager.OutputSymbolReplace(text).Replace("\\n", "\n");
+        }
 
         // Clean up
         public override void Remove()
@@ -1156,26 +1190,6 @@ public class Quest
             game.tokenBoard.Add(this);
         }
 
-        // Function to set door texture colour
-        public void SetColor(string colorName)
-        {
-            // Translate from name to #RRGGBB, will return input if already #RRGGBB
-            string colorRGB = ColorUtil.FromName(colorName);
-            // Check format is valid
-            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
-            {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName, true));
-            }
-
-            // State with white (used for alpha)
-            Color colour = Color.white;
-            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
-            image.color = colour;
-        }
-
         // Clean up
         public override void Remove()
         {
@@ -1216,17 +1230,13 @@ public class Quest
         // Set visible can control the transparency level of the component
         virtual public void SetVisible(float alpha)
         {
-            if (image == null)
-                return;
             targetAlpha = alpha;
         }
 
         // Set visible can control the transparency level of the component
         virtual public void UpdateAlpha(float time)
         {
-            if (image == null)
-                return;
-            float alpha = image.color.a;
+            float alpha = GetColor().a;
             float distUpdate = time;
             float distRemain = targetAlpha - alpha;
             if (distRemain > distUpdate)
@@ -1241,7 +1251,40 @@ public class Quest
             {
                 alpha = targetAlpha;
             }
-            image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+            SetColor(new Color(GetColor().r, GetColor().g, GetColor().b, alpha));
+        }
+
+        virtual public void SetColor(Color c)
+        {
+            if (image == null)
+                return;
+            image.color = c;
+        }
+
+        virtual public Color GetColor()
+        {
+            if (image != null) return image.color;
+            return Color.clear;
+        }
+
+        // Function to set color from string
+        public void SetColor(string colorName)
+        {
+            // Translate from name to #RRGGBB, will return input if already #RRGGBB
+            string colorRGB = ColorUtil.FromName(colorName);
+            // Check format is valid
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
+            }
+
+            // State with white (used for alpha)
+            Color colour = Color.white;
+            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
+            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            SetColor(colour);
         }
     }
 
@@ -1257,12 +1300,15 @@ public class Quest
         // Used for events that can select or highlight heros
         public bool selected;
         public string className = "";
+        public List<string> skills;
+        public int xp = 0;
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
         {
             heroData = h;
             id = i;
+            skills = new List<string>();
         }
 
         // Construct with saved data
@@ -1288,6 +1334,26 @@ public class Quest
                     }
                 }
             }
+            skills = new List<string>();
+            if (data.ContainsKey("skills"))
+            {
+                skills.AddRange(data["skills"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+            }
+            if (data.ContainsKey("xp"))
+            {
+                int.TryParse(data["xp"], out xp);
+            }
+        }
+
+        public int AvailableXP()
+        {
+            Game game = Game.Get();
+            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$xp"));
+            foreach (string s in skills)
+            {
+                aXP -= game.cd.skills[s].xp;
+            }
+            return aXP;
         }
 
         // Save hero to string for saves/undo
@@ -1299,13 +1365,30 @@ public class Quest
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
-            r += "class=" + className + nl;
+            if (className.Length > 0)
+            {
+                r += "class=" + className + nl;
+            }
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;
             }
+            if (skills.Count > 0)
+            {
+                r += "skills=";
+                foreach (string s in skills)
+                {
+                    r += s + ' ';
+                }
+                r += nl;
+            }
 
-            return r;
+            if (xp != 0)
+            {
+                r += "xp=" + xp + nl;
+            }
+
+            return r + nl;
         }
     }
 

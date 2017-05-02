@@ -30,6 +30,7 @@ public class VarManager
         {
             if (kv.Key[0].Equals('%')) newVars.Add(kv.Key, kv.Value);
             if (kv.Key.Equals("$morale")) newVars.Add(kv.Key, kv.Value);
+            if (kv.Key.Equals("$xp")) newVars.Add(kv.Key, kv.Value);
         }
         vars = newVars;
     }
