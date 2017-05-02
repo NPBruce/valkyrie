@@ -1131,7 +1131,7 @@ public class Quest
         // Get the text to display on the UI
         virtual public string GetText()
         {
-            string text = qEvent.uiText.Translate(true);
+            string text = qUI.uiText.Translate(true);
 
             // Fix new lines and replace symbol text with special characters
             return EventManager.OutputSymbolReplace(text).Replace("\\n", "\n");
@@ -1342,7 +1342,10 @@ public class Quest
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
-            r += "class=" + className + nl;
+            if (className.Length > 0)
+            {
+                r += "class=" + className + nl;
+            }
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;
