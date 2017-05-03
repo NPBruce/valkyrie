@@ -747,15 +747,10 @@ public class Quest
                 items.Add(s);
             }
         }
-        if (items.Count > 1)
+        if (items.Count > 1 && !boardItems.ContainsKey("#shop"))
         {
-            AddShop(items);
+            boardItems.Add("#shop", new ShopInterface(items), Game.Get());
         }
-    }
-
-    public void AddShop(List<string>)
-    {
-
     }
 
     // Add a component to the board
@@ -851,6 +846,7 @@ public class Quest
         foreach (BoardComponent c in boardItems.Values)
         {
             if (c is UI) return true;
+            if (c is ShopInterface) return true;
         }
         return false;
     }
