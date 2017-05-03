@@ -127,7 +127,8 @@ public class QuestLoader {
         return quests;
     }
 
-    public static void ExtractPackages(string path);
+    public static void ExtractPackages(string path)
+    {
         // Find all packages at path
         string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
         // Extract all packages
@@ -160,8 +161,6 @@ public class QuestLoader {
                 ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
             }
         }
-
-        return quests;
     }
 
     // Attempt to create a directory

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 
 // Tokens are events that are tied to a token placed on the board
-public class ShopInterface : BoardComponent
+public class ShopInterface : Quest.BoardComponent
 {
     GameObject panel;
     Game game;
     List<string> items;
 
     // Construct with quest info and reference to Game
-    public UI(List<string> i, Game gameObject) : base(gameObject)
+    public ShopInterface(List<string> i, Game gameObject) : base(gameObject)
     {
         items = i;
         // Find quest UI panel
@@ -52,7 +52,7 @@ public class ShopInterface : BoardComponent
 
     public void DrawShopItems()
     {
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         db.ApplyTag("heroselect");
@@ -90,19 +90,19 @@ public class ShopInterface : BoardComponent
         TextButton tb = null;
         foreach (string s in items)
         {
-            TextButton tb = new TextButton(new Vector2(8, 2),
+            tb = new TextButton(new Vector2(8, 2),
                 new Vector2(xOffset, 14),
                 game.cd.items[s].name,
                 delegate {; },
                 Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.background.transform.parent = scrollArea.transform;
-            tb.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
 
-            TextButton tb = new TextButton(new Vector2(8, 8),
+            tb = new TextButton(new Vector2(8, 8),
                 new Vector2(xOffset, 6),
                 StringKey.NULL,
                 delegate {; },
@@ -120,7 +120,7 @@ public class ShopInterface : BoardComponent
 
     public void DrawPartyItems()
     {
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         db.ApplyTag("heroselect");
@@ -158,19 +158,19 @@ public class ShopInterface : BoardComponent
         TextButton tb = null;
         foreach (string s in game.quest.items)
         {
-            TextButton tb = new TextButton(new Vector2(8, 2),
+            tb = new TextButton(new Vector2(8, 2),
                 new Vector2(xOffset, 14),
                 game.cd.items[s].name,
                 delegate {; },
                 Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.background.transform.parent = scrollArea.transform;
-            tb.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
 
-            TextButton tb = new TextButton(new Vector2(8, 8),
+            tb = new TextButton(new Vector2(8, 8),
                 new Vector2(xOffset, 6),
                 StringKey.NULL,
                 delegate {; },
@@ -187,7 +187,7 @@ public class ShopInterface : BoardComponent
 
     public void DrawGold()
     {
-        db = new DialogBox(
+        DialogBox db = new DialogBox(
             new Vector2(UIScaler.GetHCenter(-5), 19),
             new Vector2(10, 4),
             StringKey.NULL);
@@ -202,7 +202,7 @@ public class ShopInterface : BoardComponent
         db = new DialogBox(
             new Vector2(UIScaler.GetHCenter(1), 20),
             new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")););
+            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
     }
 }

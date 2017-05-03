@@ -1619,7 +1619,7 @@ public class QuestData
                 itemName = new string[0];
             }
 
-            if (data.ContainsKet("starting"))
+            if (data.ContainsKey("starting"))
             {
                 bool.TryParse(data["starting"], out starting);
             }

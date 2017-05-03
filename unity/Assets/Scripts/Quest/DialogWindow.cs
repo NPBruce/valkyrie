@@ -182,10 +182,12 @@ public class DialogWindow {
         }
         if (items != 1) return;
 
+        Game game = Game.Get();
+
         Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
         db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
         db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 

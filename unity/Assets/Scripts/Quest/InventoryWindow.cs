@@ -108,7 +108,7 @@ public class InventoryWindow
         db = new DialogBox(
             new Vector2(UIScaler.GetHCenter(1), 20),
             new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")););
+            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         // Add a finished button to start the quest

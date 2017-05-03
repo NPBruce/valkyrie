@@ -73,6 +73,8 @@ namespace Assets.Scripts.UI.Screens
             string hybridClass = game.quest.heroes[hero].hybridClass;
             float yStart = 7f;
 
+            DialogBox db = null;
+            TextButton tb = null;
             if (hybridClass.Length > 0)
             {
                 archetype = game.cd.classes[hybridClass].hybridArchetype;
@@ -80,8 +82,9 @@ namespace Assets.Scripts.UI.Screens
                 db.AddBorder();
                 db.ApplyTag("heroselect");
 
-                tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, 4f), cd.name, delegate { Select(hero, className); }, Color.clear);
+                tb = new TextButton(new Vector2(xOffset + 0.5f, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); }, Color.clear);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
+                tb.ApplyTag("heroselect");
 
                 yStart += 5;
             }
@@ -124,13 +127,13 @@ namespace Assets.Scripts.UI.Screens
             foreach (ClassData cd in game.cd.classes.Values)
             {
                 if (!cd.archetype.Equals(archetype)) continue;
-                if (cd.hybridClass.Length > 0 && hybridClass.Length > 0) continue;
+                if (cd.hybridArchetype.Length > 0 && hybridClass.Length > 0) continue;
 
                 string className = cd.sectionName;
                 bool available = true;
                 bool pick = false;
 
-                for (int i = 0; i < heroCount; i++)
+                for (int i = 0; i < game.quest.heroes.Count; i++)
                 {
                     if (game.quest.heroes[i].className.Equals(className))
                     {
@@ -180,7 +183,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 if (game.quest.heroes[hero].hybridClass.Length > 0)
                 {
-                    game.quest.heroes[hero].hybridClass == "";
+                    game.quest.heroes[hero].hybridClass = "";
                 }
                 else
                 {
@@ -198,19 +201,19 @@ namespace Assets.Scripts.UI.Screens
         {
             Game game = Game.Get();
 
-            Hashset<string> items = new Hashset<string>();
+            HashSet<string> items = new HashSet<string>();
             foreach (Quest.Hero h in game.quest.heroes)
             {
                 if (h.heroData != null && h.className.Length == 0) return;
                 foreach (string s in game.cd.classes[h.className].items)
                 {
-                    items.Add(s)
+                    items.Add(s);
                 }
 
                 if (h.hybridClass.Length == 0) continue;
                 foreach (string s in game.cd.classes[h.hybridClass].items)
                 {
-                    items.Add(s)
+                    items.Add(s);
                 }
             }
             game.quest.items.UnionWith(items);

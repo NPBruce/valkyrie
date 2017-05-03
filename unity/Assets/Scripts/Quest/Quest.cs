@@ -122,7 +122,7 @@ public class Quest
                 QuestData.QItem qItem = kv.Value as QuestData.QItem;
                 if (qItem != null)
                 {
-                    progress |= AttemptMonsterMatch(qItem, force);
+                    progress |= AttemptItemMatch(qItem, force);
                     if (progress && force) force = false;
                 }
             }
@@ -735,13 +735,10 @@ public class Quest
     // Add a list of components (token, tile, etc)
     public void Add(string[] names)
     {
+        List<string> items = new List<string>();
         foreach (string s in names)
         {
             Add(s);
-        }
-        List<string> items = new List<string>();
-        foreach (string s in eventData.qEvent.addComponents)
-        {
             if (s.IndexOf("QItem") == 0)
             {
                 items.Add(s);
@@ -749,7 +746,7 @@ public class Quest
         }
         if (items.Count > 1 && !boardItems.ContainsKey("#shop"))
         {
-            boardItems.Add("#shop", new ShopInterface(items), Game.Get());
+            boardItems.Add("#shop", new ShopInterface(items, Game.Get()));
         }
     }
 
@@ -1491,7 +1488,7 @@ public class Quest
             int.TryParse(data["id"], out id);
             if (data.ContainsKey("class"))
             {
-                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)
+                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 className = classes[0];
                 if (classes.Length > 1)
                 {

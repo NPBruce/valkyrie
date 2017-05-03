@@ -29,7 +29,7 @@ public class InvestigatorItems
             QuestData.QItem item = kv.Value as QuestData.QItem;
             if (item != null && item.starting)
             {
-                game.quest.items.Add(game.quest.itemSelection[kv.Key]);
+                game.quest.items.Add(game.quest.itemSelect[kv.Key]);
             }
         }
 
