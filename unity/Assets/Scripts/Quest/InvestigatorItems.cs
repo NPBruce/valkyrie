@@ -29,49 +29,7 @@ public class InvestigatorItems
             QuestData.QItem item = kv.Value as QuestData.QItem;
             if (item != null && item.starting)
             {
-                // Specific items
-                if (item.traits.Length == 0 && (item.itemName.Length == 1))
-                {
-                    if (game.cd.items.ContainsKey(item.itemName[0]))
-                    {
-                        game.quest.items.Add(item.itemName[0]);
-                    }
-                }
-                // Random item
-                else
-                {
-                    List<string> candidates = new List<string>();
-                    foreach (KeyValuePair<string, ItemData> id in game.cd.items)
-                    {
-                        bool valid = !game.quest.items.Contains(id.Value.sectionName);
-                        if (id.Value.unique)
-                        {
-                            valid = false;
-                        }
-                        foreach (string trait in item.traits)
-                        {
-                            if (!id.Value.ContainsTrait(trait) && trait.Length > 0)
-                            {
-                                valid = false;
-                            }
-                            foreach (string s in item.itemName)
-                            {
-                                if (s.Equals(id.Value.sectionName))
-                                {
-                                    valid = false;
-                                }
-                            }
-                        }
-                        if (valid)
-                        {
-                            candidates.Add(id.Value.sectionName);
-                        }
-                    }
-                    if (candidates.Count > 0)
-                    {
-                        game.quest.items.Add(candidates[Random.Range(0, candidates.Count)]);
-                    }
-                }
+                game.quest.items.Add(game.quest.itemSelection[kv.Key]);
             }
         }
 

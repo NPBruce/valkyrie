@@ -772,6 +772,10 @@ public class Quest
         {
             boardItems.Add(name, new UI((QuestData.UI)qc, game));
         }
+        if (qc is QuestData.QItem)
+        {
+            items.Add(name);
+        }
     }
 
     // Remove a list of active components

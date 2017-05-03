@@ -513,6 +513,10 @@ public class EditorComponentEvent : EditorComponent
             {
                 components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
+            if (kv.Value is QuestData.QItem && add)
+            {
+                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+            }
         }
 
         visibilityESL = new EditorSelectionList( 
