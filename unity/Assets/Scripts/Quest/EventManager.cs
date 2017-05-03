@@ -161,6 +161,10 @@ public class EventManager
         {
             game.quest.AdjustMorale(0);
         }
+        if (game.quest.vars.GetValue("$restock") == 1)
+        {
+            game.quest.GenerateItemSelection();
+        }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))

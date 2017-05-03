@@ -837,6 +837,7 @@ public class HeroData : GenericData
 public class ClassData : GenericData
 {
     public string archetype = "warrior";
+    public string hybridArchetype = "";
     public static new string type = "Class";
     public List<string> items;
 
@@ -846,6 +847,11 @@ public class ClassData : GenericData
         if (content.ContainsKey("archetype"))
         {
             archetype = content["archetype"];
+        }
+        // Get hybridArchetype
+        if (content.ContainsKey("hybridarchetype"))
+        {
+            hybridArchetype = content["hybridarchetype"];
         }
         // Get starting item
         items = new List<string>();
@@ -879,6 +885,8 @@ public class ItemData : GenericData
     public bool unique = false;
     public int act = 0;
     public int price = 0;
+    public int minFame = -1;
+    public int maxFame = -1;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -893,6 +901,14 @@ public class ItemData : GenericData
         if (content.ContainsKey("price"))
         {
             int.TryParse(content["price"], out price);
+        }
+        if (content.ContainsKey("minfame"))
+        {
+            int.TryParse(content["minfame"], out minFame);
+        }
+        if (content.ContainsKey("maxfame"))
+        {
+            int.TryParse(content["maxfame"], out maxFame);
         }
     }
 }

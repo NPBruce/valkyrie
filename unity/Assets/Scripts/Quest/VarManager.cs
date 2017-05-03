@@ -29,8 +29,7 @@ public class VarManager
         foreach (KeyValuePair<string, float> kv in vars)
         {
             if (kv.Key[0].Equals('%')) newVars.Add(kv.Key, kv.Value);
-            if (kv.Key.Equals("$morale")) newVars.Add(kv.Key, kv.Value);
-            if (kv.Key.Equals("$xp")) newVars.Add(kv.Key, kv.Value);
+            if (kv.Key.Substring(0, 2).Equals("$%")) newVars.Add(kv.Key, kv.Value);
         }
         vars = newVars;
     }
