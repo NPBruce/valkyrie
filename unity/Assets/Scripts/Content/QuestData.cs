@@ -200,6 +200,13 @@ public class QuestData
             Item c = new Item(name, content);
             components.Add(name, c);
         }
+        // Depreciated (format 3)
+        if (name.IndexOf("StartingItem") == 0)
+        {
+            string fixedName = "Item" + name.Substring("StartingItem".Length);
+            Item c = new Item(fixedName, content);
+            components.Add(fixedName, c);
+        }
         if (name.IndexOf(Puzzle.type) == 0)
         {
             Puzzle c = new Puzzle(name, content);
@@ -1616,6 +1623,11 @@ public class QuestData
             {
                 bool.TryParse(data["starting"], out starting);
             }
+            else
+            {
+                // Depreciated (Format 3)
+                starting = true;
+            }
 
             if (data.ContainsKey("traits"))
             {
@@ -1650,10 +1662,10 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            if (starting)
-            {
-                r += "starting=" + starting + nl;
-            }
+            
+            // Depreciated (Format 3) - To make default false
+            r += "starting=" + starting + nl;
+
             if (traits.Length > 0)
             {
                 r += "traits=";
