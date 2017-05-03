@@ -16,6 +16,8 @@ namespace Assets.Scripts.UI.Screens
         {
             // Clean up
             Destroyer.Dialog();
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+                Object.Destroy(go);
 
             Game game = Game.Get();
 
@@ -82,7 +84,7 @@ namespace Assets.Scripts.UI.Screens
                 db.AddBorder();
                 db.ApplyTag("heroselect");
 
-                tb = new TextButton(new Vector2(xOffset + 0.75f, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); });
+                tb = new TextButton(new Vector2(xOffset + 1, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); }, Color.black);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
                 tb.ApplyTag("heroselect");
 
@@ -188,6 +190,7 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     game.quest.heroes[hero].hybridClass = className;
+                    game.quest.heroes[hero].className = "";
                 }
             }
             else
