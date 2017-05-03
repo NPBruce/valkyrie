@@ -739,6 +739,23 @@ public class Quest
         {
             Add(s);
         }
+        List<string> items = new List<string>();
+        foreach (string s in eventData.qEvent.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                items.Add(s);
+            }
+        }
+        if (items.Count > 1)
+        {
+            AddShop(items);
+        }
+    }
+
+    public void AddShop(List<string>)
+    {
+
     }
 
     // Add a component to the board

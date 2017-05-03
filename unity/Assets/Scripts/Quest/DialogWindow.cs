@@ -171,14 +171,16 @@ public class DialogWindow {
         if (eventData.qEvent.highlight) return;
 
         string item = "";
+        int items = 0;
         foreach (string s in eventData.qEvent.addComponents)
         {
             if (s.IndexOf("QItem") == 0)
             {
                 item = s;
+                items++;
             }
         }
-        if (item.Length == 0) return;
+        if (items != 1) return;
 
         Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);

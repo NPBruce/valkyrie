@@ -278,14 +278,16 @@ public class TokenBoard : MonoBehaviour {
     public void AddHighlight(QuestData.Event e)
     {
         string item = "";
+        int items = 0;
         foreach (string s in eventData.qEvent.addComponents)
         {
             if (s.IndexOf("QItem") == 0)
             {
                 item = s;
+                items++;
             }
         }
-        if (item.Length == 0)
+        if (items != 1)
         {
             AddHighlight(e.location);
         }

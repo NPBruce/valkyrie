@@ -502,6 +502,7 @@ public class EditorComponentEvent : EditorComponent
         {
             components.Add(new EditorSelectionList.SelectionListEntry("#boardcomponents", "Special"));
             components.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Special"));
+            components.Add(new EditorSelectionList.SelectionListEntry("#shop", "Special"));
         }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
