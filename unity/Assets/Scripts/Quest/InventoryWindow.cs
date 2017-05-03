@@ -35,7 +35,6 @@ public class InventoryWindow
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
-        db.ApplyTag("heroselect");
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -69,8 +68,8 @@ public class InventoryWindow
 
         foreach (string s in game.quest.items)
         {
-            db = new DialogBox(new Vector2(8, 2),
-                new Vector2(xOffset, 14),
+            db = new DialogBox(new Vector2(xOffset, 14),
+                new Vector2(8, 2),
                 game.cd.items[s].name,
                 Color.black);
             db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
@@ -80,8 +79,8 @@ public class InventoryWindow
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
 
-            db = new DialogBox(new Vector2(8, 8),
-                new Vector2(xOffset, 6),
+            db = new DialogBox(new Vector2(xOffset, 6),
+                new Vector2(8, 8),
                 StringKey.NULL,
                 Color.clear,
                 Color.white);

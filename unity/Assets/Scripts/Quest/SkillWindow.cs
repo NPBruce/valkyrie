@@ -25,8 +25,8 @@ public class SkillWindow
         db.AddBorder();
 
         db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-17.5f), 7),
-            new Vector2(35, 17),
+            new Vector2(UIScaler.GetHCenter(-17f), 7),
+            new Vector2(34, 17),
             StringKey.NULL);
         db.AddBorder();
 
@@ -106,13 +106,13 @@ public class SkillWindow
         if (hybridClass.Length > 0)
         {
             db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-17f), 18.5f),
+                new Vector2(UIScaler.GetHCenter(-16.5f), 18.5f),
                 new Vector2(11, 5),
                 StringKey.NULL);
             db.AddBorder();
 
             db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-17f), 18.5f),
+                new Vector2(UIScaler.GetHCenter(-16.5f), 18.5f),
                 new Vector2(2, 5),
                 1);
             db.AddBorder();
@@ -132,13 +132,13 @@ public class SkillWindow
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
 
             db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(6f), 18.5f),
+                new Vector2(UIScaler.GetHCenter(5.5f), 18.5f),
                 new Vector2(11, 5),
                 StringKey.NULL);
             db.AddBorder();
 
             db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(6f), 18.5f),
+                new Vector2(UIScaler.GetHCenter(5.5f), 18.5f),
                 new Vector2(2, 5),
                 3);
             db.AddBorder();
@@ -194,7 +194,7 @@ public class SkillWindow
             if (hybridClass.Length == 0) continue;
             if (s.sectionName.IndexOf("Skill" + hybridClass.Substring("Class".Length)) != 0) continue;
             
-            tb = new TextButton(new Vector2(-26f + (s.xp * 11.5f), yOffset + 15), new Vector2(8f, 4f), s.name, delegate { SelectSkill(hero, skill); }, buttonColor);
+            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-25f) + (s.xp * 11f), yOffset + 15), new Vector2(8f, 4f), s.name, delegate { SelectSkill(hero, skill); }, buttonColor);
         }
 
         // Add a finished button to start the quest
