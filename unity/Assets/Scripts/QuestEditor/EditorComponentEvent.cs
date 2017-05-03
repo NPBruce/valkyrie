@@ -502,6 +502,7 @@ public class EditorComponentEvent : EditorComponent
         {
             components.Add(new EditorSelectionList.SelectionListEntry("#boardcomponents", "Special"));
             components.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Special"));
+            components.Add(new EditorSelectionList.SelectionListEntry("#shop", "Special"));
         }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -510,6 +511,10 @@ public class EditorComponentEvent : EditorComponent
                 components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }
             if (kv.Value is QuestData.Spawn && !add)
+            {
+                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+            }
+            if (kv.Value is QuestData.QItem && add)
             {
                 components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
             }

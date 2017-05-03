@@ -212,6 +212,7 @@ class SaveManager
                 new MenuButton();
                 new LogButton();
                 new SkillButton();
+                new InventoryButton();
                 game.stageUI = new NextStageButton();
             }
         }

@@ -22,6 +22,9 @@ public class Quest
     // A list of items that have been given to the investigators
     public HashSet<string> items;
 
+    // Dictionary of picked items
+    public Dictionary<string, string> itemSelect;
+
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
@@ -74,6 +77,7 @@ public class Quest
         boardItems = new Dictionary<string, BoardComponent>();
         vars = new VarManager();
         items = new HashSet<string>();
+        itemSelect = new Dictionary<string, string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
@@ -82,6 +86,7 @@ public class Quest
         log = new List<LogEntry>();
         monsterSelect = new Dictionary<string, string>();
 
+        GenerateItemSelection();
         GenerateMonsterSelection();
         eManager = new EventManager();
 
@@ -103,6 +108,136 @@ public class Quest
         vars.SetValue("#round", 1);
     }
 
+    public void GenerateItemSelection()
+    {
+        // Determine monster types
+        bool progress = false;
+        bool force = false;
+        bool done = false;
+        while (!done)
+        {
+            progress = false;
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+            {
+                QuestData.QItem qItem = kv.Value as QuestData.QItem;
+                if (qItem != null)
+                {
+                    progress |= AttemptItemMatch(qItem, force);
+                    if (progress && force) force = false;
+                }
+            }
+            if (!progress && !force)
+            {
+                force = true;
+            }
+            else if (!progress && force)
+            {
+                done = true;
+            }
+        }
+        vars.SetValue("$restock", 0);
+    }
+
+
+    public bool AttemptItemMatch(QuestData.QItem qItem, bool force = true)
+    {
+        if (itemSelect.ContainsKey(qItem.sectionName))
+        {
+            return false;
+        }
+        if ((qItem.traitpool.Length + qItem.traits.Length) == 0)
+        {
+            foreach (string t in qItem.itemName)
+            {
+                if (itemSelect.ContainsKey(t))
+                {
+                    itemSelect.Add(qItem.sectionName, itemSelect[t]);
+                    return true;
+                }
+                if (t.IndexOf("QItem") == 0)
+                {
+                    return false;
+                }
+                // Item type might exist in content packs
+                else if (game.cd.items.ContainsKey(t))
+                {
+                    itemSelect.Add(qItem.sectionName, t);
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            // List of exclusions
+            List<string> exclude = new List<string>();
+            foreach (string t in qItem.itemName)
+            {
+                if (itemSelect.ContainsKey(t))
+                {
+                    exclude.Add(itemSelect[t]);
+                }
+                else if (t.IndexOf("QItem") == 0 && !force)
+                {
+                    return false;
+                }
+                else
+                {
+                    exclude.Add(t);
+                }
+            }
+
+            // Start a list of matches
+            List<string> list = new List<string>();
+            foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
+            {
+                bool allFound = true;
+                foreach (string t in qItem.traits)
+                {
+                    // Does the item have this trait?
+                    if (!kv.Value.ContainsTrait(t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (qItem.traitpool.Length == 0);
+                foreach (string t in qItem.traitpool)
+                {
+                    // Does the item have this trait?
+                    if (kv.Value.ContainsTrait(t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // item has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Unable to find item of traits specified in QItem: " + qItem.sectionName);
+                Destroyer.MainMenu();
+                return false;
+            }
+
+            // Pick item at random from candidates
+            itemSelect.Add(qItem.sectionName, list[Random.Range(0, list.Count)]);
+            return true;
+        }
+        return false;
+    }
 
     public void GenerateMonsterSelection()
     {
@@ -276,6 +411,9 @@ public class Quest
         qd = new QuestData(questPath + "/" + path);
         questPath = Path.GetDirectoryName(qd.questPath);
 
+        // Extract packages in case needed
+        QuestLoader.ExtractPackages(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+
         vars.TrimQuest();
 
         undo = new Stack<string>();
@@ -288,8 +426,10 @@ public class Quest
         eventQuota = new Dictionary<string, int>();
         undo = new Stack<string>();
         monsterSelect = new Dictionary<string, string>();
+        itemSelect = new Dictionary<string, string>();
 
         GenerateMonsterSelection();
+        GenerateItemSelection();
         eManager = new EventManager();
 
         // Set quest vars for selected expansions
@@ -423,6 +563,14 @@ public class Quest
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
 
+        itemSelect = saveData.Get("SelectItem");
+        if (itemSelect == null)
+        {
+            // Support old saves
+            itemSelect = new Dictionary<string, string>();
+            GenerateItemSelection();
+        }
+
         // Set items
         items = new HashSet<string>();
         Dictionary<string, string> saveItems = saveData.Get("Items");
@@ -537,8 +685,8 @@ public class Quest
     {
         Game game = Game.Get();
         
-        float morale = vars.GetValue("$morale") + m;
-        vars.SetValue("$morale", morale);        
+        float morale = vars.GetValue("$%morale") + m;
+        vars.SetValue("$%morale", morale);        
 
         // Test for no morale ending
         if (morale < 0)
@@ -587,9 +735,18 @@ public class Quest
     // Add a list of components (token, tile, etc)
     public void Add(string[] names)
     {
+        List<string> items = new List<string>();
         foreach (string s in names)
         {
             Add(s);
+            if (s.IndexOf("QItem") == 0)
+            {
+                items.Add(s);
+            }
+        }
+        if (items.Count > 1 && !boardItems.ContainsKey("#shop"))
+        {
+            boardItems.Add("#shop", new ShopInterface(items, Game.Get()));
         }
     }
 
@@ -623,6 +780,10 @@ public class Quest
         if (qc is QuestData.UI)
         {
             boardItems.Add(name, new UI((QuestData.UI)qc, game));
+        }
+        if (qc is QuestData.QItem)
+        {
+            items.Add(name);
         }
     }
 
@@ -682,6 +843,7 @@ public class Quest
         foreach (BoardComponent c in boardItems.Values)
         {
             if (c is UI) return true;
+            if (c is ShopInterface) return true;
         }
         return false;
     }
@@ -825,6 +987,12 @@ public class Quest
 
         r += "[SelectMonster]" + nl;
         foreach (KeyValuePair<string, string> kv in monsterSelect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
+        }
+
+        r += "[SelectItem]" + nl;
+        foreach (KeyValuePair<string, string> kv in itemSelect)
         {
             r += kv.Key + "=" + kv.Value + nl;
         }
@@ -1300,6 +1468,7 @@ public class Quest
         // Used for events that can select or highlight heros
         public bool selected;
         public string className = "";
+        public string hybridClass = "";
         public List<string> skills;
         public int xp = 0;
 
@@ -1319,7 +1488,12 @@ public class Quest
             int.TryParse(data["id"], out id);
             if (data.ContainsKey("class"))
             {
-                className = data["class"];
+                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                className = classes[0];
+                if (classes.Length > 1)
+                {
+                    hybridClass = classes[1];
+                }
             }
 
             Game game = Game.Get();
@@ -1348,7 +1522,7 @@ public class Quest
         public int AvailableXP()
         {
             Game game = Game.Get();
-            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$xp"));
+            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
             foreach (string s in skills)
             {
                 aXP -= game.cd.skills[s].xp;
@@ -1367,7 +1541,7 @@ public class Quest
             r += "defeated=" + defeated + nl;
             if (className.Length > 0)
             {
-                r += "class=" + className + nl;
+                r += "class=" + className + " " + hybridClass + nl;
             }
             if (heroData != null)
             {

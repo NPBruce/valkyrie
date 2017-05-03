@@ -3,16 +3,16 @@ using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class EditorComponentStartingItem : EditorComponent
+public class EditorComponentItem : EditorComponent
 {
-    QuestData.StartingItem itemComponent;
+    QuestData.QItem itemComponent;
     EditorSelectionList itemESL;
     EditorSelectionList traitESL;
 
-    public EditorComponentStartingItem(string nameIn) : base()
+    public EditorComponentItem(string nameIn) : base()
     {
         Game game = Game.Get();
-        itemComponent = game.quest.qd.components[nameIn] as QuestData.StartingItem;
+        itemComponent = game.quest.qd.components[nameIn] as QuestData.QItem;
         component = itemComponent;
         name = component.sectionName;
         Update();
@@ -21,15 +21,15 @@ public class EditorComponentStartingItem : EditorComponent
     override public void Update()
     {
         base.Update();
-        //Game game = Game.Get();
+        Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.STARTING_ITEM, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.QITEM, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.ApplyTag("editor");
 
         tb = new TextButton(new Vector2(5, 0), new Vector2(14, 1), 
-            new StringKey(null,name.Substring("StartingItem".Length),false), delegate { QuestEditorData.ListStartingItem(); });
+            new StringKey(null,name.Substring("QItem".Length),false), delegate { QuestEditorData.ListItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.ApplyTag("editor");
@@ -38,14 +38,25 @@ public class EditorComponentStartingItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
+        DialogBox db = null;
+        if (game.gameType is MoMGameType)
+        {
+            db = new DialogBox(new Vector2(0, 2), new Vector2(10, 1), new StringKey("val","X_COLON",CommonStringKeys.STARTING_ITEM));
+            db.ApplyTag("editor");
+
+            tb = new TextButton(new Vector2(10, 2), new Vector2(4, 1), new StringKey(null, itemComponent.starting.ToString(), false), delegate { ToggleStarting(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        db = new DialogBox(new Vector2(0, 3), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 2), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
+        tb = new TextButton(new Vector2(19, 3), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        float offset = 3;
+        float offset = 4;
         for (int i = 0; i < itemComponent.itemName.Length; i++)
         {
             int tmp = i;
@@ -88,6 +99,12 @@ public class EditorComponentStartingItem : EditorComponent
         }
     }
 
+    public void ToggleStarting()
+    {
+        itemComponent.starting = !itemComponent.starting;
+        Update();
+    }
+
     public void AddItem()
     {
         Game game = Game.Get();
@@ -101,7 +118,7 @@ public class EditorComponentStartingItem : EditorComponent
         HashSet<string> usedItems = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestData.StartingItem i = kv.Value as QuestData.StartingItem;
+            QuestData.QItem i = kv.Value as QuestData.QItem;
             if (i != null)
             {
                 if (i.traits.Length == 0)
