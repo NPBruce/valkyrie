@@ -21,7 +21,7 @@ public class EditorComponentItem : EditorComponent
     override public void Update()
     {
         base.Update();
-        //Game game = Game.Get();
+        Game game = Game.Get();
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.QITEM, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -38,14 +38,24 @@ public class EditorComponentItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
+        if (game.gameType is MoMGameType)
+        {
+            DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(10, 1), new StringKey("val","X_COLON",CommonStringKeys.STARTING_ITEM));
+            db.ApplyTag("editor");
+
+            tb = new TextButton(new Vector2(10, 2), new Vector2(4, 1), new StringKey(null, itemComponent.starting.ToString(), false), delegate { ToggleStarting(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+        }
+
+        DialogBox db = new DialogBox(new Vector2(0, 3), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
         db.ApplyTag("editor");
 
-        tb = new TextButton(new Vector2(19, 2), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
+        tb = new TextButton(new Vector2(19, 3), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        float offset = 3;
+        float offset = 4;
         for (int i = 0; i < itemComponent.itemName.Length; i++)
         {
             int tmp = i;
@@ -86,6 +96,12 @@ public class EditorComponentItem : EditorComponent
             }
             offset++;
         }
+    }
+
+    public void ToggleStarting()
+    {
+        itemComponent.starting = !itemComponent.starting;
+        Update();
     }
 
     public void AddItem()
