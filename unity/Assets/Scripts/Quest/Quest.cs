@@ -1303,6 +1303,7 @@ public class Quest
         // Used for events that can select or highlight heros
         public bool selected;
         public string className = "";
+        public string hybridClass = "";
         public List<string> skills;
         public int xp = 0;
 
@@ -1322,7 +1323,12 @@ public class Quest
             int.TryParse(data["id"], out id);
             if (data.ContainsKey("class"))
             {
-                className = data["class"];
+                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)
+                className = classes[0];
+                if (classes.Length > 1)
+                {
+                    hybridClass = classes[1];
+                }
             }
 
             Game game = Game.Get();
@@ -1370,7 +1376,7 @@ public class Quest
             r += "defeated=" + defeated + nl;
             if (className.Length > 0)
             {
-                r += "class=" + className + nl;
+                r += "class=" + className + " " + hybridClass + nl;
             }
             if (heroData != null)
             {

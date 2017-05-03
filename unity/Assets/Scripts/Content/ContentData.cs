@@ -837,6 +837,7 @@ public class HeroData : GenericData
 public class ClassData : GenericData
 {
     public string archetype = "warrior";
+    public string hybridArchetype = "";
     public static new string type = "Class";
     public List<string> items;
 
@@ -846,6 +847,11 @@ public class ClassData : GenericData
         if (content.ContainsKey("archetype"))
         {
             archetype = content["archetype"];
+        }
+        // Get hybridArchetype
+        if (content.ContainsKey("hybridarchetype"))
+        {
+            hybridArchetype = content["hybridarchetype"];
         }
         // Get starting item
         items = new List<string>();
