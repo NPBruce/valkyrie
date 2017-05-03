@@ -195,9 +195,9 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
-        if (name.IndexOf(StartingItem.type) == 0)
+        if (name.IndexOf(Item.type) == 0)
         {
-            StartingItem c = new StartingItem(name, content);
+            Item c = new Item(name, content);
             components.Add(name, c);
         }
         if (name.IndexOf(Puzzle.type) == 0)
@@ -1582,14 +1582,16 @@ public class QuestData
 
 
     // Scenario starting item
-    public class StartingItem : QuestComponent
+    public class Item : QuestComponent
     {
-        new public static string type = "StartingItem";
+        new public static string type = "Item";
         public string[] itemName;
         public string[] traits;
+        public string[] traitpool;
+        public bool starting = false;
 
         // Create new (editor)
-        public StartingItem(string s) : base(s)
+        public Item(string s) : base(s)
         {
             typeDynamic = type;
             itemName = new string[0];
@@ -1598,7 +1600,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public StartingItem(string name, Dictionary<string, string> data) : base(name, data)
+        public Item(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
@@ -1609,6 +1611,12 @@ public class QuestData
             {
                 itemName = new string[0];
             }
+
+            if (data.ContainsKet("starting"))
+            {
+                bool.TryParse(data["starting"], out starting);
+            }
+
             if (data.ContainsKey("traits"))
             {
                 traits = data["traits"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
@@ -1616,6 +1624,14 @@ public class QuestData
             else
             {
                 traits = new string[0];
+            }
+            if (data.ContainsKey("traitpool"))
+            {
+                traitpool = data["traitpool"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                traitpool = new string[0];
             }
         }
 
@@ -1634,6 +1650,10 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+            if (starting)
+            {
+                r += "starting=" + starting + nl;
+            }
             if (traits.Length > 0)
             {
                 r += "traits=";
@@ -1643,10 +1663,18 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+            if (traitpool.Length > 0)
+            {
+                r += "traitpool=";
+                foreach (string s in traitpool)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
             return r;
         }
     }
-
 
     // Quest ini component has special data
     public class Quest
