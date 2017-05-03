@@ -540,8 +540,8 @@ public class Quest
     {
         Game game = Game.Get();
         
-        float morale = vars.GetValue("$morale") + m;
-        vars.SetValue("$morale", morale);        
+        float morale = vars.GetValue("$%morale") + m;
+        vars.SetValue("$%morale", morale);        
 
         // Test for no morale ending
         if (morale < 0)
@@ -1357,7 +1357,7 @@ public class Quest
         public int AvailableXP()
         {
             Game game = Game.Get();
-            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$xp"));
+            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
             foreach (string s in skills)
             {
                 aXP -= game.cd.skills[s].xp;

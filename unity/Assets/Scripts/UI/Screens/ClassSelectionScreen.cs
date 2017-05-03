@@ -198,13 +198,25 @@ namespace Assets.Scripts.UI.Screens
         {
             Game game = Game.Get();
 
+            Hashset<string> items = new Hashset<string>();
             foreach (Quest.Hero h in game.quest.heroes)
             {
                 if (h.heroData != null && h.className.Length == 0) return;
+                foreach (string s in game.cd.classes[h.className].items)
+                {
+                    items.Add(s)
+                }
+
+                if (h.hybridClass.Length == 0) continue;
+                foreach (string s in game.cd.classes[h.hybridClass].items)
+                {
+                    items.Add(s)
+                }
             }
+            game.quest.items.UnionWith(items);
+
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
                 Object.Destroy(go);
-
             game.moraleDisplay = new MoraleDisplay();
             game.QuestStartEvent();
         }

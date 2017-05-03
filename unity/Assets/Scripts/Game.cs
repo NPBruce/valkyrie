@@ -216,7 +216,7 @@ public class Game : MonoBehaviour {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        quest.vars.SetValue("$morale", count);
+        quest.vars.SetValue("$%morale", count);
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
@@ -236,6 +236,7 @@ public class Game : MonoBehaviour {
         new MenuButton();
         new LogButton();
         new SkillButton();
+        new InventoryButton();
         // Draw next stage button if required
         stageUI = new NextStageButton();
 

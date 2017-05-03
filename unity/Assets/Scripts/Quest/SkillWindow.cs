@@ -7,8 +7,6 @@ public class SkillWindow
 {
     public Dictionary<string, DialogBoxEditable> valueDBE;
 
-    public bool developerToggle = false;
-
     // Construct and display
     public SkillWindow()
     {
