@@ -23,7 +23,7 @@ public class EditorComponentEvent : EditorComponent
 
     QuestData.Event eventComponent;
 
-    DialogBoxEditable eventTextDBE;
+    PaneledDialogBoxEditable eventTextDBE;
     EditorSelectionList triggerESL;
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
@@ -142,9 +142,9 @@ public class EditorComponentEvent : EditorComponent
         db = new DialogBox(new Vector2(0, 3), new Vector2(20, 1), new StringKey("val","X_COLON", DIALOG));
         db.ApplyTag("editor");
 
-        eventTextDBE = new DialogBoxEditable(
+        eventTextDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 8), 
-            eventComponent.text.Translate(true),true,
+            eventComponent.text.Translate(true),
             delegate { UpdateText(); });
         eventTextDBE.ApplyTag("editor");
         eventTextDBE.AddBorder();

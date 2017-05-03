@@ -23,7 +23,7 @@ public class EditorComponentSpawn : EditorComponent
     QuestData.Spawn spawnComponent;
 
     DialogBoxEditable uniqueTitleDBE;
-    DialogBoxEditable uniqueTextDBE;
+    PaneledDialogBoxEditable uniqueTextDBE;
     DialogBoxEditable healthDBE;
     DialogBoxEditable healthHeroDBE;
 
@@ -133,9 +133,9 @@ public class EditorComponentSpawn : EditorComponent
                 db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
                 db.ApplyTag("editor");
 
-                uniqueTextDBE = new DialogBoxEditable(
+                uniqueTextDBE = new PaneledDialogBoxEditable(
                 new Vector2(0, 11), new Vector2(20, 8), 
-                spawnComponent.uniqueText.Translate(), true,
+                spawnComponent.uniqueText.Translate(),
                 delegate { UpdateUniqueText(); });
                 uniqueTextDBE.ApplyTag("editor");
                 uniqueTextDBE.AddBorder();

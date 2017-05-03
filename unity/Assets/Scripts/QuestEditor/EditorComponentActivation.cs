@@ -17,11 +17,11 @@ public class EditorComponentActivation : EditorComponent
 
 
     QuestData.Activation activationComponent;
-    DialogBoxEditable abilityDBE;
-    DialogBoxEditable moveButtonDBE;
-    DialogBoxEditable masterActionsDBE;
-    DialogBoxEditable minionActionsDBE;
-    DialogBoxEditable moveDBE;
+    PaneledDialogBoxEditable abilityDBE;
+    PaneledDialogBoxEditable moveButtonDBE;
+    PaneledDialogBoxEditable masterActionsDBE;
+    PaneledDialogBoxEditable minionActionsDBE;
+    PaneledDialogBoxEditable moveDBE;
 
     public EditorComponentActivation(string nameIn) : base()
     {
@@ -70,9 +70,9 @@ public class EditorComponentActivation : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), new StringKey("val","X_COLON",ABILITY));
         db.ApplyTag("editor");
 
-        abilityDBE = new DialogBoxEditable(
+        abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
-            activationComponent.ability.Translate(), true, 
+            activationComponent.ability.Translate(), 
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
@@ -91,9 +91,9 @@ public class EditorComponentActivation : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        masterActionsDBE = new DialogBoxEditable(
+        masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 11), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(true), true,
+            activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -111,9 +111,9 @@ public class EditorComponentActivation : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag("editor");
 
-        minionActionsDBE = new DialogBoxEditable(
+        minionActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 20), new Vector2(20, 8), 
-            activationComponent.minionActions.Translate(true), true,
+            activationComponent.minionActions.Translate(true),
             delegate { UpdateMinionActions(); });
         minionActionsDBE.ApplyTag("editor");
         minionActionsDBE.AddBorder();
@@ -124,18 +124,18 @@ public class EditorComponentActivation : EditorComponent
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), INITIAL_MESSAGE);
         db.ApplyTag("editor");
 
-        abilityDBE = new DialogBoxEditable(
+        abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
-            activationComponent.ability.Translate(true), true,
+            activationComponent.ability.Translate(true),
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag("editor");
         abilityDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), UNABLE_BUTTON);
 
-        moveButtonDBE = new DialogBoxEditable(
+        moveButtonDBE = new PaneledDialogBoxEditable(
             new Vector2(10, 10), new Vector2(10, 1), 
-            activationComponent.moveButton.Translate(true), false,
+            activationComponent.moveButton.Translate(true),
             delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag("editor");
         moveButtonDBE.AddBorder();
@@ -143,9 +143,9 @@ public class EditorComponentActivation : EditorComponent
         db = new DialogBox(new Vector2(0, 11), new Vector2(20, 1), ATTACK_MESSAGE);
         db.ApplyTag("editor");
 
-        masterActionsDBE = new DialogBoxEditable(
+        masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 12), new Vector2(20, 8), 
-            activationComponent.masterActions.Translate(true), true,
+            activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.ApplyTag("editor");
         masterActionsDBE.AddBorder();
@@ -153,9 +153,9 @@ public class EditorComponentActivation : EditorComponent
         db = new DialogBox(new Vector2(0, 20), new Vector2(20, 1), NO_ATTACK_MESSAGE);
         db.ApplyTag("editor");
 
-        moveDBE = new DialogBoxEditable(
+        moveDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 21), new Vector2(20, 8), 
-            activationComponent.move.Translate(true), true,
+            activationComponent.move.Translate(true),
             delegate { UpdateMove(); });
         moveDBE.ApplyTag("editor");
         moveDBE.AddBorder();

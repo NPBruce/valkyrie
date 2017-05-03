@@ -10,7 +10,7 @@ public class EditorComponentUI : EditorComponent
     DialogBoxEditable locXDBE;
     DialogBoxEditable locYDBE;
     DialogBoxEditable sizeDBE;
-    DialogBoxEditable textDBE;
+    PaneledDialogBoxEditable textDBE;
     DialogBoxEditable textSizeDBE;
     EditorSelectionList colorList;
 
@@ -133,10 +133,9 @@ public class EditorComponentUI : EditorComponent
 
         if (uiComponent.imageName.Length == 0)
         {
-            textDBE = new DialogBoxEditable(
+            textDBE = new PaneledDialogBoxEditable(
                 new Vector2(0, 15), new Vector2(20, 6),
                 game.quest.qd.quest.description.Translate(true),
-                true,
                 delegate { UpdateText(); });
             textDBE.ApplyTag("editor");
             textDBE.AddBorder();

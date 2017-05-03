@@ -707,7 +707,8 @@ public class EventManager
                         {"∑","{knowledge}"},
                         {"μ","{awareness}"},
                         {"≤","{shield}" },
-                        {"±","{surge}"}
+                        {"±","{surge}"},
+                        {"Rnd","{rnd:hero}"}
                     } },
                     { "MoM", new Dictionary<string,string>()
                     {
@@ -719,7 +720,8 @@ public class EventManager
                         {"","{influence}"},
                         {"","{observation}"},
                         {"","{success}"},
-                        {"","{clue}"}
+                        {"","{clue}"},
+                        {"Rnd","{rnd:hero}"}
                     } }
                 };
 }

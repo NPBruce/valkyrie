@@ -21,7 +21,7 @@ public class EditorComponentCustomMonster : EditorComponent
     QuestData.CustomMonster monsterComponent;
     
     DialogBoxEditable nameDBE;
-    DialogBoxEditable infoDBE;
+    PaneledDialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
     DialogBoxEditable healthHeroDBE;
     EditorSelectionList baseESL;
@@ -105,9 +105,9 @@ public class EditorComponentCustomMonster : EditorComponent
             db.ApplyTag("editor");
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
-                infoDBE = new DialogBoxEditable(
+                infoDBE = new PaneledDialogBoxEditable(
                     new Vector2(0, 7), new Vector2(20, 8), 
-                    monsterComponent.info.Translate(), true,
+                    monsterComponent.info.Translate(),
                     delegate { UpdateInfo(); });
                 infoDBE.ApplyTag("editor");
                 infoDBE.AddBorder();
