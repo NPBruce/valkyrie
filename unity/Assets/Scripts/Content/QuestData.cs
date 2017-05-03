@@ -195,16 +195,16 @@ public class QuestData
             MPlace c = new MPlace(name, content);
             components.Add(name, c);
         }
-        if (name.IndexOf(Item.type) == 0)
+        if (name.IndexOf(QItem.type) == 0)
         {
-            Item c = new Item(name, content);
+            QItem c = new QItem(name, content);
             components.Add(name, c);
         }
         // Depreciated (format 3)
         if (name.IndexOf("StartingItem") == 0)
         {
-            string fixedName = "Item" + name.Substring("StartingItem".Length);
-            Item c = new Item(fixedName, content);
+            string fixedName = "QItem" + name.Substring("StartingItem".Length);
+            QItem c = new QItem(fixedName, content);
             components.Add(fixedName, c);
         }
         if (name.IndexOf(Puzzle.type) == 0)
@@ -1589,16 +1589,16 @@ public class QuestData
 
 
     // Scenario starting item
-    public class Item : QuestComponent
+    public class QItem : QuestComponent
     {
-        new public static string type = "Item";
+        new public static string type = "QItem";
         public string[] itemName;
         public string[] traits;
         public string[] traitpool;
         public bool starting = false;
 
         // Create new (editor)
-        public Item(string s) : base(s)
+        public QItem(string s) : base(s)
         {
             typeDynamic = type;
             itemName = new string[0];
@@ -1607,7 +1607,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Item(string name, Dictionary<string, string> data) : base(name, data)
+        public QItem(string name, Dictionary<string, string> data) : base(name, data)
         {
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
@@ -1662,7 +1662,7 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
-            
+
             // Depreciated (Format 3) - To make default false
             r += "starting=" + starting + nl;
 
