@@ -277,7 +277,42 @@ public class TokenBoard : MonoBehaviour {
     // Add highlight for event
     public void AddHighlight(QuestData.Event e)
     {
-        AddHighlight(e.location);
+        string item = "";
+        foreach (string s in eventData.qEvent.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                item = s;
+            }
+        }
+        if (item.Length == 0)
+        {
+            AddHighlight(e.location);
+        }
+        else
+        {
+            AddItem(e.location, item);
+        }
+    }
+
+    // Add an item
+    public void AddItem(Vector2 location, string item)
+    {
+        Game game = Game.Get();
+        // Create object
+        GameObject itemObject = new GameObject("item" + item);
+        itemObject.tag = "dialog";
+        itemObject.transform.parent = game.tokenCanvas.transform;
+
+        // Create the image
+        Texture2D newTex = ContentData.FileToTexture(game.cd.items[game.quest.itemselection[item]].image);
+        UnityEngine.UI.Image image = itemObject.AddComponent<UnityEngine.UI.Image>();
+        iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        image.sprite = iconSprite;
+        image.rectTransform.sizeDelta = new Vector2(1, 1);
+
+        // Move to square
+        itemObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
     }
 
     // Draw a highlight at location
