@@ -67,6 +67,30 @@ public class InventoryWindow
 
         float xOffset = UIScaler.GetHCenter(-16);
 
+        foreach (string s in game.quest.items)
+        {
+            db = new DialogBox(new Vector2(8, 2),
+                new Vector2(xOffset, 14),
+                game.cd.items[s].name,
+                Color.black);
+            db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            db.background.transform.parent = scrollArea.transform;
+            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+
+            Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
+            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
+
+            db = new DialogBox(new Vector2(8, 8),
+                new Vector2(xOffset, 6),
+                StringKey.NULL,
+                Color.clear,
+                Color.white);
+            db.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
+            db.background.transform.parent = scrollArea.transform;
+
+            xOffset += 9;
+        }
+
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (xOffset - UIScaler.GetHCenter(-16)) * UIScaler.GetPixelsPerUnit());
 
         db = new DialogBox(
