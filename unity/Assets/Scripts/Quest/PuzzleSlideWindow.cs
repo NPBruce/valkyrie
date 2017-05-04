@@ -39,7 +39,7 @@ public class PuzzleSlideWindow
 
         // Puzzle goes here
         GameObject background = new GameObject("puzzleContent");
-        background.tag = "dialog";
+        background.tag = Game.DIALOG;
         RectTransform transBg = background.AddComponent<RectTransform>();
         background.transform.SetParent(Game.Get().uICanvas.transform);
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() * 2.5f, 18f * UIScaler.GetPixelsPerUnit());
@@ -127,7 +127,7 @@ public class PuzzleSlideWindow
         for (int i = 0; i < 8; i++)
         {
             bLine[i] = new GameObject("PuzzleFrame" + i);
-            bLine[i].tag = "dialog";
+            bLine[i].tag = Game.DIALOG;
             bLine[i].AddComponent<RectTransform>();
             bLine[i].AddComponent<CanvasRenderer>();
             bLine[i].transform.SetParent(trans);
@@ -176,7 +176,7 @@ public class PuzzleSlideWindow
             borderColour = Color.red;
             bgColour = new Color(0.8f, 0.0f, 0f, 1f);
         }
-        blockGO.tag = "dialog";
+        blockGO.tag = Game.DIALOG;
 
         //Game game = Game.Get();
         blockGO.transform.parent = pos;

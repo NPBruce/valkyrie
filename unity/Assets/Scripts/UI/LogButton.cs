@@ -20,13 +20,13 @@ public class LogButton
         qb = new TextButton(new Vector2(5.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), LOG, delegate { Log(); });
         qb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
-        qb.ApplyTag("questui");
+        qb.ApplyTag(Game.QUESTUI);
     }
 
     // When pressed bring up the approriate menu
     public void Log()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
         if (GameObject.FindGameObjectWithTag("activation") != null) return;
         new LogWindow();
     }

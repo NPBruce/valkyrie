@@ -17,7 +17,7 @@ public class QuestEditSelection
         questList = QuestLoader.GetUserUnpackedQuests();
 
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Heading
@@ -109,7 +109,7 @@ public class QuestEditSelection
         questList = QuestLoader.GetUserUnpackedQuests();
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Header
@@ -207,7 +207,7 @@ public class QuestEditSelection
         questList = QuestLoader.GetQuests(true);
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Header
@@ -430,7 +430,7 @@ public class QuestEditSelection
     {
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         game.audioControl.Music(new List<string>());

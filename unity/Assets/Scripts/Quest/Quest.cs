@@ -397,7 +397,7 @@ public class Quest
         Game game = Game.Get();
 
         // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
             Object.Destroy(go);
         game.tokenBoard.tc.Clear();
 
@@ -527,12 +527,12 @@ public class Quest
         // Clear all tokens
         game.tokenBoard.Clear();
         // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
             Object.Destroy(go);
 
         // Repopulate items on the baord
         boardItems = new Dictionary<string, BoardComponent>();
-        Dictionary<string, string> saveBoard = saveData.Get("Board");
+        Dictionary<string, string> saveBoard = saveData.Get(Game.BOARD);
         foreach (KeyValuePair<string, string> kv in saveBoard)
         {
             if (kv.Key.IndexOf("Door") == 0)
@@ -1042,7 +1042,7 @@ public class Quest
 
             // Create a unity object for the tile
             unityObject = new GameObject("Object" + qTile.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
             unityObject.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
@@ -1123,7 +1123,7 @@ public class Quest
 
             // Create object
             unityObject = new GameObject("Object" + qToken.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
 
             unityObject.transform.parent = game.tokenCanvas.transform;
 
@@ -1182,7 +1182,7 @@ public class Quest
             {
                 // Create UI Panel
                 panel = new GameObject("QuestUIPanel");
-                panel.tag = "board";
+                panel.tag = Game.BOARD;
                 panel.transform.parent = game.uICanvas.transform;
                 panel.transform.SetAsFirstSibling();
                 panel.AddComponent<RectTransform>();
@@ -1204,7 +1204,7 @@ public class Quest
 
             // Create object
             unityObject = new GameObject("Object" + qUI.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
 
             unityObject.transform.parent = panel.transform;
 
@@ -1272,7 +1272,7 @@ public class Quest
 
             if (qUI.border)
             {
-                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), "board");
+                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), Game.BOARD);
             }
 
             game.tokenBoard.Add(this);
@@ -1344,7 +1344,7 @@ public class Quest
 
             // Create object
             unityObject = new GameObject("Object" + qDoor.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
 
             unityObject.transform.parent = game.tokenCanvas.transform;
 
@@ -1773,7 +1773,7 @@ public class Quest
             {
                 valkyrie = true;
             }
-            if (type.IndexOf("editor") == 0)
+            if (type.IndexOf(Game.EDITOR) == 0)
             {
                 editor = true;
             }
@@ -1789,7 +1789,7 @@ public class Quest
             }
             else if (editor)
             {
-                r += "editor" + id + "=";
+                r += Game.EDITOR + id + "=";
             }
             else
             {

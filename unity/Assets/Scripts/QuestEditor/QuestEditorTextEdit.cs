@@ -41,8 +41,8 @@ public class QuestEditorTextEdit {
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
         GameObject inputObj = new GameObject("textInput");
-        textObj.tag = "dialog";
-        inputObj.tag = "dialog";
+        textObj.tag = Game.DIALOG;
+        inputObj.tag = Game.DIALOG;
 
         inputObj.transform.parent = game.uICanvas.transform;
         textObj.transform.parent = inputObj.transform;

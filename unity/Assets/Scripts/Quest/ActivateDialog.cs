@@ -108,7 +108,7 @@ public class ActivateDialog {
     virtual public void activated()
     {
         // Disable if there is a menu open
-        if (GameObject.FindGameObjectWithTag("dialog") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("activation"))
             Object.Destroy(go);

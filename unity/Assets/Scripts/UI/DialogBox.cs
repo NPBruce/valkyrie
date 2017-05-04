@@ -111,8 +111,8 @@ public class DialogBox {
         textObj = new GameObject("text" + objName);
         background = new GameObject("buttonBg" + objName);
         // Mark it as dialog
-        textObj.tag = "dialog";
-        background.tag = "dialog";
+        textObj.tag = Game.DIALOG;
+        background.tag = Game.DIALOG;
 
         Game game = Game.Get();
         background.transform.parent = game.uICanvas.transform;

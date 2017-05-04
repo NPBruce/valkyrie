@@ -15,7 +15,7 @@ public class ActivateDialogMoM : ActivateDialog
     override public void CreateWindow(bool singleStep = false)
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // ability box - name header

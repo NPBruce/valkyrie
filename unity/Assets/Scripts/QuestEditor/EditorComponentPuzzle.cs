@@ -40,7 +40,7 @@ public class EditorComponentPuzzle : EditorComponent
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), PUZZLE, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(
             new Vector2(3, 0), new Vector2(16, 1), 
@@ -49,66 +49,66 @@ public class EditorComponentPuzzle : EditorComponent
 
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1),
             new StringKey("val", "X_COLON", PUZZLE_CLASS));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         // Translate puzzle type trait
         tb = new TextButton(new Vector2(5, 2), new Vector2(8, 1), 
             new StringKey("val",puzzleComponent.puzzleClass), delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1),
             new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(5, 4), new Vector2(6, 1), 
             new StringKey(null, puzzleComponent.skill,false), delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         db = new DialogBox(new Vector2(0, 6), new Vector2(4, 1),
             new StringKey("val", "X_COLON", PUZZLE_LEVEL));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, 6), new Vector2(2, 1), 
             puzzleComponent.puzzleLevel.ToString(), false, delegate { UpdateLevel(); });
-        levelDBE.ApplyTag("editor");
+        levelDBE.ApplyTag(Game.EDITOR);
         levelDBE.AddBorder();
 
         if (!puzzleComponent.puzzleClass.Equals("slide"))
         {
             db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1),
                 new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
 
             // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, 8), new Vector2(2, 1), 
                 puzzleComponent.puzzleAltLevel.ToString(), false, delegate { UpdateAltLevel(); });
-            altLevelDBE.ApplyTag("editor");
+            altLevelDBE.ApplyTag(Game.EDITOR);
             altLevelDBE.AddBorder();
 
             db = new DialogBox(new Vector2(0, 10), new Vector2(3, 1),
                 new StringKey("val", "X_COLON", IMAGE));
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(5, 10), new Vector2(8, 1), 
                 new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
         }
 
         tb = new TextButton(new Vector2(0, 12), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
     }
 
     public void Class()

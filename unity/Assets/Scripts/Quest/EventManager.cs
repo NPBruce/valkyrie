@@ -167,7 +167,7 @@ public class EventManager
         }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // If this is a monster event then add the monster group
@@ -707,7 +707,8 @@ public class EventManager
                         {"∑","{knowledge}"},
                         {"μ","{awareness}"},
                         {"≤","{shield}" },
-                        {"±","{surge}"}
+                        {"±","{surge}"},
+                        {"Rnd","{rnd:hero}"}
                     } },
                     { "MoM", new Dictionary<string,string>()
                     {
@@ -719,7 +720,8 @@ public class EventManager
                         {"","{influence}"},
                         {"","{observation}"},
                         {"","{success}"},
-                        {"","{clue}"}
+                        {"","{clue}"},
+                        {"Rnd","{rnd:hero}"}
                     } }
                 };
 }
