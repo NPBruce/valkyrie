@@ -16,10 +16,9 @@ public class MoraleDisplay {
             morale = 0;
         }
         md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), morale, Color.red);
-        md.textObj.tag = "questui";
         md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        md.background.tag = "questui";
         md.AddBorder();
+        md.ApplyTag("questui");
     }
 
     // Update must be called if the morale is changed

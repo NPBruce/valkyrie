@@ -8,6 +8,7 @@ public class DialogBoxEditable
     private GameObject textObj;
     private GameObject background;
     private GameObject inputObj;
+    private RectangleBorder border;
 
     private UnityEngine.UI.InputField uiInput;
 
@@ -16,6 +17,7 @@ public class DialogBoxEditable
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
+        if (border != null) border.SetTag(tag);
     }
 
     /// <summary>
@@ -146,7 +148,8 @@ public class DialogBoxEditable
     public void AddBorder(Color c)
     {
         Rect rect = background.GetComponent<RectTransform>().rect;
-        new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border = new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border.SetTag(textObj.tag);
     }
 
     public string Text

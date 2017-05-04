@@ -10,6 +10,7 @@ public class PaneledDialogBoxEditable
     private GameObject textObj;
     private GameObject background;
     private GameObject inputObj;
+    private RectangleBorder border;
 
     private List<TextButton> specialCharsButtons;
 
@@ -24,6 +25,7 @@ public class PaneledDialogBoxEditable
         {
             tb.ApplyTag(tag);
         }
+        if (border != null) border.SetTag(tag);
     }
 
     /// <summary>
@@ -191,7 +193,8 @@ public class PaneledDialogBoxEditable
     public void AddBorder(Color c)
     {
         Rect rect = background.GetComponent<RectTransform>().rect;
-        new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border = new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border.SetTag(textObj.tag);
     }
 
     public string Text

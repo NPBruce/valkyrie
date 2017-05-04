@@ -167,11 +167,11 @@ public class EditorComponentUI : EditorComponent
 
             if (uiComponent.border)
             {
-                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("var", "BORDER"), delegate { ToggleBorder(); });
+                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("val", "BORDER"), delegate { ToggleBorder(); });
             }
             else
             {
-                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("var", "NO_BORDER"), delegate { ToggleBorder(); });
+                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("val", "NO_BORDER"), delegate { ToggleBorder(); });
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
@@ -289,6 +289,8 @@ public class EditorComponentUI : EditorComponent
         if (uiComponent.imageName.Length > 0)
         {
             LocalizationRead.scenarioDict.Remove(uiComponent.uitext_key);
+            uiComponent.border = false;
+            uiComponent.aspect = 1;
         }
         else
         {
