@@ -195,7 +195,7 @@ UNABLE_BUTTON,Unable Button:,Botón No Puede:,Bouton impossible,Unmöglich-Butto
 UI,UI,Interfaz,,,,,,,
 UNITS,Units,Unidades,,,,,,,
 HORIZONTAL,Horizontal,Horizontal,,,,,,,
-VERTICAL,Vertical,Verticalº,,,,,,,
+VERTICAL,Vertical,Vertical,,,,,,,
 ALIGN,Align,Alinear,,,,,,,
 POSITION,Position,Posición,,,,,,,
 SIZE,Size,Tamaño,,,,,,,
