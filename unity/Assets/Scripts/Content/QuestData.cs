@@ -464,11 +464,11 @@ public class QuestData
             {
                 if (data["valign"].Equals("top"))
                 {
-                    hAlign = -1;
+                    vAlign = -1;
                 }
                 if (data["valign"].Equals("bottom"))
                 {
-                    hAlign = 1;
+                    vAlign = 1;
                 }
             }
         }
