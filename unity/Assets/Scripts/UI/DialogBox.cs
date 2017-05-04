@@ -15,6 +15,7 @@ public class DialogBox {
     {
         textObj.tag = tag;
         background.tag = tag;
+        if (border != null) border.SetTag(tag);
     }
 
     /// <summary>
@@ -156,7 +157,8 @@ public class DialogBox {
     public void AddBorder(Color c)
     {
         UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
-        new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border = new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border.SetTag(textObj.tag);
     }
 
     public void SetFont(Font f)

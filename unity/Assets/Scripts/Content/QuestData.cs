@@ -402,6 +402,8 @@ public class QuestData
         public float size = 1;
         public float textSize = 1;
         public string textColor = "white";
+        public float aspect = 1;
+        public bool border = false;
 
         public string uitext_key { get { return genKey("uitext"); } }
 
@@ -443,6 +445,11 @@ public class QuestData
                 float.TryParse(data["textsize"], out textSize);
             }
 
+            if (data.ContainsKey("textaspect"))
+            {
+                float.TryParse(data["textaspect"], out aspect);
+            }
+
             if (data.ContainsKey("textcolor"))
             {
                 textColor = data["textcolor"];
@@ -471,6 +478,11 @@ public class QuestData
                     vAlign = 1;
                 }
             }
+
+            if (data.ContainsKey("border"))
+            {
+                bool.TryParse(data["border"], out border);
+            }
         }
 
         // Save to string (for editor)
@@ -495,6 +507,16 @@ public class QuestData
             if (verticalUnits)
             {
                 r += "vunits=" + verticalUnits + nl;
+            }
+
+            if (border)
+            {
+                r += "border=" + border + nl;
+            }
+
+            if (aspect != 1)
+            {
+                r += "textaspect=" + aspect + nl;
             }
 
             if (hAlign < 0)
