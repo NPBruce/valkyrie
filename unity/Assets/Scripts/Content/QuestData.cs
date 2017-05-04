@@ -1603,6 +1603,7 @@ public class QuestData
             typeDynamic = type;
             itemName = new string[0];
             traits = new string[1];
+            traitpool = new string[0];
             traits[0] = "weapon";
         }
 
