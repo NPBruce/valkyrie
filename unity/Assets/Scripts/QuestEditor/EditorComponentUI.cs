@@ -10,6 +10,7 @@ public class EditorComponentUI : EditorComponent
     DialogBoxEditable locXDBE;
     DialogBoxEditable locYDBE;
     DialogBoxEditable sizeDBE;
+    DialogBoxEditable aspectDBE;
     DialogBoxEditable textDBE;
     DialogBoxEditable textSizeDBE;
     EditorSelectionList colorList;
@@ -123,16 +124,24 @@ public class EditorComponentUI : EditorComponent
         locYDBE.ApplyTag("editor");
         locYDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(0, 13), new Vector2(8, 1), new StringKey("val", "SIZE"));
+        db = new DialogBox(new Vector2(0, 13), new Vector2(5, 1), new StringKey("val", "SIZE"));
         db.ApplyTag("editor");
 
-        sizeDBE = new DialogBoxEditable(new Vector2(8, 13), new Vector2(3, 1),
+        sizeDBE = new DialogBoxEditable(new Vector2(5, 13), new Vector2(3, 1),
             uiComponent.size.ToString(), false, delegate { UpdateNumbers(); });
         sizeDBE.ApplyTag("editor");
         sizeDBE.AddBorder();
 
         if (uiComponent.imageName.Length == 0)
         {
+            db = new DialogBox(new Vector2(10, 13), new Vector2(5, 1), new StringKey("val", "ASPECT"));
+            db.ApplyTag("editor");
+
+            aspectDBE = new DialogBoxEditable(new Vector2(15, 13), new Vector2(3, 1),
+                uiComponent.aspect.ToString(), false, delegate { UpdateNumbers(); });
+            aspectDBE.ApplyTag("editor");
+            aspectDBE.AddBorder();
+
             textDBE = new DialogBoxEditable(
                 new Vector2(0, 15), new Vector2(20, 6),
                 game.quest.qd.quest.description.Translate(true),
@@ -141,18 +150,29 @@ public class EditorComponentUI : EditorComponent
             textDBE.ApplyTag("editor");
             textDBE.AddBorder();
 
-            db = new DialogBox(new Vector2(0, 23), new Vector2(7, 1), new StringKey("val", "TEXT_SIZE"));
+            db = new DialogBox(new Vector2(0, 22), new Vector2(7, 1), new StringKey("val", "TEXT_SIZE"));
             db.ApplyTag("editor");
 
-            textSizeDBE = new DialogBoxEditable(new Vector2(7, 23), new Vector2(3, 1),
+            textSizeDBE = new DialogBoxEditable(new Vector2(7, 22), new Vector2(3, 1),
                 uiComponent.textSize.ToString(), false, delegate { UpdateTextSize(); });
             textSizeDBE.ApplyTag("editor");
             textSizeDBE.AddBorder();
 
-            db = new DialogBox(new Vector2(10, 23), new Vector2(5, 1), new StringKey("val", "COLOR"));
+            db = new DialogBox(new Vector2(10, 22), new Vector2(5, 1), new StringKey("val", "COLOR"));
             db.ApplyTag("editor");
 
-            tb = new TextButton(new Vector2(15, 23), new Vector2(5, 1), new StringKey(null, uiComponent.textColor, false), delegate { SetColour(); });
+            tb = new TextButton(new Vector2(15, 22), new Vector2(5, 1), new StringKey(null, uiComponent.textColor, false), delegate { SetColour(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag("editor");
+
+            if (uiComponent.border)
+            {
+                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("var", "BORDER"), delegate { ToggleBorder(); });
+            }
+            else
+            {
+                tb = new TextButton(new Vector2(0, 23), new Vector2(8, 1), new StringKey("var", "NO_BORDER"), delegate { ToggleBorder(); });
+            }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag("editor");
         }
@@ -308,6 +328,10 @@ public class EditorComponentUI : EditorComponent
         {
             float.TryParse(sizeDBE.Text, out uiComponent.size);
         }
+        if (aspectDBE != null && !aspectDBE.Text.Equals(""))
+        {
+            float.TryParse(aspectDBE.Text, out uiComponent.aspect);
+        }
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         Update();
@@ -350,6 +374,12 @@ public class EditorComponentUI : EditorComponent
         uiComponent.textColor = colorList.selection;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    public void ToggleBorder()
+    {
+        uiComponent.border = !uiComponent.border;
         Update();
     }
 }
