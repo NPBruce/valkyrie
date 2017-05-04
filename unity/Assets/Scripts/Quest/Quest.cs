@@ -735,18 +735,18 @@ public class Quest
     // Add a list of components (token, tile, etc)
     public void Add(string[] names)
     {
-        List<string> items = new List<string>();
+        List<string> itemList = new List<string>();
         foreach (string s in names)
         {
             Add(s);
             if (s.IndexOf("QItem") == 0)
             {
-                items.Add(s);
+                itemList.Add(itemSelect[s]);
             }
         }
-        if (items.Count > 1 && !boardItems.ContainsKey("#shop"))
+        if (itemList.Count > 1 && !boardItems.ContainsKey("#shop"))
         {
-            boardItems.Add("#shop", new ShopInterface(items, Game.Get()));
+            boardItems.Add("#shop", new ShopInterface(itemList, Game.Get()));
         }
     }
 
@@ -783,7 +783,7 @@ public class Quest
         }
         if (qc is QuestData.QItem)
         {
-            items.Add(name);
+            items.Add(itemSelect[name]);
         }
     }
 

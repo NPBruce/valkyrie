@@ -142,7 +142,7 @@ public class EditorComponentItem : EditorComponent
             if (i != null)
             {
                 items.Add(new EditorSelectionList.SelectionListEntry(i.sectionName, "Quest"));
-                if (i.traits.Length == 0)
+                if (i.traits.Length == 0 && i.traitpool.Length == 0)
                 {
                     usedItems.Add(i.itemName[0]);
                 }
