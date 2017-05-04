@@ -41,19 +41,19 @@ public class EditorComponentActivation : EditorComponent
             CommonStringKeys.ACTIVATION, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
             new StringKey(null, name.Substring("Activation".Length),false), 
             delegate { QuestEditorData.ListActivation(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(
             new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         if (game.gameType is MoMGameType)
         {
@@ -68,17 +68,17 @@ public class EditorComponentActivation : EditorComponent
     public void Activation()
     {
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), new StringKey("val","X_COLON",ABILITY));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
             activationComponent.ability.Translate(), 
             delegate { UpdateAbility(); });
-        abilityDBE.ApplyTag("editor");
+        abilityDBE.ApplyTag(Game.EDITOR);
         abilityDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MASTER));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
         TextButton tb = null;
         if (activationComponent.masterFirst)
         {
@@ -89,17 +89,17 @@ public class EditorComponentActivation : EditorComponent
             tb = new TextButton(new Vector2(15, 10), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMasterFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 11), new Vector2(20, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
-        masterActionsDBE.ApplyTag("editor");
+        masterActionsDBE.ApplyTag(Game.EDITOR);
         masterActionsDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 19), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MINION));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
         if (activationComponent.minionFirst)
         {
             tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), FIRST, delegate { ToggleMinionFirst(); });
@@ -109,26 +109,26 @@ public class EditorComponentActivation : EditorComponent
             tb = new TextButton(new Vector2(15, 19), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMinionFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         minionActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 20), new Vector2(20, 8), 
             activationComponent.minionActions.Translate(true),
             delegate { UpdateMinionActions(); });
-        minionActionsDBE.ApplyTag("editor");
+        minionActionsDBE.ApplyTag(Game.EDITOR);
         minionActionsDBE.AddBorder();
     }
 
     public void MoMActivation()
     {
         DialogBox db = new DialogBox(new Vector2(0, 1), new Vector2(20, 1), INITIAL_MESSAGE);
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 8), 
             activationComponent.ability.Translate(true),
             delegate { UpdateAbility(); });
-        abilityDBE.ApplyTag("editor");
+        abilityDBE.ApplyTag(Game.EDITOR);
         abilityDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), UNABLE_BUTTON);
@@ -137,27 +137,27 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(10, 10), new Vector2(10, 1), 
             activationComponent.moveButton.Translate(true),
             delegate { UpdateMoveButton(); });
-        moveButtonDBE.ApplyTag("editor");
+        moveButtonDBE.ApplyTag(Game.EDITOR);
         moveButtonDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 11), new Vector2(20, 1), ATTACK_MESSAGE);
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 12), new Vector2(20, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
-        masterActionsDBE.ApplyTag("editor");
+        masterActionsDBE.ApplyTag(Game.EDITOR);
         masterActionsDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 20), new Vector2(20, 1), NO_ATTACK_MESSAGE);
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         moveDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 21), new Vector2(20, 8), 
             activationComponent.move.Translate(true),
             delegate { UpdateMove(); });
-        moveDBE.ApplyTag("editor");
+        moveDBE.ApplyTag(Game.EDITOR);
         moveDBE.AddBorder();
     }
 

@@ -30,41 +30,41 @@ public class EditorComponentQuest : EditorComponent
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
             CommonStringKeys.QUEST, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         nameDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 1), 
             game.quest.qd.quest.name.Translate(), false, 
             delegate { UpdateQuestName(); });
-        nameDBE.ApplyTag("editor");
+        nameDBE.ApplyTag(Game.EDITOR);
         nameDBE.AddBorder();
 
         descriptionDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 6), 
             game.quest.qd.quest.description.Translate(true),
             delegate { UpdateQuestDesc(); });
-        descriptionDBE.ApplyTag("editor");
+        descriptionDBE.ApplyTag(Game.EDITOR);
         descriptionDBE.AddBorder();
 
         if (game.quest.qd.quest.hidden)
         {
             tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
         }
         else
         {
             tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ACTIVE, delegate { ToggleHidden(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
         }
 
         DialogBox db = new DialogBox(new Vector2(0, 13), new Vector2(9, 1), REQUIRED_EXPANSIONS);
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(9, 13), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         int offset = 14;
         int index;
@@ -76,11 +76,11 @@ public class EditorComponentQuest : EditorComponent
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
                     new StringKey("val", game.quest.qd.quest.packs[index]));
                 db.AddBorder();
-                db.ApplyTag("editor");
+                db.ApplyTag(Game.EDITOR);
                 tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { QuestRemovePack(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
+                tb.ApplyTag(Game.EDITOR);
             }
         }
     }

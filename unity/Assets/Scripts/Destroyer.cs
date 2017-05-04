@@ -29,27 +29,27 @@ public class Destroyer {
         Dialog();
 
         // Clean up everything marked as 'monsters'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("monsters"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.MONSTERS))
             Object.Destroy(go);
 
         // Clean up everything marked as 'heroselect'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
 
         // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
             Object.Destroy(go);
 
         // Clean up everything marked as 'questui'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
             Object.Destroy(go);
 
         // Clean up everything marked as 'editor'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
 
         // Clean up everything marked as 'uiphase'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("uiphase"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
         Game game = Game.Get();
@@ -74,7 +74,7 @@ public class Destroyer {
     public static void Dialog()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
         CameraController.panDisable = false;
         Game.Get().logWindow = null;

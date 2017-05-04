@@ -185,6 +185,7 @@ TESTS,Tests,Tests,Tests,Tests,Prove,,,,
 TILE,Tile,Tablero,Tuile,Teil,Tessera,,,,
 
 TOKEN,Token,Marcador,Marqueur,Marker,Segnalino,,,,
+TOOLS,Tools,Utilidades,,,,,,,
 TOTAL_MOVES,Total Moves,Total Movims.,Déplacements totaux,Züge (insgesamt),Movimento Totale,,,,
 TRAITS,Traits,Atributos,Traits,Fertigkeiten,Tratti,,,,
 TRIGGER,Trigger,Activador,Déclencheur,Auslöser,Attivatore,,,,

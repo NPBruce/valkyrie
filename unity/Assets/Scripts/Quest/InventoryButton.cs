@@ -19,13 +19,13 @@ public class InventoryButton
         qb = new TextButton(new Vector2(15.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), ITEMS, delegate { Items(); });
         qb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
-        qb.ApplyTag("questui");
+        qb.ApplyTag(Game.QUESTUI);
     }
 
     // When pressed bring up the approriate menu
     public void Items()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
         if (GameObject.FindGameObjectWithTag("activation") != null) return;
         new InventoryWindow();
     }

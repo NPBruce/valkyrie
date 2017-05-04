@@ -62,7 +62,7 @@ public class TokenBoard : MonoBehaviour {
             // If in horror phase ignore
             if (game.quest.phase != Quest.MoMPhase.investigator) return;
             // If a dialog is open ignore
-            if (GameObject.FindGameObjectWithTag("dialog") != null)
+            if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;
             // Spawn a window with the door/token info
             game.quest.eManager.QueueEvent(c.GetEvent().sectionName);
@@ -161,9 +161,9 @@ public class TokenBoard : MonoBehaviour {
         GameObject circleObject = new GameObject("MonsterSpawnBorder" + place);
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
         GameObject borderObject = new GameObject("MonsterSpawnBorder" + place);
-        gameObject.tag = "dialog";
-        borderObject.tag = "dialog";
-        circleObject.tag = "dialog";
+        gameObject.tag = Game.DIALOG;
+        borderObject.tag = Game.DIALOG;
+        circleObject.tag = Game.DIALOG;
         circleObject.transform.parent = game.tokenCanvas.transform;
         gameObject.transform.parent = game.tokenCanvas.transform;
         borderObject.transform.parent = game.tokenCanvas.transform;
@@ -257,7 +257,7 @@ public class TokenBoard : MonoBehaviour {
 
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn");
-        gameObject.tag = "dialog";
+        gameObject.tag = Game.DIALOG;
 
         gameObject.transform.parent = game.tokenCanvas.transform;
 
@@ -303,7 +303,7 @@ public class TokenBoard : MonoBehaviour {
         Game game = Game.Get();
         // Create object
         GameObject itemObject = new GameObject("item" + item);
-        itemObject.tag = "dialog";
+        itemObject.tag = Game.DIALOG;
         itemObject.transform.parent = game.tokenCanvas.transform;
 
         // Create the image

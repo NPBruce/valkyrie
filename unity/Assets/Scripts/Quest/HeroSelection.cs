@@ -28,7 +28,7 @@ public class HeroSelection {
         DialogBox db = new DialogBox(new Vector2(4.5f, 4f), new Vector2(UIScaler.GetWidthUnits() - 5.5f, 22f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
-        db.ApplyTag("heroselect");
+        db.ApplyTag(Game.HEROSELECT);
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -82,7 +82,7 @@ public class HeroSelection {
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
-            tb.ApplyTag("heroselect");
+            tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
 
             if (left)
@@ -96,7 +96,7 @@ public class HeroSelection {
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
             tb.background.transform.parent = scrollArea.transform;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.ApplyTag("heroselect");
+            tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
 
             if (left)
@@ -116,7 +116,7 @@ public class HeroSelection {
             //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
-            tb.ApplyTag("heroselect");
+            tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
 
             left = !left;

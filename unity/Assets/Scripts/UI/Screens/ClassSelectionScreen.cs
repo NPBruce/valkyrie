@@ -16,7 +16,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Clean up
             Destroyer.Dialog();
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
                 Object.Destroy(go);
 
             Game game = Game.Get();
@@ -29,7 +29,7 @@ namespace Assets.Scripts.UI.Screens
                 );
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
-            db.ApplyTag("heroselect");
+            db.ApplyTag(Game.HEROSELECT);
 
             // Get all heros
             int heroCount = 0;
@@ -59,12 +59,12 @@ namespace Assets.Scripts.UI.Screens
                 delegate { Finished(); },
                 Color.green);
             tb.SetFont(game.gameType.GetHeaderFont());
-            tb.ApplyTag("heroselect");
+            tb.ApplyTag(Game.HEROSELECT);
 
             TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
             cancelSelection.SetFont(game.gameType.GetHeaderFont());
             // Untag as dialog so this isn't cleared away during hero selection
-            cancelSelection.ApplyTag("heroselect");
+            cancelSelection.ApplyTag(Game.HEROSELECT);
         }
 
         public void DrawHero(float xOffset, int hero)
@@ -82,11 +82,11 @@ namespace Assets.Scripts.UI.Screens
                 archetype = game.cd.classes[hybridClass].hybridArchetype;
                 db = new DialogBox(new Vector2(xOffset + 0.25f, yStart), new Vector2(8.5f, 5f), StringKey.NULL);
                 db.AddBorder();
-                db.ApplyTag("heroselect");
+                db.ApplyTag(Game.HEROSELECT);
 
                 tb = new TextButton(new Vector2(xOffset + 1, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); }, Color.black);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
-                tb.ApplyTag("heroselect");
+                tb.ApplyTag(Game.HEROSELECT);
 
                 yStart += 5;
             }
@@ -94,7 +94,7 @@ namespace Assets.Scripts.UI.Screens
             db = new DialogBox(new Vector2(xOffset + 0.25f, yStart), new Vector2(8.5f, 27f - yStart), StringKey.NULL);
             db.AddBorder();
             db.background.AddComponent<UnityEngine.UI.Mask>();
-            db.ApplyTag("heroselect");
+            db.ApplyTag(Game.HEROSELECT);
             UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
             GameObject scrollArea = new GameObject("scroll");
@@ -164,7 +164,7 @@ namespace Assets.Scripts.UI.Screens
                 tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag("heroselect");
+                tb.ApplyTag(Game.HEROSELECT);
 
                 yOffset += 5f;
             }
@@ -175,7 +175,7 @@ namespace Assets.Scripts.UI.Screens
             Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
             db = new DialogBox(new Vector2(xOffset + 2.5f, 3.5f), new Vector2(4f, 4f), StringKey.NULL, Color.clear, Color.white);
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
-            db.ApplyTag("heroselect");
+            db.ApplyTag(Game.HEROSELECT);
         }
 
         public void Select(int hero, string className)
@@ -223,7 +223,7 @@ namespace Assets.Scripts.UI.Screens
             }
             game.quest.items.UnionWith(items);
 
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
                 Object.Destroy(go);
             game.moraleDisplay = new MoraleDisplay();
             game.QuestStartEvent();

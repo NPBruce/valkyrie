@@ -68,7 +68,7 @@ public class MonsterDialogMoM : MonsterDialog
         }
 
         GameObject mImg = new GameObject("monsterImg" + monster.monsterData.name);
-        mImg.tag = "dialog";
+        mImg.tag = Game.DIALOG;
         mImg.transform.parent = game.uICanvas.transform;
 
         RectTransform trans = mImg.AddComponent<RectTransform>();
@@ -84,7 +84,7 @@ public class MonsterDialogMoM : MonsterDialog
         if (duplicateSprite != null)
         {
             GameObject mImgDupe = new GameObject("monsterDupe" + monster.monsterData.name);
-            mImgDupe.tag = "dialog";
+            mImgDupe.tag = Game.DIALOG;
             mImgDupe.transform.parent = game.uICanvas.transform;
 
             RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();

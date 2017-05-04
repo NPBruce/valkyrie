@@ -34,7 +34,7 @@ public class InvestigatorAttack
     public void AttackOptions()
     {
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 0.5f), new Vector2(20, 2), ATTACK_PROMPT);

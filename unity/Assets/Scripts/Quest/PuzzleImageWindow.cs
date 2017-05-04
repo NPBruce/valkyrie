@@ -129,7 +129,7 @@ public class PuzzleImageWindow
         Game game = Game.Get();
         // Create object
         GameObject gameObject = new GameObject("PuzzleTile");
-        gameObject.tag = "dialog";
+        gameObject.tag = Game.DIALOG;
 
         gameObject.transform.parent = game.uICanvas.transform;
 

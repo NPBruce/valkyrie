@@ -19,13 +19,13 @@ public class SkillButton
         qb = new TextButton(new Vector2(10.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), SKILLS, delegate { Skills(); });
         qb.SetFont(game.gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away
-        qb.ApplyTag("questui");
+        qb.ApplyTag(Game.QUESTUI);
     }
 
     // When pressed bring up the approriate menu
     public void Skills()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
         if (GameObject.FindGameObjectWithTag("activation") != null) return;
         new SkillWindow();
     }

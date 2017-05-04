@@ -84,8 +84,8 @@ public class TextButton {
         border = new RectangleBorder(background.transform, colour, size);
 
         // Mark it as dialog (this can be changed with applytag)
-        button.tag = "dialog";
-        background.tag = "dialog";
+        button.tag = Game.DIALOG;
+        background.tag = Game.DIALOG;
 
         Game game = Game.Get();
         background.transform.parent = game.uICanvas.transform;
