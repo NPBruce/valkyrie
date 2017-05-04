@@ -402,6 +402,8 @@ public class QuestData
         public float size = 1;
         public float textSize = 1;
         public string textColor = "white";
+        public float aspect = 1;
+        public bool border = false;
 
         public string uitext_key { get { return genKey("uitext"); } }
 
@@ -443,6 +445,11 @@ public class QuestData
                 float.TryParse(data["textsize"], out textSize);
             }
 
+            if (data.ContainsKey("textaspect"))
+            {
+                float.TryParse(data["textaspect"], out aspect);
+            }
+
             if (data.ContainsKey("textcolor"))
             {
                 textColor = data["textcolor"];
@@ -464,12 +471,17 @@ public class QuestData
             {
                 if (data["valign"].Equals("top"))
                 {
-                    hAlign = -1;
+                    vAlign = -1;
                 }
                 if (data["valign"].Equals("bottom"))
                 {
-                    hAlign = 1;
+                    vAlign = 1;
                 }
+            }
+
+            if (data.ContainsKey("border"))
+            {
+                bool.TryParse(data["border"], out border);
             }
         }
 
@@ -495,6 +507,16 @@ public class QuestData
             if (verticalUnits)
             {
                 r += "vunits=" + verticalUnits + nl;
+            }
+
+            if (border)
+            {
+                r += "border=" + border + nl;
+            }
+
+            if (aspect != 1)
+            {
+                r += "textaspect=" + aspect + nl;
             }
 
             if (hAlign < 0)
@@ -1603,6 +1625,7 @@ public class QuestData
             typeDynamic = type;
             itemName = new string[0];
             traits = new string[1];
+            traitpool = new string[0];
             traits[0] = "weapon";
         }
 

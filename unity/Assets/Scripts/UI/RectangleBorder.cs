@@ -64,10 +64,13 @@ public class RectangleBorder{
         for (int i = 0; i < 4; i++)
         {
             bLine[i] = new GameObject("Border" + i);
-            // FIXME this looks wrong
-            if (!tag.Equals(""))
+            if (tag.Equals(""))
             {
                 bLine[i].tag = "dialog";
+            }
+            else
+            {
+                bLine[i].tag = tag;
             }
             bLine[i].AddComponent<RectTransform>();
             bLine[i].AddComponent<CanvasRenderer>();

@@ -1167,6 +1167,7 @@ public class Quest
     {
         // Quest info on the token
         public QuestData.UI qUI;
+        public RectangleBorder border;
 
         UnityEngine.UI.Text uiText;
 
@@ -1196,7 +1197,7 @@ public class Quest
                 Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
                 newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
             }
-            else
+            else if (qUI.imageName.Length > 0)
             {
                 newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
             }
@@ -1207,6 +1208,7 @@ public class Quest
 
             unityObject.transform.parent = panel.transform;
 
+            float aspect = 1;
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
             if (qUI.imageName.Length == 0)
             {
@@ -1217,6 +1219,7 @@ public class Quest
                 uiText.material = uiText.font.material;
                 uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
                 SetColor(qUI.textColor);
+                aspect = qUI.aspect;
             }
             else
             {
@@ -1225,16 +1228,17 @@ public class Quest
                 Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
                 image.color = new Color(1, 1, 1, 0);
                 image.sprite = tileSprite;
+                aspect = (float)newTex.width / (float)newTex.height;
             }
 
             float unitScale = Screen.width;
             float hSize = qUI.size * unitScale;
-            float vSize = hSize * (float)newTex.height / (float)newTex.width;
+            float vSize = hSize / aspect;
             if (qUI.verticalUnits)
             {
                 unitScale = Screen.height;
                 vSize = qUI.size * unitScale;
-                hSize = vSize * (float)newTex.width / (float)newTex.height;
+                hSize = vSize * aspect;
             }
 
             float hOffset = qUI.location.x * unitScale;
@@ -1264,6 +1268,11 @@ public class Quest
             else
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+            }
+
+            if (qUI.border)
+            {
+                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), "board");
             }
 
             game.tokenBoard.Add(this);
@@ -1309,6 +1318,7 @@ public class Quest
         public override void Remove()
         {
             Object.Destroy(unityObject);
+            if (border != null) border.Destroy();
         }
     }
 

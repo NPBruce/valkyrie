@@ -184,14 +184,14 @@ public class DialogWindow {
 
         Game game = Game.Get();
 
-        Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
+        Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
         db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
         db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-22), 6.5f), new Vector2(8, 1), game.cd.items[item].name);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-22), 6.5f), new Vector2(8, 1), game.cd.items[game.quest.itemSelect[item]].name);
     }
 
     public void quotaDec()
