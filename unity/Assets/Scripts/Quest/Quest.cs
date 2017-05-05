@@ -593,7 +593,7 @@ public class Quest
 
         // Repopulate items on the baord
         boardItems = new Dictionary<string, BoardComponent>();
-        Dictionary<string, string> saveBoard = saveData.Get(Game.BOARD);
+        Dictionary<string, string> saveBoard = saveData.Get("Board");
         foreach (KeyValuePair<string, string> kv in saveBoard)
         {
             if (kv.Key.IndexOf("Door") == 0)

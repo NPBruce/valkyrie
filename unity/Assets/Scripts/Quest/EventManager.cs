@@ -484,7 +484,7 @@ public class EventManager
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
                     {
-                        if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                        if (File.Exists(game.quest.questPath + "/" + s))
                         {
                             game.quest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
