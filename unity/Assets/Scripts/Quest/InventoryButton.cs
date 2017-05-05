@@ -26,7 +26,7 @@ public class InventoryButton
     public void Items()
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
-        if (GameObject.FindGameObjectWithTag("activation") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null) return;
         new InventoryWindow();
     }
 }

@@ -18,7 +18,7 @@ public class GameMenu {
             return;
         }
 
-        if (GameObject.FindGameObjectWithTag("activation") != null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
             return;
         }

@@ -30,7 +30,7 @@ public class ActivateDialog {
             new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
             monster.monsterData.name,
             delegate { new InfoDialog(monster); });
-        tb.ApplyTag("activation");
+        tb.ApplyTag(Game.ACTIVATION);
 
         DialogBox db = null;
         float offset = 2.5f;
@@ -41,7 +41,7 @@ public class ActivateDialog {
             db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
                 new StringKey(null, effect, false));
             db.AddBorder();
-            db.ApplyTag("activation");
+            db.ApplyTag(Game.ACTIVATION);
             offset += 4.5f;
         }
 
@@ -70,7 +70,7 @@ public class ActivateDialog {
             activationText = monster.currentActivation.minionActions;
         }
         db.AddBorder();
-        db.ApplyTag("activation");
+        db.ApplyTag(Game.ACTIVATION);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         offset += 2;
 
@@ -85,7 +85,7 @@ public class ActivateDialog {
         {
             db.AddBorder();
         }
-        db.ApplyTag("activation");
+        db.ApplyTag(Game.ACTIVATION);
 
         offset += 7.5f;
 
@@ -102,7 +102,7 @@ public class ActivateDialog {
         {
             tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), new StringKey("val", "X_ACTIVATED", MONSTER_MINION), delegate { activated(); });
         }
-        tb.ApplyTag("activation");
+        tb.ApplyTag(Game.ACTIVATION);
     }
 
     virtual public void activated()
@@ -110,7 +110,7 @@ public class ActivateDialog {
         // Disable if there is a menu open
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("activation"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.ACTIVATION))
             Object.Destroy(go);
         Game.Get().roundControl.MonsterActivated();
     }

@@ -1773,7 +1773,7 @@ public class Quest
             {
                 valkyrie = true;
             }
-            if (type.IndexOf(Game.EDITOR) == 0)
+            if (type.IndexOf("editor") == 0)
             {
                 editor = true;
             }
@@ -1789,7 +1789,7 @@ public class Quest
             }
             else if (editor)
             {
-                r += Game.EDITOR + id + "=";
+                r += "editor" + id + "=";
             }
             else
             {

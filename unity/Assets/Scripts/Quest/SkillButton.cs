@@ -26,7 +26,7 @@ public class SkillButton
     public void Skills()
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
-        if (GameObject.FindGameObjectWithTag("activation") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null) return;
         new SkillWindow();
     }
 }

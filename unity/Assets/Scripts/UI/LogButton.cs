@@ -5,7 +5,7 @@ using Assets.Scripts.Content;
 // Special class for the Menu button present while in a quest
 public class LogButton
 {
-    private StringKey LOG = new StringKey("val", "log");
+    private StringKey LOG = new StringKey("val", "LOG");
 
     public LogButton()
     {
@@ -27,7 +27,7 @@ public class LogButton
     public void Log()
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
-        if (GameObject.FindGameObjectWithTag("activation") != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null) return;
         new LogWindow();
     }
 }

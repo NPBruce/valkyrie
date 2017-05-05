@@ -44440,7 +44440,7 @@ You can only move root GameObjects from one Scene to another. This means the Gam
         <para>Report a score to a specific leaderboard.</para>
       </summary>
       <param name="score"></param>
-      <param name=Game.BOARD></param>
+      <param name="board"></param>
       <param name="callback"></param>
     </member>
     <member name="M:UnityEngine.Social.ShowAchievementsUI">
@@ -44732,7 +44732,7 @@ You can only move root GameObjects from one Scene to another. This means the Gam
       </summary>
       <param name="leaderboardID"></param>
       <param name="callback"></param>
-      <param name=Game.BOARD></param>
+      <param name="board"></param>
     </member>
     <member name="M:UnityEngine.SocialPlatforms.ISocialPlatform.LoadScores(UnityEngine.SocialPlatforms.ILeaderboard,System.Action`1&lt;System.Boolean&gt;)">
       <summary>
@@ -44740,7 +44740,7 @@ You can only move root GameObjects from one Scene to another. This means the Gam
       </summary>
       <param name="leaderboardID"></param>
       <param name="callback"></param>
-      <param name=Game.BOARD></param>
+      <param name="board"></param>
     </member>
     <member name="M:UnityEngine.SocialPlatforms.ISocialPlatform.LoadUsers(System.String[],System.Action`1&lt;UnityEngine.SocialPlatforms.IUserProfile[]&gt;)">
       <summary>
@@ -44762,7 +44762,7 @@ You can only move root GameObjects from one Scene to another. This means the Gam
         <para>See Social.ReportScore.</para>
       </summary>
       <param name="score"></param>
-      <param name=Game.BOARD></param>
+      <param name="board"></param>
       <param name="callback"></param>
     </member>
     <member name="M:UnityEngine.SocialPlatforms.ISocialPlatform.ShowAchievementsUI">
