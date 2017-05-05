@@ -266,7 +266,7 @@ public class EventManager
         }
         if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
         {
-            game.quest.boardItems.Add("Shop" + e.qEvent.sectionName, new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+            game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
         }
         else if (!e.qEvent.display)
         {

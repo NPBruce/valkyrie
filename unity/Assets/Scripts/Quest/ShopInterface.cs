@@ -42,12 +42,15 @@ public class ShopInterface : Quest.BoardComponent
     // Clean up
     public override void Remove()
     {
-        // Remove custom tag
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SHOP))
+            Object.Destroy(go);
+        game.quest.activeShop = "";
     }
 
     public void Update()
     {
         Remove();
+        game.quest.activeShop = eventData.sectionName;
         DrawButtons();
         DrawShopItems();
         DrawPartyItems();
@@ -75,8 +78,9 @@ public class ShopInterface : Quest.BoardComponent
             colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
 
             int tmp = i;
-            new TextButton(new Vector2(UIScaler.GetHCenter(-20), offset), new Vector2(10f, 2), 
+            TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-17), offset), new Vector2(10f, 2), 
                 label, delegate { OnButton(tmp); }, colour);
+            tb.ApplyTag(Game.SHOP);
 
             offset += 3;
         }
@@ -95,10 +99,12 @@ public class ShopInterface : Quest.BoardComponent
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.SetFont(game.gameType.GetHeaderFont());
         db.AddBorder();
+        db.ApplyTag(Game.SHOP);
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5), 2.5f), new Vector2(10, 24.5f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
+        db.ApplyTag(Game.SHOP);
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -144,6 +150,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
@@ -156,6 +163,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.SHOP);
 
             StringKey act = new StringKey("val", "CLASS");
             if (game.cd.items[s].act == 1)
@@ -176,6 +184,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset),
                 new Vector2(3, 1),
@@ -187,6 +196,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
             vOffset += 7;
         }
@@ -201,10 +211,12 @@ public class ShopInterface : Quest.BoardComponent
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.SetFont(game.gameType.GetHeaderFont());
         db.AddBorder();
+        db.ApplyTag(Game.SHOP);
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(7), 2.5f), new Vector2(10, 24.5f), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
+        db.ApplyTag(Game.SHOP);
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -250,6 +262,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
@@ -262,6 +275,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.SHOP);
 
             StringKey act = new StringKey("val", "CLASS");
             if (game.cd.items[s].act == 1)
@@ -282,15 +296,11 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
-            int cost = GetPurchasePrice(game.cd.items[s]);
-            if (game.quest.vars.GetValue("$%sellratio") != 0)
-            {
-                cost = Mathf.RoundToInt(GetPurchasePrice(game.cd.items[s]) * game.quest.vars.GetValue("$%sellratio"));
-            }
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset),
                 new Vector2(3, 1),
-                cost,
+                GetSellPrice(game.cd.items[itemName]),
                 delegate { Sell(itemName); },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
@@ -298,6 +308,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.ApplyTag(Game.SHOP);
 
             vOffset += 7;
         }
@@ -311,22 +322,35 @@ public class ShopInterface : Quest.BoardComponent
         return item.price;
     }
 
+    public int GetSellPrice(ItemData item)
+    {
+        if (item.act == 0) return 25;
+
+        if (game.quest.vars.GetValue("$%sellratio") == 0)
+        {
+            return GetPurchasePrice(item);
+        }
+        return Mathf.RoundToInt(GetPurchasePrice(item) * game.quest.vars.GetValue("$%sellratio"));
+    }
+
     public void DrawGold()
     {
         DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-4), 27.5f),
+            new Vector2(UIScaler.GetHCenter(-16), 24f),
             new Vector2(5, 2),
             new StringKey("val", "GOLD"));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.SetFont(game.gameType.GetHeaderFont());
         db.AddBorder();
+        db.ApplyTag(Game.SHOP);
 
         db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(1), 27.5f),
+            new Vector2(UIScaler.GetHCenter(-11), 24f),
             new Vector2(3, 2),
             Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
+        db.ApplyTag(Game.SHOP);
     }
 
     public void Buy(string item)
@@ -342,13 +366,7 @@ public class ShopInterface : Quest.BoardComponent
 
     public void Sell(string item)
     {
-        ItemData itemData = game.cd.items[item];
-        int cost = GetPurchasePrice(game.cd.items[item]);
-        if (game.quest.vars.GetValue("$%sellratio") != 0)
-        {
-            cost = Mathf.RoundToInt(GetPurchasePrice(game.cd.items[item]) * game.quest.vars.GetValue("$%sellratio"));
-        }
-        game.quest.vars.SetValue("$%gold", GetPurchasePrice(itemData) + cost);
+        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(game.cd.items[item]));
         game.quest.shops[eventData.sectionName].Add(item);
         game.quest.items.Remove(item);
         Update();

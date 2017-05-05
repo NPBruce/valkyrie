@@ -25,6 +25,9 @@ public class Quest
     // Dictionary of shops and items
     public Dictionary<string, List<string>> shops;
 
+    // The open shop
+    public string activeShop = "";
+
     // Dictionary of picked items
     public Dictionary<string, string> itemSelect;
 
@@ -435,6 +438,7 @@ public class Quest
         monsterSelect = new Dictionary<string, string>();
         itemSelect = new Dictionary<string, string>();
         shops = new Dictionary<string, List<string>>();
+        activeShop = "";
 
         GenerateMonsterSelection();
         GenerateItemSelection();
@@ -533,6 +537,15 @@ public class Quest
             }
         }
 
+        activeShop = "";
+        if (saveData.Get("ActiveShop") != null)
+        {
+            foreach (KeyValuePair<string, string> kv in saveData.Get("ActiveShop"))
+            {
+                activeShop = kv.Key;
+            }
+        }
+
         // Restore event log
         log = new List<LogEntry>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
@@ -599,7 +612,7 @@ public class Quest
             {
                 boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
             }
-            if (kv.Key.IndexOf("Shop") == 0)
+            if (kv.Key.IndexOf("#shop") == 0)
             {
                 boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), kv.Key.Substring("Shop".Length)));
             }
@@ -1012,6 +1025,12 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in itemSelect)
         {
             r += kv.Key + "=" + kv.Value + nl;
+        }
+
+        if (activeShop.Length > 0)
+        {
+            r += "[ActiveShop]" + nl;
+            r += activeShop + nl;
         }
 
         r += eManager.ToString();
