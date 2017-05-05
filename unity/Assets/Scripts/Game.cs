@@ -9,6 +9,15 @@ using ValkyrieTools;
 // There is one object of this class and it is used to find most game components
 public class Game : MonoBehaviour {
 
+    public static readonly string MONSTERS = "monsters";
+    public static readonly string HEROSELECT = "heroselect";
+    public static readonly string BOARD = "board";
+    public static readonly string QUESTUI = "questui";
+    public static readonly string EDITOR = "editor";
+    public static readonly string UIPHASE = "uiphase";
+    public static readonly string DIALOG = "dialog";
+    public static readonly string ACTIVATION = "activation";
+
     // This is populated at run time from the text asset
     public string version = "";
 
@@ -186,7 +195,7 @@ public class Game : MonoBehaviour {
 
         endSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
-        endSelection.ApplyTag("heroselect");
+        endSelection.ApplyTag(Game.HEROSELECT);
 
         // Add a title to the page
         DialogBox db = new DialogBox(
@@ -196,14 +205,14 @@ public class Game : MonoBehaviour {
             );
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(gameType.GetHeaderFont());
-        db.ApplyTag("heroselect");
+        db.ApplyTag(Game.HEROSELECT);
 
         heroCanvas.heroSelection = new HeroSelection();
 
         TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
         cancelSelection.SetFont(gameType.GetHeaderFont());
         // Untag as dialog so this isn't cleared away during hero selection
-        cancelSelection.ApplyTag("heroselect");
+        cancelSelection.ApplyTag(Game.HEROSELECT);
     }
     
     // HeroCanvas validates selection and starts quest if everything is good

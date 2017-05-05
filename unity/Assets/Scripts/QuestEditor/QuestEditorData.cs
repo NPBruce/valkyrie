@@ -70,7 +70,7 @@ public class QuestEditorData {
     public static void TypeSelect()
     {
         Game game = Game.Get();
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
@@ -877,7 +877,7 @@ public class QuestEditorData {
     // Cancel a component selection, clean up
     public static void Cancel()
     {
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
     }
 

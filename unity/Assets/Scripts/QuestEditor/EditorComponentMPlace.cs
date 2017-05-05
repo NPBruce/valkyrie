@@ -23,26 +23,26 @@ public class EditorComponentMPlace : EditorComponent
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.MPLACE, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
             new StringKey(null,name.Substring("MPlace".Length),false), 
             delegate { QuestEditorData.ListMPlace(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
 
         DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         StringKey rotateKey = new StringKey("val","RIGHT");
         if (mPlaceComponent.rotate)
@@ -55,7 +55,7 @@ public class EditorComponentMPlace : EditorComponent
             delegate { Rotate(); });
 
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         StringKey mast = new StringKey("val","MONSTER_MINION");
         if (mPlaceComponent.master)
@@ -64,9 +64,9 @@ public class EditorComponentMPlace : EditorComponent
         }
         tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), mast, delegate { MasterToggle(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
-        game.tokenBoard.AddHighlight(mPlaceComponent.location, "MonsterLoc", "editor");
+        game.tokenBoard.AddHighlight(mPlaceComponent.location, "MonsterLoc", Game.EDITOR);
     }
 
     public void Rotate()

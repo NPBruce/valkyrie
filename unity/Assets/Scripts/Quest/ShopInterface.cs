@@ -20,7 +20,7 @@ public class ShopInterface : Quest.BoardComponent
         {
             // Create UI Panel
             panel = new GameObject("QuestUIPanel");
-            panel.tag = "board";
+            panel.tag = Game.BOARD;
             panel.transform.parent = game.uICanvas.transform;
             panel.transform.SetAsFirstSibling();
             panel.AddComponent<RectTransform>();
@@ -55,7 +55,7 @@ public class ShopInterface : Quest.BoardComponent
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
-        db.ApplyTag("heroselect");
+        db.ApplyTag(Game.HEROSELECT);
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");
@@ -123,7 +123,7 @@ public class ShopInterface : Quest.BoardComponent
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
-        db.ApplyTag("heroselect");
+        db.ApplyTag(Game.HEROSELECT);
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
 
         GameObject scrollArea = new GameObject("scroll");

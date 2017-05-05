@@ -30,7 +30,7 @@ public class QuestEditor {
         game.quest.RemoveAll();
 
         // Clean up everything marked as 'editor'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
 
         // Read from file
