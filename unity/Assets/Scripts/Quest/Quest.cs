@@ -772,16 +772,16 @@ public class Quest
     }
 
     // Add a list of components (token, tile, etc)
-    public void Add(string[] names)
+    public void Add(string[] names, bool shop = false)
     {
         foreach (string s in names)
         {
-            Add(s);
+            Add(s, shop);
         }
     }
 
     // Add a component to the board
-    public void Add(string name)
+    public void Add(string name, bool shop = false)
     {
         // Check that the component is valid
         if (!game.quest.qd.components.ContainsKey(name))
@@ -811,9 +811,12 @@ public class Quest
         {
             boardItems.Add(name, new UI((QuestData.UI)qc, game));
         }
-        if (qc is QuestData.QItem)
+        if (qc is QuestData.QItem && !shop)
         {
-            items.Add(itemSelect[name]);
+            if (itemSelect.ContainsKey(name))
+            {
+                items.Add(itemSelect[name]);
+            }
         }
     }
 
@@ -1335,6 +1338,7 @@ public class Quest
         {
             if (image != null) image.color = c;
             if (uiText != null) uiText.color = c;
+            if (border != null) border.color = c;
         }
 
         override public Color GetColor()
@@ -1349,7 +1353,10 @@ public class Quest
         {
             targetAlpha = alpha;
             // Hide in editor
-            if (targetAlpha < 0.5f) targetAlpha = 0;
+            if (targetAlpha < 0.5f)
+            {
+                targetAlpha = 0;
+            }
         }
 
         // Get the text to display on the UI

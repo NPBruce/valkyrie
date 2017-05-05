@@ -216,8 +216,17 @@ public class EventManager
             game.tokenBoard.AddHighlight(e.qEvent);
         }
 
+        // Is this a shop?
+        List<string> itemList = new List<string>();
+        foreach (string s in e.qEvent.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                itemList.Add(game.quest.itemSelect[s]);
+            }
+        }
         // Add board components
-        game.quest.Add(e.qEvent.addComponents);
+        game.quest.Add(e.qEvent.addComponents, itemList.Count > 1);
         // Remove board components
         game.quest.Remove(e.qEvent.removeComponents);
 
@@ -256,14 +265,6 @@ public class EventManager
         }
 
         // Is this a shop?
-        List<string> itemList = new List<string>();
-        foreach (string s in e.qEvent.addComponents)
-        {
-            if (s.IndexOf("QItem") == 0)
-            {
-                itemList.Add(game.quest.itemSelect[s]);
-            }
-        }
         if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
         {
             game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));

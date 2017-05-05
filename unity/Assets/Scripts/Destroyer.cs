@@ -32,6 +32,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.MONSTERS))
             Object.Destroy(go);
 
+        // Clean up shop
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SHOP))
+            Object.Destroy(go);
+
         // Clean up everything marked as 'heroselect'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
