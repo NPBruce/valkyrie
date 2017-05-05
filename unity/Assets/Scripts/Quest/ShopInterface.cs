@@ -7,12 +7,17 @@ using System.Collections.Generic;
 public class ShopInterface : Quest.BoardComponent
 {
     GameObject panel;
-    List<string> items;
+    QuestData.Event eventData;
 
     // Construct with quest info and reference to Game
-    public ShopInterface(List<string> i, Game gameObject) : base(gameObject)
+    public ShopInterface(List<string> items, Game gameObject, string eventName) : base(gameObject)
     {
-        items = i;
+        game = gameObject;
+        if (!game.quest.shops.ContainsKey(eventName))
+        {
+            game.quest.shops.Add(eventName, items);
+        }
+        eventData = game.quest.qd.components[eventName] as QuestData.Event;
         // Find quest UI panel
         panel = GameObject.Find("QuestUIPanel");
         if (panel == null)
@@ -26,7 +31,6 @@ public class ShopInterface : Quest.BoardComponent
             panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
             panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
         }
-        game = Game.Get();
         Update();
     }
 
@@ -44,9 +48,45 @@ public class ShopInterface : Quest.BoardComponent
     public void Update()
     {
         Remove();
+        DrawButtons();
         DrawShopItems();
         DrawPartyItems();
         DrawGold();
+    }
+
+    public void DrawButtons()
+    {
+        float offset = 3;
+
+        for (int i = 0; i < eventData.buttons.Count; i++)
+        {
+            StringKey label = new StringKey(null, EventManager.OutputSymbolReplace(eventData.buttons[i].Translate()), false);
+            Color colour = Color.white;
+            string colorRGB = ColorUtil.FromName(eventData.buttonColors[i]);
+            // Check format is valid
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
+            }
+
+            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
+            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+
+            int tmp = i;
+            new TextButton(new Vector2(UIScaler.GetHCenter(-20), offset), new Vector2(10f, 2), 
+                label, delegate { OnButton(tmp); }, colour);
+
+            offset += 3;
+        }
+    }
+
+    public void OnButton(int i)
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+        game.quest.Save();
+        game.quest.eManager.EndEvent(eventData, i);
     }
 
     public void DrawShopItems()
@@ -91,7 +131,7 @@ public class ShopInterface : Quest.BoardComponent
         float vOffset = 3;
 
         TextButton tb = null;
-        foreach (string s in items)
+        foreach (string s in game.quest.shops[eventData.sectionName])
         {
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), vOffset + 4.5f),
                 new Vector2(8, 2),
