@@ -117,9 +117,13 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
 
             StringKey act = new StringKey("val", "CLASS");
-            if (game.cd.items[s].act > 0)
+            if (game.cd.items[s].act == 1)
             {
-                act = new StringKey("val", "ACT_NUM", game.cd.items[s].act);
+                act = new StringKey("val", "ACT_1");
+            }
+            if (game.cd.items[s].act == 2)
+            {
+                act = new StringKey("val", "ACT_2");
             }
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset + 4f),
                 new Vector2(3, 1),
@@ -132,10 +136,9 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
-            int cost = 305;
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset),
                 new Vector2(3, 1),
-                cost,
+                GetPurchasePrice(game.cd.items[s]),
                 delegate {; },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
@@ -219,9 +222,13 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
 
             StringKey act = new StringKey("val", "CLASS");
-            if (game.cd.items[s].act > 0)
+            if (game.cd.items[s].act == 1)
             {
-                act = new StringKey("val", "ACT_NUM", game.cd.items[s].act);
+                act = new StringKey("val", "ACT_1");
+            }
+            if (game.cd.items[s].act == 2)
+            {
+                act = new StringKey("val", "ACT_2");
             }
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset + 4f),
                 new Vector2(3, 1),
@@ -234,7 +241,11 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
-            int cost = 305;
+            int cost = GetPurchasePrice(game.cd.items[s]);
+            if (game.quest.vars.GetValue("$%sellratio") != 0)
+            {
+                cost = Mathf.RoundToInt(GetPurchasePrice(game.cd.items[s]) * game.quest.vars.GetValue("$%sellratio"));
+            }
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset),
                 new Vector2(3, 1),
                 cost,
@@ -250,6 +261,12 @@ public class ShopInterface : Quest.BoardComponent
         }
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (vOffset - 3) * UIScaler.GetPixelsPerUnit());
+    }
+
+    public int GetPurchasePrice(ItemData item)
+    {
+        if (item.act == 0) return 25;
+        return item.price;
     }
 
     public void DrawGold()

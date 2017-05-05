@@ -218,7 +218,8 @@ X_ACTIVATED,{0} Activated,{0} Activado,{0} Activé,{0} aktiviert,Attivo,{0},,,,
 BUY,Buy,,,,,,,,
 SELL,Sell,,,,,,,,
 CLASS,Class,,,,,,,,
-ACT_NUM,Act {0},,,,,,,,
+ACT_1,Act I,,,,,,,,
+ACT_2,Act II,,,,,,,,
 
 X_COLON,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:
 
