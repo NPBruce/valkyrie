@@ -255,9 +255,22 @@ public class EventManager
             CameraController.SetCameraMax(e.qEvent.location);
         }
 
-        // Only raise dialog if there is text, otherwise auto confirm
-        if (!e.qEvent.display)
+        // Is this a shop?
+        List<string> itemList = new List<string>();
+        foreach (string s in e.qEvent.addComponents)
         {
+            if (s.IndexOf("QItem") == 0)
+            {
+                itemList.Add(game.quest.itemSelect[s]);
+            }
+        }
+        if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
+        {
+            game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+        }
+        else if (!e.qEvent.display)
+        {
+            // Only raise dialog if there is text, otherwise auto confirm
             EndEvent();
         }
         else
@@ -304,14 +317,20 @@ public class EventManager
         new DialogWindow(e);
     }
 
-    // Event ended (pass or set as fail)
-    public void EndEvent(int state=0)
+    // Event ended
+    public void EndEvent(int state = 0)
+    {
+        EndEvent(currentEvent.qEvent, state);
+    }
+
+    // Event ended
+    public void EndEvent(QuestData.Event eventData, int state=0)
     {
         // Get list of next events
         List<string> eventList = new List<string>();
-        if (currentEvent.qEvent.nextEvent.Count > state)
+        if (eventData.nextEvent.Count > state)
         {
-            eventList = currentEvent.qEvent.nextEvent[state];
+            eventList = eventData.nextEvent[state];
         }
 
         // Only take enabled events from list
@@ -341,7 +360,7 @@ public class EventManager
         if (enabledEvents.Count > 0)
         {
             // Are we picking at random?
-            if (currentEvent.qEvent.randomEvents)
+            if (eventData.randomEvents)
             {
                 currentEvent = null;
                 // Start a random event
@@ -359,7 +378,7 @@ public class EventManager
         }
 
         // Does this event end the quest?
-        if (currentEvent.qEvent.sectionName.IndexOf("EventEnd") == 0)
+        if (eventData.sectionName.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
             return;

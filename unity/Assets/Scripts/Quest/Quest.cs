@@ -22,6 +22,12 @@ public class Quest
     // A list of items that have been given to the investigators
     public HashSet<string> items;
 
+    // Dictionary of shops and items
+    public Dictionary<string, List<string>> shops;
+
+    // The open shop
+    public string activeShop = "";
+
     // Dictionary of picked items
     public Dictionary<string, string> itemSelect;
 
@@ -77,6 +83,7 @@ public class Quest
         boardItems = new Dictionary<string, BoardComponent>();
         vars = new VarManager();
         items = new HashSet<string>();
+        shops = new Dictionary<string, List<string>>();
         itemSelect = new Dictionary<string, string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
@@ -110,6 +117,9 @@ public class Quest
 
     public void GenerateItemSelection()
     {
+        // Clear shops
+        shops = new Dictionary<string, List<string>>();
+
         // Determine monster types
         bool progress = false;
         bool force = false;
@@ -427,6 +437,8 @@ public class Quest
         undo = new Stack<string>();
         monsterSelect = new Dictionary<string, string>();
         itemSelect = new Dictionary<string, string>();
+        shops = new Dictionary<string, List<string>>();
+        activeShop = "";
 
         GenerateMonsterSelection();
         GenerateItemSelection();
@@ -511,6 +523,55 @@ public class Quest
             int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
         }
 
+        shops = new Dictionary<string, List<string>>();
+        if (saveData.Get("Shops") == null)
+        {
+            foreach (KeyValuePair<string, string> kv in saveData.Get("Shops"))
+            {
+                List<string> shopList = new List<string>();
+                foreach (string s in kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    shopList.Add(s);
+                }
+                shops.Add(kv.Key, shopList);
+            }
+        }
+
+        activeShop = "";
+        if (saveData.Get("ActiveShop") != null)
+        {
+            foreach (KeyValuePair<string, string> kv in saveData.Get("ActiveShop"))
+            {
+                activeShop = kv.Key;
+            }
+        }
+
+        // Restore event log
+        log = new List<LogEntry>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
+        {
+            log.Add(new LogEntry(kv.Key, kv.Value));
+        }
+
+        Dictionary<string, string> saveVars = saveData.Get("Vars");
+        vars = new VarManager(saveVars);
+
+        itemSelect = saveData.Get("SelectItem");
+        if (itemSelect == null)
+        {
+            // Support old saves
+            itemSelect = new Dictionary<string, string>();
+            GenerateItemSelection();
+        }
+
+        // Set items
+        items = new HashSet<string>();
+        Dictionary<string, string> saveItems = saveData.Get("Items");
+        foreach (KeyValuePair<string, string> kv in saveItems)
+        {
+            items.Add(kv.Key);
+        }
+
         // Set static quest data
         qd = new QuestData(saveData.Get("Quest", "path"));
 
@@ -551,32 +612,10 @@ public class Quest
             {
                 boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
             }
-        }
-
-        // Restore event log
-        log = new List<LogEntry>();
-        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
-        {
-            log.Add(new LogEntry(kv.Key, kv.Value));
-        }
-
-        Dictionary<string, string> saveVars = saveData.Get("Vars");
-        vars = new VarManager(saveVars);
-
-        itemSelect = saveData.Get("SelectItem");
-        if (itemSelect == null)
-        {
-            // Support old saves
-            itemSelect = new Dictionary<string, string>();
-            GenerateItemSelection();
-        }
-
-        // Set items
-        items = new HashSet<string>();
-        Dictionary<string, string> saveItems = saveData.Get("Items");
-        foreach (KeyValuePair<string, string> kv in saveItems)
-        {
-            items.Add(kv.Key);
+            if (kv.Key.IndexOf("#shop") == 0)
+            {
+                boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), kv.Key.Substring("Shop".Length)));
+            }
         }
 
         // Clean undo stack (we don't save undo stack)
@@ -735,18 +774,9 @@ public class Quest
     // Add a list of components (token, tile, etc)
     public void Add(string[] names)
     {
-        List<string> items = new List<string>();
         foreach (string s in names)
         {
             Add(s);
-            if (s.IndexOf("QItem") == 0)
-            {
-                items.Add(s);
-            }
-        }
-        if (items.Count > 1 && !boardItems.ContainsKey("#shop"))
-        {
-            boardItems.Add("#shop", new ShopInterface(items, Game.Get()));
         }
     }
 
@@ -783,7 +813,7 @@ public class Quest
         }
         if (qc is QuestData.QItem)
         {
-            items.Add(name);
+            items.Add(itemSelect[name]);
         }
     }
 
@@ -997,7 +1027,24 @@ public class Quest
             r += kv.Key + "=" + kv.Value + nl;
         }
 
+        if (activeShop.Length > 0)
+        {
+            r += "[ActiveShop]" + nl;
+            r += activeShop + nl;
+        }
+
         r += eManager.ToString();
+
+        r += "[Shops]" + nl;
+        foreach (KeyValuePair<string, List<string>> kv in shops)
+        {
+            r += kv.Key + "=";
+            foreach (string s in kv.Value)
+            {
+                r += kv.Value + " ";
+            }
+            r = r.Substring(0, r.Length - 1) + nl;
+        }
 
         return r;
     }

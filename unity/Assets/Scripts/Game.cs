@@ -17,6 +17,7 @@ public class Game : MonoBehaviour {
     public static readonly string UIPHASE = "uiphase";
     public static readonly string DIALOG = "dialog";
     public static readonly string ACTIVATION = "activation";
+    public static readonly string SHOP = "shop";
 
     // This is populated at run time from the text asset
     public string version = "";

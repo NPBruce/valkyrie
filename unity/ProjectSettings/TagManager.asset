@@ -13,6 +13,7 @@ TagManager:
   - editor
   - uiphase
   - activation
+  - shop
   layers:
   - Default
   - TransparentFX

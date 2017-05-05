@@ -163,14 +163,13 @@ public class QuestEditorData {
 
             tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        
-            offset += 2;
-            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.QITEM, delegate { ListItem(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-            tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("QItem"); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
+        offset += 2;
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.QITEM, delegate { ListItem(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("QItem"); }, Color.red);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
         tb = new TextButton(new Vector2(25.5f, offset), new Vector2(9, 1), CommonStringKeys.CANCEL, delegate { Cancel(); });
