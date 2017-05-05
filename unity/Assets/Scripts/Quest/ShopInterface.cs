@@ -133,10 +133,11 @@ public class ShopInterface : Quest.BoardComponent
         TextButton tb = null;
         foreach (string s in game.quest.shops[eventData.sectionName])
         {
+            string itemName = s;
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), vOffset + 4.5f),
                 new Vector2(8, 2),
                 game.cd.items[s].name,
-                delegate {; },
+                delegate { Buy(itemName); },
                 Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -150,7 +151,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2.5f), vOffset + 0.5f),
                 new Vector2(4, 4),
                 StringKey.NULL,
-                delegate {; },
+                delegate { Buy(itemName); },
                 Color.clear);
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
@@ -168,7 +169,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset + 4f),
                 new Vector2(3, 1),
                 act,
-                delegate {; },
+                delegate { Buy(itemName); },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -179,7 +180,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset),
                 new Vector2(3, 1),
                 GetPurchasePrice(game.cd.items[s]),
-                delegate {; },
+                delegate { Buy(itemName); },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -238,10 +239,11 @@ public class ShopInterface : Quest.BoardComponent
         TextButton tb = null;
         foreach (string s in game.quest.items)
         {
+            string itemName = s;
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(7.5f), vOffset + 4.5f),
                 new Vector2(8, 2),
                 game.cd.items[s].name,
-                delegate {; },
+                delegate { Sell(itemName); },
                 Color.clear);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -255,7 +257,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(9.5f), vOffset + 0.5f),
                 new Vector2(4, 4),
                 StringKey.NULL,
-                delegate {; },
+                delegate { Sell(itemName); },
                 Color.clear);
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
@@ -273,7 +275,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset + 4f),
                 new Vector2(3, 1),
                 act,
-                delegate {; },
+                delegate { Sell(itemName); },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -289,7 +291,7 @@ public class ShopInterface : Quest.BoardComponent
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset),
                 new Vector2(3, 1),
                 cost,
-                delegate {; },
+                delegate { Sell(itemName); },
                 Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -325,5 +327,30 @@ public class ShopInterface : Quest.BoardComponent
             Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
+    }
+
+    public void Buy(string item)
+    {
+        ItemData itemData = game.cd.items[item];
+        if (game.quest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
+
+        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") - GetPurchasePrice(itemData));
+        game.quest.shops[eventData.sectionName].Remove(item);
+        game.quest.items.Add(item);
+        Update();
+    }
+
+    public void Sell(string item)
+    {
+        ItemData itemData = game.cd.items[item];
+        int cost = GetPurchasePrice(game.cd.items[item]);
+        if (game.quest.vars.GetValue("$%sellratio") != 0)
+        {
+            cost = Mathf.RoundToInt(GetPurchasePrice(game.cd.items[item]) * game.quest.vars.GetValue("$%sellratio"));
+        }
+        game.quest.vars.SetValue("$%gold", GetPurchasePrice(itemData) + cost);
+        game.quest.shops[eventData.sectionName].Add(item);
+        game.quest.items.Remove(item);
+        Update();
     }
 }
