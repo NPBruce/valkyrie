@@ -112,7 +112,7 @@ public class PaneledDialogBoxEditable
                     new Vector2(hOffset, offset), new Vector2(width, 1),
                     translated, 
                     delegate { InsertCharacter(translation); });
-                tb.ApplyTag("dialog");
+                tb.ApplyTag(Game.DIALOG);
 
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 specialCharsButtons.Add(tb);
@@ -127,9 +127,9 @@ public class PaneledDialogBoxEditable
         inputObj = new GameObject("textIn" + objName);
 
         // Mark it as dialog
-        textObj.tag = "dialog";
-        background.tag = "dialog";
-        inputObj.tag = "dialog";
+        textObj.tag = Game.DIALOG;
+        background.tag = Game.DIALOG;
+        inputObj.tag = Game.DIALOG;
 
         Game game = Game.Get();
 

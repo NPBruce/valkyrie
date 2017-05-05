@@ -62,27 +62,27 @@ public class EditorComponentEventVars : EditorComponent
             new StringKey(null,type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1),
             new StringKey(null,name.Substring(type.Length),false), delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
         
         float offset = 2;
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
             new StringKey("val","X_COLON",TESTS));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         offset++;
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
@@ -91,31 +91,31 @@ public class EditorComponentEventVars : EditorComponent
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
                 new StringKey(null,op.operation, false), delegate { SetTestOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             offset++;
         }
 
         offset++;
         db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1),
             new StringKey("val","X_COLON",ASSIGN));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddAssignOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         offset++;
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
@@ -124,25 +124,25 @@ public class EditorComponentEventVars : EditorComponent
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
                 new StringKey(null,op.operation, false), delegate { SetAssignOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             offset++;
         }
 
         if (eventComponent.locationSpecified)
         {
-            game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", "editor");
+            game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", Game.EDITOR);
         }
     }
 

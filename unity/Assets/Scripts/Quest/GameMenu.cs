@@ -13,12 +13,12 @@ public class GameMenu {
     public static void Create()
     {
         Game game = Game.Get();
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
 
-        if (GameObject.FindGameObjectWithTag("activation") != null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
             return;
         }

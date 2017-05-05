@@ -66,7 +66,7 @@ public class RectangleBorder{
             bLine[i] = new GameObject("Border" + i);
             if (tag.Equals(""))
             {
-                bLine[i].tag = "dialog";
+                bLine[i].tag = Game.DIALOG;
             }
             else
             {

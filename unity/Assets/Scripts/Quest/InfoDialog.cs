@@ -44,7 +44,7 @@ public class InfoDialog {
     public void onClose()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
     }
 }

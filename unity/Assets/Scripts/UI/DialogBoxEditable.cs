@@ -87,9 +87,9 @@ public class DialogBoxEditable
         inputObj = new GameObject("textIn" + objName);
 
         // Mark it as dialog
-        textObj.tag = "dialog";
-        background.tag = "dialog";
-        inputObj.tag = "dialog";
+        textObj.tag = Game.DIALOG;
+        background.tag = Game.DIALOG;
+        inputObj.tag = Game.DIALOG;
 
         Game game = Game.Get();
 

@@ -19,7 +19,7 @@ public class HeroDialog{
     {
         float offset = ((hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f)) + HeroCanvas.offsetStart;
         // Has this hero been activated?
-        if (hero.activated || (GameObject.FindGameObjectWithTag("activation") != null))
+        if (hero.activated || (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null))
         {
             // Grey button with no action
             new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), END_TURN, delegate { ; }, Color.gray);
@@ -52,7 +52,7 @@ public class HeroDialog{
         hero.defeated = true;
         updateDisplay();
         // This can trigger events, delay events if activation present
-        if (GameObject.FindGameObjectWithTag("activation") != null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
             game.quest.AdjustMorale(-1, true);
         }

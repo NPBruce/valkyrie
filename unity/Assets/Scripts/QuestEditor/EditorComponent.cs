@@ -26,17 +26,17 @@ public class EditorComponent {
         // Back button is common to all components
         TextButton tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
     }
 
     public void Clean()
     {
         // Clean up everything marked as 'dialog'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Clean up everything marked as 'editor'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("editor"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
 
         // Dim all components, this component will be made solid later

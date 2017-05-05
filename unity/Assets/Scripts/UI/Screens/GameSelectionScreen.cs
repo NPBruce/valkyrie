@@ -50,7 +50,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D newTex = Resources.Load("sprites/banner") as Texture2D;
 
             GameObject banner = new GameObject("banner");
-            banner.tag = "dialog";
+            banner.tag = Game.DIALOG;
 
             banner.transform.parent = game.uICanvas.transform;
 

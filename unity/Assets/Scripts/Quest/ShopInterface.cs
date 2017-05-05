@@ -19,7 +19,7 @@ public class ShopInterface : Quest.BoardComponent
         {
             // Create UI Panel
             panel = new GameObject("QuestUIPanel");
-            panel.tag = "board";
+            panel.tag = Game.BOARD;
             panel.transform.parent = game.uICanvas.transform;
             panel.transform.SetAsFirstSibling();
             panel.AddComponent<RectTransform>();

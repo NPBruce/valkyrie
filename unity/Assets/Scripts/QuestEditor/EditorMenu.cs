@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Content;
 
 // Menu popup when in editor
@@ -12,7 +11,7 @@ public class EditorMenu {
     public static void Create()
     {
         Game game = Game.Get();
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }

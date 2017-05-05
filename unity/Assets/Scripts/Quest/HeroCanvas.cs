@@ -220,7 +220,7 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         // If there are any other dialogs
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             // Check if we are in a hero selection dialog
             if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
@@ -262,7 +262,7 @@ public class HeroCanvas : MonoBehaviour {
         // Check for validity
         if (heroCount < 2) return;
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
         heroSelection = null;
 
