@@ -252,6 +252,8 @@ public class ShopInterface : Quest.BoardComponent
         foreach (string s in game.quest.items)
         {
             string itemName = s;
+            if (game.cd.items[itemName].ContainsTrait("relic")) continue;
+
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(7.5f), vOffset + 4.5f),
                 new Vector2(8, 2),
                 game.cd.items[s].name,
