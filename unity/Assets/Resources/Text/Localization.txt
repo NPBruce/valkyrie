@@ -215,6 +215,11 @@ VARS,Vars,Vars,Variables,Vars,Vars,,,,
 VAR_NAME,Var Name:,Nombre Variable:,Nom variable :,Var-Name:,Var Nome:,,,,
 X_ACTIVATED,{0} Activated,{0} Activado,{0} Activé,{0} aktiviert,Attivo,{0},,,,
 
+BUY,Buy,,,,,,,,
+SELL,Sell,,,,,,,,
+CLASS,Class,,,,,,,,
+ACT_NUM,Act {0},,,,,,,,
+
 X_COLON,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:,{0}:
 
 //TRAITS
