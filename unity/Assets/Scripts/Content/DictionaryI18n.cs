@@ -334,5 +334,54 @@ namespace Assets.Scripts.Content
 
             return result;
         }
+
+        /// <summary>
+        /// Serialization of dictionary.
+        /// To save one Localization files per language
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string,List<string>> SerializeMultiple()
+        {
+            // Force raw data to enter the dictionary
+            flushRaw();
+
+            Dictionary<string, List<string>> totalResult = new Dictionary<string, List<string>>();
+
+            List<string> oneLangResult;
+
+            // For each language we create a new dictionary
+            for (int oneLang = 1; oneLang < languages.Length; oneLang++)
+            {
+                bool empty = true;
+                // We first generate the languages line
+
+                oneLangResult = new List<string>();
+                oneLangResult.Add(languages[0] + "," + languages[oneLang]);
+
+                // and then generate the multilanguage string for each entry
+                foreach (EntryI18n entry in dict.Values)
+                {
+                    StringBuilder text = entry.ToString(oneLang);
+                    if (text.Length > 0)
+                    {
+                        empty = false;
+                        // Replace real carry returns with the \n text.
+                        oneLangResult.Add(new StringBuilder()
+                                .Append(entry.key)
+                                .Append(COMMA)
+                                .Append(entry.ToString(oneLang))
+                                .ToString()
+                            );
+                    }
+                }
+
+                if (!empty)
+                {
+                    totalResult.Add(languages[oneLang], oneLangResult);
+                }
+            }
+
+            return totalResult;
+        }
     }
 }
