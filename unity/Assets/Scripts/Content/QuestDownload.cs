@@ -37,7 +37,9 @@ public class QuestDownload : MonoBehaviour
     public void DownloadDictionary()
     {
         remoteManifest = IniRead.ReadFromString(download.text);
+        // Download only the current lang dictionary
         string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
+        // string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization." + game.currentLang + ".txt";
         StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
     }
 

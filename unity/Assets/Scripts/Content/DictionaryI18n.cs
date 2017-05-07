@@ -13,7 +13,7 @@ namespace Assets.Scripts.Content
         private const char COMMA = ',';
 
         /// <summary>
-        /// Fixed value included in FFGs Localization.txt file
+        /// Fixed value included in FFGs Localization files
         /// </summary>
         public const string FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech";
         /// <summary>

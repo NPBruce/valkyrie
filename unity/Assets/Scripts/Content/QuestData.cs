@@ -1728,7 +1728,7 @@ public class QuestData
         // Default language for the text
         public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
         // raw localization dictionary
-        public DictionaryI18n localizationDict;
+        public DictionaryI18n localizationDict = null;
 
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
@@ -1741,13 +1741,35 @@ public class QuestData
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
-            localizationDict =
-                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, Game.Get().currentLang);
-            if (localizationDict == null)
+
+            //Read the localization data
+            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
+
+            DictionaryI18n partialLocalizationDict;
+
+            if (localizationData == null || localizationData.Keys.Count == 0)
             {
                 localizationDict = new DictionaryI18n(
                     new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
             }
+            else
+            {
+                foreach (string localizationFile in localizationData.Keys)
+                {
+                    partialLocalizationDict =
+                            LocalizationRead.ReadFromFilePath(path + "/" + localizationFile, defaultLanguage, Game.Get().currentLang);
+
+                    if (localizationDict == null)
+                    {
+                        localizationDict = partialLocalizationDict;
+                    }
+                    else
+                    {
+                        localizationDict.Add(partialLocalizationDict);
+                    }
+                }
+            }
+
             valid = Populate(iniData);
         }
 
@@ -1825,7 +1847,6 @@ public class QuestData
                 r.Append("packs=");
                 r.AppendLine(string.Join(" ", packs));
             }
-            r.AppendLine().AppendLine("[QuestText]").AppendLine("Localization.txt");
 
             return r.ToString();
         }
