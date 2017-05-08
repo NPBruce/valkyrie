@@ -102,9 +102,23 @@ public class QuestData
             ValkyrieDebug.Log("No QuestText extra files");
         }
 
-        // New dictionary without entries
-        LocalizationRead.scenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, DictionaryI18n.DEFAULT_LANG, game.currentLang);
+        // Reset scenario dict
+        LocalizationRead.scenarioDict = null;
+
+        DictionaryI18n partialDict;
+
+        foreach (string file in localizationFiles)
+        {
+            partialDict = LocalizationRead.ReadFromFilePath(file, game.currentLang, game.currentLang);
+            if (LocalizationRead.scenarioDict == null)
+            {
+                LocalizationRead.scenarioDict = partialDict;
+                    
+            } else
+            {
+                LocalizationRead.scenarioDict.AddRaw(partialDict);
+            }
+        }
 
         foreach (string f in iniFiles)
         {
@@ -134,13 +148,6 @@ public class QuestData
                     LocalizationRead.scenarioDict.RenamePrefix(kv.Key + ".", kv.Value + ".");
                 }
             }
-        }
-
-        foreach (string file in localizationFiles)
-        {
-            LocalizationRead.scenarioDict.Add(
-                LocalizationRead.ReadFromFilePath(file, quest.defaultLanguage, game.currentLang)
-                );
         }
     }
 
@@ -1823,6 +1830,7 @@ public class QuestData
             {
                 defaultLanguage = iniData["defaultlanguage"];
                 localizationDict.setDefaultLanguage(defaultLanguage);
+                localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }
 
             if (iniData.ContainsKey("hidden"))
