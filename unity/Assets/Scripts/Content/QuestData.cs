@@ -1765,9 +1765,11 @@ public class QuestData
                     }
                     else
                     {
-                        localizationDict.Add(partialLocalizationDict);
+                        localizationDict.AddRaw(partialLocalizationDict);
                     }
                 }
+                localizationDict.setDefaultLanguage(defaultLanguage);
+                localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }
 
             valid = Populate(iniData);
