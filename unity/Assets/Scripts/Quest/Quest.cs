@@ -120,6 +120,14 @@ public class Quest
         // Clear shops
         shops = new Dictionary<string, List<string>>();
 
+        // Determine fame level
+        int fame = 1;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famenoteworthy")) fame = 2;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%fameimpressive")) fame = 3;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famecelebrated")) fame = 4;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%fameheroic")) fame = 5;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famelegendary")) fame = 6;
+
         // Determine monster types
         bool progress = false;
         bool force = false;
@@ -132,7 +140,7 @@ public class Quest
                 QuestData.QItem qItem = kv.Value as QuestData.QItem;
                 if (qItem != null)
                 {
-                    progress |= AttemptItemMatch(qItem, force);
+                    progress |= AttemptItemMatch(qItem, fame, force);
                     if (progress && force) force = false;
                 }
             }
@@ -149,7 +157,7 @@ public class Quest
     }
 
 
-    public bool AttemptItemMatch(QuestData.QItem qItem, bool force = true)
+    public bool AttemptItemMatch(QuestData.QItem qItem, int fame, bool force = true)
     {
         if (itemSelect.ContainsKey(qItem.sectionName))
         {
@@ -228,8 +236,19 @@ public class Quest
                     if (t.Equals(kv.Key)) excludeBool = true;
                 }
 
+                bool fameOK = true;
+                if (kv.Value.minFame > 0)
+                {
+                    if (kv.Value.minFame > fame) fameOK = false;
+                    if (kv.Value.maxFame < fame) fameOK = false;
+                }
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
                 // item has all traits
-                if (allFound && oneFound && !excludeBool)
+                if (allFound && oneFound && !excludeBool && fameOK)
                 {
                     list.Add(kv.Key);
                 }

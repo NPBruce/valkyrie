@@ -899,12 +899,23 @@ public class ItemData : GenericData
         }
         if (content.ContainsKey("minfame"))
         {
-            int.TryParse(content["minfame"], out minFame);
+            minFame = Fame(content["maxfame"]);
         }
         if (content.ContainsKey("maxfame"))
         {
-            int.TryParse(content["maxfame"], out maxFame);
+            maxFame = Fame(content["maxfame"]);
         }
+    }
+
+    public static int Fame(string name)
+    {
+        if (name.Equals("insignificant")) return 1;
+        if (name.Equals("noteworthy")) return 2;
+        if (name.Equals("impressive")) return 3;
+        if (name.Equals("celebrated")) return 4;
+        if (name.Equals("heroic")) return 5;
+        if (name.Equals("legendary")) return 6;
+        return 0;
     }
 }
 

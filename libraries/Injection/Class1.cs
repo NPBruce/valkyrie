@@ -95,11 +95,28 @@ namespace Injection
                             traits += trait.ToString().ToLower() + " ";
                         }
                     }
-
                     if (mm.IsLieutenant)
                     {
                         traits += "lieutenant ";
                     }
+
+                    if (mm.Size == MonsterSize.SMALL_1x1)
+                    {
+                        traits += "small";
+                    }
+                    if (mm.Size == MonsterSize.MEDIUM_1x2)
+                    {
+                        traits += "medium";
+                    }
+                    if (mm.Size == MonsterSize.LARGE_2x2)
+                    {
+                        traits += "huge";
+                    }
+                    if (mm.Size == MonsterSize.HUGE_2x3)
+                    {
+                        traits += "massive";
+                    }
+
                     outText.Add(traits);
                     outText.Add("; Exclude Minions: 2: " + mm.ExcludeMinions2Players + " 3: " + mm.ExcludeMinions3Players + " 4: " + mm.ExcludeMinions4Players);
 
@@ -144,7 +161,30 @@ namespace Injection
                 }
                 File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\activations.ini", activationText.ToArray());
             }
+
+            List<string> cText = new List<string>();
+            foreach (CampaignModel cm in RtL_DB_Manager.DB.GetCampaigns())
+            {
+                cText.Add(cm.name);
+                cText.Add(FameToString(cm.CampaignFameThresholds));
+            }
+            File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\campaigns.txt", cText.ToArray());
+
             return 5;
+        }
+
+
+
+        public static string FameToString(CampaignModel.FameThresholds fame)
+        {
+            string returnStr = "";
+            returnStr += "Celebrated: " + fame.Celebrated + "\n";
+            returnStr += "Heroic: " + fame.Heroic + "\n";
+            returnStr += "Impressive: " + fame.Impressive + "\n";
+            returnStr += "Insignificant: " + fame.Insignificant + "\n";
+            returnStr += "Legendary: " + fame.Legendary + "\n";
+            returnStr += "Noteworthy: " + fame.Noteworthy + "\n";
+            return returnStr;
         }
 
         public static string GenerateIniName(string input)
@@ -180,6 +220,11 @@ namespace Injection
 
         public static string ParseItem(InventoryItemModel item, ProductModel p)
         {
+            bool relic = false;
+            if (item.ItemName.Key.IndexOf("RELIC_") == 0)
+            {
+                relic = true;
+            }
             string outText = "[" + GenerateIniName(item.ItemName.Key.Replace("RELIC_", "ITEM_")) + "]\n";
             outText += "name={ffg:" + item.ItemName.Key + "}\n";
             outText += "image=" + ImagePath(item.Icon.Path, p) + "\n";
@@ -192,9 +237,12 @@ namespace Injection
                 }
             }
             outText += item.Deck.ToString().ToLower() + "\n";
-            outText += "minfame=" + item.MinGroupLevel.ToString().ToLower() + "\n";
-            outText += "maxfame=" + item.MaxGroupLevel.ToString().ToLower() + "\n";
-            outText += "gold=" + item.CostBuy + "\n";
+            if (!relic)
+            {
+                outText += "minfame=" + item.MinGroupLevel.ToString().ToLower() + "\n";
+                outText += "maxfame=" + item.MaxGroupLevel.ToString().ToLower() + "\n";
+                outText += "price=" + item.CostBuy + "\n";
+            }
             return outText;
         }
 
