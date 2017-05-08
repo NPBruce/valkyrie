@@ -202,9 +202,9 @@ namespace Injection
         {
             if (p.Type == ExpansionType.CORE_SET)
             {
-                return path.Replace("Assets/Resources/Textures/Items", "../ffg/img");
+                return path.Replace("Assets/Resources/Textures/Items", "\"../ffg/img") + "\"";
             }
-            return path.Replace("Assets/Resources/Textures/Items", "../../ffg/img");
+            return path.Replace("Assets/Resources/Textures/Items", "\"../../ffg/img") + "\"";
         }
 
         public static string GenericActivation(string inName)
