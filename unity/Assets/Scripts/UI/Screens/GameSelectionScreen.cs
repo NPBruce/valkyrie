@@ -167,14 +167,14 @@ namespace Assets.Scripts.UI.Screens
         /// <summary>
         /// After selecting game, we load the localization file.
         /// Deppends on the gameType selected.
-        /// There are two Localization.txt, one for D2E and one for MoM
+        /// There are two Localization files from ffg, one for D2E and one for MoM
         /// </summary>
         private void loadLocalization()
         {
             // After content import, we load the localization file
             if (LocalizationRead.ffgDict == null)
             {
-                // FFG default language is allways English
+                // FFG default language is always English
                 LocalizationRead.ffgDict = new DictionaryI18n(
                     System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
                     DictionaryI18n.DEFAULT_LANG,

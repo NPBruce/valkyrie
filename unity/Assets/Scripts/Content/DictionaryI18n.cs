@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 
@@ -13,7 +14,7 @@ namespace Assets.Scripts.Content
         private const char COMMA = ',';
 
         /// <summary>
-        /// Fixed value included in FFGs Localization.txt file
+        /// Fixed value included in FFGs Localization files
         /// </summary>
         public const string FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech";
         /// <summary>
@@ -93,6 +94,65 @@ namespace Assets.Scripts.Content
                 System.Array.Copy(dictToCombine.rawDict, 0, rawDict, array1OriginalLength, dictToCombine.rawDict.Length);
             }
         }
+
+        /// <summary>
+        /// Adds raw data to the dictionary. Current dict shouldn't have entries neither new dict. Only raw data
+        /// </summary>
+        /// <param name="dictToCombine"></param>
+        public void AddRaw(DictionaryI18n dictToCombine)
+        {
+            if (dict.Count == 0 && dictToCombine.dict.Count == 0)
+            {
+                bool found = false;
+                foreach (string lang in languages)
+                {
+                    if (lang != "." && lang == dictToCombine.languages[1])
+                    {
+                        found = true;
+                    }
+                }
+
+                // If the language already exists don't add anything
+                // If the new dict has more than one lang don't add anything
+                if (!found && dictToCombine.languages.Length == 2)
+                {
+                    List<string> rawOut = new List<string>();
+                    // Generate the dictionary list
+                    string newLanguagesList = String.Join(COMMA.ToString(), languages) + COMMA + dictToCombine.languages[1];
+                    rawOut.Add(newLanguagesList);
+                    languages = newLanguagesList.Split(COMMA);
+
+                    string currentKey;
+                    string outString;
+                    for(int entryPos = 1; entryPos < rawDict.Length; entryPos++)
+                    {
+                        currentKey = rawDict[entryPos].Split(COMMA)[0] + COMMA;
+
+                        outString = rawDict[entryPos] + COMMA;
+                        for (int newEntryPos = 1; newEntryPos < dictToCombine.rawDict.Length; newEntryPos++)
+                        {
+                            if (dictToCombine.rawDict[newEntryPos].StartsWith(currentKey))
+                            {
+                                outString += dictToCombine.rawDict[newEntryPos].Substring(currentKey.Length);
+                                break;
+                            }
+                        }
+
+                        rawOut.Add(outString);
+                    }
+
+                    rawDict = rawOut.ToArray();
+                } else
+                {
+                    ValkyrieTools.ValkyrieDebug.Log("The AddRaw method only merges a dictionary with only one new lang");
+                }
+            } else
+            {
+                ValkyrieTools.ValkyrieDebug.Log("The AddRaw method only merges raw dictionaries");
+            }
+        }
+
+
 
         public void Remove(string key)
         {
@@ -333,6 +393,55 @@ namespace Assets.Scripts.Content
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Serialization of dictionary.
+        /// To save one Localization files per language
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string,List<string>> SerializeMultiple()
+        {
+            // Force raw data to enter the dictionary
+            flushRaw();
+
+            Dictionary<string, List<string>> totalResult = new Dictionary<string, List<string>>();
+
+            List<string> oneLangResult;
+
+            // For each language we create a new dictionary
+            for (int oneLang = 1; oneLang < languages.Length; oneLang++)
+            {
+                bool empty = true;
+                // We first generate the languages line
+
+                oneLangResult = new List<string>();
+                oneLangResult.Add(languages[0] + "," + languages[oneLang]);
+
+                // and then generate the multilanguage string for each entry
+                foreach (EntryI18n entry in dict.Values)
+                {
+                    StringBuilder text = entry.ToString(oneLang);
+                    if (text.Length > 0)
+                    {
+                        empty = false;
+                        // Replace real carry returns with the \n text.
+                        oneLangResult.Add(new StringBuilder()
+                                .Append(entry.key)
+                                .Append(COMMA)
+                                .Append(entry.ToString(oneLang))
+                                .ToString()
+                            );
+                    }
+                }
+
+                if (!empty)
+                {
+                    totalResult.Add(languages[oneLang], oneLangResult);
+                }
+            }
+
+            return totalResult;
         }
     }
 }

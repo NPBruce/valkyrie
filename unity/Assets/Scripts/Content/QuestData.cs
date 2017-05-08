@@ -102,9 +102,23 @@ public class QuestData
             ValkyrieDebug.Log("No QuestText extra files");
         }
 
-        // New dictionary without entries
-        LocalizationRead.scenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, DictionaryI18n.DEFAULT_LANG, game.currentLang);
+        // Reset scenario dict
+        LocalizationRead.scenarioDict = null;
+
+        DictionaryI18n partialDict;
+
+        foreach (string file in localizationFiles)
+        {
+            partialDict = LocalizationRead.ReadFromFilePath(file, game.currentLang, game.currentLang);
+            if (LocalizationRead.scenarioDict == null)
+            {
+                LocalizationRead.scenarioDict = partialDict;
+                    
+            } else
+            {
+                LocalizationRead.scenarioDict.AddRaw(partialDict);
+            }
+        }
 
         foreach (string f in iniFiles)
         {
@@ -134,13 +148,6 @@ public class QuestData
                     LocalizationRead.scenarioDict.RenamePrefix(kv.Key + ".", kv.Value + ".");
                 }
             }
-        }
-
-        foreach (string file in localizationFiles)
-        {
-            LocalizationRead.scenarioDict.Add(
-                LocalizationRead.ReadFromFilePath(file, quest.defaultLanguage, game.currentLang)
-                );
         }
     }
 
@@ -1728,7 +1735,7 @@ public class QuestData
         // Default language for the text
         public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
         // raw localization dictionary
-        public DictionaryI18n localizationDict;
+        public DictionaryI18n localizationDict = null;
 
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
@@ -1741,13 +1748,37 @@ public class QuestData
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
-            localizationDict =
-                    LocalizationRead.ReadFromFilePath(path + "/Localization.txt", defaultLanguage, Game.Get().currentLang);
-            if (localizationDict == null)
+
+            //Read the localization data
+            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
+
+            DictionaryI18n partialLocalizationDict;
+
+            if (localizationData == null || localizationData.Keys.Count == 0)
             {
                 localizationDict = new DictionaryI18n(
                     new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
             }
+            else
+            {
+                foreach (string localizationFile in localizationData.Keys)
+                {
+                    partialLocalizationDict =
+                            LocalizationRead.ReadFromFilePath(path + "/" + localizationFile, defaultLanguage, Game.Get().currentLang);
+
+                    if (localizationDict == null)
+                    {
+                        localizationDict = partialLocalizationDict;
+                    }
+                    else
+                    {
+                        localizationDict.AddRaw(partialLocalizationDict);
+                    }
+                }
+                localizationDict.setDefaultLanguage(defaultLanguage);
+                localizationDict.setCurrentLanguage(Game.Get().currentLang);
+            }
+
             valid = Populate(iniData);
         }
 
@@ -1799,6 +1830,7 @@ public class QuestData
             {
                 defaultLanguage = iniData["defaultlanguage"];
                 localizationDict.setDefaultLanguage(defaultLanguage);
+                localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }
 
             if (iniData.ContainsKey("hidden"))
@@ -1825,7 +1857,6 @@ public class QuestData
                 r.Append("packs=");
                 r.AppendLine(string.Join(" ", packs));
             }
-            r.AppendLine().AppendLine("[QuestText]").AppendLine("Localization.txt");
 
             return r.ToString();
         }
