@@ -137,6 +137,24 @@ public class QuestEditor {
         // Write to disk
         try
         {
+            // first we serialize dictionary to know the available languages
+            if (LocalizationRead.scenarioDict != null)
+            {
+                Dictionary<string, List<string>> localization_files =
+                    LocalizationRead.scenarioDict.SerializeMultiple();
+
+                // Append to the end of the content file the languages files
+                content.AppendLine().AppendLine("[QuestText]");
+
+                foreach (string language in localization_files.Keys)
+                {
+                    content.AppendLine("Localization." + language + ".txt");
+                    File.WriteAllText(
+                        Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization." + language + ".txt",
+                        string.Join(System.Environment.NewLine, localization_files[language].ToArray()));
+                }
+            }
+
             File.WriteAllText(game.quest.qd.questPath, content.ToString());
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/tiles.ini", tiles.ToString());
             File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/events.ini", events.ToString());
@@ -153,16 +171,6 @@ public class QuestEditor {
             ini_content += spawns.ToString();
             ini_content += monsters.ToString();
             ini_content += other.ToString();
-
-
-            if (LocalizationRead.scenarioDict != null)
-            {
-                List<string> localization_file = LocalizationRead.scenarioDict.Serialize();
-
-                File.WriteAllText(
-                    Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization.txt",
-                    string.Join(System.Environment.NewLine, localization_file.ToArray()));
-            }
         }
         catch (System.Exception)
         {
