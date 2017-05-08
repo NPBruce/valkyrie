@@ -165,12 +165,16 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.SHOP);
 
-            StringKey act = new StringKey("val", "CLASS");
-            if (game.cd.items[s].act == 1)
+            StringKey act = new StringKey(null, "-", false);
+            if (game.cd.items[s].ContainsTrait("class"))
+            {
+                act = new StringKey("val", "CLASS");
+            }
+            if (game.cd.items[s].ContainsTrait("act1"))
             {
                 act = new StringKey("val", "ACT_1");
             }
-            if (game.cd.items[s].act == 2)
+            if (game.cd.items[s].ContainsTrait("act2"))
             {
                 act = new StringKey("val", "ACT_2");
             }
@@ -279,12 +283,16 @@ public class ShopInterface : Quest.BoardComponent
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.SHOP);
 
-            StringKey act = new StringKey("val", "CLASS");
-            if (game.cd.items[s].act == 1)
+            StringKey act = new StringKey(null, "-", false);
+            if (game.cd.items[s].ContainsTrait("class"))
+            {
+                act = new StringKey("val", "CLASS");
+            }
+            if (game.cd.items[s].ContainsTrait("act1"))
             {
                 act = new StringKey("val", "ACT_1");
             }
-            if (game.cd.items[s].act == 2)
+            if (game.cd.items[s].ContainsTrait("act2"))
             {
                 act = new StringKey("val", "ACT_2");
             }
@@ -320,13 +328,19 @@ public class ShopInterface : Quest.BoardComponent
 
     public int GetPurchasePrice(ItemData item)
     {
-        if (item.act == 0) return 25;
+        if (item.ContainsTrait("class"))
+        {
+            return 25;
+        }
         return item.price;
     }
 
     public int GetSellPrice(ItemData item)
     {
-        if (item.act == 0) return 25;
+        if (item.ContainsTrait("class"))
+        {
+            return 25;
+        }
 
         if (game.quest.vars.GetValue("$%sellratio") == 0)
         {

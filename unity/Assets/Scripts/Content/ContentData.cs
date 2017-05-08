@@ -883,7 +883,6 @@ public class ItemData : GenericData
 {
     public static new string type = "Item";
     public bool unique = false;
-    public int act = 0;
     public int price = 0;
     public int minFame = -1;
     public int maxFame = -1;
@@ -893,10 +892,6 @@ public class ItemData : GenericData
         if (name.IndexOf("ItemUnique") == 0)
         {
             unique = true;
-        }
-        if (content.ContainsKey("act"))
-        {
-            int.TryParse(content["act"], out act);
         }
         if (content.ContainsKey("price"))
         {

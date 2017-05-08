@@ -180,7 +180,7 @@ namespace Injection
 
         public static string ParseItem(InventoryItemModel item, ProductModel p)
         {
-            string outText = "[" + GenerateIniName(item.ItemName.Key) + "]\n";
+            string outText = "[" + GenerateIniName(item.ItemName.Key.Replace("RELIC_", "ITEM_")) + "]\n";
             outText += "name={ffg:" + item.ItemName.Key + "}\n";
             outText += "image=" + ImagePath(item.Icon.Path, p) + "\n";
             outText += "traits=";
@@ -202,9 +202,9 @@ namespace Injection
         {
             if (p.Type == ExpansionType.CORE_SET)
             {
-                return path.Replace("Assets/Resources/Textures/Items", "\"../ffg/img") + "\"";
+                return path.Replace("Assets/Resources/Textures/Items", "\"../ffg/img").Replace(".png", ".dds") + "\"";
             }
-            return path.Replace("Assets/Resources/Textures/Items", "\"../../ffg/img") + "\"";
+            return path.Replace("Assets/Resources/Textures/Items", "\"../../ffg/img").Replace(".png", ".dds") + "\"";
         }
 
         public static string GenericActivation(string inName)
