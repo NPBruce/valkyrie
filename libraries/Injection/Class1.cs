@@ -26,10 +26,10 @@ namespace Injection
                 outText = new List<string>();
                 foreach (HeroModel hm in product.GetHeroes())
                 {
-                    outText.Add("[" + GenerateIniName(hm.NameKey) + "]");
+                    outText.Add("[Hero" + GenerateIniName(hm.NameKey) + "]");
                     outText.Add("name={ffg:" + hm.NameKey + "}");
                     outText.Add("image=" + ImagePath(hm.Image.Path, product));
-                    outText.Add("archetype=" + hm.Archetype.ToString().ToLower());
+                    outText.Add("archetype=" + hm.Archetype.ToString().Split(" ".ToCharArray())[0].ToLower());
                     outText.Add("traits=" + hm.Gender.ToString().ToLower());
                     outText.Add("");
                 }
@@ -39,18 +39,29 @@ namespace Injection
                 List<string> outItems = new List<string>();
                 foreach (ClassModel cm in product.GetClasses())
                 {
-                    outText.Add("[" + GenerateIniName(cm.ClassName.Key) + "]");
+                    outText.Add("[Class" + GenerateIniName(cm.ClassName) + "]");
                     outText.Add("name={ffg:" + cm.ClassName.Key + "}");
                     //cm.GetSkills
                     if (cm.IsHybrid)
                     {
-                        outText.Add("hybridarchetype=" + cm.HybridArchetype);
+                        outText.Add("hybridarchetype=" + cm.HybridArchetype.ToString().Split(" ".ToCharArray())[0].ToLower());
                     }
+                    string itemList = "items=";
                     foreach (InventoryItemModel im in cm.GetStartingItems())
                     {
                         outItems.Add(ParseItem(im, product));
+                        itemList += GenerateIniName(im.ItemName.Key) + " ";
                     }
+                    outText.Add(itemList.Substring(0, itemList.Length - 1));
                     outText.Add("");
+
+                    foreach (ClassModel.Skill s in cm.GetSkills())
+                    {
+                        outText.Add("[Skill" + GenerateIniName(cm.ClassName) + GenerateIniNameKey(s.NameKey) + "]");
+                        outText.Add("name={ffg:" + s.NameKey + "}");
+                        outText.Add("xp=" + s.Cost);
+                        outText.Add("");
+                    }
                 }
                 File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\classes.ini", outText.ToArray());
 
@@ -60,23 +71,79 @@ namespace Injection
                 }
                 File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\items.ini", outItems.ToArray());
 
+                List<string> activationText = new List<string>();
                 outText = new List<string>();
                 foreach (MonsterGroupModel mm in product.GetMonsters())
                 {
+                    outText.Add("[Monster" + GenerateIniName(mm.MonsterGroupLocalizedName) + "]");
+                    outText.Add("info={ffg:" + mm.Instructions.Key + "}");
+                    outText.Add("image=" + ImagePath(mm.Monster.Image.Path, product));
+                    outText.Add("imageplace=" + ImagePath(mm.Monster.ImagePlacement.Path, product));
+                    string traits="traits=";
+                    foreach (MonsterTraitsSet1 trait in Enum.GetValues(typeof(MonsterTraitsSet1)))
+                    {
+                        if ((mm.TraitsSet1 & trait) != 0)
+                        {
+                            traits += trait.ToString().ToLower() + " ";
+                        }
+                    }
+
+                    foreach (MonsterTraitsSet2 trait in Enum.GetValues(typeof(MonsterTraitsSet2)))
+                    {
+                        if ((mm.TraitsSet2 & trait) != 0)
+                        {
+                            traits += trait.ToString().ToLower() + " ";
+                        }
+                    }
+
+                    if (mm.IsLieutenant)
+                    {
+                        traits += "lieutenant ";
+                    }
+                    outText.Add(traits);
+                    outText.Add("; Exclude Minions: 2: " + mm.ExcludeMinions2Players + " 3: " + mm.ExcludeMinions3Players + " 4: " + mm.ExcludeMinions4Players);
+
+                    string tempString = "";
+                    foreach (MonsterActivationTypeModel at in mm.ActivationTypes)
+                    {
+                        tempString = "activation=";
+                        foreach (MonsterActivationModel a in at.activations)
+                        {
+                            tempString += GenericActivation(a.ActivationEffect.Key) + " ";
+                        }
+                        outText.Add(tempString.Substring(0, tempString.Length - 1));
+                        tempString = "; Stunned Activations: ";
+                        foreach (MonsterActivationModel a in at.stunnedActivations)
+                        {
+                            tempString += a.ActivationEffect.Key + " ";
+                        }
+                        outText.Add(tempString.Substring(0, tempString.Length - 1));
+                    }
+
+                    tempString = "; Stunned activations: ";
+                    foreach (MonsterActivationModel a in mm.ActivationsStunned)
+                    {
+                        tempString += GenericActivation(a.ActivationEffect.Key) + " ";
+                    }
+                    outText.Add(tempString.Substring(0, tempString.Length - 1));
                     outText.Add("");
+
+                    foreach (MonsterActivationModel a in mm.Activations)
+                    {
+                        activationText.Add(GetActivation(a, GenerateIniName(mm.MonsterGroupLocalizedName)));
+                    }
                 }
                 File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\monsters.ini", outText.ToArray());
 
-                outText = new List<string>();
-                foreach (ProductMonsterActivationModel am in product.AdditionalActivations)
+                foreach (ProductMonsterActivationModel aa in product.AdditionalActivations)
                 {
-                    outText.Add("");
+                    foreach (MonsterActivationModel am in aa.Activations)
+                    {
+                        activationText.Add(GetActivation(am, GenerateIniName(aa.Monster.MonsterGroupLocalizedName)));
+                    }
                 }
-                File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\activations.ini", outText.ToArray());
-
-                File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + ".txt", outText.ToArray());
+                File.WriteAllLines("C:\\Users\\Bruce\\Desktop\\ffg\\" + product.Code + "\\activations.ini", activationText.ToArray());
             }
-
             return 5;
         }
 
@@ -91,6 +158,24 @@ namespace Injection
                 name += new string(lower);
             }
             return name;
+        }
+
+        public static string GenerateIniName(LocalizationPacket input)
+        {
+            return GenerateIniNameKey(input.Key);
+        }
+        public static string GenerateIniNameKey(string key)
+        {
+            string name = Localization.Get(key);
+            string[] sections = name.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            string outputName = "";
+            foreach (string s in sections)
+            {
+                char[] lower = s.ToLower().ToCharArray();
+                lower[0] = s[0];
+                outputName += new string(lower);
+            }
+            return outputName;
         }
 
         public static string ParseItem(InventoryItemModel item, ProductModel p)
@@ -120,6 +205,51 @@ namespace Injection
                 return path.Replace("Assets/Resources/Textures/Items", "../ffg/img");
             }
             return path.Replace("Assets/Resources/Textures/Items", "../../ffg/img");
+        }
+
+        public static string GenericActivation(string inName)
+        {
+            string[] elements = inName.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            if (elements.Length < 3) return inName;
+            char[] name = elements[1].ToLower().ToCharArray();
+            name[0] = elements[1][0];
+            return new string(name) + elements[2];
+        }
+
+        public static string GetActivation(MonsterActivationModel a, string monster)
+        {
+            string activation = "[MonsterActivation" + monster + GetActivationNumber(a.ActivationEffect.Key) + "]\n";
+            activation += "ability={ffg:" + a.ActivationEffect.Key + "}\n";
+            foreach (LocalizationPacket lp in a.MasterActivations)
+            {
+                activation += "master={ffg:" + lp.Key + "}\n";
+            }
+            foreach (LocalizationPacket lp in a.MinionActivations)
+            {
+                activation += "minion={ffg:" + lp.Key + "}\n";
+            }
+            if (a.MasterPriority)
+            {
+                activation += "masterfirst=true\n";
+            }
+            else
+            {
+                activation += "minionfirst=true\n";
+            }
+            return activation;
+        }
+
+        public static string GetActivationNumber(string a)
+        {
+            string[] elements = a.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in elements)
+            {
+                if (char.IsNumber(s[0]))
+                {
+                    return s;
+                }
+            }
+            return "0";
         }
     }
 }
