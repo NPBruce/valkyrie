@@ -38,7 +38,10 @@ public class VarManager
     {
         if (!vars.ContainsKey(var))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var, true));
+            if (Game.Get().quest != null && Game.Get().quest.log != null)
+            {
+                Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var, true));
+            }
             vars.Add(var, 0);
         }
         vars[var] = value;

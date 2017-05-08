@@ -1642,9 +1642,9 @@ public class QuestData
                 itemName = new string[0];
             }
 
-            if (data.ContainsKey("starting"))
+            if (data.ContainsKey("class"))
             {
-                bool.TryParse(data["starting"], out starting);
+                bool.TryParse(data["class"], out starting);
             }
             else
             {
