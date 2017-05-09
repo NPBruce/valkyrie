@@ -38,6 +38,8 @@ public class HorrorCheck {
             new StringKey(null, text,false));
         db.AddBorder();
 
+        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+
         new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
 
         MonsterDialogMoM.DrawMonster(m);

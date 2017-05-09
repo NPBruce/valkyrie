@@ -35,6 +35,8 @@ public class InvestigatorEvade {
         }
         text = evades[Random.Range(0, evades.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
 
+        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+
         Draw();
     }
 

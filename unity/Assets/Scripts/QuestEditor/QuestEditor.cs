@@ -48,7 +48,7 @@ public class QuestEditor {
         game.quest.ChangeAlphaAll(0.2f);
 
         // Create a new QED
-        game.qed = new QuestEditorData();
+        game.qed = new QuestEditorData(game.qed);
     }
 
     // Save the quest
