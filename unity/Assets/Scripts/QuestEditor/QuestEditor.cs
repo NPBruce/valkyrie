@@ -56,83 +56,13 @@ public class QuestEditor {
     {
         Game game = Game.Get();
         // Add a comment at the start of the quest with the editor version
-        StringBuilder content = new StringBuilder()
+
+        StringBuilder questData = new StringBuilder()
             .Append("; Saved by version: ")
             .AppendLine(game.version);
 
         // Save quest meta content to a string
-        content.AppendLine(game.quest.qd.quest.ToString());
-
-        content.AppendLine("[QuestData]");
-        content.AppendLine("tiles.ini");
-        content.AppendLine("events.ini");
-        content.AppendLine("tokens.ini");
-        content.AppendLine("spawns.ini");
-        content.AppendLine("monsters.ini");
-        content.AppendLine("ui.ini");
-        content.AppendLine("other.ini");
-
-        StringBuilder tiles = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder events = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder tokens = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder spawns = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder monsters = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder uis = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        StringBuilder other = new StringBuilder()
-            .Append("; Saved by version: ")
-            .AppendLine(game.version);
-
-        // Add all quest components
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Tile)
-            {
-                tiles.AppendLine().Append(kv.Value);
-            }
-            else if (kv.Value is QuestData.Event && !kv.Value.GetType().IsSubclassOf(typeof(QuestData.Event)))
-            {
-                events.AppendLine().Append(kv.Value);
-            }
-            else if (kv.Value is QuestData.Token)
-            {
-                tokens.AppendLine().Append(kv.Value);
-            }
-            else if (kv.Value is QuestData.Spawn)
-            {
-                spawns.AppendLine().Append(kv.Value);
-            }
-            else if (kv.Value is QuestData.CustomMonster || kv.Value is QuestData.Activation)
-            {
-                monsters.AppendLine().Append(kv.Value);
-            }
-            else if (kv.Value is QuestData.UI)
-            {
-                uis.AppendLine().Append(kv.Value);
-            }
-            // Skip peril, not a quest component
-            else if (!(kv.Value is PerilData))
-            {
-                other.AppendLine().Append(kv.Value);
-            }
-        }
+        questData.AppendLine(game.quest.qd.quest.ToString());
 
         // Write to disk
         try
@@ -144,38 +74,63 @@ public class QuestEditor {
                     LocalizationRead.scenarioDict.SerializeMultiple();
 
                 // Append to the end of the content file the languages files
-                content.AppendLine().AppendLine("[QuestText]");
+                questData.AppendLine().AppendLine("[QuestText]");
 
                 foreach (string language in localization_files.Keys)
                 {
-                    content.AppendLine("Localization." + language + ".txt");
+                    questData.AppendLine("Localization." + language + ".txt");
                     File.WriteAllText(
                         Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization." + language + ".txt",
                         string.Join(System.Environment.NewLine, localization_files[language].ToArray()));
                 }
             }
-
-            File.WriteAllText(game.quest.qd.questPath, content.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/tiles.ini", tiles.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/events.ini", events.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/tokens.ini", tokens.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/spawns.ini", spawns.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/monsters.ini", monsters.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/ui.ini", uis.ToString());
-            File.WriteAllText(Path.GetDirectoryName(game.quest.qd.questPath) + "/other.ini", other.ToString());
-
-            string ini_content = content.ToString();
-            ini_content += tiles.ToString();
-            ini_content += events.ToString();
-            ini_content += tokens.ToString();
-            ini_content += spawns.ToString();
-            ini_content += monsters.ToString();
-            ini_content += other.ToString();
         }
         catch (System.Exception)
         {
             ValkyrieDebug.Log("Error: Failed to save quest in editor.");
             Application.Quit();
+        }
+
+        questData.AppendLine("[QuestData]");
+
+        Dictionary<string, StringBuilder> fileData = new Dictionary<string, StringBuilder>();
+
+        foreach (QuestData.QuestComponent qc in game.quest.qd.components.Values)
+        {
+            string source = qc.source;
+            if (source.Length == 0)
+            {
+                source = game.quest.qd.questPath;
+            }
+
+            if (!fileData.ContainsKey(source))
+            {
+                StringBuilder thisFile = new StringBuilder();
+                if (!source.Equals(game.quest.qd.questPath))
+                {
+                    thisFile.Append("; Saved by version: ").AppendLine(game.version);
+                    questData.AppendLine(source.Substring(Path.GetDirectoryName(game.quest.qd.questPath).Length + 1));
+                }
+                fileData.Add(source, thisFile);
+            }
+            if (!(qc is PerilData))
+            {
+                fileData[source].AppendLine().Append(qc);
+            }
+        }
+
+        if (fileData.ContainsKey(game.quest.qd.questPath))
+        {
+            fileData[game.quest.qd.questPath] = questData.Append(fileData[game.quest.qd.questPath]);
+        }
+        else
+        {
+            fileData.Add(game.quest.qd.questPath, questData);
+        }
+
+        foreach (KeyValuePair<string, StringBuilder> kv in fileData)
+        {
+            File.WriteAllText(kv.Key, kv.Value.ToString());
         }
 
         // Reload quest
