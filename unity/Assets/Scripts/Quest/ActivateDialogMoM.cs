@@ -28,6 +28,8 @@ public class ActivateDialogMoM : ActivateDialog
         {
             // ability text
             string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
+            // Add this to the log
+            game.quest.log.Add(new Quest.LogEntry(textKey.Replace("\n", "\\n")));
             db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
                 new StringKey(null, textKey,false));
             db.AddBorder();
@@ -60,8 +62,11 @@ public class ActivateDialogMoM : ActivateDialog
         db = new DialogBox(
             new Vector2(10, offset),
             new Vector2(UIScaler.GetWidthUnits() - 20, 4),
-            new StringKey(null, monster.currentActivation.masterActions, false));
+            new StringKey(null, monster.currentActivation.masterActions.Replace("\\n", "\n"), false));
         db.AddBorder();
+
+        // Add this to the log
+        game.quest.log.Add(new Quest.LogEntry(monster.currentActivation.masterActions.Replace("\n", "\\n")));
 
         offset += 4.5f;
 
@@ -87,6 +92,9 @@ public class ActivateDialogMoM : ActivateDialog
         db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
             new StringKey(null, monster.currentActivation.move.Replace("\\n", "\n"),false));
         db.AddBorder();
+
+        // Add this to the log
+        game.quest.log.Add(new Quest.LogEntry(monster.currentActivation.move.Replace("\n", "\\n")));
 
         offset += 4.5f;
 

@@ -312,6 +312,8 @@ public class RoundController {
         int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
         game.quest.vars.SetValue("#round", round);
 
+        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round)));
+
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
         game.heroCanvas.UpdateStatus();

@@ -136,6 +136,8 @@ public class RoundControllerMoM : RoundController
         int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
         game.quest.vars.SetValue("#round", round);
 
+        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR")));
+
         game.quest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
 
