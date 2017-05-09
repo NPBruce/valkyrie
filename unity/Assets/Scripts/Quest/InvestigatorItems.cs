@@ -27,7 +27,7 @@ public class InvestigatorItems
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             QuestData.QItem item = kv.Value as QuestData.QItem;
-            if (item != null && item.starting)
+            if (item != null && item.starting && game.quest.itemSelect.ContainsKey(kv.Key))
             {
                 game.quest.items.Add(game.quest.itemSelect[kv.Key]);
             }

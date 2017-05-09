@@ -184,6 +184,8 @@ public class DialogWindow {
 
         Game game = Game.Get();
 
+        if (!game.quest.itemSelect.ContainsKey(item)) return;
+
         Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 

@@ -256,8 +256,7 @@ public class Quest
 
             if (list.Count == 0)
             {
-                ValkyrieDebug.Log("Error: Unable to find item of traits specified in QItem: " + qItem.sectionName);
-                Destroyer.MainMenu();
+                game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName, true));
                 return false;
             }
 

@@ -222,7 +222,7 @@ public class EventManager
         {
             if (s.IndexOf("QItem") == 0)
             {
-                itemList.Add(game.quest.itemSelect[s]);
+                itemList.Add(s);
             }
         }
         // Add board components

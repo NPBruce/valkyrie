@@ -287,7 +287,7 @@ public class TokenBoard : MonoBehaviour {
                 items++;
             }
         }
-        if (items != 1)
+        if (items != 1 || !Game.Get().quest.itemSelect.ContainsKey(item))
         {
             AddHighlight(e.location);
         }
