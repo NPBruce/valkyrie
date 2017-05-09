@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ValkyrieTools;
+using Assets.Scripts.Content;
 
 // This class controls the progression of activations and events
 public class RoundController {
@@ -312,7 +313,7 @@ public class RoundController {
         int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
         game.quest.vars.SetValue("#round", round);
 
-        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round)));
+        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round).Translate()));
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();

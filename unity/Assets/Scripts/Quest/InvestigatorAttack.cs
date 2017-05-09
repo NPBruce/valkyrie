@@ -75,7 +75,7 @@ public class InvestigatorAttack
         }
         AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
         attackText = attack.text.Translate().Replace("{0}", monster.monsterData.name.Translate());
-        game.quest.log.Add(new Quest.LogEntry(attackText.Replace("\n", "\\n")));
+        Game.Get().quest.log.Add(new Quest.LogEntry(attackText.Replace("\n", "\\n")));
         Attack();
     }
 

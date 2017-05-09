@@ -189,7 +189,7 @@ namespace Assets.Scripts.UI.Screens
             db = new DialogBox(
                 new Vector2(UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3)),
                 new Vector2(5, 2),
-                new StringKey(null, Game.Get().version, false);
+                new StringKey(null, Game.Get().version, false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
             TextButton tb = new TextButton(

@@ -93,7 +93,7 @@ public class NextStageButton
         }
         else
         {
-            game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_MYTHOS")));
+            game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_MYTHOS").Translate()));
             game.roundControl.HeroActivated();
         }
     }
