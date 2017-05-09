@@ -24,6 +24,24 @@ public class QuestEditorData {
         SelectQuest();
     }
 
+    // Start the editor from old version
+    public QuestEditorData(QuestEditorData old)
+    {
+        Game.Get().qed = this;
+        selectionStack = new Stack<EditorComponent>();
+        if (old == null || old.selection == null)
+        {
+            // Start at the quest component
+            SelectQuest();
+        }
+        else
+        {
+            selectionStack = old.selectionStack;
+            selectionStack.Push(old.selection);
+            Back();
+        }
+    }
+
     // Update component selection
     // Used to save selection history
     public void NewSelection(EditorComponent c)

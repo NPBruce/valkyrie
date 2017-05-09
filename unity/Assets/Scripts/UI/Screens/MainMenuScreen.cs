@@ -186,6 +186,12 @@ namespace Assets.Scripts.UI.Screens
                 ABOUT_LIBS);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
+            db = new DialogBox(
+                new Vector2(UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3)),
+                new Vector2(5, 2),
+                new StringKey(null, Game.Get().version, false);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 
                 new Vector2(8, 2),
