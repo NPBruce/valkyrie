@@ -1281,7 +1281,7 @@ public class PerilData : QuestData.Event
     public StringKey perilText;
     override public StringKey text { get { return perilText; } }
 
-    public PerilData(string name, Dictionary<string, string> data) : base(name, data)
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data, "")
     {
         typeDynamic = type;
         if (data.ContainsKey("priority"))

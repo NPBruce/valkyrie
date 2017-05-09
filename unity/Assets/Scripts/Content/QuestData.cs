@@ -136,7 +136,7 @@ public class QuestData
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
-                AddData(section.Key, section.Value, Path.GetDirectoryName(f));
+                AddData(section.Key, section.Value, f);
             }
 
             // Update all references to this component
@@ -152,7 +152,7 @@ public class QuestData
     }
 
     // Add a section from an ini file to the quest data.  Duplicates are not allowed
-    void AddData(string name, Dictionary<string, string> content, string path)
+    void AddData(string name, Dictionary<string, string> content, string source)
     {
         // Fatal error on duplicates
         if(components.ContainsKey(name))
@@ -169,64 +169,64 @@ public class QuestData
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
-            Tile c = new Tile(name, content);
+            Tile c = new Tile(name, content, source);
             components.Add(name, c);
         }
         if (name.IndexOf(Door.type) == 0)
         {
-            Door c = new Door(name, content, game);
+            Door c = new Door(name, content, game, source);
             components.Add(name, c);
         }
         if (name.IndexOf(Token.type) == 0)
         {
-            Token c = new Token(name, content, game);
+            Token c = new Token(name, content, game, source);
             components.Add(name, c);
         }
         if (name.IndexOf(UI.type) == 0)
         {
-            UI c = new UI(name, content, game);
+            UI c = new UI(name, content, game, source);
             components.Add(name, c);
         }
         if (name.IndexOf(Event.type) == 0)
         {
-            Event c = new Event(name, content);
+            Event c = new Event(name, content, source);
             components.Add(name, c);
         }
         if (name.IndexOf(Spawn.type) == 0)
         {
-            Spawn c = new Spawn(name, content, game);
+            Spawn c = new Spawn(name, content, game, source);
             components.Add(name, c);
         }
         if (name.IndexOf(MPlace.type) == 0)
         {
-            MPlace c = new MPlace(name, content);
+            MPlace c = new MPlace(name, content, source);
             components.Add(name, c);
         }
         if (name.IndexOf(QItem.type) == 0)
         {
-            QItem c = new QItem(name, content);
+            QItem c = new QItem(name, content, source);
             components.Add(name, c);
         }
         // Depreciated (format 3)
         if (name.IndexOf("StartingItem") == 0)
         {
             string fixedName = "QItem" + name.Substring("StartingItem".Length);
-            QItem c = new QItem(fixedName, content);
+            QItem c = new QItem(fixedName, content, source);
             components.Add(fixedName, c);
         }
         if (name.IndexOf(Puzzle.type) == 0)
         {
-            Puzzle c = new Puzzle(name, content);
+            Puzzle c = new Puzzle(name, content, source);
             components.Add(name, c);
         }
         if (name.IndexOf(CustomMonster.type) == 0)
         {
-            CustomMonster c = new CustomMonster(name, content, path);
+            CustomMonster c = new CustomMonster(name, content, source);
             components.Add(name, c);
         }
         if (name.IndexOf(Activation.type) == 0)
         {
-            Activation c = new Activation(name, content);
+            Activation c = new Activation(name, content, source);
             components.Add(name, c);
         }
         // If not known ignore
@@ -245,6 +245,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
+            source = Path.GetDirectoryName(game.quest.qd.questPath) + "/tiles.ini";
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
                 tileSideName = kv.Key;
@@ -253,7 +254,7 @@ public class QuestData
         }
 
         // Create tile from ini data
-        public Tile(string name, Dictionary<string, string> data) : base(name, data)
+        public Tile(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             // Tiles must have a location
             locationSpecified = true;
@@ -303,13 +304,14 @@ public class QuestData
         // Create new with name (used by editor)
         public Door(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/door.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
         }
 
         // Create from ini data
-        public Door(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public Door(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -356,6 +358,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Token(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/tokens.ini";
             locationSpecified = true;
             typeDynamic = type;
             tokenName = "TokenSearch";
@@ -363,7 +366,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Token(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public Token(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -419,13 +422,14 @@ public class QuestData
         // Create new with name (used by editor)
         public UI(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/ui.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
         }
 
         // Create from ini data
-        public UI(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public UI(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -570,6 +574,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/spawns.ini";
             // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
@@ -593,7 +598,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Spawn(string name, Dictionary<string, string> data, Game game) : base(name, data)
+        public Spawn(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
         {
             typeDynamic = type;
             // First try to a list of specific types
@@ -772,6 +777,7 @@ public class QuestData
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/events.ini";
             display = false;
             typeDynamic = type;
             nextEvent = new List<List<string>>();
@@ -786,7 +792,7 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data) : base(name, data)
+        public Event(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             typeDynamic = type;
 
@@ -1174,12 +1180,13 @@ public class QuestData
         // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/mplaces.ini";
             locationSpecified = true;
             typeDynamic = type;
         }
 
         // Load mplace from ini data
-        public MPlace(string name, Dictionary<string, string> data) : base(name, data)
+        public MPlace(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             // Must have a location
             locationSpecified = true;
@@ -1225,6 +1232,7 @@ public class QuestData
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/puzzles.ini";
             typeDynamic = type;
             nextEvent.Add(new List<string>());
             buttonColors.Add("white");
@@ -1234,7 +1242,7 @@ public class QuestData
         }
 
         // Construct from ini data
-        public Puzzle(string name, Dictionary<string, string> data) : base(name, data)
+        public Puzzle(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             typeDynamic = type;
 
@@ -1293,6 +1301,8 @@ public class QuestData
     // Super class for all quest components
     public class QuestComponent
     {
+        // Source file
+        public string source = "";
         // location on the board in squares
         public Vector2 location;
         // Has a location been speficied?
@@ -1326,10 +1336,11 @@ public class QuestData
         }
 
         // Construct from ini data
-        public QuestComponent(string nameIn, Dictionary<string, string> data)
+        public QuestComponent(string nameIn, Dictionary<string, string> data, string sourceIn)
         {
             typeDynamic = type;
             sectionName = nameIn;
+            source = sourceIn;
 
             // Default to 0, 0 unless specified
             location = new Vector2(0, 0);
@@ -1451,6 +1462,7 @@ public class QuestData
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
             LocalizationRead.updateScenarioText(monstername_key, sectionName);
             LocalizationRead.updateScenarioText(info_key, "-");
             activations = new string[0];
@@ -1459,10 +1471,10 @@ public class QuestData
         }
 
         // Create from ini data
-        public CustomMonster(string iniName, Dictionary<string, string> data, string pathIn) : base(iniName, data)
+        public CustomMonster(string iniName, Dictionary<string, string> data, string pathIn) : base(iniName, data, pathIn)
         {
             typeDynamic = type;
-            path = pathIn;
+            path = Path.GetDirectoryName(pathIn);
             // Get base derived monster type
             if (data.ContainsKey("base"))
             {
@@ -1580,12 +1592,13 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
             LocalizationRead.updateScenarioText(ability_key, "-");
             typeDynamic = type;
         }
 
         // Create from ini data
-        public Activation(string name, Dictionary<string, string> data) : base(name, data)
+        public Activation(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             typeDynamic = type;
             if (data.ContainsKey("minionfirst"))
@@ -1629,6 +1642,7 @@ public class QuestData
         // Create new (editor)
         public QItem(string s) : base(s)
         {
+            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/items.ini";
             typeDynamic = type;
             itemName = new string[0];
             traits = new string[1];
@@ -1637,7 +1651,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public QItem(string name, Dictionary<string, string> data) : base(name, data)
+        public QItem(string name, Dictionary<string, string> data, string path) : base(name, data, path)
         {
             typeDynamic = type;
             if (data.ContainsKey("itemname"))
