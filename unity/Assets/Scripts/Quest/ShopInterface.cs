@@ -15,7 +15,15 @@ public class ShopInterface : Quest.BoardComponent
         game = gameObject;
         if (!game.quest.shops.ContainsKey(eventName))
         {
-            game.quest.shops.Add(eventName, items);
+            List<string> contentItems = new List<string>();
+            foreach (string s in items)
+            {
+                if (game.quest.itemSelect.ContainsKey(s))
+                {
+                    contentItems.Add(game.quest.itemSelect[s]);
+                }
+            }
+            game.quest.shops.Add(eventName, contentItems);
         }
         eventData = game.quest.qd.components[eventName] as QuestData.Event;
         // Find quest UI panel
