@@ -168,16 +168,16 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        db = new DialogBox(new Vector2(10, 13), new Vector2(4, 1),
+        db = new DialogBox(new Vector2(1, 14), new Vector2(10, 1),
             new StringKey("val", "X_COLON", MUSIC));
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(10, 13), new Vector2(1, 1), CommonStringKeys.PLUS,
+        tb = new TextButton(new Vector2(10, 14), new Vector2(1, 1), CommonStringKeys.PLUS,
                     delegate { AddMusic(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        int offset = 14;
+        int offset = 15;
         int index;
         for (index = 0; index < 12; index++)
         {
@@ -200,8 +200,8 @@ public class EditorComponentEvent : EditorComponent
                 offset++;
             }
         }
-        offset++;
 
+        offset++;
         if (game.gameType is D2EGameType)
         {
             db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
@@ -225,19 +225,18 @@ public class EditorComponentEvent : EditorComponent
             tb = new TextButton(new Vector2(18, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag(Game.EDITOR);
+            offset ++;
         }
 
-        offset += 2;
-
+        int componentsOffset = offset;
         db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), ADD_COMPONENTS);
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(9, offset), new Vector2(1, 1), CommonStringKeys.PLUS, 
+        tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, 
             delegate { AddVisibility(true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        int componentsOffset = offset++;
         for (index = 0; index < 12; index++)
         {
             if (eventComponent.addComponents.Length > index)
@@ -255,16 +254,16 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(10, 16), new Vector2(9, 1), REMOVE_COMPONENTS);
+        offset = componentsOffset;
+        db = new DialogBox(new Vector2(10, offset), new Vector2(9, 1), REMOVE_COMPONENTS);
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, 16), new Vector2(1, 1), 
+        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), 
             CommonStringKeys.PLUS, 
             delegate { AddVisibility(false); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        offset = componentsOffset;
         for (index = 0; index < 12; index++)
         {
             if (eventComponent.removeComponents.Length > index)
@@ -479,12 +478,33 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddMusic(int index)
     {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        Game game = Game.Get();
+        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
 
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
+        }
+
+        audioESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "AUDIO")), audio, delegate { SelectMusic(index); });
+        audioESL.SelectItem();
+    }
+
+    public void SelectMusic(int index)
+    {
+        eventComponent.music.Insert(index, audioESL.selection);
+        Update();
     }
 
     public void RemoveMusic(int index)
     {
-
+        eventComponent.music.RemoveAt(index);
+        Update();
     }
 
     public void SetHighlight()
