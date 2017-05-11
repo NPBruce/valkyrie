@@ -445,9 +445,7 @@ public class EventManager
             Quest.Hero h = game.quest.GetRandomHero();
             if (text.Contains("{rnd:hero"))
             {
-                List<Quest.Hero> selection = new List<Quest.Hero>();
-                selection.Add(h);
-                game.quest.heroSelection.Add(qEvent.sectionName, selection);
+                h.selected = true;
             }
             text = text.Replace("{rnd:hero}", h.heroData.name.Translate());
 

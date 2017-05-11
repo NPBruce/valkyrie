@@ -21,6 +21,7 @@ public class DialogWindow {
         eventData = e;
         heroList = new List<Quest.Hero>();
         Game game = Game.Get();
+        text = eventData.GetText();
 
         // hero list can be populated from another event
         if (!eventData.qEvent.heroListName.Equals(""))
@@ -58,7 +59,6 @@ public class DialogWindow {
     public void CreateWindow()
     {
         // Draw text
-        text = eventData.GetText();
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
             new StringKey(null, text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
@@ -115,7 +115,6 @@ public class DialogWindow {
     public void CreateQuotaWindow()
     {
         // Draw text
-        text = eventData.GetText();
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
             new StringKey(null, text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
