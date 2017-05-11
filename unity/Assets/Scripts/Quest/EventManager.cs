@@ -65,7 +65,7 @@ public class EventManager
                 eventStack.Push(events[s]);
             }
         }
-        if (data != null && data.ContainsKey("currentevent"))
+        if (data != null && data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
         {
             currentEvent = events[data["currentevent"]];
             ResumeEvent();

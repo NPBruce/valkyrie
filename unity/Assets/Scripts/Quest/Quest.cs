@@ -542,7 +542,7 @@ public class Quest
         }
 
         shops = new Dictionary<string, List<string>>();
-        if (saveData.Get("Shops") == null)
+        if (saveData.Get("Shops") != null)
         {
             foreach (KeyValuePair<string, string> kv in saveData.Get("Shops"))
             {
@@ -632,7 +632,7 @@ public class Quest
             }
             if (kv.Key.IndexOf("#shop") == 0)
             {
-                boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), kv.Key.Substring("Shop".Length)));
+                boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), activeShop));
             }
         }
 
@@ -1062,7 +1062,7 @@ public class Quest
             r += kv.Key + "=";
             foreach (string s in kv.Value)
             {
-                r += kv.Value + " ";
+                r += s + " ";
             }
             r = r.Substring(0, r.Length - 1) + nl;
         }
