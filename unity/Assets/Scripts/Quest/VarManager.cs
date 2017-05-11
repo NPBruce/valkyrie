@@ -23,6 +23,19 @@ public class VarManager
         }
     }
 
+    public Dictionary<string, float> GetPrefixVars(string prefix)
+    {
+        Dictionary<string, float> dict = new Dictionary<string, float>();
+        foreach (KeyValuePair<string, float> kv in vars)
+        {
+            if (kv.Key.IndexOf(prefix) == 0)
+            {
+                dict.Add(kv.Key, kv.Value);
+            }
+        }
+        return dict;
+    }
+
     public void TrimQuest()
     {
         Dictionary<string, float> newVars = new Dictionary<string, float>();

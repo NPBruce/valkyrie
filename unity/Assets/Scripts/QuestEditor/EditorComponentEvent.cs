@@ -419,12 +419,30 @@ public class EditorComponentEvent : EditorComponent
             triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters"));
         }
 
+        HashSet<string> vars = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
                 triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
             }
+
+            if (kv.Value is QuestData.Event)
+            {
+                QuestData.Event e = kv.Value as QuestData.Event;
+                foreach (string s in EditorComponentEventVars.ExtractVarsFromEvent(e))
+                {
+                    if (s[0] == '@')
+                    {
+                        vars.Add(s);
+                    }
+                }
+            }
+        }
+
+        foreach (string s in vars)
+        {
+            triggers.Add(new EditorSelectionList.SelectionListEntry("Var" + s.Substring(1), "Vars"));
         }
 
         triggerESL = new EditorSelectionList(

@@ -223,7 +223,7 @@ public class EditorComponentEventVars : EditorComponent
         return list;
     }
 
-    private HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
+    public static HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
     {
         HashSet<string> vars = new HashSet<string>();
         foreach (QuestData.Event.VarOperation op in e.operations)
@@ -287,6 +287,10 @@ public class EditorComponentEventVars : EditorComponent
             if (varText.value[0] == '%')
             {
                 op.var = '%' + op.var;
+            }
+            if (varText.value[0] == '@')
+            {
+                op.var = '@' + op.var;
             }
             if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
             {
