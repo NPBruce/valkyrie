@@ -11,9 +11,12 @@ public class Audio : MonoBehaviour
     public AudioClip eventClip;
     public List<AudioClip> music;
     public bool fadeOut = false;
+    public bool fetchingMusic = false;
     public int musicIndex = 0;
     public float effectVolume;
     public float musicVolume;
+    public List<AudioClip> previousMusic;
+    public bool loop = true;
 
     void Start()
     {
@@ -26,6 +29,7 @@ public class Audio : MonoBehaviour
 
         gameObject.transform.parent = game.cc.gameObject.transform;
         music = new List<AudioClip>();
+        previousMusic = music;
 
         effectsObject = new GameObject("audioeffects");
         effectsObject.transform.parent = game.cc.gameObject.transform;
@@ -61,9 +65,9 @@ public class Audio : MonoBehaviour
         Music(toPlay);
     }
 
-    public void Music(List<string> fileNames)
+    public void Music(List<string> fileNames, bool alwaysLoop = true)
     {
-        StartCoroutine(PlayMusic(fileNames));
+        StartCoroutine(PlayMusic(fileNames, alwaysLoop));
     }
 
     public void PlayTrait(string trait)
@@ -90,16 +94,27 @@ public class Audio : MonoBehaviour
         audioSourceEffect.PlayOneShot(test, effectVolume);
     }
 
-    public IEnumerator PlayMusic(List<string> fileNames)
+    public IEnumerator PlayMusic(List<string> fileNames, bool alwaysLoop = true)
     {
-        music = new List<AudioClip>();
+        while (fetchingMusic)
+        {
+            yield return null;
+        }
+        fetchingMusic = true;
+        List<AudioClip> newMusic = new List<AudioClip>();
         foreach (string s in fileNames)
         {
             WWW file = new WWW(@"file://" + s);
             yield return file;
-            music.Add(file.audioClip);
+            newMusic.Add(file.audioClip);
+        }
+        music = newMusic;
+        if (newMusic.Count > 1 || alwaysLoop)
+        {
+            previousMusic = music;
         }
         musicIndex = 0;
+        fetchingMusic = false;
         if (audioSource.isPlaying) fadeOut = true;
     }
 
@@ -123,6 +138,15 @@ public class Audio : MonoBehaviour
 
     public void UpdateMusic()
     {
+        if (music != previousMusic && loop)
+        {
+            loop = false;
+        }
+        else
+        {
+            loop = true;
+            music = previousMusic;
+        }
         if (music.Count == 0)
         {
             audioSource.Stop();
