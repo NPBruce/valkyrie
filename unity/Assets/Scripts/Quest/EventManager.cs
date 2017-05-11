@@ -413,7 +413,7 @@ public class EventManager
             if (kv.Value > 0)
             {
                 game.quest.vars.SetValue(kv.Key, 0);
-                EventTriggerType("Var" + kv.Key.Substring(1));
+                EventTriggerType("Var" + kv.Key.Substring(1), false);
             }
         }
     }
