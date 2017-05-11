@@ -80,7 +80,11 @@ public class Destroyer {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
-        CameraController.panDisable = false;
+
+        if (GameObject.FindGameObjectWithTag(Game.SHOP) == null)
+        {
+            CameraController.panDisable = false;
+        }
         Game.Get().logWindow = null;
         Resources.UnloadUnusedAssets();
     }

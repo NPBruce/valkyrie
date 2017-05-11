@@ -16,6 +16,7 @@ public class InventoryWindow
     public void Update()
     {
         Destroyer.Dialog();
+        CameraController.panDisable = true;
         Game game = Game.Get();
 
         DialogBox db = new DialogBox(

@@ -133,7 +133,7 @@ namespace Assets.Scripts.Content
         {
             get
             {
-                if (referedDictionary.currentLanguage < translations.Length)
+                if (referedDictionary.currentLanguage < translations.Length && referedDictionary.currentLanguage > 0)
                 {
                     return translations[referedDictionary.currentLanguage];
                 }

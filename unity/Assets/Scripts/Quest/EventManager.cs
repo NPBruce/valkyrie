@@ -77,7 +77,7 @@ public class EventManager
     {
         foreach (KeyValuePair<string, Event> kv in events)
         {
-            if (kv.Value.qEvent.trigger.Equals(type))
+            if (kv.Value.qEvent != null && kv.Value.qEvent.trigger.Equals(type))
             {
                 QueueEvent(kv.Key, trigger);
             }
