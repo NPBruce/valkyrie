@@ -120,6 +120,9 @@ public class Quest
         // Clear shops
         shops = new Dictionary<string, List<string>>();
 
+        // Clear item matches
+        itemSelect = new Dictionary<string, string>();
+
         // Determine fame level
         int fame = 1;
         if (vars.GetValue("$%fame") >= vars.GetValue("$%famenoteworthy")) fame = 2;
@@ -203,6 +206,7 @@ public class Quest
                     exclude.Add(t);
                 }
             }
+            exclude.AddRange(items);
 
             // Start a list of matches
             List<string> list = new List<string>();
