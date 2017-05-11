@@ -375,36 +375,47 @@ public class EventManager
             }
         }
 
-        // Are there any events?
-        if (enabledEvents.Count > 0)
-        {
-            // Are we picking at random?
-            if (eventData.randomEvents)
-            {
-                currentEvent = null;
-                // Start a random event
-                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)]);
-            }
-            else
-            {
-                currentEvent = null;
-                // Start the first valid event
-                game.quest.eManager.QueueEvent(enabledEvents[0]);
-
-            }
-            // Chained event ongoing
-            return;
-        }
-
         // Does this event end the quest?
         if (eventData.sectionName.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
             return;
         }
-        // Trigger a stacked event
+
         currentEvent = null;
+        // Are there any events?
+        if (enabledEvents.Count > 0)
+        {
+            // Are we picking at random?
+            if (eventData.randomEvents)
+            {
+                // Add a random event
+                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)], false);
+            }
+            else
+            {
+                // Add the first valid event
+                game.quest.eManager.QueueEvent(enabledEvents[0], false);
+            }
+        }
+
+        // Add any custom triggered events
+        AddCustomTriggers();
+
+        // Trigger a stacked event
         TriggerEvent();
+    }
+
+    public void AddCustomTriggers()
+    {
+        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("@"))
+        {
+            if (kv.Value > 0)
+            {
+                game.quest.vars.SetValue(kv.Key, 0);
+                EventTriggerType("Var" + kv.Key.Substring(1));
+            }
+        }
     }
 
     // Event control class
