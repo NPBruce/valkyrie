@@ -139,8 +139,18 @@ namespace Assets.Scripts.Content
                 result = result.Replace("[u]", "<b>").Replace("[/u]", "</b>");
                 result = result.Replace("[i]", "<i>").Replace("[/i]", "</i>");
                 result = result.Replace("[b]", "<b>").Replace("[/b]", "</b>");
-                // Replace the lookup
 
+                // Some FFG text doesn't close b/i like it should
+                while (Regex.Matches(result, "<b>").Count > Regex.Matches(result, "</b>").Count)
+                {
+                    result += "</b>";
+                }
+                while (Regex.Matches(result, "<i>").Count > Regex.Matches(result, "</i>").Count)
+                {
+                    result += "</i>";
+                }
+
+                // Replace the lookup
                 output = output.Replace("{" + dict + ":" + lookup + "}", result);
                 // Increase the recursive count
                 recursiveCount++;

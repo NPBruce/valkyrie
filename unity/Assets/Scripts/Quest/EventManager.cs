@@ -416,6 +416,14 @@ public class EventManager
                 EventTriggerType("Var" + kv.Key.Substring(1), false);
             }
         }
+        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("$@"))
+        {
+            if (kv.Value > 0)
+            {
+                game.quest.vars.SetValue(kv.Key, 0);
+                EventTriggerType("Var" + "$" + kv.Key.Substring(2), false);
+            }
+        }
     }
 
     // Event control class
