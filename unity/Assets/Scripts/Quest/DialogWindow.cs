@@ -39,10 +39,10 @@ public class DialogWindow {
                 {
                     h.selected = true;
                 }
-                // Update selection status
-                game.heroCanvas.UpdateStatus();
             }
         }
+        // Update selection status
+        game.heroCanvas.UpdateStatus();
 
         if (eventData.qEvent.quota > 0)
         {
