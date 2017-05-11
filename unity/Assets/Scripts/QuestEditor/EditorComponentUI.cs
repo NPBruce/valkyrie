@@ -144,7 +144,7 @@ public class EditorComponentUI : EditorComponent
 
             textDBE = new PaneledDialogBoxEditable(
                 new Vector2(0, 15), new Vector2(20, 6),
-                game.quest.qd.quest.description.Translate(true),
+                uiComponent.uiText.Translate(true),
                 delegate { UpdateText(); });
             textDBE.ApplyTag(Game.EDITOR);
             textDBE.AddBorder();
