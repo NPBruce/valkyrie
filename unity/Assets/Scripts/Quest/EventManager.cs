@@ -154,6 +154,24 @@ public class EventManager
             game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
         }
 
+        // Set Music
+        if (e.qEvent.music.Count > 0)
+        {
+            List<string> music = new List<string>();
+            foreach (string s in e.qEvent.music)
+            {
+                if (game.cd.audio.ContainsKey(s))
+                {
+                    music.Add(game.cd.audio[s].file);
+                }
+                else
+                {
+                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s);
+                }
+            }
+            game.audioControl.Music(music, false);
+        }
+
         // Perform var operations
         game.quest.vars.Perform(e.qEvent.operations);
         // Update morale change

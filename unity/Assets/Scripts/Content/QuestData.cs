@@ -769,6 +769,7 @@ public class QuestData
         public bool maxCam = false;
         public int quota = 0;
         public string audio = "";
+        public List<string> music;
 
         public string text_key { get { return genKey("text"); } }
 
@@ -789,6 +790,7 @@ public class QuestData
             conditions = new List<VarOperation>();
             minCam = false;
             maxCam = false;
+            music = new List<string>();
         }
 
         // Create event from ini data
@@ -932,10 +934,14 @@ public class QuestData
                 locationSpecified = false;
                 bool.TryParse(data["maxcam"], out maxCam);
             }
-            // Randomise next event setting
             if (data.ContainsKey("audio"))
             {
                 audio = data["audio"];
+            }
+            music = new List<string>();
+            if (data.ContainsKey("music"))
+            {
+                music = new List<string>(data["music"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
             }
         }
 
@@ -1133,6 +1139,17 @@ public class QuestData
             {
                 r += "audio=" + audio + nl;
             }
+
+            if (music.Count > 0)
+            {
+                r += "music=";
+                foreach (string s in music)
+                {
+                    r += s + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
             return r;
         }
 

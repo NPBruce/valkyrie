@@ -19,6 +19,7 @@ public class EditorComponentEvent : EditorComponent
     private readonly StringKey VARS = new StringKey("val", "VARS");
     private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
     private readonly StringKey AUDIO = new StringKey("val", "AUDIO");
+    private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
     private readonly StringKey CONTINUE = new StringKey("val", "CONTINUE");
 
     QuestData.Event eventComponent;
@@ -29,6 +30,7 @@ public class EditorComponentEvent : EditorComponent
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
     EditorSelectionList audioESL;
+    EditorSelectionList musicESL;
 
 
     public EditorComponentEvent(string nameIn) : base()
@@ -166,41 +168,75 @@ public class EditorComponentEvent : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
+        db = new DialogBox(new Vector2(1, 14), new Vector2(10, 1),
+            new StringKey("val", "X_COLON", MUSIC));
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(10, 14), new Vector2(1, 1), CommonStringKeys.PLUS,
+                    delegate { AddMusic(0); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag(Game.EDITOR);
+
+        int offset = 15;
+        int index;
+        for (index = 0; index < 12; index++)
+        {
+            if (eventComponent.music.Count > index)
+            {
+                int i = index;
+                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), CommonStringKeys.MINUS,
+                    delegate { RemoveMusic(i); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag(Game.EDITOR);
+                db = new DialogBox(new Vector2(1, offset), new Vector2(10, 1),
+                    new StringKey(null, eventComponent.music[index], false)
+                    );
+                db.AddBorder();
+                db.ApplyTag(Game.EDITOR);
+                tb = new TextButton(new Vector2(11, offset), new Vector2(1, 1), CommonStringKeys.PLUS,
+                    delegate { AddMusic(i + 1); }, Color.green);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag(Game.EDITOR);
+                offset++;
+            }
+        }
+
+        offset++;
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, 14), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
+            db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
             db.ApplyTag(Game.EDITOR);
 
-            tb = new TextButton(new Vector2(4, 14), new Vector2(8, 1), 
+            tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
                 new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag(Game.EDITOR);
 
-            db = new DialogBox(new Vector2(12, 14), new Vector2(2, 1), MIN);
+            db = new DialogBox(new Vector2(12, offset), new Vector2(2, 1), MIN);
             db.ApplyTag(Game.EDITOR);
 
-            tb = new TextButton(new Vector2(14, 14), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag(Game.EDITOR);
 
-            db = new DialogBox(new Vector2(16, 14), new Vector2(2, 1), MAX);
+            db = new DialogBox(new Vector2(16, offset), new Vector2(2, 1), MAX);
             db.ApplyTag(Game.EDITOR);
 
-            tb = new TextButton(new Vector2(18, 14), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
+            tb = new TextButton(new Vector2(18, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.ApplyTag(Game.EDITOR);
+            offset ++;
         }
 
-        db = new DialogBox(new Vector2(0, 16), new Vector2(9, 1), ADD_COMPONENTS);
+        int componentsOffset = offset;
+        db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), ADD_COMPONENTS);
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(9, 16), new Vector2(1, 1), CommonStringKeys.PLUS, 
+        tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, 
             delegate { AddVisibility(true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        int offset = 17;
-        int index;
         for (index = 0; index < 12; index++)
         {
             if (eventComponent.addComponents.Length > index)
@@ -218,16 +254,16 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        db = new DialogBox(new Vector2(10, 16), new Vector2(9, 1), REMOVE_COMPONENTS);
+        offset = componentsOffset;
+        db = new DialogBox(new Vector2(10, offset), new Vector2(9, 1), REMOVE_COMPONENTS);
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, 16), new Vector2(1, 1), 
+        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), 
             CommonStringKeys.PLUS, 
             delegate { AddVisibility(false); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.EDITOR);
 
-        offset = 17;
         for (index = 0; index < 12; index++)
         {
             if (eventComponent.removeComponents.Length > index)
@@ -437,6 +473,37 @@ public class EditorComponentEvent : EditorComponent
             string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/" + eventComponent.audio;
             game.audioControl.Play(path);
         }
+        Update();
+    }
+
+    public void AddMusic(int index)
+    {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        Game game = Game.Get();
+        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
+
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        {
+            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
+        }
+
+        audioESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "AUDIO")), audio, delegate { SelectMusic(index); });
+        audioESL.SelectItem();
+    }
+
+    public void SelectMusic(int index)
+    {
+        eventComponent.music.Insert(index, audioESL.selection);
+        Update();
+    }
+
+    public void RemoveMusic(int index)
+    {
+        eventComponent.music.RemoveAt(index);
         Update();
     }
 
