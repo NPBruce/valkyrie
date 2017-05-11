@@ -63,6 +63,7 @@ public class ShopInterface : Quest.BoardComponent
         DrawShopItems();
         DrawPartyItems();
         DrawGold();
+        CameraController.panDisable = true;
     }
 
     public void DrawButtons()
