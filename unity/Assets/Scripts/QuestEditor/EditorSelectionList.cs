@@ -64,6 +64,7 @@ public class EditorSelectionList
         // Title
         db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
 
+        // Create a list of traits of all items in the list
         List<SelectionListEntry> filtered = items;
         if (filter.Count > 0)
         {
@@ -90,6 +91,7 @@ public class EditorSelectionList
         TextButton tb = null;
 
         float hOffset = 22;
+        // Create filter traits buttons
         foreach (string trait in traits)
         {
             // Traits are in val dictionary
@@ -152,6 +154,11 @@ public class EditorSelectionList
                 tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
                     new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                if (key == null || key.Length == 0)
+                {
+                    //Empty buttons are disabled
+                    tb.setActive(false);
+                }
             }
             offset += 1;
         }
