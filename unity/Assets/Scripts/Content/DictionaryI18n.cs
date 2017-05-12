@@ -56,15 +56,14 @@ namespace Assets.Scripts.Content
         {
             // Set languages list with first line of file
             languages = languagesAndTexts[0].Split(COMMA);
-            // Get default language
-            setDefaultLanguage(newDefaultLanguage);
-            // set current language
-            setCurrentLanguage(newCurrentLanguage);
-
             // Create dictionary with file lines capacity
             dict = new Dictionary<string, EntryI18n>(languagesAndTexts.Length);
             //Load raw dictionary
             rawDict = languagesAndTexts;
+            // Get default language
+            setDefaultLanguage(newDefaultLanguage);
+            // set current language
+            setCurrentLanguage(newCurrentLanguage);
         }
 
         /// <summary>
@@ -257,9 +256,24 @@ namespace Assets.Scripts.Content
         public void setCurrentLanguage(string languageName)
         {
             int newLanguage = getPosFromName(languageName);
+            if (newLanguage == -1 && dict.Count == 0)
+            {
+                // If the language isn't on the list. 
+                // There are 2 options. If we are importing the dictionaries
+                // we can add the new language.
+                // Only if all items are raw data. 
+                // Else We set the default language
+
+                AddRaw(new DictionaryI18n(new String[1] { ".," + languageName }, languageName, languageName));
+                newLanguage = getPosFromName(languageName);
+            }
+
             if (newLanguage > 0)
             {
                 currentLanguage = newLanguage;
+            } else
+            {
+                currentLanguage = defaultLanguage;
             }
         }
 
