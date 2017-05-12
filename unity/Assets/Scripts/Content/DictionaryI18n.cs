@@ -56,14 +56,22 @@ namespace Assets.Scripts.Content
         {
             // Set languages list with first line of file
             languages = languagesAndTexts[0].Split(COMMA);
+
             // Create dictionary with file lines capacity
             dict = new Dictionary<string, EntryI18n>(languagesAndTexts.Length);
             //Load raw dictionary
             rawDict = languagesAndTexts;
+
             // Get default language
-            setDefaultLanguage(newDefaultLanguage);
+            if (newDefaultLanguage != null)
+            {
+                setDefaultLanguage(newDefaultLanguage);
+            }
             // set current language
-            setCurrentLanguage(newCurrentLanguage);
+            if (newDefaultLanguage != null)
+            {
+                setCurrentLanguage(newCurrentLanguage);
+            }
         }
 
         /// <summary>
