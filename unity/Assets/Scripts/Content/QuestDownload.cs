@@ -139,7 +139,7 @@ public class QuestDownload : MonoBehaviour
                     tb = new TextButton(
                         new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                         new Vector2(3, 1.2f),
-                        new StringKey("val", "DELETE"),
+                        CommonStringKeys.DELETE,
                         delegate { Delete(file); },
                         Color.black, offset);
 
@@ -164,7 +164,7 @@ public class QuestDownload : MonoBehaviour
                     tb = new TextButton(
                         new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                         new Vector2(3, 1.2f),
-                        new StringKey("val", "DELETE"),
+                        CommonStringKeys.DELETE,
                         delegate { Delete(file); },
                         Color.black, offset);
 
@@ -219,7 +219,7 @@ public class QuestDownload : MonoBehaviour
                 tb = new TextButton(
                     new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                     new Vector2(3, 1.2f),
-                    new StringKey("val", "DELETE"),
+                    CommonStringKeys.DELETE,
                     delegate { Delete(file); },
                     Color.black, offset);
 

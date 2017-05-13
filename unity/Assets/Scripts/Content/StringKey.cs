@@ -151,8 +151,14 @@ namespace Assets.Scripts.Content
                 return LocalizationRead.DictLookup(this);
             } else
             {
-                //non heys can have newline characters
-                return fullKey.Replace("\\n", "\n");
+                if (fullKey != null)
+                {
+                    //non heys can have newline characters
+                    return fullKey.Replace("\\n", "\n");
+                } else
+                {
+                    return null;
+                }
             }
         }
 

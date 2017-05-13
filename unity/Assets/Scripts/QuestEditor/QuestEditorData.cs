@@ -834,7 +834,8 @@ public class QuestEditorData {
             if (kv.Key.IndexOf(type) == 0)
             {
                 toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-                toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
+                // Disabled elements in selection list
+                toDelete.Add(new EditorSelectionList.SelectionListEntry(null));
             }
         }
         // Create list for user
@@ -853,7 +854,8 @@ public class QuestEditorData {
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
+            // Disabled elements in selection list
+            toDelete.Add(new EditorSelectionList.SelectionListEntry(null));
         }
         // Create list for user
         esl = new EditorSelectionList(COMPONENT_TO_DELETE, toDelete, delegate { SelectToDelete(); });
