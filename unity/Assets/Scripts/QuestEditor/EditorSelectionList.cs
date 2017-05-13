@@ -154,7 +154,7 @@ public class EditorSelectionList
                 tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
                     new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                if (key == null || key.Length == 0)
+                if (key == null)
                 {
                     //Empty buttons are disabled
                     tb.setActive(false);
