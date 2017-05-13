@@ -544,7 +544,12 @@ public class EventManager
                     return ((QuestData.CustomMonster)component).monsterName.Translate();
                 case "Spawn":
                     // Replaced with the text shown in the spawn
-                    return ((QuestData.Spawn)component).text.Translate();
+                    string monsterName = game.quest.monsterSelect[component.sectionName];
+                    if (monsterName.StartsWith("Custom")) {
+                        return ((QuestData.CustomMonster)game.quest.qd.components[monsterName]).monsterName.Translate();
+                    } else {
+                        return game.cd.monsters[game.quest.monsterSelect[component.sectionName]].name.Translate();
+                    }
                 case "QItem":
                     // Replaced with the first element in the list
                     return game.cd.items[game.quest.itemSelect[component.sectionName]].name.Translate();
