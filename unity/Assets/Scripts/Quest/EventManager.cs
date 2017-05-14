@@ -536,13 +536,14 @@ public class EventManager
                 case "Tile":
                     // Replaced with the name of the Tile
                     return game.cd.tileSides[((QuestData.Tile)component).tileSideName].name.Translate();
-                case "Token":
-                    // Replaced with the text of the token
-                    return ((QuestData.Token)component).text.Translate();
                 case "CustomMonster":
                     // Replaced with the custom nonster name
                     return ((QuestData.CustomMonster)component).monsterName.Translate();
                 case "Spawn":
+                    if (!game.quest.monsterSelect.ContainsKey(component.sectionName))
+                    {
+                        return component.sectionName;
+                    }
                     // Replaced with the text shown in the spawn
                     string monsterName = game.quest.monsterSelect[component.sectionName];
                     if (monsterName.StartsWith("Custom")) {
@@ -551,6 +552,10 @@ public class EventManager
                         return game.cd.monsters[game.quest.monsterSelect[component.sectionName]].name.Translate();
                     }
                 case "QItem":
+                    if (!game.quest.itemSelect.ContainsKey(component.sectionName))
+                    {
+                        return component.sectionName;
+                    }
                     // Replaced with the first element in the list
                     return game.cd.items[game.quest.itemSelect[component.sectionName]].name.Translate();
                 default:
