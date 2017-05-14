@@ -531,8 +531,11 @@ public class EventManager
             switch (component.GetType().Name)
             {
                 case "Event":
-                    // Replaced with the text of the event
-                    return ((QuestData.Event)component).text.Translate();
+                    if(!game.quest.heroSelection.ContainsKey(component.sectionName) || game.quest.heroSelection[component.sectionName].Count == 0)
+                    {
+                        return component.sectionName;
+                    }
+                    return game.quest.heroSelection[component.sectionName][0].heroData.name.Translate();
                 case "Tile":
                     // Replaced with the name of the Tile
                     return game.cd.tileSides[((QuestData.Tile)component).tileSideName].name.Translate();
