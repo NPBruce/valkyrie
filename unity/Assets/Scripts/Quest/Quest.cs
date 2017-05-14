@@ -7,16 +7,24 @@ using System.IO;
 // Class to manage all data for the current quest
 public class Quest
 {
-    // QuestData
+    /// <summary>
+    /// QuestData
+    /// </summary>
     public QuestData qd;
 
-    // Original Quest Path
+    /// <summary>
+    /// Original Quest Path
+    /// </summary>
     public string questPath = "";
 
-    // components on the board (tiles, tokens, doors)
+    /// <summary>
+    /// components on the board (tiles, tokens, doors)
+    /// </summary>
     public Dictionary<string, BoardComponent> boardItems;
 
-    // vars for the quest
+    /// <summary>
+    /// vars for the quest 
+    /// </summary>
     public VarManager vars;
 
     // A list of items that have been given to the investigators
@@ -43,10 +51,14 @@ public class Quest
     // Event manager handles the events
     public EventManager eManager;
 
-    // List of heros and their status
+    /// <summary>
+    /// List of heros and their status
+    /// </summary>
     public List<Hero> heroes;
 
-    // List of active monsters and their status
+    /// <summary>
+    /// List of active monsters and their status
+    /// </summary>
     public List<Monster> monsters;
 
     // Stack of saved game state for undo
