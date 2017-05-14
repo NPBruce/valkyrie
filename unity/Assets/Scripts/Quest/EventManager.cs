@@ -3,6 +3,8 @@ using UnityEngine;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 using System.IO;
+using System.Text.RegularExpressions;
+using System;
 
 // Class for managing quest events
 public class EventManager
@@ -186,7 +188,7 @@ public class EventManager
 
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
-            Object.Destroy(go);
+            UnityEngine.Object.Destroy(go);
 
         // If this is a monster event then add the monster group
         if (e is MonsterEvent)
@@ -390,7 +392,7 @@ public class EventManager
             if (eventData.randomEvents)
             {
                 // Add a random event
-                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)], false);
+                game.quest.eManager.QueueEvent(enabledEvents[UnityEngine.Random.Range(0, enabledEvents.Count)], false);
             }
             else
             {
@@ -447,6 +449,28 @@ public class EventManager
         {
             string text = qEvent.text.Translate(true);
 
+            // Find and replace {q:element with the name of the
+            // element
+
+            if (text.Contains("{c:"))
+            {
+                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
+                string replaceFrom;
+                string componentName;
+                string componentText;
+                foreach (Match oneVar in questItemRegex.Matches(text))
+                {
+                    replaceFrom = oneVar.Value;                    
+                    componentName = oneVar.Groups[1].Value;
+                    QuestData.QuestComponent component;
+                    if (game.quest.qd.components.TryGetValue(componentName, out component))
+                    {
+                        componentText = getComponentText(component);
+                        text = text.Replace(replaceFrom, componentText);
+                    }
+                }
+            }
+
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
 
@@ -495,6 +519,48 @@ public class EventManager
 
             // Fix new lines and replace symbol text with special characters
             return OutputSymbolReplace(text).Replace("\\n", "\n");
+        }
+
+        /// <summary>
+        /// Get text related with selected component
+        /// </summary>
+        /// <param name="component">component to get text</param>
+        /// <returns>extracted text</returns>
+        private string getComponentText(QuestData.QuestComponent component)
+        {
+            switch (component.GetType().Name)
+            {
+                case "Event":
+                    // Replaced with the text of the event
+                    return ((QuestData.Event)component).text.Translate();
+                case "Tile":
+                    // Replaced with the name of the Tile
+                    return game.cd.tileSides[((QuestData.Tile)component).tileSideName].name.Translate();
+                case "Token":
+                    // Replaced with the text of the token
+                    return ((QuestData.Token)component).text.Translate();
+                case "CustomMonster":
+                    // Replaced with the custom nonster name
+                    return ((QuestData.CustomMonster)component).monsterName.Translate();
+                case "Spawn":
+                    // Replaced with the text shown in the spawn
+                    string monsterName = game.quest.monsterSelect[component.sectionName];
+                    if (monsterName.StartsWith("Custom")) {
+                        return ((QuestData.CustomMonster)game.quest.qd.components[monsterName]).monsterName.Translate();
+                    } else {
+                        return game.cd.monsters[game.quest.monsterSelect[component.sectionName]].name.Translate();
+                    }
+                case "QItem":
+                    // Replaced with the first element in the list
+                    return game.cd.items[game.quest.itemSelect[component.sectionName]].name.Translate();
+                default:
+                    return component.sectionName;
+            }
+        }
+
+        public static explicit operator Event(QuestData.QuestComponent v)
+        {
+            throw new NotImplementedException();
         }
 
         public List<DialogWindow.EventButton> GetButtons()
