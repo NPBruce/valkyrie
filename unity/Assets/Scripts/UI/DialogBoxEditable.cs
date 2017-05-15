@@ -10,6 +10,8 @@ public class DialogBoxEditable
     private GameObject inputObj;
     private RectangleBorder border;
 
+    private string lastText;
+
     private UnityEngine.UI.InputField uiInput;
 
     public void ApplyTag(string tag)
@@ -138,6 +140,8 @@ public class DialogBoxEditable
         }
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
+
+        lastText = text;
     }
 
     public void AddBorder()
@@ -155,6 +159,22 @@ public class DialogBoxEditable
     public string Text
     {
         get { return uiInput.text; }
+    }
+
+    /// <summary>
+    /// Check if the text inside a DialogBoxEditable changed and is not empty.
+    /// If the change is true. updates the lastText of the DialogBoxEditable.
+    /// If is changed to empty nothing will change. So if after emptied, returns 
+    /// to its previous value, it won't be considered changed.
+    /// </summary>
+    /// <returns>true if changed and is not empty. false otherwhise</returns>
+    public bool CheckTextChangedAndNotEmpty()
+    {
+        if (!uiInput.text.Equals("") && !uiInput.text.Equals(lastText)){
+            lastText = uiInput.text;
+            return true;
+        }
+        return false;
     }
 
     public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)

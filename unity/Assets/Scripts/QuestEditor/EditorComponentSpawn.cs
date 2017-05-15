@@ -273,7 +273,7 @@ public class EditorComponentSpawn : EditorComponent
 
     public void UpdateUniqueTitle()
     {
-        if (!uniqueTitleDBE.Text.Equals(""))
+        if (uniqueTitleDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
         }
@@ -281,7 +281,7 @@ public class EditorComponentSpawn : EditorComponent
 
     public void UpdateUniqueText()
     {
-        if (!uniqueTextDBE.Text.Equals(""))
+        if (uniqueTextDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
         }

@@ -315,7 +315,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateName()
     {
-        if (!nameDBE.Text.Equals(""))
+        if (nameDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
         }
@@ -335,7 +335,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateInfo()
     {
-        if (!infoDBE.Text.Equals(""))
+        if (infoDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(monsterComponent.info_key, infoDBE.Text);
         }
