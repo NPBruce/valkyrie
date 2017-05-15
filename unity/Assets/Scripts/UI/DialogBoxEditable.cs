@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.UI;
+using UnityEngine;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -7,6 +8,7 @@ public class DialogBoxEditable
     private GameObject textObj;
     private GameObject background;
     private GameObject inputObj;
+    private RectangleBorder border;
 
     private UnityEngine.UI.InputField uiInput;
 
@@ -15,6 +17,7 @@ public class DialogBoxEditable
         textObj.tag = tag;
         background.tag = tag;
         inputObj.tag = tag;
+        if (border != null) border.SetTag(tag);
     }
 
     /// <summary>
@@ -23,10 +26,11 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call)
     {
-        createDialog(location, size, text, call, Color.white, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, multiline, call, Color.white, new Color(0, 0, 0, (float)0.9));
     }
 
     /// <summary>
@@ -35,11 +39,12 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour)
     {
-        createDialog(location, size, text, call, fgColour, new Color(0, 0, 0, (float)0.9));
+        createDialog(location, size, text, multiline, call, fgColour, new Color(0, 0, 0, (float)0.9));
     }
 
     /// <summary>
@@ -48,12 +53,13 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    public DialogBoxEditable(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    public DialogBoxEditable(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
-        createDialog(location, size, text, call, fgColour, bgColour);
+        createDialog(location, size, text, multiline, call, fgColour, bgColour);
     }
 
     /// <summary>
@@ -62,10 +68,11 @@ public class DialogBoxEditable
     /// <param name="location">Vector of location of the dialog</param>
     /// <param name="size">Vector of size of the dialog</param>
     /// <param name="text">default text to put inside the dialog</param>
+    /// <param name="multiline">true if the dialog accepts multiple lines</param>
     /// <param name="call">event to call when interacting with the dialog</param>
     /// <param name="fgColour">color or the font inside dialog</param>
     /// <param name="bgColour">backgroudn color of the dialog</param>
-    void createDialog(Vector2 location, Vector2 size, string text, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
+    void createDialog(Vector2 location, Vector2 size, string text, bool multiline, UnityEngine.Events.UnityAction<string> call, Color fgColour, Color bgColour)
     {
         // Object name includes first 10 chars of text
         string objName = text;
@@ -80,9 +87,9 @@ public class DialogBoxEditable
         inputObj = new GameObject("textIn" + objName);
 
         // Mark it as dialog
-        textObj.tag = "dialog";
-        background.tag = "dialog";
-        inputObj.tag = "dialog";
+        textObj.tag = Game.DIALOG;
+        background.tag = Game.DIALOG;
+        inputObj.tag = Game.DIALOG;
 
         Game game = Game.Get();
 
@@ -118,9 +125,17 @@ public class DialogBoxEditable
         uiText.material = uiText.font.material;
         uiText.fontSize = UIScaler.GetSmallFont();
 
-        uiInput = inputObj.AddComponent<UnityEngine.UI.InputField>();
+        if (multiline)
+        {
+            uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
+        }
 
+        uiInput = inputObj.AddComponent<PanCancelInputField>();
         uiInput.textComponent = uiText;
+        if (multiline)
+        {
+            uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
+        }
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
     }
@@ -132,8 +147,9 @@ public class DialogBoxEditable
 
     public void AddBorder(Color c)
     {
-        UnityEngine.Rect rect = background.GetComponent<RectTransform>().rect;
-        new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        Rect rect = background.GetComponent<RectTransform>().rect;
+        border = new RectangleBorder(background.transform, c, new Vector2(rect.width / UIScaler.GetPixelsPerUnit(), rect.height / UIScaler.GetPixelsPerUnit()));
+        border.SetTag(textObj.tag);
     }
 
     public string Text

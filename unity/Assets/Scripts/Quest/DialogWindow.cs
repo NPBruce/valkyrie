@@ -21,6 +21,7 @@ public class DialogWindow {
         eventData = e;
         heroList = new List<Quest.Hero>();
         Game game = Game.Get();
+        text = eventData.GetText();
 
         // hero list can be populated from another event
         if (!eventData.qEvent.heroListName.Equals(""))
@@ -38,10 +39,10 @@ public class DialogWindow {
                 {
                     h.selected = true;
                 }
-                // Update selection status
-                game.heroCanvas.UpdateStatus();
             }
         }
+        // Update selection status
+        game.heroCanvas.UpdateStatus();
 
         if (eventData.qEvent.quota > 0)
         {
@@ -51,12 +52,13 @@ public class DialogWindow {
         {
             CreateWindow();
         }
+
+        DrawItem();
     }
 
     public void CreateWindow()
     {
         // Draw text
-        text = eventData.GetText();
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
             new StringKey(null, text, false));
         float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
@@ -113,43 +115,84 @@ public class DialogWindow {
     public void CreateQuotaWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(null, eventData.GetText(),false));
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
+            new StringKey(null, text, false));
+        float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
+        db.Destroy();
+        
+        if (offset < 4)
+        {
+            offset = 4;
+        }
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
+            new StringKey(null, text, false));
         db.AddBorder();
+        offset += 1;
 
         if (quota == 0)
         {
-            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { ; }, Color.grey);
+            new TextButton(new Vector2(11, offset), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { ; }, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(11, 9f), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
+            new TextButton(new Vector2(11, offset), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, 9f), new Vector2(2f, 2f), quota);
+        db = new DialogBox(new Vector2(14, offset), new Vector2(2f, 2f), quota);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
         if (quota >= 10)
         {
-            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { ; }, Color.grey);
+            new TextButton(new Vector2(17, offset), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { ; }, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(17, 9f), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { quotaInc(); }, Color.white);
+            new TextButton(new Vector2(17, offset), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { quotaInc(); }, Color.white);
         }
 
         // Only one button, action depends on quota
         new TextButton(
-            new Vector2(UIScaler.GetWidthUnits() - 19, 9f), new Vector2(8f, 2), 
+            new Vector2(UIScaler.GetWidthUnits() - 19, offset), new Vector2(8f, 2), 
             eventData.GetButtons()[0].GetLabel(), delegate { onQuota(); }, Color.white);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), 11.5f), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset + 2.5f), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
         }
 
+    }
+
+    public void DrawItem()
+    {
+        if (eventData.qEvent.highlight) return;
+
+        string item = "";
+        int items = 0;
+        foreach (string s in eventData.qEvent.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                item = s;
+                items++;
+            }
+        }
+        if (items != 1) return;
+
+        Game game = Game.Get();
+
+        if (!game.quest.itemSelect.ContainsKey(item)) return;
+
+        Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
+        db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+        db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-22), 6.5f), new Vector2(8, 1), game.cd.items[game.quest.itemSelect[item]].name);
     }
 
     public void quotaDec()
@@ -284,7 +327,7 @@ public class DialogWindow {
 
         public StringKey GetLabel()
         {
-            return new StringKey(null, EventManager.SymbolReplace(label.Translate()), false);
+            return new StringKey(null, EventManager.OutputSymbolReplace(label.Translate()), false);
         }
     }
 }

@@ -17,7 +17,7 @@ public class QuestEditSelection
         questList = QuestLoader.GetUserUnpackedQuests();
 
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Heading
@@ -57,6 +57,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;
@@ -108,7 +109,7 @@ public class QuestEditSelection
         questList = QuestLoader.GetUserUnpackedQuests();
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Header
@@ -148,6 +149,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;
@@ -202,10 +204,10 @@ public class QuestEditSelection
     public void Copy()
     {
         // Can copy all quests, not just user
-        questList = QuestLoader.GetQuests();
+        questList = QuestLoader.GetQuests(true);
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         // Header
@@ -246,6 +248,7 @@ public class QuestEditSelection
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         // List of quests
         int offset = 5;
@@ -385,7 +388,7 @@ public class QuestEditSelection
             questData.Add("defaultlanguage=" + game.currentLang); 
             questData.Add("");
             questData.Add("[QuestText]");
-            questData.Add("Localization.txt");
+            questData.Add("Localization."+ game.currentLang +".txt");
 
             // Write quest file
             File.WriteAllLines(targetLocation + "/quest.ini", questData.ToArray());
@@ -406,12 +409,15 @@ public class QuestEditSelection
             newScenarioDict.Add(descriptionEntry);
 
             // Generate localization file
-            List<string> localization_file = newScenarioDict.Serialize();
+            Dictionary<string,List<string>> localization_files = newScenarioDict.SerializeMultiple();
 
-            // Write localization file
-            File.WriteAllText(
-                targetLocation + "/Localization.txt",
-                string.Join(System.Environment.NewLine, localization_file.ToArray()));
+            foreach (string oneLang in localization_files.Keys)
+            {
+                // Write localization file
+                File.WriteAllText(
+                    targetLocation + "/Localization." + oneLang + ".txt",
+                    string.Join(System.Environment.NewLine, localization_files[oneLang].ToArray()));
+            }
         }
         catch (System.Exception e)
         {
@@ -427,7 +433,7 @@ public class QuestEditSelection
     {
         Game game = Game.Get();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
         game.audioControl.Music(new List<string>());

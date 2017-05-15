@@ -50,7 +50,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D newTex = Resources.Load("sprites/banner") as Texture2D;
 
             GameObject banner = new GameObject("banner");
-            banner.tag = "dialog";
+            banner.tag = Game.DIALOG;
 
             banner.transform.parent = game.uICanvas.transform;
 
@@ -130,6 +130,8 @@ namespace Assets.Scripts.UI.Screens
             if (!fcD2E.NeedImport())
             {
                 Game.Get().gameType = new D2EGameType();
+                Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
+                Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
                 Destroyer.MainMenu();
             }
@@ -155,6 +157,8 @@ namespace Assets.Scripts.UI.Screens
                 Game.Get().gameType = new MoMGameType();
                 // MoM also has a special reound controller
                 Game.Get().roundControl = new RoundControllerMoM();
+                Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
+                Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
                 Destroyer.MainMenu();
             }
@@ -163,14 +167,14 @@ namespace Assets.Scripts.UI.Screens
         /// <summary>
         /// After selecting game, we load the localization file.
         /// Deppends on the gameType selected.
-        /// There are two Localization.txt, one for D2E and one for MoM
+        /// There are two Localization files from ffg, one for D2E and one for MoM
         /// </summary>
         private void loadLocalization()
         {
             // After content import, we load the localization file
             if (LocalizationRead.ffgDict == null)
             {
-                // FFG default language is allways English
+                // FFG default language is always English
                 LocalizationRead.ffgDict = new DictionaryI18n(
                     System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
                     DictionaryI18n.DEFAULT_LANG,

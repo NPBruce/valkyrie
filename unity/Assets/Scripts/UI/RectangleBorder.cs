@@ -64,10 +64,13 @@ public class RectangleBorder{
         for (int i = 0; i < 4; i++)
         {
             bLine[i] = new GameObject("Border" + i);
-            // FIXME this looks wrong
-            if (!tag.Equals(""))
+            if (tag.Equals(""))
             {
-                bLine[i].tag = "dialog";
+                bLine[i].tag = Game.DIALOG;
+            }
+            else
+            {
+                bLine[i].tag = tag;
             }
             bLine[i].AddComponent<RectTransform>();
             bLine[i].AddComponent<CanvasRenderer>();
@@ -91,4 +94,12 @@ public class RectangleBorder{
         bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, size.y* UIScaler.GetPixelsPerUnit());
         bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, thick);
 	}
+
+    public void Destroy()
+    {
+        Object.Destroy(bLine[0]);
+        Object.Destroy(bLine[1]);
+        Object.Destroy(bLine[2]);
+        Object.Destroy(bLine[3]);
+    }
 }

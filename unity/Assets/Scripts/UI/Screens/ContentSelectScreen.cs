@@ -173,6 +173,7 @@ namespace Assets.Scripts.UI.Screens
 
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
+            scrollRect.scrollSensitivity = 27f;
 
             buttons = new Dictionary<string, List<TextButton>>();
             // Start here

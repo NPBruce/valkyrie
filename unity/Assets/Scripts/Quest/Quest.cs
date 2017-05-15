@@ -2,21 +2,42 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
 
 // Class to manage all data for the current quest
 public class Quest
 {
-    // QuestData
+    /// <summary>
+    /// QuestData
+    /// </summary>
     public QuestData qd;
 
-    // components on the board (tiles, tokens, doors)
+    /// <summary>
+    /// Original Quest Path
+    /// </summary>
+    public string questPath = "";
+
+    /// <summary>
+    /// components on the board (tiles, tokens, doors)
+    /// </summary>
     public Dictionary<string, BoardComponent> boardItems;
 
-    // vars for the quest
+    /// <summary>
+    /// vars for the quest 
+    /// </summary>
     public VarManager vars;
 
     // A list of items that have been given to the investigators
     public HashSet<string> items;
+
+    // Dictionary of shops and items
+    public Dictionary<string, List<string>> shops;
+
+    // The open shop
+    public string activeShop = "";
+
+    // Dictionary of picked items
+    public Dictionary<string, string> itemSelect;
 
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
@@ -30,10 +51,14 @@ public class Quest
     // Event manager handles the events
     public EventManager eManager;
 
-    // List of heros and their status
+    /// <summary>
+    /// List of heros and their status
+    /// </summary>
     public List<Hero> heroes;
 
-    // List of active monsters and their status
+    /// <summary>
+    /// List of active monsters and their status
+    /// </summary>
     public List<Monster> monsters;
 
     // Stack of saved game state for undo
@@ -64,11 +89,14 @@ public class Quest
 
         // Static data from the quest file
         qd = new QuestData(q);
+        questPath = Path.GetDirectoryName(qd.questPath);
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
         vars = new VarManager();
         items = new HashSet<string>();
+        shops = new Dictionary<string, List<string>>();
+        itemSelect = new Dictionary<string, string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
@@ -77,6 +105,7 @@ public class Quest
         log = new List<LogEntry>();
         monsterSelect = new Dictionary<string, string>();
 
+        GenerateItemSelection();
         GenerateMonsterSelection();
         eManager = new EventManager();
 
@@ -98,6 +127,161 @@ public class Quest
         vars.SetValue("#round", 1);
     }
 
+    public void GenerateItemSelection()
+    {
+        // Clear shops
+        shops = new Dictionary<string, List<string>>();
+
+        // Clear item matches
+        itemSelect = new Dictionary<string, string>();
+
+        // Determine fame level
+        int fame = 1;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famenoteworthy")) fame = 2;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%fameimpressive")) fame = 3;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famecelebrated")) fame = 4;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%fameheroic")) fame = 5;
+        if (vars.GetValue("$%fame") >= vars.GetValue("$%famelegendary")) fame = 6;
+
+        // Determine monster types
+        bool progress = false;
+        bool force = false;
+        bool done = false;
+        while (!done)
+        {
+            progress = false;
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
+            {
+                QuestData.QItem qItem = kv.Value as QuestData.QItem;
+                if (qItem != null)
+                {
+                    progress |= AttemptItemMatch(qItem, fame, force);
+                    if (progress && force) force = false;
+                }
+            }
+            if (!progress && !force)
+            {
+                force = true;
+            }
+            else if (!progress && force)
+            {
+                done = true;
+            }
+        }
+        vars.SetValue("$restock", 0);
+    }
+
+
+    public bool AttemptItemMatch(QuestData.QItem qItem, int fame, bool force = true)
+    {
+        if (itemSelect.ContainsKey(qItem.sectionName))
+        {
+            return false;
+        }
+        if ((qItem.traitpool.Length + qItem.traits.Length) == 0)
+        {
+            foreach (string t in qItem.itemName)
+            {
+                if (itemSelect.ContainsKey(t))
+                {
+                    itemSelect.Add(qItem.sectionName, itemSelect[t]);
+                    return true;
+                }
+                if (t.IndexOf("QItem") == 0)
+                {
+                    return false;
+                }
+                // Item type might exist in content packs
+                else if (game.cd.items.ContainsKey(t))
+                {
+                    itemSelect.Add(qItem.sectionName, t);
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            // List of exclusions
+            List<string> exclude = new List<string>();
+            foreach (string t in qItem.itemName)
+            {
+                if (itemSelect.ContainsKey(t))
+                {
+                    exclude.Add(itemSelect[t]);
+                }
+                else if (t.IndexOf("QItem") == 0 && !force)
+                {
+                    return false;
+                }
+                else
+                {
+                    exclude.Add(t);
+                }
+            }
+            exclude.AddRange(items);
+
+            // Start a list of matches
+            List<string> list = new List<string>();
+            foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
+            {
+                bool allFound = true;
+                foreach (string t in qItem.traits)
+                {
+                    // Does the item have this trait?
+                    if (!kv.Value.ContainsTrait(t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (qItem.traitpool.Length == 0);
+                foreach (string t in qItem.traitpool)
+                {
+                    // Does the item have this trait?
+                    if (kv.Value.ContainsTrait(t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                bool fameOK = true;
+                if (kv.Value.minFame > 0)
+                {
+                    if (kv.Value.minFame > fame) fameOK = false;
+                    if (kv.Value.maxFame < fame) fameOK = false;
+                }
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // item has all traits
+                if (allFound && oneFound && !excludeBool && fameOK)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName, true));
+                return false;
+            }
+
+            // Pick item at random from candidates
+            itemSelect.Add(qItem.sectionName, list[Random.Range(0, list.Count)]);
+            return true;
+        }
+        return false;
+    }
 
     public void GenerateMonsterSelection()
     {
@@ -252,6 +436,87 @@ public class Quest
         LoadQuest(saveData);
     }
 
+    public void ChangeQuest(string path)
+    {
+        Game game = Game.Get();
+
+        // Clean up everything marked as 'board'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
+            Object.Destroy(go);
+        game.tokenBoard.tc.Clear();
+
+        phase = MoMPhase.investigator;
+        game.cc.gameObject.transform.position = new Vector3(0, 0, -8);
+
+        game.cc.minLimit = false;
+        game.cc.maxLimit = false;
+
+        // Set static quest data
+        qd = new QuestData(questPath + "/" + path);
+        questPath = Path.GetDirectoryName(qd.questPath);
+
+        // Extract packages in case needed
+        QuestLoader.ExtractPackages(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+
+        vars.TrimQuest();
+
+        undo = new Stack<string>();
+
+        // Initialise data
+        boardItems = new Dictionary<string, BoardComponent>();
+        monsters = new List<Monster>();
+        heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        puzzle = new Dictionary<string, Puzzle>();
+        eventQuota = new Dictionary<string, int>();
+        undo = new Stack<string>();
+        monsterSelect = new Dictionary<string, string>();
+        itemSelect = new Dictionary<string, string>();
+        shops = new Dictionary<string, List<string>>();
+        activeShop = "";
+
+        GenerateMonsterSelection();
+        GenerateItemSelection();
+        eManager = new EventManager();
+
+        // Set quest vars for selected expansions
+        foreach (string s in game.cd.GetLoadedPackIDs())
+        {
+            if (s.Length > 0)
+            {
+                vars.SetValue("#" + s, 1);
+            }
+        }
+        vars.SetValue("#round", 1);
+
+        // Set quest flag based on hero count
+        int heroCount = 0;
+        foreach (Quest.Hero h in heroes)
+        {
+            h.activated = false;
+            h.defeated = false;
+            h.selected = false;
+        }
+        game.quest.vars.SetValue("#heroes", heroCount);
+
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
+        // Update the screen
+        game.monsterCanvas.UpdateList();
+        game.heroCanvas.UpdateStatus();
+
+        // Start round events
+        eManager.EventTriggerType("StartRound", false);
+        // Start the quest (top of stack)
+        eManager.EventTriggerType("EventStart", false);
+        eManager.TriggerEvent();
+        SaveManager.Save(0);
+    }
+
     // Read save data
     public void LoadQuest(IniData saveData)
     {
@@ -292,9 +557,59 @@ public class Quest
             int.TryParse(saveData.Get("Quest", "camymax"), out game.cc.maxPanY);
         }
 
+        shops = new Dictionary<string, List<string>>();
+        if (saveData.Get("Shops") != null)
+        {
+            foreach (KeyValuePair<string, string> kv in saveData.Get("Shops"))
+            {
+                List<string> shopList = new List<string>();
+                foreach (string s in kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    shopList.Add(s);
+                }
+                shops.Add(kv.Key, shopList);
+            }
+        }
+
+        activeShop = "";
+        if (saveData.Get("ActiveShop") != null)
+        {
+            foreach (KeyValuePair<string, string> kv in saveData.Get("ActiveShop"))
+            {
+                activeShop = kv.Key;
+            }
+        }
+
+        // Restore event log
+        log = new List<LogEntry>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
+        {
+            log.Add(new LogEntry(kv.Key, kv.Value));
+        }
+
+        Dictionary<string, string> saveVars = saveData.Get("Vars");
+        vars = new VarManager(saveVars);
+
+        itemSelect = saveData.Get("SelectItem");
+        if (itemSelect == null)
+        {
+            // Support old saves
+            itemSelect = new Dictionary<string, string>();
+            GenerateItemSelection();
+        }
+
+        // Set items
+        items = new HashSet<string>();
+        Dictionary<string, string> saveItems = saveData.Get("Items");
+        foreach (KeyValuePair<string, string> kv in saveItems)
+        {
+            items.Add(kv.Key);
+        }
+
         // Set static quest data
-        string questPath = saveData.Get("Quest", "path");
-        qd = new QuestData(questPath);
+        qd = new QuestData(saveData.Get("Quest", "path"));
+
+        questPath = saveData.Get("Quest", "originalpath");
 
         monsterSelect = saveData.Get("SelectMonster");
         if (monsterSelect == null)
@@ -307,7 +622,7 @@ public class Quest
         // Clear all tokens
         game.tokenBoard.Clear();
         // Clean up everything marked as 'board'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("board"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
             Object.Destroy(go);
 
         // Repopulate items on the baord
@@ -327,42 +642,15 @@ public class Quest
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
             }
+            if (kv.Key.IndexOf("UI") == 0)
+            {
+                boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
+            }
+            if (kv.Key.IndexOf("#shop") == 0)
+            {
+                boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), activeShop));
+            }
         }
-
-        // Restore event log
-        log = new List<LogEntry>();
-        foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
-        {
-            log.Add(new LogEntry(kv.Key, kv.Value));
-        }
-
-        Dictionary<string, string> saveVars = saveData.Get("Vars");
-        vars = new VarManager(saveVars);
-
-        // Compat with depreciated 0.8.7 and earlier save
-        if (saveData.Get("Quest", "morale").Length > 0)
-        {
-            int morale = 0;
-            int.TryParse(saveData.Get("Quest", "morale"), out morale);
-            vars.SetValue("$morale", morale);
-        }
-        if (saveData.Get("Quest", "round").Length > 0)
-        {
-            int round = 0;
-            int.TryParse(saveData.Get("Quest", "round"), out round);
-            vars.SetValue("#round", round);
-        }
-
-        // Set items
-        items = new HashSet<string>();
-        Dictionary<string, string> saveItems = saveData.Get("Items");
-        foreach (KeyValuePair<string, string> kv in saveItems)
-        {
-            items.Add(kv.Key);
-        }
-
-        // Restart event EventManager
-        eManager = new EventManager();
 
         // Clean undo stack (we don't save undo stack)
         // When performing undo this is replaced later
@@ -439,6 +727,8 @@ public class Quest
             eventQuota.Add(kv.Key, value);
         }
 
+        eManager = new EventManager(saveData.Get("EventManager"));
+
         // Update the screen
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
@@ -468,8 +758,8 @@ public class Quest
     {
         Game game = Game.Get();
         
-        float morale = vars.GetValue("$morale") + m;
-        vars.SetValue("$morale", morale);        
+        float morale = vars.GetValue("$%morale") + m;
+        vars.SetValue("$%morale", morale);        
 
         // Test for no morale ending
         if (morale < 0)
@@ -516,16 +806,16 @@ public class Quest
     }
 
     // Add a list of components (token, tile, etc)
-    public void Add(string[] names)
+    public void Add(string[] names, bool shop = false)
     {
         foreach (string s in names)
         {
-            Add(s);
+            Add(s, shop);
         }
     }
 
     // Add a component to the board
-    public void Add(string name)
+    public void Add(string name, bool shop = false)
     {
         // Check that the component is valid
         if (!game.quest.qd.components.ContainsKey(name))
@@ -550,6 +840,17 @@ public class Quest
         if (qc is QuestData.Token)
         {
             boardItems.Add(name, new Token((QuestData.Token)qc, game));
+        }
+        if (qc is QuestData.UI)
+        {
+            boardItems.Add(name, new UI((QuestData.UI)qc, game));
+        }
+        if (qc is QuestData.QItem && !shop)
+        {
+            if (itemSelect.ContainsKey(name))
+            {
+                items.Add(itemSelect[name]);
+            }
         }
     }
 
@@ -604,6 +905,16 @@ public class Quest
         }
     }
 
+    public bool UIItemsPresent()
+    {
+        foreach (BoardComponent c in boardItems.Values)
+        {
+            if (c is UI) return true;
+            if (c is ShopInterface) return true;
+        }
+        return false;
+    }
+
     // Remove all active components
     public void RemoveAll()
     {
@@ -648,10 +959,13 @@ public class Quest
         // General quest state block
         string r = "[Quest]" + nl;
 
+        r += "time=" + System.DateTime.Now.ToString() + nl;
+
         // Save valkyrie version
         r += "valkyrie=" + game.version + nl;
 
         r += "path=" + qd.questPath + nl;
+        r += "originalpath=" + questPath + nl;
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
@@ -744,6 +1058,31 @@ public class Quest
             r += kv.Key + "=" + kv.Value + nl;
         }
 
+        r += "[SelectItem]" + nl;
+        foreach (KeyValuePair<string, string> kv in itemSelect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
+        }
+
+        if (activeShop.Length > 0)
+        {
+            r += "[ActiveShop]" + nl;
+            r += activeShop + nl;
+        }
+
+        r += eManager.ToString();
+
+        r += "[Shops]" + nl;
+        foreach (KeyValuePair<string, List<string>> kv in shops)
+        {
+            r += kv.Key + "=";
+            foreach (string s in kv.Value)
+            {
+                r += s + " ";
+            }
+            r = r.Substring(0, r.Length - 1) + nl;
+        }
+
         return r;
     }
 
@@ -787,7 +1126,7 @@ public class Quest
 
             // Create a unity object for the tile
             unityObject = new GameObject("Object" + qTile.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
             unityObject.transform.parent = game.boardCanvas.transform;
 
             // Add image to object
@@ -868,7 +1207,7 @@ public class Quest
 
             // Create object
             unityObject = new GameObject("Object" + qToken.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
 
             unityObject.transform.parent = game.tokenCanvas.transform;
 
@@ -907,6 +1246,170 @@ public class Quest
         }
     }
 
+    // Tokens are events that are tied to a token placed on the board
+    public class UI : BoardComponent
+    {
+        // Quest info on the token
+        public QuestData.UI qUI;
+        public RectangleBorder border;
+
+        UnityEngine.UI.Text uiText;
+
+        // Construct with quest info and reference to Game
+        public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
+        {
+            qUI = questUI;
+
+            // Find quest UI panel
+            GameObject panel = GameObject.Find("QuestUIPanel");
+            if (panel == null)
+            {
+                // Create UI Panel
+                panel = new GameObject("QuestUIPanel");
+                panel.tag = Game.BOARD;
+                panel.transform.parent = game.uICanvas.transform;
+                panel.transform.SetAsFirstSibling();
+                panel.AddComponent<RectTransform>();
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
+                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
+            }
+
+            Texture2D newTex = null;
+            if (game.cd.images.ContainsKey(qUI.imageName))
+            {
+                Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
+                Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
+                newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+            }
+            else if (qUI.imageName.Length > 0)
+            {
+                newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+            }
+
+            // Create object
+            unityObject = new GameObject("Object" + qUI.sectionName);
+            unityObject.tag = Game.BOARD;
+
+            unityObject.transform.parent = panel.transform;
+
+            float aspect = 1;
+            RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
+            if (qUI.imageName.Length == 0)
+            {
+                uiText = unityObject.AddComponent<UnityEngine.UI.Text>();
+                uiText.text = GetText();
+                uiText.alignment = TextAnchor.MiddleCenter;
+                uiText.font = game.gameType.GetFont();
+                uiText.material = uiText.font.material;
+                uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                SetColor(qUI.textColor);
+                aspect = qUI.aspect;
+            }
+            else
+            {
+                // Create the image
+                image = unityObject.AddComponent<UnityEngine.UI.Image>();
+                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+                image.color = new Color(1, 1, 1, 0);
+                image.sprite = tileSprite;
+                aspect = (float)newTex.width / (float)newTex.height;
+            }
+
+            float unitScale = Screen.width;
+            float hSize = qUI.size * unitScale;
+            float vSize = hSize / aspect;
+            if (qUI.verticalUnits)
+            {
+                unitScale = Screen.height;
+                vSize = qUI.size * unitScale;
+                hSize = vSize * aspect;
+            }
+
+            float hOffset = qUI.location.x * unitScale;
+            float vOffset = qUI.location.y * unitScale;
+
+            if (qUI.hAlign < 0)
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+            }
+            else if (qUI.hAlign > 0)
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+            }
+            else
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+            }
+
+            if (qUI.vAlign < 0)
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+            }
+            else if (qUI.vAlign > 0)
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+            }
+            else
+            {
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+            }
+
+            if (qUI.border)
+            {
+                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), Game.BOARD);
+            }
+
+            game.tokenBoard.Add(this);
+        }
+
+        // Tokens have an associated event to start on press
+        public override QuestData.Event GetEvent()
+        {
+            return qUI;
+        }
+
+        override public void SetColor(Color c)
+        {
+            if (image != null) image.color = c;
+            if (uiText != null) uiText.color = c;
+            if (border != null) border.color = c;
+        }
+
+        override public Color GetColor()
+        {
+            if (image != null) return image.color;
+            if (uiText != null) return uiText.color;
+            return Color.clear;
+        }
+
+        // Set visible can control the transparency level of the component
+        public override void SetVisible(float alpha)
+        {
+            targetAlpha = alpha;
+            // Hide in editor
+            if (targetAlpha < 0.5f)
+            {
+                targetAlpha = 0;
+            }
+        }
+
+        // Get the text to display on the UI
+        virtual public string GetText()
+        {
+            string text = qUI.uiText.Translate(true);
+
+            // Fix new lines and replace symbol text with special characters
+            return EventManager.OutputSymbolReplace(text).Replace("\\n", "\n");
+        }
+
+        // Clean up
+        public override void Remove()
+        {
+            Object.Destroy(unityObject);
+            if (border != null) border.Destroy();
+        }
+    }
+
     // Doors are like tokens but placed differently and have different defaults
     // Note that MoM Explore tokens are tokens and do not use this
     public class Door : BoardComponent
@@ -929,7 +1432,7 @@ public class Quest
 
             // Create object
             unityObject = new GameObject("Object" + qDoor.sectionName);
-            unityObject.tag = "board";
+            unityObject.tag = Game.BOARD;
 
             unityObject.transform.parent = game.tokenCanvas.transform;
 
@@ -951,26 +1454,6 @@ public class Quest
             image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
 
             game.tokenBoard.Add(this);
-        }
-
-        // Function to set door texture colour
-        public void SetColor(string colorName)
-        {
-            // Translate from name to #RRGGBB, will return input if already #RRGGBB
-            string colorRGB = ColorUtil.FromName(colorName);
-            // Check format is valid
-            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
-            {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Door color must be in #RRGGBB format or a known name in: " + qDoor.sectionName, true));
-            }
-
-            // State with white (used for alpha)
-            Color colour = Color.white;
-            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
-            image.color = colour;
         }
 
         // Clean up
@@ -1013,17 +1496,13 @@ public class Quest
         // Set visible can control the transparency level of the component
         virtual public void SetVisible(float alpha)
         {
-            if (image == null)
-                return;
             targetAlpha = alpha;
         }
 
         // Set visible can control the transparency level of the component
         virtual public void UpdateAlpha(float time)
         {
-            if (image == null)
-                return;
-            float alpha = image.color.a;
+            float alpha = GetColor().a;
             float distUpdate = time;
             float distRemain = targetAlpha - alpha;
             if (distRemain > distUpdate)
@@ -1038,7 +1517,40 @@ public class Quest
             {
                 alpha = targetAlpha;
             }
-            image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+            SetColor(new Color(GetColor().r, GetColor().g, GetColor().b, alpha));
+        }
+
+        virtual public void SetColor(Color c)
+        {
+            if (image == null)
+                return;
+            image.color = c;
+        }
+
+        virtual public Color GetColor()
+        {
+            if (image != null) return image.color;
+            return Color.clear;
+        }
+
+        // Function to set color from string
+        public void SetColor(string colorName)
+        {
+            // Translate from name to #RRGGBB, will return input if already #RRGGBB
+            string colorRGB = ColorUtil.FromName(colorName);
+            // Check format is valid
+            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
+            }
+
+            // State with white (used for alpha)
+            Color colour = Color.white;
+            // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
+            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            SetColor(colour);
         }
     }
 
@@ -1053,12 +1565,17 @@ public class Quest
         public int id = 0;
         // Used for events that can select or highlight heros
         public bool selected;
+        public string className = "";
+        public string hybridClass = "";
+        public List<string> skills;
+        public int xp = 0;
 
         // Constuct with content hero data and an index for hero
         public Hero(HeroData h, int i)
         {
             heroData = h;
             id = i;
+            skills = new List<string>();
         }
 
         // Construct with saved data
@@ -1067,12 +1584,21 @@ public class Quest
             bool.TryParse(data["activated"], out activated);
             bool.TryParse(data["defeated"], out defeated);
             int.TryParse(data["id"], out id);
+            if (data.ContainsKey("class"))
+            {
+                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                className = classes[0];
+                if (classes.Length > 1)
+                {
+                    hybridClass = classes[1];
+                }
+            }
 
             Game game = Game.Get();
             // Saved content reference, look it up
             if (data.ContainsKey("type"))
             {
-                foreach (KeyValuePair<string, HeroData> hd in game.cd.heros)
+                foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
                 {
                     if (hd.Value.sectionName.Equals(data["type"]))
                     {
@@ -1080,6 +1606,26 @@ public class Quest
                     }
                 }
             }
+            skills = new List<string>();
+            if (data.ContainsKey("skills"))
+            {
+                skills.AddRange(data["skills"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+            }
+            if (data.ContainsKey("xp"))
+            {
+                int.TryParse(data["xp"], out xp);
+            }
+        }
+
+        public int AvailableXP()
+        {
+            Game game = Game.Get();
+            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
+            foreach (string s in skills)
+            {
+                aXP -= game.cd.skills[s].xp;
+            }
+            return aXP;
         }
 
         // Save hero to string for saves/undo
@@ -1091,12 +1637,30 @@ public class Quest
             r += "id=" + id + nl;
             r += "activated=" + activated + nl;
             r += "defeated=" + defeated + nl;
+            if (className.Length > 0)
+            {
+                r += "class=" + className + " " + hybridClass + nl;
+            }
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;
             }
+            if (skills.Count > 0)
+            {
+                r += "skills=";
+                foreach (string s in skills)
+                {
+                    r += s + ' ';
+                }
+                r += nl;
+            }
 
-            return r;
+            if (xp != 0)
+            {
+                r += "xp=" + xp + nl;
+            }
+
+            return r + nl;
         }
     }
 
@@ -1224,8 +1788,8 @@ public class Quest
             public ActivationInstance(ActivationData contentActivation, string monsterName)
             {
                 ad = contentActivation;
-                minionActions = EventManager.SymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
-                masterActions = EventManager.SymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
+                minionActions = EventManager.OutputSymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
+                masterActions = EventManager.OutputSymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
 
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
@@ -1233,7 +1797,7 @@ public class Quest
                 {
                     effect = ad.ability.Translate().Replace("{0}", monsterName);
                     move = ad.move.Translate().Replace("{0}", monsterName);
-                    move = EventManager.SymbolReplace(move).Replace("\\n", "\n");
+                    move = EventManager.OutputSymbolReplace(move).Replace("\\n", "\n");
                 }
                 else
                 {
@@ -1241,7 +1805,7 @@ public class Quest
                     effect = effect.Replace("{1}", monsterName);
                 }
                 // Fix new lines
-                effect = EventManager.SymbolReplace(effect).Replace("\\n", "\n");
+                effect = EventManager.OutputSymbolReplace(effect).Replace("\\n", "\n");
             }
         }
 

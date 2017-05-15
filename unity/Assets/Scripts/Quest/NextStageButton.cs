@@ -18,19 +18,19 @@ public class NextStageButton
             new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
             CommonStringKeys.TAB, delegate { Next(); });
         // Untag as dialog so this isn't cleared away
-        tb.ApplyTag("questui");
+        tb.ApplyTag(Game.QUESTUI);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
             CommonStringKeys.LOG, delegate { Log(); });
         // Untag as dialog so this isn't cleared away
-        tb.ApplyTag("questui");
+        tb.ApplyTag(Game.QUESTUI);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
             CommonStringKeys.SET, delegate { Set(); });
         // Untag as dialog so this isn't cleared away
-        tb.ApplyTag("questui");
+        tb.ApplyTag(Game.QUESTUI);
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
         Update();
     }
@@ -38,7 +38,7 @@ public class NextStageButton
     public void Update()
     {
         // Clean up everything marked as 'uiphase'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("uiphase"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
         StringKey phase;
@@ -62,7 +62,7 @@ public class NextStageButton
         DialogBox db;
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase);
         db.SetFont(Game.Get().gameType.GetHeaderFont());
-        db.ApplyTag("uiphase");
+        db.ApplyTag(Game.UIPHASE);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
     }
@@ -70,12 +70,14 @@ public class NextStageButton
     // Button pressed
     public void Next()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
 
         Game game = Game.Get();
+
+        if (game.quest.UIItemsPresent()) return;
 
         // Add to undo stack
         game.quest.Save();
@@ -91,13 +93,14 @@ public class NextStageButton
         }
         else
         {
+            game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_MYTHOS").Translate()));
             game.roundControl.HeroActivated();
         }
     }
 
     public void Log()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
@@ -106,7 +109,7 @@ public class NextStageButton
 
     public void Set()
     {
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }

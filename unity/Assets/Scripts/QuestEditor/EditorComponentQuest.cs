@@ -5,12 +5,14 @@ using Assets.Scripts.Content;
 
 public class EditorComponentQuest : EditorComponent
 {
+    private readonly StringKey HIDDEN = new StringKey("val", "HIDDEN");
+    private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
     private readonly StringKey SELECT_PACK = new StringKey("val", "SELECT_PACK");
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable nameDBE;
-    public DialogBoxEditable descriptionDBE;
+    public PaneledDialogBoxEditable descriptionDBE;
     EditorSelectionList packESL;
 
     // Quest is a special component with meta data
@@ -28,30 +30,43 @@ public class EditorComponentQuest : EditorComponent
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
             CommonStringKeys.QUEST, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         nameDBE = new DialogBoxEditable(
             new Vector2(0, 2), new Vector2(20, 1), 
-            game.quest.qd.quest.name.Translate(), 
+            game.quest.qd.quest.name.Translate(), false, 
             delegate { UpdateQuestName(); });
-        nameDBE.ApplyTag("editor");
+        nameDBE.ApplyTag(Game.EDITOR);
         nameDBE.AddBorder();
 
-        descriptionDBE = new DialogBoxEditable(
+        descriptionDBE = new PaneledDialogBoxEditable(
             new Vector2(0, 4), new Vector2(20, 6), 
             game.quest.qd.quest.description.Translate(true),
             delegate { UpdateQuestDesc(); });
-        descriptionDBE.ApplyTag("editor");
+        descriptionDBE.ApplyTag(Game.EDITOR);
         descriptionDBE.AddBorder();
 
-        DialogBox db = new DialogBox(new Vector2(0, 11), new Vector2(9, 1), REQUIRED_EXPANSIONS);
-        db.ApplyTag("editor");
+        if (game.quest.qd.quest.hidden)
+        {
+            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag(Game.EDITOR);
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ACTIVE, delegate { ToggleHidden(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag(Game.EDITOR);
+        }
 
-        tb = new TextButton(new Vector2(9, 11), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
+        DialogBox db = new DialogBox(new Vector2(0, 13), new Vector2(9, 1), REQUIRED_EXPANSIONS);
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(9, 13), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
-        int offset = 12;
+        int offset = 14;
         int index;
         for (index = 0; index < 15; index++)
         {
@@ -61,11 +76,11 @@ public class EditorComponentQuest : EditorComponent
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
                     new StringKey("val", game.quest.qd.quest.packs[index]));
                 db.AddBorder();
-                db.ApplyTag("editor");
+                db.ApplyTag(Game.EDITOR);
                 tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { QuestRemovePack(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
+                tb.ApplyTag(Game.EDITOR);
             }
         }
     }
@@ -92,6 +107,13 @@ public class EditorComponentQuest : EditorComponent
         {
             LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
         }
+    }
+
+    public void ToggleHidden()
+    {
+        Game game = Game.Get();
+        game.quest.qd.quest.hidden = !game.quest.qd.quest.hidden;
+        Update();
     }
 
     public void QuestAddPack()

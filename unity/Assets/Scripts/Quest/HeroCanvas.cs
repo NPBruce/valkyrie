@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // This class is for drawing hero images on the screen
 public class HeroCanvas : MonoBehaviour {
@@ -219,7 +220,7 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         // If there are any other dialogs
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             // Check if we are in a hero selection dialog
             if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
@@ -235,7 +236,10 @@ public class HeroCanvas : MonoBehaviour {
         // We are in game and a valid hero was selected
         if (game.quest.heroesSelected && target.heroData != null)
         {
-            new HeroDialog(target);
+            if (!game.quest.UIItemsPresent())
+            {
+                new HeroDialog(target);
+            }
         }
     }
 
@@ -258,7 +262,7 @@ public class HeroCanvas : MonoBehaviour {
         // Check for validity
         if (heroCount < 2) return;
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("heroselect"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
         heroSelection = null;
 
@@ -287,25 +291,21 @@ public class HeroCanvas : MonoBehaviour {
         if (!game.gameType.DisplayHeroes())
         {
             Clean();
+            new InvestigatorItems();
+        }
+        else
+        {
+            // Pick class
         }
 
         // Draw morale if required
-        if (game.gameType.DisplayMorale())
+        if (game.gameType is D2EGameType)
         {
-            game.moraleDisplay = new MoraleDisplay();
-            game.QuestStartEvent();
+            new ClassSelectionScreen();
         }
         else
         {
             new InvestigatorItems();
         }
-
-        List<string> music = new List<string>();
-        foreach (AudioData ad in game.cd.audio.Values)
-        {
-            if (ad.ContainsTrait("quest")) music.Add(ad.file);
-        }
-        game.audioControl.Music(music);
-
     }
 }

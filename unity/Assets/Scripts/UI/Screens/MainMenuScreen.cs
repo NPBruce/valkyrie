@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
                     new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    delegate { SaveManager.Load(); });
+                    delegate { new SaveSelectScreen(); });
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
                 tb.SetFont(game.gameType.GetHeaderFont());
             }
@@ -72,7 +72,7 @@ namespace Assets.Scripts.UI.Screens
                     new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
                     new Vector2(12, 2f),
                     new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    Color.red);
+                    Color.grey);
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.SetFont(game.gameType.GetHeaderFont());
                 db.AddBorder();
@@ -159,7 +159,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D newTex = Resources.Load("sprites/banner") as Texture2D;
 
             GameObject banner = new GameObject("banner");
-            banner.tag = "dialog";
+            banner.tag = Game.DIALOG;
 
             banner.transform.parent = Game.Get().uICanvas.transform;
 
@@ -184,6 +184,12 @@ namespace Assets.Scripts.UI.Screens
                 new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), 
                 new Vector2(30, 5), 
                 ABOUT_LIBS);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+
+            db = new DialogBox(
+                new Vector2(UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3)),
+                new Vector2(5, 2),
+                new StringKey(null, Game.Get().version, false));
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
             TextButton tb = new TextButton(

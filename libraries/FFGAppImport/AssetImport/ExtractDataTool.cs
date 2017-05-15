@@ -80,7 +80,7 @@ class ExtractDataTool
             mythosAll += s + " ";
         }
         mythos += mythosAll.Substring(0, mythosAll.Length - 1);
-        mythos += "\nbutton1=\"Continue\"\n";
+        mythos += "\nbutton1={ffg:UI_TAP_TO_CONTINUE}\n";
         mythos += "trigger=Mythos\n";
         file = path + "MoM/ffg/extract-mythos.ini";
         File.WriteAllText(file, mythos);
@@ -152,9 +152,9 @@ class ExtractDataTool
         if (label.Substring(label.Length - 3).Equals("_01"))
         {
             ret += "event1=" + nameCamel.Replace("01", "02") + "\n";
-            ret += "button1=\"Resolve Event\"\n";
+            ret += "button1={ffg:COMMON_MYTHOS_EVENT_RESOLVE}\n";
             ret += "event2=\n";
-            ret += "button2=\"No Effect\"\n";
+            ret += "button2={ffg:COMMON_MYTHOS_EVENT_NO_TARGET}\n";
             ret += "flags=mythos\n\n";
 
             ret += "[" + nameCamel.Replace("01", "02") + "]\n";
@@ -165,7 +165,7 @@ class ExtractDataTool
             ret += "flags=mythos\n";
         }
         ret += "event1=\n";
-        ret += "button1=\"Continue\"\n\n";
+        ret += "button1={ffg:UI_TAP_TO_CONTINUE}\n\n";
         return ret;
     }
 

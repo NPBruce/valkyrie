@@ -49,32 +49,40 @@ public class EditorComponentEventVars : EditorComponent
         {
             type = QuestData.Token.type;
         }
+        if (eventComponent is QuestData.Puzzle)
+        {
+            type = QuestData.Puzzle.type;
+        }
+        if (eventComponent is QuestData.UI)
+        {
+            type = QuestData.UI.type;
+        }
 
         TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
             new StringKey(null,type,false), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1),
             new StringKey(null,name.Substring(type.Length),false), delegate { QuestEditorData.ListEvent(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
         
         float offset = 2;
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
             new StringKey("val","X_COLON",TESTS));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         offset++;
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
@@ -83,31 +91,31 @@ public class EditorComponentEventVars : EditorComponent
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
                 new StringKey(null,op.operation, false), delegate { SetTestOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             offset++;
         }
 
         offset++;
         db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1),
             new StringKey("val","X_COLON",ASSIGN));
-        db.ApplyTag("editor");
+        db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddAssignOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         offset++;
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
@@ -116,25 +124,25 @@ public class EditorComponentEventVars : EditorComponent
             db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1),
                 new StringKey(null,op.operation, false), delegate { SetAssignOpp(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag("editor");
+            tb.ApplyTag(Game.EDITOR);
             offset++;
         }
 
         if (eventComponent.locationSpecified)
         {
-            game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", "editor");
+            game.tokenBoard.AddHighlight(eventComponent.location, "EventLoc", Game.EDITOR);
         }
     }
 
@@ -147,7 +155,6 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "#"));
         list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
@@ -216,7 +223,7 @@ public class EditorComponentEventVars : EditorComponent
         return list;
     }
 
-    private HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
+    public static HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
     {
         HashSet<string> vars = new HashSet<string>();
         foreach (QuestData.Event.VarOperation op in e.operations)
@@ -277,6 +284,14 @@ public class EditorComponentEventVars : EditorComponent
         op.var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
         if (op.var.Length > 0)
         {
+            if (varText.value[0] == '%')
+            {
+                op.var = '%' + op.var;
+            }
+            if (varText.value[0] == '@')
+            {
+                op.var = '@' + op.var;
+            }
             if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
             {
                 op.var = "var" + op.var;
@@ -330,16 +345,15 @@ public class EditorComponentEventVars : EditorComponent
         list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", "Quest"));
         list.AddRange(GetQuestVars());
 
-        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#round", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#fire", "Valkyrie"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "Valkyrie"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
+        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "Valkyrie"));
+                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "#"));
             }
         }
 

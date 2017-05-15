@@ -3,16 +3,16 @@ using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class EditorComponentStartingItem : EditorComponent
+public class EditorComponentItem : EditorComponent
 {
-    QuestData.StartingItem itemComponent;
+    QuestData.QItem itemComponent;
     EditorSelectionList itemESL;
     EditorSelectionList traitESL;
 
-    public EditorComponentStartingItem(string nameIn) : base()
+    public EditorComponentItem(string nameIn) : base()
     {
         Game game = Game.Get();
-        itemComponent = game.quest.qd.components[nameIn] as QuestData.StartingItem;
+        itemComponent = game.quest.qd.components[nameIn] as QuestData.QItem;
         component = itemComponent;
         name = component.sectionName;
         Update();
@@ -21,71 +21,108 @@ public class EditorComponentStartingItem : EditorComponent
     override public void Update()
     {
         base.Update();
-        //Game game = Game.Get();
+        Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.STARTING_ITEM, delegate { QuestEditorData.TypeSelect(); });
+        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(5, 1), CommonStringKeys.QITEM, delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(5, 0), new Vector2(14, 1), 
-            new StringKey(null,name.Substring("StartingItem".Length),false), delegate { QuestEditorData.ListStartingItem(); });
+            new StringKey(null,name.Substring("QItem".Length),false), delegate { QuestEditorData.ListItem(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
-        db.ApplyTag("editor");
+        DialogBox db = null;
+        if (game.gameType is MoMGameType)
+        {
+            db = new DialogBox(new Vector2(0, 2), new Vector2(10, 1), new StringKey("val","X_COLON",CommonStringKeys.STARTING_ITEM));
+            db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, 2), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
+            tb = new TextButton(new Vector2(10, 2), new Vector2(4, 1), new StringKey(null, itemComponent.starting.ToString(), false), delegate { ToggleStarting(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.ApplyTag(Game.EDITOR);
+        }
+
+        db = new DialogBox(new Vector2(0, 3), new Vector2(19, 1), new StringKey("val","X_COLON",CommonStringKeys.ITEM));
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(19, 3), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddItem(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
-        float offset = 3;
+        float offset = 4;
         for (int i = 0; i < itemComponent.itemName.Length; i++)
         {
             int tmp = i;
             db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
                 new StringKey(null,itemComponent.itemName[i],false));
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
 
-            if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1)
+            if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1 || itemComponent.traitpool.Length > 0)
             {
                 tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), CommonStringKeys.MINUS , delegate { RemoveItem(tmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
+                tb.ApplyTag(Game.EDITOR);
             }
             offset++;
         }
 
         offset++;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
-        db.ApplyTag("editor");
+        db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
+        db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(17, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
+        tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag("editor");
+        tb.ApplyTag(Game.EDITOR);
 
         for (int i = 0; i < itemComponent.traits.Length; i++)
         {
             int tmp = i;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(16, 1), 
+            db = new DialogBox(new Vector2(0, offset + i), new Vector2(9, 1), 
                 new StringKey("val",itemComponent.traits[i]));
-            db.ApplyTag("editor");
+            db.ApplyTag(Game.EDITOR);
 
-            if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0)
+            if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0 || itemComponent.traitpool.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, offset), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { RemoveTrait(tmp); }, Color.red);
+                tb = new TextButton(new Vector2(9, offset + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { RemoveTrait(tmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag("editor");
+                tb.ApplyTag(Game.EDITOR);
             }
-            offset++;
         }
+        db = new DialogBox(new Vector2(10, offset - 1), new Vector2(9, 1), new StringKey("val", "X_COLON", new StringKey("val", "POOL_TRAITS")));
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(19, offset - 1), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(true); }, Color.green);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.ApplyTag(Game.EDITOR);
+
+        for (int i = 0; i < itemComponent.traitpool.Length; i++)
+        {
+            int tmp = i;
+            db = new DialogBox(new Vector2(10, offset + i), new Vector2(9, 1),
+                new StringKey("val", itemComponent.traitpool[i]));
+            db.ApplyTag(Game.EDITOR);
+
+            if (itemComponent.traitpool.Length > 1 || itemComponent.itemName.Length > 0 || itemComponent.traits.Length > 0)
+            {
+                tb = new TextButton(new Vector2(19, offset + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { RemoveTraitPool(tmp); }, Color.red);
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag(Game.EDITOR);
+            }
+        }
+    }
+
+    public void ToggleStarting()
+    {
+        itemComponent.starting = !itemComponent.starting;
+        Update();
     }
 
     public void AddItem()
@@ -101,10 +138,11 @@ public class EditorComponentStartingItem : EditorComponent
         HashSet<string> usedItems = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            QuestData.StartingItem i = kv.Value as QuestData.StartingItem;
+            QuestData.QItem i = kv.Value as QuestData.QItem;
             if (i != null)
             {
-                if (i.traits.Length == 0)
+                items.Add(new EditorSelectionList.SelectionListEntry(i.sectionName, "Quest"));
+                if (i.traits.Length == 0 && i.traitpool.Length == 0)
                 {
                     usedItems.Add(i.itemName[0]);
                 }
@@ -173,7 +211,7 @@ public class EditorComponentStartingItem : EditorComponent
         Update();
     }
 
-    public void AddTrait()
+    public void AddTrait(bool pool = false)
     {
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
@@ -191,20 +229,34 @@ public class EditorComponentStartingItem : EditorComponent
         {
             list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
         }
-        traitESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TRAITS), list, delegate { SelectAddTrait(); });
+        traitESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TRAITS), list, delegate { SelectAddTrait(pool); });
         traitESL.SelectItem();
     }
 
-    public void SelectAddTrait()
+    public void SelectAddTrait(bool pool)
     {
-        string[] newArray = new string[itemComponent.traits.Length + 1];
-
-        for (int i = 0; i < itemComponent.traits.Length; i++)
+        if (pool)
         {
-            newArray[i] = itemComponent.traits[i];
+            string[] newArray = new string[itemComponent.traitpool.Length + 1];
+
+            for (int i = 0; i < itemComponent.traitpool.Length; i++)
+            {
+                newArray[i] = itemComponent.traitpool[i];
+            }
+            newArray[itemComponent.traitpool.Length] = traitESL.selection;
+            itemComponent.traitpool = newArray;
         }
-        newArray[itemComponent.traits.Length] = traitESL.selection;
-        itemComponent.traits = newArray;
+        else
+        {
+            string[] newArray = new string[itemComponent.traits.Length + 1];
+
+            for (int i = 0; i < itemComponent.traits.Length; i++)
+            {
+                newArray[i] = itemComponent.traits[i];
+            }
+            newArray[itemComponent.traits.Length] = traitESL.selection;
+            itemComponent.traits = newArray;
+        }
         Update();
     }
 
@@ -221,6 +273,22 @@ public class EditorComponentStartingItem : EditorComponent
             }
         }
         itemComponent.traits = newArray;
+        Update();
+    }
+
+    public void RemoveTraitPool(int index)
+    {
+        string[] newArray = new string[itemComponent.traitpool.Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < itemComponent.traitpool.Length; i++)
+        {
+            if (i != index)
+            {
+                newArray[j++] = itemComponent.traitpool[i];
+            }
+        }
+        itemComponent.traitpool = newArray;
         Update();
     }
 }

@@ -16,6 +16,7 @@ public class PuzzleCodeWindow
     public PuzzleCode puzzle;
     public List<int> guess;
     public int previousMoves = 0;
+    public List<ButtonInfo> buttons;
 
 
     public PuzzleCodeWindow(EventManager.Event e)
@@ -25,6 +26,7 @@ public class PuzzleCodeWindow
 
         guess = new List<int>();
         questPuzzle = e.qEvent as QuestData.Puzzle;
+        buttons = GetButtons();
 
         if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
@@ -55,8 +57,9 @@ public class PuzzleCodeWindow
             {
                 int tmp = i;
                 tb = new TextButton(
-                    new Vector2(hPos, 1.5f), new Vector2(2f, 2), i, delegate { GuessAdd(tmp); }, Color.black);
+                    new Vector2(hPos, 1.5f), new Vector2(2f, 2), buttons[i].label, delegate { GuessAdd(tmp); }, Color.black);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
+                tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[i].image;
                 hPos += 2.5f;
             }
             hPos = UIScaler.GetHCenter(-13f);
@@ -66,9 +69,10 @@ public class PuzzleCodeWindow
                 {
                     int tmp = i - 1;
                     tb = new TextButton(
-                        new Vector2(hPos, 4f), new Vector2(2f, 2f), guess[tmp], 
+                        new Vector2(hPos, 4f), new Vector2(2f, 2f), buttons[guess[tmp]].label, 
                         delegate { GuessRemove(tmp); }, Color.black);
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
+                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[guess[tmp]].image;
                 }
                 else
                 {
@@ -86,7 +90,7 @@ public class PuzzleCodeWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f),
-            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill), false));
+            new StringKey(null, EventManager.OutputSymbolReplace(questPuzzle.skill), false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -104,6 +108,7 @@ public class PuzzleCodeWindow
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         float vPos = 7f;
         foreach (PuzzleCode.CodeGuess g in puzzle.guess)
@@ -112,8 +117,9 @@ public class PuzzleCodeWindow
             foreach (int i in g.guess)
             {
                 db = new DialogBox(
-                    new Vector2(hPos, vPos), new Vector2(2f, 2f), i, 
+                    new Vector2(hPos, vPos), new Vector2(2f, 2f), buttons[i].label, 
                     Color.black, new Color(1, 1, 1, 0.9f));
+                db.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[i].image;
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db.background.transform.parent = scrollArea.transform;
@@ -186,16 +192,58 @@ public class PuzzleCodeWindow
         guess.Add(symbolType);
 
         int tmp = guess.Count - 1;
-        new TextButton(
+        TextButton tb = new TextButton(
             new Vector2(hPos, 4f), new Vector2(2f, 2f), 
-            new StringKey(null, symbolType.ToString(),false), 
-            delegate { GuessRemove(tmp); });
+            buttons[symbolType].label, 
+            delegate { GuessRemove(tmp); }, Color.black);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
+        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[symbolType].image;
     }
 
     public void GuessRemove(int symbolPos)
     {
         guess.RemoveAt(symbolPos);
         CreateWindow();
+    }
+
+    public List<ButtonInfo> GetButtons()
+    {
+        List<ButtonInfo> buttons = new List<ButtonInfo>();
+        for (int i = 0; i <= questPuzzle.puzzleAltLevel; i++)
+        {
+            if (questPuzzle.imageType.Equals("symbol"))
+            {
+                Texture2D dupeTex = Resources.Load("sprites/monster_duplicate_" + i) as Texture2D;
+                if (dupeTex != null)
+                {
+                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1)));
+                }
+                else
+                {
+                    buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));
+                }
+            }
+            else
+            {
+                buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));
+            }
+        }
+        return buttons;
+    }
+
+    public class ButtonInfo
+    {
+        public Sprite image = null;
+        public StringKey label = StringKey.NULL;
+
+        public ButtonInfo(Sprite s)
+        {
+            image = s;
+        }
+        public ButtonInfo(StringKey l)
+        {
+            label = l;
+        }
     }
 
     public void Guess()

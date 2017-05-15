@@ -39,7 +39,7 @@ namespace Assets.Scripts.Content
         {
             referedDictionary = dict;
 
-            string newLinedCompleteLocalizationString = completeLocalizationString.Replace("\\n", System.Environment.NewLine);
+            string newLinedCompleteLocalizationString = completeLocalizationString.Replace("\\n", "\n");
 
             if (newLinedCompleteLocalizationString.Contains(QUOTES))
             {
@@ -127,13 +127,13 @@ namespace Assets.Scripts.Content
         }
 
         /// <summary>
-        /// The string value of the key whith the current language
+        /// The string value of the key with the current language
         /// </summary>
         public string currentLanguageString
         {
             get
             {
-                if (referedDictionary.currentLanguage < translations.Length)
+                if (referedDictionary.currentLanguage < translations.Length && referedDictionary.currentLanguage > 0)
                 {
                     return translations[referedDictionary.currentLanguage];
                 }
@@ -169,42 +169,51 @@ namespace Assets.Scripts.Content
             StringBuilder result = new StringBuilder();
 
             bool first = true;
-            string currentTranslation;
-            foreach (string oneTranslation in translations)
+            for (int oneTranslation = 0;  oneTranslation < translations.Length; oneTranslation++)
             {
-                if (oneTranslation != null)
-                {
-                    currentTranslation = oneTranslation
-                        .Replace(System.Environment.NewLine, "\\n")
-                        .Replace("\r","\\n");
-
-                    if (!first)
-                    {
-                        result.Append(COMMA);
-                    }
-
-                    if (currentTranslation.Contains(COMMA) || currentTranslation.Contains(QUOTES))
-                    {
-                        // The serializable text should repeat mid quotes and add initial and final quotes
-                        result.Append(QUOTES).Append(currentTranslation.Replace(QUOTES.ToString(), "\"\"")).Append(QUOTES);
-                    }
-                    else
-                    {
-                        result.Append(currentTranslation);
-                    }
-
-                    if (first)
-                    {
-                        first = false;
-                    }
-                }
-                else
+                if (!first)
                 {
                     result.Append(COMMA);
+                }
+                result.Append(ToString(oneTranslation));
+
+                if (first)
+                {
+                    first = false;
                 }
             }
 
             return result.ToString();
+        }
+        /// <summary>
+        /// String representation of the multilanguage element
+        /// </summary>
+        /// <returns></returns>
+        public StringBuilder ToString(int nLanguage)
+        {
+            StringBuilder result = new StringBuilder();
+
+            string currentTranslation;
+            if (nLanguage < translations.Length && translations[nLanguage] != null)
+            {
+                // All carryreturns are replaced
+                currentTranslation = translations[nLanguage]
+                    .Replace(System.Environment.NewLine, "\\n")
+                    .Replace("\n", "\\n")
+                    .Replace("\r", "\\n");
+
+                if (currentTranslation.Contains(COMMA) || currentTranslation.Contains(QUOTES))
+                {
+                    // The serializable text should repeat mid quotes and add initial and final quotes
+                    result.Append(QUOTES).Append(currentTranslation.Replace(QUOTES.ToString(), "\"\"")).Append(QUOTES);
+                }
+                else
+                {
+                    result.Append(currentTranslation);
+                }
+            }
+
+            return result;
         }
     }
 }

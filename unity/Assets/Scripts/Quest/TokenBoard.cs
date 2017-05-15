@@ -31,6 +31,12 @@ public class TokenBoard : MonoBehaviour {
         tc.Add(new TokenControl(t));
     }
 
+    // Add a UI
+    public void Add(Quest.UI ui)
+    {
+        tc.Add(new TokenControl(ui));
+    }
+
     // Class for tokens and doors that will get the onClick event
     public class TokenControl
     {
@@ -56,7 +62,7 @@ public class TokenBoard : MonoBehaviour {
             // If in horror phase ignore
             if (game.quest.phase != Quest.MoMPhase.investigator) return;
             // If a dialog is open ignore
-            if (GameObject.FindGameObjectWithTag("dialog") != null)
+            if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;
             // Spawn a window with the door/token info
             game.quest.eManager.QueueEvent(c.GetEvent().sectionName);
@@ -155,9 +161,9 @@ public class TokenBoard : MonoBehaviour {
         GameObject circleObject = new GameObject("MonsterSpawnBorder" + place);
         GameObject gameObject = new GameObject("MonsterSpawn" + place);
         GameObject borderObject = new GameObject("MonsterSpawnBorder" + place);
-        gameObject.tag = "dialog";
-        borderObject.tag = "dialog";
-        circleObject.tag = "dialog";
+        gameObject.tag = Game.DIALOG;
+        borderObject.tag = Game.DIALOG;
+        circleObject.tag = Game.DIALOG;
         circleObject.transform.parent = game.tokenCanvas.transform;
         gameObject.transform.parent = game.tokenCanvas.transform;
         borderObject.transform.parent = game.tokenCanvas.transform;
@@ -210,6 +216,10 @@ public class TokenBoard : MonoBehaviour {
 
             UnityEngine.UI.Image iconCicle = circleObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D circleTex = Resources.Load("sprites/target") as Texture2D;
+            if (sizeX == 2 && sizeY == 1)
+            {
+                circleTex = Resources.Load("sprites/borders/Empty_Monster_1x2") as Texture2D;
+            }
             iconCicle.sprite = Sprite.Create(circleTex, new Rect(0, 0, circleTex.width, circleTex.height), Vector2.zero, 1);
             iconCicle.rectTransform.sizeDelta = new Vector2(sizeX * 1.08f, sizeY * 1.08f);
 
@@ -247,7 +257,7 @@ public class TokenBoard : MonoBehaviour {
 
         // Create object
         GameObject gameObject = new GameObject("MonsterSpawn");
-        gameObject.tag = "dialog";
+        gameObject.tag = Game.DIALOG;
 
         gameObject.transform.parent = game.tokenCanvas.transform;
 
@@ -267,7 +277,44 @@ public class TokenBoard : MonoBehaviour {
     // Add highlight for event
     public void AddHighlight(QuestData.Event e)
     {
-        AddHighlight(e.location);
+        string item = "";
+        int items = 0;
+        foreach (string s in e.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                item = s;
+                items++;
+            }
+        }
+        if (items != 1 || !Game.Get().quest.itemSelect.ContainsKey(item))
+        {
+            AddHighlight(e.location);
+        }
+        else
+        {
+            AddItem(e.location, item);
+        }
+    }
+
+    // Add an item
+    public void AddItem(Vector2 location, string item)
+    {
+        Game game = Game.Get();
+        // Create object
+        GameObject itemObject = new GameObject("item" + item);
+        itemObject.tag = Game.DIALOG;
+        itemObject.transform.parent = game.tokenCanvas.transform;
+
+        // Create the image
+        Texture2D newTex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
+        UnityEngine.UI.Image image = itemObject.AddComponent<UnityEngine.UI.Image>();
+        Sprite iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+        image.sprite = iconSprite;
+        image.rectTransform.sizeDelta = new Vector2(1, 1);
+
+        // Move to square
+        itemObject.transform.Translate(new Vector3(location.x, location.y, 0), Space.World);
     }
 
     // Draw a highlight at location

@@ -36,14 +36,14 @@ public class MonsterDialog
         // Work out where on the screen to display
         float offset = (index + 0.1f - game.monsterCanvas.offset) * (MonsterCanvas.monsterSize + 0.5f);
 
-        if (GameObject.FindGameObjectWithTag("activation") != null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
             offset += 2.8f;
         }
 
         new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), INFORMATION, delegate { Info(); });
         offset += 2.5f;
-        if (GameObject.FindGameObjectWithTag("activation") == null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) == null)
         {
             new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), FORCE_ACTIVATE, delegate { Activate(); });
             offset += 2.5f;

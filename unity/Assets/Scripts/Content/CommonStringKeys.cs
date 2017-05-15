@@ -47,11 +47,13 @@ namespace Assets.Scripts.Content
         public static readonly StringKey NEW = new StringKey(VAL, "NEW");
         public static readonly StringKey DOOR = new StringKey(VAL, "DOOR");
         public static readonly StringKey TOKEN = new StringKey(VAL, "TOKEN");
+        public static readonly StringKey UI = new StringKey(VAL, "UI");
         public static readonly StringKey MONSTER = new StringKey(VAL, "MONSTER");
         public static readonly StringKey SPAWN = new StringKey(VAL, "SPAWN");
         public static readonly StringKey MPLACE = new StringKey(VAL, "MPLACE");
         public static readonly StringKey PUZZLE = new StringKey(VAL, "PUZZLE");
         public static readonly StringKey ITEM = new StringKey(VAL, "ITEM");
+        public static readonly StringKey QITEM = new StringKey(VAL, "QITEM");
         public static readonly StringKey STARTING_ITEM = new StringKey(VAL, "STARTING_ITEM");
         public static readonly StringKey UNIQUE_MONSTER = new StringKey(VAL, "UNIQUE_MONSTER");
         public static readonly StringKey CUSTOM_MONSTER = new StringKey(VAL, "CUSTOM_MONSTER");

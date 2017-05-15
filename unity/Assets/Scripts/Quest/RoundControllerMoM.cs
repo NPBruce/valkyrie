@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 
 // This round controller extends the standard controller for MoM specific round order
 public class RoundControllerMoM : RoundController
@@ -136,6 +137,8 @@ public class RoundControllerMoM : RoundController
         int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
         game.quest.vars.SetValue("#round", round);
 
+        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR").Translate()));
+
         game.quest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
 
@@ -146,5 +149,6 @@ public class RoundControllerMoM : RoundController
 
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
+        SaveManager.Save(0);
     }
 }

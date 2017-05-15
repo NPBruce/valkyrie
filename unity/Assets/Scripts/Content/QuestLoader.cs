@@ -10,7 +10,7 @@ using ValkyrieTools;
 public class QuestLoader {
 
     // Return a dictionary of all available quests
-    public static Dictionary<string, QuestData.Quest> GetQuests(bool checkContent = false)
+    public static Dictionary<string, QuestData.Quest> GetQuests(bool getHidden = false)
     {
         Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
@@ -18,6 +18,7 @@ public class QuestLoader {
         // Look in the user application data directory
         string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
         mkDir(dataLocation);
+        CleanTemp();
         // Get a list of quest directories (extract found packages)
         List<string> questDirectories = GetQuests(dataLocation);
 
@@ -32,8 +33,8 @@ public class QuestLoader {
             // Check quest is valid and of the right type
             if (q.valid && q.type.Equals(game.gameType.TypeName()))
             {
-                // Are all expansions selected?
-                if (q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0 || !checkContent)
+                // Is the quest hidden?
+                if (!q.hidden || getHidden)
                 {
                     // Add quest to quest list
                     quests.Add(p, q);
@@ -121,7 +122,13 @@ public class QuestLoader {
                     quests.Add(p);
             }
         }
+        ExtractPackages(path);
 
+        return quests;
+    }
+
+    public static void ExtractPackages(string path)
+    {
         // Find all packages at path
         string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
         // Extract all packages
@@ -154,8 +161,6 @@ public class QuestLoader {
                 ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
             }
         }
-
-        return quests;
     }
 
     // Attempt to create a directory

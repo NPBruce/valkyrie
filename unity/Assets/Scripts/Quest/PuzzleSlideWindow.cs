@@ -13,7 +13,7 @@ public class PuzzleSlideWindow
     {
         eventData = e;
         Game game = Game.Get();
-        game.cc.panDisable = true;
+        CameraController.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
@@ -33,13 +33,13 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        Game.Get().cc.panDisable = true;
+        CameraController.panDisable = true;
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
         // Puzzle goes here
         GameObject background = new GameObject("puzzleContent");
-        background.tag = "dialog";
+        background.tag = Game.DIALOG;
         RectTransform transBg = background.AddComponent<RectTransform>();
         background.transform.SetParent(Game.Get().uICanvas.transform);
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() * 2.5f, 18f * UIScaler.GetPixelsPerUnit());
@@ -57,7 +57,7 @@ public class PuzzleSlideWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(8.5f), 5f), new Vector2(3f, 2f), 
-            new StringKey(null, EventManager.SymbolReplace(questPuzzle.skill),false));
+            new StringKey(null, EventManager.OutputSymbolReplace(questPuzzle.skill),false));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
         db.AddBorder();
 
@@ -127,7 +127,7 @@ public class PuzzleSlideWindow
         for (int i = 0; i < 8; i++)
         {
             bLine[i] = new GameObject("PuzzleFrame" + i);
-            bLine[i].tag = "dialog";
+            bLine[i].tag = Game.DIALOG;
             bLine[i].AddComponent<RectTransform>();
             bLine[i].AddComponent<CanvasRenderer>();
             bLine[i].transform.SetParent(trans);
@@ -176,7 +176,7 @@ public class PuzzleSlideWindow
             borderColour = Color.red;
             bgColour = new Color(0.8f, 0.0f, 0f, 1f);
         }
-        blockGO.tag = "dialog";
+        blockGO.tag = Game.DIALOG;
 
         //Game game = Game.Get();
         blockGO.transform.parent = pos;

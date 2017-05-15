@@ -2,6 +2,9 @@
 using UnityEngine;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using System.IO;
+using System.Text.RegularExpressions;
+using System;
 
 // Class for managing quest events
 public class EventManager
@@ -19,7 +22,20 @@ public class EventManager
 
     public EventManager()
     {
+        Init(null);
+    }
+
+    public EventManager(Dictionary<string, string> data)
+    {
+        Init(data);
+    }
+
+    public void Init(Dictionary<string, string> data)
+    {
         game = Game.Get();
+
+        // This is filled out later but is required for loading saves
+        game.quest.eManager = this;
 
         events = new Dictionary<string, Event>();
         eventStack = new Stack<Event>();
@@ -46,6 +62,19 @@ public class EventManager
         {
             events.Add(kv.Key, new Peril(kv.Key));
         }
+
+        if (data != null && data.ContainsKey("queue"))
+        {
+            foreach (string s in data["queue"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            {
+                eventStack.Push(events[s]);
+            }
+        }
+        if (data != null && data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
+        {
+            currentEvent = events[data["currentevent"]];
+            ResumeEvent();
+        }
     }
 
     // Queue all events by trigger, optionally start
@@ -53,7 +82,7 @@ public class EventManager
     {
         foreach (KeyValuePair<string, Event> kv in events)
         {
-            if (kv.Value.qEvent.trigger.Equals(type))
+            if (kv.Value.qEvent != null && kv.Value.qEvent.trigger.Equals(type))
             {
                 QueueEvent(kv.Key, trigger);
             }
@@ -66,8 +95,15 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
-            return;
+            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
+            {
+                events.Add(name, new StartQuestEvent(name));
+            }
+            else
+            {
+                game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
+                return;
+            }
         }
 
         // Don't queue disabled events
@@ -97,6 +133,14 @@ public class EventManager
         Event e = eventStack.Pop();
         currentEvent = e;
 
+        // Move to another quest
+        if (e is StartQuestEvent)
+        {
+            // This loads the game
+            game.quest.ChangeQuest((e as StartQuestEvent).name);
+            return;
+        }
+
         // Event may have been disabled since added
         if (e.Disabled())
         {
@@ -112,15 +156,42 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+        }
+
+        // Set Music
+        if (e.qEvent.music.Count > 0)
+        {
+            List<string> music = new List<string>();
+            foreach (string s in e.qEvent.music)
+            {
+                if (game.cd.audio.ContainsKey(s))
+                {
+                    music.Add(game.cd.audio[s].file);
+                }
+                else
+                {
+                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s);
+                }
+            }
+            game.audioControl.Music(music, false);
         }
 
         // Perform var operations
         game.quest.vars.Perform(e.qEvent.operations);
+        // Update morale change
+        if (game.gameType is D2EGameType)
+        {
+            game.quest.AdjustMorale(0);
+        }
+        if (game.quest.vars.GetValue("$restock") == 1)
+        {
+            game.quest.GenerateItemSelection();
+        }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
-            Object.Destroy(go);
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+            UnityEngine.Object.Destroy(go);
 
         // If this is a monster event then add the monster group
         if (e is MonsterEvent)
@@ -168,8 +239,17 @@ public class EventManager
             game.tokenBoard.AddHighlight(e.qEvent);
         }
 
+        // Is this a shop?
+        List<string> itemList = new List<string>();
+        foreach (string s in e.qEvent.addComponents)
+        {
+            if (s.IndexOf("QItem") == 0)
+            {
+                itemList.Add(s);
+            }
+        }
         // Add board components
-        game.quest.Add(e.qEvent.addComponents);
+        game.quest.Add(e.qEvent.addComponents, itemList.Count > 1);
         // Remove board components
         game.quest.Remove(e.qEvent.removeComponents);
 
@@ -207,9 +287,14 @@ public class EventManager
             CameraController.SetCameraMax(e.qEvent.location);
         }
 
-        // Only raise dialog if there is text, otherwise auto confirm
-        if (!e.qEvent.display)
+        // Is this a shop?
+        if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
         {
+            game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+        }
+        else if (!e.qEvent.display)
+        {
+            // Only raise dialog if there is text, otherwise auto confirm
             EndEvent();
         }
         else
@@ -218,56 +303,132 @@ public class EventManager
         }
     }
 
-    // Event ended (pass or set as fail)
-    public void EndEvent(int state=0)
+    public void ResumeEvent()
+    {
+        Event e = currentEvent;
+        if (e is MonsterEvent)
+        {
+            // Display the location(s)
+            if (e.qEvent.locationSpecified && e.qEvent.display)
+            {
+                game.tokenBoard.AddMonster(e as MonsterEvent);
+            }
+        }
+
+        // Highlight a space on the board
+        if (e.qEvent.highlight)
+        {
+            game.tokenBoard.AddHighlight(e.qEvent);
+        }
+
+        if (e.qEvent is QuestData.Puzzle)
+        {
+            QuestData.Puzzle p = e.qEvent as QuestData.Puzzle;
+            if (p.puzzleClass.Equals("slide"))
+            {
+                new PuzzleSlideWindow(e);
+            }
+            if (p.puzzleClass.Equals("code"))
+            {
+                new PuzzleCodeWindow(e);
+            }
+            if (p.puzzleClass.Equals("image"))
+            {
+                new PuzzleImageWindow(e);
+            }
+            return;
+        }
+        new DialogWindow(e);
+    }
+
+    // Event ended
+    public void EndEvent(int state = 0)
+    {
+        EndEvent(currentEvent.qEvent, state);
+    }
+
+    // Event ended
+    public void EndEvent(QuestData.Event eventData, int state=0)
     {
         // Get list of next events
         List<string> eventList = new List<string>();
-        if (currentEvent.qEvent.nextEvent.Count > state)
+        if (eventData.nextEvent.Count > state)
         {
-            eventList = currentEvent.qEvent.nextEvent[state];
+            eventList = eventData.nextEvent[state];
         }
 
         // Only take enabled events from list
         List<string> enabledEvents = new List<string>();
         foreach (string s in eventList)
         {
-            if (!game.quest.eManager.events[s].Disabled())
+            // Check if the event doesn't exists - quest fault
+            if (!events.ContainsKey(s))
+            {
+                if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                {
+                    events.Add(s, new StartQuestEvent(s));
+                    enabledEvents.Add(s);
+                }
+                else
+                {
+                    game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                }
+            }
+            else if (!game.quest.eManager.events[s].Disabled())
             {
                 enabledEvents.Add(s);
             }
         }
 
-        // Are there any events?
-        if (enabledEvents.Count > 0)
-        {
-            // Are we picking at random?
-            if (currentEvent.qEvent.randomEvents)
-            {
-                currentEvent = null;
-                // Start a random event
-                game.quest.eManager.QueueEvent(enabledEvents[Random.Range(0, enabledEvents.Count)]);
-            }
-            else
-            {
-                currentEvent = null;
-                // Start the first valid event
-                game.quest.eManager.QueueEvent(enabledEvents[0]);
-
-            }
-            // Chained event ongoing
-            return;
-        }
-
         // Does this event end the quest?
-        if (currentEvent.qEvent.sectionName.IndexOf("EventEnd") == 0)
+        if (eventData.sectionName.IndexOf("EventEnd") == 0)
         {
             Destroyer.MainMenu();
             return;
         }
-        // Trigger a stacked event
+
         currentEvent = null;
+        // Are there any events?
+        if (enabledEvents.Count > 0)
+        {
+            // Are we picking at random?
+            if (eventData.randomEvents)
+            {
+                // Add a random event
+                game.quest.eManager.QueueEvent(enabledEvents[UnityEngine.Random.Range(0, enabledEvents.Count)], false);
+            }
+            else
+            {
+                // Add the first valid event
+                game.quest.eManager.QueueEvent(enabledEvents[0], false);
+            }
+        }
+
+        // Add any custom triggered events
+        AddCustomTriggers();
+
+        // Trigger a stacked event
         TriggerEvent();
+    }
+
+    public void AddCustomTriggers()
+    {
+        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("@"))
+        {
+            if (kv.Value > 0)
+            {
+                game.quest.vars.SetValue(kv.Key, 0);
+                EventTriggerType("Var" + kv.Key.Substring(1), false);
+            }
+        }
+        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("$@"))
+        {
+            if (kv.Value > 0)
+            {
+                game.quest.vars.SetValue(kv.Key, 0);
+                EventTriggerType("Var" + "$" + kv.Key.Substring(2), false);
+            }
+        }
     }
 
     // Event control class
@@ -291,14 +452,42 @@ public class EventManager
         {
             string text = qEvent.text.Translate(true);
 
+            // Find and replace {q:element with the name of the
+            // element
+
+            if (text.Contains("{c:"))
+            {
+                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
+                string replaceFrom;
+                string componentName;
+                string componentText;
+                foreach (Match oneVar in questItemRegex.Matches(text))
+                {
+                    replaceFrom = oneVar.Value;                    
+                    componentName = oneVar.Groups[1].Value;
+                    QuestData.QuestComponent component;
+                    if (game.quest.qd.components.TryGetValue(componentName, out component))
+                    {
+                        componentText = getComponentText(component);
+                        text = text.Replace(replaceFrom, componentText);
+                    }
+                }
+            }
+
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
-            text = text.Replace("{rnd:hero}", game.quest.GetRandomHero().heroData.name.Translate());
+
+            Quest.Hero h = game.quest.GetRandomHero();
+            if (text.Contains("{rnd:hero"))
+            {
+                h.selected = true;
+            }
+            text = text.Replace("{rnd:hero}", h.heroData.name.Translate());
 
             // Random heroes can have custom lookups
             if (text.StartsWith("{rnd:hero:"))
             {
-                HeroData hero = game.quest.GetRandomHero().heroData;
+                HeroData hero = h.heroData;
                 int start = "{rnd:hero:".Length;
                 if (!hero.ContainsTrait("male"))
                 {
@@ -331,35 +520,58 @@ public class EventManager
                 text = text.Replace(toReplace, hero.name.Translate());
             }
 
-            // Random numbers in events (depreciated)
-            try
-            {
-                // Find first random number tag
-                int index = text.IndexOf("{rnd:");
-                // loop through event text
-                while (index != -1)
-                {
-                    // find end of tag
-                    string rand = text.Substring(index, text.IndexOf("}", index) + 1 - index);
-                    // find separator
-                    int separator = rand.IndexOf(":", 5);
-                    // Parse min and max
-                    int min, max;
-                    int.TryParse(rand.Substring(5, separator - 5), out min);
-                    int.TryParse(rand.Substring(separator + 1, rand.Length - separator - 2), out max);
-                    // Replace with random number
-                    text = text.Replace(rand, Random.Range(min, max + 1).ToString());
-                    //find next random tag
-                    index = text.IndexOf("{rnd:");
-                }
-            }
-            catch (System.Exception)
-            {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Invalid random clause in event dialog: " + text, true));
-            }
-
             // Fix new lines and replace symbol text with special characters
-            return SymbolReplace(text).Replace("\\n", "\n");
+            return OutputSymbolReplace(text).Replace("\\n", "\n");
+        }
+
+        /// <summary>
+        /// Get text related with selected component
+        /// </summary>
+        /// <param name="component">component to get text</param>
+        /// <returns>extracted text</returns>
+        private string getComponentText(QuestData.QuestComponent component)
+        {
+            switch (component.GetType().Name)
+            {
+                case "Event":
+                    if(!game.quest.heroSelection.ContainsKey(component.sectionName) || game.quest.heroSelection[component.sectionName].Count == 0)
+                    {
+                        return component.sectionName;
+                    }
+                    return game.quest.heroSelection[component.sectionName][0].heroData.name.Translate();
+                case "Tile":
+                    // Replaced with the name of the Tile
+                    return game.cd.tileSides[((QuestData.Tile)component).tileSideName].name.Translate();
+                case "CustomMonster":
+                    // Replaced with the custom nonster name
+                    return ((QuestData.CustomMonster)component).monsterName.Translate();
+                case "Spawn":
+                    if (!game.quest.monsterSelect.ContainsKey(component.sectionName))
+                    {
+                        return component.sectionName;
+                    }
+                    // Replaced with the text shown in the spawn
+                    string monsterName = game.quest.monsterSelect[component.sectionName];
+                    if (monsterName.StartsWith("Custom")) {
+                        return ((QuestData.CustomMonster)game.quest.qd.components[monsterName]).monsterName.Translate();
+                    } else {
+                        return game.cd.monsters[game.quest.monsterSelect[component.sectionName]].name.Translate();
+                    }
+                case "QItem":
+                    if (!game.quest.itemSelect.ContainsKey(component.sectionName))
+                    {
+                        return component.sectionName;
+                    }
+                    // Replaced with the first element in the list
+                    return game.cd.items[game.quest.itemSelect[component.sectionName]].name.Translate();
+                default:
+                    return component.sectionName;
+            }
+        }
+
+        public static explicit operator Event(QuestData.QuestComponent v)
+        {
+            throw new NotImplementedException();
         }
 
         public List<DialogWindow.EventButton> GetButtons()
@@ -389,6 +601,20 @@ public class EventManager
             {
                 foreach (string s in l)
                 {
+                    // Check if the event doesn't exists - quest fault
+                    if (!game.quest.eManager.events.ContainsKey(s))
+                    {
+                        if (File.Exists(game.quest.questPath + "/" + s))
+                        {
+                            game.quest.eManager.events.Add(s, new StartQuestEvent(s));
+                            return true;
+                        }
+                        else
+                        {
+                            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                            return false;
+                        }
+                    }
                     if (!game.quest.eManager.events[s].Disabled()) return true;
                 }
             }
@@ -397,9 +623,24 @@ public class EventManager
         }
 
         // Is this event disabled?
-        public bool Disabled()
+        virtual public bool Disabled()
         {
             return !game.quest.vars.Test(qEvent.conditions);
+        }
+    }
+
+    public class StartQuestEvent : Event
+    {
+        public string name;
+
+        public StartQuestEvent(string n) : base(n)
+        {
+            name = n;
+        }
+
+        override public bool Disabled()
+        {
+            return false;
         }
     }
 
@@ -462,8 +703,32 @@ public class EventManager
         }
     }
 
-    // Replace symbol markers with special characters
-    public static string SymbolReplace(string input)
+
+    public override string ToString()
+    {
+        //Game game = Game.Get();
+        string nl = System.Environment.NewLine;
+        // General quest state block
+        string r = "[EventManager]" + nl;
+        r += "queue=";
+        foreach (Event e in eventStack.ToArray())
+        {
+            r += e.qEvent.sectionName + " ";
+        }
+        r += nl;
+        if (currentEvent != null)
+        {
+            r += "currentevent=" + currentEvent.qEvent.sectionName + nl;
+        }
+        return r;
+    }
+
+    /// <summary>
+    /// Replace symbol markers with special characters to be shown in Quest
+    /// </summary>
+    /// <param name="input">text to show</param>
+    /// <returns></returns>
+    public static string OutputSymbolReplace(string input)
     {
         string output = input;
         Game game = Game.Get();
@@ -523,5 +788,81 @@ public class EventManager
 
         return output;
     }
+
+    /// <summary>
+    /// Replace symbol markers with special characters to be stored in editor
+    /// </summary>
+    /// <param name="input">text to store</param>
+    /// <returns></returns>
+    public static string InputSymbolReplace(string input)
+    {
+        string output = input;
+        Game game = Game.Get();        
+
+        output = output.Replace("≥", "{heart}");
+        output = output.Replace("∏", "{fatigue}");
+        output = output.Replace("∂", "{might}");
+        if (game.gameType is MoMGameType)
+        {
+            output = output.Replace("","{will}");
+            output = output.Replace("","{action}");
+        }
+        else
+        {
+            output = output.Replace("π","{will}");
+            output = output.Replace("∞","{action}");
+        }
+        output = output.Replace("∑", "{knowledge}");
+        output = output.Replace("μ", "{awareness}");
+        output = output.Replace("≤","{shield}" );
+        output = output.Replace( "±","{surge}");
+        output = output.Replace( "","{strength}");
+        output = output.Replace( "","{agility}");
+        output = output.Replace("","{lore}" );
+        output = output.Replace("","{influence}" );
+        output = output.Replace("","{observation}" );
+        output = output.Replace( "","{success}");
+        output = output.Replace("","{clue}" );
+        output = output.Replace("","{MAD01}");
+        output = output.Replace("","{MAD06}");
+        output = output.Replace("","{MAD09}");
+        output = output.Replace("","{MAD20}");
+        output = output.Replace("","{MAD21}");
+        output = output.Replace("","{MAD22}");
+        output = output.Replace("", "{MAD23}");
+
+        return output;
+    }
+
+    public static readonly Dictionary<string, Dictionary<string, string>> CHARS_MAP =
+        new Dictionary<string, Dictionary<string, string>>()
+                {
+                    { "D2E", new Dictionary<string,string>()
+                    {
+                        {"≥","{heart}"},
+                        {"∏","{fatigue}"},
+                        {"∂","{might}"},
+                        {"π","{will}"},
+                        {"∞","{action}"},
+                        {"∑","{knowledge}"},
+                        {"μ","{awareness}"},
+                        {"≤","{shield}" },
+                        {"±","{surge}"},
+                        {"Rnd","{rnd:hero}"}
+                    } },
+                    { "MoM", new Dictionary<string,string>()
+                    {
+                        {"","{will}"},
+                        {"","{action}" },
+                        {"","{strength}"},
+                        {"","{agility}"},
+                        {"","{lore}"},
+                        {"","{influence}"},
+                        {"","{observation}"},
+                        {"","{success}"},
+                        {"","{clue}"},
+                        {"Rnd","{rnd:hero}"}
+                    } }
+                };
 }
 

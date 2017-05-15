@@ -37,7 +37,9 @@ public class QuestDownload : MonoBehaviour
     public void DownloadDictionary()
     {
         remoteManifest = IniRead.ReadFromString(download.text);
+        // Download only the current lang dictionary
         string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
+        // string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization." + game.currentLang + ".txt";
         StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
     }
 
@@ -95,6 +97,7 @@ public class QuestDownload : MonoBehaviour
 
         scrollRect.content = scrollInnerRect;
         scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
 
         TextButton tb;
         // Start here
@@ -136,7 +139,7 @@ public class QuestDownload : MonoBehaviour
                     tb = new TextButton(
                         new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                         new Vector2(3, 1.2f),
-                        new StringKey("val", "DELETE"),
+                        CommonStringKeys.DELETE,
                         delegate { Delete(file); },
                         Color.black, offset);
 
@@ -161,7 +164,7 @@ public class QuestDownload : MonoBehaviour
                     tb = new TextButton(
                         new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                         new Vector2(3, 1.2f),
-                        new StringKey("val", "DELETE"),
+                        CommonStringKeys.DELETE,
                         delegate { Delete(file); },
                         Color.black, offset);
 
@@ -216,7 +219,7 @@ public class QuestDownload : MonoBehaviour
                 tb = new TextButton(
                     new Vector2(UIScaler.GetWidthUnits() - 6, offset),
                     new Vector2(3, 1.2f),
-                    new StringKey("val", "DELETE"),
+                    CommonStringKeys.DELETE,
                     delegate { Delete(file); },
                     Color.black, offset);
 

@@ -25,7 +25,7 @@ public class MonsterCanvas : MonoBehaviour
     public void UpdateList()
     {
         // Clean up everything marked as 'monsters'
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("monsters"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.MONSTERS))
             Object.Destroy(go);
 
         // New list
@@ -37,6 +37,15 @@ public class MonsterCanvas : MonoBehaviour
         foreach (Quest.Monster m in game.quest.monsters)
         {
             icons.Add(new MonsterIcon(m, index++));
+        }
+
+        if (game.quest.monsters.Count - offset < 5)
+        {
+            offset = game.quest.monsters.Count - 5;
+            if (offset < 0)
+            {
+                offset = 0;
+            }
         }
 
         // Draw scoll buttons if required
@@ -63,12 +72,12 @@ public class MonsterCanvas : MonoBehaviour
         if (offset == 0)
         {
             TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { noAction(); }, Color.gray);
-            up.ApplyTag("monsters");
+            up.ApplyTag(Game.MONSTERS);
         }
         else
         { // Scroll up active
             TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { Move(-1); });
-            up.ApplyTag("monsters");
+            up.ApplyTag(Game.MONSTERS);
         }
     }
 
@@ -85,12 +94,12 @@ public class MonsterCanvas : MonoBehaviour
         if (game.quest.monsters.Count - offset <  6)
         {
             TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { noAction(); }, Color.gray);
-            down.ApplyTag("monsters");
+            down.ApplyTag(Game.MONSTERS);
         }
         else
         { // Scroll down active
             TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { Move(); });
-            down.ApplyTag("monsters");
+            down.ApplyTag(Game.MONSTERS);
         }
     }
 
@@ -167,7 +176,7 @@ public class MonsterCanvas : MonoBehaviour
             }
 
             GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
-            mImg.tag = "monsters";
+            mImg.tag = Game.MONSTERS;
             mImg.transform.parent = game.uICanvas.transform;
 
             RectTransform trans = mImg.AddComponent<RectTransform>();
@@ -188,7 +197,7 @@ public class MonsterCanvas : MonoBehaviour
             {
                 icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
                 GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
-                mImgFrame.tag = "monsters";
+                mImgFrame.tag = Game.MONSTERS;
                 mImgFrame.transform.parent = game.uICanvas.transform;
 
                 RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
@@ -210,7 +219,7 @@ public class MonsterCanvas : MonoBehaviour
                         new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), 
                         new StringKey(null,m.GetHealth().ToString(), false), 
                         delegate { MonsterDiag(); }, Color.red);
-                    tb.ApplyTag("monsters");
+                    tb.ApplyTag(Game.MONSTERS);
                 }
             }
 
@@ -218,7 +227,7 @@ public class MonsterCanvas : MonoBehaviour
             if (duplicateSprite != null)
             {
                 GameObject mImgDupe = new GameObject("monsterDupe" + m.monsterData.name);
-                mImgDupe.tag = "monsters";
+                mImgDupe.tag = Game.MONSTERS;
                 mImgDupe.transform.parent = game.uICanvas.transform;
 
                 RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
@@ -302,7 +311,7 @@ public class MonsterCanvas : MonoBehaviour
         public void MonsterDiag()
         {
             // If there are any other dialogs open just finish
-            if (GameObject.FindGameObjectWithTag("dialog") != null)
+            if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;
 
             Game game = Game.Get();

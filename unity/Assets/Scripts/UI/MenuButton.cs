@@ -23,13 +23,14 @@ public class MenuButton {
         }
 
         // Untag as dialog so this isn't cleared away
-        qb.ApplyTag("questui");
+        qb.ApplyTag(Game.QUESTUI);
     }
 
     // When pressed bring up the approriate menu
     public void Menu()
     {
         Game game = Game.Get();
+        CameraController.panDisable = true;
         if (game.editMode)
         {
             EditorMenu.Create();

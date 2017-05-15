@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // In quest game menu
 public class GameMenu {
@@ -12,16 +13,23 @@ public class GameMenu {
     public static void Create()
     {
         Game game = Game.Get();
-        if (GameObject.FindGameObjectWithTag("dialog") != null)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
 
-        if (GameObject.FindGameObjectWithTag("activation") != null)
+        if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
             return;
         }
 
+        // Take screen shot for save before menu is drawn
+        game.cc.TakeScreenshot(delegate { Draw(); });
+    }
+
+    public static void Draw()
+    {
+        Game game = Game.Get();
         // Border around menu items
         DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), StringKey.NULL);
         db.AddBorder();
@@ -34,7 +42,7 @@ public class GameMenu {
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f), MAIN_MENU, delegate { Destroyer.MainMenu(); });
+        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f), MAIN_MENU, delegate { Quit(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
@@ -47,12 +55,19 @@ public class GameMenu {
     public static void Undo()
     {
         Game game = Game.Get();
+        Destroyer.Dialog();
         game.quest.Undo();
     }
 
     public static void Save()
     {
-        SaveManager.Save();
         Destroyer.Dialog();
+        new SaveSelectScreen(true);
+    }
+
+    public static void Quit()
+    {
+        Destroyer.Dialog();
+        SaveManager.Save(0, true);
     }
 }

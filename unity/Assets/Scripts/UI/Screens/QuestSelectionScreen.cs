@@ -16,11 +16,11 @@ namespace Assets.Scripts.UI.Screens
             questList = ql;
             Game game = Game.Get();
             // If a dialog window is open we force it closed (this shouldn't happen)
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Object.Destroy(go);
 
             // Clean up downloader if present
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("questui"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
                 Object.Destroy(go);
 
             // Heading
@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI.Screens
 
             scrollRect.content = scrollInnerRect;
             scrollRect.horizontal = false;
+            scrollRect.scrollSensitivity = 27f;
 
             TextButton tb;
             // Start here
@@ -154,7 +155,7 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Dialog();
             GameObject download = new GameObject("downloadPage");
-            download.tag = "questui";
+            download.tag = Game.QUESTUI;
             download.AddComponent<QuestDownload>();
         }
 
@@ -163,7 +164,7 @@ namespace Assets.Scripts.UI.Screens
         {
             Game game = Game.Get();
 
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("dialog"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Object.Destroy(go);
 
             game.StartQuest(questList[key]);
