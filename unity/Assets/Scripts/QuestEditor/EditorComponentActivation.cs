@@ -163,7 +163,7 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateAbility()
     {
-        if (!abilityDBE.Text.Equals(""))
+        if (abilityDBE.CheckTextChangedAndNotEmpty())
         {
             //insert the text in the current language
             LocalizationRead.updateScenarioText(activationComponent.ability_key, abilityDBE.Text);
@@ -172,12 +172,12 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateMoveButton()
     {
-        if (!moveButtonDBE.Text.Equals(""))
+        if (moveButtonDBE.CheckTextChangedAndNotEmpty())
         {
             //insert the text in the current language
             LocalizationRead.updateScenarioText(activationComponent.movebutton_key, moveButtonDBE.Text);
         }
-        else
+        else if (moveButtonDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(activationComponent.movebutton_key);
         }
@@ -185,11 +185,11 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateMasterActions()
     {
-        if (!masterActionsDBE.Text.Equals(""))
+        if (masterActionsDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(activationComponent.master_key, masterActionsDBE.Text);
         }
-        else
+        else if(masterActionsDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(activationComponent.master_key);
         }
@@ -197,11 +197,11 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateMinionActions()
     {
-        if (!minionActionsDBE.Text.Equals(""))
+        if (minionActionsDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(activationComponent.minion_key, minionActionsDBE.Text);
         }
-        else
+        else if (minionActionsDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(activationComponent.minion_key);
         }
@@ -209,11 +209,11 @@ public class EditorComponentActivation : EditorComponent
 
     public void UpdateMove()
     {
-        if (!moveDBE.Text.Equals(""))
+        if (moveDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(activationComponent.move_key, moveDBE.Text);
         }
-        else
+        else if (moveDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(activationComponent.move_key);
         }

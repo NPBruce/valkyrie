@@ -331,7 +331,7 @@ public class EditorComponentEvent : EditorComponent
 
     public void UpdateText()
     {
-        if (!eventTextDBE.Text.Equals(""))
+        if (eventTextDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
             eventComponent.display = true;
@@ -344,7 +344,7 @@ public class EditorComponentEvent : EditorComponent
                     CONTINUE.Translate());
             }
         }
-        else
+        else if (eventTextDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
             eventComponent.display = false;
