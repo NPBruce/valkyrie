@@ -103,22 +103,8 @@ public class QuestData
         }
 
         // Reset scenario dict
-        LocalizationRead.scenarioDict = null;
-
-        DictionaryI18n partialDict;
-
-        foreach (string file in localizationFiles)
-        {
-            partialDict = LocalizationRead.ReadFromFilePath(file, game.currentLang, game.currentLang);
-            if (LocalizationRead.scenarioDict == null)
-            {
-                LocalizationRead.scenarioDict = partialDict;
-                    
-            } else
-            {
-                LocalizationRead.scenarioDict.AddRaw(partialDict);
-            }
-        }
+        LocalizationRead.scenarioDict = DictionaryI18n.ReadFromFileList
+            ("",localizationFiles,game.currentLang,game.currentLang);
 
         foreach (string f in iniFiles)
         {
@@ -1783,8 +1769,6 @@ public class QuestData
             //Read the localization data
             Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
 
-            DictionaryI18n partialLocalizationDict;
-
             if (localizationData == null || localizationData.Keys.Count == 0)
             {
                 localizationDict = new DictionaryI18n(
@@ -1792,20 +1776,9 @@ public class QuestData
             }
             else
             {
-                foreach (string localizationFile in localizationData.Keys)
-                {
-                    partialLocalizationDict =
-                            LocalizationRead.ReadFromFilePath(path + "/" + localizationFile, defaultLanguage, Game.Get().currentLang);
+                localizationDict = DictionaryI18n.ReadFromFileList
+                    (path + "/", localizationData.Keys, defaultLanguage, Game.Get().currentLang);
 
-                    if (localizationDict == null)
-                    {
-                        localizationDict = partialLocalizationDict;
-                    }
-                    else
-                    {
-                        localizationDict.AddRaw(partialLocalizationDict);
-                    }
-                }
                 localizationDict.setDefaultLanguage(defaultLanguage);
                 localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }

@@ -834,7 +834,8 @@ public class QuestEditorData {
             if (kv.Key.IndexOf(type) == 0)
             {
                 toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-                toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
+                // Disabled elements in selection list
+                toDelete.Add(new EditorSelectionList.SelectionListEntry(null));
             }
         }
         // Create list for user
@@ -853,7 +854,8 @@ public class QuestEditorData {
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             toDelete.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            toDelete.Add(new EditorSelectionList.SelectionListEntry(""));
+            // Disabled elements in selection list
+            toDelete.Add(new EditorSelectionList.SelectionListEntry(null));
         }
         // Create list for user
         esl = new EditorSelectionList(COMPONENT_TO_DELETE, toDelete, delegate { SelectToDelete(); });
@@ -864,6 +866,9 @@ public class QuestEditorData {
     public void SelectToDelete()
     {
         Game game = Game.Get();
+        Destroyer.Dialog();
+
+        if (esl.selection.Length == 0) return;
 
         // Remove all references to the deleted component
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -877,12 +882,10 @@ public class QuestEditorData {
             game.quest.qd.components.Remove(esl.selection);
         }
 
-        LocalizationRead.scenarioDict.RemoveKeyPrefix(esl.selection);
+        LocalizationRead.scenarioDict.RemoveKeyPrefix(esl.selection + ".");
 
         // Clean up the current quest environment
         game.quest.Remove(esl.selection);
-
-        Destroyer.Dialog();
 
         // If we deleted the selected item, go back to the last item
         if (selection.name.Equals(esl.selection))

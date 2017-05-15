@@ -83,6 +83,8 @@ public class QuestEditor {
                         Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization." + language + ".txt",
                         string.Join(System.Environment.NewLine, localization_files[language].ToArray()));
                 }
+
+                questData.AppendLine();
             }
         }
         catch (System.Exception)

@@ -55,6 +55,7 @@ public class GameMenu {
     public static void Undo()
     {
         Game game = Game.Get();
+        Destroyer.Dialog();
         game.quest.Undo();
     }
 
