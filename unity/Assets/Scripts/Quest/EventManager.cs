@@ -34,6 +34,9 @@ public class EventManager
     {
         game = Game.Get();
 
+        // This is filled out later but is required for loading saves
+        game.quest.eManager = this;
+
         events = new Dictionary<string, Event>();
         eventStack = new Stack<Event>();
 
