@@ -177,6 +177,21 @@ public class DialogBoxEditable
         return false;
     }
 
+    /// <summary>
+    /// Check if the text of a PaneledDialogBoxEditable was emptied.
+    /// Updates the lastText
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckTextEmptied()
+    {
+        if (uiInput.text.Equals(""))
+        {
+            lastText = "";
+            return true;
+        }
+        return false;
+    }
+
     public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)
     {
         this.textObj.GetComponent<UnityEngine.UI.Text>().material = mat;
