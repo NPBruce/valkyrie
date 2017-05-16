@@ -68,7 +68,7 @@ public class EditorComponentEvent : EditorComponent
         db.ApplyTag(Game.EDITOR);
 
         eventTextDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             eventComponent.text.Translate(true),
             delegate { UpdateText(); });
         eventTextDBE.ApplyTag(Game.EDITOR);
@@ -98,44 +98,41 @@ public class EditorComponentEvent : EditorComponent
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        db = new DialogBox(new Vector2(1, offset), new Vector2(10, 1),
+        db = new DialogBox(new Vector2(1.5f, offset), new Vector2(10f, 1),
             new StringKey("val", "X_COLON", MUSIC));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(10, offset++), new Vector2(1, 1), CommonStringKeys.PLUS,
+        tb = new TextButton(new Vector2(11.5f, offset++), new Vector2(1, 1), CommonStringKeys.PLUS,
                     delegate { AddMusic(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
         int index;
-        for (index = 0; index < 12; index++)
+        for (index = 0; index < eventComponent.music.Count; index++)
         {
-            if (eventComponent.music.Count > index)
-            {
-                int i = index;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), CommonStringKeys.MINUS,
-                    delegate { RemoveMusic(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag(Game.EDITOR);
-                db = new DialogBox(new Vector2(1, offset), new Vector2(10, 1),
-                    new StringKey(null, eventComponent.music[index], false)
-                    );
-                db.AddBorder();
-                db.background.transform.parent = scrollArea.transform;
-                db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(11, offset), new Vector2(1, 1), CommonStringKeys.PLUS,
-                    delegate { AddMusic(i + 1); }, Color.green);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag(Game.EDITOR);
-                offset++;
-            }
+            int i = index;
+            tb = new TextButton(new Vector2(0.5f, offset), new Vector2(1, 1), CommonStringKeys.MINUS,
+                delegate { RemoveMusic(i); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+            db = new DialogBox(new Vector2(1.5f, offset), new Vector2(10, 1),
+                new StringKey(null, eventComponent.music[index], false)
+                );
+            db.AddBorder();
+            db.background.transform.parent = scrollArea.transform;
+            db.ApplyTag(Game.EDITOR);
+            tb = new TextButton(new Vector2(11.5f, offset), new Vector2(1, 1), CommonStringKeys.PLUS,
+                delegate { AddMusic(i + 1); }, Color.green);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+            offset++;
         }
+        offset++;
 
-        offset += 2;
         if (game.gameType is D2EGameType)
         {
             db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
@@ -165,9 +162,8 @@ public class EditorComponentEvent : EditorComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
-            offset ++;
+            offset += 2;
         }
-        offset++;
 
         float componentsOffset = offset;
         db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), ADD_COMPONENTS);
@@ -180,54 +176,48 @@ public class EditorComponentEvent : EditorComponent
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        for (index = 0; index < 12; index++)
+        for (index = 0; index < eventComponent.addComponents.Length; index++)
         {
-            if (eventComponent.addComponents.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
-                    new StringKey(null,eventComponent.addComponents[index],false)
-                    );
-                db.AddBorder();
-                db.background.transform.parent = scrollArea.transform;
-                db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
-                    delegate { RemoveVisibility(i, true); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag(Game.EDITOR);
-            }
+            int i = index;
+            db = new DialogBox(new Vector2(0.5f, offset), new Vector2(8.5f, 1), 
+                new StringKey(null,eventComponent.addComponents[index],false)
+                );
+            db.AddBorder();
+            db.background.transform.parent = scrollArea.transform;
+            db.ApplyTag(Game.EDITOR);
+            tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
+                delegate { RemoveVisibility(i, true); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
         }
 
-        db = new DialogBox(new Vector2(10, componentsOffset), new Vector2(9, 1), REMOVE_COMPONENTS);
+        db = new DialogBox(new Vector2(10, componentsOffset), new Vector2(8.5f, 1), REMOVE_COMPONENTS);
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, componentsOffset++), new Vector2(1, 1), 
+        tb = new TextButton(new Vector2(18.5f, componentsOffset++), new Vector2(1, 1), 
             CommonStringKeys.PLUS, 
             delegate { AddVisibility(false); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        for (index = 0; index < 12; index++)
+        for (index = 0; index < eventComponent.removeComponents.Length; index++)
         {
-            if (eventComponent.removeComponents.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(10, componentsOffset), new Vector2(9, 1), 
-                    new StringKey(null,eventComponent.removeComponents[index],false)
-                    );
-                db.AddBorder();
-                db.background.transform.parent = scrollArea.transform;
-                db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(19, componentsOffset++), new Vector2(1, 1), 
-                    CommonStringKeys.MINUS, 
-                    delegate { RemoveVisibility(i, false); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag(Game.EDITOR);
-            }
+            int i = index;
+            db = new DialogBox(new Vector2(10, componentsOffset), new Vector2(8.5f, 1), 
+                new StringKey(null,eventComponent.removeComponents[index],false)
+                );
+            db.AddBorder();
+            db.background.transform.parent = scrollArea.transform;
+            db.ApplyTag(Game.EDITOR);
+            tb = new TextButton(new Vector2(18.5f, componentsOffset++), new Vector2(1, 1), 
+                CommonStringKeys.MINUS, 
+                delegate { RemoveVisibility(i, false); }, Color.red);
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
         }
 
         if (componentsOffset > offset) return offset = componentsOffset;
@@ -243,18 +233,16 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddPosition(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), CommonStringKeys.POSITION);
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1),
-            CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(4, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1),
-            CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
+        tb = new TextButton(new Vector2(9, offset), new Vector2(4, 1), CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
@@ -269,23 +257,23 @@ public class EditorComponentEvent : EditorComponent
         TextButton tb = null;
         if (eventComponent.minCam)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), MIN_CAM, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), MIN_CAM, delegate { PositionTypeCycle(); });
         }
         else if (eventComponent.maxCam)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), MAX_CAM, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), MAX_CAM, delegate { PositionTypeCycle(); });
         }
         else if (!eventComponent.locationSpecified)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), UNUSED, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), UNUSED, delegate { PositionTypeCycle(); });
         }
         else if (eventComponent.highlight)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), HIGHLIGHT, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), HIGHLIGHT, delegate { PositionTypeCycle(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), CAMERA, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), CAMERA, delegate { PositionTypeCycle(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -299,31 +287,36 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddNextEventComponents(float offset)
     {
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(8, 1), new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(3, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
+        TextButton tb = new TextButton(new Vector2(8, offset), new Vector2(4, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        DialogBox db = new DialogBox(new Vector2(3, offset), new Vector2(3, 1), new StringKey("val","X_COLON",QUOTA));
+        db = new DialogBox(new Vector2(12, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
         // Quota dont need translation
         quotaDBE = new DialogBoxEditable(
-            new Vector2(6, offset), new Vector2(2, 1),
+            new Vector2(16, offset), new Vector2(2, 1),
             eventComponent.quota.ToString(), false, 
             delegate { SetQuota(); });
         quotaDBE.background.transform.parent = scrollArea.transform;
         quotaDBE.ApplyTag(Game.EDITOR);
         quotaDBE.AddBorder();
+        offset += 2;
 
-        db = new DialogBox(new Vector2(8, offset), new Vector2(11, 1), new StringKey("val","X_COLON",BUTTONS));
+        db = new DialogBox(new Vector2(1.5f, offset), new Vector2(17, 1), new StringKey("val","X_COLON",BUTTONS));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1),
+        tb = new TextButton(new Vector2(18.5f, offset++), new Vector2(1, 1),
             CommonStringKeys.PLUS, delegate { AddButton(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -345,14 +338,14 @@ public class EditorComponentEvent : EditorComponent
             c[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
             c[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
 
-            tb = new TextButton(new Vector2(0, offset), new Vector2(3, 1),
+            tb = new TextButton(new Vector2(0.5f, offset), new Vector2(3, 1),
                 new StringKey("val", "COLOR"), delegate { SetButtonColor(buttonTmp); }, c);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
 
             DialogBoxEditable buttonEdit = new DialogBoxEditable(
-                new Vector2(3, offset++), new Vector2(16, 1), 
+                new Vector2(3.5f, offset++), new Vector2(15, 1), 
                 buttonLabel.Translate(), false,
                 delegate { UpdateButtonLabel(buttonTmp); });
             buttonEdit.background.transform.parent = scrollArea.transform;
@@ -365,24 +358,24 @@ public class EditorComponentEvent : EditorComponent
             {
                 int i = index++;
                 string tmpName = s;
-                tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1),
+                tb = new TextButton(new Vector2(0.5f, offset), new Vector2(1, 1),
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(1, offset), new Vector2(18, 1), 
+                tb = new TextButton(new Vector2(1.5f, offset), new Vector2(17, 1), 
                     new StringKey(null,s,false), delegate { QuestEditorData.SelectComponent(tmpName); });
                 tb.background.transform.parent = scrollArea.transform;
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1),
+                tb = new TextButton(new Vector2(18.5f, offset++), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
             }
             int tmp = index;
-            tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1),
+            tb = new TextButton(new Vector2(0.5f, offset), new Vector2(1, 1),
                 CommonStringKeys.PLUS, delegate { AddEvent(tmp, buttonTmp); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
@@ -392,7 +385,7 @@ public class EditorComponentEvent : EditorComponent
 
         if (lastButtonOffset != 0)
         {
-            tb = new TextButton(new Vector2(19, lastButtonOffset), new Vector2(1, 1),
+            tb = new TextButton(new Vector2(18.5f, lastButtonOffset), new Vector2(1, 1),
                 CommonStringKeys.MINUS, delegate { RemoveButton(); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
@@ -404,12 +397,12 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventVarComponents(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1), 
+        DialogBox db = new DialogBox(new Vector2(0.5f, offset), new Vector2(18, 1), 
             new StringKey("val","X_COLON",TESTS));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+        TextButton tb = new TextButton(new Vector2(18.5f, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -419,7 +412,7 @@ public class EditorComponentEvent : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
             QuestData.Event.VarOperation tmp = op;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
+            db = new DialogBox(new Vector2(0.5f, offset), new Vector2(8.5f, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
             db.background.transform.parent = scrollArea.transform;
@@ -429,12 +422,12 @@ public class EditorComponentEvent : EditorComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
+            tb = new TextButton(new Vector2(11, offset), new Vector2(7.5f, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+            tb = new TextButton(new Vector2(18.5f, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
@@ -443,12 +436,12 @@ public class EditorComponentEvent : EditorComponent
         }
 
         offset++;
-        db = new DialogBox(new Vector2(0, offset), new Vector2(19, 1),
+        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(18, 1),
             new StringKey("val","X_COLON",ASSIGN));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+        tb = new TextButton(new Vector2(18.5f, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddAssignOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -458,7 +451,7 @@ public class EditorComponentEvent : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
             QuestData.Event.VarOperation tmp = op;
-            db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1),
+            db = new DialogBox(new Vector2(0.5f, offset), new Vector2(8.5f, 1),
                 new StringKey(null,op.var,false));
             db.AddBorder();
             db.background.transform.parent = scrollArea.transform;
@@ -468,12 +461,12 @@ public class EditorComponentEvent : EditorComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(11, offset), new Vector2(8, 1),
+            tb = new TextButton(new Vector2(11, offset), new Vector2(7.5f, 1),
                 new StringKey(null,op.value, false), delegate { SetValue(tmp); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+            tb = new TextButton(new Vector2(18.5f, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { RemoveOp(tmp); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.transform.parent = scrollArea.transform;

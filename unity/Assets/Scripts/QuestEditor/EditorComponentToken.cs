@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -25,16 +25,20 @@ public class EditorComponentToken : EditorComponentEvent
     {
         tokenComponent = component as QuestData.Token;
 
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
-            new StringKey("val", "ROTATION", 
-            new StringKey(null, tokenComponent.rotation.ToString(), false)),
-            delegate { Rotate(); });
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        TextButton tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1),
+            new StringKey(null, tokenComponent.rotation.ToString() + "˚", false), delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), 
+        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", new StringKey("val", "TYPE")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        tb = new TextButton(new Vector2(4, offset), new Vector2(12, 1), 
             new StringKey(null, tokenComponent.tokenName,false), delegate { Type(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;

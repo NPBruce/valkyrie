@@ -18,8 +18,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey EXIT = new StringKey(VAL,"EXIT");
         public static readonly StringKey E = new StringKey(VAL, "E");
         public static readonly StringKey POSITION = new StringKey(VAL, "POSITION");
-        public static readonly StringKey POSITION_SNAP = new StringKey(null,"><",false);
-        public static readonly StringKey POSITION_FREE = new StringKey(null,"~", false);
+        public static readonly StringKey POSITION_SNAP = new StringKey(VAL, "POSITION_SNAP");
+        public static readonly StringKey POSITION_FREE = new StringKey(VAL, "POSITION_FREE");
         public static readonly StringKey PLUS = new StringKey(null,"+", false);
         public static readonly StringKey MINUS = new StringKey(null,"-", false);
         public static readonly StringKey HASH = new StringKey(null,"#", false);

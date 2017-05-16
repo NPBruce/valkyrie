@@ -57,12 +57,20 @@ public class EditorSelectionList
         Destroyer.Dialog();
         cancelCall = call;
 
+        float windowSize= 22;
+        if (traits.Count > 10)
+        {
+            windowSize = 36;
+        }
+
+        float windowEdge = UIScaler.GetHCenter(windowSize / -2);
+
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 30), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(windowEdge, 0), new Vector2(windowSize, 30), StringKey.NULL);
         db.AddBorder();
 
         // Title
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10), 0), new Vector2(20, 1), title);
 
         // Create a list of traits of all items in the list
         List<SelectionListEntry> filtered = items;
@@ -90,7 +98,7 @@ public class EditorSelectionList
         float offset = 2f;
         TextButton tb = null;
 
-        float hOffset = 22;
+        float hOffset = windowEdge + 1;
         // Create filter traits buttons
         foreach (string trait in traits)
         {
@@ -98,9 +106,9 @@ public class EditorSelectionList
             db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(VAL, trait));
             float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
             db.Destroy();
-            if (hOffset + width > 40)
+            if (hOffset + width > windowEdge + windowSize - 1)
             {
-                hOffset = 22;
+                hOffset = windowEdge + 1;
                 offset++;
             }
             string tmp = trait;
@@ -151,7 +159,7 @@ public class EditorSelectionList
             {
                 // Print the name but select the key
                 string key = filtered[i].key;
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
+                tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10), offset), new Vector2(20, 1), 
                     new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, filtered[i].color);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 if (key == null)
@@ -167,16 +175,16 @@ public class EditorSelectionList
         {
             // Prev button
             offset += 1;
-            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), new StringKey(null, "<", false), delegate { PreviousPage(); });
+            tb = new TextButton(new Vector2(windowEdge + 1, offset), new Vector2(3, 1), new StringKey(null, "<", false), delegate { PreviousPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             // Next button
-            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), new StringKey(null, ">", false), delegate { NextPage(); });
+            tb = new TextButton(new Vector2(windowEdge + windowSize - 4, offset), new Vector2(3, 1), new StringKey(null, ">", false), delegate { NextPage(); });
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
         // Cancel button
-        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
+        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }

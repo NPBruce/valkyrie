@@ -118,7 +118,7 @@ public class EditorComponentActivation : EditorComponent
         offset += 1;
 
         abilityDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.ability.Translate(true),
             delegate { UpdateAbility(); });
         abilityDBE.background.transform.parent = scrollArea.transform;
@@ -126,12 +126,12 @@ public class EditorComponentActivation : EditorComponent
         abilityDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(10, 1), UNABLE_BUTTON);
+        db = new DialogBox(new Vector2(0, offset), new Vector2(9.5f, 1), UNABLE_BUTTON);
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
         moveButtonDBE = new DialogBoxEditable(
-            new Vector2(10, offset), new Vector2(10, 1), 
+            new Vector2(9.5f, offset), new Vector2(10, 1), 
             activationComponent.moveButton.Translate(true),
             false, delegate { UpdateMoveButton(); });
         moveButtonDBE.background.transform.parent = scrollArea.transform;
@@ -139,13 +139,13 @@ public class EditorComponentActivation : EditorComponent
         moveButtonDBE.AddBorder();
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(20, 1), ATTACK_MESSAGE);
+        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(19, 1), ATTACK_MESSAGE);
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         offset += 1;
 
         masterActionsDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.background.transform.parent = scrollArea.transform;
@@ -158,7 +158,7 @@ public class EditorComponentActivation : EditorComponent
         db.ApplyTag(Game.EDITOR);
 
         moveDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.move.Translate(true),
             delegate { UpdateMove(); });
         moveDBE.background.transform.parent = scrollArea.transform;
