@@ -195,6 +195,26 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
 
+    // Create selection list for type of component
+    public static void ListType(string type)
+    {
+        Game game = Game.Get();
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        // This magic string is picked up later for object creation
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type.ToUpper() + "}"));
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value.dynamicType.Equals(type))
+            {
+                list.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            }
+        }
+        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+    }
+
     // Create selection list for tiles
     public static void ListTile()
     {

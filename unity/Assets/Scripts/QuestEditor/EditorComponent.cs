@@ -14,21 +14,37 @@ public class EditorComponent {
     // The name of the component
     public string name;
 
+    Game game;
     // This is used for creating the component rename dialog
     QuestEditorTextEdit rename;
     private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
 
+    // The editor scroll area;
+    GameObject scrollArea;
+    RectTransform scrollInnerRect;
+
     // Update redraws the selection UI
     virtual public void Update()
     {
+        game = Game.Get();
+        Vector2 scrollPos = Vector2.zero;
+        if (scollArea != null)
+        {
+            scrollPos = scrollArea.AddComponent<RectTransform>().AnchoredPosition
+        }
         Clean();
 
-        // Back button is common to all components
-        TextButton tb = new TextButton(new Vector2(0, 29), new Vector2(3, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-    }
+        AddScrollArea();
 
+        float offset = 0
+        offset = DrawComponentSelection(offset)
+
+        offset = AddSubComponents(offset);
+
+        SetScrollLimit(offset);
+        scrollArea.AddComponent<RectTransform>().AnchoredPosition = scrollPos
+        return offset;
+    }
     public void Clean()
     {
         // Clean up everything marked as 'dialog'
@@ -41,6 +57,87 @@ public class EditorComponent {
 
         // Dim all components, this component will be made solid later
         Game.Get().quest.ChangeAlphaAll(0.2f);
+    }
+
+    public void AddScrollArea()
+    {
+        DialogBox db = new DialogBox(new Vector2(0, 0), new Vector2(20, 30), StringKey.NULL);
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+        db.ApplyTag(Game.EDITOR);
+
+        scrollArea = new GameObject("scroll");
+        scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.parent = db.background.transform;
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (20 * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.parent = db.background.transform;
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 30 * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 20 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
+    }
+
+    virtual public float DrawComponentSelection(float offset)
+    {
+        // Back button
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(5, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(15, 1), new StringKey(null, "RENAME"), delegate { Rename(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        offset += 2;
+
+        db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, component.dynamicType.ToUpper()));
+        float typeWidth = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
+        db.Destroy();
+
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(typeWidth, 1), new StringKey(null, component.dynamicType.ToUpper()), delegate { QuestEditorData.TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(typeWidth, offset), new Vector2(20 - typeWidth, 1), 
+            new StringKey(null, name.Substring(component.dynamicType.Length),false), delegate { QuestEditorData.ListType(component.dynamicType); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        return offset + 2;
+    }
+
+    // Update redraws the selection UI
+    virtual public float AddSubComponents(float offset)
+    {
+        return offset;
+    }
+
+    public void SetScrollLimit(float limit)
+    {
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, limit * UIScaler.GetPixelsPerUnit());
     }
 
     // This is called by the editor

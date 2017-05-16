@@ -23,50 +23,57 @@ public class EditorComponentQuest : EditorComponent
         Update();
     }
 
-    override public void Update()
+    override public float AddSubComponents(float offset)
     {
-        base.Update();
         Game game = Game.Get();
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), 
-            CommonStringKeys.QUEST, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
 
         nameDBE = new DialogBoxEditable(
-            new Vector2(0, 2), new Vector2(20, 1), 
+            new Vector2(0, offset), new Vector2(20, 1), 
             game.quest.qd.quest.name.Translate(), false, 
             delegate { UpdateQuestName(); });
+        nameDBE.background.transform.parent = scrollArea.transform;
         nameDBE.ApplyTag(Game.EDITOR);
         nameDBE.AddBorder();
 
+        offset += 2;
+
         descriptionDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, 4), new Vector2(20, 6), 
+            new Vector2(0, offset), new Vector2(20, 6), 
             game.quest.qd.quest.description.Translate(true),
             delegate { UpdateQuestDesc(); });
+        descriptionDBE.background.transform.parent = scrollArea.transform;
         descriptionDBE.ApplyTag(Game.EDITOR);
         descriptionDBE.AddBorder();
 
+        offset += 7;
+
         if (game.quest.qd.quest.hidden)
         {
-            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });
+            tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
         }
         else
         {
-            tb = new TextButton(new Vector2(0, 11), new Vector2(8, 1), ACTIVE, delegate { ToggleHidden(); });
+            tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), ACTIVE, delegate { ToggleHidden(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
             tb.ApplyTag(Game.EDITOR);
         }
 
-        DialogBox db = new DialogBox(new Vector2(0, 13), new Vector2(9, 1), REQUIRED_EXPANSIONS);
+        offset += 2;
+
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), REQUIRED_EXPANSIONS);
+        db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(9, 13), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
+        tb = new TextButton(new Vector2(9, offset), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        int offset = 14;
+        offset += 1;
         int index;
         for (index = 0; index < 15; index++)
         {
@@ -76,13 +83,38 @@ public class EditorComponentQuest : EditorComponent
                 db = new DialogBox(new Vector2(0, offset), new Vector2(9, 1), 
                     new StringKey("val", game.quest.qd.quest.packs[index]));
                 db.AddBorder();
+                db.background.transform.parent = scrollArea.transform;
                 db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(9, offset++), new Vector2(1, 1),
+                tb = new TextButton(new Vector2(9, offset), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { QuestRemovePack(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
+                offset += 1;
             }
         }
+        offset += 1;
+
+        return offset;
+    }
+
+    override public float DrawComponentSelection(float offset)
+    {
+        // Back button
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(5, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        offset += 2;
+
+        tb = new TextButton(new Vector2(0, offset), new Vector2(6, 1), 
+            CommonStringKeys.QUEST, delegate { QuestEditorData.TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        return offset + 2;
     }
 
     public void UpdateQuestName()
