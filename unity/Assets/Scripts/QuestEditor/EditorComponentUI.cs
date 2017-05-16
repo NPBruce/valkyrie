@@ -32,9 +32,9 @@ public class EditorComponentUI : EditorComponentEvent
 
     override public float AddSubEventComponents(float offset)
     {
-        uiComponent = game.quest.qd.components[nameIn] as QuestData.UI;
+        uiComponent = component as QuestData.UI;
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
             new StringKey(null, uiComponent.imageName, false), delegate { SetImage(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -158,7 +158,7 @@ public class EditorComponentUI : EditorComponentEvent
             textDBE = new PaneledDialogBoxEditable(
                 new Vector2(0, offset), new Vector2(20, 6),
                 uiComponent.uiText.Translate(true),
-                delegate { UpdateText(); });
+                delegate { UpdateUIText(); });
             textDBE.background.transform.parent = scrollArea.transform;
             textDBE.ApplyTag(Game.EDITOR);
             textDBE.AddBorder();
@@ -197,7 +197,7 @@ public class EditorComponentUI : EditorComponentEvent
         }
         offset += 2;
 
-        DrawUIComponent()
+        DrawUIComponent();
 
         return offset;
     }
@@ -362,7 +362,7 @@ public class EditorComponentUI : EditorComponentEvent
         Update();
     }
 
-    public void UpdateText()
+    public void UpdateUIText()
     {
         Game game = Game.Get();
 

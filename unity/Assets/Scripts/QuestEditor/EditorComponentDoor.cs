@@ -32,9 +32,9 @@ public class EditorComponentDoor : EditorComponentEvent
 
     override public float AddSubEventComponents(float offset)
     {
-        doorComponent = game.quest.qd.components[nameIn] as QuestData.Door;
+        doorComponent = component as QuestData.Door;
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
             new StringKey("val","ROTATION",doorComponent.rotation), 
             delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();

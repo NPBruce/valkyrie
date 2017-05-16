@@ -206,7 +206,7 @@ public class QuestEditorData {
             new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value.dynamicType.Equals(type))
+            if (kv.Value.typeDynamic.Equals(type))
             {
                 list.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }

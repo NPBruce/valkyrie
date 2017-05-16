@@ -34,7 +34,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
     
     override public float AddSubEventComponents(float offset)
     {
-        puzzleComponent = game.quest.qd.components[nameIn] as QuestData.Puzzle;
+        puzzleComponent = component as QuestData.Puzzle;
 
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
             new StringKey("val", "X_COLON", PUZZLE_CLASS));

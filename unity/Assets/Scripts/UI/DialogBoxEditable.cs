@@ -6,7 +6,7 @@ using UnityEngine;
 public class DialogBoxEditable
 {
     private GameObject textObj;
-    private GameObject background;
+    public GameObject background;
     private GameObject inputObj;
     private RectangleBorder border;
 

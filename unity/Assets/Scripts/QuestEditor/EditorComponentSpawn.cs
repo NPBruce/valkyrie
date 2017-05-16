@@ -35,16 +35,16 @@ public class EditorComponentSpawn : EditorComponentEvent
     {
     }
 
-    virtual public void AddLocationType(float offset)
+    override public void AddLocationType(float offset)
     {
         TextButton tb = null;
-        if (!eventComponent.locationSpecified)
+        if (!component.locationSpecified)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), UNUSED, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), POSITION_TYPE_UNUSED, delegate { PositionTypeCycle(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), HIGHLIGHT, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), POSITION_TYPE_HIGHLIGHT, delegate { PositionTypeCycle(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -53,9 +53,9 @@ public class EditorComponentSpawn : EditorComponentEvent
     
     override public float AddSubEventComponents(float offset)
     {
-        spawnComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
+        spawnComponent = component as QuestData.Spawn;
 
-        db = new DialogBox(new Vector2(4, offset), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
+        DialogBox db = new DialogBox(new Vector2(4, offset), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
@@ -77,6 +77,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         healthHeroDBE.ApplyTag(Game.EDITOR);
         healthHeroDBE.AddBorder();
 
+        TextButton tb = null;
         if (game.gameType is D2EGameType)
         {
             if (spawnComponent.unique)
@@ -192,7 +193,7 @@ public class EditorComponentSpawn : EditorComponentEvent
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
-                traitOffset++
+                traitOffset++;
             }
         }
 
@@ -241,6 +242,7 @@ public class EditorComponentSpawn : EditorComponentEvent
     public float AddPlacementComponenets(float offset)
     {
         DialogBox db = null;
+        TextButton tb = null;
         for (int heroes = 2; heroes < 5; heroes++)
         {
             int h = heroes;

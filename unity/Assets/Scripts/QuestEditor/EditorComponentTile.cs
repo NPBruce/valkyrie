@@ -22,7 +22,7 @@ public class EditorComponentTile : EditorComponent
         Game game = Game.Get();
         CameraController.SetCamera(tileComponent.location);
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1), 
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1), 
             new StringKey(null, tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;

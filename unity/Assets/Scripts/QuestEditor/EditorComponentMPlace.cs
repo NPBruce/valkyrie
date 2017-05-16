@@ -23,7 +23,7 @@ public class EditorComponentMPlace : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);

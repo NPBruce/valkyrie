@@ -14,7 +14,7 @@ public class EditorComponentToken : EditorComponentEvent
 
     override public void Highlight()
     {
-        CameraController.SetCamera(eventComponent.location);
+        CameraController.SetCamera(component.location);
     }
 
     override public void AddLocationType(float offset)
@@ -23,9 +23,9 @@ public class EditorComponentToken : EditorComponentEvent
     
     override public float AddSubEventComponents(float offset)
     {
-        tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
+        tokenComponent = component as QuestData.Token;
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
             new StringKey("val", "ROTATION", 
             new StringKey(null, tokenComponent.rotation.ToString(), false)),
             delegate { Rotate(); });

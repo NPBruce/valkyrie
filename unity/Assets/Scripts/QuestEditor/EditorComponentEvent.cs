@@ -80,7 +80,7 @@ public class EditorComponentEvent : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(10, 1), 
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(10, 1), 
             new StringKey(null,eventComponent.trigger,false), delegate { SetTrigger(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -259,7 +259,7 @@ public class EditorComponentEvent : EditorComponent
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        AddLocationType(offset)
+        AddLocationType(offset);
 
         return offset + 2;
     }
@@ -301,7 +301,7 @@ public class EditorComponentEvent : EditorComponent
     {
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        tb = new TextButton(new Vector2(0, offset), new Vector2(3, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(3, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
@@ -364,14 +364,14 @@ public class EditorComponentEvent : EditorComponent
             foreach (string s in l)
             {
                 int i = index++;
-                string tmp = s;
+                string tmpName = s;
                 tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1),
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
                 tb = new TextButton(new Vector2(1, offset), new Vector2(18, 1), 
-                    new StringKey(null,s,false), delegate { QuestEditorData.SelectComponent(tmp); });
+                    new StringKey(null,s,false), delegate { QuestEditorData.SelectComponent(tmpName); });
                 tb.background.transform.parent = scrollArea.transform;
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.ApplyTag(Game.EDITOR);
@@ -409,7 +409,7 @@ public class EditorComponentEvent : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
+        TextButton tb = new TextButton(new Vector2(19, offset), new Vector2(1, 1), 
             CommonStringKeys.PLUS, delegate { AddTestOp(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -634,7 +634,7 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (string s in EditorComponentEventVars.ExtractVarsFromEvent(e))
+                foreach (string s in ExtractVarsFromEvent(e))
                 {
                     if (s[0] == '@')
                     {
@@ -713,13 +713,13 @@ public class EditorComponentEvent : EditorComponent
             audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
         }
 
-        audioESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "AUDIO")), audio, delegate { SelectMusic(index); });
-        audioESL.SelectItem();
+        musicESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "AUDIO")), audio, delegate { SelectMusic(index); });
+        musicESL.SelectItem();
     }
 
     public void SelectMusic(int index)
     {
-        eventComponent.music.Insert(index, audioESL.selection);
+        eventComponent.music.Insert(index, musicESL.selection);
         Update();
     }
 

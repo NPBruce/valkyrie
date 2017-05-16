@@ -9,7 +9,7 @@ using System;
 public class PaneledDialogBoxEditable
 {
     private GameObject textObj;
-    private GameObject background;
+    public GameObject background;
     private GameObject inputObj;
     private RectangleBorder border;
 

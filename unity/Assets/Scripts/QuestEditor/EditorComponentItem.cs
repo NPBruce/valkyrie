@@ -22,6 +22,7 @@ public class EditorComponentItem : EditorComponent
     {
         Game game = Game.Get();
 
+        TextButton tb = null;
         DialogBox db = null;
         if (game.gameType is MoMGameType)
         {
@@ -44,7 +45,7 @@ public class EditorComponentItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
-        offset += 1
+        offset += 1;
 
         for (int i = 0; i < itemComponent.itemName.Length; i++)
         {
@@ -103,7 +104,7 @@ public class EditorComponentItem : EditorComponent
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
-        traitOffset++
+        traitOffset++;
 
         for (int i = 0; i < itemComponent.traitpool.Length; i++)
         {
@@ -120,7 +121,7 @@ public class EditorComponentItem : EditorComponent
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
             }
-            traitOffset++
+            traitOffset++;
         }
 
         if (offset > traitOffset) return offset + 1;

@@ -46,7 +46,7 @@ public class EditorComponentQuest : EditorComponent
         descriptionDBE.AddBorder();
 
         offset += 7;
-
+        TextButton tb = null;
         if (game.quest.qd.quest.hidden)
         {
             tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), HIDDEN, delegate { ToggleHidden(); });

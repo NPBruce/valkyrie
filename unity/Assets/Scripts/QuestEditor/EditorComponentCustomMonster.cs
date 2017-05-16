@@ -51,7 +51,7 @@ public class EditorComponentCustomMonster : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(3, offset), new Vector2(17, 1), 
+        TextButton tb = new TextButton(new Vector2(3, offset), new Vector2(17, 1), 
             new StringKey(null,monsterComponent.baseMonster,false),  delegate { SetBase(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;

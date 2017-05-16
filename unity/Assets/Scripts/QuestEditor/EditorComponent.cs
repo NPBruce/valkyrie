@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 // Super class for all editor selectable components
 // Handles UI and editing
@@ -14,7 +15,7 @@ public class EditorComponent {
     // The name of the component
     public string name;
 
-    Game game;
+    public Game game;
     // This is used for creating the component rename dialog
     QuestEditorTextEdit rename;
     private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
@@ -24,32 +25,31 @@ public class EditorComponent {
     DialogBoxEditable commentDBE;
 
     // The editor scroll area;
-    GameObject scrollArea;
-    RectTransform scrollInnerRect;
+    public GameObject scrollArea;
+    public RectTransform scrollInnerRect;
 
     // Update redraws the selection UI
     virtual public void Update()
     {
         game = Game.Get();
         Vector2 scrollPos = Vector2.zero;
-        if (scollArea != null)
+        if (scrollArea != null)
         {
-            scrollPos = scrollArea.AddComponent<RectTransform>().AnchoredPosition
+            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition;
         }
         Clean();
 
         AddScrollArea();
 
-        float offset = 0
-        offset = DrawComponentSelection(offset)
+        float offset = 0;
+        offset = DrawComponentSelection(offset);
 
         offset = AddSubComponents(offset);
 
         offset = AddComment(offset);
 
         SetScrollLimit(offset);
-        scrollArea.AddComponent<RectTransform>().AnchoredPosition = scrollPos
-        return offset;
+        scrollArea.GetComponent<RectTransform>().anchoredPosition = scrollPos;
     }
     public void Clean()
     {
@@ -74,7 +74,7 @@ public class EditorComponent {
         scrollArea = new GameObject("scroll");
         scrollInnerRect = scrollArea.AddComponent<RectTransform>();
         scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (20 * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (20 * UIScaler.GetPixelsPerUnit()));
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
         GameObject scrollBarObj = new GameObject("scrollbar");
@@ -108,34 +108,34 @@ public class EditorComponent {
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(15, 1), new StringKey(null, "RENAME"), delegate { Rename(); });
+        tb = new TextButton(new Vector2(0, offset), new Vector2(15, 1), new StringKey(null, "RENAME"), delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "SOURCE")));
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "SOURCE"))));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
+        tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
-        db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, component.dynamicType.ToUpper()));
+        db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, component.typeDynamic.ToUpper()));
         float typeWidth = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
         db.Destroy();
 
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(typeWidth, 1), new StringKey(null, component.dynamicType.ToUpper()), delegate { QuestEditorData.TypeSelect(); });
+        tb = new TextButton(new Vector2(0, offset), new Vector2(typeWidth, 1), new StringKey(null, component.typeDynamic.ToUpper()), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(typeWidth, offset), new Vector2(20 - typeWidth, 1), 
-            new StringKey(null, name.Substring(component.dynamicType.Length),false), delegate { QuestEditorData.ListType(component.dynamicType); });
+            new StringKey(null, name.Substring(component.typeDynamic.Length),false), delegate { QuestEditorData.ListType(component.typeDynamic); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.background.transform.parent = scrollArea.transform;
@@ -151,25 +151,25 @@ public class EditorComponent {
 
     virtual public float AddComment(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT")));
+        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT"))));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
         // Quota dont need translation
-        quotaDBE = new DialogBoxEditable(
+        commentDBE = new DialogBoxEditable(
             new Vector2(0, offset), new Vector2(20, 5),
             component.comment, false, 
             delegate { SetComment(); });
-        quotaDBE.background.transform.parent = scrollArea.transform;
-        quotaDBE.ApplyTag(Game.EDITOR);
-        quotaDBE.AddBorder();
+        commentDBE.background.transform.parent = scrollArea.transform;
+        commentDBE.ApplyTag(Game.EDITOR);
+        commentDBE.AddBorder();
 
         return offset + 6;
     }
 
     public void SetComment()
     {
-        component.comment = quotaDBE.Text.Replace("\n", "\\n").Replace("\r", "\\n");
+        component.comment = commentDBE.Text.Replace("\n", "\\n").Replace("\r", "\\n");
         Update();
     }
 
@@ -278,11 +278,11 @@ public class EditorComponent {
         sourceESL.SelectItem();
     }
 
-    public void ChangeSource()
+    public void SelectSource()
     {
         if (sourceESL.selection.Equals("{NEW:File}"))
         {
-            sourceFileText = new QuestEditorTextEdit(FILE, "", delegate { NewSource(); });
+            sourceFileText = new QuestEditorTextEdit(new StringKey("val", "FILE"), "", delegate { NewSource(); });
             sourceFileText.EditText();
         }
         else
