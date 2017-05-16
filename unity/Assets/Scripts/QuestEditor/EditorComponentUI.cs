@@ -34,14 +34,18 @@ public class EditorComponentUI : EditorComponentEvent
     {
         uiComponent = component as QuestData.UI;
 
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(4.5f, offset), new Vector2(15, 1),
             new StringKey(null, uiComponent.imageName, false), delegate { SetImage(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "UNITS"));
+        db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "UNITS")));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
