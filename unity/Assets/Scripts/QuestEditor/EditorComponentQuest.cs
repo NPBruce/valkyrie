@@ -106,6 +106,11 @@ public class EditorComponentQuest : EditorComponent
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
+        tb = new TextButton(new Vector2(6, offset), new Vector2(8, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
         offset += 2;
 
         tb = new TextButton(new Vector2(0, offset), new Vector2(6, 1), 
@@ -115,6 +120,16 @@ public class EditorComponentQuest : EditorComponent
         tb.ApplyTag(Game.EDITOR);
 
         return offset + 2;
+    }
+
+    override public float AddComment(float offset)
+    {
+        return offset;
+    }
+
+    override public float AddSource(float offset)
+    {
+        return offset;
     }
 
     public void UpdateQuestName()

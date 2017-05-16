@@ -269,23 +269,23 @@ public class EditorComponentEvent : EditorComponent
         TextButton tb = null;
         if (eventComponent.minCam)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), MIN_CAM, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), MIN_CAM, delegate { PositionTypeCycle(); });
         }
         else if (eventComponent.maxCam)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), MAX_CAM, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), MAX_CAM, delegate { PositionTypeCycle(); });
         }
         else if (!eventComponent.locationSpecified)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), UNUSED, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), UNUSED, delegate { PositionTypeCycle(); });
         }
         else if (eventComponent.highlight)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), HIGHLIGHT, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), HIGHLIGHT, delegate { PositionTypeCycle(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, offset), CAMERA, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), CAMERA, delegate { PositionTypeCycle(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;

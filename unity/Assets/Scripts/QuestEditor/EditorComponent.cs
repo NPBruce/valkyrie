@@ -32,8 +32,9 @@ public class EditorComponent {
     virtual public void Update()
     {
         game = Game.Get();
+        bool newScroll = (scrollArea == null);
         Vector2 scrollPos = Vector2.zero;
-        if (scrollArea != null)
+        if (!newScroll)
         {
             scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition;
         }
@@ -46,10 +47,20 @@ public class EditorComponent {
 
         offset = AddSubComponents(offset);
 
+        offset = AddSource(offset);
+
         offset = AddComment(offset);
 
+        if (offset < 30) offset = 30;
         SetScrollLimit(offset);
-        scrollArea.GetComponent<RectTransform>().anchoredPosition = scrollPos;
+        if (newScroll)
+        {
+            new Vector2(10 * UIScaler.GetPixelsPerUnit(), offset * UIScaler.GetPixelsPerUnit() * -0.5f);
+        }
+        else
+        {
+            scrollArea.GetComponent<RectTransform>().anchoredPosition = scrollPos;
+        }
     }
     public void Clean()
     {
@@ -108,36 +119,21 @@ public class EditorComponent {
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(15, 1), new StringKey(null, "RENAME"), delegate { Rename(); });
+        tb = new TextButton(new Vector2(6, offset), new Vector2(8, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
         offset += 2;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "SOURCE"))));
-        db.background.transform.parent = scrollArea.transform;
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
+        tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1), 
+            new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-        offset += 2;
-
-        db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, component.typeDynamic.ToUpper()));
-        float typeWidth = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
-        db.Destroy();
-
-        tb = new TextButton(new Vector2(0, offset), new Vector2(typeWidth, 1), new StringKey(null, component.typeDynamic.ToUpper()), delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(typeWidth, offset), new Vector2(20 - typeWidth, 1), 
-            new StringKey(null, name.Substring(component.typeDynamic.Length),false), delegate { QuestEditorData.ListType(component.typeDynamic); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
@@ -165,6 +161,36 @@ public class EditorComponent {
         commentDBE.AddBorder();
 
         return offset + 6;
+    }
+
+    virtual public float AddSource(float offset)
+    {
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, GetRelativePath(game.quest.qd.questPath, component.source)), delegate { ChangeSource(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        return offset + 2;
+    }
+
+    public string GetRelativePath(string start, string end)
+    {
+        System.Uri fromUri = new System.Uri(start);
+        System.Uri toUri = new System.Uri(end);
+
+        if (fromUri.Scheme != toUri.Scheme) return end;
+
+        System.Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+        return System.Uri.UnescapeDataString(relativeUri.ToString());
+
+        /*if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
+        {
+            relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        }*/
     }
 
     public void SetComment()
@@ -287,7 +313,7 @@ public class EditorComponent {
         }
         else
         {
-            SetSource(sourceESL.selection);
+            SetSource(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), sourceESL.selection));
         }
     }
 
@@ -298,7 +324,14 @@ public class EditorComponent {
         {
             s += ".ini";
         }
-        SetSource(s);
+        if (s.Length == 0)
+        {
+            SetSource(game.quest.qd.questPath);
+        }
+        else
+        {
+            SetSource(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), s));
+        }
     }
 
     public void SetSource(string source)

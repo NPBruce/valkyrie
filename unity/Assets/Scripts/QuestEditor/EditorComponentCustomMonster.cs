@@ -111,6 +111,7 @@ public class EditorComponentCustomMonster : EditorComponent
                     tb.background.transform.parent = scrollArea.transform;
                     tb.ApplyTag(Game.EDITOR);
                 }
+                offset += 9;
             }
             else
             {
@@ -118,10 +119,9 @@ public class EditorComponentCustomMonster : EditorComponent
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
+                offset += 2;
             }
         }
-
-        offset += 9;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), new StringKey("val","X_COLON",ACTIVATIONS));
         db.background.transform.parent = scrollArea.transform;
@@ -199,6 +199,7 @@ public class EditorComponentCustomMonster : EditorComponent
             healthDBE.AddBorder();
 
             db = new DialogBox(new Vector2(6, offset), new Vector2(8, 1), new StringKey("val","X_COLON",HEALTH_HERO));
+            db.background.transform.parent = scrollArea.transform;
             db.ApplyTag(Game.EDITOR);
 
             healthHeroDBE = new DialogBoxEditable(new Vector2(14, offset), new Vector2(3, 1), 
