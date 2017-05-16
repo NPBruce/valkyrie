@@ -205,7 +205,7 @@ public class EditorComponent {
         return offset + 2;
     }
 
-    public string GetRelativePath(string start, string end)
+    public string static GetRelativePath(string start, string end)
     {
         System.Uri fromUri = new System.Uri(start);
         System.Uri toUri = new System.Uri(end);
@@ -214,11 +214,6 @@ public class EditorComponent {
 
         System.Uri relativeUri = fromUri.MakeRelativeUri(toUri);
         return System.Uri.UnescapeDataString(relativeUri.ToString());
-
-        /*if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
-        {
-            relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        }*/
     }
 
     public void SetComment()

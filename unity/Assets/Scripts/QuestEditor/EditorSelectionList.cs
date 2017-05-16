@@ -285,6 +285,21 @@ public class EditorSelectionList
         {
             filter = new List<string>();
         }
+
+        private SelectionListEntry(QuestData.QuestComponent component, List<string> traits = null)
+        {
+            name = component.sectionName;
+            key = name;
+            filter = traits;
+            if (filter == null)
+            {
+                filter = new List<string>();
+            }
+            Game game = Game.Get();
+            filter.Add(EditorComponent.GetRelativePath(game.quest.qd.questPath, component.source));
+            filter.Add(component.typeDynamic);
+        }
+        
         public SelectionListEntry(string nameKeyIn)
         {
             name = nameKeyIn;
