@@ -93,73 +93,40 @@ public class QuestEditorData {
             return;
         }
 
-        // Border
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5.5f), 0), new Vector2(11, 26), StringKey.NULL);
-        db.AddBorder();
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
 
-        // Heading
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 0), new Vector2(10, 1), 
-            new StringKey("val","SELECT",CommonStringKeys.TYPE)
-            );
-
-        // Buttons for each component type (and delete buttons)
-        float offset = 2;
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.QUEST, delegate { SelectQuest(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.TILE, delegate { ListType("Tile"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.TOKEN, delegate { ListType("Token"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.SPAWN, delegate { ListType("Spawn"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.EVENT, delegate { ListType("Event"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { ListType("CustomMonster"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.ACTIVATION, delegate { ListType("Activation"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.UI, delegate { ListType("UI"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Tile");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Token");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Spawn");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Event");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("CustomMonster");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Activation");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("UI");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("QItem");
 
         if (game.gameType is D2EGameType)
         {
-            offset += 2;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.DOOR, delegate { ListType("Door"); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-
-            offset += 2;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.MPLACE, delegate { ListType("MPlace"); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Door");
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("MPlace");
         }
-
-        if (game.gameType is MoMGameType)
+        else
         {
-            offset += 2;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.PUZZLE, delegate { ListType("Puzzle"); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Puzzle");
         }
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.QITEM, delegate { ListType("QItem"); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        offset += 2;
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-3f), offset), new Vector2(6, 1), CommonStringKeys.CANCEL, delegate { Cancel(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem(CommonStringKeys.QUEST, "Quest", "Quest"));
+        foreach (QuestData.QuestComponent c in game.quest.qd.components.values)
+        {
+            if (!c is PerilData)
+            {
+                list.Add(new EditorSelectionList.SelectionListEntry(c));
+            }
+        }
+
+        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
+        game.qed.esl.SelectItem();
+
+        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.QUEST, delegate { SelectQuest(); });
     }
 
     // Create selection list for type of component

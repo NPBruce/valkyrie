@@ -281,6 +281,14 @@ public class EditorSelectionList
             return entry;
         }
 
+        public static SelectionListEntry BuildNewComponent(string type)
+        {
+            SelectionListEntry entry = BuildNameKeyItem(new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}");
+            filter.Add(type);
+            filter.Add(new StringKey(VAL,"NEW").Translate());
+            return entry;
+        }
+
         private SelectionListEntry()
         {
             filter = new List<string>();
@@ -297,7 +305,7 @@ public class EditorSelectionList
             }
             Game game = Game.Get();
             filter.Add(EditorComponent.GetRelativePath(game.quest.qd.questPath, component.source));
-            filter.Add(component.typeDynamic);
+            filter.Add(new StringKey(VAL,component.typeDynamic.ToUpper()).Translate());
         }
         
         public SelectionListEntry(string nameKeyIn)
