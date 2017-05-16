@@ -135,6 +135,7 @@ public class QuestEditor {
            // Write to disk
             try
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(kv.Key));
                 File.WriteAllText(kv.Key, kv.Value.ToString());
             }
             catch (System.Exception)
