@@ -9,7 +9,7 @@ using System;
 public class PaneledDialogBoxEditable
 {
     private GameObject textObj;
-    private GameObject background;
+    public GameObject background;
     private GameObject inputObj;
     private RectangleBorder border;
 
@@ -98,30 +98,6 @@ public class PaneledDialogBoxEditable
         EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
         float width = size.x / CHARS.Keys.Count;
         specialCharsButtons = new List<TextButton>();
-        if (CHARS != null)
-        {
-            foreach (string oneChar in CHARS.Keys)
-            {
-                translated = new StringKey(null, oneChar);
-                // Traits are in val dictionary
-                if (hOffset + width > 40)
-                {
-                    hOffset = 22;
-                    offset++;
-                }
-                string translation = null;
-                CHARS.TryGetValue(oneChar,out translation);
-                tb = new TextButton(
-                    new Vector2(hOffset, offset), new Vector2(width, 1),
-                    translated, 
-                    delegate { InsertCharacter(translation); });
-                tb.ApplyTag(Game.DIALOG);
-
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                specialCharsButtons.Add(tb);
-                hOffset += width;
-            }
-        }
 
         // Create an object
 
@@ -180,6 +156,32 @@ public class PaneledDialogBoxEditable
         uiInput.lineType = UnityEngine.UI.InputField.LineType.MultiLineNewline;
         uiInput.text = text;
         uiInput.onEndEdit.AddListener(call);
+
+        if (CHARS != null)
+        {
+            foreach (string oneChar in CHARS.Keys)
+            {
+                translated = new StringKey(null, oneChar);
+                // Traits are in val dictionary
+                if (hOffset + width > 40)
+                {
+                    hOffset = 22;
+                    offset++;
+                }
+                string translation = null;
+                CHARS.TryGetValue(oneChar, out translation);
+                tb = new TextButton(
+                    new Vector2(hOffset, offset), new Vector2(width, 1),
+                    translated,
+                    delegate { InsertCharacter(translation); });
+                tb.background.transform.parent = background.transform;
+                tb.ApplyTag(Game.DIALOG);
+
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                specialCharsButtons.Add(tb);
+                hOffset += width;
+            }
+        }
     }
 
     public void InsertCharacter(string specialChar)

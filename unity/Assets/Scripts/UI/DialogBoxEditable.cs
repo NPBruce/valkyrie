@@ -6,7 +6,7 @@ using UnityEngine;
 public class DialogBoxEditable
 {
     private GameObject textObj;
-    private GameObject background;
+    public GameObject background;
     private GameObject inputObj;
     private RectangleBorder border;
 
@@ -172,6 +172,21 @@ public class DialogBoxEditable
     {
         if (!uiInput.text.Equals("") && !uiInput.text.Equals(lastText)){
             lastText = uiInput.text;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Check if the text of a PaneledDialogBoxEditable was emptied.
+    /// Updates the lastText
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckTextEmptied()
+    {
+        if (uiInput.text.Equals(""))
+        {
+            lastText = "";
             return true;
         }
         return false;

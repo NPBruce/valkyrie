@@ -3,70 +3,47 @@ using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class EditorComponentToken : EditorComponent
+public class EditorComponentToken : EditorComponentEvent
 {
     QuestData.Token tokenComponent;
     EditorSelectionList typeList;
 
-    public EditorComponentToken(string nameIn) : base()
+    public EditorComponentToken(string nameIn) : base(nameIn)
     {
-        Game game = Game.Get();
-        tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
-        component = tokenComponent;
-        name = component.sectionName;
-        Update();
+    }
+
+    override public void Highlight()
+    {
+        CameraController.SetCamera(component.location);
+    }
+
+    override public void AddLocationType(float offset)
+    {
     }
     
-    override public void Update()
+    override public float AddSubEventComponents(float offset)
     {
-        base.Update();
-        Game game = Game.Get();
-        CameraController.SetCamera(tokenComponent.location);
+        tokenComponent = component as QuestData.Token;
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.TOKEN, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(null, name.Substring("Token".Length),false), delegate { QuestEditorData.ListToken(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP , delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1),
             new StringKey("val", "ROTATION", 
             new StringKey(null, tokenComponent.rotation.ToString(), false)),
             delegate { Rotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
+        offset += 2;
 
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), 
+        tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), 
             new StringKey(null, tokenComponent.tokenName,false), delegate { Type(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        offset += 2;
 
         game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);
+
+        return offset;
     }
 
     public void Rotate()

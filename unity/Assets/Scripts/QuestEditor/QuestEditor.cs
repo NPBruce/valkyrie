@@ -132,7 +132,16 @@ public class QuestEditor {
 
         foreach (KeyValuePair<string, StringBuilder> kv in fileData)
         {
-            File.WriteAllText(kv.Key, kv.Value.ToString());
+           // Write to disk
+            try
+            {
+                File.WriteAllText(kv.Key, kv.Value.ToString());
+            }
+            catch (System.Exception)
+            {
+                ValkyrieDebug.Log("Error: Failed to write to " + kv.Key + ", components lost");
+                Application.Quit();
+            }
         }
 
         // Reload quest

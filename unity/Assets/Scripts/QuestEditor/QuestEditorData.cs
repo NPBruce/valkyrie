@@ -108,49 +108,49 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TILE, delegate { ListTile(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TILE, delegate { ListType("Tile"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Tile"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TOKEN, delegate { ListToken(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.TOKEN, delegate { ListType("Token"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Token"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.SPAWN, delegate { ListSpawn(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.SPAWN, delegate { ListType("Spawn"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Spawn"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.EVENT, delegate { ListEvent(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.EVENT, delegate { ListType("Event"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Event"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { ListCustomMonster(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { ListType("CustomMonster"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("CustomMonster"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.ACTIVATION, delegate { ListActivation(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.ACTIVATION, delegate { ListType("Activation"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Activation"); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.UI, delegate { ListUI(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.UI, delegate { ListType("UI"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("UI"); }, Color.red);
@@ -159,14 +159,14 @@ public class QuestEditorData {
         if (game.gameType is D2EGameType)
         {
             offset += 2;
-            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.DOOR, delegate { ListDoor(); });
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.DOOR, delegate { ListType("Door"); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
             tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Door"); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
             offset += 2;
-            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.MPLACE, delegate { ListMPlace(); });
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.MPLACE, delegate { ListType("MPlace"); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
             tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("MPlace"); }, Color.red);
@@ -176,14 +176,14 @@ public class QuestEditorData {
         if (game.gameType is MoMGameType)
         {
             offset += 2;
-            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.PUZZLE, delegate { ListPuzzle(); });
+            tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.PUZZLE, delegate { ListType("Puzzle"); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
             tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("Puzzle"); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         }
         offset += 2;
-        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.QITEM, delegate { ListItem(); });
+        tb = new TextButton(new Vector2(22, offset), new Vector2(9, 1), CommonStringKeys.QITEM, delegate { ListType("QItem"); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
         tb = new TextButton(new Vector2(32, offset), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { game.qed.DeleteComponent("QItem"); }, Color.red);
@@ -195,229 +195,23 @@ public class QuestEditorData {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
 
-    // Create selection list for tiles
-    public static void ListTile()
+    // Create selection list for type of component
+    public static void ListType(string type)
     {
         Game game = Game.Get();
 
-        List<EditorSelectionList.SelectionListEntry> tiles = new List<EditorSelectionList.SelectionListEntry>();
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         // This magic string is picked up later for object creation
-        tiles.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.TILE).Translate(),"{NEW:Tile}"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
+            new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}"));
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Tile)
+            if (kv.Value.typeDynamic.Equals(type))
             {
-                tiles.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                list.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
             }
         }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, tiles, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for Doors
-    public static void ListDoor()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> doors = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        doors.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.DOOR).Translate(),"{NEW:Door}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Door)
-            {
-                doors.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, doors, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for tokens
-    public static void ListToken()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> tokens = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        tokens.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.TOKEN).Translate(),"{NEW:Token}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Token)
-            {
-                tokens.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, tokens, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for UI
-    public static void ListUI()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> uis = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        uis.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val", "NEW_X", CommonStringKeys.UI).Translate(), "{NEW:UI}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.UI)
-            {
-                uis.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, uis, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for monster spawns
-    public static void ListSpawn()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.SPAWN).Translate() ,"{NEW:Spawn}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Spawn)
-            {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for mplaces
-    public static void ListMPlace()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        mplaces.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.MPLACE).Translate(),"{NEW:MPlace}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.MPlace)
-            {
-                mplaces.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, mplaces, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for events
-    public static void ListEvent()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        events.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.EVENT).Translate(),"{NEW:Event}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Event)
-            {
-                if (!kv.Value.GetType().IsSubclassOf(typeof(QuestData.Event)))
-                {
-                    events.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-                }
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, events, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for events
-    public static void ListPuzzle()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> puzzle = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        puzzle.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.PUZZLE).Translate(),"{NEW:Puzzle}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Puzzle)
-            {
-                puzzle.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, puzzle, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for items
-    public static void ListItem()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.QITEM).Translate(),"{NEW:QItem}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.QItem)
-            {
-                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for unique monsters
-    public static void ListCustomMonster()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.CUSTOM_MONSTER).Translate(),"{NEW:CustomMonster}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.CustomMonster)
-            {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Create selection list for unique monsters
-    public static void ListActivation()
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        activations.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.ACTIVATION).Translate(),"{NEW:Activation}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
-            if (kv.Value is QuestData.Activation)
-            {
-                activations.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
-        }
-
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, activations, delegate { game.qed.SelectComponent(); });
+        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
     }
 
@@ -590,41 +384,16 @@ public class QuestEditorData {
         game.qed.NewSelection(new EditorComponentUI(name));
     }
 
-    // Events, tokens, doors and monsters can all be openned as events
-    // and as nextevent/vars
     public static void SelectAsEvent(string name)
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentEvent(name));
     }
 
-    // Events, tokens, doors and monsters can all be openned as events
-    // and as  nextevent/vars
-    public static void SelectAsEventVars(string name)
-    {
-        Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentEventVars(name));
-    }
-
-    // Events, tokens, doors and monsters can all be openned as events
-    // and as  nextevent/vars
-    public static void SelectAsEventNextEvent(string name)
-    {
-        Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentEventNextEvent(name));
-    }
-
     public static void SelectAsSpawn(string name)
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentSpawn(name));
-    }
-
-    // Mosters can be opened as a placement list page
-    public static void SelectAsSpawnPlacement(string name)
-    {
-        Game game = Game.Get();
-        game.qed.NewSelection(new EditorComponentSpawnPlacement(name));
     }
 
     public static void SelectAsMPlace(string name)
