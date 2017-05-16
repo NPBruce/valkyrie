@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.UI;
 using Assets.Scripts.Content;
+using System;
 
 // Create a dialog box which has editable text
 // These are pretty rough at the moment.  Only used for editor
@@ -11,6 +12,8 @@ public class PaneledDialogBoxEditable
     private GameObject background;
     private GameObject inputObj;
     private RectangleBorder border;
+
+    private string lastText;
 
     private List<TextButton> specialCharsButtons;
 
@@ -202,9 +205,42 @@ public class PaneledDialogBoxEditable
         get { return uiInput.text; }
     }
 
+    /// <summary>
+    /// Check if the text inside a DialogBoxEditable changed and is not empty.
+    /// If the change is true. updates the lastText of the DialogBoxEditable.
+    /// If is changed to empty nothing will change. So if after emptied, returns 
+    /// to its previous value, it won't be considered changed.
+    /// </summary>
+    /// <returns>true if changed and is not empty. false otherwhise</returns>
+    public bool CheckTextChangedAndNotEmpty()
+    {
+        if (!uiInput.text.Equals("") && !uiInput.text.Equals(lastText))
+        {
+            lastText = uiInput.text;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Check if the text of a PaneledDialogBoxEditable was emptied.
+    /// Updates the lastText
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckTextEmptied()
+    {
+        if (uiInput.text.Equals(""))
+        {
+            lastText = "";
+            return true;
+        }
+        return false;
+    }
+
     public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)
     {
         this.textObj.GetComponent<UnityEngine.UI.Text>().material = mat;
         this.background.transform.parent = trans;
     }
+
 }

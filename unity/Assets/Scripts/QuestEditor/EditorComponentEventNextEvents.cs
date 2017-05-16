@@ -221,7 +221,7 @@ public class EditorComponentEventNextEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        if (!buttonDBE[number - 1].Text.Equals(""))
+        if (buttonDBE[number - 1].CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonDBE[number - 1].Text);
         }

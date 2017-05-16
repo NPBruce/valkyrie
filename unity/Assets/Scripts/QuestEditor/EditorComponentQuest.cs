@@ -89,7 +89,7 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!nameDBE.Text.Equals(""))
+        if (nameDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(game.quest.qd.quest.name_key, nameDBE.Text);
         }
@@ -99,11 +99,11 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!descriptionDBE.Text.Equals(""))
+        if (descriptionDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(game.quest.qd.quest.description_key, descriptionDBE.Text);
         }
-        else
+        else if (descriptionDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
         }

@@ -342,7 +342,7 @@ public class EditorComponentUI : EditorComponent
     {
         Game game = Game.Get();
 
-        if (!textDBE.Text.Equals(""))
+        if (textDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(uiComponent.uitext_key, textDBE.Text);
         }
