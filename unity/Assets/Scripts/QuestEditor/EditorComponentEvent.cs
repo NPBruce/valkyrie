@@ -364,16 +364,17 @@ public class EditorComponentEvent : EditorComponent
             foreach (string s in l)
             {
                 int i = index++;
+                string tmp = s;
                 tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1),
                     CommonStringKeys.PLUS, delegate { AddEvent(i, buttonTmp); }, Color.green);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.background.transform.parent = scrollArea.transform;
                 tb.ApplyTag(Game.EDITOR);
-                db = new DialogBox(new Vector2(1, offset), new Vector2(18, 1), 
-                    new StringKey(null,s,false));
-                db.AddBorder();
-                db.background.transform.parent = scrollArea.transform;
-                db.ApplyTag(Game.EDITOR);
+                tb = new TextButton(new Vector2(1, offset), new Vector2(18, 1), 
+                    new StringKey(null,s,false), delegate { QuestEditorData.SelectComponent(tmp); });
+                tb.background.transform.parent = scrollArea.transform;
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.ApplyTag(Game.EDITOR);
                 tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1),
                     CommonStringKeys.MINUS, delegate { RemoveEvent(i, buttonTmp); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();

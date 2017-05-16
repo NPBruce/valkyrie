@@ -140,11 +140,11 @@ public class EditorComponentCustomMonster : EditorComponent
             if (monsterComponent.activations.Length > index)
             {
                 int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), 
-                    new StringKey(null,monsterComponent.activations[index],false));
-                db.AddBorder();
-                db.background.transform.parent = scrollArea.transform;
-                db.ApplyTag(Game.EDITOR);
+                tb = new TextButton(new Vector2(0, offset), new Vector2(12, 1), 
+                    new StringKey(null,monsterComponent.activations[index],false), delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                tb.background.transform.parent = scrollArea.transform;
+                tb.ApplyTag(Game.EDITOR);
                 tb = new TextButton(new Vector2(12, offset), new Vector2(1, 1), 
                     CommonStringKeys.MINUS, delegate { RemoveActivation(i); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
