@@ -114,24 +114,29 @@ public class EditorComponent {
     virtual public float DrawComponentSelection(float offset)
     {
         // Back button
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(5, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(4, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(6, offset), new Vector2(8, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
+        tb = new TextButton(new Vector2(4, offset), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
+        tb = new TextButton(new Vector2(10, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), new StringKey("val", "DELETE"), delegate { Delete(); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
         offset += 2;
 
-        tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1), 
+        tb = new TextButton(new Vector2(0.5f, offset), new Vector2(19, 1), 
             new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -145,6 +150,29 @@ public class EditorComponent {
         return offset;
     }
 
+    public void Delete()
+    {
+        // Border
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6.5f), 1), new Vector2(13, 4), StringKey.NULL);
+        db.AddBorder();
+
+        // Heading
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), 1), new Vector2(12, 1), new StringKey("val", "CONFIRM"));
+
+        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-5.5f), 3), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { ConfirmDelete(); }, Color.red);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+
+        tb = new TextButton(new Vector2(UIScaler.GetHCenter(1.5f), 3), new Vector2(4, 1), CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont(); ;
+    }
+
+    public void ConfirmDelete()
+    {
+        QuestEditorData.DeleteCurrentComponent();
+    }
+
     virtual public float AddComment(float offset)
     {
         DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT"))));
@@ -153,7 +181,7 @@ public class EditorComponent {
 
         // Quota dont need translation
         commentDBE = new DialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 5),
+            new Vector2(0.5f, offset), new Vector2(19, 5),
             component.comment, false, 
             delegate { SetComment(); });
         commentDBE.background.transform.parent = scrollArea.transform;
@@ -169,7 +197,7 @@ public class EditorComponent {
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, GetRelativePath(game.quest.qd.questPath, component.source)), delegate { ChangeSource(); });
+        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(14.5f, 1), new StringKey(null, GetRelativePath(game.quest.qd.questPath, component.source)), delegate { ChangeSource(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);

@@ -32,11 +32,11 @@ public class QuestEditorTextEdit {
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 6), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10), 1), new Vector2(20, 6), StringKey.NULL);
         db.AddBorder();
 
         // Heading
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9.5f), 1), new Vector2(19, 1), title);
 
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
@@ -48,8 +48,8 @@ public class QuestEditorTextEdit {
         textObj.transform.parent = inputObj.transform;
 
         RectTransform transBg = inputObj.AddComponent<RectTransform>();
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 2 * UIScaler.GetPixelsPerUnit(), UIScaler.GetPixelsPerUnit());
-        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 22 * UIScaler.GetPixelsPerUnit(), 18 * UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 3 * UIScaler.GetPixelsPerUnit(), UIScaler.GetPixelsPerUnit());
+        transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-9) * UIScaler.GetPixelsPerUnit(), 18 * UIScaler.GetPixelsPerUnit());
 
         RectTransform transTx = textObj.AddComponent<RectTransform>();
         transTx.SetParent(transBg);
@@ -70,11 +70,11 @@ public class QuestEditorTextEdit {
         iField.textComponent = uiText;
         iField.text = value;
 
-        TextButton tb = new TextButton(new Vector2(23f, 4), new Vector2(6, 1), CommonStringKeys.OK, OKButton);
+        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-8), 5), new Vector2(6, 1), CommonStringKeys.OK, OKButton);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
 
-        tb = new TextButton(new Vector2(31f, 4), new Vector2(6, 1), CommonStringKeys.CANCEL, cancelCall);
+        tb = new TextButton(new Vector2(UIScaler.GetHCenter(2), 5), new Vector2(6, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
