@@ -19,6 +19,10 @@ public class EditorComponent {
     QuestEditorTextEdit rename;
     private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
 
+    EditorSelectionList sourceESL;
+    QuestEditorTextEdit sourceFileText;
+    DialogBoxEditable commentDBE;
+
     // The editor scroll area;
     GameObject scrollArea;
     RectTransform scrollInnerRect;
@@ -40,6 +44,8 @@ public class EditorComponent {
         offset = DrawComponentSelection(offset)
 
         offset = AddSubComponents(offset);
+
+        offset = AddComment(offset);
 
         SetScrollLimit(offset);
         scrollArea.AddComponent<RectTransform>().AnchoredPosition = scrollPos
@@ -106,7 +112,16 @@ public class EditorComponent {
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
+        offset += 2;
 
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "SOURCE")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(15, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(null, component.dynamicType.ToUpper()));
@@ -129,10 +144,33 @@ public class EditorComponent {
         return offset + 2;
     }
 
-    // Update redraws the selection UI
     virtual public float AddSubComponents(float offset)
     {
         return offset;
+    }
+
+    virtual public float AddComment(float offset)
+    {
+        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        // Quota dont need translation
+        quotaDBE = new DialogBoxEditable(
+            new Vector2(0, offset), new Vector2(20, 5),
+            component.comment, false, 
+            delegate { SetComment(); });
+        quotaDBE.background.transform.parent = scrollArea.transform;
+        quotaDBE.ApplyTag(Game.EDITOR);
+        quotaDBE.AddBorder();
+
+        return offset + 6;
+    }
+
+    public void SetComment()
+    {
+        component.comment = quotaDBE.Text.Replace("\n", "\\n").Replace("\r", "\\n");
+        Update();
     }
 
     public void SetScrollLimit(float limit)
@@ -223,5 +261,49 @@ public class EditorComponent {
         game.quest.Add(component.sectionName);
         // Reselect with new name
         QuestEditorData.SelectComponent(component.sectionName);
+    }
+
+    public void ChangeSource()
+    {
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+
+        list.Add(new EditorSelectionList.SelectionListEntry("{NEW:File}"));
+        foreach (string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+        }
+
+        sourceESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "FILE")), list, delegate { SelectSource(); });
+        sourceESL.SelectItem();
+    }
+
+    public void ChangeSource()
+    {
+        if (sourceESL.selection.Equals("{NEW:File}"))
+        {
+            sourceFileText = new QuestEditorTextEdit(FILE, "", delegate { NewSource(); });
+            sourceFileText.EditText();
+        }
+        else
+        {
+            SetSource(sourceESL.selection);
+        }
+    }
+
+    public void NewSource()
+    {
+        string s = sourceFileText.value;
+        if (!s.Substring(s.Length - 4, 4).Equals(".ini"))
+        {
+            s += ".ini";
+        }
+        SetSource(s);
+    }
+
+    public void SetSource(string source)
+    {
+        component.source = source;
+        Update();
     }
 }
