@@ -287,6 +287,11 @@ public class EditorComponentUI : EditorComponentEvent
         }
     }
 
+    override public float AddEventTrigger(float offset)
+    {
+        return offset;
+    }
+
     public void SetImage()
     {
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
