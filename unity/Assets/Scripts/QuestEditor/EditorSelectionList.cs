@@ -187,7 +187,7 @@ public class EditorSelectionList
         {
             // Print the name but select the key
             string key = filtered[i].key;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10), offset++), new Vector2(20, 1), 
+            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10.5f), offset++), new Vector2(20, 1), 
                 new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");

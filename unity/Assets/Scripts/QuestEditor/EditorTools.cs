@@ -34,7 +34,7 @@ public class EditorTools
 
         tb = new TextButton(
             new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 16), new Vector2(10, 2f),
-            REORDER_COMPONENTS, delegate { ; });
+            REORDER_COMPONENTS, delegate { ReorderComponents.ReorderComponents(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
@@ -61,4 +61,3 @@ public class EditorTools
 
     }
 }
-
