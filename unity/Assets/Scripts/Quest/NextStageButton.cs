@@ -14,24 +14,7 @@ public class NextStageButton
     public NextStageButton()
     {
         if (Game.Get().gameType.DisplayHeroes()) return;
-        TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
-            CommonStringKeys.TAB, delegate { Next(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.QUESTUI);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.LOG, delegate { Log(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.QUESTUI);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.SET, delegate { Set(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.QUESTUI);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+
         Update();
     }
 
@@ -41,6 +24,7 @@ public class NextStageButton
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
+        Color bgColor = new Color(0.5f, 0, 0, 0.5f);
         StringKey phase;
         if (Game.Get().quest.phase == Quest.MoMPhase.horror)
         {
@@ -57,10 +41,33 @@ public class NextStageButton
         else
         {
             phase = PHASE_INVESTIGATOR;
+            bgColor = new Color(0, 0.5f, 0, 0.5f);
         }
 
+        TextButton tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(10f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
+            CommonStringKeys.TAB, delegate { Next(); });
+        // Untag as dialog so this isn't cleared away
+        tb.ApplyTag(Game.UIPHASE);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(-14f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            CommonStringKeys.LOG, delegate { Log(); });
+        // Untag as dialog so this isn't cleared away
+        tb.ApplyTag(Game.UIPHASE);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        tb = new TextButton(
+            new Vector2(UIScaler.GetHCenter(-10f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
+            CommonStringKeys.SET, delegate { Set(); });
+        // Untag as dialog so this isn't cleared away
+        tb.ApplyTag(Game.UIPHASE);
+        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
+        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+
         DialogBox db;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase);
+        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase, Color.white, bgColor);
         db.SetFont(Game.Get().gameType.GetHeaderFont());
         db.ApplyTag(Game.UIPHASE);
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
