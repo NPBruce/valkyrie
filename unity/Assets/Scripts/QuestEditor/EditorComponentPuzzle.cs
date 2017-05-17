@@ -105,6 +105,11 @@ public class EditorComponentPuzzle : EditorComponentEvent
         return offset;
     }
     
+    override public float AddEventDialog(float offset)
+    {
+        return offset;
+    }
+
     override public void Highlight()
     {
     }

@@ -63,36 +63,16 @@ public class EditorComponentEvent : EditorComponent
 
         offset = AddSubEventComponents(offset);
 
-        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), new StringKey("val","X_COLON", DIALOG));
-        db.background.transform.parent = scrollArea.transform;
-        db.ApplyTag(Game.EDITOR);
+        offset = AddEventDialog(offset);
 
-        eventTextDBE = new PaneledDialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 8), 
-            eventComponent.text.Translate(true),
-            delegate { UpdateText(); });
-        eventTextDBE.ApplyTag(Game.EDITOR);
-        eventTextDBE.background.transform.parent = scrollArea.transform;
-        eventTextDBE.AddBorder();
-        offset += 9;
+        offset = AddEventTrigger(offset);
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",CommonStringKeys.TRIGGER));
-        db.background.transform.parent = scrollArea.transform;
-        db.ApplyTag(Game.EDITOR);
-
-        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(10, 1), 
-            new StringKey(null,eventComponent.trigger,false), delegate { SetTrigger(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-        offset += 2;
-
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), 
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), 
             new StringKey("val", "X_COLON", AUDIO));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset++), new Vector2(10, 1), 
+        TextButton tb = new TextButton(new Vector2(4, offset++), new Vector2(10, 1), 
             new StringKey(null,eventComponent.audio,false), delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -135,34 +115,7 @@ public class EditorComponentEvent : EditorComponent
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
-            db.background.transform.parent = scrollArea.transform;
-            db.ApplyTag(Game.EDITOR);
-
-            tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
-                new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
-            tb.ApplyTag(Game.EDITOR);
-
-            db = new DialogBox(new Vector2(12, offset), new Vector2(2, 1), MIN);
-            db.background.transform.parent = scrollArea.transform;
-            db.ApplyTag(Game.EDITOR);
-
-            tb = new TextButton(new Vector2(14, offset), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
-            tb.ApplyTag(Game.EDITOR);
-
-            db = new DialogBox(new Vector2(16, offset), new Vector2(2, 1), MAX);
-            db.background.transform.parent = scrollArea.transform;
-            db.ApplyTag(Game.EDITOR);
-
-            tb = new TextButton(new Vector2(18, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
-            tb.ApplyTag(Game.EDITOR);
-            offset += 2;
+            offset = AddHeroSelection(offset);
         }
 
         float componentsOffset = offset;
@@ -285,31 +238,115 @@ public class EditorComponentEvent : EditorComponent
         return offset;
     }
 
+    virtual public float AddEventDialog(float offset)
+    {
+        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), new StringKey("val","X_COLON", DIALOG));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        eventTextDBE = new PaneledDialogBoxEditable(
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
+            eventComponent.text.Translate(true),
+            delegate { UpdateText(); });
+        eventTextDBE.ApplyTag(Game.EDITOR);
+        eventTextDBE.background.transform.parent = scrollArea.transform;
+        eventTextDBE.AddBorder();
+        return offset + 9;
+    }
+
+    virtual public float AddEventTrigger(float offset)
+    {
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",CommonStringKeys.TRIGGER));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(10, 1), 
+            new StringKey(null,eventComponent.trigger,false), delegate { SetTrigger(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+        return offset + 2;
+    }
+
+    virtual public float AddHeroSelection(float offset)
+    {
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
+            new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        db = new DialogBox(new Vector2(12, offset), new Vector2(2, 1), MIN);
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(14, offset), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        db = new DialogBox(new Vector2(16, offset), new Vector2(2, 1), MAX);
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(18, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+        return offset + 2;
+    }
+
     virtual public float AddNextEventComponents(float offset)
     {
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(8, 1), new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        string randomButton = "Ordered";
-        if (eventComponent.randomEvents) randomButton = "Random";
-        TextButton tb = new TextButton(new Vector2(8, offset), new Vector2(4, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        db = new DialogBox(new Vector2(12, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
+        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        // Quota dont need translation
-        quotaDBE = new DialogBoxEditable(
-            new Vector2(16, offset), new Vector2(2, 1),
-            eventComponent.quota.ToString(), false, 
-            delegate { SetQuota(); });
-        quotaDBE.background.transform.parent = scrollArea.transform;
-        quotaDBE.ApplyTag(Game.EDITOR);
-        quotaDBE.AddBorder();
+        TextButton tb = null;
+        if (eventComponent.quotaVar.Length == 0)
+        {
+            tb = new TextButton(new Vector2(4, offset), new Vector2(5, 1), new StringKey("val","NUMBER"), delegate { SetQuotaVar(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+
+            // Quota dont need translation
+            quotaDBE = new DialogBoxEditable(
+                new Vector2(9, offset), new Vector2(2, 1),
+                eventComponent.quota.ToString(), false, 
+                delegate { SetQuota(); });
+            quotaDBE.background.transform.parent = scrollArea.transform;
+            quotaDBE.ApplyTag(Game.EDITOR);
+            quotaDBE.AddBorder();
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(4, offset), new Vector2(5, 1), new StringKey("val","VAR"), delegate { SetQuotaInt(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+
+            tb = new TextButton(new Vector2(9, offset), new Vector2(9, 1), new StringKey(null, eventComponent.quotaVar, false), delegate { SetQuotaVar(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+        }
+        offset += 2;
+
+        string randomButton = "Ordered";
+        if (eventComponent.randomEvents) randomButton = "Random";
+        tb = new TextButton(new Vector2(8, offset), new Vector2(4, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(1.5f, offset), new Vector2(17, 1), new StringKey("val","X_COLON",BUTTONS));
@@ -884,6 +921,59 @@ public class EditorComponentEvent : EditorComponent
     public void SetQuota()
     {
         int.TryParse(quotaDBE.Text, out eventComponent.quota);
+        Update();
+    }
+
+    public void SetQuotaInt()
+    {
+        eventComponent.quotaVar = "";
+        Update();
+    }
+
+    public void SetQuotaVar()
+    {
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
+        list.AddRange(GetQuestVars());
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectQuotaVar(); });
+        varESL.SelectItem();
+    }
+
+    public void SelectQuotaVar()
+    {
+        if (varESL.selection.Equals("{NEW}"))
+        {
+            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
+            varText.EditText();
+        }
+        else
+        {
+            eventComponent.quotaVar = varText.value;
+            eventComponent.quota = 0;
+            Update();
+        }
+    }
+
+    public void NewQuotaVar()
+    {
+        string var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
+        if (var.Length > 0)
+        {
+            if (varText.value[0] == '%')
+            {
+                var = '%' + var;
+            }
+            if (varText.value[0] == '@')
+            {
+                var = '@' + var;
+            }
+            if (char.IsNumber(var[0]) || var[0] == '-' || var[0] == '.')
+            {
+                var = "var" + var;
+            }
+            eventComponent.quotaVar = var;
+            eventComponent.quota = 0;
+        }
         Update();
     }
 

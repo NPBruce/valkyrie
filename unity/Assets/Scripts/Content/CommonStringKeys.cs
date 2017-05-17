@@ -56,7 +56,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey QITEM = new StringKey(VAL, "QITEM");
         public static readonly StringKey STARTING_ITEM = new StringKey(VAL, "STARTING_ITEM");
         public static readonly StringKey UNIQUE_MONSTER = new StringKey(VAL, "UNIQUE_MONSTER");
-        public static readonly StringKey CUSTOM_MONSTER = new StringKey(VAL, "CUSTOM_MONSTER");
+        public static readonly StringKey CUSTOMMONSTER = new StringKey(VAL, "CUSTOMMONSTER");
         public static readonly StringKey ACTIVATION = new StringKey(VAL, "ACTIVATION");
         public static readonly StringKey NUMBER = new StringKey(VAL, "NUMBER");
         public static readonly StringKey TRIGGER = new StringKey(VAL, "TRIGGER");

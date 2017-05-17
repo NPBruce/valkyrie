@@ -123,10 +123,25 @@ public class EditorComponentItem : EditorComponent
             }
             traitOffset++;
         }
+        if (offset < traitOffset) offset = traitOffset;
+        offset++;
 
-        if (offset > traitOffset) return offset + 1;
+        return AddInspect(offset);
+    }
 
-        return traitOffset + 1;
+    public float AddInspect(float offset)
+    {
+        if (!(game.gameType is MoMGameType)) return offset;
+
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6f, 1), new StringKey("val", "X_COLON", new StringKey("val", "INSPECT")));
+        db.ApplyTag(Game.EDITOR);
+
+        TextButton tb = new TextButton(new Vector2(6f, offset), new Vector2(12, 1), new StringKey(null, itemComponent.inspect, false), delegate { PickInpsect(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        return offset + 2;
     }
 
     public void ToggleStarting()
@@ -299,6 +314,30 @@ public class EditorComponentItem : EditorComponent
             }
         }
         itemComponent.traitpool = newArray;
+        Update();
+    }
+
+    public void PickInpsect()
+    {
+        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
+
+        items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if(kv.Value.typeDynamic.Equals("Event"))
+            {
+                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            }
+        }
+
+        itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectInspectEvent(); });
+        itemESL.SelectItem();
+    }
+
+    public void SelectInspectEvent()
+    {
+        itemComponent.inspect = itemESL.selection;
         Update();
     }
 }

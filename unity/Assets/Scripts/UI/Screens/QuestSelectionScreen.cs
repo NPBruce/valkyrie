@@ -162,12 +162,8 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Selection(string key)
         {
-            Game game = Game.Get();
-
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
-                Object.Destroy(go);
-
-            game.StartQuest(questList[key]);
+            Destroyer.Dialog();
+            new QuestDetailsScreen(questList[key]);
         }
     }
 }

@@ -662,9 +662,9 @@ public class QuestData
                 {
                     mTypes[i] = newName;
                 }
-                // If any were replaced with "", remove them
-                mTypes = RemoveFromArray(mTypes, "");
             }
+            // If any were replaced with "", remove them
+            mTypes = RemoveFromArray(mTypes, "");
         }
 
         // Save to string (editor)
@@ -754,6 +754,7 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
+        public string quotaVar = "";
         public string audio = "";
         public List<string> music;
 
@@ -843,6 +844,10 @@ public class QuestData
             if (data.ContainsKey("quota"))
             {
                 int.TryParse(data["quota"], out quota);
+                if (data["quota"].Length > 0 && !char.IsNumber(data["quota"][0]))
+                {
+                    quotaVar = data["quota"];
+                }
             }
             
             // minimum heros required to be selected for event
@@ -1047,7 +1052,11 @@ public class QuestData
             {
                 r += "hero=" + heroListName + nl;
             }
-            if (quota != 0)
+            if (quotaVar.Length > 0)
+            {
+                r += "quota=" + quotaVar + nl;
+            }
+            else if (quota != 0)
             {
                 r += "quota=" + quota + nl;
             }
@@ -1641,6 +1650,7 @@ public class QuestData
         public string[] traits;
         public string[] traitpool;
         public bool starting = false;
+        public string inspect = "";
 
         // Create new (editor)
         public QItem(string s) : base(s)
@@ -1692,6 +1702,10 @@ public class QuestData
             {
                 traitpool = new string[0];
             }
+            if (data.ContainsKey("inspect"))
+            {
+                inspect = data["inspect"];
+            }
         }
 
         // Save to string
@@ -1731,7 +1745,30 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+
+            if (inspect.Length > 0)
+            {
+                r += "inspect=" + inspect + nl;
+            }
             return r;
+        }
+
+        // When changing the name placement event need to update in array
+        override public void ChangeReference(string oldName, string newName)
+        {
+            if (inspect.Equals(oldName))
+            {
+                inspect = newName;
+            }
+            for (int i = 0; i < itemName.Length; i++)
+            {
+                if (itemName[i].Equals(oldName))
+                {
+                    itemName[i] = newName;
+                }
+            }
+            // If any were replaced with "", remove them
+            itemName = RemoveFromArray(itemName, "");
         }
     }
 
@@ -1740,7 +1777,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 4;
+        public static int currentFormat = 5;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -1754,11 +1791,19 @@ public class QuestData
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
+        public int minHero = 2;
+        public int maxHero = 5;
+        public float difficulty = 0;
+        public int lengthMin = 0;
+        public int lengthMax = 0;
+
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string authors_key { get { return "quest.authors"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey authors { get { return new StringKey("qst", authors_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -1842,6 +1887,36 @@ public class QuestData
                 bool.TryParse(iniData["hidden"], out hidden);
             }
 
+            if (iniData.ContainsKey("minhero"))
+            {
+                int.TryParse(iniData["minhero"], out minHero);
+            }
+            if (minHero < 1) minHero = 1;
+
+            maxHero = Game.Get().gameType.MaxHeroes();
+            if (iniData.ContainsKey("maxhero"))
+            {
+                int.TryParse(iniData["maxhero"], out maxHero);
+            }
+            if (maxHero > Game.Get().gameType.MaxHeroes())
+            {
+                maxHero = Game.Get().gameType.MaxHeroes();
+            }
+
+            if (iniData.ContainsKey("difficulty"))
+            {
+                float.TryParse(iniData["difficulty"], out difficulty);
+            }
+
+            if (iniData.ContainsKey("lengthmin"))
+            {
+                int.TryParse(iniData["lengthmin"], out lengthMin);
+            }
+            if (iniData.ContainsKey("lengthmax"))
+            {
+                int.TryParse(iniData["lengthmax"], out lengthMax);
+            }
+
             return true;
         }
 
@@ -1860,6 +1935,29 @@ public class QuestData
             {
                 r.Append("packs=");
                 r.AppendLine(string.Join(" ", packs));
+            }
+
+            if (minHero != 2)
+            {
+                r.Append("minhero=").AppendLine(minHero.ToString());
+            }
+            if (maxHero != Game.Get().gameType.MaxHeroes())
+            {
+                r.Append("maxhero=").AppendLine(maxHero.ToString());
+            }
+
+            if (difficulty != 0)
+            {
+                r.Append("difficulty=").AppendLine(difficulty.ToString());
+            }
+
+            if (lengthMin != 0)
+            {
+                r.Append("lengthmin=").AppendLine(lengthMin.ToString());
+            }
+            if (lengthMax != 0)
+            {
+                r.Append("lengthmax=").AppendLine(lengthMax.ToString());
             }
 
             return r.ToString();

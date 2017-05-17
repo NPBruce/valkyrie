@@ -15,6 +15,7 @@ public class QuestEditor {
         game.editMode = true;
 
         new MenuButton();
+        new ToolsButton();
 
         // re-read quest data
         Reload();

@@ -53,6 +53,11 @@ public class EditorComponentDoor : EditorComponentEvent
         return offset;
     }
 
+    override public float AddEventTrigger(float offset)
+    {
+        return offset;
+    }
+
     public void Rotate()
     {
         if (doorComponent.rotation == 0)

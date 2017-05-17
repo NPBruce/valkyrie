@@ -179,7 +179,6 @@ public class EditorComponent {
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        // Quota dont need translation
         commentDBE = new DialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 5),
             component.comment, false, 
@@ -205,7 +204,7 @@ public class EditorComponent {
         return offset + 2;
     }
 
-    public string GetRelativePath(string start, string end)
+    public static string GetRelativePath(string start, string end)
     {
         System.Uri fromUri = new System.Uri(start);
         System.Uri toUri = new System.Uri(end);
@@ -214,11 +213,6 @@ public class EditorComponent {
 
         System.Uri relativeUri = fromUri.MakeRelativeUri(toUri);
         return System.Uri.UnescapeDataString(relativeUri.ToString());
-
-        /*if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
-        {
-            relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        }*/
     }
 
     public void SetComment()

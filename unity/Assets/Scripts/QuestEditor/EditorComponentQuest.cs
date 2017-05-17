@@ -12,6 +12,11 @@ public class EditorComponentQuest : EditorComponent
 
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable nameDBE;
+    public DialogBoxEditable minHeroDBE;
+    public DialogBoxEditable maxHeroDBE;
+    public DialogBoxEditable difficultyDBE;
+    public DialogBoxEditable minLengthDBE;
+    public DialogBoxEditable maxLengthDBE;
     public PaneledDialogBoxEditable descriptionDBE;
     EditorSelectionList packESL;
 
@@ -94,6 +99,69 @@ public class EditorComponentQuest : EditorComponent
         }
         offset += 1;
 
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", game.gameType.HeroesName())));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        minHeroDBE = new DialogBoxEditable(
+            new Vector2(7.5f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.minHero.ToString(), false, 
+            delegate { UpdateMinHero(); });
+        minHeroDBE.background.transform.parent = scrollArea.transform;
+        minHeroDBE.ApplyTag(Game.EDITOR);
+        minHeroDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", game.gameType.HeroesName())));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        maxHeroDBE = new DialogBoxEditable(
+            new Vector2(17, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.maxHero.ToString(), false, 
+            delegate { UpdateMaxHero(); });
+        maxHeroDBE.background.transform.parent = scrollArea.transform;
+        maxHeroDBE.ApplyTag(Game.EDITOR);
+        maxHeroDBE.AddBorder();
+        offset +=2;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        minLengthDBE = new DialogBoxEditable(
+            new Vector2(7.5f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.lengthMin.ToString(), false, 
+            delegate { UpdateMinLength(); });
+        minLengthDBE.background.transform.parent = scrollArea.transform;
+        minLengthDBE.ApplyTag(Game.EDITOR);
+        minLengthDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        maxLengthDBE = new DialogBoxEditable(
+            new Vector2(17f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.lengthMax.ToString(), false, 
+            delegate { UpdateMaxLength(); });
+        maxLengthDBE.background.transform.parent = scrollArea.transform;
+        maxLengthDBE.ApplyTag(Game.EDITOR);
+        maxLengthDBE.AddBorder();
+        offset +=2;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        difficultyDBE = new DialogBoxEditable(
+            new Vector2(7.5f, offset), new Vector2(3, 1), 
+            game.quest.qd.quest.difficulty.ToString(), false, 
+            delegate { UpdateDifficulty(); });
+        difficultyDBE.background.transform.parent = scrollArea.transform;
+        difficultyDBE.ApplyTag(Game.EDITOR);
+        difficultyDBE.AddBorder();
+        offset +=2;
+
         return offset;
     }
 
@@ -129,8 +197,6 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestName()
     {
-        Game game = Game.Get();
-
         if (nameDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(game.quest.qd.quest.name_key, nameDBE.Text);
@@ -139,8 +205,6 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestDesc()
     {
-        Game game = Game.Get();
-
         if (descriptionDBE.CheckTextChangedAndNotEmpty())
         {
             LocalizationRead.updateScenarioText(game.quest.qd.quest.description_key, descriptionDBE.Text);
@@ -153,7 +217,6 @@ public class EditorComponentQuest : EditorComponent
 
     public void ToggleHidden()
     {
-        Game game = Game.Get();
         game.quest.qd.quest.hidden = !game.quest.qd.quest.hidden;
         Update();
     }
@@ -176,7 +239,6 @@ public class EditorComponentQuest : EditorComponent
 
     public void SelectQuestAddPack()
     {
-        Game game = Game.Get();
         string[] packs = new string[game.quest.qd.quest.packs.Length + 1];
         int i;
         for (i = 0; i < game.quest.qd.quest.packs.Length; i++)
@@ -190,7 +252,6 @@ public class EditorComponentQuest : EditorComponent
 
     public void QuestRemovePack(int index)
     {
-        Game game = Game.Get();
         string[] packs = new string[game.quest.qd.quest.packs.Length - 1];
 
         int j = 0;
@@ -203,6 +264,52 @@ public class EditorComponentQuest : EditorComponent
             }
         }
         game.quest.qd.quest.packs = packs;
+        Update();
+    }
+
+    public void UpdateMinHero()
+    {
+        int.TryParse(minHeroDBE.Text, out game.quest.qd.quest.minHero);
+        if (game.quest.qd.quest.minHero < 1)
+        {
+            game.quest.qd.quest.minHero = 1;
+        }
+        Update();
+    }
+
+    public void UpdateMaxHero()
+    {
+        int.TryParse(maxHeroDBE.Text, out game.quest.qd.quest.maxHero);
+        if (game.quest.qd.quest.maxHero > game.gameType.MaxHeroes())
+        {
+            game.quest.qd.quest.maxHero = game.gameType.MaxHeroes();
+        }
+        Update();
+    }
+
+    public void UpdateMinLength()
+    {
+        int.TryParse(minLengthDBE.Text, out game.quest.qd.quest.lengthMin);
+        Update();
+    }
+
+    public void UpdateMaxLength()
+    {
+        int.TryParse(maxLengthDBE.Text, out game.quest.qd.quest.lengthMax);
+        Update();
+    }
+
+    public void UpdateDifficulty()
+    {
+        float.TryParse(difficultyDBE.Text, out game.quest.qd.quest.difficulty);
+        if (game.quest.qd.quest.difficulty > 1)
+        {
+            game.quest.qd.quest.difficulty = 1;
+        }
+        if (game.quest.qd.quest.difficulty < 0)
+        {
+            game.quest.qd.quest.difficulty = 0;
+        }
         Update();
     }
 }
