@@ -306,25 +306,47 @@ public class EditorComponentEvent : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        string randomButton = "Ordered";
-        if (eventComponent.randomEvents) randomButton = "Random";
-        TextButton tb = new TextButton(new Vector2(8, offset), new Vector2(4, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        db = new DialogBox(new Vector2(12, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
+        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        // Quota dont need translation
-        quotaDBE = new DialogBoxEditable(
-            new Vector2(16, offset), new Vector2(2, 1),
-            eventComponent.quota.ToString(), false, 
-            delegate { SetQuota(); });
-        quotaDBE.background.transform.parent = scrollArea.transform;
-        quotaDBE.ApplyTag(Game.EDITOR);
-        quotaDBE.AddBorder();
+        TextButton tb = null;
+        if (eventComponent.quotaVar.Length == 0)
+        {
+            tb = new TextButton(new Vector2(4, offset), new Vector2(5, 1), new StringKey("val","NUMBER"), delegate { SetQuotaVar(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+
+            // Quota dont need translation
+            quotaDBE = new DialogBoxEditable(
+                new Vector2(9, offset), new Vector2(2, 1),
+                eventComponent.quota.ToString(), false, 
+                delegate { SetQuota(); });
+            quotaDBE.background.transform.parent = scrollArea.transform;
+            quotaDBE.ApplyTag(Game.EDITOR);
+            quotaDBE.AddBorder();
+        }
+        else
+        {
+            tb = new TextButton(new Vector2(4, offset), new Vector2(5, 1), new StringKey("val","VAR"), delegate { SetQuotaInt(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+
+            tb = new TextButton(new Vector2(9, offset), new Vector2(9, 1), new StringKey(null, eventComponent.quotaVar, false), delegate { SetQuotaVar(); });
+            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            tb.background.transform.parent = scrollArea.transform;
+            tb.ApplyTag(Game.EDITOR);
+        }
+        offset += 2;
+
+        string randomButton = "Ordered";
+        if (eventComponent.randomEvents) randomButton = "Random";
+        tb = new TextButton(new Vector2(8, offset), new Vector2(4, 1), new StringKey("val",randomButton), delegate { ToggleRandom(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(1.5f, offset), new Vector2(17, 1), new StringKey("val","X_COLON",BUTTONS));
@@ -899,6 +921,59 @@ public class EditorComponentEvent : EditorComponent
     public void SetQuota()
     {
         int.TryParse(quotaDBE.Text, out eventComponent.quota);
+        Update();
+    }
+
+    public void SetQuotaInt()
+    {
+        eventComponent.quotaVar = "";
+        Update();
+    }
+
+    public void SetQuotaVar()
+    {
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
+        list.AddRange(GetQuestVars());
+        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectQuotaVar(); });
+        varESL.SelectItem();
+    }
+
+    public void SelectQuotaVar()
+    {
+        if (varESL.selection.Equals("{NEW}"))
+        {
+            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
+            varText.EditText();
+        }
+        else
+        {
+            eventComponent.quotaVar = varText.value;
+            eventComponent.quota = 0;
+            Update();
+        }
+    }
+
+    public void NewQuotaVar()
+    {
+        string var = System.Text.RegularExpressions.Regex.Replace(varText.value, "[^A-Za-z0-9_]", "");
+        if (var.Length > 0)
+        {
+            if (varText.value[0] == '%')
+            {
+                var = '%' + var;
+            }
+            if (varText.value[0] == '@')
+            {
+                var = '@' + var;
+            }
+            if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
+            {
+                var = "var" + var;
+            }
+            eventComponent.quotaVar = var;
+            eventComponent.quota = 0;
+        }
         Update();
     }
 

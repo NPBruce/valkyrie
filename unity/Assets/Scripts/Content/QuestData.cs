@@ -754,6 +754,7 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
+        public string quotaVar = "";
         public string audio = "";
         public List<string> music;
 
@@ -843,6 +844,10 @@ public class QuestData
             if (data.ContainsKey("quota"))
             {
                 int.TryParse(data["quota"], out quota);
+                if (data["quota"].Length > 0 && !char.IsNumber(data["quota"][0].Is))
+                {
+                    quotaVar = data["quota"];
+                }
             }
             
             // minimum heros required to be selected for event
@@ -1047,7 +1052,11 @@ public class QuestData
             {
                 r += "hero=" + heroListName + nl;
             }
-            if (quota != 0)
+            if (quotaVar.Length > 0)
+            {
+                r += "quota=" + quotaVar + nl;
+            }
+            else if (quota != 0)
             {
                 r += "quota=" + quota + nl;
             }
@@ -1740,7 +1749,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 4;
+        public static int currentFormat = 5;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;

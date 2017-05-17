@@ -179,7 +179,6 @@ public class EditorComponent {
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        // Quota dont need translation
         commentDBE = new DialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 5),
             component.comment, false, 
