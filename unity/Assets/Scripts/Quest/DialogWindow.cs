@@ -44,8 +44,12 @@ public class DialogWindow {
         // Update selection status
         game.heroCanvas.UpdateStatus();
 
-        if (eventData.qEvent.quota > 0)
+        if (eventData.qEvent.quota > 0 || eventData.qEvent.quotaVar.Length > 0)
         {
+            if (eventData.qEvent.quotaVar.Length > 0)
+            {
+                quota = Mathf.RoundToInt(game.quest.vars.GetValue(eventData.qEvent.quotaVar));
+            }
             CreateQuotaWindow();
         }
         else
@@ -212,6 +216,13 @@ public class DialogWindow {
     public void onQuota()
     {
         Game game = Game.Get();
+        if (eventData.qEvent.quotaVar.Length > 0)
+        {
+            game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota));
+            onButton(1);
+            return;
+        }
+        
         if (game.quest.eventQuota.ContainsKey(eventData.qEvent.sectionName))
         {
             game.quest.eventQuota[eventData.qEvent.sectionName] += quota;
