@@ -111,7 +111,7 @@ public class Quest
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
-        for (int i = 1; i <= game.gameType.MaxHeroes(); i++)
+        for (int i = 1; i <= qd.maxHero; i++)
         {
             heroes.Add(new Hero(null, i));
         }

@@ -260,7 +260,7 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         // Check for validity
-        if (heroCount < 2) return;
+        if (heroCount < game.quest.qd.minHero) return;
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
