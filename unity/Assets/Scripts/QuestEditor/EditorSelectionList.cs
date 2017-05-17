@@ -15,8 +15,6 @@ public class EditorSelectionList
     public StringKey title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
-    // Page offset
-    public int indexOffset = 0;
     // Filters
     public HashSet<string> filter;
     public HashSet<string> traits;
@@ -211,36 +209,12 @@ public class EditorSelectionList
     public void SetFilter(string f)
     {
         filter.Add(f);
-        indexOffset = 0;
         SelectItem(cancelCall);
     }
 
     public void ClearFilter(string f)
     {
         filter.Remove(f);
-        indexOffset = 0;
-        SelectItem(cancelCall);
-    }
-
-    // Move to next page and redraw
-    public void NextPage()
-    {
-        indexOffset += perPage;
-        if (indexOffset > items.Count)
-        {
-            indexOffset -= perPage;
-        }
-        SelectItem(cancelCall);
-    }
-
-    // Move to previous page and redraw
-    public void PreviousPage()
-    {
-        indexOffset -= perPage;
-        if (indexOffset < 0)
-        {
-            indexOffset = 0;
-        }
         SelectItem(cancelCall);
     }
 
@@ -303,17 +277,17 @@ public class EditorSelectionList
         public static SelectionListEntry BuildNewComponent(string type)
         {
             SelectionListEntry entry = BuildNameKeyItem(new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}");
-            filter.Add(type);
-            filter.Add(new StringKey(VAL,"NEW").Translate());
+            entry.filter.Add(type);
+            entry.filter.Add(new StringKey(VAL,"NEW").Translate());
             return entry;
         }
 
-        private SelectionListEntry()
+        public SelectionListEntry()
         {
             filter = new List<string>();
         }
 
-        private SelectionListEntry(QuestData.QuestComponent component, List<string> traits = null)
+        public SelectionListEntry(QuestData.QuestComponent component, List<string> traits = null)
         {
             name = component.sectionName;
             key = name;

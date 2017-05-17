@@ -115,7 +115,7 @@ public class Quest
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
-        for (int i = 1; i <= qd.maxHero; i++)
+        for (int i = 1; i <= qd.quest.maxHero; i++)
         {
             heroes.Add(new Hero(null, i));
         }
@@ -861,13 +861,13 @@ public class Quest
             if (itemSelect.ContainsKey(name))
             {
                 items.Add(itemSelect[name]);
-                if ((QuestData.QItem)qc.inspect.Length > 0)
+                if (((QuestData.QItem)qc).inspect.Length > 0)
                 {
                     if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
                     {
-                        game.quest.itemInspect.Remove(itemSelect[name])
+                        game.quest.itemInspect.Remove(itemSelect[name]);
                     }
-                    game.quest.itemInspect.Add(itemSelect[name], (QuestData.QItem)qc.inspect)
+                    game.quest.itemInspect.Add(itemSelect[name], ((QuestData.QItem)qc).inspect);
                 }
             }
         }

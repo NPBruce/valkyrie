@@ -131,7 +131,7 @@ public class EditorComponentItem : EditorComponent
 
     public float AddInspect(float offset)
     {
-        if (!game.gameType is MoMGameType) return offset;
+        if (!(game.gameType is MoMGameType)) return offset;
 
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6f, 1), new StringKey("val", "X_COLON", new StringKey("val", "INSPECT")));
         db.ApplyTag(Game.EDITOR);

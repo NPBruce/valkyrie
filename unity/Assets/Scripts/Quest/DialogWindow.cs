@@ -218,7 +218,7 @@ public class DialogWindow {
         Game game = Game.Get();
         if (eventData.qEvent.quotaVar.Length > 0)
         {
-            game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota));
+            game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota);
             onButton(1);
             return;
         }

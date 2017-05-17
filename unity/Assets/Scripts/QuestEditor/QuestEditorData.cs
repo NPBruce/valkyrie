@@ -95,29 +95,29 @@ public class QuestEditorData {
 
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
 
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Tile");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Token");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Spawn");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Event");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("CustomMonster");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Activation");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("UI");
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("QItem");
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Tile"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Token"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Spawn"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Event"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("CustomMonster"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Activation"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("UI"));
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("QItem"));
 
         if (game.gameType is D2EGameType)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Door");
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("MPlace");
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Door"));
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("MPlace"));
         }
         else
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Puzzle");
+            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Puzzle"));
         }
 
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem(CommonStringKeys.QUEST, "Quest", "Quest"));
-        foreach (QuestData.QuestComponent c in game.quest.qd.components.values)
+        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem(CommonStringKeys.QUEST.Translate(), "Quest", "Quest"));
+        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
-            if (!c is PerilData)
+            if (!(c is PerilData))
             {
                 list.Add(new EditorSelectionList.SelectionListEntry(c));
             }
@@ -125,8 +125,6 @@ public class QuestEditorData {
 
         game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
         game.qed.esl.SelectItem();
-
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), offset), new Vector2(9, 1), CommonStringKeys.QUEST, delegate { SelectQuest(); });
     }
 
     // Create selection list for type of component

@@ -204,7 +204,7 @@ public class EditorComponent {
         return offset + 2;
     }
 
-    public string static GetRelativePath(string start, string end)
+    public static string GetRelativePath(string start, string end)
     {
         System.Uri fromUri = new System.Uri(start);
         System.Uri toUri = new System.Uri(end);

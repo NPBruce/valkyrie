@@ -162,8 +162,8 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Selection(string key)
         {
-            Destoyer.Dialog();
-            new QuestDetailsScreen(questList[key])
+            Destroyer.Dialog();
+            new QuestDetailsScreen(questList[key]);
         }
     }
 }

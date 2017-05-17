@@ -844,7 +844,7 @@ public class QuestData
             if (data.ContainsKey("quota"))
             {
                 int.TryParse(data["quota"], out quota);
-                if (data["quota"].Length > 0 && !char.IsNumber(data["quota"][0].Is))
+                if (data["quota"].Length > 0 && !char.IsNumber(data["quota"][0]))
                 {
                     quotaVar = data["quota"];
                 }
@@ -1898,7 +1898,7 @@ public class QuestData
             {
                 int.TryParse(iniData["maxhero"], out maxHero);
             }
-            if (maxhero > Game.Get().gameType.MaxHeroes())
+            if (maxHero > Game.Get().gameType.MaxHeroes())
             {
                 maxHero = Game.Get().gameType.MaxHeroes();
             }

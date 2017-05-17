@@ -32,11 +32,11 @@ public class InvestigatorItems
                 game.quest.items.Add(game.quest.itemSelect[kv.Key]);
                 if (item.inspect.Length > 0)
                 {
-                    if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
+                    if (game.quest.itemInspect.ContainsKey(game.quest.itemSelect[kv.Key]))
                     {
-                        game.quest.itemInspect.Remove(itemSelect[name])
+                        game.quest.itemInspect.Remove(game.quest.itemSelect[kv.Key]);
                     }
-                    game.quest.itemInspect.Add(itemSelect[name], item.inspect)
+                    game.quest.itemInspect.Add(game.quest.itemSelect[kv.Key], item.inspect);
                 }
             }
         }

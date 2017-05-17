@@ -99,7 +99,7 @@ public class EditorComponentQuest : EditorComponent
         }
         offset += 1;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MIN_X", HeroesName())));
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MIN_X", game.gameType.HeroesName())));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         
@@ -111,7 +111,7 @@ public class EditorComponentQuest : EditorComponent
         minHeroDBE.ApplyTag(Game.EDITOR);
         minHeroDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MAX_X", HeroesName())));
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MAX_X", game.gameType.HeroesName())));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         

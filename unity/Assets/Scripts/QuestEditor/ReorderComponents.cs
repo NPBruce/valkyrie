@@ -1,5 +1,7 @@
 using UnityEngine;
 using Assets.Scripts.Content;
+using System.IO;
+using System.Collections.Generic;
 
 public class ReorderComponents
 {
@@ -22,7 +24,7 @@ public class ReorderComponents
 
     public void ReorderSource()
     {
-        source = Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), sourceESL.selection);
+        source = Path.Combine(Path.GetDirectoryName(Game.Get().quest.qd.questPath), sourceESL.selection);
         Update();
     }
 
@@ -76,7 +78,7 @@ public class ReorderComponents
         scrollRect.scrollSensitivity = 27f;
 
         bool first = true;
-        foreach (QuestData.QuestComponent c in game.quest.qd.components)
+        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
             if (!c.source.Equals(source)) continue;
 
@@ -98,13 +100,9 @@ public class ReorderComponents
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
                 tb.background.transform.parent = scrollArea.transform;
             }
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), 0), new Vector2(20, 1), new StringKey(null, source, false));
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), 
-                new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = filtered[i].color;
-            tb.background.transform.parent = scrollArea.transform;
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), new StringKey(null, source, false), Color.black, Color.white);
+            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            db.background.transform.parent = scrollArea.transform;
             first = false;
         }
         offset++;
@@ -112,13 +110,14 @@ public class ReorderComponents
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - scrollStart) * UIScaler.GetPixelsPerUnit());
         // Cancel button
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.CANCEL, Destroyer.Dialog());
+        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
 
     public void DecComponent(string name)
     {
+        Game game = Game.Get();
         bool held = false;
         Dictionary<string, QuestData.QuestComponent> newDict = new Dictionary<string, QuestData.QuestComponent>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)

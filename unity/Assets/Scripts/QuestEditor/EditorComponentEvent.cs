@@ -67,12 +67,12 @@ public class EditorComponentEvent : EditorComponent
 
         offset = AddEventTrigger(offset);
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), 
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), 
             new StringKey("val", "X_COLON", AUDIO));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset++), new Vector2(10, 1), 
+        TextButton tb = new TextButton(new Vector2(4, offset++), new Vector2(10, 1), 
             new StringKey(null,eventComponent.audio,false), delegate { SetAudio(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -274,7 +274,7 @@ public class EditorComponentEvent : EditorComponent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
+        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
             new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -967,7 +967,7 @@ public class EditorComponentEvent : EditorComponent
             {
                 var = '@' + var;
             }
-            if (char.IsNumber(op.var[0]) || op.var[0] == '-' || op.var[0] == '.')
+            if (char.IsNumber(var[0]) || var[0] == '-' || var[0] == '.')
             {
                 var = "var" + var;
             }
