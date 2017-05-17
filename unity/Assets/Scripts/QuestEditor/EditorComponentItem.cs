@@ -319,6 +319,25 @@ public class EditorComponentItem : EditorComponent
 
     public void PickInpsect()
     {
-        
+        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
+
+        items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if(kv.Value.typeDynamic.Equals("Event"))
+            {
+                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+            }
+        }
+
+        itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectInspectEvent(); });
+        itemESL.SelectItem();
+    }
+
+    public void SelectInspectEvent()
+    {
+        itemComponent.inspect = itemESL.selection;
+        Update();
     }
 }

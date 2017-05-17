@@ -3,12 +3,12 @@ using UnityEngine;
 using System.Collections.Generic;
 
 // Next stage button is used by MoM to move between investigators and monsters
-public class InventoryWindow
+public class InventoryWindowMoM
 {
     public Dictionary<string, DialogBoxEditable> valueDBE;
 
     // Construct and display
-    public InventoryWindow()
+    public InventoryWindowMoM()
     {
         Update();
     }
@@ -92,24 +92,6 @@ public class InventoryWindow
         }
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (xOffset - UIScaler.GetHCenter(-16)) * UIScaler.GetPixelsPerUnit());
-
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-5), 19),
-            new Vector2(10, 4),
-            StringKey.NULL);
-        db.AddBorder();
-
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-4), 20),
-            new Vector2(5, 2),
-            new StringKey("val", "GOLD"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(1), 20),
-            new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
         TextButton tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-4f), 24.5f),

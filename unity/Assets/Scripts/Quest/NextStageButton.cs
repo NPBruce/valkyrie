@@ -121,6 +121,7 @@ public class NextStageButton
         {
             return;
         }
+        new InventoryWindowMoM();
     }
 
     public void Log()
