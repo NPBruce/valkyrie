@@ -18,7 +18,7 @@ public class EditorComponentActivation : EditorComponent
 
     QuestData.Activation activationComponent;
     PaneledDialogBoxEditable abilityDBE;
-    PaneledDialogBoxEditable moveButtonDBE;
+    DialogBoxEditable moveButtonDBE;
     PaneledDialogBoxEditable masterActionsDBE;
     PaneledDialogBoxEditable minionActionsDBE;
     PaneledDialogBoxEditable moveDBE;
@@ -132,10 +132,11 @@ public class EditorComponentActivation : EditorComponent
         abilityDBE.AddBorder();
 
         db = new DialogBox(new Vector2(0, 10), new Vector2(10, 1), UNABLE_BUTTON);
+        db.ApplyTag(Game.EDITOR);
 
-        moveButtonDBE = new PaneledDialogBoxEditable(
+        moveButtonDBE = new DialogBoxEditable(
             new Vector2(10, 10), new Vector2(10, 1), 
-            activationComponent.moveButton.Translate(true),
+            activationComponent.moveButton.Translate(true), false,
             delegate { UpdateMoveButton(); });
         moveButtonDBE.ApplyTag(Game.EDITOR);
         moveButtonDBE.AddBorder();

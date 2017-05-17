@@ -1733,6 +1733,20 @@ public class QuestData
             }
             return r;
         }
+
+        // When changing the name placement event need to update in array
+        override public void ChangeReference(string oldName, string newName)
+        {
+            for (int i = 0; i < itemName.Length; i++)
+            {
+                if (itemName[i].Equals(oldName))
+                {
+                    itemName[i] = newName;
+                }
+            }
+            // If any were replaced with "", remove them
+            itemName = RemoveFromArray(itemName, "");
+        }
     }
 
     // Quest ini component has special data
