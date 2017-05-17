@@ -662,9 +662,9 @@ public class QuestData
                 {
                     mTypes[i] = newName;
                 }
-                // If any were replaced with "", remove them
-                mTypes = RemoveFromArray(mTypes, "");
             }
+            // If any were replaced with "", remove them
+            mTypes = RemoveFromArray(mTypes, "");
         }
 
         // Save to string (editor)
@@ -1756,12 +1756,19 @@ public class QuestData
         // When changing the name placement event need to update in array
         override public void ChangeReference(string oldName, string newName)
         {
-            base.ChangeReference(oldName, newName);
-
             if (inspect.Equals(oldName))
             {
                 inspect = newName;
             }
+            for (int i = 0; i < itemName.Length; i++)
+            {
+                if (itemName[i].Equals(oldName))
+                {
+                    itemName[i] = newName;
+                }
+            }
+            // If any were replaced with "", remove them
+            itemName = RemoveFromArray(itemName, "");
         }
     }
 
