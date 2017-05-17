@@ -1754,11 +1754,19 @@ public class QuestData
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
+        public int minHero = 2;
+        public int maxHero = 5;
+        public float difficulty = 0;
+        public int lengthMin = 0;
+        public int lengthMax = 0;
+
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string authors_key { get { return "quest.authors"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey authors { get { return new StringKey("qst", authors_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -1842,6 +1850,36 @@ public class QuestData
                 bool.TryParse(iniData["hidden"], out hidden);
             }
 
+            if (iniData.ContainsKey("minhero"))
+            {
+                int.TryParse(iniData["minhero"], out minHero);
+            }
+            if (minHero < 1) minHero = 1;
+
+            maxHero = Game.Get().gameType.MaxHeroes();
+            if (iniData.ContainsKey("maxhero"))
+            {
+                int.TryParse(iniData["maxhero"], out maxHero);
+            }
+            if (maxhero > Game.Get().gameType.MaxHeroes())
+            {
+                maxHero = Game.Get().gameType.MaxHeroes();
+            }
+
+            if (iniData.ContainsKey("difficulty"))
+            {
+                float.TryParse(iniData["difficulty"], out difficulty);
+            }
+
+            if (iniData.ContainsKey("lengthmin"))
+            {
+                int.TryParse(iniData["lengthmin"], out lengthMin);
+            }
+            if (iniData.ContainsKey("lengthmax"))
+            {
+                int.TryParse(iniData["lengthmax"], out lengthMax);
+            }
+
             return true;
         }
 
@@ -1860,6 +1898,29 @@ public class QuestData
             {
                 r.Append("packs=");
                 r.AppendLine(string.Join(" ", packs));
+            }
+
+            if (minHero != 2)
+            {
+                r.Append("minhero=").AppendLine(minHero.ToString());
+            }
+            if (maxHero != Game.Get().gameType.MaxHeroes())
+            {
+                r.Append("maxhero=").AppendLine(maxHero.ToString());
+            }
+
+            if (difficulty != 0)
+            {
+                r.Append("difficulty=").AppendLine(difficulty.ToString());
+            }
+
+            if (lengthMin != 0)
+            {
+                r.Append("lengthmin=").AppendLine(lengthMin.ToString());
+            }
+            if (lengthMax != 0)
+            {
+                r.Append("lengthmax=").AppendLine(lengthMax.ToString());
             }
 
             return r.ToString();

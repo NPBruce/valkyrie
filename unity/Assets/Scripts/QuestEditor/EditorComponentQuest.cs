@@ -12,6 +12,11 @@ public class EditorComponentQuest : EditorComponent
 
     // When a component has editable boxes they use these, so that the value can be read
     public DialogBoxEditable nameDBE;
+    public DialogBoxEditable minHeroDBE;
+    public DialogBoxEditable maxHeroDBE;
+    public DialogBoxEditable difficultyDBE;
+    public DialogBoxEditable minLengthDBE;
+    public DialogBoxEditable maxLengthDBE;
     public PaneledDialogBoxEditable descriptionDBE;
     EditorSelectionList packESL;
 
@@ -93,6 +98,69 @@ public class EditorComponentQuest : EditorComponent
             offset += 1;
         }
         offset += 1;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MIN_X", HeroesName())));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        minHeroDBE = new DialogBoxEditable(
+            new Vector2(7.5f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.minhero.ToString(), false, 
+            delegate { UpdateMinHero(); });
+        minHeroDBE.background.transform.parent = scrollArea.transform;
+        minHeroDBE.ApplyTag(Game.EDITOR);
+        minHeroDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1), new StringKey("Val", "X_COLON", new StringKey("Val", "MAX_X", HeroesName())));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        maxHeroDBE = new DialogBoxEditable(
+            new Vector2(17, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.maxHero.ToString(), false, 
+            delegate { UpdateMaxHero(); });
+        maxHeroDBE.background.transform.parent = scrollArea.transform;
+        maxHeroDBE.ApplyTag(Game.EDITOR);
+        maxHeroDBE.AddBorder();
+        offset +=2;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1),  new StringKey("Val", "X_COLON", new StringKey("Val", "MIN_X", new StringKey("val", "DURATION"))));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        minLengthDBE = new DialogBoxEditable(
+            new Vector2(7.5f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.lengthMin.ToString(), false, 
+            delegate { UpdateMinLength(); });
+        minLengthDBE.background.transform.parent = scrollArea.transform;
+        minLengthDBE.ApplyTag(Game.EDITOR);
+        minLengthDBE.AddBorder();
+
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1),  new StringKey("Val", "X_COLON", new StringKey("Val", "MAX_X", new StringKey("val", "DURATION"))));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        maxLengthDBE = new DialogBoxEditable(
+            new Vector2(17f, offset), new Vector2(2, 1), 
+            game.quest.qd.quest.lengthMax.ToString(), false, 
+            delegate { UpdateMaxLength(); });
+        maxLengthDBE.background.transform.parent = scrollArea.transform;
+        maxLengthDBE.ApplyTag(Game.EDITOR);
+        maxLengthDBE.AddBorder();
+        offset +=2;
+
+        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1),  new StringKey("Val", "X_COLON", new StringKey("Val", "DIFFICULTY")));
+        db.background.transform.parent = scrollArea.transform;
+        db.ApplyTag(Game.EDITOR);
+        
+        difficultyDBE = new DialogBoxEditable(
+            new Vector2(17f, offset), new Vector2(3, 1), 
+            game.quest.qd.quest.difficulty.ToString(), false, 
+            delegate { UpdateDifficulty(); });
+        difficultyDBE.background.transform.parent = scrollArea.transform;
+        difficultyDBE.ApplyTag(Game.EDITOR);
+        difficultyDBE.AddBorder();
+        offset +=2;
 
         return offset;
     }
