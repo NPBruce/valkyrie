@@ -193,6 +193,7 @@ SPAWN,Spawn,Generar,Générer,Spawn,Generazione,,,,
 STARTING_ITEM,Starting Item,Objeto Inicial,,Startgegenstand,,,,,
 STARTING_ITEMS,Starting Items,Equipo Inicial,Objets de départ,Startgegenstände,Oggetti Iniziali,,,,
 START_QUEST,Start {0},Iniciar {0},Démarrer {0},Starte {0},Inizio {0},,,,
+START,Start,Iniciar,Démarrer,Starte,Inizio,,,,
 
 TESTS,Tests,Tests,Tests,Tests,Prove,,,,
 TILE,Tile,Tablero,Tuile,Teil,Tessera,,,,
