@@ -1650,6 +1650,7 @@ public class QuestData
         public string[] traits;
         public string[] traitpool;
         public bool starting = false;
+        public string inspect = "";
 
         // Create new (editor)
         public QItem(string s) : base(s)
@@ -1701,6 +1702,10 @@ public class QuestData
             {
                 traitpool = new string[0];
             }
+            if (data.ContainsKey("inspect"))
+            {
+                inspect = data["inspect"];
+            }
         }
 
         // Save to string
@@ -1740,7 +1745,23 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+
+            if (inspect.Length > 0)
+            {
+                r += "inspect=" + inspect + nl;
+            }
             return r;
+        }
+
+        // When changing the name placement event need to update in array
+        override public void ChangeReference(string oldName, string newName)
+        {
+            base.ChangeReference(oldName, newName);
+
+            if (inspect.Equals(oldName))
+            {
+                inspect = newName;
+            }
         }
     }
 
