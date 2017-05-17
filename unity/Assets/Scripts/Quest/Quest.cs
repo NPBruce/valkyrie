@@ -39,6 +39,9 @@ public class Quest
     // Dictionary of picked items
     public Dictionary<string, string> itemSelect;
 
+    // Dictionary item inspect events
+    public Dictionary<string, string> itemInspect;
+
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
@@ -97,6 +100,7 @@ public class Quest
         items = new HashSet<string>();
         shops = new Dictionary<string, List<string>>();
         itemSelect = new Dictionary<string, string>();
+        itemInspect = new Dictionary<string, string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
@@ -471,6 +475,7 @@ public class Quest
         undo = new Stack<string>();
         monsterSelect = new Dictionary<string, string>();
         itemSelect = new Dictionary<string, string>();
+        itemInspect = new Dictionary<string, string>();
         shops = new Dictionary<string, List<string>>();
         activeShop = "";
 
@@ -596,6 +601,12 @@ public class Quest
             // Support old saves
             itemSelect = new Dictionary<string, string>();
             GenerateItemSelection();
+        }
+
+        itemInspect = saveData.Get("SelectItem");
+        if (itemInspect == null)
+        {
+            itemInspect = new Dictionary<string, string>();
         }
 
         // Set items
@@ -850,6 +861,14 @@ public class Quest
             if (itemSelect.ContainsKey(name))
             {
                 items.Add(itemSelect[name]);
+                if ((QuestData.QItem)qc.inspect.Length > 0)
+                {
+                    if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
+                    {
+                        game.quest.itemInspect.Remove(itemSelect[name])
+                    }
+                    game.quest.itemInspect.Add(itemSelect[name], (QuestData.QItem)qc.inspect)
+                }
             }
         }
     }
@@ -1060,6 +1079,12 @@ public class Quest
 
         r += "[SelectItem]" + nl;
         foreach (KeyValuePair<string, string> kv in itemSelect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
+        }
+
+        r += "[ItemInspect]" + nl;
+        foreach (KeyValuePair<string, string> kv in itemInspect)
         {
             r += kv.Key + "=" + kv.Value + nl;
         }
