@@ -47,16 +47,19 @@ namespace Assets.Scripts.UI.Screens
                 string symbol = new StringKey("val","ICON_SUCCESS_RESULT").Translate();
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13), 28), new Vector2(11, 2), new StringKey(null, symbol + symbol + symbol + symbol + symbol, false));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13) + (q.difficulty * 11), 28), new Vector2((1 - q.difficulty) * 11, 2), StringKey.NULL, Color.clear, new Color(0, 0, 0, 0.7f));
+                db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.95f) + (q.difficulty * 6.9f), 28), new Vector2((1 - q.difficulty) * 6.9f, 2), StringKey.NULL, Color.clear, new Color(0, 0, 0, 0.7f));
             }
 
             // Duration
             if (q.lengthMax != 0)
             {
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(2), 27), new Vector2(11, 1), new StringKey("val","DURATION"));
-                db = new DialogBox(new Vector2(UIScaler.GetHCenter(2), 28f), new Vector2(4, 2), q.lengthMax);
+                db = new DialogBox(new Vector2(UIScaler.GetHCenter(2), 28f), new Vector2(4, 2), q.lengthMin);
+                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 28f), new Vector2(2, 2), new StringKey(null, "-", false));
-                db = new DialogBox(new Vector2(UIScaler.GetHCenter(9), 28f), new Vector2(4, 2), q.lengthMin);
+                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                db = new DialogBox(new Vector2(UIScaler.GetHCenter(9), 28f), new Vector2(4, 2), q.lengthMax);
+                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             }
 
             TextButton tb = new TextButton(

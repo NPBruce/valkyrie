@@ -40,11 +40,11 @@ public class EditorComponentSpawn : EditorComponentEvent
         TextButton tb = null;
         if (!component.locationSpecified)
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), POSITION_TYPE_UNUSED, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), POSITION_TYPE_UNUSED, delegate { PositionTypeCycle(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(7, offset), new Vector2(4, 1), POSITION_TYPE_HIGHLIGHT, delegate { PositionTypeCycle(); });
+            tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), POSITION_TYPE_HIGHLIGHT, delegate { PositionTypeCycle(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;

@@ -24,7 +24,7 @@ public class NextStageButton
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
-        Color bgColor = new Color(0.5f, 0, 0, 0.5f);
+        Color bgColor = new Color(0.05f, 0, 0, 0.9f);
         StringKey phase;
         if (Game.Get().quest.phase == Quest.MoMPhase.horror)
         {
@@ -41,7 +41,7 @@ public class NextStageButton
         else
         {
             phase = PHASE_INVESTIGATOR;
-            bgColor = new Color(0, 0.5f, 0, 0.5f);
+            bgColor = new Color(0, 0.05f, 0, 0.9f);
         }
 
         TextButton tb = new TextButton(
