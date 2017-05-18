@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -77,18 +78,32 @@ namespace Assets.Scripts.UI.Screens
                     LocalizationRead.scenarioDict = q.Value.localizationDict;
                     string translation = q.Value.name.Translate();
 
-                    // Size is 1.2 to be clear of characters with tails
+                    // Draw Image
+                    db = new DialogBox(new Vector2(2, offset),
+                        new Vector2(3, 3),
+                        StringKey.NULL,
+                        Color.white,
+                        Color.white);
+                    db.background.transform.SetParent(scrollArea.transform);
+                    if (q.Value.image.Length > 0)
+                    {
+                        Texture2D tex = ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image));
+                        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+                        db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                    }
+
                     tb = new TextButton(
-                        new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
+                        new Vector2(5, offset), 
+                        new Vector2(UIScaler.GetWidthUnits() - 8, 3f),
                         new StringKey("val", "INDENT", translation),
-                        delegate { Selection(key); }, Color.black, (int)offset);
+                        delegate { Selection(key); }, Color.clear, (int)offset);
                     tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                    //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                     tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
+                    tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     tb.background.transform.SetParent(scrollArea.transform);
-                    offset += 2;
+                    offset += 4;
                 }
             }
 
