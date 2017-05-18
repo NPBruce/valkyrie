@@ -47,7 +47,7 @@ public class QuestEditSelection
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
@@ -139,7 +139,7 @@ public class QuestEditSelection
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
@@ -238,7 +238,7 @@ public class QuestEditSelection
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);

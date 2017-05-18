@@ -76,12 +76,12 @@ public class EditorComponent {
 
         scrollArea = new GameObject("scroll");
         scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (20 * UIScaler.GetPixelsPerUnit()));
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 30 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 20 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
@@ -90,7 +90,7 @@ public class EditorComponent {
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
@@ -108,18 +108,18 @@ public class EditorComponent {
         TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
             new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         tb = new TextButton(new Vector2(2, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(13, offset), new Vector2(5, 1), new StringKey("val", "DELETE"), delegate { Delete(); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         return offset + 2;
@@ -156,14 +156,14 @@ public class EditorComponent {
     virtual public float AddComment(float offset)
     {
         DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT"))));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         commentDBE = new DialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 5),
             component.comment, false, 
             delegate { SetComment(); });
-        commentDBE.background.transform.parent = scrollArea.transform;
+        commentDBE.background.transform.SetParent(scrollArea.transform);
         commentDBE.ApplyTag(Game.EDITOR);
         commentDBE.AddBorder();
 
@@ -173,12 +173,12 @@ public class EditorComponent {
     virtual public float AddSource(float offset)
     {
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(14.5f, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         return offset + 2;
