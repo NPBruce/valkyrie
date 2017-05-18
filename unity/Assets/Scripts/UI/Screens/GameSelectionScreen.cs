@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
 using FFGAppImport;
+using System.Threading;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -11,6 +12,7 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+        Thread importThread;
 
         private StringKey D2E_NAME = new StringKey("val","D2E_NAME");
         private StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
@@ -22,6 +24,11 @@ namespace Assets.Scripts.UI.Screens
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
+        {
+            Draw();
+        }
+
+        public void Draw()
         {
             // This will destroy all
             Destroyer.Destroy();
@@ -141,11 +148,32 @@ namespace Assets.Scripts.UI.Screens
         public void Import(string type)
         {
             Destroyer.Destroy();
+
+            // Create the image
+            Texture2D tex = Resources.Load("sprites/logo") as Texture2D;
+            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
+            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-3), 8),
+                new Vector2(6, 6),
+                StringKey.NULL,
+                Color.clear,
+                Color.white);
+            db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+            db.background.AddComponent<SpritePulser>();
+
             // Display message
-            DialogBox db = new DialogBox(new Vector2(2, 10), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING);
+            db = new DialogBox(new Vector2(2, 20), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING);
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            // Perform importing later, to ensure message is displayed first
-            Game.Get().CallAfterFrame(delegate { PerformImport(type); });
+            if (type.Equals("D2E"))
+            {
+                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(); }));
+            }
+            if (type.Equals("MoM"))
+            {
+                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
+            }
+            importThread.Start();
+            //while (!importThread.IsAlive) ;
         }
 
         // Start game as MoM
@@ -182,19 +210,12 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        // Import (called once message displayed)
-        private void PerformImport(string type)
+        public void Update()
         {
-            if (type.Equals("D2E"))
-            {
-                fcD2E.Import();
-            }
-            if (type.Equals("MoM"))
-            {
-                fcMoM.Import();
-            }
-            Destroyer.Dialog();
-            new GameSelectionScreen();
+            if (importThread == null) return;
+            if (importThread.IsAlive) return;
+            importThread = null;
+            Draw();
         }
 
         // Exit Valkyrie

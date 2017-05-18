@@ -58,8 +58,10 @@ public class Game : MonoBehaviour {
     // Class log window
     public LogWindow logWindow;
     // Class for stage control UI
-
     public Audio audioControl;
+
+    // Import thread
+    public GameSelectionScreen gameSelect;
 
     // Current language
     public string currentLang;
@@ -121,7 +123,7 @@ public class Game : MonoBehaviour {
         ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
         // Bring up the Game selector
-        new GameSelectionScreen();
+        gameSelect = new GameSelectionScreen();
     }
 
     // This is called by 'start quest' on the main menu
@@ -287,21 +289,10 @@ public class Game : MonoBehaviour {
                 logWindow.Update(true);
             }
         }
-    }
 
-    // This is here to call a function after the frame has been rendered
-    // We use this on import because the import function blocks rendering
-    // and we want to update the display before it starts
-    public void CallAfterFrame(UnityEngine.Events.UnityAction call)
-    {
-        StartCoroutine(CallAfterFrameDelay(call));
-    }
-
-    private IEnumerator CallAfterFrameDelay(UnityEngine.Events.UnityAction call)
-    {
-        yield return new WaitForEndOfFrame();
-        // Fixme this is hacky, the single frame solution doesn't work, we add 1 second
-        yield return new WaitForSeconds(1);
-        call();
+        if (gameSelect != null)
+        {
+            gameSelect.Update();
+        }
     }
 }
