@@ -33,7 +33,7 @@ public class ShopInterface : Quest.BoardComponent
             // Create UI Panel
             panel = new GameObject("QuestUIPanel");
             panel.tag = Game.BOARD;
-            panel.transform.parent = game.uICanvas.transform;
+            panel.transform.SetParent(game.uICanvas.transform);
             panel.transform.SetAsFirstSibling();
             panel.AddComponent<RectTransform>();
             panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
@@ -118,12 +118,12 @@ public class ShopInterface : Quest.BoardComponent
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (9) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, 1 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 24.5f * UIScaler.GetPixelsPerUnit());
@@ -132,7 +132,7 @@ public class ShopInterface : Quest.BoardComponent
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
         scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -157,7 +157,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 
@@ -171,7 +171,7 @@ public class ShopInterface : Quest.BoardComponent
                 Color.clear);
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.SHOP);
 
             StringKey act = new StringKey(null, "-", false);
@@ -195,7 +195,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 
@@ -207,7 +207,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 
@@ -234,12 +234,12 @@ public class ShopInterface : Quest.BoardComponent
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (9) * UIScaler.GetPixelsPerUnit());
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, 1 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 24.5f * UIScaler.GetPixelsPerUnit());
@@ -248,7 +248,7 @@ public class ShopInterface : Quest.BoardComponent
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
         scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -275,7 +275,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 
@@ -289,7 +289,7 @@ public class ShopInterface : Quest.BoardComponent
                 Color.clear);
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.SHOP);
 
             StringKey act = new StringKey(null, "-", false);
@@ -313,7 +313,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 
@@ -325,7 +325,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.ApplyTag(Game.SHOP);
 

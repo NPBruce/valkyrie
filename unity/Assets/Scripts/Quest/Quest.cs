@@ -1152,7 +1152,7 @@ public class Quest
             // Create a unity object for the tile
             unityObject = new GameObject("Object" + qTile.sectionName);
             unityObject.tag = Game.BOARD;
-            unityObject.transform.parent = game.boardCanvas.transform;
+            unityObject.transform.SetParent(game.boardCanvas.transform);
 
             // Add image to object
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
@@ -1234,7 +1234,7 @@ public class Quest
             unityObject = new GameObject("Object" + qToken.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = game.tokenCanvas.transform;
+            unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
@@ -1292,7 +1292,7 @@ public class Quest
                 // Create UI Panel
                 panel = new GameObject("QuestUIPanel");
                 panel.tag = Game.BOARD;
-                panel.transform.parent = game.uICanvas.transform;
+                panel.transform.SetParent(game.uICanvas.transform);
                 panel.transform.SetAsFirstSibling();
                 panel.AddComponent<RectTransform>();
                 panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
@@ -1315,7 +1315,7 @@ public class Quest
             unityObject = new GameObject("Object" + qUI.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = panel.transform;
+            unityObject.transform.SetParent(panel.transform);
 
             float aspect = 1;
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
@@ -1459,7 +1459,7 @@ public class Quest
             unityObject = new GameObject("Object" + qDoor.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = game.tokenCanvas.transform;
+            unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();

@@ -161,7 +161,7 @@ namespace Assets.Scripts.UI.Screens
             GameObject banner = new GameObject("banner");
             banner.tag = Game.DIALOG;
 
-            banner.transform.parent = Game.Get().uICanvas.transform;
+            banner.transform.SetParent(Game.Get().uICanvas.transform);
 
             RectTransform trans = banner.AddComponent<RectTransform>();
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1 * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());

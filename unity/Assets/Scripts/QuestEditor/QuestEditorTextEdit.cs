@@ -44,8 +44,8 @@ public class QuestEditorTextEdit {
         textObj.tag = Game.DIALOG;
         inputObj.tag = Game.DIALOG;
 
-        inputObj.transform.parent = game.uICanvas.transform;
-        textObj.transform.parent = inputObj.transform;
+        inputObj.transform.SetParent(game.uICanvas.transform);
+        textObj.transform.SetParent(inputObj.transform);
 
         RectTransform transBg = inputObj.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 3 * UIScaler.GetPixelsPerUnit(), UIScaler.GetPixelsPerUnit());

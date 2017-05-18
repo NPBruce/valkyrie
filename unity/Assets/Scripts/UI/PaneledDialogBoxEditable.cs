@@ -112,9 +112,9 @@ public class PaneledDialogBoxEditable
 
         Game game = Game.Get();
 
-        background.transform.parent = game.uICanvas.transform;
-        inputObj.transform.parent = background.transform;
-        textObj.transform.parent = inputObj.transform;
+        background.transform.SetParent(game.uICanvas.transform);
+        inputObj.transform.SetParent(background.transform);
+        textObj.transform.SetParent(inputObj.transform);
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,  (location.y +1) * UIScaler.GetPixelsPerUnit(), (size.y - 1) * UIScaler.GetPixelsPerUnit());
@@ -174,7 +174,7 @@ public class PaneledDialogBoxEditable
                     new Vector2(hOffset, offset), new Vector2(width, 1),
                     translated,
                     delegate { InsertCharacter(translation); });
-                tb.background.transform.parent = background.transform;
+                tb.background.transform.SetParent(background.transform);
                 tb.ApplyTag(Game.DIALOG);
 
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
@@ -242,7 +242,7 @@ public class PaneledDialogBoxEditable
     public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)
     {
         this.textObj.GetComponent<UnityEngine.UI.Text>().material = mat;
-        this.background.transform.parent = trans;
+        this.background.transform.SetParent(trans);
     }
 
 }

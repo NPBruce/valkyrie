@@ -47,7 +47,7 @@ public class EditorComponentSpawn : EditorComponentEvent
             tb = new TextButton(new Vector2(14, offset), new Vector2(4, 1), POSITION_TYPE_HIGHLIGHT, delegate { PositionTypeCycle(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
     }
     
@@ -60,14 +60,14 @@ public class EditorComponentSpawn : EditorComponentEvent
         if (game.gameType is D2EGameType)
         {
             db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", MONSTER_UNIQUE));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             if (!spawnComponent.unique)
             {
                 tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1), new StringKey("val", "FALSE"), delegate { UniqueToggle(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
                 tb.ApplyTag(Game.EDITOR);
                 offset += 2;
             }
@@ -75,32 +75,32 @@ public class EditorComponentSpawn : EditorComponentEvent
             {
                 tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1), new StringKey("val", "TRUE"), delegate { UniqueToggle(); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
                 tb.ApplyTag(Game.EDITOR);
                 offset += 2;
 
                 db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
-                db.background.transform.parent = scrollArea.transform;
+                db.background.transform.SetParent(scrollArea.transform);
                 db.ApplyTag(Game.EDITOR);
 
                 uniqueTitleDBE = new DialogBoxEditable(
                     new Vector2(5, offset), new Vector2(14.5f, 1),
                     spawnComponent.uniqueTitle.Translate(), false, 
                     delegate { UpdateUniqueTitle(); });
-                uniqueTitleDBE.background.transform.parent = scrollArea.transform;
+                uniqueTitleDBE.background.transform.SetParent(scrollArea.transform);
                 uniqueTitleDBE.ApplyTag(Game.EDITOR);
                 uniqueTitleDBE.AddBorder();
                 offset += 2;
 
                 db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
-                db.background.transform.parent = scrollArea.transform;
+                db.background.transform.SetParent(scrollArea.transform);
                 db.ApplyTag(Game.EDITOR);
 
                 uniqueTextDBE = new PaneledDialogBoxEditable(
                     new Vector2(0.5f, offset), new Vector2(19, 8), 
                 spawnComponent.uniqueText.Translate(),
                 delegate { UpdateUniqueText(); });
-                uniqueTextDBE.background.transform.parent = scrollArea.transform;
+                uniqueTextDBE.background.transform.SetParent(scrollArea.transform);
                 uniqueTextDBE.ApplyTag(Game.EDITOR);
                 uniqueTextDBE.AddBorder();
                 offset += 9;
@@ -108,35 +108,35 @@ public class EditorComponentSpawn : EditorComponentEvent
         }
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", HEALTH));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         // Dumbers dont need translation
         healthDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1),
             spawnComponent.uniqueHealthBase.ToString(), false, delegate { UpdateHealth(); });
-        healthDBE.background.transform.parent = scrollArea.transform;
+        healthDBE.background.transform.SetParent(scrollArea.transform);
         healthDBE.ApplyTag(Game.EDITOR);
         healthDBE.AddBorder();
 
         db = new DialogBox(new Vector2(8, offset), new Vector2(7, 1), new StringKey("val", "X_COLON", HEALTH_HERO));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         // Numbers dont need translation
         healthHeroDBE = new DialogBoxEditable(new Vector2(15, offset), new Vector2(3, 1),
             spawnComponent.uniqueHealthHero.ToString(), false, delegate { UpdateHealthHero(); });
-        healthHeroDBE.background.transform.parent = scrollArea.transform;
+        healthHeroDBE.background.transform.SetParent(scrollArea.transform);
         healthHeroDBE.ApplyTag(Game.EDITOR);
         healthHeroDBE.AddBorder();
         offset += 2;
 
         db = new DialogBox(new Vector2(1.5f, offset), new Vector2(15, 1), new StringKey("val", "X_COLON", TYPES));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(16.5f, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTypeAdd(0); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         int i = 0;
@@ -151,17 +151,17 @@ public class EditorComponentSpawn : EditorComponentEvent
 
             tb = new TextButton(new Vector2(0.5f, offset), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTypeRemove(mSlot); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(1.5f, offset), new Vector2(15, 1), new StringKey(null,mName,false), delegate { MonsterTypeReplace(mSlot); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(16.5f, offset), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTypeAdd(mSlot + 1); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
             offset++;
         }
@@ -169,12 +169,12 @@ public class EditorComponentSpawn : EditorComponentEvent
 
         float traitOffset = offset;
         db = new DialogBox(new Vector2(0.5f, offset), new Vector2(8, 1), REQ_TRAITS);
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(8.5f, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         for (i = 0; i < spawnComponent.mTraitsRequired.Length; i++)
@@ -185,24 +185,24 @@ public class EditorComponentSpawn : EditorComponentEvent
             tb = new TextButton(new Vector2(0.5f, offset), new Vector2(1, 1), 
                 CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(1.5f, offset), new Vector2(8, 1), 
                 new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
             offset++;
         }
 
         db = new DialogBox(new Vector2(10.5f, traitOffset), new Vector2(8, 1), POOL_TRAITS);
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(18.5f, traitOffset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(true); }, Color.green);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         for (int j = 0; j < spawnComponent.mTraitsPool.Length; j++)
@@ -213,13 +213,13 @@ public class EditorComponentSpawn : EditorComponentEvent
             tb = new TextButton(new Vector2(10.5f, traitOffset), 
                 new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(11.5f, traitOffset), 
                 new Vector2(8, 1), new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot, true); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
             traitOffset++;
         }
@@ -242,12 +242,12 @@ public class EditorComponentSpawn : EditorComponentEvent
         {
             int h = heroes;
             db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "NUMBER_HEROS", heroes));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterPlaceAdd(h); }, Color.green);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             for (int i = 0; i < spawnComponent.placement[heroes].Length; i++)
@@ -257,13 +257,13 @@ public class EditorComponentSpawn : EditorComponentEvent
 
                 tb = new TextButton(new Vector2(0, offset), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterPlaceRemove(h, mSlot); }, Color.red);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
                 tb.ApplyTag(Game.EDITOR);
 
                 tb = new TextButton(new Vector2(1, offset), new Vector2(19, 1), 
                     new StringKey(null, place,false), delegate { QuestEditorData.SelectComponent(place); });
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
                 tb.ApplyTag(Game.EDITOR);
                 offset++;
             }

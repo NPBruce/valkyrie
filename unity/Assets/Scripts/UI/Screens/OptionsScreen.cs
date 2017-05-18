@@ -74,7 +74,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject musicSlideObj = new GameObject("musicSlide");
             musicSlideObj.tag = Game.DIALOG;
-            musicSlideObj.transform.parent = game.uICanvas.transform;
+            musicSlideObj.transform.SetParent(game.uICanvas.transform);
             musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject musicFill = new GameObject("musicfill");
             musicFill.tag = Game.DIALOG;
-            musicFill.transform.parent = musicSlideObj.transform;
+            musicFill.transform.SetParent(musicSlideObj.transform);
             musicFill.AddComponent<UnityEngine.UI.Image>();
             musicFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             musicSlide.fillRect = musicFill.GetComponent<RectTransform>();
@@ -94,7 +94,7 @@ namespace Assets.Scripts.UI.Screens
             // Double slide is a hack because I can't get a click in the space to work otherwise
             GameObject musicSlideObjRev = new GameObject("musicSlideRev");
             musicSlideObjRev.tag = Game.DIALOG;
-            musicSlideObjRev.transform.parent = game.uICanvas.transform;
+            musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
             musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject musicFillRev = new GameObject("musicfillrev");
             musicFillRev.tag = Game.DIALOG;
-            musicFillRev.transform.parent = musicSlideObjRev.transform;
+            musicFillRev.transform.SetParent(musicSlideObjRev.transform);
             musicFillRev.AddComponent<UnityEngine.UI.Image>();
             musicFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
             musicSlideRev.fillRect = musicFillRev.GetComponent<RectTransform>();
@@ -126,7 +126,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject effectSlideObj = new GameObject("effectSlide");
             effectSlideObj.tag = Game.DIALOG;
-            effectSlideObj.transform.parent = game.uICanvas.transform;
+            effectSlideObj.transform.SetParent(game.uICanvas.transform);
             effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
@@ -140,7 +140,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject effectFill = new GameObject("effectFill");
             effectFill.tag = Game.DIALOG;
-            effectFill.transform.parent = effectSlideObj.transform;
+            effectFill.transform.SetParent(effectSlideObj.transform);
             effectFill.AddComponent<UnityEngine.UI.Image>();
             effectFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             effectSlide.fillRect = effectFill.GetComponent<RectTransform>();
@@ -150,7 +150,7 @@ namespace Assets.Scripts.UI.Screens
             // Double slide is a hack because I can't get a click in the space to work otherwise
             GameObject effectSlideObjRev = new GameObject("effectSlideRev");
             effectSlideObjRev.tag = Game.DIALOG;
-            effectSlideObjRev.transform.parent = game.uICanvas.transform;
+            effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
             effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
@@ -161,7 +161,7 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject effectFillRev = new GameObject("effectFillRev");
             effectFillRev.tag = Game.DIALOG;
-            effectFillRev.transform.parent = effectSlideObjRev.transform;
+            effectFillRev.transform.SetParent(effectSlideObjRev.transform);
             effectFillRev.AddComponent<UnityEngine.UI.Image>();
             effectFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
             effectSlideRev.fillRect = effectFillRev.GetComponent<RectTransform>();

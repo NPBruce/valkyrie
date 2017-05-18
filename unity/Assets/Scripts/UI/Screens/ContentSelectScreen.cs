@@ -149,12 +149,12 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject scrollArea = new GameObject("scroll");
             RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-            scrollArea.transform.parent = db.background.transform;
+            scrollArea.transform.SetParent(db.background.transform);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
 
             GameObject scrollBarObj = new GameObject("scrollbar");
-            scrollBarObj.transform.parent = db.background.transform;
+            scrollBarObj.transform.SetParent(db.background.transform);
             RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
             scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
             scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
@@ -163,7 +163,7 @@ namespace Assets.Scripts.UI.Screens
             scrollRect.verticalScrollbar = scrollBar;
 
             GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-            scrollBarHandle.transform.parent = scrollBarObj.transform;
+            scrollBarHandle.transform.SetParent(scrollBarObj.transform);
             //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
             scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
             scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
@@ -207,7 +207,7 @@ namespace Assets.Scripts.UI.Screens
                         tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { Select(id); });
                     }
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-                    tb.background.transform.parent = scrollArea.transform;
+                    tb.background.transform.SetParent(scrollArea.transform);
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
                     buttons[id].Add(tb);
 
@@ -225,7 +225,7 @@ namespace Assets.Scripts.UI.Screens
                             delegate { Select(id); }, Color.clear);
                     }
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.parent = scrollArea.transform;
+                    tb.background.transform.SetParent(scrollArea.transform);
                     buttons[id].Add(tb);
 
                     if (left)
@@ -249,7 +249,7 @@ namespace Assets.Scripts.UI.Screens
                     //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
                     tb.SetFont(game.gameType.GetHeaderFont());
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.parent = scrollArea.transform;
+                    tb.background.transform.SetParent(scrollArea.transform);
                     buttons[id].Add(tb);
 
                     left = !left;

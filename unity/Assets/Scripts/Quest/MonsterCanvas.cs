@@ -177,7 +177,7 @@ public class MonsterCanvas : MonoBehaviour
 
             GameObject mImg = new GameObject("monsterImg" + m.monsterData.name);
             mImg.tag = Game.MONSTERS;
-            mImg.transform.parent = game.uICanvas.transform;
+            mImg.transform.SetParent(game.uICanvas.transform);
 
             RectTransform trans = mImg.AddComponent<RectTransform>();
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
@@ -198,7 +198,7 @@ public class MonsterCanvas : MonoBehaviour
                 icon.rectTransform.sizeDelta = new Vector2(monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f, monsterSize * UIScaler.GetPixelsPerUnit() * 0.83f);
                 GameObject mImgFrame = new GameObject("monsterFrame" + m.monsterData.name);
                 mImgFrame.tag = Game.MONSTERS;
-                mImgFrame.transform.parent = game.uICanvas.transform;
+                mImgFrame.transform.SetParent(game.uICanvas.transform);
 
                 RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
                 transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
@@ -228,7 +228,7 @@ public class MonsterCanvas : MonoBehaviour
             {
                 GameObject mImgDupe = new GameObject("monsterDupe" + m.monsterData.name);
                 mImgDupe.tag = Game.MONSTERS;
-                mImgDupe.transform.parent = game.uICanvas.transform;
+                mImgDupe.transform.SetParent(game.uICanvas.transform);
 
                 RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
                 dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, ((monsterSize / 2f) + 3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
