@@ -302,11 +302,7 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddNextEventComponents(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(8, 1), new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val","X_COLON",QUOTA));
         db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
@@ -340,6 +336,10 @@ public class EditorComponentEvent : EditorComponent
             tb.ApplyTag(Game.EDITOR);
         }
         offset += 2;
+
+        db = new DialogBox(new Vector2(0, offset), new Vector2(8, 1), new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
+        db.background.transform.SetParent(scrollArea.transform);
+        db.ApplyTag(Game.EDITOR);
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
