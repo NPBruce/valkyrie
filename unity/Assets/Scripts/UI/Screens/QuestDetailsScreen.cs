@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -22,22 +23,37 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
+            // Draw Image
+            if (q.image.Length > 0)
+            {
+                Texture2D tex = ContentData.FileToTexture(Path.Combine(q.path, q.image));
+                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+
+                db = new DialogBox(new Vector2(UIScaler.GetHCenter(-20), 4),
+                    new Vector2(8, 8),
+                    StringKey.NULL,
+                    Color.white,
+                    Color.white);
+                db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                db.AddBorder();
+            }
+
             // Draw Description
-            db = new DialogBox(Vector2.zero, new Vector2(33, 30), q.description);
+            db = new DialogBox(Vector2.zero, new Vector2(30, 30), q.description);
             float height = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
             db.Destroy();
             if (height > 25) height = 25;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-23), 15 - (height / 2)), new Vector2(33, height), q.description);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-7), 15 - (height / 2)), new Vector2(30, height), q.description);
             db.AddBorder();
 
             // Draw authors
-            db = new DialogBox(Vector2.zero, new Vector2(12, 30), q.authors);
+            db = new DialogBox(Vector2.zero, new Vector2(14, 30), q.authors);
             height = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
             db.Destroy();
             if (height > 25) height = 25;
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(11), 15 - (height / 2)), new Vector2(12, height), q.authors);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-23), 18.5f - (height / 2)), new Vector2(14, height), q.authors);
             db.AddBorder();
 
             // Difficulty
