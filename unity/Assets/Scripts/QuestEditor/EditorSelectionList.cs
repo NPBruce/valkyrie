@@ -170,7 +170,7 @@ public class EditorSelectionList
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.SetParent(db.background.transform);
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
         scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -190,7 +190,7 @@ public class EditorSelectionList
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             tb.background.GetComponent<UnityEngine.UI.Image>().color = filtered[i].color;
-            tb.background.transform.SetParent(db.background.transform);
+            tb.background.transform.SetParent(scrollArea.transform);
             if (key == null)
             {
                 //Empty buttons are disabled
