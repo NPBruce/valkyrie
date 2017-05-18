@@ -27,12 +27,12 @@ public class Audio : MonoBehaviour
         if (vSet.Length == 0) musicVolume = 1;
         audioSource.volume = musicVolume;
 
-        gameObject.transform.parent = game.cc.gameObject.transform;
+        gameObject.transform.SetParent(game.cc.gameObject.transform);
         music = new List<AudioClip>();
         previousMusic = music;
 
         effectsObject = new GameObject("audioeffects");
-        effectsObject.transform.parent = game.cc.gameObject.transform;
+        effectsObject.transform.SetParent(game.cc.gameObject.transform);
         audioSourceEffect = effectsObject.AddComponent<AudioSource>();
         vSet = game.config.data.Get("UserConfig", "effects");
         float.TryParse(vSet, out effectVolume);

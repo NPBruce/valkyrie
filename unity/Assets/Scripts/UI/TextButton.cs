@@ -88,13 +88,13 @@ public class TextButton {
         background.tag = Game.DIALOG;
 
         Game game = Game.Get();
-        background.transform.parent = game.uICanvas.transform;
+        background.transform.SetParent(game.uICanvas.transform);
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
-        button.transform.parent = background.transform;
+        button.transform.SetParent(background.transform);
 
         RectTransform transBt = button.AddComponent<RectTransform>();
         transBt.SetParent(transBg);
