@@ -60,7 +60,11 @@ namespace Assets.Scripts.UI.Screens
             if (q.difficulty != 0)
             {
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13), 27), new Vector2(11, 1), new StringKey("val","DIFFICULTY"));
-                string symbol = new StringKey("val","ICON_SUCCESS_RESULT").Translate();
+                string symbol = "*";
+                if (game.gameType is MoMGameType)
+                {
+                    symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
+                }
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13), 28), new Vector2(11, 2), new StringKey(null, symbol + symbol + symbol + symbol + symbol, false));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
                 db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.95f) + (q.difficulty * 6.9f), 28), new Vector2((1 - q.difficulty) * 6.9f, 2), StringKey.NULL, Color.clear, new Color(0, 0, 0, 0.7f));

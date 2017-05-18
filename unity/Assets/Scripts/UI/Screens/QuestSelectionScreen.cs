@@ -103,6 +103,38 @@ namespace Assets.Scripts.UI.Screens
                     tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
                     tb.background.transform.SetParent(scrollArea.transform);
+
+
+                    // Duration
+                    if (q.Value.lengthMax != 0)
+                    {
+                        db = new DialogBox(new Vector2(UIScaler.GetRight(-10), offset), new Vector2(2, 1), q.Value.lengthMin, Color.black, Color.clear);
+                        db.background.transform.SetParent(scrollArea.transform);
+                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                        db = new DialogBox(new Vector2(UIScaler.GetRight(-8), offset), new Vector2(1, 1), new StringKey(null, "-", false), Color.black, Color.clear);
+                        db.background.transform.SetParent(scrollArea.transform);
+                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                        db = new DialogBox(new Vector2(UIScaler.GetRight(-7), offset), new Vector2(2, 1), q.Value.lengthMax, Color.black, Color.clear);
+                        db.background.transform.SetParent(scrollArea.transform);
+                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                    }
+
+                    // Difficulty
+                    if (q.Value.difficulty != 0)
+                    {
+                        string symbol = "π"; // will
+                        if (game.gameType is MoMGameType)
+                        {
+                            symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
+                        }
+                        db = new DialogBox(new Vector2(UIScaler.GetRight(-11), offset + 1), new Vector2(7, 2), new StringKey(null, symbol + symbol + symbol + symbol + symbol, false), Color.black, Color.clear);
+                        db.background.transform.SetParent(scrollArea.transform);
+                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+                        db = new DialogBox(new Vector2(UIScaler.GetRight(-10.95f) + (q.Value.difficulty * 6.9f), offset + 1), new Vector2((1 - q.Value.difficulty) * 6.9f, 2), StringKey.NULL, Color.clear, new Color(1, 1, 1, 0.7f));
+                        db.background.transform.SetParent(scrollArea.transform);
+                    }
+
                     offset += 4;
                 }
             }
