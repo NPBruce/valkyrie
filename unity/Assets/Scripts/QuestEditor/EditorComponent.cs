@@ -32,11 +32,10 @@ public class EditorComponent {
     virtual public void Update()
     {
         game = Game.Get();
-        bool newScroll = (scrollArea == null);
-        Vector2 scrollPos = Vector2.zero;
-        if (!newScroll)
+        float scrollPos = -15 * UIScaler.GetPixelsPerUnit();
+        if (scrollArea != null)
         {
-            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition;
+            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollInnerRect.rect.y;
         }
         Clean();
 
@@ -53,14 +52,7 @@ public class EditorComponent {
 
         if (offset < 30) offset = 30;
         SetScrollLimit(offset);
-        if (newScroll)
-        {
-            new Vector2(10 * UIScaler.GetPixelsPerUnit(), offset * UIScaler.GetPixelsPerUnit() * -0.5f);
-        }
-        else
-        {
-            scrollArea.GetComponent<RectTransform>().anchoredPosition = scrollPos;
-        }
+        scrollArea.GetComponent<RectTransform>().anchoredPosition = new Vector2(10 * UIScaler.GetPixelsPerUnit(), scrollPos + scrollInnerRect.rect.y);
     }
     public void Clean()
     {
