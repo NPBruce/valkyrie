@@ -74,7 +74,7 @@ public class LogWindow
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 16f * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
@@ -93,7 +93,7 @@ public class LogWindow
                 new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), 
                 new StringKey(null, key, false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.AddBorder();
             // Variables value modify dont need localization
             DialogBoxEditable dbe = new DialogBoxEditable(
