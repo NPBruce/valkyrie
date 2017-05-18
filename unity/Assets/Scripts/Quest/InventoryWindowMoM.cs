@@ -67,36 +67,46 @@ public class InventoryWindowMoM
 
         float xOffset = UIScaler.GetHCenter(-16);
 
-        foreach (string s in game.quest.items)
+        TextButton tb = null;
+        foreach (string s in game.quest.itemInspect.Keys)
         {
-            db = new DialogBox(new Vector2(xOffset, 14),
+            string tmp = s;
+            tb = new TextButton(new Vector2(xOffset, 14),
                 new Vector2(8, 2),
                 game.cd.items[s].name,
+                delegate { Inspect(tmp); },
                 Color.black);
-            db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            db.background.transform.parent = scrollArea.transform;
-            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            tb.background.transform.parent = scrollArea.transform;
+            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
 
-            db = new DialogBox(new Vector2(xOffset, 6),
+            tb = new TextButton(new Vector2(xOffset, 6),
                 new Vector2(8, 8),
                 StringKey.NULL,
-                Color.clear,
-                Color.white);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            db.background.transform.parent = scrollArea.transform;
+                delegate { Inspect(tmp); },
+                Color.clear);
+            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
+            tb.background.transform.parent = scrollArea.transform;
+            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
             xOffset += 9;
         }
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (xOffset - UIScaler.GetHCenter(-16)) * UIScaler.GetPixelsPerUnit());
 
-        TextButton tb = new TextButton(
+        tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-4f), 24.5f),
             new Vector2(8, 2),
             CommonStringKeys.CLOSE,
             delegate { Destroyer.Dialog(); });
+    }
+
+    public void Inspect(string item)
+    {
+        Destroyer.Dialog();
+        Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
     }
 }
