@@ -10,12 +10,18 @@ public class ReorderComponents
 
     public ReorderComponents()
     {
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        Game game = Game.Get();
 
-        foreach (string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
+        HashSet<string> sources = new HashSet<string>();
+        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            if (!(c is PerilData)) sources.Add(c.source);
+        }
+
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        foreach (string s in sources)
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s));
         }
 
         sourceESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "FILE")), list, delegate { ReorderSource(); });
@@ -24,7 +30,7 @@ public class ReorderComponents
 
     public void ReorderSource()
     {
-        source = Path.Combine(Path.GetDirectoryName(Game.Get().quest.qd.questPath), sourceESL.selection);
+        source = sourceESL.selection;
         Update();
     }
 
@@ -100,7 +106,7 @@ public class ReorderComponents
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
                 tb.background.transform.parent = scrollArea.transform;
             }
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), new StringKey(null, source, false), Color.black, Color.white);
+            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), new StringKey(null, c.sectionName, false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
             db.background.transform.parent = scrollArea.transform;
             first = false;
