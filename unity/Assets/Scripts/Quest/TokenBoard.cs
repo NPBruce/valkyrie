@@ -164,9 +164,9 @@ public class TokenBoard : MonoBehaviour {
         gameObject.tag = Game.DIALOG;
         borderObject.tag = Game.DIALOG;
         circleObject.tag = Game.DIALOG;
-        circleObject.transform.parent = game.tokenCanvas.transform;
-        gameObject.transform.parent = game.tokenCanvas.transform;
-        borderObject.transform.parent = game.tokenCanvas.transform;
+        circleObject.transform.SetParent(game.tokenCanvas.transform);
+        gameObject.transform.SetParent(game.tokenCanvas.transform);
+        borderObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -259,7 +259,7 @@ public class TokenBoard : MonoBehaviour {
         GameObject gameObject = new GameObject("MonsterSpawn");
         gameObject.tag = Game.DIALOG;
 
-        gameObject.transform.parent = game.tokenCanvas.transform;
+        gameObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -304,7 +304,7 @@ public class TokenBoard : MonoBehaviour {
         // Create object
         GameObject itemObject = new GameObject("item" + item);
         itemObject.tag = Game.DIALOG;
-        itemObject.transform.parent = game.tokenCanvas.transform;
+        itemObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
         Texture2D newTex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
@@ -334,7 +334,7 @@ public class TokenBoard : MonoBehaviour {
         gameObject.tag = tag;
 
         Game game = Game.Get();
-        gameObject.transform.parent = game.tokenCanvas.transform;
+        gameObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
         UnityEngine.UI.Image image = gameObject.AddComponent<UnityEngine.UI.Image>();

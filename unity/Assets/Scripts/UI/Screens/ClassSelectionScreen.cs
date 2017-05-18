@@ -99,12 +99,12 @@ namespace Assets.Scripts.UI.Screens
 
             GameObject scrollArea = new GameObject("scroll");
             RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-            scrollArea.transform.parent = db.background.transform;
+            scrollArea.transform.SetParent(db.background.transform);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
             scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (8f) * UIScaler.GetPixelsPerUnit());
 
             GameObject scrollBarObj = new GameObject("scrollbar");
-            scrollBarObj.transform.parent = db.background.transform;
+            scrollBarObj.transform.SetParent(db.background.transform);
             RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
             scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (27f - yStart) * UIScaler.GetPixelsPerUnit());
             scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (7.75f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
@@ -113,7 +113,7 @@ namespace Assets.Scripts.UI.Screens
             scrollRect.verticalScrollbar = scrollBar;
 
             GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-            scrollBarHandle.transform.parent = scrollBarObj.transform;
+            scrollBarHandle.transform.SetParent(scrollBarObj.transform);
             scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
             scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
             scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -163,7 +163,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
                 tb.ApplyTag(Game.HEROSELECT);
 
                 yOffset += 5f;

@@ -40,12 +40,12 @@ public class InventoryWindowMoM
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (12f) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 1);
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (12f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 34 * UIScaler.GetPixelsPerUnit());
@@ -54,7 +54,7 @@ public class InventoryWindowMoM
         scrollRect.horizontalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
         scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -77,7 +77,7 @@ public class InventoryWindowMoM
                 delegate { Inspect(tmp); },
                 Color.black);
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
@@ -89,7 +89,7 @@ public class InventoryWindowMoM
                 delegate { Inspect(tmp); },
                 Color.clear);
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
 
             xOffset += 9;

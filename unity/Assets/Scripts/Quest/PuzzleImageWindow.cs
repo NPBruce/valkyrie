@@ -131,7 +131,7 @@ public class PuzzleImageWindow
         GameObject gameObject = new GameObject("PuzzleTile");
         gameObject.tag = Game.DIALOG;
 
-        gameObject.transform.parent = game.uICanvas.transform;
+        gameObject.transform.SetParent(game.uICanvas.transform);
 
         RectTransform trans = gameObject.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() + (UIScaler.GetPixelsPerUnit() * screenPos.y * height), height * UIScaler.GetPixelsPerUnit());

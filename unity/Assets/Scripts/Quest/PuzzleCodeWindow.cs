@@ -102,7 +102,7 @@ public class PuzzleCodeWindow
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 27 * UIScaler.GetPixelsPerUnit());
 
@@ -122,7 +122,7 @@ public class PuzzleCodeWindow
                 db.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[i].image;
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
+                db.background.transform.SetParent(scrollArea.transform);
                 db.AddBorder();
                 hPos += 2.5f;
             }
@@ -133,7 +133,7 @@ public class PuzzleCodeWindow
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_SUCCESS_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
+                db.background.transform.SetParent(scrollArea.transform);
                 db.AddBorder();
                 hPos += 2.5f;
             }
@@ -142,7 +142,7 @@ public class PuzzleCodeWindow
                 db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_INVESTIGATION_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
                 db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
+                db.background.transform.SetParent(scrollArea.transform);
                 db.AddBorder();
                 hPos += 2.5f;
             }

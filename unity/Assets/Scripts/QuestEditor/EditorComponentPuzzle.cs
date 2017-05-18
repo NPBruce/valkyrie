@@ -38,38 +38,38 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
             new StringKey("val", "X_COLON", PUZZLE_CLASS));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         // Translate puzzle type trait
         TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(8, 1), 
             new StringKey("val",puzzleComponent.puzzleClass), delegate { Class(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1),
             new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(5, offset), new Vector2(6, 1), 
             new StringKey(null, puzzleComponent.skill,false), delegate { Skill(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1),
             new StringKey("val", "X_COLON", PUZZLE_LEVEL));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
             puzzleComponent.puzzleLevel.ToString(), false, delegate { UpdateLevel(); });
-        levelDBE.background.transform.parent = scrollArea.transform;
+        levelDBE.background.transform.SetParent(scrollArea.transform);
         levelDBE.ApplyTag(Game.EDITOR);
         levelDBE.AddBorder();
         offset += 2;
@@ -78,26 +78,26 @@ public class EditorComponentPuzzle : EditorComponentEvent
         {
             db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1),
                 new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
                 puzzleComponent.puzzleAltLevel.ToString(), false, delegate { UpdateAltLevel(); });
-            altLevelDBE.background.transform.parent = scrollArea.transform;
+            altLevelDBE.background.transform.SetParent(scrollArea.transform);
             altLevelDBE.ApplyTag(Game.EDITOR);
             altLevelDBE.AddBorder();
             offset += 2;
 
             db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
                 new StringKey("val", "X_COLON", IMAGE));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(5, offset), new Vector2(8, 1), 
                 new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
             offset += 2;
         }

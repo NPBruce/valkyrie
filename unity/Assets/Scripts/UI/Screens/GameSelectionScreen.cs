@@ -52,7 +52,7 @@ namespace Assets.Scripts.UI.Screens
             GameObject banner = new GameObject("banner");
             banner.tag = Game.DIALOG;
 
-            banner.transform.parent = game.uICanvas.transform;
+            banner.transform.SetParent(game.uICanvas.transform);
 
             RectTransform trans = banner.AddComponent<RectTransform>();
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1 * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());

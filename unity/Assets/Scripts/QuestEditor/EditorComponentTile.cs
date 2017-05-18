@@ -23,35 +23,35 @@ public class EditorComponentTile : EditorComponent
         CameraController.SetCamera(tileComponent.location);
 
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         TextButton tb = new TextButton(new Vector2(4.5f, offset), new Vector2(15f, 1), 
             new StringKey(null, tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         tb = new TextButton(new Vector2(4, offset), new Vector2(4, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
         tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1),
             new StringKey(null, tileComponent.rotation.ToString() + "˚", false), delegate { TileRotate(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         offset += 2;

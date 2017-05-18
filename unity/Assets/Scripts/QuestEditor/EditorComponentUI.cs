@@ -35,18 +35,18 @@ public class EditorComponentUI : EditorComponentEvent
         uiComponent = component as QuestData.UI;
 
         DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         TextButton tb = new TextButton(new Vector2(4.5f, offset), new Vector2(15, 1),
             new StringKey(null, uiComponent.imageName, false), delegate { SetImage(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "UNITS")));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         if (uiComponent.verticalUnits)
@@ -58,114 +58,114 @@ public class EditorComponentUI : EditorComponentEvent
             tb = new TextButton(new Vector2(6, offset), new Vector2(6, 1), new StringKey("val", "HORIZONTAL"), delegate { ChangeUnits(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "ALIGN"));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         Color dim = new Color(0.3f, 0.3f, 0.3f);
         Color selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == -1) ? Color.white : dim;
         tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┏", false), delegate { SetAlign(-1, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == -1) ? Color.white : dim;
         tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == -1) ? Color.white : dim;
         tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┓", false), delegate { SetAlign(1, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == 0) ? Color.white : dim;
         tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(-1, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == 0) ? Color.white : dim;
         tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "╋", false), delegate { SetAlign(0, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == 0) ? Color.white : dim;
         tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(1, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == 1) ? Color.white : dim;
         tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┗", false), delegate { SetAlign(-1, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == 1) ? Color.white : dim;
         tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
 
         selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == 1) ? Color.white : dim;
         tb = new TextButton(new Vector2(6, offset), new Vector2(1, 1), new StringKey(null, "┛", false), delegate { SetAlign(1, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
+        tb.background.transform.SetParent(scrollArea.transform);
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset++), new Vector2(10, 1), new StringKey("val", "POSITION"));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(2, 1), new StringKey(null, "X:", false));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         locXDBE = new DialogBoxEditable(new Vector2(2, offset), new Vector2(3, 1),
             uiComponent.location.x.ToString(), false, delegate { UpdateNumbers(); });
-        locXDBE.background.transform.parent = scrollArea.transform;
+        locXDBE.background.transform.SetParent(scrollArea.transform);
         locXDBE.ApplyTag(Game.EDITOR);
         locXDBE.AddBorder();
 
         db = new DialogBox(new Vector2(5, offset), new Vector2(2, 1), new StringKey(null, "Y:", false));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         locYDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
             uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
-        locYDBE.background.transform.parent = scrollArea.transform;
+        locYDBE.background.transform.SetParent(scrollArea.transform);
         locYDBE.ApplyTag(Game.EDITOR);
         locYDBE.AddBorder();
         offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "SIZE"));
-        db.background.transform.parent = scrollArea.transform;
+        db.background.transform.SetParent(scrollArea.transform);
         db.ApplyTag(Game.EDITOR);
 
         sizeDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1),
             uiComponent.size.ToString(), false, delegate { UpdateNumbers(); });
-        sizeDBE.background.transform.parent = scrollArea.transform;
+        sizeDBE.background.transform.SetParent(scrollArea.transform);
         sizeDBE.ApplyTag(Game.EDITOR);
         sizeDBE.AddBorder();
 
         if (uiComponent.imageName.Length == 0)
         {
             db = new DialogBox(new Vector2(10, offset), new Vector2(5, 1), new StringKey("val", "ASPECT"));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             aspectDBE = new DialogBoxEditable(new Vector2(15, offset), new Vector2(3, 1),
                 uiComponent.aspect.ToString(), false, delegate { UpdateNumbers(); });
-            aspectDBE.background.transform.parent = scrollArea.transform;
+            aspectDBE.background.transform.SetParent(scrollArea.transform);
             aspectDBE.ApplyTag(Game.EDITOR);
             aspectDBE.AddBorder();
             offset += 2;
@@ -174,28 +174,28 @@ public class EditorComponentUI : EditorComponentEvent
                 new Vector2(0, offset), new Vector2(20, 6),
                 uiComponent.uiText.Translate(true),
                 delegate { UpdateUIText(); });
-            textDBE.background.transform.parent = scrollArea.transform;
+            textDBE.background.transform.SetParent(scrollArea.transform);
             textDBE.ApplyTag(Game.EDITOR);
             textDBE.AddBorder();
             offset += 7;
 
             db = new DialogBox(new Vector2(0, offset), new Vector2(7, 1), new StringKey("val", "TEXT_SIZE"));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             textSizeDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
                 uiComponent.textSize.ToString(), false, delegate { UpdateTextSize(); });
-            textSizeDBE.background.transform.parent = scrollArea.transform;
+            textSizeDBE.background.transform.SetParent(scrollArea.transform);
             textSizeDBE.ApplyTag(Game.EDITOR);
             textSizeDBE.AddBorder();
 
             db = new DialogBox(new Vector2(10, offset), new Vector2(5, 1), new StringKey("val", "COLOR"));
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             db.ApplyTag(Game.EDITOR);
 
             tb = new TextButton(new Vector2(15, offset++), new Vector2(5, 1), new StringKey(null, uiComponent.textColor, false), delegate { SetColour(); });
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
 
             if (uiComponent.border)
@@ -207,7 +207,7 @@ public class EditorComponentUI : EditorComponentEvent
                 tb = new TextButton(new Vector2(0, offset), new Vector2(8, 1), new StringKey("val", "NO_BORDER"), delegate { ToggleBorder(); });
             }
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.EDITOR);
         }
         offset += 2;
@@ -229,7 +229,7 @@ public class EditorComponentUI : EditorComponentEvent
             // Create UI Panel
             panel = new GameObject("QuestUIPanel");
             panel.tag = Game.BOARD;
-            panel.transform.parent = game.uICanvas.transform;
+            panel.transform.SetParent(game.uICanvas.transform);
             panel.transform.SetAsFirstSibling();
             panel.AddComponent<RectTransform>();
             panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
@@ -239,12 +239,12 @@ public class EditorComponentUI : EditorComponentEvent
         // Create objects
         GameObject unityObject = new GameObject("greyzonea");
         unityObject.tag = Game.EDITOR;
-        unityObject.transform.parent = panel.transform;
+        unityObject.transform.SetParent(panel.transform);
         UnityEngine.UI.Image panela = unityObject.AddComponent<UnityEngine.UI.Image>();
         panela.color = new Color(1f, 1f, 1f, 0.3f);
         unityObject = new GameObject("greyzoneb");
         unityObject.tag = Game.EDITOR;
-        unityObject.transform.parent = panel.transform;
+        unityObject.transform.SetParent(panel.transform);
         UnityEngine.UI.Image panelb = unityObject.AddComponent<UnityEngine.UI.Image>();
         panelb.color = new Color(1f, 1f, 1f, 0.3f);
         panelb.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 0);

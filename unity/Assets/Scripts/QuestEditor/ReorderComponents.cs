@@ -58,12 +58,12 @@ public class ReorderComponents
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 22 * UIScaler.GetPixelsPerUnit());
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (28 - offset) * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 22 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
@@ -72,7 +72,7 @@ public class ReorderComponents
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
         scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
@@ -97,18 +97,18 @@ public class ReorderComponents
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
 
                 tb = new TextButton(new Vector2(UIScaler.GetHCenter(-11.5f), offset), new Vector2(1, 1), 
                     new StringKey(null, "△", false), delegate { IncComponent(name); }, Color.black);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
-                tb.background.transform.parent = scrollArea.transform;
+                tb.background.transform.SetParent(scrollArea.transform);
             }
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), new StringKey(null, c.sectionName, false), Color.black, Color.white);
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.transform);
             first = false;
         }
         offset++;

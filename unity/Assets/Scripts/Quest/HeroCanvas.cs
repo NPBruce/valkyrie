@@ -61,7 +61,7 @@ public class HeroCanvas : MonoBehaviour {
 
         GameObject heroFrame = new GameObject("heroFrame" + heroName);
         heroFrame.tag = "herodisplay";
-        heroFrame.transform.parent = game.uICanvas.transform;
+        heroFrame.transform.SetParent(game.uICanvas.transform);
         RectTransform transFrame = heroFrame.AddComponent<RectTransform>();
 
         transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
@@ -80,7 +80,7 @@ public class HeroCanvas : MonoBehaviour {
 
         GameObject heroImg = new GameObject("heroImg" + heroName);
         heroImg.tag = "herodisplay";
-        heroImg.transform.parent = game.uICanvas.transform;
+        heroImg.transform.SetParent(game.uICanvas.transform);
         RectTransform trans = heroImg.AddComponent<RectTransform>();
 
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());

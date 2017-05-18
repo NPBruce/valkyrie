@@ -179,7 +179,7 @@ public class PuzzleSlideWindow
         blockGO.tag = Game.DIALOG;
 
         //Game game = Game.Get();
-        blockGO.transform.parent = pos;
+        blockGO.transform.SetParent(pos);
 
         RectTransform transBg = blockGO.AddComponent<RectTransform>();
         transBg.pivot = Vector2.up;

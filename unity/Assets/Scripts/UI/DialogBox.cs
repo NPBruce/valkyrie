@@ -115,13 +115,13 @@ public class DialogBox {
         background.tag = Game.DIALOG;
 
         Game game = Game.Get();
-        background.transform.parent = game.uICanvas.transform;
+        background.transform.SetParent(game.uICanvas.transform);
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, location.x * UIScaler.GetPixelsPerUnit(), size.x * UIScaler.GetPixelsPerUnit());
 
-        textObj.transform.parent = background.transform;
+        textObj.transform.SetParent(background.transform);
 
         RectTransform transBt = textObj.AddComponent<RectTransform>();
         transBt.SetParent(transBg);

@@ -33,12 +33,12 @@ public class HeroSelection {
 
         GameObject scrollArea = new GameObject("scroll");
         RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
+        scrollArea.transform.SetParent(db.background.transform);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit());
 
         GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
+        scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 6.5f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
@@ -47,7 +47,7 @@ public class HeroSelection {
         scrollRect.verticalScrollbar = scrollBar;
 
         GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
         //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
         scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
         scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
@@ -81,7 +81,7 @@ public class HeroSelection {
                 tb = new TextButton(new Vector2(11.75f, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 18, 1.5f), StringKey.NULL, delegate { Select(hero); }, Color.clear);
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
 
@@ -94,7 +94,7 @@ public class HeroSelection {
                 tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 7.25f, offset), new Vector2(4.25f, 4.25f), StringKey.NULL, delegate { Select(hero); }, Color.clear);
             }
             tb.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
@@ -115,7 +115,7 @@ public class HeroSelection {
             tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
             //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
             tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.parent = scrollArea.transform;
+            tb.background.transform.SetParent(scrollArea.transform);
             tb.ApplyTag(Game.HEROSELECT);
             buttons[hero].Add(tb);
 

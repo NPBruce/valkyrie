@@ -95,9 +95,9 @@ public class DialogBoxEditable
 
         Game game = Game.Get();
 
-        background.transform.parent = game.uICanvas.transform;
-        inputObj.transform.parent = background.transform;
-        textObj.transform.parent = inputObj.transform;
+        background.transform.SetParent(game.uICanvas.transform);
+        inputObj.transform.SetParent(background.transform);
+        textObj.transform.SetParent(inputObj.transform);
 
         RectTransform transBg = background.AddComponent<RectTransform>();
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, location.y * UIScaler.GetPixelsPerUnit(), size.y * UIScaler.GetPixelsPerUnit());
@@ -195,6 +195,6 @@ public class DialogBoxEditable
     public void setMaterialAndBackgroundTransformParent(Material mat, Transform trans)
     {
         this.textObj.GetComponent<UnityEngine.UI.Text>().material = mat;
-        this.background.transform.parent = trans;
+        this.background.transform.SetParent(trans);
     }
 }
