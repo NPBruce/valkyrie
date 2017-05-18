@@ -6,11 +6,13 @@ using System.Collections;
 public class SpritePulser : MonoBehaviour {
 
     UnityEngine.UI.Image image;
+    Vector2 startSize;
 
 	// Use this for initialization (called at creation)
 	void Start () {
         // Get the image attached to this game object
         image = gameObject.GetComponent<UnityEngine.UI.Image>();
+        startSize = image.rectTransform.sizeDelta;
     }
 	
 	// Update is called once per frame
@@ -19,6 +21,6 @@ public class SpritePulser : MonoBehaviour {
         // Varies from 80% to 120%
         float factor = 1f + (0.2f * Mathf.Sin(Time.time * 4));
         // Apply scale
-        image.rectTransform.sizeDelta = new Vector2(factor, factor);
+        image.rectTransform.sizeDelta = startSize * factor;
     }
 }

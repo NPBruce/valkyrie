@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 public class EditorComponentQuest : EditorComponent
 {
@@ -18,7 +19,9 @@ public class EditorComponentQuest : EditorComponent
     public DialogBoxEditable minLengthDBE;
     public DialogBoxEditable maxLengthDBE;
     public PaneledDialogBoxEditable descriptionDBE;
+    public PaneledDialogBoxEditable authorsDBE;
     EditorSelectionList packESL;
+    EditorSelectionList imageESL;
 
     // Quest is a special component with meta data
     public EditorComponentQuest()
@@ -62,6 +65,23 @@ public class EditorComponentQuest : EditorComponent
         }
         offset += 2;
 
+        db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1),
+            new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
+        db.background.transform.SetParent(scrollArea.transform);
+        db.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(5, offset), new Vector2(12, 1),
+            new StringKey(null, game.quest.qd.quest.image, false), delegate { Image(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.SetParent(scrollArea.transform);
+        tb.ApplyTag(Game.EDITOR);
+        offset += 2;
+
+        db = new DialogBox(new Vector2(0, offset++), new Vector2(8, 1),
+            new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
+        db.background.transform.SetParent(scrollArea.transform);
+        db.ApplyTag(Game.EDITOR);
+
         descriptionDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 10), 
             game.quest.qd.quest.description.Translate(true),
@@ -70,6 +90,20 @@ public class EditorComponentQuest : EditorComponent
         descriptionDBE.ApplyTag(Game.EDITOR);
         descriptionDBE.AddBorder();
         offset += 11;
+
+        db = new DialogBox(new Vector2(0, offset++), new Vector2(8, 1),
+            new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
+        db.background.transform.SetParent(scrollArea.transform);
+        db.ApplyTag(Game.EDITOR);
+
+        authorsDBE = new PaneledDialogBoxEditable(
+            new Vector2(0.5f, offset), new Vector2(19, 6),
+            game.quest.qd.quest.authors.Translate(true),
+            delegate { UpdateQuestAuth(); });
+        authorsDBE.background.transform.SetParent(scrollArea.transform);
+        authorsDBE.ApplyTag(Game.EDITOR);
+        authorsDBE.AddBorder();
+        offset += 7;
 
         db = new DialogBox(new Vector2(0.5f, offset), new Vector2(10, 1), REQUIRED_EXPANSIONS);
         db.background.transform.SetParent(scrollArea.transform);
@@ -192,6 +226,30 @@ public class EditorComponentQuest : EditorComponent
         }
     }
 
+    public void Image()
+    {
+        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        list.Add(new EditorSelectionList.SelectionListEntry(""));
+
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+        }
+        imageESL = new EditorSelectionList(new StringKey("val","SELECT_IMAGE"), list, delegate { SelectImage(); });
+        imageESL.SelectItem();
+    }
+
+    public void SelectImage()
+    {
+        game.quest.qd.quest.image = imageESL.selection;
+        Update();
+    }
+
     public void UpdateQuestDesc()
     {
         if (descriptionDBE.CheckTextChangedAndNotEmpty())
@@ -201,6 +259,18 @@ public class EditorComponentQuest : EditorComponent
         else if (descriptionDBE.CheckTextEmptied())
         {
             LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
+        }
+    }
+
+    public void UpdateQuestAuth()
+    {
+        if (authorsDBE.CheckTextChangedAndNotEmpty())
+        {
+            LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_key, authorsDBE.Text);
+        }
+        else if (authorsDBE.CheckTextEmptied())
+        {
+            LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.authors_key);
         }
     }
 

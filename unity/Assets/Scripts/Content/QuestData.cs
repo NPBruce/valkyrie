@@ -1792,6 +1792,8 @@ public class QuestData
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
+        public string image = "";
+
         public int minHero = 2;
         public int maxHero = 5;
         public float difficulty = 0;
@@ -1918,6 +1920,11 @@ public class QuestData
                 int.TryParse(iniData["lengthmax"], out lengthMax);
             }
 
+            if (iniData.ContainsKey("image"))
+            {
+                image = iniData["image"];
+            }
+
             return true;
         }
 
@@ -1959,6 +1966,10 @@ public class QuestData
             if (lengthMax != 0)
             {
                 r.Append("lengthmax=").AppendLine(lengthMax.ToString());
+            }
+            if (image.Length > 0)
+            {
+                r.Append("image=").AppendLine(image);
             }
 
             return r.ToString();
