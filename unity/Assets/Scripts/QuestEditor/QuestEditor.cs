@@ -103,16 +103,16 @@ public class QuestEditor {
             string source = qc.source;
             if (source.Length == 0)
             {
-                source = game.quest.qd.questPath;
+                source = "quest.ini";
             }
 
             if (!fileData.ContainsKey(source))
             {
                 StringBuilder thisFile = new StringBuilder();
-                if (!source.Equals(game.quest.qd.questPath))
+                if (!source.Equals("quest.ini"))
                 {
                     thisFile.Append("; Saved by version: ").AppendLine(game.version);
-                    questData.AppendLine(source.Substring(Path.GetDirectoryName(game.quest.qd.questPath).Length + 1));
+                    questData.AppendLine(source);
                 }
                 fileData.Add(source, thisFile);
             }
@@ -122,26 +122,27 @@ public class QuestEditor {
             }
         }
 
-        if (fileData.ContainsKey(game.quest.qd.questPath))
+        if (fileData.ContainsKey("quest.ini"))
         {
-            fileData[game.quest.qd.questPath] = questData.Append(fileData[game.quest.qd.questPath]);
+            fileData["quest.ini"] = questData.Append(fileData["quest.ini"]);
         }
         else
         {
-            fileData.Add(game.quest.qd.questPath, questData);
+            fileData.Add("quest.ini", questData);
         }
 
         foreach (KeyValuePair<string, StringBuilder> kv in fileData)
         {
+            string outFile = Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), kv.Key);
            // Write to disk
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(kv.Key));
-                File.WriteAllText(kv.Key, kv.Value.ToString());
+                Directory.CreateDirectory(Path.GetDirectoryName(outFile));
+                File.WriteAllText(outFile, kv.Value.ToString());
             }
             catch (System.Exception)
             {
-                ValkyrieDebug.Log("Error: Failed to write to " + kv.Key + ", components lost");
+                ValkyrieDebug.Log("Error: Failed to write to " + outFile + ", components lost");
                 Application.Quit();
             }
         }

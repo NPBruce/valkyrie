@@ -270,30 +270,30 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddHeroSelection(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", SELECTION));
+        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", SELECTION));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(8, 1), 
+        TextButton tb = new TextButton(new Vector2(6, offset++), new Vector2(12, 1), 
             new StringKey(null,eventComponent.heroListName,false), delegate { SetHighlight(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        db = new DialogBox(new Vector2(12, offset), new Vector2(2, 1), MIN);
+        db = new DialogBox(new Vector2(6, offset), new Vector2(3, 1), MIN);
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(14, offset), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
+        tb = new TextButton(new Vector2(9, offset), new Vector2(2, 1), eventComponent.minHeroes, delegate { SetHeroCount(false); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        db = new DialogBox(new Vector2(16, offset), new Vector2(2, 1), MAX);
+        db = new DialogBox(new Vector2(11, offset), new Vector2(3, 1), MAX);
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(18, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
+        tb = new TextButton(new Vector2(14, offset), new Vector2(2, 1), eventComponent.maxHeroes, delegate { SetHeroCount(true); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);

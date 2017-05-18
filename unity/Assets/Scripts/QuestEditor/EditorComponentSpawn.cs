@@ -84,7 +84,7 @@ public class EditorComponentSpawn : EditorComponentEvent
                 db.ApplyTag(Game.EDITOR);
 
                 uniqueTitleDBE = new DialogBoxEditable(
-                    new Vector2(5, offset), new Vector2(15, 1),
+                    new Vector2(5, offset), new Vector2(14.5f, 1),
                     spawnComponent.uniqueTitle.Translate(), false, 
                     delegate { UpdateUniqueTitle(); });
                 uniqueTitleDBE.background.transform.parent = scrollArea.transform;
@@ -97,7 +97,7 @@ public class EditorComponentSpawn : EditorComponentEvent
                 db.ApplyTag(Game.EDITOR);
 
                 uniqueTextDBE = new PaneledDialogBoxEditable(
-                    new Vector2(0, offset), new Vector2(20, 8), 
+                    new Vector2(0.5f, offset), new Vector2(19, 8), 
                 spawnComponent.uniqueText.Translate(),
                 delegate { UpdateUniqueText(); });
                 uniqueTextDBE.background.transform.parent = scrollArea.transform;

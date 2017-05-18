@@ -32,11 +32,10 @@ public class EditorComponent {
     virtual public void Update()
     {
         game = Game.Get();
-        bool newScroll = (scrollArea == null);
-        Vector2 scrollPos = Vector2.zero;
-        if (!newScroll)
+        float scrollPos = -15 * UIScaler.GetPixelsPerUnit();
+        if (scrollArea != null)
         {
-            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition;
+            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollInnerRect.rect.y;
         }
         Clean();
 
@@ -53,14 +52,7 @@ public class EditorComponent {
 
         if (offset < 30) offset = 30;
         SetScrollLimit(offset);
-        if (newScroll)
-        {
-            new Vector2(10 * UIScaler.GetPixelsPerUnit(), offset * UIScaler.GetPixelsPerUnit() * -0.5f);
-        }
-        else
-        {
-            scrollArea.GetComponent<RectTransform>().anchoredPosition = scrollPos;
-        }
+        scrollArea.GetComponent<RectTransform>().anchoredPosition = new Vector2(10 * UIScaler.GetPixelsPerUnit(), scrollPos + scrollInnerRect.rect.y);
     }
     public void Clean()
     {
@@ -196,23 +188,12 @@ public class EditorComponent {
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(14.5f, 1), new StringKey(null, GetRelativePath(game.quest.qd.questPath, component.source)), delegate { ChangeSource(); });
+        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(14.5f, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
         return offset + 2;
-    }
-
-    public static string GetRelativePath(string start, string end)
-    {
-        System.Uri fromUri = new System.Uri(start);
-        System.Uri toUri = new System.Uri(end);
-
-        if (fromUri.Scheme != toUri.Scheme) return end;
-
-        System.Uri relativeUri = fromUri.MakeRelativeUri(toUri);
-        return System.Uri.UnescapeDataString(relativeUri.ToString());
     }
 
     public void SetComment()
@@ -335,7 +316,7 @@ public class EditorComponent {
         }
         else
         {
-            SetSource(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), sourceESL.selection));
+            SetSource(sourceESL.selection);
         }
     }
 
@@ -346,14 +327,7 @@ public class EditorComponent {
         {
             s += ".ini";
         }
-        if (s.Length == 0)
-        {
-            SetSource(game.quest.qd.questPath);
-        }
-        else
-        {
-            SetSource(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), s));
-        }
+        SetSource(s);
     }
 
     public void SetSource(string source)

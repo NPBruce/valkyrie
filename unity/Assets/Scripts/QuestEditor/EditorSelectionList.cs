@@ -297,7 +297,7 @@ public class EditorSelectionList
                 filter = new List<string>();
             }
             Game game = Game.Get();
-            filter.Add(EditorComponent.GetRelativePath(game.quest.qd.questPath, component.source));
+            filter.Add(component.source);
             filter.Add(new StringKey(VAL,component.typeDynamic.ToUpper()).Translate());
         }
         
