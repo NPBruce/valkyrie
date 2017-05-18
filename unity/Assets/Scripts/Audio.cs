@@ -106,7 +106,7 @@ public class Audio : MonoBehaviour
         {
             WWW file = new WWW(@"file://" + s);
             yield return file;
-            newMusic.Add(file.audioClip);
+            newMusic.Add(file.GetAudioClip());
         }
         music = newMusic;
         if (newMusic.Count > 1 || alwaysLoop)
@@ -132,7 +132,7 @@ public class Audio : MonoBehaviour
         }
         else
         {
-            audioSourceEffect.PlayOneShot(file.audioClip, effectVolume);
+            audioSourceEffect.PlayOneShot(file.GetAudioClip(), effectVolume);
         }
     }
 
