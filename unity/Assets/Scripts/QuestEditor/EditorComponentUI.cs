@@ -62,51 +62,61 @@ public class EditorComponentUI : EditorComponentEvent
         tb.ApplyTag(Game.EDITOR);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset++), new Vector2(4, 1), new StringKey("val", "ALIGN"));
+        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "ALIGN"));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┏", false), delegate { SetAlign(-1, -1); });
+        Color dim = new Color(0.3f, 0.3f, 0.3f);
+        Color selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == -1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┏", false), delegate { SetAlign(-1, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, -1); });
+        selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == -1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┓", false), delegate { SetAlign(1, -1); });
+        selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == -1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┓", false), delegate { SetAlign(1, -1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(-1, 0); });
+        selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == 0) ? Color.white : dim;
+        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(-1, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "╋", false), delegate { SetAlign(0, 0); });
+        selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == 0) ? Color.white : dim;
+        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "╋", false), delegate { SetAlign(0, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(1, 0); });
+        selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == 0) ? Color.white : dim;
+        tb = new TextButton(new Vector2(6, offset++), new Vector2(1, 1), new StringKey(null, "┃", false), delegate { SetAlign(1, 0); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┗", false), delegate { SetAlign(-1, 1); });
+        selected = (uiComponent.hAlign == -1 && uiComponent.vAlign == 1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(4, offset), new Vector2(1, 1), new StringKey(null, "┗", false), delegate { SetAlign(-1, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, 1); });
+        selected = (uiComponent.hAlign == 0 && uiComponent.vAlign == 1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(5, offset), new Vector2(1, 1), new StringKey(null, "━", false), delegate { SetAlign(0, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
 
-        tb = new TextButton(new Vector2(6, offset), new Vector2(1, 1), new StringKey(null, "┛", false), delegate { SetAlign(1, 1); });
+        selected = (uiComponent.hAlign == 1 && uiComponent.vAlign == 1) ? Color.white : dim;
+        tb = new TextButton(new Vector2(6, offset), new Vector2(1, 1), new StringKey(null, "┛", false), delegate { SetAlign(1, 1); }, selected);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
@@ -130,11 +140,12 @@ public class EditorComponentUI : EditorComponentEvent
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
-        locYDBE = new DialogBoxEditable(new Vector2(7, offset++), new Vector2(3, 1),
+        locYDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
             uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
         locYDBE.background.transform.parent = scrollArea.transform;
         locYDBE.ApplyTag(Game.EDITOR);
         locYDBE.AddBorder();
+        offset += 2;
 
         db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "SIZE"));
         db.background.transform.parent = scrollArea.transform;
