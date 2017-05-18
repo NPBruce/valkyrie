@@ -43,13 +43,13 @@ public class EditorComponentActivation : EditorComponent
 
     public float D2EActivation(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(20, 1), new StringKey("val","X_COLON",ABILITY));
+        DialogBox db = new DialogBox(new Vector2(0.5f, offset), new Vector2(19, 1), new StringKey("val","X_COLON",ABILITY));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         offset += 1;
 
         abilityDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.ability.Translate(), 
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag(Game.EDITOR);
@@ -57,17 +57,17 @@ public class EditorComponentActivation : EditorComponent
         abilityDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MASTER));
+        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(14, 1), new StringKey("val", "X_COLON", MONSTER_MASTER));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         TextButton tb = null;
         if (activationComponent.masterFirst)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), FIRST, delegate { ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), FIRST, delegate { ToggleMasterFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMasterFirst(); });
+            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMasterFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -75,7 +75,7 @@ public class EditorComponentActivation : EditorComponent
         offset += 1;
 
         masterActionsDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
         masterActionsDBE.background.transform.parent = scrollArea.transform;
@@ -83,16 +83,16 @@ public class EditorComponentActivation : EditorComponent
         masterActionsDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(15, 1), new StringKey("val", "X_COLON", MONSTER_MINION));
+        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(14, 1), new StringKey("val", "X_COLON", MONSTER_MINION));
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
         if (activationComponent.minionFirst)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), FIRST, delegate { ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), FIRST, delegate { ToggleMinionFirst(); });
         }
         else
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMinionFirst(); });
+            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMinionFirst(); });
         }
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
@@ -100,7 +100,7 @@ public class EditorComponentActivation : EditorComponent
         offset += 1;
 
         minionActionsDBE = new PaneledDialogBoxEditable(
-            new Vector2(0, offset), new Vector2(20, 8), 
+            new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.minionActions.Translate(true),
             delegate { UpdateMinionActions(); });
         minionActionsDBE.background.transform.parent = scrollArea.transform;
