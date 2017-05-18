@@ -66,7 +66,7 @@ public class QuestData
         iniFiles = new List<string>();
         localizationFiles = new List<string>();
         // The main data file is included
-        iniFiles.Add(questPath);
+        iniFiles.Add("quest.ini");
 
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
@@ -76,7 +76,7 @@ public class QuestData
                 if (file != null && file.Length > 0)
                 {
                     // path is relative to the main file (absolute not supported)
-                    iniFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                    iniFiles.Add(file);
                 }
             }
         }
@@ -108,12 +108,13 @@ public class QuestData
 
         foreach (string f in iniFiles)
         {
+            string fullPath = Path.Combine(Path.GetDirectoryName(questPath), f);
             // Read each file
-            questIniData = IniRead.ReadFromIni(f);
+            questIniData = IniRead.ReadFromIni(fullPath);
             // Failure to read a file is fatal
             if (questIniData == null)
             {
-                ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
+                ValkyrieDebug.Log("Unable to read quest file: \"" + fullPath + "\"");
                 Application.Quit();
             }
 
@@ -231,7 +232,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
-            source = Path.GetDirectoryName(game.quest.qd.questPath) + "/tiles.ini";
+            source = "tiles.ini";
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
                 tileSideName = kv.Key;
@@ -290,7 +291,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Door(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/door.ini";
+            source = "door.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
@@ -344,7 +345,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Token(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/tokens.ini";
+            source = "tokens.ini";
             locationSpecified = true;
             typeDynamic = type;
             tokenName = "TokenSearch";
@@ -408,7 +409,7 @@ public class QuestData
         // Create new with name (used by editor)
         public UI(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/ui.ini";
+            source = "ui.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
@@ -560,7 +561,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/spawns.ini";
+            source = "spawns.ini";
             // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
@@ -765,7 +766,7 @@ public class QuestData
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/events.ini";
+            source = "events.ini";
             display = false;
             typeDynamic = type;
             nextEvent = new List<List<string>>();
@@ -1192,7 +1193,7 @@ public class QuestData
         // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/mplaces.ini";
+            source = "mplaces.ini";
             locationSpecified = true;
             typeDynamic = type;
         }
@@ -1244,7 +1245,7 @@ public class QuestData
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/puzzles.ini";
+            source = "puzzles.ini";
             typeDynamic = type;
             nextEvent.Add(new List<string>());
             buttonColors.Add("white");
@@ -1474,7 +1475,7 @@ public class QuestData
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
+            source = "monsters.ini";
             LocalizationRead.updateScenarioText(monstername_key, sectionName);
             LocalizationRead.updateScenarioText(info_key, "-");
             activations = new string[0];
@@ -1604,7 +1605,7 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
+            source = "monsters.ini";
             LocalizationRead.updateScenarioText(ability_key, "-");
             typeDynamic = type;
         }
@@ -1655,7 +1656,7 @@ public class QuestData
         // Create new (editor)
         public QItem(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/items.ini";
+            source = "items.ini";
             typeDynamic = type;
             itemName = new string[0];
             traits = new string[1];
