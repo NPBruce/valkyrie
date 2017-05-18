@@ -167,18 +167,7 @@ public class EditorComponentQuest : EditorComponent
 
     override public float DrawComponentSelection(float offset)
     {
-        // Back button
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(4, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, offset), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        DialogBox db = new DialogBox(new Vector2(10, offset), new Vector2(10, 1), new StringKey("val", "X_COLON", CommonStringKeys.QUEST));
+        DialogBox db = new DialogBox(new Vector2(5, offset), new Vector2(10, 1), game.gameType.QuestName());
         db.background.transform.parent = scrollArea.transform;
         db.ApplyTag(Game.EDITOR);
 
