@@ -93,14 +93,14 @@ public class ReorderComponents
             if (!first)
             {
                 tb = new TextButton(new Vector2(UIScaler.GetHCenter(9.5f), offset++), new Vector2(1, 1), 
-                    new StringKey(null, "▽", false), delegate { DecComponent(name); }, Color.black);
+                    new StringKey(null, "▽", false), delegate { IncComponent(name); }, Color.black);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
                 tb.background.transform.parent = scrollArea.transform;
 
                 tb = new TextButton(new Vector2(UIScaler.GetHCenter(-11.5f), offset), new Vector2(1, 1), 
-                    new StringKey(null, "△", false), delegate { DecComponent(name); }, Color.black);
+                    new StringKey(null, "△", false), delegate { IncComponent(name); }, Color.black);
                 tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
                 tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
@@ -116,36 +116,42 @@ public class ReorderComponents
 
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - scrollStart) * UIScaler.GetPixelsPerUnit());
         // Cancel button
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
+        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
     }
 
-    public void DecComponent(string name)
+    public void IncComponent(string name)
     {
         Game game = Game.Get();
-        bool held = false;
-        Dictionary<string, QuestData.QuestComponent> newDict = new Dictionary<string, QuestData.QuestComponent>();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        Dictionary<string, QuestData.QuestComponent> preDict = new Dictionary<string, QuestData.QuestComponent>();
+        List<QuestData.QuestComponent> postList = new List<QuestData.QuestComponent>();
+        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
-            if (!kv.Key.Equals(name))
+            if (c.sectionName.Equals(name))
             {
-                newDict.Add(kv.Key, kv.Value);
-                if (held && kv.Value.source.Equals(source))
-                {
-                    held = false;
-                    newDict.Add(name, game.quest.qd.components[name]);
-                }
+                preDict.Add(c.sectionName, c);
             }
             else
             {
-                held = true;
+                if (c.source.Equals(game.quest.qd.components[name].source))
+                {
+                    foreach (QuestData.QuestComponent post in postList)
+                    {
+                        preDict.Add(post.sectionName, post);
+                    }
+                    postList = new List<QuestData.QuestComponent>();
+                }
+                postList.Add(c);
             }
         }
-        if (held)
+
+        foreach (QuestData.QuestComponent post in postList)
         {
-            newDict.Add(name, game.quest.qd.components[name]);
+            preDict.Add(post.sectionName, post);
         }
+
+        game.quest.qd.components = preDict;
         Update();
     }
 }
