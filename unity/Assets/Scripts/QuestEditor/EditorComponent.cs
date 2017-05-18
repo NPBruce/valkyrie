@@ -105,31 +105,19 @@ public class EditorComponent {
 
     virtual public float DrawComponentSelection(float offset)
     {
-        // Back button
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(4, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
+            new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, offset), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(10, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(15, offset), new Vector2(5, 1), new StringKey("val", "DELETE"), delegate { Delete(); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.parent = scrollArea.transform;
-        tb.ApplyTag(Game.EDITOR);
-
         offset += 2;
 
-        tb = new TextButton(new Vector2(0.5f, offset), new Vector2(19, 1), 
-            new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
+        tb = new TextButton(new Vector2(2, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
+        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        tb.background.transform.parent = scrollArea.transform;
+        tb.ApplyTag(Game.EDITOR);
+
+        tb = new TextButton(new Vector2(13, offset), new Vector2(5, 1), new StringKey("val", "DELETE"), delegate { Delete(); }, Color.red);
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.background.transform.parent = scrollArea.transform;
         tb.ApplyTag(Game.EDITOR);
