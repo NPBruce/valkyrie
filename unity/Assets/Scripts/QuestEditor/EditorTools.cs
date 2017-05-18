@@ -17,23 +17,23 @@ public class EditorTools
         }
 
         // Menu border
-        DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 9), new Vector2(12, 13), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 20) / 2, 9), new Vector2(20, 13), StringKey.NULL);
         db.AddBorder();
 
         TextButton tb = new TextButton(
-            new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 10), new Vector2(10, 2f),
+            new Vector2((UIScaler.GetWidthUnits() - 18) / 2, 10), new Vector2(18, 2f),
             VALIDATE_SCENARIO, delegate { Validate_Scenario(); }, Color.grey);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
         tb = new TextButton(
-            new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f),
+            new Vector2((UIScaler.GetWidthUnits() - 18) / 2, 13), new Vector2(18, 2f),
             OPTIMIZE_LOCALIZATION, delegate { Optimize_Localization(); }, Color.grey);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
 
         tb = new TextButton(
-            new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 16), new Vector2(10, 2f),
+            new Vector2((UIScaler.GetWidthUnits() - 18) / 2, 16), new Vector2(18, 2f),
             REORDER_COMPONENTS, delegate { new ReorderComponents(); });
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
         tb.SetFont(game.gameType.GetHeaderFont());
