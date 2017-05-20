@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentDoor : EditorComponentEvent
 {
@@ -17,14 +18,15 @@ public class EditorComponentDoor : EditorComponentEvent
 
     override public float AddPosition(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        TextButton tb = new TextButton(new Vector2(4, offset), new Vector2(4, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(4, offset, 4, 1);
+        ui.SetText(CommonStringKeys.POSITION_SNAP);
+        ui.SetButton(delegate { GetPosition(); });
+        new UIElementBorder(ui);
 
         return offset + 2;
     }
@@ -33,20 +35,22 @@ public class EditorComponentDoor : EditorComponentEvent
     {
         doorComponent = component as QuestData.Door;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        TextButton tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1),
-            new StringKey(null, doorComponent.rotation.ToString() + "˚", false), delegate { Rotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(6, offset, 3, 1);
+        ui.SetText(doorComponent.rotation.ToString() + "˚");
+        ui.SetButton(delegate { Rotate(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        tb = new TextButton(new Vector2(0.5f, offset), new Vector2(8, 1), COLOR, delegate { Colour(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(COLOR);
+        ui.SetButton(delegate { Colour(); });
+        new UIElementBorder(ui);
         offset += 2;
 
         game.quest.ChangeAlpha(doorComponent.sectionName, 1f);
