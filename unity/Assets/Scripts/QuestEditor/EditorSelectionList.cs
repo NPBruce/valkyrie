@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Paged list of items to select from
 // Used by quest editor
@@ -185,7 +186,7 @@ public class EditorSelectionList
         {
             // Print the name but select the key
             string key = filtered[i].key;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10.5f), offset++), new Vector2(20, 1), 
+            /*tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10.5f), offset++), new Vector2(20, 1), 
                 new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, Color.black);
             tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -195,7 +196,12 @@ public class EditorSelectionList
             {
                 //Empty buttons are disabled
                 tb.setActive(false);
-            }
+            }*/
+            UIElement ui = new UIElement(scrollArea.transform);
+            ui.SetLocation(0, i, 20, 1);
+            ui.SetButton(delegate { SelectComponent(key); });
+            ui.SetBGColor(Color.white);
+            ui.SetText(filtered[i].name, Color.black);
         }
         if (offset < 28) offset = 28;
 
