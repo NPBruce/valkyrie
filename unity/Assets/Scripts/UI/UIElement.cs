@@ -59,6 +59,21 @@ namespace Assets.Scripts.UI
             CreateBG(parent);
         }
 
+        public Transform GetTransform()
+        {
+            return bg.transform;
+        }
+
+        public RectTransform GetRectTransform()
+        {
+            return bg.GetComponent<RectTransform>();
+        }
+
+        public string GetTag()
+        {
+            return tag;
+        }
+
         protected void CreateBG(Transform parent)
         {
             bg = new GameObject("UIBG");

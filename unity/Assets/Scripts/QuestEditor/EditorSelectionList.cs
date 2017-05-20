@@ -64,11 +64,14 @@ public class EditorSelectionList
         float windowEdge = UIScaler.GetHCenter(windowSize / -2);
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(windowEdge, 0), new Vector2(windowSize, 30), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(windowEdge, 0, windowSize, 30);
+        new UIElementBorder(ui);
 
         // Title
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10), 0), new Vector2(20, 1), title);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
+        ui.SetText(title);
 
         // Create a list of traits of all items in the list
         List<SelectionListEntry> filtered = items;
@@ -109,7 +112,7 @@ public class EditorSelectionList
             }
             string tmp = trait;
 
-            UIElement ui = new UIElement();
+            ui = new UIElement();
             ui.SetLocation(hOffset, offset, width, 1);
             Color c = Color.white;
             if (filter.Count == 0)
@@ -142,6 +145,7 @@ public class EditorSelectionList
                 }
             }
             ui.SetText(new StringKey(VAL, tmp), c);
+            new UIElementBorder(ui);
             hOffset += width;
         }
 
@@ -149,7 +153,7 @@ public class EditorSelectionList
 
         // Scroll BG
         float scrollStart = offset;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(21, 27 - offset), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(21, 27 - offset), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -185,9 +189,9 @@ public class EditorSelectionList
         {
             // Print the name but select the key
             string key = filtered[i].key;
-            UIElement ui = new UIElement(scrollArea.transform);
+            ui = new UIElement(scrollArea.transform);
             ui.SetLocation(0, (i * 1.05f), 20, 1);
-            if (key == null)
+            if (key != null)
             {
                 ui.SetButton(delegate { SelectComponent(key); });
             }
@@ -201,10 +205,14 @@ public class EditorSelectionList
             scrollsize = 28;
         }
         scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, scrollsize * UIScaler.GetPixelsPerUnit());
+
         // Cancel button
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetButton(cancelCall);
+        new UIElementBorder(ui);
     }
     
     public void SetFilter(string f)
