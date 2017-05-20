@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentCustomMonster : EditorComponent
 {
@@ -46,22 +47,21 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
-            new StringKey("val", "X_COLON", BASE));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", BASE));
 
-        TextButton tb = new TextButton(new Vector2(3, offset), new Vector2(16.5f, 1), 
-            new StringKey(null,monsterComponent.baseMonster,false),  delegate { SetBase(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(3, offset, 16.5f, 1);
+        ui.SetText(monsterComponent.baseMonster);
+        ui.SetButton(delegate { SetBase(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
-            new StringKey("val", "X_COLON", NAME));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", NAME));
+
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.KeyExists())
         {
             nameDBE = new DialogBoxEditable(
@@ -73,28 +73,29 @@ public class EditorComponentCustomMonster : EditorComponent
             nameDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), 
-                    CommonStringKeys.RESET, delegate { ClearName(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearName(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1),
-                CommonStringKeys.SET, delegate { SetName(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetName(); });
+            new UIElementBorder(ui);
         }
         offset += 2;
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0.5f, offset), new Vector2(16, 1), new StringKey("val","X_COLON",INFO));
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0.5f, offset, 16, 1);
+            ui.SetText(new StringKey("val", "X_COLON", INFO));
+
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
                 infoDBE = new PaneledDialogBoxEditable(
@@ -106,31 +107,34 @@ public class EditorComponentCustomMonster : EditorComponent
                 infoDBE.AddBorder();
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearInfo(); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.background.transform.SetParent(scrollArea.transform);
-                    tb.ApplyTag(Game.EDITOR);
+                    ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                    ui.SetLocation(16.5f, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearInfo(); });
+                    new UIElementBorder(ui);
                 }
                 offset += 10;
             }
             else
             {
-                tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetInfo(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetInfo(); });
+                new UIElementBorder(ui);
                 offset += 2;
             }
         }
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(11.5f, 1), new StringKey("val","X_COLON",ACTIVATIONS));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 11.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
 
-        tb = new TextButton(new Vector2(11.5f, offset), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddActivation(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(11.5f, offset, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { AddActivation(); });
+        new UIElementBorder(ui, Color.green);
 
         float traitOffset = offset;
         offset += 1;
@@ -138,52 +142,53 @@ public class EditorComponentCustomMonster : EditorComponent
         for (index = 0; index < monsterComponent.activations.Length; index++)
         {
             int i = index;
-            tb = new TextButton(new Vector2(0, offset), new Vector2(11.5f, 1), 
-                new StringKey(null,monsterComponent.activations[index],false), delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(11.5f, offset), new Vector2(1, 1), 
-                CommonStringKeys.MINUS, delegate { RemoveActivation(i); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0, offset, 11.5f, 1);
+            ui.SetText(monsterComponent.activations[index]);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(11.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveActivation(i); });
+            new UIElementBorder(ui, Color.red);
             offset += 1;
         }
 
-        db = new DialogBox(new Vector2(12.5f, traitOffset), new Vector2(6, 1), new StringKey("val","X_COLON", CommonStringKeys.TRAITS));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(12.5f, traitOffset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
 
-        tb = new TextButton(new Vector2(18.5f, traitOffset), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-        traitOffset += 1;
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(18.5f, traitOffset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { AddTrait(); });
+        new UIElementBorder(ui, Color.green);
 
         for (index = 0; index < monsterComponent.traits.Length; index++)
         {
             int i = index;
-            db = new DialogBox(new Vector2(12.5f, traitOffset), new Vector2(6, 1),
-                new StringKey("val",monsterComponent.traits[index]));
-            db.background.transform.SetParent(scrollArea.transform);
-            db.AddBorder();
-            db.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(18.5f, traitOffset), new Vector2(1, 1), CommonStringKeys.MINUS, 
-                delegate { RemoveTrait(i); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
-            traitOffset += 1;
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(12.5f, traitOffset, 6, 1);
+            ui.SetText(new StringKey("val", monsterComponent.traits[index]));
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(18.5f, traitOffset++, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveTrait(i); });
+            new UIElementBorder(ui, Color.red);
         }
 
         if (traitOffset > offset) offset = traitOffset;
-
         offset += 1;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val","X_COLON",HEALTH));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", HEALTH));
+
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
             healthDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1), 
@@ -192,9 +197,9 @@ public class EditorComponentCustomMonster : EditorComponent
             healthDBE.ApplyTag(Game.EDITOR);
             healthDBE.AddBorder();
 
-            db = new DialogBox(new Vector2(8, offset), new Vector2(6, 1), new StringKey("val","X_COLON",HEALTH_HERO));
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(8, offset, 6, 1);
+            ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
 
             healthHeroDBE = new DialogBoxEditable(new Vector2(14, offset), new Vector2(2.5f, 1), 
                 monsterComponent.healthPerHero.ToString(), false, delegate { UpdateHealthHero(); });
@@ -203,75 +208,81 @@ public class EditorComponentCustomMonster : EditorComponent
             healthHeroDBE.AddBorder();
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearHealth(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearHealth(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetHealth(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetHealth(); });
+            new UIElementBorder(ui);
         }
 
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1), new StringKey("val","X_COLON",IMAGE));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", IMAGE));
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
-            tb = new TextButton(new Vector2(3, offset), new Vector2(13.5f, 1), 
-                new StringKey(null,monsterComponent.imagePath,false), delegate { SetImage(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(3, offset, 13.5f, 1);
+            ui.SetText(monsterComponent.imagePath);
+            ui.SetButton(delegate { SetImage(); });
+            new UIElementBorder(ui);
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImage(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearImage(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImage(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetImage(); });
+            new UIElementBorder(ui);
         }
         offset += 2;
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), PLACE_IMG);
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0, offset, 4, 1);
+            ui.SetText(new StringKey("val", "X_COLON", PLACE_IMG));
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
             {
-                tb = new TextButton(new Vector2(4, offset), new Vector2(12.5f, 1), 
-                    new StringKey(null,monsterComponent.imagePath,false), delegate { SetImagePlace(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(4, offset, 12.5f, 1);
+                ui.SetText(monsterComponent.imagePlace);
+                ui.SetButton(delegate { SetImagePlace(); });
+                new UIElementBorder(ui);
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImagePlace(); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.background.transform.SetParent(scrollArea.transform);
-                    tb.ApplyTag(Game.EDITOR);
+                    ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                    ui.SetLocation(16.5f, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearImagePlace(); });
+                    new UIElementBorder(ui);
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(16.5f, offset), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImagePlace(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.background.transform.SetParent(scrollArea.transform);
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetImagePlace(); });
+                new UIElementBorder(ui);
             }
         }
         offset += 2;
