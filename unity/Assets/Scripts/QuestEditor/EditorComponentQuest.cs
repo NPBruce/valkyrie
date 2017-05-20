@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using System.IO;
 
 public class EditorComponentQuest : EditorComponent
@@ -44,43 +45,38 @@ public class EditorComponentQuest : EditorComponent
         nameDBE.AddBorder();
         offset += 2;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", HIDDEN));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", HIDDEN));
 
-        TextButton tb = null;
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 3, 1);
+        ui.SetButton(delegate { ToggleHidden(); });
+        new UIElementBorder(ui);
         if (game.quest.qd.quest.hidden)
         {
-            tb = new TextButton(new Vector2(5, offset), new Vector2(3, 1), new StringKey("val", "TRUE"), delegate { ToggleHidden(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui.SetText(new StringKey("val", "TRUE"));
         }
         else
         {
-            tb = new TextButton(new Vector2(5, offset), new Vector2(3, 1), new StringKey("val", "FALSE"), delegate { ToggleHidden(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui.SetText(new StringKey("val", "FALSE"));
         }
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1),
-            new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(12, 1),
-            new StringKey(null, game.quest.qd.quest.image, false), delegate { Image(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 12, 1);
+        ui.SetButton(delegate { Image(); });
+        ui.SetText(game.quest.qd.quest.image);
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset++), new Vector2(8, 1),
-            new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset++, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
 
         descriptionDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 10), 
@@ -91,10 +87,9 @@ public class EditorComponentQuest : EditorComponent
         descriptionDBE.AddBorder();
         offset += 11;
 
-        db = new DialogBox(new Vector2(0, offset++), new Vector2(8, 1),
-            new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset++, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
 
         authorsDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 6),
@@ -105,37 +100,38 @@ public class EditorComponentQuest : EditorComponent
         authorsDBE.AddBorder();
         offset += 7;
 
-        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(10, 1), REQUIRED_EXPANSIONS);
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset, 10, 1);
+        ui.SetText(REQUIRED_EXPANSIONS);
 
-        tb = new TextButton(new Vector2(10.5f, offset), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { QuestAddPack(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(10.5f, offset, 1, 1);
+        ui.SetButton(delegate { QuestAddPack(); });
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        new UIElementBorder(ui, Color.green);
 
         offset += 1;
         int index;
         for (index = 0; index < game.quest.qd.quest.packs.Length; index++)
         {
             int i = index;
-            db = new DialogBox(new Vector2(0.5f, offset), new Vector2(10, 1), 
-                new StringKey("val", game.quest.qd.quest.packs[index]));
-            db.AddBorder();
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
-            tb = new TextButton(new Vector2(10.5f, offset), new Vector2(1, 1),
-                CommonStringKeys.MINUS, delegate { QuestRemovePack(i); }, Color.red);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0.5f, offset, 10, 1);
+            ui.SetText(new StringKey("val", game.quest.qd.quest.packs[index]));
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(10.5f, offset, 1, 1);
+            ui.SetButton(delegate { QuestRemovePack(i); });
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            new UIElementBorder(ui, Color.red);
             offset += 1;
         }
         offset += 1;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", game.gameType.HeroesName())));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 7.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", game.gameType.HeroesName())));
         
         minHeroDBE = new DialogBoxEditable(
             new Vector2(7.5f, offset), new Vector2(2, 1), 
@@ -145,9 +141,9 @@ public class EditorComponentQuest : EditorComponent
         minHeroDBE.ApplyTag(Game.EDITOR);
         minHeroDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", game.gameType.HeroesName())));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(9.5f, offset, 7.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", game.gameType.HeroesName())));
         
         maxHeroDBE = new DialogBoxEditable(
             new Vector2(17, offset), new Vector2(2, 1), 
@@ -158,9 +154,9 @@ public class EditorComponentQuest : EditorComponent
         maxHeroDBE.AddBorder();
         offset +=2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 7.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
         
         minLengthDBE = new DialogBoxEditable(
             new Vector2(7.5f, offset), new Vector2(2, 1), 
@@ -170,9 +166,9 @@ public class EditorComponentQuest : EditorComponent
         minLengthDBE.ApplyTag(Game.EDITOR);
         minLengthDBE.AddBorder();
 
-        db = new DialogBox(new Vector2(9.5f, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(9.5f, offset, 7.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
         
         maxLengthDBE = new DialogBoxEditable(
             new Vector2(17f, offset), new Vector2(2, 1), 
@@ -183,9 +179,9 @@ public class EditorComponentQuest : EditorComponent
         maxLengthDBE.AddBorder();
         offset +=2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(7.5f, 1),  new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 7.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
         
         difficultyDBE = new DialogBoxEditable(
             new Vector2(7.5f, offset), new Vector2(3, 1), 
@@ -201,9 +197,9 @@ public class EditorComponentQuest : EditorComponent
 
     override public float DrawComponentSelection(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(5, offset), new Vector2(10, 1), game.gameType.QuestName());
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 10, 1);
+        ui.SetText(game.gameType.QuestName());
 
         return offset + 2;
     }
