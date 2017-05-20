@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using System.IO;
 
 // Super class for all editor selectable components
@@ -105,22 +106,24 @@ public class EditorComponent {
 
     virtual public float DrawComponentSelection(float offset)
     {
-        TextButton tb = new TextButton(new Vector2(0, offset), new Vector2(20, 1),
-            new StringKey(null, name, false), delegate { QuestEditorData.ListType(component.typeDynamic); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 20, 1);
+        ui.SetText(name);
+        ui.SetButton(delegate { QuestEditorData.ListType(component.typeDynamic); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        tb = new TextButton(new Vector2(2, offset), new Vector2(5, 1), new StringKey("val", "RENAME"), delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(2, offset, 5, 1);
+        ui.SetText(new StringKey("val", "RENAME"));
+        ui.SetButton(delegate { Rename(); });
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2(13, offset), new Vector2(5, 1), new StringKey("val", "DELETE"), delegate { Delete(); }, Color.red);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(13, offset, 5, 1);
+        ui.SetText(new StringKey("val", "DELETE"), Color.red);
+        ui.SetButton(delegate { Delete(); });
+        new UIElementBorder(ui, Color.red);
 
         return offset + 2;
     }
@@ -155,9 +158,9 @@ public class EditorComponent {
 
     virtual public float AddComment(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset++), new Vector2(5, 1), new StringKey("val","X_COLON",(new StringKey("val", "COMMENT"))));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset++, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
         commentDBE = new DialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 5),
@@ -172,14 +175,15 @@ public class EditorComponent {
 
     virtual public float AddSource(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1), new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
 
-        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(14.5f, 1), new StringKey(null, component.source), delegate { ChangeSource(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 14.5f, 1);
+        ui.SetText(component.source);
+        ui.SetButton(delegate { ChangeSource(); });
+        new UIElementBorder(ui);
 
         return offset + 2;
     }

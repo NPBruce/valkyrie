@@ -40,7 +40,13 @@ namespace Assets.Scripts.UI
 
         protected string tag = Game.DIALOG;
 
-        protected float textPadding = 0.1f;
+        protected static float textPaddingDefault = 0.25f;
+
+        protected float textPadding = textPaddingDefault;
+
+        // Used for calculating text size
+        protected static GameObject textWidthObj;
+        protected static GameObject textHeightObj;
 
         public UIElement(string t = "", Transform parent = null)
         {
@@ -48,9 +54,24 @@ namespace Assets.Scripts.UI
             CreateBG(parent);
         }
 
-        public UIElement(Transform parent = null)
+        public UIElement(Transform parent)
         {
             CreateBG(parent);
+        }
+
+        public Transform GetTransform()
+        {
+            return bg.transform;
+        }
+
+        public RectTransform GetRectTransform()
+        {
+            return bg.GetComponent<RectTransform>();
+        }
+
+        public string GetTag()
+        {
+            return tag;
         }
 
         protected void CreateBG(Transform parent)
@@ -60,6 +81,7 @@ namespace Assets.Scripts.UI
             UnityEngine.UI.Image uiImage = bg.AddComponent<UnityEngine.UI.Image>();
             // default color
             uiImage.color = new Color(0, 0, 0, (float)0.9);
+            if (parent == null) parent = Game.Get().uICanvas.transform;
             bg.transform.SetParent(parent);
         }
 
@@ -103,6 +125,11 @@ namespace Assets.Scripts.UI
             SetText(content.Translate(), Color.white);
         }
 
+        public void SetText(StringKey content, Color textColor)
+        {
+            SetText(content.Translate(), textColor);
+        }
+
         public void SetText(string content)
         {
             SetText(content, Color.white);
@@ -128,11 +155,32 @@ namespace Assets.Scripts.UI
             uiText.text = content;
             text.transform.SetParent(bg.transform);
             RectTransform transform = text.GetComponent<RectTransform>();
-            transform.sizeDelta = Vector3.zero;
             transform.anchorMin = Vector2.zero;
             transform.anchorMax = Vector2.one;
             transform.localPosition = Vector3.zero;
             transform.localScale = Vector3.one;
+            transform.offsetMin = new Vector2(textPadding * UIScaler.GetPixelsPerUnit(), 0);
+            transform.offsetMax = new Vector2(-textPadding * UIScaler.GetPixelsPerUnit(), 0);
+        }
+
+        public static float GetStringWidth(StringKey content)
+        {
+            return GetStringWidth(content.Translate());
+        }
+
+        public static float GetStringWidth(string content)
+        {
+            if (textWidthObj == null)
+            {
+                textWidthObj = new GameObject("TextSizing");
+                textWidthObj.AddComponent<UnityEngine.UI.Text>();
+                RectTransform transform = textWidthObj.GetComponent<RectTransform>();
+                transform.offsetMax = new Vector2(20000, 20000);
+                textWidthObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
+                textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            }
+            textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
+            return (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
         }
     }
 }
