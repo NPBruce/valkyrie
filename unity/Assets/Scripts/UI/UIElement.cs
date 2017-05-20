@@ -98,6 +98,11 @@ namespace Assets.Scripts.UI
             textPadding = pad;
         }
 
+        public void SetText(StringKey content)
+        {
+            SetText(content.Translate(), Color.white);
+        }
+
         public void SetText(string content)
         {
             SetText(content, Color.white);
@@ -109,9 +114,9 @@ namespace Assets.Scripts.UI
             text.tag = tag;
             UnityEngine.UI.Text uiText = text.AddComponent<UnityEngine.UI.Text>();
             uiText.color = textColor;
-            uiText.text = content;
             uiText.alignment = TextAnchor.MiddleCenter;
             uiText.font = Game.Get().gameType.GetFont();
+            uiText.fontSize = UIScaler.GetSmallFont();
             if (textColor.Equals(Color.black))
             {
                 uiText.material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -120,7 +125,14 @@ namespace Assets.Scripts.UI
             {
                 uiText.material = uiText.font.material;
             }
+            uiText.text = content;
             text.transform.SetParent(bg.transform);
+            RectTransform transform = text.GetComponent<RectTransform>();
+            transform.sizeDelta = Vector3.zero;
+            transform.anchorMin = Vector2.zero;
+            transform.anchorMax = Vector2.one;
+            transform.localPosition = Vector3.zero;
+            transform.localScale = Vector3.one;
         }
     }
 }
