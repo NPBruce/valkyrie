@@ -101,24 +101,24 @@ public class EditorSelectionList
         foreach (string trait in traits)
         {
             // Traits are in val dictionary
-            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(VAL, trait));
-            float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
-            db.Destroy();
+            float width = UIElement.GetStringWidth(new StringKey(VAL, trait));
             if (hOffset + width > windowEdge + windowSize - 1)
             {
                 hOffset = windowEdge + 1;
                 offset++;
             }
             string tmp = trait;
+
+            UIElement ui = new UIElement();
+            ui.SetLocation(hOffset, offset, width, 1);
+            Color c = Color.white;
             if (filter.Count == 0)
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(VAL, tmp), delegate { SetFilter(trait); });
+                ui.SetButton(delegate { SetFilter(trait); });
             }
             else if (filter.Contains(trait))
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(VAL, tmp), delegate { ClearFilter(trait); });
+                ui.SetButton(delegate { ClearFilter(trait); });
             }
             else
             {
@@ -133,16 +133,15 @@ public class EditorSelectionList
                 }
                 if (valid)
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(VAL, tmp), delegate { SetFilter(trait); }, Color.gray);
+                    ui.SetButton(delegate { SetFilter(trait); });
+                    c = Color.gray;
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(VAL, tmp), delegate { ; }, new Color(0.5f, 0, 0));
+                    c = new Color(0.5f, 0, 0);
                 }
             }
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            ui.SetText(new StringKey(VAL, tmp), c);
             hOffset += width;
         }
 
