@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentActivation : EditorComponent
 {
@@ -43,10 +44,9 @@ public class EditorComponentActivation : EditorComponent
 
     public float D2EActivation(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0.5f, offset), new Vector2(19, 1), new StringKey("val","X_COLON",ABILITY));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        offset += 1;
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset++, 19, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ABILITY));
 
         abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 
@@ -57,22 +57,22 @@ public class EditorComponentActivation : EditorComponent
         abilityDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(14, 1), new StringKey("val", "X_COLON", MONSTER_MASTER));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        TextButton tb = null;
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset, 14, 1);
+        ui.SetText(new StringKey("val", "X_COLON", MONSTER_MASTER));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(14.5f, offset++, 5, 1);
+        ui.SetButton(delegate { ToggleMasterFirst(); });
+        new UIElementBorder(ui);
         if (activationComponent.masterFirst)
         {
-            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), FIRST, delegate { ToggleMasterFirst(); });
+            ui.SetText(FIRST);
         }
         else
         {
-            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMasterFirst(); });
+            ui.SetText(NOT_FIRST);
         }
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
-        offset += 1;
 
         masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 
@@ -83,21 +83,22 @@ public class EditorComponentActivation : EditorComponent
         masterActionsDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(14, 1), new StringKey("val", "X_COLON", MONSTER_MINION));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset, 14, 1);
+        ui.SetText(new StringKey("val", "X_COLON", MONSTER_MINION));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(14.5f, offset++, 5, 1);
+        ui.SetButton(delegate { ToggleMinionFirst(); });
+        new UIElementBorder(ui);
         if (activationComponent.minionFirst)
         {
-            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), FIRST, delegate { ToggleMinionFirst(); });
+            ui.SetText(FIRST);
         }
         else
         {
-            tb = new TextButton(new Vector2(14.5f, offset), new Vector2(5, 1), NOT_FIRST, delegate { ToggleMinionFirst(); });
+            ui.SetText(NOT_FIRST);
         }
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
-        offset += 1;
 
         minionActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 
@@ -112,10 +113,9 @@ public class EditorComponentActivation : EditorComponent
 
     public float MoMActivation(float offset)
     {
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(20, 1), INITIAL_MESSAGE);
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        offset += 1;
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset++, 19, 1);
+        ui.SetText(new StringKey("val", "X_COLON", INITIAL_MESSAGE));
 
         abilityDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 
@@ -126,9 +126,9 @@ public class EditorComponentActivation : EditorComponent
         abilityDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(9.5f, 1), UNABLE_BUTTON);
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 9.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", UNABLE_BUTTON));
 
         moveButtonDBE = new DialogBoxEditable(
             new Vector2(9.5f, offset), new Vector2(10, 1), 
@@ -139,10 +139,9 @@ public class EditorComponentActivation : EditorComponent
         moveButtonDBE.AddBorder();
         offset += 2;
 
-        db = new DialogBox(new Vector2(0.5f, offset), new Vector2(19, 1), ATTACK_MESSAGE);
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        offset += 1;
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset++, 19, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ATTACK_MESSAGE));
 
         masterActionsDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 
@@ -153,9 +152,9 @@ public class EditorComponentActivation : EditorComponent
         masterActionsDBE.AddBorder();
         offset += 9;
 
-        db = new DialogBox(new Vector2(0, offset++), new Vector2(20, 1), NO_ATTACK_MESSAGE);
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0.5f, offset++, 19, 1);
+        ui.SetText(new StringKey("val", "X_COLON", NO_ATTACK_MESSAGE));
 
         moveDBE = new PaneledDialogBoxEditable(
             new Vector2(0.5f, offset), new Vector2(19, 8), 

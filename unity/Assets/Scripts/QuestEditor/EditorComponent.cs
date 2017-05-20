@@ -136,19 +136,28 @@ public class EditorComponent {
     public void Delete()
     {
         // Border
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6.5f), 1), new Vector2(13, 4), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6.5f), 1, 13, 4);
+        new UIElementBorder(ui);
 
         // Heading
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), 1), new Vector2(12, 1), new StringKey("val", "CONFIRM"));
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6f), 1, 12, 1);
+        ui.SetText(new StringKey("val", "CONFIRM"));
 
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-5.5f), 3), new Vector2(6, 1), CommonStringKeys.DELETE, delegate { ConfirmDelete(); }, Color.red);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-5.5f), 3, 6, 1);
+        ui.SetText(CommonStringKeys.DELETE, Color.red);
+        ui.SetButton(delegate { ConfirmDelete(); });
+        ui.SetBGColor(new Color(0.0f, 0.03f, 0f));
+        new UIElementBorder(ui, Color.red);
 
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(1.5f), 3), new Vector2(4, 1), CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont(); ;
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(1.5f), 3, 4, 1);
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetButton(delegate { Destroyer.Dialog(); });
+        ui.SetBGColor(new Color(0.03f, 0, 0f));
+        new UIElementBorder(ui);
     }
 
     public void ConfirmDelete()
