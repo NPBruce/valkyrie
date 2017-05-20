@@ -22,6 +22,9 @@ public class Game : MonoBehaviour {
     // This is populated at run time from the text asset
     public string version = "";
 
+    // This is a reference to the Game object
+    public static Game game;
+
     // These components are referenced here for easy of use
     // Data included in content packs
     public ContentData cd;
@@ -70,10 +73,13 @@ public class Game : MonoBehaviour {
     public bool editMode = false;
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
-    // Note that this is not fast, so shouldn't be used in frame
     public static Game Get()
     {
-        return FindObjectOfType<Game>();
+        if (game == null)
+        {
+            game = FindObjectOfType<Game>();
+        }
+        return game;
     }
 
     // Unity fires off this function

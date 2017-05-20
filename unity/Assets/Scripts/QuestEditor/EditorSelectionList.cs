@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Paged list of items to select from
 // Used by quest editor
@@ -163,7 +164,7 @@ public class EditorSelectionList
         GameObject scrollBarObj = new GameObject("scrollbar");
         scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (28 - offset) * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (27 - offset) * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 20 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
         UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
         scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
@@ -185,21 +186,22 @@ public class EditorSelectionList
         {
             // Print the name but select the key
             string key = filtered[i].key;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-10.5f), offset++), new Vector2(20, 1), 
-                new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = filtered[i].color;
-            tb.background.transform.SetParent(scrollArea.transform);
+            UIElement ui = new UIElement(scrollArea.transform);
+            ui.SetLocation(0, (i * 1.05f), 20, 1);
             if (key == null)
             {
-                //Empty buttons are disabled
-                tb.setActive(false);
+                ui.SetButton(delegate { SelectComponent(key); });
             }
+            ui.SetBGColor(Color.white);
+            ui.SetText(filtered[i].name, Color.black);
         }
-        if (offset < 28) offset = 28;
 
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - scrollStart) * UIScaler.GetPixelsPerUnit());
+        float scrollsize = filtered.Count * 1.05f;
+        if (scrollsize < 28)
+        {
+            scrollsize = 28;
+        }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, scrollsize * UIScaler.GetPixelsPerUnit());
         // Cancel button
         tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
         tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
