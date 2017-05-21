@@ -35,15 +35,16 @@ public class EditorComponentEvent : EditorComponent
 
     QuestData.Event eventComponent;
 
-    PaneledDialogBoxEditable eventTextDBE;
+    UIElementEditablePaneled eventTextUIE;
+    UIElementEditable quotaUIE;
+    List<UIElementEditable> buttonUIE;
+
     EditorSelectionList triggerESL;
     EditorSelectionList highlightESL;
     EditorSelectionList heroCountESL;
     EditorSelectionList visibilityESL;
     EditorSelectionList audioESL;
     EditorSelectionList musicESL;
-    List<DialogBoxEditable> buttonDBE;
-    DialogBoxEditable quotaDBE;
     EditorSelectionList addEventESL;
     EditorSelectionList colorESL;
     EditorSelectionList varESL;
@@ -242,13 +243,11 @@ public class EditorComponentEvent : EditorComponent
         ui.SetLocation(0, offset++, 20, 1);
         ui.SetText(new StringKey("val", "X_COLON", DIALOG));
 
-        eventTextDBE = new PaneledDialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 8), 
-            eventComponent.text.Translate(true),
-            delegate { UpdateText(); });
-        eventTextDBE.ApplyTag(Game.EDITOR);
-        eventTextDBE.background.transform.SetParent(scrollArea.transform);
-        eventTextDBE.AddBorder();
+        eventTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        eventTextUIE.SetLocation(0.5f, offset, 19, 8);
+        eventTextUIE.SetText(eventComponent.text.Translate(true));
+        eventTextUIE.SetButton(delegate { UpdateText(); });
+        new UIElementBorder(eventTextUIE);
         return offset + 9;
     }
 
@@ -315,13 +314,12 @@ public class EditorComponentEvent : EditorComponent
             new UIElementBorder(ui);
 
             // Quota dont need translation
-            quotaDBE = new DialogBoxEditable(
-                new Vector2(9, offset), new Vector2(2, 1),
-                eventComponent.quota.ToString(), false, 
-                delegate { SetQuota(); });
-            quotaDBE.background.transform.SetParent(scrollArea.transform);
-            quotaDBE.ApplyTag(Game.EDITOR);
-            quotaDBE.AddBorder();
+            quotaUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+            quotaUIE.SetLocation(9, offset, 2, 1);
+            quotaUIE.SetText(eventComponent.quota.ToString());
+            quotaUIE.SetButton(delegate { SetQuota(); });
+            quotaUIE.SetSingleLine();
+            new UIElementBorder(quotaUIE);
         }
         else
         {
@@ -365,7 +363,7 @@ public class EditorComponentEvent : EditorComponent
         int button = 1;
         int index = 0;
         float lastButtonOffset = 0;
-        buttonDBE = new List<DialogBoxEditable>();
+        buttonUIE = new List<UIElementEditable>();
         foreach (List<string> l in eventComponent.nextEvent)
         {
             lastButtonOffset = offset;
@@ -384,14 +382,13 @@ public class EditorComponentEvent : EditorComponent
             ui.SetButton(delegate { SetButtonColor(buttonTmp); });
             new UIElementBorder(ui, c);
 
-            DialogBoxEditable buttonEdit = new DialogBoxEditable(
-                new Vector2(3.5f, offset++), new Vector2(15, 1), 
-                buttonLabel.Translate(), false,
-                delegate { UpdateButtonLabel(buttonTmp); });
-            buttonEdit.background.transform.SetParent(scrollArea.transform);
-            buttonEdit.ApplyTag(Game.EDITOR);
-            buttonEdit.AddBorder();
-            buttonDBE.Add(buttonEdit);
+            UIElementEditable buttonEdit = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+            buttonEdit.SetLocation(3.5f, offset++, 15, 1);
+            buttonEdit.SetText(buttonLabel);
+            buttonEdit.SetButton(delegate { UpdateButtonLabel(buttonTmp); });
+            buttonEdit.SetSingleLine();
+            new UIElementBorder(buttonEdit);
+            buttonUIE.Add(buttonEdit);
 
             index = 0;
             foreach (string s in l)
@@ -568,23 +565,26 @@ public class EditorComponentEvent : EditorComponent
 
     public void UpdateText()
     {
-        if (eventTextDBE.CheckTextChangedAndNotEmpty())
+        if (eventTextUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextDBE.Text);
-            eventComponent.display = true;
-            if (eventComponent.buttons.Count == 0)
+            if (eventTextUIE.Empty())
             {
-                eventComponent.buttons.Add(eventComponent.genQuery("button1"));
-                eventComponent.nextEvent.Add(new List<string>());
-                eventComponent.buttonColors.Add("white");
-                LocalizationRead.updateScenarioText(eventComponent.genKey("button1"), 
-                    CONTINUE.Translate());
+                LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
+                eventComponent.display = false;
             }
-        }
-        else if (eventTextDBE.CheckTextEmptied())
-        {
-            LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
-            eventComponent.display = false;
+            else
+            {
+                LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextUIE.GetText());
+                eventComponent.display = true;
+                if (eventComponent.buttons.Count == 0)
+                {
+                    eventComponent.buttons.Add(eventComponent.genQuery("button1"));
+                    eventComponent.nextEvent.Add(new List<string>());
+                    eventComponent.buttonColors.Add("white");
+                    LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
+                        CONTINUE.Translate());
+                }
+            }
         }
     }
 
@@ -923,7 +923,7 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetQuota()
     {
-        int.TryParse(quotaDBE.Text, out eventComponent.quota);
+        int.TryParse(quotaUIE.GetText(), out eventComponent.quota);
         Update();
     }
 
@@ -1019,9 +1019,9 @@ public class EditorComponentEvent : EditorComponent
 
     public void UpdateButtonLabel(int number)
     {
-        if (buttonDBE[number - 1].CheckTextChangedAndNotEmpty())
+        if (!buttonUIE[number - 1].Empty() && buttonUIE[number - 1].Changed())
         {
-            LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonDBE[number - 1].Text);
+            LocalizationRead.updateScenarioText(eventComponent.genKey("button" + number), buttonUIE[number - 1].GetText());
         }
     }
 

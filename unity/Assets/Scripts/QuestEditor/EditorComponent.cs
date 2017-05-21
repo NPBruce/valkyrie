@@ -23,7 +23,8 @@ public class EditorComponent {
 
     EditorSelectionList sourceESL;
     QuestEditorTextEdit sourceFileText;
-    DialogBoxEditable commentDBE;
+
+    UIElementEditable commentUIE;
 
     // The editor scroll area;
     public GameObject scrollArea;
@@ -171,13 +172,11 @@ public class EditorComponent {
         ui.SetLocation(0, offset++, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
-        commentDBE = new DialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 5),
-            component.comment, false, 
-            delegate { SetComment(); });
-        commentDBE.background.transform.SetParent(scrollArea.transform);
-        commentDBE.ApplyTag(Game.EDITOR);
-        commentDBE.AddBorder();
+        commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+        commentUIE.SetLocation(0.5f, offset, 19, 5);
+        commentUIE.SetText(component.comment);
+        commentUIE.SetButton(delegate { SetComment(); });
+        new UIElementBorder(commentUIE);
 
         return offset + 6;
     }
@@ -190,7 +189,7 @@ public class EditorComponent {
 
         ui = new UIElement(Game.EDITOR, scrollArea.transform);
         ui.SetLocation(5, offset, 14.5f, 1);
-        ui.SetText(component.source);
+        ui.SetText(component.source.Replace("\\n", "\n"));
         ui.SetButton(delegate { ChangeSource(); });
         new UIElementBorder(ui);
 
@@ -199,7 +198,7 @@ public class EditorComponent {
 
     public void SetComment()
     {
-        component.comment = commentDBE.Text.Replace("\n", "\\n").Replace("\r", "\\n");
+        component.comment = commentUIE.GetText().Replace("\n", "\\n").Replace("\r", "\\n");
         Update();
     }
 

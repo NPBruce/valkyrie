@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using System.IO;
 
 public class EditorComponentPuzzle : EditorComponentEvent
@@ -36,35 +37,32 @@ public class EditorComponentPuzzle : EditorComponentEvent
     {
         puzzleComponent = component as QuestData.Puzzle;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
-            new StringKey("val", "X_COLON", PUZZLE_CLASS));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", PUZZLE_CLASS));
 
         // Translate puzzle type trait
-        TextButton tb = new TextButton(new Vector2(5, offset), new Vector2(8, 1), 
-            new StringKey("val",puzzleComponent.puzzleClass), delegate { Class(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 8, 1);
+        ui.SetText(new StringKey("val", puzzleComponent.puzzleClass));
+        ui.SetButton(delegate { Class(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1),
-            new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
 
-        tb = new TextButton(new Vector2(5, offset), new Vector2(6, 1), 
-            new StringKey(null, puzzleComponent.skill,false), delegate { Skill(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(5, offset, 6, 1);
+        ui.SetText(puzzleComponent.skill);
+        ui.SetButton(delegate { Skill(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1),
-            new StringKey("val", "X_COLON", PUZZLE_LEVEL));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", PUZZLE_LEVEL));
 
         // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
@@ -76,10 +74,9 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
         if (!puzzleComponent.puzzleClass.Equals("slide"))
         {
-            db = new DialogBox(new Vector2(0, offset), new Vector2(5, 1),
-                new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
 
             // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
@@ -89,16 +86,15 @@ public class EditorComponentPuzzle : EditorComponentEvent
             altLevelDBE.AddBorder();
             offset += 2;
 
-            db = new DialogBox(new Vector2(0, offset), new Vector2(3, 1),
-                new StringKey("val", "X_COLON", IMAGE));
-            db.background.transform.SetParent(scrollArea.transform);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(0, offset, 3, 1);
+            ui.SetText(new StringKey("val", "X_COLON", IMAGE));
 
-            tb = new TextButton(new Vector2(5, offset), new Vector2(8, 1), 
-                new StringKey(null, puzzleComponent.imageType,false), delegate { Image(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.transform.SetParent(scrollArea.transform);
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui.SetLocation(5, offset, 8, 1);
+            ui.SetText(puzzleComponent.imageType);
+            ui.SetButton(delegate { Image(); });
+            new UIElementBorder(ui);
             offset += 2;
         }
 
