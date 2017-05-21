@@ -137,13 +137,26 @@ namespace Assets.Scripts.UI
 
         public void SetText(string content, Color textColor)
         {
-            text = new GameObject("UIBG");
-            text.tag = tag;
-            UnityEngine.UI.Text uiText = text.AddComponent<UnityEngine.UI.Text>();
+            UnityEngine.UI.Text uiText = null;
+            if (text == null)
+            {
+                text = new GameObject("UIBG");
+                text.tag = tag;
+                uiText = text.AddComponent<UnityEngine.UI.Text>();
+                uiText.alignment = TextAnchor.MiddleCenter;
+                uiText.font = Game.Get().gameType.GetFont();
+                uiText.fontSize = UIScaler.GetSmallFont();
+                text.transform.SetParent(bg.transform);
+                RectTransform transform = text.GetComponent<RectTransform>();
+                transform.anchorMin = Vector2.zero;
+                transform.anchorMax = Vector2.one;
+                transform.localPosition = Vector3.zero;
+                transform.localScale = Vector3.one;
+                transform.offsetMin = new Vector2(textPadding * UIScaler.GetPixelsPerUnit(), 0);
+                transform.offsetMax = new Vector2(-textPadding * UIScaler.GetPixelsPerUnit(), 0);
+            }
+            uiText = text.GetComponent<UnityEngine.UI.Text>();
             uiText.color = textColor;
-            uiText.alignment = TextAnchor.MiddleCenter;
-            uiText.font = Game.Get().gameType.GetFont();
-            uiText.fontSize = UIScaler.GetSmallFont();
             if (textColor.Equals(Color.black))
             {
                 uiText.material = (Material)Resources.Load("Fonts/FontMaterial");
@@ -153,14 +166,12 @@ namespace Assets.Scripts.UI
                 uiText.material = uiText.font.material;
             }
             uiText.text = content;
-            text.transform.SetParent(bg.transform);
-            RectTransform transform = text.GetComponent<RectTransform>();
-            transform.anchorMin = Vector2.zero;
-            transform.anchorMax = Vector2.one;
-            transform.localPosition = Vector3.zero;
-            transform.localScale = Vector3.one;
-            transform.offsetMin = new Vector2(textPadding * UIScaler.GetPixelsPerUnit(), 0);
-            transform.offsetMax = new Vector2(-textPadding * UIScaler.GetPixelsPerUnit(), 0);
+        }
+
+        public string GetText()
+        {
+            if (text == null) return "";
+            return text.GetComponent<UnityEngine.UI.Text>().text;
         }
 
         public static float GetStringWidth(StringKey content)
@@ -180,7 +191,8 @@ namespace Assets.Scripts.UI
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            return (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) +(textPaddingDefault * 2);
+            return width;
         }
     }
 }

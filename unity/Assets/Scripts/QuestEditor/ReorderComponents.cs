@@ -2,11 +2,13 @@ using UnityEngine;
 using Assets.Scripts.Content;
 using System.IO;
 using System.Collections.Generic;
+using Assets.Scripts.UI;
 
 public class ReorderComponents
 {
     EditorSelectionList sourceESL;
     string source = "";
+    List<UIElement> names;
 
     public ReorderComponents()
     {
@@ -31,27 +33,26 @@ public class ReorderComponents
     public void ReorderSource()
     {
         source = sourceESL.selection;
-        Update();
+        Draw();
     }
 
-    public void Update()
+    public void Draw()
     {
         Game game = Game.Get();
         Destroyer.Dialog();
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-12.5f), 0), new Vector2(25, 30), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-12.5f), 0, 25, 30);
+        new UIElementBorder(ui);
 
         // Title
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-12), 0), new Vector2(24, 1), new StringKey(null, source, false));
-
-        float offset = 2f;
-        TextButton tb = null;
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-12), 0, 24, 1);
+        ui.SetText(source);
 
         // Scroll BG
-        float scrollStart = offset;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11.5f), offset), new Vector2(23, 27 - offset), StringKey.NULL);
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11.5f), 2), new Vector2(23, 25), StringKey.NULL);
         db.AddBorder();
         db.background.AddComponent<UnityEngine.UI.Mask>();
         UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
@@ -65,7 +66,7 @@ public class ReorderComponents
         GameObject scrollBarObj = new GameObject("scrollbar");
         scrollBarObj.transform.SetParent(db.background.transform);
         RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (28 - offset) * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 25 * UIScaler.GetPixelsPerUnit());
         scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 22 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
         UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
         scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
@@ -84,45 +85,67 @@ public class ReorderComponents
         scrollRect.scrollSensitivity = 27f;
 
         bool first = true;
+        float offset = 0;
+        names = new List<UIElement>();
+        int index = 0;
         foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
             if (!c.source.Equals(source)) continue;
 
             string name = c.sectionName;
 
+            int tmp = index++;
             if (!first)
             {
-                tb = new TextButton(new Vector2(UIScaler.GetHCenter(9.5f), offset++), new Vector2(1, 1), 
-                    new StringKey(null, "▽", false), delegate { IncComponent(name); }, Color.black);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
-                tb.background.transform.SetParent(scrollArea.transform);
+                ui = new UIElement(scrollArea.transform);
+                ui.SetLocation(21f, offset, 1, 1);
+                ui.SetBGColor(Color.green);
+                ui.SetText("▽", Color.black);
+                ui.SetButton(delegate { IncComponent(tmp); });
+                offset += 1.05f;
 
-                tb = new TextButton(new Vector2(UIScaler.GetHCenter(-11.5f), offset), new Vector2(1, 1), 
-                    new StringKey(null, "△", false), delegate { IncComponent(name); }, Color.black);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
-                tb.background.transform.SetParent(scrollArea.transform);
+                ui = new UIElement(scrollArea.transform);
+                ui.SetLocation(0, offset, 1, 1);
+                ui.SetBGColor(Color.green);
+                ui.SetText("△", Color.black);
+                ui.SetButton(delegate { IncComponent(tmp); });
             }
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(20, 1), new StringKey(null, c.sectionName, false), Color.black, Color.white);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            db.background.transform.SetParent(scrollArea.transform);
+            ui = new UIElement(scrollArea.transform);
+            ui.SetLocation(1.05f, offset, 19.9f, 1);
+            ui.SetBGColor(Color.white);
+            ui.SetText(c.sectionName, Color.black);
+            names.Add(ui);
             first = false;
         }
-        offset++;
-        if (offset < 28) offset = 28;
+        offset += 1.05f;
 
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - scrollStart) * UIScaler.GetPixelsPerUnit());
-        // Cancel button
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), 28f), new Vector2(9, 1), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        if (offset < 25) offset = 25;
+
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, offset * UIScaler.GetPixelsPerUnit());
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetText(CommonStringKeys.FINISHED);
+        ui.SetButton(delegate { Destroyer.Dialog(); });
+        new UIElementBorder(ui);
     }
 
-    public void IncComponent(string name)
+    public void Update()
     {
+        int i = 0;
+        foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
+        {
+            if (c.source.Equals(source))
+            {
+                names[i++].SetText(c.sectionName, Color.black);
+            }
+        }
+    }
+
+    public void IncComponent(int index)
+    {
+        string name = names[index].GetText();
         Game game = Game.Get();
         Dictionary<string, QuestData.QuestComponent> preDict = new Dictionary<string, QuestData.QuestComponent>();
         List<QuestData.QuestComponent> postList = new List<QuestData.QuestComponent>();
