@@ -20,7 +20,7 @@ public class EditorComponentQuest : EditorComponent
     public DialogBoxEditable minLengthDBE;
     public DialogBoxEditable maxLengthDBE;
     public UIElementEditablePaneled descriptionUIE;
-    public PaneledDialogBoxEditable authorsDBE;
+    public UIElementEditablePaneled authorsUIE;
     EditorSelectionList packESL;
     EditorSelectionList imageESL;
 
@@ -88,13 +88,12 @@ public class EditorComponentQuest : EditorComponent
         ui.SetLocation(0, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
 
-        authorsDBE = new PaneledDialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 6),
-            game.quest.qd.quest.authors.Translate(true),
-            delegate { UpdateQuestAuth(); });
-        authorsDBE.background.transform.SetParent(scrollArea.transform);
-        authorsDBE.ApplyTag(Game.EDITOR);
-        authorsDBE.AddBorder();
+
+        authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        authorsUIE.SetLocation(0.5f, offset, 19, 6);
+        authorsUIE.SetText(game.quest.qd.quest.authors.Translate(true));
+        authorsUIE.SetButton(delegate { UpdateQuestAuth(); });
+        new UIElementBorder(authorsUIE);
         offset += 7;
 
         ui = new UIElement(Game.EDITOR, scrollArea.transform);
@@ -260,13 +259,16 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestAuth()
     {
-        if (authorsDBE.CheckTextChangedAndNotEmpty())
+        if (authorsUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_key, authorsDBE.Text);
-        }
-        else if (authorsDBE.CheckTextEmptied())
-        {
-            LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.authors_key);
+            if (authorsUIE.Empty())
+            {
+                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.authors_key);
+            }
+            else
+            {
+                LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_key, authorsUIE.GetText());
+            }
         }
     }
 
