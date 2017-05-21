@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.UI
 {
-    class UIElementScrollVertical : UIElement
+    public class UIElementScrollVertical : UIElement
     {
         protected GameObject scrollArea;
         protected GameObject scrollBar;
@@ -67,11 +67,21 @@ namespace Assets.Scripts.UI
         public void SetScrollSize(float size)
         {
             float height = size * UIScaler.GetPixelsPerUnit();
-            if (size < scrollBar.GetComponent<RectTransform>().rect.height)
+            if (height < scrollBar.GetComponent<RectTransform>().rect.height)
             {
                 height = scrollBar.GetComponent<RectTransform>().rect.height;
             }
             scrollArea.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, height);
+        }
+
+        public void SetScrollPosition(float pos)
+        {
+            scrollArea.GetComponent<RectTransform>().anchoredPosition = new Vector2(scrollArea.GetComponent<RectTransform>().anchoredPosition.x, pos + scrollArea.GetComponent<RectTransform>().rect.y);
+        }
+
+        public float GetScrollPosition()
+        {
+            return scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollArea.GetComponent<RectTransform>().rect.y;
         }
     }
 }

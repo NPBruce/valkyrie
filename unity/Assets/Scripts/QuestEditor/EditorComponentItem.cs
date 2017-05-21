@@ -26,11 +26,11 @@ public class EditorComponentItem : EditorComponent
         UIElement ui = null;
         if (game.gameType is MoMGameType)
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 8, 1);
             ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.STARTING_ITEM));
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(8, offset, 4, 1);
             ui.SetText(itemComponent.starting.ToString());
             ui.SetButton(delegate { ToggleStarting(); });
@@ -38,11 +38,11 @@ public class EditorComponentItem : EditorComponent
             offset += 2;
         }
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.ITEM));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddItem(); });
@@ -51,13 +51,13 @@ public class EditorComponentItem : EditorComponent
         for (int i = 0; i < itemComponent.itemName.Length; i++)
         {
             int tmp = i;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 18, 1);
             ui.SetText(itemComponent.itemName[i]);
 
             if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1 || itemComponent.traitpool.Length > 0)
             {
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset, 1, 1);
                 ui.SetText(CommonStringKeys.MINUS, Color.red);
                 ui.SetButton(delegate { RemoveItem(tmp); });
@@ -68,11 +68,11 @@ public class EditorComponentItem : EditorComponent
 
         offset++;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 9, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9, offset, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTrait(); });
@@ -84,13 +84,13 @@ public class EditorComponentItem : EditorComponent
         for (int i = 0; i < itemComponent.traits.Length; i++)
         {
             int tmp = i;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 9, 1);
             ui.SetText(new StringKey("val", itemComponent.traits[i]));
 
             if (itemComponent.traits.Length > 1 || itemComponent.itemName.Length > 0 || itemComponent.traitpool.Length > 0)
             {
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(9, offset, 1, 1);
                 ui.SetText(CommonStringKeys.MINUS, Color.red);
                 ui.SetButton(delegate { RemoveTrait(tmp); });
@@ -99,11 +99,11 @@ public class EditorComponentItem : EditorComponent
             offset++;
         }
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(10, traitOffset, 8.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "POOL_TRAITS")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, traitOffset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTrait(true); });
@@ -112,13 +112,13 @@ public class EditorComponentItem : EditorComponent
         for (int i = 0; i < itemComponent.traitpool.Length; i++)
         {
             int tmp = i;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, traitOffset, 8.5f, 1);
             ui.SetText(new StringKey("val", itemComponent.traitpool[i]));
 
             if (itemComponent.traitpool.Length > 1 || itemComponent.itemName.Length > 0 || itemComponent.traits.Length > 0)
             {
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, traitOffset, 1, 1);
                 ui.SetText(CommonStringKeys.MINUS, Color.red);
                 ui.SetButton(delegate { RemoveTraitPool(tmp); });
@@ -141,7 +141,7 @@ public class EditorComponentItem : EditorComponent
 
         TextButton tb = new TextButton(new Vector2(6f, offset), new Vector2(12, 1), new StringKey(null, itemComponent.inspect, false), delegate { PickInpsect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
+        tb.background.transform.SetParent(scrollArea.GetScrollTransform());
         tb.ApplyTag(Game.EDITOR);
 
         return offset + 2;

@@ -27,8 +27,7 @@ public class EditorComponent {
     UIElementEditable commentUIE;
 
     // The editor scroll area;
-    public GameObject scrollArea;
-    public RectTransform scrollInnerRect;
+    public UIElementScrollVertical scrollArea;
 
     // Update redraws the selection UI
     virtual public void Update()
@@ -37,7 +36,7 @@ public class EditorComponent {
         float scrollPos = -15 * UIScaler.GetPixelsPerUnit();
         if (scrollArea != null)
         {
-            scrollPos = scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollInnerRect.rect.y;
+            scrollPos = scrollArea.GetScrollPosition();
         }
         Clean();
 
@@ -52,9 +51,8 @@ public class EditorComponent {
 
         offset = AddComment(offset);
 
-        if (offset < 30) offset = 30;
-        SetScrollLimit(offset);
-        scrollArea.GetComponent<RectTransform>().anchoredPosition = new Vector2(10 * UIScaler.GetPixelsPerUnit(), scrollPos + scrollInnerRect.rect.y);
+        scrollArea.SetScrollSize(offset);
+        scrollArea.SetScrollPosition(scrollPos);
     }
     public void Clean()
     {
@@ -72,55 +70,27 @@ public class EditorComponent {
 
     public void AddScrollArea()
     {
-        DialogBox db = new DialogBox(new Vector2(0, 0), new Vector2(20, 30), StringKey.NULL);
-        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
-        db.ApplyTag(Game.EDITOR);
-
-        scrollArea = new GameObject("scroll");
-        scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.SetParent(db.background.transform);
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (20 * UIScaler.GetPixelsPerUnit()));
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
-
-        GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.SetParent(db.background.transform);
-        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 30 * UIScaler.GetPixelsPerUnit());
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 20 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
-        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
-        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
-        scrollRect.verticalScrollbar = scrollBar;
-
-        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
-        //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
-        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
-        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
-        scrollBar.handleRect.offsetMin = Vector2.zero;
-        scrollBar.handleRect.offsetMax = Vector2.zero;
-
-        scrollRect.content = scrollInnerRect;
-        scrollRect.horizontal = false;
-        scrollRect.scrollSensitivity = 27f;
+        scrollArea = new UIElementScrollVertical(Game.EDITOR);
+        scrollArea.SetLocation(0, 0, 21, 30);
+        new UIElementBorder(scrollArea);
     }
 
     virtual public float DrawComponentSelection(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 20, 1);
         ui.SetText(name);
         ui.SetButton(delegate { QuestEditorData.ListType(component.typeDynamic); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(2, offset, 5, 1);
         ui.SetText(new StringKey("val", "RENAME"));
         ui.SetButton(delegate { Rename(); });
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(13, offset, 5, 1);
         ui.SetText(new StringKey("val", "DELETE"), Color.red);
         ui.SetButton(delegate { Delete(); });
@@ -168,11 +138,11 @@ public class EditorComponent {
 
     virtual public float AddComment(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
-        commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+        commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         commentUIE.SetLocation(0.5f, offset, 19, 5);
         commentUIE.SetText(component.comment);
         commentUIE.SetButton(delegate { SetComment(); });
@@ -183,11 +153,11 @@ public class EditorComponent {
 
     virtual public float AddSource(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 14.5f, 1);
         ui.SetText(component.source.Replace("\\n", "\n"));
         ui.SetButton(delegate { ChangeSource(); });
@@ -200,11 +170,6 @@ public class EditorComponent {
     {
         component.comment = commentUIE.GetText().Replace("\n", "\\n").Replace("\r", "\\n");
         Update();
-    }
-
-    public void SetScrollLimit(float limit)
-    {
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, limit * UIScaler.GetPixelsPerUnit());
     }
 
     // This is called by the editor
