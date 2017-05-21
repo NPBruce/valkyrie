@@ -116,11 +116,15 @@ public class QuestDownload : MonoBehaviour
             ui.SetLocation(1, offset, 3, 3);
             ui.SetBGColor(bg);
             if (update) ui.SetButton(delegate { Selection(file); });
-            /* FIXME
-            if (q.Value.image.Length > 0)
+
+            int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
+
+
+            if (remoteManifest.Get(kv.Key, "image").Length > 0)
             {
-                ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image)));
-            }*/
+                // FIXME
+                //ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, remoteManifest.Get(kv.Key, "image"))));
+            }
 
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
@@ -139,11 +143,16 @@ public class QuestDownload : MonoBehaviour
             ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.3f));
 
             // Duration
-            /*if (q.Value.lengthMax != 0)
+            int lengthMax = 0;
+            int.TryParse(remoteManifest.Get(kv.Key, "lengthMax"), out lengthMax);
+            if (lengthMax > 0)
             {
+                int lengthMin = 0;
+                int.TryParse(remoteManifest.Get(kv.Key, "lengthMin"), out lengthMin);
+
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetRight(-11), offset, 2, 1);
-                ui.SetText(q.Value.lengthMin.ToString(), Color.black);
+                ui.SetText(lengthMin.ToString(), Color.black);
                 ui.SetBGColor(Color.clear);
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
@@ -153,12 +162,14 @@ public class QuestDownload : MonoBehaviour
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetRight(-8), offset, 2, 1);
-                ui.SetText(q.Value.lengthMax.ToString(), Color.black);
+                ui.SetText(lengthMax.ToString(), Color.black);
                 ui.SetBGColor(Color.clear);
-            }*/
+            }
 
             // Difficulty
-            /*if (q.Value.difficulty != 0)
+            int difficulty = 0;
+            int.TryParse(remoteManifest.Get(kv.Key, "difficulty"), out difficulty);
+            if (difficulty != 0)
             {
                 string symbol = "π"; // will
                 if (game.gameType is MoMGameType)
@@ -172,9 +183,9 @@ public class QuestDownload : MonoBehaviour
                 ui.SetFontSize(UIScaler.GetMediumFont());
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(UIScaler.GetRight(-11.95f) + (q.Value.difficulty * 6.9f), offset + 1, (1 - q.Value.difficulty) * 6.9f, 2);
+                ui.SetLocation(UIScaler.GetRight(-11.95f) + (difficulty * 6.9f), offset + 1, (1 - q.Value.difficulty) * 6.9f, 2);
                 ui.SetBGColor(new Color(1, 1, 1, 0.7f));
-            }*/
+            }
 
             // Size is 1.2 to be clear of characters with tails
             if (exists)
