@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI
             return tag;
         }
 
-        protected void CreateBG(Transform parent)
+        protected virtual void CreateBG(Transform parent)
         {
             bg = new GameObject("UIBG");
             bg.tag = tag;
