@@ -29,7 +29,7 @@ namespace Assets.Scripts.UI
      * 
      */
 
-    class UIElement
+    public class UIElement
     {
         // The button itself, unity object
         protected GameObject text;
@@ -182,6 +182,12 @@ namespace Assets.Scripts.UI
         {
             if (text == null) return "";
             return text.GetComponent<UnityEngine.UI.Text>().text;
+        }
+
+        public virtual bool Empty()
+        {
+            if (text == null) return true;
+            return text.GetComponent<UnityEngine.UI.Text>().text.Length == 0;
         }
 
         public static float GetStringWidth(StringKey content)

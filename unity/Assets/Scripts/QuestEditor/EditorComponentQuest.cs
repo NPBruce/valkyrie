@@ -13,7 +13,7 @@ public class EditorComponentQuest : EditorComponent
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
     // When a component has editable boxes they use these, so that the value can be read
-    public DialogBoxEditable nameDBE;
+    public UIElementEditable nameUIE;
     public DialogBoxEditable minHeroDBE;
     public DialogBoxEditable maxHeroDBE;
     public DialogBoxEditable difficultyDBE;
@@ -36,13 +36,12 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        nameDBE = new DialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 1), 
-            game.quest.qd.quest.name.Translate(), false, 
-            delegate { UpdateQuestName(); });
-        nameDBE.background.transform.SetParent(scrollArea.transform);
-        nameDBE.ApplyTag(Game.EDITOR);
-        nameDBE.AddBorder();
+        nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+        nameUIE.SetLocation(0.5f, offset, 19, 1);
+        nameUIE.SetText(game.quest.qd.quest.name.Translate());
+        nameUIE.SetButton(delegate { UpdateQuestName(); });
+        nameUIE.SetSingleLine();
+        new UIElementBorder(nameUIE);
         offset += 2;
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
@@ -216,9 +215,9 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestName()
     {
-        if (nameDBE.CheckTextChangedAndNotEmpty())
+        if (!nameUIE.Empty() && nameUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(game.quest.qd.quest.name_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(game.quest.qd.quest.name_key, nameUIE.GetText());
         }
     }
 
