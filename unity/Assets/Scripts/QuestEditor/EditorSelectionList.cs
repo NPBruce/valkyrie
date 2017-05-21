@@ -97,7 +97,6 @@ public class EditorSelectionList
         }
 
         float offset = 2f;
-        TextButton tb = null;
 
         float hOffset = windowEdge + 1;
         // Create filter traits buttons

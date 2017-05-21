@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI
             return tag;
         }
 
-        protected void CreateBG(Transform parent)
+        protected virtual void CreateBG(Transform parent)
         {
             bg = new GameObject("UIBG");
             bg.tag = tag;
@@ -91,6 +91,14 @@ namespace Assets.Scripts.UI
         {
             bg.GetComponent<UnityEngine.UI.Image>().color = c;
         }
+
+        public void SetImage(Texture2D texture)
+        {
+            if (texture == null) return;
+            SetBGColor(Color.white);
+            bg.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
+        }
+
 
         public void SetLocation(float x, float y, float width, float height)
         {
@@ -176,6 +184,21 @@ namespace Assets.Scripts.UI
                 uiText.material = uiText.font.material;
             }
             uiText.text = content;
+        }
+
+        public virtual void SetFontSize(int size)
+        {
+            text.GetComponent<UnityEngine.UI.Text>().fontSize = size;
+        }
+
+        public virtual void SetFont(Font font)
+        {
+            text.GetComponent<UnityEngine.UI.Text>().font = font;
+        }
+
+        public virtual void SetTextAlignment(TextAnchor align)
+        {
+            text.GetComponent<UnityEngine.UI.Text>().alignment = align;
         }
 
         public virtual string GetText()

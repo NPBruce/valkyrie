@@ -25,50 +25,18 @@ namespace Assets.Scripts.UI.Screens
                 Object.Destroy(go);
 
             // Heading
-            DialogBox db = new DialogBox(
-                new Vector2(2, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                new StringKey("val","SELECT",game.gameType.QuestName())
-                );
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+            ui.SetText(new StringKey("val", "SELECT", game.gameType.QuestName()));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
-            db = new DialogBox(new Vector2(1, 5f), new Vector2(UIScaler.GetWidthUnits()-2f, 21f), StringKey.NULL);
-            db.AddBorder();
-            db.background.AddComponent<UnityEngine.UI.Mask>();
-            UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+            UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+            scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21f);
+            new UIElementBorder(scrollArea);
 
-            GameObject scrollBarObj = new GameObject("scrollbar");
-            scrollBarObj.transform.SetParent(db.background.transform);
-            RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 21 * UIScaler.GetPixelsPerUnit());
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
-            UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
-            scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
-            scrollRect.verticalScrollbar = scrollBar;
-
-            GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-            scrollBarHandle.transform.SetParent(scrollBarObj.transform);
-            //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
-            scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
-            scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-            scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
-            scrollBar.handleRect.offsetMin = Vector2.zero;
-            scrollBar.handleRect.offsetMax = Vector2.zero;
-
-            GameObject scrollArea = new GameObject("scroll");
-            RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-            scrollArea.transform.SetParent(db.background.transform);
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
-
-            scrollRect.content = scrollInnerRect;
-            scrollRect.horizontal = false;
-            scrollRect.scrollSensitivity = 27f;
-
-            TextButton tb;
             // Start here
-            float offset = 5;
+            float offset = 0;
             // Loop through all available quests
             foreach (KeyValuePair<string, QuestData.Quest> q in questList)
             {
@@ -78,45 +46,52 @@ namespace Assets.Scripts.UI.Screens
                     LocalizationRead.scenarioDict = q.Value.localizationDict;
                     string translation = q.Value.name.Translate();
 
+                    // Frame
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetLocation(0.95f, offset, UIScaler.GetWidthUnits() - 4.9f, 3.1f);
+                    ui.SetBGColor(Color.white);
+                    ui.SetButton(delegate { Selection(key); });
+                    offset += 0.05f;
+
                     // Draw Image
-                    db = new DialogBox(new Vector2(2, offset),
-                        new Vector2(3, 3),
-                        StringKey.NULL,
-                        Color.white,
-                        Color.white);
-                    db.background.transform.SetParent(scrollArea.transform);
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetLocation(1, offset, 3, 3);
+                    ui.SetBGColor(Color.white);
+                    ui.SetButton(delegate { Selection(key); });
                     if (q.Value.image.Length > 0)
                     {
-                        Texture2D tex = ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image));
-                        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-                        db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                        ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image)));
                     }
 
-                    tb = new TextButton(
-                        new Vector2(5, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 8, 3f),
-                        new StringKey("val", "INDENT", translation),
-                        delegate { Selection(key); }, Color.clear, (int)offset);
-                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                    //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-                    tb.background.transform.SetParent(scrollArea.transform);
-
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetBGColor(Color.clear);
+                    ui.SetLocation(4, offset, UIScaler.GetWidthUnits() - 8, 3f);
+                    ui.SetTextPadding(1.2f);
+                    ui.SetText(translation, Color.black);
+                    ui.SetButton(delegate { Selection(key); });
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.3f));
 
                     // Duration
                     if (q.Value.lengthMax != 0)
                     {
-                        db = new DialogBox(new Vector2(UIScaler.GetRight(-10), offset), new Vector2(2, 1), q.Value.lengthMin, Color.black, Color.clear);
-                        db.background.transform.SetParent(scrollArea.transform);
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                        db = new DialogBox(new Vector2(UIScaler.GetRight(-8), offset), new Vector2(1, 1), new StringKey(null, "-", false), Color.black, Color.clear);
-                        db.background.transform.SetParent(scrollArea.transform);
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                        db = new DialogBox(new Vector2(UIScaler.GetRight(-7), offset), new Vector2(2, 1), q.Value.lengthMax, Color.black, Color.clear);
-                        db.background.transform.SetParent(scrollArea.transform);
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(UIScaler.GetRight(-11), offset, 2, 1);
+                        ui.SetText(q.Value.lengthMin.ToString(), Color.black);
+                        ui.SetButton(delegate { Selection(key); });
+                        ui.SetBGColor(Color.clear);
+
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(UIScaler.GetRight(-9), offset, 1, 1);
+                        ui.SetButton(delegate { Selection(key); });
+                        ui.SetText("-", Color.black);
+                        ui.SetBGColor(Color.clear);
+
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(UIScaler.GetRight(-8), offset, 2, 1);
+                        ui.SetText(q.Value.lengthMax.ToString(), Color.black);
+                        ui.SetButton(delegate { Selection(key); });
+                        ui.SetBGColor(Color.clear);
                     }
 
                     // Difficulty
@@ -127,12 +102,17 @@ namespace Assets.Scripts.UI.Screens
                         {
                             symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                         }
-                        db = new DialogBox(new Vector2(UIScaler.GetRight(-11), offset + 1), new Vector2(7, 2), new StringKey(null, symbol + symbol + symbol + symbol + symbol, false), Color.black, Color.clear);
-                        db.background.transform.SetParent(scrollArea.transform);
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                        db = new DialogBox(new Vector2(UIScaler.GetRight(-10.95f) + (q.Value.difficulty * 6.9f), offset + 1), new Vector2((1 - q.Value.difficulty) * 6.9f, 2), StringKey.NULL, Color.clear, new Color(1, 1, 1, 0.7f));
-                        db.background.transform.SetParent(scrollArea.transform);
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(UIScaler.GetRight(-12), offset + 1, 7, 2);
+                        ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
+                        ui.SetBGColor(Color.clear);
+                        ui.SetFontSize(UIScaler.GetMediumFont());
+                        ui.SetButton(delegate { Selection(key); });
+
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(UIScaler.GetRight(-11.95f) + (q.Value.difficulty * 6.9f), offset + 1, (1 - q.Value.difficulty) * 6.9f, 2);
+                        ui.SetBGColor(new Color(1, 1, 1, 0.7f));
+                        ui.SetButton(delegate { Selection(key); });
                     }
 
                     offset += 4;
@@ -149,46 +129,43 @@ namespace Assets.Scripts.UI.Screens
                     string translation = q.Value.name.Translate();
 
                     // Size is 1.2 to be clear of characters with tails
-                    db = new DialogBox(
-                        new Vector2(2, offset), 
-                        new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                        new StringKey("val", "INDENT", translation),
-                        Color.black);
-                    db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                    db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
-                    db.background.transform.SetParent(scrollArea.transform);
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
+                    ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetBGColor(new Color(0.4f, 0.4f, 0.4f));
                     offset += 1.2f;
+
                     foreach (string s in q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()))
                     {
-                        db = new DialogBox(
-                            new Vector2(4, offset), 
-                            new Vector2(UIScaler.GetWidthUnits() - 9, 1.2f),
-                            // TODO: Expansion names should be keys too
-                            new StringKey("val", "REQUIRES_EXPANSION", game.cd.GetContentName(s)),                    
-                            Color.black);
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                        db.textObj.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                        db.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
-                        db.background.transform.SetParent(scrollArea.transform);
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(3, offset, UIScaler.GetWidthUnits() - 9, 1.2f);
+                        ui.SetText(new StringKey("val", "REQUIRES_EXPANSION", game.cd.GetContentName(s)), Color.black);
+                        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                        ui.SetBGColor(new Color(0.4f, 0.4f, 0.4f));
                         offset += 1.2f;
                     }
                 }
                 offset += 0.8f;
             }
 
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
+            scrollArea.SetScrollSize(offset);
 
-            tb = new TextButton(
-                new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), 
-                CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { Cancel(); });
+            new UIElementBorder(ui, Color.red);
 
-            tb.SetFont(game.gameType.GetHeaderFont());
-
-            tb = new TextButton(
-                new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), 
-                DOWNLOAD, delegate { Download(); }, Color.green);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-9), UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(DOWNLOAD, Color.green);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { Download(); });
+            new UIElementBorder(ui, Color.green);
         }
 
         // Return to main menu
