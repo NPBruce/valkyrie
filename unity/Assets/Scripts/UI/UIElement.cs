@@ -48,6 +48,8 @@ namespace Assets.Scripts.UI
         protected static GameObject textWidthObj;
         protected static GameObject textHeightObj;
 
+        protected UnityEngine.Events.UnityAction buttonCall;
+
         public UIElement(string t = "", Transform parent = null)
         {
             if (t.Length > 0) tag = t;
@@ -102,7 +104,7 @@ namespace Assets.Scripts.UI
             transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, x, width);
         }
 
-        public void SetButton(UnityEngine.Events.UnityAction call)
+        public virtual void SetButton(UnityEngine.Events.UnityAction call)
         {
             UnityEngine.UI.Button uiButton = bg.AddComponent<UnityEngine.UI.Button>();
             uiButton.interactable = true;
@@ -113,6 +115,7 @@ namespace Assets.Scripts.UI
                 uiButton.interactable = true;
                 uiButton.onClick.AddListener(call);
             }
+            buttonCall = call;
         }
 
         public void SetTextPadding(float pad)
@@ -135,12 +138,12 @@ namespace Assets.Scripts.UI
             SetText(content, Color.white);
         }
 
-        public void SetText(string content, Color textColor)
+        public virtual void SetText(string content, Color textColor)
         {
             UnityEngine.UI.Text uiText = null;
             if (text == null)
             {
-                text = new GameObject("UIBG");
+                text = new GameObject("UIText");
                 text.tag = tag;
                 uiText = text.AddComponent<UnityEngine.UI.Text>();
                 uiText.alignment = TextAnchor.MiddleCenter;
@@ -154,6 +157,13 @@ namespace Assets.Scripts.UI
                 transform.localScale = Vector3.one;
                 transform.offsetMin = new Vector2(textPadding * UIScaler.GetPixelsPerUnit(), 0);
                 transform.offsetMax = new Vector2(-textPadding * UIScaler.GetPixelsPerUnit(), 0);
+
+                if (buttonCall != null)
+                {
+                    UnityEngine.UI.Button uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                    uiButton.interactable = true;
+                    uiButton.onClick.AddListener(buttonCall);
+                }
             }
             uiText = text.GetComponent<UnityEngine.UI.Text>();
             uiText.color = textColor;
@@ -168,7 +178,7 @@ namespace Assets.Scripts.UI
             uiText.text = content;
         }
 
-        public string GetText()
+        public virtual string GetText()
         {
             if (text == null) return "";
             return text.GetComponent<UnityEngine.UI.Text>().text;
