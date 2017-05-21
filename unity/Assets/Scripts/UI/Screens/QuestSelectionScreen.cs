@@ -51,12 +51,14 @@ namespace Assets.Scripts.UI.Screens
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     ui.SetLocation(0.95f, offset, UIScaler.GetWidthUnits() - 4.9f, 3.1f);
                     ui.SetBGColor(Color.white);
+                    ui.SetButton(delegate { Selection(key); });
                     offset += 0.05f;
 
                     // Draw Image
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     ui.SetLocation(1, offset, 3, 3);
                     ui.SetBGColor(Color.white);
+                    ui.SetButton(delegate { Selection(key); });
                     if (q.Value.image.Length > 0)
                     {
                         ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image)));
@@ -77,16 +79,19 @@ namespace Assets.Scripts.UI.Screens
                         ui = new UIElement(scrollArea.GetScrollTransform());
                         ui.SetLocation(UIScaler.GetRight(-11), offset, 2, 1);
                         ui.SetText(q.Value.lengthMin.ToString(), Color.black);
+                        ui.SetButton(delegate { Selection(key); });
                         ui.SetBGColor(Color.clear);
 
                         ui = new UIElement(scrollArea.GetScrollTransform());
                         ui.SetLocation(UIScaler.GetRight(-9), offset, 1, 1);
+                        ui.SetButton(delegate { Selection(key); });
                         ui.SetText("-", Color.black);
                         ui.SetBGColor(Color.clear);
 
                         ui = new UIElement(scrollArea.GetScrollTransform());
                         ui.SetLocation(UIScaler.GetRight(-8), offset, 2, 1);
                         ui.SetText(q.Value.lengthMax.ToString(), Color.black);
+                        ui.SetButton(delegate { Selection(key); });
                         ui.SetBGColor(Color.clear);
                     }
 
@@ -103,10 +108,12 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
                         ui.SetBGColor(Color.clear);
                         ui.SetFontSize(UIScaler.GetMediumFont());
+                        ui.SetButton(delegate { Selection(key); });
 
                         ui = new UIElement(scrollArea.GetScrollTransform());
                         ui.SetLocation(UIScaler.GetRight(-11.95f) + (q.Value.difficulty * 6.9f), offset + 1, (1 - q.Value.difficulty) * 6.9f, 2);
                         ui.SetBGColor(new Color(1, 1, 1, 0.7f));
+                        ui.SetButton(delegate { Selection(key); });
                     }
 
                     offset += 4;
