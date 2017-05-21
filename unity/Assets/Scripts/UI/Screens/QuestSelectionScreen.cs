@@ -35,7 +35,6 @@ namespace Assets.Scripts.UI.Screens
             scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21f);
             new UIElementBorder(scrollArea);
 
-            TextButton tb;
             // Start here
             float offset = 0;
             // Loop through all available quests

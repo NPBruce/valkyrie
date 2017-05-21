@@ -18,10 +18,12 @@ public class QuestDownload : MonoBehaviour
     IniData remoteManifest;
     IniData localManifest;
     DictionaryI18n localizationDict;
+    Dictionary<string, Texture2D> textures;
 
     void Start()
     {
         game = Game.Get();
+        textures = new Dictionary<string, Texture2D>();
         // For development builds use the development branch of the store
         if (char.IsNumber(game.version[game.version.Length - 1]))
         {
@@ -32,15 +34,40 @@ public class QuestDownload : MonoBehaviour
             serverLocation += "development/";
         }
         string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
-        StartCoroutine(Download(remoteManifest, delegate { DownloadDictionary(); }));
+        StartCoroutine(Download(remoteManifest, delegate { DownloadImages(); }));
     }
 
-    public void DownloadDictionary()
+    public void DownloadImages(Stack<string> images = null)
     {
-        remoteManifest = IniRead.ReadFromString(download.text);
-        // Download only the current lang dictionary
         string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
-        // string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization." + game.currentLang + ".txt";
+
+        if (images == null)
+        {
+            remoteManifest = IniRead.ReadFromString(download.text);
+            images = new Stack<string>();
+            foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
+            {
+                if (remoteManifest.Get(kv.Key, "image").Length > 0)
+                {
+                    images.Push(remoteManifest.Get(kv.Key, "image"));
+                }
+            }
+            if (images.Count == 0)
+            {
+                StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
+                return;
+            }
+            StartCoroutine(Download(images.Peek(), delegate { DownloadImages(images); }));
+            return;
+        }
+
+        textures.Add(images.Pop(), download.texture);
+        if (images.Count > 0)
+        {
+            StartCoroutine(Download(serverLocation + game.gameType.TypeName() + "/" + images.Peek(), delegate { DownloadImages(images); }));
+            return;
+        }
+
         StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
     }
 
@@ -122,8 +149,7 @@ public class QuestDownload : MonoBehaviour
 
             if (remoteManifest.Get(kv.Key, "image").Length > 0)
             {
-                // FIXME
-                //ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, remoteManifest.Get(kv.Key, "image"))));
+                ui.SetImage(textures[remoteManifest.Get(kv.Key, "image")]);
             }
 
             ui = new UIElement(scrollArea.GetScrollTransform());
@@ -183,7 +209,7 @@ public class QuestDownload : MonoBehaviour
                 ui.SetFontSize(UIScaler.GetMediumFont());
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(UIScaler.GetRight(-11.95f) + (difficulty * 6.9f), offset + 1, (1 - q.Value.difficulty) * 6.9f, 2);
+                ui.SetLocation(UIScaler.GetRight(-11.95f) + (difficulty * 6.9f), offset + 1, (1 - difficulty) * 6.9f, 2);
                 ui.SetBGColor(new Color(1, 1, 1, 0.7f));
             }
 
