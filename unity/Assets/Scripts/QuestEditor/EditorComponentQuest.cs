@@ -19,7 +19,7 @@ public class EditorComponentQuest : EditorComponent
     public DialogBoxEditable difficultyDBE;
     public DialogBoxEditable minLengthDBE;
     public DialogBoxEditable maxLengthDBE;
-    public PaneledDialogBoxEditable descriptionDBE;
+    public UIElementEditablePaneled descriptionUIE;
     public PaneledDialogBoxEditable authorsDBE;
     EditorSelectionList packESL;
     EditorSelectionList imageESL;
@@ -77,13 +77,11 @@ public class EditorComponentQuest : EditorComponent
         ui.SetLocation(0, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
 
-        descriptionDBE = new PaneledDialogBoxEditable(
-            new Vector2(0.5f, offset), new Vector2(19, 10), 
-            game.quest.qd.quest.description.Translate(true),
-            delegate { UpdateQuestDesc(); });
-        descriptionDBE.background.transform.SetParent(scrollArea.transform);
-        descriptionDBE.ApplyTag(Game.EDITOR);
-        descriptionDBE.AddBorder();
+        descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        descriptionUIE.SetLocation(0.5f, offset, 19, 10);
+        descriptionUIE.SetText(game.quest.qd.quest.description.Translate(true));
+        descriptionUIE.SetButton(delegate { UpdateQuestDesc(); });
+        new UIElementBorder(descriptionUIE);
         offset += 11;
 
         ui = new UIElement(Game.EDITOR, scrollArea.transform);
@@ -247,13 +245,16 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestDesc()
     {
-        if (descriptionDBE.CheckTextChangedAndNotEmpty())
+        if (descriptionUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(game.quest.qd.quest.description_key, descriptionDBE.Text);
-        }
-        else if (descriptionDBE.CheckTextEmptied())
-        {
-            LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
+            if (descriptionUIE.Empty())
+            {
+                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
+            }
+            else
+            {
+                LocalizationRead.updateScenarioText(game.quest.qd.quest.description_key, descriptionUIE.GetText());
+            }
         }
     }
 

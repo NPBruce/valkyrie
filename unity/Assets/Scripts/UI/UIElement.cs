@@ -97,7 +97,7 @@ namespace Assets.Scripts.UI
             SetLocationPixels(UIScaler.GetPixelsPerUnit() * x, UIScaler.GetPixelsPerUnit() * y, UIScaler.GetPixelsPerUnit() * width, UIScaler.GetPixelsPerUnit() * height);
         }
 
-        public void SetLocationPixels(float x, float y, float width, float height)
+        public virtual void SetLocationPixels(float x, float y, float width, float height)
         {
             RectTransform transBg = bg.GetComponent<RectTransform>();
             transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, height);
