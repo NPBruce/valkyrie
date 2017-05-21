@@ -15,6 +15,7 @@ namespace Assets.Scripts.UI
         protected override void CreateBG(Transform parent)
         {
             base.CreateBG(parent);
+            bg.AddComponent<UnityEngine.UI.RectMask2D>();
             UnityEngine.UI.ScrollRect scrollRect = bg.AddComponent<UnityEngine.UI.ScrollRect>();
 
             scrollArea = new GameObject("scroll");
@@ -34,7 +35,7 @@ namespace Assets.Scripts.UI
             scrollBarHandle.tag = tag;
             scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
             scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-            scrollBarHandle.transform.SetParent(bg.transform);
+            scrollBarHandle.transform.SetParent(scrollBar.transform);
 
             scrollBarCmp.handleRect = scrollBarHandle.GetComponent<RectTransform>();
             scrollBarCmp.handleRect.offsetMin = Vector2.zero;
@@ -61,6 +62,16 @@ namespace Assets.Scripts.UI
         public Transform GetScrollTransform()
         {
             return scrollArea.transform;
+        }
+
+        public void SetScrollSize(float size)
+        {
+            float height = size * UIScaler.GetPixelsPerUnit();
+            if (size < scrollBar.GetComponent<RectTransform>().rect.height)
+            {
+                height = scrollBar.GetComponent<RectTransform>().rect.height;
+            }
+            scrollArea.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, height);
         }
     }
 }
