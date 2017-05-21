@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentTile : EditorComponent
 {
@@ -22,38 +23,37 @@ public class EditorComponentTile : EditorComponent
         Game game = Game.Get();
         CameraController.SetCamera(tileComponent.location);
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(4.5f, 1), new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
-        TextButton tb = new TextButton(new Vector2(4.5f, offset), new Vector2(15f, 1), 
-            new StringKey(null, tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
-
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(4.5f, offset, 15, 1);
+        ui.SetText(tileComponent.tileSideName);
+        ui.SetButton(delegate { ChangeTileSide(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        tb = new TextButton(new Vector2(4, offset), new Vector2(4, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
-
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(4, offset, 4, 1);
+        ui.SetText(CommonStringKeys.POSITION_SNAP);
+        ui.SetButton(delegate { GetPosition(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1),
-            new StringKey(null, tileComponent.rotation.ToString() + "˚", false), delegate { TileRotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(6, offset, 3, 1);
+        ui.SetText(tileComponent.rotation.ToString());
+        ui.SetButton(delegate { TileRotate(); });
+        new UIElementBorder(ui);
         offset += 2;
 
         game.tokenBoard.AddHighlight(tileComponent.location, "TileAnchor", Game.EDITOR);

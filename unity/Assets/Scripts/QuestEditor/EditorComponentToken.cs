@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentToken : EditorComponentEvent
 {
@@ -25,24 +26,26 @@ public class EditorComponentToken : EditorComponentEvent
     {
         tokenComponent = component as QuestData.Token;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6, 1), new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        TextButton tb = new TextButton(new Vector2(6, offset), new Vector2(3, 1),
-            new StringKey(null, tokenComponent.rotation.ToString() + "˚", false), delegate { Rotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(6, offset, 3, 1);
+        ui.SetText(tokenComponent.rotation.ToString());
+        ui.SetButton(delegate { Rotate(); });
+        new UIElementBorder(ui);
         offset += 2;
 
-        db = new DialogBox(new Vector2(0, offset), new Vector2(4, 1), new StringKey("val", "X_COLON", new StringKey("val", "TYPE")));
-        db.background.transform.SetParent(scrollArea.transform);
-        db.ApplyTag(Game.EDITOR);
-        tb = new TextButton(new Vector2(4, offset), new Vector2(12, 1), 
-            new StringKey(null, tokenComponent.tokenName,false), delegate { Type(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.transform);
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TYPE")));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui.SetLocation(4, offset, 12, 1);
+        ui.SetText(tokenComponent.tokenName);
+        ui.SetButton(delegate { Type(); });
+        new UIElementBorder(ui);
         offset += 2;
 
         game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);

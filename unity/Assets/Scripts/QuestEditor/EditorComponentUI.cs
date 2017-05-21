@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentUI : EditorComponentEvent
 {
