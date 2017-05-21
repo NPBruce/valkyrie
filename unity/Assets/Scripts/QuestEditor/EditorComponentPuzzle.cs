@@ -37,60 +37,60 @@ public class EditorComponentPuzzle : EditorComponentEvent
     {
         puzzleComponent = component as QuestData.Puzzle;
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 3, 1);
         ui.SetText(new StringKey("val", "X_COLON", PUZZLE_CLASS));
 
         // Translate puzzle type trait
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 8, 1);
         ui.SetText(new StringKey("val", puzzleComponent.puzzleClass));
         ui.SetButton(delegate { Class(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 6, 1);
         ui.SetText(puzzleComponent.skill);
         ui.SetButton(delegate { Skill(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", PUZZLE_LEVEL));
 
         // Numbers dont need translation
         levelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
             puzzleComponent.puzzleLevel.ToString(), false, delegate { UpdateLevel(); });
-        levelDBE.background.transform.SetParent(scrollArea.transform);
+        levelDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         levelDBE.ApplyTag(Game.EDITOR);
         levelDBE.AddBorder();
         offset += 2;
 
         if (!puzzleComponent.puzzleClass.Equals("slide"))
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 5, 1);
             ui.SetText(new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
 
             // Numbers dont need translation
             altLevelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
                 puzzleComponent.puzzleAltLevel.ToString(), false, delegate { UpdateAltLevel(); });
-            altLevelDBE.background.transform.SetParent(scrollArea.transform);
+            altLevelDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
             altLevelDBE.ApplyTag(Game.EDITOR);
             altLevelDBE.AddBorder();
             offset += 2;
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 3, 1);
             ui.SetText(new StringKey("val", "X_COLON", IMAGE));
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(5, offset, 8, 1);
             ui.SetText(puzzleComponent.imageType);
             ui.SetButton(delegate { Image(); });

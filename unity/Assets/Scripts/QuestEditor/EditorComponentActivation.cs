@@ -44,7 +44,7 @@ public class EditorComponentActivation : EditorComponent
 
     public float D2EActivation(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 19, 1);
         ui.SetText(new StringKey("val", "X_COLON", ABILITY));
 
@@ -53,15 +53,15 @@ public class EditorComponentActivation : EditorComponent
             activationComponent.ability.Translate(), 
             delegate { UpdateAbility(); });
         abilityDBE.ApplyTag(Game.EDITOR);
-        abilityDBE.background.transform.SetParent(scrollArea.transform);
+        abilityDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         abilityDBE.AddBorder();
         offset += 9;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 14, 1);
         ui.SetText(new StringKey("val", "X_COLON", MONSTER_MASTER));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(14.5f, offset++, 5, 1);
         ui.SetButton(delegate { ToggleMasterFirst(); });
         new UIElementBorder(ui);
@@ -78,16 +78,16 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
-        masterActionsDBE.background.transform.SetParent(scrollArea.transform);
+        masterActionsDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         masterActionsDBE.ApplyTag(Game.EDITOR);
         masterActionsDBE.AddBorder();
         offset += 9;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 14, 1);
         ui.SetText(new StringKey("val", "X_COLON", MONSTER_MINION));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(14.5f, offset++, 5, 1);
         ui.SetButton(delegate { ToggleMinionFirst(); });
         new UIElementBorder(ui);
@@ -104,7 +104,7 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.minionActions.Translate(true),
             delegate { UpdateMinionActions(); });
-        minionActionsDBE.background.transform.SetParent(scrollArea.transform);
+        minionActionsDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         minionActionsDBE.ApplyTag(Game.EDITOR);
         minionActionsDBE.AddBorder();
 
@@ -113,7 +113,7 @@ public class EditorComponentActivation : EditorComponent
 
     public float MoMActivation(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 19, 1);
         ui.SetText(new StringKey("val", "X_COLON", INITIAL_MESSAGE));
 
@@ -121,12 +121,12 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.ability.Translate(true),
             delegate { UpdateAbility(); });
-        abilityDBE.background.transform.SetParent(scrollArea.transform);
+        abilityDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         abilityDBE.ApplyTag(Game.EDITOR);
         abilityDBE.AddBorder();
         offset += 9;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 9.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", UNABLE_BUTTON));
 
@@ -134,12 +134,12 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(9.5f, offset), new Vector2(10, 1), 
             activationComponent.moveButton.Translate(true),
             false, delegate { UpdateMoveButton(); });
-        moveButtonDBE.background.transform.SetParent(scrollArea.transform);
+        moveButtonDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         moveButtonDBE.ApplyTag(Game.EDITOR);
         moveButtonDBE.AddBorder();
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 19, 1);
         ui.SetText(new StringKey("val", "X_COLON", ATTACK_MESSAGE));
 
@@ -147,12 +147,12 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.masterActions.Translate(true),
             delegate { UpdateMasterActions(); });
-        masterActionsDBE.background.transform.SetParent(scrollArea.transform);
+        masterActionsDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         masterActionsDBE.ApplyTag(Game.EDITOR);
         masterActionsDBE.AddBorder();
         offset += 9;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 19, 1);
         ui.SetText(new StringKey("val", "X_COLON", NO_ATTACK_MESSAGE));
 
@@ -160,7 +160,7 @@ public class EditorComponentActivation : EditorComponent
             new Vector2(0.5f, offset), new Vector2(19, 8), 
             activationComponent.move.Translate(true),
             delegate { UpdateMove(); });
-        moveDBE.background.transform.SetParent(scrollArea.transform);
+        moveDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         moveDBE.ApplyTag(Game.EDITOR);
         moveDBE.AddBorder();
         offset += 9;

@@ -20,18 +20,18 @@ public class EditorComponentMPlace : EditorComponent
         CameraController.SetCamera(mPlaceComponent.location);
         Game game = Game.Get();
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 4, 1);
         ui.SetText(CommonStringKeys.POSITION_SNAP);
         ui.SetButton(delegate { GetPosition(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
@@ -41,7 +41,7 @@ public class EditorComponentMPlace : EditorComponent
             rotateKey = new StringKey("val", "DOWN");
         }
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 4, 1);
         ui.SetText(rotateKey);
         ui.SetButton(delegate { Rotate(); });
@@ -53,7 +53,7 @@ public class EditorComponentMPlace : EditorComponent
         {
             mast = new StringKey("val","MONSTER_MASTER");
         }
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(mast);
         ui.SetButton(delegate { MasterToggle(); });

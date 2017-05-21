@@ -69,21 +69,21 @@ public class EditorComponentEvent : EditorComponent
 
         offset = AddEventTrigger(offset);
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", AUDIO));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset++, 10, 1);
         ui.SetText(eventComponent.audio);
         ui.SetButton(delegate { SetAudio(); });
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(1.5f, offset, 10, 1);
         ui.SetText(new StringKey("val", "X_COLON", MUSIC));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(11.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddMusic(0); });
@@ -93,18 +93,18 @@ public class EditorComponentEvent : EditorComponent
         for (index = 0; index < eventComponent.music.Count; index++)
         {
             int i = index;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveMusic(i); });
             new UIElementBorder(ui, Color.red);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(1.5f, offset, 10, 1);
             ui.SetText(eventComponent.music[index]);
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(11.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddMusic(i + 1); });
@@ -119,11 +119,11 @@ public class EditorComponentEvent : EditorComponent
 
         float componentsOffset = offset;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 9, 1);
         ui.SetText(ADD_COMPONENTS);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddVisibility(true); });
@@ -133,23 +133,23 @@ public class EditorComponentEvent : EditorComponent
         {
             int i = index;
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 8.5f, 1);
             ui.SetText(eventComponent.addComponents[index]);
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(9, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveVisibility(i, true); });
             new UIElementBorder(ui, Color.red);
         }
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(10, componentsOffset, 8.5f, 1);
         ui.SetText(REMOVE_COMPONENTS);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, componentsOffset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddVisibility(false); });
@@ -158,12 +158,12 @@ public class EditorComponentEvent : EditorComponent
         for (index = 0; index < eventComponent.removeComponents.Length; index++)
         {
             int i = index;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, componentsOffset, 8.5f, 1);
             ui.SetText(eventComponent.removeComponents[index]);
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, componentsOffset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveVisibility(i, false); });
@@ -183,17 +183,17 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddPosition(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 4, 1);
         ui.SetText(CommonStringKeys.POSITION_SNAP);
         ui.SetButton(delegate { GetPosition(); });
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9, offset, 4, 1);
         ui.SetText(CommonStringKeys.POSITION_FREE);
         ui.SetButton(delegate { GetPosition(false); });
@@ -206,7 +206,7 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public void AddLocationType(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(14, offset, 4, 1);
         ui.SetButton(delegate { PositionTypeCycle(); });
         new UIElementBorder(ui);
@@ -239,11 +239,11 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventDialog(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 20, 1);
         ui.SetText(new StringKey("val", "X_COLON", DIALOG));
 
-        eventTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        eventTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         eventTextUIE.SetLocation(0.5f, offset, 19, 8);
         eventTextUIE.SetText(eventComponent.text.Translate(true));
         eventTextUIE.SetButton(delegate { UpdateText(); });
@@ -253,11 +253,11 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventTrigger(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRIGGER));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 10, 1);
         ui.SetText(eventComponent.trigger);
         ui.SetButton(delegate { SetTrigger(); });
@@ -267,31 +267,31 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddHeroSelection(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", SELECTION));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset++, 12, 1);
         ui.SetText(eventComponent.heroListName);
         ui.SetButton(delegate { SetHighlight(); });
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 3, 1);
         ui.SetText(new StringKey("val", "X_COLON", MIN));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9, offset, 2, 1);
         ui.SetText(eventComponent.minHeroes.ToString());
         ui.SetButton(delegate { SetHeroCount(false); });
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(11, offset, 3, 1);
         ui.SetText(new StringKey("val", "X_COLON", MAX));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(14, offset, 2, 1);
         ui.SetText(eventComponent.maxHeroes.ToString());
         ui.SetButton(delegate { SetHeroCount(true); });
@@ -301,20 +301,20 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddNextEventComponents(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", QUOTA));
 
         if (eventComponent.quotaVar.Length == 0)
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(4, offset, 5, 1);
             ui.SetText(new StringKey("val", "NUMBER"));
             ui.SetButton(delegate { SetQuotaVar(); });
             new UIElementBorder(ui);
 
             // Quota dont need translation
-            quotaUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+            quotaUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
             quotaUIE.SetLocation(9, offset, 2, 1);
             quotaUIE.SetText(eventComponent.quota.ToString());
             quotaUIE.SetButton(delegate { SetQuota(); });
@@ -323,13 +323,13 @@ public class EditorComponentEvent : EditorComponent
         }
         else
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(4, offset, 5, 1);
             ui.SetText(new StringKey("val", "VAR"));
             ui.SetButton(delegate { SetQuotaInt(); });
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(9, offset, 9, 1);
             ui.SetText(eventComponent.quotaVar);
             ui.SetButton(delegate { SetQuotaVar(); });
@@ -337,24 +337,24 @@ public class EditorComponentEvent : EditorComponent
         }
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 4, 1);
         ui.SetText(new StringKey("val", randomButton));
         ui.SetButton(delegate { ToggleRandom(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(1.5f, offset, 17, 1);
         ui.SetText(new StringKey("val", "X_COLON", BUTTONS));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddButton(); });
@@ -376,13 +376,13 @@ public class EditorComponentEvent : EditorComponent
             c[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
             c[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 3, 1);
             ui.SetText(new StringKey("val", "COLOR"), c);
             ui.SetButton(delegate { SetButtonColor(buttonTmp); });
             new UIElementBorder(ui, c);
 
-            UIElementEditable buttonEdit = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+            UIElementEditable buttonEdit = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
             buttonEdit.SetLocation(3.5f, offset++, 15, 1);
             buttonEdit.SetText(buttonLabel);
             buttonEdit.SetButton(delegate { UpdateButtonLabel(buttonTmp); });
@@ -395,19 +395,19 @@ public class EditorComponentEvent : EditorComponent
             {
                 int i = index++;
                 string tmpName = s;
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(0.5f, offset, 1, 1);
                 ui.SetText(CommonStringKeys.PLUS, Color.green);
                 ui.SetButton(delegate { AddEvent(i, buttonTmp); });
                 new UIElementBorder(ui, Color.green);
 
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(1.5f, offset, 17, 1);
                 ui.SetText(s);
                 ui.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(ui);
 
-                ui = new UIElement(Game.EDITOR, scrollArea.transform);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset++, 1, 1);
                 ui.SetText(CommonStringKeys.MINUS, Color.red);
                 ui.SetButton(delegate { RemoveEvent(i, buttonTmp); });
@@ -415,7 +415,7 @@ public class EditorComponentEvent : EditorComponent
             }
 
             int tmp = index;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddEvent(tmp, buttonTmp); });
@@ -424,7 +424,7 @@ public class EditorComponentEvent : EditorComponent
 
         if (lastButtonOffset != 0)
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, lastButtonOffset, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveButton(); });
@@ -436,11 +436,11 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventVarComponents(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", TESTS));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTestOp(); });
@@ -449,24 +449,24 @@ public class EditorComponentEvent : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
             QuestData.Event.VarOperation tmp = op;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 8.5f, 1);
             ui.SetText(op.var);
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(9, offset, 2, 1);
             ui.SetText(op.operation);
             ui.SetButton(delegate { SetTestOpp(tmp); });
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(11, offset, 7.5f, 1);
             ui.SetText(op.value);
             ui.SetButton(delegate { SetValue(tmp); });
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveOp(tmp); });
@@ -474,11 +474,11 @@ public class EditorComponentEvent : EditorComponent
         }
         offset++;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", ASSIGN));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddAssignOp(); });
@@ -487,24 +487,24 @@ public class EditorComponentEvent : EditorComponent
         foreach (QuestData.Event.VarOperation op in eventComponent.operations)
         {
             QuestData.Event.VarOperation tmp = op;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 8.5f, 1);
             ui.SetText(op.var);
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(9, offset, 2, 1);
             ui.SetText(op.operation);
             ui.SetButton(delegate { SetAssignOpp(tmp); });
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(11, offset, 7.5f, 1);
             ui.SetText(op.value);
             ui.SetButton(delegate { SetValue(tmp); });
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveOp(tmp); });

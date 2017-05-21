@@ -36,7 +36,7 @@ public class EditorComponentQuest : EditorComponent
     {
         Game game = Game.Get();
 
-        nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.transform);
+        nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         nameUIE.SetLocation(0.5f, offset, 19, 1);
         nameUIE.SetText(game.quest.qd.quest.name.Translate());
         nameUIE.SetButton(delegate { UpdateQuestName(); });
@@ -44,11 +44,11 @@ public class EditorComponentQuest : EditorComponent
         new UIElementBorder(nameUIE);
         offset += 2;
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", HIDDEN));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 3, 1);
         ui.SetButton(delegate { ToggleHidden(); });
         new UIElementBorder(ui);
@@ -62,45 +62,45 @@ public class EditorComponentQuest : EditorComponent
         }
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 12, 1);
         ui.SetButton(delegate { Image(); });
         ui.SetText(game.quest.qd.quest.image);
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
 
-        descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         descriptionUIE.SetLocation(0.5f, offset, 19, 10);
         descriptionUIE.SetText(game.quest.qd.quest.description.Translate(true));
         descriptionUIE.SetButton(delegate { UpdateQuestDesc(); });
         new UIElementBorder(descriptionUIE);
         offset += 11;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
 
 
-        authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.transform);
+        authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         authorsUIE.SetLocation(0.5f, offset, 19, 6);
         authorsUIE.SetText(game.quest.qd.quest.authors.Translate(true));
         authorsUIE.SetButton(delegate { UpdateQuestAuth(); });
         new UIElementBorder(authorsUIE);
         offset += 7;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 10, 1);
         ui.SetText(REQUIRED_EXPANSIONS);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(10.5f, offset, 1, 1);
         ui.SetButton(delegate { QuestAddPack(); });
         ui.SetText(CommonStringKeys.PLUS, Color.green);
@@ -111,12 +111,12 @@ public class EditorComponentQuest : EditorComponent
         for (index = 0; index < game.quest.qd.quest.packs.Length; index++)
         {
             int i = index;
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 10, 1);
             ui.SetText(new StringKey("val", game.quest.qd.quest.packs[index]));
             new UIElementBorder(ui);
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10.5f, offset, 1, 1);
             ui.SetButton(delegate { QuestRemovePack(i); });
             ui.SetText(CommonStringKeys.MINUS, Color.red);
@@ -125,7 +125,7 @@ public class EditorComponentQuest : EditorComponent
         }
         offset += 1;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", game.gameType.HeroesName())));
         
@@ -133,11 +133,11 @@ public class EditorComponentQuest : EditorComponent
             new Vector2(7.5f, offset), new Vector2(2, 1), 
             game.quest.qd.quest.minHero.ToString(), false, 
             delegate { UpdateMinHero(); });
-        minHeroDBE.background.transform.SetParent(scrollArea.transform);
+        minHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         minHeroDBE.ApplyTag(Game.EDITOR);
         minHeroDBE.AddBorder();
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9.5f, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", game.gameType.HeroesName())));
         
@@ -145,12 +145,12 @@ public class EditorComponentQuest : EditorComponent
             new Vector2(17, offset), new Vector2(2, 1), 
             game.quest.qd.quest.maxHero.ToString(), false, 
             delegate { UpdateMaxHero(); });
-        maxHeroDBE.background.transform.SetParent(scrollArea.transform);
+        maxHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         maxHeroDBE.ApplyTag(Game.EDITOR);
         maxHeroDBE.AddBorder();
         offset +=2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
         
@@ -158,11 +158,11 @@ public class EditorComponentQuest : EditorComponent
             new Vector2(7.5f, offset), new Vector2(2, 1), 
             game.quest.qd.quest.lengthMin.ToString(), false, 
             delegate { UpdateMinLength(); });
-        minLengthDBE.background.transform.SetParent(scrollArea.transform);
+        minLengthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         minLengthDBE.ApplyTag(Game.EDITOR);
         minLengthDBE.AddBorder();
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9.5f, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
         
@@ -170,12 +170,12 @@ public class EditorComponentQuest : EditorComponent
             new Vector2(17f, offset), new Vector2(2, 1), 
             game.quest.qd.quest.lengthMax.ToString(), false, 
             delegate { UpdateMaxLength(); });
-        maxLengthDBE.background.transform.SetParent(scrollArea.transform);
+        maxLengthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         maxLengthDBE.ApplyTag(Game.EDITOR);
         maxLengthDBE.AddBorder();
         offset +=2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
         
@@ -183,7 +183,7 @@ public class EditorComponentQuest : EditorComponent
             new Vector2(7.5f, offset), new Vector2(3, 1), 
             game.quest.qd.quest.difficulty.ToString(), false, 
             delegate { UpdateDifficulty(); });
-        difficultyDBE.background.transform.SetParent(scrollArea.transform);
+        difficultyDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         difficultyDBE.ApplyTag(Game.EDITOR);
         difficultyDBE.AddBorder();
         offset +=2;
@@ -193,7 +193,7 @@ public class EditorComponentQuest : EditorComponent
 
     override public float DrawComponentSelection(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 10, 1);
         ui.SetText(game.gameType.QuestName());
 

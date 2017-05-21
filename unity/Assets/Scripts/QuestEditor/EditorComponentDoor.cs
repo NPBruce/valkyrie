@@ -18,11 +18,11 @@ public class EditorComponentDoor : EditorComponentEvent
 
     override public float AddPosition(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 4, 1);
         ui.SetText(CommonStringKeys.POSITION_SNAP);
         ui.SetButton(delegate { GetPosition(); });
@@ -35,18 +35,18 @@ public class EditorComponentDoor : EditorComponentEvent
     {
         doorComponent = component as QuestData.Door;
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 3, 1);
         ui.SetText(doorComponent.rotation.ToString() + "˚");
         ui.SetButton(delegate { Rotate(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(COLOR);
         ui.SetButton(delegate { Colour(); });

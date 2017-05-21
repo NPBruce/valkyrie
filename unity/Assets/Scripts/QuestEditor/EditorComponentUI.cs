@@ -35,22 +35,22 @@ public class EditorComponentUI : EditorComponentEvent
     {
         uiComponent = component as QuestData.UI;
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4.5f, offset, 15, 1);
         ui.SetText(uiComponent.imageName);
         ui.SetButton(delegate { SetImage(); });
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "UNITS")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 6, 1);
         ui.SetButton(delegate { ChangeUnits(); });
         new UIElementBorder(ui);
@@ -64,7 +64,7 @@ public class EditorComponentUI : EditorComponentEvent
         }
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ALIGN")));
 
@@ -81,50 +81,50 @@ public class EditorComponentUI : EditorComponentEvent
         DrawAlignSelection(offset, 1, 1, "┛");
         offset += 3;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 10, 1);
         ui.SetText(new StringKey("val", "POSITION"));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 2, 1);
         ui.SetText("X:");
 
         locXDBE = new DialogBoxEditable(new Vector2(2, offset), new Vector2(3, 1),
             uiComponent.location.x.ToString(), false, delegate { UpdateNumbers(); });
-        locXDBE.background.transform.SetParent(scrollArea.transform);
+        locXDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         locXDBE.ApplyTag(Game.EDITOR);
         locXDBE.AddBorder();
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 2, 1);
         ui.SetText("Y:");
 
         locYDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
             uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
-        locYDBE.background.transform.SetParent(scrollArea.transform);
+        locYDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         locYDBE.ApplyTag(Game.EDITOR);
         locYDBE.AddBorder();
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
 
         sizeDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1),
             uiComponent.size.ToString(), false, delegate { UpdateNumbers(); });
-        sizeDBE.background.transform.SetParent(scrollArea.transform);
+        sizeDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
         sizeDBE.ApplyTag(Game.EDITOR);
         sizeDBE.AddBorder();
 
         if (uiComponent.imageName.Length == 0)
         {
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, offset, 5, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ASPECT")));
 
             aspectDBE = new DialogBoxEditable(new Vector2(15, offset), new Vector2(3, 1),
                 uiComponent.aspect.ToString(), false, delegate { UpdateNumbers(); });
-            aspectDBE.background.transform.SetParent(scrollArea.transform);
+            aspectDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
             aspectDBE.ApplyTag(Game.EDITOR);
             aspectDBE.AddBorder();
             offset += 2;
@@ -133,33 +133,33 @@ public class EditorComponentUI : EditorComponentEvent
                 new Vector2(0.5f, offset), new Vector2(19, 8),
                 uiComponent.uiText.Translate(true),
                 delegate { UpdateUIText(); });
-            textDBE.background.transform.SetParent(scrollArea.transform);
+            textDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
             textDBE.ApplyTag(Game.EDITOR);
             textDBE.AddBorder();
             offset += 9;
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 7, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TEXT_SIZE")));
 
             textSizeDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
                 uiComponent.textSize.ToString(), false, delegate { UpdateTextSize(); });
-            textSizeDBE.background.transform.SetParent(scrollArea.transform);
+            textSizeDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
             textSizeDBE.ApplyTag(Game.EDITOR);
             textSizeDBE.AddBorder();
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, offset, 4.5f, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "COLOR")));
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(14.5f, offset, 5, 1);
             ui.SetText(uiComponent.textColor);
             ui.SetButton(delegate { SetColour(); });
             new UIElementBorder(ui);
             offset += 2;
 
-            ui = new UIElement(Game.EDITOR, scrollArea.transform);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 8, 1);
             ui.SetText(uiComponent.textColor);
             ui.SetButton(delegate { ToggleBorder(); });
@@ -183,7 +183,7 @@ public class EditorComponentUI : EditorComponentEvent
     public void DrawAlignSelection(float offset, int x, int y, string label)
     {
         Color selected = (uiComponent.hAlign == x && uiComponent.vAlign == y) ? Color.white : new Color(0.3f, 0.3f, 0.3f);
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.transform);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5 + x, offset + y, 1, 1);
         ui.SetText(label, selected);
         ui.SetButton(delegate { SetAlign(x, y); });
