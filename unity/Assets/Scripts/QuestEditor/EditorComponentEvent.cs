@@ -39,15 +39,6 @@ public class EditorComponentEvent : EditorComponent
     UIElementEditable quotaUIE;
     List<UIElementEditable> buttonUIE;
 
-    EditorSelectionList triggerESL;
-    EditorSelectionList highlightESL;
-    EditorSelectionList heroCountESL;
-    EditorSelectionList visibilityESL;
-    EditorSelectionList audioESL;
-    EditorSelectionList musicESL;
-    EditorSelectionList addEventESL;
-    EditorSelectionList colorESL;
-    EditorSelectionList varESL;
     QuestEditorTextEdit varText;
 
     public EditorComponentEvent(string nameIn) : base()
@@ -590,9 +581,18 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetTrigger()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> triggers = new List<EditorSelectionList.SelectionListEntry>();
-        triggers.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventTrigger, new StringKey("val", "SELECT", CommonStringKeys.TRIGGER));
+
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "GENERAL").Translate() });
+        select.AddItem("{NONE}", "", traits);
 
         bool startPresent = false;
         bool noMorale = false;
@@ -619,41 +619,42 @@ public class EditorComponentEvent : EditorComponent
 
         if (startPresent)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General", Color.grey));
+            select.AddItem("EventStart", traits, Color.gray);
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("EventStart", "General"));
+            select.AddItem("EventStart", traits);
         }
 
         if (noMorale)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General", Color.grey));
+            select.AddItem("NoMorale", traits, Color.gray);
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("NoMorale", "General"));
+           select.AddItem("NoMorale", traits);
         }
 
         if (eliminated)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General", Color.grey));
+            select.AddItem("Eliminated", traits, Color.gray);
         }
         else
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Eliminated", "General"));
+           select.AddItem("Eliminated", traits);
         }
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("Mythos", "General"));
+        select.AddItem("Mythos", traits);
+        select.AddItem("EndRound", traits);
+        select.AddItem("StartRound", traits);
 
-        triggers.Add(new EditorSelectionList.SelectionListEntry("EndRound", "General"));
-
-        triggers.Add(new EditorSelectionList.SelectionListEntry("StartRound", "General"));
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "MONSTER").Translate() });
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Monsters"));
-            triggers.Add(new EditorSelectionList.SelectionListEntry("DefeatedUnique" + kv.Key, "Monsters"));
+            select.AddItem("Defeated" + kv.Key, traits);
+            select.AddItem("DefeatedUnique" + kv.Key, traits);
         }
 
         HashSet<string> vars = new HashSet<string>();
@@ -661,7 +662,8 @@ public class EditorComponentEvent : EditorComponent
         {
             if (kv.Value is QuestData.CustomMonster)
             {
-                triggers.Add(new EditorSelectionList.SelectionListEntry("Defeated" + kv.Key, "Quest"));
+                select.AddItem("Defeated" + kv.Key, traits);
+                select.AddItem("DefeatedUnique" + kv.Key, traits);
             }
 
             if (kv.Value is QuestData.Event)
@@ -677,48 +679,61 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "VARS").Translate() });
+
         foreach (string s in vars)
         {
-            triggers.Add(new EditorSelectionList.SelectionListEntry("Var" + s.Substring(1), "Vars"));
+            select.AddItem("Var" + s.Substring(1), traits);
         }
 
-        triggerESL = new EditorSelectionList(
-                        new StringKey("val", "SELECT", CommonStringKeys.TRIGGER),
-                        triggers, delegate { SelectEventTrigger(); });
-        triggerESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectEventTrigger()
+    public void SelectEventTrigger(string trigger)
     {
-        eventComponent.trigger = triggerESL.selection;
+        eventComponent.trigger = trigger;
         Update();
     }
 
     public void SetAudio()
     {
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
-        audio.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventAudio, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
+
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+
+        select.AddItem("{NONE}", "");
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
 
         foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
         {
-            audio.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
-            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
+            traits = new Dictionary<string, IEnumerable<string>>();
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "FFG" });
+            traits.Add(new StringKey("val", "TRAITS").Translate(), kv.Value.traits);
+
+            select.AddItem(kv.Key, traits);
         }
 
-        audioESL = new EditorSelectionList(new StringKey("val","SELECT",new StringKey("val","AUDIO")), audio, delegate { SelectEventAudio(); });
-        audioESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectEventAudio()
+    public void SelectEventAudio(string audio)
     {
         Game game = Game.Get();
-        eventComponent.audio = audioESL.selection;
+        eventComponent.audio = audio;
         if (game.cd.audio.ContainsKey(eventComponent.audio))
         {
             game.audioControl.Play(game.cd.audio[eventComponent.audio].file);
@@ -733,26 +748,41 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddMusic(int index)
     {
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> audio = new List<EditorSelectionList.SelectionListEntry>();
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectMusic(index, s); }, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
+
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+
+        select.AddItem("{NONE}", "");
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+
         foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
         {
-            audio.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
-            audio.Add(new EditorSelectionList.SelectionListEntry(kv.Key, new List<string>(kv.Value.traits)));
+            traits = new Dictionary<string, IEnumerable<string>>();
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "FFG" });
+            traits.Add(new StringKey("val", "TRAITS").Translate(), kv.Value.traits);
+
+            select.AddItem(kv.Key, traits);
         }
 
-        musicESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "AUDIO")), audio, delegate { SelectMusic(index); });
-        musicESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectMusic(int index)
+    public void SelectMusic(int index, string music)
     {
-        eventComponent.music.Insert(index, musicESL.selection);
+        eventComponent.music.Insert(index, music);
         Update();
     }
 
@@ -764,91 +794,101 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetHighlight()
     {
-        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
-        events.Add(new EditorSelectionList.SelectionListEntry(""));
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventHighlight, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
+
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+
+        select.AddItem("{NONE}", "");
+
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+                select.AddItem(kv.Value);
             }
         }
-
-        highlightESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.EVENT),
-            events, delegate { SelectEventHighlight(); });
-        highlightESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectEventHighlight()
+    public void SelectEventHighlight(string eventName)
     {
-        eventComponent.heroListName = highlightESL.selection;
+        eventComponent.heroListName = eventName;
         Update();
     }
 
     public void SetHeroCount(bool max)
     {
-        List<EditorSelectionList.SelectionListEntry> num = new List<EditorSelectionList.SelectionListEntry>();
-        for (int i = 0; i <= Game.Get().gameType.MaxHeroes(); i++)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            num.Add(new EditorSelectionList.SelectionListEntry(i.ToString()));
+            return;
         }
+        Game game = Game.Get();
 
-        heroCountESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.NUMBER), 
-            num, delegate { SelectEventHeroCount(max); });
-        heroCountESL.SelectItem();
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectEventHeroCount(max, s); }, new StringKey("val", "SELECT", CommonStringKeys.NUMBER));
+        for (int i = 0; i <= game.gameType.MaxHeroes(); i++)
+        {
+            select.AddItem(i.ToString());
+        }
+        select.Draw();
     }
 
-    public void SelectEventHeroCount(bool max)
+    public void SelectEventHeroCount(bool max, string number)
     {
         if (max)
         {
-            int.TryParse(heroCountESL.selection, out eventComponent.maxHeroes);
+            int.TryParse(number, out eventComponent.maxHeroes);
         }
         else
         {
-            int.TryParse(heroCountESL.selection, out eventComponent.minHeroes);
+            int.TryParse(number, out eventComponent.minHeroes);
         }
         Update();
     }
 
     public void AddVisibility(bool add)
     {
-        List<EditorSelectionList.SelectionListEntry> components = new List<EditorSelectionList.SelectionListEntry>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddVisibility(add, s); }, new StringKey("val", "SELECT", new StringKey("val", "COMPONENT")));
+
         if (!add)
         {
-            components.Add(new EditorSelectionList.SelectionListEntry("#boardcomponents", "Special"));
-            components.Add(new EditorSelectionList.SelectionListEntry("#monsters", "Special"));
-            components.Add(new EditorSelectionList.SelectionListEntry("#shop", "Special"));
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Special" });
+
+            select.AddItem("#boardcomponents", traits);
+            select.AddItem("#monsters", traits);
+            select.AddItem("#shop", traits);
         }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token || kv.Value is QuestData.UI)
             {
-                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+                select.AddItem(kv.Value);
             }
             if (kv.Value is QuestData.Spawn && !add)
             {
-                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+                select.AddItem(kv.Value);
             }
             if (kv.Value is QuestData.QItem && add)
             {
-                components.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+                select.AddItem(kv.Value);
             }
         }
-
-        visibilityESL = new EditorSelectionList( 
-            new StringKey("val","SELECT",CommonStringKeys.TILE),
-            components, delegate { SelectAddVisibility(add); });
-        visibilityESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddVisibility(bool add)
+    public void SelectAddVisibility(bool add, string component)
     {
         string[] oldC = null;
 
@@ -867,7 +907,7 @@ public class EditorComponentEvent : EditorComponent
             newC[i] = oldC[i];
         }
 
-        newC[i] = visibilityESL.selection;
+        newC[i] = component;
 
         if (add)
         {
@@ -935,23 +975,33 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetQuotaVar()
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
-        list.AddRange(GetQuestVars());
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectQuotaVar(); });
-        varESL.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectQuotaVar, new StringKey("val", "SELECT", VAR));
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+
+        AddQuestVars(select);
+
+        select.Draw();
     }
 
-    public void SelectQuotaVar()
+    public void SelectQuotaVar(string var)
     {
-        if (varESL.selection.Equals("{NEW}"))
+        if (var.Equals("{NEW}"))
         {
             varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
             varText.EditText();
         }
         else
         {
-            eventComponent.quotaVar = varESL.selection;
+            eventComponent.quotaVar = var;
             eventComponent.quota = 0;
             Update();
         }
@@ -1002,18 +1052,24 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetButtonColor(int number)
     {
-        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
-        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
+            return;
         }
-        colorESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectButtonColour(number); });
-        colorESL.SelectItem();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectButtonColour(number, s); }, CommonStringKeys.SELECT_ITEM);
+
+        foreach (string s in ColorUtil.LookUp().Keys)
+        {
+            select.AddItem(s);
+        }
+
+        select.Draw();
     }
 
-    public void SelectButtonColour(int number)
+    public void SelectButtonColour(int number, string color)
     {
-        eventComponent.buttonColors[number - 1] = colorESL.selection;
+        eventComponent.buttonColors[number - 1] = color;
         Update();
     }
 
@@ -1027,28 +1083,31 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddEvent(int index, int button)
     {
-        List<EditorSelectionList.SelectionListEntry> events = new List<EditorSelectionList.SelectionListEntry>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        events.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.EVENT).Translate(),"{NEW:Event}"));
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddEvent(index, button, s); }, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
+
+        select.AddNewComponentItem("Event");
+
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
-                events.Add(new EditorSelectionList.SelectionListEntry(kv.Key, kv.Value.typeDynamic));
+                select.AddItem(kv.Value);
             }
         }
 
-        addEventESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.EVENT), 
-            events, delegate { SelectAddEvent(index, button); });
-        addEventESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddEvent(int index, int button)
+    public void SelectAddEvent(int index, int button, string eventName)
     {
-        string toAdd = addEventESL.selection;
-        if (addEventESL.selection.Equals("{NEW:Event}"))
+        string toAdd = eventName;
+        if (eventName.Equals("{NEW:Event}"))
         {
             int i = 0;
             while (Game.Get().quest.qd.components.ContainsKey("Event" + i))
@@ -1070,43 +1129,62 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddTestOp()
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
-        list.AddRange(GetQuestVars());
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
 
-        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddOp(s); }, new StringKey("val", "SELECT", VAR));
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+
+        AddQuestVars(select);
+
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "#" });
+
+        select.AddItem("#monsters", traits);
+        select.AddItem("#heroes", traits);
+        select.AddItem("#round", traits);
+        select.AddItem("#eliminated", traits);
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "#"));
+                select.AddItem("#" + pack.id, traits);
             }
         }
-
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(); });
-        varESL.SelectItem();
+        select.Draw();
     }
 
     public void AddAssignOp()
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", "Quest"));
-        list.AddRange(GetQuestVars());
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", VAR), list, delegate { SelectAddOp(false); });
-        varESL.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddOp(s, false); }, new StringKey("val", "SELECT", VAR));
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+
+        AddQuestVars(select);
+
+        select.Draw();
     }
 
-    public List<EditorSelectionList.SelectionListEntry> GetQuestVars()
+    public void AddQuestVars(UIWindowSelectionListTraits list)
     {
         HashSet<string> vars = new HashSet<string>();
         HashSet<string> dollarVars = new HashSet<string>();
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
 
         Game game = Game.Get();
-
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Event)
@@ -1121,9 +1199,12 @@ public class EditorComponentEvent : EditorComponent
                 }
             }
         }
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
         foreach (string s in vars)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s, "Quest"));
+            list.AddItem(s, traits);
         }
 
 
@@ -1137,12 +1218,13 @@ public class EditorComponentEvent : EditorComponent
                 }
             }
         }
+
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "$" });
         foreach (string s in dollarVars)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s, "$"));
+            list.AddItem(s, traits);
         }
-
-        return list;
     }
 
     public static HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
@@ -1170,10 +1252,10 @@ public class EditorComponentEvent : EditorComponent
         return vars;
     }
 
-    public void SelectAddOp(bool test = true)
+    public void SelectAddOp(string var, bool test = true)
     {
         QuestData.Event.VarOperation op = new QuestData.Event.VarOperation();
-        op.var = varESL.selection;
+        op.var = var;
         op.operation = "=";
         if (test)
         {
@@ -1232,61 +1314,86 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetTestOpp(QuestData.Event.VarOperation op)
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("=="));
-        list.Add(new EditorSelectionList.SelectionListEntry("!="));
-        list.Add(new EditorSelectionList.SelectionListEntry(">="));
-        list.Add(new EditorSelectionList.SelectionListEntry("<="));
-        list.Add(new EditorSelectionList.SelectionListEntry(">"));
-        list.Add(new EditorSelectionList.SelectionListEntry("<"));
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", OP), list, delegate { SelectSetOp(op); });
-        varESL.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
+
+        select.AddItem("==");
+        select.AddItem("!=");
+        select.AddItem(">=");
+        select.AddItem("<=");
+        select.AddItem(">");
+        select.AddItem("<");
+
+        select.Draw();
     }
 
     public void SetAssignOpp(QuestData.Event.VarOperation op)
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry("="));
-        list.Add(new EditorSelectionList.SelectionListEntry("+"));
-        list.Add(new EditorSelectionList.SelectionListEntry("-"));
-        list.Add(new EditorSelectionList.SelectionListEntry("*"));
-        list.Add(new EditorSelectionList.SelectionListEntry("/"));
-        varESL = new EditorSelectionList(new StringKey("val", "SELECT", OP), list, delegate { SelectSetOp(op); });
-        varESL.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
+
+        select.AddItem("=");
+        select.AddItem("+");
+        select.AddItem("-");
+        select.AddItem("*");
+        select.AddItem("/");
+
+        select.Draw();
     }
 
-    public void SelectSetOp(QuestData.Event.VarOperation op)
+    public void SelectSetOp(QuestData.Event.VarOperation op, string operation)
     {
-        op.operation = varESL.selection;;
+        op.operation = operation;
         Update();
     }
 
     public void SetValue(QuestData.Event.VarOperation op)
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", "Quest"));
-        list.AddRange(GetQuestVars());
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
 
-        list.Add(new EditorSelectionList.SelectionListEntry("#monsters", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#heroes", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#round", "#"));
-        list.Add(new EditorSelectionList.SelectionListEntry("#eliminated", "#"));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectSetValue(op, s); }, new StringKey("val", "SELECT", VALUE));
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits);
+
+        AddQuestVars(select);
+
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "#" });
+
+        select.AddItem("#monsters", traits);
+        select.AddItem("#heroes", traits);
+        select.AddItem("#round", traits);
+        select.AddItem("#eliminated", traits);
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                list.Add(new EditorSelectionList.SelectionListEntry("#" + pack.id, "#"));
+                select.AddItem("#" + pack.id, traits);
             }
         }
-
-        varESL = new EditorSelectionList(new StringKey("val","SELECT",VALUE), list, delegate { SelectSetValue(op); });
-        varESL.SelectItem();
+        select.Draw();
     }
 
 
-    public void SelectSetValue(QuestData.Event.VarOperation op)
+    public void SelectSetValue(QuestData.Event.VarOperation op, string value)
     {
-        if (varESL.selection.Equals("{NUMBER}"))
+        if (value.Equals("{NUMBER}"))
         {
             // Vars doesnt localize
             varText = new QuestEditorTextEdit(
@@ -1296,7 +1403,7 @@ public class EditorComponentEvent : EditorComponent
         }
         else
         {
-            op.value = varESL.selection;
+            op.value = value;
             Update();
         }
     }

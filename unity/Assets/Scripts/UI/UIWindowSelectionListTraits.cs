@@ -10,6 +10,10 @@ namespace Assets.Scripts.UI
 
         protected List<SelectionItemTraits> traitItems = new List<SelectionItemTraits>();
 
+        protected float scrollPos = 0;
+
+        protected UIElementScrollVertical traitScrollArea;
+
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
         }
@@ -69,6 +73,17 @@ namespace Assets.Scripts.UI
 
         protected void Update()
         {
+            bool resetScroll = false;
+            if (traitScrollArea == null)
+            {
+                resetScroll = true;
+            }
+            else
+            {
+                scrollPos = traitScrollArea.GetScrollPosition();
+            }
+
+
             // Border
             UIElement ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-18), 0, 36, 30);
@@ -79,8 +94,9 @@ namespace Assets.Scripts.UI
             ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
             ui.SetText(_title);
 
-            UIElementScrollVertical traitScrollArea = new UIElementScrollVertical();
+            traitScrollArea = new UIElementScrollVertical();
             traitScrollArea.SetLocation(UIScaler.GetHCenter(-17.5f), 2, 13, 25);
+            new UIElementBorder(traitScrollArea);
 
             float offset = 0;
             foreach (TraitGroup tg in traitData)
@@ -140,13 +156,17 @@ namespace Assets.Scripts.UI
                 offset += 1.05f;
             }
             traitScrollArea.SetScrollSize(offset);
-
+            if (!resetScroll)
+            {
+                traitScrollArea.SetScrollPosition(scrollPos);
+            }
 
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
+            new UIElementBorder(itemScrollArea);
 
             offset = 0;
-            foreach (SelectionItemTraits item in items)
+            foreach (SelectionItemTraits item in traitItems)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)
@@ -164,7 +184,7 @@ namespace Assets.Scripts.UI
                 {
                     ui.SetButton(delegate { SelectItem(key); });
                 }
-                ui.SetBGColor(Color.white);
+                ui.SetBGColor(item.GetColor());
                 ui.SetText(item.GetDisplay(), Color.black);
                 offset += 1.05f;
             }
@@ -191,14 +211,32 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
         }
 
+        public void AddItem(StringKey stringKey, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits)
         {
             items.Add(new SelectionItemTraits(item, item, traits));
         }
 
+        public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(item, item, traits));
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits)
         {
             items.Add(new SelectionItemTraits(display, key, traits));
+        }
+
+        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(display, key, traits));
+            items[items.Count - 1].SetColor(color);
         }
 
         public void AddItem(QuestData.QuestComponent qc)
@@ -211,6 +249,40 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
         }
 
+        public void AddItem(GenericData component)
+        {
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+
+            List<string> sets = new List<string>();
+            foreach (string s in component.sets)
+            {
+                if (s.Length == 0)
+                {
+                    sets.Add(new StringKey("val", "base").Translate());
+                }
+                else
+                {
+                    sets.Add(new StringKey("val", s).Translate());
+                }
+            }
+            traits.Add(new StringKey("val", "SOURCE").Translate(), sets);
+
+            List<string> traitlocal = new List<string>();
+            foreach (string s in component.traits)
+            {
+                traitlocal.Add(new StringKey("val", s).Translate());
+            }
+            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
+
+            items.Add(new SelectionItemTraits(component.name.Translate(), component.sectionName, traits));
+        }
+
+        public void AddItem(GenericData component, Color color)
+        {
+            AddItem(component);
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddNewComponentItem(string type)
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
@@ -219,6 +291,22 @@ namespace Assets.Scripts.UI
             traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "NEW").Translate() });
 
             items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", type.ToUpper()).Translate(), "{NEW:" + type + "}", traits));
+        }
+
+        public void SelectTrait(string type, string trait)
+        {
+            foreach (TraitGroup tg in traitData)
+            {
+                if (tg.GetName().Equals(type))
+                {
+                    if (tg.traits.ContainsKey(trait))
+                    {
+                        tg.traits[trait].selected = true;
+                        Update();
+                    }
+                    return;
+                }
+            }
         }
 
         protected class SelectionItemTraits : SelectionItem

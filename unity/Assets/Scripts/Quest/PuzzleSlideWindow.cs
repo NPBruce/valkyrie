@@ -13,7 +13,6 @@ public class PuzzleSlideWindow
     {
         eventData = e;
         Game game = Game.Get();
-        CameraController.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
@@ -33,7 +32,6 @@ public class PuzzleSlideWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        CameraController.panDisable = true;
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 

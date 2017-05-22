@@ -21,7 +21,6 @@ public class EditorComponent {
     QuestEditorTextEdit rename;
     private readonly StringKey COMPONENT_NAME = new StringKey("val","COMPONENT_NAME");
 
-    EditorSelectionList sourceESL;
     QuestEditorTextEdit sourceFileText;
 
     UIElementEditable commentUIE;
@@ -80,7 +79,7 @@ public class EditorComponent {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 20, 1);
         ui.SetText(name);
-        ui.SetButton(delegate { QuestEditorData.ListType(component.typeDynamic); });
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
         new UIElementBorder(ui);
         offset += 2;
 
@@ -259,29 +258,27 @@ public class EditorComponent {
 
     public void ChangeSource()
     {
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, new StringKey("val", "SELECT", new StringKey("val", "FILE")));
+
+        select.AddItem("{NEW:File}");
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-
-        list.Add(new EditorSelectionList.SelectionListEntry("{NEW:File}"));
-        foreach (string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
+        foreach(string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
-
-        sourceESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "FILE")), list, delegate { SelectSource(); });
-        sourceESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectSource()
+    public void SelectSource(string source)
     {
-        if (sourceESL.selection.Equals("{NEW:File}"))
+        if (source.Equals("{NEW:File}"))
         {
             sourceFileText = new QuestEditorTextEdit(new StringKey("val", "FILE"), "", delegate { NewSource(); });
             sourceFileText.EditText();
         }
         else
         {
-            SetSource(sourceESL.selection);
+            SetSource(source);
         }
     }
 

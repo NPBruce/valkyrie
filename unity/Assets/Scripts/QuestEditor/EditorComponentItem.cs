@@ -7,7 +7,6 @@ using Assets.Scripts.UI;
 public class EditorComponentItem : EditorComponent
 {
     QuestData.QItem itemComponent;
-    EditorSelectionList itemESL;
     EditorSelectionList traitESL;
 
     public EditorComponentItem(string nameIn) : base()
@@ -155,13 +154,15 @@ public class EditorComponentItem : EditorComponent
 
     public void AddItem()
     {
-        Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
-
-        if (itemComponent.traits.Length > 0)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+            return;
         }
+        Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectAddItem, CommonStringKeys.SELECT_ITEM);
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { "Quest" });
 
         HashSet<string> usedItems = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
@@ -169,7 +170,7 @@ public class EditorComponentItem : EditorComponent
             QuestData.QItem i = kv.Value as QuestData.QItem;
             if (i != null)
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(i.sectionName, "Quest"));
+                select.AddItem(i.sectionName, traits);
                 if (i.traits.Length == 0 && i.traitpool.Length == 0)
                 {
                     usedItems.Add(i.itemName[0]);
@@ -179,38 +180,19 @@ public class EditorComponentItem : EditorComponent
 
         foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-
-            Color buttonColor = Color.white;
             if (usedItems.Contains(kv.Key))
             {
-                buttonColor = Color.grey;
-
+                select.AddItem(kv.Value, Color.grey);
             }
-
-            items.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
-                localizedDisplay.ToString(), display.ToString(), sets, buttonColor));
+            else
+            {
+                select.AddItem(kv.Value);
+            }
         }
-        itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectAddItem(); });
-        itemESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddItem()
+    public void SelectAddItem(string item)
     {
         string[] newArray = new string[itemComponent.itemName.Length + 1];
 
@@ -218,7 +200,7 @@ public class EditorComponentItem : EditorComponent
         {
             newArray[i] = itemComponent.itemName[i];
         }
-        newArray[itemComponent.itemName.Length] = itemESL.selection;
+        newArray[itemComponent.itemName.Length] = item;
         itemComponent.itemName = newArray;
         Update();
     }
@@ -322,25 +304,29 @@ public class EditorComponentItem : EditorComponent
 
     public void PickInpsect()
     {
-        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
 
-        items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectInspectEvent, new StringKey("val", "SELECT", CommonStringKeys.SELECT_ITEM));
+
+        select.AddItem("{NONE}", "");
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if(kv.Value.typeDynamic.Equals("Event"))
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                select.AddItem(kv.Value);
             }
         }
-
-        itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectInspectEvent(); });
-        itemESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectInspectEvent()
+    public void SelectInspectEvent(string eventName)
     {
-        itemComponent.inspect = itemESL.selection;
+        itemComponent.inspect = eventName;
         Update();
     }
 }

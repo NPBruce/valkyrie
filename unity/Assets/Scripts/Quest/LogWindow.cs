@@ -22,7 +22,6 @@ public class LogWindow
         developerToggle ^= toggle;
         Game game = Game.Get();
         game.logWindow = this;
-        CameraController.panDisable = true;
         // white background because font rendering is broken
         string log = "";
         foreach (Quest.LogEntry e in game.quest.log)

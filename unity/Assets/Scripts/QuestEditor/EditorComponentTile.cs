@@ -7,7 +7,6 @@ using Assets.Scripts.UI;
 public class EditorComponentTile : EditorComponent
 {
     QuestData.Tile tileComponent;
-    EditorSelectionList tileESL;
 
     public EditorComponentTile(string nameIn) : base()
     {
@@ -65,7 +64,12 @@ public class EditorComponentTile : EditorComponent
 
     public void ChangeTileSide()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectTileSide, new StringKey("val", "SELECT", CommonStringKeys.TILE));
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
@@ -79,44 +83,21 @@ public class EditorComponentTile : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> sides = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> traits = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    traits.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    traits.Add(s);
-                }
-            }
-
-            Color buttonColor = Color.white;
-
             if (usedSides.Contains(kv.Key))
             {
-                buttonColor = Color.grey;
+                select.AddItem(kv.Value, Color.grey);
             }
-
-            sides.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
-                localizedDisplay.ToString(),display.ToString(), traits, buttonColor));
+            select.AddItem(kv.Value);
         }
-        tileESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });
-        tileESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectTileSide()
+    public void SelectTileSide(string tile)
     {
         Game game = Game.Get();
-        tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
+        tileComponent.tileSideName = tile.Split(" ".ToCharArray())[0];
         game.quest.Remove(tileComponent.sectionName);
         game.quest.Add(tileComponent.sectionName);
         Update();
