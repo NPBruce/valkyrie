@@ -178,7 +178,12 @@ namespace Assets.Scripts.UI
 
         public void AddItem(QuestData.QuestComponent qc)
         {
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", qc.typeDynamic.ToUpper()).Translate() });
+            traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { qc.source });
+
+            items.Add(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
         }
 
         public void AddNewComponentItem(string type)
