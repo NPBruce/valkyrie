@@ -7,7 +7,6 @@ using Assets.Scripts.UI;
 public class EditorComponentTile : EditorComponent
 {
     QuestData.Tile tileComponent;
-    EditorSelectionList tileESL;
 
     public EditorComponentTile(string nameIn) : base()
     {
@@ -65,7 +64,12 @@ public class EditorComponentTile : EditorComponent
 
     public void ChangeTileSide()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectTileSide, new StringKey("val", "SELECT", CommonStringKeys.TILE));
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
@@ -79,24 +83,35 @@ public class EditorComponentTile : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> sides = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
             StringBuilder display = new StringBuilder().Append(kv.Key);
             StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> traits = new List<string>(kv.Value.traits);
+
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+
+            List<string> sets = new List<string>();
             foreach (string s in kv.Value.sets)
             {
                 if (s.Length == 0)
                 {
-                    traits.Add("base");
+                    sets.Add(new StringKey("val", "base").Translate());
                 }
                 else
                 {
-                    display.Append(" ").Append(s);
-                    traits.Add(s);
+                    sets.Add(new StringKey("val", s).Translate());
                 }
             }
+            traits.Add(new StringKey("val", "EXPANSION").Translate(), sets);
+
+            List<string> traitlocal = new List<string>();
+            foreach (string s in kv.Value.traits)
+            {
+                traitlocal.Add(new StringKey("val", s).Translate());
+            }
+            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
+
+            select.AddItem(kv.Value.name.Translate(), kv.Key, traits);
 
             Color buttonColor = Color.white;
 
@@ -104,19 +119,15 @@ public class EditorComponentTile : EditorComponent
             {
                 buttonColor = Color.grey;
             }
-
-            sides.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
-                localizedDisplay.ToString(),display.ToString(), traits, buttonColor));
         }
-        tileESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });
-        tileESL.SelectItem();
+
+        select.Draw();
     }
 
-    public void SelectTileSide()
+    public void SelectTileSide(string tile)
     {
         Game game = Game.Get();
-        tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
+        tileComponent.tileSideName = tile.Split(" ".ToCharArray())[0];
         game.quest.Remove(tileComponent.sectionName);
         game.quest.Add(tileComponent.sectionName);
         Update();
