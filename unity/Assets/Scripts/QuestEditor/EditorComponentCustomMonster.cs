@@ -25,10 +25,6 @@ public class EditorComponentCustomMonster : EditorComponent
     PaneledDialogBoxEditable infoDBE;
     DialogBoxEditable healthDBE;
     DialogBoxEditable healthHeroDBE;
-    EditorSelectionList baseESL;
-    EditorSelectionList traitsESL;
-    EditorSelectionList imageESL;
-    EditorSelectionList placeESL;
 
     // TODO: Translate expansion traits, translate base monster names.
 
@@ -291,42 +287,49 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetBase()
     {
-        List<EditorSelectionList.SelectionListEntry> baseMonster = new List<EditorSelectionList.SelectionListEntry>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(CommonStringKeys.NONE.Translate(),"{NONE}"));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetBase, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
+
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+
+            List<string> sets = new List<string>();
             foreach (string s in kv.Value.sets)
             {
                 if (s.Length == 0)
                 {
-                    sets.Add("base");
+                    sets.Add(new StringKey("val", "base").Translate());
                 }
                 else
                 {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
+                    sets.Add(new StringKey("val", s).Translate());
                 }
             }
-            baseMonster.Add(
-                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                    localizedDisplay.ToString(),display.ToString(), sets));
+            traits.Add(new StringKey("val", "EXPANSION").Translate(), sets);
+
+            List<string> traitlocal = new List<string>();
+            foreach (string s in kv.Value.traits)
+            {
+                traitlocal.Add(new StringKey("val", s).Translate());
+            }
+            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
+
+            select.AddItem(kv.Value.name.Translate(), kv.Key, traits);
         }
 
-        baseESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.EVENT),
-            baseMonster, delegate { SelectSetBase(); });
-        baseESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectSetBase()
+    public void SelectSetBase(string type)
     {
-        if (baseESL.selection.Equals("{NONE}"))
+        if (type.Equals("{NONE}"))
         {
             monsterComponent.baseMonster = "";
             if (!monsterComponent.monsterName.KeyExists())
@@ -344,7 +347,7 @@ public class EditorComponentCustomMonster : EditorComponent
         }
         else
         {
-            monsterComponent.baseMonster = baseESL.selection.Split(" ".ToCharArray())[0];
+            monsterComponent.baseMonster = type.Split(" ".ToCharArray())[0];
         }
         Update();
     }
@@ -436,9 +439,13 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void AddTrait()
     {
-        HashSet<string> traits = new HashSet<string>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+
+        HashSet<string> traits = new HashSet<string>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
 
@@ -448,18 +455,17 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddTraits, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
+
         foreach (string s in traits)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
+            select.AddItem(s);
         }
-        traitsESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.ACTIVATION), 
-            list, delegate { SelectAddTraits(); });
-        traitsESL.SelectItem();
+
+        select.Draw();
     }
 
-    public void SelectAddTraits()
+    public void SelectAddTraits(string trait)
     {
         string[] newT = new string[monsterComponent.traits.Length + 1];
         int i;
@@ -468,7 +474,7 @@ public class EditorComponentCustomMonster : EditorComponent
             newT[i] = monsterComponent.traits[i];
         }
 
-        newT[i] = traitsESL.selection;
+        newT[i] = trait;
         monsterComponent.traits = newT;
         Update();
     }
@@ -518,23 +524,29 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImage()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectImage, SELECT_IMAGE);
+
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
-        imageESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
-        imageESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImage()
+    public void SelectImage(string image)
     {
-        monsterComponent.imagePath = imageESL.selection;
+        monsterComponent.imagePath = image;
         Update();
     }
 
@@ -546,23 +558,29 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImagePlace()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectImagePlace, SELECT_IMAGE);
+
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
-        placeESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImagePlace(); });
-        placeESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImagePlace()
+    public void SelectImagePlace(string image)
     {
-        monsterComponent.imagePlace = placeESL.selection;
+        monsterComponent.imagePlace = image;
         Update();
     }
 

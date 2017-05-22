@@ -146,7 +146,7 @@ namespace Assets.Scripts.UI
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
 
             offset = 0;
-            foreach (SelectionItemTraits item in items)
+            foreach (SelectionItemTraits item in traitItems)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)

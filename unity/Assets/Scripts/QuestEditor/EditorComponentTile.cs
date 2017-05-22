@@ -85,9 +85,6 @@ public class EditorComponentTile : EditorComponent
 
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
             List<string> sets = new List<string>();
