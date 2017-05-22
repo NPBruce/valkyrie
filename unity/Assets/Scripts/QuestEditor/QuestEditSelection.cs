@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 public class QuestEditSelection
@@ -60,7 +61,7 @@ public class QuestEditSelection
         scrollRect.scrollSensitivity = 27f;
 
         // List of quests
-        int offset = 5;
+        int offset = 0;
         TextButton tb;
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
@@ -68,16 +69,14 @@ public class QuestEditSelection
             LocalizationRead.scenarioDict = q.Value.localizationDict;
             string translation = q.Value.name.Translate();
 
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",translation), delegate { Selection(key); }, Color.black, offset);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.transform);
+            UIElement ui = new UIElement(scrollArea.transform);
+            ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
+            ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
+            ui.SetButton(delegate { Selection(key); });
+            ui.SetBGColor(Color.white);
             offset += 2;
         }
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 5) * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, offset * UIScaler.GetPixelsPerUnit());
 
         // Main menu
         tb = new TextButton(
