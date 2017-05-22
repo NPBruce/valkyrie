@@ -263,7 +263,7 @@ namespace Assets.Scripts.UI
                     sets.Add(new StringKey("val", s).Translate());
                 }
             }
-            traits.Add(new StringKey("val", "EXPANSION").Translate(), sets);
+            traits.Add(new StringKey("val", "SOURCE").Translate(), sets);
 
             List<string> traitlocal = new List<string>();
             foreach (string s in component.traits)

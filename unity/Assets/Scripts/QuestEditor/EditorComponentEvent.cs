@@ -649,7 +649,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("StartRound", traits);
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "MONSTERS").Translate() });
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "MONSTER").Translate() });
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {

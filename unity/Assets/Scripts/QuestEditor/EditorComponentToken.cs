@@ -7,7 +7,6 @@ using Assets.Scripts.UI;
 public class EditorComponentToken : EditorComponentEvent
 {
     QuestData.Token tokenComponent;
-    EditorSelectionList typeList;
 
     public EditorComponentToken(string nameIn) : base(nameIn)
     {
@@ -72,31 +71,25 @@ public class EditorComponentToken : EditorComponentEvent
 
     public void Type()
     {
-        typeList = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TOKEN), GetTokenNames(), delegate { SelectType(); });
-        typeList.SelectItem();
-    }
-
-    public static List<EditorSelectionList.SelectionListEntry> GetTokenNames()
-    {
-        List<EditorSelectionList.SelectionListEntry> names = new List<EditorSelectionList.SelectionListEntry>();
-
-        foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            //StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            foreach (string s in kv.Value.sets)
-            {
-                display.Append(" ").Append(s);
-                //localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-            }
-            names.Add( new EditorSelectionList.SelectionListEntry(display.ToString()));
+            return;
         }
-        return names;
+        Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
+
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+
+        foreach (KeyValuePair<string, TokenData> kv in game.cd.tokens)
+        {
+            select.AddItem(kv.Value);
+        }
+        select.Draw();
     }
 
-    public void SelectType()
+    public void SelectType(string token)
     {
-        tokenComponent.tokenName = typeList.selection.Split(" ".ToCharArray())[0];
+        tokenComponent.tokenName = token.Split(" ".ToCharArray())[0];
         Game.Get().quest.Remove(tokenComponent.sectionName);
         Game.Get().quest.Add(tokenComponent.sectionName);
         Update();

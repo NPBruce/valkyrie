@@ -28,7 +28,6 @@ public class EditorComponentSpawn : EditorComponentEvent
     DialogBoxEditable healthDBE;
     DialogBoxEditable healthHeroDBE;
 
-    EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
     EditorSelectionList monsterPlaceESL;
 
@@ -340,94 +339,65 @@ public class EditorComponentSpawn : EditorComponentEvent
 
     public void MonsterTypeAdd(int pos)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectMonsterType(s, pos); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Custom"));
+                select.AddItem(kv.Value);
             }
-        }
-
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
             if (kv.Value is QuestData.Spawn)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Spawn"));
+                select.AddItem(kv.Value);
             }
         }
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-            monsters.Add(
-                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                    localizedDisplay.ToString(),display.ToString(), sets));
+            select.AddItem(kv.Value);
         }
-        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
-        monsterTypeESL.SelectItem();
+        select.Draw();
     }
 
     public void MonsterTypeReplace(int pos)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectMonsterType(s, pos, true); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
+                select.AddItem(kv.Value);
+            }
+            if (kv.Value is QuestData.Spawn)
+            {
+                select.AddItem(kv.Value);
             }
         }
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-            monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                localizedDisplay.ToString(),display.ToString(), sets));
+            select.AddItem(kv.Value);
         }
-        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
-        monsterTypeESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectMonsterType(int pos, bool replace = false)
+    public void SelectMonsterType(string type, int pos, bool replace = false)
     {
         if (replace)
         {
-            spawnComponent.mTypes[pos] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
+            spawnComponent.mTypes[pos] = type.Split(" ".ToCharArray())[0];
         }
         else
         {
@@ -438,7 +408,7 @@ public class EditorComponentSpawn : EditorComponentEvent
             {
                 if (j == pos && i == j)
                 {
-                    newM[i] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
+                    newM[i] = type.Split(" ".ToCharArray())[0];
                 }
                 else
                 {

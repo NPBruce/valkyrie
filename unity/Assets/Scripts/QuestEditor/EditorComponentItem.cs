@@ -162,7 +162,7 @@ public class EditorComponentItem : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectAddItem, CommonStringKeys.SELECT_ITEM);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "EXPANSION").Translate(), new string[] { "Quest" });
+        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { "Quest" });
 
         HashSet<string> usedItems = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
