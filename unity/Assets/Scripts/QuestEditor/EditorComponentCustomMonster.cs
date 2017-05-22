@@ -298,32 +298,8 @@ public class EditorComponentCustomMonster : EditorComponent
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-
-            List<string> sets = new List<string>();
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add(new StringKey("val", "base").Translate());
-                }
-                else
-                {
-                    sets.Add(new StringKey("val", s).Translate());
-                }
-            }
-            traits.Add(new StringKey("val", "EXPANSION").Translate(), sets);
-
-            List<string> traitlocal = new List<string>();
-            foreach (string s in kv.Value.traits)
-            {
-                traitlocal.Add(new StringKey("val", s).Translate());
-            }
-            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
-
-            select.AddItem(kv.Value.name.Translate(), kv.Key, traits);
+            select.AddItem(kv.Value);
         }
-
         select.Draw();
     }
 

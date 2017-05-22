@@ -247,6 +247,40 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
         }
 
+        public void AddItem(GenericData component)
+        {
+            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+
+            List<string> sets = new List<string>();
+            foreach (string s in component.sets)
+            {
+                if (s.Length == 0)
+                {
+                    sets.Add(new StringKey("val", "base").Translate());
+                }
+                else
+                {
+                    sets.Add(new StringKey("val", s).Translate());
+                }
+            }
+            traits.Add(new StringKey("val", "EXPANSION").Translate(), sets);
+
+            List<string> traitlocal = new List<string>();
+            foreach (string s in component.traits)
+            {
+                traitlocal.Add(new StringKey("val", s).Translate());
+            }
+            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
+
+            items.Add(new SelectionItemTraits(component.name.Translate(), component.sectionName, traits));
+        }
+
+        public void AddItem(GenericData component, Color color)
+        {
+            AddItem(component);
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddNewComponentItem(string type)
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();

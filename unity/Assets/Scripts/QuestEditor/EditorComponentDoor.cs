@@ -10,7 +10,6 @@ public class EditorComponentDoor : EditorComponentEvent
 
     QuestData.Door doorComponent;
     // List to select door colour
-    EditorSelectionList colorList;
 
     public EditorComponentDoor(string nameIn) : base(nameIn)
     {
@@ -80,18 +79,24 @@ public class EditorComponentDoor : EditorComponentEvent
 
     public void Colour()
     {
-        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
-        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
+            return;
         }
-        colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectColour(); });
-        colorList.SelectItem();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectColour, CommonStringKeys.SELECT_ITEM);
+
+        foreach (string s in ColorUtil.LookUp().Keys)
+        {
+            select.AddItem(s);
+        }
+
+        select.Draw();
     }
 
-    public void SelectColour()
+    public void SelectColour(string color)
     {
-        doorComponent.colourName = colorList.selection;
+        doorComponent.colourName = color;
         Game.Get().quest.Remove(doorComponent.sectionName);
         Game.Get().quest.Add(doorComponent.sectionName);
         Update();
