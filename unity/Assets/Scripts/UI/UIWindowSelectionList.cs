@@ -28,14 +28,29 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItem(stringKey.Translate(), stringKey.key));
         }
 
+        public void AddItem(StringKey stringKey, Color color)
+        {
+            items.Add(new SelectionItem(stringKey.Translate(), stringKey.key, color));
+        }
+
         public void AddItem(string item)
         {
             items.Add(new SelectionItem(item, item));
         }
 
+        public void AddItem(string item, Color color)
+        {
+            items.Add(new SelectionItem(item, item, color));
+        }
+
         public void AddItem(string display, string key)
         {
             items.Add(new SelectionItem(display, key));
+        }
+
+        public void AddItem(string display, string key, Color color)
+        {
+            items.Add(new SelectionItem(display, key, color));
         }
 
         virtual public void Draw()
@@ -63,7 +78,7 @@ namespace Assets.Scripts.UI
                 {
                     ui.SetButton(delegate { SelectItem(key); });
                 }
-                ui.SetBGColor(Color.white);
+                ui.SetBGColor(items[i].GetColor());
                 ui.SetText(items[i].GetDisplay(), Color.black);
             }
 
@@ -88,11 +103,19 @@ namespace Assets.Scripts.UI
         {
             string _display = "";
             string _key = "";
+            Color _color = Color.white;
 
             public SelectionItem(string display, string key)
             {
                 _key = key;
                 _display = display;
+            }
+
+            public SelectionItem(string display, string key, Color color)
+            {
+                _key = key;
+                _display = display;
+                _color = color;
             }
 
             public string GetKey()
@@ -104,6 +127,17 @@ namespace Assets.Scripts.UI
             {
                 return _display;
             }
+
+            public void SetColor(Color color)
+            {
+                _color = color;
+            }
+
+            public Color GetColor()
+            {
+                return _color;
+            }
+
         }
     }
 }

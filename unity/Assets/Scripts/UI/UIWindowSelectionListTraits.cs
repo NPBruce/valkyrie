@@ -182,7 +182,7 @@ namespace Assets.Scripts.UI
                 {
                     ui.SetButton(delegate { SelectItem(key); });
                 }
-                ui.SetBGColor(Color.white);
+                ui.SetBGColor(item.GetColor());
                 ui.SetText(item.GetDisplay(), Color.black);
                 offset += 1.05f;
             }
@@ -209,14 +209,32 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
         }
 
+        public void AddItem(StringKey stringKey, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits)
         {
             items.Add(new SelectionItemTraits(item, item, traits));
         }
 
+        public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(item, item, traits));
+            items[items.Count - 1].SetColor(color);
+        }
+
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits)
         {
             items.Add(new SelectionItemTraits(display, key, traits));
+        }
+
+        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
+        {
+            items.Add(new SelectionItemTraits(display, key, traits));
+            items[items.Count - 1].SetColor(color);
         }
 
         public void AddItem(QuestData.QuestComponent qc)

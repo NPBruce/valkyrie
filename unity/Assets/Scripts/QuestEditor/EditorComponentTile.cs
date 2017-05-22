@@ -108,14 +108,13 @@ public class EditorComponentTile : EditorComponent
             }
             traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
 
-            select.AddItem(kv.Value.name.Translate(), kv.Key, traits);
-
             Color buttonColor = Color.white;
-
             if (usedSides.Contains(kv.Key))
             {
                 buttonColor = Color.grey;
             }
+
+            select.AddItem(kv.Value.name.Translate(), kv.Key, traits, buttonColor);
         }
 
         select.Draw();
