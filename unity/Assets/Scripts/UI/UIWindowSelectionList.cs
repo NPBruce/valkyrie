@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItem(display, key));
         }
 
-        public void Draw()
+        virtual public void Draw()
         {
             // Border
             UIElement ui = new UIElement();
