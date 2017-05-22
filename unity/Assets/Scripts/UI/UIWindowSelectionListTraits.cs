@@ -10,6 +10,10 @@ namespace Assets.Scripts.UI
 
         protected List<SelectionItemTraits> traitItems = new List<SelectionItemTraits>();
 
+        protected float scrollPos = 0;
+
+        protected UIElementScrollVertical traitScrollArea;
+
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
         }
@@ -69,6 +73,17 @@ namespace Assets.Scripts.UI
 
         protected void Update()
         {
+            bool resetScroll = false;
+            if (traitScrollArea == null)
+            {
+                resetScroll = true;
+            }
+            else
+            {
+                scrollPos = traitScrollArea.GetScrollPosition();
+            }
+
+
             // Border
             UIElement ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-18), 0, 36, 30);
@@ -79,7 +94,7 @@ namespace Assets.Scripts.UI
             ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
             ui.SetText(_title);
 
-            UIElementScrollVertical traitScrollArea = new UIElementScrollVertical();
+            traitScrollArea = new UIElementScrollVertical();
             traitScrollArea.SetLocation(UIScaler.GetHCenter(-17.5f), 2, 13, 25);
 
             float offset = 0;
@@ -140,7 +155,10 @@ namespace Assets.Scripts.UI
                 offset += 1.05f;
             }
             traitScrollArea.SetScrollSize(offset);
-
+            if (!resetScroll)
+            {
+                traitScrollArea.SetScrollPosition(scrollPos);
+            }
 
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
