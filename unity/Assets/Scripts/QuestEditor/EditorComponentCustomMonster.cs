@@ -26,7 +26,6 @@ public class EditorComponentCustomMonster : EditorComponent
     DialogBoxEditable healthDBE;
     DialogBoxEditable healthHeroDBE;
     EditorSelectionList baseESL;
-    EditorSelectionList activationsESL;
     EditorSelectionList traitsESL;
     EditorSelectionList imageESL;
     EditorSelectionList placeESL;
@@ -392,24 +391,19 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void AddActivation()
     {
-        List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
-        Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
             {
-                activations.Add(new EditorSelectionList.SelectionListEntry(kv.Key.Substring("Activation".Length)));
+                select.AddItem(kv.Key.Substring("Activation".Length));
             }
         }
-
-        activationsESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION),
-            activations, delegate { SelectAddActivation(); });
-        activationsESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddActivation()
+    public void SelectAddActivation(string key)
     {
         string[] newA = new string[monsterComponent.activations.Length + 1];
         int i;
@@ -418,7 +412,7 @@ public class EditorComponentCustomMonster : EditorComponent
             newA[i] = monsterComponent.activations[i];
         }
 
-        newA[i] = activationsESL.selection;
+        newA[i] = key;
         monsterComponent.activations = newA;
         Update();
     }
