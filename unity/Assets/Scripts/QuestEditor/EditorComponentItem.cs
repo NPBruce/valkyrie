@@ -9,8 +9,6 @@ public class EditorComponentItem : EditorComponent
     QuestData.QItem itemComponent;
     EditorSelectionList traitESL;
 
-    EditorSelectionList itemESL;
-
     public EditorComponentItem(string nameIn) : base()
     {
         Game game = Game.Get();
@@ -306,25 +304,29 @@ public class EditorComponentItem : EditorComponent
 
     public void PickInpsect()
     {
-        List<EditorSelectionList.SelectionListEntry> items = new List<EditorSelectionList.SelectionListEntry>();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
 
-        items.Add(new EditorSelectionList.SelectionListEntry("", Color.white));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectInspectEvent, new StringKey("val", "SELECT", CommonStringKeys.SELECT_ITEM));
+
+        select.AddItem("{NONE}", "");
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if(kv.Value.typeDynamic.Equals("Event"))
             {
-                items.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                select.AddItem(kv.Value);
             }
         }
-
-        itemESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, items, delegate { SelectInspectEvent(); });
-        itemESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectInspectEvent()
+    public void SelectInspectEvent(string eventName)
     {
-        itemComponent.inspect = itemESL.selection;
+        itemComponent.inspect = eventName;
         Update();
     }
 }

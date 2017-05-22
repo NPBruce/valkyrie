@@ -86,7 +86,7 @@ public class QuestEditorData {
 
     // Open component selection top level
     // Menu for selection of all component types, includes delete options
-    public static void TypeSelect()
+    public static void TypeSelect(string type = "")
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
@@ -126,32 +126,10 @@ public class QuestEditorData {
         }
 
         select.Draw();
-    }
-
-    // Create selection list for type of component
-    public static void ListType(string type)
-    {
-        Game game = Game.Get();
-
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        // This magic string is picked up later for object creation
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}"));
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        if (type.Length > 0)
         {
-            if (kv.Value.typeDynamic.Equals(type))
-            {
-                list.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
-            }
+            select.SelectTrait(new StringKey("val", "TYPE").Translate(), new StringKey("val", type.ToUpper()).Translate());
         }
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
-    }
-
-    // Select a component from a list
-    public void SelectComponent()
-    {
-        SelectComponent(esl.selection);
     }
 
     // Select a component for editing

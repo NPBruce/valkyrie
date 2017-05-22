@@ -79,7 +79,7 @@ public class EditorComponent {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 20, 1);
         ui.SetText(name);
-        ui.SetButton(delegate { QuestEditorData.ListType(component.typeDynamic); });
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
         new UIElementBorder(ui);
         offset += 2;
 

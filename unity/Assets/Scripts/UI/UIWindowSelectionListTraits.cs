@@ -291,6 +291,22 @@ namespace Assets.Scripts.UI
             items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", type.ToUpper()).Translate(), "{NEW:" + type + "}", traits));
         }
 
+        public void SelectTrait(string type, string trait)
+        {
+            foreach (TraitGroup tg in traitData)
+            {
+                if (tg.GetName().Equals(type))
+                {
+                    if (tg.traits.ContainsKey(trait))
+                    {
+                        tg.traits[trait].selected = true;
+                        Update();
+                    }
+                    return;
+                }
+            }
+        }
+
         protected class SelectionItemTraits : SelectionItem
         {
             Dictionary<string, IEnumerable<string>> _traits = new Dictionary<string, IEnumerable<string>>();
