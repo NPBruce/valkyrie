@@ -81,10 +81,7 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        if (GameObject.FindGameObjectWithTag(Game.SHOP) == null)
-        {
-            CameraController.panDisable = false;
-        }
+        CameraController.panDisable = false;
         Game.Get().logWindow = null;
         Resources.UnloadUnusedAssets();
     }

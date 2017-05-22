@@ -30,7 +30,6 @@ public class MenuButton {
     public void Menu()
     {
         Game game = Game.Get();
-        CameraController.panDisable = true;
         if (game.editMode)
         {
             EditorMenu.Create();
