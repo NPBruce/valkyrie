@@ -100,16 +100,41 @@ namespace Assets.Scripts.UI
                     string tmpTrait = s;
                     ui = new UIElement(traitScrollArea.GetScrollTransform());
                     ui.SetLocation(0, offset, 12, 1);
-                    if (noneSelected || tg.traits[s].selected)
+                    if (tg.traits[s].selected)
                     {
                         ui.SetBGColor(Color.white);
+                        ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
                     }
                     else
                     {
-                        ui.SetBGColor(Color.grey);
+                        int itemCount = 0;
+                        foreach (SelectionItemTraits item in tg.traits[s].items)
+                        {
+                            bool display = true;
+                            foreach (TraitGroup g in traitData)
+                            {
+                                display &= g.ActiveItem(item);
+                            }
+                            if (display) itemCount++;
+                        }
+                        if (itemCount > 0)
+                        {
+                            if (noneSelected)
+                            {
+                                ui.SetBGColor(Color.white);
+                            }
+                            else
+                            {
+                                ui.SetBGColor(Color.grey);
+                            }
+                            ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
+                        }
+                        else
+                        {
+                            ui.SetBGColor(new Color(0.5f, 0, 0));
+                        }
                     }
                     ui.SetText(s, Color.black);
-                    ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
                     offset += 1.05f;
                 }
                 offset += 1.05f;
