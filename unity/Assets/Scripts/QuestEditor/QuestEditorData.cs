@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // This class manages the Quest editor Interface
 // FIXME: Rename, not a good name any more
@@ -87,44 +88,44 @@ public class QuestEditorData {
     // Menu for selection of all component types, includes delete options
     public static void TypeSelect()
     {
-        Game game = Game.Get();
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
+        Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Tile"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Token"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Spawn"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Event"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("CustomMonster"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Activation"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("UI"));
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("QItem"));
-
+        select.AddNewComponentItem("Tile");
+        select.AddNewComponentItem("Token");
+        select.AddNewComponentItem("Spawn");
+        select.AddNewComponentItem("Event");
+        select.AddNewComponentItem("CustomMonster");
+        select.AddNewComponentItem("Activation");
+        select.AddNewComponentItem("UI");
+        select.AddNewComponentItem("QItem");
         if (game.gameType is D2EGameType)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Door"));
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("MPlace"));
+            select.AddNewComponentItem("Door");
+            select.AddNewComponentItem("MPlace");
         }
         else
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNewComponent("Puzzle"));
+            select.AddNewComponentItem("Puzzle");
         }
 
-        list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitItem(CommonStringKeys.QUEST.Translate(), "Quest", "Quest"));
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        select.AddItem(CommonStringKeys.QUEST.Translate(), "Quest", traits);
+
         foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
             if (!(c is PerilData))
             {
-                list.Add(new EditorSelectionList.SelectionListEntry(c));
+                select.AddItem(c);
             }
         }
 
-        game.qed.esl = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { game.qed.SelectComponent(); });
-        game.qed.esl.SelectItem();
+        select.Draw();
     }
 
     // Create selection list for type of component
