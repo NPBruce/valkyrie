@@ -67,6 +67,7 @@ namespace Assets.Scripts.UI
 
             UIElementScrollVertical scrollArea = new UIElementScrollVertical();
             scrollArea.SetLocation(UIScaler.GetHCenter(-10.5f), 2, 21, 25);
+            new UIElementBorder(scrollArea);
 
             for (int i = 0; i < items.Count; i++)
             {

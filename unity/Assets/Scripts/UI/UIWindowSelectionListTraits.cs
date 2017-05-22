@@ -96,6 +96,7 @@ namespace Assets.Scripts.UI
 
             traitScrollArea = new UIElementScrollVertical();
             traitScrollArea.SetLocation(UIScaler.GetHCenter(-17.5f), 2, 13, 25);
+            new UIElementBorder(traitScrollArea);
 
             float offset = 0;
             foreach (TraitGroup tg in traitData)
@@ -162,6 +163,7 @@ namespace Assets.Scripts.UI
 
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
+            new UIElementBorder(itemScrollArea);
 
             offset = 0;
             foreach (SelectionItemTraits item in traitItems)
