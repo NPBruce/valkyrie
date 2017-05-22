@@ -207,6 +207,13 @@ namespace Assets.Scripts.UI.Screens
                     System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
                     DictionaryI18n.DEFAULT_LANG,
                     Game.Get().currentLang);
+
+                // Hack for Dunwich Horror
+                if (System.IO.File.Exists(Game.Get().gameType.DataDirectory() + "ffg/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
+                {
+                    LocalizationRead.ffgDict.Add(new DictionaryI18n(System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
+                        DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
+                }
             }
         }
 
