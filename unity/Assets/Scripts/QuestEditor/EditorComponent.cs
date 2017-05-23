@@ -32,7 +32,7 @@ public class EditorComponent {
     virtual public void Update()
     {
         game = Game.Get();
-        float scrollPos = -15 * UIScaler.GetPixelsPerUnit();
+        float scrollPos = -14.5f * UIScaler.GetPixelsPerUnit();
         if (scrollArea != null)
         {
             scrollPos = scrollArea.GetScrollPosition();
@@ -52,7 +52,22 @@ public class EditorComponent {
 
         scrollArea.SetScrollSize(offset);
         scrollArea.SetScrollPosition(scrollPos);
+
+        UIElement ui = new UIElement(Game.EDITOR);
+        ui.SetLocation(0, 0, 4, 1);
+        ui.SetText(CommonStringKeys.BACK);
+        ui.SetButton(delegate { QuestEditorData.Back(); });
+        ui.SetBGColor(Color.black);
+        new UIElementBorder(ui);
+
+        ui = new UIElement(Game.EDITOR);
+        ui.SetLocation(4, 0, 16, 1);
+        ui.SetText(name);
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
+        ui.SetBGColor(Color.black);
+        new UIElementBorder(ui);
     }
+
     public void Clean()
     {
         // Clean up everything marked as 'dialog'
@@ -70,19 +85,14 @@ public class EditorComponent {
     public void AddScrollArea()
     {
         scrollArea = new UIElementScrollVertical(Game.EDITOR);
-        scrollArea.SetLocation(0, 0, 21, 30);
+        scrollArea.SetLocation(0, 1, 21, 29);
         new UIElementBorder(scrollArea);
     }
 
     virtual public float DrawComponentSelection(float offset)
     {
+        offset += 1;
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 20, 1);
-        ui.SetText(name);
-        ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
-        new UIElementBorder(ui);
-        offset += 2;
-
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(2, offset, 5, 1);
         ui.SetText(new StringKey("val", "RENAME"));
