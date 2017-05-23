@@ -32,8 +32,9 @@ public class EditorComponent {
     virtual public void Update()
     {
         game = Game.Get();
+
         float scrollPos = -14.5f * UIScaler.GetPixelsPerUnit();
-        if (scrollArea != null)
+        if (scrollArea != null && !scrollArea.ObjectDestroyed())
         {
             scrollPos = scrollArea.GetScrollPosition();
         }
@@ -60,8 +61,13 @@ public class EditorComponent {
         ui.SetBGColor(Color.black);
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR);
-        ui.SetLocation(4, 0, 16, 1);
+        AddTitle();
+    }
+
+    protected virtual void AddTitle()
+    {
+        UIElement ui = new UIElement(Game.EDITOR);
+        ui.SetLocation(4, 0, 17, 1);
         ui.SetText(name);
         ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
         ui.SetBGColor(Color.black);
