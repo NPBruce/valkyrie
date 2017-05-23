@@ -1092,6 +1092,11 @@ public class EditorComponentEvent : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddEvent(index, button, s); }, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
 
         select.AddNewComponentItem("Event");
+        select.AddNewComponentItem("Spawn");
+        if (game.gameType is MoMGameType)
+        {
+            select.AddNewComponentItem("Puzzle");
+        }
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -1107,16 +1112,40 @@ public class EditorComponentEvent : EditorComponent
     public void SelectAddEvent(int index, int button, string eventName)
     {
         string toAdd = eventName;
+        Game game = Game.Get();
         if (eventName.Equals("{NEW:Event}"))
         {
             int i = 0;
-            while (Game.Get().quest.qd.components.ContainsKey("Event" + i))
+            while (game.quest.qd.components.ContainsKey("Event" + i))
             {
                 i++;
             }
             toAdd = "Event" + i;
             Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
         }
+
+        if (eventName.Equals("{NEW:Spawn}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Spawn" + i))
+            {
+                i++;
+            }
+            toAdd = "Spawn" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Spawn(toAdd));
+        }
+
+        if (eventName.Equals("{NEW:Puzzle}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Puzzle" + i))
+            {
+                i++;
+            }
+            toAdd = "Puzzle" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Puzzle(toAdd));
+        }
+
         eventComponent.nextEvent[button - 1].Insert(index, toAdd);
         Update();
     }
