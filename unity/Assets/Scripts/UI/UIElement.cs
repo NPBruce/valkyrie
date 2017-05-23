@@ -233,5 +233,10 @@ namespace Assets.Scripts.UI
             float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) +(textPaddingDefault * 2);
             return width;
         }
+
+        public bool ObjectDestroyed()
+        {
+            return bg == null;
+        }
     }
 }

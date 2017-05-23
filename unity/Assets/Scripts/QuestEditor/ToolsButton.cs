@@ -12,16 +12,11 @@ public class ToolsButton
         Game game = Game.Get();
         if (!game.editMode) return;
 
-        // Back button
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-4), 0), new Vector2(4, 1), CommonStringKeys.BACK, delegate { QuestEditorData.Back(); });
+        TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-6), 0), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.QUESTUI);
 
-        tb = new TextButton(new Vector2(UIScaler.GetRight(-10), 0), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.QUESTUI);
-
-        tb = new TextButton(new Vector2(UIScaler.GetRight(-14), 0), new Vector2(4, 1), TOOLS, delegate { EditorTools.Create(); });
+        tb = new TextButton(new Vector2(UIScaler.GetRight(-10), 0), new Vector2(4, 1), TOOLS, delegate { EditorTools.Create(); });
         tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
         tb.ApplyTag(Game.QUESTUI);
 

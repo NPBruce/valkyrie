@@ -193,11 +193,7 @@ public class EditorComponentQuest : EditorComponent
 
     override public float DrawComponentSelection(float offset)
     {
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 10, 1);
-        ui.SetText(game.gameType.QuestName());
-
-        return offset + 2;
+        return offset + 1;
     }
 
     override public float AddComment(float offset)
@@ -208,6 +204,16 @@ public class EditorComponentQuest : EditorComponent
     override public float AddSource(float offset)
     {
         return offset;
+    }
+
+    protected override void AddTitle()
+    {
+        UIElement ui = new UIElement(Game.EDITOR);
+        ui.SetLocation(4, 0, 17, 1);
+        ui.SetText(game.gameType.QuestName());
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(); });
+        ui.SetBGColor(Color.black);
+        new UIElementBorder(ui);
     }
 
     public void UpdateQuestName()
