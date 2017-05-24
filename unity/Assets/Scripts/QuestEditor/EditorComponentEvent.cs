@@ -127,6 +127,10 @@ public class EditorComponentEvent : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 8.5f, 1);
             ui.SetText(eventComponent.addComponents[index]);
+            if (game.quest.qd.components.ContainsKey(eventComponent.addComponents[i]))
+            {
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.addComponents[i]); });
+            }
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -152,6 +156,10 @@ public class EditorComponentEvent : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, componentsOffset, 8.5f, 1);
             ui.SetText(eventComponent.removeComponents[index]);
+            if (game.quest.qd.components.ContainsKey(eventComponent.removeComponents[i]))
+            {
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.removeComponents[i]); });
+            }
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
