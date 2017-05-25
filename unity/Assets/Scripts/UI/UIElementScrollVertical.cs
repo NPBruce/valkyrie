@@ -19,7 +19,7 @@ namespace Assets.Scripts.UI
 
             scrollBG = new GameObject("scrollBG");
             scrollBG.tag = tag;
-            scrollBG.AddComponent<RectTransform>();
+            scrollBG.AddComponent<UnityEngine.UI.Image>().color = Color.clear;
             scrollBG.transform.SetParent(bg.transform);
             scrollBG.AddComponent<UnityEngine.UI.RectMask2D>();
             UnityEngine.UI.ScrollRect scrollRect = scrollBG.AddComponent<UnityEngine.UI.ScrollRect>();
