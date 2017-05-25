@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -142,38 +143,9 @@ namespace Assets.Scripts.UI.Screens
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             db.SetFont(game.gameType.GetHeaderFont());
 
-            db = new DialogBox(new Vector2(1, 4f), new Vector2(UIScaler.GetWidthUnits()-2f, 22f), StringKey.NULL);
-            db.AddBorder();
-            db.background.AddComponent<UnityEngine.UI.Mask>();
-            UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
-
-            GameObject scrollArea = new GameObject("scroll");
-            RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-            scrollArea.transform.SetParent(db.background.transform);
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (UIScaler.GetWidthUnits()-3f) * UIScaler.GetPixelsPerUnit());
-
-            GameObject scrollBarObj = new GameObject("scrollbar");
-            scrollBarObj.transform.SetParent(db.background.transform);
-            RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 22 * UIScaler.GetPixelsPerUnit());
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetWidthUnits() - 3f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
-            UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
-            scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
-            scrollRect.verticalScrollbar = scrollBar;
-
-            GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-            scrollBarHandle.transform.SetParent(scrollBarObj.transform);
-            //RectTransform scrollBarHandleRect = scrollBarHandle.AddComponent<RectTransform>();
-            scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
-            scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-            scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
-            scrollBar.handleRect.offsetMin = Vector2.zero;
-            scrollBar.handleRect.offsetMax = Vector2.zero;
-
-            scrollRect.content = scrollInnerRect;
-            scrollRect.horizontal = false;
-            scrollRect.scrollSensitivity = 27f;
+            UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+            scrollArea.SetLocation(1, 4, UIScaler.GetWidthUnits() - 2, 22);
+            new UIElementBorder(scrollArea);
 
             buttons = new Dictionary<string, List<TextButton>>();
             // Start here
@@ -207,7 +179,7 @@ namespace Assets.Scripts.UI.Screens
                         tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { Select(id); });
                     }
                     tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-                    tb.background.transform.SetParent(scrollArea.transform);
+                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
                     buttons[id].Add(tb);
 
@@ -225,7 +197,7 @@ namespace Assets.Scripts.UI.Screens
                             delegate { Select(id); }, Color.clear);
                     }
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.SetParent(scrollArea.transform);
+                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
                     buttons[id].Add(tb);
 
                     if (left)
@@ -249,14 +221,14 @@ namespace Assets.Scripts.UI.Screens
                     //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
                     tb.SetFont(game.gameType.GetHeaderFont());
                     tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.SetParent(scrollArea.transform);
+                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
                     buttons[id].Add(tb);
 
                     left = !left;
                     offset += 4f;
                 }
             }
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 2.5f) * UIScaler.GetPixelsPerUnit());
+            scrollArea.SetScrollSize(offset - 1.5f);
 
             // Button for back to main menu
             if (game.cd.packTypes.Count > 1)
