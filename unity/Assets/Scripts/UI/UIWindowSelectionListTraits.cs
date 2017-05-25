@@ -161,11 +161,24 @@ namespace Assets.Scripts.UI
                 traitScrollArea.SetScrollPosition(scrollPos);
             }
 
+            DrawItemList();
+
+            // Cancel button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetButton(delegate { Destroyer.Dialog(); });
+            new UIElementBorder(ui);
+        }
+
+        protected virtual void DrawItemList()
+        {
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
 
-            offset = 0;
+            float offset = 0;
             foreach (SelectionItemTraits item in traitItems)
             {
                 bool display = true;
@@ -178,16 +191,7 @@ namespace Assets.Scripts.UI
 
                 offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
             }
-
             itemScrollArea.SetScrollSize(offset);
-
-            // Cancel button
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
-            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-            ui.SetText(CommonStringKeys.CANCEL);
-            ui.SetButton(delegate { Destroyer.Dialog(); });
-            new UIElementBorder(ui);
         }
 
         protected virtual float DrawItem(SelectionItemTraits item, Transform transform, float offset)

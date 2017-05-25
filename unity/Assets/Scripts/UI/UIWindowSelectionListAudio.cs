@@ -14,7 +14,6 @@ namespace Assets.Scripts.UI
         {
         }
 
-
         protected override float DrawItem(SelectionItemTraits item, Transform transform, float offset)
         {
             string key = item.GetKey();
