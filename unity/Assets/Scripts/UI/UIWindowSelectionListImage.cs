@@ -35,17 +35,27 @@ namespace Assets.Scripts.UI
 
                 if (game.cd.tokens.ContainsKey(item.GetKey()))
                 {
-                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset, xOffset);
-                    if (xOffset > 18)
-                    {
-                        offset += 4;
-                        xOffset = 0;
-                    }
+                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.tokens[item.GetKey()], offset, xOffset);
+                }
+                else if (game.cd.images.ContainsKey(item.GetKey()))
+                {
+                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.images[item.GetKey()], offset, xOffset);
+                }
+                else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + item.GetKey()))
+                {
+                    xOffset = DrawItem(item.GetKey(), item.GetColor(), itemScrollArea.GetScrollTransform(), ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + item.GetKey()), offset, xOffset);
                 }
                 else
                 {
+                    if (xOffset > 0) offset += 4;
                     xOffset = 0;
                     offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
+                }
+
+                if (xOffset > 16)
+                {
+                    offset += 4;
+                    xOffset = 0;
                 }
             }
             if (xOffset != 0)
@@ -56,20 +66,34 @@ namespace Assets.Scripts.UI
         }
 
 
-        protected float DrawItem(SelectionItemTraits item, Transform transform, float offset, float xOffset)
+        protected float DrawItem(SelectionItemTraits item, Transform transform, TokenData token, float offset, float xOffset)
         {
-            Game game = Game.Get();
-            string key = item.GetKey();
+            Vector2 texPos = new Vector2(token.x, token.y);
+            Vector2 texSize = new Vector2(token.width, token.height);
+            Texture2D tex = ContentData.FileToTexture(token.image, texPos, texSize);
+            return DrawItem(item.GetKey(), item.GetColor(), transform, tex, offset, xOffset);
+        }
 
+        protected float DrawItem(string key, Color color, Transform transform, Texture2D tex, float offset, float xOffset)
+        {
             UIElement ui = new UIElement(transform);
             ui.SetButton(delegate { SelectItem(key); });
-            ui.SetBGColor(item.GetColor());
+            ui.SetBGColor(color);
 
-            ui.SetLocation(xOffset, offset, 3.95f, 3.95f);
-            Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
-            Vector2 texSize = new Vector2(game.cd.tokens[key].width, game.cd.tokens[key].height);
-            ui.SetImage(ContentData.FileToTexture(game.cd.tokens[key].image, texPos, texSize));
-            return xOffset + 4;
+            float width = 3.95f;
+            if (tex.height <= tex.width)
+            {
+                ui.SetImage(Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1));
+                ui.SetLocation(xOffset, offset, width, width);
+            }
+            else
+            {
+                width = width * tex.width / tex.height;
+                ui.SetImage(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1));
+                ui.SetLocation(xOffset, offset, width, 3.95f);
+            }
+            return xOffset + width + 0.05f;
         }
+
     }
 }

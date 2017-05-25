@@ -507,7 +507,6 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionList select = new UIWindowSelectionList(SelectImage, SELECT_IMAGE);
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1));

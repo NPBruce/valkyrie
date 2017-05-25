@@ -8,7 +8,6 @@ public class EditorComponentUI : EditorComponentEvent
 {
     QuestData.UI uiComponent;
 
-    EditorSelectionList imageList;
     EditorSelectionList colorList;
 
     UIElementEditable locXUIE;
@@ -283,28 +282,30 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void SetImage()
     {
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, SELECT_IMAGE.Translate());
+        select.AddItem("{NONE}", "");
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry(""));
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
         foreach (KeyValuePair<string, ImageData> kv in Game.Get().cd.images)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "FFG"));
+            select.AddItem(kv.Value);
         }
-        imageList = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
-        imageList.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImage()
+    public void SelectImage(string image)
     {
-        uiComponent.imageName = imageList.selection;
+        uiComponent.imageName = image;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         if (uiComponent.imageName.Length > 0)
