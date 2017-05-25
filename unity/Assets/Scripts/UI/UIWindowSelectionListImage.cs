@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI
 
         protected override void DrawItemList()
         {
+            Game game = Game.Get();
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
@@ -32,11 +33,19 @@ namespace Assets.Scripts.UI
 
                 if (!display) continue;
 
-                xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset, xOffset);
-                if (xOffset > 18)
+                if (game.cd.tokens.ContainsKey(item.GetKey()))
                 {
-                    offset += 4;
+                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset, xOffset);
+                    if (xOffset > 18)
+                    {
+                        offset += 4;
+                        xOffset = 0;
+                    }
+                }
+                else
+                {
                     xOffset = 0;
+                    offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
                 }
             }
             if (xOffset != 0)
@@ -53,20 +62,13 @@ namespace Assets.Scripts.UI
             string key = item.GetKey();
 
             UIElement ui = new UIElement(transform);
-            ui.SetLocation(xOffset, offset, 3.95f, 3.95f);
             ui.SetButton(delegate { SelectItem(key); });
             ui.SetBGColor(item.GetColor());
 
-            if (game.cd.tokens.ContainsKey(key))
-            {
-                Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
-                Vector2 texSize = new Vector2(game.cd.tokens[key].width, game.cd.tokens[key].height);
-                ui.SetImage(ContentData.FileToTexture(game.cd.tokens[key].image, texPos, texSize));
-            }
-            else
-            {
-                ui.SetText(item.GetDisplay(), Color.black);
-            }
+            ui.SetLocation(xOffset, offset, 3.95f, 3.95f);
+            Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
+            Vector2 texSize = new Vector2(game.cd.tokens[key].width, game.cd.tokens[key].height);
+            ui.SetImage(ContentData.FileToTexture(game.cd.tokens[key].image, texPos, texSize));
             return xOffset + 4;
         }
     }
