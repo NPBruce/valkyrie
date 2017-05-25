@@ -110,11 +110,11 @@ namespace Assets.Scripts.UI
             spriteCache[key].width = 3.95f;
             if (tex.height <= tex.width)
             {
-                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1);
+                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             }
             else
             {
-                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
                 spriteCache[key].width = spriteCache[key].width * tex.width / tex.height;
             }
             return DrawItem(key, transform, offset, xOffset);
