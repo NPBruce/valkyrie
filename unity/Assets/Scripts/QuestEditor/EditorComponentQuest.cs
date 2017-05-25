@@ -23,7 +23,6 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditablePaneled authorsUIE;
 
     EditorSelectionList packESL;
-    EditorSelectionList imageESL;
 
     // Quest is a special component with meta data
     public EditorComponentQuest()
@@ -222,25 +221,26 @@ public class EditorComponentQuest : EditorComponent
 
     public void Image()
     {
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
-        list.Add(new EditorSelectionList.SelectionListEntry(""));
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, new StringKey("val", "SELECT_IMAGE"));
+        select.AddItem("{NONE}", "");
 
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        imageESL = new EditorSelectionList(new StringKey("val","SELECT_IMAGE"), list, delegate { SelectImage(); });
-        imageESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImage()
+    public void SelectImage(string image)
     {
-        game.quest.qd.quest.image = imageESL.selection;
+        game.quest.qd.quest.image = image;
         Update();
     }
 
