@@ -34,7 +34,6 @@ public class LogWindow
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         UIElement ui = new UIElement(scrollArea.GetScrollTransform());
         float height = 0;
-        DialogBox db = null;
         if (developerToggle)
         {
             scrollArea.SetLocation(UIScaler.GetHCenter(-18.5f), 0.5f, 21, 24.5f);

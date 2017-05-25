@@ -74,7 +74,7 @@ namespace Assets.Scripts.UI
             return scrollArea.transform;
         }
 
-        public void SetScrollSize(float size)
+        public virtual void SetScrollSize(float size)
         {
             float height = size * UIScaler.GetPixelsPerUnit();
             if (height < scrollBar.GetComponent<RectTransform>().rect.height)
@@ -84,12 +84,12 @@ namespace Assets.Scripts.UI
             scrollArea.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, height);
         }
 
-        public void SetScrollPosition(float pos)
+        public virtual void SetScrollPosition(float pos)
         {
             scrollArea.GetComponent<RectTransform>().anchoredPosition = new Vector2(scrollArea.GetComponent<RectTransform>().anchoredPosition.x, pos + scrollArea.GetComponent<RectTransform>().rect.y);
         }
 
-        public float GetScrollPosition()
+        public virtual float GetScrollPosition()
         {
             return scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollArea.GetComponent<RectTransform>().rect.y;
         }
