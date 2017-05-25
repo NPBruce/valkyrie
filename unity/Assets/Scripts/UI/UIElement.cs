@@ -234,6 +234,26 @@ namespace Assets.Scripts.UI
             return width;
         }
 
+        public static float GetStringHeight(StringKey content, float width)
+        {
+            return GetStringHeight(content.Translate(), width);
+        }
+
+        public static float GetStringHeight(string content, float width)
+        {
+            if (textHeightObj == null)
+            {
+                textHeightObj = new GameObject("TextSizing");
+                textHeightObj.AddComponent<UnityEngine.UI.Text>();
+                RectTransform transform = textHeightObj.GetComponent<RectTransform>();
+                transform.offsetMax = new Vector2((width + (textPaddingDefault * 2)) * UIScaler.GetPixelsPerUnit(), 20000);
+                textHeightObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
+                textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            }
+            textHeightObj.GetComponent<UnityEngine.UI.Text>().text = content;
+            return textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit();
+        }
+
         public bool ObjectDestroyed()
         {
             return bg == null;
