@@ -99,6 +99,13 @@ namespace Assets.Scripts.UI
             bg.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
         }
 
+        public void SetImage(Sprite sprite)
+        {
+            if (sprite == null) return;
+            SetBGColor(Color.white);
+            bg.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+        }
+
 
         public void SetLocation(float x, float y, float width, float height)
         {
