@@ -61,9 +61,13 @@ public class QuestDownload : MonoBehaviour
             return;
         }
 
-        if (download.isDone)
+        if (download.error == null)
         {
             textures.Add(images.Pop(), download.texture);
+        }
+        else
+        {
+            images.Pop();
         }
         if (images.Count > 0)
         {
