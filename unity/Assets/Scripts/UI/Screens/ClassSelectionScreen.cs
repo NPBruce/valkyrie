@@ -101,7 +101,7 @@ namespace Assets.Scripts.UI.Screens
 
             while (scrollArea.Count <= hero)
             {
-                scrollArea.Add(new UIElementScrollVertical());
+                scrollArea.Add(null);
             }
             scrollArea[hero] = new UIElementScrollVertical(Game.HEROSELECT);
             scrollArea[hero].SetLocation(xOffset + 0.25f, yStart, 8.5f, 27 - yStart);
