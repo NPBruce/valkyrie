@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Window with Investigator evade information
 public class HorrorCheck {
@@ -34,9 +35,10 @@ public class HorrorCheck {
             Object.Destroy(go);
 
         string text = horrors[Random.Range(0, horrors.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(null, text,false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
+        ui.SetText(text);
+        new UIElementBorder(ui);
 
         game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 

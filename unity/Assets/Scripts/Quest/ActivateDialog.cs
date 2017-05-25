@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using UnityEngine;
 
 // Window with Monster activation
@@ -25,12 +26,12 @@ public class ActivateDialog {
         Destroyer.Dialog();
 
         // ability box - name header
-        TextButton tb = new TextButton(
-            new Vector2(15, 0.5f), 
-            new Vector2(UIScaler.GetWidthUnits() - 30, 2), 
-            monster.monsterData.name,
-            delegate { new InfoDialog(monster); });
-        tb.ApplyTag(Game.ACTIVATION);
+        UIElement ui = new UIElement(Game.ACTIVATION);
+        ui.SetLocation(15, 0.5f, UIScaler.GetWidthUnits() - 30, 2);
+        ui.SetText(monster.monsterData.name);
+        ui.SetButton(delegate { new InfoDialog(monster); });
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
         DialogBox db = null;
         float offset = 2.5f;
@@ -38,10 +39,10 @@ public class ActivateDialog {
         {
             string effect = monster.currentActivation.effect.Replace("\\n", "\n");
             // ability text
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(null, effect, false));
-            db.AddBorder();
-            db.ApplyTag(Game.ACTIVATION);
+            ui = new UIElement(Game.ACTIVATION);
+            ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
+            ui.SetText(effect);
+            new UIElementBorder(ui);
             offset += 4.5f;
         }
 
@@ -75,20 +76,21 @@ public class ActivateDialog {
         offset += 2;
 
         // Create activation text box
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 7),
-            new StringKey(null, activationText, false));
+        ui = new UIElement(Game.ACTIVATION);
+        ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 7);
+        ui.SetText(activationText);
         if (master && !singleStep)
         {
-            db.AddBorder(Color.red);
+            new UIElementBorder(ui, Color.red);
         }
         else
         {
-            db.AddBorder();
+            new UIElementBorder(ui);
         }
-        db.ApplyTag(Game.ACTIVATION);
 
         offset += 7.5f;
 
+        TextButton tb = null;
         // Create finished button
         if (singleStep)
         {

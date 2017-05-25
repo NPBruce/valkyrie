@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Window with Investigator evade information
 public class InvestigatorEvade {
@@ -43,9 +44,10 @@ public class InvestigatorEvade {
     public void Draw()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(null, text, false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
+        ui.SetText(text);
+        new UIElementBorder(ui);
 
         if (m.damage == m.GetHealth())
         {
