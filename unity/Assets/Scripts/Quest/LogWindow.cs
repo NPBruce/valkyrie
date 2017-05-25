@@ -31,30 +31,26 @@ public class LogWindow
         }
         log.Trim('\n');
 
-        DialogBox db = null;
+        UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+        float height = 0;
         if (developerToggle)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-18f), 0.5f), new Vector2(20, 24.5f), 
-                new StringKey(null, log, false), Color.black, new Color(1, 1, 1, 0.9f));
+            scrollArea.SetLocation(UIScaler.GetHCenter(-18.5f), 0.5f, 21, 24.5f);
+            height = UIElement.GetStringHeight(log, 20);
+            ui.SetLocation(0, 0, 20, height);
         }
         else
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 24.5f), 
-                new StringKey(null, log, false), Color.black, new Color(1, 1, 1, 0.9f));
+            height = UIElement.GetStringHeight(log, 28);
+            scrollArea.SetLocation(UIScaler.GetHCenter(-14.5f), 0.5f, 29, 24.5f);
+            ui.SetLocation(0, 0, 28, height);
         }
+        ui.SetText(log, Color.black);
+        ui.SetBGColor(Color.white);
 
-        db.AddBorder();
-        // This material works for the mask, but only renders in black
-        db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
-        scrollRect.content = db.textObj.GetComponent<RectTransform>();
-        scrollRect.horizontal = false;
-        RectTransform textRect = db.textObj.GetComponent<RectTransform>();
-        textRect.sizeDelta = new Vector2(textRect.rect.width, db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight);
-        scrollRect.verticalNormalizedPosition = 0f;
-        scrollRect.scrollSensitivity = 27f;
-
-        UnityEngine.UI.Mask mask = db.background.AddComponent<UnityEngine.UI.Mask>();
+        new UIElementBorder(scrollArea);
+        scrollArea.SetScrollSize(height);
 
         new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
 
@@ -67,7 +63,7 @@ public class LogWindow
     public void DrawVarList()
     {
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
-        scrollArea.SetLocation(UIScaler.GetHCenter(2f), 0.5f, 16, 24.5f);
+        scrollArea.SetLocation(UIScaler.GetHCenter(2.5f), 0.5f, 16, 24.5f);
         new UIElementBorder(scrollArea);
 
         // List of vars

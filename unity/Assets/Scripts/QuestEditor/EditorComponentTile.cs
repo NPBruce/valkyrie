@@ -69,7 +69,7 @@ public class EditorComponentTile : EditorComponent
             return;
         }
         Game game = Game.Get();
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectTileSide, new StringKey("val", "SELECT", CommonStringKeys.TILE));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectTileSide, new StringKey("val", "SELECT", CommonStringKeys.TILE));
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
@@ -89,7 +89,10 @@ public class EditorComponentTile : EditorComponent
             {
                 select.AddItem(kv.Value, Color.grey);
             }
-            select.AddItem(kv.Value);
+            else
+            {
+                select.AddItem(kv.Value);
+            }
         }
         select.Draw();
     }

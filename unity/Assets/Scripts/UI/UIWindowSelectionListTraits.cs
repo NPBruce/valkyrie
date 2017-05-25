@@ -161,11 +161,24 @@ namespace Assets.Scripts.UI
                 traitScrollArea.SetScrollPosition(scrollPos);
             }
 
+            DrawItemList();
+
+            // Cancel button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetButton(delegate { Destroyer.Dialog(); });
+            new UIElementBorder(ui);
+        }
+
+        protected virtual void DrawItemList()
+        {
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
 
-            offset = 0;
+            float offset = 0;
             foreach (SelectionItemTraits item in traitItems)
             {
                 bool display = true;
@@ -176,28 +189,23 @@ namespace Assets.Scripts.UI
 
                 if (!display) continue;
 
-                // Print the name but select the key
-                string key = item.GetKey();
-                ui = new UIElement(itemScrollArea.GetScrollTransform());
-                ui.SetLocation(0, offset, 20, 1);
-                if (key != null)
-                {
-                    ui.SetButton(delegate { SelectItem(key); });
-                }
-                ui.SetBGColor(item.GetColor());
-                ui.SetText(item.GetDisplay(), Color.black);
-                offset += 1.05f;
+                offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
             }
-
             itemScrollArea.SetScrollSize(offset);
+        }
 
-            // Cancel button
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
-            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-            ui.SetText(CommonStringKeys.CANCEL);
-            ui.SetButton(delegate { Destroyer.Dialog(); });
-            new UIElementBorder(ui);
+        protected virtual float DrawItem(SelectionItemTraits item, Transform transform, float offset)
+        {
+            string key = item.GetKey();
+            UIElement ui = new UIElement(transform);
+            ui.SetLocation(0, offset, 20, 1);
+            if (key != null)
+            {
+                ui.SetButton(delegate { SelectItem(key); });
+            }
+            ui.SetBGColor(item.GetColor());
+            ui.SetText(item.GetDisplay(), Color.black);
+            return offset + 1.05f;
         }
 
         protected void SelectTrait(TraitGroup group, string trait)

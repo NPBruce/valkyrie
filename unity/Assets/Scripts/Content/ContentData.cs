@@ -604,12 +604,18 @@ public class ContentData {
             if (!puzzles.ContainsKey(name))
             {
                 puzzles.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (puzzles[name].priority < d.priority)
             {
                 puzzles.Remove(name);
                 puzzles.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (puzzles[name].priority == d.priority)
+            {
+                puzzles[name].sets.Add(packID);
             }
         }
 
@@ -624,12 +630,18 @@ public class ContentData {
             if (!images.ContainsKey(name))
             {
                 images.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (images[name].priority < d.priority)
             {
                 images.Remove(name);
                 images.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (images[name].priority == d.priority)
+            {
+                images[name].sets.Add(packID);
             }
         }
 

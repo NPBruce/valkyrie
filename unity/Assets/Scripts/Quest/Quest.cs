@@ -603,7 +603,7 @@ public class Quest
             GenerateItemSelection();
         }
 
-        itemInspect = saveData.Get("SelectItem");
+        itemInspect = saveData.Get("ItemInspect");
         if (itemInspect == null)
         {
             itemInspect = new Dictionary<string, string>();

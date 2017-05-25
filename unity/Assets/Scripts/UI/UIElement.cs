@@ -99,6 +99,13 @@ namespace Assets.Scripts.UI
             bg.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
         }
 
+        public void SetImage(Sprite sprite)
+        {
+            if (sprite == null) return;
+            SetBGColor(Color.white);
+            bg.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+        }
+
 
         public void SetLocation(float x, float y, float width, float height)
         {
@@ -232,6 +239,26 @@ namespace Assets.Scripts.UI
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
             float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) +(textPaddingDefault * 2);
             return width;
+        }
+
+        public static float GetStringHeight(StringKey content, float width)
+        {
+            return GetStringHeight(content.Translate(), width);
+        }
+
+        public static float GetStringHeight(string content, float width)
+        {
+            if (textHeightObj == null)
+            {
+                textHeightObj = new GameObject("TextSizing");
+                textHeightObj.AddComponent<UnityEngine.UI.Text>();
+                RectTransform transform = textHeightObj.GetComponent<RectTransform>();
+                transform.offsetMax = new Vector2((width + (textPaddingDefault * 2)) * UIScaler.GetPixelsPerUnit(), 20000);
+                textHeightObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
+                textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            }
+            textHeightObj.GetComponent<UnityEngine.UI.Text>().text = content;
+            return textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit();
         }
 
         public bool ObjectDestroyed()

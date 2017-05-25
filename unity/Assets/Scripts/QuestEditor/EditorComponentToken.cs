@@ -76,7 +76,7 @@ public class EditorComponentToken : EditorComponentEvent
             return;
         }
         Game game = Game.Get();
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
 
         select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
 
