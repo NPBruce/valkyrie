@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class QuestMonster : MonsterData
 {
     public bool useMonsterTypeActivations = false;
+    public string horrorEvent = "";
     public string derivedType = "";
 
     // Construct with quest data

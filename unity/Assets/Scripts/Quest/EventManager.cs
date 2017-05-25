@@ -12,6 +12,11 @@ public class EventManager
     // A dictionary of available events
     public Dictionary<string, Event> events;
 
+    // events should display monster image when not null
+    public Quest.Monster monsterImage;
+    // events should display monster health if true
+    public bool monsterHealth = false;
+
     // Stack of events to be triggered
     public Stack<Event> eventStack;
 
@@ -299,6 +304,14 @@ public class EventManager
         }
         else
         {
+            if (monsterImage != null)
+            {
+                MonsterDialogMoM.DrawMonster(monsterImage);
+                if (monsterHealth)
+                {
+                    MonsterDialogMoM.DrawMonsterHealth(monsterImage; delegate { ;});
+                }
+            }
             new DialogWindow(e);
         }
     }
@@ -402,6 +415,11 @@ public class EventManager
                 // Add the first valid event
                 game.quest.eManager.QueueEvent(enabledEvents[0], false);
             }
+        }
+        else
+        {
+            monsterImage = null
+            monsterHealth = false;
         }
 
         // Add any custom triggered events

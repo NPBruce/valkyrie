@@ -9,6 +9,22 @@ public class HorrorCheck {
     public HorrorCheck(Quest.Monster m)
     {
         Game game = Game.Get();
+
+        QuestMonster qm = m as QuestMonster;
+        if (qm != null && game.quest.qd.components.ContainsKey(qm.horrorEvent))
+        {
+            game.quest.eManager.monsterImage = m;
+            game.quest.eManager.QueueEvent(qm.horrorEvent);
+        }
+        else
+        {
+            PickHorror(m);
+        }
+    }
+
+    public void PickHorror(Quest.Monster m)
+    {
+        Game game = Game.Get();
         List<HorrorData> horrors = new List<HorrorData>();
         foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
         {
@@ -30,11 +46,17 @@ public class HorrorCheck {
             }
         }
 
+        if (horrors.Count != 0) Draw(horrors[Random.Range(0, horrors.Count)]);
+    }
+
+    protected void Draw(HorrorData horror)
+    {
+        Game game = Game.Get();
         // If a dialog window is open we force it closed (this shouldn't happen)
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        string text = horrors[Random.Range(0, horrors.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
+        string text = horror.text.Translate().Replace("{0}", m.monsterData.name.Translate());
         UIElement ui = new UIElement();
         ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
         ui.SetText(text);
