@@ -23,10 +23,10 @@ public class EditorComponentSpawn : EditorComponentEvent
     
     QuestData.Spawn spawnComponent;
 
-    DialogBoxEditable uniqueTitleDBE;
-    PaneledDialogBoxEditable uniqueTextDBE;
-    DialogBoxEditable healthDBE;
-    DialogBoxEditable healthHeroDBE;
+    UIElementEditable uniqueTitleUIE;
+    UIElementEditablePaneled uniqueTextUIE;
+    UIElementEditable healthUIE;
+    UIElementEditable healthHeroUIE;
 
     EditorSelectionList monsterTraitESL;
     EditorSelectionList monsterPlaceESL;
@@ -85,26 +85,23 @@ public class EditorComponentSpawn : EditorComponentEvent
                 ui.SetLocation(0, offset, 5, 1);
                 ui.SetText(new StringKey("val", "X_COLON", UNIQUE_TITLE));
 
-                uniqueTitleDBE = new DialogBoxEditable(
-                    new Vector2(5, offset), new Vector2(14.5f, 1),
-                    spawnComponent.uniqueTitle.Translate(), false, 
-                    delegate { UpdateUniqueTitle(); });
-                uniqueTitleDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-                uniqueTitleDBE.ApplyTag(Game.EDITOR);
-                uniqueTitleDBE.AddBorder();
+                uniqueTitleUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+                uniqueTitleUIE.SetLocation(5, offset, 14.5f, 1);
+                uniqueTitleUIE.SetText(spawnComponent.uniqueTitle.Translate());
+                uniqueTitleUIE.SetSingleLine();
+                uniqueTitleUIE.SetButton(delegate { UpdateUniqueTitle(); });
+                new UIElementBorder(uniqueTitleUIE);
                 offset += 2;
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(0, offset++, 20, 1);
                 ui.SetText(new StringKey("val", "X_COLON", UNIQUE_INFO));
 
-                uniqueTextDBE = new PaneledDialogBoxEditable(
-                    new Vector2(0.5f, offset), new Vector2(19, 8), 
-                spawnComponent.uniqueText.Translate(),
-                delegate { UpdateUniqueText(); });
-                uniqueTextDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-                uniqueTextDBE.ApplyTag(Game.EDITOR);
-                uniqueTextDBE.AddBorder();
+                uniqueTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+                uniqueTextUIE.SetLocation(0.5f, offset, 19, 8);
+                uniqueTextUIE.SetText(spawnComponent.uniqueText.Translate());
+                uniqueTextUIE.SetButton(delegate { UpdateUniqueText(); });
+                new UIElementBorder(uniqueTextUIE);
                 offset += 9;
             }
         }
@@ -113,23 +110,23 @@ public class EditorComponentSpawn : EditorComponentEvent
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", HEALTH));
 
-        // Dumbers dont need translation
-        healthDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1),
-            spawnComponent.uniqueHealthBase.ToString(), false, delegate { UpdateHealth(); });
-        healthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        healthDBE.ApplyTag(Game.EDITOR);
-        healthDBE.AddBorder();
+        healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        healthUIE.SetLocation(5, offset, 3, 1);
+        healthUIE.SetText(spawnComponent.uniqueHealthBase.ToString());
+        healthUIE.SetSingleLine();
+        healthUIE.SetButton(delegate { UpdateHealth(); });
+        new UIElementBorder(healthUIE);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 7, 1);
         ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
 
-        // Numbers dont need translation
-        healthHeroDBE = new DialogBoxEditable(new Vector2(15, offset), new Vector2(3, 1),
-            spawnComponent.uniqueHealthHero.ToString(), false, delegate { UpdateHealthHero(); });
-        healthHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        healthHeroDBE.ApplyTag(Game.EDITOR);
-        healthHeroDBE.AddBorder();
+        healthHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        healthHeroUIE.SetLocation(15, offset, 3, 1);
+        healthHeroUIE.SetText(spawnComponent.uniqueHealthHero.ToString());
+        healthHeroUIE.SetSingleLine();
+        healthHeroUIE.SetButton(delegate { UpdateHealthHero(); });
+        new UIElementBorder(healthHeroUIE);
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -311,29 +308,29 @@ public class EditorComponentSpawn : EditorComponentEvent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.Text, out spawnComponent.uniqueHealthBase);
+        float.TryParse(healthUIE.GetText(), out spawnComponent.uniqueHealthBase);
         Update();
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.Text, out spawnComponent.uniqueHealthHero);
+        float.TryParse(healthHeroUIE.GetText(), out spawnComponent.uniqueHealthHero);
         Update();
     }
 
     public void UpdateUniqueTitle()
     {
-        if (uniqueTitleDBE.CheckTextChangedAndNotEmpty())
+        if (!uniqueTitleUIE.Empty() && uniqueTitleUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleUIE.GetText());
         }
     }
 
     public void UpdateUniqueText()
     {
-        if (uniqueTextDBE.CheckTextChangedAndNotEmpty())
+        if (!uniqueTextUIE.Empty() && uniqueTextUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextUIE.GetText());
         }
     }
 

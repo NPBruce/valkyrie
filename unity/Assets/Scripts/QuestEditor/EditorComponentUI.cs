@@ -7,14 +7,16 @@ using Assets.Scripts.UI;
 public class EditorComponentUI : EditorComponentEvent
 {
     QuestData.UI uiComponent;
+
     EditorSelectionList imageList;
-    DialogBoxEditable locXDBE;
-    DialogBoxEditable locYDBE;
-    DialogBoxEditable sizeDBE;
-    DialogBoxEditable aspectDBE;
-    PaneledDialogBoxEditable textDBE;
-    DialogBoxEditable textSizeDBE;
     EditorSelectionList colorList;
+
+    UIElementEditable locXUIE;
+    UIElementEditable locYUIE;
+    UIElementEditable sizeUIE;
+    UIElementEditable aspectUIE;
+    UIElementEditable textSizeUIE;
+    UIElementEditablePaneled textUIE;
 
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
@@ -89,32 +91,35 @@ public class EditorComponentUI : EditorComponentEvent
         ui.SetLocation(0, offset, 2, 1);
         ui.SetText("X:");
 
-        locXDBE = new DialogBoxEditable(new Vector2(2, offset), new Vector2(3, 1),
-            uiComponent.location.x.ToString(), false, delegate { UpdateNumbers(); });
-        locXDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        locXDBE.ApplyTag(Game.EDITOR);
-        locXDBE.AddBorder();
+        locXUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        locXUIE.SetLocation(2, offset, 3, 1);
+        locXUIE.SetText(uiComponent.location.x.ToString());
+        locXUIE.SetSingleLine();
+        locXUIE.SetButton(delegate { UpdateNumbers(); });
+        new UIElementBorder(locXUIE);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 2, 1);
         ui.SetText("Y:");
 
-        locYDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
-            uiComponent.location.y.ToString(), false, delegate { UpdateNumbers(); });
-        locYDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        locYDBE.ApplyTag(Game.EDITOR);
-        locYDBE.AddBorder();
+        locYUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        locYUIE.SetLocation(7, offset, 3, 1);
+        locYUIE.SetText(uiComponent.location.y.ToString());
+        locYUIE.SetSingleLine();
+        locYUIE.SetButton(delegate { UpdateNumbers(); });
+        new UIElementBorder(locYUIE);
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
 
-        sizeDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1),
-            uiComponent.size.ToString(), false, delegate { UpdateNumbers(); });
-        sizeDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        sizeDBE.ApplyTag(Game.EDITOR);
-        sizeDBE.AddBorder();
+        sizeUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        sizeUIE.SetLocation(5, offset, 3, 1);
+        sizeUIE.SetText(uiComponent.size.ToString());
+        sizeUIE.SetSingleLine();
+        sizeUIE.SetButton(delegate { UpdateNumbers(); });
+        new UIElementBorder(sizeUIE);
 
         if (uiComponent.imageName.Length == 0)
         {
@@ -122,31 +127,31 @@ public class EditorComponentUI : EditorComponentEvent
             ui.SetLocation(10, offset, 5, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ASPECT")));
 
-            aspectDBE = new DialogBoxEditable(new Vector2(15, offset), new Vector2(3, 1),
-                uiComponent.aspect.ToString(), false, delegate { UpdateNumbers(); });
-            aspectDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            aspectDBE.ApplyTag(Game.EDITOR);
-            aspectDBE.AddBorder();
+            aspectUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            aspectUIE.SetLocation(15, offset, 3, 1);
+            aspectUIE.SetText(uiComponent.aspect.ToString());
+            aspectUIE.SetSingleLine();
+            aspectUIE.SetButton(delegate { UpdateNumbers(); });
+            new UIElementBorder(aspectUIE);
             offset += 2;
 
-            textDBE = new PaneledDialogBoxEditable(
-                new Vector2(0.5f, offset), new Vector2(19, 8),
-                uiComponent.uiText.Translate(true),
-                delegate { UpdateUIText(); });
-            textDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            textDBE.ApplyTag(Game.EDITOR);
-            textDBE.AddBorder();
+            textUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+            textUIE.SetLocation(0.5f, offset, 19, 8);
+            textUIE.SetText(uiComponent.uiText.Translate(true));
+            textUIE.SetButton(delegate { UpdateUIText(); });
+            new UIElementBorder(textUIE);
             offset += 9;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 7, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TEXT_SIZE")));
 
-            textSizeDBE = new DialogBoxEditable(new Vector2(7, offset), new Vector2(3, 1),
-                uiComponent.textSize.ToString(), false, delegate { UpdateTextSize(); });
-            textSizeDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            textSizeDBE.ApplyTag(Game.EDITOR);
-            textSizeDBE.AddBorder();
+            textSizeUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            textSizeUIE.SetLocation(7, offset, 3, 1);
+            textSizeUIE.SetText(uiComponent.textSize.ToString());
+            textSizeUIE.SetSingleLine();
+            textSizeUIE.SetButton(delegate { UpdateTextSize(); });
+            new UIElementBorder(textSizeUIE);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(10, offset, 4.5f, 1);
@@ -334,21 +339,21 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void UpdateNumbers()
     {
-        if (!locXDBE.Text.Equals(""))
+        if (!locXUIE.GetText().Equals(""))
         {
-            float.TryParse(locXDBE.Text, out uiComponent.location.x);
+            float.TryParse(locXUIE.GetText(), out uiComponent.location.x);
         }
-        if (!locYDBE.Text.Equals(""))
+        if (!locYUIE.GetText().Equals(""))
         {
-            float.TryParse(locYDBE.Text, out uiComponent.location.y);
+            float.TryParse(locYUIE.GetText(), out uiComponent.location.y);
         }
-        if (!sizeDBE.Text.Equals(""))
+        if (!sizeUIE.GetText().Equals(""))
         {
-            float.TryParse(sizeDBE.Text, out uiComponent.size);
+            float.TryParse(sizeUIE.GetText(), out uiComponent.size);
         }
-        if (aspectDBE != null && !aspectDBE.Text.Equals(""))
+        if (aspectUIE != null && !aspectUIE.GetText().Equals(""))
         {
-            float.TryParse(aspectDBE.Text, out uiComponent.aspect);
+            float.TryParse(aspectUIE.GetText(), out uiComponent.aspect);
         }
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
@@ -359,9 +364,9 @@ public class EditorComponentUI : EditorComponentEvent
     {
         Game game = Game.Get();
 
-        if (textDBE.CheckTextChangedAndNotEmpty())
+        if (!textUIE.Empty() && textUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(uiComponent.uitext_key, textDBE.Text);
+            LocalizationRead.updateScenarioText(uiComponent.uitext_key, textUIE.GetText());
         }
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
@@ -370,7 +375,7 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void UpdateTextSize()
     {
-        float.TryParse(textSizeDBE.Text, out uiComponent.textSize);
+        float.TryParse(textSizeUIE.GetText(), out uiComponent.textSize);
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         Update();

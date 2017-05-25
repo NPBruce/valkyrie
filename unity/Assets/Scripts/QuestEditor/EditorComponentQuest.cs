@@ -14,13 +14,14 @@ public class EditorComponentQuest : EditorComponent
 
     // When a component has editable boxes they use these, so that the value can be read
     public UIElementEditable nameUIE;
-    public DialogBoxEditable minHeroDBE;
-    public DialogBoxEditable maxHeroDBE;
-    public DialogBoxEditable difficultyDBE;
-    public DialogBoxEditable minLengthDBE;
-    public DialogBoxEditable maxLengthDBE;
+    public UIElementEditable minHeroUIE;
+    public UIElementEditable maxHeroUIE;
+    public UIElementEditable difficultyUIE;
+    public UIElementEditable minLengthUIE;
+    public UIElementEditable maxLengthUIE;
     public UIElementEditablePaneled descriptionUIE;
     public UIElementEditablePaneled authorsUIE;
+
     EditorSelectionList packESL;
     EditorSelectionList imageESL;
 
@@ -128,64 +129,59 @@ public class EditorComponentQuest : EditorComponent
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", game.gameType.HeroesName())));
-        
-        minHeroDBE = new DialogBoxEditable(
-            new Vector2(7.5f, offset), new Vector2(2, 1), 
-            game.quest.qd.quest.minHero.ToString(), false, 
-            delegate { UpdateMinHero(); });
-        minHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        minHeroDBE.ApplyTag(Game.EDITOR);
-        minHeroDBE.AddBorder();
+
+        minHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        minHeroUIE.SetLocation(7.5f, offset, 2, 1);
+        minHeroUIE.SetText(game.quest.qd.quest.minHero.ToString());
+        minHeroUIE.SetSingleLine();
+        minHeroUIE.SetButton(delegate { UpdateMinHero(); });
+        new UIElementBorder(minHeroUIE);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9.5f, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", game.gameType.HeroesName())));
-        
-        maxHeroDBE = new DialogBoxEditable(
-            new Vector2(17, offset), new Vector2(2, 1), 
-            game.quest.qd.quest.maxHero.ToString(), false, 
-            delegate { UpdateMaxHero(); });
-        maxHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        maxHeroDBE.ApplyTag(Game.EDITOR);
-        maxHeroDBE.AddBorder();
+
+        maxHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        maxHeroUIE.SetLocation(17, offset, 2, 1);
+        maxHeroUIE.SetText(game.quest.qd.quest.maxHero.ToString());
+        maxHeroUIE.SetSingleLine();
+        maxHeroUIE.SetButton(delegate { UpdateMaxHero(); });
+        new UIElementBorder(maxHeroUIE);
         offset +=2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
-        
-        minLengthDBE = new DialogBoxEditable(
-            new Vector2(7.5f, offset), new Vector2(2, 1), 
-            game.quest.qd.quest.lengthMin.ToString(), false, 
-            delegate { UpdateMinLength(); });
-        minLengthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        minLengthDBE.ApplyTag(Game.EDITOR);
-        minLengthDBE.AddBorder();
+
+        minLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        minLengthUIE.SetLocation(7.5f, offset, 2, 1);
+        minLengthUIE.SetText(game.quest.qd.quest.lengthMin.ToString());
+        minLengthUIE.SetSingleLine();
+        minLengthUIE.SetButton(delegate { UpdateMinLength(); });
+        new UIElementBorder(minLengthUIE);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9.5f, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
-        
-        maxLengthDBE = new DialogBoxEditable(
-            new Vector2(17f, offset), new Vector2(2, 1), 
-            game.quest.qd.quest.lengthMax.ToString(), false, 
-            delegate { UpdateMaxLength(); });
-        maxLengthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        maxLengthDBE.ApplyTag(Game.EDITOR);
-        maxLengthDBE.AddBorder();
+
+        maxLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        maxLengthUIE.SetLocation(17, offset, 2, 1);
+        maxLengthUIE.SetText(game.quest.qd.quest.lengthMax.ToString());
+        maxLengthUIE.SetSingleLine();
+        maxLengthUIE.SetButton(delegate { UpdateMaxLength(); });
+        new UIElementBorder(maxLengthUIE);
         offset +=2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
-        
-        difficultyDBE = new DialogBoxEditable(
-            new Vector2(7.5f, offset), new Vector2(3, 1), 
-            game.quest.qd.quest.difficulty.ToString(), false, 
-            delegate { UpdateDifficulty(); });
-        difficultyDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        difficultyDBE.ApplyTag(Game.EDITOR);
-        difficultyDBE.AddBorder();
+
+        difficultyUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        difficultyUIE.SetLocation(7.5f, offset, 3, 1);
+        difficultyUIE.SetText(game.quest.qd.quest.difficulty.ToString());
+        difficultyUIE.SetSingleLine();
+        difficultyUIE.SetButton(delegate { UpdateDifficulty(); });
+        new UIElementBorder(difficultyUIE);
         offset +=2;
 
         return offset;
@@ -332,7 +328,7 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateMinHero()
     {
-        int.TryParse(minHeroDBE.Text, out game.quest.qd.quest.minHero);
+        int.TryParse(minHeroUIE.GetText(), out game.quest.qd.quest.minHero);
         if (game.quest.qd.quest.minHero < 1)
         {
             game.quest.qd.quest.minHero = 1;
@@ -342,7 +338,7 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateMaxHero()
     {
-        int.TryParse(maxHeroDBE.Text, out game.quest.qd.quest.maxHero);
+        int.TryParse(maxHeroUIE.GetText(), out game.quest.qd.quest.maxHero);
         if (game.quest.qd.quest.maxHero > game.gameType.MaxHeroes())
         {
             game.quest.qd.quest.maxHero = game.gameType.MaxHeroes();
@@ -352,19 +348,19 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateMinLength()
     {
-        int.TryParse(minLengthDBE.Text, out game.quest.qd.quest.lengthMin);
+        int.TryParse(minLengthUIE.GetText(), out game.quest.qd.quest.lengthMin);
         Update();
     }
 
     public void UpdateMaxLength()
     {
-        int.TryParse(maxLengthDBE.Text, out game.quest.qd.quest.lengthMax);
+        int.TryParse(maxLengthUIE.GetText(), out game.quest.qd.quest.lengthMax);
         Update();
     }
 
     public void UpdateDifficulty()
     {
-        float.TryParse(difficultyDBE.Text, out game.quest.qd.quest.difficulty);
+        float.TryParse(difficultyUIE.GetText(), out game.quest.qd.quest.difficulty);
         if (game.quest.qd.quest.difficulty > 1)
         {
             game.quest.qd.quest.difficulty = 1;
