@@ -25,6 +25,7 @@ public class Destroyer {
     public static void Destroy()
     {
         Resources.UnloadUnusedAssets();
+        ContentData.textureCache = null;
         // Clean up everything marked as 'dialog'
         Dialog();
 

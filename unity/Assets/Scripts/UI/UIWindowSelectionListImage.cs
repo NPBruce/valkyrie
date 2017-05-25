@@ -17,6 +17,71 @@ namespace Assets.Scripts.UI
         {
         }
 
+        override public void Draw()
+        {
+            GenerateSpriteCache();
+            base.Draw();
+        }
+
+        protected void GenerateSpriteCache()
+        {
+            foreach (SelectionItem item in items)
+            {
+                float aspect = 0;
+                Texture2D tex = GetTexture(item.GetKey(), out aspect);
+                if (tex == null) continue;
+
+                ItemDraw spriteData = new ItemDraw();
+                spriteData.color = item.GetColor();
+                spriteData.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+
+                spriteData.height = 3.95f;
+                spriteData.width = spriteData.height * tex.width / tex.height;
+                if (aspect != 0)
+                {
+                    spriteData.width = spriteData.height * aspect;
+                }
+                if (spriteData.width > 20)
+                {
+                    spriteData.width = 20;
+                    spriteData.height = spriteData.width * tex.height / tex.width;
+                }
+                spriteCache.Add(item.GetKey(), spriteData);
+            }
+        }
+
+        protected Texture2D GetTexture(string key, out float aspect)
+        {
+            Game game = Game.Get();
+            aspect = 0;
+            if (game.cd.tokens.ContainsKey(key))
+            {
+                Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
+                Vector2 texSize = new Vector2(game.cd.tokens[key].width, game.cd.tokens[key].height);
+                return ContentData.FileToTexture(game.cd.tokens[key].image, texPos, texSize);
+            }
+            else if (game.cd.puzzles.ContainsKey(key))
+            {
+                return ContentData.FileToTexture(game.cd.puzzles[key].image);
+            }
+            else if (game.cd.images.ContainsKey(key))
+            {
+                Vector2 texPos = new Vector2(game.cd.images[key].x, game.cd.images[key].y);
+                Vector2 texSize = new Vector2(game.cd.images[key].width, game.cd.images[key].height);
+                return ContentData.FileToTexture(game.cd.images[key].image, texPos, texSize);
+            }
+            else if (game.cd.tileSides.ContainsKey(key))
+            {
+                aspect = game.cd.tileSides[key].aspect;
+                return ContentData.FileToTexture(game.cd.tileSides[key].image);
+            }
+            else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + key))
+            {
+                return ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + key);
+            }
+            return null;
+        }
+
         protected override void DrawItemList()
         {
             Game game = Game.Get();
@@ -38,27 +103,13 @@ namespace Assets.Scripts.UI
 
                 if (spriteCache.ContainsKey(item.GetKey()))
                 {
+                    if (20 - xOffset < spriteCache[item.GetKey()].width)
+                    {
+                        offset += 4;
+                        xOffset = 0;
+                    }
+
                     xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset);
-                }
-                else if (game.cd.tokens.ContainsKey(item.GetKey()))
-                {
-                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.tokens[item.GetKey()], offset, xOffset);
-                }
-                else if (game.cd.puzzles.ContainsKey(item.GetKey()))
-                {
-                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.puzzles[item.GetKey()], offset, xOffset);
-                }
-                else if (game.cd.images.ContainsKey(item.GetKey()))
-                {
-                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.images[item.GetKey()], offset, xOffset);
-                }
-                else if (game.cd.tileSides.ContainsKey(item.GetKey()))
-                {
-                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.tileSides[item.GetKey()], offset, xOffset);
-                }
-                else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + item.GetKey()))
-                {
-                    xOffset = DrawItem(item.GetKey(), item.GetColor(), itemScrollArea.GetScrollTransform(), ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + item.GetKey()), offset, xOffset);
                 }
                 else
                 {
@@ -66,58 +117,12 @@ namespace Assets.Scripts.UI
                     xOffset = 0;
                     offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
                 }
-
-                if (xOffset > 16)
-                {
-                    offset += 4;
-                    xOffset = 0;
-                }
             }
             if (xOffset != 0)
             {
                 offset += 4;
             }
             itemScrollArea.SetScrollSize(offset);
-        }
-
-        protected float DrawItem(SelectionItemTraits item, Transform transform, PuzzleData puzzle, float offset, float xOffset)
-        {
-            return DrawItem(item.GetKey(), item.GetColor(), transform, ContentData.FileToTexture(puzzle.image), offset, xOffset);
-        }
-
-        protected float DrawItem(SelectionItemTraits item, Transform transform, TokenData token, float offset, float xOffset)
-        {
-            Vector2 texPos = new Vector2(token.x, token.y);
-            Vector2 texSize = new Vector2(token.width, token.height);
-            Texture2D tex = ContentData.FileToTexture(token.image, texPos, texSize);
-            return DrawItem(item.GetKey(), item.GetColor(), transform, tex, offset, xOffset);
-        }
-
-        protected float DrawItem(SelectionItemTraits item, Transform transform, TileSideData tile, float offset, float xOffset)
-        {
-            Texture2D tex = ContentData.FileToTexture(tile.image);
-            return DrawItem(item.GetKey(), item.GetColor(), transform, tex, offset, xOffset);
-        }
-
-        protected float DrawItem(string key, Color color, Transform transform, Texture2D tex, float offset, float xOffset)
-        {
-            UIElement ui = new UIElement(transform);
-            ui.SetButton(delegate { SelectItem(key); });
-            ui.SetBGColor(color);
-
-            spriteCache.Add(key, new ItemDraw());
-
-            spriteCache[key].width = 3.95f;
-            if (tex.height <= tex.width)
-            {
-                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1);
-            }
-            else
-            {
-                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-                spriteCache[key].width = spriteCache[key].width * tex.width / tex.height;
-            }
-            return DrawItem(key, transform, offset, xOffset);
         }
 
         protected float DrawItem(string key, Transform transform, float offset, float xOffset)
@@ -135,6 +140,7 @@ namespace Assets.Scripts.UI
             public Sprite sprite;
             public Color color;
             public float width;
+            public float height;
         }
     }
 }

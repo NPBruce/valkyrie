@@ -49,7 +49,7 @@ namespace Assets.Scripts.UI
 
             scrollRect.content = scrollArea.GetComponent<RectTransform>(); ;
             scrollRect.horizontal = false;
-            scrollRect.scrollSensitivity = 27f;
+            scrollRect.scrollSensitivity = 40f;
         }
 
         public override void SetLocationPixels(float x, float y, float width, float height)
