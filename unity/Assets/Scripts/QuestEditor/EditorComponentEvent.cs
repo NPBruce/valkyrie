@@ -712,7 +712,7 @@ public class EditorComponentEvent : EditorComponent
         }
         Game game = Game.Get();
 
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventAudio, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListAudio(SelectEventAudio, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 
@@ -762,7 +762,7 @@ public class EditorComponentEvent : EditorComponent
         }
         Game game = Game.Get();
 
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectMusic(index, s); }, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListAudio(delegate(string s) { SelectMusic(index, s); }, new StringKey("val", "SELECT", new StringKey("val", "AUDIO")));
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 

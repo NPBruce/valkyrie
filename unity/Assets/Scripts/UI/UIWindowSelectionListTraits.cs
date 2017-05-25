@@ -176,17 +176,7 @@ namespace Assets.Scripts.UI
 
                 if (!display) continue;
 
-                // Print the name but select the key
-                string key = item.GetKey();
-                ui = new UIElement(itemScrollArea.GetScrollTransform());
-                ui.SetLocation(0, offset, 20, 1);
-                if (key != null)
-                {
-                    ui.SetButton(delegate { SelectItem(key); });
-                }
-                ui.SetBGColor(item.GetColor());
-                ui.SetText(item.GetDisplay(), Color.black);
-                offset += 1.05f;
+                offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
             }
 
             itemScrollArea.SetScrollSize(offset);
@@ -198,6 +188,20 @@ namespace Assets.Scripts.UI
             ui.SetText(CommonStringKeys.CANCEL);
             ui.SetButton(delegate { Destroyer.Dialog(); });
             new UIElementBorder(ui);
+        }
+
+        protected virtual float DrawItem(SelectionItemTraits item, Transform transform, float offset)
+        {
+            string key = item.GetKey();
+            UIElement ui = new UIElement(transform);
+            ui.SetLocation(0, offset, 20, 1);
+            if (key != null)
+            {
+                ui.SetButton(delegate { SelectItem(key); });
+            }
+            ui.SetBGColor(item.GetColor());
+            ui.SetText(item.GetDisplay(), Color.black);
+            return offset + 1.05f;
         }
 
         protected void SelectTrait(TraitGroup group, string trait)
