@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
 
@@ -6,6 +7,8 @@ namespace Assets.Scripts.UI
 {
     class UIWindowSelectionListImage : UIWindowSelectionListTraits
     {
+        protected Dictionary<string, ItemDraw> spriteCache = new Dictionary<string, ItemDraw>();
+
         public UIWindowSelectionListImage(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
         }
@@ -33,7 +36,11 @@ namespace Assets.Scripts.UI
 
                 if (!display) continue;
 
-                if (game.cd.tokens.ContainsKey(item.GetKey()))
+                if (spriteCache.ContainsKey(item.GetKey()))
+                {
+                    xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset);
+                }
+                else if (game.cd.tokens.ContainsKey(item.GetKey()))
                 {
                     xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.tokens[item.GetKey()], offset, xOffset);
                 }
@@ -89,20 +96,36 @@ namespace Assets.Scripts.UI
             ui.SetButton(delegate { SelectItem(key); });
             ui.SetBGColor(color);
 
-            float width = 3.95f;
+            spriteCache.Add(key, new ItemDraw());
+
+            spriteCache[key].width = 3.95f;
             if (tex.height <= tex.width)
             {
-                ui.SetImage(Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1));
-                ui.SetLocation(xOffset, offset, width, width);
+                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1);
             }
             else
             {
-                width = width * tex.width / tex.height;
-                ui.SetImage(Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1));
-                ui.SetLocation(xOffset, offset, width, 3.95f);
+                spriteCache[key].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+                spriteCache[key].width = spriteCache[key].width * tex.width / tex.height;
             }
-            return xOffset + width + 0.05f;
+            return DrawItem(key, transform, offset, xOffset);
         }
 
+        protected float DrawItem(string key, Transform transform, float offset, float xOffset)
+        {
+            UIElement ui = new UIElement(transform);
+            ui.SetButton(delegate { SelectItem(key); });
+            ui.SetBGColor(spriteCache[key].color);
+            ui.SetImage(spriteCache[key].sprite);
+            ui.SetLocation(xOffset, offset, spriteCache[key].width, 3.95f);
+            return xOffset + spriteCache[key].width + 0.05f;
+        }
+
+        protected class ItemDraw
+        {
+            public Sprite sprite;
+            public Color color;
+            public float width;
+        }
     }
 }
