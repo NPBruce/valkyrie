@@ -27,7 +27,8 @@ namespace Assets.Scripts.UI
         {
             foreach (SelectionItem item in items)
             {
-                Texture2D tex = GetTexture(item.GetKey());
+                float aspect = 0;
+                Texture2D tex = GetTexture(item.GetKey(), out aspect);
                 if (tex == null) continue;
 
                 ItemDraw spriteData = new ItemDraw();
@@ -36,6 +37,10 @@ namespace Assets.Scripts.UI
 
                 spriteData.height = 3.95f;
                 spriteData.width = spriteData.height * tex.width / tex.height;
+                if (aspect != 0)
+                {
+                    spriteData.width = spriteData.height * aspect;
+                }
                 if (spriteData.width > 20)
                 {
                     spriteData.width = 20;
@@ -45,9 +50,10 @@ namespace Assets.Scripts.UI
             }
         }
 
-        protected Texture2D GetTexture(string key)
+        protected Texture2D GetTexture(string key, out float aspect)
         {
             Game game = Game.Get();
+            aspect = 0;
             if (game.cd.tokens.ContainsKey(key))
             {
                 Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
@@ -66,6 +72,7 @@ namespace Assets.Scripts.UI
             }
             else if (game.cd.tileSides.ContainsKey(key))
             {
+                aspect = game.cd.tileSides[key].aspect;
                 return ContentData.FileToTexture(game.cd.tileSides[key].image);
             }
             else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + key))
