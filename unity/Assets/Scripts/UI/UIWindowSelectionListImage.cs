@@ -32,16 +32,14 @@ namespace Assets.Scripts.UI
 
                 ItemDraw spriteData = new ItemDraw();
                 spriteData.color = item.GetColor();
+                spriteData.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
-                spriteData.width = 3.95f;
-                if (tex.height <= tex.width)
+                spriteData.height = 3.95f;
+                spriteData.width = spriteData.height * tex.width / tex.height;
+                if (spriteData.width > 20)
                 {
-                    spriteData.sprite = Sprite.Create(tex, new Rect(0, 0, tex.height, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-                }
-                else
-                {
-                    spriteData.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-                    spriteData.width = spriteData.width * tex.width / tex.height;
+                    spriteData.width = 20;
+                    spriteData.height = spriteData.width * tex.height / tex.width;
                 }
                 spriteCache.Add(item.GetKey(), spriteData);
             }
@@ -98,6 +96,12 @@ namespace Assets.Scripts.UI
 
                 if (spriteCache.ContainsKey(item.GetKey()))
                 {
+                    if (20 - xOffset < spriteCache[item.GetKey()].width)
+                    {
+                        offset += 4;
+                        xOffset = 0;
+                    }
+
                     xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset);
                 }
                 else
@@ -105,12 +109,6 @@ namespace Assets.Scripts.UI
                     if (xOffset > 0) offset += 4;
                     xOffset = 0;
                     offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
-                }
-
-                if (xOffset > 16)
-                {
-                    offset += 4;
-                    xOffset = 0;
                 }
             }
             if (xOffset != 0)
@@ -135,6 +133,7 @@ namespace Assets.Scripts.UI
             public Sprite sprite;
             public Color color;
             public float width;
+            public float height;
         }
     }
 }
