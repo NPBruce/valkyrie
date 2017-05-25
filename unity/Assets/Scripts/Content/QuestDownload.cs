@@ -170,11 +170,11 @@ public class QuestDownload : MonoBehaviour
 
             // Duration
             int lengthMax = 0;
-            int.TryParse(remoteManifest.Get(kv.Key, "lengthMax"), out lengthMax);
+            int.TryParse(remoteManifest.Get(kv.Key, "lengthmax"), out lengthMax);
             if (lengthMax > 0)
             {
                 int lengthMin = 0;
-                int.TryParse(remoteManifest.Get(kv.Key, "lengthMin"), out lengthMin);
+                int.TryParse(remoteManifest.Get(kv.Key, "lengthmin"), out lengthMin);
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetRight(-11), offset, 2, 1);
@@ -193,8 +193,8 @@ public class QuestDownload : MonoBehaviour
             }
 
             // Difficulty
-            int difficulty = 0;
-            int.TryParse(remoteManifest.Get(kv.Key, "difficulty"), out difficulty);
+            float difficulty = 0;
+            float.TryParse(remoteManifest.Get(kv.Key, "difficulty"), out difficulty);
             if (difficulty != 0)
             {
                 string symbol = "π"; // will
