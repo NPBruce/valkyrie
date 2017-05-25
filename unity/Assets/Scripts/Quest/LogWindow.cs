@@ -1,11 +1,12 @@
 ﻿using Assets.Scripts.Content;
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.UI;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class LogWindow
 {
-    public Dictionary<string, DialogBoxEditable> valueDBE;
+    public Dictionary<string, UIElementEditable> valueUIE;
 
     public bool developerToggle = false;
 
@@ -65,53 +66,42 @@ public class LogWindow
 
     public void DrawVarList()
     {
-
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(2f), 0.5f), new Vector2(16, 24.5f), StringKey.NULL);
-        db.AddBorder();
-        db.background.AddComponent<UnityEngine.UI.Mask>();
-        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
-
-        GameObject scrollArea = new GameObject("scroll");
-        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.SetParent(db.background.transform);
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 16f * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
-
-        scrollRect.content = scrollInnerRect;
-        scrollRect.horizontal = false;
-        scrollRect.scrollSensitivity = 27f;
+        UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+        scrollArea.SetLocation(UIScaler.GetHCenter(2f), 0.5f, 16, 24.5f);
+        new UIElementBorder(scrollArea);
 
         // List of vars
-        float offset = 1;
-        valueDBE = new Dictionary<string, DialogBoxEditable>();
+        float offset = 0.1f;
+        valueUIE = new Dictionary<string, UIElementEditable>();
         foreach (KeyValuePair<string, float> kv in Game.Get().quest.vars.vars)
         {
             string key = kv.Key;
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(2.5f), offset), new Vector2(12, 1.2f), 
-                new StringKey(null, key, false), Color.black, Color.white);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            db.background.transform.SetParent(scrollArea.transform);
-            db.AddBorder();
-            // Variables value modify dont need localization
-            DialogBoxEditable dbe = new DialogBoxEditable(
-                new Vector2(UIScaler.GetHCenter(14.5f), offset), new Vector2(3, 1.2f), 
-                kv.Value.ToString(), false, 
-                delegate { UpdateValue(key); }, Color.black, Color.white);
-            dbe.setMaterialAndBackgroundTransformParent((Material)Resources.Load("Fonts/FontMaterial"),scrollArea.transform);
-            dbe.AddBorder();
-            valueDBE.Add(key, dbe);
+            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 12, 1.2f);
+            ui.SetBGColor(Color.white);
+            ui.SetText(key, Color.black);
+            ui.SetButton(delegate { UpdateValue(key); });
+            new UIElementBorder(ui);
+
+            UIElementEditable uie = new UIElementEditable(scrollArea.GetScrollTransform());
+            uie.SetLocation(12.5f, offset, 2.5f, 1.2f);
+            uie.SetBGColor(Color.white);
+            uie.SetText(kv.Value.ToString(), Color.black);
+            uie.SetSingleLine();
+            uie.SetButton(delegate { UpdateValue(key); });
+            new UIElementBorder(uie);
+            valueUIE.Add(key, uie);
 
             offset += 1.4f;
         }
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (offset - 1) * UIScaler.GetPixelsPerUnit());
+        scrollArea.SetScrollSize(offset);
     }
 
     public void UpdateValue(string key)
     {
         float value;
-        float.TryParse(valueDBE[key].Text, out value);
+        float.TryParse(valueUIE[key].GetText(), out value);
         Game.Get().quest.vars.SetValue(key, value);
         Destroyer.Dialog();
         Update();

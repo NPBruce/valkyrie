@@ -20,9 +20,9 @@ public class EditorComponentPuzzle : EditorComponentEvent
     EditorSelectionList classList;
     EditorSelectionList imageList;
     EditorSelectionList skillList;
-    DialogBoxEditable levelDBE;
-    DialogBoxEditable altLevelDBE;
 
+    UIElementEditable levelUIE;
+    UIElementEditable altLevelUIE;
 
     public EditorComponentPuzzle(string nameIn) : base(nameIn)
     {
@@ -64,12 +64,12 @@ public class EditorComponentPuzzle : EditorComponentEvent
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", PUZZLE_LEVEL));
 
-        // Numbers dont need translation
-        levelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
-            puzzleComponent.puzzleLevel.ToString(), false, delegate { UpdateLevel(); });
-        levelDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-        levelDBE.ApplyTag(Game.EDITOR);
-        levelDBE.AddBorder();
+        levelUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        levelUIE.SetLocation(5, offset, 2, 1);
+        levelUIE.SetText(puzzleComponent.puzzleLevel.ToString());
+        levelUIE.SetSingleLine();
+        levelUIE.SetButton(delegate { UpdateLevel(); });
+        new UIElementBorder(levelUIE);
         offset += 2;
 
         if (!puzzleComponent.puzzleClass.Equals("slide"))
@@ -78,12 +78,13 @@ public class EditorComponentPuzzle : EditorComponentEvent
             ui.SetLocation(0, offset, 5, 1);
             ui.SetText(new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
 
-            // Numbers dont need translation
-            altLevelDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(2, 1), 
-                puzzleComponent.puzzleAltLevel.ToString(), false, delegate { UpdateAltLevel(); });
-            altLevelDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            altLevelDBE.ApplyTag(Game.EDITOR);
-            altLevelDBE.AddBorder();
+
+            altLevelUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            altLevelUIE.SetLocation(5, offset, 2, 1);
+            altLevelUIE.SetText(puzzleComponent.puzzleAltLevel.ToString());
+            altLevelUIE.SetSingleLine();
+            altLevelUIE.SetButton(delegate { UpdateAltLevel(); });
+            new UIElementBorder(altLevelUIE);
             offset += 2;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -152,13 +153,13 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
     public void UpdateLevel()
     {
-        int.TryParse(levelDBE.Text, out puzzleComponent.puzzleLevel);
+        int.TryParse(levelUIE.GetText(), out puzzleComponent.puzzleLevel);
         Update();
     }
 
     public void UpdateAltLevel()
     {
-        int.TryParse(altLevelDBE.Text, out puzzleComponent.puzzleAltLevel);
+        int.TryParse(altLevelUIE.GetText(), out puzzleComponent.puzzleAltLevel);
         Update();
     }
     

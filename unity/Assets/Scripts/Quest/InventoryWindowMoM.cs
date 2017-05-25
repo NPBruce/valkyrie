@@ -5,8 +5,6 @@ using System.Collections.Generic;
 // Next stage button is used by MoM to move between investigators and monsters
 public class InventoryWindowMoM
 {
-    public Dictionary<string, DialogBoxEditable> valueDBE;
-
     // Construct and display
     public InventoryWindowMoM()
     {

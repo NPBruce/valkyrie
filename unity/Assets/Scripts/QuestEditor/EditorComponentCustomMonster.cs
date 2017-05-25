@@ -20,11 +20,11 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
 
     QuestData.CustomMonster monsterComponent;
-    
-    DialogBoxEditable nameDBE;
-    PaneledDialogBoxEditable infoDBE;
-    DialogBoxEditable healthDBE;
-    DialogBoxEditable healthHeroDBE;
+
+    UIElementEditable nameUIE;
+    UIElementEditablePaneled infoUIE;
+    UIElementEditable healthUIE;
+    UIElementEditable healthHeroUIE;
 
     // TODO: Translate expansion traits, translate base monster names.
 
@@ -59,13 +59,12 @@ public class EditorComponentCustomMonster : EditorComponent
 
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.KeyExists())
         {
-            nameDBE = new DialogBoxEditable(
-                new Vector2(3, offset), new Vector2(13.5f, 1), 
-                monsterComponent.monsterName.Translate(), false,
-                delegate { UpdateName(); });
-            nameDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            nameDBE.ApplyTag(Game.EDITOR);
-            nameDBE.AddBorder();
+            nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            nameUIE.SetLocation(3, offset, 13.5f, 1);
+            nameUIE.SetText(monsterComponent.monsterName.Translate());
+            nameUIE.SetSingleLine();
+            nameUIE.SetButton(delegate { UpdateName(); });
+            new UIElementBorder(nameUIE);
             if (monsterComponent.baseMonster.Length > 0)
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -93,13 +92,11 @@ public class EditorComponentCustomMonster : EditorComponent
 
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
-                infoDBE = new PaneledDialogBoxEditable(
-                    new Vector2(0.5f, offset + 1), new Vector2(19, 8), 
-                    monsterComponent.info.Translate(),
-                    delegate { UpdateInfo(); });
-                infoDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-                infoDBE.ApplyTag(Game.EDITOR);
-                infoDBE.AddBorder();
+                infoUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+                infoUIE.SetLocation(0.5f, offset + 1, 19, 8);
+                infoUIE.SetText(monsterComponent.info.Translate());
+                infoUIE.SetButton(delegate { UpdateInfo(); });
+                new UIElementBorder(infoUIE);
                 if (monsterComponent.baseMonster.Length > 0)
                 {
                     ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -186,21 +183,23 @@ public class EditorComponentCustomMonster : EditorComponent
 
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
-            healthDBE = new DialogBoxEditable(new Vector2(5, offset), new Vector2(3, 1), 
-                monsterComponent.healthBase.ToString(), false, delegate { UpdateHealth(); });
-            healthDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            healthDBE.ApplyTag(Game.EDITOR);
-            healthDBE.AddBorder();
+            healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            healthUIE.SetLocation(5, offset, 3, 1);
+            healthUIE.SetText(monsterComponent.healthBase.ToString());
+            healthUIE.SetSingleLine();
+            healthUIE.SetButton(delegate { UpdateHealth(); });
+            new UIElementBorder(healthUIE);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(8, offset, 6, 1);
             ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
 
-            healthHeroDBE = new DialogBoxEditable(new Vector2(14, offset), new Vector2(2.5f, 1), 
-                monsterComponent.healthPerHero.ToString(), false, delegate { UpdateHealthHero(); });
-            healthHeroDBE.background.transform.SetParent(scrollArea.GetScrollTransform());
-            healthHeroDBE.ApplyTag(Game.EDITOR);
-            healthHeroDBE.AddBorder();
+            healthHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            healthHeroUIE.SetLocation(14, offset, 2.5f, 1);
+            healthHeroUIE.SetText(monsterComponent.healthPerHero.ToString());
+            healthHeroUIE.SetSingleLine();
+            healthHeroUIE.SetButton(delegate { UpdateHealthHero(); });
+            new UIElementBorder(healthHeroUIE);
             if (monsterComponent.baseMonster.Length > 0)
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -330,9 +329,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateName()
     {
-        if (nameDBE.CheckTextChangedAndNotEmpty())
+        if (!nameUIE.Empty() && nameUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameUIE.GetText());
         }
     }
 
@@ -350,9 +349,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateInfo()
     {
-        if (infoDBE.CheckTextChangedAndNotEmpty())
+        if (!infoUIE.Empty() && infoUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(monsterComponent.info_key, infoDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, infoUIE.GetText());
         }
     }
 
@@ -474,12 +473,12 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.Text, out monsterComponent.healthBase);
+        float.TryParse(healthUIE.GetText(), out monsterComponent.healthBase);
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.Text, out monsterComponent.healthPerHero);
+        float.TryParse(healthHeroUIE.GetText(), out monsterComponent.healthPerHero);
     }
 
     public void ClearHealth()
