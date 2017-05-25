@@ -278,8 +278,33 @@ public class EditorComponentCustomMonster : EditorComponent
                 ui.SetButton(delegate { SetImagePlace(); });
                 new UIElementBorder(ui);
             }
+            offset += 2;
         }
-        offset += 2;
+
+        if (game.gameType is MoMGameType)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "EVADE")));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 14, 1);
+            ui.SetText(monsterComponent.evadeEvent);
+            ui.SetButton(delegate { SetEvade(); });
+            new UIElementBorder(ui);
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "horror")));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 14, 1);
+            ui.SetText(monsterComponent.horrorEvent);
+            ui.SetButton(delegate { SetHorror(); });
+            new UIElementBorder(ui);
+            offset += 2;
+        }
 
         return offset;
     }
@@ -561,6 +586,46 @@ public class EditorComponentCustomMonster : EditorComponent
     public void ClearImagePlace()
     {
         monsterComponent.imagePlace = "";
+        Update();
+    }
+
+    public void AddEvade()
+    {
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        {
+            if (kv.typeDynamic.Equals("Event"))
+            {
+                select.AddItem(kv.Value);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectAddEvade(string evade)
+    {
+        monsterComponent.evadeEvent = evade;
+        Update();
+    }
+
+    public void AddHorror()
+    {
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        {
+            if (kv.typeDynamic.Equals("Event"))
+            {
+                select.AddItem(kv.Value);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectAddHorror(string horror)
+    {
+        monsterComponent.horrorEvent = horror;
         Update();
     }
 }

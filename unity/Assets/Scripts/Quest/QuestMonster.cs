@@ -5,14 +5,15 @@ using System.Collections.Generic;
 public class QuestMonster : MonsterData
 {
     public bool useMonsterTypeActivations = false;
-    public string horrorEvent = "";
+    public QuestData.CustomMonster cMonster;
     public string derivedType = "";
 
     // Construct with quest data
     public QuestMonster(QuestData.CustomMonster qm) : base()
     {
         Game game = Game.Get();
-
+        cMonster = qm;
+        
         // Get base derived monster type
         MonsterData baseObject = null;
 

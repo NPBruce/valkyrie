@@ -12,7 +12,22 @@ public class InvestigatorEvade {
     public InvestigatorEvade(Quest.Monster monster)
     {
         m = monster;
+        Game game = Game.Get();
 
+        QuestMonster qm = m as QuestMonster;
+        if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.evadeEvent))
+        {
+            game.quest.eManager.monsterImage = m;
+            game.quest.eManager.QueueEvent(qm.cMonster.evadeEvent);
+        }
+        else
+        {
+            PickEvade(m);
+        }
+    }
+
+    public void PickEvade(Quest.Monster m)
+    {
         Game game = Game.Get();
         List<EvadeData> evades = new List<EvadeData>();
         foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
@@ -34,11 +49,15 @@ public class InvestigatorEvade {
                 }
             }
         }
-        text = evades[Random.Range(0, evades.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
 
-        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+        if (evades.Count > 0)
+        {
+            text = evades[Random.Range(0, evades.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
 
-        Draw();
+            game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+
+            Draw();
+        }
     }
 
     public void Draw()

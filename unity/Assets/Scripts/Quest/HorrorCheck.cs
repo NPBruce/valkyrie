@@ -11,10 +11,10 @@ public class HorrorCheck {
         Game game = Game.Get();
 
         QuestMonster qm = m as QuestMonster;
-        if (qm != null && game.quest.qd.components.ContainsKey(qm.horrorEvent))
+        if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.horrorEvent))
         {
             game.quest.eManager.monsterImage = m;
-            game.quest.eManager.QueueEvent(qm.horrorEvent);
+            game.quest.eManager.QueueEvent(qm.cMonster.horrorEvent);
         }
         else
         {
@@ -58,7 +58,7 @@ public class HorrorCheck {
 
         string text = horror.text.Translate().Replace("{0}", m.monsterData.name.Translate());
         UIElement ui = new UIElement();
-        ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
+        ui.SetLocation(UIScaler.GetHCenter(-14), 0.5f, 28, 8);
         ui.SetText(text);
         new UIElementBorder(ui);
 
