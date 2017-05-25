@@ -413,6 +413,58 @@ public class Quest
                 }
             }
 
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+            {
+                QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
+                if (cm == null) continue;
+
+                MonsterData baseMonster = null;
+                string[] traits = cm.traits;
+                // Check for content data monster defined as base
+                if (game.cd.monsters.ContainsKey(qm.baseMonster))
+                {
+                    baseMonster = game.cd.monsters[qm.baseMonster];
+                    if (traits.Length == 0)
+                    {
+                        traits = baseMonster.traits;
+                    }
+                }
+
+                bool allFound = true;
+                foreach (string t in spawn.mTraitsRequired)
+                {
+                    // Does the monster have this trait?
+                    if (!Array.Contains(traits, t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (spawn.mTraitsPool.Length == 0);
+                foreach (string t in spawn.mTraitsPool)
+                {
+                    // Does the monster have this trait?
+                    if (Array.Contains(traits, t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // Monster has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
