@@ -3,32 +3,6 @@ using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI
 {
-    /*
-     * - tag
-     * - parent
-     * 
-     * background
-     *  - color
-     *  - position
-     *  - size
-     *  - image
-     *  
-     * text
-     *  - content
-     *  - font
-     *  - size
-     *  - color
-     *  - alignment
-     *  - padding
-     * 
-     * button
-     *  - call
-     * 
-     * border
-     *  - color
-     * 
-     */
-
     public class UIElement
     {
         // The button itself, unity object
@@ -258,7 +232,7 @@ namespace Assets.Scripts.UI
                 textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             textHeightObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            return textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit();
+            return (textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
         }
 
         public bool ObjectDestroyed()
