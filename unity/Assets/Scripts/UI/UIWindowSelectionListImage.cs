@@ -44,6 +44,10 @@ namespace Assets.Scripts.UI
                 {
                     xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.tokens[item.GetKey()], offset, xOffset);
                 }
+                else if (game.cd.puzzles.ContainsKey(item.GetKey()))
+                {
+                    xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.puzzles[item.GetKey()], offset, xOffset);
+                }
                 else if (game.cd.images.ContainsKey(item.GetKey()))
                 {
                     xOffset = DrawItem(item, itemScrollArea.GetScrollTransform(), game.cd.images[item.GetKey()], offset, xOffset);
@@ -74,6 +78,11 @@ namespace Assets.Scripts.UI
                 offset += 4;
             }
             itemScrollArea.SetScrollSize(offset);
+        }
+
+        protected float DrawItem(SelectionItemTraits item, Transform transform, PuzzleData puzzle, float offset, float xOffset)
+        {
+            return DrawItem(item.GetKey(), item.GetColor(), transform, ContentData.FileToTexture(puzzle.image), offset, xOffset);
         }
 
         protected float DrawItem(SelectionItemTraits item, Transform transform, TokenData token, float offset, float xOffset)

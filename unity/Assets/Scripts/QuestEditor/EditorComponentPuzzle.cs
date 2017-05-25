@@ -18,7 +18,6 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
     QuestData.Puzzle puzzleComponent;
     EditorSelectionList classList;
-    EditorSelectionList imageList;
     EditorSelectionList skillList;
 
     UIElementEditable levelUIE;
@@ -165,35 +164,38 @@ public class EditorComponentPuzzle : EditorComponentEvent
     
     public void Image()
     {
-        List<EditorSelectionList.SelectionListEntry> puzzleImage = new List<EditorSelectionList.SelectionListEntry>();
         if (puzzleComponent.puzzleClass.Equals("code"))
         {
-            puzzleImage.Add(new EditorSelectionList.SelectionListEntry(""));
-            puzzleImage.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(new StringKey("val", "SYMBOL").Translate(), "symbol"));
+            UIWindowSelectionList selectType = new UIWindowSelectionList(SelectImage, SELECT_IMAGE.Translate());
+            selectType.AddItem("{NUMBERS}", "");
+            selectType.AddItem(new StringKey("val", "SYMBOL").Translate(), "symbol");
+            selectType.Draw();
+            return;
         }
-        else
+
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, SELECT_IMAGE.Translate());
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-            foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
-            {
-                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
-            }
-            foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
-            {
-                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1), "File"));
-            }
-            foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
-            {
-                puzzleImage.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "MoM"));
-            }
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        imageList = new EditorSelectionList(SELECT_IMAGE, puzzleImage, delegate { SelectImage(); });
-        imageList.SelectItem();
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
+        {
+            select.AddItem(kv.Value);
+        }
+        select.Draw();
     }
 
-    public void SelectImage()
+    public void SelectImage(string image)
     {
-        puzzleComponent.imageType = imageList.selection;
+        puzzleComponent.imageType = image;
         Update();
     }
 }
