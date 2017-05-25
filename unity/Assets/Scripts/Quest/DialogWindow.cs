@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 // Class for creation of a dialog window with buttons and handling button press
@@ -63,19 +64,16 @@ public class DialogWindow {
     public void CreateWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
-            new StringKey(null, text, false));
-        float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
-        db.Destroy();
-        
+        float offset = UIElement.GetStringHeight(text, 28);
         if (offset < 4)
         {
             offset = 4;
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
-            new StringKey(null, text, false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, offset);
+        ui.SetText(text);
+        new UIElementBorder(ui);
         offset += 1f;
 
         // Determine button size
@@ -87,7 +85,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
+            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
             if (length > buttonWidth)

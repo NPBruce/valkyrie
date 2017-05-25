@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Window with Investigator attack information
 public class InvestigatorAttack
@@ -82,9 +83,11 @@ public class InvestigatorAttack
     public void Attack()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 8), 
-            new StringKey(null, attackText, false));
-        db.AddBorder();
+
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
+        ui.SetText(attackText);
+        new UIElementBorder(ui);
 
         if (monster.damage == monster.GetHealth())
         {

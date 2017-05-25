@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Window with Monster activation
 public class ActivateDialogMoM : ActivateDialog
@@ -30,9 +31,10 @@ public class ActivateDialogMoM : ActivateDialog
             string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
             // Add this to the log
             Game.Get().quest.log.Add(new Quest.LogEntry(textKey.Replace("\n", "\\n")));
-            db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-                new StringKey(null, textKey,false));
-            db.AddBorder();
+            UIElement ui = new UIElement();
+            ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
+            ui.SetText(textKey);
+            new UIElementBorder(ui);
             offset += 4.5f;
         }
 
@@ -59,11 +61,10 @@ public class ActivateDialogMoM : ActivateDialog
         db.AddBorder();
 
         float offset = 2.5f;
-        db = new DialogBox(
-            new Vector2(10, offset),
-            new Vector2(UIScaler.GetWidthUnits() - 20, 4),
-            new StringKey(null, monster.currentActivation.masterActions.Replace("\\n", "\n"), false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
+        ui.SetText(monster.currentActivation.masterActions.Replace("\\n", "\n"));
+        new UIElementBorder(ui);
 
         // Add this to the log
         Game.Get().quest.log.Add(new Quest.LogEntry(monster.currentActivation.masterActions.Replace("\n", "\\n")));
@@ -89,9 +90,10 @@ public class ActivateDialogMoM : ActivateDialog
         db.AddBorder();
 
         float offset = 2.5f;
-        db = new DialogBox(new Vector2(10, offset), new Vector2(UIScaler.GetWidthUnits() - 20, 4), 
-            new StringKey(null, monster.currentActivation.move.Replace("\\n", "\n"),false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
+        ui.SetText(monster.currentActivation.move.Replace("\\n", "\n"));
+        new UIElementBorder(ui);
 
         // Add this to the log
         Game.Get().quest.log.Add(new Quest.LogEntry(monster.currentActivation.move.Replace("\n", "\\n")));
