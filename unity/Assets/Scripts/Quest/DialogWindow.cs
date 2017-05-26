@@ -188,7 +188,7 @@ public class DialogWindow {
         if (!game.quest.itemSelect.ContainsKey(item)) return;
 
         Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
-        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
         db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;

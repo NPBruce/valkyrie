@@ -48,7 +48,7 @@ public class InventoryWindow
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
-            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
+            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             db = new DialogBox(new Vector2(xOffset, 6),
                 new Vector2(8, 8),

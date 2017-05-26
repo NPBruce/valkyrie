@@ -133,7 +133,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.ApplyTag(Game.SHOP);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
-            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
+            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2.5f), vOffset + 0.5f),
                 new Vector2(4, 4),
@@ -221,7 +221,7 @@ public class ShopInterface : Quest.BoardComponent
             tb.ApplyTag(Game.SHOP);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
-            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
+            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             tb = new TextButton(new Vector2(UIScaler.GetHCenter(9.5f), vOffset + 0.5f),
                 new Vector2(4, 4),
