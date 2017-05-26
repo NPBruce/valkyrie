@@ -100,11 +100,11 @@ public class QuestEditorData {
         select.AddNewComponentItem("Spawn");
         select.AddNewComponentItem("Event");
         select.AddNewComponentItem("CustomMonster");
-        select.AddNewComponentItem("Activation");
         select.AddNewComponentItem("UI");
         select.AddNewComponentItem("QItem");
         if (game.gameType is D2EGameType)
         {
+            select.AddNewComponentItem("Activation");
             select.AddNewComponentItem("Door");
             select.AddNewComponentItem("MPlace");
         }

@@ -116,45 +116,20 @@ public class EditorComponentCustomMonster : EditorComponent
                 new UIElementBorder(ui);
                 offset += 2;
             }
+
+            offset = DrawD2EActivations(offset);
         }
-
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 11.5f, 1);
-        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
-
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(11.5f, offset, 1, 1);
-        ui.SetText(CommonStringKeys.PLUS, Color.green);
-        ui.SetButton(delegate { AddActivation(); });
-        new UIElementBorder(ui, Color.green);
-
-        float traitOffset = offset;
-        offset += 1;
-        int index;
-        for (index = 0; index < monsterComponent.activations.Length; index++)
+        else
         {
-            int i = index;
-
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 11.5f, 1);
-            ui.SetText(monsterComponent.activations[index]);
-            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
-            new UIElementBorder(ui);
-
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(11.5f, offset, 1, 1);
-            ui.SetText(CommonStringKeys.MINUS, Color.red);
-            ui.SetButton(delegate { RemoveActivation(i); });
-            new UIElementBorder(ui, Color.red);
-            offset += 1;
+            offset = DrawMoMActivations(offset);
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(12.5f, traitOffset, 6, 1);
+        ui.SetLocation(12.5f, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(18.5f, traitOffset++, 1, 1);
+        ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTrait(); });
         new UIElementBorder(ui, Color.green);
@@ -163,18 +138,16 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             int i = index;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(12.5f, traitOffset, 6, 1);
+            ui.SetLocation(12.5f, offset, 6, 1);
             ui.SetText(new StringKey("val", monsterComponent.traits[index]));
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(18.5f, traitOffset++, 1, 1);
+            ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveTrait(i); });
             new UIElementBorder(ui, Color.red);
         }
-
-        if (traitOffset > offset) offset = traitOffset;
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -309,6 +282,93 @@ public class EditorComponentCustomMonster : EditorComponent
         return offset;
     }
 
+    public float DrawD2EActivations(float offset)
+    {
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 18, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { AddActivation(); });
+        new UIElementBorder(ui, Color.green);
+
+        int index;
+        for (index = 0; index < monsterComponent.activations.Length; index++)
+        {
+            int i = index;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 18, 1);
+            ui.SetText(monsterComponent.activations[index]);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveActivation(i); });
+            new UIElementBorder(ui, Color.red);
+            offset++;
+        }
+        return offset + 1;
+    }
+
+    public float DrawMoMActivations(float offset)
+    {
+        if (monsterComponent.activations.Length > 1)
+        {
+            return DepreciatedMoMActivations(offset);
+        }
+        if (monsterComponent.activations.Length == 1 && monsterComponent.activations[0].IndexOf("Activation") == 0)
+        {
+            return DepreciatedMoMActivations(offset);
+        }
+        
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 14.5f, 1);
+        ui.SetButton(delegate { SetActivation(); });
+        if (monsterComponent.activations.Length > 0)
+        {
+            ui.SetText(monsterComponent.activations[0]);
+        }
+        new UIElementBorder(ui);
+        return offset + 2;
+    }
+
+    public float DepreciatedMoMActivations(float offset)
+    {
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 11.5f, 1);
+        ui.SetText("DEPRECIATED Activations", Color.red);
+
+        offset += 1;
+        int index;
+        for (index = 0; index < monsterComponent.activations.Length; index++)
+        {
+            int i = index;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 11.5f, 1);
+            ui.SetText(monsterComponent.activations[index]);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(11.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveActivation(i); });
+            new UIElementBorder(ui, Color.red);
+            offset += 1;
+        }
+        return offset + 1;
+    }
+
     public void SetBase()
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
@@ -417,6 +477,36 @@ public class EditorComponentCustomMonster : EditorComponent
 
         newA[i] = key;
         monsterComponent.activations = newA;
+        Update();
+    }
+
+    public void SetActivation()
+    {
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
+
+        select.AddItem("{NONE}", "");
+
+        foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
+        {
+            if (c.typeDynamic.IndexOf("Event") == 0)
+            {
+                select.AddItem(c);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectSetActivation(string key)
+    {
+        if (key.Length == 0)
+        {
+            monsterComponent.activations = new string[0];
+        }
+        else
+        {
+            monsterComponent.activations = new string[1];
+            monsterComponent.activations[0] = key;
+        }
         Update();
     }
 
