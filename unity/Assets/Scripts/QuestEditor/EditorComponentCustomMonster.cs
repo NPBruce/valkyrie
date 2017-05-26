@@ -321,7 +321,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             return DepreciatedMoMActivations(offset);
         }
-        if (monsterComponent.activations.Length == 1 && monsterComponent.activations[0].IndexOf("Activation") == 0)
+        if (monsterComponent.activations.Length == 1 && !game.quest.qd.components.ContainsKey(monsterComponent.activations[0]))
         {
             return DepreciatedMoMActivations(offset);
         }
