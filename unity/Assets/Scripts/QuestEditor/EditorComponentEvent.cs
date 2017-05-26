@@ -574,7 +574,6 @@ public class EditorComponentEvent : EditorComponent
             else
             {
                 LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextUIE.GetText());
-                eventComponent.display = true;
                 if (eventComponent.buttons.Count == 0)
                 {
                     eventComponent.buttons.Add(eventComponent.genQuery("button1"));
@@ -582,6 +581,11 @@ public class EditorComponentEvent : EditorComponent
                     eventComponent.buttonColors.Add("white");
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
+                }
+                if (!eventComponent.display)
+                {
+                    eventComponent.display = true;
+                    Update();
                 }
             }
         }
