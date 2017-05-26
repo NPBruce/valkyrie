@@ -66,7 +66,18 @@ public class RoundControllerMoM : RoundController
             // Find a random unactivated monster
             Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
-            ActivateMonster(toActivate);
+            // Find out of this monster is quest specific
+            QuestMonster qm = toActivate as QuestMonster;
+            if (qm != null && qm.activations != null && qm.activations.Count == 1 && qm.activations[0].IndexOf("Event") == 0)
+            {
+                toActivate.masterStarted = true;
+                game.quest.eManager.monsterImage = toActivate;
+                game.quest.eManager.QueueEvent(qm.activations[0]);
+            }
+            else
+            {
+                ActivateMonster(toActivate);
+            }
             // Return false as activations remain
             return false;
         }

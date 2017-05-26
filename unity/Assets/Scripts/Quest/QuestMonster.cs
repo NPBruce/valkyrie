@@ -13,7 +13,7 @@ public class QuestMonster : MonsterData
     {
         Game game = Game.Get();
         cMonster = qm;
-        
+
         // Get base derived monster type
         MonsterData baseObject = null;
 
@@ -69,13 +69,6 @@ public class QuestMonster : MonsterData
             imagePlace = baseObject.image;
         }
         if (imagePlace.Length == 0) imagePlace = image;
-
-        // Read activations  from quest data or base type
-        activations = qm.activations;
-        if (activations.Length == 0 && baseObject != null)
-        {
-            useMonsterTypeActivations = true;
-        }
 
         // Read activations  from quest data or base type
         activations = qm.activations;
