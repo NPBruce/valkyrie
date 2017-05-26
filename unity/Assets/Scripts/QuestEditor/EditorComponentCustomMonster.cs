@@ -134,7 +134,7 @@ public class EditorComponentCustomMonster : EditorComponent
         ui.SetButton(delegate { AddTrait(); });
         new UIElementBorder(ui, Color.green);
 
-        for (index = 0; index < monsterComponent.traits.Length; index++)
+        for (int index = 0; index < monsterComponent.traits.Length; index++)
         {
             int i = index;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -284,7 +284,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public float DrawD2EActivations(float offset)
     {
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
 
@@ -325,8 +325,8 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             return DepreciatedMoMActivations(offset);
         }
-        
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
         ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
 
@@ -343,7 +343,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public float DepreciatedMoMActivations(float offset)
     {
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 11.5f, 1);
         ui.SetText("DEPRECIATED Activations", Color.red);
 
@@ -482,7 +482,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetActivation()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
         select.AddItem("{NONE}", "");
 
@@ -679,13 +679,13 @@ public class EditorComponentCustomMonster : EditorComponent
         Update();
     }
 
-    public void AddEvade()
+    public void SetEvade()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
-            if (kv.typeDynamic.Equals("Event"))
+            if (kv.Value.typeDynamic.Equals("Event"))
             {
                 select.AddItem(kv.Value);
             }
@@ -693,19 +693,19 @@ public class EditorComponentCustomMonster : EditorComponent
         select.Draw();
     }
 
-    public void SelectAddEvade(string evade)
+    public void SelectSetEvade(string evade)
     {
         monsterComponent.evadeEvent = evade;
         Update();
     }
 
-    public void AddHorror()
+    public void SetHorror()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
-            if (kv.typeDynamic.Equals("Event"))
+            if (kv.Value.typeDynamic.Equals("Event"))
             {
                 select.AddItem(kv.Value);
             }
@@ -713,7 +713,7 @@ public class EditorComponentCustomMonster : EditorComponent
         select.Draw();
     }
 
-    public void SelectAddHorror(string horror)
+    public void SelectSetHorror(string horror)
     {
         monsterComponent.horrorEvent = horror;
         Update();

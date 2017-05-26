@@ -413,7 +413,7 @@ public class Quest
                 }
             }
 
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.qd.components)
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
             {
                 QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
                 if (cm == null) continue;
@@ -421,9 +421,9 @@ public class Quest
                 MonsterData baseMonster = null;
                 string[] traits = cm.traits;
                 // Check for content data monster defined as base
-                if (game.cd.monsters.ContainsKey(qm.baseMonster))
+                if (game.cd.monsters.ContainsKey(cm.baseMonster))
                 {
-                    baseMonster = game.cd.monsters[qm.baseMonster];
+                    baseMonster = game.cd.monsters[cm.baseMonster];
                     if (traits.Length == 0)
                     {
                         traits = baseMonster.traits;
@@ -434,7 +434,7 @@ public class Quest
                 foreach (string t in spawn.mTraitsRequired)
                 {
                     // Does the monster have this trait?
-                    if (!Array.Contains(traits, t))
+                    if (!InArray(traits, t))
                     {
                         // Trait missing, exclude monster
                         allFound = false;
@@ -446,7 +446,7 @@ public class Quest
                 foreach (string t in spawn.mTraitsPool)
                 {
                     // Does the monster have this trait?
-                    if (Array.Contains(traits, t))
+                    if (InArray(traits, t))
                     {
                         oneFound = true;
                     }
@@ -475,6 +475,15 @@ public class Quest
             // Pick monster at random from candidates
             monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
             return true;
+        }
+        return false;
+    }
+
+    public static bool InArray(string[] array, string item)
+    {
+        foreach (string s in array)
+        {
+            if (s.Equals(item)) return true;
         }
         return false;
     }
@@ -1213,11 +1222,11 @@ public class Quest
             if (game.gameType is MoMGameType)
             {
                 // This is faster
-                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             }
             else
             {
-                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             }
             // Set image sprite
             image.sprite = tileSprite;
@@ -1853,6 +1862,28 @@ public class Quest
                 }
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
+        }
+
+        public string GetIdentifier()
+        {
+            return monsterData.sectionName + ":" + duplicate;
+        }
+
+        public static Monster GetMonster(string identifier)
+        {
+            Game game = Game.Get();
+            string[] parts = identifier.Split(':');
+            if (parts.Length != 2) return null;
+            int d = 0;
+            int.TryParse(parts[1], out d);
+            foreach (Monster m in game.quest.monsters)
+            {
+                if (m.monsterData.sectionName.Equals(parts[0]) && m.duplicate == d)
+                {
+                    return m;
+                }
+            }
+            return null;
         }
 
         public int GetHealth()

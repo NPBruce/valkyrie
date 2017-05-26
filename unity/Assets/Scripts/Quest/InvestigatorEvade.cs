@@ -14,7 +14,7 @@ public class InvestigatorEvade {
         m = monster;
         Game game = Game.Get();
 
-        QuestMonster qm = m as QuestMonster;
+        QuestMonster qm = m.monsterData as QuestMonster;
         if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.evadeEvent))
         {
             game.quest.eManager.monsterImage = m;

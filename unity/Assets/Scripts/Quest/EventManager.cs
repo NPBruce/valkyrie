@@ -79,18 +79,11 @@ public class EventManager
             }
             if (data.ContainsKey("monsterimage"))
             {
-                if (game.cd.monsters.ContainsKey(data["monsterimage"]))
-                {
-                    monsterImage = game.cd.monsters[data["monsterimage"]];
-                }
-                if (game.quest.qd.components.ContainsKey(data["monsterimage"]))
-                {
-                    monsterImage = game.quest.qd.components[data["monsterimage"]];
-                }
+                monsterImage = Quest.Monster.GetMonster(data["monsterimage"]);
             }
             if (data.ContainsKey("monsterhealth"))
             {
-                bool.TryParse(data["monsterhealth"], out monsterHealth)
+                bool.TryParse(data["monsterhealth"], out monsterHealth);
             }
             if (data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
             {
@@ -327,7 +320,6 @@ public class EventManager
                 MonsterDialogMoM.DrawMonster(monsterImage);
                 if (monsterHealth)
                 {
-                    MonsterDialogMoM.DrawMonsterHealth(monsterImage; delegate { ;});
                 }
             }
             new DialogWindow(e);
@@ -440,7 +432,7 @@ public class EventManager
 
         if (eventStack.Count == 0)
         {
-            monsterImage = null
+            monsterImage = null;
             monsterHealth = false;
             if (game.quest.phase == Quest.MoMPhase.monsters)
             {
@@ -765,7 +757,7 @@ public class EventManager
         }
         if (monsterImage != null)
         {
-            r += "monsterimage=" + monsterImage.sectionName + nl;
+            r += "monsterimage=" + monsterImage.GetIdentifier() + nl;
         }
         if (monsterHealth)
         {

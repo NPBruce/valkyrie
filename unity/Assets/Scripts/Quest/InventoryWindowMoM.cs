@@ -76,7 +76,7 @@ public class InventoryWindowMoM
     public void Inspect(string item)
     {
         Destroyer.Dialog();
-        game.quest.Save();
+        Game.Get().quest.Save();
         Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
         Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
     }

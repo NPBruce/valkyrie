@@ -10,7 +10,7 @@ public class HorrorCheck {
     {
         Game game = Game.Get();
 
-        QuestMonster qm = m as QuestMonster;
+        QuestMonster qm = m.monsterData as QuestMonster;
         if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.horrorEvent))
         {
             game.quest.eManager.monsterImage = m;
@@ -46,10 +46,10 @@ public class HorrorCheck {
             }
         }
 
-        if (horrors.Count != 0) Draw(horrors[Random.Range(0, horrors.Count)]);
+        if (horrors.Count != 0) Draw(horrors[Random.Range(0, horrors.Count)], m);
     }
 
-    protected void Draw(HorrorData horror)
+    protected void Draw(HorrorData horror, Quest.Monster m)
     {
         Game game = Game.Get();
         // If a dialog window is open we force it closed (this shouldn't happen)
