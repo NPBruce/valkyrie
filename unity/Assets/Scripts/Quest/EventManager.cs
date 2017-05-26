@@ -420,7 +420,7 @@ public class EventManager
         // Add any custom triggered events
         AddCustomTriggers();
 
-        if (eventStack.Count == 0 )        
+        if (eventStack.Count == 0)
         {
             monsterImage = null
             monsterHealth = false;
