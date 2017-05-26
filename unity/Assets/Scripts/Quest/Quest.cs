@@ -1209,7 +1209,16 @@ public class Quest
             // Add image to object
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
             // Create sprite from texture
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = null;
+            if (game.gameType is MoMGameType)
+            {
+                // This is faster
+                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+            }
+            else
+            {
+                Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            }
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
@@ -1515,7 +1524,7 @@ public class Quest
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             // Set door colour
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(0.4f, 1.6f);
