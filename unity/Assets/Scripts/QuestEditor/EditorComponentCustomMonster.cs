@@ -436,7 +436,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!infoUIE.Empty() && infoUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, infoUIE.GetText());
+            LocalizationRead.updateScenarioText(monsterComponent.info_key, infoUIE.GetText());
         }
     }
 
