@@ -416,14 +416,20 @@ public class EventManager
                 game.quest.eManager.QueueEvent(enabledEvents[0], false);
             }
         }
-        else
-        {
-            monsterImage = null
-            monsterHealth = false;
-        }
 
         // Add any custom triggered events
         AddCustomTriggers();
+
+        if (eventStack.Count == 0 )        
+        {
+            monsterImage = null
+            monsterHealth = false;
+            if (game.quest.phase == Quest.MoMPhase.monsters)
+            {
+                game.roundControl.MonsterActivated();
+                return;
+            }
+        }
 
         // Trigger a stacked event
         TriggerEvent();
