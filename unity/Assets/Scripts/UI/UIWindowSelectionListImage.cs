@@ -129,8 +129,8 @@ namespace Assets.Scripts.UI
         {
             UIElement ui = new UIElement(transform);
             ui.SetButton(delegate { SelectItem(key); });
-            ui.SetBGColor(spriteCache[key].color);
             ui.SetImage(spriteCache[key].sprite);
+            ui.SetBGColor(spriteCache[key].color);
             ui.SetLocation(xOffset, offset, spriteCache[key].width, 3.95f);
             return xOffset + spriteCache[key].width + 0.05f;
         }

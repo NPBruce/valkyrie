@@ -54,7 +54,7 @@ public class InvestigatorItems
         foreach (string item in game.quest.items)
         {
             Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
-            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), StringKey.NULL);
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;

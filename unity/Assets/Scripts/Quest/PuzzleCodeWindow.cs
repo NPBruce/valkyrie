@@ -205,7 +205,7 @@ public class PuzzleCodeWindow
                 Texture2D dupeTex = Resources.Load("sprites/monster_duplicate_" + i) as Texture2D;
                 if (dupeTex != null)
                 {
-                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1)));
+                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect)));
                 }
                 else
                 {

@@ -413,6 +413,58 @@ public class Quest
                 }
             }
 
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+            {
+                QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
+                if (cm == null) continue;
+
+                MonsterData baseMonster = null;
+                string[] traits = cm.traits;
+                // Check for content data monster defined as base
+                if (game.cd.monsters.ContainsKey(cm.baseMonster))
+                {
+                    baseMonster = game.cd.monsters[cm.baseMonster];
+                    if (traits.Length == 0)
+                    {
+                        traits = baseMonster.traits;
+                    }
+                }
+
+                bool allFound = true;
+                foreach (string t in spawn.mTraitsRequired)
+                {
+                    // Does the monster have this trait?
+                    if (!InArray(traits, t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (spawn.mTraitsPool.Length == 0);
+                foreach (string t in spawn.mTraitsPool)
+                {
+                    // Does the monster have this trait?
+                    if (InArray(traits, t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // Monster has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
@@ -423,6 +475,15 @@ public class Quest
             // Pick monster at random from candidates
             monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
             return true;
+        }
+        return false;
+    }
+
+    public static bool InArray(string[] array, string item)
+    {
+        foreach (string s in array)
+        {
+            if (s.Equals(item)) return true;
         }
         return false;
     }
@@ -1157,7 +1218,16 @@ public class Quest
             // Add image to object
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
             // Create sprite from texture
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = null;
+            if (game.gameType is MoMGameType)
+            {
+                // This is faster
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+            }
+            else
+            {
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            }
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
@@ -1463,7 +1533,7 @@ public class Quest
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             // Set door colour
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(0.4f, 1.6f);
@@ -1792,6 +1862,28 @@ public class Quest
                 }
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
+        }
+
+        public string GetIdentifier()
+        {
+            return monsterData.sectionName + ":" + duplicate;
+        }
+
+        public static Monster GetMonster(string identifier)
+        {
+            Game game = Game.Get();
+            string[] parts = identifier.Split(':');
+            if (parts.Length != 2) return null;
+            int d = 0;
+            int.TryParse(parts[1], out d);
+            foreach (Monster m in game.quest.monsters)
+            {
+                if (m.monsterData.sectionName.Equals(parts[0]) && m.duplicate == d)
+                {
+                    return m;
+                }
+            }
+            return null;
         }
 
         public int GetHealth()

@@ -1465,6 +1465,8 @@ public class QuestData
         public float healthBase = 0;
         public float healthPerHero = 0;
         public bool healthDefined = false;
+        public string evadeEvent = "";
+        public string horrorEvent = "";
 
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
@@ -1527,6 +1529,15 @@ public class QuestData
                 healthDefined = true;
                 float.TryParse(data["healthperhero"], out healthPerHero);
             }
+
+            if (data.ContainsKey("evadeevent"))
+            {
+                evadeEvent = data["evadeevent"];
+            }
+            if (data.ContainsKey("horrorevent"))
+            {
+                horrorEvent = data["horrorevent"];
+            }
         }
 
         // get path of monster image
@@ -1578,6 +1589,14 @@ public class QuestData
             {
                 r.Append("health=").AppendLine(healthBase.ToString());
                 r.Append("healthperhero=").AppendLine(healthPerHero.ToString());
+            }
+            if (evadeEvent.Length > 0)
+            {
+                r.Append("evadeevent=").AppendLine(evadeEvent);
+            }
+            if (horrorEvent.Length > 0)
+            {
+                r.Append("horrorevent=").AppendLine(horrorEvent);
             }
             return r.ToString();
         }

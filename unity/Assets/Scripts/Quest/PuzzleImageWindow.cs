@@ -60,7 +60,7 @@ public class PuzzleImageWindow
             imageSprite[i] = new Sprite[questPuzzle.puzzleAltLevel];
             for (int j = 0; j < questPuzzle.puzzleAltLevel; j++)
             {
-                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, (questPuzzle.puzzleAltLevel - (j + 1)) * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1);
+                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, (questPuzzle.puzzleAltLevel - (j + 1)) * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             }
         }
 

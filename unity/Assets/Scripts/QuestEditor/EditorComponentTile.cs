@@ -87,7 +87,7 @@ public class EditorComponentTile : EditorComponent
         {
             if (usedSides.Contains(kv.Key))
             {
-                select.AddItem(kv.Value, Color.grey);
+                select.AddItem(kv.Value, new Color(0.4f, 0.4f, 1));
             }
             else
             {

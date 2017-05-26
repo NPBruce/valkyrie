@@ -68,7 +68,7 @@ namespace Assets.Scripts.UI.Screens
 
                     if (saves[i].image != null)
                     {
-                        Sprite imgSprite = Sprite.Create(saves[i].image, new Rect(0, 0, saves[i].image.width, saves[i].image.height), Vector2.zero, 1);
+                        Sprite imgSprite = Sprite.Create(saves[i].image, new Rect(0, 0, saves[i].image.width, saves[i].image.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
                         tb = new TextButton(
                             new Vector2(UIScaler.GetHCenter(-20), offset),
                             new Vector2(4f * (float)saves[i].image.width / (float)saves[i].image.height, 4f),
