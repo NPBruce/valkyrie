@@ -485,7 +485,7 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
         select.AddItem("{NONE}", "");
-
+        select.AddNewComponentItem("Event");
         foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
         {
             if (c.typeDynamic.IndexOf("Event") == 0)
@@ -504,8 +504,19 @@ public class EditorComponentCustomMonster : EditorComponent
         }
         else
         {
+            string toAdd = key;
+            if (toAdd.Equals("{NEW:Event}"))
+            {
+                int i = 0;
+                while (game.quest.qd.components.ContainsKey("Event" + i))
+                {
+                    i++;
+                }
+                toAdd = "Event" + i;
+                Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+            }
             monsterComponent.activations = new string[1];
-            monsterComponent.activations[0] = key;
+            monsterComponent.activations[0] = toAdd;
         }
         Update();
     }
@@ -682,7 +693,9 @@ public class EditorComponentCustomMonster : EditorComponent
     public void SetEvade()
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
-
+        
+        select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
@@ -695,7 +708,18 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SelectSetEvade(string evade)
     {
-        monsterComponent.evadeEvent = evade;
+        string toAdd = evade;
+        if (toAdd.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+        monsterComponent.evadeEvent = toAdd;
         Update();
     }
 
@@ -703,6 +727,8 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 
+        select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
@@ -715,7 +741,18 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SelectSetHorror(string horror)
     {
-        monsterComponent.horrorEvent = horror;
+        string toAdd = horror;
+        if (toAdd.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+        monsterComponent.horrorEvent = toAdd;
         Update();
     }
 }
