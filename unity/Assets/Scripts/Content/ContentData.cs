@@ -731,23 +731,62 @@ public class ContentData {
                 int height = ddsBytes[13] * 256 + ddsBytes[12];
                 int width = ddsBytes[17] * 256 + ddsBytes[16];
 
+                /*20-23 pit
+                 * 24-27 dep
+                 * 28-31 mm
+                 * 32-35 al
+                 * 36-39 res
+                 * 40-43 sur
+                 * 44-51 over
+                 * 52-59 des
+                 * 60-67 sov
+                 * 68-75 sblt
+                 * 76-79 size
+                 * 80-83 flags
+                 * 84-87 fourCC
+                 * 88-91 bpp
+                 * 92-95 red
+                 */
+
+                char[] type = new char[4];
+                type[0] = (char)ddsBytes[84];
+                type[1] = (char)ddsBytes[85];
+                type[2] = (char)ddsBytes[86];
+                type[3] = (char)ddsBytes[87];
+
                 // Copy image data (skip header)
                 int DDS_HEADER_SIZE = 128;
                 byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
                 System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
-                // Create empty texture
-                texture = new Texture2D(width, height, TextureFormat.DXT5, false);
-                // Load data into texture
-                try
+                if (ddsBytes[87] == '5')
                 {
-                    texture.LoadRawTextureData(dxtBytes);
+                    texture = new Texture2D(width, height, TextureFormat.DXT5, false);
                 }
-                catch (System.Exception)
+                else if (ddsBytes[87] == '1')
                 {
                     texture = new Texture2D(width, height, TextureFormat.DXT1, false);
-                    texture.LoadRawTextureData(dxtBytes);
                 }
+                else if (ddsBytes[88] == 32)
+                {
+                    if (ddsBytes[92] == 0)
+                    {
+                        texture = new Texture2D(width, height, TextureFormat.BGRA32, false);
+                    }
+                    else
+                    {
+                        texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+                    }
+                }
+                else if (ddsBytes[88] == 24)
+                {
+                    texture = new Texture2D(width, height, TextureFormat.RGB24, false);
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Warning: Image invalid: " + file);
+                }
+                texture.LoadRawTextureData(dxtBytes);
                 texture.Apply();
             }
             else

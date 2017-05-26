@@ -91,6 +91,7 @@ namespace Assets.Scripts.UI
 
             float offset = 0;
             float xOffset = 0;
+            float yOffset = 4;
             foreach (SelectionItemTraits item in traitItems)
             {
                 bool display = true;
@@ -105,33 +106,33 @@ namespace Assets.Scripts.UI
                 {
                     if (20 - xOffset < spriteCache[item.GetKey()].width)
                     {
-                        offset += 4;
+                        offset += yOffset;
                         xOffset = 0;
                     }
-
-                    xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset);
+                    xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset, out yOffset);
                 }
                 else
                 {
-                    if (xOffset > 0) offset += 4;
+                    if (xOffset > 0) offset += yOffset;
                     xOffset = 0;
                     offset = DrawItem(item, itemScrollArea.GetScrollTransform(), offset);
                 }
             }
             if (xOffset != 0)
             {
-                offset += 4;
+                offset += yOffset;
             }
             itemScrollArea.SetScrollSize(offset);
         }
 
-        protected float DrawItem(string key, Transform transform, float offset, float xOffset)
+        protected float DrawItem(string key, Transform transform, float offset, float xOffset, out float yOffset)
         {
             UIElement ui = new UIElement(transform);
             ui.SetButton(delegate { SelectItem(key); });
             ui.SetImage(spriteCache[key].sprite);
             ui.SetBGColor(spriteCache[key].color);
-            ui.SetLocation(xOffset, offset, spriteCache[key].width, 3.95f);
+            ui.SetLocation(xOffset, offset, spriteCache[key].width, spriteCache[key].height);
+            yOffset = spriteCache[key].height + 0.05f;
             return xOffset + spriteCache[key].width + 0.05f;
         }
 
