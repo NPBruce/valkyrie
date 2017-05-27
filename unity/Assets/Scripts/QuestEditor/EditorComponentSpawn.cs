@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
-public class EditorComponentSpawn : EditorComponent
+public class EditorComponentSpawn : EditorComponentEvent
 {
     private readonly StringKey POSITION_TYPE_UNUSED = new StringKey("val", "POSITION_TYPE_UNUSED");
     private readonly StringKey POSITION_TYPE_HIGHLIGHT = new StringKey("val", "POSITION_TYPE_HIGHLIGHT");
@@ -22,222 +23,285 @@ public class EditorComponentSpawn : EditorComponent
     
     QuestData.Spawn spawnComponent;
 
-    DialogBoxEditable uniqueTitleDBE;
-    PaneledDialogBoxEditable uniqueTextDBE;
-    DialogBoxEditable healthDBE;
-    DialogBoxEditable healthHeroDBE;
+    UIElementEditable uniqueTitleUIE;
+    UIElementEditablePaneled uniqueTextUIE;
+    UIElementEditable healthUIE;
+    UIElementEditable healthHeroUIE;
 
-    EditorSelectionList monsterTypeESL;
     EditorSelectionList monsterTraitESL;
 
-    public EditorComponentSpawn(string nameIn) : base()
+    public EditorComponentSpawn(string nameIn) : base(nameIn)
     {
-        Game game = Game.Get();
-        spawnComponent = game.quest.qd.components[nameIn] as QuestData.Spawn;
-        component = spawnComponent;
-        name = component.sectionName;
-        Update();
     }
-    
-    override public void Update()
+
+    override public void AddLocationType(float offset)
     {
-        base.Update();
-        CameraController.SetCamera(spawnComponent.location);
-        Game game = Game.Get();
-
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.SPAWN, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(null,name.Substring("Spawn".Length),false), delegate { QuestEditorData.ListSpawn(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        if (!spawnComponent.locationSpecified)
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(14, offset, 4, 1);
+        ui.SetButton(delegate { PositionTypeCycle(); });
+        new UIElementBorder(ui);
+        if (!component.locationSpecified)
         {
-            tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), POSITION_TYPE_UNUSED, delegate { PositionTypeCycle(); });
+            ui.SetText(POSITION_TYPE_UNUSED);
         }
         else
         {
-            tb = new TextButton(new Vector2(7, 2), new Vector2(4, 1), POSITION_TYPE_HIGHLIGHT, delegate { PositionTypeCycle(); });
+            ui.SetText(POSITION_TYPE_HIGHLIGHT);
         }
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+    }
+    
+    override public float AddSubEventComponents(float offset)
+    {
+        spawnComponent = component as QuestData.Spawn;
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        db = new DialogBox(new Vector2(4, 6), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
-        db.ApplyTag(Game.EDITOR);
-
-        // Dumbers dont need translation
-        healthDBE = new DialogBoxEditable(new Vector2(7, 6), new Vector2(3, 1), 
-        spawnComponent.uniqueHealthBase.ToString(), false, delegate { UpdateHealth(); });
-        healthDBE.ApplyTag(Game.EDITOR);
-        healthDBE.AddBorder();
-
-        db = new DialogBox(new Vector2(10, 6), new Vector2(7, 1), new StringKey("val","X_COLON",HEALTH_HERO));
-        db.ApplyTag(Game.EDITOR);
-
-        // Numbers dont need translation
-        healthHeroDBE = new DialogBoxEditable(new Vector2(17, 6), new Vector2(3, 1), 
-        spawnComponent.uniqueHealthHero.ToString(), false, delegate { UpdateHealthHero(); });
-        healthHeroDBE.ApplyTag(Game.EDITOR);
-        healthHeroDBE.AddBorder();
+        UIElement ui = null;
 
         if (game.gameType is D2EGameType)
         {
-            tb = new TextButton(
-                new Vector2(12, 4), new Vector2(8, 1), 
-                CommonStringKeys.PLACEMENT, 
-                delegate { QuestEditorData.SelectAsSpawnPlacement(name); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag(Game.EDITOR);
-        
-            if (spawnComponent.unique)
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 6, 1);
+            ui.SetText(new StringKey("val", "X_COLON", MONSTER_UNIQUE));
+
+            if (!spawnComponent.unique)
             {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_UNIQUE, delegate { UniqueToggle(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-
-                db = new DialogBox(new Vector2(0, 8), new Vector2(5, 1), new StringKey("val", "X_COLON", UNIQUE_TITLE));
-                db.ApplyTag(Game.EDITOR);
-
-                uniqueTitleDBE = new DialogBoxEditable(
-                    new Vector2(5, 8), new Vector2(15, 1),
-                    spawnComponent.uniqueTitle.Translate(), false, 
-                delegate { UpdateUniqueTitle(); });
-                uniqueTitleDBE.ApplyTag(Game.EDITOR);
-                uniqueTitleDBE.AddBorder();
-
-                db = new DialogBox(new Vector2(0, 10), new Vector2(20, 1), new StringKey("val", "X_COLON", UNIQUE_INFO));
-                db.ApplyTag(Game.EDITOR);
-
-                uniqueTextDBE = new PaneledDialogBoxEditable(
-                new Vector2(0, 11), new Vector2(20, 8), 
-                spawnComponent.uniqueText.Translate(),
-                delegate { UpdateUniqueText(); });
-                uniqueTextDBE.ApplyTag(Game.EDITOR);
-                uniqueTextDBE.AddBorder();
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(6, offset, 3, 1);
+                ui.SetText(new StringKey("val", "FALSE"));
+                ui.SetButton(delegate { UniqueToggle(); });
+                new UIElementBorder(ui);
+                offset += 2;
             }
             else
             {
-                tb = new TextButton(new Vector2(0, 6), new Vector2(4, 1), MONSTER_NORMAL, delegate { UniqueToggle(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(6, offset, 3, 1);
+                ui.SetText(new StringKey("val", "TRUE"));
+                ui.SetButton(delegate { UniqueToggle(); });
+                new UIElementBorder(ui);
+                offset += 2;
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(0, offset, 5, 1);
+                ui.SetText(new StringKey("val", "X_COLON", UNIQUE_TITLE));
+
+                uniqueTitleUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+                uniqueTitleUIE.SetLocation(5, offset, 14.5f, 1);
+                uniqueTitleUIE.SetText(spawnComponent.uniqueTitle.Translate());
+                uniqueTitleUIE.SetSingleLine();
+                uniqueTitleUIE.SetButton(delegate { UpdateUniqueTitle(); });
+                new UIElementBorder(uniqueTitleUIE);
+                offset += 2;
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(0, offset++, 20, 1);
+                ui.SetText(new StringKey("val", "X_COLON", UNIQUE_INFO));
+
+                uniqueTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+                uniqueTextUIE.SetLocation(0.5f, offset, 19, 8);
+                uniqueTextUIE.SetText(spawnComponent.uniqueText.Translate());
+                uniqueTextUIE.SetButton(delegate { UpdateUniqueText(); });
+                new UIElementBorder(uniqueTextUIE);
+                offset += 9;
             }
         }
 
-        db = new DialogBox(new Vector2(0, 20), new Vector2(3, 1), new StringKey("val", "X_COLON", TYPES));
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", HEALTH));
 
-        tb = new TextButton(new Vector2(12, 20), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTypeAdd(0); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        healthUIE.SetLocation(5, offset, 3, 1);
+        healthUIE.SetText(spawnComponent.uniqueHealthBase.ToString());
+        healthUIE.SetSingleLine();
+        healthUIE.SetButton(delegate { UpdateHealth(); });
+        new UIElementBorder(healthUIE);
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(8, offset, 7, 1);
+        ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
+
+        healthHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+        healthHeroUIE.SetLocation(15, offset, 3, 1);
+        healthHeroUIE.SetText(spawnComponent.uniqueHealthHero.ToString());
+        healthHeroUIE.SetSingleLine();
+        healthHeroUIE.SetButton(delegate { UpdateHealthHero(); });
+        new UIElementBorder(healthHeroUIE);
+        offset += 2;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(1.5f, offset, 17, 1);
+        ui.SetText(new StringKey("val", "X_COLON", TYPES));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { MonsterTypeAdd(0); });
+        new UIElementBorder(ui, Color.green);
 
         int i = 0;
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < spawnComponent.mTypes.Length; i++)
         {
-            if (spawnComponent.mTypes.Length > i)
+            int mSlot = i;
+            string mName = spawnComponent.mTypes[i];
+            if (mName.IndexOf("Monster") == 0)
             {
-                int mSlot = i;
-                string mName = spawnComponent.mTypes[i];
-                if (mName.IndexOf("Monster") == 0)
-                {
-                    mName = mName.Substring("Monster".Length);
-                }
-
-                tb = new TextButton(new Vector2(0, 21 + i), new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTypeRemove(mSlot); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-
-                tb = new TextButton(new Vector2(1, 21 + i), new Vector2(11, 1), new StringKey(null,mName,false), delegate { MonsterTypeReplace(mSlot); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-
-                tb = new TextButton(new Vector2(12, 21 + i), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTypeAdd(mSlot + 1); }, Color.green);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                mName = mName.Substring("Monster".Length);
             }
+
+            if ((spawnComponent.mTypes.Length > 1) || (spawnComponent.mTraitsRequired.Length > 0) || (spawnComponent.mTraitsPool.Length > 0))
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(0.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { MonsterTypeRemove(mSlot); });
+                new UIElementBorder(ui, Color.red);
+            }
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            if (game.quest.qd.components.ContainsKey(spawnComponent.mTypes[i]))
+            {
+                ui.SetLocation(1.5f, offset, 16, 1);
+                UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                link.SetLocation(17.5f, offset, 1, 1);
+                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetButton(delegate { QuestEditorData.SelectComponent(spawnComponent.mTypes[mSlot]); });
+                new UIElementBorder(link, Color.blue);
+            }
+            else
+            {
+                ui.SetLocation(1.5f, offset, 17, 1);
+            }
+            ui.SetText(mName);
+            ui.SetButton(delegate { MonsterTypeReplace(mSlot); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset++, 1, 1);
+            ui.SetText(CommonStringKeys.PLUS, Color.green);
+            ui.SetButton(delegate { MonsterTypeAdd(mSlot + 1); });
+            new UIElementBorder(ui, Color.green);
+        }
+        offset++;
+
+        float traitOffset = offset;
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(REQ_TRAITS);
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(8.5f, offset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { MonsterTraitsAdd(); });
+        new UIElementBorder(ui, Color.green);
+
+        for (i = 0; i < spawnComponent.mTraitsRequired.Length; i++)
+        {
+            int mSlot = i;
+            string mName = spawnComponent.mTraitsRequired[i];
+
+            if ((spawnComponent.mTypes.Length > 0) || (spawnComponent.mTraitsRequired.Length > 1) || (spawnComponent.mTraitsPool.Length > 0))
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(0.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { MonsterTraitsRemove(mSlot); });
+                new UIElementBorder(ui, Color.red);
+            }
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(1.5f, offset++, 8, 1);
+            ui.SetText(new StringKey("val", mName));
+            ui.SetButton(delegate { MonsterTraitReplace(mSlot); });
+            new UIElementBorder(ui);
         }
 
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(10.5f, traitOffset, 8, 1);
+        ui.SetText(POOL_TRAITS);
 
-        db = new DialogBox(new Vector2(14, 20), new Vector2(3, 1), REQ_TRAITS);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, traitOffset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { MonsterTraitsAdd(true); });
+        new UIElementBorder(ui, Color.green);
 
-        tb = new TextButton(new Vector2(19, 20), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        for (i = 0; i < 8; i++)
+        for (int j = 0; j < spawnComponent.mTraitsPool.Length; j++)
         {
-            if (spawnComponent.mTraitsRequired.Length > i)
+            int mSlot = j;
+            string mName = spawnComponent.mTraitsPool[j];
+
+            if ((spawnComponent.mTypes.Length > 0) || (spawnComponent.mTraitsRequired.Length > 0) || (spawnComponent.mTraitsPool.Length > 1))
             {
-                int mSlot = i;
-                string mName = spawnComponent.mTraitsRequired[i];
-
-                tb = new TextButton(new Vector2(14, 21 + i), new Vector2(1, 1), 
-                    CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-
-                tb = new TextButton(new Vector2(15, 21 + i), new Vector2(5, 1), 
-                    new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(10.5f, traitOffset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { MonsterTraitsRemove(mSlot, true); });
+                new UIElementBorder(ui, Color.red);
             }
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(11.5f, traitOffset++, 8, 1);
+            ui.SetText(new StringKey("val", mName));
+            ui.SetButton(delegate { MonsterTraitReplace(mSlot, true); });
+            new UIElementBorder(ui);
         }
 
-        db = new DialogBox(new Vector2(14, 21 + spawnComponent.mTraitsRequired.Length), new Vector2(3, 1), POOL_TRAITS);
-        db.ApplyTag(Game.EDITOR);
+        if (traitOffset > offset) offset = traitOffset;
 
-        tb = new TextButton(new Vector2(19, 21 + spawnComponent.mTraitsRequired.Length), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { MonsterTraitsAdd(true); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        for (int j = 0; j < 8; j++)
+        offset++;
+        if (game.gameType is D2EGameType)
         {
-            if (spawnComponent.mTraitsPool.Length > j)
-            {
-                int mSlot = j;
-                string mName = spawnComponent.mTraitsPool[j];
-
-                tb = new TextButton(new Vector2(14, 22 + spawnComponent.mTraitsRequired.Length + j), 
-                    new Vector2(1, 1), CommonStringKeys.MINUS, delegate { MonsterTraitsRemove(mSlot, true); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-
-                tb = new TextButton(new Vector2(15, 22 + spawnComponent.mTraitsRequired.Length + j), 
-                    new Vector2(5, 1), new StringKey("val", mName), delegate { MonsterTraitReplace(mSlot, true); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-            }
+            offset = AddPlacementComponenets(offset);
         }
 
-        game.tokenBoard.AddHighlight(spawnComponent.location, "MonsterLoc", Game.EDITOR);
+        return offset;
     }
 
-    public void PositionTypeCycle()
+    public float AddPlacementComponenets(float offset)
+    {
+        for (int heroes = 2; heroes < 5; heroes++)
+        {
+            int h = heroes;
+            UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 18, 1);
+            ui.SetText(new StringKey("val", "NUMBER_HEROS", heroes));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset++, 1, 1);
+            ui.SetText(CommonStringKeys.PLUS, Color.green);
+            ui.SetButton(delegate { MonsterPlaceAdd(h); });
+            new UIElementBorder(ui, Color.green);
+
+            for (int i = 0; i < spawnComponent.placement[heroes].Length; i++)
+            {
+                int mSlot = i;
+                string place = spawnComponent.placement[heroes][i];
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(0.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { MonsterPlaceRemove(h, mSlot); });
+                new UIElementBorder(ui, Color.red);
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(1.5f, offset, 17, 1);
+                ui.SetText(place);
+                ui.SetButton(delegate { MonsterPlaceAdd(h, mSlot); });
+                new UIElementBorder(ui);
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset++, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(place); });
+                new UIElementBorder(ui, Color.blue);
+            }
+            offset++;
+        }
+
+        return offset;
+    }
+
+    override public void PositionTypeCycle()
     {
         spawnComponent.locationSpecified = !spawnComponent.locationSpecified;
         Update();
@@ -261,122 +325,93 @@ public class EditorComponentSpawn : EditorComponent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.Text, out spawnComponent.uniqueHealthBase);
+        float.TryParse(healthUIE.GetText(), out spawnComponent.uniqueHealthBase);
         Update();
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.Text, out spawnComponent.uniqueHealthHero);
+        float.TryParse(healthHeroUIE.GetText(), out spawnComponent.uniqueHealthHero);
         Update();
     }
 
     public void UpdateUniqueTitle()
     {
-        if (!uniqueTitleDBE.Text.Equals(""))
+        if (!uniqueTitleUIE.Empty() && uniqueTitleUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetitle_key, uniqueTitleUIE.GetText());
         }
     }
 
     public void UpdateUniqueText()
     {
-        if (!uniqueTextDBE.Text.Equals(""))
+        if (!uniqueTextUIE.Empty() && uniqueTextUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextDBE.Text);
+            LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextUIE.GetText());
         }
     }
 
     public void MonsterTypeAdd(int pos)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectMonsterType(s, pos); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Custom"));
+                select.AddItem(kv.Value);
             }
-        }
-
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
-        {
             if (kv.Value is QuestData.Spawn)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Spawn"));
+                select.AddItem(kv.Value);
             }
         }
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-            monsters.Add(
-                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                    localizedDisplay.ToString(),display.ToString(), sets));
+            select.AddItem(kv.Value);
         }
-        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos); });
-        monsterTypeESL.SelectItem();
+        select.Draw();
     }
 
     public void MonsterTypeReplace(int pos)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        List<EditorSelectionList.SelectionListEntry> monsters = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectMonsterType(s, pos, true); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
-                monsters.Add(new EditorSelectionList.SelectionListEntry(kv.Key, "Quest"));
+                select.AddItem(kv.Value);
+            }
+            if (kv.Value is QuestData.Spawn)
+            {
+                select.AddItem(kv.Value);
             }
         }
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-            monsters.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                localizedDisplay.ToString(),display.ToString(), sets));
+            select.AddItem(kv.Value);
         }
-        monsterTypeESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, monsters, delegate { SelectMonsterType(pos, true); });
-        monsterTypeESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectMonsterType(int pos, bool replace = false)
+    public void SelectMonsterType(string type, int pos, bool replace = false)
     {
         if (replace)
         {
-            spawnComponent.mTypes[pos] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
+            spawnComponent.mTypes[pos] = type.Split(" ".ToCharArray())[0];
         }
         else
         {
@@ -387,7 +422,7 @@ public class EditorComponentSpawn : EditorComponent
             {
                 if (j == pos && i == j)
                 {
-                    newM[i] = monsterTypeESL.selection.Split(" ".ToCharArray())[0];
+                    newM[i] = type.Split(" ".ToCharArray())[0];
                 }
                 else
                 {
@@ -543,6 +578,78 @@ public class EditorComponentSpawn : EditorComponent
             }
             spawnComponent.mTraitsRequired = newM;
         }
+        Update();
+    }
+
+    public void MonsterPlaceAdd(int heroes, int slot = -1)
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { MonsterPlaceAddSelection(heroes, slot, s); }, CommonStringKeys.SELECT_ITEM);
+
+        select.AddNewComponentItem("MPlace");
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.MPlace)
+            {
+                select.AddItem(kv.Value);
+            }
+        }
+        select.Draw();
+    }
+
+    public void MonsterPlaceAddSelection(int heroes, int slot, string name)
+    {
+        if (name.Equals("{NEW:MPlace}"))
+        {
+            Game game = Game.Get();
+            int index = 0;
+
+            while (game.quest.qd.components.ContainsKey("MPlace" + index))
+            {
+                index++;
+            }
+            game.quest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
+            name = "MPlace" + index;
+        }
+
+        if (slot == -1)
+        {
+            string[] newM = new string[spawnComponent.placement[heroes].Length + 1];
+            int i;
+            for (i = 0; i < spawnComponent.placement[heroes].Length; i++)
+            {
+                newM[i] = spawnComponent.placement[heroes][i];
+            }
+
+            newM[i] = name;
+            spawnComponent.placement[heroes] = newM;
+        }
+        else
+        {
+            spawnComponent.placement[heroes][slot] = name;
+        }
+        Update();
+    }
+
+    public void MonsterPlaceRemove(int heroes, int pos)
+    {
+        string[] newM = new string[spawnComponent.placement[heroes].Length - 1];
+
+        int j = 0;
+        for (int i = 0; i < spawnComponent.placement[heroes].Length; i++)
+        {
+            if (i != pos || i != j)
+            {
+                newM[j] = spawnComponent.placement[heroes][i];
+                j++;
+            }
+        }
+        spawnComponent.placement[heroes] = newM;
         Update();
     }
 }

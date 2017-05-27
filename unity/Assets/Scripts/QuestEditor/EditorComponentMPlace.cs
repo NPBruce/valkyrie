@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentMPlace : EditorComponent
 {
@@ -14,35 +15,25 @@ public class EditorComponentMPlace : EditorComponent
         Update();
     }
     
-    override public void Update()
+    override public float AddSubComponents(float offset)
     {
-        base.Update();
         CameraController.SetCamera(mPlaceComponent.location);
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.MPLACE, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(null,name.Substring("MPlace".Length),false), 
-            delegate { QuestEditorData.ListMPlace(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(4, offset, 4, 1);
+        ui.SetText(CommonStringKeys.POSITION_SNAP);
+        ui.SetButton(delegate { GetPosition(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
         StringKey rotateKey = new StringKey("val","RIGHT");
         if (mPlaceComponent.rotate)
@@ -50,23 +41,28 @@ public class EditorComponentMPlace : EditorComponent
             rotateKey = new StringKey("val", "DOWN");
         }
 
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val","ROTATE_TO",rotateKey), 
-            delegate { Rotate(); });
-
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 4, 1);
+        ui.SetText(rotateKey);
+        ui.SetButton(delegate { Rotate(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
         StringKey mast = new StringKey("val","MONSTER_MINION");
         if (mPlaceComponent.master)
         {
             mast = new StringKey("val","MONSTER_MASTER");
         }
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), mast, delegate { MasterToggle(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(mast);
+        ui.SetButton(delegate { MasterToggle(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
         game.tokenBoard.AddHighlight(mPlaceComponent.location, "MonsterLoc", Game.EDITOR);
+
+        return offset;
     }
 
     public void Rotate()

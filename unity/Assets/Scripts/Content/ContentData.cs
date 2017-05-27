@@ -27,6 +27,8 @@ public class ContentData {
     public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
 
+    public static Dictionary<string, Texture2D> textureCache;
+
     public static string ContentPath()
     {
         if (Application.isEditor)
@@ -604,12 +606,18 @@ public class ContentData {
             if (!puzzles.ContainsKey(name))
             {
                 puzzles.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (puzzles[name].priority < d.priority)
             {
                 puzzles.Remove(name);
                 puzzles.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (puzzles[name].priority == d.priority)
+            {
+                puzzles[name].sets.Add(packID);
             }
         }
 
@@ -624,12 +632,18 @@ public class ContentData {
             if (!images.ContainsKey(name))
             {
                 images.Add(name, d);
+                d.sets.Add(packID);
             }
             // If we do replace if this has higher priority
             else if (images[name].priority < d.priority)
             {
                 images.Remove(name);
                 images.Add(name, d);
+            }
+            // items of the same priority belong to multiple packs
+            else if (images[name].priority == d.priority)
+            {
+                images[name].sets.Add(packID);
             }
         }
 
@@ -680,64 +694,119 @@ public class ContentData {
         WWW www = null;
         Texture2D texture = null;
 
-        // Unity doesn't support dds directly, have to do hackery
-        if (Path.GetExtension(file).Equals(".dds"))
+        if (textureCache == null)
         {
-            // Read the data
-            byte[] ddsBytes = null;
-            try
-            {
-                ddsBytes = File.ReadAllBytes(file);
-            }
-            catch (System.Exception)
-            {
-                ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
-                return null;
-            }
-            // Check for valid header
-            byte ddsSizeCheck = ddsBytes[4];
-            if (ddsSizeCheck != 124)
-            {
-                ValkyrieDebug.Log("Warning: Image invalid: " + file);
-                return null;
-            }
+            textureCache = new Dictionary<string, Texture2D>();
+        }
 
-            // Extract dimensions
-            int height = ddsBytes[13] * 256 + ddsBytes[12];
-            int width = ddsBytes[17] * 256 + ddsBytes[16];
-
-            // Copy image data (skip header)
-            int DDS_HEADER_SIZE = 128;
-            byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
-            System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
-
-            // Create empty texture
-            texture = new Texture2D(width, height, TextureFormat.DXT5, false);
-            // Load data into texture
-            try
-            {
-                texture.LoadRawTextureData(dxtBytes);
-            }
-            catch (System.Exception)
-            {
-                texture = new Texture2D(width, height, TextureFormat.DXT1, false);
-                texture.LoadRawTextureData(dxtBytes);
-            }
-            texture.Apply();
+        if (textureCache.ContainsKey(file))
+        {
+            texture = textureCache[file];
         }
         else
-        // If the image isn't DDS just use unity file load
         {
-            try
+            // Unity doesn't support dds directly, have to do hackery
+            if (Path.GetExtension(file).Equals(".dds"))
             {
-                www = new WWW(@"file://" + imagePath);
-                texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
-                www.LoadImageIntoTexture(texture);
+                // Read the data
+                byte[] ddsBytes = null;
+                try
+                {
+                    ddsBytes = File.ReadAllBytes(file);
+                }
+                catch (System.Exception)
+                {
+                    ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
+                    return null;
+                }
+                // Check for valid header
+                byte ddsSizeCheck = ddsBytes[4];
+                if (ddsSizeCheck != 124)
+                {
+                    ValkyrieDebug.Log("Warning: Image invalid: " + file);
+                    return null;
+                }
+
+                // Extract dimensions
+                int height = ddsBytes[13] * 256 + ddsBytes[12];
+                int width = ddsBytes[17] * 256 + ddsBytes[16];
+
+                /*20-23 pit
+                 * 24-27 dep
+                 * 28-31 mm
+                 * 32-35 al
+                 * 36-39 res
+                 * 40-43 sur
+                 * 44-51 over
+                 * 52-59 des
+                 * 60-67 sov
+                 * 68-75 sblt
+                 * 76-79 size
+                 * 80-83 flags
+                 * 84-87 fourCC
+                 * 88-91 bpp
+                 * 92-95 red
+                 */
+
+                char[] type = new char[4];
+                type[0] = (char)ddsBytes[84];
+                type[1] = (char)ddsBytes[85];
+                type[2] = (char)ddsBytes[86];
+                type[3] = (char)ddsBytes[87];
+
+                // Copy image data (skip header)
+                int DDS_HEADER_SIZE = 128;
+                byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
+                System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
+
+                if (ddsBytes[87] == '5')
+                {
+                    texture = new Texture2D(width, height, TextureFormat.DXT5, false);
+                }
+                else if (ddsBytes[87] == '1')
+                {
+                    texture = new Texture2D(width, height, TextureFormat.DXT1, false);
+                }
+                else if (ddsBytes[88] == 32)
+                {
+                    if (ddsBytes[92] == 0)
+                    {
+                        texture = new Texture2D(width, height, TextureFormat.BGRA32, false);
+                    }
+                    else
+                    {
+                        texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+                    }
+                }
+                else if (ddsBytes[88] == 24)
+                {
+                    texture = new Texture2D(width, height, TextureFormat.RGB24, false);
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Warning: Image invalid: " + file);
+                }
+                texture.LoadRawTextureData(dxtBytes);
+                texture.Apply();
             }
-            catch (System.Exception)
+            else
+            // If the image isn't DDS just use unity file load
             {
-                ValkyrieDebug.Log("Warning: Image missing: " + file);
-                return null;
+                try
+                {
+                    www = new WWW(@"file://" + imagePath);
+                    texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
+                    www.LoadImageIntoTexture(texture);
+                }
+                catch (System.Exception)
+                {
+                    ValkyrieDebug.Log("Warning: Image missing: " + file);
+                    return null;
+                }
+            }
+            if (!file.Contains(Path.GetTempPath()))
+            {
+                textureCache.Add(file, texture);
             }
         }
         // Get whole image

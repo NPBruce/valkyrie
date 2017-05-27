@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 // Class for creation of a dialog window with buttons and handling button press
@@ -44,8 +45,12 @@ public class DialogWindow {
         // Update selection status
         game.heroCanvas.UpdateStatus();
 
-        if (eventData.qEvent.quota > 0)
+        if (eventData.qEvent.quota > 0 || eventData.qEvent.quotaVar.Length > 0)
         {
+            if (eventData.qEvent.quotaVar.Length > 0)
+            {
+                quota = Mathf.RoundToInt(game.quest.vars.GetValue(eventData.qEvent.quotaVar));
+            }
             CreateQuotaWindow();
         }
         else
@@ -59,19 +64,16 @@ public class DialogWindow {
     public void CreateWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
-            new StringKey(null, text, false));
-        float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
-        db.Destroy();
-        
+        float offset = UIElement.GetStringHeight(text, 28);
         if (offset < 4)
         {
             offset = 4;
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
-            new StringKey(null, text, false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, offset);
+        ui.SetText(text);
+        new UIElementBorder(ui);
         offset += 1f;
 
         // Determine button size
@@ -83,7 +85,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
+            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
             db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
             float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
             if (length > buttonWidth)
@@ -186,7 +188,7 @@ public class DialogWindow {
         if (!game.quest.itemSelect.ContainsKey(item)) return;
 
         Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
-        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
         db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
@@ -212,6 +214,13 @@ public class DialogWindow {
     public void onQuota()
     {
         Game game = Game.Get();
+        if (eventData.qEvent.quotaVar.Length > 0)
+        {
+            game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota);
+            onButton(1);
+            return;
+        }
+        
         if (game.quest.eventQuota.ContainsKey(eventData.qEvent.sectionName))
         {
             game.quest.eventQuota[eventData.qEvent.sectionName] += quota;

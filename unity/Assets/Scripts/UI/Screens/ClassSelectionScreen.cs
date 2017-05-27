@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts.UI.Screens
 {
     class ClassSelectionScreen
     {
+        protected List<float> scrollOffset = new List<float>();
+        protected List<UIElementScrollVertical> scrollArea = new List<UIElementScrollVertical>();
+
         public ClassSelectionScreen()
         {
             Draw();
@@ -71,6 +74,11 @@ namespace Assets.Scripts.UI.Screens
         {
             Game game = Game.Get();
 
+            if (scrollOffset.Count > hero)
+            {
+                scrollOffset[hero] = scrollArea[hero].GetScrollPosition();
+            }
+
             string archetype = game.quest.heroes[hero].heroData.archetype;
             string hybridClass = game.quest.heroes[hero].hybridClass;
             float yStart = 7f;
@@ -91,40 +99,15 @@ namespace Assets.Scripts.UI.Screens
                 yStart += 5;
             }
 
-            db = new DialogBox(new Vector2(xOffset + 0.25f, yStart), new Vector2(8.5f, 27f - yStart), StringKey.NULL);
-            db.AddBorder();
-            db.background.AddComponent<UnityEngine.UI.Mask>();
-            db.ApplyTag(Game.HEROSELECT);
-            UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+            while (scrollArea.Count <= hero)
+            {
+                scrollArea.Add(null);
+            }
+            scrollArea[hero] = new UIElementScrollVertical(Game.HEROSELECT);
+            scrollArea[hero].SetLocation(xOffset + 0.25f, yStart, 8.5f, 27 - yStart);
+            new UIElementBorder(scrollArea[hero]);
 
-            GameObject scrollArea = new GameObject("scroll");
-            RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-            scrollArea.transform.parent = db.background.transform;
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (8f) * UIScaler.GetPixelsPerUnit());
-
-            GameObject scrollBarObj = new GameObject("scrollbar");
-            scrollBarObj.transform.parent = db.background.transform;
-            RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (27f - yStart) * UIScaler.GetPixelsPerUnit());
-            scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (7.75f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
-            UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
-            scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
-            scrollRect.verticalScrollbar = scrollBar;
-
-            GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-            scrollBarHandle.transform.parent = scrollBarObj.transform;
-            scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
-            scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-            scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
-            scrollBar.handleRect.offsetMin = Vector2.zero;
-            scrollBar.handleRect.offsetMax = Vector2.zero;
-
-            scrollRect.content = scrollInnerRect;
-            scrollRect.horizontal = false;
-            scrollRect.scrollSensitivity = 27f;
-
-            float yOffset = yStart + 1f;
+            float yOffset = 1;
 
             foreach (ClassData cd in game.cd.classes.Values)
             {
@@ -145,31 +128,42 @@ namespace Assets.Scripts.UI.Screens
                             pick = true;
                         }
                     }
+                    if (game.quest.heroes[i].hybridClass.Equals(className))
+                    {
+                        available = false;
+                    }
                 }
 
+                UIElement ui = new UIElement(Game.HEROSELECT, scrollArea[hero].GetScrollTransform());
+                ui.SetLocation(0.25f, yOffset, 7, 4);
                 if (available)
                 {
-                    tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, 4f), cd.name, delegate { Select(hero, className); }, Color.clear);
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                    ui.SetBGColor(Color.white);
+                    ui.SetButton(delegate { Select(hero, className); });
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(xOffset + 0.5f, yOffset), new Vector2(7f, 4f), cd.name, delegate {; }, Color.clear);
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.2f, 0.2f, 0.2f);
+                    ui.SetBGColor(new Color(0.2f, 0.2f, 0.2f));
                     if (pick)
                     {
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
+                        ui.SetBGColor(new Color(0, 0.7f, 0));
                     }
                 }
-                tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.background.transform.parent = scrollArea.transform;
-                tb.ApplyTag(Game.HEROSELECT);
+                ui.SetText(cd.name, Color.black);
+                ui.SetFontSize(UIScaler.GetMediumFont());
 
                 yOffset += 5f;
             }
 
-            scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (yOffset - 2.5f) * UIScaler.GetPixelsPerUnit());
+            scrollArea[hero].SetScrollSize(yOffset);
+            if (scrollOffset.Count > hero)
+            {
+                scrollArea[hero].SetScrollPosition(scrollOffset[hero]);
+            }
+            else
+            {
+                scrollOffset.Add(0);
+            }
 
             Texture2D heroTex = ContentData.FileToTexture(game.quest.heroes[hero].heroData.image);
             Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
@@ -183,6 +177,7 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
             if (game.cd.classes[className].hybridArchetype.Length > 0)
             {
+                game.quest.heroes[hero].className = "";
                 if (game.quest.heroes[hero].hybridClass.Length > 0)
                 {
                     game.quest.heroes[hero].hybridClass = "";
@@ -190,7 +185,6 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     game.quest.heroes[hero].hybridClass = className;
-                    game.quest.heroes[hero].className = "";
                 }
             }
             else

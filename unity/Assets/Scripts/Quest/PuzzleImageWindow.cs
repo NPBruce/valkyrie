@@ -20,7 +20,6 @@ public class PuzzleImageWindow
     {
         eventData = e;
         Game game = Game.Get();
-        CameraController.panDisable = true;
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
@@ -61,7 +60,7 @@ public class PuzzleImageWindow
             imageSprite[i] = new Sprite[questPuzzle.puzzleAltLevel];
             for (int j = 0; j < questPuzzle.puzzleAltLevel; j++)
             {
-                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, (questPuzzle.puzzleAltLevel - (j + 1)) * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1);
+                imageSprite[i][j] = Sprite.Create(newTex, new Rect(i * newTex.width / questPuzzle.puzzleLevel, (questPuzzle.puzzleAltLevel - (j + 1)) * newTex.height / questPuzzle.puzzleAltLevel, newTex.width / questPuzzle.puzzleLevel, newTex.height / questPuzzle.puzzleAltLevel), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             }
         }
 
@@ -71,7 +70,6 @@ public class PuzzleImageWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        CameraController.panDisable = true;
         DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
         db.AddBorder();
 
@@ -131,7 +129,7 @@ public class PuzzleImageWindow
         GameObject gameObject = new GameObject("PuzzleTile");
         gameObject.tag = Game.DIALOG;
 
-        gameObject.transform.parent = game.uICanvas.transform;
+        gameObject.transform.SetParent(game.uICanvas.transform);
 
         RectTransform trans = gameObject.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetPixelsPerUnit() + (UIScaler.GetPixelsPerUnit() * screenPos.y * height), height * UIScaler.GetPixelsPerUnit());

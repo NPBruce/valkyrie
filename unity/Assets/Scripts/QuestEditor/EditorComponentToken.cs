@@ -1,72 +1,60 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
-public class EditorComponentToken : EditorComponent
+public class EditorComponentToken : EditorComponentEvent
 {
     QuestData.Token tokenComponent;
-    EditorSelectionList typeList;
 
-    public EditorComponentToken(string nameIn) : base()
+    public EditorComponentToken(string nameIn) : base(nameIn)
     {
-        Game game = Game.Get();
-        tokenComponent = game.quest.qd.components[nameIn] as QuestData.Token;
-        component = tokenComponent;
-        name = component.sectionName;
-        Update();
+    }
+
+    override public void Highlight()
+    {
+        CameraController.SetCamera(component.location);
+    }
+
+    override public void AddLocationType(float offset)
+    {
     }
     
-    override public void Update()
+    override public float AddSubEventComponents(float offset)
     {
-        base.Update();
-        Game game = Game.Get();
-        CameraController.SetCamera(tokenComponent.location);
+        tokenComponent = component as QuestData.Token;
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(4, 1), CommonStringKeys.TOKEN, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
-        tb = new TextButton(new Vector2(4, 0), new Vector2(15, 1), 
-            new StringKey(null, name.Substring("Token".Length),false), delegate { QuestEditorData.ListToken(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 3, 1);
+        ui.SetText(tokenComponent.rotation.ToString());
+        ui.SetButton(delegate { Rotate(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TYPE")));
 
-
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(4, 2), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP , delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(5, 2), new Vector2(1, 1), CommonStringKeys.POSITION_FREE, delegate { GetPosition(false); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 4), new Vector2(8, 1),
-            new StringKey("val", "ROTATION", 
-            new StringKey(null, tokenComponent.rotation.ToString(), false)),
-            delegate { Rotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1), 
-            new StringKey(null, tokenComponent.tokenName,false), delegate { Type(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 8), new Vector2(8, 1), CommonStringKeys.EVENT, delegate { QuestEditorData.SelectAsEvent(name); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(4, offset, 12, 1);
+        ui.SetText(tokenComponent.tokenName);
+        ui.SetButton(delegate { Type(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
         game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);
+
+        return offset;
+    }
+
+    override public float AddEventTrigger(float offset)
+    {
+        return offset;
     }
 
     public void Rotate()
@@ -83,31 +71,25 @@ public class EditorComponentToken : EditorComponent
 
     public void Type()
     {
-        typeList = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TOKEN), GetTokenNames(), delegate { SelectType(); });
-        typeList.SelectItem();
-    }
-
-    public static List<EditorSelectionList.SelectionListEntry> GetTokenNames()
-    {
-        List<EditorSelectionList.SelectionListEntry> names = new List<EditorSelectionList.SelectionListEntry>();
-
-        foreach (KeyValuePair<string, TokenData> kv in Game.Get().cd.tokens)
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            //StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            foreach (string s in kv.Value.sets)
-            {
-                display.Append(" ").Append(s);
-                //localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-            }
-            names.Add( new EditorSelectionList.SelectionListEntry(display.ToString()));
+            return;
         }
-        return names;
+        Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
+
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+
+        foreach (KeyValuePair<string, TokenData> kv in game.cd.tokens)
+        {
+            select.AddItem(kv.Value);
+        }
+        select.Draw();
     }
 
-    public void SelectType()
+    public void SelectType(string token)
     {
-        tokenComponent.tokenName = typeList.selection.Split(" ".ToCharArray())[0];
+        tokenComponent.tokenName = token.Split(" ".ToCharArray())[0];
         Game.Get().quest.Remove(tokenComponent.sectionName);
         Game.Get().quest.Add(tokenComponent.sectionName);
         Update();

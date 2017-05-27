@@ -69,7 +69,7 @@ public class MonsterDialogMoM : MonsterDialog
 
         GameObject mImg = new GameObject("monsterImg" + monster.monsterData.name);
         mImg.tag = Game.DIALOG;
-        mImg.transform.parent = game.uICanvas.transform;
+        mImg.transform.SetParent(game.uICanvas.transform);
 
         RectTransform trans = mImg.AddComponent<RectTransform>();
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 1f * UIScaler.GetPixelsPerUnit(), 8f * UIScaler.GetPixelsPerUnit());
@@ -85,7 +85,7 @@ public class MonsterDialogMoM : MonsterDialog
         {
             GameObject mImgDupe = new GameObject("monsterDupe" + monster.monsterData.name);
             mImgDupe.tag = Game.DIALOG;
-            mImgDupe.transform.parent = game.uICanvas.transform;
+            mImgDupe.transform.SetParent(game.uICanvas.transform);
 
             RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
             dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 5f * UIScaler.GetPixelsPerUnit(), UIScaler.GetPixelsPerUnit() * 4f);

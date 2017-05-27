@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Paged list of items to select from
 // Used by quest editor
@@ -15,12 +16,9 @@ public class EditorSelectionList
     public StringKey title;
     public UnityEngine.Events.UnityAction returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
-    // Page offset
-    public int indexOffset = 0;
     // Filters
     public HashSet<string> filter;
     public HashSet<string> traits;
-    public int perPage = 20;
 
     /// <summary>
     /// Create editor selection clist with title, list, colour and callback.
@@ -57,12 +55,23 @@ public class EditorSelectionList
         Destroyer.Dialog();
         cancelCall = call;
 
+        float windowSize= 22;
+        if (traits.Count > 10)
+        {
+            windowSize = 36;
+        }
+
+        float windowEdge = UIScaler.GetHCenter(windowSize / -2);
+
         // Border
-        DialogBox db = new DialogBox(new Vector2(21, 0), new Vector2(20, 30), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(windowEdge, 0, windowSize, 30);
+        new UIElementBorder(ui);
 
         // Title
-        db = new DialogBox(new Vector2(21, 0), new Vector2(20, 1), title);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
+        ui.SetText(title);
 
         // Create a list of traits of all items in the list
         List<SelectionListEntry> filtered = items;
@@ -88,31 +97,30 @@ public class EditorSelectionList
         }
 
         float offset = 2f;
-        TextButton tb = null;
 
-        float hOffset = 22;
+        float hOffset = windowEdge + 1;
         // Create filter traits buttons
         foreach (string trait in traits)
         {
             // Traits are in val dictionary
-            db = new DialogBox(Vector2.zero, new Vector2(10, 1), new StringKey(VAL, trait));
-            float width = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 0.5f;
-            db.Destroy();
-            if (hOffset + width > 40)
+            float width = UIElement.GetStringWidth(new StringKey(VAL, trait));
+            if (hOffset + width > windowEdge + windowSize - 1)
             {
-                hOffset = 22;
+                hOffset = windowEdge + 1;
                 offset++;
             }
             string tmp = trait;
+
+            ui = new UIElement();
+            ui.SetLocation(hOffset, offset, width, 1);
+            Color c = Color.white;
             if (filter.Count == 0)
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(VAL, tmp), delegate { SetFilter(trait); });
+                ui.SetButton(delegate { SetFilter(trait); });
             }
             else if (filter.Contains(trait))
             {
-                tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                    new StringKey(VAL, tmp), delegate { ClearFilter(trait); });
+                ui.SetButton(delegate { ClearFilter(trait); });
             }
             else
             {
@@ -127,93 +135,94 @@ public class EditorSelectionList
                 }
                 if (valid)
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(VAL, tmp), delegate { SetFilter(trait); }, Color.gray);
+                    ui.SetButton(delegate { SetFilter(trait); });
+                    c = Color.gray;
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(hOffset, offset), new Vector2(width, 1), 
-                        new StringKey(VAL, tmp), delegate { ; }, new Color(0.5f, 0, 0));
+                    c = new Color(0.5f, 0, 0);
                 }
             }
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            ui.SetText(new StringKey(VAL, tmp), c);
+            new UIElementBorder(ui);
             hOffset += width;
         }
 
         if (traits.Count > 0) offset += 2;
-        perPage = 27 - Mathf.RoundToInt(offset);
 
-        // All items on this page
-        for (int i = indexOffset; i < (perPage + indexOffset); i++)
+        // Scroll BG
+        float scrollStart = offset;
+        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10.5f), offset), new Vector2(21, 27 - offset), StringKey.NULL);
+        db.AddBorder();
+        db.background.AddComponent<UnityEngine.UI.Mask>();
+        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+
+        GameObject scrollArea = new GameObject("scroll");
+        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
+        scrollArea.transform.SetParent(db.background.transform);
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 20 * UIScaler.GetPixelsPerUnit());
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1);
+
+        GameObject scrollBarObj = new GameObject("scrollbar");
+        scrollBarObj.transform.SetParent(db.background.transform);
+        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (27 - offset) * UIScaler.GetPixelsPerUnit());
+        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 20 * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
+        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
+        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+        scrollRect.verticalScrollbar = scrollBar;
+
+        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
+        scrollBarHandle.transform.SetParent(scrollBarObj.transform);
+        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
+        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
+        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
+        scrollBar.handleRect.offsetMin = Vector2.zero;
+        scrollBar.handleRect.offsetMax = Vector2.zero;
+
+        scrollRect.content = scrollInnerRect;
+        scrollRect.horizontal = false;
+        scrollRect.scrollSensitivity = 27f;
+
+        for (int i = 0; i < filtered.Count; i++)
         {
-            // limit to array length
-            if (filtered.Count > i)
+            // Print the name but select the key
+            string key = filtered[i].key;
+            ui = new UIElement(scrollArea.transform);
+            ui.SetLocation(0, (i * 1.05f), 20, 1);
+            if (key != null)
             {
-                // Print the name but select the key
-                string key = filtered[i].key;
-                tb = new TextButton(new Vector2(21, offset), new Vector2(20, 1), 
-                    new StringKey(null, filtered[i].name, false), delegate { SelectComponent(key); }, filtered[i].color);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                if (key == null)
-                {
-                    //Empty buttons are disabled
-                    tb.setActive(false);
-                }
+                ui.SetButton(delegate { SelectComponent(key); });
             }
-            offset += 1;
+            ui.SetBGColor(Color.white);
+            ui.SetText(filtered[i].name, Color.black);
         }
-        // Paged
-        if (filtered.Count > perPage)
+
+        float scrollsize = filtered.Count * 1.05f;
+        if (scrollsize < 28)
         {
-            // Prev button
-            offset += 1;
-            tb = new TextButton(new Vector2(22f, offset), new Vector2(1, 1), new StringKey(null, "<", false), delegate { PreviousPage(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            // Next button
-            tb = new TextButton(new Vector2(39f, offset), new Vector2(1, 1), new StringKey(null, ">", false), delegate { NextPage(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+            scrollsize = 28;
         }
+        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, scrollsize * UIScaler.GetPixelsPerUnit());
+
         // Cancel button
-        tb = new TextButton(new Vector2(26.5f, offset), new Vector2(9, 1), CommonStringKeys.CANCEL, cancelCall);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetButton(cancelCall);
+        new UIElementBorder(ui);
     }
     
     public void SetFilter(string f)
     {
         filter.Add(f);
-        indexOffset = 0;
         SelectItem(cancelCall);
     }
 
     public void ClearFilter(string f)
     {
         filter.Remove(f);
-        indexOffset = 0;
-        SelectItem(cancelCall);
-    }
-
-    // Move to next page and redraw
-    public void NextPage()
-    {
-        indexOffset += perPage;
-        if (indexOffset > items.Count)
-        {
-            indexOffset -= perPage;
-        }
-        SelectItem(cancelCall);
-    }
-
-    // Move to previous page and redraw
-    public void PreviousPage()
-    {
-        indexOffset -= perPage;
-        if (indexOffset < 0)
-        {
-            indexOffset = 0;
-        }
         SelectItem(cancelCall);
     }
 
@@ -273,10 +282,33 @@ public class EditorSelectionList
             return entry;
         }
 
-        private SelectionListEntry()
+        public static SelectionListEntry BuildNewComponent(string type)
+        {
+            SelectionListEntry entry = BuildNameKeyItem(new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}");
+            entry.filter.Add(type);
+            entry.filter.Add(new StringKey(VAL,"NEW").Translate());
+            return entry;
+        }
+
+        public SelectionListEntry()
         {
             filter = new List<string>();
         }
+
+        public SelectionListEntry(QuestData.QuestComponent component, List<string> traits = null)
+        {
+            name = component.sectionName;
+            key = name;
+            filter = traits;
+            if (filter == null)
+            {
+                filter = new List<string>();
+            }
+            Game game = Game.Get();
+            filter.Add(component.source);
+            filter.Add(new StringKey(VAL,component.typeDynamic.ToUpper()).Translate());
+        }
+        
         public SelectionListEntry(string nameKeyIn)
         {
             name = nameKeyIn;

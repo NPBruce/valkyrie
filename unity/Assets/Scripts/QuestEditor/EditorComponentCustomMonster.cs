@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentCustomMonster : EditorComponent
 {
@@ -19,16 +20,11 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
 
     QuestData.CustomMonster monsterComponent;
-    
-    DialogBoxEditable nameDBE;
-    PaneledDialogBoxEditable infoDBE;
-    DialogBoxEditable healthDBE;
-    DialogBoxEditable healthHeroDBE;
-    EditorSelectionList baseESL;
-    EditorSelectionList activationsESL;
-    EditorSelectionList traitsESL;
-    EditorSelectionList imageESL;
-    EditorSelectionList placeESL;
+
+    UIElementEditable nameUIE;
+    UIElementEditablePaneled infoUIE;
+    UIElementEditable healthUIE;
+    UIElementEditable healthHeroUIE;
 
     // TODO: Translate expansion traits, translate base monster names.
 
@@ -42,255 +38,388 @@ public class EditorComponentCustomMonster : EditorComponent
         Update();
     }
     
-    override public void Update()
+    override public float AddSubComponents(float offset)
     {
-        base.Update();
         Game game = Game.Get();
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(6, 1), CommonStringKeys.CUSTOM_MONSTER, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", BASE));
 
-        tb = new TextButton(new Vector2(6, 0), new Vector2(13, 1), 
-            new StringKey(null,name.Substring("CustomMonster".Length),false), delegate { QuestEditorData.ListCustomMonster(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(3, offset, 16.5f, 1);
+        ui.SetText(monsterComponent.baseMonster);
+        ui.SetButton(delegate { SetBase(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", NAME));
 
-
-        DialogBox db = new DialogBox(new Vector2(0, 2), new Vector2(3, 1),
-            new StringKey("val", "X_COLON", BASE));
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(3, 2), new Vector2(17, 1), 
-            new StringKey(null,monsterComponent.baseMonster,false),  delegate { SetBase(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        db = new DialogBox(new Vector2(0, 4), new Vector2(3, 1),
-            new StringKey("val", "X_COLON", NAME));
-        db.ApplyTag(Game.EDITOR);
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.KeyExists())
         {
-            nameDBE = new DialogBoxEditable(
-                new Vector2(3, 4), new Vector2(14, 1), 
-                monsterComponent.monsterName.Translate(), false,
-                delegate { UpdateName(); });
-            nameDBE.ApplyTag(Game.EDITOR);
-            nameDBE.AddBorder();
+            nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            nameUIE.SetLocation(3, offset, 13.5f, 1);
+            nameUIE.SetText(monsterComponent.monsterName.Translate());
+            nameUIE.SetSingleLine();
+            nameUIE.SetButton(delegate { UpdateName(); });
+            new UIElementBorder(nameUIE);
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1), 
-                    CommonStringKeys.RESET, delegate { ClearName(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearName(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 4), new Vector2(3, 1),
-                CommonStringKeys.SET, delegate { SetName(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetName(); });
+            new UIElementBorder(ui);
         }
+        offset += 2;
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, 6), new Vector2(17, 1), new StringKey("val","X_COLON",INFO));
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 16, 1);
+            ui.SetText(new StringKey("val", "X_COLON", INFO));
+
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
-                infoDBE = new PaneledDialogBoxEditable(
-                    new Vector2(0, 7), new Vector2(20, 8), 
-                    monsterComponent.info.Translate(),
-                    delegate { UpdateInfo(); });
-                infoDBE.ApplyTag(Game.EDITOR);
-                infoDBE.AddBorder();
+                infoUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+                infoUIE.SetLocation(0.5f, offset + 1, 19, 8);
+                infoUIE.SetText(monsterComponent.info.Translate());
+                infoUIE.SetButton(delegate { UpdateInfo(); });
+                new UIElementBorder(infoUIE);
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearInfo(); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.ApplyTag(Game.EDITOR);
+                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                    ui.SetLocation(16.5f, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearInfo(); });
+                    new UIElementBorder(ui);
                 }
+                offset += 10;
             }
             else
             {
-                tb = new TextButton(new Vector2(17, 6), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetInfo(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetInfo(); });
+                new UIElementBorder(ui);
+                offset += 2;
             }
+
+            offset = DrawD2EActivations(offset);
         }
-
-        db = new DialogBox(new Vector2(0, 15), new Vector2(12, 1), new StringKey("val","X_COLON",ACTIVATIONS));
-        db.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(12, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddActivation(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        int offset = 16;
-        int index;
-        for (index = 0; index < 6; index++)
+        else
         {
-            if (monsterComponent.activations.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(0, offset), new Vector2(12, 1), 
-                    new StringKey(null,monsterComponent.activations[index],false));
-                db.AddBorder();
-                db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(12, offset++), new Vector2(1, 1), 
-                    CommonStringKeys.MINUS, delegate { RemoveActivation(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-            }
+            offset = DrawMoMActivations(offset);
         }
 
-        db = new DialogBox(new Vector2(13, 15), new Vector2(6, 1), new StringKey("val","X_COLON", CommonStringKeys.TRAITS));
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(12.5f, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
 
-        tb = new TextButton(new Vector2(19, 15), new Vector2(1, 1), CommonStringKeys.PLUS, delegate { AddTrait(); }, Color.green);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { AddTrait(); });
+        new UIElementBorder(ui, Color.green);
 
-        offset = 16;
-        for (index = 0; index < 6; index++)
+        for (int index = 0; index < monsterComponent.traits.Length; index++)
         {
-            if (monsterComponent.traits.Length > index)
-            {
-                int i = index;
-                db = new DialogBox(new Vector2(13, offset), new Vector2(6, 1),
-                    new StringKey("val",monsterComponent.traits[index]));
-                db.AddBorder();
-                db.ApplyTag(Game.EDITOR);
-                tb = new TextButton(new Vector2(19, offset++), new Vector2(1, 1), CommonStringKeys.MINUS, 
-                    delegate { RemoveTrait(i); }, Color.red);
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
-            }
-        }
+            int i = index;
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(12.5f, offset, 6, 1);
+            ui.SetText(new StringKey("val", monsterComponent.traits[index]));
+            new UIElementBorder(ui);
 
-        db = new DialogBox(new Vector2(0, 22), new Vector2(3, 1), new StringKey("val","X_COLON",HEALTH));
-        db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset++, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveTrait(i); });
+            new UIElementBorder(ui, Color.red);
+        }
+        offset += 1;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", HEALTH));
+
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
-            healthDBE = new DialogBoxEditable(new Vector2(3, 22), new Vector2(3, 1), 
-            monsterComponent.healthBase.ToString(), false, delegate { UpdateHealth(); });
-            healthDBE.ApplyTag(Game.EDITOR);
-            healthDBE.AddBorder();
+            healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            healthUIE.SetLocation(5, offset, 3, 1);
+            healthUIE.SetText(monsterComponent.healthBase.ToString());
+            healthUIE.SetSingleLine();
+            healthUIE.SetButton(delegate { UpdateHealth(); });
+            new UIElementBorder(healthUIE);
 
-            db = new DialogBox(new Vector2(6, 22), new Vector2(8, 1), new StringKey("val","X_COLON",HEALTH_HERO));
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(8, offset, 6, 1);
+            ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
 
-            healthHeroDBE = new DialogBoxEditable(new Vector2(14, 22), new Vector2(3, 1), 
-            monsterComponent.healthPerHero.ToString(), false, delegate { UpdateHealthHero(); });
-            healthHeroDBE.ApplyTag(Game.EDITOR);
-            healthHeroDBE.AddBorder();
+            healthHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            healthHeroUIE.SetLocation(14, offset, 2.5f, 1);
+            healthHeroUIE.SetText(monsterComponent.healthPerHero.ToString());
+            healthHeroUIE.SetSingleLine();
+            healthHeroUIE.SetButton(delegate { UpdateHealthHero(); });
+            new UIElementBorder(healthHeroUIE);
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearHealth(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearHealth(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 22), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetHealth(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetHealth(); });
+            new UIElementBorder(ui);
         }
 
-        db = new DialogBox(new Vector2(0, 24), new Vector2(3, 1), new StringKey("val","X_COLON",IMAGE));
-        db.ApplyTag(Game.EDITOR);
+        offset += 2;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 3, 1);
+        ui.SetText(new StringKey("val", "X_COLON", IMAGE));
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
-            tb = new TextButton(new Vector2(3, 24), new Vector2(14, 1), 
-                new StringKey(null,monsterComponent.imagePath,false), delegate { SetImage(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(3, offset, 13.5f, 1);
+            ui.SetText(monsterComponent.imagePath);
+            ui.SetButton(delegate { SetImage(); });
+            new UIElementBorder(ui);
             if (monsterComponent.baseMonster.Length > 0)
             {
-                tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImage(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearImage(); });
+                new UIElementBorder(ui);
             }
         }
         else
         {
-            tb = new TextButton(new Vector2(17, 24), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImage(); });
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetImage(); });
+            new UIElementBorder(ui);
         }
+        offset += 2;
 
         if (game.gameType is D2EGameType)
         {
-            db = new DialogBox(new Vector2(0, 26), new Vector2(4, 1), PLACE_IMG);
-            db.ApplyTag(Game.EDITOR);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 4, 1);
+            ui.SetText(new StringKey("val", "X_COLON", PLACE_IMG));
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
             {
-                tb = new TextButton(new Vector2(4, 26), new Vector2(13, 1), 
-                    new StringKey(null,monsterComponent.imagePath,false), delegate { SetImagePlace(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(4, offset, 12.5f, 1);
+                ui.SetText(monsterComponent.imagePlace);
+                ui.SetButton(delegate { SetImagePlace(); });
+                new UIElementBorder(ui);
                 if (monsterComponent.baseMonster.Length > 0)
                 {
-                    tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), CommonStringKeys.RESET, delegate { ClearImagePlace(); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.ApplyTag(Game.EDITOR);
+                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                    ui.SetLocation(16.5f, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearImagePlace(); });
+                    new UIElementBorder(ui);
                 }
             }
             else
             {
-                tb = new TextButton(new Vector2(17, 26), new Vector2(3, 1), CommonStringKeys.SET, delegate { SetImagePlace(); });
-                tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                tb.ApplyTag(Game.EDITOR);
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetImagePlace(); });
+                new UIElementBorder(ui);
             }
+            offset += 2;
         }
+
+        if (game.gameType is MoMGameType)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "EVADE")));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 13.5f, 1);
+            ui.SetText(monsterComponent.evadeEvent);
+            ui.SetButton(delegate { SetEvade(); });
+            new UIElementBorder(ui);
+
+            if (monsterComponent.evadeEvent.Length > 0)
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.evadeEvent); });
+                new UIElementBorder(ui, Color.blue);
+            }
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "horror")));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 13.5f, 1);
+            ui.SetText(monsterComponent.horrorEvent);
+            ui.SetButton(delegate { SetHorror(); });
+            new UIElementBorder(ui);
+
+            if (monsterComponent.horrorEvent.Length > 0)
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.horrorEvent); });
+                new UIElementBorder(ui, Color.blue);
+            }
+            offset += 2;
+        }
+
+        return offset;
+    }
+
+    public float DrawD2EActivations(float offset)
+    {
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 18, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(delegate { AddActivation(); });
+        new UIElementBorder(ui, Color.green);
+
+        int index;
+        for (index = 0; index < monsterComponent.activations.Length; index++)
+        {
+            int i = index;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 17, 1);
+            ui.SetText(monsterComponent.activations[index]);
+            ui.SetButton(delegate { AddActivation(i); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(17.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent("Activation" + monsterComponent.activations[i]); });
+            new UIElementBorder(ui, Color.blue);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveActivation(i); });
+            new UIElementBorder(ui, Color.red);
+            offset++;
+        }
+        return offset + 1;
+    }
+
+    public float DrawMoMActivations(float offset)
+    {
+        if (monsterComponent.activations.Length > 1)
+        {
+            return DepreciatedMoMActivations(offset);
+        }
+        if (monsterComponent.activations.Length == 1 && !game.quest.qd.components.ContainsKey(monsterComponent.activations[0]))
+        {
+            return DepreciatedMoMActivations(offset);
+        }
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 13.5f, 1);
+        ui.SetButton(delegate { SetActivation(); });
+        new UIElementBorder(ui);
+        if (monsterComponent.activations.Length > 0)
+        {
+            ui.SetText(monsterComponent.activations[0]);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[0]); });
+            new UIElementBorder(ui, Color.blue);
+        }
+
+        return offset + 2;
+    }
+
+    public float DepreciatedMoMActivations(float offset)
+    {
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 11.5f, 1);
+        ui.SetText("DEPRECIATED Activations", Color.red);
+
+        offset += 1;
+        int index;
+        for (index = 0; index < monsterComponent.activations.Length; index++)
+        {
+            int i = index;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 11.5f, 1);
+            ui.SetText(monsterComponent.activations[index]);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(11.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveActivation(i); });
+            new UIElementBorder(ui, Color.red);
+            offset += 1;
+        }
+        return offset + 1;
     }
 
     public void SetBase()
     {
-        List<EditorSelectionList.SelectionListEntry> baseMonster = new List<EditorSelectionList.SelectionListEntry>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
-        baseMonster.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(CommonStringKeys.NONE.Translate(),"{NONE}"));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetBase, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
+
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> sets = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    sets.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    localizedDisplay.Append(" ").Append(new StringKey("val", s).Translate());
-                    sets.Add(s);
-                }
-            }
-            baseMonster.Add(
-                EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsItem(
-                    localizedDisplay.ToString(),display.ToString(), sets));
+            select.AddItem(kv.Value);
         }
-
-        baseESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.EVENT),
-            baseMonster, delegate { SelectSetBase(); });
-        baseESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectSetBase()
+    public void SelectSetBase(string type)
     {
-        if (baseESL.selection.Equals("{NONE}"))
+        if (type.Equals("{NONE}"))
         {
             monsterComponent.baseMonster = "";
             if (!monsterComponent.monsterName.KeyExists())
@@ -308,16 +437,16 @@ public class EditorComponentCustomMonster : EditorComponent
         }
         else
         {
-            monsterComponent.baseMonster = baseESL.selection.Split(" ".ToCharArray())[0];
+            monsterComponent.baseMonster = type.Split(" ".ToCharArray())[0];
         }
         Update();
     }
 
     public void UpdateName()
     {
-        if (!nameDBE.Text.Equals(""))
+        if (!nameUIE.Empty() && nameUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.monstername_key, nameUIE.GetText());
         }
     }
 
@@ -335,9 +464,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateInfo()
     {
-        if (!infoDBE.Text.Equals(""))
+        if (!infoUIE.Empty() && infoUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(monsterComponent.info_key, infoDBE.Text);
+            LocalizationRead.updateScenarioText(monsterComponent.info_key, infoUIE.GetText());
         }
     }
 
@@ -353,36 +482,91 @@ public class EditorComponentCustomMonster : EditorComponent
         Update();
     }
 
-    public void AddActivation()
+    public void AddActivation(int index = -1)
     {
-        List<EditorSelectionList.SelectionListEntry> activations = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddActivation(index, s); }, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
-        Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        select.AddNewComponentItem("Activation");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
             {
-                activations.Add(new EditorSelectionList.SelectionListEntry(kv.Key.Substring("Activation".Length)));
+                select.AddItem(kv.Value);
             }
         }
-
-        activationsESL = new EditorSelectionList(
-            new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION),
-            activations, delegate { SelectAddActivation(); });
-        activationsESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddActivation()
+    public void SelectAddActivation(int index, string key)
     {
+        int i = 0;
+        string toAdd = key;
+        if (key.Equals("{NEW:Activation}"))
+        {
+            while (game.quest.qd.components.ContainsKey("Activation" + i))
+            {
+                i++;
+            }
+            toAdd = "Activation" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Activation(toAdd));
+        }
+
+        if (index != -1)
+        {
+            monsterComponent.activations[index] = toAdd.Substring("Activation".Length);
+            Update();
+            return;
+        }
+
         string[] newA = new string[monsterComponent.activations.Length + 1];
-        int i;
         for (i = 0; i < monsterComponent.activations.Length; i++)
         {
             newA[i] = monsterComponent.activations[i];
         }
 
-        newA[i] = activationsESL.selection;
+        newA[i] = toAdd.Substring("Activation".Length);
         monsterComponent.activations = newA;
+        Update();
+    }
+
+    public void SetActivation()
+    {
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
+
+        select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
+        foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
+        {
+            if (c.typeDynamic.IndexOf("Event") == 0)
+            {
+                select.AddItem(c);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectSetActivation(string key)
+    {
+        if (key.Length == 0)
+        {
+            monsterComponent.activations = new string[0];
+        }
+        else
+        {
+            string toAdd = key;
+            if (toAdd.Equals("{NEW:Event}"))
+            {
+                int i = 0;
+                while (game.quest.qd.components.ContainsKey("Event" + i))
+                {
+                    i++;
+                }
+                toAdd = "Event" + i;
+                Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+            }
+            monsterComponent.activations = new string[1];
+            monsterComponent.activations[0] = toAdd;
+        }
         Update();
     }
 
@@ -405,9 +589,13 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void AddTrait()
     {
-        HashSet<string> traits = new HashSet<string>();
-
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+
+        HashSet<string> traits = new HashSet<string>();
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
 
@@ -417,18 +605,17 @@ public class EditorComponentCustomMonster : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddTraits, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
+
         foreach (string s in traits)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
+            select.AddItem(s);
         }
-        traitsESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.ACTIVATION), 
-            list, delegate { SelectAddTraits(); });
-        traitsESL.SelectItem();
+
+        select.Draw();
     }
 
-    public void SelectAddTraits()
+    public void SelectAddTraits(string trait)
     {
         string[] newT = new string[monsterComponent.traits.Length + 1];
         int i;
@@ -437,7 +624,7 @@ public class EditorComponentCustomMonster : EditorComponent
             newT[i] = monsterComponent.traits[i];
         }
 
-        newT[i] = traitsESL.selection;
+        newT[i] = trait;
         monsterComponent.traits = newT;
         Update();
     }
@@ -461,12 +648,12 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void UpdateHealth()
     {
-        float.TryParse(healthDBE.Text, out monsterComponent.healthBase);
+        float.TryParse(healthUIE.GetText(), out monsterComponent.healthBase);
     }
 
     public void UpdateHealthHero()
     {
-        float.TryParse(healthHeroDBE.Text, out monsterComponent.healthPerHero);
+        float.TryParse(healthHeroUIE.GetText(), out monsterComponent.healthPerHero);
     }
 
     public void ClearHealth()
@@ -487,23 +674,28 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImage()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectImage, SELECT_IMAGE);
+
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
-        imageESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImage(); });
-        imageESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImage()
+    public void SelectImage(string image)
     {
-        monsterComponent.imagePath = imageESL.selection;
+        monsterComponent.imagePath = image;
         Update();
     }
 
@@ -515,29 +707,101 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImagePlace()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectImagePlace, SELECT_IMAGE);
+
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s.Substring(relativePath.Length + 1)));
+            select.AddItem(s.Substring(relativePath.Length + 1));
         }
-        placeESL = new EditorSelectionList(SELECT_IMAGE, list, delegate { SelectImagePlace(); });
-        placeESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectImagePlace()
+    public void SelectImagePlace(string image)
     {
-        monsterComponent.imagePlace = placeESL.selection;
+        monsterComponent.imagePlace = image;
         Update();
     }
 
     public void ClearImagePlace()
     {
         monsterComponent.imagePlace = "";
+        Update();
+    }
+
+    public void SetEvade()
+    {
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
+        
+        select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        {
+            if (kv.Value.typeDynamic.Equals("Event"))
+            {
+                select.AddItem(kv.Value);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectSetEvade(string evade)
+    {
+        string toAdd = evade;
+        if (toAdd.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+        monsterComponent.evadeEvent = toAdd;
+        Update();
+    }
+
+    public void SetHorror()
+    {
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
+
+        select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        {
+            if (kv.Value.typeDynamic.Equals("Event"))
+            {
+                select.AddItem(kv.Value);
+            }
+        }
+        select.Draw();
+    }
+
+    public void SelectSetHorror(string horror)
+    {
+        string toAdd = horror;
+        if (toAdd.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+        monsterComponent.horrorEvent = toAdd;
         Update();
     }
 }

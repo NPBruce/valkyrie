@@ -39,6 +39,9 @@ public class Quest
     // Dictionary of picked items
     public Dictionary<string, string> itemSelect;
 
+    // Dictionary item inspect events
+    public Dictionary<string, string> itemInspect;
+
     // A dictionary of heros that have been selected in events
     public Dictionary<string, List<Quest.Hero>> heroSelection;
 
@@ -97,6 +100,7 @@ public class Quest
         items = new HashSet<string>();
         shops = new Dictionary<string, List<string>>();
         itemSelect = new Dictionary<string, string>();
+        itemInspect = new Dictionary<string, string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
@@ -111,7 +115,7 @@ public class Quest
 
         // Populate null hero list, these can then be selected as hero types
         heroes = new List<Hero>();
-        for (int i = 1; i <= game.gameType.MaxHeroes(); i++)
+        for (int i = 1; i <= qd.quest.maxHero; i++)
         {
             heroes.Add(new Hero(null, i));
         }
@@ -409,6 +413,58 @@ public class Quest
                 }
             }
 
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+            {
+                QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
+                if (cm == null) continue;
+
+                MonsterData baseMonster = null;
+                string[] traits = cm.traits;
+                // Check for content data monster defined as base
+                if (game.cd.monsters.ContainsKey(cm.baseMonster))
+                {
+                    baseMonster = game.cd.monsters[cm.baseMonster];
+                    if (traits.Length == 0)
+                    {
+                        traits = baseMonster.traits;
+                    }
+                }
+
+                bool allFound = true;
+                foreach (string t in spawn.mTraitsRequired)
+                {
+                    // Does the monster have this trait?
+                    if (!InArray(traits, t))
+                    {
+                        // Trait missing, exclude monster
+                        allFound = false;
+                    }
+                }
+
+                // Must have one of these traits
+                bool oneFound = (spawn.mTraitsPool.Length == 0);
+                foreach (string t in spawn.mTraitsPool)
+                {
+                    // Does the monster have this trait?
+                    if (InArray(traits, t))
+                    {
+                        oneFound = true;
+                    }
+                }
+
+                bool excludeBool = false;
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key)) excludeBool = true;
+                }
+
+                // Monster has all traits
+                if (allFound && oneFound && !excludeBool)
+                {
+                    list.Add(kv.Key);
+                }
+            }
+
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
@@ -419,6 +475,15 @@ public class Quest
             // Pick monster at random from candidates
             monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
             return true;
+        }
+        return false;
+    }
+
+    public static bool InArray(string[] array, string item)
+    {
+        foreach (string s in array)
+        {
+            if (s.Equals(item)) return true;
         }
         return false;
     }
@@ -471,6 +536,7 @@ public class Quest
         undo = new Stack<string>();
         monsterSelect = new Dictionary<string, string>();
         itemSelect = new Dictionary<string, string>();
+        itemInspect = new Dictionary<string, string>();
         shops = new Dictionary<string, List<string>>();
         activeShop = "";
 
@@ -596,6 +662,12 @@ public class Quest
             // Support old saves
             itemSelect = new Dictionary<string, string>();
             GenerateItemSelection();
+        }
+
+        itemInspect = saveData.Get("ItemInspect");
+        if (itemInspect == null)
+        {
+            itemInspect = new Dictionary<string, string>();
         }
 
         // Set items
@@ -850,6 +922,14 @@ public class Quest
             if (itemSelect.ContainsKey(name))
             {
                 items.Add(itemSelect[name]);
+                if (((QuestData.QItem)qc).inspect.Length > 0)
+                {
+                    if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
+                    {
+                        game.quest.itemInspect.Remove(itemSelect[name]);
+                    }
+                    game.quest.itemInspect.Add(itemSelect[name], ((QuestData.QItem)qc).inspect);
+                }
             }
         }
     }
@@ -1064,6 +1144,12 @@ public class Quest
             r += kv.Key + "=" + kv.Value + nl;
         }
 
+        r += "[ItemInspect]" + nl;
+        foreach (KeyValuePair<string, string> kv in itemInspect)
+        {
+            r += kv.Key + "=" + kv.Value + nl;
+        }
+
         if (activeShop.Length > 0)
         {
             r += "[ActiveShop]" + nl;
@@ -1127,12 +1213,21 @@ public class Quest
             // Create a unity object for the tile
             unityObject = new GameObject("Object" + qTile.sectionName);
             unityObject.tag = Game.BOARD;
-            unityObject.transform.parent = game.boardCanvas.transform;
+            unityObject.transform.SetParent(game.boardCanvas.transform);
 
             // Add image to object
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
             // Create sprite from texture
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = null;
+            if (game.gameType is MoMGameType)
+            {
+                // This is faster
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+            }
+            else
+            {
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            }
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
@@ -1209,7 +1304,7 @@ public class Quest
             unityObject = new GameObject("Object" + qToken.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = game.tokenCanvas.transform;
+            unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
@@ -1267,7 +1362,7 @@ public class Quest
                 // Create UI Panel
                 panel = new GameObject("QuestUIPanel");
                 panel.tag = Game.BOARD;
-                panel.transform.parent = game.uICanvas.transform;
+                panel.transform.SetParent(game.uICanvas.transform);
                 panel.transform.SetAsFirstSibling();
                 panel.AddComponent<RectTransform>();
                 panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
@@ -1290,7 +1385,7 @@ public class Quest
             unityObject = new GameObject("Object" + qUI.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = panel.transform;
+            unityObject.transform.SetParent(panel.transform);
 
             float aspect = 1;
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
@@ -1434,11 +1529,11 @@ public class Quest
             unityObject = new GameObject("Object" + qDoor.sectionName);
             unityObject.tag = Game.BOARD;
 
-            unityObject.transform.parent = game.tokenCanvas.transform;
+            unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             // Set door colour
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(0.4f, 1.6f);
@@ -1767,6 +1862,28 @@ public class Quest
                 }
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
+        }
+
+        public string GetIdentifier()
+        {
+            return monsterData.sectionName + ":" + duplicate;
+        }
+
+        public static Monster GetMonster(string identifier)
+        {
+            Game game = Game.Get();
+            string[] parts = identifier.Split(':');
+            if (parts.Length != 2) return null;
+            int d = 0;
+            int.TryParse(parts[1], out d);
+            foreach (Monster m in game.quest.monsters)
+            {
+                if (m.monsterData.sectionName.Equals(parts[0]) && m.duplicate == d)
+                {
+                    return m;
+                }
+            }
+            return null;
         }
 
         public int GetHealth()

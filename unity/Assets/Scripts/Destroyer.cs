@@ -25,6 +25,7 @@ public class Destroyer {
     public static void Destroy()
     {
         Resources.UnloadUnusedAssets();
+        ContentData.textureCache = null;
         // Clean up everything marked as 'dialog'
         Dialog();
 
@@ -81,10 +82,7 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        if (GameObject.FindGameObjectWithTag(Game.SHOP) == null)
-        {
-            CameraController.panDisable = false;
-        }
+        CameraController.panDisable = false;
         Game.Get().logWindow = null;
         Resources.UnloadUnusedAssets();
     }

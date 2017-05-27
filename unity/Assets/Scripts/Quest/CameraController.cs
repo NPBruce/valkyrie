@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
+using System.Collections.Generic;
 
 // Class to control the game camera
 // Used to pan/zoom around the board
@@ -29,6 +31,9 @@ public class CameraController : MonoBehaviour {
 
     // Are we moving to a target position?
     private bool targetSet = false;
+
+    private bool dragging = false;
+
     // Target position
     public Vector3 camTarget;
 
@@ -49,24 +54,43 @@ public class CameraController : MonoBehaviour {
         game = Game.Get();
     }
 
+    bool ScrollEnabled()
+    {
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+        pointer.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, raycastResults);
+
+        if (raycastResults.Count > 0)
+        {
+            foreach (RaycastResult hit in raycastResults)
+            {
+                if (!hit.gameObject.tag.Equals(Game.BOARD)) return false;
+            }
+        }
+        return true;
+    }
+
     // FixedUpdate is not tied to frame rate
     // Scrolling by keys go here to be at a fixed rate
-    void FixedUpdate () {
+    void FixedUpdate ()
+    {
+        // Check if the scroll wheel has moved
+        if (Input.GetAxis("Mouse ScrollWheel") != 0 && ScrollEnabled())
+        {
+            // Translate the camera up/down
+            gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
+
+            // Limit how high/low the camera can go
+            if (gameObject.transform.position.z > maxZoom)
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, maxZoom);
+            if (gameObject.transform.position.z < minZoom)
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, minZoom);
+        }
+
         if (!panDisable)
         {
-            // Check if the scroll wheel has moved
-            if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            {
-                // Translate the camera up/down
-                gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
-
-                // Limit how high/low the camera can go
-                if (gameObject.transform.position.z > maxZoom)
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, maxZoom);
-                if (gameObject.transform.position.z < minZoom)
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, minZoom);
-            }
-
             // Check for arrow keys and move camera around
             if (Input.GetKey(KeyCode.UpArrow))
             {
@@ -108,18 +132,27 @@ public class CameraController : MonoBehaviour {
     void Update()
     {
         // latch positions on mouse down
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && ScrollEnabled())
         {
             mouseDownCamPosition = gameObject.transform.position;
             mouseDownMousePosition = GetMouseBoardPlane();
+            dragging = true;
         }
         // If mouse is held down update camera
-        if (Input.GetMouseButton(0) && !panDisable)
+        if (Input.GetMouseButton(0))
         {
-            Vector2 bPos = GetMouseBoardPlane();
-            gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
-                mouseDownMousePosition.y - bPos.y, 0), Space.World);
+            if (dragging)
+            {
+                Vector2 bPos = GetMouseBoardPlane();
+                gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
+                    mouseDownMousePosition.y - bPos.y, 0), Space.World);
+            }
         }
+        else
+        {
+            dragging = false;
+        }
+
         // Limit camera position
         Vector3 pos = gameObject.transform.position;
         if (minLimit)

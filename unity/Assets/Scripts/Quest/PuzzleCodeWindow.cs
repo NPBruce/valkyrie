@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class PuzzleCodeWindow
 {
@@ -95,60 +93,51 @@ public class PuzzleCodeWindow
         db.AddBorder();
 
         // Guesses window
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13.5f), 6.5f), new Vector2(27, 13f), StringKey.NULL);
-        db.AddBorder();
-        db.background.AddComponent<UnityEngine.UI.Mask>();
-        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
+        UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+        scrollArea.SetLocation(UIScaler.GetHCenter(-13.5f), 6.5f, 27, 13f);
+        new UIElementBorder(scrollArea);
+        scrollArea.SetScrollSize(1 + (puzzle.guess.Count * 2.5f));
 
-        GameObject scrollArea = new GameObject("scroll");
-        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (1 + (puzzle.guess.Count * 2.5f)) * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 27 * UIScaler.GetPixelsPerUnit());
-
-        scrollRect.content = scrollInnerRect;
-        scrollRect.horizontal = false;
-        scrollRect.scrollSensitivity = 27f;
-
-        float vPos = 7f;
+        float vPos = 0.5f;
         foreach (PuzzleCode.CodeGuess g in puzzle.guess)
         {
-            hPos = UIScaler.GetHCenter(-13f);
+            hPos = 0.5f;
             foreach (int i in g.guess)
             {
-                db = new DialogBox(
-                    new Vector2(hPos, vPos), new Vector2(2f, 2f), buttons[i].label, 
-                    Color.black, new Color(1, 1, 1, 0.9f));
-                db.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[i].image;
-                db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
-                db.AddBorder();
+                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetLocation(hPos, vPos, 2, 2);
+                ui.SetText(buttons[i].label, Color.black);
+                ui.SetBGColor(new Color(1, 1, 1, 0.9f));
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetImage(buttons[i].image);
+                new UIElementBorder(ui);
                 hPos += 2.5f;
             }
 
-            hPos = UIScaler.GetHCenter();
+            hPos = 13.25f;
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_SUCCESS_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
-                db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
-                db.AddBorder();
+                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetLocation(hPos, vPos, 2, 2);
+                ui.SetText(ICON_SUCCESS_RESULT, Color.black);
+                ui.SetBGColor(new Color(1, 1, 1, 0.9f));
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui);
                 hPos += 2.5f;
             }
             for (int i = 0; i < g.CorrectType(); i++)
             {
-                db = new DialogBox(new Vector2(hPos, vPos), new Vector2(2f, 2f), ICON_INVESTIGATION_RESULT, Color.black, new Color(1, 1, 1, 0.9f));
-                db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.background.transform.parent = scrollArea.transform;
-                db.AddBorder();
+                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetLocation(hPos, vPos, 2, 2);
+                ui.SetText(ICON_INVESTIGATION_RESULT, Color.black);
+                ui.SetBGColor(new Color(1, 1, 1, 0.9f));
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui);
                 hPos += 2.5f;
             }
             vPos += 2.5f;
         }
-        scrollRect.verticalNormalizedPosition = 0f;
+        scrollArea.SetScrollPosition(1 + (puzzle.guess.Count * 2.5f) * UIScaler.GetPixelsPerUnit());
 
         db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f),
             new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
@@ -216,7 +205,7 @@ public class PuzzleCodeWindow
                 Texture2D dupeTex = Resources.Load("sprites/monster_duplicate_" + i) as Texture2D;
                 if (dupeTex != null)
                 {
-                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1)));
+                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect)));
                 }
                 else
                 {

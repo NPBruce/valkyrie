@@ -12,6 +12,11 @@ public class EventManager
     // A dictionary of available events
     public Dictionary<string, Event> events;
 
+    // events should display monster image when not null
+    public Quest.Monster monsterImage;
+    // events should display monster health if true
+    public bool monsterHealth = false;
+
     // Stack of events to be triggered
     public Stack<Event> eventStack;
 
@@ -63,17 +68,28 @@ public class EventManager
             events.Add(kv.Key, new Peril(kv.Key));
         }
 
-        if (data != null && data.ContainsKey("queue"))
+        if (data != null)
         {
-            foreach (string s in data["queue"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            if (data.ContainsKey("queue"))
             {
-                eventStack.Push(events[s]);
+                foreach (string s in data["queue"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    eventStack.Push(events[s]);
+                }
             }
-        }
-        if (data != null && data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
-        {
-            currentEvent = events[data["currentevent"]];
-            ResumeEvent();
+            if (data.ContainsKey("monsterimage"))
+            {
+                monsterImage = Quest.Monster.GetMonster(data["monsterimage"]);
+            }
+            if (data.ContainsKey("monsterhealth"))
+            {
+                bool.TryParse(data["monsterhealth"], out monsterHealth);
+            }
+            if (data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
+            {
+                currentEvent = events[data["currentevent"]];
+                ResumeEvent();
+            }
         }
     }
 
@@ -299,6 +315,13 @@ public class EventManager
         }
         else
         {
+            if (monsterImage != null)
+            {
+                MonsterDialogMoM.DrawMonster(monsterImage);
+                if (monsterHealth)
+                {
+                }
+            }
             new DialogWindow(e);
         }
     }
@@ -407,6 +430,17 @@ public class EventManager
         // Add any custom triggered events
         AddCustomTriggers();
 
+        if (eventStack.Count == 0)
+        {
+            monsterImage = null;
+            monsterHealth = false;
+            if (game.quest.phase == Quest.MoMPhase.monsters)
+            {
+                game.roundControl.MonsterActivated();
+                return;
+            }
+        }
+
         // Trigger a stacked event
         TriggerEvent();
     }
@@ -436,6 +470,7 @@ public class EventManager
     {
         public Game game;
         public QuestData.Event qEvent;
+        public bool cancelable;
 
         // Create event from quest data
         public Event(string name)
@@ -719,6 +754,14 @@ public class EventManager
         if (currentEvent != null)
         {
             r += "currentevent=" + currentEvent.qEvent.sectionName + nl;
+        }
+        if (monsterImage != null)
+        {
+            r += "monsterimage=" + monsterImage.GetIdentifier() + nl;
+        }
+        if (monsterHealth)
+        {
+            r += "monsterhealth=" + monsterHealth.ToString() + nl;
         }
         return r;
     }

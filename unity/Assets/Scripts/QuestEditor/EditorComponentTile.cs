@@ -1,12 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class EditorComponentTile : EditorComponent
 {
     QuestData.Tile tileComponent;
-    EditorSelectionList tileESL;
 
     public EditorComponentTile(string nameIn) : base()
     {
@@ -17,52 +17,59 @@ public class EditorComponentTile : EditorComponent
         Update();
     }
     
-    override public void Update()
+    override public float AddSubComponents(float offset)
     {
-        base.Update();
         Game game = Game.Get();
         CameraController.SetCamera(tileComponent.location);
 
-        TextButton tb = new TextButton(new Vector2(0, 0), new Vector2(3, 1), CommonStringKeys.TILE, delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-        tb.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 4.5f, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
-        tb = new TextButton(new Vector2(3, 0), new Vector2(16, 1), 
-            new StringKey(null, name.Substring("Tile".Length),false), delegate { QuestEditorData.ListTile(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(4.5f, offset, 15, 1);
+        ui.SetText(tileComponent.tileSideName);
+        ui.SetButton(delegate { ChangeTileSide(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
-        tb = new TextButton(new Vector2(19, 0), new Vector2(1, 1), CommonStringKeys.E, delegate { Rename(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.POSITION));
 
-        tb = new TextButton(new Vector2(0, 2), new Vector2(20, 1), 
-            new StringKey(null, tileComponent.tileSideName,false), delegate { ChangeTileSide(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(4, offset, 4, 1);
+        ui.SetText(CommonStringKeys.POSITION_SNAP);
+        ui.SetButton(delegate { GetPosition(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
-        DialogBox db = new DialogBox(new Vector2(0, 4), new Vector2(4, 1), CommonStringKeys.POSITION);
-        db.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
-        tb = new TextButton(new Vector2(4, 4), new Vector2(1, 1), CommonStringKeys.POSITION_SNAP, delegate { GetPosition(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
-
-        tb = new TextButton(new Vector2(0, 6), new Vector2(8, 1),
-            new StringKey("val","ROTATION",tileComponent.rotation), delegate { TileRotate(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 3, 1);
+        ui.SetText(tileComponent.rotation.ToString());
+        ui.SetButton(delegate { TileRotate(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
         game.tokenBoard.AddHighlight(tileComponent.location, "TileAnchor", Game.EDITOR);
 
         game.quest.ChangeAlpha(tileComponent.sectionName, 1f);
+
+        return offset;
     }
 
     public void ChangeTileSide()
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectTileSide, new StringKey("val", "SELECT", CommonStringKeys.TILE));
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
@@ -76,44 +83,24 @@ public class EditorComponentTile : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> sides = new List<EditorSelectionList.SelectionListEntry>();
         foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
         {
-            StringBuilder display = new StringBuilder().Append(kv.Key);
-            StringBuilder localizedDisplay = new StringBuilder().Append(kv.Value.name.Translate());
-            List<string> traits = new List<string>(kv.Value.traits);
-            foreach (string s in kv.Value.sets)
-            {
-                if (s.Length == 0)
-                {
-                    traits.Add("base");
-                }
-                else
-                {
-                    display.Append(" ").Append(s);
-                    traits.Add(s);
-                }
-            }
-
-            Color buttonColor = Color.white;
-
             if (usedSides.Contains(kv.Key))
             {
-                buttonColor = Color.grey;
+                select.AddItem(kv.Value, new Color(0.4f, 0.4f, 1));
             }
-
-            sides.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyTraitsColorItem(
-                localizedDisplay.ToString(),display.ToString(), traits, buttonColor));
+            else
+            {
+                select.AddItem(kv.Value);
+            }
         }
-        tileESL = new EditorSelectionList(
-            new StringKey("val","SELECT",CommonStringKeys.TILE), sides, delegate { SelectTileSide(); });
-        tileESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectTileSide()
+    public void SelectTileSide(string tile)
     {
         Game game = Game.Get();
-        tileComponent.tileSideName = tileESL.selection.Split(" ".ToCharArray())[0];
+        tileComponent.tileSideName = tile.Split(" ".ToCharArray())[0];
         game.quest.Remove(tileComponent.sectionName);
         game.quest.Add(tileComponent.sectionName);
         Update();

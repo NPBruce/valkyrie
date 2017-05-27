@@ -66,7 +66,7 @@ public class QuestData
         iniFiles = new List<string>();
         localizationFiles = new List<string>();
         // The main data file is included
-        iniFiles.Add(questPath);
+        iniFiles.Add("quest.ini");
 
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
@@ -76,7 +76,7 @@ public class QuestData
                 if (file != null && file.Length > 0)
                 {
                     // path is relative to the main file (absolute not supported)
-                    iniFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                    iniFiles.Add(file);
                 }
             }
         }
@@ -108,12 +108,13 @@ public class QuestData
 
         foreach (string f in iniFiles)
         {
+            string fullPath = Path.Combine(Path.GetDirectoryName(questPath), f);
             // Read each file
-            questIniData = IniRead.ReadFromIni(f);
+            questIniData = IniRead.ReadFromIni(fullPath);
             // Failure to read a file is fatal
             if (questIniData == null)
             {
-                ValkyrieDebug.Log("Unable to read quest file: \"" + f + "\"");
+                ValkyrieDebug.Log("Unable to read quest file: \"" + fullPath + "\"");
                 Application.Quit();
             }
 
@@ -231,7 +232,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             Game game = Game.Get();
-            source = Path.GetDirectoryName(game.quest.qd.questPath) + "/tiles.ini";
+            source = "tiles.ini";
             foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
             {
                 tileSideName = kv.Key;
@@ -290,7 +291,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Door(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/door.ini";
+            source = "door.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
@@ -344,7 +345,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Token(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/tokens.ini";
+            source = "tokens.ini";
             locationSpecified = true;
             typeDynamic = type;
             tokenName = "TokenSearch";
@@ -408,7 +409,7 @@ public class QuestData
         // Create new with name (used by editor)
         public UI(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/ui.ini";
+            source = "ui.ini";
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
@@ -560,7 +561,7 @@ public class QuestData
         // Create new with name (used by editor)
         public Spawn(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/spawns.ini";
+            source = "spawns.ini";
             // Location defaults to specified
             locationSpecified = true;
             typeDynamic = type;
@@ -662,9 +663,9 @@ public class QuestData
                 {
                     mTypes[i] = newName;
                 }
-                // If any were replaced with "", remove them
-                mTypes = RemoveFromArray(mTypes, "");
             }
+            // If any were replaced with "", remove them
+            mTypes = RemoveFromArray(mTypes, "");
         }
 
         // Save to string (editor)
@@ -754,6 +755,7 @@ public class QuestData
         public bool minCam = false;
         public bool maxCam = false;
         public int quota = 0;
+        public string quotaVar = "";
         public string audio = "";
         public List<string> music;
 
@@ -764,7 +766,7 @@ public class QuestData
         // Create a new event with name (editor)
         public Event(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/events.ini";
+            source = "events.ini";
             display = false;
             typeDynamic = type;
             nextEvent = new List<List<string>>();
@@ -843,6 +845,10 @@ public class QuestData
             if (data.ContainsKey("quota"))
             {
                 int.TryParse(data["quota"], out quota);
+                if (data["quota"].Length > 0 && !char.IsNumber(data["quota"][0]))
+                {
+                    quotaVar = data["quota"];
+                }
             }
             
             // minimum heros required to be selected for event
@@ -1047,7 +1053,11 @@ public class QuestData
             {
                 r += "hero=" + heroListName + nl;
             }
-            if (quota != 0)
+            if (quotaVar.Length > 0)
+            {
+                r += "quota=" + quotaVar + nl;
+            }
+            else if (quota != 0)
             {
                 r += "quota=" + quota + nl;
             }
@@ -1183,7 +1193,7 @@ public class QuestData
         // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/mplaces.ini";
+            source = "mplaces.ini";
             locationSpecified = true;
             typeDynamic = type;
         }
@@ -1235,7 +1245,7 @@ public class QuestData
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/puzzles.ini";
+            source = "puzzles.ini";
             typeDynamic = type;
             nextEvent.Add(new List<string>());
             buttonColors.Add("white");
@@ -1455,6 +1465,8 @@ public class QuestData
         public float healthBase = 0;
         public float healthPerHero = 0;
         public bool healthDefined = false;
+        public string evadeEvent = "";
+        public string horrorEvent = "";
 
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
@@ -1465,7 +1477,7 @@ public class QuestData
         // Create new with name (editor)
         public CustomMonster(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
+            source = "monsters.ini";
             LocalizationRead.updateScenarioText(monstername_key, sectionName);
             LocalizationRead.updateScenarioText(info_key, "-");
             activations = new string[0];
@@ -1516,6 +1528,15 @@ public class QuestData
             {
                 healthDefined = true;
                 float.TryParse(data["healthperhero"], out healthPerHero);
+            }
+
+            if (data.ContainsKey("evadeevent"))
+            {
+                evadeEvent = data["evadeevent"];
+            }
+            if (data.ContainsKey("horrorevent"))
+            {
+                horrorEvent = data["horrorevent"];
             }
         }
 
@@ -1569,6 +1590,14 @@ public class QuestData
                 r.Append("health=").AppendLine(healthBase.ToString());
                 r.Append("healthperhero=").AppendLine(healthPerHero.ToString());
             }
+            if (evadeEvent.Length > 0)
+            {
+                r.Append("evadeevent=").AppendLine(evadeEvent);
+            }
+            if (horrorEvent.Length > 0)
+            {
+                r.Append("horrorevent=").AppendLine(horrorEvent);
+            }
             return r.ToString();
         }
     }
@@ -1595,7 +1624,7 @@ public class QuestData
         // Create new (editor)
         public Activation(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/monsters.ini";
+            source = "monsters.ini";
             LocalizationRead.updateScenarioText(ability_key, "-");
             typeDynamic = type;
         }
@@ -1641,11 +1670,12 @@ public class QuestData
         public string[] traits;
         public string[] traitpool;
         public bool starting = false;
+        public string inspect = "";
 
         // Create new (editor)
         public QItem(string s) : base(s)
         {
-            source = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/items.ini";
+            source = "items.ini";
             typeDynamic = type;
             itemName = new string[0];
             traits = new string[1];
@@ -1692,6 +1722,10 @@ public class QuestData
             {
                 traitpool = new string[0];
             }
+            if (data.ContainsKey("inspect"))
+            {
+                inspect = data["inspect"];
+            }
         }
 
         // Save to string
@@ -1731,12 +1765,21 @@ public class QuestData
                 }
                 r = r.Substring(0, r.Length - 1) + nl;
             }
+
+            if (inspect.Length > 0)
+            {
+                r += "inspect=" + inspect + nl;
+            }
             return r;
         }
 
         // When changing the name placement event need to update in array
         override public void ChangeReference(string oldName, string newName)
         {
+            if (inspect.Equals(oldName))
+            {
+                inspect = newName;
+            }
             for (int i = 0; i < itemName.Length; i++)
             {
                 if (itemName[i].Equals(oldName))
@@ -1754,7 +1797,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 4;
+        public static int currentFormat = 5;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -1768,11 +1811,21 @@ public class QuestData
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
+        public string image = "";
+
+        public int minHero = 2;
+        public int maxHero = 5;
+        public float difficulty = 0;
+        public int lengthMin = 0;
+        public int lengthMax = 0;
+
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string authors_key { get { return "quest.authors"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey authors { get { return new StringKey("qst", authors_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -1856,6 +1909,41 @@ public class QuestData
                 bool.TryParse(iniData["hidden"], out hidden);
             }
 
+            if (iniData.ContainsKey("minhero"))
+            {
+                int.TryParse(iniData["minhero"], out minHero);
+            }
+            if (minHero < 1) minHero = 1;
+
+            maxHero = Game.Get().gameType.MaxHeroes();
+            if (iniData.ContainsKey("maxhero"))
+            {
+                int.TryParse(iniData["maxhero"], out maxHero);
+            }
+            if (maxHero > Game.Get().gameType.MaxHeroes())
+            {
+                maxHero = Game.Get().gameType.MaxHeroes();
+            }
+
+            if (iniData.ContainsKey("difficulty"))
+            {
+                float.TryParse(iniData["difficulty"], out difficulty);
+            }
+
+            if (iniData.ContainsKey("lengthmin"))
+            {
+                int.TryParse(iniData["lengthmin"], out lengthMin);
+            }
+            if (iniData.ContainsKey("lengthmax"))
+            {
+                int.TryParse(iniData["lengthmax"], out lengthMax);
+            }
+
+            if (iniData.ContainsKey("image"))
+            {
+                image = iniData["image"];
+            }
+
             return true;
         }
 
@@ -1874,6 +1962,33 @@ public class QuestData
             {
                 r.Append("packs=");
                 r.AppendLine(string.Join(" ", packs));
+            }
+
+            if (minHero != 2)
+            {
+                r.Append("minhero=").AppendLine(minHero.ToString());
+            }
+            if (maxHero != Game.Get().gameType.MaxHeroes())
+            {
+                r.Append("maxhero=").AppendLine(maxHero.ToString());
+            }
+
+            if (difficulty != 0)
+            {
+                r.Append("difficulty=").AppendLine(difficulty.ToString());
+            }
+
+            if (lengthMin != 0)
+            {
+                r.Append("lengthmin=").AppendLine(lengthMin.ToString());
+            }
+            if (lengthMax != 0)
+            {
+                r.Append("lengthmax=").AppendLine(lengthMax.ToString());
+            }
+            if (image.Length > 0)
+            {
+                r.Append("image=").AppendLine(image);
             }
 
             return r.ToString();

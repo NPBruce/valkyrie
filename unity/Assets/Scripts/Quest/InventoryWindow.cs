@@ -1,12 +1,11 @@
 ﻿using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using UnityEngine;
 using System.Collections.Generic;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class InventoryWindow
 {
-    public Dictionary<string, DialogBoxEditable> valueDBE;
-
     // Construct and display
     public InventoryWindow()
     {
@@ -16,7 +15,6 @@ public class InventoryWindow
     public void Update()
     {
         Destroyer.Dialog();
-        CameraController.panDisable = true;
         Game game = Game.Get();
 
         DialogBox db = new DialogBox(
@@ -33,37 +31,9 @@ public class InventoryWindow
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
         db.SetFont(game.gameType.GetHeaderFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-17), 5), new Vector2(34, 13), StringKey.NULL);
-        db.AddBorder();
-        db.background.AddComponent<UnityEngine.UI.Mask>();
-        UnityEngine.UI.ScrollRect scrollRect = db.background.AddComponent<UnityEngine.UI.ScrollRect>();
-
-        GameObject scrollArea = new GameObject("scroll");
-        RectTransform scrollInnerRect = scrollArea.AddComponent<RectTransform>();
-        scrollArea.transform.parent = db.background.transform;
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, (12f) * UIScaler.GetPixelsPerUnit());
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 1);
-
-        GameObject scrollBarObj = new GameObject("scrollbar");
-        scrollBarObj.transform.parent = db.background.transform;
-        RectTransform scrollBarRect = scrollBarObj.AddComponent<RectTransform>();
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (12f) * UIScaler.GetPixelsPerUnit(), 1 * UIScaler.GetPixelsPerUnit());
-        scrollBarRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 34 * UIScaler.GetPixelsPerUnit());
-        UnityEngine.UI.Scrollbar scrollBar = scrollBarObj.AddComponent<UnityEngine.UI.Scrollbar>();
-        scrollBar.direction = UnityEngine.UI.Scrollbar.Direction.LeftToRight;
-        scrollRect.horizontalScrollbar = scrollBar;
-
-        GameObject scrollBarHandle = new GameObject("scrollbarhandle");
-        scrollBarHandle.transform.parent = scrollBarObj.transform;
-        scrollBarHandle.AddComponent<UnityEngine.UI.Image>();
-        scrollBarHandle.GetComponent<UnityEngine.UI.Image>().color = new Color(0.7f, 0.7f, 0.7f);
-        scrollBar.handleRect = scrollBarHandle.GetComponent<RectTransform>();
-        scrollBar.handleRect.offsetMin = Vector2.zero;
-        scrollBar.handleRect.offsetMax = Vector2.zero;
-
-        scrollRect.content = scrollInnerRect;
-        scrollRect.vertical = false;
-        scrollRect.scrollSensitivity = 27f;
+        UIElementScrollHorizontal scrollArea = new UIElementScrollHorizontal();
+        scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 13);
+        new UIElementBorder(scrollArea);
 
         float xOffset = UIScaler.GetHCenter(-16);
 
@@ -74,11 +44,11 @@ public class InventoryWindow
                 game.cd.items[s].name,
                 Color.black);
             db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.GetScrollTransform());
             db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
-            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1);
+            Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             db = new DialogBox(new Vector2(xOffset, 6),
                 new Vector2(8, 8),
@@ -86,12 +56,11 @@ public class InventoryWindow
                 Color.clear,
                 Color.white);
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            db.background.transform.parent = scrollArea.transform;
+            db.background.transform.SetParent(scrollArea.GetScrollTransform());
 
             xOffset += 9;
         }
-
-        scrollInnerRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, (xOffset - UIScaler.GetHCenter(-16)) * UIScaler.GetPixelsPerUnit());
+        scrollArea.SetScrollSize(xOffset - UIScaler.GetHCenter(-16));
 
         db = new DialogBox(
             new Vector2(UIScaler.GetHCenter(-5), 19),
@@ -111,7 +80,6 @@ public class InventoryWindow
             Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
         db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
 
-        // Add a finished button to start the quest
         TextButton tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-4f), 24.5f),
             new Vector2(8, 2),

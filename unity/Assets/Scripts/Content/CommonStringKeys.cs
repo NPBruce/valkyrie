@@ -18,8 +18,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey EXIT = new StringKey(VAL,"EXIT");
         public static readonly StringKey E = new StringKey(VAL, "E");
         public static readonly StringKey POSITION = new StringKey(VAL, "POSITION");
-        public static readonly StringKey POSITION_SNAP = new StringKey(null,"><",false);
-        public static readonly StringKey POSITION_FREE = new StringKey(null,"~", false);
+        public static readonly StringKey POSITION_SNAP = new StringKey(VAL, "POSITION_SNAP");
+        public static readonly StringKey POSITION_FREE = new StringKey(VAL, "POSITION_FREE");
         public static readonly StringKey PLUS = new StringKey(null,"+", false);
         public static readonly StringKey MINUS = new StringKey(null,"-", false);
         public static readonly StringKey HASH = new StringKey(null,"#", false);
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey QITEM = new StringKey(VAL, "QITEM");
         public static readonly StringKey STARTING_ITEM = new StringKey(VAL, "STARTING_ITEM");
         public static readonly StringKey UNIQUE_MONSTER = new StringKey(VAL, "UNIQUE_MONSTER");
-        public static readonly StringKey CUSTOM_MONSTER = new StringKey(VAL, "CUSTOM_MONSTER");
+        public static readonly StringKey CUSTOMMONSTER = new StringKey(VAL, "CUSTOMMONSTER");
         public static readonly StringKey ACTIVATION = new StringKey(VAL, "ACTIVATION");
         public static readonly StringKey NUMBER = new StringKey(VAL, "NUMBER");
         public static readonly StringKey TRIGGER = new StringKey(VAL, "TRIGGER");

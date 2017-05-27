@@ -30,6 +30,14 @@ public class InvestigatorItems
             if (item != null && item.starting && game.quest.itemSelect.ContainsKey(kv.Key))
             {
                 game.quest.items.Add(game.quest.itemSelect[kv.Key]);
+                if (item.inspect.Length > 0)
+                {
+                    if (game.quest.itemInspect.ContainsKey(game.quest.itemSelect[kv.Key]))
+                    {
+                        game.quest.itemInspect.Remove(game.quest.itemSelect[kv.Key]);
+                    }
+                    game.quest.itemInspect.Add(game.quest.itemSelect[kv.Key], item.inspect);
+                }
             }
         }
 
@@ -46,7 +54,7 @@ public class InvestigatorItems
         foreach (string item in game.quest.items)
         {
             Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
-            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
+            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), StringKey.NULL);
             db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
