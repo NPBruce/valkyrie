@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
 using System.Text;
 using System.Collections;
@@ -261,10 +261,19 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "EVADE")));
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
+            ui.SetLocation(5, offset, 13.5f, 1);
             ui.SetText(monsterComponent.evadeEvent);
             ui.SetButton(delegate { SetEvade(); });
             new UIElementBorder(ui);
+
+            if (monsterComponent.evadeEvent.Length > 0)
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.evadeEvent); });
+                new UIElementBorder(ui, Color.blue);
+            }
             offset += 2;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -272,10 +281,19 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(new StringKey("val", "X_COLON",  new StringKey("val", "horror")));
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
+            ui.SetLocation(5, offset, 13.5f, 1);
             ui.SetText(monsterComponent.horrorEvent);
             ui.SetButton(delegate { SetHorror(); });
             new UIElementBorder(ui);
+
+            if (monsterComponent.horrorEvent.Length > 0)
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.horrorEvent); });
+                new UIElementBorder(ui, Color.blue);
+            }
             offset += 2;
         }
 
@@ -300,10 +318,16 @@ public class EditorComponentCustomMonster : EditorComponent
             int i = index;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0.5f, offset, 18, 1);
+            ui.SetLocation(0.5f, offset, 17, 1);
             ui.SetText(monsterComponent.activations[index]);
-            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[i]); });
+            ui.SetButton(delegate { AddActivation(i); });
             new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(17.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent("Activation" + monsterComponent.activations[i]); });
+            new UIElementBorder(ui, Color.blue);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
@@ -331,13 +355,19 @@ public class EditorComponentCustomMonster : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", ACTIVATIONS));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14.5f, 1);
+        ui.SetLocation(5, offset, 13.5f, 1);
         ui.SetButton(delegate { SetActivation(); });
+        new UIElementBorder(ui);
         if (monsterComponent.activations.Length > 0)
         {
             ui.SetText(monsterComponent.activations[0]);
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[0]); });
+            new UIElementBorder(ui, Color.blue);
         }
-        new UIElementBorder(ui);
+
         return offset + 2;
     }
 
@@ -452,30 +482,49 @@ public class EditorComponentCustomMonster : EditorComponent
         Update();
     }
 
-    public void AddActivation()
+    public void AddActivation(int index = -1)
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectAddActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddActivation(index, s); }, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
+        select.AddNewComponentItem("Activation");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
             {
-                select.AddItem(kv.Key.Substring("Activation".Length));
+                select.AddItem(kv.Value);
             }
         }
         select.Draw();
     }
 
-    public void SelectAddActivation(string key)
+    public void SelectAddActivation(int index, string key)
     {
+        int i = 0;
+        string toAdd = key;
+        if (key.Equals("{NEW:Activation}"))
+        {
+            while (game.quest.qd.components.ContainsKey("Activation" + i))
+            {
+                i++;
+            }
+            toAdd = "Activation" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Activation(toAdd));
+        }
+
+        if (index != -1)
+        {
+            monsterComponent.activations[index] = toAdd.Substring("Activation".Length);
+            Update();
+            return;
+        }
+
         string[] newA = new string[monsterComponent.activations.Length + 1];
-        int i;
         for (i = 0; i < monsterComponent.activations.Length; i++)
         {
             newA[i] = monsterComponent.activations[i];
         }
 
-        newA[i] = key;
+        newA[i] = toAdd.Substring("Activation".Length);
         monsterComponent.activations = newA;
         Update();
     }

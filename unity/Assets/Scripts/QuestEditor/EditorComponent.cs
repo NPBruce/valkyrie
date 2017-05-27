@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -55,11 +55,11 @@ public class EditorComponent {
         scrollArea.SetScrollPosition(scrollPos);
 
         UIElement ui = new UIElement(Game.EDITOR);
-        ui.SetLocation(0, 0, 4, 1);
-        ui.SetText(CommonStringKeys.BACK);
+        ui.SetLocation(0, 0, 1, 1);
+        ui.SetText("<b>⇦</b>", Color.blue);
         ui.SetButton(delegate { QuestEditorData.Back(); });
         ui.SetBGColor(Color.black);
-        new UIElementBorder(ui);
+        new UIElementBorder(ui, Color.blue);
 
         AddTitle();
     }
@@ -67,7 +67,7 @@ public class EditorComponent {
     protected virtual void AddTitle()
     {
         UIElement ui = new UIElement(Game.EDITOR);
-        ui.SetLocation(4, 0, 17, 1);
+        ui.SetLocation(1, 0, 20, 1);
         ui.SetText(name);
         ui.SetButton(delegate { QuestEditorData.TypeSelect(component.typeDynamic); });
         ui.SetBGColor(Color.black);

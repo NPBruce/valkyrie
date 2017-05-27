@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -29,7 +29,6 @@ public class EditorComponentSpawn : EditorComponentEvent
     UIElementEditable healthHeroUIE;
 
     EditorSelectionList monsterTraitESL;
-    EditorSelectionList monsterPlaceESL;
 
     public EditorComponentSpawn(string nameIn) : base(nameIn)
     {
@@ -130,11 +129,11 @@ public class EditorComponentSpawn : EditorComponentEvent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(1.5f, offset, 15, 1);
+        ui.SetLocation(1.5f, offset, 17, 1);
         ui.SetText(new StringKey("val", "X_COLON", TYPES));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(16.5f, offset++, 1, 1);
+        ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { MonsterTypeAdd(0); });
         new UIElementBorder(ui, Color.green);
@@ -159,13 +158,25 @@ public class EditorComponentSpawn : EditorComponentEvent
             }
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(1.5f, offset, 15, 1);
+            if (game.quest.qd.components.ContainsKey(spawnComponent.mTypes[i]))
+            {
+                ui.SetLocation(1.5f, offset, 16, 1);
+                UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                link.SetLocation(17.5f, offset, 1, 1);
+                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetButton(delegate { QuestEditorData.SelectComponent(spawnComponent.mTypes[mSlot]); });
+                new UIElementBorder(link, Color.blue);
+            }
+            else
+            {
+                ui.SetLocation(1.5f, offset, 17, 1);
+            }
             ui.SetText(mName);
             ui.SetButton(delegate { MonsterTypeReplace(mSlot); });
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(16.5f, offset++, 1, 1);
+            ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { MonsterTypeAdd(mSlot + 1); });
             new UIElementBorder(ui, Color.green);
@@ -273,10 +284,16 @@ public class EditorComponentSpawn : EditorComponentEvent
                 new UIElementBorder(ui, Color.red);
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(1.5f, offset++, 18, 1);
+                ui.SetLocation(1.5f, offset, 17, 1);
                 ui.SetText(place);
-                ui.SetButton(delegate { QuestEditorData.SelectComponent(place); });
+                ui.SetButton(delegate { MonsterPlaceAdd(h, mSlot); });
                 new UIElementBorder(ui);
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset++, 1, 1);
+                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetButton(delegate { QuestEditorData.SelectComponent(place); });
+                new UIElementBorder(ui, Color.blue);
             }
             offset++;
         }
@@ -564,32 +581,30 @@ public class EditorComponentSpawn : EditorComponentEvent
         Update();
     }
 
-    public void MonsterPlaceAdd(int heroes)
+    public void MonsterPlaceAdd(int heroes, int slot = -1)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { MonsterPlaceAddSelection(heroes, slot, s); }, CommonStringKeys.SELECT_ITEM);
 
-        List<EditorSelectionList.SelectionListEntry> mplaces = new List<EditorSelectionList.SelectionListEntry>();
-        mplaces.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(
-            new StringKey("val","NEW_X",CommonStringKeys.MPLACE).Translate(),"{NEW:MPlace}"));
+        select.AddNewComponentItem("MPlace");
+
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
             {
-                mplaces.Add(new EditorSelectionList.SelectionListEntry(kv.Key));
+                select.AddItem(kv.Value);
             }
         }
-
-        if (mplaces.Count == 0)
-        {
-            return;
-        }
-        monsterPlaceESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, mplaces, delegate { MonsterPlaceAddSelection(heroes); });
-        monsterPlaceESL.SelectItem();
+        select.Draw();
     }
 
-    public void MonsterPlaceAddSelection(int heroes)
+    public void MonsterPlaceAddSelection(int heroes, int slot, string name)
     {
-        if (monsterPlaceESL.selection.Equals("{NEW:MPlace}"))
+        if (name.Equals("{NEW:MPlace}"))
         {
             Game game = Game.Get();
             int index = 0;
@@ -599,18 +614,25 @@ public class EditorComponentSpawn : EditorComponentEvent
                 index++;
             }
             game.quest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
-            monsterPlaceESL.selection = "MPlace" + index;
+            name = "MPlace" + index;
         }
 
-        string[] newM = new string[spawnComponent.placement[heroes].Length + 1];
-        int i;
-        for (i = 0; i < spawnComponent.placement[heroes].Length; i++)
+        if (slot == -1)
         {
-            newM[i] = spawnComponent.placement[heroes][i];
-        }
+            string[] newM = new string[spawnComponent.placement[heroes].Length + 1];
+            int i;
+            for (i = 0; i < spawnComponent.placement[heroes].Length; i++)
+            {
+                newM[i] = spawnComponent.placement[heroes][i];
+            }
 
-        newM[i] = monsterPlaceESL.selection;
-        spawnComponent.placement[heroes] = newM;
+            newM[i] = name;
+            spawnComponent.placement[heroes] = newM;
+        }
+        else
+        {
+            spawnComponent.placement[heroes][slot] = name;
+        }
         Update();
     }
 
