@@ -39,6 +39,11 @@ public class ContentData {
         return Application.dataPath + "/content/";
     }
 
+    public static string ImportPath()
+    {
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/import/";
+    }
+
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {
@@ -1319,7 +1324,14 @@ public class GenericData
         // absolute paths are not supported
         if (content.ContainsKey("image"))
         {
-            image = path + "/" + content["image"];
+            if (content["image"].IndexOf("{ffg}") == 0)
+            {
+                image = ContentData.ImportPath() + content["image"];
+            }
+            else
+            {
+                image = path + "/" + content["image"];
+            }
         }
         else // No image is a valid condition
         {
