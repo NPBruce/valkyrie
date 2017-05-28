@@ -104,7 +104,12 @@ public class Audio : MonoBehaviour
         List<AudioClip> newMusic = new List<AudioClip>();
         foreach (string s in fileNames)
         {
-            WWW file = new WWW(@"file://" + s);
+            string fileName = s;
+            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                fileName = "/" + s;
+            }
+            WWW file = new WWW(@"file://" + fileName);
             yield return file;
             newMusic.Add(file.GetAudioClip());
         }
