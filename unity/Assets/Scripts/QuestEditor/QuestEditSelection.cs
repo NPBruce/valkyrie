@@ -189,7 +189,11 @@ public class QuestEditSelection
     public void Copy(string key)
     {
         Game game = Game.Get();
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/Editor";
+        if (!Directory.Exists(dataLocation))
+        {
+            Directory.CreateDirectory(dataLocation);
+        }
 
         // Find a new unique directory name
         int i = 1;
@@ -277,7 +281,11 @@ public class QuestEditSelection
     public void NewQuest()
     {
         Game game = Game.Get();
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/Editor";
+        if (!Directory.Exists(dataLocation))
+        {
+            Directory.CreateDirectory(dataLocation);
+        }
 
         // Find an available unique directory name
         int i = 1;
