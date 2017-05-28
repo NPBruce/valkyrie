@@ -33,7 +33,9 @@ namespace Assets.Scripts.UI
                 ui.SetButton(delegate { Play(key); });
             }
             ui.SetBGColor(new Color(0.6f, 0.6f, 1));
-            ui.SetText(">", Color.black);
+            ui.SetText("►", Color.black);
+            // this character is strange
+            ui.SetFontSize(Mathf.RoundToInt((float)UIScaler.GetSmallFont() * 0.5f));
 
             return offset + 1.05f;
         }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -108,14 +108,12 @@ public class EditorComponentEvent : EditorComponent
             offset = AddHeroSelection(offset);
         }
 
-        float componentsOffset = offset;
-
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 9, 1);
+        ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(ADD_COMPONENTS);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(9, offset++, 1, 1);
+        ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddVisibility(true); });
         new UIElementBorder(ui, Color.green);
@@ -125,27 +123,37 @@ public class EditorComponentEvent : EditorComponent
             int i = index;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0.5f, offset, 8.5f, 1);
             ui.SetText(eventComponent.addComponents[index]);
+            ui.SetButton(delegate { AddVisibility(true, i); });
             if (game.quest.qd.components.ContainsKey(eventComponent.addComponents[i]))
             {
-                ui.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.addComponents[i]); });
+                ui.SetLocation(0.5f, offset, 17, 1);
+                UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                link.SetLocation(17.5f, offset, 1, 1);
+                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.addComponents[i]); });
+                new UIElementBorder(link, Color.blue);
+            }
+            else
+            {
+                ui.SetLocation(0.5f, offset, 18, 1);
             }
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(9, offset++, 1, 1);
+            ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveVisibility(i, true); });
             new UIElementBorder(ui, Color.red);
         }
+        offset++;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(10, componentsOffset, 8.5f, 1);
+        ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(REMOVE_COMPONENTS);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(18.5f, componentsOffset++, 1, 1);
+        ui.SetLocation(18.5f, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddVisibility(false); });
         new UIElementBorder(ui, Color.green);
@@ -154,22 +162,29 @@ public class EditorComponentEvent : EditorComponent
         {
             int i = index;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(10, componentsOffset, 8.5f, 1);
             ui.SetText(eventComponent.removeComponents[index]);
+            ui.SetButton(delegate { AddVisibility(false, i); });
             if (game.quest.qd.components.ContainsKey(eventComponent.removeComponents[i]))
             {
-                ui.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.removeComponents[i]); });
+                ui.SetLocation(0.5f, offset, 17, 1);
+                UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                link.SetLocation(17.5f, offset, 1, 1);
+                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.removeComponents[i]); });
+                new UIElementBorder(link, Color.blue);
+            }
+            else
+            {
+                ui.SetLocation(0.5f, offset, 18, 1);
             }
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(18.5f, componentsOffset++, 1, 1);
+            ui.SetLocation(18.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveVisibility(i, false); });
             new UIElementBorder(ui, Color.red);
         }
-
-        if (componentsOffset > offset) offset = componentsOffset;
         offset++;
 
         offset = AddNextEventComponents(offset);
@@ -271,10 +286,20 @@ public class EditorComponentEvent : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", SELECTION));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset++, 12, 1);
+        ui.SetLocation(6, offset, 12.5f, 1);
         ui.SetText(eventComponent.heroListName);
         ui.SetButton(delegate { SetHighlight(); });
         new UIElementBorder(ui);
+
+        if (game.quest.qd.components.ContainsKey(eventComponent.heroListName))
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.heroListName); });
+            new UIElementBorder(ui, Color.blue);
+        }
+        offset++;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 3, 1);
@@ -401,10 +426,19 @@ public class EditorComponentEvent : EditorComponent
                 new UIElementBorder(ui, Color.green);
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(1.5f, offset, 17, 1);
+                ui.SetLocation(1.5f, offset, 16, 1);
                 ui.SetText(s);
-                ui.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
+                ui.SetButton(delegate { SetEvent(i, buttonTmp); });
                 new UIElementBorder(ui);
+
+                if (game.quest.qd.components.ContainsKey(tmpName))
+                {
+                    UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                    link.SetLocation(17.5f, offset, 1, 1);
+                    link.SetText("<b>⇨</b>", Color.blue);
+                    link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
+                    new UIElementBorder(link, Color.blue);
+                }
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset++, 1, 1);
@@ -574,7 +608,6 @@ public class EditorComponentEvent : EditorComponent
             else
             {
                 LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextUIE.GetText());
-                eventComponent.display = true;
                 if (eventComponent.buttons.Count == 0)
                 {
                     eventComponent.buttons.Add(eventComponent.genQuery("button1"));
@@ -582,6 +615,11 @@ public class EditorComponentEvent : EditorComponent
                     eventComponent.buttonColors.Add("white");
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
+                }
+                if (!eventComponent.display)
+                {
+                    eventComponent.display = true;
+                    Update();
                 }
             }
         }
@@ -859,7 +897,7 @@ public class EditorComponentEvent : EditorComponent
         Update();
     }
 
-    public void AddVisibility(bool add)
+    public void AddVisibility(bool add, int index = -1)
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
@@ -867,7 +905,7 @@ public class EditorComponentEvent : EditorComponent
         }
         Game game = Game.Get();
 
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddVisibility(add, s); }, new StringKey("val", "SELECT", new StringKey("val", "COMPONENT")));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddVisibility(add, index, s); }, new StringKey("val", "SELECT", new StringKey("val", "COMPONENT")));
 
         if (!add)
         {
@@ -896,8 +934,21 @@ public class EditorComponentEvent : EditorComponent
         select.Draw();
     }
 
-    public void SelectAddVisibility(bool add, string component)
+    public void SelectAddVisibility(bool add, int index, string component)
     {
+        if (index != -1)
+        {
+            if (add)
+            {
+                eventComponent.addComponents[index] = component;
+            }
+            else
+            {
+                eventComponent.removeComponents[index] = component;
+            }
+            Update();
+            return;
+        }
         string[] oldC = null;
 
         if(add)
@@ -1089,7 +1140,12 @@ public class EditorComponentEvent : EditorComponent
         }
     }
 
-    public void AddEvent(int index, int button)
+    public void SetEvent(int index, int button)
+    {
+        AddEvent(index, button, true);
+    }
+
+    public void AddEvent(int index, int button, bool replace = false)
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
@@ -1097,7 +1153,7 @@ public class EditorComponentEvent : EditorComponent
         }
         Game game = Game.Get();
 
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddEvent(index, button, s); }, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddEvent(index, button, replace, s); }, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
 
         select.AddNewComponentItem("Event");
         select.AddNewComponentItem("Spawn");
@@ -1117,7 +1173,7 @@ public class EditorComponentEvent : EditorComponent
         select.Draw();
     }
 
-    public void SelectAddEvent(int index, int button, string eventName)
+    public void SelectAddEvent(int index, int button, bool replace, string eventName)
     {
         string toAdd = eventName;
         Game game = Game.Get();
@@ -1154,7 +1210,14 @@ public class EditorComponentEvent : EditorComponent
             Game.Get().quest.qd.components.Add(toAdd, new QuestData.Puzzle(toAdd));
         }
 
-        eventComponent.nextEvent[button - 1].Insert(index, toAdd);
+        if (replace)
+        {
+            eventComponent.nextEvent[button - 1][index] = toAdd;
+        }
+        else
+        {
+            eventComponent.nextEvent[button - 1].Insert(index, toAdd);
+        }
         Update();
     }
 

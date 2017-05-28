@@ -204,7 +204,7 @@ public class EditorComponentQuest : EditorComponent
     protected override void AddTitle()
     {
         UIElement ui = new UIElement(Game.EDITOR);
-        ui.SetLocation(4, 0, 17, 1);
+        ui.SetLocation(1, 0, 20, 1);
         ui.SetText(game.gameType.QuestName());
         ui.SetButton(delegate { QuestEditorData.TypeSelect(); });
         ui.SetBGColor(Color.black);

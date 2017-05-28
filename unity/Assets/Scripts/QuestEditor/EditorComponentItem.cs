@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -51,8 +51,22 @@ public class EditorComponentItem : EditorComponent
         {
             int tmp = i;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0.5f, offset, 18, 1);
             ui.SetText(itemComponent.itemName[i]);
+            ui.SetButton(delegate { SetItem(tmp); });
+            if (game.quest.qd.components.ContainsKey(itemComponent.itemName[tmp]))
+            {
+                ui.SetLocation(0.5f, offset, 17, 1);
+                UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                link.SetLocation(17.5f, offset, 1, 1);
+                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetButton(delegate { QuestEditorData.SelectComponent(itemComponent.itemName[tmp]); });
+                new UIElementBorder(link, Color.blue);
+            }
+            else
+            {
+                ui.SetLocation(0.5f, offset, 18, 1);
+            }
+            new UIElementBorder(ui);
 
             if (itemComponent.traits.Length > 0 || itemComponent.itemName.Length > 1 || itemComponent.traitpool.Length > 0)
             {
@@ -135,14 +149,24 @@ public class EditorComponentItem : EditorComponent
     {
         if (!(game.gameType is MoMGameType)) return offset;
 
-        DialogBox db = new DialogBox(new Vector2(0, offset), new Vector2(6f, 1), new StringKey("val", "X_COLON", new StringKey("val", "INSPECT")));
-        db.ApplyTag(Game.EDITOR);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "INSPECT")));
 
-        TextButton tb = new TextButton(new Vector2(6f, offset), new Vector2(12, 1), new StringKey(null, itemComponent.inspect, false), delegate { PickInpsect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-        tb.ApplyTag(Game.EDITOR);
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 13.5f, 1);
+        ui.SetText(itemComponent.inspect);
+        ui.SetButton(delegate { PickInpsect(); });
+        new UIElementBorder(ui);
 
+        if (itemComponent.inspect.Length > 0)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetButton(delegate { QuestEditorData.SelectComponent(itemComponent.inspect); });
+            new UIElementBorder(ui, Color.blue);
+        }
         return offset + 2;
     }
 
@@ -154,12 +178,17 @@ public class EditorComponentItem : EditorComponent
 
     public void AddItem()
     {
+        SetItem(-1);
+    }
+
+    public void SetItem(int index)
+    {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             return;
         }
         Game game = Game.Get();
-        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectAddItem, CommonStringKeys.SELECT_ITEM);
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddItem(index, s); }, CommonStringKeys.SELECT_ITEM);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { "Quest" });
@@ -192,16 +221,23 @@ public class EditorComponentItem : EditorComponent
         select.Draw();
     }
 
-    public void SelectAddItem(string item)
+    public void SelectAddItem(int pos, string item)
     {
-        string[] newArray = new string[itemComponent.itemName.Length + 1];
-
-        for (int i = 0; i < itemComponent.itemName.Length; i++)
+        if (pos == -1)
         {
-            newArray[i] = itemComponent.itemName[i];
+            string[] newArray = new string[itemComponent.itemName.Length + 1];
+
+            for (int i = 0; i < itemComponent.itemName.Length; i++)
+            {
+                newArray[i] = itemComponent.itemName[i];
+            }
+            newArray[itemComponent.itemName.Length] = item;
+            itemComponent.itemName = newArray;
         }
-        newArray[itemComponent.itemName.Length] = item;
-        itemComponent.itemName = newArray;
+        else
+        {
+            itemComponent.itemName[pos] = item;
+        }
         Update();
     }
 
