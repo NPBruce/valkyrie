@@ -41,7 +41,7 @@ public class ContentData {
 
     public static string ImportPath()
     {
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/import/";
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/import";
     }
 
     // Constructor takes a path in which to look for content
@@ -1017,9 +1017,9 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("imageplace"))
         {
-            if (content["imageplace"].IndexOf("{ffg}") == 0)
+            if (content["imageplace"].IndexOf("{import}") == 0)
             {
-                imagePlace = ContentData.ImportPath() + content["imageplace"].Substring(5);
+                imagePlace = ContentData.ImportPath() + content["imageplace"].Substring(8);
             }
             else
             {
@@ -1268,9 +1268,9 @@ public class AudioData : GenericData
     {
         if (content.ContainsKey("file"))
         {
-            if (content["file"].IndexOf("{ffg}") == 0)
+            if (content["file"].IndexOf("{import}") == 0)
             {
-                file = ContentData.ImportPath() + content["file"].Substring(5);
+                file = ContentData.ImportPath() + content["file"].Substring(8);
             }
             else
             {
@@ -1336,9 +1336,9 @@ public class GenericData
         // absolute paths are not supported
         if (content.ContainsKey("image"))
         {
-            if (content["image"].IndexOf("{ffg}") == 0)
+            if (content["image"].IndexOf("{import}") == 0)
             {
-                image = ContentData.ImportPath() + content["image"].Substring(5);
+                image = ContentData.ImportPath() + content["image"].Substring(8);
             }
             else
             {

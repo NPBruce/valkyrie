@@ -61,7 +61,7 @@ namespace FFGAppImport
         public bool NeedImport()
         {
             // Read the import log
-            logFile = contentPath + "import.ini";
+            logFile = Path.Combine(contentPath, "import.ini");
             IniData log = IniRead.ReadFromIni(logFile);
 
             // If no import log, import is required
@@ -210,7 +210,7 @@ namespace FFGAppImport
             {
                 Directory.CreateDirectory(contentPath);
 
-                logFile = contentPath + "import.ini";
+                logFile = Path.Combine(contentPath, "import.ini");
 
                 if (File.Exists(logFile))
                 {
@@ -294,9 +294,9 @@ namespace FFGAppImport
             Unity_Studio.Texture2D m_Texture2D = new Unity_Studio.Texture2D(asset, false);
             m_Texture2D = new Unity_Studio.Texture2D(asset, true);
             Directory.CreateDirectory(contentPath);
-            Directory.CreateDirectory(contentPath + "img");
+            Directory.CreateDirectory(contentPath + "/img");
             // Default file name
-            string fileCandidate = contentPath + "img/" + asset.Text;
+            string fileCandidate = contentPath + "/img/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
@@ -392,9 +392,9 @@ namespace FFGAppImport
         {
             Unity_Studio.AudioClip m_AudioClip = new Unity_Studio.AudioClip(asset, false);
             Directory.CreateDirectory(contentPath);
-            Directory.CreateDirectory(contentPath + "audio");
+            Directory.CreateDirectory(contentPath + "/audio");
 
-            string fileCandidate = contentPath + "audio/" + asset.Text;
+            string fileCandidate = contentPath + "/audio/" + asset.Text;
             string fileName = fileCandidate + ".ogg";
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
@@ -413,8 +413,8 @@ namespace FFGAppImport
         {
             Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
             Directory.CreateDirectory(contentPath);
-            Directory.CreateDirectory(contentPath + "text");
-            string fileCandidate = contentPath + "text/" + asset.Text;
+            Directory.CreateDirectory(contentPath + "/text");
+            string fileCandidate = contentPath + "/text/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
 
             m_TextAsset = new Unity_Studio.TextAsset(asset, true);
@@ -448,8 +448,8 @@ namespace FFGAppImport
         {
             Unity_Studio.unityFont m_Font = new Unity_Studio.unityFont(asset, false);
             Directory.CreateDirectory(contentPath);
-            Directory.CreateDirectory(contentPath + "fonts");
-            string fileCandidate = contentPath + "fonts/" + asset.Text;
+            Directory.CreateDirectory(contentPath + "/fonts");
+            string fileCandidate = contentPath + "/fonts/" + asset.Text;
             string fileName = fileCandidate + ".ttf";
 
             m_Font = new Unity_Studio.unityFont(asset, true);

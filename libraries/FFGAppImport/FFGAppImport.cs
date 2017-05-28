@@ -18,7 +18,7 @@ namespace FFGAppImport
         {
             type = t;
             platform = p;
-            path = contentPath;
+            path = contentPath + t.ToString() + "/import";
             editor = e;
         }
 
