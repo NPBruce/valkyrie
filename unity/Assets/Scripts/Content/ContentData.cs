@@ -1017,7 +1017,14 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("imageplace"))
         {
-            imagePlace = path + "/" + content["imageplace"];
+            if (content["imageplace"].IndexOf("{ffg}") == 0)
+            {
+                imagePlace = ContentData.ImportPath() + content["imageplace"].Substring(5);
+            }
+            else
+            {
+                imagePlace = path + "/" + content["imageplace"];
+            }
         }
         else // No image is a valid condition
         {
@@ -1261,7 +1268,14 @@ public class AudioData : GenericData
     {
         if (content.ContainsKey("file"))
         {
-            file = path + "/" + content["file"];
+            if (content["file"].IndexOf("{ffg}") == 0)
+            {
+                file = ContentData.ImportPath() + content["file"].Substring(5);
+            }
+            else
+            {
+                file = path + "/" + content["file"];
+            }
         }
     }
 }
@@ -1303,8 +1317,6 @@ public class GenericData
             name = new StringKey(null,name_ini.Substring(type.Length));
         }
 
-
-
         priority = 0;
         if (content.ContainsKey("priority"))
         {
@@ -1326,7 +1338,7 @@ public class GenericData
         {
             if (content["image"].IndexOf("{ffg}") == 0)
             {
-                image = ContentData.ImportPath() + content["image"];
+                image = ContentData.ImportPath() + content["image"].Substring(5);
             }
             else
             {
