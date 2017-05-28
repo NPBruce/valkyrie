@@ -40,13 +40,13 @@ namespace Assets.Scripts.UI.Screens
             // Get the current content for games
             if (Application.platform == RuntimePlatform.OSXPlayer)
             {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, ContentData.ContentPath(), Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, ContentData.ContentPath(), Application.isEditor);
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
             }
             else
             {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, ContentData.ContentPath(), Application.isEditor);
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
             }
 
             fcD2E.Inspect();
@@ -204,14 +204,14 @@ namespace Assets.Scripts.UI.Screens
             {
                 // FFG default language is always English
                 LocalizationRead.ffgDict = new DictionaryI18n(
-                    System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/Localization.txt"),
+                    System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
                     DictionaryI18n.DEFAULT_LANG,
                     Game.Get().currentLang);
 
                 // Hack for Dunwich Horror
-                if (System.IO.File.Exists(Game.Get().gameType.DataDirectory() + "ffg/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
+                if (System.IO.File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
                 {
-                    LocalizationRead.ffgDict.Add(new DictionaryI18n(System.IO.File.ReadAllLines(Game.Get().gameType.DataDirectory() + "ffg/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
+                    LocalizationRead.ffgDict.Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
                         DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
                 }
             }

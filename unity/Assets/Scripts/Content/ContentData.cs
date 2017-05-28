@@ -39,6 +39,11 @@ public class ContentData {
         return Application.dataPath + "/content/";
     }
 
+    public static string ImportPath()
+    {
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/import";
+    }
+
     // Constructor takes a path in which to look for content
     public ContentData(string path)
     {
@@ -1012,7 +1017,14 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("imageplace"))
         {
-            imagePlace = path + "/" + content["imageplace"];
+            if (content["imageplace"].IndexOf("{import}") == 0)
+            {
+                imagePlace = ContentData.ImportPath() + content["imageplace"].Substring(8);
+            }
+            else
+            {
+                imagePlace = path + "/" + content["imageplace"];
+            }
         }
         else // No image is a valid condition
         {
@@ -1256,7 +1268,14 @@ public class AudioData : GenericData
     {
         if (content.ContainsKey("file"))
         {
-            file = path + "/" + content["file"];
+            if (content["file"].IndexOf("{import}") == 0)
+            {
+                file = ContentData.ImportPath() + content["file"].Substring(8);
+            }
+            else
+            {
+                file = path + "/" + content["file"];
+            }
         }
     }
 }
@@ -1298,8 +1317,6 @@ public class GenericData
             name = new StringKey(null,name_ini.Substring(type.Length));
         }
 
-
-
         priority = 0;
         if (content.ContainsKey("priority"))
         {
@@ -1319,7 +1336,14 @@ public class GenericData
         // absolute paths are not supported
         if (content.ContainsKey("image"))
         {
-            image = path + "/" + content["image"];
+            if (content["image"].IndexOf("{import}") == 0)
+            {
+                image = ContentData.ImportPath() + content["image"].Substring(8);
+            }
+            else
+            {
+                image = path + "/" + content["image"];
+            }
         }
         else // No image is a valid condition
         {
