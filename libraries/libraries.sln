@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportTest", "ImportTest\Im
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injection", "Injection\Injection.csproj", "{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObbExtract", "ObbExtract\ObbExtract.csproj", "{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
