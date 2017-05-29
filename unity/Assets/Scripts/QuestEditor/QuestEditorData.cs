@@ -95,27 +95,27 @@ public class QuestEditorData {
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
 
-        select.AddNewComponentItem("Tile");
-        select.AddNewComponentItem("Token");
-        select.AddNewComponentItem("Spawn");
-        select.AddNewComponentItem("Event");
-        select.AddNewComponentItem("CustomMonster");
-        select.AddNewComponentItem("UI");
-        select.AddNewComponentItem("QItem");
+        select.AddNewComponentItem(CommonStringKeys.TILE);
+        select.AddNewComponentItem(CommonStringKeys.TOKEN);
+        select.AddNewComponentItem(CommonStringKeys.SPAWN);
+        select.AddNewComponentItem(CommonStringKeys.EVENT);
+        select.AddNewComponentItem(CommonStringKeys.CUSTOMMONSTER);
+        select.AddNewComponentItem(CommonStringKeys.UI);
+        select.AddNewComponentItem(CommonStringKeys.QITEM);
         if (game.gameType is D2EGameType)
         {
-            select.AddNewComponentItem("Activation");
-            select.AddNewComponentItem("Door");
-            select.AddNewComponentItem("MPlace");
+            select.AddNewComponentItem(CommonStringKeys.ACTIVATION);
+            select.AddNewComponentItem(CommonStringKeys.DOOR);
+            select.AddNewComponentItem(CommonStringKeys.MPLACE);
         }
         else
         {
-            select.AddNewComponentItem("Puzzle");
+            select.AddNewComponentItem(CommonStringKeys.PUZZLE);
         }
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
-        select.AddItem(CommonStringKeys.QUEST.Translate(), "Quest", traits);
+        select.AddItem(CommonStringKeys.QUEST, traits);
 
         foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
         {
@@ -139,23 +139,23 @@ public class QuestEditorData {
         QuestEditorData qed = game.qed;
 
         // Quest is a special component
-        if (name.Equals("Quest"))
+        if (name.Equals(CommonStringKeys.QUEST.key))
         {
             SelectQuest();
             return;
         }
         // These are special strings for creating new objects
-        if (name.Equals("{NEW:Tile}"))
+        if (name.Equals("{NEW:TILE}"))
         {
             qed.NewTile();
             return;
         }
-        if (name.Equals("{NEW:Door}"))
+        if (name.Equals("{NEW:DOOR}"))
         {
             qed.NewDoor();
             return;
         }
-        if (name.Equals("{NEW:Token}"))
+        if (name.Equals("{NEW:TOKEN}"))
         {
             qed.NewToken();
             return;
@@ -165,37 +165,37 @@ public class QuestEditorData {
             qed.NewUI();
             return;
         }
-        if (name.Equals("{NEW:Spawn}"))
+        if (name.Equals("{NEW:SPAWN}"))
         {
             qed.NewSpawn();
             return;
         }
-        if (name.Equals("{NEW:MPlace}"))
+        if (name.Equals("{NEW:MPLACE}"))
         {
             qed.NewMPlace();
             return;
         }
-        if (name.Equals("{NEW:QItem}"))
+        if (name.Equals("{NEW:QITEM}"))
         {
             qed.NewItem();
             return;
         }
-        if (name.Equals("{NEW:CustomMonster}"))
+        if (name.Equals("{NEW:CUSTOMMONSTER}"))
         {
             qed.NewCustomMonster();
             return;
         }
-        if (name.Equals("{NEW:Activation}"))
+        if (name.Equals("{NEW:ACTIVATION}"))
         {
             qed.NewActivation();
             return;
         }
-        if (name.Equals("{NEW:Event}"))
+        if (name.Equals("{NEW:EVENT}"))
         {
             qed.NewEvent();
             return;
         }
-        if (name.Equals("{NEW:Puzzle}"))
+        if (name.Equals("{NEW:PUZZLE}"))
         {
             qed.NewPuzzle();
             return;

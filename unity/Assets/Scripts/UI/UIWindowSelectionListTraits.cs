@@ -291,14 +291,14 @@ namespace Assets.Scripts.UI
             items[items.Count - 1].SetColor(color);
         }
 
-        public void AddNewComponentItem(string type)
+        public void AddNewComponentItem(StringKey type)
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { type });
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { type.Translate() });
             traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "NEW").Translate() });
 
-            items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", type.ToUpper()).Translate(), "{NEW:" + type + "}", traits));
+            items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", type.Translate().ToUpper()).Translate(), "{NEW:" + type.key + "}", traits));
         }
 
         public void SelectTrait(string type, string trait)

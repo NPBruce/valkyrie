@@ -276,7 +276,7 @@ public class EditorComponent {
     {
         UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, new StringKey("val", "SELECT", new StringKey("val", "FILE")));
 
-        select.AddItem("{NEW:File}");
+        select.AddItem("{NEW:FILE}");
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         foreach(string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
         {
@@ -287,7 +287,7 @@ public class EditorComponent {
 
     public void SelectSource(string source)
     {
-        if (source.Equals("{NEW:File}"))
+        if (source.Equals("{NEW:FILE}"))
         {
             sourceFileText = new QuestEditorTextEdit(new StringKey("val", "FILE"), "", delegate { NewSource(); });
             sourceFileText.EditText();
