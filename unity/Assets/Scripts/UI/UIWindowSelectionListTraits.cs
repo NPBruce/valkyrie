@@ -295,10 +295,10 @@ namespace Assets.Scripts.UI
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { type });
+            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", type.ToUpper()).Translate() });
             traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "NEW").Translate() });
 
-            items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", type.ToUpper()).Translate(), "{NEW:" + type + "}", traits));
+            items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits));
         }
 
         public void SelectTrait(string type, string trait)
