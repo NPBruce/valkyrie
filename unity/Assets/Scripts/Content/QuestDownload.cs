@@ -217,7 +217,9 @@ public class QuestDownload : MonoBehaviour
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetRight(-11.95f) + (difficulty * 6.9f), offset + 1, (1 - difficulty) * 6.9f, 2);
-                ui.SetBGColor(new Color(1, 1, 1, 0.7f));
+                Color filter = bg;
+                filter.a = 0.7f;
+                ui.SetBGColor(filter);
             }
 
             // Size is 1.2 to be clear of characters with tails
