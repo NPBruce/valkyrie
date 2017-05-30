@@ -486,7 +486,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddActivation(index, s); }, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
-        select.AddNewComponentItem("Activation");
+        select.AddNewComponentItem(CommonStringKeys.ACTIVATION);
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
@@ -501,7 +501,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         int i = 0;
         string toAdd = key;
-        if (key.Equals("{NEW:Activation}"))
+        if (key.Equals("{NEW:ACTIVATION}"))
         {
             while (game.quest.qd.components.ContainsKey("Activation" + i))
             {
@@ -534,7 +534,7 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
         select.AddItem("{NONE}", "");
-        select.AddNewComponentItem("Event");
+        select.AddNewComponentItem(CommonStringKeys.EVENT);
         foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
         {
             if (c.typeDynamic.IndexOf("Event") == 0)
@@ -554,7 +554,7 @@ public class EditorComponentCustomMonster : EditorComponent
         else
         {
             string toAdd = key;
-            if (toAdd.Equals("{NEW:Event}"))
+            if (toAdd.Equals("{NEW:EVENT}"))
             {
                 int i = 0;
                 while (game.quest.qd.components.ContainsKey("Event" + i))
@@ -744,7 +744,7 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
         
         select.AddItem("{NONE}", "");
-        select.AddNewComponentItem("Event");
+        select.AddNewComponentItem(CommonStringKeys.EVENT);
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
@@ -758,7 +758,7 @@ public class EditorComponentCustomMonster : EditorComponent
     public void SelectSetEvade(string evade)
     {
         string toAdd = evade;
-        if (toAdd.Equals("{NEW:Event}"))
+        if (toAdd.Equals("{NEW:EVENT}"))
         {
             int i = 0;
             while (game.quest.qd.components.ContainsKey("Event" + i))
@@ -777,7 +777,7 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 
         select.AddItem("{NONE}", "");
-        select.AddNewComponentItem("Event");
+        select.AddNewComponentItem(CommonStringKeys.EVENT);
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
@@ -791,7 +791,7 @@ public class EditorComponentCustomMonster : EditorComponent
     public void SelectSetHorror(string horror)
     {
         string toAdd = horror;
-        if (toAdd.Equals("{NEW:Event}"))
+        if (toAdd.Equals("{NEW:EVENT}"))
         {
             int i = 0;
             while (game.quest.qd.components.ContainsKey("Event" + i))

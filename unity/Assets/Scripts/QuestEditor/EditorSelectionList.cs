@@ -282,6 +282,7 @@ public class EditorSelectionList
             return entry;
         }
 
+        /*
         public static SelectionListEntry BuildNewComponent(string type)
         {
             SelectionListEntry entry = BuildNameKeyItem(new StringKey("val","NEW_X",type.ToUpper()).Translate(),"{NEW:" + type + "}");
@@ -289,6 +290,7 @@ public class EditorSelectionList
             entry.filter.Add(new StringKey(VAL,"NEW").Translate());
             return entry;
         }
+        */
 
         public SelectionListEntry()
         {

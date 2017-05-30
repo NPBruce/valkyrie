@@ -590,7 +590,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { MonsterPlaceAddSelection(heroes, slot, s); }, CommonStringKeys.SELECT_ITEM);
 
-        select.AddNewComponentItem("MPlace");
+        select.AddNewComponentItem(CommonStringKeys.MPLACE);
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -604,7 +604,7 @@ public class EditorComponentSpawn : EditorComponentEvent
 
     public void MonsterPlaceAddSelection(int heroes, int slot, string name)
     {
-        if (name.Equals("{NEW:MPlace}"))
+        if (name.Equals("{NEW:MPLACE}"))
         {
             Game game = Game.Get();
             int index = 0;
