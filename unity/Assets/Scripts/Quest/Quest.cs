@@ -561,6 +561,7 @@ public class Quest
             h.activated = false;
             h.defeated = false;
             h.selected = false;
+            if (h.heroData != null) heroCount++;
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
