@@ -562,6 +562,7 @@ public class QuestEditorData {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
 
         int count = 0;
+        string last = "";
         foreach (RaycastResult hit in raycastResults)
         {
             foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
@@ -569,11 +570,13 @@ public class QuestEditorData {
                 if (kv.Value.unityObject == hit.gameObject)
                 {
                     count++;
+                    last = kv.Key;
                     select.AddItem(kv.Key);
                     break;
                 }
             }
         }
-        if (count > 0) select.Draw();
+        if (count == 1) SelectComponent(last);
+        if (count > 1) select.Draw();
     }
 }
