@@ -283,6 +283,12 @@ public class Game : MonoBehaviour {
             qed.MouseDown();
         }
 
+        // 0 is the left mouse button
+        if (qed != null && Input.GetMouseButtonDown(1))
+        {
+            qed.RightClick();
+        }
+
         if (quest != null)
         {
             quest.Update();

@@ -537,9 +537,43 @@ public class QuestEditorData {
             Object.Destroy(go);
     }
 
-    // This is called game
+    // This is called by game
     public void MouseDown()
     {
         selection.MouseDown();
+    }
+
+    // This is called by game
+    public void RightClick()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+        pointer.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, raycastResults);
+
+        if (raycastResults.Count == 0) return;
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
+
+        int count = 0;
+        foreach (RaycastResult hit in raycastResults)
+        {
+            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            {
+                if (kv.Value.unityObject == hit.gameObject)
+                {
+                    count++;
+                    select.AddItem(kv.Key);
+                    break;
+                }
+            }
+        }
+        if (count > 0) select.Draw();
     }
 }
