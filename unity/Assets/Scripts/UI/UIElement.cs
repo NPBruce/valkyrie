@@ -227,7 +227,7 @@ namespace Assets.Scripts.UI
                 textHeightObj = new GameObject("TextSizing");
                 textHeightObj.AddComponent<UnityEngine.UI.Text>();
                 RectTransform transform = textHeightObj.GetComponent<RectTransform>();
-                transform.offsetMax = new Vector2((width + (textPaddingDefault * 2)) * UIScaler.GetPixelsPerUnit(), 20000);
+                transform.offsetMax = new Vector2((width - (textPaddingDefault * 2)) * UIScaler.GetPixelsPerUnit(), 20000);
                 textHeightObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
                 textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
