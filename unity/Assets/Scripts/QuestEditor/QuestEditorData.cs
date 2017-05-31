@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -537,9 +538,49 @@ public class QuestEditorData {
             Object.Destroy(go);
     }
 
-    // This is called game
+    // This is called by game
     public void MouseDown()
     {
         selection.MouseDown();
+    }
+
+    // This is called by game
+    public void RightClick()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+        pointer.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, raycastResults);
+
+        if (raycastResults.Count == 0) return;
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
+
+        int count = 0;
+        string last = "";
+        foreach (RaycastResult hit in raycastResults)
+        {
+            foreach (KeyValuePair<string, Quest.BoardComponent> kv in Game.Get().quest.boardItems)
+            {
+                if (kv.Value.unityObject == hit.gameObject)
+                {
+                    if (kv.Key.IndexOf("UI") != 0)
+                    {
+                        last = kv.Key;
+                        count++;
+                        select.AddItem(Game.Get().quest.qd.components[kv.Key]);
+                    }
+                    break;
+                }
+            }
+        }
+        if (count == 1) SelectComponent(last);
+        if (count > 1) select.Draw();
     }
 }
