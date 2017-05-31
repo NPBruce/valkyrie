@@ -140,7 +140,7 @@ namespace FFGAppImport
             {
                 Import(s);
             }
-            ObbExtract.CleanTemp();
+            //ObbExtract.CleanTemp();
         }
 
         // Import one assets file

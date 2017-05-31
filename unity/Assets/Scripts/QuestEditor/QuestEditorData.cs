@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -565,13 +566,16 @@ public class QuestEditorData {
         string last = "";
         foreach (RaycastResult hit in raycastResults)
         {
-            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            foreach (KeyValuePair<string, Quest.BoardComponent> kv in Game.Get().quest.boardItems)
             {
                 if (kv.Value.unityObject == hit.gameObject)
                 {
-                    count++;
-                    last = kv.Key;
-                    select.AddItem(kv.Key);
+                    if (kv.Key.IndexOf("UI") != 0)
+                    {
+                        last = kv.Key;
+                        count++;
+                        select.AddItem(Game.Get().quest.qd.components[kv.Key]);
+                    }
                     break;
                 }
             }
