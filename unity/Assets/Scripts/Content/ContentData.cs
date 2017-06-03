@@ -137,7 +137,14 @@ public class ContentData {
             pack.id = d.Get("ContentPack", "id");
 
             // If this is invalid we will just handle it later, not fatal
-            pack.image = path + "/" + d.Get("ContentPack", "image");
+            if (d.Get("ContentPack", "image").IndexOf("{import}") == 0)
+            {
+                pack.image = ContentData.ImportPath() + d.Get("ContentPack", "image").Substring(8);
+            }
+            else
+            {
+                pack.image = path + "/" + d.Get("ContentPack", "image");
+            }
 
             // Black description isn't fatal
             pack.description = d.Get("ContentPack", "description");
