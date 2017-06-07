@@ -512,7 +512,7 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventVarOperationComponents(float offset)
     {
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", ASSIGN));
 

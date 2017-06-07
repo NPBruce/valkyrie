@@ -3,6 +3,7 @@ using System.Collections;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
+using ValkyrieTools;
 
 // In quest game menu
 public class GameMenu {
@@ -42,7 +43,7 @@ public class GameMenu {
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
-        ui.SetButton(delegate { Undo());
+        ui.SetButton(delegate { Undo(); });
 
         ui = new UIElement();
         ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 10, 10, 2);
@@ -50,19 +51,19 @@ public class GameMenu {
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
-        ui.SetButton(delegate { Save());
+        ui.SetButton(delegate { Save(); });
 
         ui = new UIElement();
         ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 13, 10, 2);
         if (game.testMode)
         {
             ui.SetText(new StringKey("val", "EDITOR"));
-            ui.SetButton(delegate { Editor());
+            ui.SetButton(delegate { Editor(); });
         }
         else
         {
             ui.SetText(MAIN_MENU);
-            ui.SetButton(delegate { Quit());
+            ui.SetButton(delegate { Quit(); });
         }
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetFontSize(UIScaler.GetMediumFont());
@@ -74,7 +75,7 @@ public class GameMenu {
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
-        ui.SetButton(delegate { Destroyer.Dialog());
+        ui.SetButton(delegate { Destroyer.Dialog(); });
     }
 
     public static void Undo()
@@ -96,20 +97,20 @@ public class GameMenu {
         SaveManager.Save(0, true);
     }
 
-    public void Editor()
+    public static void Editor()
     {
         Game game = Game.Get();
         QuestData.Quest q = game.quest.qd.quest;
         Destroyer.Destroy();
 
-        game.cd = new ContentData(gameType.DataDirectory());
-        foreach (string pack in cd.GetPacks())
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        foreach (string pack in game.cd.GetPacks())
         {
-            cd.LoadContent(pack);
+            game.cd.LoadContent(pack);
         }
 
         // Fetch all of the quest data
-        ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
+        ValkyrieDebug.Log("Selecting Quest: " + q.path + System.Environment.NewLine);
         game.quest = new Quest(q);
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin();

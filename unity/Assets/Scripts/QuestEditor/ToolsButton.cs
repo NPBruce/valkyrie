@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 
 // Special class for the Menu button present while in a quest
 public class ToolsButton
@@ -33,10 +34,10 @@ public class ToolsButton
         QuestData.Quest q = game.quest.qd.quest;
         Destroyer.Destroy();
 
-        game.cd = new ContentData(gameType.DataDirectory());
-        foreach (string pack in cd.GetPacks())
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        foreach (string pack in game.cd.GetPacks())
         {
-            cd.LoadContent(pack);
+            game.cd.LoadContent(pack);
         }
 
         game.testMode = true;
@@ -46,7 +47,7 @@ public class ToolsButton
 
         int heroCount = Random.Range(game.quest.qd.quest.minHero, game.quest.qd.quest.maxHero + 1);
 
-        List<HeroData> hOptions = new List<HeroData>(game.cd.heroes);
+        List<HeroData> hOptions = new List<HeroData>(game.cd.heroes.Values);
         for (int i = 0; i < heroCount; i++)
         {
             game.quest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];
@@ -66,8 +67,8 @@ public class ToolsButton
         }
         else
         {
-            UpdateImages();
-            UpdateStatus();
+            game.heroCanvas.UpdateImages();
+            game.heroCanvas.UpdateStatus();
         }
 
         // Draw morale if required
