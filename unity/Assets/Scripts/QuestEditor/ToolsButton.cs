@@ -30,6 +30,7 @@ public class ToolsButton
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
         Game game = Game.Get();
+        QuestData.Quest q = game.quest.qd.quest;
         Destroyer.Destroy();
         game.testMode = true;
         // Fetch all of the quest data and initialise the quest
