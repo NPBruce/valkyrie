@@ -44,6 +44,7 @@ public class GameMenu {
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetButton(delegate { Undo(); });
+        new UIElementBorder(ui);
 
         ui = new UIElement();
         ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 10, 10, 2);
@@ -52,6 +53,7 @@ public class GameMenu {
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetButton(delegate { Save(); });
+        new UIElementBorder(ui);
 
         ui = new UIElement();
         ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 13, 10, 2);
@@ -68,6 +70,7 @@ public class GameMenu {
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
         ui = new UIElement();
         ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 16, 10, 2);
@@ -76,6 +79,7 @@ public class GameMenu {
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetButton(delegate { Destroyer.Dialog(); });
+        new UIElementBorder(ui);
     }
 
     public static void Undo()
@@ -100,7 +104,7 @@ public class GameMenu {
     public static void Editor()
     {
         Game game = Game.Get();
-        QuestData.Quest q = game.quest.qd.quest;
+        string path = game.quest.questPath;
         Destroyer.Destroy();
 
         game.cd = new ContentData(game.gameType.DataDirectory());
@@ -110,8 +114,7 @@ public class GameMenu {
         }
 
         // Fetch all of the quest data
-        ValkyrieDebug.Log("Selecting Quest: " + q.path + System.Environment.NewLine);
-        game.quest = new Quest(q);
+        game.quest = new Quest(new QuestData.Quest(path));
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin();
     }

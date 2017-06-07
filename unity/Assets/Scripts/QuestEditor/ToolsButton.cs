@@ -31,7 +31,7 @@ public class ToolsButton
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
         Game game = Game.Get();
-        QuestData.Quest q = game.quest.qd.quest;
+        string path = game.quest.questPath;
         Destroyer.Destroy();
 
         game.cd = new ContentData(game.gameType.DataDirectory());
@@ -42,7 +42,7 @@ public class ToolsButton
 
         game.testMode = true;
         // Fetch all of the quest data and initialise the quest
-        game.quest = new Quest(q);
+        game.quest = new Quest(new QuestData.Quest(path));
         game.heroCanvas.SetupUI();
 
         int heroCount = Random.Range(game.quest.qd.quest.minHero, game.quest.qd.quest.maxHero + 1);
