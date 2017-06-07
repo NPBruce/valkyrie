@@ -970,9 +970,9 @@ public class Quest
                 game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
             }
         }
-        if (itemSelect.ContainsKey(name))
+        if (itemSelect.ContainsKey(name) && items.Contains(itemSelect[name]))
         {
-            itemSelect.Remove(name);
+            items.Remove(itemSelect[name]);
         }
         if (name.Equals("#monsters"))
         {
