@@ -102,6 +102,12 @@ public class GameMenu {
         QuestData.Quest q = game.quest.qd.quest;
         Destroyer.Destroy();
 
+        game.cd = new ContentData(gameType.DataDirectory());
+        foreach (string pack in cd.GetPacks())
+        {
+            cd.LoadContent(pack);
+        }
+
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
         game.quest = new Quest(q);

@@ -32,6 +32,13 @@ public class ToolsButton
         Game game = Game.Get();
         QuestData.Quest q = game.quest.qd.quest;
         Destroyer.Destroy();
+
+        game.cd = new ContentData(gameType.DataDirectory());
+        foreach (string pack in cd.GetPacks())
+        {
+            cd.LoadContent(pack);
+        }
+
         game.testMode = true;
         // Fetch all of the quest data and initialise the quest
         game.quest = new Quest(q);
