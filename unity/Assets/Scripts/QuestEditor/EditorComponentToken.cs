@@ -57,6 +57,11 @@ public class EditorComponentToken : EditorComponentEvent
         return offset;
     }
 
+    override public float AddEventVarConditionComponents(float offset)
+    {
+        return offset;
+    }
+
     public void Rotate()
     {
         tokenComponent.rotation += 90;

@@ -62,6 +62,8 @@ public class Game : MonoBehaviour {
     public LogWindow logWindow;
     // Class for stage control UI
     public Audio audioControl;
+    // Quest started as test from editor
+    public bool testMode = false;
 
     // Import thread
     public GameSelectionScreen gameSelect;

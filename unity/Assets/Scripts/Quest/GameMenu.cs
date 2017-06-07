@@ -2,6 +2,8 @@
 using System.Collections;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.UI;
+using ValkyrieTools;
 
 // In quest game menu
 public class GameMenu {
@@ -31,25 +33,53 @@ public class GameMenu {
     {
         Game game = Game.Get();
         // Border around menu items
-        DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 6), new Vector2(12, 13), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 6, 12, 13);
+        new UIElementBorder(ui);
 
-        TextButton tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 7), new Vector2(10, 2f), UNDO, delegate { Undo(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 7, 10, 2);
+        ui.SetText(UNDO);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetButton(delegate { Undo(); });
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 10), new Vector2(10, 2f), SAVE, delegate { Save(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 10, 10, 2);
+        ui.SetText(SAVE);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetButton(delegate { Save(); });
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 13), new Vector2(10, 2f), MAIN_MENU, delegate { Quit(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 13, 10, 2);
+        if (game.testMode)
+        {
+            ui.SetText(new StringKey("val", "EDITOR"));
+            ui.SetButton(delegate { Editor(); });
+        }
+        else
+        {
+            ui.SetText(MAIN_MENU);
+            ui.SetButton(delegate { Quit(); });
+        }
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 16), new Vector2(10, 2f), CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.SetFont(game.gameType.GetHeaderFont());
-
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 16, 10, 2);
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetButton(delegate { Destroyer.Dialog(); });
+        new UIElementBorder(ui);
     }
 
     public static void Undo()
@@ -69,5 +99,23 @@ public class GameMenu {
     {
         Destroyer.Dialog();
         SaveManager.Save(0, true);
+    }
+
+    public static void Editor()
+    {
+        Game game = Game.Get();
+        string path = game.quest.questPath;
+        Destroyer.Destroy();
+
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        foreach (string pack in game.cd.GetPacks())
+        {
+            game.cd.LoadContent(pack);
+        }
+
+        // Fetch all of the quest data
+        game.quest = new Quest(new QuestData.Quest(path));
+        ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
+        QuestEditor.Begin();
     }
 }

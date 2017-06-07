@@ -360,6 +360,9 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
+            // Tokens don't have conditions
+            conditions = new List<VarOperation>();
+
             tokenName = "";
             if (data.ContainsKey("type"))
             {
@@ -1797,7 +1800,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 5;
+        public static int currentFormat = 6;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
