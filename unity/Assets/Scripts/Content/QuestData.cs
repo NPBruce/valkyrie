@@ -360,6 +360,9 @@ public class QuestData
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
 
+            // Tokens don't have conditions
+            conditions = new List<VarOperation>();
+
             tokenName = "";
             if (data.ContainsKey("type"))
             {

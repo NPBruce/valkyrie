@@ -189,7 +189,9 @@ public class EditorComponentEvent : EditorComponent
 
         offset = AddNextEventComponents(offset);
 
-        offset = AddEventVarComponents(offset);
+        offset = AddEventVarConditionComponents(offset);
+
+        offset = AddEventVarOperationComponents(offset);
 
         Highlight();
         return offset;
@@ -467,7 +469,7 @@ public class EditorComponentEvent : EditorComponent
         return offset + 1;
     }
 
-    virtual public float AddEventVarComponents(float offset)
+    virtual public float AddEventVarConditionComponents(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
@@ -505,8 +507,11 @@ public class EditorComponentEvent : EditorComponent
             ui.SetButton(delegate { RemoveOp(tmp); });
             new UIElementBorder(ui, Color.red);
         }
-        offset++;
+        return offset + 1;
+    }
 
+    virtual public float AddEventVarOperationComponents(float offset)
+    {
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", ASSIGN));
@@ -543,7 +548,6 @@ public class EditorComponentEvent : EditorComponent
             ui.SetButton(delegate { RemoveOp(tmp); });
             new UIElementBorder(ui, Color.red);
         }
-
         return offset + 1;
     }
 
