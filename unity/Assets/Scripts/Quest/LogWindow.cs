@@ -13,6 +13,7 @@ public class LogWindow
     // Construct and display
     public LogWindow()
     {
+        developerToggle = Game.Get().testMode;
         Update();
     }
 
