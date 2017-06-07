@@ -32,35 +32,28 @@ public class InventoryWindowMoM
         db.SetFont(game.gameType.GetHeaderFont());
 
         UIElementScrollHorizontal scrollArea = new UIElementScrollHorizontal();
-        scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 13);
+        scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 14);
         new UIElementBorder(scrollArea);
 
-        float xOffset = UIScaler.GetHCenter(-16);
+        float xOffset = 1;
 
         TextButton tb = null;
         foreach (string s in game.quest.itemInspect.Keys)
         {
             string tmp = s;
-            tb = new TextButton(new Vector2(xOffset, 14),
-                new Vector2(8, 2),
-                game.cd.items[s].name,
-                delegate { Inspect(tmp); },
-                Color.black);
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+
+            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 9, 8, 3);
+            ui.SetButton(delegate { Inspect(tmp); });
+            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetBGColor(Color.white);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-
-            tb = new TextButton(new Vector2(xOffset, 6),
-                new Vector2(8, 8),
-                StringKey.NULL,
-                delegate { Inspect(tmp); },
-                Color.clear);
-            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 1, 8, 8);
+            ui.SetButton(delegate { Inspect(tmp); });
+            ui.SetImage(itemSprite);
 
             xOffset += 9;
         }
@@ -77,7 +70,6 @@ public class InventoryWindowMoM
     {
         Destroyer.Dialog();
         Game.Get().quest.Save();
-        Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
         Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
     }
 }
