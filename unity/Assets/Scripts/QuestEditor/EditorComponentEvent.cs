@@ -926,7 +926,7 @@ public class EditorComponentEvent : EditorComponent
             {
                 select.AddItem(kv.Value);
             }
-            if (kv.Value is QuestData.QItem && add)
+            if (kv.Value is QuestData.QItem)
             {
                 select.AddItem(kv.Value);
             }
