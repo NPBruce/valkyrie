@@ -521,7 +521,7 @@ public class Quest
         questPath = Path.GetDirectoryName(qd.questPath);
 
         // Extract packages in case needed
-        QuestLoader.ExtractPackages(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+        QuestLoader.ExtractPackages(Game.AppData());
 
         vars.TrimQuest();
 

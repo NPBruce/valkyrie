@@ -16,7 +16,7 @@ class SaveManager
         Game game = Game.Get();
         string number = num.ToString();
         if (num == 0) number = "Auto";
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
+        return Game.AppData() + "/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
@@ -30,17 +30,17 @@ class SaveManager
         Game game = Game.Get();
         try
         {
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie"))
+            if (!Directory.Exists(Game.AppData()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+                Directory.CreateDirectory(Game.AppData());
             }
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName()))
+            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName());
+                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName());
             }
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save"))
+            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName() + "/Save"))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save");
+                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName() + "/Save");
             }
 
             if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))

@@ -333,7 +333,7 @@ public class QuestDownload : MonoBehaviour
 
     public string saveLocation()
     {
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/Download";
+        return Game.AppData() + "/Download";
     }
 
     // Return to main menu

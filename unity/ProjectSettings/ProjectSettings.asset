@@ -6,7 +6,7 @@ PlayerSettings:
   serializedVersion: 11
   productGUID: d95fa235c7b6e3042bafcc4ead88432e
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 2
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -137,7 +137,7 @@ PlayerSettings:
   protectGraphicsMemory: 0
   useHDRDisplay: 0
   applicationIdentifier:
-    Android: com.Company.ProductName
+    Android: com.Bruce.Valkyrie
     Standalone: unity.NA.Valkyrie
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
