@@ -56,7 +56,10 @@ namespace FFGAppImport
             // Check if version is acceptable for import
             importAvailable = VersionNewerOrEqual(appVersion, ffgVersion);
 
-            if (importData.platform == Platform.Android) importAvailable = true;
+            if (importData.platform == Platform.Android)
+            {
+                importAvailable = File.Exists(finder.ObbPath());
+            }
         }
 
         // Check if an import is required
@@ -143,7 +146,10 @@ namespace FFGAppImport
             {
                 Import(s);
             }
-            //ObbExtract.CleanTemp();
+            if (Directory.Exists(Path.GetTempPath() + "Valkyrie/Obb"))
+            {
+                Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
+            }
         }
 
         // Import one assets file

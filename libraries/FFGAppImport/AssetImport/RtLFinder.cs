@@ -1,4 +1,4 @@
-﻿
+﻿using ValkyrieTools;
 using System;
 
 namespace FFGAppImport
@@ -49,7 +49,7 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            return "/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
+            return Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
         }
     }
 }
