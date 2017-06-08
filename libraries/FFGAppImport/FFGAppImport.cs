@@ -55,6 +55,7 @@ namespace FFGAppImport
     {
         Windows,
         MacOS,
-        Linux
+        Linux,
+        Android
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using Microsoft.Win32;
 using System.IO;
 using System;
 using System.Text;
 using Read64bitRegistryFrom32bitApp;
 using ValkyrieTools;
+using Ionic.Zip;
 
 namespace FFGAppImport
 {
@@ -83,6 +84,14 @@ namespace FFGAppImport
             {
 
             }
+            else if (platform == Platform.Android)
+            {
+                location = Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data";
+                if (Directory.Exists(Path.GetTempPath() + "Valkyrie/Obb"))
+                {
+                    Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
+                }
+            }
             else
             {
                 // Attempt to get steam install location (current 32/64 level)
@@ -120,6 +129,71 @@ namespace FFGAppImport
             exeLocation += location + "/" + Executable();
             location += DataDirectory();
             ValkyrieDebug.Log("Asset location: " + location);
+        }
+
+        public void ExtractObb()
+        {
+            if (platform != Platform.Android) return;
+
+            string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
+            ZipFile zip = ZipFile.Read(obbFile);
+            zip.ExtractAll(Path.GetTempPath() + "Valkyrie/Obb");
+            zip.Dispose();
+
+            Dictionary<string, List<FilePart>> data = new Dictionary<string, List<FilePart>>();
+            foreach (string file in Directory.GetFiles(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data"))
+            {
+                if (Path.GetExtension(file).IndexOf(".split") == 0)
+                {
+                    if (!data.ContainsKey(Path.GetFileNameWithoutExtension(file)))
+                    {
+                        data.Add(Path.GetFileNameWithoutExtension(file), new List<FilePart>());
+                    }
+                    int fileNum = int.Parse(Path.GetExtension(file)[6].ToString());
+                    if (Path.GetExtension(file).Length > 7)
+                    {
+                        fileNum *= 10;
+                        fileNum += int.Parse(Path.GetExtension(file)[7].ToString());
+                    }
+                    data[Path.GetFileNameWithoutExtension(file)].Add(new FilePart(fileNum, file));
+                }
+            }
+            foreach (KeyValuePair<string, List<FilePart>> kv in data)
+            {
+                List<byte> fileData = new List<byte>();
+                int partCount = 0;
+                while (partCount < kv.Value.Count)
+                {
+                    foreach (FilePart part in kv.Value)
+                    {
+                        if (part.count == partCount)
+                        {
+                            fileData.AddRange(part.GetData());
+                            File.SetAttributes(part.filePath, FileAttributes.Normal);
+                            File.Delete(part.filePath);
+                            partCount++;
+                        }
+                    }
+                }
+                File.WriteAllBytes(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data/" + Path.GetFileName(kv.Key), fileData.ToArray());
+            }
+        }
+
+        public class FilePart
+        {
+            public int count = 0;
+            public string filePath;
+
+            public FilePart(int c, string f)
+            {
+                count = c;
+                filePath = f;
+            }
+
+            public byte[] GetData()
+            {
+                return File.ReadAllBytes(filePath);
+            }
         }
     }
 }

@@ -55,6 +55,8 @@ namespace FFGAppImport
 
             // Check if version is acceptable for import
             importAvailable = VersionNewerOrEqual(appVersion, ffgVersion);
+
+            if (importData.platform == Platform.Android) importAvailable = true;
         }
 
         // Check if an import is required
@@ -130,6 +132,7 @@ namespace FFGAppImport
         // Import from app
         public void Import()
         {
+            finder.ExtractObb();
             // List all assets files
             string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
 
