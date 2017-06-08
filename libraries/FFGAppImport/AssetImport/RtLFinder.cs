@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace FFGAppImport
 {
     public class RtLFinder : AppFinder
@@ -43,6 +45,11 @@ namespace FFGAppImport
         override public int ObfuscateKey()
         {
             return 0;
+        }
+
+        public override string ObbPath()
+        {
+            return "/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
         }
     }
 }

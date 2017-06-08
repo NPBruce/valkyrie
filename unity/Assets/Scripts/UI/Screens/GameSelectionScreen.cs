@@ -43,6 +43,11 @@ namespace Assets.Scripts.UI.Screens
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
             }
+            else if (Application.platform == RuntimePlatform.Android)
+            {
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);
+            }
             else
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/", Application.isEditor);

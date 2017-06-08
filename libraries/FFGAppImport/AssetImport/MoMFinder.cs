@@ -46,5 +46,10 @@ namespace FFGAppImport
         {
             return 68264378;
         }
+
+        public override string ObbPath()
+        {
+            return "/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
+        }
     }
 }

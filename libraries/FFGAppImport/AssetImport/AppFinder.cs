@@ -17,6 +17,7 @@ namespace FFGAppImport
         public abstract string DataDirectory();
         public abstract string Executable();
         public abstract string RequiredFFGVersion();
+        public abstract string ObbPath();
         public string location = "";
         public string exeLocation;
         public abstract int ObfuscateKey();
@@ -135,8 +136,9 @@ namespace FFGAppImport
         {
             if (platform != Platform.Android) return;
 
-            string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
-            ZipFile zip = ZipFile.Read(obbFile);
+            //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
+            //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
+            ZipFile zip = ZipFile.Read(ObbPath());
             zip.ExtractAll(Path.GetTempPath() + "Valkyrie/Obb");
             zip.Dispose();
 
