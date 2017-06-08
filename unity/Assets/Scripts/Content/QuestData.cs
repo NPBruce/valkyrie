@@ -1894,6 +1894,34 @@ public class QuestData
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                // Depreciated Format 5
+                List<string> newPacks = new List<string>();
+                foreach (string s in packs)
+                {
+                    if (s.Equals("MoM1E"))
+                    {
+                        newPacks.Add("MoM1ET");
+                        newPacks.Add("MoM1EI");
+                        newPacks.Add("MoM1EM");
+                    }
+                    else if (s.Equals("FA"))
+                    {
+                        newPacks.Add("FAT");
+                        newPacks.Add("FAI");
+                        newPacks.Add("FAM");
+                    }
+                    else if (s.Equals("CotW"))
+                    {
+                        newPacks.Add("CotWT");
+                        newPacks.Add("CotWI");
+                        newPacks.Add("CotWM");
+                    }
+                    else
+                    {
+                        newPacks.Add(s);
+                    }
+                }
+                packs = newPacks.ToArray();
             }
             else
             {
