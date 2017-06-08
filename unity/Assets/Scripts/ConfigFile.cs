@@ -13,7 +13,7 @@ public class ConfigFile
     public ConfigFile()
     {
         data = new IniData();
-        string optionsFile = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/config.ini";
+        string optionsFile = Game.AppData() + "/config.ini";
         if (File.Exists(optionsFile))
         {
             data = IniRead.ReadFromIni(optionsFile);
@@ -23,13 +23,13 @@ public class ConfigFile
     // Save the configuration in memory to disk
     public void Save()
     {
-        string optionsFile = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/config.ini";
+        string optionsFile = Game.AppData() + "/config.ini";
         string content = data.ToString();
         try
         {
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie"))
+            if (!Directory.Exists(Game.AppData()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+                Directory.CreateDirectory(Game.AppData());
             }
             File.WriteAllText(optionsFile, content);
         }

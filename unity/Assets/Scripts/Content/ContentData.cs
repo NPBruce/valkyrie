@@ -41,7 +41,7 @@ public class ContentData {
 
     public static string ImportPath()
     {
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + Game.Get().gameType.TypeName() + "/import";
+        return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
     }
 
     // Constructor takes a path in which to look for content
