@@ -17,8 +17,6 @@ public class EditorComponentPuzzle : EditorComponentEvent
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
     QuestData.Puzzle puzzleComponent;
-    EditorSelectionList classList;
-    EditorSelectionList skillList;
 
     UIElementEditable levelUIE;
     UIElementEditable altLevelUIE;
@@ -112,41 +110,49 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
     public void Class()
     {
-        List<EditorSelectionList.SelectionListEntry> puzzleClass = new List<EditorSelectionList.SelectionListEntry>();
-        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("slide"));
-        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("code"));
-        puzzleClass.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem("image"));
-        classList = new EditorSelectionList(PUZZLE_CLASS_SELECT, puzzleClass, delegate { SelectClass(); });
-        classList.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectClass, PUZZLE_CLASS_SELECT);
+        select.AddItem(new StringKey("val", "slide"));
+        select.AddItem(new StringKey("val", "code"));
+        select.AddItem(new StringKey("val", "image"));
+        select.Draw();
     }
 
-    public void SelectClass()
+    public void SelectClass(string className)
     {
-        if (!puzzleComponent.puzzleClass.Equals(classList.selection))
+        if (!puzzleComponent.puzzleClass.Equals(className))
         {
             puzzleComponent.imageType = "";
         }
         // the selection has the key (ie:{val:PUZZLE_SLIDE_CLASS}) so we can build the StringKey.
-        puzzleComponent.puzzleClass = classList.selection;
+        puzzleComponent.puzzleClass = className;
         Update();
     }
 
     public void Skill()
     {
-        List<EditorSelectionList.SelectionListEntry> skill = new List<EditorSelectionList.SelectionListEntry>();
-        skill.Add(new EditorSelectionList.SelectionListEntry("{will} " + EventManager.OutputSymbolReplace("{will}")));
-        skill.Add(new EditorSelectionList.SelectionListEntry("{strength} " + EventManager.OutputSymbolReplace("{strength}")));
-        skill.Add(new EditorSelectionList.SelectionListEntry("{agility} " + EventManager.OutputSymbolReplace("{agility}")));
-        skill.Add(new EditorSelectionList.SelectionListEntry("{lore} " + EventManager.OutputSymbolReplace("{lore}")));
-        skill.Add(new EditorSelectionList.SelectionListEntry("{influence} " + EventManager.OutputSymbolReplace("{influence}")));
-        skill.Add(new EditorSelectionList.SelectionListEntry("{observation} " + EventManager.OutputSymbolReplace("{observation}")));
-        skillList = new EditorSelectionList(PUZZLE_SELECT_SKILL, skill, delegate { SelectSkill(); });
-        skillList.SelectItem();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectSkill, PUZZLE_SELECT_SKILL);
+        select.AddItem("{will} " + EventManager.OutputSymbolReplace("{will}"));
+        select.AddItem("{strength} " + EventManager.OutputSymbolReplace("{strength}"));
+        select.AddItem("{agility} " + EventManager.OutputSymbolReplace("{agility}"));
+        select.AddItem("{lore} " + EventManager.OutputSymbolReplace("{lore}"));
+        select.AddItem("{influence} " + EventManager.OutputSymbolReplace("{influence}"));
+        select.AddItem("{observation} " + EventManager.OutputSymbolReplace("{observation}"));
+        select.Draw();
     }
 
-    public void SelectSkill()
+    public void SelectSkill(string skill)
     {
-        puzzleComponent.skill = skillList.selection.Substring(0, skillList.selection.IndexOf(" "));
+        puzzleComponent.skill = skill.Substring(0, skill.IndexOf(" "));
         Update();
     }
 
