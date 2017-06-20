@@ -172,17 +172,22 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
 
+            // Create an object
+            GameObject logo = new GameObject("logo");
+            // Mark it as dialog
+            logo.tag = Game.DIALOG;
+            logo.transform.SetParent(Game.Get().uICanvas.transform);
+
+            RectTransform transBg = logo.AddComponent<RectTransform>();
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetHCenter(-3) * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 8 * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+
             // Create the image
             Texture2D tex = Resources.Load("sprites/logo") as Texture2D;
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-
-            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-3), 8),
-                new Vector2(6, 6),
-                StringKey.NULL,
-                Color.clear,
-                Color.white);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-            db.background.AddComponent<SpritePulser>();
+            UnityEngine.UI.Image uiImage = logo.AddComponent<UnityEngine.UI.Image>();
+            uiImage.sprite = sprite
+            logo.AddComponent<SpritePulser>();
 
             // Display message
             UIElement ui = new UIElement();
