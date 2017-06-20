@@ -17,9 +17,9 @@ public class EditorMenu {
         }
 
         // Menu border
-        DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 9), new Vector2(12, 13), StringKey.NULL);
-        db.AddBorder();
-        db.SetFont(game.gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 9, 12, 13);
+        new UIElementBorder(ui);
 
         TextButton tb = new TextButton(
             new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 10), new Vector2(10, 2f), 

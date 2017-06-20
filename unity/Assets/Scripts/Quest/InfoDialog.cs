@@ -24,10 +24,11 @@ public class InfoDialog {
         // Unique monsters have additional info
         if (m.unique && m.uniqueText.KeyExists())
         {
-            DialogBox db = new DialogBox(new Vector2(12, 13f), new Vector2(UIScaler.GetWidthUnits() - 24, 2), 
-                m.uniqueTitle, Color.red);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(12, 13, UIScaler.GetWidthUnits() - 24, 2);
+            ui.SetText(m.uniqueTitle, Color.red);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui, Color.red);
 
             string uniqueText = EventManager.OutputSymbolReplace(m.uniqueText.Translate().Replace("\\n", "\n"));
             ui = new UIElement();

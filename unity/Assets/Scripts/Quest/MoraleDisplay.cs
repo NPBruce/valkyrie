@@ -4,7 +4,7 @@ using Assets.Scripts.Content;
 
 // Used to display remaining morale
 public class MoraleDisplay {
-    DialogBox md;
+    UIElement md;
 
     // Construct and display
     public MoraleDisplay()
@@ -15,10 +15,11 @@ public class MoraleDisplay {
         {
             morale = 0;
         }
-        md = new DialogBox(new Vector2(0.75f, 0.5f), new Vector2(3, 3), morale, Color.red);
-        md.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        md.AddBorder();
-        md.ApplyTag(Game.QUESTUI);
+        md = new UIElement(Game.QUESTUI);
+        md.SetLocation(0.75f, 0.5f, 3, 3);
+        md.SetText(morale.ToString(), Color.red);
+        md.SetFontSize(UIScaler.GetLargeFont());
+        new UIElementBorder(md, Color.red);
     }
 
     // Update must be called if the morale is changed
@@ -30,7 +31,7 @@ public class MoraleDisplay {
         {
             morale = 0;
         }
-        md.textObj.GetComponent<UnityEngine.UI.Text>().text = morale.ToString();
+        md.SetText(morale.ToString(), Color.red);
     }
 }
 

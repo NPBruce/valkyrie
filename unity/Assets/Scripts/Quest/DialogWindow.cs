@@ -85,9 +85,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), eb.GetLabel());
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            float length = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + 1;
+            float length = UIElement.GetStringWidth(eb.GetLabel().Translate(), UIScaler.GetMediumFont());
             if (length > buttonWidth)
             {
                 buttonWidth = length;
@@ -95,15 +93,18 @@ public class DialogWindow {
                 hOffsetCancel = UIScaler.GetHCenter(-4);
                 offsetCancel = offset + (2.5f * buttons.Count);
             }
-            db.Destroy();
         }
 
         int num = 1;
         foreach (EventButton eb in buttons)
         {
             int numTmp = num++;
-            new TextButton(new Vector2(hOffset, offset), new Vector2(buttonWidth, 2), 
-                eb.GetLabel(), delegate { onButton(numTmp); }, eb.colour);
+            ui = new UIElement();
+            ui.SetLocation(hOffset, offset, buttonWidth, 2);
+            ui.SetText(eb.GetLabel(), eb.colour);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { onButton(numTmp); });
+            new UIElementBorder(ui, eb.colour);
             offset += 2.5f;
         }
 
@@ -117,19 +118,16 @@ public class DialogWindow {
     public void CreateQuotaWindow()
     {
         // Draw text
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, 8), 
-            new StringKey(null, text, false));
-        float offset = (db.textObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + 1;
-        db.Destroy();
-        
+        float offset = UIElement.GetStringHeight(text, 28);
         if (offset < 4)
         {
             offset = 4;
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28, offset), 
-            new StringKey(null, text, false));
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, offset);
+        ui.SetText(text);
+        new UIElementBorder(ui);
         offset += 1;
 
         if (quota == 0)
@@ -141,9 +139,11 @@ public class DialogWindow {
             new TextButton(new Vector2(11, offset), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
         }
 
-        db = new DialogBox(new Vector2(14, offset), new Vector2(2f, 2f), quota);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(14, offset, 2, 2);
+        ui.SetText(quota);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
         if (quota >= 10)
         {
@@ -190,11 +190,13 @@ public class DialogWindow {
         Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-21), 0.5f), new Vector2(6, 6), StringKey.NULL);
-        db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-        db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-21), 0.5f, 6, 6);
+        ui.SetImage(sprite);
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-22), 6.5f), new Vector2(8, 1), game.cd.items[game.quest.itemSelect[item]].name);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-22), 6.5f, 8, 1);
+        ui.SetText(game.cd.items[game.quest.itemSelect[item]].name);
     }
 
     public void quotaDec()

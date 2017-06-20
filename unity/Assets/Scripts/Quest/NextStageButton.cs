@@ -76,12 +76,13 @@ public class NextStageButton
         tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
         tb.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        DialogBox db;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase, Color.white, bgColor);
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
-        db.ApplyTag(Game.UIPHASE);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        UIElement ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f), 16, 2);
+        ui.SetText(phase);
+        ui.SetBGColor(bgColor);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
     }
 
     // Button pressed

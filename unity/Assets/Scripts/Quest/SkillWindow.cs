@@ -16,25 +16,20 @@ public class SkillWindow
         Destroyer.Dialog();
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-15), 1),
-            new Vector2(30, 6),
-            StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-15), 1, 30, 6);
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-17f), 7),
-            new Vector2(34, 17),
-            StringKey.NULL);
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-17), 7, 34, 17);
+        new UIElementBorder(ui);
 
         // Add a title to the page
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-6), 1),
-            new Vector2(12, 3),
-            new StringKey("val", "SELECT_SKILLS"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6), 1, 12, 3);
+        ui.SetText(new StringKey("val", "SELECT_SKILLS"));
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         // Get all heros
         int heroCount = 0;
@@ -74,88 +69,71 @@ public class SkillWindow
             xOffset += 6f;
         }
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 8.5f),
-            new Vector2(32, 5),
-            StringKey.NULL);
-        db.AddBorder();
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 8.5f),
-            new Vector2(2, 5),
-            1);
-        db.AddBorder();
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-16), 8.5f, 32, 5);
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 13.5f),
-            new Vector2(32, 5),
-            StringKey.NULL);
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-16), 8.5f, 2, 5);
+        ui.SetText("1");
+        ui.SetFontSize(UIScaler.GetLargeFont());
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 13.5f),
-            new Vector2(2, 5),
-            2);
-        db.AddBorder();
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-16), 13.5f, 32, 5);
+        new UIElementBorder(ui);
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-16), 13.5f, 2, 5);
+        ui.SetText("2");
+        ui.SetFontSize(UIScaler.GetLargeFont());
+        new UIElementBorder(ui);
 
         string hybridClass = game.quest.heroes[hero].hybridClass;
         if (hybridClass.Length > 0)
         {
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-16.5f), 18.5f),
-                new Vector2(11, 5),
-                StringKey.NULL);
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-16.5f), 18.5f, 11, 5);
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-16.5f), 18.5f),
-                new Vector2(2, 5),
-                1);
-            db.AddBorder();
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-16.5f), 18.5f, 2, 5);
+            ui.SetText("1");
+            ui.SetFontSize(UIScaler.GetLargeFont());
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-5.5f), 18.5f),
-                new Vector2(11, 5),
-                StringKey.NULL);
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-5.5f), 18.5f, 11, 5);
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-5.5f), 18.5f),
-                new Vector2(2, 5),
-                2);
-            db.AddBorder();
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-5.5f), 18.5f, 2, 5);
+            ui.SetText("2");
+            ui.SetFontSize(UIScaler.GetLargeFont());
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(5.5f), 18.5f),
-                new Vector2(11, 5),
-                StringKey.NULL);
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(5.5f), 18.5f, 11, 5);
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(5.5f), 18.5f),
-                new Vector2(2, 5),
-                3);
-            db.AddBorder();
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(5.5f), 18.5f, 2, 5);
+            ui.SetText("3");
+            ui.SetFontSize(UIScaler.GetLargeFont());
+            new UIElementBorder(ui);
         }
         else
         {
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-16), 18.5f),
-                new Vector2(32, 5),
-                StringKey.NULL);
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-16), 18.5f, 32, 5);
+            new UIElementBorder(ui);
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-16), 18.5f),
-                new Vector2(2, 5),
-                3);
-            db.AddBorder();
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-16), 18.5f, 2, 5);
+            ui.SetText("3");
+            ui.SetFontSize(UIScaler.GetLargeFont());
+            new UIElementBorder(ui);
         }
 
         float[] xOffsetArray = new float[4];

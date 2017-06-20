@@ -104,11 +104,12 @@ public class ShopInterface : Quest.BoardComponent
 
     public void DrawShopItems()
     {
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 0.5f), new Vector2(10, 2), new StringKey("val", "BUY"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-5), 0.5f, 10, 2);
+        ui.SetText(new StringKey("val", "BUY"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.SHOP);
         scrollArea.SetLocation(UIScaler.GetHCenter(-5), 2.5f, 10, 24.5f);
@@ -190,11 +191,12 @@ public class ShopInterface : Quest.BoardComponent
 
     public void DrawPartyItems()
     {
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(7), 0.5f), new Vector2(10, 2), new StringKey("val", "SELL"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(7), 0.5f, 10, 2);
+        ui.SetText(new StringKey("val", "SELL"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.SHOP);
         scrollArea.SetLocation(UIScaler.GetHCenter(7), 2.5f, 10, 24.5f);
@@ -300,22 +302,18 @@ public class ShopInterface : Quest.BoardComponent
 
     public void DrawGold()
     {
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 24f),
-            new Vector2(5, 2),
-            new StringKey("val", "GOLD"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-16), 24, 5, 2);
+        ui.SetText(new StringKey("val", "GOLD"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-11), 24f),
-            new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-11), 24, 3, 2);
+        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")).ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
     }
 
     public void Buy(string item)

@@ -70,19 +70,21 @@ public class PuzzleImageWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, 22);
+        new UIElementBorder(ui);
 
         // Puzzle goes here
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(10), 8, 3, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.SKILL));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 8f), new Vector2(3f, 2f),
-            new StringKey("val", "X_COLON", CommonStringKeys.SKILL));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(10f), 10f), new Vector2(3f, 2f),
-            new StringKey(null, EventManager.OutputSymbolReplace(questPuzzle.skill),false));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(10), 10, 3, 2);
+        ui.SetText(EventManager.OutputSymbolReplace(questPuzzle.skill));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
         bool solved = puzzle.Solved();
         foreach (KeyValuePair<PuzzleImage.TilePosition, PuzzleImage.TilePosition> kv in puzzle.state)
@@ -90,21 +92,27 @@ public class PuzzleImageWindow
             Draw(kv.Key, kv.Value, solved);
         }
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-13f), 20f), new Vector2(6f, 2f),
-            new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-13f), 20f, 6, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.MOVES));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-6f), 20f), new Vector2(3f, 2f), puzzle.moves - previousMoves);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6), 20, 3, 2);
+        ui.SetText((puzzle.moves - previousMoves).ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-3f), 20f), new Vector2(10f, 2f),
-            new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-3f), 20f, 10, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.TOTAL_MOVES));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(7f), 20f), new Vector2(3f, 2f), puzzle.moves);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(7), 20, 3, 2);
+        ui.SetText(puzzle.moves.ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
         if (solved)
         {

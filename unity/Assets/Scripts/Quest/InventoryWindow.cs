@@ -17,68 +17,54 @@ public class InventoryWindow
         Destroyer.Dialog();
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-18), 1),
-            new Vector2(36, 23),
-            StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-18), 1, 36, 23);
+        new UIElementBorder(ui);
 
         // Add a title to the page
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-6), 1),
-            new Vector2(12, 3),
-            new StringKey("val", "ITEMS"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6), 1, 12, 3);
+        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollHorizontal scrollArea = new UIElementScrollHorizontal();
         scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 13);
         new UIElementBorder(scrollArea);
 
-        float xOffset = UIScaler.GetHCenter(-16);
+        float xOffset = 1;
 
         foreach (string s in game.quest.items)
         {
-            db = new DialogBox(new Vector2(xOffset, 14),
-                new Vector2(8, 2),
-                game.cd.items[s].name,
-                Color.black);
-            db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            db.background.transform.SetParent(scrollArea.GetScrollTransform());
-            db.textObj.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 9, 8, 2);
+            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetBGColor(Color.white);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
-            db = new DialogBox(new Vector2(xOffset, 6),
-                new Vector2(8, 8),
-                StringKey.NULL,
-                Color.clear,
-                Color.white);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            db.background.transform.SetParent(scrollArea.GetScrollTransform());
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 1, 8, 8);
+            ui.SetImage(itemSprite);
 
             xOffset += 9;
         }
-        scrollArea.SetScrollSize(xOffset - UIScaler.GetHCenter(-16));
+        scrollArea.SetScrollSize(xOffset);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-5), 19),
-            new Vector2(10, 4),
-            StringKey.NULL);
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-5), 19, 10, 4);
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-4), 20),
-            new Vector2(5, 2),
-            new StringKey("val", "GOLD"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4), 20, 5, 2);
+        ui.SetText(new StringKey("val", "GOLD"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(1), 20),
-            new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(1), 20, 3, 2);
+        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold").Tostring());
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
         TextButton tb = new TextButton(
             new Vector2(UIScaler.GetHCenter(-4f), 24.5f),

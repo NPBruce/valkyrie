@@ -15,8 +15,9 @@ public class SetWindow
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10f), 10f), new Vector2(20, 10f), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-10), 10, 20, 10);
+        new UIElementBorder(ui);
 
         if (game.quest.vars.GetValue("$fire") > 0)
         {
@@ -28,9 +29,11 @@ public class SetWindow
         }
         if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), INVESTIGATOR_ELIMINATED, Color.gray);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.AddBorder();
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-8), 14, 16, 2);
+            ui.SetText(INVESTIGATOR_ELIMINATED, Color.gray);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui, Color.gray);
         }
         else
         {

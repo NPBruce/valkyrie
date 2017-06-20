@@ -45,9 +45,11 @@ public class InvestigatorItems
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        DialogBox db = new DialogBox(new Vector2(10, 0.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 2), STARTING_ITEMS);
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        UIElement ui = new UIElement();
+        ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 2);
+        ui.SetText(STARTING_ITEMS);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
 
         int y = 0;
         int x = 0;
@@ -56,11 +58,13 @@ public class InvestigatorItems
             Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y)), new Vector2(6, 6), StringKey.NULL);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-            db.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y), 6, 6);
+            ui.SetImage(sprite);
 
-            db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y)), new Vector2(8, 1), game.cd.items[item].name);
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
+            ui.SetText(game.cd.items[item].name);
 
             x++;
             if (x > 4)

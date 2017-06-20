@@ -17,19 +17,16 @@ public class InventoryWindowMoM
         Destroyer.Dialog();
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-18), 1),
-            new Vector2(36, 23),
-            StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-18), 1, 36, 23);
+        new UIElementBorder(ui);
 
         // Add a title to the page
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-6), 1),
-            new Vector2(12, 3),
-            new StringKey("val", "ITEMS"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6), 1, 12, 3);
+        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollHorizontal scrollArea = new UIElementScrollHorizontal();
         scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 14);
@@ -42,7 +39,7 @@ public class InventoryWindowMoM
         {
             string tmp = s;
 
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(xOffset, 9, 8, 3);
             ui.SetButton(delegate { Inspect(tmp); });
             ui.SetText(game.cd.items[s].name, Color.black);
