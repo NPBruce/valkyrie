@@ -17,8 +17,9 @@ public class EditorTools
         }
 
         // Menu border
-        DialogBox db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 20) / 2, 9), new Vector2(20, 13), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation((UIScaler.GetWidthUnits() - 20) / 2, 9, 20, 13);
+        new UIElementBorder(ui);
 
         TextButton tb = new TextButton(
             new Vector2((UIScaler.GetWidthUnits() - 18) / 2, 10), new Vector2(18, 2f),

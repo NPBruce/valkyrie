@@ -25,14 +25,11 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
 
             // Add a title to the page
-            DialogBox db = new DialogBox(
-                new Vector2(8, 1),
-                new Vector2(UIScaler.GetWidthUnits() - 16, 3),
-                new StringKey("val", "SELECT_CLASS")
-                );
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            db.SetFont(game.gameType.GetHeaderFont());
-            db.ApplyTag(Game.HEROSELECT);
+            UIElement ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3);
+            ui.SetText(new StringKey("val","SELECT_CLASS"));
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             // Get all heros
             int heroCount = 0;
@@ -83,14 +80,14 @@ namespace Assets.Scripts.UI.Screens
             string hybridClass = game.quest.heroes[hero].hybridClass;
             float yStart = 7f;
 
-            DialogBox db = null;
+            UIElement ui = null;
             TextButton tb = null;
             if (hybridClass.Length > 0)
             {
                 archetype = game.cd.classes[hybridClass].hybridArchetype;
-                db = new DialogBox(new Vector2(xOffset + 0.25f, yStart), new Vector2(8.5f, 5f), StringKey.NULL);
-                db.AddBorder();
-                db.ApplyTag(Game.HEROSELECT);
+                ui = new UIElement(Game.HEROSELECT);
+                ui.SetLocation(xOffset + 0.25f, yStart, 8.5f, 5);
+                new UIElementBorder(ui);
 
                 tb = new TextButton(new Vector2(xOffset + 1, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); }, Color.black);
                 tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
@@ -167,9 +164,9 @@ namespace Assets.Scripts.UI.Screens
 
             Texture2D heroTex = ContentData.FileToTexture(game.quest.heroes[hero].heroData.image);
             Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
-            db = new DialogBox(new Vector2(xOffset + 2.5f, 3.5f), new Vector2(4f, 4f), StringKey.NULL, Color.clear, Color.white);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = heroSprite;
-            db.ApplyTag(Game.HEROSELECT);
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(xOffset + 2.5f, 3.5f, 4, 4);
+            ui.SetImage(heroSprite);
         }
 
         public void Select(int hero, string className)

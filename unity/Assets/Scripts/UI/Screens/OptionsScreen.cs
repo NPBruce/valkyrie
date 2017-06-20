@@ -43,13 +43,11 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             // Options screen text
-            DialogBox dbTittle = new DialogBox(
-                new Vector2(2, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                OPTIONS
-                );
-            dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            dbTittle.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+            ui.SetText(OPTIONS);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             CreateLanguageElements();
 
@@ -63,9 +61,11 @@ namespace Assets.Scripts.UI.Screens
 
         private void CreateAudioElements()
         {
-            DialogBox db = new DialogBox(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 8), new Vector2(10, 2), MUSIC);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 8, 10, 2);
+            ui.SetText(MUSIC);
+            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             float mVolume;
             string vSet = game.config.data.Get("UserConfig", "music");
@@ -115,9 +115,11 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
-            db = new DialogBox(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 14), new Vector2(10, 2), EFFECTS);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 14, 10, 2);
+            ui.SetText(EFFECTS);
+            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             float eVolume;
             vSet = game.config.data.Get("UserConfig", "effects");
@@ -180,13 +182,11 @@ namespace Assets.Scripts.UI.Screens
         private void CreateLanguageElements()
         {
             // Select langauge text
-            DialogBox dbLanguage = new DialogBox(
-                new Vector2(((0.25f * UIScaler.GetWidthUnits()) - 9), 4), 
-                new Vector2(18, 2), 
-                CHOOSE_LANG
-                );
-            dbLanguage.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            dbLanguage.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(new Vector2(((0.25f * UIScaler.GetWidthUnits()) - 9), 4, 18, 2);
+            ui.SetText(CHOOSE_LANG);
+            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             // The list of languages is determined by FFG languages for MoM
             // In D2E there is an additional language

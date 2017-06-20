@@ -41,10 +41,11 @@ namespace Assets.Scripts.UI.Screens
             game.audioControl.Music(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                new StringKey(null, "Valkyrie", false));
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+            ui.SetText("Valkyrie");
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             // Button for start quest/scenario
             TextButton tb = new TextButton(
@@ -55,28 +56,22 @@ namespace Assets.Scripts.UI.Screens
             tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
             tb.SetFont(game.gameType.GetHeaderFont());
 
-            // Load save game (enabled if exists)
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 8, 12, 2);
             if (SaveManager.SaveExists())
             {
-                tb = new TextButton(
-                    new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
-                    new Vector2(12, 2f),
-                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    delegate { new SaveSelectScreen(); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-                tb.SetFont(game.gameType.GetHeaderFont());
+                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()));
+                ui.SetButton(delegate { new SaveSelectScreen(); });
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui);
             }
             else
             {
-                db = new DialogBox(
-                    new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 8), 
-                    new Vector2(12, 2f),
-                    new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()),
-                    Color.grey);
-                db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-                db.SetFont(game.gameType.GetHeaderFont());
-                db.AddBorder();
+                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()), Color.grey);
+                new UIElementBorder(ui, Color.grey);
             }
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Content selection page
             tb = new TextButton(
@@ -174,23 +169,20 @@ namespace Assets.Scripts.UI.Screens
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
 
-            DialogBox db = new DialogBox(
-                new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 10f), 
-                new Vector2(30, 6), 
-                ABOUT_FFG);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            UIElement ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30f) / 2, 10, 30, 6);
+            ui.SetText(ABOUT_FFG);
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
-            db = new DialogBox(
-                new Vector2((UIScaler.GetWidthUnits() - 30f) / 2, 18f), 
-                new Vector2(30, 5), 
-                ABOUT_LIBS);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30f) / 2, 18, 30, 5);
+            ui.SetText(ABOUT_LIBS);
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
-            db = new DialogBox(
-                new Vector2(UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3)),
-                new Vector2(5, 2),
-                new StringKey(null, Game.Get().version, false));
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3), 5, 2);
+            ui.SetText(Game.Get().version);
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             TextButton tb = new TextButton(
                 new Vector2(1, UIScaler.GetBottom(-3)), 

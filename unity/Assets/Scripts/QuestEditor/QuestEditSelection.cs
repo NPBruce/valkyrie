@@ -22,10 +22,11 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Heading
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3),
-            new StringKey("val","SELECT",game.gameType.QuestName()));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
@@ -83,10 +84,11 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Header
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3),
-            new StringKey("val","SELECT_TO_DELETE", game.gameType.QuestName()));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT_TO_DELETE",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
@@ -152,11 +154,11 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Header
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-            new StringKey("val","SELECT_TO_COPY", game.gameType.QuestName())
-            );
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT_TO_COPY",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);

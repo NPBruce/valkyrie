@@ -51,9 +51,11 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             // Draw a header
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), SELECT_EXPANSION);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 2);
+            ui.SetText(SELECT_EXPANSION);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Start here
             float offset = 4.5f;
@@ -135,13 +137,11 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw a header
-            DialogBox db = new DialogBox(
-                new Vector2(2, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
-                SELECT_EXPANSION
-                );
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 2);
+            ui.SetText(SELECT_EXPANSION);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             UIElementScrollVertical scrollArea = new UIElementScrollVertical();
             scrollArea.SetLocation(1, 4, UIScaler.GetWidthUnits() - 2, 22);

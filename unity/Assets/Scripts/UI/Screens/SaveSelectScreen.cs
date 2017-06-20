@@ -31,20 +31,19 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             float offset = 1f;
+            UIElement ui = null;
             if (save)
             {
                 offset += 2;
-                new DialogBox(new Vector2(UIScaler.GetHCenter(-21), offset), new Vector2(42, 24), StringKey.NULL);
+                ui = new UIElement();
+                ui.SetLocation(new Vector2(UIScaler.GetHCenter(-21), offset, 42, 24);
                 offset += 1;
             }
-            // Options screen text
-            DialogBox dbTittle = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-10), offset),
-                new Vector2(20, 3),
-                SELECT_SAVE
-                );
-            dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            dbTittle.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(new Vector2(UIScaler.GetHCenter(-10), offset, 20, 3);
+            ui.SetText(SELECT_SAVE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             offset += 4;
             TextButton tb;

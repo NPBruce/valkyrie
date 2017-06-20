@@ -32,11 +32,14 @@ public class QuestEditorTextEdit {
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10), 1), new Vector2(20, 6), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-10), 1, 20, 6);
+        new UIElementBorder(ui);
 
         // Heading
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9.5f), 1), new Vector2(19, 1), title);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-9.5f), 1, 19, 1);
+        ui.SetText(title);
 
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
