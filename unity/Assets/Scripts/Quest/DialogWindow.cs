@@ -111,7 +111,12 @@ public class DialogWindow {
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(hOffsetCancel, offsetCancel), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+            ui = new UIElement();
+            ui.SetLocation(hOffsetCancel, offsetCancel, 8, 2);
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(onCancel);
+            new UIElementBorder(ui);
         }
     }
 
@@ -130,14 +135,19 @@ public class DialogWindow {
         new UIElementBorder(ui);
         offset += 1;
 
+        ui = new UIElement();
+        ui.SetLocation(11, offset, 2, 2);
+        new UIElementBorder(ui);
         if (quota == 0)
         {
-            new TextButton(new Vector2(11, offset), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { ; }, Color.grey);
+            ui.SetText(CommonStringKeys.MINUS, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(11, offset), new Vector2(2f, 2f), CommonStringKeys.MINUS, delegate { quotaDec(); }, Color.white);
+            ui.SetText(CommonStringKeys.MINUS);
+            ui.SetButton(quotaDec);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
         ui.SetLocation(14, offset, 2, 2);
@@ -145,26 +155,38 @@ public class DialogWindow {
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
+        ui = new UIElement();
+        ui.SetLocation(17, offset, 2, 2);
+        new UIElementBorder(ui);
         if (quota >= 10)
         {
-            new TextButton(new Vector2(17, offset), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { ; }, Color.grey);
+            ui.SetText(CommonStringKeys.PLUS, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(17, offset), new Vector2(2f, 2f), CommonStringKeys.PLUS, delegate { quotaInc(); }, Color.white);
+            ui.SetText(CommonStringKeys.PLUS);
+            ui.SetButton(quotaInc);
         }
-
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        
         // Only one button, action depends on quota
-        new TextButton(
-            new Vector2(UIScaler.GetWidthUnits() - 19, offset), new Vector2(8f, 2), 
-            eventData.GetButtons()[0].GetLabel(), delegate { onQuota(); }, Color.white);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetWidthUnits() - 19, offset, 8, 2);
+        ui.SetText(eventData.GetButtons()[0].GetLabel());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(onQuota);
+        new UIElementBorder(ui);
 
         // Do we have a cancel button?
         if (eventData.qEvent.cancelable)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-4f), offset + 2.5f), new Vector2(8f, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-4f), offset + 2.5f, 8, 2);
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(onCancel);
+            new UIElementBorder(ui);
         }
-
     }
 
     public void DrawItem()

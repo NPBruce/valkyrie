@@ -66,10 +66,11 @@ public class InventoryWindow
         ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold").Tostring());
         ui.SetFontSize(UIScaler.GetMediumFont());
 
-        TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-4f), 24.5f),
-            new Vector2(8, 2),
-            CommonStringKeys.CLOSE,
-            delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4f), 24.5f, 8, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
     }
 }

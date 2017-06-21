@@ -73,8 +73,12 @@ public class InvestigatorItems
                 y++;
             }
         }
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 27f), new Vector2(12, 2), 
-            CommonStringKeys.FINISHED, delegate { game.QuestStartEvent(); });
-        tb.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6f), 27f, 12, 2);
+        ui.SetText(CommonStringKeys.FINISHED);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(game.QuestStartEvent);
+        new UIElementBorder(ui);
     }
 }

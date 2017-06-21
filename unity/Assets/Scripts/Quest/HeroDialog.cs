@@ -19,27 +19,43 @@ public class HeroDialog{
     {
         float offset = ((hero.id - 0.9f) * (HeroCanvas.heroSize + 0.5f)) + HeroCanvas.offsetStart;
         // Has this hero been activated?
+        UIElement ui = new UIElement();
+        ui.SetLocation(HeroCanvas.heroSize + 0.5f, offset, 10, 2);
         if (hero.activated || (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null))
         {
-            // Grey button with no action
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), END_TURN, delegate { ; }, Color.gray);
+            ui.SetText(END_TURN, Color.gray);
+            new UIElementBorder(ui, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset), new Vector2(10, 2), END_TURN, delegate { activated(); });
+            ui.SetText(END_TURN);
+            ui.SetButton(activated);
+            new UIElementBorder(ui);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
         // Is this hero defeated?
+        ui = new UIElement();
+        ui.SetLocation(HeroCanvas.heroSize + 0.5f, offset + 2.5f, 10, 2);
+        new UIElementBorder(ui);
         if (hero.defeated)
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), RECOVER, delegate { restored(); });
+            ui.SetText(RECOVER);
+            ui.SetButton(restored);
         }
         else
         {
-            new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 2.5f), new Vector2(10, 2), KO, delegate { defeated(); });
+            ui.SetText(KO);
+            ui.SetButton(defeated);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        new TextButton(new Vector2(HeroCanvas.heroSize + 0.5f, offset + 5f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { onCancel(); });
+        ui = new UIElement();
+        ui.SetLocation(HeroCanvas.heroSize + 0.5f, offset + 5, 10, 2);
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(onCancel);
+        new UIElementBorder(ui);
     }
 
     // Hero defeated

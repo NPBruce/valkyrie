@@ -44,39 +44,43 @@ public class NextStageButton
             bgColor = new Color(0, 0.05f, 0, 0.9f);
         }
 
-        TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
-            CommonStringKeys.TAB, delegate { Next(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-16f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            new StringKey("val", "ITEMS"), delegate { Items(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.LOG, delegate { Log(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.SET, delegate { Set(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
-
         UIElement ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.TAB);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Next);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
+
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(16f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Items);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
+
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.LOG);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Log);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
+
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.SET);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Set);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
+
+        ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f), 16, 2);
         ui.SetText(phase);
         ui.SetBGColor(bgColor);

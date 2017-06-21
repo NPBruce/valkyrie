@@ -196,20 +196,16 @@ public class Game : MonoBehaviour {
         heroCanvas.SetupUI();
 
         // Add a finished button to start the quest
-        TextButton endSelection = new TextButton(
-            new Vector2(UIScaler.GetRight(-8.5f), 
-            UIScaler.GetBottom(-2.5f)), 
-            new Vector2(8, 2), 
-            CommonStringKeys.FINISHED, 
-            delegate { EndSelection(); }, 
-            Color.green);
-
-        endSelection.SetFont(gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away during hero selection
-        endSelection.ApplyTag(Game.HEROSELECT);
+        UIElement ui = new UIElement(Game.HEROSELECT);
+        ui.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f), 8, 2);
+        ui.SetText(CommonStringKeys.FINISHED, Color.green);
+        ui.SetFont(gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(EndSelection);
+        new UIElementBorder(ui, Color.green);
 
         // Add a title to the page
-        UIElement ui = new UIElement(Game.HEROSELECT);
+        ui = new UIElement(Game.HEROSELECT);
         ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3)
         ui.SetText(new StringKey("val","SELECT",gameType.HeroesName());
         ui.SetFont(gameType.GetHeaderFont());
@@ -217,10 +213,13 @@ public class Game : MonoBehaviour {
 
         heroCanvas.heroSelection = new HeroSelection();
 
-        TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
-        cancelSelection.SetFont(gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away during hero selection
-        cancelSelection.ApplyTag(Game.HEROSELECT);
+        ui = new UIElement(Game.HEROSELECT);
+        ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.QuestSelect);
+        new UIElementBorder(ui, Color.red);
     }
     
     // HeroCanvas validates selection and starts quest if everything is good

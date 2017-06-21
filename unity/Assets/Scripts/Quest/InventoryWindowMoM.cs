@@ -34,7 +34,6 @@ public class InventoryWindowMoM
 
         float xOffset = 1;
 
-        TextButton tb = null;
         foreach (string s in game.quest.itemInspect.Keys)
         {
             string tmp = s;
@@ -56,11 +55,12 @@ public class InventoryWindowMoM
         }
         scrollArea.SetScrollSize(xOffset - UIScaler.GetHCenter(-16));
 
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-4f), 24.5f),
-            new Vector2(8, 2),
-            CommonStringKeys.CLOSE,
-            delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4f), 24.5f, 8, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
     }
 
     public void Inspect(string item)

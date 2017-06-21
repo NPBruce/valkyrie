@@ -94,21 +94,26 @@ public class ActivateDialog {
 
         offset += 7.5f;
 
-        TextButton tb = null;
         // Create finished button
+        ui = new UIElement(Game.ACTIVATION);
+        ui.SetLocation(15, offset, UIScaler.GetWidthUnits() - 30, 2);
+        ui.SetButton(activated);
         if (singleStep)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), ACTIVATED, delegate { activated(); });
+            ui.SetText(ACTIVATED);
+            new UIElementBorder(ui);
         }
         else if (master)
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), new StringKey("val","X_ACTIVATED",MONSTER_MASTER ), delegate { activated(); }, Color.red);
+            ui.SetText(new StringKey("val", "X_ACTIVATED", MONSTER_MASTER), Color.red);
+            new UIElementBorder(ui, Color.red);
         }
         else
         {
-            tb = new TextButton(new Vector2(15, offset), new Vector2(UIScaler.GetWidthUnits() - 30, 2), new StringKey("val", "X_ACTIVATED", MONSTER_MINION), delegate { activated(); });
+            ui.SetText(new StringKey("val", "X_ACTIVATED", MONSTER_MINION));
+            new UIElementBorder(ui);
         }
-        tb.ApplyTag(Game.ACTIVATION);
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     virtual public void activated()

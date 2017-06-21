@@ -35,11 +35,22 @@ public class InfoDialog {
             ui.SetLocation(10, 15, UIScaler.GetWidthUnits() - 20, 8);
             ui.SetText(uniqueText);
             new UIElementBorder(ui, Color.red);
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 23.5f), new Vector2(10, 2), CommonStringKeys.CLOSE, delegate { onClose(); });
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetWidthUnits() - 21, 23.5f, 10, 2);
+            ui.SetText(CommonStringKeys.CLOSE);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(onClose);
+            new UIElementBorder(ui);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetWidthUnits() - 21, 13f), new Vector2(10, 2), CommonStringKeys.CLOSE, delegate { onClose(); });
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetWidthUnits() - 21, 13, 10, 2);
+            ui.SetText(CommonStringKeys.CLOSE);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(onClose);
+            new UIElementBorder(ui);
         }
     }
 
