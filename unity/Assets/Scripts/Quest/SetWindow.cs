@@ -19,28 +19,42 @@ public class SetWindow
         ui.SetLocation(UIScaler.GetHCenter(-10), 10, 20, 10);
         new UIElementBorder(ui);
 
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-8), 11, 16, 2);
         if (game.quest.vars.GetValue("$fire") > 0)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), CLEAR_FIRE, delegate { ClearFire(); });
+            ui.SetText(CLEAR_FIRE);
+            ui.SetButton(ClearFire);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 11f), new Vector2(16, 2), SET_FIRE, delegate { SetFire(); });
+            ui.SetText(SET_FIRE);
+            ui.SetButton(SetFire);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-8), 14, 16, 2);
         if (game.quest.vars.GetValue("#eliminated") > 0)
         {
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(-8), 14, 16, 2);
             ui.SetText(INVESTIGATOR_ELIMINATED, Color.gray);
-            ui.SetFontSize(UIScaler.GetMediumFont());
             new UIElementBorder(ui, Color.gray);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 14f), new Vector2(16, 2), INVESTIGATOR_ELIMINATED, delegate { Eliminate(); });
+            ui.SetText(INVESTIGATOR_ELIMINATED);
+            ui.SetButton(Eliminate);
+            new UIElementBorder(ui);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 17f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-3), 17, 6, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
     }
 
     public void SetFire()

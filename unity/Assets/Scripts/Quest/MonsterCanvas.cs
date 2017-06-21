@@ -69,16 +69,21 @@ public class MonsterCanvas : MonoBehaviour
             return;
         }
         // If at top
+        UIElement ui = new UIElement(Game.MONSTERS);
+        ui.SetLocation(UIScaler.GetRight(-4.25f), 1, 4, 2);
         if (offset == 0)
         {
-            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { noAction(); }, Color.gray);
-            up.ApplyTag(Game.MONSTERS);
+            ui.SetText(UP_ARROW, Color.gray);
+            new UIElementBorder(ui, Color.gray);
         }
         else
-        { // Scroll up active
-            TextButton up = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 1), new Vector2(4, 2), UP_ARROW, delegate { Move(-1); });
-            up.ApplyTag(Game.MONSTERS);
+        {
+            // Scroll up active
+            ui.SetText(UP_ARROW);
+            new UIElementBorder(ui);
+            ui.SetButton(delegate { Move(-1); });
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     // Draw down button if > 5 monsters, disabled if at bottom
@@ -91,16 +96,21 @@ public class MonsterCanvas : MonoBehaviour
             return;
         }
         // If at buttom
+        UIElement ui = new UIElement(Game.MONSTERS);
+        ui.SetLocation(UIScaler.GetRight(-4.25f), 27, 4, 2);
         if (game.quest.monsters.Count - offset <  6)
         {
-            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { noAction(); }, Color.gray);
-            down.ApplyTag(Game.MONSTERS);
+            ui.SetText(DOWN_ARROW, Color.gray);
+            new UIElementBorder(ui, Color.gray);
         }
         else
-        { // Scroll down active
-            TextButton down = new TextButton(new Vector2(UIScaler.GetRight(-4.25f), 27), new Vector2(4, 2), DOWN_ARROW, delegate { Move(); });
-            down.ApplyTag(Game.MONSTERS);
+        {
+            // Scroll up active
+            ui.SetText(DOWN_ARROW);
+            new UIElementBorder(ui);
+            ui.SetButton(Move);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     // Called by scroll up/down
@@ -215,11 +225,12 @@ public class MonsterCanvas : MonoBehaviour
 
                 if (m.GetHealth() != 0)
                 {
-                    TextButton tb = new TextButton(
-                        new Vector2(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f)), new Vector2(2, 2), 
-                        new StringKey(null,m.GetHealth().ToString(), false), 
-                        delegate { MonsterDiag(); }, Color.red);
-                    tb.ApplyTag(Game.MONSTERS);
+                    UIElement ui = new UIElement(Game.MONSTERS);
+                    ui.SetLocation(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f), 2, 2);
+                    ui.SetText(m.GetHealth().ToString(), Color.red);
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetButton(MonsterDiag);
+                    new UIElementBorder(ui, Color.red);
                 }
             }
 

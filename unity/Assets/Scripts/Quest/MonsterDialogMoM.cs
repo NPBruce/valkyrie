@@ -34,23 +34,52 @@ public class MonsterDialogMoM : MonsterDialog
         // In horror phase we do horror checks
         if (game.quest.phase == Quest.MoMPhase.horror)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2), HORROR_CHECK, delegate { Horror(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 4.5f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { OnCancel(); });
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-8f), 2, 16, 2);
+            ui.SetText(HORROR_CHECK);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Horror);
+            new UIElementBorder(ui);
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-5f), 4.5f, 10, 2);
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(OnCancel);
+            new UIElementBorder(ui);
         }
         else
         { // In investigator phase we do attacks and evades
             DrawMonsterHealth(monster, delegate { CreateWindow(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 2), new Vector2(16, 2),
-                new StringKey("val","ACTION_X",ATTACK), delegate { Attack(); });
-            new TextButton(new Vector2(UIScaler.GetHCenter(-8f), 4.5f), new Vector2(16, 2), EVADE, delegate { Evade(); });
+
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-8f), 2, 16, 2);
+            ui.SetText(new StringKey("val","ACTION_X",ATTACK));
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Attack);
+            new UIElementBorder(ui);
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-8f), 4.5f, 16, 2);
+            ui.SetText(EVADE);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Evade);
+            new UIElementBorder(ui);
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-5f), 7, 10, 2);
             if (monster.damage == monster.GetHealth())
             {
-                new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { ; }, Color.gray);
+                ui.SetText(CommonStringKeys.CANCEL, Color.gray);
+                new UIElementBorder(ui, Color.gray);
             }
             else
             {
-                new TextButton(new Vector2(UIScaler.GetHCenter(-5f), 7f), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { OnCancel(); });
+                ui.SetText(CommonStringKeys.CANCEL);
+                ui.SetButton(OnCancel);
+                new UIElementBorder(ui);
             }
+            ui.SetFontSize(UIScaler.GetMediumFont());
         }
     }
 
@@ -106,14 +135,20 @@ public class MonsterDialogMoM : MonsterDialog
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui, Color.red);
 
+        ui = new UIElement();
+        ui.SetLocation(1, 9, 2, 2);
         if (monster.damage == 0)
         {
-            new TextButton(new Vector2(1f, 9), new Vector2(2, 2), CommonStringKeys.MINUS, delegate { MonsterDamageDec(monster, call); }, Color.grey);
+            ui.SetText(CommonStringKeys.MINUS, Color.grey);
+            new UIElementBorder(ui, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(1f, 9), new Vector2(2, 2), CommonStringKeys.MINUS, delegate { MonsterDamageDec(monster, call); }, Color.red);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            new UIElementBorder(ui, Color.red);
+            ui.SetButton(delegate { MonsterDamageDec(monster, call); });
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
         ui.SetLocation(4, 9, 2, 2);
@@ -121,15 +156,27 @@ public class MonsterDialogMoM : MonsterDialog
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui, Color.red);
 
+        ui = new UIElement();
+        ui.SetLocation(7, 9, 2, 2);
         if (monster.damage == monster.GetHealth())
         {
-            new TextButton(new Vector2(7f, 9), new Vector2(2, 2), CommonStringKeys.PLUS, delegate { MonsterDamageInc(monster, call); }, Color.grey);
-            new TextButton(new Vector2(2, 11.5f), new Vector2(6, 2), DEFEATED, delegate { Defeated(monster); }, Color.red);
+            ui.SetText(CommonStringKeys.PLUS, Color.grey);
+            new UIElementBorder(ui, Color.grey);
+
+            UIElement defui = new UIElement();
+            defui.SetLocation(2, 11.5f, 6, 2);
+            defui.SetText(DEFEATED);
+            defui.SetFontSize(UIScaler.GetMediumFont());
+            defui.SetButton(delegate { Defeated(monster); });
+            new UIElementBorder(defui, Color.red);
         }
         else
         {
-            new TextButton(new Vector2(7f, 9), new Vector2(2, 2), CommonStringKeys.PLUS, delegate { MonsterDamageInc(monster, call); }, Color.red);
+            ui.SetText(CommonStringKeys.PLUS, Color.red);
+            new UIElementBorder(ui, Color.red);
+            ui.SetButton(delegate { MonsterDamageInc(monster, call); });
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     public static void Defeated(Quest.Monster monster)

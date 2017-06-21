@@ -41,23 +41,49 @@ public class MonsterDialog
             offset += 2.8f;
         }
 
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), INFORMATION, delegate { Info(); });
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset, 10, 2);
+        ui.SetText(INFORMATION);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Info);
+        new UIElementBorder(ui);
         offset += 2.5f;
         if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) == null)
         {
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), FORCE_ACTIVATE, delegate { Activate(); });
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset, 10, 2);
+            ui.SetText(FORCE_ACTIVATE);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Activate);
+            new UIElementBorder(ui);
             offset += 2.5f;
-            new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), DEFEATED, delegate { Defeated(); });
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset, 10, 2);
+            ui.SetText(DEFEATED);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Defeated);
+            new UIElementBorder(ui);
             offset += 2.5f;
             if (monster.unique)
             {
                 // If there is a unique option the offset needs to be increased
-                new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 3), UNIQUE_DEFEATED, delegate { UniqueDefeated(); });
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset, 10, 3);
+                ui.SetText(UNIQUE_DEFEATED);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(UniqueDefeated);
+                new UIElementBorder(ui);
                 offset += 3.5f;
             }
         }
         // FIXME: This doesn't fit if there is a unique monster in the last space
-        new TextButton(new Vector2(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset), new Vector2(10, 2), CommonStringKeys.CANCEL, delegate { OnCancel(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetRight(-10.5f - MonsterCanvas.monsterSize), offset, 10, 2);
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(OnCancel);
+        new UIElementBorder(ui);
     }
 
     // Monster Information

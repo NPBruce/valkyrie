@@ -114,20 +114,35 @@ public class PuzzleImageWindow
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-13), 23.5f, 8, 2);
         if (solved)
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
-            new TextButton(
-                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
-                eventData.GetButtons()[0].GetLabel(), delegate { Finished(); });
+            ui.SetText(CommonStringKeys.CLOSE, Color.grey);
+            new UIElementBorder(ui, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
-            new TextButton(
-                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
-                eventData.GetButtons()[0].GetLabel(), delegate {; }, Color.grey);
+            ui.SetText(CommonStringKeys.CLOSE);
+            new UIElementBorder(ui);
+            ui.SetButton(Close);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(5), 23.5f, 8, 2);
+        if (!solved)
+        {
+            ui.SetText(eventData.GetButtons()[0].GetLabel(), Color.grey);
+            new UIElementBorder(ui, Color.grey);
+        }
+        else
+        {
+            ui.SetText(eventData.GetButtons()[0].GetLabel());
+            new UIElementBorder(ui);
+            ui.SetButton(Finished);
+        }
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     public void Draw(PuzzleImage.TilePosition screenPos, PuzzleImage.TilePosition imgPos, bool solved)
