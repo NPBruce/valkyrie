@@ -48,13 +48,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetLargeFont());
 
             // Button for start quest/scenario
-            TextButton tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 5), 
-                new Vector2(12, 2f), 
-                new StringKey("val","START_QUEST",game.gameType.QuestName()), 
-                delegate { Start(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 5, 12, 2);
+            ui.SetText(new StringKey("val","START_QUEST",game.gameType.QuestName()));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Start);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
 
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 8, 12, 2);
@@ -74,46 +75,54 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Content selection page
-            tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 11), 
-                new Vector2(12, 2f), 
-                SELECT_CONTENT, 
-                delegate { Content(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 11, 12, 2);
+            ui.SetText(SELECT_CONTENT);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Content);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
 
             // Quest/Scenario editor
-            tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 14),
-                new Vector2(12, 2f),
-                new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()),
-                delegate { Editor(); });
-
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 14, 12, 2);
+            ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName());
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Editor);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
 
             // About page (managed in this class)
-            tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 17), 
-                new Vector2(12, 2f), 
-                ABOUT, 
-                delegate { About(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 17, 12, 2);
+            ui.SetText(ABOUT);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(About);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
             
             // Configuration menu
-            tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 20), 
-                new Vector2(12, 2f), 
-                OPTIONS, 
-                delegate { Config(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 20, 12, 2);
+            ui.SetText(OPTIONS);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Config);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
 
             // Exit Valkyrie
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 12) / 2, 23), new Vector2(12, 2f), CommonStringKeys.EXIT,  delegate { Exit(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 23, 12, 2);
+            ui.SetText(CommonStringKeys.EXIT);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Exit);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
         }
 
         // Start quest
@@ -184,13 +193,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(Game.Get().version);
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            TextButton tb = new TextButton(
-                new Vector2(1, UIScaler.GetBottom(-3)), 
-                new Vector2(8, 2),
-                CommonStringKeys.BACK, 
-                delegate { Destroyer.MainMenu(); });
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-            tb.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Destroyer.MainMenu);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui);
         }
 
         public void Exit()

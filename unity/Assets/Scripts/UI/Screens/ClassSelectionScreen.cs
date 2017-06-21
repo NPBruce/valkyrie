@@ -43,28 +43,28 @@ namespace Assets.Scripts.UI.Screens
             if (heroCount < 4) xOffset += 4.5f;
             if (heroCount < 3) xOffset += 4.5f;
 
-            TextButton tb = null;
-
             for (int i = 0; i < heroCount; i++)
             {
                 DrawHero(xOffset, i);
                 xOffset += 9f;
             }
-            // Add a finished button to start the quest
-            tb = new TextButton(
-                new Vector2(UIScaler.GetRight(-8.5f),
-                UIScaler.GetBottom(-2.5f)),
-                new Vector2(8, 2),
-                CommonStringKeys.FINISHED,
-                delegate { Finished(); },
-                Color.green);
-            tb.SetFont(game.gameType.GetHeaderFont());
-            tb.ApplyTag(Game.HEROSELECT);
 
-            TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
-            cancelSelection.SetFont(game.gameType.GetHeaderFont());
-            // Untag as dialog so this isn't cleared away during hero selection
-            cancelSelection.ApplyTag(Game.HEROSELECT);
+            // Add a finished button to start the quest
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f), 8, 2);
+            ui.SetText(CommonStringKeys.FINISHED, Color.green);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Finished);
+            new UIElementBorder(ui, Color.green);
+
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Destroyer.QuestSelect);
+            new UIElementBorder(ui, Color.red);
         }
 
         public void DrawHero(float xOffset, int hero)
@@ -81,7 +81,6 @@ namespace Assets.Scripts.UI.Screens
             float yStart = 7f;
 
             UIElement ui = null;
-            TextButton tb = null;
             if (hybridClass.Length > 0)
             {
                 archetype = game.cd.classes[hybridClass].hybridArchetype;
@@ -89,9 +88,13 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(xOffset + 0.25f, yStart, 8.5f, 5);
                 new UIElementBorder(ui);
 
-                tb = new TextButton(new Vector2(xOffset + 1, yStart + 0.5f), new Vector2(7f, 4f), game.cd.classes[hybridClass].name, delegate { Select(hero, hybridClass); }, Color.black);
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.7f, 0);
-                tb.ApplyTag(Game.HEROSELECT);
+                ui = new UIElement(Game.HEROSELECT);
+                ui.SetLocation(xOffset + 1, yStart + 0.5f, 7, 4);
+                ui.SetText(game.cd.classes[hybridClass].name, Color.black);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Select(hero, hybridClass); });
+                ui.SetBGColor(new Color(0, 0.7f, 0));
+                new UIElementBorder(ui, Color.black);
 
                 yStart += 5;
             }

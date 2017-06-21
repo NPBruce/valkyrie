@@ -90,15 +90,21 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(UIScaler.GetMediumFont());
             }
 
-            TextButton tb = new TextButton(
-                new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), 
-                CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Cancel);
+            new UIElementBorder(ui, Color.red);
 
-            tb = new TextButton(
-                new Vector2(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), 
-                new StringKey("val", "START"), delegate { Start(q); }, Color.green);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f), 8, 2);
+            ui.SetText(new StringKey("val", "START"), Color.green);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { Start(q); });
+            new UIElementBorder(ui, Color.green);
         }
 
         // Return to quest selection
