@@ -36,11 +36,11 @@ namespace Assets.Scripts.UI.Screens
             {
                 offset += 2;
                 ui = new UIElement();
-                ui.SetLocation(new Vector2(UIScaler.GetHCenter(-21), offset, 42, 24);
+                ui.SetLocation(UIScaler.GetHCenter(-21), offset, 42, 24);
                 offset += 1;
             }
             ui = new UIElement();
-            ui.SetLocation(new Vector2(UIScaler.GetHCenter(-10), offset, 20, 3);
+            ui.SetLocation(UIScaler.GetHCenter(-10), offset, 20, 3);
             ui.SetText(SELECT_SAVE);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
