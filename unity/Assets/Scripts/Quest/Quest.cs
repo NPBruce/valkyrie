@@ -1478,8 +1478,8 @@ public class Quest
 
         override public void SetColor(Color c)
         {
-            if (image != null) image.color = c;
-            if (uiText != null) uiText.color = c;
+            if (image != null && image.gameObject != null) image.color = c;
+            if (uiText != null && uiText.gameObject != null) uiText.color = c;
             if (border != null) border.color = c;
         }
 
@@ -1631,6 +1631,8 @@ public class Quest
         virtual public void SetColor(Color c)
         {
             if (image == null)
+                return;
+            if (image.gameObject == null)
                 return;
             image.color = c;
         }
