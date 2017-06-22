@@ -95,6 +95,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 else
                 {
+                    ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-20), offset, 40, 4);
                     ui.SetButton(delegate { Select(tmp); });
                     new UIElementBorder(ui, Color.gray);
