@@ -235,6 +235,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
             game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.musicVolume = musicSlide.value;
         }
 
         private void UpdateMusicRev()
@@ -243,6 +244,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
             game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.musicVolume = musicSlide.value;
         }
 
         private void UpdateEffects()
