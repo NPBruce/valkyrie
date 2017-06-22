@@ -232,7 +232,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.red);
             if (game.cd.packTypes.Count > 1)
             {
                 ui.SetButton(DrawTypeList);

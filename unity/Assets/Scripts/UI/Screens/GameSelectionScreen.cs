@@ -179,8 +179,8 @@ namespace Assets.Scripts.UI.Screens
             logo.transform.SetParent(Game.Get().uICanvas.transform);
 
             RectTransform transBg = logo.AddComponent<RectTransform>();
-            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, UIScaler.GetHCenter(-3) * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
-            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 8 * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-3) * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
 
             // Create the image
             Texture2D tex = Resources.Load("sprites/logo") as Texture2D;

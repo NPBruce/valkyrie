@@ -48,8 +48,6 @@ public class ActivateDialog {
         // Activation box  header
         ui = new UIElement(Game.ACTIVATION);
         ui.SetLocation(15, offset, UIScaler.GetWidthUnits() - 30, 2);
-        ui.SetFont(Game.Get().gameType.GetHeaderFont());
-        ui.SetFontSize(UIScaler.GetLargeFont());
         if (singleStep)
         {
             ui.SetText(ACTIONS);
