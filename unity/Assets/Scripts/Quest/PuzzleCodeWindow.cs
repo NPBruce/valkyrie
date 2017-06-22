@@ -116,7 +116,7 @@ public class PuzzleCodeWindow
             hPos = 0.5f;
             foreach (int i in g.guess)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(buttons[i].label, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));
@@ -129,7 +129,7 @@ public class PuzzleCodeWindow
             hPos = 13.25f;
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(ICON_SUCCESS_RESULT, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));
@@ -139,7 +139,7 @@ public class PuzzleCodeWindow
             }
             for (int i = 0; i < g.CorrectType(); i++)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(ICON_INVESTIGATION_RESULT, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));

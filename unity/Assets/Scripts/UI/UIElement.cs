@@ -314,7 +314,7 @@ namespace Assets.Scripts.UI
         /// The size of the text in UIScaler units.</returns>
         public static float GetStringWidth(string content)
         {
-            return GetStringWidth(content.Translate(), UIScaler.GetSmallFont());
+            return GetStringWidth(content, UIScaler.GetSmallFont());
         }
 
         /// <summary>

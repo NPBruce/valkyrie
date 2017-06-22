@@ -87,7 +87,7 @@ namespace Assets.Scripts.UI.Screens
             // Quest/Scenario editor
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 14, 12, 2);
-            ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName());
+            ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Editor);
@@ -189,14 +189,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3), 5, 2);
+            ui.SetLocation(UIScaler.GetWidthUnits() - 5, UIScaler.GetBottom(-3), 5, 2);
             ui.SetText(Game.Get().version);
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
             ui.SetText(CommonStringKeys.BACK);
-            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Destroyer.MainMenu);
             ui.SetBGColor(new Color(0, 0.03f, 0f));

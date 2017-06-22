@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class NextStageButton
@@ -47,7 +48,7 @@ public class NextStageButton
         UIElement ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f), 4, 2);
         ui.SetText(CommonStringKeys.TAB);
-        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Next);
         ui.SetBGColor(bgColor);
@@ -56,7 +57,7 @@ public class NextStageButton
         ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(16f), UIScaler.GetBottom(-2.5f), 4, 2);
         ui.SetText(new StringKey("val", "ITEMS"));
-        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Items);
         ui.SetBGColor(bgColor);
@@ -65,7 +66,7 @@ public class NextStageButton
         ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f), 4, 2);
         ui.SetText(CommonStringKeys.LOG);
-        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Log);
         ui.SetBGColor(bgColor);
@@ -74,7 +75,7 @@ public class NextStageButton
         ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f), 4, 2);
         ui.SetText(CommonStringKeys.SET);
-        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Set);
         ui.SetBGColor(bgColor);

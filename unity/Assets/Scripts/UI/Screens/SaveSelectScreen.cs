@@ -76,21 +76,21 @@ namespace Assets.Scripts.UI.Screens
                     ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-12), offset + 0.5f, 10, 2);
                     ui.SetText(name);
-                    ui.SetTextAlignment(TextAnchor.MiddleLeft)
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetFontSize(UIScaler.GetMediumFont());
                     ui.SetButton(delegate { Select(tmp); });
 
                     ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-1), offset + 0.5f, 20, 2);
                     ui.SetText(saves[i].saveTime.ToString());
-                    ui.SetTextAlignment(TextAnchor.MiddleRight)
+                    ui.SetTextAlignment(TextAnchor.MiddleRight);
                     ui.SetFontSize(UIScaler.GetMediumFont());
                     ui.SetButton(delegate { Select(tmp); });
 
                     ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-12), offset + 2.6f, 31, 1);
                     ui.SetText(saves[i].quest);
-                    ui.SetTextAlignment(TextAnchor.MiddleLeft)
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetButton(delegate { Select(tmp); });
                 }
                 else
@@ -122,7 +122,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetButton(Destroyer.MainMenu);
                 new UIElementBorder(ui, Color.red);
             }
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFont(game.gameType.GetHeaderFont());
         }
 
         public void Select(int num)

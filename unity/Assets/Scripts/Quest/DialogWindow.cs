@@ -151,7 +151,7 @@ public class DialogWindow {
 
         ui = new UIElement();
         ui.SetLocation(14, offset, 2, 2);
-        ui.SetText(quota);
+        ui.SetText(quota.ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 

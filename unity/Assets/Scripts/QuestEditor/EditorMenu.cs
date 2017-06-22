@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Menu popup when in editor
 public class EditorMenu {

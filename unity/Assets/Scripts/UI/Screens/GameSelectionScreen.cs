@@ -186,7 +186,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D tex = Resources.Load("sprites/logo") as Texture2D;
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
             UnityEngine.UI.Image uiImage = logo.AddComponent<UnityEngine.UI.Image>();
-            uiImage.sprite = sprite
+            uiImage.sprite = sprite;
             logo.AddComponent<SpritePulser>();
 
             // Display message

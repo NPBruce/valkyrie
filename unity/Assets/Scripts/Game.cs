@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 // General controller for the game
@@ -206,8 +207,8 @@ public class Game : MonoBehaviour {
 
         // Add a title to the page
         ui = new UIElement(Game.HEROSELECT);
-        ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3)
-        ui.SetText(new StringKey("val","SELECT",gameType.HeroesName());
+        ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3);
+        ui.SetText(new StringKey("val","SELECT",gameType.HeroesName()));
         ui.SetFont(gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
 

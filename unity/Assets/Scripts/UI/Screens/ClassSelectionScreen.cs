@@ -134,7 +134,7 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
 
-                UIElement ui = new UIElement(Game.HEROSELECT, scrollArea[hero].GetScrollTransform());
+                ui = new UIElement(Game.HEROSELECT, scrollArea[hero].GetScrollTransform());
                 ui.SetLocation(0.25f, yOffset, 7, 4);
                 if (available)
                 {

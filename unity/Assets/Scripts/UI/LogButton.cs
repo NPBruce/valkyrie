@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class LogButton

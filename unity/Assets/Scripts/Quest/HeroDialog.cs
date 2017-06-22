@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Class for creation of hero control button menu
 public class HeroDialog{

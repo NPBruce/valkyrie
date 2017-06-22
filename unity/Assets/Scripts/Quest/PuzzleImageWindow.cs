@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 public class PuzzleImageWindow
 {

@@ -218,7 +218,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetFont(game.gameType.GetHeaderFont());
                     ui.SetFontSize(UIScaler.GetMediumFont());
                     ui.SetButton(delegate { Select(id); });
-                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
                     buttons[id].Add(ui);
 
                     left = !left;

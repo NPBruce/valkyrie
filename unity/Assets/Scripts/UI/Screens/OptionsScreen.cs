@@ -49,10 +49,10 @@ namespace Assets.Scripts.UI.Screens
             CreateAudioElements();
 
             // Button for back to main menu
-            UIElement ui = new UIElement();
+            ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
             ui.SetText(CommonStringKeys.BACK, Color.red);
-            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Destroyer.MainMenu);
             new UIElementBorder(ui, Color.red);
@@ -63,7 +63,7 @@ namespace Assets.Scripts.UI.Screens
             UIElement ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 8, 10, 2);
             ui.SetText(MUSIC);
-            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             float mVolume;
@@ -117,7 +117,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 14, 10, 2);
             ui.SetText(EFFECTS);
-            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             float eVolume;
@@ -184,7 +184,7 @@ namespace Assets.Scripts.UI.Screens
             UIElement ui = new UIElement();
             ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 9, 4, 18, 2);
             ui.SetText(CHOOSE_LANG);
-            ui.SetFont(game.gameType.GetHeaderFont(());
+            ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // The list of languages is determined by FFG languages for MoM

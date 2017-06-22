@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.UI;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class SkillWindow
@@ -56,7 +57,6 @@ public class SkillWindow
             if (i != hero)
             {
                 ui.SetBGColor(new Color(0.3f, 0.3f, 0.3f));
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
             }
 
             availableXP = game.quest.heroes[i].AvailableXP();

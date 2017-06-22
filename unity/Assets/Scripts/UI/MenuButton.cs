@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using UnityEngine;
 
 // Special class for the Menu button present while in a quest

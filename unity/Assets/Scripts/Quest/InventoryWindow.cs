@@ -63,7 +63,7 @@ public class InventoryWindow
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(1), 20, 3, 2);
-        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold").Tostring());
+        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();

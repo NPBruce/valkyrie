@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class SkillButton
@@ -14,7 +15,7 @@ public class SkillButton
 
         if (game.gameType is MoMGameType) return;
 
-        ui = new UIElement(Game.QUESTUI);
+        UIElement ui = new UIElement(Game.QUESTUI);
         ui.SetLocation(10.5f, UIScaler.GetBottom(-2.5f), 5, 2);
         ui.SetText(SKILLS);
         ui.SetFont(game.gameType.GetHeaderFont());

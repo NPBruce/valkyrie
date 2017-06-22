@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // This class controls the list of monsters
 public class MonsterCanvas : MonoBehaviour
@@ -108,7 +109,7 @@ public class MonsterCanvas : MonoBehaviour
             // Scroll up active
             ui.SetText(DOWN_ARROW);
             new UIElementBorder(ui);
-            ui.SetButton(Move);
+            ui.SetButton(delegate { Move(); });
         }
         ui.SetFontSize(UIScaler.GetMediumFont());
     }

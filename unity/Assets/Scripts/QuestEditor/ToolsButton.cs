@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class ToolsButton
@@ -16,7 +17,7 @@ public class ToolsButton
         UIElement ui = new UIElement(Game.QUESTUI);
         ui.SetLocation(UIScaler.GetRight(-6), 0, 6, 1);
         ui.SetText(new StringKey("val", "COMPONENTS"));
-        ui.SetButton(QuestEditorData.TypeSelect);
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(); });
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.QUESTUI);
