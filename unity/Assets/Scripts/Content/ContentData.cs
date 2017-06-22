@@ -5,7 +5,8 @@ using System.IO;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
-// This class reads and stores all of the content for a base game and expansions
+/// <summary>
+/// This class reads and stores all of the content for a base game and expansions.</summary>
 public class ContentData {
 
     public HashSet<string> loadedPacks;
@@ -27,8 +28,15 @@ public class ContentData {
     public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
 
+    // textureCache is used to store previously loaded textures so they are faster next time
+    // For the editor all defined images are loaded, requires ~1GB RAM
+    // For quests only used tiles/tokens will be loaded
     public static Dictionary<string, Texture2D> textureCache;
 
+    /// <summary>
+    /// Get the path where game content is defined.</summary>
+    /// <returns>
+    /// The path as a string with a trailing '/'.</returns>
     public static string ContentPath()
     {
         if (Application.isEditor)
@@ -39,12 +47,19 @@ public class ContentData {
         return Application.dataPath + "/content/";
     }
 
+    /// <summary>
+    /// Get the path where ffg app content is imported.</summary>
+    /// <returns>
+    /// The path as a string without a trailing '/'.</returns>
     public static string ImportPath()
     {
         return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
     }
 
-    // Constructor takes a path in which to look for content
+
+    /// <summary>
+    /// Seach the provided path for all content packs and read meta data.</summary>
+    /// <param name="path">Path to search for content packs.</param>
     public ContentData(string path)
     {
         // This is pack type for sorting packs

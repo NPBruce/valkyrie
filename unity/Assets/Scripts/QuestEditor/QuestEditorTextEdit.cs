@@ -32,11 +32,14 @@ public class QuestEditorTextEdit {
         cancelCall = call;
 
         // Border
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-10), 1), new Vector2(20, 6), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-10), 1, 20, 6);
+        new UIElementBorder(ui);
 
         // Heading
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-9.5f), 1), new Vector2(19, 1), title);
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-9.5f), 1, 19, 1);
+        ui.SetText(title);
 
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
@@ -70,13 +73,19 @@ public class QuestEditorTextEdit {
         iField.textComponent = uiText;
         iField.text = value;
 
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-8), 5), new Vector2(6, 1), CommonStringKeys.OK, OKButton);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.0f, 0.03f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-8), 5, 6, 1);
+        ui.SetText(CommonStringKeys.OK);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetButton(OKButton);
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2(UIScaler.GetHCenter(2), 5), new Vector2(6, 1), CommonStringKeys.CANCEL, cancelCall);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.03f, 0.0f, 0f);
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(2), 5, 6, 1);
+        ui.SetText(CommonStringKeys.CANCEL);
+        ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+        ui.SetButton(cancelCall);
+        new UIElementBorder(ui);
     }
 
 

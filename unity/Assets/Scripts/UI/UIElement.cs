@@ -314,6 +314,17 @@ namespace Assets.Scripts.UI
         /// The size of the text in UIScaler units.</returns>
         public static float GetStringWidth(string content)
         {
+            return GetStringWidth(content, UIScaler.GetSmallFont());
+        }
+
+        /// <summary>
+        /// Get the length of a text string at small size with standard font.</summary>
+        /// <param name="content">Text to measure.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public static float GetStringWidth(string content, int fontSize)
+        {
             if (textWidthObj == null)
             {
                 textWidthObj = new GameObject("TextSizing");
@@ -321,7 +332,7 @@ namespace Assets.Scripts.UI
                 RectTransform transform = textWidthObj.GetComponent<RectTransform>();
                 transform.offsetMax = new Vector2(20000, 20000);
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
-                textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
+                textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = fontSize;
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
             float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);

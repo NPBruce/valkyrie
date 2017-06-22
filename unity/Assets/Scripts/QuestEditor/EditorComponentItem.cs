@@ -7,7 +7,6 @@ using Assets.Scripts.UI;
 public class EditorComponentItem : EditorComponent
 {
     QuestData.QItem itemComponent;
-    EditorSelectionList traitESL;
 
     public EditorComponentItem(string nameIn) : base()
     {
@@ -259,6 +258,10 @@ public class EditorComponentItem : EditorComponent
 
     public void AddTrait(bool pool = false)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
 
@@ -270,16 +273,15 @@ public class EditorComponentItem : EditorComponent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectAddTrait(pool, s); }, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
         foreach (string s in traits)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
+            select.AddItem(new StringKey("val", s));
         }
-        traitESL = new EditorSelectionList(new StringKey("val","SELECT",CommonStringKeys.TRAITS), list, delegate { SelectAddTrait(pool); });
-        traitESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectAddTrait(bool pool)
+    public void SelectAddTrait(bool pool, string trait)
     {
         if (pool)
         {
@@ -289,7 +291,7 @@ public class EditorComponentItem : EditorComponent
             {
                 newArray[i] = itemComponent.traitpool[i];
             }
-            newArray[itemComponent.traitpool.Length] = traitESL.selection;
+            newArray[itemComponent.traitpool.Length] = trait;
             itemComponent.traitpool = newArray;
         }
         else
@@ -300,7 +302,7 @@ public class EditorComponentItem : EditorComponent
             {
                 newArray[i] = itemComponent.traits[i];
             }
-            newArray[itemComponent.traits.Length] = traitESL.selection;
+            newArray[itemComponent.traits.Length] = trait;
             itemComponent.traits = newArray;
         }
         Update();

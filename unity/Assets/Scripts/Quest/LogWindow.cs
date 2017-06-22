@@ -53,7 +53,12 @@ public class LogWindow
         new UIElementBorder(scrollArea);
         scrollArea.SetScrollSize(height);
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-3f), 25, 6, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
 
         if (developerToggle)
         {

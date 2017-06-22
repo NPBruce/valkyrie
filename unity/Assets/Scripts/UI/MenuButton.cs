@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using UnityEngine;
 
 // Special class for the Menu button present while in a quest
@@ -9,21 +10,22 @@ public class MenuButton {
     public MenuButton()
     {
         Game game = Game.Get();
-        TextButton qb;
+
+        UIElement ui = new UIElement(Game.QUESTUI);
         // For the editor button is moved to the right
         if (Game.Get().editMode)
         {
-            qb = new TextButton(new Vector2(UIScaler.GetRight(-5.5f), UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), MENU, delegate { Menu(); });
-            qb.SetFont(game.gameType.GetHeaderFont());
+            ui.SetLocation(UIScaler.GetRight(-5.5f), UIScaler.GetBottom(-2.5f),5, 2);
         }
         else
         {
-            qb = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), MENU, delegate { Menu(); });
-            qb.SetFont(game.gameType.GetHeaderFont());
+            ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f),5, 2);
         }
-
-        // Untag as dialog so this isn't cleared away
-        qb.ApplyTag(Game.QUESTUI);
+        ui.SetText(MENU);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Menu);
+        new UIElementBorder(ui);
     }
 
     // When pressed bring up the approriate menu

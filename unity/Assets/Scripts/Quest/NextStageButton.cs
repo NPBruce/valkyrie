@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Next stage button is used by MoM to move between investigators and monsters
 public class NextStageButton
@@ -44,44 +45,49 @@ public class NextStageButton
             bgColor = new Color(0, 0.05f, 0, 0.9f);
         }
 
-        TextButton tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f)),new Vector2(4, 2), 
-            CommonStringKeys.TAB, delegate { Next(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.TAB);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Next);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
 
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-16f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            new StringKey("val", "ITEMS"), delegate { Items(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(16f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Items);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
 
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.LOG, delegate { Log(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.LOG);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Log);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
 
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f)), new Vector2(4, 2), 
-            CommonStringKeys.SET, delegate { Set(); });
-        // Untag as dialog so this isn't cleared away
-        tb.ApplyTag(Game.UIPHASE);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f), 4, 2);
+        ui.SetText(CommonStringKeys.SET);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Set);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
 
-        DialogBox db;
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f)), new Vector2(16, 2), phase, Color.white, bgColor);
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
-        db.ApplyTag(Game.UIPHASE);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f), 16, 2);
+        ui.SetText(phase);
+        ui.SetBGColor(bgColor);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
     }
 
     // Button pressed

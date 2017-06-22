@@ -6,7 +6,6 @@ using Assets.Scripts.UI;
 
 public class ReorderComponents
 {
-    EditorSelectionList sourceESL;
     string source = "";
     List<UIElement> names;
 
@@ -20,19 +19,17 @@ public class ReorderComponents
             if (!(c is PerilData)) sources.Add(c.source);
         }
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(ReorderSource, new StringKey("val", "SELECT", new StringKey("val", "FILE")));
         foreach (string s in sources)
         {
-            list.Add(new EditorSelectionList.SelectionListEntry(s));
+            select.AddItem(s);
         }
-
-        sourceESL = new EditorSelectionList(new StringKey("val", "SELECT", new StringKey("val", "FILE")), list, delegate { ReorderSource(); });
-        sourceESL.SelectItem();
+        select.Draw();
     }
 
-    public void ReorderSource()
+    public void ReorderSource(string s)
     {
-        source = sourceESL.selection;
+        source = s;
         Draw();
     }
 

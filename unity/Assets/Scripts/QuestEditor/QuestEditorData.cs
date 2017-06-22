@@ -9,9 +9,6 @@ using Assets.Scripts.UI;
 public class QuestEditorData {
 
     private readonly StringKey COMPONENT_TO_DELETE = new StringKey("val", "COMPONENT_TO_DELETE");
-    // When a selection list is raised it is stored here
-    // This allows the return value to be fetched later
-    public EditorSelectionList esl;
     // This is the currently selected component
     public EditorComponent selection;
     // The selection stack is used for the 'back' button

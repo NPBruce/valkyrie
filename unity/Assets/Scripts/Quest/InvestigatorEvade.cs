@@ -68,14 +68,20 @@ public class InvestigatorEvade {
         ui.SetText(text);
         new UIElementBorder(ui);
 
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6f), 9, 12, 2);
         if (m.damage == m.GetHealth())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { ; }, Color.gray);
+            ui.SetText(CommonStringKeys.FINISHED, Color.grey);
+            new UIElementBorder(ui, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
+            ui.SetText(CommonStringKeys.FINISHED);
+            ui.SetButton(Destroyer.Dialog);
+            new UIElementBorder(ui);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
         MonsterDialogMoM.DrawMonster(m);
         MonsterDialogMoM.DrawMonsterHealth(m, delegate { Draw(); });

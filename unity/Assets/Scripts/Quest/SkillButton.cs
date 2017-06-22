@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class SkillButton
@@ -10,16 +11,17 @@ public class SkillButton
     public SkillButton()
     {
         Game game = Game.Get();
-        TextButton qb;
-        // For the editor button is moved to the right
         if (game.editMode) return;
 
         if (game.gameType is MoMGameType) return;
 
-        qb = new TextButton(new Vector2(10.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), SKILLS, delegate { Skills(); });
-        qb.SetFont(game.gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away
-        qb.ApplyTag(Game.QUESTUI);
+        UIElement ui = new UIElement(Game.QUESTUI);
+        ui.SetLocation(10.5f, UIScaler.GetBottom(-2.5f), 5, 2);
+        ui.SetText(SKILLS);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Skills);
+        new UIElementBorder(ui);
     }
 
     // When pressed bring up the approriate menu

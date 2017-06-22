@@ -64,7 +64,12 @@ public class HorrorCheck {
 
         game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-6f), 9f), new Vector2(12, 2), CommonStringKeys.FINISHED, delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6f), 9, 12, 2);
+        ui.SetText(CommonStringKeys.FINISHED);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
 
         MonsterDialogMoM.DrawMonster(m);
     }

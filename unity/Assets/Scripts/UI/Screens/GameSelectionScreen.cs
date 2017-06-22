@@ -77,8 +77,6 @@ namespace Assets.Scripts.UI.Screens
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
 
-            DialogBox db;
-
             Color startColor = Color.white;
             // If we need to import we can't play this type
             if (fcD2E.NeedImport())
@@ -86,27 +84,31 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             // Draw D2E button
-            TextButton tb = new TextButton(
-                new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 10), 
-                new Vector2(30, 4f), 
-                D2E_NAME, 
-                delegate { D2E(); }, 
-                startColor);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
+            UIElement ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 10, 30, 4);
+            ui.SetText(D2E_NAME, startColor);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { D2E(); });
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui, startColor);
 
             // Draw D2E import button
+            ui = new UIElement();
             if (fcD2E.ImportAvailable())
             {
+                ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 14.2f, 10, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 14.2f), new Vector2(10, 2f), keyText, delegate { Import("D2E"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
-
+                ui.SetText(keyText);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Import("D2E"); });
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui);
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 14.2f), new Vector2(24, 1f), D2E_APP_NOT_FOUND, Color.red);
-                db.AddBorder();
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 14.2f, 24, 1);
+                ui.SetText(D2E_APP_NOT_FOUND, Color.red);
+                new UIElementBorder(ui, Color.red);
             }
 
             // Draw MoM button
@@ -115,24 +117,40 @@ namespace Assets.Scripts.UI.Screens
             {
                 startColor = Color.gray;
             }
-            tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 30) / 2, 19), new Vector2(30, 4f), MOM_NAME, delegate { MoM(); }, startColor);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 4);
+            ui.SetText(MOM_NAME, startColor);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { MoM(); });
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui, startColor);
 
             // Draw MoM import button
+            ui = new UIElement();
             if (fcMoM.ImportAvailable())
             {
+                ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 23.2f, 10, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
-                tb = new TextButton(new Vector2((UIScaler.GetWidthUnits() - 10) / 2, 23.2f), new Vector2(10, 2f), keyText, delegate { Import("MoM"); });
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0.03f, 0f);
+                ui.SetText(keyText);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Import("MoM"); });
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui);
             }
             else // Import unavailable
             {
-                db = new DialogBox(new Vector2((UIScaler.GetWidthUnits() - 24) / 2, 23.2f), new Vector2(24, 1f), MOM_APP_NOT_FOUND, Color.red);
-                db.AddBorder();
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 23.2f, 24, 1);
+                ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                new UIElementBorder(ui, Color.red);
             }
 
-            new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.EXIT, delegate { Exit(); }, Color.red);
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.EXIT, Color.red);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Exit);
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui, Color.red);
         }
 
         // Start game as D2E
@@ -154,21 +172,28 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
 
+            // Create an object
+            GameObject logo = new GameObject("logo");
+            // Mark it as dialog
+            logo.tag = Game.DIALOG;
+            logo.transform.SetParent(Game.Get().uICanvas.transform);
+
+            RectTransform transBg = logo.AddComponent<RectTransform>();
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-3) * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
+
             // Create the image
             Texture2D tex = Resources.Load("sprites/logo") as Texture2D;
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-
-            DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-3), 8),
-                new Vector2(6, 6),
-                StringKey.NULL,
-                Color.clear,
-                Color.white);
-            db.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-            db.background.AddComponent<SpritePulser>();
+            UnityEngine.UI.Image uiImage = logo.AddComponent<UnityEngine.UI.Image>();
+            uiImage.sprite = sprite;
+            logo.AddComponent<SpritePulser>();
 
             // Display message
-            db = new DialogBox(new Vector2(2, 20), new Vector2(UIScaler.GetWidthUnits() - 4, 2), CONTENT_IMPORTING);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 20, UIScaler.GetWidthUnits() - 4, 2);
+            ui.SetText(CONTENT_IMPORTING);
+            ui.SetFontSize(UIScaler.GetMediumFont());
             if (type.Equals("D2E"))
             {
                 importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(); }));

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class ToolsButton
@@ -13,17 +14,23 @@ public class ToolsButton
         Game game = Game.Get();
         if (!game.editMode) return;
 
-        TextButton tb = new TextButton(new Vector2(UIScaler.GetRight(-6), 0), new Vector2(6, 1), new StringKey("val", "COMPONENTS"), delegate { QuestEditorData.TypeSelect(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.QUESTUI);
+        UIElement ui = new UIElement(Game.QUESTUI);
+        ui.SetLocation(UIScaler.GetRight(-6), 0, 6, 1);
+        ui.SetText(new StringKey("val", "COMPONENTS"));
+        ui.SetButton(delegate { QuestEditorData.TypeSelect(); });
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2(UIScaler.GetRight(-10), 0), new Vector2(4, 1), TOOLS, delegate { EditorTools.Create(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.QUESTUI);
+        ui = new UIElement(Game.QUESTUI);
+        ui.SetLocation(UIScaler.GetRight(-10), 0, 4, 1);
+        ui.SetText(TOOLS);
+        ui.SetButton(EditorTools.Create);
+        new UIElementBorder(ui);
 
-        tb = new TextButton(new Vector2(UIScaler.GetRight(-14), 0), new Vector2(4, 1), new StringKey("val", "TEST"), delegate { Test(); });
-        tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-        tb.ApplyTag(Game.QUESTUI);
+        ui = new UIElement(Game.QUESTUI);
+        ui.SetLocation(UIScaler.GetRight(-14), 0, 4, 1);
+        ui.SetText(new StringKey("val", "TEST"));
+        ui.SetButton(Test);
+        new UIElementBorder(ui);
     }
 
     public void Test()
