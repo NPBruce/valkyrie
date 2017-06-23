@@ -50,11 +50,9 @@ namespace Assets.Scripts.Content
 
         private bool preventLookup = false;
 
-        private const string regexKey = "^{(ffg|val|qst):";
-
         public StringKey(string unknownKey)
         {
-            if (Regex.Match(unknownKey, regexKey).Success)
+            if (Regex.Match(unknownKey, LocalizationRead.LookupRegexKey()).Success)
             {
                 string[] parts = unknownKey.Substring(1,unknownKey.Length -2).Split(":".ToCharArray(), 3, System.StringSplitOptions.RemoveEmptyEntries);
 
