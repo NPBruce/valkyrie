@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using System.Collections.Generic;
 
 public class PuzzleTowerWindow
 {
@@ -166,12 +167,9 @@ public class PuzzleTowerWindow
     /// <param name="blocks">Block size to draw</param>
     public void CreateBlock(float hCentre, float vBottom, int size)
     {
-        UIElement ui = new UIElement()
-        ui.SetLocation(hCenter - ((size + 1.5f) / 2), vBottom - 1.5f, size + 1.5f, 1.5f)
+        UIElement ui = new UIElement();
+        ui.SetLocation(hCentre - ((size + 1.5f) / 2), vBottom - 1.5f, size + 1.5f, 1.5f);
         ui.SetBGColor(new Color(0.6f, 0.6f, 0f, 1f));
         new UIElementBorder(ui, Color.yellow);
-        RectangleBorder border;
-        Color borderColour = Color.yellow;
-        Color bgColour = new Color(0.6f, 0.6f, 0f, 1f);
     }
 }

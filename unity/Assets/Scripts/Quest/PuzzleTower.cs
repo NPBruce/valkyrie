@@ -14,8 +14,8 @@ public class PuzzleTower : Puzzle
     /// <param name="depth">Minimum moves to solve puzzle</param>
     public PuzzleTower(int depth)
     {
-        List<uint> options = BuildPuzzles(depth);
-        puzzle = Random.Range(0, options.Count);
+        List<List<List<int>>> options = BuildPuzzles(depth);
+        puzzle = options[Random.Range(0, options.Count)];
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class PuzzleTower : Puzzle
         end.Add(new List<int>());
         end.Add(new List<int>());
 
-        for(int i = 0; i < 8 i++)
+        for(int i = 0; i < 8; i++)
         {
             end[0].Add(i - 7);
         }
@@ -49,10 +49,10 @@ public class PuzzleTower : Puzzle
         allStates.Add(new List<List<List<int>>>());
         allStates[0].Add(end);
 
-        for(int currentLevel = 0, currentLevel <= depth, currentLevel++)
+        for(int currentLevel = 0; currentLevel <= depth; currentLevel++)
         {
             allStates.Add(new List<List<List<int>>>());
-            foreach (uint state in allStates[currentLevel])
+            foreach (List<List<int>> state in allStates[currentLevel])
             {
                 AddStates(state, allStates);
             }
@@ -118,7 +118,7 @@ public class PuzzleTower : Puzzle
     /// <param name="state">puzzle state</param>
     /// <param name="stateTwo">puzzle state</param>
     /// <returns>If the states are equal</returns>
-    protected bool Equal(List<List<uint>> state, List<List<int>> stateTwo)
+    protected bool Equal(List<List<int>> state, List<List<int>> stateTwo)
     {
         if (state.Count != state.Count) return false;
         for (int i = 0; i < state.Count; i++)
@@ -154,8 +154,10 @@ public class PuzzleTower : Puzzle
                 int tower = 0;
                 int.TryParse(kv.Key, out tower);
 
-                foreach(int size in kv.Value.Split(' '), StringSplitOptions.RemoveEmptyEntries);
+                foreach(string s in kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
                 {
+                    int size = 0;
+                    int.TryParse(s, out size);
                     puzzle[tower].Add(size);
                 }
             }
@@ -170,7 +172,7 @@ public class PuzzleTower : Puzzle
     {
         foreach (List<int> list in puzzle)
         {
-            if (list.count > 0 && list.count < 8) return false;
+            if (list.Count > 0 && list.Count < 8) return false;
             int lastSize = 10;
             foreach (int size in list)
             {
@@ -190,7 +192,7 @@ public class PuzzleTower : Puzzle
     /// <returns>If the move is legal</returns>
     public bool MoveOK(int fromTower, int toTower)
     {
-        MoveOK(fromTower, toTower, puzzle)
+        return MoveOK(fromTower, toTower, puzzle);
     }
 
     /// <summary>
@@ -202,9 +204,9 @@ public class PuzzleTower : Puzzle
     /// <returns>If the move is legal</returns>
     public bool MoveOK(int fromTower, int toTower, List<List<int>> p)
     {
-        if (!p.Count >= fromTower) return false;
+        if (p.Count < fromTower) return false;
         if (p[fromTower].Count == 0) return false;
-        if (!p.Count >= toTower) return false;
+        if (p.Count < toTower) return false;
         if (p[toTower].Count == 0) return true;
 
         int fromSize = p[fromTower][p[fromTower].Count - 1];
@@ -223,10 +225,10 @@ public class PuzzleTower : Puzzle
         // General quest state block
         string r = "[PuzzleTower" + id + "]" + nl;
         r += "moves=" + moves + nl;
-        foreach(KeyValuePair<int, List<int>> kv in puzzle)
+        for (int i = 0; i < puzzle.Count; i++)
         {
-            r += kv.Key + "=";
-            foreach (int size in kv.Value)
+            r += i + "=";
+            foreach (int size in puzzle[i])
             {
                 r += size + " ";
             }

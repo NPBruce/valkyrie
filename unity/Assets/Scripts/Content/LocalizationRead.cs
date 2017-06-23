@@ -10,7 +10,7 @@ namespace Assets.Scripts.Content
     // This exists because .NET/Mono doesn't have one!!
     public static class LocalizationRead
     {
-        public Dictionary<string, DictionaryI18n> dicts = new Dictionary<string, DictionaryI18n>();
+        public static Dictionary<string, DictionaryI18n> dicts = new Dictionary<string, DictionaryI18n>();
 
         /// <summary>
         /// Change all dictionary languages
@@ -18,7 +18,7 @@ namespace Assets.Scripts.Content
         /// <param name="newLang">string for new language</param>
         public static void changeCurrentLangTo(string newLang)
         {
-            foreach (DictionaryI18n d in dicts)
+            foreach (DictionaryI18n d in dicts.Values)
             {
                 d.setCurrentLanguage(newLang);
             }
@@ -350,9 +350,9 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="dict">dictionary name</param>
         /// <returns>dictionary selected</returns>
-        private static DictionaryI18n selectDictionary(string dict)
+        public static DictionaryI18n selectDictionary(string dict)
         {
-            if (!dicts.ContaisKey(dict)) return null;
+            if (!dicts.ContainsKey(dict)) return null;
 
             return dicts[dict];
         }
@@ -363,9 +363,9 @@ namespace Assets.Scripts.Content
         /// <param name="name">dictionary name</param>
         /// <param name="dict">DictionaryI18n data</param>
         /// <returns>void</returns>
-        private static void AddDictionary(string name, DictionaryI18n dict)
+        public static void AddDictionary(string name, DictionaryI18n dict)
         {
-            if (!dicts.ContaisKey(name))
+            if (!dicts.ContainsKey(name))
             {
                 dicts.Add(name, dict);
             }

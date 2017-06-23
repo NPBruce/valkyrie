@@ -201,7 +201,7 @@ public class ContentData {
                     int firstSpace = s.IndexOf(' ');
                     string id = s.Substring(0, firstSpace);
                     string file = s.Substring(firstSpace + 1);
-                    if (!dictFiles.Contains(id))
+                    if (!dictFiles.ContainsKey(id))
                     {
                         dictFiles.Add(id, new List<string>());
                     }
@@ -294,7 +294,7 @@ public class ContentData {
             }
         }
 
-        foreach(KeyValuePair<string, string> kv in cp.localizationFiles)
+        foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
         {
             DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
             if (packageDict == null)
@@ -304,7 +304,7 @@ public class ContentData {
             }
             packageDict.setCurrentLanguage(Game.Get().currentLang);
 
-            localizationRead.AddDictionary(kv.Key, packageDict);
+            LocalizationRead.AddDictionary(kv.Key, packageDict);
         }
 
         loadedPacks.Add(cp.id);
