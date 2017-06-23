@@ -592,6 +592,14 @@ public class Quest
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
+        // Start quest music FIXME music state not saved
+        List<string> music = new List<string>();
+        foreach (AudioData ad in game.cd.audio.Values)
+        {
+            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+        }
+        game.audioControl.Music(music);
+
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
         bool horror;
@@ -1470,8 +1478,8 @@ public class Quest
 
         override public void SetColor(Color c)
         {
-            if (image != null) image.color = c;
-            if (uiText != null) uiText.color = c;
+            if (image != null && image.gameObject != null) image.color = c;
+            if (uiText != null && uiText.gameObject != null) uiText.color = c;
             if (border != null) border.color = c;
         }
 
@@ -1623,6 +1631,8 @@ public class Quest
         virtual public void SetColor(Color c)
         {
             if (image == null)
+                return;
+            if (image.gameObject == null)
                 return;
             image.color = c;
         }

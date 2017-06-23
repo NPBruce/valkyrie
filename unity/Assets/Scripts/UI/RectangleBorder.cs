@@ -24,8 +24,8 @@ public class RectangleBorder{
         {
             for (int side = 0; side < 4; side++)
             {
-                image[side].color = value;
-            }            
+                if (image[side] != null && image[side].gameObject != null) image[side].color = value;
+            }
         }
     }
     

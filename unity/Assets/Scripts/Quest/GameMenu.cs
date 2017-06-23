@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
@@ -112,6 +112,9 @@ public class GameMenu {
         {
             game.cd.LoadContent(pack);
         }
+
+        // Stop music
+        game.audioControl.Music(new List<string>());
 
         // Fetch all of the quest data
         game.quest = new Quest(new QuestData.Quest(path));
