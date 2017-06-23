@@ -1,0 +1,14 @@
+.,English
+BOXED,Erweiterungsboxen
+FANDT,Figuren und Spielplanteilsammlungen
+CK,Konvertierungskit
+
+MAD09I,Ruf der Wildnis - Ermittler
+MAD09M,Ruf der Wildnis - Monster
+MAD09T,Ruf der Wildnis - Spielplanteile
+MAD06I,Verbotene Alchemie - Ermittler
+MAD06M,Verbotene Alchemie - Monster
+MAD06T,Verbotene Alchemie - Spielplanteile
+MAD01I,Mansions of Madness First Edition Investigators
+MAD01M,Mansions of Madness First Edition Monsters
+MAD01T,Mansions of Madness First Edition Tiles
