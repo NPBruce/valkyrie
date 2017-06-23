@@ -216,6 +216,7 @@ namespace Assets.Scripts.UI
                 text.tag = tag;
                 uiText = text.AddComponent<UnityEngine.UI.Text>();
                 uiText.alignment = TextAnchor.MiddleCenter;
+                uiText.verticalOverflow = VerticalWrapMode.Overflow;
                 uiText.font = Game.Get().gameType.GetFont();
                 uiText.fontSize = UIScaler.GetSmallFont();
                 text.transform.SetParent(bg.transform);

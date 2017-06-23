@@ -96,7 +96,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcD2E.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 14.2f, 10, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 14.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -129,7 +129,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcMoM.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 10) / 2, 23.2f, 10, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 23.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
