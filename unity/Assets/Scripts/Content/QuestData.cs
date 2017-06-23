@@ -1848,7 +1848,11 @@ public class QuestData
             {
                 localizationDict = DictionaryI18n.ReadFromFileList
                     (path + "/", localizationData.Keys, defaultLanguage, Game.Get().currentLang);
-
+                if (localizationDict == null)
+                {
+                    // Unable to load dictionary
+                    return;
+                }
                 localizationDict.setDefaultLanguage(defaultLanguage);
                 localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }

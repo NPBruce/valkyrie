@@ -146,6 +146,8 @@ namespace Assets.Scripts.Content
         /// <param name="dictToCombine"></param>
         public void AddRaw(DictionaryI18n dictToCombine)
         {
+            if (dictToCombine == null) return;
+            
             if (dict.Count == 0 && dictToCombine.dict.Count == 0)
             {
                 bool found = false;
