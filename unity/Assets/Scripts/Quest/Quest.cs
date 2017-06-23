@@ -1961,7 +1961,7 @@ public class Quest
             string nl = System.Environment.NewLine;
 
             // Section name must be unique
-            string r = "[Monster" + monsterData.sectionName + "]" + nl;
+            string r = "[Monster" + monsterData.sectionName + duplicate + "]" + nl;
             r += "activated=" + activated + nl;
             r += "type=" + monsterData.sectionName + nl;
             r += "minionStarted=" + minionStarted + nl;
