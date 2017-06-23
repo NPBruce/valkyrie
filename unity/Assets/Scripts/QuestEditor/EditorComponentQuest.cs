@@ -248,7 +248,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (descriptionUIE.Empty())
             {
-                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.description_key);
             }
             else
             {
@@ -263,7 +263,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (authorsUIE.Empty())
             {
-                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.authors_key);
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.authors_key);
             }
             else
             {

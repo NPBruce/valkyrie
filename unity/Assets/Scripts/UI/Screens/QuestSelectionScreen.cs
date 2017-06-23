@@ -43,7 +43,7 @@ namespace Assets.Scripts.UI.Screens
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count == 0)
                 {
                     string key = q.Key;
-                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
                     string translation = q.Value.name.Translate();
 
                     // Frame
@@ -125,7 +125,7 @@ namespace Assets.Scripts.UI.Screens
                 if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
                 {
                     string key = q.Key;
-                    LocalizationRead.scenarioDict = q.Value.localizationDict;
+                    LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
                     string translation = q.Value.name.Translate();
 
                     // Size is 1.2 to be clear of characters with tails

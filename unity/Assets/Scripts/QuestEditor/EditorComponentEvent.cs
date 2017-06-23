@@ -606,7 +606,7 @@ public class EditorComponentEvent : EditorComponent
         {
             if (eventTextUIE.Empty())
             {
-                LocalizationRead.scenarioDict.Remove(eventComponent.text_key);
+                LocalizationRead.dicts["qst"].Remove(eventComponent.text_key);
                 eventComponent.display = false;
             }
             else
@@ -1109,7 +1109,7 @@ public class EditorComponentEvent : EditorComponent
         eventComponent.nextEvent.RemoveAt(count - 1);
         eventComponent.buttons.RemoveAt(count - 1);
         eventComponent.buttonColors.RemoveAt(count - 1);
-        LocalizationRead.scenarioDict.Remove(eventComponent.genKey("button" + count));
+        LocalizationRead.dicts["qst"].Remove(eventComponent.genKey("button" + count));
         Update();
     }
 
