@@ -1,0 +1,14 @@
+.,English
+BOXED,Boxed Expansions
+FANDT,Figure and Tile Collection
+CK,Conversion Kit
+
+MAD09I,Call of the Wild Investigators
+MAD09M,Call of the Wild Monsters
+MAD09T,Call of the Wild Tiles
+MAD06I,Forbidden Alchemy Investigators
+MAD06M,Forbidden Alchemy Monsters
+MAD06T,Forbidden Alchemy Tiles
+MAD01I,Mansions of Madness First Edition Investigators
+MAD01M,Mansions of Madness First Edition Monsters
+MAD01T,Mansions of Madness First Edition Tiles

@@ -196,7 +196,7 @@ public class ContentData {
             // No extra files is valid
             if (d.Get("LanguageData") != null)
             {
-                foreach (string s in d.Get("ContentPackData").Keys)
+                foreach (string s in d.Get("LanguageData").Keys)
                 {
                     int firstSpace = s.IndexOf(' ');
                     string id = s.Substring(0, firstSpace);
