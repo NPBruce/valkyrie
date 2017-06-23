@@ -294,7 +294,7 @@ public class ContentData {
             }
         }
 
-        foreach(KeyValuePair kv in cp.localizationFiles)
+        foreach(KeyValuePair<string, string> kv in cp.localizationFiles)
         {
             DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
             if (packageDict == null)
