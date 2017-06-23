@@ -326,10 +326,10 @@ class SaveManager
                     return;
                 }
 
-                DictionaryI18n tmpDict = LocalizationRead.scenarioDict;
-                LocalizationRead.scenarioDict = q.localizationDict;
+                DictionaryI18n tmpDict = LocalizationRead.selectDictionary("qst");
+                LocalizationRead.AddDictionary("qst", q.localizationDict);
                 quest = q.name.Translate();
-                LocalizationRead.scenarioDict = tmpDict;
+                LocalizationRead.AddDictionary("qst", tmpDict);
 
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
 

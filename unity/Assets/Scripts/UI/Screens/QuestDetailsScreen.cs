@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI.Screens
         public QuestDetailsScreen(QuestData.Quest q)
         {
             Game game = Game.Get();
-            LocalizationRead.scenarioDict = q.localizationDict;
+            LocalizationRead.AddDictionary("qst", q.localizationDict);
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Object.Destroy(go);

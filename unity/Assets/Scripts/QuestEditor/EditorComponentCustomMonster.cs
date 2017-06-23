@@ -452,7 +452,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void ClearName()
     {
-        LocalizationRead.scenarioDict.Remove(monsterComponent.monstername_key);
+        LocalizationRead.dicts["qst"].Remove(monsterComponent.monstername_key);
         Update();
     }
 
@@ -472,7 +472,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void ClearInfo()
     {
-        LocalizationRead.scenarioDict.Remove(monsterComponent.info_key);
+        LocalizationRead.dicts["qst"].Remove(monsterComponent.info_key);
         Update();
     }
 

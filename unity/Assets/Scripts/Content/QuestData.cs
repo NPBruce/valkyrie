@@ -103,8 +103,8 @@ public class QuestData
         }
 
         // Reset scenario dict
-        LocalizationRead.scenarioDict = DictionaryI18n.ReadFromFileList
-            ("",localizationFiles,game.currentLang,game.currentLang);
+        LocalizationRead.AddDictionary("qst", DictionaryI18n.ReadFromFileList
+            ("",localizationFiles,game.currentLang,game.currentLang));
 
         foreach (string f in iniFiles)
         {
@@ -132,7 +132,7 @@ public class QuestData
                 foreach (KeyValuePair<string, string> kv in rename)
                 {
                     qc.ChangeReference(kv.Key, kv.Value);
-                    LocalizationRead.scenarioDict.RenamePrefix(kv.Key + ".", kv.Value + ".");
+                    LocalizationRead.dicts["qst"].RenamePrefix(kv.Key + ".", kv.Value + ".");
                 }
             }
         }
@@ -1863,7 +1863,7 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
-            localizationDict = LocalizationRead.scenarioDict;
+            localizationDict = LocalizationRead.dicts["qst"];
             if (localizationDict == null)
             {
                 localizationDict = new DictionaryI18n(

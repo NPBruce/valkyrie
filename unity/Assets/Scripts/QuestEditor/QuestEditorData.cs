@@ -520,7 +520,7 @@ public class QuestEditorData {
             game.quest.qd.components.Remove(name);
         }
 
-        LocalizationRead.scenarioDict.RemoveKeyPrefix(name + ".");
+        LocalizationRead.dicts["qst"].RemoveKeyPrefix(name + ".");
 
         // Clean up the current quest environment
         game.quest.Remove(name);

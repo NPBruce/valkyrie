@@ -230,18 +230,18 @@ namespace Assets.Scripts.UI.Screens
         private void loadLocalization()
         {
             // After content import, we load the localization file
-            if (LocalizationRead.ffgDict == null)
+            if (LocalizationRead.selectDictionary("ffg") == null)
             {
                 // FFG default language is always English
-                LocalizationRead.ffgDict = new DictionaryI18n(
+                LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
                     System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
                     DictionaryI18n.DEFAULT_LANG,
-                    Game.Get().currentLang);
+                    Game.Get().currentLang));
 
                 // Hack for Dunwich Horror
                 if (System.IO.File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
                 {
-                    LocalizationRead.ffgDict.Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
+                    LocalizationRead.selectDictionary("ffg").Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
                         DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
                 }
             }

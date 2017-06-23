@@ -109,7 +109,7 @@ public class QuestDownload : MonoBehaviour
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
             string file = kv.Key + ".valkyrie";
-            LocalizationRead.scenarioDict = localizationDict;
+            LocalizationRead.AddDictionary("qst", localizationDict);
             string questName = new StringKey("qst", kv.Key + ".name").Translate();
 
             int remoteFormat = 0;

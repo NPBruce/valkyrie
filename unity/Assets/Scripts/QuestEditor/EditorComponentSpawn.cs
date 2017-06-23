@@ -310,8 +310,8 @@ public class EditorComponentSpawn : EditorComponentEvent
         spawnComponent.unique = !spawnComponent.unique;
         if (!spawnComponent.unique)
         {
-            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetitle_key);
-            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetext_key);
+            LocalizationRead.dicts["qst"].Remove(spawnComponent.uniquetitle_key);
+            LocalizationRead.dicts["qst"].Remove(spawnComponent.uniquetext_key);
         }
         else
         {

@@ -308,7 +308,7 @@ public class EditorComponentUI : EditorComponentEvent
         Game.Get().quest.Add(uiComponent.sectionName);
         if (uiComponent.imageName.Length > 0)
         {
-            LocalizationRead.scenarioDict.Remove(uiComponent.uitext_key);
+            LocalizationRead.dicts["qst"].Remove(uiComponent.uitext_key);
             uiComponent.border = false;
             uiComponent.aspect = 1;
         }
