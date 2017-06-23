@@ -191,6 +191,26 @@ public class ContentData {
             // Save list of files
             pack.iniFiles = files;
 
+            // Get all the other ini files in the pack
+            Dictionary<string, List<string>> dictFiles = new Dictionary<string, List<string>>();
+            // No extra files is valid
+            if (d.Get("LanguageData") != null)
+            {
+                foreach (string s in d.Get("ContentPackData").Keys)
+                {
+                    int firstSpace = s.IndexOf(' ');
+                    string id = s.Substring(0, firstSpace);
+                    string file = s.Substring(firstSpace + 1);
+                    if (!dictFiles.Contains(id))
+                    {
+                        dictFiles.Add(id, new List<string>());
+                    }
+                    dictFiles[id].Add(path + "/" + file);
+                }
+            }
+            // Save list of files
+            pack.localizationFiles = dictFiles;
+
             // Add content pack
             allPacks.Add(pack);
 
@@ -273,6 +293,20 @@ public class ContentData {
                 AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
             }
         }
+
+        foreach(KeyValuePair kv in cp.localizationFiles)
+        {
+            DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
+            if (packageDict == null)
+            {
+                // Unable to load dictionary
+                return;
+            }
+            packageDict.setCurrentLanguage(Game.Get().currentLang);
+
+            localizationRead.AddDictionary(kv.Key, packageDict);
+        }
+
         loadedPacks.Add(cp.id);
 
         foreach (string s in cp.clone)
@@ -704,6 +738,7 @@ public class ContentData {
         public string id;
         public string type;
         public List<string> iniFiles;
+        public Dictionary<string, List<string>> localizationFiles;
         public List<string> clone;
     }
 
