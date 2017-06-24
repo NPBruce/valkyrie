@@ -73,6 +73,7 @@ public class Destroyer {
             game.tokenBoard.tc.Clear();
         }
         game.editMode = false;
+        game.testMode = false;
     }
 
     // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed

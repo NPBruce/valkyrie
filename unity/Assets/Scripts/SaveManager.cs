@@ -16,7 +16,7 @@ class SaveManager
         Game game = Game.Get();
         string number = num.ToString();
         if (num == 0) number = "Auto";
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
+        return Game.AppData() + "/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
@@ -28,19 +28,19 @@ class SaveManager
     public static void SaveWithScreen(int num, bool quit = false)
     {
         Game game = Game.Get();
-        try
+        //try
         {
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie"))
+            if (!Directory.Exists(Game.AppData()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie");
+                Directory.CreateDirectory(Game.AppData());
             }
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName()))
+            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName()))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName());
+                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName());
             }
-            if (!Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save"))
+            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName() + "/Save"))
             {
-                Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie/" + game.gameType.TypeName() + "/Save");
+                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName() + "/Save");
             }
 
             if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
@@ -76,7 +76,12 @@ class SaveManager
                 {
                     for(int ix = xXFrom; ix < xXTo; ix++)
                     {
-                        oColorTemp += screenColor[(int)(((float)iy * screenSize.x) + ix)];
+                        int index = (int)(((float)iy * screenSize.x) + ix);
+                        if (index >= screenColor.Length || index < 0)
+                        {
+                            continue;
+                        }
+                        oColorTemp += screenColor[index];
                         xGridCount++;
                     }
                 }
@@ -93,9 +98,9 @@ class SaveManager
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }
-        catch (System.Exception e)
+        //catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
+        //    ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
         if (quit)
         {
@@ -188,7 +193,30 @@ class SaveManager
                 foreach (KeyValuePair<string, string> kv in packs)
                 {
                     game.cd.LoadContentID("");
-                    game.cd.LoadContentID(kv.Key);
+
+                    // Support for save games from 1.2 and older
+                    if (kv.Key.Equals("FA"))
+                    {
+                        game.cd.LoadContentID("FAI");
+                        game.cd.LoadContentID("FAM");
+                        game.cd.LoadContentID("FAT");
+                    }
+                    if (kv.Key.Equals("CotW"))
+                    {
+                        game.cd.LoadContentID("CotWI");
+                        game.cd.LoadContentID("CotWM");
+                        game.cd.LoadContentID("CotWT");
+                    }
+                    if (kv.Key.Equals("MoM1E"))
+                    {
+                        game.cd.LoadContentID("MoM1EI");
+                        game.cd.LoadContentID("MoM1EM");
+                        game.cd.LoadContentID("MoM1ET");
+                    }
+                    else
+                    {
+                        game.cd.LoadContentID(kv.Key);
+                    }
                 }
 
                 // This loads the game
@@ -321,10 +349,10 @@ class SaveManager
                     return;
                 }
 
-                DictionaryI18n tmpDict = LocalizationRead.scenarioDict;
-                LocalizationRead.scenarioDict = q.localizationDict;
+                DictionaryI18n tmpDict = LocalizationRead.selectDictionary("qst");
+                LocalizationRead.AddDictionary("qst", q.localizationDict);
                 quest = q.name.Translate();
-                LocalizationRead.scenarioDict = tmpDict;
+                LocalizationRead.AddDictionary("qst", tmpDict);
 
                 string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
 

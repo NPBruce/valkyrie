@@ -69,10 +69,10 @@ public class QuestEditor {
         try
         {
             // first we serialize dictionary to know the available languages
-            if (LocalizationRead.scenarioDict != null)
+            if (LocalizationRead.selectDictionary("qst") != null)
             {
                 Dictionary<string, List<string>> localization_files =
-                    LocalizationRead.scenarioDict.SerializeMultiple();
+                    LocalizationRead.dicts["qst"].SerializeMultiple();
 
                 // Append to the end of the content file the languages files
                 questData.AppendLine().AppendLine("[QuestText]");

@@ -452,7 +452,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void ClearName()
     {
-        LocalizationRead.scenarioDict.Remove(monsterComponent.monstername_key);
+        LocalizationRead.dicts["qst"].Remove(monsterComponent.monstername_key);
         Update();
     }
 
@@ -472,7 +472,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void ClearInfo()
     {
-        LocalizationRead.scenarioDict.Remove(monsterComponent.info_key);
+        LocalizationRead.dicts["qst"].Remove(monsterComponent.info_key);
         Update();
     }
 
@@ -715,7 +715,6 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionList select = new UIWindowSelectionList(SelectImagePlace, SELECT_IMAGE);
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1));

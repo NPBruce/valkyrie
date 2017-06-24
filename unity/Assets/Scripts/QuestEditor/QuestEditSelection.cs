@@ -22,10 +22,11 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Heading
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3),
-            new StringKey("val","SELECT",game.gameType.QuestName()));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
@@ -33,14 +34,13 @@ public class QuestEditSelection
 
         // List of quests
         int offset = 0;
-        TextButton tb;
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            LocalizationRead.scenarioDict = q.Value.localizationDict;
+            LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
 
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
             ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
             ui.SetButton(delegate { Selection(key); });
@@ -50,22 +50,37 @@ public class QuestEditSelection
         scrollArea.SetScrollSize(offset);
 
         // Main menu
-        tb = new TextButton(
-            new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Cancel(); }, Color.red);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Cancel);
+        new UIElementBorder(ui, Color.red);
         // Delete a user quest
-        tb = new TextButton(
-            new Vector2((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.DELETE, delegate { Delete(); }, Color.red);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetRight() * 3 / 8) - 4, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.DELETE, Color.red);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Delete);
+        new UIElementBorder(ui, Color.red);
         // Copy a quest
-        tb = new TextButton(
-            new Vector2((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.COPY, delegate { Copy(); });
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation((UIScaler.GetRight() * 5 / 8) - 4, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.COPY);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Copy);
+        new UIElementBorder(ui);
         // Create a new quest
-        tb = new TextButton(
-            new Vector2(UIScaler.GetRight(-9), UIScaler.GetBottom(-3)), new Vector2(8, 2), 
-            CommonStringKeys.NEW, delegate { NewQuest(); });
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetRight(-9), UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.NEW);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(NewQuest);
+        new UIElementBorder(ui);
     }
 
     public void Cancel()
@@ -83,38 +98,42 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Header
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3),
-            new StringKey("val","SELECT_TO_DELETE", game.gameType.QuestName()));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT_TO_DELETE",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
         new UIElementBorder(scrollArea);
 
         // List of quests
-        int offset = 5;
-        TextButton tb;
+        int offset = 0;
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            LocalizationRead.scenarioDict = q.Value.localizationDict;
+            LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
 
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",translation), delegate { Delete(key); }, Color.black, offset);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 0f, 0f);
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
+            ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
+            ui.SetTextAlignment(TextAnchor.MiddleLeft);
+            ui.SetButton(delegate { Delete(key); });
+            ui.SetBGColor(Color.red);
             offset += 2;
         }
         scrollArea.SetScrollSize(offset - 5);
 
         // Back to edit list
-        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { CancelDelete(); }, Color.red);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(CancelDelete);
+        new UIElementBorder(ui, Color.red);
     }
 
     // Delete quest
@@ -152,44 +171,52 @@ public class QuestEditSelection
             Object.Destroy(go);
 
         // Header
-        DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-            new StringKey("val","SELECT_TO_COPY", game.gameType.QuestName())
-            );
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(Game.Get().gameType.GetHeaderFont());
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(new StringKey("val","SELECT_TO_COPY",game.gameType.QuestName()));
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
         scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
         new UIElementBorder(scrollArea);
 
         // List of quests
-        int offset = 5;
-        TextButton tb;
+        int offset = 0;
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
-            LocalizationRead.scenarioDict = q.Value.localizationDict;
-            tb = new TextButton(new Vector2(2, offset), new Vector2(UIScaler.GetWidthUnits() - 5, 1.2f),
-                new StringKey("val","INDENT",q.Value.name), delegate { Copy(key); }, Color.black, offset);
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
+            LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
+
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
+            ui.SetText(new StringKey("val", "INDENT", q.Value.name), Color.black);
+            ui.SetTextAlignment(TextAnchor.MiddleLeft);
+            ui.SetButton(delegate { Copy(key); });
+            ui.SetBGColor(Color.white);
             offset += 2;
         }
         scrollArea.SetScrollSize(offset - 5);
 
         // Back to edit selection
-        tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),CommonStringKeys.BACK, delegate { CancelCopy(); }, Color.red);
-        tb.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(CancelCopy);
+        new UIElementBorder(ui, Color.red);
     }
 
     // Copy a quest
     public void Copy(string key)
     {
         Game game = Game.Get();
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/Editor";
+        if (!Directory.Exists(dataLocation))
+        {
+            Directory.CreateDirectory(dataLocation);
+        }
 
         // Find a new unique directory name
         int i = 1;
@@ -277,7 +304,11 @@ public class QuestEditSelection
     public void NewQuest()
     {
         Game game = Game.Get();
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/Editor";
+        if (!Directory.Exists(dataLocation))
+        {
+            Directory.CreateDirectory(dataLocation);
+        }
 
         // Find an available unique directory name
         int i = 1;

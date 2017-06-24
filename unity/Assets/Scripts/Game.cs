@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 
 // General controller for the game
@@ -62,6 +63,8 @@ public class Game : MonoBehaviour {
     public LogWindow logWindow;
     // Class for stage control UI
     public Audio audioControl;
+    // Quest started as test from editor
+    public bool testMode = false;
 
     // Import thread
     public GameSelectionScreen gameSelect;
@@ -112,7 +115,7 @@ public class Game : MonoBehaviour {
         try
         {
             TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
-            LocalizationRead.valkyrieDict = LocalizationRead.ReadFromTextAsset(localizationFile, currentLang);
+            LocalizationRead.AddDictionary("val", LocalizationRead.ReadFromTextAsset(localizationFile, currentLang));
             LocalizationRead.changeCurrentLangTo(currentLang);
         }
         catch (System.Exception e)
@@ -194,34 +197,30 @@ public class Game : MonoBehaviour {
         heroCanvas.SetupUI();
 
         // Add a finished button to start the quest
-        TextButton endSelection = new TextButton(
-            new Vector2(UIScaler.GetRight(-8.5f), 
-            UIScaler.GetBottom(-2.5f)), 
-            new Vector2(8, 2), 
-            CommonStringKeys.FINISHED, 
-            delegate { EndSelection(); }, 
-            Color.green);
-
-        endSelection.SetFont(gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away during hero selection
-        endSelection.ApplyTag(Game.HEROSELECT);
+        UIElement ui = new UIElement(Game.HEROSELECT);
+        ui.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f), 8, 2);
+        ui.SetText(CommonStringKeys.FINISHED, Color.green);
+        ui.SetFont(gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(EndSelection);
+        new UIElementBorder(ui, Color.green);
 
         // Add a title to the page
-        DialogBox db = new DialogBox(
-            new Vector2(8, 1), 
-            new Vector2(UIScaler.GetWidthUnits() - 16, 3), 
-            new StringKey("val","SELECT",gameType.HeroesName())
-            );
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(gameType.GetHeaderFont());
-        db.ApplyTag(Game.HEROSELECT);
+        ui = new UIElement(Game.HEROSELECT);
+        ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3);
+        ui.SetText(new StringKey("val","SELECT",gameType.HeroesName()));
+        ui.SetFont(gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         heroCanvas.heroSelection = new HeroSelection();
 
-        TextButton cancelSelection = new TextButton(new Vector2(0.5f, UIScaler.GetBottom(-2.5f)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.QuestSelect(); }, Color.red);
-        cancelSelection.SetFont(gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away during hero selection
-        cancelSelection.ApplyTag(Game.HEROSELECT);
+        ui = new UIElement(Game.HEROSELECT);
+        ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.QuestSelect);
+        new UIElementBorder(ui, Color.red);
     }
     
     // HeroCanvas validates selection and starts quest if everything is good
@@ -283,6 +282,12 @@ public class Game : MonoBehaviour {
             qed.MouseDown();
         }
 
+        // 0 is the left mouse button
+        if (qed != null && Input.GetMouseButtonDown(1))
+        {
+            qed.RightClick();
+        }
+
         if (quest != null)
         {
             quest.Update();
@@ -300,5 +305,41 @@ public class Game : MonoBehaviour {
         {
             gameSelect.Update();
         }
+    }
+
+    public static string AppData()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            try
+            {
+                System.IntPtr obj_context = AndroidJNI.FindClass("android/content/ContextWrapper");
+                System.IntPtr method_getFilesDir = AndroidJNIHelper.GetMethodID(obj_context, "getFilesDir", "()Ljava/io/File;");
+
+                using (AndroidJavaClass cls_UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                {
+                    using (AndroidJavaObject obj_Activity = cls_UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+                    {
+                        System.IntPtr file = AndroidJNI.CallObjectMethod(obj_Activity.GetRawObject(), method_getFilesDir, new jvalue[0]);
+                        System.IntPtr obj_file = AndroidJNI.FindClass("java/io/File");
+                        System.IntPtr method_getAbsolutePath = AndroidJNIHelper.GetMethodID(obj_file, "getAbsolutePath", "()Ljava/lang/String;");
+
+                        string path = AndroidJNI.CallStringMethod(file, method_getAbsolutePath, new jvalue[0]);
+
+                        if (path != null)
+                        {
+                            ValkyrieDebug.Log(path);
+                            return path;
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log(e.ToString());
+            }
+            return "";
+        }
+        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
     }
 }

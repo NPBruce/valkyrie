@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using ValkyrieTools;
 
 namespace FFGAppImport
 {
@@ -45,6 +46,11 @@ namespace FFGAppImport
         override public int ObfuscateKey()
         {
             return 68264378;
+        }
+
+        public override string ObbPath()
+        {
+            return Android.GetStorage() + "/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
         }
     }
 }

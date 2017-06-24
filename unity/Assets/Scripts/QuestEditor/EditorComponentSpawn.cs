@@ -28,8 +28,6 @@ public class EditorComponentSpawn : EditorComponentEvent
     UIElementEditable healthUIE;
     UIElementEditable healthHeroUIE;
 
-    EditorSelectionList monsterTraitESL;
-
     public EditorComponentSpawn(string nameIn) : base(nameIn)
     {
     }
@@ -312,8 +310,8 @@ public class EditorComponentSpawn : EditorComponentEvent
         spawnComponent.unique = !spawnComponent.unique;
         if (!spawnComponent.unique)
         {
-            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetitle_key);
-            LocalizationRead.scenarioDict.Remove(spawnComponent.uniquetext_key);
+            LocalizationRead.dicts["qst"].Remove(spawnComponent.uniquetitle_key);
+            LocalizationRead.dicts["qst"].Remove(spawnComponent.uniquetext_key);
         }
         else
         {
@@ -459,8 +457,13 @@ public class EditorComponentSpawn : EditorComponentEvent
 
     public void MonsterTraitReplace(int pos, bool pool = false)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             foreach (string s in kv.Value.traits)
@@ -468,32 +471,37 @@ public class EditorComponentSpawn : EditorComponentEvent
                 traits.Add(s);
             }
         }
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectMonsterTraitReplace(pos, pool, s); }, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
         foreach (string s in traits)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
+            select.AddItem(new StringKey("val", s));
         }
-        monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTraitReplace(pos, pool); });
-        monsterTraitESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectMonsterTraitReplace(int pos, bool pool = false)
+    public void SelectMonsterTraitReplace(int pos, bool pool, string trait)
     {
         if (pool)
         {
-            spawnComponent.mTraitsPool[pos] = monsterTraitESL.selection;
+            spawnComponent.mTraitsPool[pos] = trait;
         }
         else
         {
-            spawnComponent.mTraitsRequired[pos] = monsterTraitESL.selection;
+            spawnComponent.mTraitsRequired[pos] = trait;
         }
         Update();
     }
 
     public void MonsterTraitsAdd(bool pool = false)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
+
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
             foreach (string s in kv.Value.traits)
@@ -502,16 +510,15 @@ public class EditorComponentSpawn : EditorComponentEvent
             }
         }
 
-        List<EditorSelectionList.SelectionListEntry> list = new List<EditorSelectionList.SelectionListEntry>();
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectMonsterTrait(pool, s); }, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
         foreach (string s in traits)
         {
-            list.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(s));
+            select.AddItem(new StringKey("val", s));
         }
-        monsterTraitESL = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, list, delegate { SelectMonsterTrait(pool); });
-        monsterTraitESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectMonsterTrait(bool pool = false)
+    public void SelectMonsterTrait(bool pool, string trait)
     {
         if (pool)
         {
@@ -523,7 +530,7 @@ public class EditorComponentSpawn : EditorComponentEvent
                 newM[i] = spawnComponent.mTraitsPool[i];
             }
 
-            newM[i] = monsterTraitESL.selection;
+            newM[i] = trait;
             spawnComponent.mTraitsPool = newM;
         }
         else
@@ -536,7 +543,7 @@ public class EditorComponentSpawn : EditorComponentEvent
                 newM[i] = spawnComponent.mTraitsRequired[i];
             }
 
-            newM[i] = monsterTraitESL.selection;
+            newM[i] = trait;
             spawnComponent.mTraitsRequired = newM;
         }
         Update();

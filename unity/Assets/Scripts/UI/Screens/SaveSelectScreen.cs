@@ -31,23 +31,21 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             float offset = 1f;
+            UIElement ui = null;
             if (save)
             {
                 offset += 2;
-                new DialogBox(new Vector2(UIScaler.GetHCenter(-21), offset), new Vector2(42, 24), StringKey.NULL);
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(-21), offset, 42, 24);
                 offset += 1;
             }
-            // Options screen text
-            DialogBox dbTittle = new DialogBox(
-                new Vector2(UIScaler.GetHCenter(-10), offset),
-                new Vector2(20, 3),
-                SELECT_SAVE
-                );
-            dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            dbTittle.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-10), offset, 20, 3);
+            ui.SetText(SELECT_SAVE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             offset += 4;
-            TextButton tb;
             for (int i = 0; i < saves.Count; i++)
             {
                 int tmp = i;
@@ -60,57 +58,47 @@ namespace Assets.Scripts.UI.Screens
                         name = AUTOSAVE.Translate();
                     }
 
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-20), offset),
-                        new Vector2(40, 4f),
-                        new StringKey(null, "", false),
-                        delegate { Select(tmp); });
+                    ui = new UIElement();
+                    ui.SetLocation(UIScaler.GetHCenter(-20), offset, 40, 4);
+                    ui.SetButton(delegate { Select(tmp); });
+                    new UIElementBorder(ui);
 
                     if (saves[i].image != null)
                     {
                         Sprite imgSprite = Sprite.Create(saves[i].image, new Rect(0, 0, saves[i].image.width, saves[i].image.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-                        tb = new TextButton(
-                            new Vector2(UIScaler.GetHCenter(-20), offset),
-                            new Vector2(4f * (float)saves[i].image.width / (float)saves[i].image.height, 4f),
-                            new StringKey(null, "", false),
-                            delegate { Select(tmp); });
-
-                        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = imgSprite;
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                        ui = new UIElement();
+                        ui.SetLocation(UIScaler.GetHCenter(-20), offset, 4f * (float)saves[i].image.width / (float)saves[i].image.height, 4);
+                        ui.SetButton(delegate { Select(tmp); });
+                        ui.SetImage(imgSprite);
+                        new UIElementBorder(ui);
                     }
 
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-12), offset + 0.5f),
-                        new Vector2(10, 2f),
-                        new StringKey(null, name, false),
-                        delegate { Select(tmp); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.border.Destroy();
+                    ui = new UIElement();
+                    ui.SetLocation(UIScaler.GetHCenter(-12), offset + 0.5f, 10, 2);
+                    ui.SetText(name);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetButton(delegate { Select(tmp); });
 
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-1), offset + 0.5f),
-                        new Vector2(20, 2f),
-                        new StringKey(null, saves[i].saveTime.ToString(), false),
-                        delegate { Select(tmp); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleRight;
-                    tb.border.Destroy();
+                    ui = new UIElement();
+                    ui.SetLocation(UIScaler.GetHCenter(-1), offset + 0.5f, 20, 2);
+                    ui.SetText(saves[i].saveTime.ToString());
+                    ui.SetTextAlignment(TextAnchor.MiddleRight);
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetButton(delegate { Select(tmp); });
 
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-12), offset + 2.6f),
-                        new Vector2(31, 1f),
-                        new StringKey(null, saves[i].quest, false),
-                        delegate { Select(tmp); });
-                    tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    tb.border.Destroy();
+                    ui = new UIElement();
+                    ui.SetLocation(UIScaler.GetHCenter(-12), offset + 2.6f, 31, 1);
+                    ui.SetText(saves[i].quest);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetButton(delegate { Select(tmp); });
                 }
                 else
                 {
-                    tb = new TextButton(
-                        new Vector2(UIScaler.GetHCenter(-20), offset),
-                        new Vector2(40, 4f),
-                        new StringKey(null, "", false),
-                        delegate { Select(tmp); }, Color.gray);
+                    ui = new UIElement();
+                    ui.SetLocation(UIScaler.GetHCenter(-20), offset, 40, 4);
+                    ui.SetButton(delegate { Select(tmp); });
+                    new UIElementBorder(ui, Color.gray);
                 }
                 offset += 5;
             }
@@ -118,16 +106,24 @@ namespace Assets.Scripts.UI.Screens
             if (save)
             {
                 // Button for cancel
-                tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4), 24), new Vector2(8, 2),
-                    CommonStringKeys.CANCEL, delegate { Destroyer.Dialog(); });
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(-4), 24, 8, 2);
+                ui.SetText(CommonStringKeys.CANCEL);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(Destroyer.Dialog);
+                new UIElementBorder(ui);
             }
             else
             {
                 // Button for back to main menu
-                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2),
-                    CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+                ui = new UIElement();
+                ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+                ui.SetText(CommonStringKeys.BACK, Color.red);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(Destroyer.MainMenu);
+                new UIElementBorder(ui, Color.red);
             }
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFont(game.gameType.GetHeaderFont());
         }
 
         public void Select(int num)

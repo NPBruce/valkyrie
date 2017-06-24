@@ -10,9 +10,7 @@ namespace Assets.Scripts.Content
     // This exists because .NET/Mono doesn't have one!!
     public static class LocalizationRead
     {
-        public static DictionaryI18n ffgDict = null;
-        public static DictionaryI18n valkyrieDict = null;
-        public static DictionaryI18n scenarioDict = null;
+        public static Dictionary<string, DictionaryI18n> dicts = new Dictionary<string, DictionaryI18n>();
 
         /// <summary>
         /// Change all dictionary languages
@@ -20,17 +18,9 @@ namespace Assets.Scripts.Content
         /// <param name="newLang">string for new language</param>
         public static void changeCurrentLangTo(string newLang)
         {
-            if (ffgDict != null)
+            foreach (DictionaryI18n d in dicts.Values)
             {
-                ffgDict.setCurrentLanguage(newLang);
-            }
-            if (valkyrieDict != null)
-            {
-                valkyrieDict.setCurrentLanguage(newLang);
-            }
-            if (scenarioDict != null)
-            {
-                scenarioDict.setCurrentLanguage(newLang);
+                d.setCurrentLanguage(newLang);
             }
         }
 
@@ -96,14 +86,13 @@ namespace Assets.Scripts.Content
             string output = input.fullKey;
             // While there are more lookups
 
-            string regexKey = "{(ffg|val|qst):";
             // Count the number of replaces. One lookup should not replace more than RECURSIVE_LIMIT elements.
             int recursiveCount = 0;
 
             //while (output.IndexOf("{ffg:") != -1)
-            while (Regex.Match(output,regexKey).Success && recursiveCount < RECURSIVE_LIMIT)
+            while (Regex.Match(output, LookupRegexKey()).Success && recursiveCount < RECURSIVE_LIMIT)
             {
-                int pos = Regex.Match(output, regexKey).Index;
+                int pos = Regex.Match(output, LookupRegexKey()).Index;
                 // Can be nested
                 int bracketLevel = 1;
                 // Start of lookup
@@ -169,10 +158,9 @@ namespace Assets.Scripts.Content
             string output = input.fullKey;
             // While there are more lookups
 
-            string regexKey = "{(ffg|val|qst):";
-            if (!Regex.Match(output, regexKey).Success) return false;
+            if (!Regex.Match(output, LookupRegexKey()).Success) return false;
 
-            int pos = Regex.Match(output, regexKey).Index;
+            int pos = Regex.Match(output, LookupRegexKey()).Index;
             // Can be nested
             int bracketLevel = 1;
             // Start of lookup
@@ -301,10 +289,10 @@ namespace Assets.Scripts.Content
         {
             EntryI18n entry;
             // Search for localization string 
-            if (!scenarioDict.tryGetValue(key, out entry))
+            if (!dicts["qst"].tryGetValue(key, out entry))
             {
                 // if not exists, we create a new one
-                entry = new EntryI18n(key,scenarioDict);
+                entry = new EntryI18n(key, dicts["qst"]);
             }
 
             entry.currentLanguageString = text;
@@ -319,10 +307,10 @@ namespace Assets.Scripts.Content
         {
             EntryI18n entry;
             // Search for localization string 
-            if (scenarioDict.tryGetValue(oldKey, out entry))
+            if (dicts["qst"].tryGetValue(oldKey, out entry))
             {
                 entry.key = newKey;
-                scenarioDict.Add(entry);
+                dicts["qst"].Add(entry);
             }
         }
 
@@ -360,19 +348,43 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="dict">dictionary name</param>
         /// <returns>dictionary selected</returns>
-        private static DictionaryI18n selectDictionary(string dict)
+        public static DictionaryI18n selectDictionary(string dict)
         {
-            switch (dict)
+            if (!dicts.ContainsKey(dict)) return null;
+
+            return dicts[dict];
+        }
+
+        /// <summary>
+        /// Add a new dictionary, replaces if exists
+        /// </summary>
+        /// <param name="name">dictionary name</param>
+        /// <param name="dict">DictionaryI18n data</param>
+        /// <returns>void</returns>
+        public static void AddDictionary(string name, DictionaryI18n dict)
+        {
+            if (!dicts.ContainsKey(name))
             {
-                case "ffg":
-                    return ffgDict;
-                case "val":
-                    return valkyrieDict;
-                case "qst":
-                    return scenarioDict;
-                default:
-                    return null;
+                dicts.Add(name, dict);
             }
+            else
+            {
+                dicts[name] = dict;
+            }
+        }
+
+        /// <summary>
+        /// Get a regex pattern to check if is it a valid lookup key
+        /// </summary>
+        /// <returns>regex string</returns>
+        public static string LookupRegexKey()
+        {
+            string regexKey = "{(";
+            foreach (string key in dicts.Keys)
+            {
+                regexKey += key + "|";
+            }
+            return regexKey.Substring(0, regexKey.Length - 1) + "):";
         }
     }
 }

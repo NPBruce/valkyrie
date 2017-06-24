@@ -8,8 +8,6 @@ public class EditorComponentUI : EditorComponentEvent
 {
     QuestData.UI uiComponent;
 
-    EditorSelectionList colorList;
-
     UIElementEditable locXUIE;
     UIElementEditable locYUIE;
     UIElementEditable sizeUIE;
@@ -310,7 +308,7 @@ public class EditorComponentUI : EditorComponentEvent
         Game.Get().quest.Add(uiComponent.sectionName);
         if (uiComponent.imageName.Length > 0)
         {
-            LocalizationRead.scenarioDict.Remove(uiComponent.uitext_key);
+            LocalizationRead.dicts["qst"].Remove(uiComponent.uitext_key);
             uiComponent.border = false;
             uiComponent.aspect = 1;
         }
@@ -384,18 +382,23 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void SetColour()
     {
-        List<EditorSelectionList.SelectionListEntry> colours = new List<EditorSelectionList.SelectionListEntry>();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectColour, CommonStringKeys.SELECT_ITEM);
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
         {
-            colours.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(kv.Key));
+            select.AddItem(new StringKey("val", kv.Key));
         }
-        colorList = new EditorSelectionList(CommonStringKeys.SELECT_ITEM, colours, delegate { SelectColour(); });
-        colorList.SelectItem();
+        select.Draw();
     }
 
-    public void SelectColour()
+    public void SelectColour(string color)
     {
-        uiComponent.textColor = colorList.selection;
+        uiComponent.textColor = color;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         Update();

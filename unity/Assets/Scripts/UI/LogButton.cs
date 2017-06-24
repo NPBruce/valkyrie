@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 // Special class for the Menu button present while in a quest
 public class LogButton
@@ -10,17 +11,18 @@ public class LogButton
     public LogButton()
     {
         Game game = Game.Get();
-        TextButton qb;
         // For the editor button is moved to the right
         if (game.editMode) return;
 
         if (game.gameType is MoMGameType) return;
 
-
-        qb = new TextButton(new Vector2(5.5f, UIScaler.GetBottom(-2.5f)), new Vector2(5, 2), LOG, delegate { Log(); });
-        qb.SetFont(game.gameType.GetHeaderFont());
-        // Untag as dialog so this isn't cleared away
-        qb.ApplyTag(Game.QUESTUI);
+        UIElement ui = new UIElement(Game.QUESTUI);
+        ui.SetLocation(5.5f, UIScaler.GetBottom(-2.5f),5, 2);
+        ui.SetText(LOG);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Log);
+        new UIElementBorder(ui);
     }
 
     // When pressed bring up the approriate menu

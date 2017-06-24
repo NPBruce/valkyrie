@@ -5,7 +5,8 @@ using System.IO;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
-// This class reads and stores all of the content for a base game and expansions
+/// <summary>
+/// This class reads and stores all of the content for a base game and expansions.</summary>
 public class ContentData {
 
     public HashSet<string> loadedPacks;
@@ -27,8 +28,15 @@ public class ContentData {
     public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
 
+    // textureCache is used to store previously loaded textures so they are faster next time
+    // For the editor all defined images are loaded, requires ~1GB RAM
+    // For quests only used tiles/tokens will be loaded
     public static Dictionary<string, Texture2D> textureCache;
 
+    /// <summary>
+    /// Get the path where game content is defined.</summary>
+    /// <returns>
+    /// The path as a string with a trailing '/'.</returns>
     public static string ContentPath()
     {
         if (Application.isEditor)
@@ -39,7 +47,19 @@ public class ContentData {
         return Application.dataPath + "/content/";
     }
 
-    // Constructor takes a path in which to look for content
+    /// <summary>
+    /// Get the path where ffg app content is imported.</summary>
+    /// <returns>
+    /// The path as a string without a trailing '/'.</returns>
+    public static string ImportPath()
+    {
+        return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
+    }
+
+
+    /// <summary>
+    /// Seach the provided path for all content packs and read meta data.</summary>
+    /// <param name="path">Path to search for content packs.</param>
     public ContentData(string path)
     {
         // This is pack type for sorting packs
@@ -132,7 +152,14 @@ public class ContentData {
             pack.id = d.Get("ContentPack", "id");
 
             // If this is invalid we will just handle it later, not fatal
-            pack.image = path + "/" + d.Get("ContentPack", "image");
+            if (d.Get("ContentPack", "image").IndexOf("{import}") == 0)
+            {
+                pack.image = ContentData.ImportPath() + d.Get("ContentPack", "image").Substring(8);
+            }
+            else
+            {
+                pack.image = path + "/" + d.Get("ContentPack", "image");
+            }
 
             // Black description isn't fatal
             pack.description = d.Get("ContentPack", "description");
@@ -163,6 +190,26 @@ public class ContentData {
             }
             // Save list of files
             pack.iniFiles = files;
+
+            // Get all the other ini files in the pack
+            Dictionary<string, List<string>> dictFiles = new Dictionary<string, List<string>>();
+            // No extra files is valid
+            if (d.Get("LanguageData") != null)
+            {
+                foreach (string s in d.Get("LanguageData").Keys)
+                {
+                    int firstSpace = s.IndexOf(' ');
+                    string id = s.Substring(0, firstSpace);
+                    string file = s.Substring(firstSpace + 1);
+                    if (!dictFiles.ContainsKey(id))
+                    {
+                        dictFiles.Add(id, new List<string>());
+                    }
+                    dictFiles[id].Add(path + "/" + file);
+                }
+            }
+            // Save list of files
+            pack.localizationFiles = dictFiles;
 
             // Add content pack
             allPacks.Add(pack);
@@ -246,6 +293,20 @@ public class ContentData {
                 AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
             }
         }
+
+        foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
+        {
+            DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
+            if (packageDict == null)
+            {
+                // Unable to load dictionary
+                return;
+            }
+            packageDict.setCurrentLanguage(Game.Get().currentLang);
+
+            LocalizationRead.AddDictionary(kv.Key, packageDict);
+        }
+
         loadedPacks.Add(cp.id);
 
         foreach (string s in cp.clone)
@@ -677,6 +738,7 @@ public class ContentData {
         public string id;
         public string type;
         public List<string> iniFiles;
+        public Dictionary<string, List<string>> localizationFiles;
         public List<string> clone;
     }
 
@@ -1012,7 +1074,14 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("imageplace"))
         {
-            imagePlace = path + "/" + content["imageplace"];
+            if (content["imageplace"].IndexOf("{import}") == 0)
+            {
+                imagePlace = ContentData.ImportPath() + content["imageplace"].Substring(8);
+            }
+            else
+            {
+                imagePlace = path + "/" + content["imageplace"];
+            }
         }
         else // No image is a valid condition
         {
@@ -1256,7 +1325,14 @@ public class AudioData : GenericData
     {
         if (content.ContainsKey("file"))
         {
-            file = path + "/" + content["file"];
+            if (content["file"].IndexOf("{import}") == 0)
+            {
+                file = ContentData.ImportPath() + content["file"].Substring(8);
+            }
+            else
+            {
+                file = path + "/" + content["file"];
+            }
         }
     }
 }
@@ -1298,8 +1374,6 @@ public class GenericData
             name = new StringKey(null,name_ini.Substring(type.Length));
         }
 
-
-
         priority = 0;
         if (content.ContainsKey("priority"))
         {
@@ -1319,7 +1393,14 @@ public class GenericData
         // absolute paths are not supported
         if (content.ContainsKey("image"))
         {
-            image = path + "/" + content["image"];
+            if (content["image"].IndexOf("{import}") == 0)
+            {
+                image = ContentData.ImportPath() + content["image"].Substring(8);
+            }
+            else
+            {
+                image = path + "/" + content["image"];
+            }
         }
         else // No image is a valid condition
         {

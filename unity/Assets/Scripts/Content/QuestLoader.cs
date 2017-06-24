@@ -16,7 +16,7 @@ public class QuestLoader {
 
         Game game = Game.Get();
         // Look in the user application data directory
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = Game.AppData();
         mkDir(dataLocation);
         CleanTemp();
         // Get a list of quest directories (extract found packages)
@@ -55,7 +55,7 @@ public class QuestLoader {
         CleanTemp();
 
         // Read user application data for quests
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = Game.AppData();
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
 
@@ -83,7 +83,7 @@ public class QuestLoader {
         Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
         // Read user application data for quests
-        string dataLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        string dataLocation = Game.AppData();
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
 

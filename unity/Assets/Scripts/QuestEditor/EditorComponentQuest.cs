@@ -22,8 +22,6 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditablePaneled descriptionUIE;
     public UIElementEditablePaneled authorsUIE;
 
-    EditorSelectionList packESL;
-
     // Quest is a special component with meta data
     public EditorComponentQuest()
     {
@@ -250,7 +248,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (descriptionUIE.Empty())
             {
-                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.description_key);
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.description_key);
             }
             else
             {
@@ -265,7 +263,7 @@ public class EditorComponentQuest : EditorComponent
         {
             if (authorsUIE.Empty())
             {
-                LocalizationRead.scenarioDict.Remove(game.quest.qd.quest.authors_key);
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.authors_key);
             }
             else
             {
@@ -282,21 +280,24 @@ public class EditorComponentQuest : EditorComponent
 
     public void QuestAddPack()
     {
-        List<EditorSelectionList.SelectionListEntry> packs = new List<EditorSelectionList.SelectionListEntry>();
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+        Game game = Game.Get();
 
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectQuestAddPack, SELECT_PACK);
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
         {
             if (pack.id.Length > 0)
             {
-                packs.Add(EditorSelectionList.SelectionListEntry.BuildNameKeyItem(pack.id));
+                select.AddItem(new StringKey("val", pack.id));
             }
         }
-
-        packESL = new EditorSelectionList(SELECT_PACK, packs, delegate { SelectQuestAddPack(); });
-        packESL.SelectItem();
+        select.Draw();
     }
 
-    public void SelectQuestAddPack()
+    public void SelectQuestAddPack(string pack)
     {
         string[] packs = new string[game.quest.qd.quest.packs.Length + 1];
         int i;
@@ -304,7 +305,7 @@ public class EditorComponentQuest : EditorComponent
         {
             packs[i] = game.quest.qd.quest.packs[i];
         }
-        packs[i] = (packESL.selection);
+        packs[i] = pack;
         game.quest.qd.quest.packs = packs;
         Update();
     }

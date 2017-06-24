@@ -15,7 +15,7 @@ namespace Assets.Scripts.UI.Screens
         // List of expansions selected by ID
         public List<string> selected;
 
-        public Dictionary<string, List<TextButton>> buttons;
+        public Dictionary<string, List<UIElement>> buttons;
 
         // Create page
         public ContentSelectScreen()
@@ -51,67 +51,76 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             // Draw a header
-            DialogBox db = new DialogBox(new Vector2(2, 1), new Vector2(UIScaler.GetWidthUnits() - 4, 2), SELECT_EXPANSION);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 2);
+            ui.SetText(SELECT_EXPANSION);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Start here
             float offset = 4.5f;
-            TextButton tb = null;
             bool left = true;
             // Note this is currently unordered
             foreach (PackTypeData type in game.cd.packTypes.Values)
             {
                 // Create a sprite with the category image
                 Texture2D tex = ContentData.FileToTexture(type.image);
-                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
 
                 string typeId = type.sectionName.Substring("PackType".Length);
 
+                ui = new UIElement();
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(typeId); });
+                    ui.SetLocation(2, offset, 6, 6);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { DrawList(typeId); });
+                    ui.SetLocation(UIScaler.GetWidthUnits() - 9, offset, 6, 6);
                 }
-                tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                ui.SetImage(tex);
+                ui.SetButton(delegate { DrawList(typeId); });
+                new UIElementBorder(ui);
 
+                ui = new UIElement();
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), StringKey.NULL, delegate { DrawList(typeId); }, Color.clear);
+                    ui.SetLocation(8, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(10, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), StringKey.NULL, delegate { DrawList(typeId); }, Color.clear);
+                    ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                 }
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                ui.SetBGColor(Color.white);
+                ui.SetButton(delegate { DrawList(typeId); });
 
+                ui = new UIElement();
                 if (left)
                 {
-                    tb = new TextButton(new Vector2(9, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), type.name, delegate { DrawList(typeId); }, Color.black);
+                    ui.SetLocation(9, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
                 }
                 else
                 {
-                    tb = new TextButton(new Vector2(11, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 20, 3), type.name, delegate { DrawList(typeId); }, Color.black);
+                    ui.SetLocation(11, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                 }
-                tb.setColor(Color.clear);
-                tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-                tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-                tb.SetFont(game.gameType.GetHeaderFont());
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                ui.SetBGColor(Color.white);
+                ui.SetText(type.name, Color.black);
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFont(game.gameType.GetHeaderFont());
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { DrawList(typeId); });
 
                 left = !left;
                 offset += 4f;
             }
 
             // Button for back to main menu
-            tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); });
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Destroyer.MainMenu);
+            new UIElementBorder(ui);
         }
 
 
@@ -135,22 +144,19 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw a header
-            DialogBox db = new DialogBox(
-                new Vector2(2, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 2), 
-                SELECT_EXPANSION
-                );
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 2);
+            ui.SetText(SELECT_EXPANSION);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             UIElementScrollVertical scrollArea = new UIElementScrollVertical();
             scrollArea.SetLocation(1, 4, UIScaler.GetWidthUnits() - 2, 22);
             new UIElementBorder(scrollArea);
 
-            buttons = new Dictionary<string, List<TextButton>>();
+            buttons = new Dictionary<string, List<UIElement>>();
             // Start here
-            float offset = 4.5f;
-            TextButton tb = null;
+            float offset = 0.5f;
             bool left = true;
             // Note this is currently unordered
             foreach (ContentData.ContentPack cp in game.cd.allPacks)
@@ -159,7 +165,7 @@ namespace Assets.Scripts.UI.Screens
                 if (cp.id.Length > 0 && cp.type.Equals(type))
                 {
                     string id = cp.id;
-                    buttons.Add(id, new List<TextButton>());
+                    buttons.Add(id, new List<UIElement>());
                     Color bgColor = Color.white;
                     if (!selected.Contains(id))
                     {
@@ -168,94 +174,89 @@ namespace Assets.Scripts.UI.Screens
 
                     // Create a sprite with the pack's image
                     Texture2D tex = ContentData.FileToTexture(cp.image);
-                    Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-
+                    ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
-                        tb = new TextButton(new Vector2(2f, offset), new Vector2(6, 6), StringKey.NULL, delegate { Select(id); });
+                        ui.SetLocation(1, offset, 6, 6);
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(UIScaler.GetWidthUnits() - 9, offset), new Vector2(6, 6), StringKey.NULL, delegate { Select(id); });
+                        ui.SetLocation(UIScaler.GetWidthUnits() - 10, offset, 6, 6);
                     }
-                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
-                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    buttons[id].Add(tb);
+                    ui.SetImage(tex);
+                    ui.SetButton(delegate { Select(id); });
+                    ui.SetBGColor(bgColor);
+                    new UIElementBorder(ui);
+                    buttons[id].Add(ui);
 
+
+                    ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
-                        tb = new TextButton(new Vector2(8, offset + 1.5f), new Vector2(UIScaler.GetWidthUnits() - 19, 3), 
-                            new StringKey("val", "INDENT", game.cd.GetContentName(id)), 
-                            delegate { Select(id); }, Color.clear);
+                        ui.SetLocation(7, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(10, offset + 1.5f), 
-                            new Vector2(UIScaler.GetWidthUnits() - 20, 3), 
-                            new StringKey("val", "INDENT", game.cd.GetContentName(id)), 
-                            delegate { Select(id); }, Color.clear);
+                        ui.SetLocation(9, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                     }
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-                    buttons[id].Add(tb);
+                    ui.SetBGColor(bgColor);
+                    ui.SetButton(delegate { Select(id); });
+                    buttons[id].Add(ui);
 
+                    ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
-                        tb = new TextButton(new Vector2(9, offset + 1.5f), 
-                            new Vector2(UIScaler.GetWidthUnits() - 19, 3), 
-                            new StringKey(null,game.cd.GetContentName(id), false), 
-                            delegate { Select(id); }, Color.black);
+                        ui.SetLocation(8, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
                     }
                     else
                     {
-                        tb = new TextButton(new Vector2(11, offset + 1.5f), 
-                            new Vector2(UIScaler.GetWidthUnits() - 20, 3), 
-                            new StringKey(null, game.cd.GetContentName(id), false), 
-                            delegate { Select(id); }, Color.black);
+                        ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                     }
-                    tb.setColor(Color.clear);
-                    tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-                    tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-                    tb.button.GetComponent<UnityEngine.UI.Text>().alignment = TextAnchor.MiddleLeft;
-                    //tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-                    tb.SetFont(game.gameType.GetHeaderFont());
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = bgColor;
-                    tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-                    buttons[id].Add(tb);
+                    ui.SetBGColor(bgColor);
+                    ui.SetText(game.cd.GetContentName(id), Color.black);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFont(game.gameType.GetHeaderFont());
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetButton(delegate { Select(id); });
+                    buttons[id].Add(ui);
 
                     left = !left;
                     offset += 4f;
                 }
             }
-            scrollArea.SetScrollSize(offset - 1.5f);
+            scrollArea.SetScrollSize(offset + 2.5f);
 
             // Button for back to main menu
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui, Color.red);
             if (game.cd.packTypes.Count > 1)
             {
-                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { DrawTypeList(); }, Color.red);
+                ui.SetButton(DrawTypeList);
             }
             else
             {
-                tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
+                ui.SetButton(Destroyer.MainMenu);
             }
-            tb.SetFont(game.gameType.GetHeaderFont());
         }
         
         public void Update()
         {
-            foreach (KeyValuePair<string, List<TextButton>> kv in buttons)
+            foreach (KeyValuePair<string, List<UIElement>> kv in buttons)
             {
-                foreach (TextButton tb in kv.Value)
+                foreach (UIElement ui in kv.Value)
                 {
                     if (game.config.data.Get(game.gameType.TypeName() + "Packs") != null
                         && game.config.data.Get(game.gameType.TypeName() + "Packs").ContainsKey(kv.Key))
                     {
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                        ui.SetBGColor(Color.white);
                     }
                     else
                     {
-                        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(0.4f, 0.4f, 0.4f);
+                        ui.SetBGColor(new Color(0.4f, 0.4f, 0.4f));
                     }
                 }
             }

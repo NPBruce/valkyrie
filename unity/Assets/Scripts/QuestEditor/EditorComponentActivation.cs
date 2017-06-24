@@ -169,7 +169,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (moveButtonUIE.Empty())
         {
-            LocalizationRead.scenarioDict.Remove(activationComponent.movebutton_key);
+            LocalizationRead.dicts["qst"].Remove(activationComponent.movebutton_key);
         }
         else if (moveButtonUIE.Changed())
         {
@@ -182,7 +182,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (masterActionsUIE.Empty())
         {
-            LocalizationRead.scenarioDict.Remove(activationComponent.master_key);
+            LocalizationRead.dicts["qst"].Remove(activationComponent.master_key);
         }
         else if (masterActionsUIE.Changed())
         {
@@ -194,7 +194,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (minionActionsUIE.Empty())
         {
-            LocalizationRead.scenarioDict.Remove(activationComponent.minion_key);
+            LocalizationRead.dicts["qst"].Remove(activationComponent.minion_key);
         }
         else if (minionActionsUIE.Changed())
         {
@@ -206,7 +206,7 @@ public class EditorComponentActivation : EditorComponent
     {
         if (moveUIE.Empty())
         {
-            LocalizationRead.scenarioDict.Remove(activationComponent.move_key);
+            LocalizationRead.dicts["qst"].Remove(activationComponent.move_key);
         }
         else if (moveUIE.Changed())
         {

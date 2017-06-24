@@ -16,15 +16,10 @@ namespace Assets.Scripts.UI.Screens
 
         Game game = Game.Get();
 
-        // array of text buttons with all languages
-        TextButton[] languageTextButtons;
-
         public UnityEngine.UI.Slider musicSlide;
         public UnityEngine.UI.Slider musicSlideRev;
         public UnityEngine.UI.Slider effectSlide;
         public UnityEngine.UI.Slider effectSlideRev;
-
-        int selectedIndex = -1;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public OptionsScreen()
@@ -43,29 +38,33 @@ namespace Assets.Scripts.UI.Screens
         private void CreateElements()
         {
             // Options screen text
-            DialogBox dbTittle = new DialogBox(
-                new Vector2(2, 1), 
-                new Vector2(UIScaler.GetWidthUnits() - 4, 3), 
-                OPTIONS
-                );
-            dbTittle.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-            dbTittle.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+            ui.SetText(OPTIONS);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
 
             CreateLanguageElements();
 
             CreateAudioElements();
 
             // Button for back to main menu
-            TextButton tb = new TextButton(new Vector2(1, UIScaler.GetBottom(-3)), new Vector2(8, 2), 
-                CommonStringKeys.BACK, delegate { Destroyer.MainMenu(); }, Color.red);
-            tb.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Destroyer.MainMenu);
+            new UIElementBorder(ui, Color.red);
         }
 
         private void CreateAudioElements()
         {
-            DialogBox db = new DialogBox(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 8), new Vector2(10, 2), MUSIC);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 8, 10, 2);
+            ui.SetText(MUSIC);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             float mVolume;
             string vSet = game.config.data.Get("UserConfig", "music");
@@ -115,9 +114,11 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
-            db = new DialogBox(new Vector2(((0.75f * UIScaler.GetWidthUnits()) - 5), 14), new Vector2(10, 2), EFFECTS);
-            db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            db.SetFont(game.gameType.GetHeaderFont());
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 14, 10, 2);
+            ui.SetText(EFFECTS);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             float eVolume;
             vSet = game.config.data.Get("UserConfig", "effects");
@@ -180,13 +181,11 @@ namespace Assets.Scripts.UI.Screens
         private void CreateLanguageElements()
         {
             // Select langauge text
-            DialogBox dbLanguage = new DialogBox(
-                new Vector2(((0.25f * UIScaler.GetWidthUnits()) - 9), 4), 
-                new Vector2(18, 2), 
-                CHOOSE_LANG
-                );
-            dbLanguage.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-            dbLanguage.SetFont(game.gameType.GetHeaderFont());
+            UIElement ui = new UIElement();
+            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 9, 4, 18, 2);
+            ui.SetText(CHOOSE_LANG);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
 
             // The list of languages is determined by FFG languages for MoM
             // In D2E there is an additional language
@@ -194,39 +193,39 @@ namespace Assets.Scripts.UI.Screens
 
             string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
             // For now, English and Spanish languages available.
-            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German".Split(','));
+            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
 
-            languageTextButtons = new TextButton[langs.Length];
             for (int i = 1; i < langs.Length; i++)
             {
                 int position = i;
                 // Need current index in order to delegate not point to loop for variable
                 string currentLanguage = langs[position];
-                Color currentColor = Color.gray;
 
-                if (currentLanguage == game.currentLang)
-                {
-                    selectedIndex = position;
-                    currentColor = Color.white;
-                }
-                languageTextButtons[position] = new TextButton(
-                    new Vector2((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position)),
-                    new Vector2(8, 1.8f),
-                    new StringKey(null, currentLanguage, false),
-                    delegate { SelectLang(position); },
-                    currentColor
-                    );
-
+                ui = new UIElement();
+                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position), 8, 1.8f);
                 if (!enabled_langs.Contains(currentLanguage))
                 {
-                    languageTextButtons[position].setColor(Color.red);
-                    languageTextButtons[position].setActive(false);
+                    ui.SetText(currentLanguage, Color.red);
+                    new UIElementBorder(ui, Color.red);
                 }
-
-
+                else
+                {
+                    ui.SetButton(delegate { SelectLang(currentLanguage); });
+                    if (currentLanguage == game.currentLang)
+                    {
+                        ui.SetText(currentLanguage);
+                        new UIElementBorder(ui);
+                    }
+                    else
+                    {
+                        ui.SetText(currentLanguage, Color.grey);
+                        new UIElementBorder(ui, Color.grey);
+                    }
+                }
+                ui.SetFontSize(UIScaler.GetMediumFont());
             }
         }
 
@@ -236,6 +235,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
             game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.musicVolume = musicSlide.value;
         }
 
         private void UpdateMusicRev()
@@ -244,6 +244,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.data.Add("UserConfig", "music", musicSlide.value.ToString());
             game.config.Save();
             game.audioControl.audioSource.volume = musicSlide.value;
+            game.audioControl.musicVolume = musicSlide.value;
         }
 
         private void UpdateEffects()
@@ -271,36 +272,19 @@ namespace Assets.Scripts.UI.Screens
         /// Select current language to specified
         /// </summary>
         /// <param name="langName"></param>
-        private void SelectLang(int langPosition)
+        private void SelectLang(string lang)
         {
-            // Disable previous button
-            if (selectedIndex > 0)
-            {
-                languageTextButtons[selectedIndex].setColor(Color.gray);
-            }
-            selectedIndex = langPosition;
-
             // Set newn lang in UI...
-            string newLang = languageTextButtons[langPosition].uiText.text;        
-            languageTextButtons[langPosition].setColor(Color.white);
+            string newLang = lang;        
 
             // ... and in configuration
             game.config.data.Add("UserConfig", "currentLang", newLang);
             game.config.Save();
             game.currentLang = newLang;
             LocalizationRead.changeCurrentLangTo(newLang);
-            refreshScreen();
             ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
-        }
 
-        /// <summary>
-        /// Refreshes the screen texts
-        /// </summary>
-        private void refreshScreen()
-        {
-            // TODO
-            // Reprint all texts in the screen.
+            new OptionsScreen();
         }
     }
-
 }

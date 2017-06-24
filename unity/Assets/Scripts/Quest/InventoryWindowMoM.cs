@@ -17,67 +17,56 @@ public class InventoryWindowMoM
         Destroyer.Dialog();
         Game game = Game.Get();
 
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-18), 1),
-            new Vector2(36, 23),
-            StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-18), 1, 36, 23);
+        new UIElementBorder(ui);
 
         // Add a title to the page
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-6), 1),
-            new Vector2(12, 3),
-            new StringKey("val", "ITEMS"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetLargeFont();
-        db.SetFont(game.gameType.GetHeaderFont());
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-6), 1, 12, 3);
+        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
 
         UIElementScrollHorizontal scrollArea = new UIElementScrollHorizontal();
-        scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 13);
+        scrollArea.SetLocation(UIScaler.GetHCenter(-17), 5, 34, 14);
         new UIElementBorder(scrollArea);
 
-        float xOffset = UIScaler.GetHCenter(-16);
+        float xOffset = 1;
 
-        TextButton tb = null;
         foreach (string s in game.quest.itemInspect.Keys)
         {
             string tmp = s;
-            tb = new TextButton(new Vector2(xOffset, 14),
-                new Vector2(8, 2),
-                game.cd.items[s].name,
-                delegate { Inspect(tmp); },
-                Color.black);
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
+
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 9, 8, 3);
+            ui.SetButton(delegate { Inspect(tmp); });
+            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetBGColor(Color.white);
 
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-
-            tb = new TextButton(new Vector2(xOffset, 6),
-                new Vector2(8, 8),
-                StringKey.NULL,
-                delegate { Inspect(tmp); },
-                Color.clear);
-            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            ui.SetLocation(xOffset, 1, 8, 8);
+            ui.SetButton(delegate { Inspect(tmp); });
+            ui.SetImage(itemSprite);
 
             xOffset += 9;
         }
         scrollArea.SetScrollSize(xOffset - UIScaler.GetHCenter(-16));
 
-        tb = new TextButton(
-            new Vector2(UIScaler.GetHCenter(-4f), 24.5f),
-            new Vector2(8, 2),
-            CommonStringKeys.CLOSE,
-            delegate { Destroyer.Dialog(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-4f), 24.5f, 8, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
     }
 
     public void Inspect(string item)
     {
         Destroyer.Dialog();
         Game.Get().quest.Save();
-        Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
         Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
     }
 }

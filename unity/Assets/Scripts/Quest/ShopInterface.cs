@@ -87,9 +87,12 @@ public class ShopInterface : Quest.BoardComponent
             colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
 
             int tmp = i;
-            TextButton tb = new TextButton(new Vector2(UIScaler.GetHCenter(-17), offset), new Vector2(10f, 2), 
-                label, delegate { OnButton(tmp); }, colour);
-            tb.ApplyTag(Game.SHOP);
+            UIElement ui = new UIElement(Game.SHOP);
+            ui.SetLocation(UIScaler.GetHCenter(-17), offset, 10, 2);
+            ui.SetText(label, colour);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(game.QuestStartEvent);
+            new UIElementBorder(ui, colour);
 
             offset += 3;
         }
@@ -104,46 +107,34 @@ public class ShopInterface : Quest.BoardComponent
 
     public void DrawShopItems()
     {
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 0.5f), new Vector2(10, 2), new StringKey("val", "BUY"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-5), 0.5f, 10, 2);
+        ui.SetText(new StringKey("val", "BUY"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.SHOP);
         scrollArea.SetLocation(UIScaler.GetHCenter(-5), 2.5f, 10, 24.5f);
         new UIElementBorder(scrollArea);
 
-        float vOffset = 3;
+        float vOffset = 0.5f;
 
-        TextButton tb = null;
         foreach (string s in game.quest.shops[eventData.sectionName])
         {
             string itemName = s;
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-4.5f), vOffset + 4.5f),
-                new Vector2(8, 2),
-                game.cd.items[s].name,
-                delegate { Buy(itemName); },
-                Color.clear);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
+            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetButton(delegate { Buy(itemName); });
+            ui.SetBGColor(Color.white);
 
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(2.5f, vOffset + 0.5f, 4, 4);
+            ui.SetButton(delegate { Buy(itemName); });
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2.5f), vOffset + 0.5f),
-                new Vector2(4, 4),
-                StringKey.NULL,
-                delegate { Buy(itemName); },
-                Color.clear);
-            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.ApplyTag(Game.SHOP);
+            ui.SetImage(itemSprite);
 
             StringKey act = new StringKey(null, "-", false);
             if (game.cd.items[s].ContainsTrait("class"))
@@ -158,80 +149,58 @@ public class ShopInterface : Quest.BoardComponent
             {
                 act = new StringKey("val", "ACT_2");
             }
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset + 4f),
-                new Vector2(3, 1),
-                act,
-                delegate { Buy(itemName); },
-                Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(3, vOffset + 4, 3, 1);
+            ui.SetText(act);
+            ui.SetButton(delegate { Buy(itemName); });
+            ui.SetBGColor(Color.yellow);
+            new UIElementBorder(ui, Color.black);
 
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(-2f), vOffset),
-                new Vector2(3, 1),
-                GetPurchasePrice(game.cd.items[s]),
-                delegate { Buy(itemName); },
-                Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(3, vOffset, 3, 1);
+            ui.SetText(GetPurchasePrice(game.cd.items[s]).ToString());
+            ui.SetButton(delegate { Buy(itemName); });
+            ui.SetBGColor(Color.yellow);
+            new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
         }
-        scrollArea.SetScrollSize(vOffset - 3);
+        scrollArea.SetScrollSize(vOffset - 0.5f);
     }
 
 
     public void DrawPartyItems()
     {
-        DialogBox db = new DialogBox(new Vector2(UIScaler.GetHCenter(7), 0.5f), new Vector2(10, 2), new StringKey("val", "SELL"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(7), 0.5f, 10, 2);
+        ui.SetText(new StringKey("val", "SELL"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.SHOP);
         scrollArea.SetLocation(UIScaler.GetHCenter(7), 2.5f, 10, 24.5f);
         new UIElementBorder(scrollArea);
 
-        float vOffset = 3f;
+        float vOffset = 0.5f;
 
-        TextButton tb = null;
         foreach (string s in game.quest.items)
         {
             string itemName = s;
             if (game.cd.items[itemName].ContainsTrait("relic")) continue;
 
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(7.5f), vOffset + 4.5f),
-                new Vector2(8, 2),
-                game.cd.items[s].name,
-                delegate { Sell(itemName); },
-                Color.clear);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
+            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetButton(delegate { Sell(itemName); });
+            ui.SetBGColor(Color.white);
 
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(2.5f, vOffset + 0.5f, 4, 4);
+            ui.SetButton(delegate { Sell(itemName); });
             Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(9.5f), vOffset + 0.5f),
-                new Vector2(4, 4),
-                StringKey.NULL,
-                delegate { Sell(itemName); },
-                Color.clear);
-            tb.background.GetComponent<UnityEngine.UI.Image>().sprite = itemSprite;
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.ApplyTag(Game.SHOP);
+            ui.SetImage(itemSprite);
 
             StringKey act = new StringKey(null, "-", false);
             if (game.cd.items[s].ContainsTrait("class"))
@@ -246,33 +215,23 @@ public class ShopInterface : Quest.BoardComponent
             {
                 act = new StringKey("val", "ACT_2");
             }
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset + 4f),
-                new Vector2(3, 1),
-                act,
-                delegate { Sell(itemName); },
-                Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(3, vOffset + 4, 3, 1);
+            ui.SetText(act);
+            ui.SetButton(delegate { Sell(itemName); });
+            ui.SetBGColor(Color.yellow);
+            new UIElementBorder(ui, Color.black);
 
-            tb = new TextButton(new Vector2(UIScaler.GetHCenter(10f), vOffset),
-                new Vector2(3, 1),
-                GetSellPrice(game.cd.items[itemName]),
-                delegate { Sell(itemName); },
-                Color.black);
-            tb.button.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-            tb.button.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
-            tb.background.GetComponent<UnityEngine.UI.Image>().color = Color.yellow;
-            tb.background.transform.SetParent(scrollArea.GetScrollTransform());
-            tb.button.GetComponent<UnityEngine.UI.Text>().material = (Material)Resources.Load("Fonts/FontMaterial");
-            tb.ApplyTag(Game.SHOP);
+            ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
+            ui.SetLocation(3, vOffset, 3, 1);
+            ui.SetText(GetSellPrice(game.cd.items[itemName]).ToString());
+            ui.SetButton(delegate { Sell(itemName); });
+            ui.SetBGColor(Color.yellow);
+            new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
         }
-        scrollArea.SetScrollSize(vOffset - 3);
+        scrollArea.SetScrollSize(vOffset - 0.5f);
     }
 
     public int GetPurchasePrice(ItemData item)
@@ -300,22 +259,18 @@ public class ShopInterface : Quest.BoardComponent
 
     public void DrawGold()
     {
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-16), 24f),
-            new Vector2(5, 2),
-            new StringKey("val", "GOLD"));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.SetFont(game.gameType.GetHeaderFont());
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        UIElement ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-16), 24, 5, 2);
+        ui.SetText(new StringKey("val", "GOLD"));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        new UIElementBorder(ui);
 
-        db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-11), 24f),
-            new Vector2(3, 2),
-            Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
-        db.ApplyTag(Game.SHOP);
+        ui = new UIElement(Game.SHOP);
+        ui.SetLocation(UIScaler.GetHCenter(-11), 24, 3, 2);
+        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")).ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
     }
 
     public void Buy(string item)

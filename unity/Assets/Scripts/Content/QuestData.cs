@@ -103,8 +103,8 @@ public class QuestData
         }
 
         // Reset scenario dict
-        LocalizationRead.scenarioDict = DictionaryI18n.ReadFromFileList
-            ("",localizationFiles,game.currentLang,game.currentLang);
+        LocalizationRead.AddDictionary("qst", DictionaryI18n.ReadFromFileList
+            ("",localizationFiles,game.currentLang,game.currentLang));
 
         foreach (string f in iniFiles)
         {
@@ -132,7 +132,7 @@ public class QuestData
                 foreach (KeyValuePair<string, string> kv in rename)
                 {
                     qc.ChangeReference(kv.Key, kv.Value);
-                    LocalizationRead.scenarioDict.RenamePrefix(kv.Key + ".", kv.Value + ".");
+                    LocalizationRead.dicts["qst"].RenamePrefix(kv.Key + ".", kv.Value + ".");
                 }
             }
         }
@@ -359,6 +359,9 @@ public class QuestData
             typeDynamic = type;
             // Tokens are cancelable because you can select then cancel
             cancelable = true;
+
+            // Tokens don't have conditions
+            conditions = new List<VarOperation>();
 
             tokenName = "";
             if (data.ContainsKey("type"))
@@ -1797,7 +1800,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 5;
+        public static int currentFormat = 6;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -1845,7 +1848,11 @@ public class QuestData
             {
                 localizationDict = DictionaryI18n.ReadFromFileList
                     (path + "/", localizationData.Keys, defaultLanguage, Game.Get().currentLang);
-
+                if (localizationDict == null)
+                {
+                    // Unable to load dictionary
+                    return;
+                }
                 localizationDict.setDefaultLanguage(defaultLanguage);
                 localizationDict.setCurrentLanguage(Game.Get().currentLang);
             }
@@ -1856,7 +1863,7 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
-            localizationDict = LocalizationRead.scenarioDict;
+            localizationDict = LocalizationRead.dicts["qst"];
             if (localizationDict == null)
             {
                 localizationDict = new DictionaryI18n(
@@ -1891,6 +1898,34 @@ public class QuestData
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                // Depreciated Format 5
+                List<string> newPacks = new List<string>();
+                foreach (string s in packs)
+                {
+                    if (s.Equals("MoM1E"))
+                    {
+                        newPacks.Add("MoM1ET");
+                        newPacks.Add("MoM1EI");
+                        newPacks.Add("MoM1EM");
+                    }
+                    else if (s.Equals("FA"))
+                    {
+                        newPacks.Add("FAT");
+                        newPacks.Add("FAI");
+                        newPacks.Add("FAM");
+                    }
+                    else if (s.Equals("CotW"))
+                    {
+                        newPacks.Add("CotWT");
+                        newPacks.Add("CotWI");
+                        newPacks.Add("CotWM");
+                    }
+                    else
+                    {
+                        newPacks.Add(s);
+                    }
+                }
+                packs = newPacks.ToArray();
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -8,9 +9,6 @@ using Assets.Scripts.UI;
 public class QuestEditorData {
 
     private readonly StringKey COMPONENT_TO_DELETE = new StringKey("val", "COMPONENT_TO_DELETE");
-    // When a selection list is raised it is stored here
-    // This allows the return value to be fetched later
-    public EditorSelectionList esl;
     // This is the currently selected component
     public EditorComponent selection;
     // The selection stack is used for the 'back' button
@@ -522,7 +520,7 @@ public class QuestEditorData {
             game.quest.qd.components.Remove(name);
         }
 
-        LocalizationRead.scenarioDict.RemoveKeyPrefix(name + ".");
+        LocalizationRead.dicts["qst"].RemoveKeyPrefix(name + ".");
 
         // Clean up the current quest environment
         game.quest.Remove(name);
@@ -537,9 +535,49 @@ public class QuestEditorData {
             Object.Destroy(go);
     }
 
-    // This is called game
+    // This is called by game
     public void MouseDown()
     {
         selection.MouseDown();
+    }
+
+    // This is called by game
+    public void RightClick()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+        pointer.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, raycastResults);
+
+        if (raycastResults.Count == 0) return;
+
+        UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectComponent, CommonStringKeys.SELECT_ITEM);
+
+        int count = 0;
+        string last = "";
+        foreach (RaycastResult hit in raycastResults)
+        {
+            foreach (KeyValuePair<string, Quest.BoardComponent> kv in Game.Get().quest.boardItems)
+            {
+                if (kv.Value.unityObject == hit.gameObject)
+                {
+                    if (kv.Key.IndexOf("UI") != 0)
+                    {
+                        last = kv.Key;
+                        count++;
+                        select.AddItem(Game.Get().quest.qd.components[kv.Key]);
+                    }
+                    break;
+                }
+            }
+        }
+        if (count == 1) SelectComponent(last);
+        if (count > 1) select.Draw();
     }
 }

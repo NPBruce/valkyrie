@@ -13,6 +13,7 @@ public class LogWindow
     // Construct and display
     public LogWindow()
     {
+        developerToggle = Game.Get().testMode;
         Update();
     }
 
@@ -21,38 +22,50 @@ public class LogWindow
         Destroyer.Dialog();
 
         developerToggle ^= toggle;
+
+        float textWidth = 28;
+        float textStart = UIScaler.GetHCenter(-14.5f);
+        if (developerToggle)
+        {
+            textWidth = 20;
+            textStart = UIScaler.GetHCenter(-18.5f);
+        }
+
         Game game = Game.Get();
         game.logWindow = this;
         // white background because font rendering is broken
-        string log = "";
-        foreach (Quest.LogEntry e in game.quest.log)
-        {
-            log += e.GetEntry(developerToggle);
-        }
-        log.Trim('\n');
+        UIElement ui = new UIElement();
+        ui.SetLocation(textStart, 0.5f, textWidth, 24.5f);
+        ui.SetBGColor(Color.white);
+        ui = new UIElement();
+        ui.SetLocation(textStart + textWidth, 0.5f, 1, 24.5f);
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
-        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
-        float height = 0;
-        if (developerToggle)
-        {
-            scrollArea.SetLocation(UIScaler.GetHCenter(-18.5f), 0.5f, 21, 24.5f);
-            height = UIElement.GetStringHeight(log, 20);
-            ui.SetLocation(0, 0, 20, height);
-        }
-        else
-        {
-            height = UIElement.GetStringHeight(log, 28);
-            scrollArea.SetLocation(UIScaler.GetHCenter(-14.5f), 0.5f, 29, 24.5f);
-            ui.SetLocation(0, 0, 28, height);
-        }
-        ui.SetText(log, Color.black);
-        ui.SetBGColor(Color.white);
-
+        scrollArea.SetLocation(textStart, 0.5f, textWidth + 1, 24.5f);
+        scrollArea.SetBGColor(Color.clear);
         new UIElementBorder(scrollArea);
-        scrollArea.SetScrollSize(height);
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(-3f), 25f), new Vector2(6, 2), CommonStringKeys.CLOSE, delegate { Destroyer.Dialog(); });
+        float offset = 0.5f;
+        foreach (Quest.LogEntry e in game.quest.log)
+        {
+            string entry = e.GetEntry(developerToggle).Trim('\n');
+            if (entry.Length == 0) continue;
+            ui = new UIElement(scrollArea.GetScrollTransform());
+            float height = UIElement.GetStringHeight(entry, textWidth);
+            ui.SetLocation(0, offset, textWidth, height);
+            ui.SetText(entry, Color.black);
+            ui.SetBGColor(Color.white);
+
+            offset += height;
+        }
+        scrollArea.SetScrollSize(offset);
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-3f), 25, 6, 2);
+        ui.SetText(CommonStringKeys.CLOSE);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Destroyer.Dialog);
+        new UIElementBorder(ui);
 
         if (developerToggle)
         {

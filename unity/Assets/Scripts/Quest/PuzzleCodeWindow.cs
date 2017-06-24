@@ -42,22 +42,24 @@ public class PuzzleCodeWindow
     public void CreateWindow()
     {
         Destroyer.Dialog();
-        DialogBox db = new DialogBox(
-            new Vector2(UIScaler.GetHCenter(-14f), 0.5f), new Vector2(28f, 22f), StringKey.NULL);
-        db.AddBorder();
+        UIElement ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, 22);
+        new UIElementBorder(ui);
 
         // Puzzle goes here
-        TextButton tb = null;
         float hPos = UIScaler.GetHCenter(-13f);
         if (!puzzle.Solved())
         {
             for (int i = 1; i <= questPuzzle.puzzleAltLevel; i++)
             {
                 int tmp = i;
-                tb = new TextButton(
-                    new Vector2(hPos, 1.5f), new Vector2(2f, 2), buttons[i].label, delegate { GuessAdd(tmp); }, Color.black);
-                tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
-                tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[i].image;
+                ui = new UIElement();
+                ui.SetLocation(hPos, 1.5f, 2, 2);
+                ui.SetText(buttons[i].label, Color.black);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { GuessAdd(tmp); });
+                ui.SetImage(buttons[i].image);
+                ui.SetBGColor(new Color(1, 1, 1, 0.9f));
                 hPos += 2.5f;
             }
             hPos = UIScaler.GetHCenter(-13f);
@@ -66,31 +68,41 @@ public class PuzzleCodeWindow
                 if (guess.Count >= i)
                 {
                     int tmp = i - 1;
-                    tb = new TextButton(
-                        new Vector2(hPos, 4f), new Vector2(2f, 2f), buttons[guess[tmp]].label, 
-                        delegate { GuessRemove(tmp); }, Color.black);
-                    tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
-                    tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[guess[tmp]].image;
+                    ui = new UIElement();
+                    ui.SetLocation(hPos, 4, 2, 2);
+                    ui.SetText(buttons[guess[tmp]].label, Color.black);
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetButton(delegate { GuessRemove(tmp); });
+                    ui.SetImage(buttons[guess[tmp]].image);
+                    ui.SetBGColor(new Color(1, 1, 1, 0.9f));
                 }
                 else
                 {
-                    db = new DialogBox(new Vector2(hPos, 4f), new Vector2(2f, 2), StringKey.NULL, Color.white);
-                    db.AddBorder();
+                    ui = new UIElement();
+                    ui.SetLocation(hPos, 4, 2, 2);
+                    new UIElementBorder(ui);
                 }
                 hPos += 2.5f;
             }
         }
 
-        new TextButton(new Vector2(UIScaler.GetHCenter(), 2.75f), new Vector2(5f, 2f), PUZZLE_GUESS, delegate { Guess(); });
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(), 2.75f, 5, 2);
+        ui.SetText(PUZZLE_GUESS);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Guess);
+        new UIElementBorder(ui);
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(6.5f), 1.5f), new Vector2(6f, 2f), 
-            new StringKey("val","X_COLON",CommonStringKeys.SKILL));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(6.5f), 1.5f, 6, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.SKILL));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 4f), new Vector2(3f, 2f),
-            new StringKey(null, EventManager.OutputSymbolReplace(questPuzzle.skill), false));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(8), 4, 3, 2);
+        ui.SetText(EventManager.OutputSymbolReplace(questPuzzle.skill));
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
         // Guesses window
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
@@ -104,7 +116,7 @@ public class PuzzleCodeWindow
             hPos = 0.5f;
             foreach (int i in g.guess)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(buttons[i].label, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));
@@ -117,7 +129,7 @@ public class PuzzleCodeWindow
             hPos = 13.25f;
             for (int i = 0; i < g.CorrectSpot(); i++)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(ICON_SUCCESS_RESULT, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));
@@ -127,7 +139,7 @@ public class PuzzleCodeWindow
             }
             for (int i = 0; i < g.CorrectType(); i++)
             {
-                UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(hPos, vPos, 2, 2);
                 ui.SetText(ICON_INVESTIGATION_RESULT, Color.black);
                 ui.SetBGColor(new Color(1, 1, 1, 0.9f));
@@ -139,36 +151,57 @@ public class PuzzleCodeWindow
         }
         scrollArea.SetScrollPosition(1 + (puzzle.guess.Count * 2.5f) * UIScaler.GetPixelsPerUnit());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-11f), 20f), new Vector2(6f, 2f),
-            new StringKey("val", "X_COLON", CommonStringKeys.MOVES));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-11f), 20f, 6, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.MOVES));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-5f), 20f), new Vector2(3f, 2f), puzzle.guess.Count - previousMoves);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-5), 20, 3, 2);
+        ui.SetText((puzzle.guess.Count - previousMoves).ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(-2f), 20f), new Vector2(10f, 2f),
-            new StringKey("val", "X_COLON", CommonStringKeys.TOTAL_MOVES));
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-2f), 20f, 10, 2);
+        ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.TOTAL_MOVES));
+        ui.SetFontSize(UIScaler.GetMediumFont());
 
-        db = new DialogBox(new Vector2(UIScaler.GetHCenter(8f), 20f), new Vector2(3f, 2f), puzzle.guess.Count);
-        db.textObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetMediumFont();
-        db.AddBorder();
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(8), 20, 3, 2);
+        ui.SetText(puzzle.guess.Count.ToString());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        new UIElementBorder(ui);
 
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-13), 23.5f, 8, 2);
         if (puzzle.Solved())
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate {; }, Color.grey);
-            new TextButton(
-                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
-                eventData.GetButtons()[0].GetLabel(), delegate { Finished(); });
+            ui.SetText(CommonStringKeys.CLOSE, Color.grey);
+            new UIElementBorder(ui, Color.grey);
         }
         else
         {
-            new TextButton(new Vector2(UIScaler.GetHCenter(-13f), 23.5f), new Vector2(8f, 2), CommonStringKeys.CLOSE, delegate { Close(); });
-            new TextButton(
-                new Vector2(UIScaler.GetHCenter(5f), 23.5f), new Vector2(8f, 2), 
-                eventData.GetButtons()[0].GetLabel(), delegate {; }, Color.grey);
+            ui.SetText(CommonStringKeys.CLOSE);
+            new UIElementBorder(ui);
+            ui.SetButton(Close);
         }
+        ui.SetFontSize(UIScaler.GetMediumFont());
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(5), 23.5f, 8, 2);
+        if (!puzzle.Solved())
+        {
+            ui.SetText(eventData.GetButtons()[0].GetLabel(), Color.grey);
+            new UIElementBorder(ui, Color.grey);
+        }
+        else
+        {
+            ui.SetText(eventData.GetButtons()[0].GetLabel());
+            new UIElementBorder(ui);
+            ui.SetButton(Finished);
+        }
+        ui.SetFontSize(UIScaler.GetMediumFont());
     }
 
     public void GuessAdd(int symbolType)
@@ -181,12 +214,13 @@ public class PuzzleCodeWindow
         guess.Add(symbolType);
 
         int tmp = guess.Count - 1;
-        TextButton tb = new TextButton(
-            new Vector2(hPos, 4f), new Vector2(2f, 2f), 
-            buttons[symbolType].label, 
-            delegate { GuessRemove(tmp); }, Color.black);
-        tb.background.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, (float)0.9);
-        tb.background.GetComponent<UnityEngine.UI.Image>().sprite = buttons[symbolType].image;
+        UIElement ui = new UIElement();
+        ui.SetLocation(hPos, 4, 2, 2);
+        ui.SetText(buttons[symbolType].label, Color.black);
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(delegate { GuessRemove(tmp); });
+        ui.SetImage(buttons[symbolType].image);
+        ui.SetBGColor(new Color(1, 1, 1, 0.9f));
     }
 
     public void GuessRemove(int symbolPos)
