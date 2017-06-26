@@ -69,7 +69,7 @@ public class PuzzleSlideWindow
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-8.5f), 14.5f, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(8.5f), 14.5f, 3, 2);
         ui.SetText((puzzle.moves - lastMoves).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
