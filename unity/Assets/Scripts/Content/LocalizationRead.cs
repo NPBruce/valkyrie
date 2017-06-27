@@ -86,14 +86,13 @@ namespace Assets.Scripts.Content
             string output = input.fullKey;
             // While there are more lookups
 
-            string regexKey = "{(ffg|val|qst):";
             // Count the number of replaces. One lookup should not replace more than RECURSIVE_LIMIT elements.
             int recursiveCount = 0;
 
             //while (output.IndexOf("{ffg:") != -1)
-            while (Regex.Match(output,regexKey).Success && recursiveCount < RECURSIVE_LIMIT)
+            while (Regex.Match(output, LookupRegexKey()).Success && recursiveCount < RECURSIVE_LIMIT)
             {
-                int pos = Regex.Match(output, regexKey).Index;
+                int pos = Regex.Match(output, LookupRegexKey()).Index;
                 // Can be nested
                 int bracketLevel = 1;
                 // Start of lookup
@@ -159,10 +158,9 @@ namespace Assets.Scripts.Content
             string output = input.fullKey;
             // While there are more lookups
 
-            string regexKey = "{(ffg|val|qst):";
-            if (!Regex.Match(output, regexKey).Success) return false;
+            if (!Regex.Match(output, LookupRegexKey()).Success) return false;
 
-            int pos = Regex.Match(output, regexKey).Index;
+            int pos = Regex.Match(output, LookupRegexKey()).Index;
             // Can be nested
             int bracketLevel = 1;
             // Start of lookup
@@ -373,6 +371,20 @@ namespace Assets.Scripts.Content
             {
                 dicts[name] = dict;
             }
+        }
+
+        /// <summary>
+        /// Get a regex pattern to check if is it a valid lookup key
+        /// </summary>
+        /// <returns>regex string</returns>
+        public static string LookupRegexKey()
+        {
+            string regexKey = "{(";
+            foreach (string key in dicts.Keys)
+            {
+                regexKey += key + "|";
+            }
+            return regexKey.Substring(0, regexKey.Length - 1) + "):";
         }
     }
 }

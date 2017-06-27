@@ -128,6 +128,20 @@ public class Quest
                 vars.SetValue("#" + s, 1);
             }
         }
+        // Depreciated support for quest formats < 6
+        if (game.cd.GetLoadedPackIDs().Contains("MoM1ET") && game.cd.GetLoadedPackIDs().Contains("MoM1EI") && game.cd.GetLoadedPackIDs().Contains("MoM1EM"))
+        {
+            vars.SetValue("#MoM1E", 1);
+        }
+        if (game.cd.GetLoadedPackIDs().Contains("CotWT") && game.cd.GetLoadedPackIDs().Contains("CotWI") && game.cd.GetLoadedPackIDs().Contains("CotWM"))
+        {
+            vars.SetValue("#CotW", 1);
+        }
+        if (game.cd.GetLoadedPackIDs().Contains("FAT") && game.cd.GetLoadedPackIDs().Contains("FAI") && game.cd.GetLoadedPackIDs().Contains("FAM"))
+        {
+            vars.SetValue("#FA", 1);
+        }
+
         vars.SetValue("#round", 1);
     }
 
@@ -1947,7 +1961,7 @@ public class Quest
             string nl = System.Environment.NewLine;
 
             // Section name must be unique
-            string r = "[Monster" + monsterData.sectionName + "]" + nl;
+            string r = "[Monster" + monsterData.sectionName + duplicate + "]" + nl;
             r += "activated=" + activated + nl;
             r += "type=" + monsterData.sectionName + nl;
             r += "minionStarted=" + minionStarted + nl;

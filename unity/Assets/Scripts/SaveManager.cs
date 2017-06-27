@@ -193,7 +193,30 @@ class SaveManager
                 foreach (KeyValuePair<string, string> kv in packs)
                 {
                     game.cd.LoadContentID("");
-                    game.cd.LoadContentID(kv.Key);
+
+                    // Support for save games from 1.2 and older
+                    if (kv.Key.Equals("FA"))
+                    {
+                        game.cd.LoadContentID("FAI");
+                        game.cd.LoadContentID("FAM");
+                        game.cd.LoadContentID("FAT");
+                    }
+                    if (kv.Key.Equals("CotW"))
+                    {
+                        game.cd.LoadContentID("CotWI");
+                        game.cd.LoadContentID("CotWM");
+                        game.cd.LoadContentID("CotWT");
+                    }
+                    if (kv.Key.Equals("MoM1E"))
+                    {
+                        game.cd.LoadContentID("MoM1EI");
+                        game.cd.LoadContentID("MoM1EM");
+                        game.cd.LoadContentID("MoM1ET");
+                    }
+                    else
+                    {
+                        game.cd.LoadContentID(kv.Key);
+                    }
                 }
 
                 // This loads the game
