@@ -404,5 +404,43 @@ namespace Assets.Scripts.UI
             if (transbg.y + transbg.height > Y) return false;
             return true;
         }
+
+        /// <summary>
+        /// Get the amount of space for additional lines in the box, can be negative.</summary>
+        /// <returns>Amount of vertical space, less padding value in UIScaler units</returns>
+        protected float GetVerticalTextSpace()
+        {
+            float gap = return text.GetComponent<RectTransform>().height - text.GetComponent<UnityEngine.UI.Text>().preferredHeight;
+            gap -= textPaddingDefault * 2f;
+            return gap / UIScaler.GetPixelsPerUnit();
+        }
+
+        /// <summary>
+        /// Is the amount of free vertical space within a specified range?</summary>
+        /// <param name="min">Minimum space in UIScaler units</param>
+        /// <param name="max">Maximum space in UIScaler units</param>
+        protected bool VerticalTextSpaceInRange(float min, float max)
+        {
+            if (GetVerticalTextSpace() < min) return false;
+            if (GetVerticalTextSpace() > max) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Is the height equal to text size plus padding?</summary>
+        /// <returns>True if height matches</returns>
+        public bool HeightAtTextPadding()
+        {
+            // Allow for floating point errors
+            return VerticalTextSpaceInRange(-0.01f, 0.01f);
+        }
+
+        /// <summary>
+        /// Set the UIElement to text height plus vertical padding</summary>
+        /// <returns>New UIElement height</returns>
+        public float HeightToTextPadding()
+        {
+            GetRectTransform().height = text.GetComponent<UnityEngine.UI.Text>().preferredHeight + (textPaddingDefault * 2f);
+        }
     }
 }
