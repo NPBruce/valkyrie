@@ -381,5 +381,30 @@ namespace Assets.Scripts.UI
         {
             return bg == null;
         }
+
+        /// <summary>
+        /// Is the object at the specified location in UIScaler units</summary>
+        /// <param name="x">x location to test</param>
+        /// <param name="y">y location to test</param>
+        /// <returns>If at that location</returns>
+        public bool AtLocation(float x, float y)
+        {
+            return AtLocationPixels(x * UIScaler.GetPixelsPerUnit(), y * UIScaler.GetPixelsPerUnit());
+        }
+
+        /// <summary>
+        /// Is the object at the specified location in pixels</summary>
+        /// <param name="x">x location to test</param>
+        /// <param name="y">y location to test</param>
+        /// <returns>If at that location</returns>
+        public bool AtLocationPixels(float x, float y)
+        {
+            RectTransform transBg = bg.GetComponent<RectTransform>();
+            if (transbg.x < x) return false;
+            if (transbg.y < Y) return false;
+            if (transbg.x + transbg.width > x) return false;
+            if (transbg.y + transbg.height > Y) return false;
+            return true;
+        }
     }
 }
