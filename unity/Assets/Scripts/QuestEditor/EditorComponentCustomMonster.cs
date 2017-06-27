@@ -92,30 +92,31 @@ public class EditorComponentCustomMonster : EditorComponent
 
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.info.KeyExists())
             {
-                infoUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-                infoUIE.SetLocation(0.5f, offset + 1, 19, 8);
-                infoUIE.SetText(monsterComponent.info.Translate());
-                infoUIE.SetButton(delegate { UpdateInfo(); });
-                new UIElementBorder(infoUIE);
                 if (monsterComponent.baseMonster.Length > 0)
                 {
                     ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                    ui.SetLocation(16.5f, offset, 3, 1);
+                    ui.SetLocation(16.5f, offset++, 3, 1);
                     ui.SetText(CommonStringKeys.RESET);
                     ui.SetButton(delegate { ClearInfo(); });
                     new UIElementBorder(ui);
                 }
-                offset += 10;
+
+                infoUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+                infoUIE.SetLocation(0.5f, offset, 19, 8);
+                infoUIE.SetText(monsterComponent.info.Translate());
+                offset += infoUIE.HeightToTextPadding(1);
+                infoUIE.SetButton(delegate { UpdateInfo(); });
+                new UIElementBorder(infoUIE);
             }
             else
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(16.5f, offset, 3, 1);
+                ui.SetLocation(16.5f, offset++, 3, 1);
                 ui.SetText(CommonStringKeys.SET);
                 ui.SetButton(delegate { SetInfo(); });
                 new UIElementBorder(ui);
-                offset += 2;
             }
+            offset ++;
 
             offset = DrawD2EActivations(offset);
         }
@@ -467,6 +468,10 @@ public class EditorComponentCustomMonster : EditorComponent
         if (!infoUIE.Empty() && infoUIE.Changed())
         {
             LocalizationRead.updateScenarioText(monsterComponent.info_key, infoUIE.GetText());
+            if (!infoUIE.HeightAtTextPadding(1))
+            {
+                Update();
+            }
         }
     }
 

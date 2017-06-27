@@ -262,9 +262,10 @@ public class EditorComponentEvent : EditorComponent
         eventTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         eventTextUIE.SetLocation(0.5f, offset, 19, 8);
         eventTextUIE.SetText(eventComponent.text.Translate(true));
+        offset += eventTextUIE.HeightToTextPadding(1);
         eventTextUIE.SetButton(delegate { UpdateText(); });
         new UIElementBorder(eventTextUIE);
-        return offset + 9;
+        return offset + 1;
     }
 
     virtual public float AddEventTrigger(float offset)
@@ -624,7 +625,12 @@ public class EditorComponentEvent : EditorComponent
                 {
                     eventComponent.display = true;
                     Update();
+                    return;
                 }
+            }
+            if (!infoUIE.HeightAtTextPadding(1))
+            {
+                Update();
             }
         }
     }
