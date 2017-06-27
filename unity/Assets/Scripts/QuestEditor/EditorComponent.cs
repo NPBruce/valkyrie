@@ -160,10 +160,11 @@ public class EditorComponent {
         commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         commentUIE.SetLocation(0.5f, offset, 19, 5);
         commentUIE.SetText(component.comment);
+        offset += commentUIE.HeightToTextPadding();
         commentUIE.SetButton(delegate { SetComment(); });
         new UIElementBorder(commentUIE);
 
-        return offset + 6;
+        return offset + 1;
     }
 
     virtual public float AddSource(float offset)

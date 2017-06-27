@@ -1800,7 +1800,7 @@ public class QuestData
     {
         public static int minumumFormat = 3;
         // Increment during changes, and again at release
-        public static int currentFormat = 6;
+        public static int currentFormat = 7;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -1950,7 +1950,7 @@ public class QuestData
             }
             if (minHero < 1) minHero = 1;
 
-            maxHero = Game.Get().gameType.MaxHeroes();
+            maxHero = Game.Get().gameType.DefaultHeroes();
             if (iniData.ContainsKey("maxhero"))
             {
                 int.TryParse(iniData["maxhero"], out maxHero);
@@ -2003,7 +2003,7 @@ public class QuestData
             {
                 r.Append("minhero=").AppendLine(minHero.ToString());
             }
-            if (maxHero != Game.Get().gameType.MaxHeroes())
+            if (maxHero != Game.Get().gameType.DefaultHeroes())
             {
                 r.Append("maxhero=").AppendLine(maxHero.ToString());
             }

@@ -66,6 +66,9 @@ public class Game : MonoBehaviour {
     // Quest started as test from editor
     public bool testMode = false;
 
+    // List of things that want to know if the mouse is clicked
+    protected List<IUpdateListener> updateList;
+
     // Import thread
     public GameSelectionScreen gameSelect;
 
@@ -103,6 +106,7 @@ public class Game : MonoBehaviour {
         config = new ConfigFile();
         GameObject go = new GameObject("audio");
         audioControl = go.AddComponent<Audio>();
+        updateList = new List<IUpdateListener>();
 
         if (config.data.Get("UserConfig") == null)
         {
@@ -276,6 +280,23 @@ public class Game : MonoBehaviour {
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor
     void Update()
     {
+        updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
+        for(int i = 0; i < updateList.Count; i++)
+        {
+            if (!updateList[i].Update())
+            {
+                updateList[i] = null;
+            }
+        }
+        updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            foreach(IUpdateListener iul in updateList)
+            {
+                iul.Click();
+            }
+        }
         // 0 is the left mouse button
         if (qed != null && Input.GetMouseButtonDown(0))
         {
@@ -342,4 +363,23 @@ public class Game : MonoBehaviour {
         }
         return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
     }
+
+    public void AddUpdateListener(IUpdateListener obj)
+    {
+        updateList.Add(obj);
+    }
+}
+
+public interface IUpdateListener
+{
+    /// <summary>
+    /// This method is called on click
+    /// </summary>
+    void Click();
+
+    /// <summary>
+    /// This method is called on Unity Update.  Must return false to allow garbage collection.
+    /// </summary>
+    /// <returns>True to keep this in the update list, false to remove.</returns>
+    bool Update();
 }

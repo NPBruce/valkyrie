@@ -84,7 +84,14 @@ public class HeroCanvas : MonoBehaviour {
         RectTransform trans = heroImg.AddComponent<RectTransform>();
 
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        offset += heroSize + 0.5f;
+        if (game.quest.heroes.Count > 5)
+        {
+            offset += 22f / game.quest.heroes.Count;
+        }
+        else
+        {
+            offset += heroSize + 0.5f;
+        }
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0.25f * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
         heroImg.AddComponent<CanvasRenderer>();
         UnityEngine.UI.Image image = heroImg.AddComponent<UnityEngine.UI.Image>();

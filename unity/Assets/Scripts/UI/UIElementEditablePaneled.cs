@@ -49,5 +49,13 @@ namespace Assets.Scripts.UI
             uiInput.text = uiInput.text.Insert(uiInput.getLastCaretPosition(), specialChar);
             uiInput.Select();
         }
+
+        /// <summary>
+        /// Set the UIElement to text height plus vertical padding</summary>
+        /// <returns>New UIElement height</returns>
+        public override float HeightToTextPadding()
+        {
+            return base.HeightToTextPadding() + 1;
+        }
     }
 }

@@ -69,12 +69,11 @@ public class EditorComponentPuzzle : EditorComponentEvent
         new UIElementBorder(levelUIE);
         offset += 2;
 
-        if (!puzzleComponent.puzzleClass.Equals("slide"))
+        if (puzzleComponent.puzzleClass.Equals("image") || puzzleComponent.puzzleClass.Equals("code"))
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 5, 1);
             ui.SetText(new StringKey("val", "X_COLON", PUZZLE_ALT_LEVEL));
-
 
             altLevelUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
             altLevelUIE.SetLocation(5, offset, 2, 1);
@@ -119,6 +118,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
         select.AddItem(new StringKey("val", "slide"));
         select.AddItem(new StringKey("val", "code"));
         select.AddItem(new StringKey("val", "image"));
+        select.AddItem(new StringKey("val", "tower"));
         select.Draw();
     }
 

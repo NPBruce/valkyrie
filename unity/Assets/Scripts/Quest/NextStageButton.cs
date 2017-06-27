@@ -56,7 +56,7 @@ public class NextStageButton
 
         ui = new UIElement(Game.UIPHASE);
         ui.SetLocation(UIScaler.GetHCenter(16f), UIScaler.GetBottom(-2.5f), 4, 2);
-        ui.SetText(new StringKey("val", "ITEMS"));
+        ui.SetText(new StringKey("val", "ITEMS_SMALL"));
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Items);

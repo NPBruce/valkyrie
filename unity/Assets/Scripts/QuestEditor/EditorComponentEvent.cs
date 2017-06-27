@@ -1451,6 +1451,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("-");
         select.AddItem("*");
         select.AddItem("/");
+        select.AddItem("%");
 
         select.Draw();
     }

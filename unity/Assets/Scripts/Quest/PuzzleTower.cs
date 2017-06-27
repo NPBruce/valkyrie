@@ -15,7 +15,17 @@ public class PuzzleTower : Puzzle
     public PuzzleTower(int depth)
     {
         List<List<List<int>>> options = BuildPuzzles(depth);
-        puzzle = options[Random.Range(0, options.Count)];
+        List<List<int>> p = options[Random.Range(0, options.Count)];
+
+        // Randomise tower order
+        puzzle = new List<List<int>>();
+        int pos = Random.Range(0, 3);
+        puzzle[0] = p[pos];
+        p.RemoveAt(pos);
+        pos = Random.Range(0, 2);
+        puzzle[1] = p[pos];
+        p.RemoveAt(pos);
+        puzzle[2] = p[0];
     }
 
     /// <summary>
@@ -49,7 +59,7 @@ public class PuzzleTower : Puzzle
         allStates.Add(new List<List<List<int>>>());
         allStates[0].Add(end);
 
-        for(int currentLevel = 0; currentLevel <= depth; currentLevel++)
+        for(int currentLevel = 0; currentLevel < depth; currentLevel++)
         {
             allStates.Add(new List<List<List<int>>>());
             foreach (List<List<int>> state in allStates[currentLevel])
@@ -98,7 +108,7 @@ public class PuzzleTower : Puzzle
     /// </summary>
     /// <param name="state">puzzle</param>
     /// <returns>copy of puzzle state</returns>
-    protected List<List<int>> CopyState(List<List<int>> state)
+    public List<List<int>> CopyState(List<List<int>> state)
     {
         List<List<int>> copy = new List<List<int>>();
         for (int i = 0; i < state.Count; i++)
@@ -212,6 +222,30 @@ public class PuzzleTower : Puzzle
         int fromSize = p[fromTower][p[fromTower].Count - 1];
         int toSize = p[toTower][p[toTower].Count - 1];
         return fromSize < toSize;
+    }
+
+    /// <summary>
+    /// Perform a puzzle move, if legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="toTower">Tower to move block to</param>
+    public void Move(int fromTower, int toTower)
+    {
+        Move(fromTower, toTower, puzzle);
+    }
+
+    /// <summary>
+    /// Perform a puzzle move, if legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="toTower">Tower to move block to</param>
+    /// <param name="p">Puzzle state to use</param>
+    public void Move(int fromTower, int toTower, List<List<int>> p)
+    {
+        if (!MoveOK(fromTower, toTower, p)) return;
+
+        p[toTower].Add(p[fromTower][p[fromTower].Count - 1]);
+        p[fromTower].RemoveAt(p[fromTower].Count - 1);
     }
 
     /// <summary>

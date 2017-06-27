@@ -10,6 +10,7 @@ public abstract class GameType
     public abstract StringKey HeroesName();
     public abstract StringKey QuestName();
     public abstract int MaxHeroes();
+    public abstract int DefaultHeroes();
     public abstract bool DisplayHeroes();
     public abstract float TilePixelPerSquare();
     // There are actually two fonts, should expand to include header/text
@@ -58,6 +59,11 @@ public class NoGameType : GameType
     }
 
     public override int MaxHeroes()
+    {
+        return 0;
+    }
+
+    public override int DefaultHeroes()
     {
         return 0;
     }
@@ -144,6 +150,11 @@ public class D2EGameType : GameType
         return 4;
     }
 
+    public override int DefaultHeroes()
+    {
+        return 4;
+    }
+
     public override bool DisplayHeroes()
     {
         return true;
@@ -218,6 +229,11 @@ class MoMGameType : GameType
     }
 
     public override int MaxHeroes()
+    {
+        return 10;
+    }
+
+    public override int DefaultHeroes()
     {
         return 5;
     }
