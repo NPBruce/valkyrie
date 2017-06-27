@@ -135,6 +135,12 @@ public class VarManager
             Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Dividing quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
         }
 
+        if (op.operation.Equals("%"))
+        {
+            vars[op.var] %= value;
+            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Modulus quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
+        }
+
         if (op.operation.Equals("="))
         {
             vars[op.var] = value;
