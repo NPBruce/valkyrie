@@ -188,7 +188,6 @@ public class PuzzleSlideWindow
 
     public void CreateBlock(PuzzleSlide.Block block, RectTransform pos, bool target = false)
     {
-        RectangleBorder border;
         Color borderColour = Color.yellow;
         Color bgColour = new Color(0.6f, 0.6f, 0f, 1f);
 
@@ -210,7 +209,7 @@ public class PuzzleSlideWindow
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (block.xpos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, ((block.xlen + 1) * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
         blockGO.AddComponent<CanvasRenderer>();
 
-        border = new RectangleBorder(blockGO.transform, borderColour, new Vector2((block.xlen + 1) * 3f, (block.ylen + 1) *3f));
+        new UIElementBorder(blockGO.transform, Game.DIALOG, borderColour);
 
         UnityEngine.UI.Image uiImage = blockGO.AddComponent<UnityEngine.UI.Image>();
         uiImage.color = bgColour;

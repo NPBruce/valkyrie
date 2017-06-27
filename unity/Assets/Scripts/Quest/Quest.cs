@@ -1373,7 +1373,7 @@ public class Quest
     {
         // Quest info on the token
         public QuestData.UI qUI;
-        public RectangleBorder border;
+        public UIElementBorder border;
 
         UnityEngine.UI.Text uiText;
 
@@ -1478,7 +1478,7 @@ public class Quest
 
             if (qUI.border)
             {
-                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), Game.BOARD);
+                border = new UIElementBorder(unityObject.transform, Game.BOARD, uiText.color);
             }
 
             game.tokenBoard.Add(this);
@@ -1494,7 +1494,7 @@ public class Quest
         {
             if (image != null && image.gameObject != null) image.color = c;
             if (uiText != null && uiText.gameObject != null) uiText.color = c;
-            if (border != null) border.color = c;
+            if (border != null) border.SetColor(c);
         }
 
         override public Color GetColor()
@@ -1528,7 +1528,6 @@ public class Quest
         public override void Remove()
         {
             Object.Destroy(unityObject);
-            if (border != null) border.Destroy();
         }
     }
 

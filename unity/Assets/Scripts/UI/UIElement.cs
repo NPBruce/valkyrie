@@ -13,8 +13,6 @@ namespace Assets.Scripts.UI
         protected GameObject text;
         // The background, unity object
         protected GameObject bg;
-        // Border for the button
-        protected RectangleBorder border;
 
         protected string tag = Game.DIALOG;
 

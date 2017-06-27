@@ -5,27 +5,34 @@ namespace Assets.Scripts.UI
 {
     class UIElementBorder
     {
+        protected GameObject[] bLine;
+
         public UIElementBorder(UIElement element)
         {
-            CreateBorder(element, Color.white);
+            CreateBorder(element.GetTransform(), element.GetTag(), Color.white);
         }
 
         public UIElementBorder(UIElement element, Color color)
         {
-            CreateBorder(element, color);
+            CreateBorder(element.GetTransform(), element.GetTag(), color);
         }
 
-        private void CreateBorder(UIElement element, Color color)
+        private void UIElementBorder(Transform transform, string tag, Color color)
         {
-            GameObject[] bLine = new GameObject[4];
+            CreateBorder(transform, tag, color);
+        }
+
+        private void CreateBorder(Transform transform, string tag, Color color)
+        {
+            bLine = new GameObject[4];
 
             // create 4 lines
             for (int i = 0; i < 4; i++)
             {
                 bLine[i] = new GameObject("Border" + i);
-                bLine[i].tag = element.GetTag();
+                bLine[i].tag = tag;
                 bLine[i].AddComponent<UnityEngine.UI.Image>().color = color;
-                bLine[i].transform.SetParent(element.GetTransform());
+                bLine[i].transform.SetParent(transform);
             }
 
             // Set the thickness of the lines
@@ -42,6 +49,20 @@ namespace Assets.Scripts.UI
 
             bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, element.GetRectTransform().rect.height);
             bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, thick);
+        }
+
+        /// <summary>
+        /// Set border color.</summary>
+        /// <param name="color">Color to use.</param>
+        public void SetColor(Color color)
+        {
+            foreach (GameObject line in bLine)
+            {
+                if (line != null)
+                {
+                    bLine[i].GetComponent<UnityEngine.UI.Image>().color = color;
+                }
+            }
         }
     }
 }
