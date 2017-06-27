@@ -440,10 +440,16 @@ namespace Assets.Scripts.UI
         /// <returns>New UIElement height in UIScaler units</returns>
         public virtual float HeightToTextPadding()
         {
-            float height = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f);
-            if (height < 1) height = 1;
-            GetRectTransform().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, GetRectTransform().rect.y, height * UIScaler.GetPixelsPerUnit());
-            return height;
+            float newHeight = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f);
+            if (newHeight < 1 + (textPaddingDefault * 2f))
+            {
+                newHeight = 1 + (textPaddingDefault * 2f);
+            }
+            float oldHeight = GetRectTransform().sizeDelta.y;
+            float newHeightPixels = newHeight * UIScaler.GetPixelsPerUnit();
+            GetRectTransform().anchoredPosition = new Vector2(GetRectTransform().anchoredPosition.x, GetRectTransform().anchoredPosition.y - ((newHeightPixels - oldHeight) / 2f));
+            GetRectTransform().sizeDelta = new Vector2(GetRectTransform().sizeDelta.x, newHeightPixels);
+            return newHeight;
         }
     }
 }
