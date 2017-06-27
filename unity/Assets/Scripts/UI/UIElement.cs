@@ -437,10 +437,13 @@ namespace Assets.Scripts.UI
 
         /// <summary>
         /// Set the UIElement to text height plus vertical padding</summary>
-        /// <returns>New UIElement height</returns>
-        public float HeightToTextPadding()
+        /// <returns>New UIElement height in UIScaler units</returns>
+        public virtual float HeightToTextPadding()
         {
-            GetRectTransform().height = text.GetComponent<UnityEngine.UI.Text>().preferredHeight + (textPaddingDefault * 2f);
+            float height = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f);
+            if (height < 1) height = 1;
+            GetRectTransform().height = height * UIScaler.GetPixelsPerUnit());
+            return height;
         }
     }
 }
