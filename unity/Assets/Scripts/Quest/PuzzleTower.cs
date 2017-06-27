@@ -22,7 +22,7 @@ public class PuzzleTower : Puzzle
         int pos = Random.Range(0, 3);
         puzzle[0] = p[pos];
         p.RemoveAt(pos);
-        int pos = Random.Range(0, 2);
+        pos = Random.Range(0, 2);
         puzzle[1] = p[pos];
         p.RemoveAt(pos);
         puzzle[2] = p[0];
@@ -229,7 +229,7 @@ public class PuzzleTower : Puzzle
     /// </summary>
     /// <param name="fromTower">Tower to move block from</param>
     /// <param name="toTower">Tower to move block to</param>
-    public bool Move(int fromTower, int toTower)
+    public void Move(int fromTower, int toTower)
     {
         Move(fromTower, toTower, puzzle);
     }
@@ -240,7 +240,7 @@ public class PuzzleTower : Puzzle
     /// <param name="fromTower">Tower to move block from</param>
     /// <param name="toTower">Tower to move block to</param>
     /// <param name="p">Puzzle state to use</param>
-    public bool Move(int fromTower, int toTower, List<List<int>> p)
+    public void Move(int fromTower, int toTower, List<List<int>> p)
     {
         if (!MoveOK(fromTower, toTower, p)) return;
 

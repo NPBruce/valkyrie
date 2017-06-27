@@ -280,15 +280,15 @@ public class Game : MonoBehaviour {
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor
     void Update()
     {
-        updateList.RemoveAll(delegate (object o) { return o == null; });
-        foreach(int i = 0; i < updateList.Count; i++)
+        updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
+        for(int i = 0; i < updateList.Count; i++)
         {
             if (!updateList[i].Update())
             {
                 updateList[i] = null;
             }
         }
-        updateList.RemoveAll(delegate (object o) { return o == null; });
+        updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -364,9 +364,9 @@ public class Game : MonoBehaviour {
         return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
     }
 
-    public void AddUpdateListener(IUpdateListener object)
+    public void AddUpdateListener(IUpdateListener obj)
     {
-        updateList.Add(object);
+        updateList.Add(obj);
     }
 }
 

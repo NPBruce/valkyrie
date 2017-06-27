@@ -3,26 +3,26 @@ using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI
 {
-    class UIElementBorder
+    public class UIElementBorder
     {
         protected GameObject[] bLine;
 
         public UIElementBorder(UIElement element)
         {
-            CreateBorder(element.GetTransform(), element.GetTag(), Color.white);
+            CreateBorder(element.GetTransform(), element.GetRectTransform(), element.GetTag(), Color.white);
         }
 
         public UIElementBorder(UIElement element, Color color)
         {
-            CreateBorder(element.GetTransform(), element.GetTag(), color);
+            CreateBorder(element.GetTransform(), element.GetRectTransform(), element.GetTag(), color);
         }
 
-        private void UIElementBorder(Transform transform, string tag, Color color)
+        public UIElementBorder(Transform transform, RectTransform rectTrans, string tag, Color color)
         {
-            CreateBorder(transform, tag, color);
+            CreateBorder(transform, rectTrans, tag, color);
         }
 
-        private void CreateBorder(Transform transform, string tag, Color color)
+        private void CreateBorder(Transform transform, RectTransform rectTrans, string tag, Color color)
         {
             bLine = new GameObject[4];
 
@@ -39,15 +39,15 @@ namespace Assets.Scripts.UI
             float thick = 0.05f * UIScaler.GetPixelsPerUnit();
 
             bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, thick);
-            bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, element.GetRectTransform().rect.width);
+            bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, rectTrans.rect.width);
 
             bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, thick);
-            bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, element.GetRectTransform().rect.width);
+            bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, rectTrans.rect.width);
 
-            bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, element.GetRectTransform().rect.height);
+            bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height);
             bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, thick);
 
-            bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, element.GetRectTransform().rect.height);
+            bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height);
             bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, thick);
         }
 
@@ -60,7 +60,7 @@ namespace Assets.Scripts.UI
             {
                 if (line != null)
                 {
-                    bLine[i].GetComponent<UnityEngine.UI.Image>().color = color;
+                    line.GetComponent<UnityEngine.UI.Image>().color = color;
                 }
             }
         }

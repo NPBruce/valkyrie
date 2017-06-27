@@ -398,10 +398,10 @@ namespace Assets.Scripts.UI
         public bool AtLocationPixels(float x, float y)
         {
             RectTransform transBg = bg.GetComponent<RectTransform>();
-            if (transbg.x < x) return false;
-            if (transbg.y < Y) return false;
-            if (transbg.x + transbg.width > x) return false;
-            if (transbg.y + transbg.height > Y) return false;
+            if (transBg.rect.x < x) return false;
+            if (transBg.rect.y < y) return false;
+            if (transBg.rect.x + transBg.rect.width > x) return false;
+            if (transBg.rect.y + transBg.rect.height > y) return false;
             return true;
         }
 
@@ -410,7 +410,7 @@ namespace Assets.Scripts.UI
         /// <returns>Amount of vertical space, less padding value in UIScaler units</returns>
         protected float GetVerticalTextSpace()
         {
-            float gap = return text.GetComponent<RectTransform>().height - text.GetComponent<UnityEngine.UI.Text>().preferredHeight;
+            float gap = text.GetComponent<RectTransform>().rect.height - text.GetComponent<UnityEngine.UI.Text>().preferredHeight;
             gap -= textPaddingDefault * 2f;
             return gap / UIScaler.GetPixelsPerUnit();
         }
@@ -442,7 +442,7 @@ namespace Assets.Scripts.UI
         {
             float height = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f);
             if (height < 1) height = 1;
-            GetRectTransform().height = height * UIScaler.GetPixelsPerUnit());
+            GetRectTransform().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, GetRectTransform().rect.y, height * UIScaler.GetPixelsPerUnit());
             return height;
         }
     }

@@ -81,7 +81,7 @@ public class PuzzleTowerWindow : IUpdateListener
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-5), 20, 3, 2);
-        ui.SetText((puzzle.moves - previousMoves).ToString());
+        ui.SetText((puzzle.moves - lastMoves).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 

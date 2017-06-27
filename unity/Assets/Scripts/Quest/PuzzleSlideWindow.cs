@@ -209,7 +209,7 @@ public class PuzzleSlideWindow
         transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (block.xpos * 3f * UIScaler.GetPixelsPerUnit()) + 0.1f, ((block.xlen + 1) * 3f * UIScaler.GetPixelsPerUnit()) - 0.2f);
         blockGO.AddComponent<CanvasRenderer>();
 
-        new UIElementBorder(blockGO.transform, Game.DIALOG, borderColour);
+        new UIElementBorder(blockGO.transform, transBg, Game.DIALOG, borderColour);
 
         UnityEngine.UI.Image uiImage = blockGO.AddComponent<UnityEngine.UI.Image>();
         uiImage.color = bgColour;

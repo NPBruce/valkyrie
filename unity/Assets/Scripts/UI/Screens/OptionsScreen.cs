@@ -72,7 +72,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation(14, 2, ((0.75f * UIScaler.GetWidthUnits()) - 7, 11);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 11, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -130,7 +130,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) eVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation(14, 2, ((0.75f * UIScaler.GetWidthUnits()) - 7, 17);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 17, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 

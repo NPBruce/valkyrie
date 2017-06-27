@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 using System.IO;
 
@@ -1478,7 +1479,7 @@ public class Quest
 
             if (qUI.border)
             {
-                border = new UIElementBorder(unityObject.transform, Game.BOARD, uiText.color);
+                border = new UIElementBorder(unityObject.transform, rectTransform, Game.BOARD, uiText.color);
             }
 
             game.tokenBoard.Add(this);
