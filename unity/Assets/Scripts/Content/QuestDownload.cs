@@ -15,15 +15,19 @@ public class QuestDownload : MonoBehaviour
     public WWW download;
     public static string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
     public Game game;
-    List<RemoteQuest> remoteQuests = new List<RemoteQuest>();
+    List<RemoteQuest> remoteQuests;
     IniData localManifest;
     DictionaryI18n localizationDict;
     Dictionary<string, Texture2D> textures;
 
+    /// <summary>
+    /// Download required files then draw screen
+    /// </summary>
     void Start()
     {
         game = Game.Get();
         textures = new Dictionary<string, Texture2D>();
+        remoteQuests = new List<RemoteQuest>();
         // For development builds use the development branch of the store
         if (char.IsNumber(game.version[game.version.Length - 1]))
         {
@@ -37,6 +41,9 @@ public class QuestDownload : MonoBehaviour
         StartCoroutine(Download(remoteManifest, DownloadManifest));
     }
 
+    /// <summary>
+    /// Parse the downloaded remote manifest and start download of individual quest files
+    /// </summary>
     public void DownloadManifest()
     {
         IniData remoteManifest = IniRead.ReadFromString(download.text);
@@ -47,6 +54,9 @@ public class QuestDownload : MonoBehaviour
         DownloadQuestFiles();
     }
 
+    /// <summary>
+    /// Called to check if there are any more quest components to download, when finished downloads dictionary
+    /// </summary>
     public void DownloadQuestFiles()
     {
         foreach (RemoteQuest rq in remotequests)
@@ -59,12 +69,18 @@ public class QuestDownload : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Read the downloaded dictionary, draw screen
+    /// </summary>
     public void ReadDict()
     {
         localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
 
+    /// <summary>
+    /// Draw download options screen
+    /// </summary>
     public void DrawList()
     {
         localManifest = IniRead.ReadFromString("");
@@ -271,12 +287,20 @@ public class QuestDownload : MonoBehaviour
         new QuestSelectionScreen(ql);
     }
 
+    /// <summary>
+    /// Select to download
+    /// </summary>
+    /// <param name="rq">Remote quest to download</param>
     public void Selection(RemoteQuest rq)
     {
         string package = rq.path + rq.name + ".valkyrie";
         StartCoroutine(Download(package, delegate { Save(rq); }));
     }
 
+    /// <summary>
+    /// Select to delete
+    /// </summary>
+    /// <param file="file">File name to delete</param>
     public void Delete(string file)
     {
         string toDelete = saveLocation() + "/" + file;
@@ -285,6 +309,10 @@ public class QuestDownload : MonoBehaviour
         DrawList();
     }
 
+    /// <summary>
+    /// Called after download finished to save to disk
+    /// </summary>
+    /// <param name="rq">Remote quest to save</param>
     public void Save(RemoteQuest rq)
     {
         QuestLoader.mkDir(saveLocation());
@@ -309,11 +337,20 @@ public class QuestDownload : MonoBehaviour
         DrawList();
     }
 
+    /// <summary>
+    /// Get save directory without trailing '/'
+    /// </summary>
+    /// <returns>localtion to save packages</returns>
     public string saveLocation()
     {
         return Game.AppData() + "/Download";
     }
 
+    /// <summary>
+    /// Download and call function
+    /// </summary>
+    /// <param name="file">Path to download</param>
+    /// <param name="call">function to call on completion</param>
     public IEnumerator Download(string file, UnityEngine.Events.UnityAction call)
     {
         download = new WWW(file);
@@ -336,6 +373,10 @@ public class QuestDownload : MonoBehaviour
         bool iniError = false;
         public Dictionary<string, string> data;
 
+        /// <summary>
+        /// Constuct remote quest object from manifest data
+        /// </summary>
+        /// <param name="kv">manifest data</param>
         public RemoteQuest(KeyValuePair<string, Dictionary<string, string>> kv)
         {
             name = kv.Key;
@@ -347,12 +388,23 @@ public class QuestDownload : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Extract manifest value
+        /// </summary>
+        /// <param name="key">manifest key</param>
+        /// <returns>Value or empty string if not present</returns>
         public string GetData(string key)
         {
             if (data.ContainsKey(key)) return data[key];
             return "";
         }
 
+        /// <summary>
+        /// Fetch next required file
+        /// </summary>
+        /// <param name="qd">QuestDownloadObeject to use</param>
+        /// <param name="call">Function to call after download</param>
+        /// <returns>true if no downloads required</returns>
         public bool FetchContent(QuestDownload qd, UnityEngine.Events.UnityAction call)
         {
             if (data.ContainsKey("external"))
@@ -373,6 +425,11 @@ public class QuestDownload : MonoBehaviour
             return true;
         }
 
+        /// <summary>
+        /// Parse downloaded ini data
+        /// </summary>
+        /// <param name="download">download object</param>
+        /// <param name="call">Function to call after parse</param>
         public void IniFetched(WWW download, UnityEngine.Events.UnityAction call)
         {
             if (download.error == null)
@@ -387,6 +444,11 @@ public class QuestDownload : MonoBehaviour
             call;
         }
 
+        /// <summary>
+        /// Parse downloaded image data
+        /// </summary>
+        /// <param name="download">download object</param>
+        /// <param name="call">Function to call after parse</param>
         public void ImageFetched(WWW download, UnityEngine.Events.UnityAction call)
         {
             if (download.error == null)
