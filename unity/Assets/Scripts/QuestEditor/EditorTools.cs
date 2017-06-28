@@ -94,17 +94,15 @@ public class EditorTools
         Dialog.Destroy();
         Game game = Game.Get();
         System.Environment.SpecialFolder.DesktopDirectory;
-        string packageBase = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
+        string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
-            packageName = packageBase;
-            int postfix = 2;
-            while (Directory.Exists(System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName)
-            {
-                packageName = packageBase + postfix++;
-            }
-
             string destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName;
+            int postfix = 2;
+            while (Directory.Exists(destination)
+            {
+                destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName + postfix++;
+            }
             Directory.CreateDirectory(destination);
 
             File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
