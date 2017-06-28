@@ -191,6 +191,7 @@ public class EventManager
                 }
             }
             game.audioControl.Music(music, false);
+            game.quest.music = new List<string>(e.qEvent.music);
         }
 
         // Perform var operations
