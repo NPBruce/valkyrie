@@ -614,7 +614,7 @@ public class Quest
         List<string> music = new List<string>();
         if (saveData.Get("Music") != null)
         {
-            music = new List<string>(saveData.Get("Shops").Keys);
+            music = new List<string>(saveData.Get("Music").Values);
             List<string> toPlay = new List<string>();
             foreach (string s in music)
             {
@@ -1227,9 +1227,9 @@ public class Quest
         if (music.Count > 0)
         {
             r += "[Music]" + nl;
-            foreach (string s in music)
+            for (int j = 0; j < music.Count; j++)
             {
-                r += s + nl;
+                r += "track" + j + "=" + music[j] + nl;
             }
             r += nl;
         }
