@@ -42,7 +42,9 @@ public class PuzzleTowerWindow : IUpdateListener
     {
         Destroyer.Dialog();
         UIElement ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, 22);
+        towerBoxes = new List<UIElement>();
+
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, 22.5f);
         new UIElementBorder(ui);
 
         ui = new UIElement();
@@ -60,44 +62,44 @@ public class PuzzleTowerWindow : IUpdateListener
 
         for(int i = 0; i < puzzleDisplay.Count; i++)
         {
-            CreateTower(-9 + (i * 9), 17f, puzzleDisplay[i]);
+            CreateTower(UIScaler.GetHCenter(-9) + (i * 9), 17f, puzzleDisplay[i]);
         }
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(6.5f), 3, 7, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-5), 18, 7, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.SKILL));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(8.5f), 5, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(2), 18, 3, 2);
         ui.SetText(EventManager.OutputSymbolReplace(questPuzzle.skill));
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-11f), 20f, 6, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-11f), 20.5f, 6, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.MOVES));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-5), 20, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-5), 20.5f, 3, 2);
         ui.SetText((puzzle.moves - lastMoves).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-2f), 20f, 10, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-2f), 20.5f, 10, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.TOTAL_MOVES));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(8), 20, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(8), 20.5f, 3, 2);
         ui.SetText(puzzle.moves.ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-13), 23.5f, 8, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-13), 24, 8, 2);
         if (puzzle.Solved())
         {
             ui.SetText(CommonStringKeys.CLOSE, Color.grey);
@@ -112,7 +114,7 @@ public class PuzzleTowerWindow : IUpdateListener
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(5), 23.5f, 8, 2);
+        ui.SetLocation(UIScaler.GetHCenter(5), 24, 8, 2);
         if (!puzzle.Solved())
         {
             ui.SetText(eventData.GetButtons()[0].GetLabel(), Color.grey);
@@ -168,7 +170,7 @@ public class PuzzleTowerWindow : IUpdateListener
         foreach (int size in blocks)
         {
             CreateBlock(hCentre, vBottom, size);
-            vBottom += 2;
+            vBottom -= 2;
         }
     }
 
@@ -191,9 +193,11 @@ public class PuzzleTowerWindow : IUpdateListener
     /// </summary>
     void IUpdateListener.Click()
     {
+        if (puzzle.Solved()) return;
+
         for (int i = 0; i < towerBoxes.Count; i++)
         {
-            if (towerBoxes[i].AtLocationPixels(Input.mousePosition.x, Input.mousePosition.y))
+            if (towerBoxes[i].AtLocationPixels(Input.mousePosition.x, Screen.height - Input.mousePosition.y))
             {
                 startDragTower = i;
                 hoverTower = i;
@@ -212,7 +216,7 @@ public class PuzzleTowerWindow : IUpdateListener
         int newHover = -1;
         for (int i = 0; i < towerBoxes.Count; i++)
         {
-            if (towerBoxes[i].AtLocationPixels(Input.mousePosition.x, Input.mousePosition.y))
+            if (towerBoxes[i].AtLocationPixels(Input.mousePosition.x, Screen.height - Input.mousePosition.y))
             {
                 newHover = i;
             }
@@ -237,6 +241,7 @@ public class PuzzleTowerWindow : IUpdateListener
                 puzzle.Move(startDragTower, hoverTower);
             }
             puzzleDisplay = puzzle.CopyState(puzzle.puzzle);
+            startDragTower = -1;
             CreateWindow();
         }
 

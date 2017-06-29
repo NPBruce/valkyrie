@@ -614,7 +614,7 @@ public class Quest
         List<string> music = new List<string>();
         if (saveData.Get("Music") != null)
         {
-            music = new List<string>(saveData.Get("Shops").Keys);
+            music = new List<string>(saveData.Get("Music").Values);
             List<string> toPlay = new List<string>();
             foreach (string s in music)
             {
@@ -835,6 +835,10 @@ public class Quest
             if (kv.Key.IndexOf("PuzzleImage") == 0)
             {
                 puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length), new PuzzleImage(kv.Value));
+            }
+            if (kv.Key.IndexOf("PuzzleTower") == 0)
+            {
+                puzzle.Add(kv.Key.Substring("PuzzleTower".Length, kv.Key.Length - "PuzzleTower".Length), new PuzzleTower(kv.Value));
             }
         }
         // Restore event quotas
@@ -1223,9 +1227,9 @@ public class Quest
         if (music.Count > 0)
         {
             r += "[Music]" + nl;
-            foreach (string s in music)
+            for (int j = 0; j < music.Count; j++)
             {
-                r += s + nl;
+                r += "track" + j + "=" + music[j] + nl;
             }
             r += nl;
         }

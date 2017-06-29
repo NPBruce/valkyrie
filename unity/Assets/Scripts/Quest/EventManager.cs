@@ -191,7 +191,10 @@ public class EventManager
                 }
             }
             game.audioControl.Music(music, false);
-            game.quest.music = new List<string>(e.qEvent.music);
+            if (music.Count > 1)
+            {
+                game.quest.music = new List<string>(e.qEvent.music);
+            }
         }
 
         // Perform var operations
@@ -290,6 +293,10 @@ public class EventManager
             if (p.puzzleClass.Equals("image"))
             {
                 new PuzzleImageWindow(e);
+            }
+            if (p.puzzleClass.Equals("tower"))
+            {
+                new PuzzleTowerWindow(e);
             }
             return;
         }
