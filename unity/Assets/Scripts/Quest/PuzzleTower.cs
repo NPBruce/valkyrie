@@ -79,24 +79,28 @@ public class PuzzleTower : Puzzle
     {
         for (int i = 0; i < state.Count; i++)
         {
+            if (!ReverseMoveOK(i, state)) continue;
+
             for (int j = 0; j < state.Count; j++)
             {
                 if (j == i) continue;
-                if (MoveOK(i, j, state))
+
+                List<List<int>> newState = CopyState(state);
+                newState[j].Add(state[i][state[i].Count - 1]);
+                newState[i].RemoveAt(state[i].Count - 1);
+                bool uniqueState = true;
+                foreach (List<List<List<int>>> level in allStates)
                 {
-                    List<List<int>> newState = CopyState(state);
-                    newState[j].Add(state[i][state[i].Count - 1]);
-                    newState[i].RemoveAt(state[i].Count - 1);
-                    foreach (List<List<List<int>>> level in allStates)
+                    foreach (List<List<int>> oldState in level)
                     {
-                        foreach (List<List<int>> oldState in level)
+                        if (Equal(newState, oldState))
                         {
-                            if (Equal(newState, oldState))
-                            {
-                                continue;
-                            }
+                            uniqueState = false;
                         }
                     }
+                }
+                if (uniqueState)
+                {
                     allStates[allStates.Count - 1].Add(newState);
                 }
             }
@@ -224,6 +228,24 @@ public class PuzzleTower : Puzzle
         int fromSize = p[fromTower][p[fromTower].Count - 1];
         int toSize = p[toTower][p[toTower].Count - 1];
         return fromSize < toSize;
+    }
+
+    /// <summary>
+    /// Check if a reverse puzzle move is legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="p">Puzzle state to use</param>
+    /// <returns>If the move is legal</returns>
+    public bool ReverseMoveOK(int fromTower, List<List<int>> p)
+    {
+        if (p.Count <= fromTower) return false;
+        if (fromTower < 0) return false;
+        if (p[fromTower].Count == 0) return false;
+        if (p[fromTower].Count == 1) return true;
+
+        int moveSize = p[fromTower][p[fromTower].Count - 1];
+        int baseSize = p[fromTower][p[fromTower].Count - 2];
+        return moveSize < baseSize;
     }
 
     /// <summary>
