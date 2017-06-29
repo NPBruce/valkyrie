@@ -50,7 +50,7 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", ABILITY));
 
         abilityUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        abilityUIE.SetLocation(0.5f, offset, 19, 8);
+        abilityUIE.SetLocation(0.5f, offset, 19, 18);
         abilityUIE.SetText(activationComponent.ability.Translate());
         offset += abilityUIE.HeightToTextPadding(1);
         abilityUIE.SetButton(delegate { UpdateAbility(); });
@@ -75,7 +75,7 @@ public class EditorComponentActivation : EditorComponent
         }
 
         masterActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        masterActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        masterActionsUIE.SetLocation(0.5f, offset, 19, 18);
         masterActionsUIE.SetText(activationComponent.masterActions.Translate(true));
         offset += masterActionsUIE.HeightToTextPadding(1);
         masterActionsUIE.SetButton(delegate { UpdateMasterActions(); });
@@ -100,7 +100,7 @@ public class EditorComponentActivation : EditorComponent
         }
 
         minionActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        minionActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        minionActionsUIE.SetLocation(0.5f, offset, 19, 18);
         minionActionsUIE.SetText(activationComponent.minionActions.Translate(true));
         offset += minionActionsUIE.HeightToTextPadding(1);
         minionActionsUIE.SetButton(delegate { UpdateMinionActions(); });
@@ -116,7 +116,7 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", INITIAL_MESSAGE));
 
         abilityUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        abilityUIE.SetLocation(0.5f, offset, 19, 8);
+        abilityUIE.SetLocation(0.5f, offset, 19, 18);
         abilityUIE.SetText(activationComponent.ability.Translate(true));
         offset += abilityUIE.HeightToTextPadding(1);
         abilityUIE.SetButton(delegate { UpdateAbility(); });
@@ -140,7 +140,7 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", ATTACK_MESSAGE));
 
         masterActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        masterActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        masterActionsUIE.SetLocation(0.5f, offset, 19, 18);
         masterActionsUIE.SetText(activationComponent.masterActions.Translate(true));
         offset += masterActionsUIE.HeightToTextPadding(1);
         masterActionsUIE.SetButton(delegate { UpdateMasterActions(); });

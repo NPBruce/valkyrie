@@ -133,7 +133,7 @@ public class EditorComponentUI : EditorComponentEvent
             offset += 2;
 
             textUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-            textUIE.SetLocation(0.5f, offset, 19, 8);
+            textUIE.SetLocation(0.5f, offset, 19, 38);
             textUIE.SetText(uiComponent.uiText.Translate(true));
             offset += textUIE.HeightToTextPadding(1);
             textUIE.SetButton(delegate { UpdateUIText(); });

@@ -2,6 +2,9 @@
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using System.Security.Cryptography;
+using System.IO;
+using Ionic.Zip;
+using ValkyrieTools;
 
 public class EditorTools
 {
@@ -91,17 +94,17 @@ public class EditorTools
     /// </summary>
     private static void CreatePackage()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
-        System.Environment.SpecialFolder.DesktopDirectory;
+
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
-            string destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName;
+            string destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName;
             int postfix = 2;
-            while (Directory.Exists(destination)
+            while (Directory.Exists(destination))
             {
-                destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName + postfix++;
+                destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName + postfix++;
             }
             Directory.CreateDirectory(destination);
 
@@ -112,12 +115,12 @@ public class EditorTools
             zip.Save(destination + "/" + packageName + ".valkyrie");
 
             string icon = game.quest.qd.quest.image;
-            if (icon.length > 0)
+            if (icon.Length > 0)
             {
                 string iconName = Path.GetFileName(icon);
                 // Temp hack to get ToString to output local file
                 game.quest.qd.quest.image = iconName;
-                File.Copy(Path.Combine(game.quest.qd.quest.path, icon), destination + "/" + iconName);
+                File.Copy(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), icon), destination + "/" + iconName);
             }
             string manifest = game.quest.qd.quest.ToString();
             // Restore icon
@@ -127,12 +130,12 @@ public class EditorTools
             using (FileStream stream = File.OpenRead(destination + "/" + packageName + ".valkyrie"))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + checksum;
+                manifest += "version=" + System.BitConverter.ToString(checksum);
             }
 
             File.WriteAllText(destination + "/" + packageName + ".ini", manifest);
         }
-        catch (System.IOException e)
+        catch (System.IO.IOException e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to valkyrie package." + e.Message);
         }

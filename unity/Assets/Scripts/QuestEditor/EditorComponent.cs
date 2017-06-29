@@ -158,7 +158,7 @@ public class EditorComponent {
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
         commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-        commentUIE.SetLocation(0.5f, offset, 19, 5);
+        commentUIE.SetLocation(0.5f, offset, 19, 15);
         commentUIE.SetText(component.comment);
         offset += commentUIE.HeightToTextPadding(1);
         commentUIE.SetButton(delegate { SetComment(); });
