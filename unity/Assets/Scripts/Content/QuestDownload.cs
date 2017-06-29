@@ -13,7 +13,6 @@ public class QuestDownload : MonoBehaviour
     public Dictionary<string, QuestData.Quest> questList;
 
     public WWW download;
-    protected static string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
     public Game game;
     List<RemoteQuest> remoteQuests;
     IniData localManifest;
@@ -38,12 +37,8 @@ public class QuestDownload : MonoBehaviour
     /// <returns>the path to the remote files</returns>
     public static string GetServerLocation()
     {
-        // For development builds use the development branch of the store
-        if (char.IsNumber(Game.Get().version[Game.Get().version.Length - 1]))
-        {
-            return serverLocation + "master/" + Game.Get().gameType.TypeName() + "/";
-        }
-        return serverLocation + "development/" + Game.Get().gameType.TypeName() + "/";
+        TextAsset downloadSrc = Resources.Load("Text/download") as TextAsset;
+        return downloadSrc.text + Game.Get().gameType.TypeName() + "/";
     }
 
     /// <summary>
