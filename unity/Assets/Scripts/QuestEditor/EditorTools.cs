@@ -2,6 +2,9 @@
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using System.Security.Cryptography;
+using System.IO;
+using Ionic.Zip;
+using ValkyrieTools;
 
 public class EditorTools
 {
@@ -91,15 +94,15 @@ public class EditorTools
     /// </summary>
     private static void CreatePackage()
     {
-        Dialog.Destroy();
+        Destroyer.Dialog();
         Game game = Game.Get();
-        System.Environment.SpecialFolder.DesktopDirectory;
+
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
             string destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName;
             int postfix = 2;
-            while (Directory.Exists(destination)
+            while (Directory.Exists(destination))
             {
                 destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName + postfix++;
             }
@@ -112,7 +115,7 @@ public class EditorTools
             zip.Save(destination + "/" + packageName + ".valkyrie");
 
             string icon = game.quest.qd.quest.image;
-            if (icon.length > 0)
+            if (icon.Length > 0)
             {
                 string iconName = Path.GetFileName(icon);
                 // Temp hack to get ToString to output local file
@@ -132,7 +135,7 @@ public class EditorTools
 
             File.WriteAllText(destination + "/" + packageName + ".ini", manifest);
         }
-        catch (System.IOException e)
+        catch (System.IO.IOException e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to valkyrie package." + e.Message);
         }

@@ -59,9 +59,9 @@ public class QuestDownload : MonoBehaviour
     /// </summary>
     public void DownloadQuestFiles()
     {
-        foreach (RemoteQuest rq in remotequests)
+        foreach (RemoteQuest rq in remoteQuests)
         {
-            if(FetchContent(this, DownloadQuestFiles))
+            if(rq.FetchContent(this, DownloadQuestFiles))
             {
                 string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
                 StartCoroutine(Download(remoteDict, ReadDict));
@@ -119,7 +119,7 @@ public class QuestDownload : MonoBehaviour
             bool update = true;
             if (exists)
             {
-                string localHash = localManifest.Get(kv.Key, "version");
+                string localHash = localManifest.Get(rq.name, "version");
                 string remoteHash = rq.GetData("version");
 
                 update = !localHash.Equals(remoteHash);
@@ -148,7 +148,7 @@ public class QuestDownload : MonoBehaviour
             ui.SetBGColor(bg);
             if (update) ui.SetButton(delegate { Selection(rq); });
 
-            if (if (rq.image != null)
+            if (rq.image != null)
             {
                 ui.SetImage(rq.image);
             }
@@ -411,14 +411,14 @@ public class QuestDownload : MonoBehaviour
             {
                 if (iniError) return true;
 
-                public StartCoroutine(qd.Download(path + name + ".ini", delegate { IniFetched(qd.download, call); }));
+                qd.StartCoroutine(qd.Download(path + name + ".ini", delegate { IniFetched(qd.download, call); }));
                 return false;
             }
-            if (data.ContainsKey("image") && data["image"].length > 0)
+            if (data.ContainsKey("image") && data["image"].Length > 0)
             {
                 if (image == null && !imageError)
                 {
-                    public StartCoroutine(qd.Download(path + data["image"], delegate { ImageFetched(qd.download, call); }));
+                    qd.StartCoroutine(qd.Download(path + data["image"], delegate { ImageFetched(qd.download, call); }));
                     return false;
                 }
             }
@@ -441,7 +441,7 @@ public class QuestDownload : MonoBehaviour
             {
                 iniError = true;
             }
-            call;
+            call();
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ public class QuestDownload : MonoBehaviour
             {
                 imageError = true;
             }
-            call;
+            call();
         }
     }
 }

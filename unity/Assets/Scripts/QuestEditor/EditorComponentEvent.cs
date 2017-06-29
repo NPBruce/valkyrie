@@ -628,7 +628,7 @@ public class EditorComponentEvent : EditorComponent
                     return;
                 }
             }
-            if (!infoUIE.HeightAtTextPadding(1))
+            if (!eventTextUIE.HeightAtTextPadding(1))
             {
                 Update();
             }

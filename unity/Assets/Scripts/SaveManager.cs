@@ -98,7 +98,7 @@ class SaveManager
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }
-        catch (System.IOException e)
+        catch (System.IO.IOException e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
