@@ -102,7 +102,7 @@ public class EditorComponentCustomMonster : EditorComponent
                 }
 
                 infoUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-                infoUIE.SetLocation(0.5f, offset, 19, 8);
+                infoUIE.SetLocation(0.5f, offset, 19, 18);
                 infoUIE.SetText(monsterComponent.info.Translate());
                 offset += infoUIE.HeightToTextPadding(1);
                 infoUIE.SetButton(delegate { UpdateInfo(); });

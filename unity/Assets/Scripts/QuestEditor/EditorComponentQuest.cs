@@ -76,7 +76,7 @@ public class EditorComponentQuest : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
 
         descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        descriptionUIE.SetLocation(0.5f, offset, 19, 10);
+        descriptionUIE.SetLocation(0.5f, offset, 19, 30);
         descriptionUIE.SetText(game.quest.qd.quest.description.Translate(true));
         offset += descriptionUIE.HeightToTextPadding(1);
         descriptionUIE.SetButton(delegate { UpdateQuestDesc(); });
@@ -89,7 +89,7 @@ public class EditorComponentQuest : EditorComponent
 
 
         authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        authorsUIE.SetLocation(0.5f, offset, 19, 6);
+        authorsUIE.SetLocation(0.5f, offset, 19, 16);
         authorsUIE.SetText(game.quest.qd.quest.authors.Translate(true));
         offset += authorsUIE.HeightToTextPadding(1);
         authorsUIE.SetButton(delegate { UpdateQuestAuth(); });

@@ -260,7 +260,7 @@ public class EditorComponentEvent : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", DIALOG));
 
         eventTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        eventTextUIE.SetLocation(0.5f, offset, 19, 8);
+        eventTextUIE.SetLocation(0.5f, offset, 19, 18);
         eventTextUIE.SetText(eventComponent.text.Translate(true));
         offset += eventTextUIE.HeightToTextPadding(1);
         eventTextUIE.SetButton(delegate { UpdateText(); });
