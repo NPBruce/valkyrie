@@ -25,6 +25,8 @@ public class EditorComponentCustomMonster : EditorComponent
     UIElementEditablePaneled infoUIE;
     UIElementEditable healthUIE;
     UIElementEditable healthHeroUIE;
+    UIElementEditable horrorUIE;
+    UIElementEditable awarenessUIE;
 
     // TODO: Translate expansion traits, translate base monster names.
 
@@ -191,8 +193,74 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetButton(delegate { SetHealth(); });
             new UIElementBorder(ui);
         }
-
         offset += 2;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 7, 1);
+        ui.SetText(new StringKey("val", "X_COLON", horror));
+
+        if (game.gameType is MoMGameType)
+        {
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.horrorDefined)
+            {
+                horrorUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+                horrorUIE.SetLocation(7, offset, 3, 1);
+                horrorUIE.SetText(monsterComponent.healthBase.ToString());
+                horrorUIE.SetSingleLine();
+                horrorUIE.SetButton(delegate { UpdateHorror(); });
+                new UIElementBorder(horrorUIE);
+
+                if (monsterComponent.baseMonster.Length > 0)
+                {
+                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                    ui.SetLocation(10, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearHorror(); });
+                    new UIElementBorder(ui);
+                }
+            }
+            else
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(10, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetHealth(); });
+                new UIElementBorder(ui);
+            }
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 7, 1);
+            ui.SetText(new StringKey("val", "X_COLON", AWARENESS));
+
+            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.awarenessDefined)
+            {
+                awarenessUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+                awarenessUIE.SetLocation(7, offset, 3, 1);
+                awarenessUIE.SetText(monsterComponent.healthBase.ToString());
+                awarenessUIE.SetSingleLine();
+                awarenessUIE.SetButton(delegate { UpdateAwareness(); });
+                new UIElementBorder(awarenessUIE);
+
+                if (monsterComponent.baseMonster.Length > 0)
+                {
+                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                    ui.SetLocation(10, offset, 3, 1);
+                    ui.SetText(CommonStringKeys.RESET);
+                    ui.SetButton(delegate { ClearAwareness(); });
+                    new UIElementBorder(ui);
+                }
+            }
+            else
+            {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(10, offset, 3, 1);
+                ui.SetText(CommonStringKeys.SET);
+                ui.SetButton(delegate { SetAwareness(); });
+                new UIElementBorder(ui);
+            }
+            offset += 2;
+        }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 3, 1);
@@ -435,6 +503,14 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 SetHealth();
             }
+            if (!monsterComponent.horrorDefined)
+            {
+                SetHorror();
+            }
+            if (!monsterComponent.awarenessDefined)
+            {
+                SetAwareness();
+            }
         }
         else
         {
@@ -674,6 +750,44 @@ public class EditorComponentCustomMonster : EditorComponent
         monsterComponent.healthBase = 0;
         monsterComponent.healthPerHero = 0;
         monsterComponent.healthDefined = true;
+        Update();
+    }
+
+    public void UpdateHorror()
+    {
+        int.TryParse(horrorUIE.GetText(), out monsterComponent.horror);
+    }
+
+    public void ClearHorror()
+    {
+        monsterComponent.horror = 0;
+        monsterComponent.horrorDefined = false;
+        Update();
+    }
+
+    public void SetHorror()
+    {
+        monsterComponent.horror = 0;
+        monsterComponent.horrorDefined = true;
+        Update();
+    }
+
+    public void UpdateAwareness()
+    {
+        int.TryParse(awarenessUIE.GetText(), out monsterComponent.awareness);
+    }
+
+    public void ClearAwareness()
+    {
+        monsterComponent.awareness = 0;
+        monsterComponent.awarenessDefined = false;
+        Update();
+    }
+
+    public void SetAwareness()
+    {
+        monsterComponent.awareness = 0;
+        monsterComponent.awarenessDefined = true;
         Update();
     }
 
