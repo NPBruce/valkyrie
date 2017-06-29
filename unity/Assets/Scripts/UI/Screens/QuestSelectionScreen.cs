@@ -103,7 +103,7 @@ namespace Assets.Scripts.UI.Screens
                             symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                         }
                         ui = new UIElement(scrollArea.GetScrollTransform());
-                        ui.SetLocation(UIScaler.GetRight(-12), offset + 1, 7, 2);
+                        ui.SetLocation(UIScaler.GetRight(-13), offset + 1, 9, 2);
                         ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
                         ui.SetBGColor(Color.clear);
                         ui.SetFontSize(UIScaler.GetMediumFont());

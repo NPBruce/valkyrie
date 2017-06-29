@@ -13,7 +13,7 @@ public class QuestDownload : MonoBehaviour
     public Dictionary<string, QuestData.Quest> questList;
 
     public WWW download;
-    public static string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
+    protected static string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
     public Game game;
     List<RemoteQuest> remoteQuests;
     IniData localManifest;
@@ -28,17 +28,22 @@ public class QuestDownload : MonoBehaviour
         game = Game.Get();
         textures = new Dictionary<string, Texture2D>();
         remoteQuests = new List<RemoteQuest>();
-        // For development builds use the development branch of the store
-        if (char.IsNumber(game.version[game.version.Length - 1]))
-        {
-            serverLocation += "master/";
-        }
-        else
-        {
-            serverLocation += "development/";
-        }
-        string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
+        string remoteManifest = GetServerLocation() + "manifest.ini";
         StartCoroutine(Download(remoteManifest, DownloadManifest));
+    }
+
+    /// <summary>
+    /// Get the default server list location
+    /// </summary>
+    /// <returns>the path to the remote files</returns>
+    public static string GetServerLocation()
+    {
+        // For development builds use the development branch of the store
+        if (char.IsNumber(Game.Get().version[Game.Get().version.Length - 1]))
+        {
+            return serverLocation + "master/" + Game.Get().gameType.TypeName() + "/";
+        }
+        return serverLocation + "development/" + Game.Get().gameType.TypeName() + "/";
     }
 
     /// <summary>
@@ -46,6 +51,7 @@ public class QuestDownload : MonoBehaviour
     /// </summary>
     public void DownloadManifest()
     {
+        if (download.error != null) Application.Quit();
         IniData remoteManifest = IniRead.ReadFromString(download.text);
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
@@ -61,12 +67,10 @@ public class QuestDownload : MonoBehaviour
     {
         foreach (RemoteQuest rq in remoteQuests)
         {
-            if(rq.FetchContent(this, DownloadQuestFiles))
-            {
-                string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
-                StartCoroutine(Download(remoteDict, ReadDict));
-            }
+            if (!rq.FetchContent(this, DownloadQuestFiles)) return;
         }
+        string remoteDict = GetServerLocation() + "Localization.txt";
+        StartCoroutine(Download(remoteDict, ReadDict));
     }
 
     /// <summary>
@@ -74,6 +78,7 @@ public class QuestDownload : MonoBehaviour
     /// </summary>
     public void ReadDict()
     {
+        if (download.error != null) Application.Quit();
         localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
@@ -204,7 +209,7 @@ public class QuestDownload : MonoBehaviour
                     symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                 }
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(UIScaler.GetRight(-12), offset + 1, 7, 2);
+                ui.SetLocation(UIScaler.GetRight(-13), offset + 1, 9, 2);
                 ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
                 ui.SetBGColor(Color.clear);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -359,7 +364,7 @@ public class QuestDownload : MonoBehaviour
         {
             // fixme not fatal
             ValkyrieDebug.Log(download.error);
-            Application.Quit();
+            //Application.Quit();
         }
         call();
     }
@@ -380,7 +385,7 @@ public class QuestDownload : MonoBehaviour
         public RemoteQuest(KeyValuePair<string, Dictionary<string, string>> kv)
         {
             name = kv.Key;
-            path = QuestDownload.serverLocation + Game.Get().gameType.TypeName();
+            path = QuestDownload.GetServerLocation();
             data = kv.Value;
             if (data.ContainsKey("external"))
             {
