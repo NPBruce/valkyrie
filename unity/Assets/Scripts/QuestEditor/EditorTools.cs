@@ -100,11 +100,11 @@ public class EditorTools
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
-            string destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName;
+            string destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName;
             int postfix = 2;
             while (Directory.Exists(destination))
             {
-                destination = System.Environment.SpecialFolder.DesktopDirectory + "/" + packageName + postfix++;
+                destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName + postfix++;
             }
             Directory.CreateDirectory(destination);
 
@@ -120,7 +120,7 @@ public class EditorTools
                 string iconName = Path.GetFileName(icon);
                 // Temp hack to get ToString to output local file
                 game.quest.qd.quest.image = iconName;
-                File.Copy(Path.Combine(game.quest.qd.quest.path, icon), destination + "/" + iconName);
+                File.Copy(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), icon), destination + "/" + iconName);
             }
             string manifest = game.quest.qd.quest.ToString();
             // Restore icon
@@ -130,7 +130,7 @@ public class EditorTools
             using (FileStream stream = File.OpenRead(destination + "/" + packageName + ".valkyrie"))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + checksum;
+                manifest += "version=" + System.BitConverter.ToString(checksum);
             }
 
             File.WriteAllText(destination + "/" + packageName + ".ini", manifest);
