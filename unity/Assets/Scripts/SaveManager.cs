@@ -244,7 +244,7 @@ class SaveManager
                 game.stageUI = new NextStageButton();
             }
         }
-        catch (System.Exception e)
+        catch (IOException e)
         {
             ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile(num) + " " + e.Message);
             Application.Quit();

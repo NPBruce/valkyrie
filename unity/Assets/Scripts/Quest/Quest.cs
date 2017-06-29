@@ -836,6 +836,10 @@ public class Quest
             {
                 puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length), new PuzzleImage(kv.Value));
             }
+            if (kv.Key.IndexOf("PuzzleTower") == 0)
+            {
+                puzzle.Add(kv.Key.Substring("PuzzleTower".Length, kv.Key.Length - "PuzzleTower".Length), new PuzzleTower(kv.Value));
+            }
         }
         // Restore event quotas
         eventQuota = new Dictionary<string, int>();
