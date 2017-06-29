@@ -398,10 +398,10 @@ namespace Assets.Scripts.UI
         public bool AtLocationPixels(float x, float y)
         {
             RectTransform transBg = bg.GetComponent<RectTransform>();
-            if (transBg.rect.x < x) return false;
-            if (transBg.rect.y < y) return false;
-            if (transBg.rect.x + transBg.rect.width > x) return false;
-            if (transBg.rect.y + transBg.rect.height > y) return false;
+            if (transBg.anchoredPosition.x - (transBg.sizeDelta.x / 2) > x) return false;
+            if (-transBg.anchoredPosition.y - (transBg.sizeDelta.y / 2) > y) return false;
+            if (transBg.anchoredPosition.x + (transBg.sizeDelta.x / 2) < x) return false;
+            if (-transBg.anchoredPosition.y + (transBg.sizeDelta.y / 2) < y) return false;
             return true;
         }
 

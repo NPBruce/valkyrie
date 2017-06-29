@@ -20,12 +20,12 @@ public class PuzzleTower : Puzzle
         // Randomise tower order
         puzzle = new List<List<int>>();
         int pos = Random.Range(0, 3);
-        puzzle[0] = p[pos];
+        puzzle.Add(p[pos]);
         p.RemoveAt(pos);
         pos = Random.Range(0, 2);
-        puzzle[1] = p[pos];
+        puzzle.Add(p[pos]);
         p.RemoveAt(pos);
-        puzzle[2] = p[0];
+        puzzle.Add(p[0]);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class PuzzleTower : Puzzle
 
         for(int i = 0; i < 8; i++)
         {
-            end[0].Add(i - 7);
+            end[0].Add(7 - i);
         }
 
         List<List<List<List<int>>>> allStates = new List<List<List<List<int>>>>();
@@ -136,7 +136,7 @@ public class PuzzleTower : Puzzle
             if (state[i].Count != stateTwo[i].Count) return false;
             for (int j = 0; j < state[i].Count; j++)
             {
-                if (state[j][i] != stateTwo[i][j]) return false;
+                if (state[i][j] != stateTwo[i][j]) return false;
             }
         }
         return true;
@@ -214,9 +214,11 @@ public class PuzzleTower : Puzzle
     /// <returns>If the move is legal</returns>
     public bool MoveOK(int fromTower, int toTower, List<List<int>> p)
     {
-        if (p.Count < fromTower) return false;
+        if (p.Count <= fromTower) return false;
+        if (fromTower < 0) return false;
         if (p[fromTower].Count == 0) return false;
-        if (p.Count < toTower) return false;
+        if (p.Count <= toTower) return false;
+        if (toTower < 0) return false;
         if (p[toTower].Count == 0) return true;
 
         int fromSize = p[fromTower][p[fromTower].Count - 1];

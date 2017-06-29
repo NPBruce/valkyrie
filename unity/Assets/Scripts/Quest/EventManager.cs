@@ -291,6 +291,10 @@ public class EventManager
             {
                 new PuzzleImageWindow(e);
             }
+            if (p.puzzleClass.Equals("tower"))
+            {
+                new PuzzleTowerWindow(e);
+            }
             return;
         }
 
