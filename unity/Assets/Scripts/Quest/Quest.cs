@@ -80,6 +80,9 @@ public class Quest
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
 
+    // A list of music if custom music has been selected - used for save games
+    public List<string> music = new List<string>();
+
     // Reference back to the game object
     public Game game;
 
@@ -607,13 +610,33 @@ public class Quest
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
-        // Start quest music FIXME music state not saved
+        // Start quest music
         List<string> music = new List<string>();
-        foreach (AudioData ad in game.cd.audio.Values)
+        if (saveData.Get("Music") != null)
         {
-            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+            music = new List<string>(saveData.Get("Shops").Keys);
+            List<string> toPlay = new List<string>();
+            foreach (string s in music)
+            {
+                if (game.cd.audio.ContainsKey(s))
+                {
+                    toPlay.Add(game.cd.audio[s].file);
+                }
+                else
+                {
+                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + "/" + s);
+                }
+            }
+            game.audioControl.Music(toPlay, false);
         }
-        game.audioControl.Music(music);
+        else
+        {
+            foreach (AudioData ad in game.cd.audio.Values)
+            {
+                if (ad.ContainsTrait("quest")) music.Add(ad.file);
+            }
+            game.audioControl.Music(music);
+        }
 
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
@@ -1195,6 +1218,16 @@ public class Quest
                 r += s + " ";
             }
             r = r.Substring(0, r.Length - 1) + nl;
+        }
+
+        if (music.Count > 0)
+        {
+            r += "[Music]" + nl;
+            foreach (string s in music)
+            {
+                r += s + nl;
+            }
+            r += nl;
         }
 
         return r;

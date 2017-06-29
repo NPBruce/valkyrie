@@ -1059,6 +1059,8 @@ public class MonsterData : GenericData
     public string[] activations;
     public float healthBase = 0;
     public float healthPerHero = 0;
+    public int horror = 0;
+    public int awareness = 0;
     
     // This constuctor only exists for the quest version of this class to use to do nothing
     public MonsterData()
@@ -1099,6 +1101,14 @@ public class MonsterData : GenericData
         if (content.ContainsKey("healthperhero"))
         {
             float.TryParse(content["healthperhero"], out healthPerHero);
+        }
+        if (content.ContainsKey("horror"))
+        {
+            int.TryParse(content["horror"], out horror);
+        }
+        if (content.ContainsKey("awareness"))
+        {
+            int.TryParse(content["awareness"], out awareness);
         }
     }
 }

@@ -53,9 +53,9 @@ namespace Assets.Scripts.UI
         /// <summary>
         /// Set the UIElement to text height plus vertical padding</summary>
         /// <returns>New UIElement height</returns>
-        public override float HeightToTextPadding()
+        public override float HeightToTextPadding(float space = 0)
         {
-            return base.HeightToTextPadding() + 1;
+            return base.HeightToTextPadding(space) + 1;
         }
     }
 }

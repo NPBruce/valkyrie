@@ -13,77 +13,79 @@ public class QuestDownload : MonoBehaviour
     public Dictionary<string, QuestData.Quest> questList;
 
     public WWW download;
-    public string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
+    protected static string serverLocation = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/";
     public Game game;
-    IniData remoteManifest;
+    List<RemoteQuest> remoteQuests;
     IniData localManifest;
     DictionaryI18n localizationDict;
     Dictionary<string, Texture2D> textures;
 
+    /// <summary>
+    /// Download required files then draw screen
+    /// </summary>
     void Start()
     {
         game = Game.Get();
         textures = new Dictionary<string, Texture2D>();
+        remoteQuests = new List<RemoteQuest>();
+        string remoteManifest = GetServerLocation() + "manifest.ini";
+        StartCoroutine(Download(remoteManifest, DownloadManifest));
+    }
+
+    /// <summary>
+    /// Get the default server list location
+    /// </summary>
+    /// <returns>the path to the remote files</returns>
+    public static string GetServerLocation()
+    {
         // For development builds use the development branch of the store
-        if (char.IsNumber(game.version[game.version.Length - 1]))
+        if (char.IsNumber(Game.Get().version[Game.Get().version.Length - 1]))
         {
-            serverLocation += "master/";
+            return serverLocation + "master/" + Game.Get().gameType.TypeName() + "/";
         }
-        else
-        {
-            serverLocation += "development/";
-        }
-        string remoteManifest = serverLocation + game.gameType.TypeName() + "/manifest.ini";
-        StartCoroutine(Download(remoteManifest, delegate { DownloadImages(); }));
+        return serverLocation + "development/" + Game.Get().gameType.TypeName() + "/";
     }
 
-    public void DownloadImages(Stack<string> images = null)
+    /// <summary>
+    /// Parse the downloaded remote manifest and start download of individual quest files
+    /// </summary>
+    public void DownloadManifest()
     {
-        string remoteDict = serverLocation + game.gameType.TypeName() + "/Localization.txt";
-
-        if (images == null)
+        if (download.error != null) Application.Quit();
+        IniData remoteManifest = IniRead.ReadFromString(download.text);
+        foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
-            remoteManifest = IniRead.ReadFromString(download.text);
-            images = new Stack<string>();
-            foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
-            {
-                if (remoteManifest.Get(kv.Key, "image").Length > 0)
-                {
-                    images.Push(remoteManifest.Get(kv.Key, "image"));
-                }
-            }
-            if (images.Count == 0)
-            {
-                StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
-                return;
-            }
-            StartCoroutine(Download(serverLocation + game.gameType.TypeName() + "/" + images.Peek(), delegate { DownloadImages(images); }));
-            return;
+            remoteQuests.Add(new RemoteQuest(kv));
         }
-
-        if (download.error == null)
-        {
-            textures.Add(images.Pop(), download.texture);
-        }
-        else
-        {
-            images.Pop();
-        }
-        if (images.Count > 0)
-        {
-            StartCoroutine(Download(serverLocation + game.gameType.TypeName() + "/" + images.Peek(), delegate { DownloadImages(images); }));
-            return;
-        }
-
-        StartCoroutine(Download(remoteDict, delegate { ReadManifest(); }));
+        DownloadQuestFiles();
     }
 
-    public void ReadManifest()
+    /// <summary>
+    /// Called to check if there are any more quest components to download, when finished downloads dictionary
+    /// </summary>
+    public void DownloadQuestFiles()
     {
+        foreach (RemoteQuest rq in remoteQuests)
+        {
+            if (!rq.FetchContent(this, DownloadQuestFiles)) return;
+        }
+        string remoteDict = GetServerLocation() + "Localization.txt";
+        StartCoroutine(Download(remoteDict, ReadDict));
+    }
+
+    /// <summary>
+    /// Read the downloaded dictionary, draw screen
+    /// </summary>
+    public void ReadDict()
+    {
+        if (download.error != null) Application.Quit();
         localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
 
+    /// <summary>
+    /// Draw download options screen
+    /// </summary>
     public void DrawList()
     {
         localManifest = IniRead.ReadFromString("");
@@ -106,14 +108,14 @@ public class QuestDownload : MonoBehaviour
         // Start here
         float offset = 0;
         // Loop through all available quests
-        foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
+        foreach (RemoteQuest rq in remoteQuests)
         {
-            string file = kv.Key + ".valkyrie";
+            string file = rq.name + ".valkyrie";
             LocalizationRead.AddDictionary("qst", localizationDict);
-            string questName = new StringKey("qst", kv.Key + ".name").Translate();
+            string questName = new StringKey("qst", rq.name + ".name").Translate();
 
             int remoteFormat = 0;
-            int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
+            int.TryParse(rq.GetData("format"), out remoteFormat);
             bool formatOK = (remoteFormat >= QuestData.Quest.minumumFormat) && (remoteFormat <= QuestData.Quest.currentFormat);
 
             if (!formatOK) continue;
@@ -122,8 +124,8 @@ public class QuestDownload : MonoBehaviour
             bool update = true;
             if (exists)
             {
-                string localHash = localManifest.Get(kv.Key, "version");
-                string remoteHash = remoteManifest.Get(kv.Key, "version");
+                string localHash = localManifest.Get(rq.name, "version");
+                string remoteHash = rq.GetData("version");
 
                 update = !localHash.Equals(remoteHash);
             }
@@ -142,21 +144,18 @@ public class QuestDownload : MonoBehaviour
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(0.95f, offset, UIScaler.GetWidthUnits() - 4.9f, 3.1f);
             ui.SetBGColor(bg);
-            if (update) ui.SetButton(delegate { Selection(file); });
+            if (update) ui.SetButton(delegate { Selection(rq); });
             offset += 0.05f;
 
             // Draw Image
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, 3, 3);
             ui.SetBGColor(bg);
-            if (update) ui.SetButton(delegate { Selection(file); });
+            if (update) ui.SetButton(delegate { Selection(rq); });
 
-            int.TryParse(remoteManifest.Get(kv.Key, "format"), out remoteFormat);
-
-
-            if (textures.ContainsKey(remoteManifest.Get(kv.Key, "image")))
+            if (rq.image != null)
             {
-                ui.SetImage(textures[remoteManifest.Get(kv.Key, "image")]);
+                ui.SetImage(rq.image);
             }
 
             ui = new UIElement(scrollArea.GetScrollTransform());
@@ -171,17 +170,17 @@ public class QuestDownload : MonoBehaviour
             {
                 ui.SetText(questName, Color.black);
             }
-            if (update) ui.SetButton(delegate { Selection(file); });
+            if (update) ui.SetButton(delegate { Selection(rq); });
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
             ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.3f));
 
             // Duration
             int lengthMax = 0;
-            int.TryParse(remoteManifest.Get(kv.Key, "lengthmax"), out lengthMax);
+            int.TryParse(rq.GetData("lengthmax"), out lengthMax);
             if (lengthMax > 0)
             {
                 int lengthMin = 0;
-                int.TryParse(remoteManifest.Get(kv.Key, "lengthmin"), out lengthMin);
+                int.TryParse(rq.GetData("lengthmin"), out lengthMin);
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetRight(-11), offset, 2, 1);
@@ -201,7 +200,7 @@ public class QuestDownload : MonoBehaviour
 
             // Difficulty
             float difficulty = 0;
-            float.TryParse(remoteManifest.Get(kv.Key, "difficulty"), out difficulty);
+            float.TryParse(rq.GetData("difficulty"), out difficulty);
             if (difficulty != 0)
             {
                 string symbol = "π"; // will
@@ -210,7 +209,7 @@ public class QuestDownload : MonoBehaviour
                     symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                 }
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(UIScaler.GetRight(-12), offset + 1, 7, 2);
+                ui.SetLocation(UIScaler.GetRight(-13), offset + 1, 9, 2);
                 ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
                 ui.SetBGColor(Color.clear);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -238,7 +237,13 @@ public class QuestDownload : MonoBehaviour
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in localManifest.data)
         {
             // Only looking for files missing from remote
-            if (remoteManifest.data.ContainsKey(kv.Key)) continue;
+            bool onRemote = false;
+            foreach (RemoteQuest rq in remoteQuests)
+            {
+                if (rq.name.Equals(kv.Key)) onRemote = true;
+            }
+            if (onRemote) continue;
+
             string type = localManifest.Get(kv.Key, "type");
 
             // Only looking for packages of this game type
@@ -287,12 +292,20 @@ public class QuestDownload : MonoBehaviour
         new QuestSelectionScreen(ql);
     }
 
-    public void Selection(string file)
+    /// <summary>
+    /// Select to download
+    /// </summary>
+    /// <param name="rq">Remote quest to download</param>
+    public void Selection(RemoteQuest rq)
     {
-        string package = serverLocation + game.gameType.TypeName() + "/" + file;
-        StartCoroutine(Download(package, delegate { Save(file); }));
+        string package = rq.path + rq.name + ".valkyrie";
+        StartCoroutine(Download(package, delegate { Save(rq); }));
     }
 
+    /// <summary>
+    /// Select to delete
+    /// </summary>
+    /// <param file="file">File name to delete</param>
     public void Delete(string file)
     {
         string toDelete = saveLocation() + "/" + file;
@@ -301,25 +314,23 @@ public class QuestDownload : MonoBehaviour
         DrawList();
     }
 
-    public void Save(string file)
+    /// <summary>
+    /// Called after download finished to save to disk
+    /// </summary>
+    /// <param name="rq">Remote quest to save</param>
+    public void Save(RemoteQuest rq)
     {
         QuestLoader.mkDir(saveLocation());
 
         // Write to disk
-        using (BinaryWriter writer = new BinaryWriter(File.Open(saveLocation() + "/" + file, FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(saveLocation() + "/" + rq.name + ".valkyrie", FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();
         }
 
-        string section = file.Substring(0, file.Length - ".valkyrie".Length);
-        int localVersion, remoteVersion;
-        int.TryParse(localManifest.Get(section, "version"), out localVersion);
-        int.TryParse(remoteManifest.Get(section, "version"), out remoteVersion);
-
-        localManifest.Remove(section);
-        localManifest.Add(section, remoteManifest.Get(section));
-
+        localManifest.Remove(rq.name);
+        localManifest.Add(rq.name, rq.data);
 
         if (File.Exists(saveLocation() + "/manifest.ini"))
         {
@@ -331,12 +342,20 @@ public class QuestDownload : MonoBehaviour
         DrawList();
     }
 
+    /// <summary>
+    /// Get save directory without trailing '/'
+    /// </summary>
+    /// <returns>localtion to save packages</returns>
     public string saveLocation()
     {
         return Game.AppData() + "/Download";
     }
 
-    // Return to main menu
+    /// <summary>
+    /// Download and call function
+    /// </summary>
+    /// <param name="file">Path to download</param>
+    /// <param name="call">function to call on completion</param>
     public IEnumerator Download(string file, UnityEngine.Events.UnityAction call)
     {
         download = new WWW(file);
@@ -345,8 +364,107 @@ public class QuestDownload : MonoBehaviour
         {
             // fixme not fatal
             ValkyrieDebug.Log(download.error);
-            Application.Quit();
+            //Application.Quit();
         }
         call();
+    }
+
+    public class RemoteQuest
+    {
+        public string path;
+        public string name;
+        public Texture2D image;
+        bool imageError = false;
+        bool iniError = false;
+        public Dictionary<string, string> data;
+
+        /// <summary>
+        /// Constuct remote quest object from manifest data
+        /// </summary>
+        /// <param name="kv">manifest data</param>
+        public RemoteQuest(KeyValuePair<string, Dictionary<string, string>> kv)
+        {
+            name = kv.Key;
+            path = QuestDownload.GetServerLocation();
+            data = kv.Value;
+            if (data.ContainsKey("external"))
+            {
+                path = data["external"];
+            }
+        }
+
+        /// <summary>
+        /// Extract manifest value
+        /// </summary>
+        /// <param name="key">manifest key</param>
+        /// <returns>Value or empty string if not present</returns>
+        public string GetData(string key)
+        {
+            if (data.ContainsKey(key)) return data[key];
+            return "";
+        }
+
+        /// <summary>
+        /// Fetch next required file
+        /// </summary>
+        /// <param name="qd">QuestDownloadObeject to use</param>
+        /// <param name="call">Function to call after download</param>
+        /// <returns>true if no downloads required</returns>
+        public bool FetchContent(QuestDownload qd, UnityEngine.Events.UnityAction call)
+        {
+            if (data.ContainsKey("external"))
+            {
+                if (iniError) return true;
+
+                qd.StartCoroutine(qd.Download(path + name + ".ini", delegate { IniFetched(qd.download, call); }));
+                return false;
+            }
+            if (data.ContainsKey("image") && data["image"].Length > 0)
+            {
+                if (image == null && !imageError)
+                {
+                    qd.StartCoroutine(qd.Download(path + data["image"], delegate { ImageFetched(qd.download, call); }));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Parse downloaded ini data
+        /// </summary>
+        /// <param name="download">download object</param>
+        /// <param name="call">Function to call after parse</param>
+        public void IniFetched(WWW download, UnityEngine.Events.UnityAction call)
+        {
+            if (download.error == null)
+            {
+                IniData remoteManifest = IniRead.ReadFromString(download.text);
+                data = remoteManifest.Get("Quest");
+            }
+            else
+            {
+                iniError = true;
+            }
+            call();
+        }
+
+        /// <summary>
+        /// Parse downloaded image data
+        /// </summary>
+        /// <param name="download">download object</param>
+        /// <param name="call">Function to call after parse</param>
+        public void ImageFetched(WWW download, UnityEngine.Events.UnityAction call)
+        {
+            if (download.error == null)
+            {
+                image = download.texture;
+            }
+            else
+            {
+                imageError = true;
+            }
+            call();
+        }
     }
 }

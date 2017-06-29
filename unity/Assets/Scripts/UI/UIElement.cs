@@ -428,19 +428,21 @@ namespace Assets.Scripts.UI
 
         /// <summary>
         /// Is the height equal to text size plus padding?</summary>
+        /// <param name="space">Additional vertical padding in UIScaler units</param>
         /// <returns>True if height matches</returns>
-        public bool HeightAtTextPadding()
+        public bool HeightAtTextPadding(float space = 0)
         {
             // Allow for floating point errors
-            return VerticalTextSpaceInRange(-0.01f, 0.01f);
+            return VerticalTextSpaceInRange(space - 0.01f, space + 0.01f);
         }
 
         /// <summary>
         /// Set the UIElement to text height plus vertical padding</summary>
+        /// <param name="space">Additional vertical padding in UIScaler units</param>
         /// <returns>New UIElement height in UIScaler units</returns>
-        public virtual float HeightToTextPadding()
+        public virtual float HeightToTextPadding(float space = 0)
         {
-            float newHeight = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f);
+            float newHeight = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f) + space;
             if (newHeight < 1 + (textPaddingDefault * 2f))
             {
                 newHeight = 1 + (textPaddingDefault * 2f);

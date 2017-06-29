@@ -18,6 +18,7 @@ public class RoundControllerMoM : RoundController
         }
         game.quest.phase = Quest.MoMPhase.mythos;
         game.stageUI.Update();
+        game.monsterCanvas.UpdateList();
 
         game.quest.eManager.EventTriggerType("Mythos", false);
         // This will cause the next phase if nothing was added
@@ -152,9 +153,7 @@ public class RoundControllerMoM : RoundController
 
         game.quest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
-
-        // Update monster display
-        game.monsterCanvas.UpdateStatus();
+        game.monsterCanvas.UpdateList();
 
         game.audioControl.PlayTrait("newround");
 

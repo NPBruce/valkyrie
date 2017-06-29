@@ -95,11 +95,12 @@ public class EditorComponentSpawn : EditorComponentEvent
                 ui.SetText(new StringKey("val", "X_COLON", UNIQUE_INFO));
 
                 uniqueTextUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-                uniqueTextUIE.SetLocation(0.5f, offset, 19, 8);
+                uniqueTextUIE.SetLocation(0.5f, offset, 19, 18);
                 uniqueTextUIE.SetText(spawnComponent.uniqueText.Translate());
+                offset += uniqueTextUIE.HeightToTextPadding(1);
                 uniqueTextUIE.SetButton(delegate { UpdateUniqueText(); });
                 new UIElementBorder(uniqueTextUIE);
-                offset += 9;
+                offset += 1;
             }
         }
 
@@ -346,6 +347,10 @@ public class EditorComponentSpawn : EditorComponentEvent
         if (!uniqueTextUIE.Empty() && uniqueTextUIE.Changed())
         {
             LocalizationRead.updateScenarioText(spawnComponent.uniquetext_key, uniqueTextUIE.GetText());
+            if (!uniqueTextUIE.HeightAtTextPadding(1))
+            {
+                Update();
+            }
         }
     }
 
