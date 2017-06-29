@@ -239,11 +239,11 @@ public class MonsterCanvas : MonoBehaviour
                 // MoM
                 if(game.quest.phase == Quest.MoMPhase.investigator)
                 {
-                    DrawHorror(3.75f + ((index - offset) * 4.5f));
+                    DrawAwareness(3.75f + ((index - offset) * 4.5f));
                 }
                 else
                 {
-                    DrawAwareness(3.75f + ((index - offset) * 4.5f));
+                    DrawHorror(3.75f + ((index - offset) * 4.5f));
                 }
             }
 
