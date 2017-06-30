@@ -205,7 +205,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 horrorUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
                 horrorUIE.SetLocation(7, offset, 3, 1);
-                horrorUIE.SetText(monsterComponent.healthBase.ToString());
+                horrorUIE.SetText(monsterComponent.horror.ToString());
                 horrorUIE.SetSingleLine();
                 horrorUIE.SetButton(delegate { UpdateHorror(); });
                 new UIElementBorder(horrorUIE);
@@ -237,7 +237,7 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 awarenessUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
                 awarenessUIE.SetLocation(7, offset, 3, 1);
-                awarenessUIE.SetText(monsterComponent.healthBase.ToString());
+                awarenessUIE.SetText(monsterComponent.awareness.ToString());
                 awarenessUIE.SetSingleLine();
                 awarenessUIE.SetButton(delegate { UpdateAwareness(); });
                 new UIElementBorder(awarenessUIE);
