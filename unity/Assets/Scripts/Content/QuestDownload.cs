@@ -24,6 +24,7 @@ public class QuestDownload : MonoBehaviour
     /// </summary>
     void Start()
     {
+        new LoadingScreen(new StringKey("val", "DOWNLOAD_LIST").Translate());
         game = Game.Get();
         textures = new Dictionary<string, Texture2D>();
         remoteQuests = new List<RemoteQuest>();
@@ -293,6 +294,7 @@ public class QuestDownload : MonoBehaviour
     /// <param name="rq">Remote quest to download</param>
     public void Selection(RemoteQuest rq)
     {
+        new LoadingScreen(new StringKey("val", "DOWNLOAD_PACKAGE").Translate());
         string package = rq.path + rq.name + ".valkyrie";
         StartCoroutine(Download(package, delegate { Save(rq); }));
     }
