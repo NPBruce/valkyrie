@@ -5,12 +5,13 @@ using System.Threading;
 
 namespace Assets.Scripts.UI.Screens
 {
+
     public class LoadingScreen
     {
         /// <summary>
         /// Construct a screen with pulsing logo and optional text label
         /// </summary>
-        /// <param name="display">Text to dispaly</param>
+        /// <param name="display">Text to display</param>
         public LoadingScreen(string display = "")
         {
             Destroyer.Dialog();
@@ -18,9 +19,35 @@ namespace Assets.Scripts.UI.Screens
         }
 
         /// <summary>
+        /// Construct a screen with pulsing logo, download progress and optional text label
+        /// </summary>
+        /// <param name="download">WWW object tracking download</param>
+        /// <param name="display">Text to display</param>
+        public LoadingScreen(WWW download, string display = "")
+        {
+            Destroyer.Dialog();
+            Draw(display);
+
+            // Create an object
+            GameObject bar = new GameObject("progress");
+            // Mark it as dialog
+            logo.tag = Game.DIALOG;
+            logo.transform.SetParent(Game.Get().uICanvas.transform);
+
+            RectTransform transBg = logo.AddComponent<RectTransform>();
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 3 * UIScaler.GetPixelsPerUnit(), (UIScaler.Units() - 6) * UIScaler.GetPixelsPerUnit());
+            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 27 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+
+            // Create the image
+            UnityEngine.UI.Image uiImage = logo.AddComponent<UnityEngine.UI.Image>();
+            uiImage.color = Color.white;
+            logo.AddComponent<ProgressBar>().SetDownload(download);
+        }
+
+        /// <summary>
         /// Draw the contents to the screen
         /// </summary>
-        /// <param name="display">Text to dispaly</param>
+        /// <param name="display">Text to display</param>
         private void Draw(string display)
         {
             // Create an object
