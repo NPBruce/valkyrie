@@ -84,6 +84,7 @@ public class QuestDownload : MonoBehaviour
     /// </summary>
     public void DrawList()
     {
+        Destroyer.Dialog();
         localManifest = IniRead.ReadFromString("");
         if (File.Exists(saveLocation() + "/manifest.ini"))
         {

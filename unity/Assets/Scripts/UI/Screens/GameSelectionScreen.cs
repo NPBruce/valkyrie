@@ -172,7 +172,7 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
 
-            new LoadingScreen(CONTENT_IMPORTING.Translate())
+            new LoadingScreen(CONTENT_IMPORTING.Translate());
 
             if (type.Equals("D2E"))
             {

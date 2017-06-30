@@ -197,7 +197,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7, 1);
-        ui.SetText(new StringKey("val", "X_COLON", horror));
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "horror")));
 
         if (game.gameType is MoMGameType)
         {
@@ -224,14 +224,14 @@ public class EditorComponentCustomMonster : EditorComponent
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(10, offset, 3, 1);
                 ui.SetText(CommonStringKeys.SET);
-                ui.SetButton(delegate { SetHealth(); });
+                ui.SetButton(delegate { SetHorror(); });
                 new UIElementBorder(ui);
             }
             offset += 2;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 7, 1);
-            ui.SetText(new StringKey("val", "X_COLON", AWARENESS));
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AWARENESS")));
 
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.awarenessDefined)
             {
@@ -352,7 +352,7 @@ public class EditorComponentCustomMonster : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(5, offset, 13.5f, 1);
             ui.SetText(monsterComponent.horrorEvent);
-            ui.SetButton(delegate { SetHorror(); });
+            ui.SetButton(delegate { SetHorrorEvent(); });
             new UIElementBorder(ui);
 
             if (monsterComponent.horrorEvent.Length > 0)
@@ -890,7 +890,7 @@ public class EditorComponentCustomMonster : EditorComponent
         Update();
     }
 
-    public void SetHorror()
+    public void SetHorrorEvent()
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 

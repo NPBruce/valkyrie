@@ -1549,12 +1549,12 @@ public class QuestData
             if (data.ContainsKey("horror"))
             {
                 horrorDefined = true;
-                float.TryParse(data["horror"], out horror);
+                int.TryParse(data["horror"], out horror);
             }
             if (data.ContainsKey("awareness"))
             {
                 awarenessDefined = true;
-                float.TryParse(data["awareness"], out awareness);
+                int.TryParse(data["awareness"], out awareness);
             }
         }
 
