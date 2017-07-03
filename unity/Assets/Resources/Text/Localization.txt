@@ -30,7 +30,7 @@ ACTIVATIONS,Activations,Activaciones,Activations,Aktivierungen,Attivazioni,Ativa
 ADD_COMPONENTS,Add Components:,Añadir Componentes:,Ajouter éléments :,Komponente hinzufügen:,Aggiungi Componente,Adicionar Componentes,,,
 COMPONENTS,Components,Componentes,,Komponenten,,,,,
 RENAME,Rename,Renombrar,,Umbenennen,,,,,
-TEST,Test,,,,,,,,
+SAVE_TEST,Save & Test,,,,,,,,
 SOURCE,Source,Origen,,Quelle,,,,,
 COMMENT,Comment,Comentar,,Kommentar,,,,,
 TRUE,True,Verdadero,,,,,,,
