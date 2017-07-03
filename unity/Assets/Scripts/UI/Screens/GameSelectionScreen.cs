@@ -172,28 +172,8 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Destroy();
 
-            // Create an object
-            GameObject logo = new GameObject("logo");
-            // Mark it as dialog
-            logo.tag = Game.DIALOG;
-            logo.transform.SetParent(Game.Get().uICanvas.transform);
+            new LoadingScreen(CONTENT_IMPORTING.Translate());
 
-            RectTransform transBg = logo.AddComponent<RectTransform>();
-            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, UIScaler.GetHCenter(-3) * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
-            transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 6 * UIScaler.GetPixelsPerUnit());
-
-            // Create the image
-            Texture2D tex = Resources.Load("sprites/logo") as Texture2D;
-            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1);
-            UnityEngine.UI.Image uiImage = logo.AddComponent<UnityEngine.UI.Image>();
-            uiImage.sprite = sprite;
-            logo.AddComponent<SpritePulser>();
-
-            // Display message
-            UIElement ui = new UIElement();
-            ui.SetLocation(2, 20, UIScaler.GetWidthUnits() - 4, 2);
-            ui.SetText(CONTENT_IMPORTING);
-            ui.SetFontSize(UIScaler.GetMediumFont());
             if (type.Equals("D2E"))
             {
                 importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(); }));
@@ -203,7 +183,6 @@ namespace Assets.Scripts.UI.Screens
                 importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
             }
             importThread.Start();
-            //while (!importThread.IsAlive) ;
         }
 
         // Start game as MoM

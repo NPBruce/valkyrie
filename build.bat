@@ -82,3 +82,11 @@ cd ..
 "C:\Program Files\7-Zip\7z.exe" a valkyrie-linux-%version%.tar.gz valkyrie-linux-%version%.tar
 del valkyrie-linux-%version%.tar
 cd ..
+
+set /a num=%var:~-1% 2>nul
+if {%num%}=={%var:~-1%} (
+    makensis /DVERSION=%version% /DPRERELEASE valkyrie.nsi
+    goto :EOF
+)
+
+makensis /NOCD /DVERSION=%version% valkyrie.nsi

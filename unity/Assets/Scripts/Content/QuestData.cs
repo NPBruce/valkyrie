@@ -1470,6 +1470,10 @@ public class QuestData
         public bool healthDefined = false;
         public string evadeEvent = "";
         public string horrorEvent = "";
+        public int horror = 0;
+        public bool horrorDefined = false;
+        public int awareness = 0;
+        public bool awarenessDefined = false;
 
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
@@ -1541,6 +1545,17 @@ public class QuestData
             {
                 horrorEvent = data["horrorevent"];
             }
+
+            if (data.ContainsKey("horror"))
+            {
+                horrorDefined = true;
+                int.TryParse(data["horror"], out horror);
+            }
+            if (data.ContainsKey("awareness"))
+            {
+                awarenessDefined = true;
+                int.TryParse(data["awareness"], out awareness);
+            }
         }
 
         // get path of monster image
@@ -1601,6 +1616,16 @@ public class QuestData
             {
                 r.Append("horrorevent=").AppendLine(horrorEvent);
             }
+
+            if (horrorDefined)
+            {
+                r.Append("horror=").AppendLine(horror.ToString());
+            }
+            if (awarenessDefined)
+            {
+                r.Append("awareness=").AppendLine(awareness.ToString());
+            }
+
             return r.ToString();
         }
     }
