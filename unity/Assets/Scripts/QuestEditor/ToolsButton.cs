@@ -27,8 +27,8 @@ public class ToolsButton
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.QUESTUI);
-        ui.SetLocation(UIScaler.GetRight(-14), 0, 4, 1);
-        ui.SetText(new StringKey("val", "TEST"));
+        ui.SetLocation(UIScaler.GetRight(-18), 0, 8, 1);
+        ui.SetText(new StringKey("val", "SAVE_TEST"));
         ui.SetButton(Test);
         new UIElementBorder(ui);
     }
@@ -36,6 +36,8 @@ public class ToolsButton
     public void Test()
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
+        QuestEditor.Save();
 
         Game game = Game.Get();
         string path = game.quest.questPath;
