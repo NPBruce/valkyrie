@@ -31,7 +31,12 @@
   !endif
 
   ;Request application privileges for Windows Vista
-  RequestExecutionLevel user
+  RequestExecutionLevel admin
+
+;--------------------------------
+;Variables
+
+  Var StartMenuFolder
 
 ;--------------------------------
 ;Interface Settings
@@ -41,9 +46,18 @@
 ;--------------------------------
 ;Pages
 
+  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_INSTFILES
   
+  ;Start Menu Folder Page Configuration
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Valkyrie"
+  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+
+  !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+
+  !insertmacro MUI_PAGE_INSTFILES
+
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
   
@@ -59,7 +73,7 @@ Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   
-  File /r ..\batch\*.*
+  File /r build\batch\*.*
   
   ;Store installation folder
   !ifdef PRERELEASE
@@ -72,6 +86,21 @@ Section "Dummy Section" SecDummy
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+  
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    
+    ;Create shortcuts
+    CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+    CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    !ifdef PRERELEASE
+      CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Valkyrie-${VERSION}.lnk" "$INSTDIR\Valkyrie.exe"
+    !endif
+    !ifndef PRERELEASE
+      CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Valkyrie.lnk" "$INSTDIR\Valkyrie.exe"
+    !endif
+  
+  !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
@@ -100,5 +129,9 @@ Section "Uninstall"
   !ifndef PRERELEASE
     DeleteRegKey HKCU "Software\Valkyrie"
   !endif
+
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+
+  RMDir /r /REBOOTOK "$SMPROGRAMS\$StartMenuFolder"
 
 SectionEnd

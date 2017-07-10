@@ -69,11 +69,8 @@ del build\valkyrie-win-%version%.zip
 del build\valkyrie-macos-%version%.zip
 del build\valkyrie-linux-%version%.tar.gz
 
-rem create windows zip
-cd build\batch
-"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-win-%version%.zip * -r
 rem create macos zip
-cd ..\batchMac
+cd build\batchMac
 "C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-macos-%version%.zip * -r
 rem create linux tar ball
 cd ..\batchLinux
@@ -83,10 +80,11 @@ cd ..
 del valkyrie-linux-%version%.tar
 cd ..
 
-set /a num=%var:~-1% 2>nul
-if {%num%}=={%var:~-1%} (
-    makensis /DVERSION=%version% /DPRERELEASE valkyrie.nsi
+set /a num=%version:~-1% 2>nul
+
+if "%num%"=="%version:~-1%" (
+    "C:\Program Files (x86)\NSIS\makensis" /DVERSION=%version% valkyrie.nsi
     goto :EOF
 )
 
-makensis /NOCD /DVERSION=%version% valkyrie.nsi
+"C:\Program Files (x86)\NSIS\makensis" /DVERSION=%version% /DPRERELEASE valkyrie.nsi
