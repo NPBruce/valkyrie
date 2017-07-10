@@ -1,4 +1,4 @@
-﻿.,Polski
+﻿.,Polish
 BOXED,Rozszerzenia Pudełkowe
 FANDT,Zestaw Figurek i Kafelków
 CK,Zestaw Konwersujący
