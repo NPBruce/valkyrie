@@ -53,6 +53,12 @@
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
   !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Valkyrie"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+  !ifdef PRERELEASE
+    !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Valkyrie ${VERSION}"
+  !endif
+  !ifndef PRERELEASE
+    !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Valkyrie"
+  !endif
 
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 
