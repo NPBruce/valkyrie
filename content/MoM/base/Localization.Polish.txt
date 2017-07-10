@@ -1,7 +1,7 @@
-.,Polski
-BOXED,Rozszerzenia Pude³kowe
-FANDT,Zestaw Figurek i Pól
-CK,Zestaw Konwersuj¹cy
+ï»¿.,Polski
+BOXED,Rozszerzenia PudeÅ‚kowe
+FANDT,Zestaw Figurek i KafelkÃ³w
+CK,Zestaw KonwersujÄ…cy
 
 MAD09I,Zew Dziczy Badacze
 MAD09M,Zew Dziczy Potwory
@@ -9,6 +9,6 @@ MAD09T,Zew Dziczy Kafelki
 MAD06I,Zakazana Alchemia Badacze
 MAD06M,Zakazana Alchemia Potwory
 MAD06T,Zakazana Alchemia Kafelki
-MAD01I,Posiad³oœæ Szaleñstwa Pierwsza Edycja Badacze
-MAD01M,Posiad³oœæ Szaleñstwa Pierwsza Edycja Potwory
-MAD01T,Posiad³oœæ Szaleñstwa Pierwsza Edycja Kafelki
+MAD01I,PosiadÅ‚oÅ›Ä‡ SzaleÅ„stwa Pierwsza Edycja Badacze
+MAD01M,PosiadÅ‚oÅ›Ä‡ SzaleÅ„stwa Pierwsza Edycja Potwory
+MAD01T,PosiadÅ‚oÅ›Ä‡ SzaleÅ„stwa Pierwsza Edycja Kafelki
