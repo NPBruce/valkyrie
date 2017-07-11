@@ -11,7 +11,7 @@
 ;General
 
   ;Name and file
-  Name "Valkyrie Installer"
+  Name "Valkyrie ${VERSION} Installer"
   OutFile "build\Valkyrie-${VERSION}.exe"
 
   !ifdef PRERELEASE
@@ -51,12 +51,13 @@
   
   ;Start Menu Folder Page Configuration
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Valkyrie"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
   !ifdef PRERELEASE
+    !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Valkyrie-${VERSION}"
     !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Valkyrie ${VERSION}"
   !endif
   !ifndef PRERELEASE
+    !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Valkyrie"
     !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Valkyrie"
   !endif
 
