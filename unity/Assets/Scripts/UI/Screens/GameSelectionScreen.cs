@@ -225,17 +225,14 @@ namespace Assets.Scripts.UI.Screens
                 }
                 else
                 {
-                    // FFG default language is always English
-                    LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
-                        File.ReadAllLines(ContentData.ImportPath() + "/text/Localization_en.txt"),
-                        DictionaryI18n.DEFAULT_LANG,
-                        Game.Get().currentLang));
-                    // Hack for Dunwich Horror
-                    if (File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt"))
-                    {
-                        LocalizationRead.selectDictionary("ffg").Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt"),
-                            DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
-                    }
+                    //string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                    string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_en.txt");
+                    DictionaryI18n momDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
+                    LocalizationRead.AddDictionary("ffg", momDict);
+
+                    localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt");
+                    DictionaryI18n shDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
+                    LocalizationRead.AddDictionary("csh", shDict);
                 }
             }
         }
