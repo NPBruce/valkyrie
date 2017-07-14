@@ -47,16 +47,6 @@ rem duplicate licence to macos/linux
 xcopy /I /E /Y build\batch build\batchMac\Valkyrie.app
 xcopy /I /E /Y build\batch build\batchLinux\valkyrie-linux-%version%
 
-rem copy content from source to win release
-xcopy /E /Y content build\batch\valkyrie_Data\content
-rem remove imported content
-rmdir /s /q build\batch\valkyrie_Data\content\D2E\ffg
-rmdir /s /q build\batch\valkyrie_Data\content\MoM\ffg
-rem copy content from win to macos
-xcopy /I /E /Y build\batch\valkyrie_Data build\batchMac\Valkyrie.app\Contents
-rem copy content from win to linux
-xcopy /I /E /Y build\batch\valkyrie_Data build\batchLinux\valkyrie-linux-%version%\valkyrie_Data
-
 rem copy over windows build
 xcopy /E /Y build\win build\batch
 rem copy over macos build
@@ -65,7 +55,7 @@ rem copy over linux build
 xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%version%
 
 rem delete previous build
-del build\valkyrie-win-%version%.zip
+del build\valkyrie-windows-%version%.exe
 del build\valkyrie-macos-%version%.zip
 del build\valkyrie-linux-%version%.tar.gz
 

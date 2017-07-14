@@ -39,12 +39,7 @@ public class ContentData {
     /// The path as a string with a trailing '/'.</returns>
     public static string ContentPath()
     {
-        if (Application.isEditor)
-        {
-            // If running through unity then we assume you are using the git content, with the project at the same level
-            return Application.dataPath + "/../../content/";
-        }
-        return Application.dataPath + "/content/";
+        return Application.streamingAssetsPath + "/content/";
     }
 
     /// <summary>

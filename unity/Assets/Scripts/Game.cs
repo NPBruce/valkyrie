@@ -118,8 +118,10 @@ public class Game : MonoBehaviour {
 
         try
         {
-            TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
-            LocalizationRead.AddDictionary("val", LocalizationRead.ReadFromTextAsset(localizationFile, currentLang));
+            LocalizationRead.AddDictionary("val", new DictionaryI18n(
+                System.IO.File.ReadAllLines(Application.streamingAssetsPath + "/text/Localization.txt"),
+                DictionaryI18n.DEFAULT_LANG,
+                currentLang));
             LocalizationRead.changeCurrentLangTo(currentLang);
         }
         catch (System.Exception e)

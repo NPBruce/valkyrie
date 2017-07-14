@@ -38,8 +38,8 @@ public class QuestDownload : MonoBehaviour
     /// <returns>the path to the remote files</returns>
     public static string GetServerLocation()
     {
-        TextAsset downloadSrc = Resources.Load("Text/download") as TextAsset;
-        return downloadSrc.text + Game.Get().gameType.TypeName() + "/";
+        string[] text = File.ReadAllLines(Application.streamingAssetsPath + "/text/download.txt");
+        return text[0] + Game.Get().gameType.TypeName() + "/";
     }
 
     /// <summary>
