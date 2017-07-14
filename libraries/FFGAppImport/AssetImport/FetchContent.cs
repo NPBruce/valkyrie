@@ -150,6 +150,10 @@ namespace FFGAppImport
             {
                 Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
             }
+
+            // Find any streaming asset files
+            string[] streamFiles = Directory.GetFiles(finder.location + "/StreamingAssets", "*", SearchOption.AllDirectories);
+            ImportStreamAssets(streamFiles);
         }
 
         // Import one assets file
@@ -533,6 +537,40 @@ namespace FFGAppImport
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Find asset bundles and create a list of them in a file.  Invalid files ignored.
+        /// </summary>
+        /// <param name="streamFiles"></param>
+        protected void ImportStreamAssets(string[] streamFiles)
+        {
+            List<string> bundles = new List<string>();
+
+            foreach (string file in streamFiles)
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    {
+                        byte[] buffer = new byte[8];
+                        fs.Read(buffer, 0, buffer.Length);
+                        string header = System.Text.Encoding.Default.GetString(buffer);
+                        fs.Close();
+                        if (header.IndexOf("UnityFS") == 0)
+                        {
+                            bundles.Add(file);
+                        }
+                    }
+                }
+                catch (System.Exception)
+                {
+                    continue;
+                }
+            }
+
+            // We can't extract these here because this isn't the main thread and unity doesn't handle that
+            File.WriteAllLines(contentPath + "/bundles.txt", bundles.ToArray());
         }
     }
 }

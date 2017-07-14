@@ -2,6 +2,7 @@
 using UnityEngine;
 using FFGAppImport;
 using System.Threading;
+using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -12,6 +13,7 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+        protected string importType = "";
         Thread importThread;
 
         private StringKey D2E_NAME = new StringKey("val","D2E_NAME");
@@ -173,6 +175,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
+            importType = type;
 
             if (type.Equals("D2E"))
             {
@@ -231,7 +234,31 @@ namespace Assets.Scripts.UI.Screens
             if (importThread == null) return;
             if (importThread.IsAlive) return;
             importThread = null;
+            ExtractBundles();
             Draw();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ExtractBundles()
+        {
+            try
+            {
+                string[] bundles = File.ReadAllLines(Game.AppData() + "/" + importType + "/import/bundles.txt");
+                foreach (string file in bundles)
+                {
+                    AssetBundle bundle = AssetBundle.LoadFromFile(file);
+                    if (bundle == null) continue;
+                    string id = Path.GetFileNameWithoutExtension(file);
+                    foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
+                    {
+                        File.WriteAllText(Game.AppData() + "/" + importType + "/import/text/" + asset.name + ".txt", asset.ToString());
+                    }
+                }
+            }
+            catch (IOException) { }
+            importType = "";
         }
 
         // Exit Valkyrie
