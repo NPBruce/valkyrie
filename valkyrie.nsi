@@ -12,7 +12,7 @@
 
   ;Name and file
   Name "Valkyrie ${VERSION} Installer"
-  OutFile "build\Valkyrie-${VERSION}.exe"
+  OutFile "build\valkyrie-windows-${VERSION}.exe"
 
   !ifdef PRERELEASE
     ;Default installation folder
