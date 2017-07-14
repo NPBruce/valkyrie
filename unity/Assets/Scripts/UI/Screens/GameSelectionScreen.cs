@@ -214,17 +214,28 @@ namespace Assets.Scripts.UI.Screens
             // After content import, we load the localization file
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
-                // FFG default language is always English
-                LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
-                    System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
-                    DictionaryI18n.DEFAULT_LANG,
-                    Game.Get().currentLang));
-
-                // Hack for Dunwich Horror
-                if (System.IO.File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
+                // D2E localization
+                if (File.Exists(ContentData.ImportPath() + "/text/Localization.txt"))
                 {
-                    LocalizationRead.selectDictionary("ffg").Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
-                        DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
+                    // FFG default language is always English
+                    LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
+                        File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
+                        DictionaryI18n.DEFAULT_LANG,
+                        Game.Get().currentLang));
+                }
+                else
+                {
+                    // FFG default language is always English
+                    LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
+                        File.ReadAllLines(ContentData.ImportPath() + "/text/Localization_en.txt"),
+                        DictionaryI18n.DEFAULT_LANG,
+                        Game.Get().currentLang));
+                    // Hack for Dunwich Horror
+                    if (File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt"))
+                    {
+                        LocalizationRead.selectDictionary("ffg").Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt"),
+                            DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
+                    }
                 }
             }
         }
