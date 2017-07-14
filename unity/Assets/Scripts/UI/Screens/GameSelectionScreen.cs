@@ -225,12 +225,11 @@ namespace Assets.Scripts.UI.Screens
                 }
                 else
                 {
-                    //string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
-                    string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_en.txt");
+                    string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
                     DictionaryI18n momDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
                     LocalizationRead.AddDictionary("ffg", momDict);
 
-                    localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_en.txt");
+                    localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_*.txt");
                     DictionaryI18n shDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
                     LocalizationRead.AddDictionary("csh", shDict);
                 }

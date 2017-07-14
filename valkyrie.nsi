@@ -33,6 +33,8 @@
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
 
+  !define MUI_ICON web\logo.ico
+
 ;--------------------------------
 ;Variables
 
@@ -46,7 +48,6 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   
   ;Start Menu Folder Page Configuration
