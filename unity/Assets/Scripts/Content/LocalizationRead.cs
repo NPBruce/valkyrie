@@ -44,15 +44,6 @@ namespace Assets.Scripts.Content
             return new DictionaryI18n(lines, newDefaultLang);
         }
 
-        // Function ini file contents as a string and returns data object
-        // Returns null on error
-        public static DictionaryI18n ReadFromString(string content, string newDefaultLang)
-        {
-            // split text into array of lines
-            string[] lines = content.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-            return new DictionaryI18n(lines, newDefaultLang);
-        }
-
         private const int RECURSIVE_LIMIT = 10;
 
         // Check for FFG text lookups and insert required text
@@ -266,31 +257,7 @@ namespace Assets.Scripts.Content
         /// <param name="text">text to insert in current language</param>
         public static void updateScenarioText(string key, string text)
         {
-            EntryI18n entry;
-            // Search for localization string 
-            if (!dicts["qst"].tryGetValue(key, out entry))
-            {
-                // if not exists, we create a new one
-                entry = new EntryI18n(key, dicts["qst"]);
-            }
-
-            entry.currentLanguageString = text;
-        }
-
-        /// <summary>
-        /// Replaces all dictionary entries with old key and replaces with the new one
-        /// </summary>
-        /// <param name="oldKey"></param>
-        /// <param name="newKey"></param>
-        public static void replaceScenarioText(string oldKey,string newKey)
-        {
-            EntryI18n entry;
-            // Search for localization string 
-            if (dicts["qst"].tryGetValue(oldKey, out entry))
-            {
-                entry.key = newKey;
-                dicts["qst"].Add(entry);
-            }
+            dicts["qst"].AddEntry(key, text);
         }
 
         /// <summary>

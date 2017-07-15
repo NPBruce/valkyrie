@@ -111,23 +111,17 @@ public class Game : MonoBehaviour {
         if (config.data.Get("UserConfig") == null)
         {
             // English is the default current language
-            config.data.Add("UserConfig", "currentLang", DictionaryI18n.DEFAULT_LANG);
+            config.data.Add("UserConfig", "currentLang", "English");
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
-        try
+        DictionaryI18n valDict = new DictionaryI18n();
+        foreach (string file in System.IO.Directory.GetFiles(Application.streamingAssetsPath + "/text", "Localization*.txt"))
         {
-            LocalizationRead.AddDictionary("val", new DictionaryI18n(
-                System.IO.File.ReadAllLines(Application.streamingAssetsPath + "/text/Localization.txt"),
-                DictionaryI18n.DEFAULT_LANG,
-                currentLang));
-            LocalizationRead.changeCurrentLangTo(currentLang);
+            valDict.AddDataFromFile(file);
         }
-        catch (System.Exception e)
-        {
-            ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
-        }
+        LocalizationRead.AddDictionary("val", valDict);
 
         roundControl = new RoundController();
 

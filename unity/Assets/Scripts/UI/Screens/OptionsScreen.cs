@@ -208,9 +208,9 @@ namespace Assets.Scripts.UI.Screens
 
             for (int i = 0; i < langs.Length; i++)
             {
-                int position = i;
+                int position = i + 1;
                 // Need current index in order to delegate not point to loop for variable
-                string currentLanguage = langs[position];
+                string currentLanguage = langs[i];
 
                 ui = new UIElement();
                 ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position), 8, 1.8f);

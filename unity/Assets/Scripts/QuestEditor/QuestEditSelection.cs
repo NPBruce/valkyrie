@@ -340,15 +340,9 @@ public class QuestEditSelection
             DictionaryI18n newScenarioDict = new DictionaryI18n(new string[1] { ".," + game.currentLang }, game.currentLang);
 
             // Add quest name to dictionary
-            string nameKey = "quest.name";
-            EntryI18n nameEntry = new EntryI18n(nameKey,newScenarioDict);
-            nameEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i;
-            newScenarioDict.Add(nameEntry);
+            newScenarioDict.AddEntry("quest.name", game.gameType.QuestName().Translate() + " " + i);
             // Add quest description to dictionary
-            string descriptionKey = "quest.description";
-            EntryI18n descriptionEntry = new EntryI18n(descriptionKey, newScenarioDict);
-            descriptionEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i + "...";
-            newScenarioDict.Add(descriptionEntry);
+            newScenarioDict.AddEntry("quest.description", game.gameType.QuestName().Translate() + " " + i + "...");
 
             // Generate localization file
             Dictionary<string,List<string>> localization_files = newScenarioDict.SerializeMultiple();

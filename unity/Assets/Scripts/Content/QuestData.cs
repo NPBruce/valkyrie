@@ -1420,25 +1420,6 @@ public class QuestData
             ChangeReference(refName, "");
         }
 
-        /// <summary>
-        /// Updates de dicionary with new text and generates a StringKey element
-        /// </summary>
-        /// <param name="key">key to update/create</param>
-        /// <param name="text">text in current language</param>
-        /// <returns></returns>
-        protected StringKey AfterRenameUpdateDictionaryTextAndGenKey(string oldkey, string newName)
-        {
-            string[] split = oldkey.Split('.');
-            string newKey = new StringBuilder()
-                .Append(newName).Append('.').Append(split[1]).ToString();
-
-            // update or create scenario text in current language
-            LocalizationRead.replaceScenarioText(oldkey, newKey);
-
-            //return the stringkey
-            return new StringKey("qst", newKey);
-        }
-
         // Save to string (editor)
         override public string ToString()
         {
