@@ -337,8 +337,7 @@ public class QuestEditSelection
             File.WriteAllLines(targetLocation + "/quest.ini", questData.ToArray());
 
             // Create new dictionary
-            DictionaryI18n newScenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, game.currentLang, game.currentLang);
+            DictionaryI18n newScenarioDict = new DictionaryI18n(new string[1] { ".," + game.currentLang }, game.currentLang);
 
             // Add quest name to dictionary
             string nameKey = "quest.name";

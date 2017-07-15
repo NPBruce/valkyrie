@@ -291,13 +291,11 @@ public class ContentData {
 
         foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
         {
-            DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
-            if (packageDict == null)
+            DictionaryI18n packageDict = new DictionaryI18n();
+            foreach(string file in kv.Value)
             {
-                // Unable to load dictionary
-                return;
+                packageDict.AddDataFromFile(file);
             }
-            packageDict.setCurrentLanguage(Game.Get().currentLang);
 
             LocalizationRead.AddDictionary(kv.Key, packageDict);
         }

@@ -7,7 +7,7 @@ namespace FFGAppImport
 {
     public class FFGImport
     {
-        public static int version = 1;
+        public static int version = 2;
         public GameType type;
         public Platform platform;
         public string path;

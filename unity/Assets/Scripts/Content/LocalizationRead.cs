@@ -20,32 +20,13 @@ namespace Assets.Scripts.Content
         {
             foreach (DictionaryI18n d in dicts.Values)
             {
-                d.setCurrentLanguage(newLang);
+                d.currentLanguage = newLang;
             }
-        }
-
-        // Function takes Unity TextAsset and returns localization dictionary
-        public static DictionaryI18n ReadFromTextAsset(TextAsset asset, string newCurrentLang)
-        {
-            string[] lines;
-            try
-            {
-                // split text into array of lines
-                lines = asset.text.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log("Error loading localization from asset " + asset.name + ":" + e.Message);
-                return null;
-            }
-
-            // The assets has the english as default language
-            return new DictionaryI18n(lines,DictionaryI18n.DEFAULT_LANG,newCurrentLang);
         }
 
         // Function takes path to localization file and returns data object
         // Returns null on error
-        public static DictionaryI18n ReadFromFilePath(string path, string newDefaultLang, string newCurrentLang)
+        public static DictionaryI18n ReadFromFilePath(string path, string newDefaultLang)
         {
             string[] lines;
 
@@ -60,17 +41,16 @@ namespace Assets.Scripts.Content
                 return null;
             }
             // Parse text data
-            return new DictionaryI18n(lines, newDefaultLang,newCurrentLang);
+            return new DictionaryI18n(lines, newDefaultLang);
         }
-
 
         // Function ini file contents as a string and returns data object
         // Returns null on error
-        public static DictionaryI18n ReadFromString(string content, string newDefaultLang, string newCurrentLang)
+        public static DictionaryI18n ReadFromString(string content, string newDefaultLang)
         {
             // split text into array of lines
             string[] lines = content.Split(new string[] { "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-            return new DictionaryI18n(lines, newDefaultLang, newCurrentLang);
+            return new DictionaryI18n(lines, newDefaultLang);
         }
 
         private const int RECURSIVE_LIMIT = 10;
@@ -276,8 +256,7 @@ namespace Assets.Scripts.Content
 
             DictionaryI18n currentDict = selectDictionary(dict);
             if (currentDict == null) return false;
-            EntryI18n valueOut;
-            return currentDict.tryGetValue(elements[0], out valueOut);
+            return currentDict.KeyExists(elements[0]);
         }
 
         /// <summary>
@@ -324,23 +303,12 @@ namespace Assets.Scripts.Content
         {
             DictionaryI18n currentDict = selectDictionary(dict);
 
-            if (currentDict != null)
-            {
-                EntryI18n valueOut;
-
-                if (currentDict.tryGetValue(key, out valueOut))
-                {
-                    return valueOut.getCurrentOrDefaultLanguageString();
-                }
-                else
-                {
-                    return key;
-                }
-            } else
+            if (currentDict == null)
             {
                 ValkyrieDebug.Log("Error: current dictionary not loaded");
+                return key;
             }
-            return key;
+            return currentDict.GetValue(key);
         }
 
         /// <summary>
