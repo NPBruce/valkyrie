@@ -1,0 +1,365 @@
+.,French
+// TEXTS
+ABILITY,Capacité
+ABOUT,A propos
+ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ACTIONS,Actions
+ACTIVATED,Activé
+ACTIVATION,Activation
+ACTIVATIONS,Activations
+ADD_COMPONENTS,Ajouter éléments :
+ASSIGN,Assigner
+ATTACK,Attaquer
+ATTACK_MESSAGE,Message en cas d'attaque :
+AUDIO,Audio
+BACK,Retour
+BASE,Base
+BUTTON,Bouton
+BUTTONS,Boutons
+CAMERA,Camera
+CANCEL,Annuler
+CHOOSE_LANG,Choix de la langue
+CLEAR_FIRE,Eteindre le feu
+COLOR,Couleur
+COMPONENT_NAME,Nom de l'élément :
+COMPONENT_TO_DELETE,Elément à supprimer
+CONTENT_IMPORT,Importer contenu
+CONTENT_IMPORTING,Import...
+CONTENT_REIMPORT,Réimporter contenu
+CONTINUE,Continuer
+COPY,Copier
+CUSTOMMONSTER,Monstre personnalisé
+D2E_APP_NOT_FOUND,Impossible de localiser l'installation de Road to Legend via Steam
+D2E_HEROES_NAME,Héros
+D2E_HERO_NAME,Héro
+D2E_NAME,Descent : Voyages dans les Ténèbres (Seconde Edition)
+D2E_QUEST_NAME,Scenario
+DEFEATED,Eliminé
+DELETE,Supprimer
+DIALOG,Dialogue
+DOOR,Porte
+DOWNLOAD,Télécharger
+E,E
+EFFECTS,Effets
+END_TURN,Fin du tour
+EVADE,Evasion
+EVENT,Evénement
+EXIT,Sortir
+FINISHED,Terminé
+FIRST,Premier
+FORCE_ACTIVATE,Forcer l'activation
+
+HEALTH,Santé
+HEALTH_HERO,Per Hero
+HIGHLIGHT,Mettre en valeur
+HORROR_CHECK,Test d'horreur
+INDENT,  {0}
+INFO,Info
+INFORMATION,Information
+INITIAL_MESSAGE,Message de départ :
+ITEM,Objet
+KO,KO
+LOAD_QUEST,Charger {0}
+LOG,Log
+MAIN_MENU,Menu principal
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Cam
+MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Cam
+MOM_APP_NOT_FOUND, bitte über Steam installieren","Impossibile trovare "Le Case della Follia"
+MOM_HEROES_NAME,Investigateurs
+MOM_HERO_NAME,Investigateur
+MOM_NAME,Les Demeures de l'Epouvante Seconde Edition
+MOM_QUEST_NAME,Scenario
+MONSTER,Monstre
+MONSTER_ATTACKS,Le monstre attaque.
+MONSTER_MASTER,Maître
+MONSTER_MASTER_X,Maître {0}
+MONSTER_MINION,Serviteur
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Unique
+MOVES,Mouvements
+MPLACE,Position
+MUSIC,Musique
+NAME,Nom
+NEW,Nouveau
+NEW_X,{Nouveau {0}}
+NONE,{Ninguno}
+
+NEXT_EVENTS,Evénements suivants
+NOT_FIRST,Pas en premier
+NO_ATTACK_MESSAGE,Message en absence d'attaque :
+
+NUMBER,Numéro
+NUMBER_HEROS,{0} Héros:
+OK,Ok
+OP,Opérateur
+OPTIONS,Options
+PLACEMENT,Positionnement
+
+PLACE_IMG,Placer Img :
+POOL_TRAITS,Traits possibles :
+POSITION,Position
+POSITION_TYPE_HIGHLIGHT,Mise en valeur
+POSITION_TYPE_UNUSED,Non utilisé
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Difficulté
+PUZZLE_CLASS,Classe
+PUZZLE_CLASS_SELECT,Choix de la classe
+IMAGE,Image
+
+PUZZLE_LEVEL,Niveau
+PUZZLE_SELECT_SKILL,Choisir compétence
+PUZZLE_IMAGE_CLASS,image
+PUZZLE_CODE_CLASS,code
+PUZZLE_SLIDE_CLASS,mécanisme
+QUEST,Scenario
+QUEST_NAME_DOWNLOAD,Télécharger {0}
+QUEST_NAME_EDITOR,Editeur {0}
+EDITOR,Editeur
+QUEST_NAME_UPDATE,  [Mise à jour] {0}
+QUOTA,Quota
+RECOVER,Récupérer
+
+RELOAD,Recharger
+REMOVE_COMPONENTS,Retirer des éléments
+REQUIRED_EXPANSIONS,Extensions requises :
+REQUIRES_EXPANSION, Requiert :  {0}
+
+REQ_TRAITS,Attributs requis :
+RESET,Reset
+ROTATION,Rotation
+SAVE,Sauver
+AUTOSAVE,Sauvegarde auto.
+SELECT_SAVE,Choisir sauvegarde
+SELECT,Choisir {0}
+SELECT_CLASS,Choisir classe
+SELECTION,Sélection
+SELECT_CONTENT,Choisir du contenu
+SELECT_EXPANSION,Choix des extensions
+SELECT_IMAGE,Choisir Image
+SELECT_ITEM,Choix des objets
+SELECT_PACK,Choix des paquets
+SELECT_TO_COPY,Choisir {0} à copier
+SELECT_TO_DELETE,Sélectionner {0} pour le supprimmer
+HIDDEN,Caché
+ACTIVE,Actif
+SET,Appliquer
+SKILL,Compétence
+SELECT_SKILLS,Choisir compétences
+SPAWN,Générer
+STARTING_ITEM,Objets de départ
+STARTING_ITEMS,Objets de départ
+START_QUEST,Démarrer {0}
+START,Démarrer
+
+TESTS,Tests
+TILE,Tuile
+
+TOKEN,Marqueur
+TOOLS,
+TOTAL_MOVES,Déplacements totaux
+TRAITS,Traits
+TRIGGER,Déclencheur
+TYPE,Type
+TYPES,Types
+UNABLE_BUTTON,Bouton impossible
+
+UI,UI
+UNITS,Unités
+HORIZONTAL,Horizontal
+VERTICAL,Vertical
+ALIGN,Aligner
+POSITION,Position
+SIZE,Taille
+TEXT_SIZE,Taille du texte
+ASPECT,Aspect
+BORDER,Bordure
+NO_BORDER,Sans bordure
+UNDO,Défaire
+UNIQUE_DEFEATED,Unique Battu
+UNIQUE_INFO,Info unique
+UNIQUE_MONSTER,Monstre unique
+UNIQUE_TITLE,Titre unique
+UNUSED,Non utilisé
+VALUE,Valeur
+VAR,Variable
+VARS,Variables
+VAR_NAME,Nom variable :
+X_ACTIVATED,{0} Activé
+
+BUY,Acheter
+SELL,Vendre
+CLASS,Classe
+ACT_1,Acte 1
+ACT_2,Acte 2
+
+//Items
+weapon,Arme
+firearm,Arme à feu
+heavyweapon,Arme lourde
+heavy,Arme lourde
+tome,Tome
+equipment,Equipement
+lightsource,Source de lumière
+bladedweapon,Arme tranchante
+bladed,Arme tranchante
+spell,Sort
+key,Clé
+evidence,Preuve
+ally,Allié
+
+//Audio
+menu,Menu
+music,Musique
+quest,Scenario
+defeated,Echec
+newround,Nouveau tour
+attack,Attaque
+unarmed,Sans arme
+horror,Horreur
+search,Recherche
+explore,Exploration
+
+//Heroes
+latari,Latari
+dwarf,Nain
+gnome,Gnome
+male,Homme
+female,Femme
+
+//monsters
+undead,Mort vivant
+humanoid,Humanoïde
+spirit,Esprit
+beast,Bête
+agent,Agent
+lieutenant,Lieutenant
+small,Petit
+medium,Moyen
+huge,Grand
+massive,Massif
+building,Bâtiment
+melee,Mélée
+ranged,Distance
+goblin,Goblin
+cursed,Maudit
+cave,Cave
+wilderness,Etendue sauvage
+civilized,Civilisé
+dark,Sombre
+mountain,Montagne
+cold,Froid
+hot,Chaud
+water,Eau
+
+//Tiles
+basement,Sous-sol
+river,Rivière
+street,Rue
+hallway,Couloir
+bathroom,Salle de bain
+bedroom,Chambre
+kitchen,Cuisine
+dock,Quai
+storage,Entrepôt
+outside,Extérieur
+inside,Intérieur
+small,Petit
+medium,Moyen
+big,Grand
+transition,Transition
+throne,Trône
+pit,Fosse
+farm,Grange
+tomb,Tombe
+library,Bibliothèque
+graves,Cimetière
+bridge,Pont
+stairs,Escaliers
+torture,Torture
+tents,Tentes
+stables,Etables
+hall,Salon
+map,Carte
+bedroom,Chambre
+city,Ville
+fountain,Fontaine
+blackrealm,Royaume noir
+altar,Autel
+beds,Lits
+study,Etude
+prison,Prison
+plinth,Support
+tavern,Taverne
+statues,Statues
+drawbridge,Pont-levis
+rubble,décombres
+treasure,Trésor
+stone,Pierre
+dirt,Saleté
+timber,Bois
+snow,Neige
+lava,Lave
+swamp,Marécage
+sludge,Boue
+
+// Colors
+black,Noir
+white,Blanc
+red,Rouge
+lime,Citron vert
+blue,Bleu
+yellow,Jaune
+aqua,Eau
+cyan,Cyan
+magenta,Magenta
+fuchsia,Fuchsia
+silver,Argent
+gray,Gris
+maroon,Marron
+olive,Olive
+green,Vert
+purple,Violet
+teal,Sarcelle
+navy,Bleu marine
+
+//Puzzles
+image,Image
+code,Code
+slide,Mécanisme
+
+// Events
+Ordered,Ordonné
+Random,Aléatoire
+
+//Inherited from FFG localization files
+SET_FIRE,Mettre le feu
+INVESTIGATOR_ELIMINATED,Investigateur éliminé
+CLOSE,Fermer
+PUZZLE_GUESS,Proposer
+
+UP,Haut
+DOWN,Bas
+LEFT,Gauche
+RIGHT,Droite
+
+PHASE_INVESTIGATOR,Phase d'Investigateur
+PHASE_MYTHOS,Phase de Mythe
+MONSTER_STEP,Étape de monstre
+HORROR_STEP,Étape d'horreur
+END_PHASE,Terminer la phase
+
+ATTACK_PROMPT,Avec quel type d’arme allez-vous attaquer ?
+ATTACK_WITH_HEAVY_WEAPON, Attaquer avec une [i]Arme Lourde[/i]
+ATTACK_WITH_BLADED_WEAPON, Attaquer avec une [i]Arme Tranchante[/i]
+ATTACK_WITH_FIREARM, Attaquer avec une [i]Arme à feu[/i]
+ATTACK_WITH_SPELL, Attaquer avec un Sort
+ATTACK_WITH_UNARMED, Attaquer à mains nues
+
+ACTION_X, {0}

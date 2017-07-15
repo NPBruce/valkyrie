@@ -39,12 +39,7 @@ public class ContentData {
     /// The path as a string with a trailing '/'.</returns>
     public static string ContentPath()
     {
-        if (Application.isEditor)
-        {
-            // If running through unity then we assume you are using the git content, with the project at the same level
-            return Application.dataPath + "/../../content/";
-        }
-        return Application.dataPath + "/content/";
+        return Application.streamingAssetsPath + "/content/";
     }
 
     /// <summary>
@@ -296,13 +291,11 @@ public class ContentData {
 
         foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
         {
-            DictionaryI18n packageDict = DictionaryI18n.ReadFromFileList("", kv.Value, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
-            if (packageDict == null)
+            DictionaryI18n packageDict = new DictionaryI18n();
+            foreach(string file in kv.Value)
             {
-                // Unable to load dictionary
-                return;
+                packageDict.AddDataFromFile(file);
             }
-            packageDict.setCurrentLanguage(Game.Get().currentLang);
 
             LocalizationRead.AddDictionary(kv.Key, packageDict);
         }
@@ -1059,6 +1052,8 @@ public class MonsterData : GenericData
     public string[] activations;
     public float healthBase = 0;
     public float healthPerHero = 0;
+    public int horror = 0;
+    public int awareness = 0;
     
     // This constuctor only exists for the quest version of this class to use to do nothing
     public MonsterData()
@@ -1099,6 +1094,14 @@ public class MonsterData : GenericData
         if (content.ContainsKey("healthperhero"))
         {
             float.TryParse(content["healthperhero"], out healthPerHero);
+        }
+        if (content.ContainsKey("horror"))
+        {
+            int.TryParse(content["horror"], out horror);
+        }
+        if (content.ContainsKey("awareness"))
+        {
+            int.TryParse(content["awareness"], out awareness);
         }
     }
 }

@@ -50,11 +50,12 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", ABILITY));
 
         abilityUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        abilityUIE.SetLocation(0.5f, offset, 19, 8);
+        abilityUIE.SetLocation(0.5f, offset, 19, 18);
         abilityUIE.SetText(activationComponent.ability.Translate());
+        offset += abilityUIE.HeightToTextPadding(1);
         abilityUIE.SetButton(delegate { UpdateAbility(); });
         new UIElementBorder(abilityUIE);
-        offset += 9;
+        offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 14, 1);
@@ -74,11 +75,12 @@ public class EditorComponentActivation : EditorComponent
         }
 
         masterActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        masterActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        masterActionsUIE.SetLocation(0.5f, offset, 19, 18);
         masterActionsUIE.SetText(activationComponent.masterActions.Translate(true));
+        offset += masterActionsUIE.HeightToTextPadding(1);
         masterActionsUIE.SetButton(delegate { UpdateMasterActions(); });
         new UIElementBorder(masterActionsUIE);
-        offset += 9;
+        offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 14, 1);
@@ -98,12 +100,13 @@ public class EditorComponentActivation : EditorComponent
         }
 
         minionActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        minionActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        minionActionsUIE.SetLocation(0.5f, offset, 19, 18);
         minionActionsUIE.SetText(activationComponent.minionActions.Translate(true));
+        offset += minionActionsUIE.HeightToTextPadding(1);
         minionActionsUIE.SetButton(delegate { UpdateMinionActions(); });
         new UIElementBorder(minionActionsUIE);
 
-        return offset + 9;
+        return offset + 1;
     }
 
     public float MoMActivation(float offset)
@@ -113,11 +116,12 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", INITIAL_MESSAGE));
 
         abilityUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        abilityUIE.SetLocation(0.5f, offset, 19, 8);
+        abilityUIE.SetLocation(0.5f, offset, 19, 18);
         abilityUIE.SetText(activationComponent.ability.Translate(true));
+        offset += abilityUIE.HeightToTextPadding(1);
         abilityUIE.SetButton(delegate { UpdateAbility(); });
         new UIElementBorder(abilityUIE);
-        offset += 9;
+        offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 9.5f, 1);
@@ -136,11 +140,12 @@ public class EditorComponentActivation : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", ATTACK_MESSAGE));
 
         masterActionsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        masterActionsUIE.SetLocation(0.5f, offset, 19, 8);
+        masterActionsUIE.SetLocation(0.5f, offset, 19, 18);
         masterActionsUIE.SetText(activationComponent.masterActions.Translate(true));
+        offset += masterActionsUIE.HeightToTextPadding(1);
         masterActionsUIE.SetButton(delegate { UpdateMasterActions(); });
         new UIElementBorder(masterActionsUIE);
-        offset += 9;
+        offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 19, 1);
@@ -149,9 +154,10 @@ public class EditorComponentActivation : EditorComponent
         moveUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         moveUIE.SetLocation(0.5f, offset, 19, 8);
         moveUIE.SetText(activationComponent.move.Translate(true));
+        offset += moveUIE.HeightToTextPadding(1);
         moveUIE.SetButton(delegate { UpdateMove(); });
         new UIElementBorder(moveUIE);
-        offset += 9;
+        offset += 1;
 
         return offset;
     }
@@ -162,6 +168,10 @@ public class EditorComponentActivation : EditorComponent
         {
             //insert the text in the current language
             LocalizationRead.updateScenarioText(activationComponent.ability_key, abilityUIE.GetText());
+            if (!abilityUIE.HeightAtTextPadding(1))
+            {
+                Update();
+            }
         }
     }
 
@@ -188,6 +198,10 @@ public class EditorComponentActivation : EditorComponent
         {
             LocalizationRead.updateScenarioText(activationComponent.master_key, masterActionsUIE.GetText());
         }
+        if (!masterActionsUIE.HeightAtTextPadding(1))
+        {
+            Update();
+        }
     }
 
     public void UpdateMinionActions()
@@ -200,6 +214,10 @@ public class EditorComponentActivation : EditorComponent
         {
             LocalizationRead.updateScenarioText(activationComponent.minion_key, minionActionsUIE.GetText());
         }
+        if (!minionActionsUIE.HeightAtTextPadding(1))
+        {
+            Update();
+        }
     }
 
     public void UpdateMove()
@@ -211,6 +229,10 @@ public class EditorComponentActivation : EditorComponent
         else if (moveUIE.Changed())
         {
             LocalizationRead.updateScenarioText(activationComponent.move_key, moveUIE.GetText());
+        }
+        if (!moveUIE.HeightAtTextPadding(1))
+        {
+            Update();
         }
     }
 

@@ -84,6 +84,17 @@ public class QuestMonster : MonsterData
             healthBase = baseObject.healthBase;
             healthPerHero = baseObject.healthPerHero;
         }
+
+        horror = qm.horror;
+        if (!qm.horrorDefined && baseObject != null)
+        {
+            horror = baseObject.horror;
+        }
+        awareness = qm.awareness;
+        if (!qm.awarenessDefined && baseObject != null)
+        {
+            awareness = baseObject.awareness;
+        }
     }
 }
 

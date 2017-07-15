@@ -28,7 +28,7 @@ class SaveManager
     public static void SaveWithScreen(int num, bool quit = false)
     {
         Game game = Game.Get();
-        //try
+        try
         {
             if (!Directory.Exists(Game.AppData()))
             {
@@ -98,9 +98,9 @@ class SaveManager
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }
-        //catch (System.Exception e)
+        catch (System.IO.IOException e)
         {
-        //    ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
+            ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
         if (quit)
         {
@@ -244,7 +244,7 @@ class SaveManager
                 game.stageUI = new NextStageButton();
             }
         }
-        catch (System.Exception e)
+        catch (IOException e)
         {
             ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile(num) + " " + e.Message);
             Application.Quit();

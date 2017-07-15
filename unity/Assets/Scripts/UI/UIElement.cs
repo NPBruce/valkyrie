@@ -13,8 +13,6 @@ namespace Assets.Scripts.UI
         protected GameObject text;
         // The background, unity object
         protected GameObject bg;
-        // Border for the button
-        protected RectangleBorder border;
 
         protected string tag = Game.DIALOG;
 
@@ -380,6 +378,80 @@ namespace Assets.Scripts.UI
         public bool ObjectDestroyed()
         {
             return bg == null;
+        }
+
+        /// <summary>
+        /// Is the object at the specified location in UIScaler units</summary>
+        /// <param name="x">x location to test</param>
+        /// <param name="y">y location to test</param>
+        /// <returns>If at that location</returns>
+        public bool AtLocation(float x, float y)
+        {
+            return AtLocationPixels(x * UIScaler.GetPixelsPerUnit(), y * UIScaler.GetPixelsPerUnit());
+        }
+
+        /// <summary>
+        /// Is the object at the specified location in pixels</summary>
+        /// <param name="x">x location to test</param>
+        /// <param name="y">y location to test</param>
+        /// <returns>If at that location</returns>
+        public bool AtLocationPixels(float x, float y)
+        {
+            RectTransform transBg = bg.GetComponent<RectTransform>();
+            if (transBg.anchoredPosition.x - (transBg.sizeDelta.x / 2) > x) return false;
+            if (-transBg.anchoredPosition.y - (transBg.sizeDelta.y / 2) > y) return false;
+            if (transBg.anchoredPosition.x + (transBg.sizeDelta.x / 2) < x) return false;
+            if (-transBg.anchoredPosition.y + (transBg.sizeDelta.y / 2) < y) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Get the amount of space for additional lines in the box, can be negative.</summary>
+        /// <returns>Amount of vertical space, less padding value in UIScaler units</returns>
+        protected float GetVerticalTextSpace()
+        {
+            float gap = text.GetComponent<RectTransform>().rect.height - text.GetComponent<UnityEngine.UI.Text>().preferredHeight;
+            gap -= textPaddingDefault * 2f;
+            return gap / UIScaler.GetPixelsPerUnit();
+        }
+
+        /// <summary>
+        /// Is the amount of free vertical space within a specified range?</summary>
+        /// <param name="min">Minimum space in UIScaler units</param>
+        /// <param name="max">Maximum space in UIScaler units</param>
+        protected bool VerticalTextSpaceInRange(float min, float max)
+        {
+            if (GetVerticalTextSpace() < min) return false;
+            if (GetVerticalTextSpace() > max) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Is the height equal to text size plus padding?</summary>
+        /// <param name="space">Additional vertical padding in UIScaler units</param>
+        /// <returns>True if height matches</returns>
+        public bool HeightAtTextPadding(float space = 0)
+        {
+            // Allow for floating point errors
+            return VerticalTextSpaceInRange(space - 0.01f, space + 0.01f);
+        }
+
+        /// <summary>
+        /// Set the UIElement to text height plus vertical padding</summary>
+        /// <param name="space">Additional vertical padding in UIScaler units</param>
+        /// <returns>New UIElement height in UIScaler units</returns>
+        public virtual float HeightToTextPadding(float space = 0)
+        {
+            float newHeight = (text.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2f) + space;
+            if (newHeight < 1 + (textPaddingDefault * 2f))
+            {
+                newHeight = 1 + (textPaddingDefault * 2f);
+            }
+            float oldHeight = GetRectTransform().sizeDelta.y;
+            float newHeightPixels = newHeight * UIScaler.GetPixelsPerUnit();
+            GetRectTransform().anchoredPosition = new Vector2(GetRectTransform().anchoredPosition.x, GetRectTransform().anchoredPosition.y - ((newHeightPixels - oldHeight) / 2f));
+            GetRectTransform().sizeDelta = new Vector2(GetRectTransform().sizeDelta.x, newHeightPixels);
+            return newHeight;
         }
     }
 }

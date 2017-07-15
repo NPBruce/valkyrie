@@ -234,6 +234,18 @@ public class MonsterCanvas : MonoBehaviour
                     new UIElementBorder(ui, Color.red);
                 }
             }
+            else
+            {
+                // MoM
+                if(game.quest.phase == Quest.MoMPhase.investigator)
+                {
+                    DrawAwareness(3.75f + ((index - offset) * 4.5f));
+                }
+                else
+                {
+                    DrawHorror(3.75f + ((index - offset) * 4.5f));
+                }
+            }
 
             iconDupe = null;
             if (duplicateSprite != null)
@@ -244,7 +256,7 @@ public class MonsterCanvas : MonoBehaviour
 
                 RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
                 dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, ((monsterSize / 2f) + 3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
-                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
+                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 2.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
                 mImgDupe.AddComponent<CanvasRenderer>();
 
                 iconDupe = mImgDupe.AddComponent<UnityEngine.UI.Image>();
@@ -257,6 +269,28 @@ public class MonsterCanvas : MonoBehaviour
             }
 
             Update();
+        }
+
+        public void DrawHorror(float offset)
+        {
+            if (m.monsterData.horror == 0) return;
+            UIElement ui = new UIElement(Game.MONSTERS);
+            ui.SetLocation(UIScaler.GetRight(-2.25f), offset + 2, 2, 2);
+            ui.SetText(m.monsterData.horror.ToString(), Color.blue);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(MonsterDiag);
+            new UIElementBorder(ui, Color.blue);
+        }
+
+        public void DrawAwareness(float offset)
+        {
+            if (m.monsterData.awareness == 0) return;
+            UIElement ui = new UIElement(Game.MONSTERS);
+            ui.SetLocation(UIScaler.GetRight(-2.25f), offset, 2, 2);
+            ui.SetText(m.monsterData.awareness.ToString(), Color.green);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(MonsterDiag);
+            new UIElementBorder(ui, Color.green);
         }
 
         public void Update()

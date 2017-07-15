@@ -71,6 +71,11 @@ namespace Assets.Scripts.UI.Screens
             float.TryParse(vSet, out mVolume);
             if (vSet.Length == 0) mVolume = 1;
 
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 11, 14, 2);
+            ui.SetBGColor(Color.clear);
+            new UIElementBorder(ui);
+
             GameObject musicSlideObj = new GameObject("musicSlide");
             musicSlideObj.tag = Game.DIALOG;
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
@@ -79,7 +84,6 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
-            new RectangleBorder(musicSlideObj.transform, Color.white, new Vector2(musicSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), musicSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
             GameObject musicFill = new GameObject("musicfill");
             musicFill.tag = Game.DIALOG;
@@ -125,6 +129,11 @@ namespace Assets.Scripts.UI.Screens
             float.TryParse(vSet, out eVolume);
             if (vSet.Length == 0) eVolume = 1;
 
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 17, 14, 2);
+            ui.SetBGColor(Color.clear);
+            new UIElementBorder(ui);
+
             GameObject effectSlideObj = new GameObject("effectSlide");
             effectSlideObj.tag = Game.DIALOG;
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
@@ -137,7 +146,6 @@ namespace Assets.Scripts.UI.Screens
             entry.eventID = EventTriggerType.PointerUp;
             entry.callback.AddListener(delegate { PlayTestSound(); });
             effectSlideObj.AddComponent<EventTrigger>().triggers.Add(entry);
-            new RectangleBorder(effectSlideObj.transform, Color.white, new Vector2(effectSlideRect.rect.width / UIScaler.GetPixelsPerUnit(), effectSlideRect.rect.height / UIScaler.GetPixelsPerUnit()));
 
             GameObject effectFill = new GameObject("effectFill");
             effectFill.tag = Game.DIALOG;
@@ -191,18 +199,18 @@ namespace Assets.Scripts.UI.Screens
             // In D2E there is an additional language
             // It can change in future
 
-            string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
             // For now, English and Spanish languages available.
-            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese".Split(','));
+            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese,Polish".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
-            float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
+            float verticalStart = UIScaler.GetVCenter(-1f) - langs.Length;
 
-            for (int i = 1; i < langs.Length; i++)
+            for (int i = 0; i < langs.Length; i++)
             {
-                int position = i;
+                int position = i + 1;
                 // Need current index in order to delegate not point to loop for variable
-                string currentLanguage = langs[position];
+                string currentLanguage = langs[i];
 
                 ui = new UIElement();
                 ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position), 8, 1.8f);

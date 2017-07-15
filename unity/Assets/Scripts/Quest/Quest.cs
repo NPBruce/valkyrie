@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using ValkyrieTools;
 using System.IO;
 
@@ -78,6 +79,9 @@ public class Quest
 
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
+
+    // A list of music if custom music has been selected - used for save games
+    public List<string> music = new List<string>();
 
     // Reference back to the game object
     public Game game;
@@ -606,13 +610,33 @@ public class Quest
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
-        // Start quest music FIXME music state not saved
+        // Start quest music
         List<string> music = new List<string>();
-        foreach (AudioData ad in game.cd.audio.Values)
+        if (saveData.Get("Music") != null)
         {
-            if (ad.ContainsTrait("quest")) music.Add(ad.file);
+            music = new List<string>(saveData.Get("Music").Values);
+            List<string> toPlay = new List<string>();
+            foreach (string s in music)
+            {
+                if (game.cd.audio.ContainsKey(s))
+                {
+                    toPlay.Add(game.cd.audio[s].file);
+                }
+                else
+                {
+                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + "/" + s);
+                }
+            }
+            game.audioControl.Music(toPlay, false);
         }
-        game.audioControl.Music(music);
+        else
+        {
+            foreach (AudioData ad in game.cd.audio.Values)
+            {
+                if (ad.ContainsTrait("quest")) music.Add(ad.file);
+            }
+            game.audioControl.Music(music);
+        }
 
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
@@ -811,6 +835,10 @@ public class Quest
             if (kv.Key.IndexOf("PuzzleImage") == 0)
             {
                 puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length), new PuzzleImage(kv.Value));
+            }
+            if (kv.Key.IndexOf("PuzzleTower") == 0)
+            {
+                puzzle.Add(kv.Key.Substring("PuzzleTower".Length, kv.Key.Length - "PuzzleTower".Length), new PuzzleTower(kv.Value));
             }
         }
         // Restore event quotas
@@ -1196,6 +1224,16 @@ public class Quest
             r = r.Substring(0, r.Length - 1) + nl;
         }
 
+        if (music.Count > 0)
+        {
+            r += "[Music]" + nl;
+            for (int j = 0; j < music.Count; j++)
+            {
+                r += "track" + j + "=" + music[j] + nl;
+            }
+            r += nl;
+        }
+
         return r;
     }
 
@@ -1373,7 +1411,7 @@ public class Quest
     {
         // Quest info on the token
         public QuestData.UI qUI;
-        public RectangleBorder border;
+        public UIElementBorder border;
 
         UnityEngine.UI.Text uiText;
 
@@ -1478,7 +1516,7 @@ public class Quest
 
             if (qUI.border)
             {
-                border = new RectangleBorder(unityObject.transform, uiText.color, new Vector2(hSize / UIScaler.GetPixelsPerUnit(), vSize / UIScaler.GetPixelsPerUnit()), Game.BOARD);
+                border = new UIElementBorder(unityObject.transform, rectTransform, Game.BOARD, uiText.color);
             }
 
             game.tokenBoard.Add(this);
@@ -1494,7 +1532,7 @@ public class Quest
         {
             if (image != null && image.gameObject != null) image.color = c;
             if (uiText != null && uiText.gameObject != null) uiText.color = c;
-            if (border != null) border.color = c;
+            if (border != null) border.SetColor(c);
         }
 
         override public Color GetColor()
@@ -1528,7 +1566,6 @@ public class Quest
         public override void Remove()
         {
             Object.Destroy(unityObject);
-            if (border != null) border.Destroy();
         }
     }
 

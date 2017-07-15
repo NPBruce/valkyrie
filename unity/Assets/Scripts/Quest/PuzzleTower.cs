@@ -15,7 +15,17 @@ public class PuzzleTower : Puzzle
     public PuzzleTower(int depth)
     {
         List<List<List<int>>> options = BuildPuzzles(depth);
-        puzzle = options[Random.Range(0, options.Count)];
+        List<List<int>> p = options[Random.Range(0, options.Count)];
+
+        // Randomise tower order
+        puzzle = new List<List<int>>();
+        int pos = Random.Range(0, 3);
+        puzzle.Add(p[pos]);
+        p.RemoveAt(pos);
+        pos = Random.Range(0, 2);
+        puzzle.Add(p[pos]);
+        p.RemoveAt(pos);
+        puzzle.Add(p[0]);
     }
 
     /// <summary>
@@ -42,14 +52,14 @@ public class PuzzleTower : Puzzle
 
         for(int i = 0; i < 8; i++)
         {
-            end[0].Add(i - 7);
+            end[0].Add(7 - i);
         }
 
         List<List<List<List<int>>>> allStates = new List<List<List<List<int>>>>();
         allStates.Add(new List<List<List<int>>>());
         allStates[0].Add(end);
 
-        for(int currentLevel = 0; currentLevel <= depth; currentLevel++)
+        for(int currentLevel = 0; currentLevel < depth; currentLevel++)
         {
             allStates.Add(new List<List<List<int>>>());
             foreach (List<List<int>> state in allStates[currentLevel])
@@ -69,24 +79,28 @@ public class PuzzleTower : Puzzle
     {
         for (int i = 0; i < state.Count; i++)
         {
+            if (!ReverseMoveOK(i, state)) continue;
+
             for (int j = 0; j < state.Count; j++)
             {
                 if (j == i) continue;
-                if (MoveOK(i, j, state))
+
+                List<List<int>> newState = CopyState(state);
+                newState[j].Add(state[i][state[i].Count - 1]);
+                newState[i].RemoveAt(state[i].Count - 1);
+                bool uniqueState = true;
+                foreach (List<List<List<int>>> level in allStates)
                 {
-                    List<List<int>> newState = CopyState(state);
-                    newState[j].Add(state[i][state[i].Count - 1]);
-                    newState[i].RemoveAt(state[i].Count - 1);
-                    foreach (List<List<List<int>>> level in allStates)
+                    foreach (List<List<int>> oldState in level)
                     {
-                        foreach (List<List<int>> oldState in level)
+                        if (Equal(newState, oldState))
                         {
-                            if (Equal(newState, oldState))
-                            {
-                                continue;
-                            }
+                            uniqueState = false;
                         }
                     }
+                }
+                if (uniqueState)
+                {
                     allStates[allStates.Count - 1].Add(newState);
                 }
             }
@@ -98,7 +112,7 @@ public class PuzzleTower : Puzzle
     /// </summary>
     /// <param name="state">puzzle</param>
     /// <returns>copy of puzzle state</returns>
-    protected List<List<int>> CopyState(List<List<int>> state)
+    public List<List<int>> CopyState(List<List<int>> state)
     {
         List<List<int>> copy = new List<List<int>>();
         for (int i = 0; i < state.Count; i++)
@@ -126,7 +140,7 @@ public class PuzzleTower : Puzzle
             if (state[i].Count != stateTwo[i].Count) return false;
             for (int j = 0; j < state[i].Count; j++)
             {
-                if (state[j][i] != stateTwo[i][j]) return false;
+                if (state[i][j] != stateTwo[i][j]) return false;
             }
         }
         return true;
@@ -204,14 +218,58 @@ public class PuzzleTower : Puzzle
     /// <returns>If the move is legal</returns>
     public bool MoveOK(int fromTower, int toTower, List<List<int>> p)
     {
-        if (p.Count < fromTower) return false;
+        if (p.Count <= fromTower) return false;
+        if (fromTower < 0) return false;
         if (p[fromTower].Count == 0) return false;
-        if (p.Count < toTower) return false;
+        if (p.Count <= toTower) return false;
+        if (toTower < 0) return false;
         if (p[toTower].Count == 0) return true;
 
         int fromSize = p[fromTower][p[fromTower].Count - 1];
         int toSize = p[toTower][p[toTower].Count - 1];
         return fromSize < toSize;
+    }
+
+    /// <summary>
+    /// Check if a reverse puzzle move is legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="p">Puzzle state to use</param>
+    /// <returns>If the move is legal</returns>
+    public bool ReverseMoveOK(int fromTower, List<List<int>> p)
+    {
+        if (p.Count <= fromTower) return false;
+        if (fromTower < 0) return false;
+        if (p[fromTower].Count == 0) return false;
+        if (p[fromTower].Count == 1) return true;
+
+        int moveSize = p[fromTower][p[fromTower].Count - 1];
+        int baseSize = p[fromTower][p[fromTower].Count - 2];
+        return moveSize < baseSize;
+    }
+
+    /// <summary>
+    /// Perform a puzzle move, if legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="toTower">Tower to move block to</param>
+    public void Move(int fromTower, int toTower)
+    {
+        Move(fromTower, toTower, puzzle);
+    }
+
+    /// <summary>
+    /// Perform a puzzle move, if legal
+    /// </summary>
+    /// <param name="fromTower">Tower to move block from</param>
+    /// <param name="toTower">Tower to move block to</param>
+    /// <param name="p">Puzzle state to use</param>
+    public void Move(int fromTower, int toTower, List<List<int>> p)
+    {
+        if (!MoveOK(fromTower, toTower, p)) return;
+
+        p[toTower].Add(p[fromTower][p[fromTower].Count - 1]);
+        p[fromTower].RemoveAt(p[fromTower].Count - 1);
     }
 
     /// <summary>

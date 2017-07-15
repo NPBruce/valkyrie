@@ -150,6 +150,10 @@ namespace FFGAppImport
             {
                 Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
             }
+
+            // Find any streaming asset files
+            string[] streamFiles = Directory.GetFiles(finder.location + "/StreamingAssets", "*", SearchOption.AllDirectories);
+            ImportStreamAssets(streamFiles);
         }
 
         // Import one assets file
@@ -443,13 +447,39 @@ namespace FFGAppImport
                 writer.Close();
             }
 
-            // Run monster data extration tool if in dev
-            if (importData.editor && asset.Text.Equals("Localization"))
+            // Need to trim new lines from old D2E format
+            if (asset.Text.Equals("Localization"))
             {
-                if (finder is MoMFinder)
+                string[] locFix = File.ReadAllLines(fileName);
+                List<string> locOut = new List<string>();
+                string currentLine = "";
+                for (int i = 0; i < locFix.Length; i++)
                 {
-                    ExtractDataTool.MoM(m_TextAsset.Deobfuscate(finder.ObfuscateKey()), contentPath);
+                    if (locFix[i].Split('\"').Length % 2 == 0)
+                    {
+                        if (currentLine.Length == 0)
+                        {
+                            currentLine = locFix[i];
+                        }
+                        else
+                        {
+                            locOut.Add(currentLine + "\\n" + locFix[i]);
+                            currentLine = "";
+                        }
+                    }
+                    else
+                    {
+                        if (currentLine.Length == 0)
+                        {
+                            locOut.Add(locFix[i]);
+                        }
+                        else
+                        {
+                            currentLine += "\\n" + locFix[i];
+                        }
+                    }
                 }
+                File.WriteAllLines(fileName, locOut.ToArray());
             }
         }
 
@@ -533,6 +563,40 @@ namespace FFGAppImport
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Find asset bundles and create a list of them in a file.  Invalid files ignored.
+        /// </summary>
+        /// <param name="streamFiles"></param>
+        protected void ImportStreamAssets(string[] streamFiles)
+        {
+            List<string> bundles = new List<string>();
+
+            foreach (string file in streamFiles)
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    {
+                        byte[] buffer = new byte[8];
+                        fs.Read(buffer, 0, buffer.Length);
+                        string header = System.Text.Encoding.Default.GetString(buffer);
+                        fs.Close();
+                        if (header.IndexOf("UnityFS") == 0)
+                        {
+                            bundles.Add(file);
+                        }
+                    }
+                }
+                catch (System.Exception)
+                {
+                    continue;
+                }
+            }
+
+            // We can't extract these here because this isn't the main thread and unity doesn't handle that
+            File.WriteAllLines(contentPath + "/bundles.txt", bundles.ToArray());
         }
     }
 }

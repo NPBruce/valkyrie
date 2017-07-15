@@ -1,0 +1,254 @@
+.,Portuguese
+// TEXTS
+ABILITY,Habilidade
+ABOUT,Sobre Valkyrie
+ABOUT_FFG,Valkyrie é um App de ajuda de criação de aventuras inspirado por Fantasy Flight Games' Descent: Road to Legend. A maioria das imagens utilizadas no App são da FFG e são de propriedade da FFG com todos os direitos reservados.
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ACTIONS,Ações
+ACTIVATED,Ativado
+ACTIVATION,Ativação
+ACTIVATIONS,Ativações
+ADD_COMPONENTS,Adicionar Componentes
+ATTACK,Ataque
+ATTACK_MESSAGE,Mensagem de Ataque
+AUDIO,Audio
+BACK,voltar
+BASE,Base
+BUTTON,Botão
+BUTTONS,Botões
+CAMERA,Camera
+CANCEL,Cancelar
+CHOOSE_LANG,Escolher Idioma
+CLEAR_FIRE,Apagar Incêndio
+COLOR,Cor
+COMPONENT_NAME,Nome do Componente
+COMPONENT_TO_DELETE,Deletar Componente
+CONTENT_IMPORT,Importar Componente
+CONTENT_IMPORTING,Importando...
+CONTENT_REIMPORT,Reimportar Componente
+CONTINUE,Continuar
+COPY,Copiar
+CUSTOMMONSTER,Monstro Personalizado
+D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend", instalar via Steam
+D2E_HEROES_NAME,Heróis
+D2E_HERO_NAME,Herói
+D2E_NAME,Descent: Journeys in the Dark Second Edition
+D2E_QUEST_NAME,Aventura
+DEFEATED,Derrotado
+DELETE,Deletar
+DIALOG,Diálogo
+DOOR,Porta
+DOWNLOAD,Download
+DOWNLOAD_LIST,
+DOWNLOAD_PACKAGE,
+E,E
+EFFECTS,Efeitos
+EMPTY,
+END_TURN,Fim do Turno
+ROUND,
+EVADE,Evasão
+EVENT,Evento
+EXIT,Sair
+FINISHED,Terminado
+FIRST,Primeiro
+FORCE_ACTIVATE,Ativação Forçada
+
+HEALTH,Vida
+HEALTH_HERO,Por Herói
+HIGHLIGHT,Destaque
+HORROR_CHECK,Teste de Horror
+AWARENESS,
+INDENT,  {0}
+INFO,Info
+INFORMATION,Informação
+INITIAL_MESSAGE,Mensagem Inicial
+ITEM,Objeto
+MENU,Menu
+
+UI,Interface
+UNITS,Unidades
+HORIZONTAL,Horizontal
+VERTICAL,Vertical
+ALIGN,Alinhamento
+POSITION,Posição
+SIZE,Tamanho
+TEXT_SIZE,Texto
+ASPECT,Aspecto
+BORDER,Borda
+NO_BORDER,Sem Borda
+UNDO,Desfazer
+UNIQUE_DEFEATED,Única
+Derrota
+UNIQUE_INFO,Informação Única
+UNIQUE_MONSTER,Monstro Único
+UNIQUE_TITLE,Titulo Único
+UNUSED,Não Usado
+VALUE,Valor
+VAR,Variável
+VARS,Variáveis
+
+//Items
+weapon,Arma
+firearm,Arma de Fogo
+heavyweapon,Arma Pesada
+heavy,Arma Pesada
+tome,Tomo
+equipment,Equipamento
+lightsource,Fonte de Luz
+bladedweapon,Arma de Corte
+bladed,Arma Cortante
+spell,Feitiço
+key,Chave
+evidence,Evidência
+ally,Aliado
+
+//Audio
+menu,Menu
+music,Música
+quest,Aventura
+defeated,Derrotado
+newround,Novo Round
+attack,Ataque
+unarmed,Desarmado
+horror,Horror
+search,Procurar
+explore,Explorar
+
+//Heroes
+latari,Latari
+dwarf,Anão
+gnome,Gnomo
+male,Homem
+female,Mulher
+
+//monsters
+undead,Morto Vivo
+humanoid,Humanoide
+spirit,Espírito
+beast,Besta
+agent,Agente
+lieutenant,Tenente
+small,Pequeno
+medium,Médio
+huge,Gigante
+massive,Massivo
+building,Construção
+melee,Corpo a Corpo
+ranged,Distancia
+goblin,Goblin
+cursed,Amaldiçoado
+cave,Caverna
+wilderness,Região Selvagem
+civilized,Civilizado
+dark,Escuridão
+mountain,Montanha
+cold,Frio
+hot,Quente
+water,Água
+
+//Tiles
+basement,Porão
+river,Rio
+street,Estrada
+hallway,Corredor
+bathroom,Banheiro
+bedroom,Quarto
+kitchen,Cozinha
+dock,Doca
+storage,Armazém
+outside,Externo
+inside,Interno
+small,Pequeno
+medium,Médio
+big,Grande
+transition,Transição
+throne,Trono
+pit,Abismo
+farm,Fazenda
+tomb,Tumba
+library,Biblioteca
+graves,Cemitério
+bridge,Ponte
+stairs,Escada
+torture,Tortura
+tents,Tendas
+stables,Estábulo
+hall,Hall
+map,Mapa
+bedroom,Quarto
+city,Cidade
+fountain,Fonte
+blackrealm,Reino Obscuro
+altar,Altar
+beds,Camas
+study,Estudo
+prison,Prisão
+plinth,Pedestal
+tavern,Taverna
+statues,Estátua
+drawbridge,Ponte Levadiça
+rubble,Escombros
+treasure,Tesouro
+stone,Pedra
+dirt,Sujeira
+timber,Madeira
+snow,Neve
+lava,Lava
+swamp,Pântano
+sludge,Lama
+
+// Colors
+black,Preto
+white,Branco
+red,Vermelho
+lime,Lima
+blue,Azul
+yellow,Amarelo
+aqua,Aquamarinho
+cyan,Ciano
+magenta,Magenta
+fuchsia,Fúcsia
+silver,Prata
+gray,Cinza
+maroon,Marrom
+olive,Oliva
+green,Verde
+purple,Roxo
+teal,Turquesa
+navy,Azul Marinho
+
+//Puzzles
+image,Mosaico
+code,Código
+slide,Mecanismo
+SYMBOL,Símbolo
+
+// Events
+Ordered,Ordenado
+Random,Aleatório
+
+//Inherited from FFG localization files
+SET_FIRE,Tocar Fogo
+INVESTIGATOR_ELIMINATED,Investigador Eliminado
+CLOSE,Fechar
+PUZZLE_GUESS,Tentar
+
+UP,Para Cima
+DOWN,Para Baixo
+LEFT,Para a Esquerda
+RIGHT,Para a Direita
+
+PHASE_INVESTIGATOR,Fase de Investigação
+PHASE_MYTHOS,Fase do Mito
+MONSTER_STEP,Passo dos Monstros
+HORROR_STEP,Passo dos Horrores
+END_PHASE,Fim de Fase
+
+ATTACK_PROMPT,Com que tipo de arma você quer atacar?
+ATTACK_WITH_HEAVY_WEAPON, Atacar com uma [i]Arma Pesada[/i]
+ATTACK_WITH_BLADED_WEAPON, Atacar com uma [i]Arma Branca[/i]
+ATTACK_WITH_FIREARM, Atacar com uma [i]Arma de Fogo[/i]
+ATTACK_WITH_SPELL, Atacar com um Feitiço
+ATTACK_WITH_UNARMED, Atacar Desarmado
+
+ACTION_X, {0}
