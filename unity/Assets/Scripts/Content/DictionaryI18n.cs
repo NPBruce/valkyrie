@@ -96,11 +96,11 @@ namespace Assets.Scripts.Content
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
                 data.Add(kv.Key, new Dictionary<string, string>());
-                foreach (string s in kv.Value)
+                for(int i = 1; i < kv.Value.Count; i++)
                 {
-                    if (s.Trim().IndexOf("//") == 0) continue;
+                    if (kv.Value[i].Trim().IndexOf("//") == 0) continue;
 
-                    string[] components = s.Split(",".ToCharArray(), 2);
+                    string[] components = kv.Value[i].Split(",".ToCharArray(), 2);
                     if (components.Length != 2) continue;
 
                     if (!data[kv.Key].ContainsKey(components[0]))
@@ -137,11 +137,11 @@ namespace Assets.Scripts.Content
         public void Remove(string key)
         {
             MakeEditable();
-            foreach (Dictionary<string, string> languageData in data.Values)
+            foreach (string lang in data.Keys)
             {
-                if (languageData.ContainsKey(key))
+                if (data[lang].ContainsKey(key))
                 {
-                    languageData.Remove(key);
+                    data[lang].Remove(key);
                 }
             }
         }
@@ -196,6 +196,8 @@ namespace Assets.Scripts.Content
                 if (languageData.ContainsKey(key)) return true;
             }
 
+            if (loadedForEdit) return false;
+
             bool found = false;
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
@@ -207,7 +209,14 @@ namespace Assets.Scripts.Content
                         {
                             data.Add(kv.Key, new Dictionary<string, string>());
                         }
-                        data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        if (data[kv.Key].ContainsKey(key))
+                        {
+                            ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
+                        }
+                        else
+                        {
+                            data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        }
                         found = true;
                     }
                 }
@@ -249,6 +258,7 @@ namespace Assets.Scripts.Content
             foreach (KeyValuePair<string, Dictionary<string, string>> kv in data)
             {
                 rawData.Add(kv.Key, new List<string>());
+                rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
                     rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
@@ -267,6 +277,22 @@ namespace Assets.Scripts.Content
                 parsedReturn = parsedReturn.Replace("\"\"", "\"");
             }
             return parsedReturn;
+        }
+
+        public Dictionary<string, string> ExtractAllMatches(string key)
+        {
+            // Load into data
+            KeyExists(key);
+
+            Dictionary<string, string> returnData = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, Dictionary<string,  string>> kv in data)
+            {
+                if (kv.Value.ContainsKey(key))
+                {
+                    returnData.Add(kv.Key, kv.Value[key]);
+                }
+            }
+            return returnData;
         }
     }
 }

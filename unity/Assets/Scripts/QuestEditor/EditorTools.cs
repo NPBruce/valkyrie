@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.IO;
 using Ionic.Zip;
 using ValkyrieTools;
+using System.Collections.Generic;
 
 public class EditorTools
 {
@@ -108,8 +109,6 @@ public class EditorTools
             }
             Directory.CreateDirectory(destination);
 
-            File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
-
             ZipFile zip = new ZipFile();
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath));
             zip.Save(destination + "/" + packageName + ".valkyrie");
@@ -130,8 +129,14 @@ public class EditorTools
             using (FileStream stream = File.OpenRead(destination + "/" + packageName + ".valkyrie"))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + System.BitConverter.ToString(checksum);
+                manifest += "version=" + System.BitConverter.ToString(checksum) + "\n";
             }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
+            {
+                manifest += "name." + kv.Key + "=" + kv.Value + "\n";
+            }
+
 
             File.WriteAllText(destination + "/" + packageName + ".ini", manifest);
         }
