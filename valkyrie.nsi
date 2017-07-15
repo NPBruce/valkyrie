@@ -81,6 +81,7 @@ Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   
+  SetOverwrite on
   File /r build\batch\*.*
   
   ;Store installation folder
