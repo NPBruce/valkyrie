@@ -137,11 +137,11 @@ namespace Assets.Scripts.Content
         public void Remove(string key)
         {
             MakeEditable();
-            foreach (Dictionary<string, string> languageData in data.Values)
+            foreach (string lang in data.Keys)
             {
-                if (languageData.ContainsKey(key))
+                if (data[lang].ContainsKey(key))
                 {
-                    languageData.Remove(key);
+                    data[lang].Remove(key);
                 }
             }
         }
@@ -196,6 +196,8 @@ namespace Assets.Scripts.Content
                 if (languageData.ContainsKey(key)) return true;
             }
 
+            if (loadedForEdit) return false;
+
             bool found = false;
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
@@ -207,7 +209,14 @@ namespace Assets.Scripts.Content
                         {
                             data.Add(kv.Key, new Dictionary<string, string>());
                         }
-                        data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        if (data[kv.Key].ContainsKey(key))
+                        {
+                            ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
+                        }
+                        else
+                        {
+                            data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        }
                         found = true;
                     }
                 }

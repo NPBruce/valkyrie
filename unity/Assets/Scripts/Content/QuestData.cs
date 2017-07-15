@@ -108,6 +108,7 @@ public class QuestData
         {
             qstDict.AddDataFromFile(file);
         }
+        LocalizationRead.AddDictionary("qst", qstDict);
 
         foreach (string f in iniFiles)
         {
