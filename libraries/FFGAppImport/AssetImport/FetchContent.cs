@@ -447,13 +447,39 @@ namespace FFGAppImport
                 writer.Close();
             }
 
-            // Run monster data extration tool if in dev
-            if (importData.editor && asset.Text.Equals("Localization"))
+            // Need to trim new lines from old D2E format
+            if (asset.Text.Equals("Localization"))
             {
-                if (finder is MoMFinder)
+                string[] locFix = File.ReadAllLines(fileName);
+                List<string> locOut = new List<string>();
+                string currentLine = "";
+                for (int i = 0; i < locFix.Length; i++)
                 {
-                    ExtractDataTool.MoM(m_TextAsset.Deobfuscate(finder.ObfuscateKey()), contentPath);
+                    if (locFix[i].Split('\"').Length % 2 == 0)
+                    {
+                        if (currentLine.Length == 0)
+                        {
+                            currentLine = locFix[i];
+                        }
+                        else
+                        {
+                            locOut.Add(currentLine + "\\n" + locFix[i]);
+                            currentLine = "";
+                        }
+                    }
+                    else
+                    {
+                        if (currentLine.Length == 0)
+                        {
+                            locOut.Add(locFix[i]);
+                        }
+                        else
+                        {
+                            currentLine += "\\n" + locFix[i];
+                        }
+                    }
                 }
+                File.WriteAllLines(fileName, locOut.ToArray());
             }
         }
 

@@ -33,6 +33,7 @@ namespace Assets.Scripts.Content
         {
             data = new Dictionary<string, Dictionary<string, string>>();
             rawData = new Dictionary<string, List<string>>();
+            currentLanguage = Game.Get().currentLang;
         }
 
         public DictionaryI18n(string newDefaultLanguage)
@@ -104,7 +105,7 @@ namespace Assets.Scripts.Content
 
                     if (!data[kv.Key].ContainsKey(components[0]))
                     {
-                        data[kv.Key].Add(components[0], components[1]);
+                        data[kv.Key].Add(components[0], ParseEntry(components[1]));
                     }
                 }
             }
@@ -195,6 +196,7 @@ namespace Assets.Scripts.Content
                 if (languageData.ContainsKey(key)) return true;
             }
 
+            bool found = false;
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
                 foreach (string raw in kv.Value)
@@ -205,12 +207,13 @@ namespace Assets.Scripts.Content
                         {
                             data.Add(kv.Key, new Dictionary<string, string>());
                         }
-                        data[kv.Key].Add(key, raw.Substring(raw.IndexOf(',') + 1));
-                        return true;
+                        data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        found = true;
                     }
                 }
             }
-            return false;
+
+            return found;
         }
 
         public string GetValue(string key)
@@ -248,11 +251,22 @@ namespace Assets.Scripts.Content
                 rawData.Add(kv.Key, new List<string>());
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value);
+                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
                 }
             }
 
             return rawData;
+        }
+
+        protected string ParseEntry(string entry)
+        {
+            string parsedReturn = entry.Replace("\\n", "\n");
+            if (parsedReturn.Length > 2 && parsedReturn[0] == '\"')
+            {
+                parsedReturn = parsedReturn.Substring(1, parsedReturn.Length - 2);
+                parsedReturn = parsedReturn.Replace("\"\"", "\"");
+            }
+            return parsedReturn;
         }
     }
 }

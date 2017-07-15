@@ -24,26 +24,6 @@ namespace Assets.Scripts.Content
             }
         }
 
-        // Function takes path to localization file and returns data object
-        // Returns null on error
-        public static DictionaryI18n ReadFromFilePath(string path, string newDefaultLang)
-        {
-            string[] lines;
-
-            // Read the whole file
-            try
-            {
-                lines = System.IO.File.ReadAllLines(path);
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log("Error loading localization file " + path + ":" + e.Message);
-                return null;
-            }
-            // Parse text data
-            return new DictionaryI18n(lines, newDefaultLang);
-        }
-
         private const int RECURSIVE_LIMIT = 10;
 
         // Check for FFG text lookups and insert required text
