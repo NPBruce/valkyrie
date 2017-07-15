@@ -1,0 +1,24 @@
+.,Chinese
+//Inherited from FFG localization files
+SET_FIRE,點火
+INVESTIGATOR_ELIMINATED,調查員被消滅
+CLOSE,關閉
+PUZZLE_GUESS,猜測
+
+UP,上
+DOWN,下
+LEFT,左
+RIGHT,右
+
+PHASE_INVESTIGATOR,調查階段
+PHASE_MYTHOS,神秘階段
+MONSTER_STEP,怪物步驟
+HORROR_STEP,恐怖步驟
+END_PHASE,結束步驟
+
+ATTACK_PROMPT,你想在攻擊時使用哪種類型的武器？
+ATTACK_WITH_HEAVY_WEAPON, 使用重型武器攻擊
+ATTACK_WITH_BLADED_WEAPON, 使用銳器攻擊
+ATTACK_WITH_FIREARM, 使用槍械攻擊
+ATTACK_WITH_SPELL, 使用法術攻擊
+ATTACK_WITH_UNARMED, 徒手攻擊
