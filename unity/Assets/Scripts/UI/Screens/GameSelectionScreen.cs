@@ -259,7 +259,7 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
             }
-            catch (IOException) { }
+            catch (System.Exception) { }
             importType = "";
         }
 
