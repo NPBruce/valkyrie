@@ -214,25 +214,20 @@ namespace Assets.Scripts.UI.Screens
             // After content import, we load the localization file
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
-                // D2E localization
-                if (File.Exists(ContentData.ImportPath() + "/text/Localization.txt"))
+                DictionaryI18n ffgDict = new DictionaryI18n();
+                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization*.txt"))
                 {
-                    // FFG default language is always English
-                    LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
-                        File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
-                        DictionaryI18n.DEFAULT_LANG,
-                        Game.Get().currentLang));
+                    ffgDict.AddDataFromFile(file);
                 }
-                else
-                {
-                    string[] localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
-                    DictionaryI18n momDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
-                    LocalizationRead.AddDictionary("ffg", momDict);
+                LocalizationRead.AddDictionary("ffg", ffgDict);
 
-                    localList = Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_*.txt");
-                    DictionaryI18n shDict = DictionaryI18n.ReadFromFileList("", localList, DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang);
-                    LocalizationRead.AddDictionary("csh", shDict);
+                // CoSH used for Dunwich Horror data
+                DictionaryI18n cshDict = new DictionaryI18n();
+                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_*.txt"))
+                {
+                    cshDict.AddDataFromFile(file);
                 }
+                LocalizationRead.AddDictionary("csh", cshDict);
             }
         }
 

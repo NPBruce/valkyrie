@@ -75,7 +75,7 @@ public class QuestDownload : MonoBehaviour
     public void ReadDict()
     {
         if (download.error != null) Application.Quit();
-        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
+        localizationDict = new DictionaryI18n(download.text);
         DrawList();
     }
 

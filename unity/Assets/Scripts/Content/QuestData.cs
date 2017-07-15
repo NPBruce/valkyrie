@@ -103,8 +103,11 @@ public class QuestData
         }
 
         // Reset scenario dict
-        LocalizationRead.AddDictionary("qst", DictionaryI18n.ReadFromFileList
-            ("",localizationFiles,game.currentLang,game.currentLang));
+        DictionaryI18n qstDict = new DictionaryI18n(game.currentLang);
+        foreach (string file in localizationFiles)
+        {
+            qstDict.AddDataFromFile(file);
+        }
 
         foreach (string f in iniFiles)
         {
@@ -1417,25 +1420,6 @@ public class QuestData
             ChangeReference(refName, "");
         }
 
-        /// <summary>
-        /// Updates de dicionary with new text and generates a StringKey element
-        /// </summary>
-        /// <param name="key">key to update/create</param>
-        /// <param name="text">text in current language</param>
-        /// <returns></returns>
-        protected StringKey AfterRenameUpdateDictionaryTextAndGenKey(string oldkey, string newName)
-        {
-            string[] split = oldkey.Split('.');
-            string newKey = new StringBuilder()
-                .Append(newName).Append('.').Append(split[1]).ToString();
-
-            // update or create scenario text in current language
-            LocalizationRead.replaceScenarioText(oldkey, newKey);
-
-            //return the stringkey
-            return new StringKey("qst", newKey);
-        }
-
         // Save to string (editor)
         override public string ToString()
         {
@@ -1823,7 +1807,7 @@ public class QuestData
     // Quest ini component has special data
     public class Quest
     {
-        public static int minumumFormat = 3;
+        public static int minumumFormat = 4;
         // Increment during changes, and again at release
         public static int currentFormat = 7;
         public int format = 0;
@@ -1835,7 +1819,7 @@ public class QuestData
         // Content packs required for quest
         public string[] packs;
         // Default language for the text
-        public string defaultLanguage = DictionaryI18n.DEFAULT_LANG;
+        public string defaultLanguage = "English";
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
@@ -1864,22 +1848,10 @@ public class QuestData
             //Read the localization data
             Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
 
-            if (localizationData == null || localizationData.Keys.Count == 0)
+            localizationDict = new DictionaryI18n(defaultLanguage);
+            foreach (string file in localizationData.Keys)
             {
-                localizationDict = new DictionaryI18n(
-                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
-            }
-            else
-            {
-                localizationDict = DictionaryI18n.ReadFromFileList
-                    (path + "/", localizationData.Keys, defaultLanguage, Game.Get().currentLang);
-                if (localizationDict == null)
-                {
-                    // Unable to load dictionary
-                    return;
-                }
-                localizationDict.setDefaultLanguage(defaultLanguage);
-                localizationDict.setCurrentLanguage(Game.Get().currentLang);
+                localizationDict.AddDataFromFile(path + '/' + file);
             }
 
             valid = Populate(iniData);
@@ -1891,8 +1863,7 @@ public class QuestData
             localizationDict = LocalizationRead.dicts["qst"];
             if (localizationDict == null)
             {
-                localizationDict = new DictionaryI18n(
-                    new string[1] { DictionaryI18n.FFG_LANGS }, defaultLanguage, Game.Get().currentLang);
+                localizationDict = new DictionaryI18n(new string[1] { ".," + Game.Get().currentLang }, defaultLanguage);
             }
             valid = Populate(iniData);
         }
@@ -1960,8 +1931,7 @@ public class QuestData
             if (iniData.ContainsKey("defaultlanguage"))
             {
                 defaultLanguage = iniData["defaultlanguage"];
-                localizationDict.setDefaultLanguage(defaultLanguage);
-                localizationDict.setCurrentLanguage(Game.Get().currentLang);
+                localizationDict.defaultLanguage = defaultLanguage;
             }
 
             if (iniData.ContainsKey("hidden"))

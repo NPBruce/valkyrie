@@ -199,18 +199,18 @@ namespace Assets.Scripts.UI.Screens
             // In D2E there is an additional language
             // It can change in future
 
-            string[] langs = DictionaryI18n.FFG_LANGS.Split(',');
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
             // For now, English and Spanish languages available.
             HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese,Polish".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
-            float verticalStart = UIScaler.GetVCenter(-1f) - ((langs.Length - 1) * 1f);
+            float verticalStart = UIScaler.GetVCenter(-1f) - langs.Length;
 
-            for (int i = 1; i < langs.Length; i++)
+            for (int i = 0; i < langs.Length; i++)
             {
-                int position = i;
+                int position = i + 1;
                 // Need current index in order to delegate not point to loop for variable
-                string currentLanguage = langs[position];
+                string currentLanguage = langs[i];
 
                 ui = new UIElement();
                 ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position), 8, 1.8f);
