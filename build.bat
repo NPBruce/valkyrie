@@ -26,6 +26,7 @@ mkdir build\win
 mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
+mkdir build\android
 
 rem Because reasons
 set Target=
@@ -37,6 +38,7 @@ rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\android\
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
@@ -68,6 +70,9 @@ cd ..\batchLinux
 cd ..
 "C:\Program Files\7-Zip\7z.exe" a valkyrie-linux-%version%.tar.gz valkyrie-linux-%version%.tar
 del valkyrie-linux-%version%.tar
+rem move apk
+move android\test.apk valkyrie-android-%version%.apk
+
 cd ..
 
 set /a num=%version:~-1% 2>nul
