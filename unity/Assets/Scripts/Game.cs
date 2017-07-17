@@ -128,7 +128,6 @@ public class Game : MonoBehaviour {
                     if (e.FileName.IndexOf("assets") != 0) continue;
                     if (e.FileName.IndexOf("assets/bin") == 0) continue;
 
-                    ValkyrieDebug.Log(e.FileName);
                     e.Extract(ContentData.ContentPath() + "../..", ExtractExistingFileAction.OverwriteSilently);
                 }
             }

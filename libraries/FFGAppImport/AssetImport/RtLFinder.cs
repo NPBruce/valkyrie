@@ -49,7 +49,19 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            return Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
+            if (!System.IO.Directory.Exists(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
+            {
+                return "";
+            }
+
+            foreach (string file in System.IO.Directory.GetFiles(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
+            {
+                if (file.Contains(".com.fantasyflightgames.rtl.obb"))
+                {
+                    return file;
+                }
+            }
+            return "";
         }
     }
 }
