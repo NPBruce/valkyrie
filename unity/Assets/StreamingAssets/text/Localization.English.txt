@@ -71,6 +71,7 @@ CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
+D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -121,6 +122,7 @@ MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
 MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness, install via Steam
+MOM_APP_NOT_FOUND_ANDROID,Unable to locate Mansions of Madness
 MOM_HEROES_NAME,Investigators
 MOM_HERO_NAME,Investigator
 MOM_NAME,Mansions of Madness Second Edition
