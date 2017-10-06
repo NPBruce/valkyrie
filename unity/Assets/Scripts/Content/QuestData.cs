@@ -1613,6 +1613,43 @@ public class QuestData
 
             return r.ToString();
         }
+
+        // When changing the name placement event need to update in array
+        override public void ChangeReference(string oldName, string newName)
+        {
+            for (int i = 0; i < activations.Length; i++)
+            {
+                if (activations[i].Equals(oldName))
+                {
+                    activations[i] = newName;
+                }
+                else
+                {
+                    if (oldName.Equals("Activation" + activations[i]))
+                    {
+                        if (newName.IndexOf("Activation") == 0)
+                        {
+                            activations[i] = newName.Substring("Activation".Length);
+                        }
+                        if (newName.Length == 0)
+                        {
+                            activations[i] = "";
+                        }
+                    }
+                }
+            }
+            // If any were replaced with "", remove them
+            activations = RemoveFromArray(activations, "");
+
+            if (evadeEvent.Equals(oldName))
+            {
+                evadeEvent = newName;
+            }
+            if (horrorEvent.Equals(oldName))
+            {
+                horrorEvent = newName;
+            }
+        }
     }
 
     // Quest defined Monster activation
