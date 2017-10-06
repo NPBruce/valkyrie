@@ -102,7 +102,7 @@ namespace Assets.Scripts.Content
         /// <param name="languageData">Language data</param>
         public void AddData(string[] languageData)
         {
-            string newLanguage = languageData[0].Split(COMMA)[1];
+            string newLanguage = languageData[0].Split(COMMA)[1].Trim('"');
 
             if (!rawData.ContainsKey(newLanguage))
             {
