@@ -274,7 +274,7 @@ public class EventManager
         game.quest.Remove(e.qEvent.removeComponents);
 
         // Move camera
-        if (e.qEvent.locationSpecified)
+        if (e.qEvent.locationSpecified && !(e.qEvent is QuestData.UI))
         {
             CameraController.SetCamera(e.qEvent.location);
         }
