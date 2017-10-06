@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Content;
 using System.Collections.Generic;
+using System.IO;
 
 // A monster quest class that is defined by the quest
 public class QuestMonster : MonsterData
@@ -55,20 +56,36 @@ public class QuestMonster : MonsterData
             info = baseObject.info;
         }
 
-        // Read image from quest data or base type
         image = qm.GetImagePath();
-        if (image.Length == 0 && baseObject != null)
+        if (image.Length == 0)
         {
-            image = baseObject.image;
+            if (baseObject != null)
+            {
+                image = baseObject.image;
+            }
+        }
+        else
+        {
+            image = Path.GetDirectoryName(game.quest.qd.questPath) + "/" + image;
         }
 
         // Read placement image from quest data or base type
         imagePlace = qm.GetImagePlacePath();
-        if (imagePlace.Length == 0 && baseObject != null)
+        if (imagePlace.Length == 0)
         {
-            imagePlace = baseObject.image;
+            if (baseObject != null)
+            {
+                imagePlace = baseObject.image;
+            }
+            else
+            {
+                imagePlace = image;
+            }
         }
-        if (imagePlace.Length == 0) imagePlace = image;
+        else
+        {
+            imagePlace = Path.GetDirectoryName(game.quest.qd.questPath) + "/" + imagePlace;
+        }
 
         // Read activations  from quest data or base type
         activations = qm.activations;
