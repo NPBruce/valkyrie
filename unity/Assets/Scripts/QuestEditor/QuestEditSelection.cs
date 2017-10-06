@@ -124,7 +124,7 @@ public class QuestEditSelection
             ui.SetBGColor(Color.red);
             offset += 2;
         }
-        scrollArea.SetScrollSize(offset - 5);
+        scrollArea.SetScrollSize(offset);
 
         // Back to edit list
         ui = new UIElement();
@@ -196,7 +196,7 @@ public class QuestEditSelection
             ui.SetBGColor(Color.white);
             offset += 2;
         }
-        scrollArea.SetScrollSize(offset - 5);
+        scrollArea.SetScrollSize(offset);
 
         // Back to edit selection
         ui = new UIElement();
