@@ -145,7 +145,7 @@ QUEST_NAME_DOWNLOAD,Pobieranie {0}
 QUEST_NAME_EDITOR,Edytor {0}
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}
-QUOTA,Cytat
+QUOTA,Limit
 RECOVER,Wyzdrowieć
 
 RELOAD,Przeładuj
