@@ -1892,6 +1892,12 @@ public class Quest
             bool.TryParse(data["unique"], out unique);
             int.TryParse(data["damage"], out damage);
             int.TryParse(data["duplicate"], out duplicate);
+
+            if (data.ContainsKey("healthmod"))
+            {
+                int.TryParse(data["healthmod"], out healthMod);
+            }
+
             uniqueText = new StringKey(data["uniqueText"]);
             uniqueTitle = new StringKey(data["uniqueTitle"]);
 
@@ -2008,6 +2014,7 @@ public class Quest
             r += "uniqueTitle=" + uniqueTitle + nl;
             r += "damage=" + damage + nl;
             r += "duplicate=" + duplicate + nl;
+            r += "healthmod=" + healthMod + nl;
             // Save the activation (currently doesn't save the effect string)
             if (currentActivation != null)
             {

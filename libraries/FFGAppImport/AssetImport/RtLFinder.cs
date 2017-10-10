@@ -12,7 +12,7 @@ namespace FFGAppImport
         // If the installed app isn't this or higher don't import
         override public string RequiredFFGVersion()
         {
-            return "1.3.0";
+            return "1.4.0";
         }
         // Steam app ID
         override public string AppId()
@@ -49,7 +49,19 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            return Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
+            if (!System.IO.Directory.Exists(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
+            {
+                return "";
+            }
+
+            foreach (string file in System.IO.Directory.GetFiles(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
+            {
+                if (file.Contains(".com.fantasyflightgames.rtl.obb"))
+                {
+                    return file;
+                }
+            }
+            return "";
         }
     }
 }

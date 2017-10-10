@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2d77c25afe79626409cf90c1d38dde13
+timeCreated: 1507250792
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Columbus MT
+  fontNames:
+  - Columbus MT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

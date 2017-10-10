@@ -39,6 +39,10 @@ public class ContentData {
     /// The path as a string with a trailing '/'.</returns>
     public static string ContentPath()
     {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            return Application.persistentDataPath + "/assets/content/";
+        }
         return Application.streamingAssetsPath + "/content/";
     }
 

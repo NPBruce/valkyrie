@@ -20,8 +20,10 @@ namespace Assets.Scripts.UI.Screens
         private StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
         private StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
         private StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
+        private StringKey D2E_APP_NOT_FOUND_ANDROID = new StringKey("val", "D2E_APP_NOT_FOUND_ANDROID");
         private StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
         private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
+        private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
         private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
@@ -109,7 +111,14 @@ namespace Assets.Scripts.UI.Screens
             else // Import unavailable
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 14.2f, 24, 1);
-                ui.SetText(D2E_APP_NOT_FOUND, Color.red);
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(D2E_APP_NOT_FOUND, Color.red);
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
@@ -142,7 +151,14 @@ namespace Assets.Scripts.UI.Screens
             else // Import unavailable
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 23.2f, 24, 1);
-                ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                }
                 new UIElementBorder(ui, Color.red);
             }
 

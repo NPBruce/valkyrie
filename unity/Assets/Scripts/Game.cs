@@ -5,6 +5,7 @@ using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
 using ValkyrieTools;
+using Ionic.Zip;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -116,8 +117,24 @@ public class Game : MonoBehaviour {
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
+        // On android extract streaming assets for use
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            System.IO.Directory.CreateDirectory(ContentData.ContentPath());
+            using (ZipFile jar = ZipFile.Read(Application.dataPath))
+            {
+                foreach (ZipEntry e in jar)
+                {
+                    if (e.FileName.IndexOf("assets") != 0) continue;
+                    if (e.FileName.IndexOf("assets/bin") == 0) continue;
+
+                    e.Extract(ContentData.ContentPath() + "../..", ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
+        }
+
         DictionaryI18n valDict = new DictionaryI18n();
-        foreach (string file in System.IO.Directory.GetFiles(Application.streamingAssetsPath + "/text", "Localization*.txt"))
+        foreach (string file in System.IO.Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt"))
         {
             valDict.AddDataFromFile(file);
         }
