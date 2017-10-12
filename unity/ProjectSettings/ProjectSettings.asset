@@ -137,7 +137,7 @@ PlayerSettings:
   protectGraphicsMemory: 0
   useHDRDisplay: 0
   applicationIdentifier:
-    Android: com.Bruce.Valkyrie
+    Android: com.bruce.valkyrie
     Standalone: unity.NA.Valkyrie
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
