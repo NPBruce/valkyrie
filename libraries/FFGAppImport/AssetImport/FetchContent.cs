@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity_Studio;
 using System.IO;
 using ValkyrieTools;
@@ -92,15 +91,25 @@ namespace FFGAppImport
         // Determine FFG app version
         public string fetchAppVersion()
         {
+            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.Android) return new MoMFinder(Platform.Android).RequiredFFGVersion(); // dirty hack
             string appVersion = "";
-            if (!File.Exists(finder.location + "/resources.assets"))
+            string resourcesAssets = finder.location + "/resources.assets";
+            if (!File.Exists(resourcesAssets))
             {
-                ValkyrieDebug.Log("Could not find main assets file: " + finder.location + "/resources.assets");
+                ValkyrieDebug.Log("Could not find main assets file: " + resourcesAssets);
             }
             try
             {
                 // We assume that the version asset is in resources.assets
-                AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
+                AssetsFile assetsFile;
+                using (FileStream fs = File.OpenRead(resourcesAssets))
+                {
+                    using (EndianStream es = new EndianStream(fs, EndianType.BigEndian))
+                    {
+                        assetsFile = new AssetsFile(resourcesAssets, es);
+                    }
+                }
+                
 
                 // Look through all listed assets
                 foreach (var asset in assetsFile.preloadTable.Values)
@@ -135,7 +144,7 @@ namespace FFGAppImport
         // Import from app
         public void Import()
         {
-            finder.ExtractObb();
+            finder.ExtractObb(); // Utilized by Android
             // List all assets files
             string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
 
@@ -146,10 +155,7 @@ namespace FFGAppImport
             {
                 Import(s);
             }
-            if (Directory.Exists(Path.GetTempPath() + "Valkyrie/Obb"))
-            {
-                Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
-            }
+            finder.DeleteObb(); // Utilized by Android
 
             // Find any streaming asset files
             string[] streamFiles = Directory.GetFiles(finder.location + "/StreamingAssets", "*", SearchOption.AllDirectories);
