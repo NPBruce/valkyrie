@@ -19,6 +19,7 @@ namespace FFGAppImport
         public abstract string RequiredFFGVersion();
         public abstract string ObbPath();
         public string location = "";
+        public string obbRoot = "";
         public string exeLocation;
         public abstract int ObfuscateKey();
 
@@ -87,10 +88,11 @@ namespace FFGAppImport
             }
             else if (platform == Platform.Android)
             {
-                location = Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data";
-                if (Directory.Exists(Path.GetTempPath() + "Valkyrie/Obb"))
+                obbRoot = Android.GetStorage() + "/Valkyrie/Obb";
+                location = obbRoot + "/assets/bin/Data";
+                if (Directory.Exists(obbRoot))
                 {
-                    Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
+                    Directory.Delete(obbRoot, true);
                 }
             }
             else
@@ -132,18 +134,41 @@ namespace FFGAppImport
             ValkyrieDebug.Log("Asset location: " + location);
         }
 
+        internal void DeleteObb()
+        {
+            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.Android)
+            {
+                if (Directory.Exists(obbRoot))
+                {
+                    Directory.Delete(obbRoot, true);
+                }
+            }
+        }
+
         public void ExtractObb()
         {
             if (platform != Platform.Android) return;
 
             //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
             //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
-            ZipFile zip = ZipFile.Read(ObbPath());
-            zip.ExtractAll(Path.GetTempPath() + "Valkyrie/Obb");
-            zip.Dispose();
+            string obbPath = ObbPath();
+            ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
+            //using (var zip = ZipFile.Read(obbPath))
+            //{ 
+            //    zip.ExtractAll(obbRoot);
+            //}
+
+            Directory.CreateDirectory(obbRoot);
+            using (ZipFile jar = ZipFile.Read(obbPath))
+            {
+                foreach (ZipEntry e in jar)
+                {
+                    e.Extract(obbRoot, ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
 
             Dictionary<string, List<FilePart>> data = new Dictionary<string, List<FilePart>>();
-            foreach (string file in Directory.GetFiles(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data"))
+            foreach (string file in Directory.GetFiles(location))
             {
                 if (Path.GetExtension(file).IndexOf(".split") == 0)
                 {
@@ -177,7 +202,7 @@ namespace FFGAppImport
                         }
                     }
                 }
-                File.WriteAllBytes(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data/" + Path.GetFileName(kv.Key), fileData.ToArray());
+                File.WriteAllBytes(location + "/" + Path.GetFileName(kv.Key), fileData.ToArray());
             }
         }
 
