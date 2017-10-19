@@ -136,12 +136,10 @@ namespace FFGAppImport
 
         internal void DeleteObb()
         {
-            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.Android)
+            if (platform != Platform.Android) return;
+            if (Directory.Exists(obbRoot))
             {
-                if (Directory.Exists(obbRoot))
-                {
-                    Directory.Delete(obbRoot, true);
-                }
+                Directory.Delete(obbRoot, true);
             }
         }
 
