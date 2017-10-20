@@ -167,6 +167,11 @@ public class CameraController : MonoBehaviour {
         }
         gameObject.transform.position = pos;
 
+        // Left shift to cancel targets
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            targetSet = false;
+        }
+
         // If we are moving to a target position
         if (targetSet)
         {
