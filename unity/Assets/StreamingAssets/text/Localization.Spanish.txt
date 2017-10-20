@@ -11,7 +11,7 @@ ACTIVATIONS,Activaciones
 ADD_COMPONENTS,Añadir Componentes:
 COMPONENTS,Componentes
 RENAME,Renombrar
-SAVE_TEST,
+SAVE_TEST,Guardar Prueba
 SOURCE,Origen
 COMMENT,Comentar
 TRUE,Verdadero
@@ -21,16 +21,16 @@ FREE,Libre
 CONFIRM,Confirmar
 INSPECT,Inspeccionar
 DURATION,Duración
-DESCRIPTION,
-AUTHORS,
+DESCRIPTION,Descripción
+AUTHORS,Autores
 DIFFICULTY,Dificultad
 VALIDATE_SCENARIO,Validar
 FILE,Fichero
 OPTIMIZE_LOCALIZATION,Optimizar Localización
-CREATE_PACKAGE,
+CREATE_PACKAGE,Crear Paquete
 REORDER_COMPONENTS,Reordenar Componentes
-POSITION_SNAP,
-POSITION_FREE,
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
 ASSIGN,Asignar
 ATTACK,Atacar
 ATTACK_MESSAGE,Mensaje Ataca:
@@ -53,6 +53,7 @@ CONTINUE,Continuar
 COPY,Copiar
 CUSTOMMONSTER,Monstruo Personalizado
 D2E_APP_NOT_FOUND,Imposible localizar "Road to Legend", instalar desde Steam
+D2E_APP_NOT_FOUND_ANDROID,Imposible localizar "Road to Legend"
 D2E_HEROES_NAME,Héroes
 D2E_HERO_NAME,Héroe
 D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
@@ -68,6 +69,7 @@ E,E
 EFFECTS,Efectos
 EMPTY,
 END_TURN,Fin del Turno
+ROUND,Turno {0}
 EVADE,Esquivar
 EVENT,Evento
 EXIT,Salir
@@ -79,8 +81,9 @@ HEALTH,Salud
 HEALTH_HERO,Por héroe
 HIGHLIGHT,Destacar
 HORROR_CHECK,Horror
+AWARENESS,Percepción
 INDENT,  {0}
-INFO,Información
+INFO,Info
 INFORMATION,Información
 INITIAL_MESSAGE,Mensaje Inicial:
 ITEM,Objeto
@@ -100,7 +103,8 @@ MENU,Menú
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Cam Min
-MOM_APP_NOT_FOUND,Imposible localizar "Mansions of Madness", instalar desde Steam,"Impossible de localiser l'installation des Demeures de l'Epouvante via Steam",""Villen des Wahnsinns"-Installation konnte nicht gefunden werde
+MOM_APP_NOT_FOUND,Imposible localizar "Mansions of Madness", instalar desde Steam
+MOM_APP_NOT_FOUND_ANDROID,Imposible localizar "Mansions of Madness"
 MOM_HEROES_NAME,Investigadores
 MOM_HERO_NAME,Investigador
 MOM_NAME,Las Mansiones de la Locura: Segunda Edición
@@ -128,7 +132,7 @@ NO_ATTACK_MESSAGE,Mensaje no Ataca:
 NUMBER,Número
 NUMBER_HEROS,{0} Héroes:
 OK,Ok
-OP,Operador
+OP,Op
 OPTIONS,Opciones
 PLACEMENT,Colocación
 
@@ -166,7 +170,7 @@ RESET,Restablecer
 ROTATE_TO,Rotar: {0}
 ROTATION,Rotación
 SAVE,Guardar
-AUTOSAVE,Guardado Automático
+AUTOSAVE,Autoguardado
 SELECT_SAVE,Sel. Partida Grabada
 SELECT,Selección de {0}
 SELECT_CLASS,Selección de Clase
@@ -189,7 +193,7 @@ STARTING_ITEMS,Equipo Inicial
 START_QUEST,Iniciar {0}
 START,Iniciar
 
-TESTS,Tests
+TESTS,Pruebas
 TILE,Tablero
 
 TOKEN,Marcador
@@ -213,14 +217,13 @@ ASPECT,Aspecto
 BORDER,Borde
 NO_BORDER,Sin Borde
 UNDO,Deshacer
-UNIQUE_DEFEATED,Único
-Derrotado
+UNIQUE_DEFEATED,Único\nDerrotado
 UNIQUE_INFO,Información de Único
 UNIQUE_MONSTER,Monstruo Único
 UNIQUE_TITLE,Título de Único
 UNUSED,No Usado
 VALUE,Valor
-VAR,Variable
+VAR,Var
 VARS,Vars
 VAR_NAME,Nombre Variable:
 X_ACTIVATED,{0} Activado
