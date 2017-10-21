@@ -1604,9 +1604,29 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetNumValue(QuestData.Event.VarOperation op)
     {
-        float value = 0;
-        float.TryParse(varText.value, out value);
-        op.value = value.ToString();
+        
+        if (varText.value.StartsWith("#rand"))
+        {
+            // rand integer value
+
+            string randLimit = varText.value.Substring(5);
+            int value;
+            int.TryParse(randLimit, out value);
+
+            // The minimal random number is 1
+            if (value == 0)
+            {
+                value = 1;
+            }
+
+            op.value = "#rand" + value.ToString();
+        
+        } else {
+            // float value
+            float value;
+            float.TryParse(varText.value, out value);
+            op.value = value.ToString();
+        }
         Update();
     }
 

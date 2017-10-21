@@ -11,7 +11,7 @@ ACTIVATIONS,Activaciones
 ADD_COMPONENTS,Añadir Componentes:
 COMPONENTS,Componentes
 RENAME,Renombrar
-SAVE_TEST,Guardar Prueba
+SAVE_TEST,Guardar y Probar
 SOURCE,Origen
 COMMENT,Comentar
 TRUE,Verdadero
@@ -93,7 +93,7 @@ LOAD_QUEST,Cargar {0}
 LOG,Log
 SKILLS,Habilidades
 ITEMS,Objetos
-ITEMS_SMALL,Objetos
+ITEMS_SMALL,Objs.
 GOLD,Oro
 MAIN_MENU,Menú Principal
 MAX,Max
@@ -184,7 +184,7 @@ SELECT_TO_COPY,Selección de {0} a Copiar
 SELECT_TO_DELETE,Selección de {0} a Eliminar
 HIDDEN,Oculto
 ACTIVE,Activo
-SET,Cambiar
+SET,Set
 SKILL,Atributo
 SELECT_SKILLS,Selección de Habilidades
 SPAWN,Generar
