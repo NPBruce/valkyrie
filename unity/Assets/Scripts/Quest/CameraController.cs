@@ -79,6 +79,9 @@ public class CameraController : MonoBehaviour {
         // Check if the scroll wheel has moved
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && ScrollEnabled())
         {
+            // disable automatic translating to avoid loops
+            targetSet = false;
+
             // Translate the camera up/down
             gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
 
@@ -95,18 +98,26 @@ public class CameraController : MonoBehaviour {
             if (Input.GetKey(KeyCode.UpArrow))
             {
                 gameObject.transform.Translate(new Vector3(0, keyScrollRate, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 gameObject.transform.Translate(new Vector3(0, -keyScrollRate, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 gameObject.transform.Translate(new Vector3(-keyScrollRate, 0, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 gameObject.transform.Translate(new Vector3(keyScrollRate, 0, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
         }
 
@@ -146,6 +157,8 @@ public class CameraController : MonoBehaviour {
                 Vector2 bPos = GetMouseBoardPlane();
                 gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
                     mouseDownMousePosition.y - bPos.y, 0), Space.World);
+                // dragging disables target moving
+                targetSet = false;
             }
         }
         else
@@ -167,8 +180,9 @@ public class CameraController : MonoBehaviour {
         }
         gameObject.transform.position = pos;
 
-        // Left shift to cancel targets
-        if (Input.GetKey(KeyCode.LeftShift)) {
+        // any shift to cancel targets
+        if (Input.GetKey(KeyCode.LeftShift) ||
+            Input.GetKey(KeyCode.RightShift)) {
             targetSet = false;
         }
 
@@ -182,6 +196,13 @@ public class CameraController : MonoBehaviour {
             {
                 // How many units to move this frame
                 float moveDist = Time.deltaTime * autoPanSpeed;
+
+                if (game.editMode)
+                {
+                    // in edit mode, there is pan but not zoom
+                    camTarget.z = gameObject.transform.position.z;
+                }
+
                 gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, camTarget, moveDist);
             }
             else
