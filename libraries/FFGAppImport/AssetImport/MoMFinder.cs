@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.IO;
 using ValkyrieTools;
 
 namespace FFGAppImport
@@ -6,6 +7,8 @@ namespace FFGAppImport
     // Details for FFG MoM app
     public class MoMFinder : AppFinder
     {
+        protected string obbPath;
+
         public MoMFinder(Platform p) : base(p)
         {
         }
@@ -31,6 +34,10 @@ namespace FFGAppImport
             {
                 return "/Contents/Resources/Data";
             }
+            else if (platform == Platform.Android)
+            {
+                return "";
+            }
             return "/Mansions of Madness_Data";
         }
         override public string Executable()
@@ -50,18 +57,18 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            if (!System.IO.Directory.Exists(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.mom"))
+            if (obbPath == null) // try this only once
             {
-                return "";
-            }
-            foreach (string file in System.IO.Directory.GetFiles(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.mom"))
-            {
-                if (file.Contains(".com.fantasyflightgames.mom.obb"))
+                string location = Android.GetStorage() + "/Android/obb/com.fantasyflightgames.mom";
+                if (!Directory.Exists(location))
                 {
-                    return file;
+                    return "";
                 }
+                var files = new List<string>(Directory.GetFiles(location));
+                string file = files.Find(x => x.EndsWith(".com.fantasyflightgames.mom.obb"));
+                obbPath = file ?? "";
             }
-            return "";
+            return obbPath;
         }
     }
 }

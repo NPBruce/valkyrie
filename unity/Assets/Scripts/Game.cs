@@ -345,34 +345,12 @@ public class Game : MonoBehaviour {
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            try
+            string appData = Android.GetStorage() + "/Valkyrie";
+            if (appData != null)
             {
-                System.IntPtr obj_context = AndroidJNI.FindClass("android/content/ContextWrapper");
-                System.IntPtr method_getFilesDir = AndroidJNIHelper.GetMethodID(obj_context, "getFilesDir", "()Ljava/io/File;");
-
-                using (AndroidJavaClass cls_UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-                {
-                    using (AndroidJavaObject obj_Activity = cls_UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
-                    {
-                        System.IntPtr file = AndroidJNI.CallObjectMethod(obj_Activity.GetRawObject(), method_getFilesDir, new jvalue[0]);
-                        System.IntPtr obj_file = AndroidJNI.FindClass("java/io/File");
-                        System.IntPtr method_getAbsolutePath = AndroidJNIHelper.GetMethodID(obj_file, "getAbsolutePath", "()Ljava/lang/String;");
-
-                        string path = AndroidJNI.CallStringMethod(file, method_getAbsolutePath, new jvalue[0]);
-
-                        if (path != null)
-                        {
-                            ValkyrieDebug.Log(path);
-                            return path;
-                        }
-                    }
-                }
+                ValkyrieDebug.Log("AppData: " + appData);
+                return appData;
             }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-            }
-            return "";
         }
         return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
     }
