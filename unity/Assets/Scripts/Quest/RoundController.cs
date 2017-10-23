@@ -278,20 +278,20 @@ public class RoundController {
     }
 
     // Check if ready for new round
-    public virtual void CheckNewRound()
+    public virtual bool CheckNewRound()
     {
 
         Game game = Game.Get();
 
         // Is there an active event?
         if (game.quest.eManager.currentEvent != null)
-            return;
+            return false;
 
         // Are there queued events?
         if (game.quest.eManager.eventStack.Count > 0)
-            return;
+            return false;
 
-        if (!activationsFinished) return;
+        if (!activationsFinished) return false;
 
         // Clean up for next round
         activationsFinished = false;
@@ -324,5 +324,6 @@ public class RoundController {
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
+        return true;
     }
 }

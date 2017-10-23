@@ -140,7 +140,7 @@ public class EventManager
     {
         Game game = Game.Get();
         // First check if things need to be added to the queue at end round
-        game.roundControl.CheckNewRound();
+        if (game.roundControl.CheckNewRound()) return;
 
         // No events to trigger
         if (eventStack.Count == 0) return;
