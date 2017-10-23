@@ -50,6 +50,7 @@ public class CameraController : MonoBehaviour {
     void Awake()
     {
         mouseDownCamPosition = gameObject.transform.position;
+        camTarget = gameObject.transform.position;
         mouseDownMousePosition = Vector2.zero;
         game = Game.Get();
     }
@@ -196,13 +197,6 @@ public class CameraController : MonoBehaviour {
             {
                 // How many units to move this frame
                 float moveDist = Time.deltaTime * autoPanSpeed;
-
-                if (game.editMode)
-                {
-                    // in edit mode, there is pan but not zoom
-                    camTarget = new Vector3(camTarget.x,camTarget.y, gameObject.transform.position.z);
-                }
-
                 gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, camTarget, moveDist);
             }
             else
@@ -271,7 +265,14 @@ public class CameraController : MonoBehaviour {
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.targetSet = true;
-        cc.camTarget = new Vector3(pos.x, pos.y, -8);
+
+        cc.camTarget = new Vector3(pos.x, pos.y, cc.gameObject.transform.position.z);
+
+        // If not in editor reset zoom
+        if (!Game.Get().editMode)
+        {
+            cc.camTarget.z = -8;
+        }
 
         if (cc.minLimit)
         {
