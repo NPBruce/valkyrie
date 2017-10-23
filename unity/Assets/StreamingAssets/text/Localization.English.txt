@@ -235,8 +235,7 @@ ASPECT,Aspect
 BORDER,Border
 NO_BORDER,No Border
 UNDO,Undo
-UNIQUE_DEFEATED,Unique
-Defeated
+UNIQUE_DEFEATED,Unique\nDefeated
 UNIQUE_INFO,Unique Information
 UNIQUE_MONSTER,Unique Monster
 UNIQUE_TITLE,Unique Title
