@@ -200,7 +200,7 @@ public class CameraController : MonoBehaviour {
                 if (game.editMode)
                 {
                     // in edit mode, there is pan but not zoom
-                    camTarget.z = gameObject.transform.position.z;
+                    camTarget = new Vector3(camTarget.x,camTarget.y, gameObject.transform.position.z);
                 }
 
                 gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, camTarget, moveDist);
