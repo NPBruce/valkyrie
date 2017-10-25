@@ -902,6 +902,9 @@ public class TileSideData : GenericData
     public float aspect = 0;
     public string reverse = "";
     public static new string type = "TileSide";
+    public List<string> map = new List<string>();
+    public Vector2 mapZero = new Vector2(0, 0);
+    public int count = 1;
 
     public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -935,6 +938,42 @@ public class TileSideData : GenericData
         if (content.ContainsKey("reverse"))
         {
             reverse = content["reverse"];
+        }
+
+        // How many of these tiles are available?
+        if (content.ContainsKey("count"))
+        {
+            int.TryParse(content["count"], out count);
+        }
+
+        // Get the tile map if available
+        for (int mapLine = 0; mapLine < 100; mapLine++)
+        {
+            if (content.ContainsKey("map0" + mapLine))
+            {
+                map.Add(content["map0" + mapLine]);
+            }
+            else if (content.ContainsKey("map" + mapLine))
+            {
+                map.Add(content["map" + mapLine]);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // Get the tile map 0 location
+        if (content.ContainsKey("zeropos"))
+        {
+            string xString = content["zeropos"].Substring(0, content["zeropos"].IndexOf(','));
+            string yString = content["zeropos"].Substring(content["zeropos"].IndexOf(',') + 1);
+            int xZeroInt = 0;
+            int.TryParse(xString, out xZeroInt);
+            int yZeroInt = 0;
+            int.TryParse(xString, out yZeroInt);
+            mapZero.x = xZeroInt;
+            mapZero.y = yZeroInt;
         }
     }
 }
