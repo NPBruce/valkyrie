@@ -263,7 +263,13 @@ public class HeroCanvas : MonoBehaviour {
         Game game = Game.Get();
         foreach (Quest.Hero h in game.quest.heroes)
         {
-            if (h.heroData != null) heroCount++;
+            if (h.heroData != null)
+            {
+                heroCount++;
+                // Create variable to value 1 for each selected Hero
+                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                
+            }
         }
 
         // Check for validity
