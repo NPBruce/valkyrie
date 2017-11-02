@@ -366,6 +366,7 @@ public class ContentData {
             else if (tileSides[name].priority == d.priority)
             {
                 tileSides[name].sets.Add(packID);
+                tileSides[name].count += d.count;
             }
         }
 
@@ -630,6 +631,7 @@ public class ContentData {
             else if (tokens[name].priority == d.priority)
             {
                 tokens[name].sets.Add(packID);
+                tokens[name].count += d.count;
             }
         }
 
@@ -1211,6 +1213,7 @@ public class TokenData : GenericData
     // 0 means token is 1 square big
     public float pxPerSquare = 0;
     public static new string type = "Token";
+    public int count = 1;
 
     public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -1246,6 +1249,12 @@ public class TokenData : GenericData
         if (content.ContainsKey("pps"))
         {
             float.TryParse(content["pps"], out pxPerSquare);
+        }
+
+        // How many of these tokens are available?
+        if (content.ContainsKey("count"))
+        {
+            int.TryParse(content["count"], out count);
         }
     }
 

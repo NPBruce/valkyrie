@@ -2,30 +2,19 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 
-public class GeneratorTile
+public class GeneratorMapSegmentTile : GeneratorMapSegment
 {
-    public TileSideData cd;
-
-    public Dictionary<int, Dictionary<int, GeneratorMapSpace>> map = new Dictionary<int, Dictionary<int, GeneratorMapSpace>>();
-
-    public List<GeneratorTileJoin> joints = new List<GeneratorTileJoin>();
-
-    public int available = 1;
-
-    public int size = 0;
-
-    public GeneratorTile(TileSideData t)
+    public GeneratorMapSegmentTile(TileSideData t)
     {
-        cd = t;
-        available = cd.count;
-        BuildMap();
+        components.Add(t.sectionName, new GeneratorMapVector());
+        BuildMap(t);
     }
 
-    protected void BuildMap()
+    protected void BuildMap(TileSideData tileSideData)
     {
-        for (int y = 0; y < cd.map.Length; y++)
+        for (int y = 0; y < tileSideData.map.Length; y++)
         {
-            char[] mapRow = cd.map[y].ToCharArray();
+            char[] mapRow = tileSideData.map[y].ToCharArray();
             for (int x = 0; x < mapRow.Length; x++)
             {
                 GeneratorMapSpace space = GeneratorMapSpace.Void;
@@ -56,85 +45,78 @@ public class GeneratorTile
 
                 if (space != GeneratorMapSpace.Void)
                 {
-                    SetSpace(x - cd.mapZero.x, y - cd.mapZero.y, space);
-                    size++;
+                    SetSpace(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y, space);
                 }
                 if (System.Convert.ToByte((map[y][x]) >= System.Convert.ToByte('A') && System.Convert.ToByte((map[y][x]) <= System.Convert.ToByte('Z'))
                 {
-                    joints.Add(new GeneratorTileJoin(x - cd.mapZero.x, y - cd.mapZero.y, map[y][x]))
+                    joints.Add(new GeneratorMapJoint(new GeneratorMapVectory(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), map[y][x]))
                 }
             }
         }
         for (int i = 0; i < joints.Length; i++)
         {
+            GeneratorMapVector jointLocation = joints[i].location;
             // Possible join directions
-            bool Top = GetSpace(joints[i].x, joints[i].y + 1) != GeneratorMapSpace.Void;
-            bool Bottom = GetSpace(joints[i].x, joints[i].y - 1) != GeneratorMapSpace.Void;
-            bool Left = GetSpace(joints[i].x + 1, joints[i].y) != GeneratorMapSpace.Void;
-            bool Right = GetSpace(joints[i].x - 1, joints[i].y) != GeneratorMapSpace.Void;
+            bool Top = GetSpace(jointLocation.x, jointLocation.y + 1) != GeneratorMapSpace.Void;
+            bool Bottom = GetSpace(joints[i].x, jointLocation.y - 1) != GeneratorMapSpace.Void;
+            bool Left = GetSpace(jointLocation.x + 1, jointLocation.y) != GeneratorMapSpace.Void;
+            bool Right = GetSpace(jointLocation.x - 1, jointLocation.y) != GeneratorMapSpace.Void;
             
             // For each type find valid join direction
             if (joints[i].IsTypeADerivative())
             {
                 if (Top && !Right)
                 {
-                    joints[i].rotation = 0;
+                    jointLocation.rotation = 0;
+                    jointLocation.x += 0.5f;
+                    jointLocation.y -= 0.5f;
                 }
                 if (Right && !Bottom)
                 {
-                    joints[i].rotation = 90;
+                    jointLocation.rotation = 90;
+                    jointLocation.x -= 0.5f;
+                    jointLocation.y -= 0.5f;
                 }
                 if (Bottom && !Left)
                 {
-                    joints[i].rotation = 180;
+                    jointLocation.rotation = 180;
+                    jointLocation.x -= 0.5f;
+                    jointLocation.y += 0.5f;
                 }
                 if (Left && !Top)
                 {
-                    joints[i].rotation = 270;
+                    jointLocation.rotation = 270;
+                    jointLocation.x += 0.5f;
+                    jointLocation.y += 0.5f;
                 }
             }
             else
             {
                 if (Top && !Left)
                 {
-                    joints[i].rotation = 0;
+                    jointLocation.rotation = 0;
+                    jointLocation.x -= 0.5f;
+                    jointLocation.y -= 0.5f;
                 }
                 if (Right && !Top)
                 {
-                    joints[i].rotation = 90;
+                    jointLocation.rotation = 90;
+                    jointLocation.x -= 0.5f;
+                    jointLocation.y += 0.5f;
                 }
                 if (Bottom && !Right)
                 {
-                    joints[i].rotation = 180;
+                    jointLocation.rotation = 180;
+                    jointLocation.x += 0.5f;
+                    jointLocation.y += 0.5f;
                 }
                 if (Left && !Bottom)
                 {
-                    joints[i].rotation = 270;
+                    jointLocation.rotation = 270;
+                    jointLocation.x += 0.5f;
+                    jointLocation.y -= 0.5f;
                 }
             }
-        }
-    }
-
-    public GeneratorMapSpace GetSpace(int x, int y)
-    {
-        if (!map.ContainsKey(x)) return GeneratorMapSpace.Void;
-        if (!map[x].ContainsKey(y)) return GeneratorMapSpace.Void;
-        return map[x][y];
-    }
-
-    public void SetSpace(int x, int y, GeneratorMapSpace space)
-    {
-        if (!map.ContainsKey(x))
-        {
-            map.Add(x, new Dictionary<int, GeneratorMapSpace>());
-        }
-        if (!map[x].ContainsKey(y))
-        {
-            map.Add(y, space)
-        }
-        else
-        {
-            map[x][y] = space;
         }
     }
 }
