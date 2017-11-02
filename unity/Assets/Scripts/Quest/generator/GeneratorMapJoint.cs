@@ -13,4 +13,14 @@ public class GeneratorMapJoint
         location = locationIn;
         type = typeIn;
     }
+
+    public bool MatingJoint(GeneratorMapJoint j)
+    {
+        if (j.location.x - location.x > 0.1f) return false;
+        if (j.location.x - location.x < -0.1f) return false;
+        if (j.location.y - location.y > 0.1f) return false;
+        if (j.location.y - location.y < -0.1f) return false;
+        if (((j.rotation + rotation) % 360) != 0) return false;
+        return (type == j.type);
+    }
 }

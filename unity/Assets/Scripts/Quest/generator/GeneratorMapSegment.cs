@@ -85,12 +85,43 @@ public class GeneratorMapSegment
             {
                 if (space.Value == GeneratorMapSpace.Void) continue;
 
-                GeneratorMapSpace targetSpace = GetSpace(offset.Add(new GeneratorMapVector(row.Key, space.Key)));
-                if (targetSpace != GeneratorMapSpace.Void) return false;
+                GeneratorMapVector targetVector = offset.Add(new GeneratorMapVector(row.Key, space.Key))
+                GeneratorMapSpace targetSpace = GetSpace(targetVector);
+                if (targetSpace == GeneratorMapSpace.Void) continue;
+                // join block checks go here
+                foreach (GeneratorMapJoint j in GetJointsByLocation(targetVector))
+                {
+                    List<GeneratorMapJoint> incomingJoints = GetJointsByLocation(j.location);
+                    if (incomingJoints.Count == 0) return false;
+
+                    foreach (GeneratorMapJoint incomingJoint in incomingJoints)
+                    {
+                        if (!incomingJoint.MatingJoint(j)) return false;
+                    }
+                }
             }
         }
         return true;
     }
+
+    public List<GeneratorMapJoint> GetJointsByLocation(GeneratorMapVector location)
+    {
+        List<GeneratorMapJoint> toReturn = new List<GeneratorMapJoint>();
+        foreach (GeneratorMapJoint j in joints)
+        {
+            if (j.location.WithinASpace(location))
+            {
+                toReturn.Add(j);
+            }
+        }
+        return toReturn;
+    }
+
+    public bool Merge(GeneratorMapSegment toMerge)
+    {
+        List<GeneratorMapJoint> j = CheckMerge(toMerge);
+    }
+
 
     public bool Merge(GeneratorMapSegment toMerge, GeneratorMapJoint availableJoint, GeneratorMapJoint inJoint)
     {
@@ -118,14 +149,27 @@ public class GeneratorMapSegment
             }
         }
 
-        joints.Remove(availableJoint);
+        joints.AddRange(toMerge.joints);
+        TrimJoints()
+    }
 
-        foreach (GeneratorMapJoint j in toMerge.joints)
+    public void TrimJoints()
+    {
+        List<GeneratorMapJoint> toRemove = new List<GeneratorMapJoint>();
+        foreach (GeneratorMapJoint j in joints)
         {
-            if (j != inJoint)
+            foreach (GeneratorMapJoint jTwo in joints)
             {
-                joints.Add(j);
+                if (jTwo.MatingJoint(j))
+                {
+                    toRemove.Add(j);
+                }
             }
+        }
+
+        foreach (GeneratorMapJoint j in toRemove)
+        {
+            joints.Remove(j);
         }
     }
 
@@ -157,5 +201,32 @@ public class GeneratorMapSegment
             map[x].Add(y, value);
         }
         map[x][y] = value;;
+    }
+
+    public GeneratorMapSegment Copy()
+    {
+        GeneratorMapSegment toReturn = new GeneratorMapSegment();
+
+        toReturn.components = new List<Tuple<string, GeneratorMapVector>>(components);
+        toReturn.map = new Dictionary<int, Dictionary<int, GeneratorMapSpace>>(map);
+        toReturn.joints = new List<GeneratorMapJoint>(joints);
+
+        return toReturn;
+    }
+
+    public int Size()
+    {
+        int size = 0;
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace> row in map)
+        {
+            foreach (KeyValuePair<int, GeneratorMapSpace> space in row.Value)
+            {
+                if (space.Value != GeneratorMapSpace.Void)
+                {
+                    size++;
+                }
+            }
+        }
+        return size;
     }
 }

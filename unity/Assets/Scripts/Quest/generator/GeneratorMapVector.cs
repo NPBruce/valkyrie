@@ -38,6 +38,15 @@ public class GeneratorMapVector
         return vector;
     }
 
+    public bool WithinASpace(GeneratorMapVector compare)
+    {
+        if (x - compare.x < -0.8f) return false;
+        if (x - compare.x > 0.8f) return false;
+        if (y - compare.Y < -0.8f) return false;
+        if (y - compare.Y > 0.8f) return false;
+        return true;
+    }
+
     public GeneratorMapVector Add(GeneratorMapVector toAdd)
     {
         
