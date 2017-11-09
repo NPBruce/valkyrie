@@ -579,7 +579,11 @@ public class Quest
             h.activated = false;
             h.defeated = false;
             h.selected = false;
-            if (h.heroData != null) heroCount++;
+            if (h.heroData != null) {
+                heroCount++;
+                // Create variable to value 1 for each selected Hero
+                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+            }
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
