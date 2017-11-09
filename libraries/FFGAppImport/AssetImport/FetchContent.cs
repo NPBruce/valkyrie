@@ -101,15 +101,7 @@ namespace FFGAppImport
             try
             {
                 // We assume that the version asset is in resources.assets
-                AssetsFile assetsFile;
-                using (FileStream fs = File.OpenRead(resourcesAssets))
-                {
-                    using (EndianStream es = new EndianStream(fs, EndianType.BigEndian))
-                    {
-                        assetsFile = new AssetsFile(resourcesAssets, es);
-                    }
-                }
-                
+                AssetsFile assetsFile = new AssetsFile(finder.location + "/resources.assets", new EndianStream(File.OpenRead(finder.location + "/resources.assets"), EndianType.BigEndian));
 
                 // Look through all listed assets
                 foreach (var asset in assetsFile.preloadTable.Values)
