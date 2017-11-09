@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity_Studio;
+using System;
+using System.Linq;
 using System.IO;
 using ValkyrieTools;
 
@@ -45,11 +47,11 @@ namespace FFGAppImport
             // Add version found to log
             if (ffgVersion.Length != 0)
             {
-                ValkyrieDebug.Log("FFG " + gameType + " Version Found: " + ffgVersion + System.Environment.NewLine);
+                ValkyrieDebug.Log("FFG " + gameType + " Version Found: " + ffgVersion + Environment.NewLine);
             }
             else
             {
-                ValkyrieDebug.Log("FFG " + gameType + " not found." + System.Environment.NewLine);
+                ValkyrieDebug.Log("FFG " + gameType + " not found." + Environment.NewLine);
             }
 
             // Check if version is acceptable for import
@@ -69,10 +71,7 @@ namespace FFGAppImport
             IniData log = IniRead.ReadFromIni(logFile);
 
             // If no import log, import is required
-            if (log == null)
-            {
-                return true;
-            }
+            if (log == null) return true;
 
             bool appVersionOK = false;
             bool valkVersionOK = false;
@@ -91,26 +90,19 @@ namespace FFGAppImport
         // Determine FFG app version
         public string fetchAppVersion()
         {
-            if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.Android) return new MoMFinder(Platform.Android).RequiredFFGVersion(); // dirty hack
+            if (importData.platform == Platform.Android) return new MoMFinder(Platform.Android).RequiredFFGVersion(); // TODO: implement version checking for Android
             string appVersion = "";
             string resourcesAssets = finder.location + "/resources.assets";
             if (!File.Exists(resourcesAssets))
             {
                 ValkyrieDebug.Log("Could not find main assets file: " + resourcesAssets);
+                return appVersion;
             }
             try
             {
                 // We assume that the version asset is in resources.assets
-                AssetsFile assetsFile;
-                using (FileStream fs = File.OpenRead(resourcesAssets))
-                {
-                    using (EndianStream es = new EndianStream(fs, EndianType.BigEndian))
-                    {
-                        assetsFile = new AssetsFile(resourcesAssets, es);
-                    }
-                }
+                var assetsFile = new AssetsFile(resourcesAssets, new EndianStream(File.OpenRead(resourcesAssets), EndianType.BigEndian));
                 
-
                 // Look through all listed assets
                 foreach (var asset in assetsFile.preloadTable.Values)
                 {
@@ -118,14 +110,15 @@ namespace FFGAppImport
                     if (asset.Type2 == 49) //TextAsset
                     {
                         // Load as text
-                        Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+                        var textAsset = new Unity_Studio.TextAsset(asset, false);
                         // Check if called _version
                         if (asset.Text.Equals("_version"))
                         {
+                            textAsset = null; // free for gc
                             // Read asset content
-                            m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+                            textAsset = new Unity_Studio.TextAsset(asset, true);
                             // Extract version
-                            appVersion = System.Text.Encoding.UTF8.GetString(m_TextAsset.m_Script);
+                            appVersion = System.Text.Encoding.UTF8.GetString(textAsset.m_Script);
                         }
                     }
                 }
@@ -136,7 +129,10 @@ namespace FFGAppImport
                     appVersion = appVersion.Substring(0, appVersion.IndexOf("#"));
                 }
             }
-            catch (System.Exception) { }
+            catch(Exception ex)
+            {
+                ValkyrieDebug.Log("fetchAppVersion caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+            }
 
             return appVersion;
         }
@@ -144,31 +140,45 @@ namespace FFGAppImport
         // Import from app
         public void Import()
         {
-            finder.ExtractObb(); // Utilized by Android
-            // List all assets files
-            string[] assetFiles = Directory.GetFiles(finder.location, "*.assets");
-
-            // Attempt to clean up old import
-            if (!CleanImport()) return;
-            // Import from all assets files
-            foreach (string s in assetFiles)
+            try
             {
-                Import(s);
-            }
-            finder.DeleteObb(); // Utilized by Android
+                finder.ExtractObb(); // Utilized by Android
 
-            // Find any streaming asset files
-            string[] streamFiles = Directory.GetFiles(finder.location + "/StreamingAssets", "*", SearchOption.AllDirectories);
-            ImportStreamAssets(streamFiles);
+                // List all assets files
+                var assetFiles = Directory.GetFiles(finder.location, "*.assets").ToList();
+
+                // Attempt to clean up old import
+                if (!CleanImport()) return;
+
+                // Import from all assets files
+                assetFiles.ForEach(s => Import(s));
+
+                // Find any streaming asset files
+                string streamDir = finder.location + "/StreamingAssets";
+                if (Directory.Exists(streamDir))
+                {
+                    string[] streamFiles = Directory.GetFiles(streamDir, "*", SearchOption.AllDirectories);
+                    ImportStreamAssets(streamFiles);
+                }
+
+                //finder.DeleteObb(); // Utilized by Android
+            }
+            catch (Exception ex)
+            {
+                ValkyrieDebug.Log("Import caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+            }
         }
 
         // Import one assets file
         public void Import(string assetFile)
         {
-            List<string> unityFiles = new List<string>(); //files to load
+            if (assetFile == null)
+                throw new ArgumentNullException("assetFile");
+            var unityFiles = new List<string>(); //files to load
 
-            // read file
             AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
+            
+            // read file
             // Legacy assets not supported, shouldn't be old
             if (assetsFile.fileGen < 15)
             {
@@ -185,7 +195,7 @@ namespace FFGAppImport
                 string sharedFileName = Path.GetFileName(sharedFile.fileName);
 
                 // find assets file
-                var quedSharedFile = unityFiles.Find(uFile => string.Equals(Path.GetFileName(uFile), sharedFileName, System.StringComparison.OrdinalIgnoreCase));
+                var quedSharedFile = unityFiles.Find(uFile => string.Equals(Path.GetFileName(uFile), sharedFileName, StringComparison.OrdinalIgnoreCase));
                 if (quedSharedFile == null)
                 {
                     if (!File.Exists(sharedFilePath))
@@ -206,11 +216,7 @@ namespace FFGAppImport
 
             // Make assets from string list
             assetFiles = new List<AssetsFile>();
-            foreach (string s in unityFiles)
-            {
-                AssetsFile file = new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian));
-                assetFiles.Add(file);
-            }
+            unityFiles.ForEach(s => assetFiles.Add(new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian))));
 
             // Get all asset content
             BuildAssetStrucutres();
@@ -238,7 +244,7 @@ namespace FFGAppImport
                 }
                 File.WriteAllLines(logFile, log);
             }
-            catch (System.Exception)
+            catch
             {
                 ValkyrieDebug.Log("Warning: Unable to create import log");
             }
@@ -252,13 +258,12 @@ namespace FFGAppImport
             {
                 Directory.Delete(contentPath, true);
             }
-            catch (System.Exception)
+            catch
             {
                 ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
                 return false;
             }
-            if (Directory.Exists(contentPath)) return false;
-            return true;
+            return !Directory.Exists(contentPath);
         }
 
         // Import asset contents
@@ -268,7 +273,7 @@ namespace FFGAppImport
             foreach (AssetsFile file in assetFiles)
             {
                 // All assets
-                foreach (var asset in file.preloadTable.Values)
+                foreach (AssetPreloadData asset in file.preloadTable.Values)
                 {
                     switch (asset.Type2)
                     {
@@ -309,15 +314,34 @@ namespace FFGAppImport
         }
 
         // Save texture to disk
-        private void ExportTexture(Unity_Studio.AssetPreloadData asset)
+        private void ExportTexture(AssetPreloadData asset)
         {
-            Unity_Studio.Texture2D m_Texture2D = new Unity_Studio.Texture2D(asset, false);
-            m_Texture2D = new Unity_Studio.Texture2D(asset, true);
+            if (asset == null)
+                throw new ArgumentNullException("asset");
+            Texture2D texture2D;
+            try
+            {
+                texture2D = new Texture2D(asset, false);
+                texture2D = new Texture2D(asset, true);
+            }
+            catch (OverflowException)
+            {
+                // Can happen on Android
+                ValkyrieDebug.Log("ExportTexture: File '" + (string.IsNullOrEmpty(asset.Text) ? "' could not be resolved" : asset.Text) + " caused OverflowException");
+                return;
+            }
+            catch (OutOfMemoryException)
+            {
+                // Can happen on Android
+                ValkyrieDebug.Log("ExportTexture: File '" + (string.IsNullOrEmpty(asset.Text) ? "' could not be resolved" : asset.Text) + " caused OutOfMemoryException");
+                return;
+            }
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/img");
             // Default file name
             string fileCandidate = contentPath + "/img/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
+            ValkyrieDebug.Log("ExportTexture: " + fileName);
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
             while (File.Exists(fileName))
@@ -325,7 +349,7 @@ namespace FFGAppImport
                 return;// Fixme;
             }
 
-            switch (m_Texture2D.m_TextureFormat)
+            switch (texture2D.m_TextureFormat)
             {
                 #region DDS
                 case 1: //Alpha8
@@ -337,33 +361,35 @@ namespace FFGAppImport
                 case 10: //DXT1
                 case 12: //DXT5
                 case 13: //R4G4B4A4, iOS (only?)
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+                    using (var fs = File.Open(fileName, FileMode.Create))
                     {
-                        // We have to manually add a header because unity doesn't have it
-                        writer.Write(0x20534444);
-                        writer.Write(0x7C);
-                        writer.Write(m_Texture2D.dwFlags);
-                        writer.Write(m_Texture2D.m_Height);
-                        writer.Write(m_Texture2D.m_Width);
-                        writer.Write(m_Texture2D.dwPitchOrLinearSize); //should be main tex size without mips);
-                        writer.Write((int)0); //dwDepth not implemented
-                        writer.Write(m_Texture2D.dwMipMapCount);
-                        writer.Write(new byte[44]); //dwReserved1[11]
-                        writer.Write(m_Texture2D.dwSize);
-                        writer.Write(m_Texture2D.dwFlags2);
-                        writer.Write(m_Texture2D.dwFourCC);
-                        writer.Write(m_Texture2D.dwRGBBitCount);
-                        writer.Write(m_Texture2D.dwRBitMask);
-                        writer.Write(m_Texture2D.dwGBitMask);
-                        writer.Write(m_Texture2D.dwBBitMask);
-                        writer.Write(m_Texture2D.dwABitMask);
-                        writer.Write(m_Texture2D.dwCaps);
-                        writer.Write(m_Texture2D.dwCaps2);
-                        writer.Write(new byte[12]); //dwCaps3&4 & dwReserved2
+                        using (var writer = new BinaryWriter(fs))
+                        {
+                            // We have to manually add a header because unity doesn't have it
+                            writer.Write(0x20534444);
+                            writer.Write(0x7C);
+                            writer.Write(texture2D.dwFlags);
+                            writer.Write(texture2D.m_Height);
+                            writer.Write(texture2D.m_Width);
+                            writer.Write(texture2D.dwPitchOrLinearSize); //should be main tex size without mips);
+                            writer.Write((int)0); //dwDepth not implemented
+                            writer.Write(texture2D.dwMipMapCount);
+                            writer.Write(new byte[44]); //dwReserved1[11]
+                            writer.Write(texture2D.dwSize);
+                            writer.Write(texture2D.dwFlags2);
+                            writer.Write(texture2D.dwFourCC);
+                            writer.Write(texture2D.dwRGBBitCount);
+                            writer.Write(texture2D.dwRBitMask);
+                            writer.Write(texture2D.dwGBitMask);
+                            writer.Write(texture2D.dwBBitMask);
+                            writer.Write(texture2D.dwABitMask);
+                            writer.Write(texture2D.dwCaps);
+                            writer.Write(texture2D.dwCaps2);
+                            writer.Write(new byte[12]); //dwCaps3&4 & dwReserved2
 
-                        // Write image data
-                        writer.Write(m_Texture2D.image_data);
-                        writer.Close();
+                            // Write image data
+                            writer.Write(texture2D.image_data);
+                        }
                     }
                     break;
                 #endregion
@@ -373,44 +399,48 @@ namespace FFGAppImport
                 case 32: //PVRTC_RGB4
                 case 33: //PVRTC_RGBA4
                 case 34: //ETC_RGB4
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+                    using (var fs = File.Open(fileName, FileMode.Create))
                     {
-                        // We have to manually add a header because unity doesn't have it
-                        writer.Write(m_Texture2D.pvrVersion);
-                        writer.Write(m_Texture2D.pvrFlags);
-                        writer.Write(m_Texture2D.pvrPixelFormat);
-                        writer.Write(m_Texture2D.pvrColourSpace);
-                        writer.Write(m_Texture2D.pvrChannelType);
-                        writer.Write(m_Texture2D.m_Height);
-                        writer.Write(m_Texture2D.m_Width);
-                        writer.Write(m_Texture2D.pvrDepth);
-                        writer.Write(m_Texture2D.pvrNumSurfaces);
-                        writer.Write(m_Texture2D.pvrNumFaces);
-                        writer.Write(m_Texture2D.dwMipMapCount);
-                        writer.Write(m_Texture2D.pvrMetaDataSize);
+                        using (var writer = new BinaryWriter(fs))
+                        {
+                            // We have to manually add a header because unity doesn't have it
+                            writer.Write(texture2D.pvrVersion);
+                            writer.Write(texture2D.pvrFlags);
+                            writer.Write(texture2D.pvrPixelFormat);
+                            writer.Write(texture2D.pvrColourSpace);
+                            writer.Write(texture2D.pvrChannelType);
+                            writer.Write(texture2D.m_Height);
+                            writer.Write(texture2D.m_Width);
+                            writer.Write(texture2D.pvrDepth);
+                            writer.Write(texture2D.pvrNumSurfaces);
+                            writer.Write(texture2D.pvrNumFaces);
+                            writer.Write(texture2D.dwMipMapCount);
+                            writer.Write(texture2D.pvrMetaDataSize);
 
-                        // Write image data
-                        writer.Write(m_Texture2D.image_data);
-                        writer.Close();
+                            // Write image data
+                            writer.Write(texture2D.image_data);
+                        }
                     }
                     break;
                 #endregion
                 case 28: //DXT1 Crunched
                 case 29: //DXT1 Crunched
                 default:
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+                    using (var fs = File.Open(fileName, FileMode.Create))
                     {
-                        writer.Write(m_Texture2D.image_data);
-                        writer.Close();
+                        using (var writer = new BinaryWriter(fs))
+                        {
+                            writer.Write(texture2D.image_data);
+                        }
                     }
                     break;
             }
-        }
+            }
 
         // Save audio to file
         private void ExportAudioClip(Unity_Studio.AssetPreloadData asset)
         {
-            Unity_Studio.AudioClip m_AudioClip = new Unity_Studio.AudioClip(asset, false);
+            var audioClip = new Unity_Studio.AudioClip(asset, false);
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/audio");
 
@@ -424,20 +454,20 @@ namespace FFGAppImport
             }
 
             // Pass to FSB Export
-            m_AudioClip = new Unity_Studio.AudioClip(asset, true);
-            FSBExport.Write(m_AudioClip.m_AudioData, fileName);
+            audioClip = new Unity_Studio.AudioClip(asset, true);
+            FSBExport.Write(audioClip.m_AudioData, fileName);
         }
 
         // Save text to file
         private void ExportText(Unity_Studio.AssetPreloadData asset)
         {
-            Unity_Studio.TextAsset m_TextAsset = new Unity_Studio.TextAsset(asset, false);
+            var textAsset = new Unity_Studio.TextAsset(asset, false);
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/text");
             string fileCandidate = contentPath + "/text/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
 
-            m_TextAsset = new Unity_Studio.TextAsset(asset, true);
+            textAsset = new Unity_Studio.TextAsset(asset, true);
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
             while (File.Exists(fileName))
@@ -446,18 +476,20 @@ namespace FFGAppImport
             }
 
             // Write to disk
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            using (var fs = File.Open(fileName, FileMode.Create))
             {
-                // Pass the Deobfuscate key to decrypt
-                writer.Write(m_TextAsset.Deobfuscate(finder.ObfuscateKey()));
-                writer.Close();
+                using (var writer = new BinaryWriter(fs))
+                {
+                    // Pass the Deobfuscate key to decrypt
+                    writer.Write(textAsset.Deobfuscate(finder.ObfuscateKey()));
+                }
             }
 
             // Need to trim new lines from old D2E format
             if (asset.Text.Equals("Localization"))
             {
                 string[] locFix = File.ReadAllLines(fileName);
-                List<string> locOut = new List<string>();
+                var locOut = new List<string>();
                 string currentLine = "";
                 for (int i = 0; i < locFix.Length; i++)
                 {
@@ -492,18 +524,15 @@ namespace FFGAppImport
         // Save TTF font to dist
         private void ExportFont(Unity_Studio.AssetPreloadData asset)
         {
-            Unity_Studio.unityFont m_Font = new Unity_Studio.unityFont(asset, false);
+            var font = new Unity_Studio.unityFont(asset, false);
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/fonts");
             string fileCandidate = contentPath + "/fonts/" + asset.Text;
             string fileName = fileCandidate + ".ttf";
 
-            m_Font = new Unity_Studio.unityFont(asset, true);
-
-            if (m_Font.m_FontData == null)
-            {
-                return;
-            }
+            font = new Unity_Studio.unityFont(asset, true);
+            
+            if (font.m_FontData == null) return;
 
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
@@ -513,10 +542,12 @@ namespace FFGAppImport
             }
 
             // Write to disk
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            using (var fs = File.Open(fileName, FileMode.Create))
             {
-                writer.Write(m_Font.m_FontData);
-                writer.Close();
+                using (var writer = new BinaryWriter(fs))
+                {
+                    writer.Write(font.m_FontData);
+                }
             }
         }
 
@@ -542,10 +573,8 @@ namespace FFGAppImport
             if (oldVersion.Equals("")) return true;
 
             // Different number of components
-            if (oldV.Length != newV.Length)
-            {
-                return true;
-            }
+            if (oldV.Length != newV.Length) return true;
+            
             // Check each component
             for (int i = 0; i < oldV.Length; i++)
             {
@@ -554,16 +583,10 @@ namespace FFGAppImport
                 string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
                 try
                 {
-                    if (int.Parse(oldS) < int.Parse(newS))
-                    {
-                        return true;
-                    }
-                    if (int.Parse(oldS) > int.Parse(newS))
-                    {
-                        return false;
-                    }
+                    if (int.Parse(oldS) < int.Parse(newS)) return true;
+                    if (int.Parse(oldS) > int.Parse(newS)) return false;
                 }
-                catch (System.Exception)
+                catch
                 {
                     return true;
                 }
@@ -577,26 +600,29 @@ namespace FFGAppImport
         /// <param name="streamFiles"></param>
         protected void ImportStreamAssets(string[] streamFiles)
         {
-            List<string> bundles = new List<string>();
+            if (streamFiles == null)
+                throw new ArgumentNullException("streamFiles");
+            var bundles = new List<string>();
 
             foreach (string file in streamFiles)
             {
                 try
                 {
-                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    string header = null;
+                    using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
                         byte[] buffer = new byte[8];
                         fs.Read(buffer, 0, buffer.Length);
-                        string header = System.Text.Encoding.Default.GetString(buffer);
-                        fs.Close();
-                        if (header.IndexOf("UnityFS") == 0)
-                        {
-                            bundles.Add(file);
-                        }
+                        header = System.Text.Encoding.Default.GetString(buffer);
+                    }
+                    if (header.StartsWith("UnityFS"))
+                    {
+                        bundles.Add(file);
                     }
                 }
-                catch (System.Exception)
+                catch (Exception ex)
                 {
+                    ValkyrieDebug.Log("ImportStreamAssets on file '" + file + "' caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
                     continue;
                 }
             }
@@ -604,5 +630,27 @@ namespace FFGAppImport
             // We can't extract these here because this isn't the main thread and unity doesn't handle that
             File.WriteAllLines(contentPath + "/bundles.txt", bundles.ToArray());
         }
+
+        ///// <summary>
+        ///// Writes the given stream to a <c>MemoryStream</c> using a 4k buffer and returns it.
+        ///// </summary>
+        ///// <param name="s"><c>Stream</c> to convert</param>
+        ///// <returns>A <c>MemoryStream</c> containing the data of the passed stream</returns>
+        //private static MemoryStream CreateMemoryStream(Stream s)
+        //{
+        //    if (s == null)
+        //    { 
+        //        throw new ArgumentNullException("s");
+        //    }
+        //    var m = new MemoryStream();
+        //    var buffer = new byte[4096]; // 4 kb buffer
+        //    int read = 0;
+        //    while ((read = s.Read(buffer, 0, buffer.Length)) > 0)
+        //    {
+        //        m.Write(buffer, 0, read);
+        //    }
+        //    m.Position = 0;
+        //    return m;
+        //}
     }
 }

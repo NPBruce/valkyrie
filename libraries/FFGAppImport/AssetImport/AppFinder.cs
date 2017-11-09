@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Ionic.Zip;
 using Microsoft.Win32;
-using System.IO;
-using System;
-using System.Text;
 using Read64bitRegistryFrom32bitApp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using ValkyrieTools;
-using Ionic.Zip;
 
 namespace FFGAppImport
 {
@@ -70,7 +72,7 @@ namespace FFGAppImport
 
                 string output = outputBuilder.ToString();
 
-                ValkyrieDebug.Log("Looking for: " + "/" + Executable());
+                ValkyrieDebug.Log("Looking for: /" + Executable());
                 // Quick hack rather than doing XML properly
                 int foundAt = output.IndexOf("/" + Executable());
                 if (foundAt > 0)
@@ -89,13 +91,11 @@ namespace FFGAppImport
             else if (platform == Platform.Android)
             {
                 obbRoot = Android.GetStorage() + "/Valkyrie/Obb";
+                ValkyrieDebug.Log("Obb extraction path: " + obbRoot);
                 location = obbRoot + "/assets/bin/Data";
-                if (Directory.Exists(obbRoot))
-                {
-                    Directory.Delete(obbRoot, true);
-                }
+                //DeleteObb();
             }
-            else
+            else // Windows
             {
                 // Attempt to get steam install location (current 32/64 level)
                 location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
@@ -106,13 +106,13 @@ namespace FFGAppImport
                     {
                         location = RegistryWOW6432.GetRegKey64(RegHive.HKEY_LOCAL_MACHINE, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation");
                     }
-                    catch (Exception) { }
+                    catch { }
                 }
             }
 
             if (location == null || location.Length == 0)
             {
-                string[] args = System.Environment.GetCommandLineArgs();
+                string[] args = Environment.GetCommandLineArgs();
                 for (int i = 0; i < (args.Length - 1); i++)
                 {
                     if (args[i] == "-import")
@@ -137,10 +137,8 @@ namespace FFGAppImport
         internal void DeleteObb()
         {
             if (platform != Platform.Android) return;
-            if (Directory.Exists(obbRoot))
-            {
-                Directory.Delete(obbRoot, true);
-            }
+            if (!Directory.Exists(obbRoot)) return;
+            Directory.Delete(obbRoot, true);
         }
 
         public void ExtractObb()
@@ -151,73 +149,53 @@ namespace FFGAppImport
             //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
             string obbPath = ObbPath();
             ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
-            //using (var zip = ZipFile.Read(obbPath))
-            //{ 
-            //    zip.ExtractAll(obbRoot);
-            //}
-
+            DeleteObb();
             Directory.CreateDirectory(obbRoot);
-            using (ZipFile jar = ZipFile.Read(obbPath))
+            using (var zip = ZipFile.Read(obbPath))
             {
-                foreach (ZipEntry e in jar)
+                zip.ExtractAll(obbRoot);
+            }
+            
+            var dirContent = string.Join("\n", Directory.GetFiles(location));
+            var regexObj = new Regex(@"^(?<prefix>.*)(?<split>\.split)(?<num>\d+)$", RegexOptions.Multiline);
+            var splitfiles = new Dictionary<string, List<KeyValuePair<int, string>>>();
+            // we will get all files as results, that are split files
+            Match matchResults = regexObj.Match(dirContent);
+            while (matchResults.Success)
+            {
+                string key = matchResults.Groups["prefix"].Value;
+                int num = int.Parse(matchResults.Groups["num"].Value);
+                string file = matchResults.Value;
+                if (!splitfiles.Keys.Contains(key))
+                    splitfiles.Add(key, new List<KeyValuePair<int, string>>());
+                splitfiles[key].Add(new KeyValuePair<int, string>(num, file)); // insert sorted by num to the list
+                matchResults = matchResults.NextMatch();
+            }
+            foreach (var e in splitfiles)
+            {
+                e.Value.OrderBy(x => x.Value);
+            }
+            foreach (var e in splitfiles)
+            {
+                using (var fs = new FileStream(e.Key, FileMode.Create))
                 {
-                    e.Extract(obbRoot, ExtractExistingFileAction.OverwriteSilently);
-                }
-            }
+                    string logmsg = "Creating out file '" + e.Key + "' using:";
+                    e.Value.ForEach(file => logmsg += "\nSplit asset '" + file.Value + "'");
+                    ValkyrieDebug.Log(logmsg);
 
-            Dictionary<string, List<FilePart>> data = new Dictionary<string, List<FilePart>>();
-            foreach (string file in Directory.GetFiles(location))
-            {
-                if (Path.GetExtension(file).IndexOf(".split") == 0)
-                {
-                    if (!data.ContainsKey(Path.GetFileNameWithoutExtension(file)))
+                    // combinde split files to one file
+                    foreach (var file in e.Value)
                     {
-                        data.Add(Path.GetFileNameWithoutExtension(file), new List<FilePart>());
+                        byte[] part = File.ReadAllBytes(file.Value);
+                        fs.Write(part, 0, part.Length);
                     }
-                    int fileNum = int.Parse(Path.GetExtension(file)[6].ToString());
-                    if (Path.GetExtension(file).Length > 7)
+                    // delete all split files, to make space for the extracted files
+                    foreach (var file in e.Value)
                     {
-                        fileNum *= 10;
-                        fileNum += int.Parse(Path.GetExtension(file)[7].ToString());
-                    }
-                    data[Path.GetFileNameWithoutExtension(file)].Add(new FilePart(fileNum, file));
-                }
-            }
-            foreach (KeyValuePair<string, List<FilePart>> kv in data)
-            {
-                List<byte> fileData = new List<byte>();
-                int partCount = 0;
-                while (partCount < kv.Value.Count)
-                {
-                    foreach (FilePart part in kv.Value)
-                    {
-                        if (part.count == partCount)
-                        {
-                            fileData.AddRange(part.GetData());
-                            File.SetAttributes(part.filePath, FileAttributes.Normal);
-                            File.Delete(part.filePath);
-                            partCount++;
-                        }
+                        File.SetAttributes(file.Value, FileAttributes.Normal); // remove write protection
+                        File.Delete(file.Value); // delete split files to free disk space
                     }
                 }
-                File.WriteAllBytes(location + "/" + Path.GetFileName(kv.Key), fileData.ToArray());
-            }
-        }
-
-        public class FilePart
-        {
-            public int count = 0;
-            public string filePath;
-
-            public FilePart(int c, string f)
-            {
-                count = c;
-                filePath = f;
-            }
-
-            public byte[] GetData()
-            {
-                return File.ReadAllBytes(filePath);
             }
         }
     }
