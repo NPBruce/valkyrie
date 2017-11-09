@@ -318,24 +318,8 @@ namespace FFGAppImport
         {
             if (asset == null)
                 throw new ArgumentNullException("asset");
-            Texture2D texture2D;
-            try
-            {
-                texture2D = new Texture2D(asset, false);
-                texture2D = new Texture2D(asset, true);
-            }
-            catch (OverflowException)
-            {
-                // Can happen on Android
-                ValkyrieDebug.Log("ExportTexture: File '" + (string.IsNullOrEmpty(asset.Text) ? "' could not be resolved" : asset.Text) + " caused OverflowException");
-                return;
-            }
-            catch (OutOfMemoryException)
-            {
-                // Can happen on Android
-                ValkyrieDebug.Log("ExportTexture: File '" + (string.IsNullOrEmpty(asset.Text) ? "' could not be resolved" : asset.Text) + " caused OutOfMemoryException");
-                return;
-            }
+            Texture2D texture2D = new Texture2D(asset, false);
+            texture2D = new Texture2D(asset, true);
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/img");
             // Default file name

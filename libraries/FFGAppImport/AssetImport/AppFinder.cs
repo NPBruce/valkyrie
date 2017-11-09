@@ -157,6 +157,8 @@ namespace FFGAppImport
             }
             
             var dirContent = string.Join("\n", Directory.GetFiles(location));
+            ValkyrieDebug.Log("Assets parts found: " + dirContent);
+
             var regexObj = new Regex(@"^(?<prefix>.*)(?<split>\.split)(?<num>\d+)$", RegexOptions.Multiline);
             var splitfiles = new Dictionary<string, List<KeyValuePair<int, string>>>();
             // we will get all files as results, that are split files
@@ -173,7 +175,7 @@ namespace FFGAppImport
             }
             foreach (var e in splitfiles)
             {
-                e.Value.OrderBy(x => x.Value);
+                e.Value.Sort((x, y) => x.Key.CompareTo(y.Key));
             }
             foreach (var e in splitfiles)
             {
