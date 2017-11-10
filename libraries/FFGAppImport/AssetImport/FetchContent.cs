@@ -47,11 +47,11 @@ namespace FFGAppImport
             // Add version found to log
             if (ffgVersion.Length != 0)
             {
-                ValkyrieDebug.Log("FFG " + gameType + " Version Found: " + ffgVersion + Environment.NewLine);
+                ValkyrieDebug.Log("FFG " + gameType + " Version Found: " + ffgVersion + System.Environment.NewLine);
             }
             else
             {
-                ValkyrieDebug.Log("FFG " + gameType + " not found." + Environment.NewLine);
+                ValkyrieDebug.Log("FFG " + gameType + " not found." + System.Environment.NewLine);
             }
 
             // Check if version is acceptable for import
@@ -71,7 +71,10 @@ namespace FFGAppImport
             IniData log = IniRead.ReadFromIni(logFile);
 
             // If no import log, import is required
-            if (log == null) return true;
+            if (log == null)
+            {
+                return true;
+            }
 
             bool appVersionOK = false;
             bool valkVersionOK = false;
@@ -102,7 +105,7 @@ namespace FFGAppImport
             {
                 // We assume that the version asset is in resources.assets
                 var assetsFile = new AssetsFile(resourcesAssets, new EndianStream(File.OpenRead(resourcesAssets), EndianType.BigEndian));
-                
+
                 // Look through all listed assets
                 foreach (var asset in assetsFile.preloadTable.Values)
                 {
@@ -114,7 +117,6 @@ namespace FFGAppImport
                         // Check if called _version
                         if (asset.Text.Equals("_version"))
                         {
-                            textAsset = null; // free for gc
                             // Read asset content
                             textAsset = new Unity_Studio.TextAsset(asset, true);
                             // Extract version
@@ -149,8 +151,7 @@ namespace FFGAppImport
 
                 // Attempt to clean up old import
                 if (!CleanImport()) return;
-
-                // Import from all assets files
+                // Import from all assets 
                 assetFiles.ForEach(s => Import(s));
 
                 // Find any streaming asset files
@@ -161,7 +162,7 @@ namespace FFGAppImport
                     ImportStreamAssets(streamFiles);
                 }
 
-                //finder.DeleteObb(); // Utilized by Android
+                finder.DeleteObb(); // Utilized by Android
             }
             catch (Exception ex)
             {
@@ -176,9 +177,9 @@ namespace FFGAppImport
                 throw new ArgumentNullException("assetFile");
             var unityFiles = new List<string>(); //files to load
 
+			// read file
             AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
             
-            // read file
             // Legacy assets not supported, shouldn't be old
             if (assetsFile.fileGen < 15)
             {
@@ -273,7 +274,7 @@ namespace FFGAppImport
             foreach (AssetsFile file in assetFiles)
             {
                 // All assets
-                foreach (AssetPreloadData asset in file.preloadTable.Values)
+                foreach (var asset in file.preloadTable.Values)
                 {
                     switch (asset.Type2)
                     {
@@ -419,7 +420,7 @@ namespace FFGAppImport
                     }
                     break;
             }
-            }
+        }
 
         // Save audio to file
         private void ExportAudioClip(Unity_Studio.AssetPreloadData asset)
@@ -614,27 +615,5 @@ namespace FFGAppImport
             // We can't extract these here because this isn't the main thread and unity doesn't handle that
             File.WriteAllLines(contentPath + "/bundles.txt", bundles.ToArray());
         }
-
-        ///// <summary>
-        ///// Writes the given stream to a <c>MemoryStream</c> using a 4k buffer and returns it.
-        ///// </summary>
-        ///// <param name="s"><c>Stream</c> to convert</param>
-        ///// <returns>A <c>MemoryStream</c> containing the data of the passed stream</returns>
-        //private static MemoryStream CreateMemoryStream(Stream s)
-        //{
-        //    if (s == null)
-        //    { 
-        //        throw new ArgumentNullException("s");
-        //    }
-        //    var m = new MemoryStream();
-        //    var buffer = new byte[4096]; // 4 kb buffer
-        //    int read = 0;
-        //    while ((read = s.Read(buffer, 0, buffer.Length)) > 0)
-        //    {
-        //        m.Write(buffer, 0, read);
-        //    }
-        //    m.Position = 0;
-        //    return m;
-        //}
     }
 }

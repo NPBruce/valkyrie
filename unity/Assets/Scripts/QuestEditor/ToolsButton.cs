@@ -60,6 +60,7 @@ public class ToolsButton
         for (int i = 0; i < heroCount; i++)
         {
             game.quest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];
+            game.quest.vars.SetValue("#" + game.quest.heroes[i].heroData.sectionName, 1);
             hOptions.Remove(game.quest.heroes[i].heroData);
         }
 

@@ -12,3 +12,9 @@ C:\git_external\valkyrie\unity\Assets\Plugins\ValkyrieTools.pdb
 C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.csprojResolveAssemblyReference.cache
 C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.dll
 C:\git_external\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.pdb
+C:\Daten\valkyrie\unity\Assets\Plugins\ValkyrieTools.dll
+C:\Daten\valkyrie\unity\Assets\Plugins\ValkyrieTools.pdb
+C:\Daten\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.csproj.CoreCompileInputs.cache
+C:\Daten\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.dll
+C:\Daten\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.pdb
+C:\Daten\valkyrie\libraries\ValkyrieTools\obj\Release\ValkyrieTools.csprojResolveAssemblyReference.cache
