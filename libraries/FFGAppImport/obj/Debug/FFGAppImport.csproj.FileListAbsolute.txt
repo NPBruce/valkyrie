@@ -30,15 +30,3 @@ C:\Git\Valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.xml
 C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.csprojResolveAssemblyReference.cache
 C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.dll
 C:\Git\Valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.pdb
-C:\Daten\valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.csprojResolveAssemblyReference.cache
-C:\Daten\valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.csproj.CoreCompileInputs.cache
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\FFGAppImport.dll
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\FFGAppImport.pdb
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\Ionic.Zip.Unity.dll
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.dll
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\ValkyrieTools.dll
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\ValkyrieTools.pdb
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\Ionic.Zip.Unity.xml
-C:\Daten\valkyrie\libraries\FFGAppImport\bin\Debug\UnityEngine.xml
-C:\Daten\valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.dll
-C:\Daten\valkyrie\libraries\FFGAppImport\obj\Debug\FFGAppImport.pdb
