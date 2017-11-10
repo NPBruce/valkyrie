@@ -246,6 +246,18 @@ public class PuzzleCodeWindow
                     buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));
                 }
             }
+            if (questPuzzle.imageType.Equals("element"))
+            {
+                Texture2D dupeTex = Resources.Load("sprites/element" + i) as Texture2D;
+                if (dupeTex != null)
+                {
+                    buttons.Add(new ButtonInfo(Sprite.Create(dupeTex, new Rect(0, 0, dupeTex.width, dupeTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect)));
+                }
+                else
+                {
+                    buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));
+                }
+            }
             else
             {
                 buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));

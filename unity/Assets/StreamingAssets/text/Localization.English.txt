@@ -400,6 +400,7 @@ image,Image
 code,Code
 slide,Slide
 SYMBOL,Symbol
+ELEMENT,Element
 
 // Events
 Ordered,Ordered
