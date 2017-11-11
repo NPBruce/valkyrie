@@ -66,7 +66,7 @@ rem create windows zip
 cd build\batch
 "C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-windows-%version%.zip * -r
 rem create macos zip
-cd build\batchMac
+cd ..\batchMac
 "C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-macos-%version%.zip * -r
 rem create linux tar ball
 cd ..\batchLinux
