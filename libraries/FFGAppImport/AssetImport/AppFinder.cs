@@ -93,7 +93,7 @@ namespace FFGAppImport
                 obbRoot = Android.GetStorage() + "/Valkyrie/Obb";
                 ValkyrieDebug.Log("Obb extraction path: " + obbRoot);
                 location = obbRoot + "/assets/bin/Data";
-                //DeleteObb();
+                DeleteObb();
             }
             else // Windows
             {
@@ -155,7 +155,13 @@ namespace FFGAppImport
             {
                 zip.ExtractAll(obbRoot);
             }
-            
+
+            ConvertObbStreamingAssets();
+            ConvertObbAssets();
+        }
+
+        private void ConvertObbAssets()
+        {
             var dirContent = string.Join("\n", Directory.GetFiles(location));
             ValkyrieDebug.Log("Assets parts found: " + dirContent);
 
@@ -199,6 +205,58 @@ namespace FFGAppImport
                     }
                 }
             }
+        }
+
+        private void ConvertObbStreamingAssets()
+        {
+            if (obbRoot == null)
+                throw new ArgumentNullException("obbPath");
+
+            char dsc = Path.DirectorySeparatorChar;
+            string dirAssetBundles = Path.Combine(this.obbRoot, "assets" + dsc + "AssetBundles");
+            List<string> dirAssetBundlesDirs = Directory.GetDirectories(dirAssetBundles).ToList();
+            if (dirAssetBundlesDirs.Count < 1)
+            {
+                ValkyrieDebug.Log("Could not find directory '" + dirAssetBundles + "/<version>' during Obb import");
+                return;
+            }
+            string version = dirAssetBundlesDirs[0];
+            string dirVersion = Path.Combine(dirAssetBundles, version);
+
+            string dirPlatform = Path.Combine(dirVersion, "Android");
+            string dirPlatformWin = Path.Combine(dirVersion, "Windows");
+            if (!Directory.Exists(dirPlatform))
+            {
+                ValkyrieDebug.Log("Could not find platform directory '" + dirPlatform + "' during Obb import");
+                return;
+            }
+
+            ValkyrieDebug.Log("Moving dir '" + dirPlatform + "' to '" + dirPlatformWin + "'");
+            Directory.Move(dirPlatform, dirPlatformWin);
+
+            string mainAsset = Path.Combine(dirPlatformWin, "Android");
+            string mainAssetWin = Path.Combine(dirPlatformWin, "Windows");
+            if (!File.Exists(mainAsset))
+            {
+                ValkyrieDebug.Log("Could not find main asset '" + mainAsset + "' during Obb import");
+                return;
+            }
+            string mainAssetManifest = mainAsset + ".manifest";
+            string mainAssetManifestWin = mainAssetWin + ".manifest";
+
+            ValkyrieDebug.Log("Moving main asset file '" + mainAsset + "' to '" + mainAssetWin + "'");
+            File.Move(mainAsset, mainAssetWin);
+
+            ValkyrieDebug.Log("Moving main asset manifest file '" + mainAssetManifest + "' to '" + mainAssetManifestWin + "'");
+            File.Move(mainAssetManifest, mainAssetManifestWin);
+
+            string dirStreamingAssets = Path.Combine(obbRoot, "assets" + dsc + "bin" + dsc + "Data" + dsc + "StreamingAssets");
+            ValkyrieDebug.Log("Creating dir '" + dirStreamingAssets + "'");
+            Directory.CreateDirectory(dirStreamingAssets);
+
+            string dirAssetBundlesWin = Path.Combine(dirStreamingAssets, "AssetBundles");
+            ValkyrieDebug.Log("Moving StreamingAssets dir '" + dirAssetBundles + "' to '" + dirAssetBundlesWin + "'");
+            Directory.Move(dirAssetBundles, dirAssetBundlesWin);
         }
     }
 }

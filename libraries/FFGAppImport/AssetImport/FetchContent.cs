@@ -93,7 +93,7 @@ namespace FFGAppImport
         // Determine FFG app version
         public string fetchAppVersion()
         {
-            if (importData.platform == Platform.Android) return new MoMFinder(Platform.Android).RequiredFFGVersion(); // TODO: implement version checking for Android
+            if (importData.platform == Platform.Android) return "1.4.1"; // TODO: implement version checking for Android
             string appVersion = "";
             string resourcesAssets = finder.location + "/resources.assets";
             if (!File.Exists(resourcesAssets))
@@ -155,14 +155,16 @@ namespace FFGAppImport
                 assetFiles.ForEach(s => Import(s));
 
                 // Find any streaming asset files
-                string streamDir = finder.location + "/StreamingAssets";
+                string streamDir = Path.Combine(finder.location, "StreamingAssets");
                 if (Directory.Exists(streamDir))
                 {
                     string[] streamFiles = Directory.GetFiles(streamDir, "*", SearchOption.AllDirectories);
                     ImportStreamAssets(streamFiles);
                 }
-
-                finder.DeleteObb(); // Utilized by Android
+                else
+                {
+                    ValkyrieDebug.Log("StreamingAssets dir '" + streamDir + "' not found");
+                }
             }
             catch (Exception ex)
             {
@@ -549,13 +551,18 @@ namespace FFGAppImport
         // Test version of the form a.b.c is newer
         public static bool VersionNewer(string oldVersion, string newVersion)
         {
-            // Split into components
-            string[] oldV = oldVersion.Split('.');
-            string[] newV = newVersion.Split('.');
-
+            if (oldVersion == null)
+                throw new ArgumentNullException("oldVersion");
+            if (newVersion == null)
+                throw new ArgumentNullException("newVersion");
+            
             if (newVersion.Equals("")) return false;
 
             if (oldVersion.Equals("")) return true;
+
+            // Split into components
+            string[] oldV = oldVersion.Split('.');
+            string[] newV = newVersion.Split('.');
 
             // Different number of components
             if (oldV.Length != newV.Length) return true;
@@ -613,7 +620,9 @@ namespace FFGAppImport
             }
 
             // We can't extract these here because this isn't the main thread and unity doesn't handle that
-            File.WriteAllLines(contentPath + "/bundles.txt", bundles.ToArray());
+            string bundlesFile = Path.Combine(contentPath, "bundles.txt");
+            ValkyrieDebug.Log("Writing '" + bundlesFile + "' containing " + bundles.Count + "' items");
+            File.WriteAllLines(bundlesFile, bundles.ToArray());
         }
     }
 }
