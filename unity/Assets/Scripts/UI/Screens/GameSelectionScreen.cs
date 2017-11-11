@@ -2,7 +2,6 @@
 using UnityEngine;
 using FFGAppImport;
 using ValkyrieTools;
-using System;
 using System.Threading;
 using System.IO;
 
@@ -285,7 +284,7 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
             }
