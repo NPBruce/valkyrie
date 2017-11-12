@@ -125,8 +125,8 @@ public class Game : MonoBehaviour {
             {
                 foreach (ZipEntry e in jar)
                 {
-                    if (e.FileName.IndexOf("assets") != 0) continue;
-                    if (e.FileName.IndexOf("assets/bin") == 0) continue;
+                    if (!e.FileName.StartsWith("assets")) continue;
+                    if (e.FileName.StartsWith("assets/bin")) continue;
 
                     e.Extract(ContentData.ContentPath() + "../..", ExtractExistingFileAction.OverwriteSilently);
                 }
