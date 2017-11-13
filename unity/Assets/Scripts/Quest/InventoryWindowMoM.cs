@@ -53,7 +53,7 @@ public class InventoryWindowMoM
 
             xOffset += 9;
         }
-        scrollArea.SetScrollSize(xOffset - UIScaler.GetHCenter(-16));
+        scrollArea.SetScrollSize(xOffset);
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-4f), 24.5f, 8, 2);
