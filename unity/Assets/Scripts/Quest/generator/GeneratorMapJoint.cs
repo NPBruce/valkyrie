@@ -8,10 +8,16 @@ public class GeneratorMapJoint
     public GeneratorMapVector location;
     public char type;
 
-    public GeneratorMapJoint(GeneratorMapVectory locationIn, char typeIn)
+    public GeneratorMapJoint(GeneratorMapVector locationIn, char typeIn)
     {
         location = locationIn;
         type = typeIn;
+    }
+
+    public GeneratorMapJoint(GeneratorMapJoint in)
+    {
+        location = new GeneratorMapVector(in.location);
+        type = in.type;
     }
 
     public bool MatingJoint(GeneratorMapJoint j)

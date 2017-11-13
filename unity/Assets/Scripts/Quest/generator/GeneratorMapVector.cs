@@ -19,6 +19,13 @@ public class GeneratorMapVector
         rotation = rotationIn;
     }
 
+    public GeneratorMapVector(GeneratorMapVector in)
+    {
+        x = in.x;
+        y = in.y;
+        rotation = in.rotation;
+    }
+
     public GeneratorMapVector Rotate(int degrees)
     {
         if (degrees == 90)

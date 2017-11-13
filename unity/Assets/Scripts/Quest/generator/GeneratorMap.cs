@@ -8,27 +8,64 @@ public class GeneratorMap
 
     GeneratorMapSegment output = new GeneratorMapSegment();
 
-    public GeneratorMap(QuestData.Generator data, Dictionary<string, QuestComponent> components)
+    public GeneratorMap(QuestData.Generator data)
     {
+        ValkyrieDebug.Log("Building map data for all tiles");
         foreach (TileSideData t in Game.Get().cd.tiles)
         {
             tiles.Add(new GeneratorMapSegmentTile(t));
         }
     }
 
-    public void GenerateComponents()
+    public List<Tuple<string, GeneratorMapVector>> Build()
     {
-        output = tiles[Random.Range(0, tiles.Count)].Copy();
+        for (int i = 0; i < 1000; i++)
+        {
+            ValkyrieDebug.Log("Map build attempt " + (i+1));
+            if (GenerateComponents()) break;
+        }
+        return output.components;
+    }
+
+    private bool GenerateComponents()
+    {
+        output = new GeneratorMapSegment(tiles[Random.Range(0, tiles.Count)]);
 
         while (output.Size() < 30)
         {
-            if (output.joints.Count > 2)
+            // We are closed off and too small
+            if (output.joints.Count == 0)
             {
-                output.Merge(RandomTile(true, output));
+                ValkyrieDebug.Log("Map closed off before reaching target size");
+                return false;
             }
-        }
-    }
 
+            //No forks
+            GeneratorMapSegment randomTile = RandomTile(output.joints.Count > 1, output);
+            // Unable to find a matching tile
+            if (randomTile == null)
+            {
+                ValkyrieDebug.Log("No tile can be added to map");
+                return false;
+            }
+            output.Merge(RandomTile(true, output));
+        }
+
+        ValkyrieDebug.Log("Closing open joints");
+        while (output.joints.Count > 0)
+        {
+            GeneratorMapSegment randomTile = RandomTile(true, output);
+            // Unable to find a matching tile
+            if (randomTile == null)
+            {
+                ValkyrieDebug.Log("No tile can be added to map");
+                return false;
+            }
+            output.Merge(RandomTile(true, output));
+        }
+
+        return true;
+    }
 
     public bool ComponentAvailable(string name, int count = 0)
     {
@@ -66,6 +103,8 @@ public class GeneratorMap
 
             availableTiles.Add(candidate);
         }
+        if (availableTiles.Count == 0) return null;
+
         return availableTiles[Random.Range(0, availableTiles.Count)];
     }
 }

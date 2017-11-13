@@ -14,6 +14,28 @@ public class GeneratorMapSegment
     {
     }
 
+
+    public GeneratorMapSegment(GeneratorMapSegment in)
+    {
+        foreach (Tuple<string, GeneratorMapVector> c in in.components)
+        {
+            components.Add(new Tuple<string, GeneratorMapVector>(c.Item1, new GeneratorMapVector(c.Item2)));
+        }
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> kv in in.map)
+        {
+            map.Add(kv.Key, new Dictionary<int, GeneratorMapSpace>>());
+            foreach (var column in kv.Value)
+            {
+                map[kv.Key].Add(column.Key, new GeneratorMapSpace(column.Value));
+            }
+        }
+        foreach (GeneratorMapJoint j in in.joints)
+        {
+            joints.Add(new GeneratorMapJoint(j));
+        }
+    }
+
+
     public List<GeneratorMapJoint> CheckMerge(GeneratorMapSegment toMerge)
     {
         List<GeneratorMapJoint> toReturn = new List<GeneratorMapJoint>();
