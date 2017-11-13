@@ -1,10 +1,13 @@
-﻿using ValkyrieTools;
-using System;
+﻿using System.Collections.Generic;
+using System.IO;
+using ValkyrieTools;
 
 namespace FFGAppImport
 {
     public class RtLFinder : AppFinder
     {
+        protected string obbPath;
+
         public RtLFinder(Platform p) : base(p)
         {
         }
@@ -31,6 +34,10 @@ namespace FFGAppImport
             {
                 return "/Contents/Resources/Data";
             }
+            else if (platform == Platform.Android)
+            {
+                return "";
+            }
             return "/Road to Legend_Data";
         }
         override public string Executable()
@@ -49,19 +56,10 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            if (!System.IO.Directory.Exists(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
-            {
-                return "";
-            }
-
-            foreach (string file in System.IO.Directory.GetFiles(Android.GetStorage() + "/Android/obb/com.fantasyflightgames.rtl"))
-            {
-                if (file.Contains(".com.fantasyflightgames.rtl.obb"))
-                {
-                    return file;
-                }
-            }
-            return "";
+            if (obbPath != null) // try this only once
+                return obbPath;
+            obbPath = GetObbPath("Android/obb/com.fantasyflightgames.rtl", ".com.fantasyflightgames.rtl.obb");
+            return obbPath;
         }
     }
 }
