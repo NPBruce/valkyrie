@@ -55,6 +55,25 @@ public class ContentData {
         return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
     }
 
+    public static string TempPath
+    {
+        get
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                return Path.Combine(Game.AppData(), "temp");
+            }
+            return Path.GetTempPath();
+        }
+    }
+
+    public static string TempValyriePath
+    {
+        get
+        {
+            return Path.Combine(TempPath, "Valkyrie");
+        }
+    }
 
     /// <summary>
     /// Seach the provided path for all content packs and read meta data.</summary>
@@ -865,7 +884,7 @@ public class ContentData {
                     return null;
                 }
             }
-            if (!file.Contains(Path.GetTempPath()))
+            if (!file.Contains(TempPath))
             {
                 textureCache.Add(file, texture);
             }

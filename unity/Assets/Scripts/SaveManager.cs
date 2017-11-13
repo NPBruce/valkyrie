@@ -42,12 +42,12 @@ class SaveManager
             {
                 Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName() + "/Save");
             }
-
-            if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+            string tempValkyriePath = ContentData.TempValyriePath;
+            if (!Directory.Exists(tempValkyriePath))
             {
-                Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+                Directory.CreateDirectory(tempValkyriePath);
             }
-            File.WriteAllText(Path.GetTempPath() + "/Valkyrie/save.ini", game.quest.ToString());
+            File.WriteAllText(Path.Combine(tempValkyriePath, "save.ini"), game.quest.ToString());
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
 
@@ -90,11 +90,11 @@ class SaveManager
 
             outTex.SetPixels(outColor);
             outTex.Apply();
-            File.WriteAllBytes(Path.GetTempPath() + "/Valkyrie/image.png", outTex.EncodeToPNG());
+            File.WriteAllBytes(Path.Combine(tempValkyriePath, "image.png"), outTex.EncodeToPNG());
 
             ZipFile zip = new ZipFile();
-            zip.AddFile(Path.GetTempPath() + "/Valkyrie/save.ini", "");
-            zip.AddFile(Path.GetTempPath() + "/Valkyrie/image.png", "");
+            zip.AddFile(Path.Combine(tempValkyriePath, "save.ini"), "");
+            zip.AddFile(Path.Combine(tempValkyriePath, "image.png"), "");
             zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
             zip.Save(SaveFile(num));
         }
@@ -129,22 +129,24 @@ class SaveManager
         {
             if (File.Exists(SaveFile(num)))
             {
-                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+                if (!Directory.Exists(ContentData.TempValyriePath))
                 {
-                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+                    Directory.CreateDirectory(ContentData.TempValyriePath);
                 }
-                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie/Load"))
+                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Load");
+
+                if (!Directory.Exists(valkyrieLoadPath))
                 {
-                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie/Load");
+                    Directory.CreateDirectory(valkyrieLoadPath);
                 }
 
-                Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
+                Directory.Delete(valkyrieLoadPath, true);
                 ZipFile zip = ZipFile.Read(SaveFile(num));
-                zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
+                zip.ExtractAll(valkyrieLoadPath);
                 zip.Dispose();
 
                 // Check that quest in save is valid
-                QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
+                QuestData.Quest q = new QuestData.Quest(Path.Combine(valkyrieLoadPath, "quest"));
                 if (!q.valid)
                 {
                     ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
@@ -152,11 +154,11 @@ class SaveManager
                     return;
                 }
 
-                string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
+                string data = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
 
                 IniData saveData = IniRead.ReadFromString(data);
 
-                saveData.data["Quest"]["path"] = Path.GetTempPath() + "/Valkyrie/Load/quest/quest.ini";
+                saveData.data["Quest"]["path"] = Path.Combine(valkyrieLoadPath, "quest" + Path.DirectorySeparatorChar + "quest.ini");
 
                 saveData.Get("Quest","valkyrie");
 
@@ -325,24 +327,25 @@ class SaveManager
             if (!File.Exists(SaveFile(num))) return;
             try
             {
-                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie"))
+                if (!Directory.Exists(ContentData.TempValyriePath))
                 {
-                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie");
+                    Directory.CreateDirectory(ContentData.TempValyriePath);
                 }
-                if (!Directory.Exists(Path.GetTempPath() + "/Valkyrie/Load"))
+                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Load");
+                if (!Directory.Exists(valkyrieLoadPath))
                 {
-                    Directory.CreateDirectory(Path.GetTempPath() + "/Valkyrie/Load");
+                    Directory.CreateDirectory(valkyrieLoadPath);
                 }
 
-                Directory.Delete(Path.GetTempPath() + "/Valkyrie/Load", true);
+                Directory.Delete(valkyrieLoadPath, true);
                 ZipFile zip = ZipFile.Read(SaveFile(num));
-                zip.ExtractAll(Path.GetTempPath() + "/Valkyrie/Load");
+                zip.ExtractAll(valkyrieLoadPath);
                 zip.Dispose();
 
-                image = ContentData.FileToTexture(Path.GetTempPath() + "/Valkyrie/Load/image.png");
+                image = ContentData.FileToTexture(Path.Combine(valkyrieLoadPath, "image.png"));
 
                 // Check that quest in save is valid
-                QuestData.Quest q = new QuestData.Quest(Path.GetTempPath() + "/Valkyrie/Load/quest");
+                QuestData.Quest q = new QuestData.Quest(Path.Combine(valkyrieLoadPath, "quest"));
                 if (!q.valid)
                 {
                     ValkyrieDebug.Log("Warning: Save " + num + " contains unsupported quest version." + System.Environment.NewLine);
@@ -354,7 +357,7 @@ class SaveManager
                 quest = q.name.Translate();
                 LocalizationRead.AddDictionary("qst", tmpDict);
 
-                string data = File.ReadAllText(Path.GetTempPath() + "/Valkyrie/Load/save.ini");
+                string data = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
 
                 IniData saveData = IniRead.ReadFromString(data);
 

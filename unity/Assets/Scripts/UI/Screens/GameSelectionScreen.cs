@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
 using FFGAppImport;
+using ValkyrieTools;
 using System.Threading;
 using System.IO;
 
@@ -253,6 +254,7 @@ namespace Assets.Scripts.UI.Screens
             if (importThread.IsAlive) return;
             importThread = null;
             ExtractBundles();
+            // TODO: Delete Obb dir for Android build here
             Draw();
         }
 
@@ -263,19 +265,29 @@ namespace Assets.Scripts.UI.Screens
         {
             try
             {
-                string[] bundles = File.ReadAllLines(Game.AppData() + "/" + importType + "/import/bundles.txt");
+                string importDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
+                string bundlesFile = Path.Combine(importDir, "bundles.txt");
+                ValkyrieDebug.Log("Loading all bundles from '" + bundlesFile + "'");
+                string[] bundles = File.ReadAllLines(bundlesFile);
                 foreach (string file in bundles)
                 {
                     AssetBundle bundle = AssetBundle.LoadFromFile(file);
                     if (bundle == null) continue;
-                    string id = Path.GetFileNameWithoutExtension(file);
+                    ValkyrieDebug.Log("Loading assets from '" + file + "'");
                     foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
                     {
-                        File.WriteAllText(Game.AppData() + "/" + importType + "/import/text/" + asset.name + ".txt", asset.ToString());
+                        string textDir = Path.Combine(importDir, "text");
+                        Directory.CreateDirectory(textDir);
+                        string f = Path.Combine(importDir, Path.Combine(textDir, asset.name + ".txt"));
+                        ValkyrieDebug.Log("Writing text asset to '" + f + "'");
+                        File.WriteAllText(f, asset.ToString());
                     }
                 }
             }
-            catch (System.Exception) { }
+            catch (System.Exception ex)
+            {
+                ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+            }
             importType = "";
         }
 
