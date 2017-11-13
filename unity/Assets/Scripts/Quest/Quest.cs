@@ -1027,6 +1027,10 @@ public class Quest
         if (itemSelect.ContainsKey(name) && items.Contains(itemSelect[name]))
         {
             items.Remove(itemSelect[name]);
+            if (itemInspect.ContainsKey(itemSelect[name]))
+            {
+                itemInspect.Remove(itemSelect[name]);
+            }
         }
         if (name.Equals("#monsters"))
         {
