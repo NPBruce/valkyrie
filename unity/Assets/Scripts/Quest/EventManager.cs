@@ -140,7 +140,7 @@ public class EventManager
     {
         Game game = Game.Get();
         // First check if things need to be added to the queue at end round
-        game.roundControl.CheckNewRound();
+        if (game.roundControl.CheckNewRound()) return;
 
         // No events to trigger
         if (eventStack.Count == 0) return;
@@ -836,6 +836,7 @@ public class EventManager
         output = output.Replace("{MAD21}", "");
         output = output.Replace("{MAD22}", "");
         output = output.Replace("{MAD23}", "");
+        output = output.Replace("{MAD25}", "");
 
         return output;
     }
@@ -881,6 +882,7 @@ public class EventManager
         output = output.Replace("","{MAD21}");
         output = output.Replace("","{MAD22}");
         output = output.Replace("", "{MAD23}");
+        output = output.Replace("", "{MAD25}");
 
         return output;
     }

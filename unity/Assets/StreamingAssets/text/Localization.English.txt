@@ -16,6 +16,7 @@ ICON_PRODUCT_MAD20,
 ICON_PRODUCT_MAD21,
 ICON_PRODUCT_MAD22,
 ICON_PRODUCT_MAD23,
+ICON_PRODUCT_MAD25,
 
 // TEXTS
 ABILITY,Ability
@@ -235,8 +236,7 @@ ASPECT,Aspect
 BORDER,Border
 NO_BORDER,No Border
 UNDO,Undo
-UNIQUE_DEFEATED,Unique
-Defeated
+UNIQUE_DEFEATED,Unique\nDefeated
 UNIQUE_INFO,Unique Information
 UNIQUE_MONSTER,Unique Monster
 UNIQUE_TITLE,Unique Title
@@ -256,6 +256,7 @@ ACT_2,Act II
 X_COLON,{0}:
 
 //Packs
+SoA,SoA 
 BtT,BtT 
 CotW,CotW 
 FA,FA 
@@ -399,6 +400,7 @@ image,Image
 code,Code
 slide,Slide
 SYMBOL,Symbol
+ELEMENT,Element
 
 // Events
 Ordered,Ordered

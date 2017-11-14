@@ -1847,7 +1847,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 7;
+        public static int currentFormat = 8;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;

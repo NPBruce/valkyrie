@@ -50,6 +50,7 @@ public class CameraController : MonoBehaviour {
     void Awake()
     {
         mouseDownCamPosition = gameObject.transform.position;
+        camTarget = gameObject.transform.position;
         mouseDownMousePosition = Vector2.zero;
         game = Game.Get();
     }
@@ -79,6 +80,9 @@ public class CameraController : MonoBehaviour {
         // Check if the scroll wheel has moved
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && ScrollEnabled())
         {
+            // disable automatic translating to avoid loops
+            targetSet = false;
+
             // Translate the camera up/down
             gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
 
@@ -95,18 +99,26 @@ public class CameraController : MonoBehaviour {
             if (Input.GetKey(KeyCode.UpArrow))
             {
                 gameObject.transform.Translate(new Vector3(0, keyScrollRate, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 gameObject.transform.Translate(new Vector3(0, -keyScrollRate, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 gameObject.transform.Translate(new Vector3(-keyScrollRate, 0, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 gameObject.transform.Translate(new Vector3(keyScrollRate, 0, 0), Space.World);
+                // disable automatic translating to avoid loops
+                targetSet = false;
             }
         }
 
@@ -146,6 +158,8 @@ public class CameraController : MonoBehaviour {
                 Vector2 bPos = GetMouseBoardPlane();
                 gameObject.transform.Translate(new Vector3(mouseDownMousePosition.x - bPos.x,
                     mouseDownMousePosition.y - bPos.y, 0), Space.World);
+                // dragging disables target moving
+                targetSet = false;
             }
         }
         else
@@ -166,6 +180,12 @@ public class CameraController : MonoBehaviour {
             if (pos.y > maxPanY) pos.y = maxPanY;
         }
         gameObject.transform.position = pos;
+
+        // any shift to cancel targets
+        if (Input.GetKey(KeyCode.LeftShift) ||
+            Input.GetKey(KeyCode.RightShift)) {
+            targetSet = false;
+        }
 
         // If we are moving to a target position
         if (targetSet)
@@ -245,7 +265,14 @@ public class CameraController : MonoBehaviour {
     {
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.targetSet = true;
-        cc.camTarget = new Vector3(pos.x, pos.y, -8);
+
+        cc.camTarget = new Vector3(pos.x, pos.y, cc.gameObject.transform.position.z);
+
+        // If not in editor reset zoom
+        if (!Game.Get().editMode)
+        {
+            cc.camTarget.z = -8;
+        }
 
         if (cc.minLimit)
         {

@@ -204,6 +204,8 @@ namespace Assets.Scripts.UI.Screens
                 if (h.heroData == null) continue;
                 if (h.className.Length == 0) return;
 
+                game.quest.vars.SetValue("#" + h.className, 1);
+
                 foreach (string s in game.cd.classes[h.className].items)
                 {
                     items.Add(s);

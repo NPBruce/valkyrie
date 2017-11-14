@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Ionic.Zip;
 using Microsoft.Win32;
-using System.IO;
-using System;
-using System.Text;
 using Read64bitRegistryFrom32bitApp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using ValkyrieTools;
-using Ionic.Zip;
 
 namespace FFGAppImport
 {
@@ -19,6 +21,7 @@ namespace FFGAppImport
         public abstract string RequiredFFGVersion();
         public abstract string ObbPath();
         public string location = "";
+        public string obbRoot = "";
         public string exeLocation;
         public abstract int ObfuscateKey();
 
@@ -69,7 +72,7 @@ namespace FFGAppImport
 
                 string output = outputBuilder.ToString();
 
-                ValkyrieDebug.Log("Looking for: " + "/" + Executable());
+                ValkyrieDebug.Log("Looking for: /" + Executable());
                 // Quick hack rather than doing XML properly
                 int foundAt = output.IndexOf("/" + Executable());
                 if (foundAt > 0)
@@ -87,13 +90,12 @@ namespace FFGAppImport
             }
             else if (platform == Platform.Android)
             {
-                location = Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data";
-                if (Directory.Exists(Path.GetTempPath() + "Valkyrie/Obb"))
-                {
-                    Directory.Delete(Path.GetTempPath() + "Valkyrie/Obb", true);
-                }
+                obbRoot = Android.GetStorage() + "/Valkyrie/Obb";
+                ValkyrieDebug.Log("Obb extraction path: " + obbRoot);
+                location = obbRoot + "/assets/bin/Data";
+                DeleteObb();
             }
-            else
+            else // Windows
             {
                 // Attempt to get steam install location (current 32/64 level)
                 location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
@@ -104,13 +106,13 @@ namespace FFGAppImport
                     {
                         location = RegistryWOW6432.GetRegKey64(RegHive.HKEY_LOCAL_MACHINE, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation");
                     }
-                    catch (Exception) { }
+                    catch { }
                 }
             }
 
             if (location == null || location.Length == 0)
             {
-                string[] args = System.Environment.GetCommandLineArgs();
+                string[] args = Environment.GetCommandLineArgs();
                 for (int i = 0; i < (args.Length - 1); i++)
                 {
                     if (args[i] == "-import")
@@ -132,70 +134,129 @@ namespace FFGAppImport
             ValkyrieDebug.Log("Asset location: " + location);
         }
 
+        internal void DeleteObb()
+        {
+            if (platform != Platform.Android) return;
+            if (!Directory.Exists(obbRoot)) return;
+            Directory.Delete(obbRoot, true);
+        }
+
         public void ExtractObb()
         {
             if (platform != Platform.Android) return;
 
             //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
             //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
-            ZipFile zip = ZipFile.Read(ObbPath());
-            zip.ExtractAll(Path.GetTempPath() + "Valkyrie/Obb");
-            zip.Dispose();
-
-            Dictionary<string, List<FilePart>> data = new Dictionary<string, List<FilePart>>();
-            foreach (string file in Directory.GetFiles(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data"))
+            string obbPath = ObbPath();
+            ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
+            DeleteObb();
+            Directory.CreateDirectory(obbRoot);
+            using (var zip = ZipFile.Read(obbPath))
             {
-                if (Path.GetExtension(file).IndexOf(".split") == 0)
-                {
-                    if (!data.ContainsKey(Path.GetFileNameWithoutExtension(file)))
-                    {
-                        data.Add(Path.GetFileNameWithoutExtension(file), new List<FilePart>());
-                    }
-                    int fileNum = int.Parse(Path.GetExtension(file)[6].ToString());
-                    if (Path.GetExtension(file).Length > 7)
-                    {
-                        fileNum *= 10;
-                        fileNum += int.Parse(Path.GetExtension(file)[7].ToString());
-                    }
-                    data[Path.GetFileNameWithoutExtension(file)].Add(new FilePart(fileNum, file));
-                }
+                zip.ExtractAll(obbRoot);
             }
-            foreach (KeyValuePair<string, List<FilePart>> kv in data)
+
+            ConvertObbStreamingAssets();
+            ConvertObbAssets();
+        }
+
+        private void ConvertObbAssets()
+        {
+            var dirContent = string.Join("\n", Directory.GetFiles(location));
+            ValkyrieDebug.Log("Assets parts found: " + dirContent);
+
+            var regexObj = new Regex(@"^(?<prefix>.*)(?<split>\.split)(?<num>\d+)$", RegexOptions.Multiline);
+            var splitfiles = new Dictionary<string, List<KeyValuePair<int, string>>>();
+            // we will get all files as results, that are split files
+            Match matchResults = regexObj.Match(dirContent);
+            while (matchResults.Success)
             {
-                List<byte> fileData = new List<byte>();
-                int partCount = 0;
-                while (partCount < kv.Value.Count)
+                string key = matchResults.Groups["prefix"].Value;
+                int num = int.Parse(matchResults.Groups["num"].Value);
+                string file = matchResults.Value;
+                if (!splitfiles.Keys.Contains(key))
+                    splitfiles.Add(key, new List<KeyValuePair<int, string>>());
+                splitfiles[key].Add(new KeyValuePair<int, string>(num, file)); // insert sorted by num to the list
+                matchResults = matchResults.NextMatch();
+            }
+            foreach (var e in splitfiles)
+            {
+                e.Value.Sort((x, y) => x.Key.CompareTo(y.Key));
+            }
+            foreach (var e in splitfiles)
+            {
+                using (var fs = new FileStream(e.Key, FileMode.Create))
                 {
-                    foreach (FilePart part in kv.Value)
+                    string logmsg = "Creating out file '" + e.Key + "' using:";
+                    e.Value.ForEach(file => logmsg += "\nSplit asset '" + file.Value + "'");
+                    ValkyrieDebug.Log(logmsg);
+
+                    // combinde split files to one file
+                    foreach (var file in e.Value)
                     {
-                        if (part.count == partCount)
-                        {
-                            fileData.AddRange(part.GetData());
-                            File.SetAttributes(part.filePath, FileAttributes.Normal);
-                            File.Delete(part.filePath);
-                            partCount++;
-                        }
+                        byte[] part = File.ReadAllBytes(file.Value);
+                        fs.Write(part, 0, part.Length);
+                    }
+                    // delete all split files, to make space for the extracted files
+                    foreach (var file in e.Value)
+                    {
+                        File.SetAttributes(file.Value, FileAttributes.Normal); // remove write protection
+                        File.Delete(file.Value); // delete split files to free disk space
                     }
                 }
-                File.WriteAllBytes(Path.GetTempPath() + "Valkyrie/Obb/Assets/Bin/Data/" + Path.GetFileName(kv.Key), fileData.ToArray());
             }
         }
 
-        public class FilePart
+        private void ConvertObbStreamingAssets()
         {
-            public int count = 0;
-            public string filePath;
+            if (obbRoot == null)
+                throw new ArgumentNullException("obbPath");
 
-            public FilePart(int c, string f)
+            char dsc = Path.DirectorySeparatorChar;
+            string dirAssetBundles = Path.Combine(this.obbRoot, "assets" + dsc + "AssetBundles");
+            List<string> dirAssetBundlesDirs = Directory.GetDirectories(dirAssetBundles).ToList();
+            if (dirAssetBundlesDirs.Count < 1)
             {
-                count = c;
-                filePath = f;
+                ValkyrieDebug.Log("Could not find directory '" + dirAssetBundles + "/<version>' during Obb import");
+                return;
+            }
+            string version = dirAssetBundlesDirs[0];
+            string dirVersion = Path.Combine(dirAssetBundles, version);
+
+            string dirPlatform = Path.Combine(dirVersion, "Android");
+            string dirPlatformWin = Path.Combine(dirVersion, "Windows");
+            if (!Directory.Exists(dirPlatform))
+            {
+                ValkyrieDebug.Log("Could not find platform directory '" + dirPlatform + "' during Obb import");
+                return;
             }
 
-            public byte[] GetData()
+            ValkyrieDebug.Log("Moving dir '" + dirPlatform + "' to '" + dirPlatformWin + "'");
+            Directory.Move(dirPlatform, dirPlatformWin);
+
+            string mainAsset = Path.Combine(dirPlatformWin, "Android");
+            string mainAssetWin = Path.Combine(dirPlatformWin, "Windows");
+            if (!File.Exists(mainAsset))
             {
-                return File.ReadAllBytes(filePath);
+                ValkyrieDebug.Log("Could not find main asset '" + mainAsset + "' during Obb import");
+                return;
             }
+            string mainAssetManifest = mainAsset + ".manifest";
+            string mainAssetManifestWin = mainAssetWin + ".manifest";
+
+            ValkyrieDebug.Log("Moving main asset file '" + mainAsset + "' to '" + mainAssetWin + "'");
+            File.Move(mainAsset, mainAssetWin);
+
+            ValkyrieDebug.Log("Moving main asset manifest file '" + mainAssetManifest + "' to '" + mainAssetManifestWin + "'");
+            File.Move(mainAssetManifest, mainAssetManifestWin);
+
+            string dirStreamingAssets = Path.Combine(obbRoot, "assets" + dsc + "bin" + dsc + "Data" + dsc + "StreamingAssets");
+            ValkyrieDebug.Log("Creating dir '" + dirStreamingAssets + "'");
+            Directory.CreateDirectory(dirStreamingAssets);
+
+            string dirAssetBundlesWin = Path.Combine(dirStreamingAssets, "AssetBundles");
+            ValkyrieDebug.Log("Moving StreamingAssets dir '" + dirAssetBundles + "' to '" + dirAssetBundlesWin + "'");
+            Directory.Move(dirAssetBundles, dirAssetBundlesWin);
         }
     }
 }

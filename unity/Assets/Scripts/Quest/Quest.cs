@@ -579,7 +579,11 @@ public class Quest
             h.activated = false;
             h.defeated = false;
             h.selected = false;
-            if (h.heroData != null) heroCount++;
+            if (h.heroData != null) {
+                heroCount++;
+                // Create variable to value 1 for each selected Hero
+                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+            }
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
@@ -853,6 +857,7 @@ public class Quest
         eManager = new EventManager(saveData.Get("EventManager"));
 
         // Update the screen
+        game.stageUI.Update();
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
     }
@@ -1023,6 +1028,10 @@ public class Quest
         if (itemSelect.ContainsKey(name) && items.Contains(itemSelect[name]))
         {
             items.Remove(itemSelect[name]);
+            if (itemInspect.ContainsKey(itemSelect[name]))
+            {
+                itemInspect.Remove(itemSelect[name]);
+            }
         }
         if (name.Equals("#monsters"))
         {
