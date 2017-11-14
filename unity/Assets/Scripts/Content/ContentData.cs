@@ -792,9 +792,12 @@ public class ContentData {
                 {
                     ddsBytes = File.ReadAllBytes(file);
                 }
-                catch (System.Exception)
+                catch (System.Exception ex)
                 {
-                    ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
+                    if (!File.Exists(file))
+                        ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
+                    else
+                        ValkyrieDebug.Log("Warning: DDS Immage loading of file '" + file + "' failed with " + ex.GetType().Name + " message: " + ex.Message);
                     return null;
                 }
                 // Check for valid header
@@ -872,13 +875,16 @@ public class ContentData {
             {
                 try
                 {
-                    www = new WWW(@"file://" + imagePath);
+                    www = new WWW(new System.Uri(imagePath).AbsoluteUri);
                     texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
                     www.LoadImageIntoTexture(texture);
                 }
-                catch (System.Exception)
+                catch (System.Exception ex)
                 {
-                    ValkyrieDebug.Log("Warning: Image missing: " + file);
+                    if(!File.Exists(file))
+                        ValkyrieDebug.Log("Warning: Image missing: " + file);
+                    else
+                        ValkyrieDebug.Log("Warning: Immage loading of file '" + file + "' failed with " + ex.GetType().Name + " message: " + ex.Message);
                     return null;
                 }
             }

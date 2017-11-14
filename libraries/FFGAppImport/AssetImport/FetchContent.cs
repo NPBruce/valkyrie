@@ -93,16 +93,20 @@ namespace FFGAppImport
         // Determine FFG app version
         public string fetchAppVersion()
         {
-            if (importData.platform == Platform.Android) return "1.4.1"; // TODO: implement version checking for Android
             string appVersion = "";
-            string resourcesAssets = finder.location + "/resources.assets";
-            if (!File.Exists(resourcesAssets))
-            {
-                ValkyrieDebug.Log("Could not find main assets file: " + resourcesAssets);
-                return appVersion;
-            }
             try
             {
+                if (importData.platform == Platform.Android)
+                {
+                    return finder.ExtractObbVersion();
+                }
+                string resourcesAssets = finder.location + "/resources.assets";
+                if (!File.Exists(resourcesAssets))
+                {
+                    ValkyrieDebug.Log("Could not find main assets file: " + resourcesAssets);
+                    return appVersion;
+                }
+
                 // We assume that the version asset is in resources.assets
                 var assetsFile = new AssetsFile(resourcesAssets, new EndianStream(File.OpenRead(resourcesAssets), EndianType.BigEndian));
 
