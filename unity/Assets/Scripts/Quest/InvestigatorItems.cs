@@ -52,26 +52,55 @@ public class InvestigatorItems
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        int y = 0;
-        int x = 0;
+        SortedList<string, SortedList<string, string>> itemSort = new SortedDictionary<string, SortedList<string, string>>();
+
         foreach (string item in game.quest.items)
         {
-            Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
-            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
-
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y), 6, 6);
-            ui.SetImage(sprite);
-
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
-            ui.SetText(game.cd.items[item].name);
-
-            x++;
-            if (x > 4)
+            // Ignore "ItemX", find next capital letter
+            for(int charIndex = 5; charIndex < item.Length - 1; charIndex++)
             {
-                x = 0;
-                y++;
+                if (Char.IsUpper(item[5])) break;
+            }
+            string typeString = item.Substring(0, charIndex);
+            string translationString = game.cd.items[item].name.Translate();
+
+            if (!itemSort.ContainsKey(typeString))
+            {
+                itemSort.Add(typeString, new SortedList<string, string>())
+            }
+
+            // Duplicate names
+            while (itemSort[typeString].ContainsKey(translationString))
+            {
+                translationString += "D";
+            }
+
+            itemSort[typeString].Add(translationString, item);
+        }
+
+        int y = 0;
+        int x = 0;
+        foreach (string category in itemSort.Values)
+        {
+            foreach (string item in category)
+            {
+                Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
+                Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y), 6, 6);
+                ui.SetImage(sprite);
+
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
+                ui.SetText(game.cd.items[item].name);
+
+                x++;
+                if (x > 4)
+                {
+                    x = 0;
+                    y++;
+                }
             }
         }
         ui = new UIElement();
