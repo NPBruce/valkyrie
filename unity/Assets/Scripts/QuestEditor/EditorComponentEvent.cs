@@ -782,7 +782,7 @@ public class EditorComponentEvent : EditorComponent
 
             select.AddItem(kv.Key, traits);
         }
-
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -832,7 +832,7 @@ public class EditorComponentEvent : EditorComponent
 
             select.AddItem(kv.Key, traits);
         }
-
+        select.ExcludeExpansions();
         select.Draw();
     }
 

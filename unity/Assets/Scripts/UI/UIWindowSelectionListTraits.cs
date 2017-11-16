@@ -115,7 +115,7 @@ namespace Assets.Scripts.UI
                     TraitGroup tmpGroup = tg;
                     string tmpTrait = s;
                     ui = new UIElement(traitScrollArea.GetScrollTransform());
-                    ui.SetLocation(0, offset, 12, 1);
+                    ui.SetLocation(0, offset, 11, 1);
                     if (tg.traits[s].selected)
                     {
                         ui.SetBGColor(Color.white);
@@ -151,6 +151,23 @@ namespace Assets.Scripts.UI
                         }
                     }
                     ui.SetText(s, Color.black);
+
+                    // Strikethrough
+                    if (tg.traits[s].excluded)
+                    {
+                        ui = new UIElement(traitScrollArea.GetScrollTransform());
+                        ui.SetLocation(0.2f, offset + 0.5f, 10.6f, 0.06f);
+                        ui.SetBGColor(Color.black);
+                        ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
+                    }
+
+                    // Exclude
+                    ui = new UIElement(traitScrollArea.GetScrollTransform());
+                    ui.SetLocation(11, offset, 1, 1);
+                    ui.SetBGColor(Color.red);
+                    ui.SetText("X", Color.black);
+                    ui.SetButton(delegate { ExcludeTrait(tmpGroup, tmpTrait); });
+
                     offset += 1.05f;
                 }
                 offset += 1.05f;
@@ -210,7 +227,19 @@ namespace Assets.Scripts.UI
 
         protected void SelectTrait(TraitGroup group, string trait)
         {
+            if (!traits.ContainsKey(trait)) return;
+
             group.traits[trait].selected = !group.traits[trait].selected;
+            group.traits[trait].excluded = false;
+            Update();
+        }
+
+        protected void ExcludeTrait(TraitGroup group, string trait)
+        {
+            if (!traits.ContainsKey(trait)) return;
+
+            group.traits[trait].excluded = !group.traits[trait].excluded;
+            group.traits[trait].selected = false;
             Update();
         }
 
@@ -307,14 +336,59 @@ namespace Assets.Scripts.UI
             {
                 if (tg.GetName().Equals(type))
                 {
-                    if (tg.traits.ContainsKey(trait))
-                    {
-                        tg.traits[trait].selected = true;
-                        Update();
-                    }
+                    SelectTrait(tg, trait)
                     return;
                 }
             }
+        }
+
+        public void ExcludeTrait(string type, string trait)
+        {
+            foreach (TraitGroup tg in traitData)
+            {
+                if (tg.GetName().Equals(type))
+                {
+                    ExcludeTrait(tg, trait)
+                    return;
+                }
+            }
+        }
+
+        public void ExcludeTraitsWithExceptions(string type, IEnumerable<string> exceptions)
+        {
+            TraitGroup tg = null;
+            foreach (TraitGroup group in traitData)
+            {
+                if (tg.GetName().Equals(type))
+                {
+                    tg = group;
+                    break;
+                }
+            }
+
+            if (tg == null) return;
+
+            foreach (var t in tg.traits)
+            {
+                foreach (string e in exceptions)
+                {
+                    if (!t.Key.Equals(e))
+                    {
+                        ExcludeTrait(tg, trait)
+                    }
+                }
+            }
+        }
+
+        public void ExcludeExpansions()
+        {
+            List<string> enabled = new List<string();
+            enabled.Add(new StringKey("val", "base").Translate());
+            foreach (string s in Game.Get().quest.qd.quest.packs)
+            {
+                enabled.Add(new StringKey("val", s).Translate());
+            }
+            ExcludeTraitsWithExceptions(new StringKey("val", "SOURCE").Translate(), enabled);
         }
 
         protected class SelectionItemTraits : SelectionItem
@@ -372,7 +446,22 @@ namespace Assets.Scripts.UI
 
                 foreach (Trait t in traits.Values)
                 {
-                    if (t.selected && !t.items.Contains(item)) return false;
+                    if (t.items.Contains(item))
+                    {
+                        if (t.excluded)
+                        {
+                            // item contains excluded trait
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (t.selected)
+                        {
+                            // item does not contain selected trait
+                            return false;
+                        }
+                    }
                 }
                 return true;
             }
@@ -406,6 +495,7 @@ namespace Assets.Scripts.UI
             public class Trait
             {
                 public bool selected = false;
+                public bool excluded = false;
                 public List<SelectionItem> items = new List<SelectionItem>();
             }
         }
