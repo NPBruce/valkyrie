@@ -9,7 +9,11 @@ namespace Assets.Scripts.UI
         protected string _title = "";
         protected UnityEngine.Events.UnityAction<string> _call;
 
-        protected List<SelectionItem> items = new List<SelectionItem>();
+        protected SortedList<int, SelectionItem> items = new SortedList<int, SelectionItem>();
+        protected SortedList<string, SelectionItem> alphaItems = new SortedList<string, SelectionItem>();
+
+        protected bool alphaSort = false;
+        protected bool reverseSort = false;
 
         public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "")
         {
@@ -25,32 +29,38 @@ namespace Assets.Scripts.UI
 
         public void AddItem(StringKey stringKey)
         {
-            items.Add(new SelectionItem(stringKey.Translate(), stringKey.key));
+            AddItem(new SelectionItem(stringKey.Translate(), stringKey.key));
         }
 
         public void AddItem(StringKey stringKey, Color color)
         {
-            items.Add(new SelectionItem(stringKey.Translate(), stringKey.key, color));
+            AddItem(new SelectionItem(stringKey.Translate(), stringKey.key, color));
         }
 
         public void AddItem(string item)
         {
-            items.Add(new SelectionItem(item, item));
+            AddItem(new SelectionItem(item, item));
         }
 
         public void AddItem(string item, Color color)
         {
-            items.Add(new SelectionItem(item, item, color));
+            AddItem(new SelectionItem(item, item, color));
         }
 
         public void AddItem(string display, string key)
         {
-            items.Add(new SelectionItem(display, key));
+            AddItem(new SelectionItem(display, key));
         }
 
         public void AddItem(string display, string key, Color color)
         {
-            items.Add(new SelectionItem(display, key, color));
+            AddItem(new SelectionItem(display, key, color));
+        }
+
+        virtual void AddItem(SelectionItem item)
+        {
+            items.Add(items.Count, item);
+            alphaItems.Add(item.GetDisplay(), item);
         }
 
         virtual public void Draw()
@@ -69,18 +79,30 @@ namespace Assets.Scripts.UI
             scrollArea.SetLocation(UIScaler.GetHCenter(-10.5f), 2, 21, 25);
             new UIElementBorder(scrollArea);
 
-            for (int i = 0; i < items.Count; i++)
+            SortedList toDisplay = items;
+            if (alphaSort)
+            {
+                toDisplay = alphaItems;
+            }
+            if (reverseSort)
+            {
+                toDisplay = toDisplay.Reverse();
+            }
+
+            int lineNum = 0;
+            foreach(SelectionItem item in toDisplay)
             {
                 // Print the name but select the key
-                string key = items[i].GetKey();
+                string key = item.GetKey();
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(0, (i * 1.05f), 20, 1);
+                ui.SetLocation(0, (lineNum * 1.05f), 20, 1);
                 if (key != null)
                 {
                     ui.SetButton(delegate { SelectItem(key); });
                 }
-                ui.SetBGColor(items[i].GetColor());
-                ui.SetText(items[i].GetDisplay(), Color.black);
+                ui.SetBGColor(item.GetColor());
+                ui.SetText(item.GetDisplay(), Color.black);
+                lineNum++;
             }
 
             scrollArea.SetScrollSize(items.Count * 1.05f);

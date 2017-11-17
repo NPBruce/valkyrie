@@ -8,7 +8,8 @@ namespace Assets.Scripts.UI
     {
         protected List<TraitGroup> traitData = new List<TraitGroup>();
 
-        protected List<SelectionItemTraits> traitItems = new List<SelectionItemTraits>();
+        protected SortedList<int, SelectionItemTraits> traitItems = new SortedList<int, SelectionItemTraits>();
+        protected SortedList<string, SelectionItemTraits> alphaTraitItems = new SortedList<string, SelectionItemTraits>();
 
         protected float scrollPos = 0;
 
@@ -24,19 +25,6 @@ namespace Assets.Scripts.UI
 
         override public void Draw()
         {
-            foreach (SelectionItem item in items)
-            {
-                SelectionItemTraits itemT = item as SelectionItemTraits;
-                if (itemT == null)
-                {
-                    traitItems.Add(new SelectionItemTraits(item));
-                }
-                else
-                {
-                    traitItems.Add(itemT);
-                }
-            }
-
             foreach (SelectionItemTraits item in traitItems)
             {
                 foreach (string category in item.GetTraits().Keys)
@@ -195,8 +183,18 @@ namespace Assets.Scripts.UI
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
 
+            SortedList toDisplay = traitItems;
+            if (alphaSort)
+            {
+                toDisplay = alphaTraitItems;
+            }
+            if (reverseSort)
+            {
+                toDisplay = toDisplay.Reverse();
+            }
+
             float offset = 0;
-            foreach (SelectionItemTraits item in traitItems)
+            foreach (SelectionItemTraits item in toDisplay)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)
@@ -245,35 +243,32 @@ namespace Assets.Scripts.UI
 
         public void AddItem(StringKey stringKey, Dictionary<string, IEnumerable<string>> traits)
         {
-            items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
+            AddItem(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
         }
 
         public void AddItem(StringKey stringKey, Dictionary<string, IEnumerable<string>> traits, Color color)
         {
-            items.Add(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits));
-            items[items.Count - 1].SetColor(color);
+            AddItem(new SelectionItemTraits(stringKey.Translate(), stringKey.key, traits), color);
         }
 
         public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits)
         {
-            items.Add(new SelectionItemTraits(item, item, traits));
+            AddItem(new SelectionItemTraits(item, item, traits));
         }
 
         public void AddItem(string item, Dictionary<string, IEnumerable<string>> traits, Color color)
         {
-            items.Add(new SelectionItemTraits(item, item, traits));
-            items[items.Count - 1].SetColor(color);
+            AddItem(new SelectionItemTraits(item, item, traits), color);
         }
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits)
         {
-            items.Add(new SelectionItemTraits(display, key, traits));
+            AddItem(new SelectionItemTraits(display, key, traits), color);
         }
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
         {
-            items.Add(new SelectionItemTraits(display, key, traits));
-            items[items.Count - 1].SetColor(color);
+            AddItem(new SelectionItemTraits(display, key, traits), color);
         }
 
         public void AddItem(QuestData.QuestComponent qc)
@@ -283,10 +278,40 @@ namespace Assets.Scripts.UI
             traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", qc.typeDynamic.ToUpper()).Translate() });
             traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { qc.source });
 
-            items.Add(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
+            AddItem(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
         }
 
         public void AddItem(GenericData component)
+        {
+            AddItem(CreateItem(component));
+        }
+
+        public void AddItem(GenericData component, Color color)
+        {
+            AddItem(CreateItem(component), color);
+        }
+
+        override void AddItem(SelectionItem item)
+        {
+            if (item is SelectionItemTraits)
+            {
+                traitItems.Add(traitItems.Count, new SelectionItemTraits(item));
+                alphaTraitItems.Add(item.GetDisplay(), new SelectionItemTraits(item));
+            }
+            else
+            {
+                traitItems.Add(itemIndex, item);
+                alphaTraitItems.Add(item.GetDisplay(), item);
+            }
+        }
+
+        protected void AddItem(SelectionItem item, Color color)
+        {
+            item.SetColor(color);
+            AddItem(item);
+        }
+
+        protected SelectionItemTraits CreateItem(GenericData component)
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
@@ -311,13 +336,7 @@ namespace Assets.Scripts.UI
             }
             traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
 
-            items.Add(new SelectionItemTraits(component.name.Translate(), component.sectionName, traits));
-        }
-
-        public void AddItem(GenericData component, Color color)
-        {
-            AddItem(component);
-            items[items.Count - 1].SetColor(color);
+            return new SelectionItemTraits(component.name.Translate(), component.sectionName, traits);
         }
 
         public void AddNewComponentItem(string type)
@@ -327,7 +346,7 @@ namespace Assets.Scripts.UI
             traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", type.ToUpper()).Translate() });
             traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "NEW").Translate() });
 
-            items.Add(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits));
+            AddItem(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits));
         }
 
         public void SelectTrait(string type, string trait)

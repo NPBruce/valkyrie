@@ -89,10 +89,21 @@ namespace Assets.Scripts.UI
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
 
+
+            SortedList toDisplay = traitItems;
+            if (alphaSort)
+            {
+                toDisplay = alphaTraitItems;
+            }
+            if (reverseSort)
+            {
+                toDisplay = toDisplay.Reverse();
+            }
+
             float offset = 0;
             float xOffset = 0;
             float yOffset = 4;
-            foreach (SelectionItemTraits item in traitItems)
+            foreach (SelectionItemTraits item in toDisplay)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)
