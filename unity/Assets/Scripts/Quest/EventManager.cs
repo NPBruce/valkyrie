@@ -567,13 +567,36 @@ public class EventManager
             return OutputSymbolReplace(text).Replace("\\n", "\n");
         }
 
+        public static string ReplaceComponentText(string input)
+        {
+            if (input.Contains("{c:"))
+            {
+                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
+                string replaceFrom;
+                string componentName;
+                string componentText;
+                foreach (Match oneVar in questItemRegex.Matches(text))
+                {
+                    replaceFrom = oneVar.Value;                    
+                    componentName = oneVar.Groups[1].Value;
+                    QuestData.QuestComponent component;
+                    if (game.quest.qd.components.TryGetValue(componentName, out component))
+                    {
+                        componentText = getComponentText(component);
+                        text = text.Replace(replaceFrom, componentText);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Get text related with selected component
         /// </summary>
         /// <param name="component">component to get text</param>
         /// <returns>extracted text</returns>
-        private string getComponentText(QuestData.QuestComponent component)
+        public static string getComponentText(QuestData.QuestComponent component)
         {
+            Game game = Game.Get();
             switch (component.GetType().Name)
             {
                 case "Event":
