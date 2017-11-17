@@ -59,7 +59,7 @@ namespace Assets.Scripts.UI
             Update();
         }
 
-        protected void Update()
+        override void Update()
         {
             bool resetScroll = false;
             if (traitScrollArea == null)
@@ -81,6 +81,51 @@ namespace Assets.Scripts.UI
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
             ui.SetText(_title);
+
+            // Sort Buttons
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(15.5), 1, 1, 1);
+            if (alphaSort)
+            {
+                ui.SetText("1", Color.white);
+                ui.SetBGColor(Color.black);
+            }
+            else
+            {
+                if (reverseSort)
+                {
+                    ui.SetText("9", Color.black);
+                }
+                else
+                {
+                    ui.SetText("1", Color.black);
+                }
+                ui.SetBGColor(Color.white);
+            }
+            ui.SetButton(SortNumerical);
+            new UIElementBorder(ui);
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(16.5), 1, 1, 1);
+            if (alphaSort)
+            {
+                if (reverseSort)
+                {
+                    ui.SetText("Z", Color.black);
+                }
+                else
+                {
+                    ui.SetText("A", Color.black);
+                }
+                ui.SetBGColor(Color.white);
+            }
+            else
+            {
+                ui.SetText("A", Color.white);
+                ui.SetBGColor(Color.black);
+            }
+            ui.SetButton(SortAlpha);
+            new UIElementBorder(ui);
 
             traitScrollArea = new UIElementScrollVertical();
             traitScrollArea.SetLocation(UIScaler.GetHCenter(-17.5f), 2, 13, 25);

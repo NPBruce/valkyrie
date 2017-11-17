@@ -65,6 +65,11 @@ namespace Assets.Scripts.UI
 
         virtual public void Draw()
         {
+            Update();
+        }
+
+        virtual public void Update()
+        {
             // Border
             UIElement ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-11), 0, 22, 30);
@@ -74,6 +79,51 @@ namespace Assets.Scripts.UI
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
             ui.SetText(_title);
+
+            // Sort Buttons
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(8.5), 1, 1, 1);
+            if (alphaSort)
+            {
+                ui.SetText("1", Color.white);
+                ui.SetBGColor(Color.black);
+            }
+            else
+            {
+                if (reverseSort)
+                {
+                    ui.SetText("9", Color.black);
+                }
+                else
+                {
+                    ui.SetText("1", Color.black);
+                }
+                ui.SetBGColor(Color.white);
+            }
+            ui.SetButton(SortNumerical);
+            new UIElementBorder(ui);
+
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(9.5), 1, 1, 1);
+            if (alphaSort)
+            {
+                if (reverseSort)
+                {
+                    ui.SetText("Z", Color.black);
+                }
+                else
+                {
+                    ui.SetText("A", Color.black);
+                }
+                ui.SetBGColor(Color.white);
+            }
+            else
+            {
+                ui.SetText("A", Color.white);
+                ui.SetBGColor(Color.black);
+            }
+            ui.SetButton(SortAlpha);
+            new UIElementBorder(ui);
 
             UIElementScrollVertical scrollArea = new UIElementScrollVertical();
             scrollArea.SetLocation(UIScaler.GetHCenter(-10.5f), 2, 21, 25);
@@ -114,6 +164,26 @@ namespace Assets.Scripts.UI
             ui.SetText(CommonStringKeys.CANCEL);
             ui.SetButton(delegate { Destroyer.Dialog(); });
             new UIElementBorder(ui);
+        }
+
+        protected void SortNumerical()
+        {
+            if (!alphaSort)
+            {
+                reverseSort = !reverseSort
+            }
+            alphaSort = false;
+            Update();
+        }
+
+        protected void SortAlpha()
+        {
+            if (alphaSort)
+            {
+                reverseSort = !reverseSort
+            }
+            alphaSort = true;
+            Update();
         }
 
         protected void SelectItem(string key)
