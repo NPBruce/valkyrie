@@ -23,6 +23,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     UIElementEditable nameUIE;
     UIElementEditablePaneled infoUIE;
+    Dictionary<string, List<UIElementEditablePaneled>> attacksUIE;
     UIElementEditable healthUIE;
     UIElementEditable healthHeroUIE;
     UIElementEditable horrorUIE;
@@ -195,12 +196,12 @@ public class EditorComponentCustomMonster : EditorComponent
         }
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 7, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "horror")));
-
         if (game.gameType is MoMGameType)
         {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 7, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "horror")));
+
             if (monsterComponent.baseMonster.Length == 0 || monsterComponent.horrorDefined)
             {
                 horrorUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -260,6 +261,8 @@ public class EditorComponentCustomMonster : EditorComponent
                 new UIElementBorder(ui);
             }
             offset += 2;
+            
+            offset = DrawInvestigatorAttacks(offset);
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -464,6 +467,46 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetButton(delegate { RemoveActivation(i); });
             new UIElementBorder(ui, Color.red);
             offset += 1;
+        }
+        return offset + 1;
+    }
+
+    public float DrawInvestigatorAttacks(float offset)
+    {
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 18, 1);
+        ui.SetText(new StringKey("val", "INVESTIGATOR_ATTACKS"));
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(18.5f, offset, 1, 1);
+        ui.SetText(CommonStringKeys.PLUS, Color.green);
+        new UIElementBorder(ui, Color.green);
+        offset += 1;
+
+        attacksUIE = new Dictionary<string, List<UIElementEditablePaneled>>();
+        foreach (string attackType in monsterComponent.investigatorAttacks.Keys)
+        {
+            attacksUIE.Add(attackType, new List<UIElementEditablePaneled>());
+            UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 18, 1);
+            ui.SetText(new StringKey("val", attackType);
+
+            UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.PLUS, Color.green);
+            new UIElementBorder(ui, Color.green);
+            offset += 1;
+
+            foreach (StringKey attack in monsterComponent.investigatorAttacks[attackType])
+            {
+                UIElementEditablePaneled uie = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform())
+                uie.SetLocation(0.5f, offset, 19, 18);
+                uie.SetText(attack.Translate());
+                offset += uie.HeightToTextPadding(1);
+                uie.SetButton(UpdateAttacks);
+                new UIElementBorder(uie);
+                attacksUIE[attackType].Add(uie);
+            }
         }
         return offset + 1;
     }
@@ -771,6 +814,41 @@ public class EditorComponentCustomMonster : EditorComponent
         monsterComponent.horror = 0;
         monsterComponent.horrorDefined = true;
         Update();
+    }
+
+    public void UpdateAttacks()
+    {
+        foreach (string type in monsterComponent.investigatorAttacks.Keys)
+        {
+            int index = 0;
+            foreach (Stringkey entry in monsterComponent.investigatorAttacks[type])
+            {
+                if (attacksUIE[type][index].Empty())
+                {
+                    LocalizationRead.dicts["qst"].Remove(entry);
+                    if (monsterComponent.investigatorAttacks[type].Count == 1)
+                    {
+                        monsterComponent.investigatorAttacks.Remove(type);
+                    }
+                    else
+                    {
+                        monsterComponent.investigatorAttacks[type].RemoveAt(index);
+                    }
+                    Update();
+                    return;
+                }
+                if (attacksUIE[type][index].Changed())
+                {
+                    LocalizationRead.updateScenarioText(entry, attacksUIE[type][index].GetText());
+                    if (!attacksUIE[type][index].HeightAtTextPadding(1))
+                    {
+                        Update();
+                    }
+                    return;
+                }
+                index++;
+            }
+        }
     }
 
     public void UpdateAwareness()
