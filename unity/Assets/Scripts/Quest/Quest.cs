@@ -2007,6 +2007,32 @@ public class Quest
             }
         }
 
+        virtual public IEnumerable<string> GetAttackTypes();
+        {
+            HashSet<string> toReturn = new HashSet<string>();
+            foreach (KeyValuePair<string, AttackData> kv in Game.Get().cd.investigatorAttacks)
+            {
+                if (m.monsterData.ContainsTrait(kv.Value.target))
+                {
+                    toReturn.Add(kv.Value.attackType);
+                }
+            }
+            return toReturn;
+        }
+
+        virtual public StringKey GetRandomAttack(string type)
+        {
+            List<AttackData> validAttacks = new List<AttackData>();
+            foreach (AttackData ad in attacks)
+            {
+                if (ad.attackType.Equals(type))
+                {
+                    validAttacks.Add(ad);
+                }
+            }
+            return validAttacks[Random.Range(0, validAttacks.Count)].text;
+        }
+
         // Save monster data to string
         override public string ToString()
         {

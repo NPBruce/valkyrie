@@ -1467,6 +1467,7 @@ public class QuestData
         public bool horrorDefined = false;
         public int awareness = 0;
         public bool awarenessDefined = false;
+        public Dictionary<string, List<StringKey>> investigatorAttacks = new Dictionary<string, List<StringKey>>();
 
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
@@ -1549,6 +1550,31 @@ public class QuestData
                 awarenessDefined = true;
                 int.TryParse(data["awareness"], out awareness);
             }
+
+            if (data.ContainsKey("attacks"))
+            {
+                foreach(string typeEntry in data["attacks"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string type = typeEntry;
+                    int typeCount = 1;
+                    int typeSeparator = typeEntry.IndexOf(':');
+                    if (typeSeparator >= 0)
+                    {
+                        type = typeEntry.Substring(0, typeSeparator);
+                        int.TryParse(typeEntry.Substring(typeSeparator + 1), out typeCount);
+                    }
+
+                    if (!investigatorAttacks.ContainsKey(type))
+                    {
+                        investigatorAttacks.Add(type, new List<StringKey>());
+                    }
+
+                    for (int i = 1; i <= typeCount; i++)
+                    {
+                        investigatorAttacks[type].Add(genQuery("Attack_" + type + "_" + i));
+                    }
+                }
+            }
         }
 
         // get path of monster image
@@ -1617,6 +1643,16 @@ public class QuestData
             if (awarenessDefined)
             {
                 r.Append("awareness=").AppendLine(awareness.ToString());
+            }
+
+            if (investigatorAttacks.Count > 0)
+            {
+                string attacksLine = "attacks=";
+                foreach (string type in investigatorAttacks.Keys)
+                {
+                    attacksLine += type + ':' + investigatorAttacks[type].Count + " ");
+                }
+                r.AppendLine(attacksLine.Substring(0, attacksLine.Length - 1));
             }
 
             return r.ToString();

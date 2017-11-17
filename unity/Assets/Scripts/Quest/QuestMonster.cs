@@ -113,6 +113,27 @@ public class QuestMonster : MonsterData
             awareness = baseObject.awareness;
         }
     }
+
+    override public IEnumerable<string> GetAttackTypes();
+    {
+        HashSet<string> toReturn = base.GetAttackTypes();
+        foreach (string type in cMonster.investigatorAttacks.Keys)
+        {
+            toReturn.Add(type);
+        }
+        return toReturn;
+    }
+
+    override public StringKey GetRandomAttack(string type)
+    {
+        if (!cMonster.investigatorAttacks.ContainsKey(type))
+        {
+            return base.GetRandomAttacktype);
+        }
+
+        List<StringKey> attackOptions = cMonster.investigatorAttacks[type];
+        return attackOptions[Random.Range(0, attackOptions.Count)];
+    }
 }
 
 // Class for quest defined activations
