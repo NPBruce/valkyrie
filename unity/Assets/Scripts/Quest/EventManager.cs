@@ -411,8 +411,8 @@ public class EventManager
             }
         }
 
-        // Does this event end the quest?
-        if (eventData.sectionName.IndexOf("EventEnd") == 0)
+        // Has the quest ended?
+        if (game.quest.vars.GetValue("$end") != 0)
         {
             Destroyer.MainMenu();
             return;

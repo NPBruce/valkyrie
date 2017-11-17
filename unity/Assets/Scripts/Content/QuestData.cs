@@ -68,6 +68,14 @@ public class QuestData
         // The main data file is included
         iniFiles.Add("quest.ini");
 
+        // Quest is a special component, must be in quest.ini
+        if (questIniData.Get("Quest") == null)
+        {
+            ValkyrieDebug.Log("Error: Quest section missing from quest.ini");
+            return;
+        }
+        quest = new Quest(questIniData.Get("Quest"));
+
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
         {
@@ -152,11 +160,6 @@ public class QuestData
             Application.Quit();
         }
 
-        // Quest is a special component
-        if (name.Equals("Quest"))
-        {
-            quest = new Quest(content);
-        }
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
@@ -180,7 +183,7 @@ public class QuestData
         }
         if (name.IndexOf(Event.type) == 0)
         {
-            Event c = new Event(name, content, source);
+            Event c = new Event(name, content, source, quest.format);
             components.Add(name, c);
         }
         if (name.IndexOf(Spawn.type) == 0)
@@ -789,7 +792,7 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data, string path) : base(name, data, path)
+        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path)
         {
             typeDynamic = type;
 
@@ -903,6 +906,11 @@ public class QuestData
                 foreach (string s in array)
                 {
                     operations.Add(new VarOperation(s));
+                }
+                // Backwards support for format < 8
+                if (format < 8 && sectionName.StartsWith("EventEnd"))
+                {
+                    operations.Add(new VarOperation("$end,=,1"));
                 }
             }
 
@@ -1847,7 +1855,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 8;
+        public static int currentFormat = 9;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
