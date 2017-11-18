@@ -57,11 +57,16 @@ public class InvestigatorItems
         foreach (string item in game.quest.items)
         {
             Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
-            Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+            Sprite sprite = null;
+            if (tex != null)
+                sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(8f * x) - 19, 5f + (9f * y), 6, 6);
-            ui.SetImage(sprite);
+            if(sprite != null)
+            { 
+                ui.SetImage(sprite);
+            }
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);

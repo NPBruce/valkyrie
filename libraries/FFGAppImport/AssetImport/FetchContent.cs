@@ -332,7 +332,8 @@ namespace FFGAppImport
             // Default file name
             string fileCandidate = contentPath + "/img/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
-            ValkyrieDebug.Log("ExportTexture: " + fileName);
+            fileName = FixFilename(fileName);
+            ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
             while (File.Exists(fileName))
@@ -390,6 +391,9 @@ namespace FFGAppImport
                 case 32: //PVRTC_RGB4
                 case 33: //PVRTC_RGBA4
                 case 34: //ETC_RGB4
+                case 47: //ETC2_RGBA8
+                    // We put the image data in a PVR container. See the specification for details
+                    // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
                         using (var writer = new BinaryWriter(fs))
@@ -417,15 +421,20 @@ namespace FFGAppImport
                 case 28: //DXT1 Crunched
                 case 29: //DXT1 Crunched
                 default:
-                    using (var fs = File.Open(fileName, FileMode.Create))
-                    {
-                        using (var writer = new BinaryWriter(fs))
-                        {
-                            writer.Write(texture2D.image_data);
-                        }
-                    }
+                    File.WriteAllBytes(fileName, texture2D.image_data);
                     break;
             }
+        }
+
+        private string FixFilename(string file)
+        {
+            if (importData.platform != Platform.Android) return file;
+            string filename = Path.GetFileNameWithoutExtension(file);
+            if (filename.Equals("SpriteAtlasTexture-ATLAS_FEATURES_CORE (Group 0)-2048x1024-fmt47", StringComparison.InvariantCultureIgnoreCase))
+                filename = "SpriteAtlasTexture-ATLAS_FEATURES_CORE (Group 0)-2048x1024-fmt12";
+            else if (filename.Equals("SpriteAtlasTexture-ATLAS_FEATURES_CORE (Group 1)-512x1024-fmt10"))
+                filename = "SpriteAtlasTexture-ATLAS_FEATURES_CORE (Group 1)-512x1024-fmt34";
+            return Path.Combine(Path.GetDirectoryName(file), filename + Path.GetExtension(file));
         }
 
         // Save audio to file
