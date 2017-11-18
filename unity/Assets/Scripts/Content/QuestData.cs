@@ -1650,7 +1650,7 @@ public class QuestData
                 string attacksLine = "attacks=";
                 foreach (string type in investigatorAttacks.Keys)
                 {
-                    attacksLine += type + ':' + investigatorAttacks[type].Count + " ");
+                    attacksLine += type + ':' + investigatorAttacks[type].Count + " ";
                 }
                 r.AppendLine(attacksLine.Substring(0, attacksLine.Length - 1));
             }

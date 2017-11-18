@@ -66,7 +66,7 @@ public class InvestigatorItems
 
             if (!itemSort.ContainsKey(typeString))
             {
-                itemSort.Add(typeString, new SortedList<string, string>())
+                itemSort.Add(typeString, new SortedList<string, string>());
             }
 
             // Duplicate names

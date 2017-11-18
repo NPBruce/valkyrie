@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItem(display, key, color));
         }
 
-        virtual void AddItem(SelectionItem item)
+        virtual public void AddItem(SelectionItem item)
         {
             items.Add(items.Count, item);
             alphaItems.Add(item.GetDisplay(), item);
@@ -82,7 +82,7 @@ namespace Assets.Scripts.UI
 
             // Sort Buttons
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(8.5), 1, 1, 1);
+            ui.SetLocation(UIScaler.GetHCenter(8.5f), 1, 1, 1);
             if (alphaSort)
             {
                 ui.SetText("1", Color.white);
@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI
             new UIElementBorder(ui);
 
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(9.5), 1, 1, 1);
+            ui.SetLocation(UIScaler.GetHCenter(9.5f), 1, 1, 1);
             if (alphaSort)
             {
                 if (reverseSort)
@@ -170,7 +170,7 @@ namespace Assets.Scripts.UI
         {
             if (!alphaSort)
             {
-                reverseSort = !reverseSort
+                reverseSort = !reverseSort;
             }
             alphaSort = false;
             Update();
@@ -180,7 +180,7 @@ namespace Assets.Scripts.UI
         {
             if (alphaSort)
             {
-                reverseSort = !reverseSort
+                reverseSort = !reverseSort;
             }
             alphaSort = true;
             Update();

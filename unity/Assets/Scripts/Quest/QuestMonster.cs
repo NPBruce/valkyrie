@@ -114,21 +114,11 @@ public class QuestMonster : MonsterData
         }
     }
 
-    override public IEnumerable<string> GetAttackTypes();
-    {
-        HashSet<string> toReturn = base.GetAttackTypes();
-        foreach (string type in cMonster.investigatorAttacks.Keys)
-        {
-            toReturn.Add(type);
-        }
-        return toReturn;
-    }
-
     override public StringKey GetRandomAttack(string type)
     {
         if (!cMonster.investigatorAttacks.ContainsKey(type))
         {
-            return base.GetRandomAttacktype);
+            return base.GetRandomAttack(type);
         }
 
         List<StringKey> attackOptions = cMonster.investigatorAttacks[type];

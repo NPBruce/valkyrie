@@ -2007,19 +2007,6 @@ public class Quest
             }
         }
 
-        virtual public IEnumerable<string> GetAttackTypes();
-        {
-            HashSet<string> toReturn = new HashSet<string>();
-            foreach (KeyValuePair<string, AttackData> kv in Game.Get().cd.investigatorAttacks)
-            {
-                if (m.monsterData.ContainsTrait(kv.Value.target))
-                {
-                    toReturn.Add(kv.Value.attackType);
-                }
-            }
-            return toReturn;
-        }
-
         virtual public StringKey GetRandomAttack(string type)
         {
             List<AttackData> validAttacks = new List<AttackData>();

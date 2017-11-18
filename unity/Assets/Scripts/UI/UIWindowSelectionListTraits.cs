@@ -59,7 +59,7 @@ namespace Assets.Scripts.UI
             Update();
         }
 
-        override void Update()
+        override public void Update()
         {
             bool resetScroll = false;
             if (traitScrollArea == null)
@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI
 
             // Sort Buttons
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(15.5), 1, 1, 1);
+            ui.SetLocation(UIScaler.GetHCenter(15.5f), 1, 1, 1);
             if (alphaSort)
             {
                 ui.SetText("1", Color.white);
@@ -106,7 +106,7 @@ namespace Assets.Scripts.UI
             new UIElementBorder(ui);
 
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(16.5), 1, 1, 1);
+            ui.SetLocation(UIScaler.GetHCenter(16.5f), 1, 1, 1);
             if (alphaSort)
             {
                 if (reverseSort)
@@ -336,7 +336,7 @@ namespace Assets.Scripts.UI
             AddItem(CreateItem(component), color);
         }
 
-        override void AddItem(SelectionItem item)
+        override public void AddItem(SelectionItem item)
         {
             if (item is SelectionItemTraits)
             {
@@ -400,7 +400,7 @@ namespace Assets.Scripts.UI
             {
                 if (tg.GetName().Equals(type))
                 {
-                    SelectTrait(tg, trait)
+                    SelectTrait(tg, trait);
                     return;
                 }
             }
@@ -412,7 +412,7 @@ namespace Assets.Scripts.UI
             {
                 if (tg.GetName().Equals(type))
                 {
-                    ExcludeTrait(tg, trait)
+                    ExcludeTrait(tg, trait);
                     return;
                 }
             }
@@ -438,7 +438,7 @@ namespace Assets.Scripts.UI
                 {
                     if (!t.Key.Equals(e))
                     {
-                        ExcludeTrait(tg, trait)
+                        ExcludeTrait(tg, trait);
                     }
                 }
             }

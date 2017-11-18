@@ -477,7 +477,7 @@ public class EditorComponentCustomMonster : EditorComponent
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "INVESTIGATOR_ATTACKS"));
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         new UIElementBorder(ui, Color.green);
@@ -487,11 +487,11 @@ public class EditorComponentCustomMonster : EditorComponent
         foreach (string attackType in monsterComponent.investigatorAttacks.Keys)
         {
             attacksUIE.Add(attackType, new List<UIElementEditablePaneled>());
-            UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 18, 1);
-            ui.SetText(new StringKey("val", attackType);
+            ui.SetText(new StringKey("val", attackType));
 
-            UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             new UIElementBorder(ui, Color.green);
@@ -499,7 +499,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
             foreach (StringKey attack in monsterComponent.investigatorAttacks[attackType])
             {
-                UIElementEditablePaneled uie = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform())
+                UIElementEditablePaneled uie = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
                 uie.SetLocation(0.5f, offset, 19, 18);
                 uie.SetText(attack.Translate());
                 offset += uie.HeightToTextPadding(1);

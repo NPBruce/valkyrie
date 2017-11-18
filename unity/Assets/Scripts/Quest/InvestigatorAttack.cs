@@ -33,7 +33,7 @@ public class InvestigatorAttack
         new UIElementBorder(ui);
 
         float offset = 3f;
-        foreach (string type in monster.GetAttackTypes())
+        foreach (string type in monster.monsterData.GetAttackTypes())
         {
             string tmpType = type;
             ui = new UIElement();
