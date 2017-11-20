@@ -227,10 +227,7 @@ namespace FFGAppImport
                     {
                         byte[] part = File.ReadAllBytes(file.Value);
                         fs.Write(part, 0, part.Length);
-                    }
-                    // delete all split files, to make space for the extracted files
-                    foreach (var file in e.Value)
-                    {
+                        // delete all split files, to make space for the extracted files
                         File.SetAttributes(file.Value, FileAttributes.Normal); // remove write protection
                         File.Delete(file.Value); // delete split files to free disk space
                     }
@@ -289,7 +286,7 @@ namespace FFGAppImport
             ValkyrieDebug.Log("Moving StreamingAssets dir '" + dirAssetBundles + "' to '" + dirAssetBundlesWin + "'");
             Directory.Move(dirAssetBundles, dirAssetBundlesWin);
         }
-        
+
         protected string GetObbPath(string prefix, string suffix)
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
