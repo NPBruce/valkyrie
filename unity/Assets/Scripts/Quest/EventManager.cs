@@ -836,6 +836,7 @@ public class EventManager
         output = output.Replace("{MAD21}", "");
         output = output.Replace("{MAD22}", "");
         output = output.Replace("{MAD23}", "");
+        output = output.Replace("{MAD25}", "");
 
         return output;
     }
@@ -881,6 +882,7 @@ public class EventManager
         output = output.Replace("","{MAD21}");
         output = output.Replace("","{MAD22}");
         output = output.Replace("", "{MAD23}");
+        output = output.Replace("", "{MAD25}");
 
         return output;
     }

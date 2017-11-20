@@ -220,7 +220,7 @@ class MoMGameType : GameType
 
     public override Font GetFont()
     {
-        return (Font)Resources.Load("fonts/mad");
+        return (Font)Resources.Load("fonts/MADGaramondPro");
     }
 
     public override Font GetHeaderFont()
