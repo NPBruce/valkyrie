@@ -756,6 +756,31 @@ public class ContentData {
         public List<string> clone;
     }
 
+    /// <summary>
+    /// This will resove the asset name to a matching file and return the full file path including the file extension.
+    /// </summary>
+    public static string ResolveTextureFile(string name)
+    {
+        if (name == null) throw new System.ArgumentNullException("name");
+        if (File.Exists(name))
+        {
+            return name;
+        }
+
+        // Check all possible extensions
+        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg" })
+        {
+            string file = name + extension;
+            if (File.Exists(file))
+            {
+                return file;
+            }
+        }
+
+        ValkyrieDebug.Log("Could not resolve file: '" + name + "'");
+        return null;
+    }
+
     // Get a unity texture from a file (dds or other unity supported format)
     public static Texture2D FileToTexture(string file)
     {
@@ -763,27 +788,16 @@ public class ContentData {
         return FileToTexture(file, Vector2.zero, Vector2.zero);
     }
 
-    // Get a unity texture from a file (dds or other unity supported format)
+    // Get a unity texture from a file (dds, svr or other unity supported format)
     // Crop to pos and size in pixels
     public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
         if (file == null) throw new System.ArgumentNullException("file");
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            if (!File.Exists(file))
-            {
-                string prefix = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
-                string f;
-                if (File.Exists(f = prefix + ".pvr"))
-                {
-                    file = f;
-                }
-                else if (File.Exists(f = prefix + ".tex"))
-                {
-                    file = f;
-                }
-            }
-        }
+        file = ResolveTextureFile(file);
+
+        // return if file could not be resolved
+        if (file == null)
+            return null;
 
         Texture2D texture = null;
 
@@ -799,7 +813,6 @@ public class ContentData {
         else
         {
             string ext = Path.GetExtension(file);
-            // Unity doesn't support dds directly, have to do hackery
             if (ext.Equals(".dds", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 texture = DdsToTexture(file);
@@ -824,7 +837,7 @@ public class ContentData {
         // Array of pixels from image
         Color[] pix = texture.GetPixels(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
         // Empty texture
-        Texture2D subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        var subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
         // Set pixels
         subTexture.SetPixels(pix);
         subTexture.Apply();
@@ -834,6 +847,7 @@ public class ContentData {
     private static Texture2D DdsToTexture(string file)
     {
         if (file == null) throw new System.ArgumentNullException("file");
+        // Unity doesn't support dds directly, have to do hackery
         // Read the data
         byte[] ddsBytes = null;
         try
@@ -1526,20 +1540,29 @@ public class GenericData
 
         // If image specified it is relative to the path of the ini file
         // absolute paths are not supported
-        if (content.ContainsKey("image"))
+        // resolve optional images like image, image2, image3 and so on
+        int count = 0;
+        while (true)
         {
-            if (content["image"].IndexOf("{import}") == 0)
+            string key = "image" + (count > 0 ? (count + 1).ToString() : "");
+            if (!content.ContainsKey(key))
             {
-                image = ContentData.ImportPath() + content["image"].Substring(8);
+                image = ""; // No image is a valid condition
+                break;
+            }
+            if (content[key].StartsWith("{import}"))
+            {
+                image = Path.Combine(ContentData.ImportPath(), content[key].Substring(9));
             }
             else
             {
-                image = path + "/" + content["image"];
+                image = Path.Combine(path, content[key]);
             }
-        }
-        else // No image is a valid condition
-        {
-            image = "";
+            if (ContentData.ResolveTextureFile(image) != null)
+            {
+                break;
+            }
+            count++;
         }
     }
 
