@@ -821,11 +821,11 @@ public class EditorComponentCustomMonster : EditorComponent
         foreach (string type in monsterComponent.investigatorAttacks.Keys)
         {
             int index = 0;
-            foreach (Stringkey entry in monsterComponent.investigatorAttacks[type])
+            foreach (StringKey entry in monsterComponent.investigatorAttacks[type])
             {
                 if (attacksUIE[type][index].Empty())
                 {
-                    LocalizationRead.dicts["qst"].Remove(entry);
+                    LocalizationRead.dicts["qst"].Remove(entry.key);
                     if (monsterComponent.investigatorAttacks[type].Count == 1)
                     {
                         monsterComponent.investigatorAttacks.Remove(type);
@@ -839,7 +839,7 @@ public class EditorComponentCustomMonster : EditorComponent
                 }
                 if (attacksUIE[type][index].Changed())
                 {
-                    LocalizationRead.updateScenarioText(entry, attacksUIE[type][index].GetText());
+                    LocalizationRead.updateScenarioText(entry.key, attacksUIE[type][index].GetText());
                     if (!attacksUIE[type][index].HeightAtTextPadding(1))
                     {
                         Update();

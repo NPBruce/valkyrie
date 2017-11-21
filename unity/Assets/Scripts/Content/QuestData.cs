@@ -305,7 +305,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Door(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Door(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -360,7 +360,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Token(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Token(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -426,7 +426,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public UI(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public UI(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -595,7 +595,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Spawn(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Spawn(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             typeDynamic = type;
             // First try to a list of specific types
@@ -1270,7 +1270,7 @@ public class QuestData
         }
 
         // Construct from ini data
-        public Puzzle(string name, Dictionary<string, string> data, string path) : base(name, data, path)
+        public Puzzle(string name, Dictionary<string, string> data, string path) : base(name, data, path, Quest.currentFormat)
         {
             typeDynamic = type;
 

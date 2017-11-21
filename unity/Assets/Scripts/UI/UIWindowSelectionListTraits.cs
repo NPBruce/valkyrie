@@ -270,7 +270,7 @@ namespace Assets.Scripts.UI
 
         protected void SelectTrait(TraitGroup group, string trait)
         {
-            if (!traits.ContainsKey(trait)) return;
+            if (!group.traits.ContainsKey(trait)) return;
 
             group.traits[trait].selected = !group.traits[trait].selected;
             group.traits[trait].excluded = false;
@@ -279,7 +279,7 @@ namespace Assets.Scripts.UI
 
         protected void ExcludeTrait(TraitGroup group, string trait)
         {
-            if (!traits.ContainsKey(trait)) return;
+            if (!group.traits.ContainsKey(trait)) return;
 
             group.traits[trait].excluded = !group.traits[trait].excluded;
             group.traits[trait].selected = false;
