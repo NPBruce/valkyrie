@@ -178,6 +178,8 @@ EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Quota
 RECOVER,Recover
+INVESTIGATOR_ATTACKS,Investigator Attacks
+
 
 RELOAD,Reload
 REMOVE_COMPONENTS,Remove Components:
