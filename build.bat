@@ -8,6 +8,7 @@ rmdir /s /q build\batchLinux
 rmdir /s /q build\macos
 rmdir /s /q build\win
 rmdir /s /q build\linux
+del build\Valkyrie-android-%version%.apk
 
 rem create base structure
 mkdir build
@@ -37,6 +38,7 @@ rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\Valkyrie-android-%version%.apk
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
@@ -47,16 +49,6 @@ rem duplicate licence to macos/linux
 xcopy /I /E /Y build\batch build\batchMac\Valkyrie.app
 xcopy /I /E /Y build\batch build\batchLinux\valkyrie-linux-%version%
 
-rem copy content from source to win release
-xcopy /E /Y content build\batch\valkyrie_Data\content
-rem remove imported content
-rmdir /s /q build\batch\valkyrie_Data\content\D2E\ffg
-rmdir /s /q build\batch\valkyrie_Data\content\MoM\ffg
-rem copy content from win to macos
-xcopy /I /E /Y build\batch\valkyrie_Data build\batchMac\Valkyrie.app\Contents
-rem copy content from win to linux
-xcopy /I /E /Y build\batch\valkyrie_Data build\batchLinux\valkyrie-linux-%version%\valkyrie_Data
-
 rem copy over windows build
 xcopy /E /Y build\win build\batch
 rem copy over macos build
@@ -65,12 +57,16 @@ rem copy over linux build
 xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%version%
 
 rem delete previous build
-del build\valkyrie-win-%version%.zip
+del build\valkyrie-windows-%version%.exe
+del build\valkyrie-windows-%version%.zip
 del build\valkyrie-macos-%version%.zip
 del build\valkyrie-linux-%version%.tar.gz
 
+rem create windows zip
+cd build\batch
+"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-windows-%version%.zip * -r
 rem create macos zip
-cd build\batchMac
+cd ..\batchMac
 "C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-macos-%version%.zip * -r
 rem create linux tar ball
 cd ..\batchLinux
@@ -78,6 +74,9 @@ cd ..\batchLinux
 cd ..
 "C:\Program Files\7-Zip\7z.exe" a valkyrie-linux-%version%.tar.gz valkyrie-linux-%version%.tar
 del valkyrie-linux-%version%.tar
+rem move apk
+move android\test.apk valkyrie-android-%version%.apk
+
 cd ..
 
 set /a num=%version:~-1% 2>nul

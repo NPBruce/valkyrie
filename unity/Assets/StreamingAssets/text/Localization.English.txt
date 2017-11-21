@@ -1,0 +1,435 @@
+.,English
+// ICONS
+ICON_SKILL_STRENGTH,
+ICON_SKILL_AGILITY,
+ICON_SKILL_OBSERVATION,
+ICON_SKILL_LORE,
+ICON_SKILL_INFLUENCE,
+ICON_SKILL_WILL,
+ICON_ACTION,
+ICON_SUCCESS_RESULT,
+ICON_INVESTIGATION_RESULT,
+ICON_PRODUCT_MAD01,
+ICON_PRODUCT_MAD06,
+ICON_PRODUCT_MAD09,
+ICON_PRODUCT_MAD20,
+ICON_PRODUCT_MAD21,
+ICON_PRODUCT_MAD22,
+ICON_PRODUCT_MAD23,
+ICON_PRODUCT_MAD25,
+
+// TEXTS
+ABILITY,Ability
+ABOUT,About
+ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ACTIONS,Actions
+ACTIVATED,Activated
+ACTIVATION,Activation
+ACTIVATIONS,Activations
+ADD_COMPONENTS,Add Components:
+COMPONENTS,Components
+RENAME,Rename
+SAVE_TEST,Save & Test
+SOURCE,Source
+COMMENT,Comment
+TRUE,True
+FALSE,False
+SNAP,Snap
+FREE,Free
+CONFIRM,Confirm
+INSPECT,Inspect
+DURATION,Duration
+DESCRIPTION,Description
+AUTHORS,Authors
+DIFFICULTY,Difficulty
+VALIDATE_SCENARIO,Validate
+FILE,File
+OPTIMIZE_LOCALIZATION,Optimize Localisation
+CREATE_PACKAGE,Create Package
+REORDER_COMPONENTS,Reorder Components
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
+ASSIGN,Assign
+ATTACK,Attack
+ATTACK_MESSAGE,Attack Message:
+AUDIO,Audio
+BACK,Back
+BASE,Base
+BUTTON,Button
+BUTTONS,Buttons
+CAMERA,Camera
+CANCEL,Cancel
+CHOOSE_LANG,Choose Language
+CLEAR_FIRE,Clear Fire
+COLOR,Colour
+COMPONENT_NAME,Component Name:
+COMPONENT_TO_DELETE,Component to Delete:
+CONTENT_IMPORT,Import Content
+CONTENT_IMPORTING,Importing...
+CONTENT_REIMPORT,Reimport Content
+CONTINUE,Continue
+COPY,Copy
+CUSTOMMONSTER,CustomMonster
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
+D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_HEROES_NAME,Heroes
+D2E_HERO_NAME,Hero
+D2E_NAME,Descent: Journeys in the Dark Second Edition
+D2E_QUEST_NAME,Quest
+DEFEATED,Defeated
+DELETE,Delete
+DIALOG,Dialog
+DOOR,Door
+DOWNLOAD,Download
+DOWNLOAD_LIST,Downloading Package List
+DOWNLOAD_PACKAGE,Downloading Package
+E,E
+EFFECTS,Effects
+EMPTY,
+END_TURN,End Turn
+ROUND,Round {0}
+EVADE,Evade
+EVENT,Event
+EXIT,Exit
+FINISHED,Finished
+FIRST,First
+FORCE_ACTIVATE,Force Activate
+
+HEALTH,Health
+HEALTH_HERO,Per Hero
+HIGHLIGHT,Highlight
+HORROR_CHECK,Horror Check
+AWARENESS,Awareness
+INDENT,  {0}
+INFO,Info
+INFORMATION,Information
+INITIAL_MESSAGE,Initial Message:
+ITEM,Item
+QITEM,QItem
+KO,KO
+LOAD_QUEST,Load {0}
+LOG,Log
+SKILLS,Skills
+ITEMS,Items
+ITEMS_SMALL,Items
+GOLD,Gold
+MAIN_MENU,Main Menu
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Cam
+MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Cam
+MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness, install via Steam
+MOM_APP_NOT_FOUND_ANDROID,Unable to locate Mansions of Madness
+MOM_HEROES_NAME,Investigators
+MOM_HERO_NAME,Investigator
+MOM_NAME,Mansions of Madness Second Edition
+MOM_QUEST_NAME,Scenario
+MONSTER,Monster
+MONSTER_ATTACKS,The monster attacks.
+MONSTER_MASTER,Master
+MONSTER_MASTER_X,Master {0}
+MONSTER_MINION,Minion
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Unique
+MOVES,Moves
+MPLACE,MPlace
+MUSIC,Music
+NAME,Name
+NEW,New
+NEW_X,{New {0}}
+NONE,{None}
+
+NEXT_EVENTS,Next Events
+NOT_FIRST,Not First
+NO_ATTACK_MESSAGE,No Attack Message:
+
+NUMBER,Number
+NUMBER_HEROS,{0} Heros:
+OK,Ok
+OP,Op
+OPTIONS,Options
+PLACEMENT,Placement
+
+PLACE_IMG,Place Img:
+POOL_TRAITS,Pool Traits:
+POSITION,Position
+POSITION_TYPE_HIGHLIGHT,Highlight
+POSITION_TYPE_UNUSED,Unused
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Alt Level
+PUZZLE_CLASS,Class
+PUZZLE_CLASS_SELECT,Select Class
+IMAGE,Image
+
+PUZZLE_LEVEL,Level
+PUZZLE_SELECT_SKILL,Select Skill
+PUZZLE_IMAGE_CLASS,image
+PUZZLE_CODE_CLASS,code
+PUZZLE_SLIDE_CLASS,slide
+QUEST,Quest
+QUEST_NAME_DOWNLOAD,Download {0}
+QUEST_NAME_EDITOR,{0} Editor
+EDITOR,Editor
+QUEST_NAME_UPDATE,  [Update] {0}
+QUOTA,Quota
+RECOVER,Recover
+INVESTIGATOR_ATTACKS,Investigator Attacks
+
+
+RELOAD,Reload
+REMOVE_COMPONENTS,Remove Components:
+REQUIRED_EXPANSIONS,Required Expansions:
+REQUIRES_EXPANSION, Requires:  {0}
+
+REQ_TRAITS,Req. Traits:
+RESET,Reset
+ROTATE_TO,Rotate: {0}
+ROTATION,Rotation
+SAVE,Save
+AUTOSAVE,Auto Save
+SELECT_SAVE,Select Save
+SELECT,Select {0}
+SELECT_CLASS,Select Class
+SELECTION,Selection
+SELECT_CONTENT,Select Content
+SELECT_EXPANSION,Select Expansion Content
+SELECT_IMAGE,Select Image
+SELECT_ITEM,Select Item
+SELECT_PACK,Select Pack
+SELECT_TO_COPY,Select {0} To Copy
+SELECT_TO_DELETE,Select {0} To Delete
+HIDDEN,Hidden
+ACTIVE,Active
+SET,Set
+SKILL,Skill
+SELECT_SKILLS,Select Skills
+SPAWN,Spawn
+STARTING_ITEM,Starting Item
+STARTING_ITEMS,Starting Items
+START_QUEST,Start {0}
+START,Start
+
+TESTS,Tests
+TILE,Tile
+
+TOKEN,Token
+TOOLS,Tools
+TOTAL_MOVES,Total Moves
+TRAITS,Traits
+TRIGGER,Trigger
+TYPE,Type
+TYPES,Types
+UNABLE_BUTTON,Unable Button:
+
+UI,UI
+UNITS,Units
+HORIZONTAL,Horizontal
+VERTICAL,Vertical
+ALIGN,Align
+POSITION,Position
+SIZE,Size
+TEXT_SIZE,Text Size
+ASPECT,Aspect
+BORDER,Border
+NO_BORDER,No Border
+UNDO,Undo
+UNIQUE_DEFEATED,Unique\nDefeated
+UNIQUE_INFO,Unique Information
+UNIQUE_MONSTER,Unique Monster
+UNIQUE_TITLE,Unique Title
+UNUSED,Unused
+VALUE,Value
+VAR,Var
+VARS,Vars
+VAR_NAME,Var Name:
+X_ACTIVATED,{0} Activated
+
+BUY,Buy
+SELL,Sell
+CLASS,Class
+ACT_1,Act I
+ACT_2,Act II
+
+X_COLON,{0}:
+
+//Packs
+SoA,SoA 
+BtT,BtT 
+CotW,CotW 
+FA,FA 
+MoM1E,MoM1E 
+base,base 
+RN,RN 
+SM,SM 
+
+//Items
+weapon,Weapon
+firearm,Firearm
+heavyweapon,Heavy Weapon
+heavy,Heavy Weapon
+tome,Tome
+equipment,Equipment
+lightsource,Lightsource
+bladedweapon,Bladed Weapon
+bladed,Bladed Weapon
+spell,Spell
+key,Key
+evidence,Evidence
+ally,Ally
+
+//Audio
+menu,Menu
+music,Music
+quest,Quest
+defeated,Defeated
+newround,New Round
+attack,Attack
+unarmed,Unarmed
+horror,Horror
+search,Search
+explore,Explore
+
+//Heroes
+latari,Latari
+dwarf,Dwarf
+gnome,Gnome
+male,Male
+female,Female
+
+//monsters
+undead,Undead
+humanoid,Humanoid
+spirit,Spirit
+beast,Beast
+agent,Agent
+lieutenant,Lieutenant
+small,Small
+medium,Medium
+huge,Huge
+massive,Massive
+building,Building
+melee,Melee
+ranged,Ranged
+goblin,Goblin
+cursed,Cursed
+cave,Cave
+wilderness,Wilderness
+civilized,Civilized
+dark,Dark
+mountain,Mountain
+cold,Cold
+hot,Hot
+water,Water
+
+//Tiles
+basement,Basement
+river,River
+street,Street
+hallway,Hallway
+bathroom,Bathroom
+bedroom,Bedroom
+kitchen,Kitchen
+dock,Dock
+storage,Storage
+outside,Outside
+inside,Inside
+small,Small
+medium,Medium
+big,Big
+transition,Transition
+throne,Throne
+pit,Pit
+farm,Farm
+tomb,Tomb
+library,Library
+graves,Graves
+bridge,Bridge
+stairs,Stairs
+torture,Torture
+tents,Tents
+stables,Stables
+hall,Hall
+map,Map
+bedroom,Bedroom
+city,City
+fountain,Fountain
+blackrealm,Blackrealm
+altar,Altar
+beds,Beds
+study,Study
+prison,Prison
+plinth,Plinth
+tavern,Tavern
+statues,Statues
+drawbridge,Drawbridge
+rubble,Rubble
+treasure,Treasure
+stone,Stone
+dirt,Dirt
+timber,Timber
+snow,Snow
+lava,Lava
+swamp,Swamp
+sludge,Sludge
+
+// Colors
+black,Black
+white,White
+red,Red
+lime,Lime
+blue,Blue
+yellow,Yellow
+aqua,Aqua
+cyan,Cyan
+magenta,Magenta
+fuchsia,Fuchsia
+silver,Silver
+gray,Gray
+maroon,Maroon
+olive,Olive
+green,Green
+purple,Purple
+teal,Teal
+navy,Navy
+
+//Puzzles
+image,Image
+code,Code
+slide,Slide
+SYMBOL,Symbol
+ELEMENT,Element
+
+// Events
+Ordered,Ordered
+Random,Random
+
+//Inherited from FFG localization files,
+SET_FIRE,Set Fire
+INVESTIGATOR_ELIMINATED,Investigator Eliminated
+CLOSE,Close
+PUZZLE_GUESS,Guess
+
+UP,Up
+DOWN,Down
+LEFT,Left
+RIGHT,Right
+
+PHASE_INVESTIGATOR,Investigator Phase
+PHASE_MYTHOS,Mythos Phase
+MONSTER_STEP,Monster Step
+HORROR_STEP,Horror Step
+END_PHASE,End Phase
+
+ATTACK_PROMPT,Weapon type to attack with?
+ATTACK_WITH_HEAVY_WEAPON, Attack with a [i]Heavy Weapon[/i]
+ATTACK_WITH_BLADED_WEAPON, Attack with a [i]Bladed Weapon[/i]
+ATTACK_WITH_FIREARM, Attack with a [i]Firearm[/i]
+ATTACK_WITH_SPELL, Attack with a Spell
+ATTACK_WITH_UNARMED, Attack Unarmed
+
+ACTION_X, {0}

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
 using ValkyrieTools;
+using Ionic.Zip;
+using System.IO;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -111,21 +112,33 @@ public class Game : MonoBehaviour {
         if (config.data.Get("UserConfig") == null)
         {
             // English is the default current language
-            config.data.Add("UserConfig", "currentLang", DictionaryI18n.DEFAULT_LANG);
+            config.data.Add("UserConfig", "currentLang", "English");
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
-        try
+        // On android extract streaming assets for use
+        if (Application.platform == RuntimePlatform.Android)
         {
-            TextAsset localizationFile = Resources.Load("Text/Localization") as TextAsset;
-            LocalizationRead.AddDictionary("val", LocalizationRead.ReadFromTextAsset(localizationFile, currentLang));
-            LocalizationRead.changeCurrentLangTo(currentLang);
+            System.IO.Directory.CreateDirectory(ContentData.ContentPath());
+            using (ZipFile jar = ZipFile.Read(Application.dataPath))
+            {
+                foreach (ZipEntry e in jar)
+                {
+                    if (!e.FileName.StartsWith("assets")) continue;
+                    if (e.FileName.StartsWith("assets/bin")) continue;
+
+                    e.Extract(ContentData.ContentPath() + "../..", ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
         }
-        catch (System.Exception e)
+
+        DictionaryI18n valDict = new DictionaryI18n();
+        foreach (string file in System.IO.Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt"))
         {
-            ValkyrieDebug.Log("Error loading valkyrie localization file:" + e.Message);
+            valDict.AddDataFromFile(file);
         }
+        LocalizationRead.AddDictionary("val", valDict);
 
         roundControl = new RoundController();
 
@@ -332,36 +345,13 @@ public class Game : MonoBehaviour {
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            try
+            string appData = Path.Combine(Android.GetStorage(), "Valkyrie");
+            if (appData != null)
             {
-                System.IntPtr obj_context = AndroidJNI.FindClass("android/content/ContextWrapper");
-                System.IntPtr method_getFilesDir = AndroidJNIHelper.GetMethodID(obj_context, "getFilesDir", "()Ljava/io/File;");
-
-                using (AndroidJavaClass cls_UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-                {
-                    using (AndroidJavaObject obj_Activity = cls_UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
-                    {
-                        System.IntPtr file = AndroidJNI.CallObjectMethod(obj_Activity.GetRawObject(), method_getFilesDir, new jvalue[0]);
-                        System.IntPtr obj_file = AndroidJNI.FindClass("java/io/File");
-                        System.IntPtr method_getAbsolutePath = AndroidJNIHelper.GetMethodID(obj_file, "getAbsolutePath", "()Ljava/lang/String;");
-
-                        string path = AndroidJNI.CallStringMethod(file, method_getAbsolutePath, new jvalue[0]);
-
-                        if (path != null)
-                        {
-                            ValkyrieDebug.Log(path);
-                            return path;
-                        }
-                    }
-                }
+                return appData;
             }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-            }
-            return "";
         }
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "Valkyrie");
     }
 
     public void AddUpdateListener(IUpdateListener obj)

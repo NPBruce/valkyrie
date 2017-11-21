@@ -86,22 +86,22 @@ public class RoundControllerMoM : RoundController
     }
 
     // Check if there are events that are required at the end of the round
-    public override void CheckNewRound()
+    public override bool CheckNewRound()
     {
 
         Game game = Game.Get();
 
         // Return if there is an event open
         if (game.quest.eManager.currentEvent != null)
-            return;
+            return false;
 
         // Return if there is an event queued
         if (game.quest.eManager.eventStack.Count > 0)
-            return;
+            return false;
 
         if (game.quest.phase == Quest.MoMPhase.investigator)
         {
-            return;
+            return false;
         }
 
         if (game.quest.phase == Quest.MoMPhase.mythos)
@@ -111,14 +111,14 @@ public class RoundControllerMoM : RoundController
                 game.quest.phase = Quest.MoMPhase.monsters;
                 game.stageUI.Update();
                 ActivateMonster();
-                return;
+                return game.quest.eManager.currentEvent != null;
             }
             else
             {
                 game.quest.phase = Quest.MoMPhase.horror;
                 game.stageUI.Update();
                 EndRound();
-                return;
+                return game.quest.eManager.currentEvent != null;
             }
         }
 
@@ -126,7 +126,7 @@ public class RoundControllerMoM : RoundController
         {
             game.quest.phase = Quest.MoMPhase.horror;
             game.stageUI.Update();
-            return;
+            return false;
         }
 
         // Finishing the round
@@ -160,5 +160,6 @@ public class RoundControllerMoM : RoundController
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
+        return true;
     }
 }

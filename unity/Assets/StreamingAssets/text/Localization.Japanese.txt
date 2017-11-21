@@ -1,0 +1,26 @@
+.,Japanese
+//Inherited from FFG localization files
+SET_FIRE,炎トークンを置く
+INVESTIGATOR_ELIMINATED,探索者の死亡
+CLOSE,閉じる
+PUZZLE_GUESS,入力
+
+UP,上
+DOWN,下
+LEFT,左
+RIGHT,右
+
+PHASE_INVESTIGATOR,探索者フェイズ
+PHASE_MYTHOS,神話フェイズ
+MONSTER_STEP,モンスターの活動ステップ
+HORROR_STEP,恐怖判定ステップ
+END_PHASE,フェイズ終了
+
+ATTACK_PROMPT,どの種類の武器で攻撃しますか？
+ATTACK_WITH_HEAVY_WEAPON, [i]大型武器[/i]で攻撃
+ATTACK_WITH_BLADED_WEAPON, [i]鋭利武器[/i]で攻撃
+ATTACK_WITH_FIREARM, [i]銃火器[/i]で攻撃
+ATTACK_WITH_SPELL, 呪文で攻撃
+ATTACK_WITH_UNARMED, 素手で攻撃
+
+ACTION_X, {0}

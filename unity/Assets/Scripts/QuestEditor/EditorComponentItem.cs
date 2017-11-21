@@ -217,6 +217,7 @@ public class EditorComponentItem : EditorComponent
                 select.AddItem(kv.Value);
             }
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -351,6 +352,7 @@ public class EditorComponentItem : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectInspectEvent, new StringKey("val", "SELECT", CommonStringKeys.SELECT_ITEM));
 
         select.AddItem("{NONE}", "");
+        select.AddNewComponentItem("Event");
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -364,7 +366,19 @@ public class EditorComponentItem : EditorComponent
 
     public void SelectInspectEvent(string eventName)
     {
-        itemComponent.inspect = eventName;
+        string toAdd = eventName;
+        if (eventName.Equals("{NEW:Event}"))
+        {
+            int i = 0;
+            while (game.quest.qd.components.ContainsKey("Event" + i))
+            {
+                i++;
+            }
+            toAdd = "Event" + i;
+            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+        }
+
+        itemComponent.inspect = toAdd;
         Update();
     }
 }

@@ -1,0 +1,14 @@
+.,Spanish
+BOXED,Caja de Expansión
+FANDT,Colección de Figuras y Tableros
+CK,Kit de Conversión
+
+MAD09I,Investigadores de La Llamada de lo Salvaje
+MAD09M,Monstruos de La Llamada de lo Salvaje
+MAD09T,Tableros de La Llamada de lo Salvaje
+MAD06I,Investigadores de Alquimia Prohibida
+MAD06M,Monstruos de Alquimia Prohibida
+MAD06T,Tableros de Alquimia Prohibida
+MAD01I,Investigadores de Las Mansiones de la Locura Primera Edición
+MAD01M,Monstruos de Las Mansiones de la Locura Primera Edición
+MAD01T,Tableros de Las Mansiones de la Locura Primera Edición

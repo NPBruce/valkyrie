@@ -1,0 +1,389 @@
+.,Polish
+// TEXTS
+ABILITY,Umiejętność
+ABOUT, O Valkyrie
+ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa.
+ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
+ACTIONS,Akcje
+ACTIVATED,Aktywowano
+ACTIVATION,Aktywacja
+ACTIVATIONS,Aktywacje
+ADD_COMPONENTS,Dodaj Komponent:
+COMPONENTS,Komponenty
+RENAME,Zmień Nazwę
+SAVE_TEST,
+SOURCE,Źródło
+COMMENT,Komentarz
+TRUE,Prawda
+FALSE,Fałsz
+SNAP,Zdjęcie
+FREE,Darmowy
+CONFIRM,Potwierdź
+INSPECT,Sprawdź
+DURATION,Czas Trwania
+DESCRIPTION,Opis
+AUTHORS,Autorzy
+DIFFICULTY,Poziom Trudności
+VALIDATE_SCENARIO,Zatwierdź Scenariusz
+FILE,Plik
+OPTIMIZE_LOCALIZATION,Optymalizuj tłumaczenie
+CREATE_PACKAGE,
+REORDER_COMPONENTS,Zmiana Kolejności Komponentów
+ASSIGN,Przydziel
+ATTACK,Atak
+ATTACK_MESSAGE,Komunikat Ataku:
+AUDIO,Audio
+BACK,Powrót
+BASE,Podstawa
+BUTTON,Przycisk
+BUTTONS,Przyciski
+CAMERA,Kamera
+CANCEL,Anuluj
+CHOOSE_LANG,Wybór Języka
+CLEAR_FIRE,Usuń Ogień
+COLOR,Kolor
+COMPONENT_NAME,Nazwa Komponentu
+COMPONENT_TO_DELETE,Komponent do Usunięcia:
+CONTENT_IMPORT,Import Komponentu
+CONTENT_IMPORTING,Importowanie...
+CONTENT_REIMPORT,Zaimportuj Ponownie Komponent
+CONTINUE,Kontynuuj
+COPY,Kopiuj
+CUSTOMMONSTER,Personalizacja Potwora
+D2E_APP_NOT_FOUND,Nie można zlokalizować Road to Legend, zainstaluj za pośrednictwem Steam
+D2E_HEROES_NAME,Bohaterowie
+D2E_HERO_NAME,Bohater
+D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
+D2E_QUEST_NAME,Przygoda
+DEFEATED,Pokonany
+DELETE,Usuń
+DIALOG,Dialog
+DOOR,Drzwi
+DOWNLOAD,Pobierz
+E,E
+EFFECTS,Efekty
+END_TURN,Koniec Tury
+EVADE,Unik
+EVENT,Wydarzenie
+EXIT,Wyjście
+FINISHED,Skończony
+FIRST,Pierwszy
+FORCE_ACTIVATE,Wymuś Aktywację
+
+HEALTH,Zdrowie
+HEALTH_HERO,Na jednego Bohatera
+HIGHLIGHT,Zaznacz
+HORROR_CHECK,Sprawdź
+INDENT,  {0}
+INFO,Info
+INFORMATION,Informacja
+INITIAL_MESSAGE,Wiadomość Początkowa:
+ITEM,Przedmiot
+QITEM,Przedmiot Fabularny
+KO,KO
+LOAD_QUEST,Ładowanie {0}
+LOG,Dziennik
+SKILLS,Umiejętności
+ITEMS,Przedmioty
+GOLD,Złoto
+MAIN_MENU,Menu Główne
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Kam
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Kam
+MOM_HEROES_NAME,Badacze
+MOM_HERO_NAME,Badacz
+MOM_NAME,Posiadłość Szaleństwa 2. edycja
+MOM_QUEST_NAME,Scenariusz
+MONSTER,Potwór
+MONSTER_ATTACKS,Potwór Atakuje
+MONSTER_MASTER,Elitarny
+MONSTER_MASTER_X,Elitarny {0}
+MONSTER_MINION,Sługus
+MONSTER_NORMAL,Normalny
+
+MONSTER_UNIQUE,Niepowtarzalny
+MOVES,Ruchy
+MPLACE,PPozycja
+MUSIC,Muzyka
+NAME,Imie
+NEW,Nowy
+NEW_X,{Nowy {0}}
+NONE,{Żaden}
+
+NEXT_EVENTS,Kolejne Wydarzenie
+NOT_FIRST,Nie Pierwszy
+NO_ATTACK_MESSAGE,Wiadomość Poza Atakiem:
+
+NUMBER,Numer
+NUMBER_HEROS,{0} Bohater:
+OK,Ok
+OP,Operator
+OPTIONS,Opcje
+PLACEMENT,Rozmieszczenie
+
+PLACE_IMG,Umieść Obraz
+POOL_TRAITS,Pula Atrybutów:
+POSITION,Pozycja
+POSITION_TYPE_HIGHLIGHT,Podświetl
+POSITION_TYPE_UNUSED,Nieużywany
+PUZZLE,Zagadka
+PUZZLE_ALT_LEVEL,Alternatywny Poziom Trudności
+PUZZLE_CLASS,Kategoria
+PUZZLE_CLASS_SELECT,Wybór Kategorii
+IMAGE,Obraz
+
+PUZZLE_LEVEL,Poziom Trudności
+PUZZLE_SELECT_SKILL,Wybierz Umiejętność
+PUZZLE_IMAGE_CLASS,obraz
+PUZZLE_CODE_CLASS,kod
+PUZZLE_SLIDE_CLASS,przesuń
+QUEST,Scenariusz
+QUEST_NAME_DOWNLOAD,Pobieranie {0}
+QUEST_NAME_EDITOR,Edytor {0}
+EDITOR,Edytor
+QUEST_NAME_UPDATE,  [Aktualizacja] {0}
+QUOTA,Limit
+RECOVER,Wyzdrowieć
+
+RELOAD,Przeładuj
+REMOVE_COMPONENTS,Usuń Komponent:
+REQUIRED_EXPANSIONS,Wymagane Rozszerzenia:
+REQUIRES_EXPANSION, Wymaga: {0}
+
+REQ_TRAITS,Wymagane Atrybuty:
+RESET,Reset
+ROTATION,Obrót
+SAVE,Zapisz
+AUTOSAVE,Autozapis
+SELECT_SAVE,Wybierz Zapis
+SELECT,Wybierz {0}
+SELECT_CLASS,Wybierz Klasę
+SELECTION,Wybór
+SELECT_CONTENT,Wybierz Zawartość
+SELECT_EXPANSION,Wybierz Zawartość Rozszerzenia
+SELECT_IMAGE,Wybierz Obraz
+SELECT_ITEM,Wybierz Przedmiot
+SELECT_PACK,Wybierz Pakiet
+SELECT_TO_COPY,Wybierz {0} do Skopiowania
+SELECT_TO_DELETE,Wybierz {0} do Usunięcia
+HIDDEN,Ukryty
+ACTIVE,Aktywny
+SET,Ustaw
+SKILL,Umiejętność
+SELECT_SKILLS,Wybierz Umiejętności
+SPAWN,Przywołaj
+STARTING_ITEM,Przedmiot Startowy
+STARTING_ITEMS,Przedmioty Startowe
+START_QUEST,Początek {0}
+START,Start
+
+TESTS,Testy
+TILE,Pole
+
+TOKEN,Znacznik
+TOOLS,Narzędzia
+TOTAL_MOVES,Ruchy (łącznie)
+TRAITS,Atrybuty
+TRIGGER,Aktywacja
+TYPE,Typ
+TYPES,Typy
+UNABLE_BUTTON,Dezaktywacja:
+
+UI,Interfejs
+UNITS,Jednostki
+HORIZONTAL,Poziomy
+VERTICAL,Pionowy
+ALIGN,Wyrównaj
+POSITION,Pozycja
+SIZE,Rozmiar
+TEXT_SIZE,Rozmiar Tekstu
+ASPECT,Stosunek
+BORDER,Brzeg
+NO_BORDER,Brak Brzegów
+UNDO,Cofnij
+UNIQUE_DEFEATED,Unikatowy
+Pokonany
+UNIQUE_INFO,Unikatowa Informacja
+UNIQUE_MONSTER,Unikatowy Potwór
+UNIQUE_TITLE,Unikatowy Tytuł
+UNUSED,Nieużywany
+VALUE,Wartość
+VAR,Zmienna
+VARS,Zmienne
+VAR_NAME,Nazwa Zmiennej:
+X_ACTIVATED,{0} Aktywowany
+
+BUY,Kup
+SELL,Sprzedaj
+CLASS,Klasa
+ACT_1,Akt I
+ACT_2,Akt II
+
+//Items
+weapon,Broń
+firearm,Broń Palna
+heavyweapon,Broń Ciężka
+heavy,Broń Ciężka
+tome,Tom
+equipment,Ekwipunek
+lightsource,Źródło Światła
+bladedweapon,Broń Sieczna
+bladed,Broń Sieczna
+spell,Zaklęcie
+key,Klucz
+evidence,Dowód
+ally,Sprzymieńca
+
+//Audio
+menu,Menu
+music,Muzyka
+quest,Scenariusz
+defeated,Pokonany
+newround,Nowa Runda
+attack,Atak
+unarmed,Bez Broni
+horror,Horror
+search,Przeszukaj
+explore,Eksploruj
+
+//Heroes
+latari,Latari
+dwarf,Karzeł
+gnome,Gnom
+male,Mężczyzna
+female,Kobieta
+
+//monsters
+undead,Nieumarły
+humanoid,Humanoid
+spirit,Duch
+beast,Bestia
+agent,Agent
+lieutenant,Porucznik
+small,Mały
+medium,Średni
+huge,Duży
+massive,Masywny
+building,Budynek
+melee,Walka w Zwarciu
+ranged,Walka Dystansowa
+goblin,Goblin
+cursed,Przeklęty
+cave,Jaskinia
+wilderness,Dzicz
+civilized,Ciwilizowany
+dark,Mroczny
+mountain,Góra
+cold,Zimno
+hot,Gorąco
+water,Woda
+
+//Tiles
+basement,Podziemie
+river,Rzeka
+street,Droga
+hallway,Korytarz
+bathroom,Łazienka
+bedroom,Sypialnia
+kitchen,Kuchnia
+dock,Dok
+storage,Magazyn
+outside,Zewnętrze
+inside,Wnętrze
+small,Mały
+medium,Średni
+big,Duży
+transition,Przejście
+throne,Tron
+pit,Dół
+farm,Gospodarstwo
+tomb,Grobowiec
+library,Biblioteka
+graves,Cmentarz
+bridge,Most
+stairs,Schody
+torture,Sala Tortur
+tents,Namioty
+stables,Stajnie
+hall,Hol
+map,Mapa
+bedroom,Sypialnia
+city,Miasto
+fountain,Fontanna
+blackrealm,Królestwo Ciemności
+altar,Ołtarz
+beds,Łóżka
+study,Pracownia
+prison,Więzienie
+plinth,Cokół
+tavern,Tawerna
+statues,Statuły
+drawbridge,Most Zwodzony
+rubble,Rumowisko
+treasure,Skarb
+stone,Kamień
+dirt,Ziemia
+timber,Drzewiasty
+snow,Śnieg
+lava,Lawa
+swamp,Mokradła
+sludge,Błoto
+
+// Colors
+black,Czarny
+white,Biały
+red,Czerwony
+lime,Jasnozielony
+blue,Niebieski
+yellow,Żółty
+aqua,Aqua
+cyan,Błękitny
+magenta,Magenta
+fuchsia,Fuksia
+silver,Srebrny
+gray,Szary
+maroon,Brązowy
+olive,Oliwkowy
+green,Zielony
+purple,Fioletowy
+teal,Turkusowy
+navy,Granatowy
+
+//Puzzles
+image,Obraz
+code,Kod
+slide,Suwak
+SYMBOL,Symbol
+
+// Events
+Ordered,Uporządkowany
+Random,Losowy
+
+//Inherited from FFG localization files
+SET_FIRE,Podpalenie
+INVESTIGATOR_ELIMINATED,Wyeliminowano badacza
+CLOSE,Zamknij
+PUZZLE_GUESS,Sprawdź
+
+UP,Góra
+DOWN,Dół
+LEFT,Lewo
+RIGHT,Prawo
+
+PHASE_INVESTIGATOR,Faza badaczy
+PHASE_MYTHOS,Faza mitów
+MONSTER_STEP,Etap potworów
+HORROR_STEP,Etap przerażenia
+END_PHASE,Koniec fazy
+
+ATTACK_PROMPT,Jakim rodzajem broni atakujesz?
+ATTACK_WITH_HEAVY_WEAPON, Atak [i]Ciężką bronią[/i]
+ATTACK_WITH_BLADED_WEAPON, Atak [i]Bronią sieczną[/i]
+ATTACK_WITH_FIREARM, Atak [i]Bronią palną[/i]
+ATTACK_WITH_SPELL, Atak Zaklęciem
+ATTACK_WITH_UNARMED, Atak bez broni
+
+ACTION_X, {0}

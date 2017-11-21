@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.IO;
 using ValkyrieTools;
 
 namespace FFGAppImport
@@ -6,6 +7,8 @@ namespace FFGAppImport
     // Details for FFG MoM app
     public class MoMFinder : AppFinder
     {
+        protected string obbPath;
+
         public MoMFinder(Platform p) : base(p)
         {
         }
@@ -13,7 +16,7 @@ namespace FFGAppImport
         // If the installed app isn't this or higher don't import
         override public string RequiredFFGVersion()
         {
-            return "1.3.0";
+            return "1.4.1";
         }
         // Steam app ID
         override public string AppId()
@@ -30,6 +33,10 @@ namespace FFGAppImport
             if (platform == Platform.MacOS)
             {
                 return "/Contents/Resources/Data";
+            }
+            else if (platform == Platform.Android)
+            {
+                return "";
             }
             return "/Mansions of Madness_Data";
         }
@@ -50,7 +57,10 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            return Android.GetStorage() + "/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
+            if (obbPath != null) // try this only once
+                return obbPath;
+            obbPath = GetObbPath("Android/obb/com.fantasyflightgames.mom", ".com.fantasyflightgames.mom.obb");
+            return obbPath;
         }
     }
 }

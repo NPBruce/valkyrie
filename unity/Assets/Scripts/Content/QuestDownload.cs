@@ -16,7 +16,6 @@ public class QuestDownload : MonoBehaviour
     public Game game;
     List<RemoteQuest> remoteQuests;
     IniData localManifest;
-    DictionaryI18n localizationDict;
     Dictionary<string, Texture2D> textures;
 
     /// <summary>
@@ -38,8 +37,8 @@ public class QuestDownload : MonoBehaviour
     /// <returns>the path to the remote files</returns>
     public static string GetServerLocation()
     {
-        TextAsset downloadSrc = Resources.Load("Text/download") as TextAsset;
-        return downloadSrc.text + Game.Get().gameType.TypeName() + "/";
+        string[] text = File.ReadAllLines(ContentData.ContentPath() + "../text/download.txt");
+        return text[0] + Game.Get().gameType.TypeName() + "/";
     }
 
     /// <summary>
@@ -57,7 +56,7 @@ public class QuestDownload : MonoBehaviour
     }
 
     /// <summary>
-    /// Called to check if there are any more quest components to download, when finished downloads dictionary
+    /// Called to check if there are any more quest components to download, when finished Draw content
     /// </summary>
     public void DownloadQuestFiles()
     {
@@ -66,16 +65,6 @@ public class QuestDownload : MonoBehaviour
             if (!rq.FetchContent(this, DownloadQuestFiles)) return;
         }
         string remoteDict = GetServerLocation() + "Localization.txt";
-        StartCoroutine(Download(remoteDict, ReadDict));
-    }
-
-    /// <summary>
-    /// Read the downloaded dictionary, draw screen
-    /// </summary>
-    public void ReadDict()
-    {
-        if (download.error != null) Application.Quit();
-        localizationDict = LocalizationRead.ReadFromString(download.text, DictionaryI18n.DEFAULT_LANG, game.currentLang);
         DrawList();
     }
 
@@ -108,8 +97,15 @@ public class QuestDownload : MonoBehaviour
         foreach (RemoteQuest rq in remoteQuests)
         {
             string file = rq.name + ".valkyrie";
-            LocalizationRead.AddDictionary("qst", localizationDict);
-            string questName = new StringKey("qst", rq.name + ".name").Translate();
+            string questName = rq.GetData("name." + game.currentLang);
+            if (questName.Length == 0)
+            {
+                questName = rq.GetData("name." + rq.GetData("defaultlanguage"));
+            }
+            if (questName.Length == 0)
+            {
+                questName = rq.name;
+            }
 
             int remoteFormat = 0;
             int.TryParse(rq.GetData("format"), out remoteFormat);

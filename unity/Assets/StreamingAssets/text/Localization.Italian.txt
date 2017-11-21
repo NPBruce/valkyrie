@@ -1,0 +1,347 @@
+.,Italian
+// TEXTS
+ABILITY,Abilità
+ABOUT,Informazioni su
+ABOUT_FFG,Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi.
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ACTIONS,Azioni
+ACTIVATED,Attivo
+ACTIVATION,Attivazione
+ACTIVATIONS,Attivazioni
+ADD_COMPONENTS,Aggiungi Componente
+ASSIGN,Assegna
+ATTACK,Attacca
+ATTACK_MESSAGE,Messaggio d'attacco
+AUDIO,Audio
+BACK,Indietro
+BASE,Base
+BUTTON,Pulsante
+BUTTONS,Pulsanti
+CAMERA,Camera
+CANCEL,Annulla
+CHOOSE_LANG,Lingua
+CLEAR_FIRE,Incendio Estinto
+COLOR,Colore
+COMPONENT_NAME,Importa
+COMPONENT_TO_DELETE,Contenuto da Eliminare
+CONTENT_IMPORT,Contenuto Importato
+CONTENT_IMPORTING,In aggiornamento...
+CONTENT_REIMPORT,Reimporta Contenuto
+CONTINUE,Continua
+COPY,Copia
+CUSTOMMONSTER,Mostro personalizzato
+D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend", installalo con Steam
+D2E_HEROES_NAME,Eroi
+D2E_HERO_NAME,Eroe
+D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
+D2E_QUEST_NAME,Scenario
+DEFEATED,Sconfitto
+DELETE,Cancella
+DIALOG,Dialogo
+DOOR,Porta
+DOWNLOAD,Scarica
+E,E
+EFFECTS,Effetti
+END_TURN,Fine Turno
+ROUND,
+EVADE,Evadi
+EVENT,Evento
+EXIT,Esci
+FINISHED,Continua
+FIRST,Primo
+FORCE_ACTIVATE,Attivazione forzata
+
+HEALTH,Salute
+HEALTH_HERO,Per eroe
+HIGHLIGHT,In evidenza
+HORROR_CHECK,Prova di Orrore
+INDENT,  {0}
+INFO,info
+INFORMATION,Informazioni
+INITIAL_MESSAGE,Messaggio iniziale
+ITEM,Oggetto
+LOAD_QUEST,Carica {0}
+LOG,Log
+MAIN_MENU,Menu Principale
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Cam Max
+MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Cam Min
+MOM_HEROES_NAME,Investigatori
+MOM_HERO_NAME,Investigatore
+MOM_NAME,Le Case della Follia Seconda Edizione
+MOM_QUEST_NAME,Scenario
+MONSTER,Mostro
+MONSTER_ATTACKS,Il mostro attacca
+MONSTER_MASTER,Maggiore
+MONSTER_MASTER_X,Maggiore {0}
+MONSTER_MINION,Minore
+MONSTER_NORMAL,Normale
+
+MONSTER_UNIQUE,Unico
+MOVES,Movimenti
+MPLACE,Posizione
+MUSIC,Musica
+NAME,Nome
+NEW,Nuovo
+NEW_X,{Nuovo {0}}
+
+NEXT_EVENTS,Evento Successivo
+NOT_FIRST,Non Primo
+NO_ATTACK_MESSAGE,Messaggio
+
+NUMBER,Numero
+NUMBER_HEROS,{0} Eroi:
+OK,Ok
+OP,Opera
+OPTIONS,Opzioni
+PLACEMENT,Posizione
+
+PLACE_IMG,Posiziona Img:
+POOL_TRAITS,Tratti Pubblici
+POSITION,Posizione
+POSITION_TYPE_HIGHLIGHT,Evidenzia
+POSITION_TYPE_UNUSED,Inutilizzato
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Difficoltà
+PUZZLE_CLASS,Tipo
+PUZZLE_CLASS_SELECT,Seleziona Tipo
+IMAGE,Immagine
+
+PUZZLE_LEVEL,Difficoltà
+PUZZLE_SELECT_SKILL,Seleziona Abilità
+PUZZLE_IMAGE_CLASS,mosaico
+PUZZLE_CODE_CLASS,codice
+PUZZLE_SLIDE_CLASS,meccanismo
+QUEST,Scenario
+QUEST_NAME_DOWNLOAD,Scarica {0}
+QUEST_NAME_EDITOR,{0} Editor
+EDITOR,Editor
+QUEST_NAME_UPDATE,  [Aggiorna] {0}
+QUOTA,Quota
+RECOVER,Recupera
+
+RELOAD,Ricarica
+REMOVE_COMPONENTS,Rimuovi Componente
+REQUIRED_EXPANSIONS,Espansioni Richieste:
+REQUIRES_EXPANSION, Richieste: {0}
+
+REQ_TRAITS,Tratti Richiesti:
+RESET,Reset
+ROTATE_TO,
+ROTATION,Rotazione
+SAVE,Salva
+AUTOSAVE,
+SELECT_SAVE,
+SELECT,Seleziona {0}
+SELECT_CLASS,
+SELECTION,Selezione
+SELECT_CONTENT,Seleziona Contenuto
+SELECT_EXPANSION,Seleziona Espansione
+SELECT_IMAGE,Seleziona Immagine
+SELECT_ITEM,Seleziona Oggetto
+SELECT_PACK,Seleziona Pacchetto
+SELECT_TO_COPY,Selezione {0} da Copiare
+SELECT_TO_DELETE,Selezione {0} da Cancellare
+HIDDEN,
+ACTIVE,
+SET,Set
+SKILL,Abilità
+SELECT_SKILLS,
+SPAWN,Generazione
+STARTING_ITEM,
+STARTING_ITEMS,Oggetti Iniziali
+START_QUEST,Inizio {0}
+START,Inizio
+
+TESTS,Prove
+TILE,Tessera
+
+TOKEN,Segnalino
+TOOLS,
+TOTAL_MOVES,Movimento Totale
+TRAITS,Tratti
+TRIGGER,Attivatore
+TYPE,Tipo
+TYPES,Tipi
+UNABLE_BUTTON,Pulsante Disabilitato:
+
+UNDO,Indietro
+UNIQUE_DEFEATED,Unico Sconfitto
+UNIQUE_INFO,Unica Informazione
+UNIQUE_MONSTER,Mostro Unico
+UNIQUE_TITLE,Titolo Unico
+UNUSED,Non Usato
+VALUE,Valore
+VAR,Var
+VARS,Vars
+VAR_NAME,Var Nome:
+X_ACTIVATED,Attivo
+
+//Items
+weapon,Arma
+firearm,Arma da Fuoco
+heavyweapon,Arma Pesante
+heavy,Arma Pesante
+tome,Tomo
+equipment,Equipaggiamento
+lightsource,Fonte di Luce
+bladedweapon,Arma da Taglio
+bladed,Arma da Taglio
+spell,Incantesimo
+key,Chiave
+evidence,Prova
+ally,Alleato
+
+//Audio
+menu,Menu
+music,Musica
+quest,Scenario
+defeated,Sconfitto
+newround,Nuovo Round
+attack,Attacco
+unarmed,Senz'Armi
+horror,Orrore
+search,Cerca
+explore,Esplora
+
+//Heroes
+latari,Latari
+dwarf,Nano
+gnome,Gnomo
+male,Maschio
+female,Femmina
+
+//monsters
+undead,Non-Morto
+humanoid,Umanoide
+spirit,Spirito
+beast,Bestia
+agent,Agente
+lieutenant,Luogotenente
+small,Piccolo
+medium,Medio
+huge,Gigante
+massive,Massivo
+building,Costruire
+melee,Corpo a Corpo
+ranged,Distanza
+goblin,Goblin
+cursed,Meledetto
+cave,Cava
+wilderness,Selvaggio
+civilized,Civilizzato
+dark,Oscuro
+mountain,Montagna
+cold,Freddo
+hot,Caldo
+water,Acqua
+
+//Tiles
+basement,Seminterrato
+river,Fiume
+street,Strada
+hallway,Corridoio
+bathroom,Bagno
+bedroom,Camera da Letto
+kitchen,Cucina
+dock,Molo
+storage,Magazzino
+outside,Esterno
+inside,Interno
+small,Piccola
+medium,Media
+big,Grande
+transition,Transizione
+throne,Trono
+pit,Abisso
+farm,Granaio
+tomb,Tomba
+library,Biblioteca
+graves,Cimitero
+bridge,Ponte
+stairs,Scale
+torture,Tortura
+tents,Tende
+stables,Stalle
+hall,Salone
+map,Mappa
+bedroom,Camera da Letto
+city,Città
+fountain,Fontana
+blackrealm,Reame Oscuro
+altar,Altare
+beds,Letti
+study,Studio
+prison,Prigione
+plinth,Plinto
+tavern,Taverna
+statues,Statue
+drawbridge,Ponte Levatoio
+rubble,Macerie
+treasure,Tesoro
+stone,Pietra
+dirt,Sporco
+timber,Legname
+snow,Neve
+lava,Lava
+swamp,Palude
+sludge,Fango
+
+// Colors
+black,Nero
+white,Bianco
+red,Rosso
+lime,Lime
+blue,Blu
+yellow,Giallo
+aqua,Acqua
+cyan,Ciano
+magenta,Magenta
+fuchsia,Fucsia
+silver,Argento
+gray,Grigio
+maroon,Marrone
+olive,Oliva
+green,Verde
+purple,Porpora
+teal,Turchese
+navy,Azzurro
+
+//Puzzles
+image,Mosaico
+code,Codice
+slide,Meccanismo
+
+// Events
+Ordered,Ordinato
+Random,Casuale
+
+//Inherited from FFG localization files,
+SET_FIRE,Incendia
+INVESTIGATOR_ELIMINATED,Investigatore Eliminato
+CLOSE,Chiudi
+PUZZLE_GUESS,Indovina
+
+UP,Su
+DOWN,Giù
+LEFT,Sinistra
+RIGHT,Destra
+
+PHASE_INVESTIGATOR,Fase Degli Investigatori
+PHASE_MYTHOS,Fase Dei Miti
+MONSTER_STEP,Sottofase dei Mostri
+HORROR_STEP,Sottofase di Orrore
+END_PHASE,Fine Fase
+
+ATTACK_PROMPT,Con quale tipo di arma vuoi attaccare?
+ATTACK_WITH_HEAVY_WEAPON, Attacca con un’[i]Arma Pesante[/i]
+ATTACK_WITH_BLADED_WEAPON, Attacca con un’[i]Arma da Taglio[/i]
+ATTACK_WITH_FIREARM, Attacca con un’[i]Arma da Fuoco[/i]
+ATTACK_WITH_SPELL, Attacca con un Incantesimo
+ATTACK_WITH_UNARMED, Attacca Senza Armi
+
+ACTION_X, {0}

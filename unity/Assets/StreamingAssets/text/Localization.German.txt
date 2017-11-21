@@ -1,0 +1,389 @@
+.,German
+// TEXTS
+ABILITY,Fähigkeit
+ABOUT,Über Valkyrie
+ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ACTIONS,Aktionen
+ACTIVATED,Aktiviert
+ACTIVATION,Aktivierung
+ACTIVATIONS,Aktivierungen
+ADD_COMPONENTS,Komponente hinzufügen:
+COMPONENTS,Komponenten
+RENAME,Umbenennen
+SAVE_TEST,Speichern & Testen
+SOURCE,Quelle
+COMMENT,Kommentar
+SNAP,Auto
+FREE,Frei
+CONFIRM,OK
+INSPECT,Prüfen
+DURATION,Dauer
+DESCRIPTION,Beschreibung
+AUTHORS,Autoren
+DIFFICULTY,Schwierigkeit
+VALIDATE_SCENARIO,Validieren
+FILE,Datei
+OPTIMIZE_LOCALIZATION,Übersetzungen optimieren
+REORDER_COMPONENTS,Komponenten neu ordnen
+ASSIGN,Hinzu
+ATTACK,Angriff
+ATTACK_MESSAGE,Angriffsmeldung:
+AUDIO,Audio
+BACK,Zurück
+BASE,Basis
+BUTTON,Schaltfläche
+BUTTONS,Schaltflächen
+CAMERA,Kamera
+CANCEL,Abbrechen
+CHOOSE_LANG,Sprache wählen
+CLEAR_FIRE,Feuer gelöscht
+COLOR,Farbe
+COMPONENT_NAME,Name der Erweiterung:
+COMPONENT_TO_DELETE,Zu löschende Erweiterung:
+CONTENT_IMPORT,Importiere Inhalt
+CONTENT_IMPORTING,Importiere...
+CONTENT_REIMPORT,Reimportiere Inhalt
+CONTINUE,Weiter
+COPY,Kopieren
+CUSTOMMONSTER,Spezial-Monster
+D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden, bitte über Steam installieren
+D2E_APP_NOT_FOUND_ANDROID,"Wege zum Ruhm" nicht gefunden
+D2E_HEROES_NAME,Helden
+D2E_HERO_NAME,Held
+D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
+D2E_QUEST_NAME,Szenario
+DEFEATED,Besiegt
+DELETE,Löschen
+DIALOG,Dialog
+DOOR,Tür
+DOWNLOAD,Download
+DOWNLOAD_LIST,Download von Paketliste
+DOWNLOAD_PACKAGE,Download von Paket
+E,E
+EFFECTS,Effekte
+END_TURN,Letzter Zug
+EVADE,Ausweichen
+EVENT,Ereignis
+EXIT,Verlassen
+FINISHED,Fertig
+FIRST,Erster
+FORCE_ACTIVATE,Erzwinge Aktivierung
+
+HEALTH,Ausdauer
+HEALTH_HERO,Pro Held
+HIGHLIGHT,Markieren
+HORROR_CHECK,Horrortest
+AWARENESS,Aufmerksamkeit
+INDENT,  {0}
+INFO,Info
+INFORMATION,Information
+INITIAL_MESSAGE,Eingangstext:
+ITEM,Gegenstand
+KO,KO
+LOAD_QUEST,Lade {0}
+LOG,Log
+SKILLS,Fähigkeiten
+ITEMS,Inventar
+ITEMS_SMALL,Inv.
+GOLD,Gold
+MAIN_MENU,Hauptmenü
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Kam Max
+MENU,Menü
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Kam Min
+MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden, bitte über Steam installieren
+MOM_APP_NOT_FOUND_ANDROID,"Villen des Wahnsinns" nicht gefunden
+MOM_HERO_NAME,Ermittler
+MOM_HEROES_NAME,Ermittler
+MOM_NAME,Villen des Wahnsinns: 2. Edition
+MOM_QUEST_NAME,Szenario
+MONSTER,Monster
+MONSTER_ATTACKS,Das Monster greift an.
+MONSTER_MASTER,Elite
+MONSTER_MASTER_X,Elite {0}
+MONSTER_MINION,Minion
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Unique
+MOVES,Züge
+MPLACE,MPosition
+MUSIC,Musik
+NAME,Name
+NEW,Neu
+NEW_X,{Neu {0}}
+NONE,{Keines}
+
+NEXT_EVENTS,Nächstes Ereignis
+NOT_FIRST,Nicht zuerst
+NO_ATTACK_MESSAGE,Kein-Angriff-Meldung:
+
+NUMBER,Nummer
+NUMBER_HEROS,{0} Helden:
+OPTIONS,Optionen
+PLACEMENT,Platzierung
+
+PLACE_IMG,Platz. Bild:
+POOL_TRAITS,Poolmerkmale:
+POSITION,Position
+POSITION_TYPE_HIGHLIGHT,Markieren
+POSITION_TYPE_UNUSED,Unbenutzt
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Schwierigkeit
+PUZZLE_CLASS,Klasse
+PUZZLE_CLASS_SELECT,Klasse wählen
+IMAGE,Bild
+
+PUZZLE_LEVEL,Level
+PUZZLE_SELECT_SKILL,Fähigkeit wählen
+PUZZLE_IMAGE_CLASS,bild
+PUZZLE_CODE_CLASS,code
+PUZZLE_SLIDE_CLASS,schieberaetsel
+QUEST,Szenario
+QUEST_NAME_DOWNLOAD,Download {0}
+QUEST_NAME_EDITOR,{0}-Editor
+EDITOR,Editor
+QUEST_NAME_UPDATE,  [Update] {0}
+QUOTA,Quote
+RECOVER,Erholen
+
+RELOAD,Aktualisieren
+REMOVE_COMPONENTS,Komponente entfernen:
+REQUIRED_EXPANSIONS,Erforderliche Inhalte:
+REQUIRES_EXPANSION, Benötigt:  {0}
+
+REQ_TRAITS,Ben. Fähigk.:
+RESET,Zurücksetzen
+ROTATE_TO,Drehen um: {0}
+ROTATION,Drehen
+SAVE,Speichern
+AUTOSAVE,Autom. Speichern
+SELECT_SAVE,Speicherst. wählen
+SELECT,{0} wählen
+SELECT_CLASS,Klasse wählen
+SELECTION,Auswahl
+SELECT_CONTENT,Inhalt wählen
+SELECT_EXPANSION,Erweiterungsinhalt wählen
+SELECT_IMAGE,Bild wählen
+SELECT_ITEM,Gegenstand wählen
+SELECT_PACK,Paket wählen
+SELECT_TO_COPY,{0} zum Kopieren ausgewählt
+SELECT_TO_DELETE,{0} zur Löschung ausgewählt
+HIDDEN,Versteckt
+ACTIVE,Aktiv
+SET,Setze
+SKILL,Fähigkeit
+SELECT_SKILLS,Fähigkeiten wählen
+SPAWN,Spawn
+STARTING_ITEM,Startgegenstand
+STARTING_ITEMS,Startgegenstände
+START_QUEST,Starte {0}
+START,Starte
+
+TESTS,Tests
+TILE,Teil
+
+TOKEN,Marker
+TOOLS,Werkzeuge
+TOTAL_MOVES,Züge (insgesamt)
+TRAITS,Fertigkeiten
+TRIGGER,Auslöser
+TYPE,Typ
+TYPES,Typen
+UNABLE_BUTTON,Unmöglich-Button:
+
+UI,UI
+UNITS,Einheiten
+HORIZONTAL,Horizontal
+VERTICAL,Vertikal
+ALIGN,Ausrichten
+POSITION,Position
+SIZE,Größe
+TEXT_SIZE,Textgröße
+ASPECT,Aspekt
+BORDER,Umrandung
+NO_BORDER,Keine Umrandung
+UNDO,Rückgängig
+UNIQUE_DEFEATED,Unique\nBesiegt
+UNIQUE_INFO,Unique-Info
+UNIQUE_MONSTER,Unique-Monster
+UNIQUE_TITLE,Unique-Titel
+UNUSED,Unbenutzt
+VALUE,Wert
+VAR_NAME,Var-Name:
+X_ACTIVATED,{0} aktiviert
+
+BUY,Kaufen
+SELL,Verkaufen
+CLASS,Klasse
+ACT_1,Akt I
+ACT_2,Akt II
+
+//Items
+weapon,Waffe
+firearm,Schusswaffe
+heavyweapon,Schwere Waffe
+heavy,Schwere Waffe
+tome,Buch
+equipment,Ausrüstung
+lightsource,Lichtquelle
+bladedweapon,Klingenwaffe
+bladed,Klingenwaffe
+spell,Zauber
+key,Schlüssel
+evidence,Beweis
+ally,Verbündeter
+
+//Audio
+menu,Menü
+music,Musik
+quest,Szenario
+defeated,Besiegt
+newround,Neue Runde
+attack,Angriff
+unarmed,Unbewaffnet
+horror,Horror
+search,Suche
+explore,Erkunden
+
+//Heroes
+latari,Latari
+dwarf,Zwerg
+gnome,Gnom
+male,Mann
+female,Frau
+
+//monsters
+undead,Untot
+humanoid,Mensch
+spirit,Geist
+beast,Bestie
+agent,Agent
+lieutenant,Leutnant
+small,Klein
+medium,Mittel
+huge,Groß
+massive,Massiv
+building,Gebäude
+melee,Nahkampf
+ranged,Fernkampf
+goblin,Goblin
+cursed,Verflucht
+cave,Höhle
+wilderness,Wildniss
+civilized,Zivilisiert
+dark,Dunkel
+mountain,Berg
+cold,Kalt
+hot,Heiß
+water,Wasser
+
+//Tiles
+basement,Keller
+river,Fluss
+street,Straße
+hallway,Flur
+bathroom,Badezimmer
+bedroom,Schlafraum
+kitchen,Küche
+dock,Hafen
+storage,Lager
+outside,Außen
+inside,Innen
+small,Klein
+medium,Mittel
+big,Groß
+transition,Übergang
+throne,Thron
+pit,Höhle
+farm,Bauernhof
+tomb,Grab
+library,Bibliothek
+graves,Gräber
+bridge,Brücke
+stairs,Treppe
+torture,Folterkamer
+tents,Zelte
+stables,Ställe
+hall,Halle
+map,Karte
+bedroom,Schlafraum
+city,Stadt
+fountain,Fontäne
+blackrealm,Dunkelreich
+altar,Altar
+beds,Betten
+study,Studienzimmer
+prison,Gefängnis
+plinth,Podest
+tavern,Taverne
+statues,Status
+drawbridge,Zugbrücke
+rubble,Trümmer
+treasure,Schatz
+stone,Stein
+dirt,Dreck
+timber,Holz
+snow,Schnee
+lava,Lava
+swamp,Sumpf
+sludge,Schlamm
+
+// Colors
+black,Schwarz
+white,Weiß
+red,Rot
+lime,Limette
+blue,Blau
+yellow,Gelb
+aqua,Aquamarin
+cyan,Türkis
+magenta,Magenta
+fuchsia,Fuchsia
+silver,Silber
+gray,Grau
+maroon,Rotbraun
+olive,Oliv
+green,Grün
+purple,Violett
+teal,Blaugrün
+navy,Marineblau
+
+//Puzzles
+image,Bild
+code,Code
+slide,Schieberaetsel
+SYMBOL,Symbol
+
+// Events
+Ordered,Geordnet
+Random,Zufällig
+
+//Inherited from FFG localization files
+SET_FIRE,Feuer legen
+INVESTIGATOR_ELIMINATED,Ermittler ausgeschieden
+CLOSE,Schließen
+PUZZLE_GUESS,Raten
+
+UP,Oben
+DOWN,Unten
+LEFT,Links
+RIGHT,Rechts
+
+PHASE_INVESTIGATOR,Ermittlerphase
+PHASE_MYTHOS,Mythosphase
+MONSTER_STEP,Monsterschritt
+HORROR_STEP,Mythosphase
+END_PHASE,Phase beenden
+
+ATTACK_PROMPT,Mit welcher Waffe?
+ATTACK_WITH_HEAVY_WEAPON, Mit einer [i]schweren Waffe[/i] angreifen
+ATTACK_WITH_BLADED_WEAPON, Mit einer [i]Klingenwaffe[/i] angreifen
+ATTACK_WITH_FIREARM, Mit einer [i]Schusswaffe[/i] angreifen
+ATTACK_WITH_SPELL, Mit einem Zauber angreifen
+ATTACK_WITH_UNARMED, Unbewaffnet angreifen
+
+ACTION_X, {0}

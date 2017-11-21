@@ -356,6 +356,11 @@ namespace Unity_Studio
                             pvrPixelFormat = 0x16;
                             break;
                         }
+                    case 47: //ETC2_RGBA8
+                        {
+                            pvrPixelFormat = 0x17;
+                            break;
+                        }
                 }
             }
             else
@@ -381,6 +386,7 @@ namespace Unity_Studio
                     case 32: preloadData.InfoText += "PVRTC_RGB4"; preloadData.extension = ".pvr"; preloadData.exportSize += 52; break;
                     case 33: preloadData.InfoText += "PVRTC_RGBA4"; preloadData.extension = ".pvr"; preloadData.exportSize += 52; break;
                     case 34: preloadData.InfoText += "ETC_RGB4"; preloadData.extension = ".pvr"; preloadData.exportSize += 52; break;
+                    case 47: preloadData.InfoText += "ETC2_RGB8"; preloadData.extension = ".pvr"; preloadData.exportSize += 52; break;
                     default: preloadData.InfoText += "unknown"; preloadData.extension = ".tex"; break;
                 }
 

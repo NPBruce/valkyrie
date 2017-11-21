@@ -220,7 +220,7 @@ class MoMGameType : GameType
 
     public override Font GetFont()
     {
-        return (Font)Resources.Load("fonts/mad");
+        return (Font)Resources.Load("fonts/MADGaramondPro");
     }
 
     public override Font GetHeaderFont()
@@ -247,6 +247,8 @@ class MoMGameType : GameType
     {
         // the base side of the tile is 1024 pixels, we are having 3.5 'squares' (3.5 inches) in this
         // These squares are the same size as D2E squares
+        if (Application.platform == RuntimePlatform.Android)
+            return 512f / 3.5f;
         return 1024f / 3.5f;
     }
 

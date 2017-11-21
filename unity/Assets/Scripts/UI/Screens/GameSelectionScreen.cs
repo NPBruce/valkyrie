@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
 using FFGAppImport;
+using ValkyrieTools;
 using System.Threading;
+using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -12,14 +14,17 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+        protected string importType = "";
         Thread importThread;
 
         private StringKey D2E_NAME = new StringKey("val","D2E_NAME");
         private StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
         private StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
         private StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
+        private StringKey D2E_APP_NOT_FOUND_ANDROID = new StringKey("val", "D2E_APP_NOT_FOUND_ANDROID");
         private StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
         private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
+        private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
         private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
@@ -107,7 +112,14 @@ namespace Assets.Scripts.UI.Screens
             else // Import unavailable
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 14.2f, 24, 1);
-                ui.SetText(D2E_APP_NOT_FOUND, Color.red);
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(D2E_APP_NOT_FOUND, Color.red);
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
@@ -140,7 +152,14 @@ namespace Assets.Scripts.UI.Screens
             else // Import unavailable
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 23.2f, 24, 1);
-                ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
@@ -173,6 +192,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
+            importType = type;
 
             if (type.Equals("D2E"))
             {
@@ -211,18 +231,20 @@ namespace Assets.Scripts.UI.Screens
             // After content import, we load the localization file
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
-                // FFG default language is always English
-                LocalizationRead.AddDictionary("ffg", new DictionaryI18n(
-                    System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/Localization.txt"),
-                    DictionaryI18n.DEFAULT_LANG,
-                    Game.Get().currentLang));
-
-                // Hack for Dunwich Horror
-                if (System.IO.File.Exists(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"))
+                DictionaryI18n ffgDict = new DictionaryI18n();
+                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization*.txt"))
                 {
-                    LocalizationRead.selectDictionary("ffg").Add(new DictionaryI18n(System.IO.File.ReadAllLines(ContentData.ImportPath() + "/text/SCENARIO_CULT_OF_SENTINEL_HILL_MAD22.txt"),
-                        DictionaryI18n.DEFAULT_LANG, Game.Get().currentLang));
+                    ffgDict.AddDataFromFile(file);
                 }
+                LocalizationRead.AddDictionary("ffg", ffgDict);
+
+                // CoSH used for Dunwich Horror data
+                DictionaryI18n cshDict = new DictionaryI18n();
+                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "SCENARIO_CULT_OF_SENTINEL_HILL_MAD22_*.txt"))
+                {
+                    cshDict.AddDataFromFile(file);
+                }
+                LocalizationRead.AddDictionary("csh", cshDict);
             }
         }
 
@@ -231,7 +253,42 @@ namespace Assets.Scripts.UI.Screens
             if (importThread == null) return;
             if (importThread.IsAlive) return;
             importThread = null;
+            ExtractBundles();
+            // TODO: Delete Obb dir for Android build here
             Draw();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ExtractBundles()
+        {
+            try
+            {
+                string importDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
+                string bundlesFile = Path.Combine(importDir, "bundles.txt");
+                ValkyrieDebug.Log("Loading all bundles from '" + bundlesFile + "'");
+                string[] bundles = File.ReadAllLines(bundlesFile);
+                foreach (string file in bundles)
+                {
+                    AssetBundle bundle = AssetBundle.LoadFromFile(file);
+                    if (bundle == null) continue;
+                    ValkyrieDebug.Log("Loading assets from '" + file + "'");
+                    foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
+                    {
+                        string textDir = Path.Combine(importDir, "text");
+                        Directory.CreateDirectory(textDir);
+                        string f = Path.Combine(importDir, Path.Combine(textDir, asset.name + ".txt"));
+                        ValkyrieDebug.Log("Writing text asset to '" + f + "'");
+                        File.WriteAllText(f, asset.ToString());
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+            }
+            importType = "";
         }
 
         // Exit Valkyrie

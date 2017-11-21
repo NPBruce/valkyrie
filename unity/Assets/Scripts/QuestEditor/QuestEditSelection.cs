@@ -124,7 +124,7 @@ public class QuestEditSelection
             ui.SetBGColor(Color.red);
             offset += 2;
         }
-        scrollArea.SetScrollSize(offset - 5);
+        scrollArea.SetScrollSize(offset);
 
         // Back to edit list
         ui = new UIElement();
@@ -196,7 +196,7 @@ public class QuestEditSelection
             ui.SetBGColor(Color.white);
             offset += 2;
         }
-        scrollArea.SetScrollSize(offset - 5);
+        scrollArea.SetScrollSize(offset);
 
         // Back to edit selection
         ui = new UIElement();
@@ -337,19 +337,12 @@ public class QuestEditSelection
             File.WriteAllLines(targetLocation + "/quest.ini", questData.ToArray());
 
             // Create new dictionary
-            DictionaryI18n newScenarioDict = new DictionaryI18n(
-            new string[1] { DictionaryI18n.FFG_LANGS }, game.currentLang, game.currentLang);
+            DictionaryI18n newScenarioDict = new DictionaryI18n(new string[1] { ".," + game.currentLang }, game.currentLang);
 
             // Add quest name to dictionary
-            string nameKey = "quest.name";
-            EntryI18n nameEntry = new EntryI18n(nameKey,newScenarioDict);
-            nameEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i;
-            newScenarioDict.Add(nameEntry);
+            newScenarioDict.AddEntry("quest.name", game.gameType.QuestName().Translate() + " " + i);
             // Add quest description to dictionary
-            string descriptionKey = "quest.description";
-            EntryI18n descriptionEntry = new EntryI18n(descriptionKey, newScenarioDict);
-            descriptionEntry.currentLanguageString = game.gameType.QuestName().Translate() + " " + i + "...";
-            newScenarioDict.Add(descriptionEntry);
+            newScenarioDict.AddEntry("quest.description", game.gameType.QuestName().Translate() + " " + i + "...");
 
             // Generate localization file
             Dictionary<string,List<string>> localization_files = newScenarioDict.SerializeMultiple();

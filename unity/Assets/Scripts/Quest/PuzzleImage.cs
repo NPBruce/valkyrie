@@ -69,7 +69,7 @@ public class PuzzleImage : Puzzle
     override public string ToString(string id)
     {
         string nl = System.Environment.NewLine;
-        string r = "[PuzzleCode" + id + "]" + nl;
+        string r = "[PuzzleImage" + id + "]" + nl;
         r += "moves=" + moves.ToString() + nl;
 
         r += "state=";

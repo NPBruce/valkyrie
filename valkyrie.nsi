@@ -12,7 +12,7 @@
 
   ;Name and file
   Name "Valkyrie ${VERSION} Installer"
-  OutFile "build\Valkyrie-${VERSION}.exe"
+  OutFile "build\valkyrie-windows-${VERSION}.exe"
 
   !ifdef PRERELEASE
     ;Default installation folder
@@ -33,6 +33,8 @@
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
 
+  !define MUI_ICON web\logo.ico
+
 ;--------------------------------
 ;Variables
 
@@ -46,7 +48,6 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   
   ;Start Menu Folder Page Configuration
@@ -80,6 +81,7 @@ Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   
+  SetOverwrite on
   File /r build\batch\*.*
   
   ;Store installation folder

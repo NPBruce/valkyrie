@@ -1,0 +1,401 @@
+.,Spanish
+// TEXTS
+ABILITY,Capacidad
+ABOUT,Acerca de
+ABOUT_FFG,Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.
+ABOUT_LIBS,Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.
+ACTIONS,Acciones
+ACTIVATED,Activado
+ACTIVATION,Activación
+ACTIVATIONS,Activaciones
+ADD_COMPONENTS,Añadir Componentes:
+COMPONENTS,Componentes
+RENAME,Renombrar
+SAVE_TEST,Guardar y Probar
+SOURCE,Origen
+COMMENT,Comentar
+TRUE,Verdadero
+FALSE,Falso
+SNAP,Ajustado
+FREE,Libre
+CONFIRM,Confirmar
+INSPECT,Inspeccionar
+DURATION,Duración
+DESCRIPTION,Descripción
+AUTHORS,Autores
+DIFFICULTY,Dificultad
+VALIDATE_SCENARIO,Validar
+FILE,Fichero
+OPTIMIZE_LOCALIZATION,Optimizar Localización
+CREATE_PACKAGE,Crear Paquete
+REORDER_COMPONENTS,Reordenar Componentes
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
+ASSIGN,Asignar
+ATTACK,Atacar
+ATTACK_MESSAGE,Mensaje Ataca:
+AUDIO,Audio
+BACK,Volver
+BASE,Base
+BUTTON,Botón
+BUTTONS,Botones
+CAMERA,Cámara
+CANCEL,Cancelar
+CHOOSE_LANG,Elige Idioma
+CLEAR_FIRE,Quitar fuego
+COLOR,Color
+COMPONENT_NAME,Nombre del Componente:
+COMPONENT_TO_DELETE,Componente a Eliminar:
+CONTENT_IMPORT,Importar Contenido
+CONTENT_IMPORTING,Importando...
+CONTENT_REIMPORT,Reimportar Contenido
+CONTINUE,Continuar
+COPY,Copiar
+CUSTOMMONSTER,Monstruo Personalizado
+D2E_APP_NOT_FOUND,Imposible localizar "Road to Legend", instalar desde Steam
+D2E_APP_NOT_FOUND_ANDROID,Imposible localizar "Road to Legend"
+D2E_HEROES_NAME,Héroes
+D2E_HERO_NAME,Héroe
+D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
+D2E_QUEST_NAME,Aventura
+DEFEATED,Derrotado
+DELETE,Eliminar
+DIALOG,Diálogo
+DOOR,Puerta
+DOWNLOAD,Descargar
+DOWNLOAD_LIST,
+DOWNLOAD_PACKAGE,
+E,E
+EFFECTS,Efectos
+EMPTY,
+END_TURN,Fin del Turno
+ROUND,Turno {0}
+EVADE,Esquivar
+EVENT,Evento
+EXIT,Salir
+FINISHED,Terminado
+FIRST,Primero
+FORCE_ACTIVATE,Forzar Activación
+
+HEALTH,Salud
+HEALTH_HERO,Por héroe
+HIGHLIGHT,Destacar
+HORROR_CHECK,Horror
+AWARENESS,Percepción
+INDENT,  {0}
+INFO,Info
+INFORMATION,Información
+INITIAL_MESSAGE,Mensaje Inicial:
+ITEM,Objeto
+QITEM,Objeto de Escenario
+KO,KO
+LOAD_QUEST,Cargar {0}
+LOG,Log
+SKILLS,Habilidades
+ITEMS,Objetos
+ITEMS_SMALL,Objs.
+GOLD,Oro
+MAIN_MENU,Menú Principal
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Cam Max
+MENU,Menú
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Cam Min
+MOM_APP_NOT_FOUND,Imposible localizar "Mansions of Madness", instalar desde Steam
+MOM_APP_NOT_FOUND_ANDROID,Imposible localizar "Mansions of Madness"
+MOM_HEROES_NAME,Investigadores
+MOM_HERO_NAME,Investigador
+MOM_NAME,Las Mansiones de la Locura: Segunda Edición
+MOM_QUEST_NAME,Escenario
+MONSTER,Monstruo
+MONSTER_ATTACKS,El monstruo ataca.
+MONSTER_MASTER,Maestro
+MONSTER_MASTER_X,Maestro {0}
+MONSTER_MINION,Esbirro
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Único
+MOVES,Movimientos
+MPLACE,Posición
+MUSIC,Música
+NAME,Nombre
+NEW,Nuevo
+NEW_X,{Nuevo {0}}
+NONE,{Ninguno}
+
+NEXT_EVENTS,Siguientes Eventos
+NOT_FIRST,No Primero
+NO_ATTACK_MESSAGE,Mensaje no Ataca:
+
+NUMBER,Número
+NUMBER_HEROS,{0} Héroes:
+OK,Ok
+OP,Op
+OPTIONS,Opciones
+PLACEMENT,Colocación
+
+PLACE_IMG,Poner Img:
+POOL_TRAITS,Atributos Posibles:
+POSITION,Posición
+POSITION_TYPE_HIGHLIGHT,Destacado
+POSITION_TYPE_UNUSED,No Usado
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Dificultad Alt.
+PUZZLE_CLASS,Tipo
+PUZZLE_CLASS_SELECT,Escoger Tipo
+IMAGE,Imagen
+
+PUZZLE_LEVEL,Dificultad
+PUZZLE_SELECT_SKILL,Escoger Habilidad
+PUZZLE_IMAGE_CLASS,mosaico
+PUZZLE_CODE_CLASS,código
+PUZZLE_SLIDE_CLASS,mecanismo
+QUEST,Escenario
+QUEST_NAME_DOWNLOAD,Descargar {0}
+QUEST_NAME_EDITOR,Editar {0}
+EDITOR,Editar
+QUEST_NAME_UPDATE,  [Actualizar] {0}
+QUOTA,Cuota
+RECOVER,Recupear
+
+RELOAD,Recargar
+REMOVE_COMPONENTS,Eliminar Componentes:
+REQUIRED_EXPANSIONS,Expansiones Requeridas:
+REQUIRES_EXPANSION, Requiere: {0}
+
+REQ_TRAITS,Atributos Req.:
+RESET,Restablecer
+ROTATE_TO,Rotar: {0}
+ROTATION,Rotación
+SAVE,Guardar
+AUTOSAVE,Autoguardado
+SELECT_SAVE,Sel. Partida Grabada
+SELECT,Selección de {0}
+SELECT_CLASS,Selección de Clase
+SELECTION,Selección
+SELECT_CONTENT,Mi Colección
+SELECT_EXPANSION,Elige Colección de Expansiones
+SELECT_IMAGE,Escoger Imagen
+SELECT_ITEM,Escoger Elemento
+SELECT_PACK,Selección de Paquetes
+SELECT_TO_COPY,Selección de {0} a Copiar
+SELECT_TO_DELETE,Selección de {0} a Eliminar
+HIDDEN,Oculto
+ACTIVE,Activo
+SET,Set
+SKILL,Atributo
+SELECT_SKILLS,Selección de Habilidades
+SPAWN,Generar
+STARTING_ITEM,Objeto Inicial
+STARTING_ITEMS,Equipo Inicial
+START_QUEST,Iniciar {0}
+START,Iniciar
+
+TESTS,Pruebas
+TILE,Tablero
+
+TOKEN,Marcador
+TOOLS,Utilidades
+TOTAL_MOVES,Total Movims.
+TRAITS,Atributos
+TRIGGER,Activador
+TYPE,Tipo
+TYPES,Tipos
+UNABLE_BUTTON,Botón No Puede:
+
+UI,Interfaz
+UNITS,Unidades
+HORIZONTAL,Horizontal
+VERTICAL,Vertical
+ALIGN,Alinear
+POSITION,Posición
+SIZE,Tamaño
+TEXT_SIZE,Tamaño del Texto
+ASPECT,Aspecto
+BORDER,Borde
+NO_BORDER,Sin Borde
+UNDO,Deshacer
+UNIQUE_DEFEATED,Único\nDerrotado
+UNIQUE_INFO,Información de Único
+UNIQUE_MONSTER,Monstruo Único
+UNIQUE_TITLE,Título de Único
+UNUSED,No Usado
+VALUE,Valor
+VAR,Var
+VARS,Vars
+VAR_NAME,Nombre Variable:
+X_ACTIVATED,{0} Activado
+
+BUY,Comprar
+SELL,Vender
+CLASS,Clase
+ACT_1,Acto I
+ACT_2,Acto II
+
+//Items
+weapon,Arma
+firearm,Arma de Fuego
+heavyweapon,Arma Contundente
+heavy,Arma Contundente
+tome,Tomo
+equipment,Equipo
+lightsource,Fuente de Luz
+bladedweapon,Arma de Filo
+bladed,Arma de Filo
+spell,Hechizo
+key,Llave
+evidence,Pista
+ally,Aliado
+
+//Audio
+menu,Menú
+music,Música
+quest,Escenario
+defeated,Derrotado
+newround,Nueva Ronda
+attack,Ataque
+unarmed,Sin Arma
+horror,Horror
+search,Búsqueda
+explore,Exploración
+
+//Heroes
+latari,Latari
+dwarf,Enano
+gnome,Gnomo
+male,Hombre
+female,Mujer
+
+//monsters
+undead,No Muerto
+humanoid,Humanoide
+spirit,Espíritu
+beast,Bestia
+agent,Agente
+lieutenant,Teniente
+small,Pequeño
+medium,Mediano
+huge,Gigante
+massive,Masivo
+building,Edificio
+melee,Melé
+ranged,Distancia
+goblin,Goblin
+cursed,Maldito
+cave,Cueva
+wilderness,Naturaleza
+civilized,Civilización
+dark,Oscuridad
+mountain,Montaña
+cold,Frío
+hot,Caliente
+water,Agua
+
+//Tiles
+basement,Sótano
+river,Río
+street,Calle
+hallway,Pasillo
+bathroom,Baño
+bedroom,Dormitorio
+kitchen,Cocina
+dock,Muelle
+storage,Almacén
+outside,Exterior
+inside,Interior
+small,Pequeño
+medium,Mediano
+big,Grande
+transition,Transición
+throne,Trono
+pit,Abismo
+farm,Granja
+tomb,Tumba
+library,Biblioteca
+graves,Cementerio
+bridge,Puente
+stairs,Escaleras
+torture,Tortura
+tents,Tiendas
+stables,Establos
+hall,Salón
+map,Mapa
+bedroom,Dormitorio
+city,Ciudad
+fountain,Fuente
+blackrealm,Reino de Oscuridad
+altar,Altar
+beds,Camas
+study,Estudio
+prison,Prisión
+plinth,Pedestal
+tavern,Taberna
+statues,Estatuas
+drawbridge,Puente Levadizo
+rubble,Escombros
+treasure,Tesoro
+stone,Piedra
+dirt,Mugre
+timber,Madera
+snow,Nieve
+lava,Lava
+swamp,Pantano
+sludge,Lodo
+
+// Colors
+black,Negro
+white,Blanco
+red,Rojo
+lime,Lima
+blue,Azul
+yellow,Amarillo
+aqua,Agua
+cyan,Cian
+magenta,Magenta
+fuchsia,Fucsia
+silver,Plata
+gray,Gris
+maroon,Marrón
+olive,Oliva
+green,Verde
+purple,Púrpura
+teal,Turquesa
+navy,Azul Marino
+
+//Puzzles
+image,Mosaico
+code,Código
+slide,Mecanismo
+SYMBOL,Símbolo
+
+// Events
+Ordered,Ordenado
+Random,Aleatorio
+
+//Inherited from FFG localization files
+SET_FIRE,Prender fuego
+INVESTIGATOR_ELIMINATED,Investigador eliminado
+CLOSE,Cerrar
+PUZZLE_GUESS,Resolver
+
+UP,Arriba
+DOWN,Abajo
+LEFT,Izquierda
+RIGHT,Derecha
+
+PHASE_INVESTIGATOR,Fase de los Investigadores
+PHASE_MYTHOS,Fase de Mitos
+MONSTER_STEP,Paso de activación de monstruos
+HORROR_STEP,Paso de Horror
+END_PHASE,Fin de la fase
+
+ATTACK_PROMPT,¿Con qué tipo de arma vas a atacar?
+ATTACK_WITH_HEAVY_WEAPON, Atacar con un [i]Arma pesada[/i]
+ATTACK_WITH_BLADED_WEAPON, Atacar con un [i]Arma de filo[/i]
+ATTACK_WITH_FIREARM, Atacar con un [i]Arma de fuego[/i]
+ATTACK_WITH_SPELL, Atacar con un Hechizo
+ATTACK_WITH_UNARMED, Atacar sin arma
+
+ACTION_X, {0}

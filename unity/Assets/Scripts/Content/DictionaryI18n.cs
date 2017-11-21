@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ValkyrieTools;
 
 
 namespace Assets.Scripts.Content
@@ -14,496 +15,394 @@ namespace Assets.Scripts.Content
         private const char COMMA = ',';
 
         /// <summary>
-        /// Fixed value included in FFGs Localization files
-        /// </summary>
-        public const string FFG_LANGS = ".,English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech";
-        /// <summary>
         /// Default initial language is English
         /// </summary>
-        public const string DEFAULT_LANG = "English";
+        public string defaultLanguage = "English";
 
-        // Languages
-        private string[] languages;
-        
-        // Dictionary: Will be used to store all strings of a localization file
-        private Dictionary<string, EntryI18n> dict;
-        // raw dict
-        private string[] rawDict;
+        public string currentLanguage = "English";
 
-        // default language. If current language doesn't have description, default will be used.
-        public int defaultLanguage { get; set; }
+        // Each language has it's own dictionary
+        private Dictionary<string, Dictionary<string, string>> data;
 
-        // current language. Current language to be used.
-        public int currentLanguage {get; set;}
+        // And each language has it's own raw data
+        Dictionary<string, List<string>> rawData;
 
-        /*
+        // must be loaded to Dictionaries and not raw for edit
+        protected bool loadedForEdit = false;
+
         /// <summary>
-        /// Dictionary constructor from a languagesList
+        /// Construct a new empty dictionary
         /// </summary>
-        /// <param name="languagesList"></param>
-        public DictionaryI18n(string languagesList, int newDefaultLanguage)
+        public DictionaryI18n()
         {
-            languages = languagesList.Split(COMMA);
+            data = new Dictionary<string, Dictionary<string, string>>();
+            rawData = new Dictionary<string, List<string>>();
+            currentLanguage = Game.Get().currentLang;
+        }
+
+        /// <summary>
+        /// Construct a new empty dictionary with a default language
+        /// </summary>
+        /// <param name="newDefaultLanguage">Language to use as default</param>
+        public DictionaryI18n(string newDefaultLanguage)
+        {
+            data = new Dictionary<string, Dictionary<string, string>>();
+            rawData = new Dictionary<string, List<string>>();
+            currentLanguage = Game.Get().currentLang;
+        }
+
+        /// <summary>
+        /// Construct a dictionary and add language data
+        /// </summary>
+        public DictionaryI18n(string[] languageData)
+        {
+            data = new Dictionary<string, Dictionary<string, string>>();
+            rawData = new Dictionary<string, List<string>>();
+            currentLanguage = Game.Get().currentLang;
+            AddData(languageData);
+        }
+
+        /// <summary>
+        /// Construct a dictionary with a default language and add language data
+        /// </summary>
+        /// <param name="languageData">Language data</param>
+        /// <param name="newDefaultLanguage">Language to use as default</param>
+        public DictionaryI18n(string[] languageData, string newDefaultLanguage)
+        {
+            data = new Dictionary<string, Dictionary<string, string>>();
+            rawData = new Dictionary<string, List<string>>();
             defaultLanguage = newDefaultLanguage;
+            currentLanguage = Game.Get().currentLang;
+            AddData(languageData);
         }
-        */
 
         /// <summary>
-        /// Dictionary constructor from a localizacion file and default language
+        /// Add language data to dictionary from file path.
         /// </summary>
-        /// <param name="languagesList"></param>
-        public DictionaryI18n(string[] languagesAndTexts, string newDefaultLanguage,string newCurrentLanguage)
+        /// <param name="file">Language file to add</param>
+        public void AddDataFromFile(string file)
         {
-            // Set languages list with first line of file
-            languages = languagesAndTexts[0].Split(COMMA);
+            string[] lines;
 
-            // Create dictionary with file lines capacity
-            dict = new Dictionary<string, EntryI18n>(languagesAndTexts.Length);
-            //Load raw dictionary
-            rawDict = languagesAndTexts;
-
-            // Get default language
-            if (newDefaultLanguage != null)
+            // Read the whole file
+            try
             {
-                setDefaultLanguage(newDefaultLanguage);
+                lines = System.IO.File.ReadAllLines(file);
+                AddData(lines);
             }
-            // set current language
-            if (newCurrentLanguage != null)
+            catch (System.IO.IOException e)
             {
-                setCurrentLanguage(newCurrentLanguage);
+                ValkyrieDebug.Log("Error loading localization file " + file + ":" + e.Message);
             }
         }
 
         /// <summary>
-        /// Create a dict entry with the StringI18n
+        /// Add language data to dictionary
         /// </summary>
-        /// <param name="currentKeyValues">line of localization file</param>
-        public void Add(EntryI18n currentKeyValues)
+        /// <param name="languageData">Language data</param>
+        public void AddData(string[] languageData)
         {
-            dict[currentKeyValues.key] = currentKeyValues;
+            string newLanguage = languageData[0].Split(COMMA)[1].Trim('"');
+
+            if (!rawData.ContainsKey(newLanguage))
+            {
+                rawData.Add(newLanguage, new List<string>());
+            }
+            rawData[newLanguage].AddRange(languageData);
         }
 
         /// <summary>
-        /// Add dict entries from another dict merging rawdata
+        /// Loads all raw data into Dictionaries.  Must be called before any edits are made.
         /// </summary>
-        /// <param name="dictToCombine"></param>
-        public void Add(DictionaryI18n dictToCombine)
+        protected void MakeEditable()
         {
-            if (dictToCombine != null)
+            // Already loaded
+            if (loadedForEdit) return;
+
+            // Remove all existing entries (helps maintain order)
+            data = new Dictionary<string, Dictionary<string, string>>();
+
+            // For all languages
+            foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
-                foreach (string key in dictToCombine.dict.Keys)
+                // Create a Dictionary for each language
+                data.Add(kv.Key, new Dictionary<string, string>());
+                // Check each line
+                for(int i = 1; i < kv.Value.Count; i++)
                 {
-                    dict[key] = dictToCombine.dict[key];
-                }
+                    // Ignore comments
+                    if (kv.Value[i].Trim().IndexOf("//") == 0) continue;
 
-                int array1OriginalLength = rawDict.Length;
-                System.Array.Resize<string>(ref rawDict, array1OriginalLength + dictToCombine.rawDict.Length);
-                System.Array.Copy(dictToCombine.rawDict, 0, rawDict, array1OriginalLength, dictToCombine.rawDict.Length);
-            }
-        }
+                    // Split out key
+                    string[] components = kv.Value[i].Split(",".ToCharArray(), 2);
+                    if (components.Length != 2) continue;
 
-        /// <summary>
-        /// Create a dictionary from a list of localization files
-        /// </summary>
-        /// <param name="basePath">Base path to localization files</param>
-        /// <param name="localizationFiles">List of paths to localization files</param>
-        /// <param name="newDefaultLanguage">default language of the new dictionary</param>
-        /// <param name="newCurrentLanguage">current language of the new dictionary</param>
-        /// <returns></returns>
-        public static DictionaryI18n ReadFromFileList(string basePath, IEnumerable<string> localizationFiles, string newDefaultLanguage, string newCurrentLanguage)
-        {
-            DictionaryI18n finalDict = null;
-            DictionaryI18n partialDict;
-
-            foreach (string file in localizationFiles)
-            {
-                // The partial dicts are created without default and current language and after loading
-                // all dict the default and current language will be stablished
-                partialDict = LocalizationRead.ReadFromFilePath(basePath + file, null, null);
-                if (finalDict == null)
-                {
-                    finalDict = partialDict;
-
-                }
-                else
-                {
-                    finalDict.AddRaw(partialDict);
-                }
-            }
-
-            if (finalDict != null)
-            {
-                finalDict.setDefaultLanguage(newDefaultLanguage);
-                finalDict.setCurrentLanguage(newCurrentLanguage);
-            }
-
-            return finalDict;
-        }
-
-        /// <summary>
-        /// Adds raw data to the dictionary. Current dict shouldn't have entries neither new dict. Only raw data
-        /// </summary>
-        /// <param name="dictToCombine"></param>
-        public void AddRaw(DictionaryI18n dictToCombine)
-        {
-            if (dictToCombine == null) return;
-            
-            if (dict.Count == 0 && dictToCombine.dict.Count == 0)
-            {
-                bool found = false;
-                foreach (string lang in languages)
-                {
-                    if (lang != "." && lang == dictToCombine.languages[1])
+                    // Only store the first occurance of a key
+                    if (!data[kv.Key].ContainsKey(components[0]))
                     {
-                        found = true;
+                        data[kv.Key].Add(components[0], ParseEntry(components[1]));
                     }
                 }
-
-                // If the language already exists don't add anything
-                // If the new dict has more than one lang don't add anything
-                if (!found && dictToCombine.languages.Length == 2)
-                {
-                    List<string> rawOut = new List<string>();
-                    // Generate the dictionary list
-                    string newLanguagesList = String.Join(COMMA.ToString(), languages) + COMMA + dictToCombine.languages[1];
-                    rawOut.Add(newLanguagesList);
-                    languages = newLanguagesList.Split(COMMA);
-
-                    string currentKey;
-                    string outString;
-                    for(int entryPos = 1; entryPos < rawDict.Length; entryPos++)
-                    {
-                        currentKey = rawDict[entryPos].Split(COMMA)[0] + COMMA;
-
-                        outString = rawDict[entryPos] + COMMA;
-                        for (int newEntryPos = 1; newEntryPos < dictToCombine.rawDict.Length; newEntryPos++)
-                        {
-                            if (dictToCombine.rawDict[newEntryPos].StartsWith(currentKey))
-                            {
-                                outString += dictToCombine.rawDict[newEntryPos].Substring(currentKey.Length);
-                                break;
-                            }
-                        }
-
-                        rawOut.Add(outString);
-                    }
-
-                    rawDict = rawOut.ToArray();
-                } else
-                {
-                    ValkyrieTools.ValkyrieDebug.Log("The AddRaw method only merges a dictionary with only one new lang");
-                }
-            } else
-            {
-                ValkyrieTools.ValkyrieDebug.Log("The AddRaw method only merges raw dictionaries");
             }
-        }
-
-
-
-        public void Remove(string key)
-        {
-            if (dict.ContainsKey(key))
-            {
-                dict.Remove(key);
-            }
-            RemoveRaw(key);
-        }
-
-        private void RemoveRaw(string key)
-        {
-            RemoveRawPrefix(key + ",");
-        }
-
-        private void RemoveRawPrefix(string key)
-        {
-            List<string> newRaw = new List<string>();
-            foreach (string s in rawDict)
-            {
-                if (s.IndexOf(key) != 0)
-                {
-                    newRaw.Add(s);
-                }
-            }
-            rawDict = newRaw.ToArray();
-        }
-
-        public void RemoveKeyPrefix(string prefix)
-        {
-            HashSet<string> toRemove = new HashSet<string>();
-            foreach (string s in dict.Keys)
-            {
-                if (s.IndexOf(prefix) == 0)
-                {
-                    toRemove.Add(s);
-                }
-            }
-            foreach (string s in toRemove)
-            {
-                Remove(s);
-            }
-            RemoveRawPrefix(prefix);
-        }
-
-        public void RenamePrefix(string oldPrefix, string newPrefix)
-        {
-            HashSet<string> toRemove = new HashSet<string>();
-            List<EntryI18n> toAdd = new List<EntryI18n>();
-            foreach (string s in dict.Keys)
-            {
-                if (s.IndexOf(oldPrefix) == 0)
-                {
-                    string newKey = newPrefix + s.Substring(oldPrefix.Length);
-                    EntryI18n e = dict[s];
-                    e.key = newKey;
-                    toAdd.Add(e);
-                    toRemove.Add(s);
-                }
-            }
-            foreach (string s in toRemove)
-            {
-                Remove(s);
-            }
-            foreach (EntryI18n e in toAdd)
-            {
-                dict.Add(e.key, e);
-            }
-            for (int i = 0; i < rawDict.Length; i++)
-            {
-                if (rawDict[i].IndexOf(oldPrefix) == 0)
-                {
-                    rawDict[i] = newPrefix + rawDict[i].Substring(oldPrefix.Length);
-                }
-            }
+            loadedForEdit = true;
         }
 
         /// <summary>
-        /// Method for getting all languages of this dictionary 
+        /// Add an entry with the current language, replace if exists
         /// </summary>
-        /// <returns></returns>
-        public string[] getLanguages()
+        /// <param name="key">Entry key</param>
+        /// <param name="value">Data to add</param>
+        public void AddEntry(string key, string value)
         {
-            return languages;
-        }
-
-        public void setDefaultLanguage(string languageName)
-        {
-            int newLanguage = getPosFromName(languageName);
-            if (newLanguage > 0)
-            {
-                defaultLanguage = newLanguage;
-            }
+            AddEntry(key, value, currentLanguage);
         }
 
         /// <summary>
-        /// Sets current language using the string of the language.
-        /// If there is no language with this name, the default language
-        /// remains the same.
+        /// Add an entry to a language, replace if exists
         /// </summary>
-        /// <param name="languageName">Name of the language</param>
-        public void setCurrentLanguage(string languageName)
+        /// <param name="key">Entry key</param>
+        /// <param name="value">Data to add</param>
+        /// <param name="language">Language to use</param>
+        public void AddEntry(string key, string value, string language)
         {
-            int newLanguage = getPosFromName(languageName);
-            if (newLanguage == -1 && dict.Count == 0)
-            {
-                // If the language isn't on the list. 
-                // There are 2 options. If we are importing the dictionaries
-                // we can add the new language.
-                // Only if all items are raw data. 
-                // Else We set the default language
+            MakeEditable();
 
-                AddRaw(new DictionaryI18n(new String[1] { ".," + languageName }, languageName, languageName));
-                newLanguage = getPosFromName(languageName);
+            // Create language Dictionary if missing
+            if (!data.ContainsKey(language))
+            {
+                data.Add(language, new Dictionary<string, string>());
             }
 
-            if (newLanguage > 0)
+            if (data[language].ContainsKey(key))
             {
-                currentLanguage = newLanguage;
-            } else
-            {
-                currentLanguage = defaultLanguage;
-            }
-        }
-
-        /// <summary>
-        /// Get language number from string
-        /// </summary>
-        /// <param name="languageName"></param>
-        /// <returns></returns>
-        private int getPosFromName(string languageName)
-        {
-            for (int pos = 1; pos < languages.Length; pos++)
-            {
-                if (languages[pos] == languageName)
-                {
-                    return pos;
-                }
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// Checks if a key exists in the dictionary
-        /// gets its value
-        /// </summary>
-        /// <param name="v">key to find</param>
-        /// <param name="valueOut">variable to store result if exists</param>
-        /// <returns>true if the key exists in the dictionary</returns>
-        public bool tryGetValue(string v, out EntryI18n valueOut)
-        {
-            bool found = dict.TryGetValue(v, out valueOut);
-
-            if (found)
-            {
-                return true;
+                data[language][key] = value;
             }
             else
             {
-                // Search element
-                for (int pos = 1; pos < rawDict.Length; pos++)
-                {
-                    // if the line is not empty and not slash (/) insert
-                    if (rawDict[pos].StartsWith(v + COMMA))
-                    {
-                        valueOut = new EntryI18n(this, GetEntry(pos));
-                        Add(valueOut);
-                        return true;
-                    }
-                }
-                return false;
+                data[language].Add(key, value);
             }
         }
 
         /// <summary>
-        /// Create entries for every raw data.
-        /// Repeated data will not replace
+        /// Remove an entry from all languages
         /// </summary>
-        public void flushRaw()
+        /// <param name="key">Entry key</param>
+        public void Remove(string key)
         {
-            foreach(string rawLine in rawDict)
+            MakeEditable();
+            foreach (string lang in data.Keys)
             {
-                string key = rawLine.Split(COMMA)[0];
-                // Process non repeated list line
-                if (key != "." && !dict.ContainsKey(key))
+                if (data[lang].ContainsKey(key))
                 {
-                    Add(new EntryI18n(this, rawLine));
+                    data[lang].Remove(key);
                 }
             }
-        }
-
-        public string GetEntry(int pos)
-        {
-            string r = rawDict[pos];
-            int index = pos + 1;
-            while(!EntryFinished(r) && index < rawDict.Length)
-            {
-                r += System.Environment.NewLine + rawDict[index++];
-            }
-            return r;
-        }
-
-        public bool EntryFinished(string entry)
-        {
-            bool quote = false;
-            for (int i = 0; i < entry.Length; i++)
-            {
-                char next = '_';
-                if (i < (entry.Length - 1))
-                {
-                    next = entry[i + 1];
-                }
-                if (!quote && entry[i] == '\\' && next == '\\')
-                {
-                    return true;
-                }
-                if (entry[i] == '\"')
-                {
-                    if (next != '\"')
-                    {
-                        quote = !quote;
-                    }
-                    else
-                    {
-                        i++;
-                    }
-                }
-            }
-
-            return !quote;
         }
 
         /// <summary>
-        /// Serialization of dictionary.
-        /// To save Localization.file
+        /// Remove all entries starting with prefix from all languages
         /// </summary>
-        /// <returns></returns>
-        public List<string> Serialize()
+        /// <param name="prefix">prefix to match</param>
+        public void RemoveKeyPrefix(string prefix)
         {
-            List<string> result = new List<string>();
+            MakeEditable();
 
-            // We first generate the languages line
-            result.Add(string.Join(COMMA.ToString(), languages));
-
-            // Force raw data to enter the dictionary
-            flushRaw();
-
-            // and then generate the multilanguage string for each entry
-            foreach(EntryI18n entry in dict.Values)
+            foreach (Dictionary<string, string> languageData in data.Values)
             {
-                // Replace real carry returns with the \n text.
-                result.Add(entry.ToString());
-            }
+                // Build list of keys to remove
+                List<string> toRemove = new List<string>();
+                foreach (string key in languageData.Keys)
+                {
+                    if (key.IndexOf(prefix) == 0)
+                    {
+                        toRemove.Add(key);
+                    }
+                }
 
-            return result;
+                // Remove all keys
+                foreach (string key in toRemove)
+                {
+                    languageData.Remove(key);
+                }
+            }
         }
 
         /// <summary>
-        /// Serialization of dictionary.
-        /// To save one Localization files per language
+        /// Rename key for all entries starting with prefix from all languages
         /// </summary>
-        /// <returns></returns>
+        /// <param name="oldPrefix">prefix to match</param>
+        /// <param name="newPrefix">text to replace prefix</param>
+        public void RenamePrefix(string oldPrefix, string newPrefix)
+        {
+            MakeEditable();
+
+            foreach (Dictionary<string, string> languageData in data.Values)
+            {
+                // Build list of keys to rename
+                Dictionary<string, string> toRename = new Dictionary<string, string>();
+                foreach (string key in languageData.Keys)
+                {
+                    if (key.IndexOf(oldPrefix) == 0)
+                    {
+                        toRename.Add(key, newPrefix + key.Substring(oldPrefix.Length));
+                    }
+                }
+
+                // Replace with new key name
+                foreach (KeyValuePair<string, string> kv in toRename)
+                {
+                    languageData.Add(kv.Value, languageData[kv.Key]);
+                    languageData.Remove(kv.Key);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check if a key exists in any language, also ensures all matching values are loaded into Dictionary objects
+        /// </summary>
+        /// <param name="key">key to check</param>
+        public bool KeyExists(string key)
+        {
+            // Check loaded Dictionary data
+            foreach (Dictionary<string, string> languageData in data.Values)
+            {
+                if (languageData.ContainsKey(key)) return true;
+            }
+
+            // If in edit mode don't check raw data, may be outdated
+            if (loadedForEdit) return false;
+
+            // Check raw data
+            bool found = false;
+            // Check all languages
+            foreach (KeyValuePair<string, List<string>> kv in rawData)
+            {
+                // Check all lines
+                foreach (string raw in kv.Value)
+                {
+                    if (raw.IndexOf(key + ',') == 0)
+                    {
+                        // Add this language to Dictionary data
+                        if (!data.ContainsKey(kv.Key))
+                        {
+                            data.Add(kv.Key, new Dictionary<string, string>());
+                        }
+
+                        // If already present log warning
+                        if (data[kv.Key].ContainsKey(key))
+                        {
+                            ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
+                        }
+                        else
+                        {
+                            data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                        }
+
+                        // Continue after found to ensure all languages are loaded
+                        found = true;
+                    }
+                }
+            }
+
+            return found;
+        }
+
+        /// <summary>
+        /// Get the value for a key.  First check current language, then default, then any.  Returns key if not found.
+        /// </summary>
+        /// <param name="key">key to retreive</param>
+        /// <returns>Value found or 'key' if not found</returns>
+        public string GetValue(string key)
+        {
+            // KeyExists ensures any matches are loaded to Dictionary data
+            if (!KeyExists(key)) return key;
+
+            // Check current language first
+            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key))
+            {
+                return data[currentLanguage][key];
+            }
+
+            // Then check default language
+            if (data.ContainsKey(defaultLanguage) && data[defaultLanguage].ContainsKey(key))
+            {
+                return data[defaultLanguage][key];
+            }
+
+            // Not in current or default, find any match
+            foreach (Dictionary<string, string> langData in data.Values)
+            {
+                if (langData.ContainsKey(key))
+                {
+                    return langData[key];
+                }
+            }
+            // Should never happen
+            return "";
+        }
+
+        /// <summary>
+        /// Get the raw language data for this dictionary
+        /// </summary>
+        /// <returns>raw data by language</returns>
         public Dictionary<string,List<string>> SerializeMultiple()
         {
-            // Force raw data to enter the dictionary
-            flushRaw();
+            // If we haven't edited can return what we were given
+            if (!loadedForEdit) return rawData;
 
-            Dictionary<string, List<string>> totalResult = new Dictionary<string, List<string>>();
-
-            List<string> oneLangResult;
-
-            // For each language we create a new dictionary
-            for (int oneLang = 1; oneLang < languages.Length; oneLang++)
+            // If we have edited we can replace the rawData
+            rawData = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, Dictionary<string, string>> kv in data)
             {
-                bool empty = true;
-                // We first generate the languages line
-
-                oneLangResult = new List<string>();
-                oneLangResult.Add(languages[0] + "," + languages[oneLang]);
-
-                // and then generate the multilanguage string for each entry
-                foreach (EntryI18n entry in dict.Values)
+                rawData.Add(kv.Key, new List<string>());
+                rawData[kv.Key].Add(".," + kv.Key);
+                foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    StringBuilder text = entry.ToString(oneLang);
-                    if (text.Length > 0)
-                    {
-                        empty = false;
-                        // Replace real carry returns with the \n text.
-                        oneLangResult.Add(new StringBuilder()
-                                .Append(entry.key)
-                                .Append(COMMA)
-                                .Append(entry.ToString(oneLang))
-                                .ToString()
-                            );
-                    }
-                }
-
-                if (!empty)
-                {
-                    totalResult.Add(languages[oneLang], oneLangResult);
+                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
                 }
             }
 
-            return totalResult;
+            return rawData;
+        }
+
+        /// <summary>
+        /// Parse raw value entry
+        /// </summary>
+        /// <param name="entry">entry from raw text</param>
+        /// <returns>Entry with newlines and quotes handled</returns>
+        protected string ParseEntry(string entry)
+        {
+            string parsedReturn = entry.Replace("\\n", "\n");
+            // If entry is in quotes
+            if (parsedReturn.Length > 2 && parsedReturn[0] == '\"')
+            {
+                // Trim leading and trailing quotes
+                parsedReturn = parsedReturn.Substring(1, parsedReturn.Length - 2);
+                // Handle escaped quotes
+                parsedReturn = parsedReturn.Replace("\"\"", "\"");
+            }
+            return parsedReturn;
+        }
+
+        /// <summary>
+        /// Get matches to a key for all languages
+        /// </summary>
+        /// <param name="key">key to check</param>
+        /// <returns>Dictionary of results for each language</returns>
+        public Dictionary<string, string> ExtractAllMatches(string key)
+        {
+            // Load into data
+            KeyExists(key);
+
+            Dictionary<string, string> returnData = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, Dictionary<string,  string>> kv in data)
+            {
+                if (kv.Value.ContainsKey(key))
+                {
+                    returnData.Add(kv.Key, kv.Value[key]);
+                }
+            }
+            return returnData;
         }
     }
 }

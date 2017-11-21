@@ -140,7 +140,7 @@ public class EventManager
     {
         Game game = Game.Get();
         // First check if things need to be added to the queue at end round
-        game.roundControl.CheckNewRound();
+        if (game.roundControl.CheckNewRound()) return;
 
         // No events to trigger
         if (eventStack.Count == 0) return;
@@ -274,7 +274,7 @@ public class EventManager
         game.quest.Remove(e.qEvent.removeComponents);
 
         // Move camera
-        if (e.qEvent.locationSpecified)
+        if (e.qEvent.locationSpecified && !(e.qEvent is QuestData.UI))
         {
             CameraController.SetCamera(e.qEvent.location);
         }
@@ -411,8 +411,8 @@ public class EventManager
             }
         }
 
-        // Does this event end the quest?
-        if (eventData.sectionName.IndexOf("EventEnd") == 0)
+        // Has the quest ended?
+        if (game.quest.vars.GetValue("$end") != 0)
         {
             Destroyer.MainMenu();
             return;
@@ -498,24 +498,7 @@ public class EventManager
             // Find and replace {q:element with the name of the
             // element
 
-            if (text.Contains("{c:"))
-            {
-                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
-                string replaceFrom;
-                string componentName;
-                string componentText;
-                foreach (Match oneVar in questItemRegex.Matches(text))
-                {
-                    replaceFrom = oneVar.Value;                    
-                    componentName = oneVar.Groups[1].Value;
-                    QuestData.QuestComponent component;
-                    if (game.quest.qd.components.TryGetValue(componentName, out component))
-                    {
-                        componentText = getComponentText(component);
-                        text = text.Replace(replaceFrom, componentText);
-                    }
-                }
-            }
+            text = ReplaceComponentText(text);
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
@@ -567,13 +550,38 @@ public class EventManager
             return OutputSymbolReplace(text).Replace("\\n", "\n");
         }
 
+        public static string ReplaceComponentText(string input)
+        {
+            string toReturn = input;
+            if (toReturn.Contains("{c:"))
+            {
+                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
+                string replaceFrom;
+                string componentName;
+                string componentText;
+                foreach (Match oneVar in questItemRegex.Matches(toReturn))
+                {
+                    replaceFrom = oneVar.Value;                    
+                    componentName = oneVar.Groups[1].Value;
+                    QuestData.QuestComponent component;
+                    if (Game.Get().quest.qd.components.TryGetValue(componentName, out component))
+                    {
+                        componentText = getComponentText(component);
+                        toReturn = toReturn.Replace(replaceFrom, componentText);
+                    }
+                }
+            }
+            return toReturn;
+        }
+
         /// <summary>
         /// Get text related with selected component
         /// </summary>
         /// <param name="component">component to get text</param>
         /// <returns>extracted text</returns>
-        private string getComponentText(QuestData.QuestComponent component)
+        public static string getComponentText(QuestData.QuestComponent component)
         {
+            Game game = Game.Get();
             switch (component.GetType().Name)
             {
                 case "Event":
@@ -836,6 +844,7 @@ public class EventManager
         output = output.Replace("{MAD21}", "");
         output = output.Replace("{MAD22}", "");
         output = output.Replace("{MAD23}", "");
+        output = output.Replace("{MAD25}", "");
 
         return output;
     }
@@ -881,6 +890,7 @@ public class EventManager
         output = output.Replace("","{MAD21}");
         output = output.Replace("","{MAD22}");
         output = output.Replace("", "{MAD23}");
+        output = output.Replace("", "{MAD25}");
 
         return output;
     }

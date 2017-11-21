@@ -175,6 +175,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
             UIWindowSelectionList selectType = new UIWindowSelectionList(SelectImage, SELECT_IMAGE.Translate());
             selectType.AddItem("{NUMBERS}", "");
             selectType.AddItem(new StringKey("val", "SYMBOL").Translate(), "symbol");
+            selectType.AddItem(new StringKey("val", "ELEMENT").Translate(), "element");
             selectType.Draw();
             return;
         }
@@ -196,6 +197,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 

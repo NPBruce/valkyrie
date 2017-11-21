@@ -782,7 +782,7 @@ public class EditorComponentEvent : EditorComponent
 
             select.AddItem(kv.Key, traits);
         }
-
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -832,7 +832,7 @@ public class EditorComponentEvent : EditorComponent
 
             select.AddItem(kv.Key, traits);
         }
-
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -926,6 +926,16 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem("#monsters", traits);
             select.AddItem("#shop", traits);
         }
+
+        if (game.gameType is D2EGameType)
+        {
+            select.AddNewComponentItem("Door");
+        }
+        select.AddNewComponentItem("Tile");
+        select.AddNewComponentItem("Token");
+        select.AddNewComponentItem("UI");
+        select.AddNewComponentItem("QItem");
+
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.Door || kv.Value is QuestData.Tile || kv.Value is QuestData.Token || kv.Value is QuestData.UI)
@@ -946,15 +956,89 @@ public class EditorComponentEvent : EditorComponent
 
     public void SelectAddVisibility(bool add, int index, string component)
     {
+        string target = component;
+        int i;
+        if (component.Equals("{NEW:Door}"))
+        {
+            i = 0;
+            while (game.quest.qd.components.ContainsKey("Door" + i))
+            {
+                i++;
+            }
+            target = "Door" + i;
+            QuestData.Door door = new QuestData.Door(target);
+            Game.Get().quest.qd.components.Add(target, door);
+
+            CameraController cc = GameObject.FindObjectOfType<CameraController>();
+            door.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
+            door.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
+
+            game.quest.Add(target);
+        }
+        if (component.Equals("{NEW:Tile}"))
+        {
+            i = 0;
+            while (game.quest.qd.components.ContainsKey("Tile" + i))
+            {
+                i++;
+            }
+            target = "Tile" + i;
+            QuestData.Tile tile = new QuestData.Tile(target);
+            Game.Get().quest.qd.components.Add(target, tile);
+
+            CameraController cc = GameObject.FindObjectOfType<CameraController>();
+            tile.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
+            tile.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
+
+            game.quest.Add(target);
+        }
+        if (component.Equals("{NEW:Token}"))
+        {
+            i = 0;
+            while (game.quest.qd.components.ContainsKey("Token" + i))
+            {
+                i++;
+            }
+            target = "Token" + i;
+            QuestData.Token token = new QuestData.Token(target);
+            Game.Get().quest.qd.components.Add(target, token);
+
+            CameraController cc = GameObject.FindObjectOfType<CameraController>();
+            token.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
+            token.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
+
+            game.quest.Add(target);
+        }
+        if (component.Equals("{NEW:UI}"))
+        {
+            i = 0;
+            while (game.quest.qd.components.ContainsKey("UI" + i))
+            {
+                i++;
+            }
+            target = "UI" + i;
+            Game.Get().quest.qd.components.Add(target, new QuestData.UI(target));
+        }
+        if (component.Equals("{NEW:QItem}"))
+        {
+            i = 0;
+            while (game.quest.qd.components.ContainsKey("QItem" + i))
+            {
+                i++;
+            }
+            target = "QItem" + i;
+            Game.Get().quest.qd.components.Add(target, new QuestData.QItem(target));
+        }
+
         if (index != -1)
         {
             if (add)
             {
-                eventComponent.addComponents[index] = component;
+                eventComponent.addComponents[index] = target;
             }
             else
             {
-                eventComponent.removeComponents[index] = component;
+                eventComponent.removeComponents[index] = target;
             }
             Update();
             return;
@@ -970,13 +1054,12 @@ public class EditorComponentEvent : EditorComponent
             oldC = eventComponent.removeComponents;
         }
         string[] newC = new string[oldC.Length + 1];
-        int i;
         for (i = 0; i < oldC.Length; i++)
         {
             newC[i] = oldC[i];
         }
 
-        newC[i] = component;
+        newC[i] = target;
 
         if (add)
         {
@@ -1521,9 +1604,29 @@ public class EditorComponentEvent : EditorComponent
 
     public void SetNumValue(QuestData.Event.VarOperation op)
     {
-        float value = 0;
-        float.TryParse(varText.value, out value);
-        op.value = value.ToString();
+        
+        if (varText.value.StartsWith("#rand"))
+        {
+            // rand integer value
+
+            string randLimit = varText.value.Substring(5);
+            int value;
+            int.TryParse(randLimit, out value);
+
+            // The minimal random number is 1
+            if (value == 0)
+            {
+                value = 1;
+            }
+
+            op.value = "#rand" + value.ToString();
+        
+        } else {
+            // float value
+            float value;
+            float.TryParse(varText.value, out value);
+            op.value = value.ToString();
+        }
         Update();
     }
 
