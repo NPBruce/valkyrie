@@ -11,7 +11,7 @@ ACTIVATIONS,Aktivierungen
 ADD_COMPONENTS,Komponente hinzufügen:
 COMPONENTS,Komponenten
 RENAME,Umbenennen
-SAVE_TEST,
+SAVE_TEST,Speichern & Testen
 SOURCE,Quelle
 COMMENT,Kommentar
 SNAP,Auto
@@ -39,7 +39,7 @@ CANCEL,Abbrechen
 CHOOSE_LANG,Sprache wählen
 CLEAR_FIRE,Feuer gelöscht
 COLOR,Farbe
-COMPONENT_NAME,Name der Erweiterung
+COMPONENT_NAME,Name der Erweiterung:
 COMPONENT_TO_DELETE,Zu löschende Erweiterung:
 CONTENT_IMPORT,Importiere Inhalt
 CONTENT_IMPORTING,Importiere...
@@ -47,7 +47,8 @@ CONTENT_REIMPORT,Reimportiere Inhalt
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
-D2E_APP_NOT_FOUND,"Road to Legend"-Installation konnte nicht gefunden werden, bitte über Steam installieren
+D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden, bitte über Steam installieren
+D2E_APP_NOT_FOUND_ANDROID,"Wege zum Ruhm" nicht gefunden
 D2E_HEROES_NAME,Helden
 D2E_HERO_NAME,Held
 D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
@@ -57,6 +58,8 @@ DELETE,Löschen
 DIALOG,Dialog
 DOOR,Tür
 DOWNLOAD,Download
+DOWNLOAD_LIST,Download von Paketliste
+DOWNLOAD_PACKAGE,Download von Paket
 E,E
 EFFECTS,Effekte
 END_TURN,Letzter Zug
@@ -71,6 +74,7 @@ HEALTH,Ausdauer
 HEALTH_HERO,Pro Held
 HIGHLIGHT,Markieren
 HORROR_CHECK,Horrortest
+AWARENESS,Aufmerksamkeit
 INDENT,  {0}
 INFO,Info
 INFORMATION,Information
@@ -91,9 +95,10 @@ MENU,Menü
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Kam Min
-MOM_APP_NOT_FOUND, installalo con Steam",,"Nie można zlokalizować Posiadłości Szaleństwa
-MOM_HEROES_NAME,Ermittler
+MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden, bitte über Steam installieren
+MOM_APP_NOT_FOUND_ANDROID,"Villen des Wahnsinns" nicht gefunden
 MOM_HERO_NAME,Ermittler
+MOM_HEROES_NAME,Ermittler
 MOM_NAME,Villen des Wahnsinns: 2. Edition
 MOM_QUEST_NAME,Szenario
 MONSTER,Monster
@@ -118,8 +123,6 @@ NO_ATTACK_MESSAGE,Kein-Angriff-Meldung:
 
 NUMBER,Nummer
 NUMBER_HEROS,{0} Helden:
-OK,Ok
-OP,Op
 OPTIONS,Optionen
 PLACEMENT,Platzierung
 
@@ -154,8 +157,8 @@ REQUIRES_EXPANSION, Benötigt:  {0}
 
 REQ_TRAITS,Ben. Fähigk.:
 RESET,Zurücksetzen
-ROTATE_TO,
-ROTATION,Rotation
+ROTATE_TO,Drehen um: {0}
+ROTATION,Drehen
 SAVE,Speichern
 AUTOSAVE,Autom. Speichern
 SELECT_SAVE,Speicherst. wählen
@@ -204,15 +207,12 @@ ASPECT,Aspekt
 BORDER,Umrandung
 NO_BORDER,Keine Umrandung
 UNDO,Rückgängig
-UNIQUE_DEFEATED,Unique
-Besiegt
-UNIQUE_INFO,Unique-Information
+UNIQUE_DEFEATED,Unique\nBesiegt
+UNIQUE_INFO,Unique-Info
 UNIQUE_MONSTER,Unique-Monster
 UNIQUE_TITLE,Unique-Titel
 UNUSED,Unbenutzt
 VALUE,Wert
-VAR,Var
-VARS,Vars
 VAR_NAME,Var-Name:
 X_ACTIVATED,{0} aktiviert
 

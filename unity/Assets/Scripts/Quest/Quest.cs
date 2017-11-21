@@ -857,6 +857,7 @@ public class Quest
         eManager = new EventManager(saveData.Get("EventManager"));
 
         // Update the screen
+        game.stageUI.Update();
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
     }
@@ -1027,6 +1028,10 @@ public class Quest
         if (itemSelect.ContainsKey(name) && items.Contains(itemSelect[name]))
         {
             items.Remove(itemSelect[name]);
+            if (itemInspect.ContainsKey(itemSelect[name]))
+            {
+                itemInspect.Remove(itemSelect[name]);
+            }
         }
         if (name.Equals("#monsters"))
         {
