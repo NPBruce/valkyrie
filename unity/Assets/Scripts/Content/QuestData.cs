@@ -907,11 +907,11 @@ public class QuestData
                 {
                     operations.Add(new VarOperation(s));
                 }
-                // Backwards support for format < 8
-                if (format < 8 && sectionName.StartsWith("EventEnd"))
-                {
-                    operations.Add(new VarOperation("$end,=,1"));
-                }
+            }
+            // Backwards support for format < 8
+            if (format <= 8 && sectionName.StartsWith("EventEnd"))
+            {
+                operations.Add(new VarOperation("$end,=,1"));
             }
 
             conditions = new List<VarOperation>();
