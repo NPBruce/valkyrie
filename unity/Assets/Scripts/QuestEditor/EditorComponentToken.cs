@@ -89,6 +89,7 @@ public class EditorComponentToken : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 

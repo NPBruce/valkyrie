@@ -94,6 +94,7 @@ public class EditorComponentTile : EditorComponent
                 select.AddItem(kv.Value);
             }
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 
