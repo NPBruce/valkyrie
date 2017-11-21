@@ -2007,19 +2007,6 @@ public class Quest
             }
         }
 
-        virtual public StringKey GetRandomAttack(string type)
-        {
-            List<AttackData> validAttacks = new List<AttackData>();
-            foreach (AttackData ad in attacks)
-            {
-                if (ad.attackType.Equals(type))
-                {
-                    validAttacks.Add(ad);
-                }
-            }
-            return validAttacks[Random.Range(0, validAttacks.Count)].text;
-        }
-
         // Save monster data to string
         override public string ToString()
         {

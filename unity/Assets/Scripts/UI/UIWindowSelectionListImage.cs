@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI
 
         protected void GenerateSpriteCache()
         {
-            foreach (SelectionItem item in items)
+            foreach (SelectionItem item in traitItems.Values)
             {
                 float aspect = 0;
                 Texture2D tex = GetTexture(item.GetKey(), out aspect);
@@ -90,14 +90,14 @@ namespace Assets.Scripts.UI
             new UIElementBorder(itemScrollArea);
 
 
-            SortedList toDisplay = traitItems;
+            List<SelectionItemTraits> toDisplay = new List<SelectionItemTraits>(traitItems.Values);
             if (alphaSort)
             {
-                toDisplay = alphaTraitItems;
+                toDisplay = new List<SelectionItemTraits>(alphaTraitItems.Values);
             }
             if (reverseSort)
             {
-                toDisplay = toDisplay.Reverse();
+                toDisplay.Reverse();
             }
 
             float offset = 0;

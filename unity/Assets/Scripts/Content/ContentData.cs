@@ -1150,7 +1150,7 @@ public class MonsterData : GenericData
     virtual public StringKey GetRandomAttack(string type)
     {
         List<AttackData> validAttacks = new List<AttackData>();
-        foreach (AttackData ad in attacks)
+        foreach (AttackData ad in Game.Get().cd.investigatorAttacks.Values)
         {
             if (ad.attackType.Equals(type))
             {

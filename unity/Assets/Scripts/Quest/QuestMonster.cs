@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Content;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 // A monster quest class that is defined by the quest
 public class QuestMonster : MonsterData

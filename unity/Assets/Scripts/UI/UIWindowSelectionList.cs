@@ -129,14 +129,14 @@ namespace Assets.Scripts.UI
             scrollArea.SetLocation(UIScaler.GetHCenter(-10.5f), 2, 21, 25);
             new UIElementBorder(scrollArea);
 
-            SortedList toDisplay = items;
+            List<SelectionItem> toDisplay = new List<SelectionItem>(items.Values);
             if (alphaSort)
             {
-                toDisplay = alphaItems;
+                toDisplay = new List<SelectionItem>(alphaItems.Values);
             }
             if (reverseSort)
             {
-                toDisplay = toDisplay.Reverse();
+                toDisplay.Reverse();
             }
 
             int lineNum = 0;
@@ -192,7 +192,7 @@ namespace Assets.Scripts.UI
             _call(key);
         }
 
-        protected class SelectionItem
+        public class SelectionItem
         {
             string _display = "";
             string _key = "";

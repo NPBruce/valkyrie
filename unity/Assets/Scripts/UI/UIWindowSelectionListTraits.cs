@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI
 
         override public void Draw()
         {
-            foreach (SelectionItemTraits item in traitItems)
+            foreach (SelectionItemTraits item in traitItems.Values)
             {
                 foreach (string category in item.GetTraits().Keys)
                 {
@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            foreach (SelectionItemTraits item in traitItems)
+            foreach (SelectionItemTraits item in traitItems.Values)
             {
                 foreach (TraitGroup tg in traitData)
                 {
@@ -228,14 +228,14 @@ namespace Assets.Scripts.UI
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);
 
-            SortedList toDisplay = traitItems;
+            List<SelectionItemTraits> toDisplay = new List<SelectionItemTraits>(traitItems.Values);
             if (alphaSort)
             {
-                toDisplay = alphaTraitItems;
+                toDisplay = new List<SelectionItemTraits>(alphaTraitItems.Values);
             }
             if (reverseSort)
             {
-                toDisplay = toDisplay.Reverse();
+                toDisplay.Reverse();
             }
 
             float offset = 0;
@@ -308,7 +308,7 @@ namespace Assets.Scripts.UI
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits)
         {
-            AddItem(new SelectionItemTraits(display, key, traits), color);
+            AddItem(new SelectionItemTraits(display, key, traits));
         }
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
@@ -340,13 +340,13 @@ namespace Assets.Scripts.UI
         {
             if (item is SelectionItemTraits)
             {
-                traitItems.Add(traitItems.Count, new SelectionItemTraits(item));
-                alphaTraitItems.Add(item.GetDisplay(), new SelectionItemTraits(item));
+                traitItems.Add(traitItems.Count, item as SelectionItemTraits);
+                alphaTraitItems.Add(item.GetDisplay(), item as SelectionItemTraits);
             }
             else
             {
-                traitItems.Add(itemIndex, item);
-                alphaTraitItems.Add(item.GetDisplay(), item);
+                traitItems.Add(traitItems.Count, new SelectionItemTraits(item));
+                alphaTraitItems.Add(item.GetDisplay(), new SelectionItemTraits(item));
             }
         }
 
@@ -438,7 +438,7 @@ namespace Assets.Scripts.UI
                 {
                     if (!t.Key.Equals(e))
                     {
-                        ExcludeTrait(tg, trait);
+                        ExcludeTrait(tg, t.Key);
                     }
                 }
             }
@@ -446,7 +446,7 @@ namespace Assets.Scripts.UI
 
         public void ExcludeExpansions()
         {
-            List<string> enabled = new List<string();
+            List<string> enabled = new List<string>();
             enabled.Add(new StringKey("val", "base").Translate());
             foreach (string s in Game.Get().quest.qd.quest.packs)
             {
@@ -455,7 +455,7 @@ namespace Assets.Scripts.UI
             ExcludeTraitsWithExceptions(new StringKey("val", "SOURCE").Translate(), enabled);
         }
 
-        protected class SelectionItemTraits : SelectionItem
+        public class SelectionItemTraits : SelectionItem
         {
             Dictionary<string, IEnumerable<string>> _traits = new Dictionary<string, IEnumerable<string>>();
 

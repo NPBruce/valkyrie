@@ -498,24 +498,7 @@ public class EventManager
             // Find and replace {q:element with the name of the
             // element
 
-            if (text.Contains("{c:"))
-            {
-                Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
-                string replaceFrom;
-                string componentName;
-                string componentText;
-                foreach (Match oneVar in questItemRegex.Matches(text))
-                {
-                    replaceFrom = oneVar.Value;                    
-                    componentName = oneVar.Groups[1].Value;
-                    QuestData.QuestComponent component;
-                    if (game.quest.qd.components.TryGetValue(componentName, out component))
-                    {
-                        componentText = getComponentText(component);
-                        text = text.Replace(replaceFrom, componentText);
-                    }
-                }
-            }
+            text = ReplaceComponentText(text);
 
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
@@ -569,24 +552,26 @@ public class EventManager
 
         public static string ReplaceComponentText(string input)
         {
-            if (input.Contains("{c:"))
+            string toReturn = input;
+            if (toReturn.Contains("{c:"))
             {
                 Regex questItemRegex = new Regex("{c:(((?!{).)*?)}");
                 string replaceFrom;
                 string componentName;
                 string componentText;
-                foreach (Match oneVar in questItemRegex.Matches(text))
+                foreach (Match oneVar in questItemRegex.Matches(toReturn))
                 {
                     replaceFrom = oneVar.Value;                    
                     componentName = oneVar.Groups[1].Value;
                     QuestData.QuestComponent component;
-                    if (game.quest.qd.components.TryGetValue(componentName, out component))
+                    if (Game.Get().quest.qd.components.TryGetValue(componentName, out component))
                     {
                         componentText = getComponentText(component);
-                        text = text.Replace(replaceFrom, componentText);
+                        toReturn = toReturn.Replace(replaceFrom, componentText);
                     }
                 }
             }
+            return toReturn;
         }
 
         /// <summary>

@@ -52,14 +52,15 @@ public class InvestigatorItems
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
 
-        SortedList<string, SortedList<string, string>> itemSort = new SortedDictionary<string, SortedList<string, string>>();
+        SortedList<string, SortedList<string, string>> itemSort = new SortedList<string, SortedList<string, string>>();
 
         foreach (string item in game.quest.items)
         {
             // Ignore "ItemX", find next capital letter
-            for(int charIndex = 5; charIndex < item.Length - 1; charIndex++)
+            int charIndex = 5;
+            while (charIndex < item.Length - 1)
             {
-                if (Char.IsUpper(item[5])) break;
+                if (System.Char.IsUpper(item[charIndex++])) break;
             }
             string typeString = item.Substring(0, charIndex);
             string translationString = game.cd.items[item].name.Translate();
@@ -80,9 +81,9 @@ public class InvestigatorItems
 
         int y = 0;
         int x = 0;
-        foreach (string category in itemSort.Values)
+        foreach (string category in itemSort.Keys)
         {
-            foreach (string item in category)
+            foreach (string item in itemSort[category].Values)
             {
                 Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
                 Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
