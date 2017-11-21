@@ -150,13 +150,21 @@ namespace FFGAppImport
             {
                 finder.ExtractObb(); // Utilized by Android
 
-                // List all assets files
-                var assetFiles = Directory.GetFiles(finder.location, "*.assets").ToList();
-
                 // Attempt to clean up old import
                 if (!CleanImport()) return;
+                
+                // List all assets files
+                string filter = "*.assets";
+                if (finder.platform == Platform.Android)
+                    filter = "*"; // Android has some assets in files named like 'd18b80b6f1c734d1eb70d521a2dbeda9' or 'level*'
+
                 // Import from all assets 
-                assetFiles.ForEach(s => Import(s));
+                var assetFiles = Directory.GetFiles(finder.location, filter).ToList();
+
+                // Get all asset content
+                BuildAssetStructures(assetFiles);
+                // Write log
+                WriteImportLog(logFile);
 
                 // Find any streaming asset files
                 string streamDir = Path.Combine(finder.location, "StreamingAssets");
@@ -174,61 +182,6 @@ namespace FFGAppImport
             {
                 ValkyrieDebug.Log("Import caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
             }
-        }
-
-        // Import one assets file
-        public void Import(string assetFile)
-        {
-            if (assetFile == null)
-                throw new ArgumentNullException("assetFile");
-            var unityFiles = new List<string>(); //files to load
-
-			// read file
-            AssetsFile assetsFile = new AssetsFile(assetFile, new EndianStream(File.OpenRead(assetFile), EndianType.BigEndian));
-            
-            // Legacy assets not supported, shouldn't be old
-            if (assetsFile.fileGen < 15)
-            {
-                ValkyrieDebug.Log("Invalid asset file: " + assetFile);
-                return;
-            }
-
-            // Loop through all assets listed in file
-            // Fixme: I don't think we need to do this as we are importing from all files anyway
-            foreach (var sharedFile in assetsFile.sharedAssetsList)
-            {
-                // Some listed assets are in other assets files
-                string sharedFilePath = finder.location + "/" + sharedFile.fileName;
-                string sharedFileName = Path.GetFileName(sharedFile.fileName);
-
-                // find assets file
-                var quedSharedFile = unityFiles.Find(uFile => string.Equals(Path.GetFileName(uFile), sharedFileName, StringComparison.OrdinalIgnoreCase));
-                if (quedSharedFile == null)
-                {
-                    if (!File.Exists(sharedFilePath))
-                    {
-                        var findFiles = Directory.GetFiles(Path.GetDirectoryName(assetFile), sharedFileName, SearchOption.AllDirectories);
-                        if (findFiles.Length > 0) { sharedFilePath = findFiles[0]; }
-                    }
-
-                    if (File.Exists(sharedFilePath))
-                    {
-                        //this would get screwed if the file somehow fails to load
-                        sharedFile.Index = unityFiles.Count;
-                        unityFiles.Add(sharedFilePath);
-                    }
-                }
-                else { sharedFile.Index = unityFiles.IndexOf(quedSharedFile); }
-            }
-
-            // Make assets from string list
-            assetFiles = new List<AssetsFile>();
-            unityFiles.ForEach(s => assetFiles.Add(new AssetsFile(s, new EndianStream(File.OpenRead(s), EndianType.BigEndian))));
-
-            // Get all asset content
-            BuildAssetStrucutres();
-            // Write log
-            WriteImportLog(logFile);
         }
 
         // Write log of import
@@ -274,49 +227,64 @@ namespace FFGAppImport
         }
 
         // Import asset contents
-        private void BuildAssetStrucutres()
+        private void BuildAssetStructures(IEnumerable<string> unityFiles)
         {
+            if (unityFiles == null) throw new ArgumentNullException("unityFiles");
             // All asset files connected to the one openned
-            foreach (AssetsFile file in assetFiles)
+            unityFiles.ToList().ForEach(file => ImportAssetFile(file));
+        }
+
+        private void ImportAssetFile(string file)
+        {
+            if (file == null) throw new ArgumentNullException("file");
+
+            using (FileStream fs = File.OpenRead(file))
             {
-                // All assets
-                foreach (var asset in file.preloadTable.Values)
+                using (var endianStream = new EndianStream(fs, EndianType.BigEndian))
                 {
-                    switch (asset.Type2)
-                    {
-                        //case 1: //GameObject
-                        //case 4: //Transform
-                        //case 224: //RectTransform
-                        //case 21: //Material
+                    var assetFile = new AssetsFile(file, endianStream);
 
-                        case 28: //Texture2D
-                            {
-                                ExportTexture(asset);
-                                break;
-                            }
-                        //case 48: //Shader
-                        case 49: //TextAsset
-                            {
-                                ExportText(asset);
-                                break;
-                            }
-                        case 83: //AudioClip
-                            {
-                                ExportAudioClip(asset);
-                                break;
-                            }
-                        //case 89: //CubeMap
-                        case 128: //Font
-                            {
-                                ExportFont(asset);
-                                break;
-                            }
-                        //case 129: //PlayerSettings
-                        case 0:
-                            break;
-
-                    }
+                    // All assets
+                    assetFile.preloadTable.Values.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
                 }
+            }
+        }
+
+        private void ImportAssetPreloadData(AssetPreloadData assetPreloadData)
+        {
+            if (assetPreloadData == null) throw new ArgumentNullException("assetPreloadData");
+
+            switch (assetPreloadData.Type2)
+            {
+                //case 1: //GameObject
+                //case 4: //Transform
+                //case 224: //RectTransform
+                //case 21: //Material
+                case 28: //Texture2D
+                    {
+                        ExportTexture(assetPreloadData);
+                        break;
+                    }
+                //case 48: //Shader
+                case 49: //TextAsset
+                    {
+                        ExportText(assetPreloadData);
+                        break;
+                    }
+                case 83: //AudioClip
+                    {
+                        ExportAudioClip(assetPreloadData);
+                        break;
+                    }
+                //case 89: //CubeMap
+                case 128: //Font
+                    {
+                        ExportFont(assetPreloadData);
+                        break;
+                    }
+                //case 129: //PlayerSettings
+                case 0:
+                    break;
             }
         }
 
@@ -332,7 +300,7 @@ namespace FFGAppImport
             // Default file name
             string fileCandidate = contentPath + "/img/" + asset.Text;
             string fileName = fileCandidate + asset.extension;
-            ValkyrieDebug.Log("ExportTexture: " + fileName);
+            ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
             // This should apend a postfix to the name to avoid collisions, but as we import multiple times
             // This is broken
             while (File.Exists(fileName))
@@ -390,6 +358,9 @@ namespace FFGAppImport
                 case 32: //PVRTC_RGB4
                 case 33: //PVRTC_RGBA4
                 case 34: //ETC_RGB4
+                case 47: //ETC2_RGBA8
+                    // We put the image data in a PVR container. See the specification for details
+                    // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
                         using (var writer = new BinaryWriter(fs))
@@ -417,13 +388,7 @@ namespace FFGAppImport
                 case 28: //DXT1 Crunched
                 case 29: //DXT1 Crunched
                 default:
-                    using (var fs = File.Open(fileName, FileMode.Create))
-                    {
-                        using (var writer = new BinaryWriter(fs))
-                        {
-                            writer.Write(texture2D.image_data);
-                        }
-                    }
+                    File.WriteAllBytes(fileName, texture2D.image_data);
                     break;
             }
         }

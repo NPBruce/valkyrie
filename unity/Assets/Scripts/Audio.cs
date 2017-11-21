@@ -109,7 +109,7 @@ public class Audio : MonoBehaviour
             {
                 fileName = "/" + s;
             }
-            WWW file = new WWW(@"file://" + fileName);
+            var file = new WWW(new System.Uri(fileName).AbsoluteUri);
             yield return file;
             newMusic.Add(file.GetAudioClip());
         }
@@ -129,7 +129,7 @@ public class Audio : MonoBehaviour
         {
             fileName = "/" + fileName;
         }
-        WWW file = new WWW(@"file://" + fileName);
+        var file = new WWW(new System.Uri(fileName).AbsoluteUri);
         yield return file;
         if (file.error != null)
         {
