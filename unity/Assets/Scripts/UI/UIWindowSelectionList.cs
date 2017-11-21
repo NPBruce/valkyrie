@@ -60,7 +60,13 @@ namespace Assets.Scripts.UI
         virtual public void AddItem(SelectionItem item)
         {
             items.Add(items.Count, item);
-            alphaItems.Add(item.GetDisplay(), item);
+            string key = item.GetDisplay();
+            int duplicateIndex = 0;
+            while (alphaItems.ContainsKey(key))
+            {
+                key = item.GetDisplay() + "_" + duplicateIndex++;
+            }
+            alphaItems.Add(key, item);
         }
 
         virtual public void Draw()

@@ -85,6 +85,7 @@ namespace Assets.Scripts.UI
             // Sort Buttons
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(15.5f), 1, 1, 1);
+            ui.SetTextPadding(0);
             if (alphaSort)
             {
                 ui.SetText("1", Color.white);
@@ -107,6 +108,7 @@ namespace Assets.Scripts.UI
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(16.5f), 1, 1, 1);
+            ui.SetTextPadding(0);
             if (alphaSort)
             {
                 if (reverseSort)
@@ -198,6 +200,7 @@ namespace Assets.Scripts.UI
                     ui = new UIElement(traitScrollArea.GetScrollTransform());
                     ui.SetLocation(11, offset, 1, 1);
                     ui.SetBGColor(Color.red);
+                    ui.SetTextPadding(0);
                     ui.SetText("X", Color.black);
                     ui.SetButton(delegate { ExcludeTrait(tmpGroup, tmpTrait); });
 
@@ -338,15 +341,22 @@ namespace Assets.Scripts.UI
 
         override public void AddItem(SelectionItem item)
         {
+            string key = item.GetDisplay();
+            int duplicateIndex = 0;
+            while (alphaTraitItems.ContainsKey(key))
+            {
+                key = item.GetDisplay() + "_" + duplicateIndex++;
+            }
+
             if (item is SelectionItemTraits)
             {
                 traitItems.Add(traitItems.Count, item as SelectionItemTraits);
-                alphaTraitItems.Add(item.GetDisplay(), item as SelectionItemTraits);
+                alphaTraitItems.Add(key, item as SelectionItemTraits);
             }
             else
             {
                 traitItems.Add(traitItems.Count, new SelectionItemTraits(item));
-                alphaTraitItems.Add(item.GetDisplay(), new SelectionItemTraits(item));
+                alphaTraitItems.Add(key, new SelectionItemTraits(item));
             }
         }
 
