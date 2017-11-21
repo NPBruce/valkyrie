@@ -11,6 +11,8 @@ namespace Assets.Scripts.UI
         protected SortedList<int, SelectionItemTraits> traitItems = new SortedList<int, SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alphaTraitItems = new SortedList<string, SelectionItemTraits>();
 
+        protected Dictionary<string, List<string>> initialExclusions = new Dictionary<string, List<string>>();
+
         protected float scrollPos = 0;
 
         protected UIElementScrollVertical traitScrollArea;
@@ -22,6 +24,7 @@ namespace Assets.Scripts.UI
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, StringKey title) : base(call, title)
         {
         }
+
 
         override public void Draw()
         {
@@ -53,6 +56,14 @@ namespace Assets.Scripts.UI
                 foreach (TraitGroup tg in traitData)
                 {
                     tg.AddItem(item);
+                }
+            }
+
+            foreach (var exclusion in initialExclusions)
+            {
+                foreach (string item in exclusion.Value)
+                {
+                    ExcludeTrait(exclusion.Key, item);
                 }
             }
 
@@ -428,41 +439,36 @@ namespace Assets.Scripts.UI
             }
         }
 
-        public void ExcludeTraitsWithExceptions(string type, IEnumerable<string> exceptions)
+        public void InitExcludeTrait(string type, string exclusion)
         {
-            TraitGroup tg = null;
-            foreach (TraitGroup group in traitData)
+            if (!initialExclusions.ContainsKey(type))
             {
-                if (tg.GetName().Equals(type))
-                {
-                    tg = group;
-                    break;
-                }
+                initialExclusions.Add(type, new List<string>());
             }
-
-            if (tg == null) return;
-
-            foreach (var t in tg.traits)
-            {
-                foreach (string e in exceptions)
-                {
-                    if (!t.Key.Equals(e))
-                    {
-                        ExcludeTrait(tg, t.Key);
-                    }
-                }
-            }
+            initialExclusions[type].Add(exclusion);
         }
 
         public void ExcludeExpansions()
         {
             List<string> enabled = new List<string>();
             enabled.Add(new StringKey("val", "base").Translate());
-            foreach (string s in Game.Get().quest.qd.quest.packs)
+            foreach (string anyPack in Game.Get().cd.GetLoadedPackIDs())
             {
-                enabled.Add(new StringKey("val", s).Translate());
+                bool packRequired = false;
+                if (anyPack.Equals("") || anyPack.Equals("base")) packRequired = true;
+                foreach (string s in Game.Get().quest.qd.quest.packs)
+                {
+                    if (packRequired) break;
+                    if (anyPack.Equals(s))
+                    {
+                        packRequired = true;
+                    }
+                }
+                if (!packRequired)
+                {
+                    InitExcludeTrait(new StringKey("val", "SOURCE").Translate(), new StringKey("val", anyPack).Translate());
+                }
             }
-            ExcludeTraitsWithExceptions(new StringKey("val", "SOURCE").Translate(), enabled);
         }
 
         public class SelectionItemTraits : SelectionItem
@@ -516,8 +522,6 @@ namespace Assets.Scripts.UI
 
             public bool ActiveItem(SelectionItemTraits item)
             {
-                if (NoneSelected()) return true;
-
                 foreach (Trait t in traits.Values)
                 {
                     if (t.items.Contains(item))
@@ -530,7 +534,7 @@ namespace Assets.Scripts.UI
                     }
                     else
                     {
-                        if (t.selected)
+                        if (t.selected && !NoneSelected())
                         {
                             // item does not contain selected trait
                             return false;
