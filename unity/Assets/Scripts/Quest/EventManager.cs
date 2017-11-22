@@ -521,7 +521,7 @@ public class EventManager
                     {
                         start = text.IndexOf("}", start);
                     }
-                    start = text.IndexOf(":", start) + 1;
+                    start = text.IndexOf(":{", start) + 1;
                     if (text[start] == '{')
                     {
                         start = text.IndexOf("}", start);
@@ -533,7 +533,7 @@ public class EventManager
                 {
                     next = text.IndexOf("}", next);
                 }
-                next = text.IndexOf(":", next) + 1;
+                next = text.IndexOf(":{", next) + 1;
                 int end = next;
                 if (text[end] == '{')
                 {

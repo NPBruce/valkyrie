@@ -480,12 +480,14 @@ public class EditorComponentCustomMonster : EditorComponent
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
+        ui.SetButton(NewAttackType);
         new UIElementBorder(ui, Color.green);
         offset += 1;
 
         attacksUIE = new Dictionary<string, List<UIElementEditablePaneled>>();
         foreach (string attackType in monsterComponent.investigatorAttacks.Keys)
         {
+            string aType = attackType;
             attacksUIE.Add(attackType, new List<UIElementEditablePaneled>());
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 18, 1);
@@ -494,6 +496,7 @@ public class EditorComponentCustomMonster : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
+            ui.SetButton(delegate { NewInvestigatorAttack(aType); });
             new UIElementBorder(ui, Color.green);
             offset += 1;
 
@@ -813,6 +816,36 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         monsterComponent.horror = 0;
         monsterComponent.horrorDefined = true;
+        Update();
+    }
+
+    public void NewAttackType()
+    {
+        UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", new StringKey("val", "TYPE")));
+
+        HashSet<string> attackTypes = new HashSet<string>();
+        foreach (AttackData a in Game.Get().cd.investigatorAttacks.Values)
+        {
+            attackTypes.Add(a.attackType);
+        }
+
+        foreach(string s in attackTypes)
+        {
+            select.AddItem(new StringKey("val", s));
+        }
+        select.Draw();
+    }
+
+    public void NewInvestigatorAttack(string type)
+    {
+        if (!monsterComponent.investigatorAttacks.ContainsKey(type))
+        {
+            monsterComponent.investigatorAttacks.Add(type, new List<StringKey>());
+        }
+        int position = monsterComponent.investigatorAttacks[type].Count + 1;
+        StringKey newAttack = new StringKey("qst", monsterComponent.sectionName + ".Attack_" + type + "_" + position);
+        monsterComponent.investigatorAttacks[type].Add(newAttack);
+        LocalizationRead.updateScenarioText(newAttack.key, "-");
         Update();
     }
 
