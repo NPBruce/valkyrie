@@ -480,7 +480,7 @@ public class EditorComponentCustomMonster : EditorComponent
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(18.5f, offset, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
-        ui.SetButton(delegate { NewInvestigatorAttack(); });
+        ui.SetButton(NewAttackType);
         new UIElementBorder(ui, Color.green);
         offset += 1;
 
