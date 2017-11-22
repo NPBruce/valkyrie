@@ -526,7 +526,7 @@ public class EventManager
                     {
                         start = text.IndexOf("}", start);
                     }
-                    start = text.IndexOf(":{", start) + 1;
+                    start = text.IndexOf(":", start) + 1;
                 }
                 int next = start;
                 if (text[next] == '{')
@@ -539,7 +539,7 @@ public class EventManager
                 {
                     end = text.IndexOf("}", end);
                 }
-                end = text.IndexOf(":{", end);
+                end = text.IndexOf(":", end);
                 if (end < 0) end = text.Length - 1;
                 string toReplace = text.Substring(next, end - next);
                 text = new StringKey(text.Substring(start, (next - start) - 1)).Translate();
