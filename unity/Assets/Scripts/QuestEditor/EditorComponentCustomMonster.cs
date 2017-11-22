@@ -840,12 +840,13 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         if (!monsterComponent.investigatorAttacks.ContainsKey(type))
         {
-            monsterComponent.investigatorAttacks.Add(type, new List<StringKey>())
+            monsterComponent.investigatorAttacks.Add(type, new List<StringKey>());
         }
         int position = monsterComponent.investigatorAttacks[type].Count + 1;
-        StringKey newAttack = new StringKey("qst", monsterComponent.sectionName + ".attack_" + type + "_" + position)
+        StringKey newAttack = new StringKey("qst", monsterComponent.sectionName + ".Attack_" + type + "_" + position);
         monsterComponent.investigatorAttacks[type].Add(newAttack);
         LocalizationRead.updateScenarioText(newAttack.key, "-");
+        Update();
     }
 
     public void UpdateAttacks()
