@@ -8,6 +8,7 @@ rmdir /s /q build\batchLinux
 rmdir /s /q build\macos
 rmdir /s /q build\win
 rmdir /s /q build\linux
+del build\Valkyrie-android-%version%.apk
 
 rem create base structure
 mkdir build
@@ -26,7 +27,6 @@ mkdir build\win
 mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
-mkdir build\android
 
 rem Because reasons
 set Target=
@@ -38,7 +38,7 @@ rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
-"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\android\
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\Valkyrie-android-%version%.apk
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
