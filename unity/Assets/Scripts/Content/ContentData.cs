@@ -1060,7 +1060,15 @@ public class TileSideData : GenericData
         // pixel per D2E square (inch) of image
         if (content.ContainsKey("pps"))
         {
-            float.TryParse(content["pps"], out pxPerSquare);
+            if (content["pps"].StartsWith("*"))
+            {
+                float.TryParse(content["pps"].Remove(0, 1), out pxPerSquare);
+                pxPerSquare *= Game.Get().gameType.TilePixelPerSquare();
+            }
+            else
+            {
+                float.TryParse(content["pps"], out pxPerSquare);
+            }
         }
         else
         {

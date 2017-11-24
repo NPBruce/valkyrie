@@ -1314,7 +1314,6 @@ public class Quest
             // We need this for the 3x2 MoM tiles because they don't have square pixels!!
             if (mTile.aspect != 0)
             {
-                vPPS = Mathf.Min(newTex.width, (float)newTex.height) / 7f;
                 hPPS = (vPPS * newTex.width / newTex.height) / mTile.aspect;
             }
 
