@@ -379,6 +379,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -407,6 +408,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 

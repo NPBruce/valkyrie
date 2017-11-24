@@ -68,6 +68,14 @@ public class QuestData
         // The main data file is included
         iniFiles.Add("quest.ini");
 
+        // Quest is a special component, must be in quest.ini
+        if (questIniData.Get("Quest") == null)
+        {
+            ValkyrieDebug.Log("Error: Quest section missing from quest.ini");
+            return;
+        }
+        quest = new Quest(questIniData.Get("Quest"));
+
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
         {
@@ -152,11 +160,6 @@ public class QuestData
             Application.Quit();
         }
 
-        // Quest is a special component
-        if (name.Equals("Quest"))
-        {
-            quest = new Quest(content);
-        }
         // Check for known types and create
         if (name.IndexOf(Tile.type) == 0)
         {
@@ -180,7 +183,7 @@ public class QuestData
         }
         if (name.IndexOf(Event.type) == 0)
         {
-            Event c = new Event(name, content, source);
+            Event c = new Event(name, content, source, quest.format);
             components.Add(name, c);
         }
         if (name.IndexOf(Spawn.type) == 0)
@@ -302,7 +305,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Door(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Door(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -357,7 +360,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Token(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Token(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -423,7 +426,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public UI(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public UI(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             locationSpecified = true;
             typeDynamic = type;
@@ -592,7 +595,7 @@ public class QuestData
         }
 
         // Create from ini data
-        public Spawn(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path)
+        public Spawn(string name, Dictionary<string, string> data, Game game, string path) : base(name, data, path, Quest.currentFormat)
         {
             typeDynamic = type;
             // First try to a list of specific types
@@ -789,7 +792,7 @@ public class QuestData
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data, string path) : base(name, data, path)
+        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path)
         {
             typeDynamic = type;
 
@@ -904,6 +907,11 @@ public class QuestData
                 {
                     operations.Add(new VarOperation(s));
                 }
+            }
+            // Backwards support for format < 8
+            if (format <= 8 && sectionName.StartsWith("EventEnd"))
+            {
+                operations.Add(new VarOperation("$end,=,1"));
             }
 
             conditions = new List<VarOperation>();
@@ -1262,7 +1270,7 @@ public class QuestData
         }
 
         // Construct from ini data
-        public Puzzle(string name, Dictionary<string, string> data, string path) : base(name, data, path)
+        public Puzzle(string name, Dictionary<string, string> data, string path) : base(name, data, path, Quest.currentFormat)
         {
             typeDynamic = type;
 
@@ -1459,6 +1467,7 @@ public class QuestData
         public bool horrorDefined = false;
         public int awareness = 0;
         public bool awarenessDefined = false;
+        public Dictionary<string, List<StringKey>> investigatorAttacks = new Dictionary<string, List<StringKey>>();
 
         public string monstername_key { get { return genKey("monstername"); } }
         public string info_key { get { return genKey("info"); } }
@@ -1541,6 +1550,31 @@ public class QuestData
                 awarenessDefined = true;
                 int.TryParse(data["awareness"], out awareness);
             }
+
+            if (data.ContainsKey("attacks"))
+            {
+                foreach(string typeEntry in data["attacks"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string type = typeEntry;
+                    int typeCount = 1;
+                    int typeSeparator = typeEntry.IndexOf(':');
+                    if (typeSeparator >= 0)
+                    {
+                        type = typeEntry.Substring(0, typeSeparator);
+                        int.TryParse(typeEntry.Substring(typeSeparator + 1), out typeCount);
+                    }
+
+                    if (!investigatorAttacks.ContainsKey(type))
+                    {
+                        investigatorAttacks.Add(type, new List<StringKey>());
+                    }
+
+                    for (int i = 1; i <= typeCount; i++)
+                    {
+                        investigatorAttacks[type].Add(genQuery("Attack_" + type + "_" + i));
+                    }
+                }
+            }
         }
 
         // get path of monster image
@@ -1609,6 +1643,16 @@ public class QuestData
             if (awarenessDefined)
             {
                 r.Append("awareness=").AppendLine(awareness.ToString());
+            }
+
+            if (investigatorAttacks.Count > 0)
+            {
+                string attacksLine = "attacks=";
+                foreach (string type in investigatorAttacks.Keys)
+                {
+                    attacksLine += type + ':' + investigatorAttacks[type].Count + " ";
+                }
+                r.AppendLine(attacksLine.Substring(0, attacksLine.Length - 1));
             }
 
             return r.ToString();
@@ -1847,7 +1891,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 8;
+        public static int currentFormat = 9;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;

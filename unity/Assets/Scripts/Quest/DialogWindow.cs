@@ -360,7 +360,7 @@ public class DialogWindow {
 
         public StringKey GetLabel()
         {
-            return new StringKey(null, EventManager.OutputSymbolReplace(label.Translate()), false);
+            return new StringKey(null, EventManager.OutputSymbolReplace(EventManager.Event.ReplaceComponentText(label.Translate())), false);
         }
     }
 }

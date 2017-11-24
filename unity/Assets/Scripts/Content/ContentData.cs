@@ -1258,6 +1258,32 @@ public class MonsterData : GenericData
             int.TryParse(content["awareness"], out awareness);
         }
     }
+
+    virtual public IEnumerable<string> GetAttackTypes()
+    {
+        HashSet<string> toReturn = new HashSet<string>();
+        foreach (KeyValuePair<string, AttackData> kv in Game.Get().cd.investigatorAttacks)
+        {
+            if (ContainsTrait(kv.Value.target))
+            {
+                toReturn.Add(kv.Value.attackType);
+            }
+        }
+        return toReturn;
+    }
+
+    virtual public StringKey GetRandomAttack(string type)
+    {
+        List<AttackData> validAttacks = new List<AttackData>();
+        foreach (AttackData ad in Game.Get().cd.investigatorAttacks.Values)
+        {
+            if (ad.attackType.Equals(type))
+            {
+                validAttacks.Add(ad);
+            }
+        }
+        return validAttacks[Random.Range(0, validAttacks.Count)].text;
+    }
 }
 
 // Class for Activation specific data
@@ -1597,7 +1623,7 @@ public class PerilData : QuestData.Event
     public StringKey perilText;
     override public StringKey text { get { return perilText; } }
 
-    public PerilData(string name, Dictionary<string, string> data) : base(name, data, "")
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data, "", QuestData.Quest.currentFormat)
     {
         typeDynamic = type;
         if (data.ContainsKey("priority"))
