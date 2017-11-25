@@ -89,9 +89,6 @@ public class CameraController : MonoBehaviour {
             {
                 zoomed = true;
 
-                // disable automatic translating to avoid loops
-                targetSet = false;
-
                 // Translate the camera up/down
                 gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
             }
@@ -125,6 +122,9 @@ public class CameraController : MonoBehaviour {
             }
             if (zoomed)
             {
+                // disable automatic translating to avoid loops
+                targetSet = false;
+
                 // Limit how high/low the camera can go
                 if (gameObject.transform.position.z > maxZoom)
                     gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, maxZoom);
