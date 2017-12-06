@@ -757,7 +757,7 @@ public class ContentData {
     }
 
     /// <summary>
-    /// This will resove the asset name to a matching file and return the full file path including the file extension.
+    /// This will resove the asset name to a matching file and return the full file path including the file extension or null, if the file can't be resolved.
     /// </summary>
     public static string ResolveTextureFile(string name)
     {
@@ -776,8 +776,6 @@ public class ContentData {
                 return file;
             }
         }
-
-        ValkyrieDebug.Log("Could not resolve file: '" + name + "'");
         return null;
     }
 
@@ -793,11 +791,14 @@ public class ContentData {
     public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
         if (file == null) throw new System.ArgumentNullException("file");
-        file = ResolveTextureFile(file);
-
+        var resolvedFile = ResolveTextureFile(file);
         // return if file could not be resolved
-        if (file == null)
+        if (resolvedFile == null)
+        {
+            ValkyrieDebug.Log("Could not resolve file: '" + file + "'");
             return null;
+        }
+        file = resolvedFile;
 
         Texture2D texture = null;
 
@@ -898,7 +899,7 @@ public class ContentData {
         type[3] = (char)ddsBytes[87];
 
         // Copy image data (skip header)
-        int DDS_HEADER_SIZE = 128;
+        const int DDS_HEADER_SIZE = 128;
         byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
         System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
@@ -945,34 +946,25 @@ public class ContentData {
         {
             string imagePath = new System.Uri(file).AbsoluteUri;
             var www = new WWW(imagePath);
-            int headerSize = 52;
 
-            var header = new byte[headerSize];
-            System.Buffer.BlockCopy(www.bytes, 0, header, 0, headerSize);
+            // *** HEADER ****
+            // int verison
+            // int flags
+            pixelformat = System.BitConverter.ToInt64(www.bytes, 8);
+            // int color space
+            // int channel type
+            int height = System.BitConverter.ToInt32(www.bytes, 24);
+            int width = System.BitConverter.ToInt32(www.bytes, 28);
+            // int depth
+            // int num surfaces
+            // int num faces
+            // int mip map count
+            // int meta data size
 
-            int width, height;
-
-            // read header
-            var image = new byte[www.bytesDownloaded - headerSize];
-            System.Buffer.BlockCopy(www.bytes, headerSize, image, 0, www.bytesDownloaded - headerSize);
-            using (var ms = new MemoryStream(header, false))
-            {
-                using (var br = new BinaryReader(ms))
-                {
-                    br.ReadInt32(); // verison
-                    br.ReadInt32(); // flags
-                    pixelformat = br.ReadInt64(); // pixelFormat
-                    br.ReadInt32(); // color space
-                    br.ReadInt32(); // channel type
-                    height = br.ReadInt32(); // height
-                    width = br.ReadInt32(); // width
-                    br.ReadInt32(); // depth
-                    br.ReadInt32(); // num surfaces
-                    br.ReadInt32(); // num faces
-                    br.ReadInt32(); // mip map count
-                    br.ReadInt32(); // meta data size
-                }
-            }
+            // *** IMAGE DATA ****
+            const int PVR_HEADER_SIZE = 52;
+            var image = new byte[www.bytesDownloaded - PVR_HEADER_SIZE];
+            System.Buffer.BlockCopy(www.bytes, PVR_HEADER_SIZE, image, 0, www.bytesDownloaded - PVR_HEADER_SIZE);
             Texture2D texture = null;
             switch (pixelformat)
             {
@@ -1009,9 +1001,7 @@ public class ContentData {
         {
             string imagePath = new System.Uri(file).AbsoluteUri;
             var www = new WWW(imagePath);
-            var texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
-            www.LoadImageIntoTexture(texture);
-            return texture;
+            return www.texture;
         }
         catch (System.Exception ex)
         {
