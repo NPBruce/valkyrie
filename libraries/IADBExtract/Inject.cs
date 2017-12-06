@@ -25,8 +25,104 @@ namespace IADBExtract
             }
             foreach (IA_CampaignModel campaign in db.Campaigns)
             {
-
+                ExtractCampaign(campaign);
             }
+        }
+
+        public static void ExtractCampaign(IA_CampaignModel campaign)
+        {
+
+            Directory.CreateDirectory(outputDir + "campaign");
+            List<string> campaignData = new List<string>();
+            campaignData.Add("Title: " + campaign.Title.Key);
+            campaignData.Add("Description: " + campaign.Description.Key);
+            campaignData.Add("Contents: " + campaign.Contents.Key);
+            campaignData.Add("RequiredProduct: " + campaign.RequiredProduct.NameKey);
+            campaignData.Add("Image: " + campaign.Image.Path);
+
+            campaignData.Add("Fame Insignificant: " + campaign.CampaignFameThresholds.Insignificant + " Noteworthy: " + campaign.CampaignFameThresholds.Noteworthy + " Impressive: " + campaign.CampaignFameThresholds.Impressive + " Celebrated: " + campaign.CampaignFameThresholds.Celebrated + " Heroic: " + campaign.CampaignFameThresholds.Heroic + " Legendary: " + campaign.CampaignFameThresholds.Legendary);
+
+            campaignData.Add("Normal Gold per Hero: " + campaign.DifficultyNormal.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyNormal.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyNormal.PerilReduction);
+            campaignData.Add("Hard Gold per Hero: " + campaign.DifficultyHard.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyHard.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyHard.PerilReduction);
+
+            //IA_CampaignTaskModel[] Tasks;
+
+            foreach (IA_CampaignTaskModel task in campaign.Tasks)
+            {
+                // TODO: Tasks details
+                campaignData.Add("Task: " + task.NameKey);
+            }
+            foreach (IA_PerilModel peril in campaign.Perils)
+            {
+                // TODO: Peril details
+                campaignData.Add("Peril: " + peril.Level.ToString());
+            }
+            foreach (IA_MissionModel mission in campaign.StoryQuests)
+            {
+                campaignData.Add("Story Mission: " + mission.NameKey);
+                ExtractMission(mission);
+            }
+            foreach (IA_MissionModel mission in campaign.SideQuests)
+            {
+                campaignData.Add("Side Mission: " + mission.NameKey);
+                ExtractMission(mission);
+            }
+            campaignData.Add("HasTutorial: " + campaign.HasTutorial);
+            campaignData.Add("StartingMission: " + campaign.StartingMission.NameKey);
+            campaignData.Add("NewPlayersStartingMission: " + campaign.NewPlayersStartingMission.NameKey);
+            File.WriteAllLines(outputDir + "campaign\\" + campaign.Title.Key + ".txt", campaignData.ToArray());
+        }
+
+        public static void ExtractMission(IA_MissionModel mission)
+        {
+            Directory.CreateDirectory(outputDir + "campaign");
+            List<string> missionData = new List<string>();
+            missionData.Add("Title: " + mission.NameKey);
+            missionData.Add("Description: " + mission.DescriptionKey);
+            missionData.Add("Image: " + mission.Image.Path);
+            missionData.Add("IsFinale: " + mission.IsFinale);
+            missionData.Add("CanFail: " + mission.CanFail);
+            missionData.Add("IncapacitatedInsteadOfWithdrawn: " + mission.IncapacitatedInsteadOfWithdrawn);
+            missionData.Add("IncapacitatedMessageKey: " + mission.IncapacitatedMessageKey);
+            missionData.Add("ParFame: " + mission.ParFame);
+            missionData.Add("ParRound: " + mission.ParRound);
+            missionData.Add("ThreatLevel: " + mission.ThreatLevel);
+            missionData.Add("XPValueAwardedOnFinish: " + mission.XPValueAwardedOnFinish);
+            missionData.Add("CreditsAwardedOnFinish: " + mission.CreditsAwardedOnFinish);
+            missionData.Add("CreditsAwardedPerHeroOnFinish: " + mission.CreditsAwardedPerHeroOnFinish);
+            missionData.Add("CreditsAwardedPerHeroOnVictory: " + mission.CreditsAwardedPerHeroOnVictory);
+            missionData.Add("BaseMinorPerilLevel: " + mission.BaseMinorPerilLevel);
+            missionData.Add("BaseMajorPerilLevel: " + mission.BaseMajorPerilLevel);
+            missionData.Add("BaseDeadlyPerilLevel: " + mission.BaseDeadlyPerilLevel);
+            missionData.Add("BlockEnemyDefeatFameAward: " + mission.BlockEnemyDefeatFameAward);
+            missionData.Add("BlockEndMissionRewards: " + mission.BlockEndMissionRewards);
+            missionData.Add("CanStartWithAllies: " + mission.CanStartWithAllies);
+            missionData.Add("RandomGroupThreatFloor: " + mission.RandomGroupThreatFloor);
+            missionData.Add("RandomGroupThreatCeiling: " + mission.RandomGroupThreatCeiling);
+            missionData.Add("Mission Type: " + mission.Type.ToString());
+            missionData.Add("Location: " + mission.Location.NameKey);
+            foreach (IA_InventoryItemModel item in mission.ItemsAwardedOnFinish)
+            {
+                missionData.Add("Finish Item: " + item.NameKey);
+            }
+            foreach (IA_EnemyGroupModel enemy in mission.BlacklistedEnemyGroups)
+            {
+                missionData.Add("BlacklistedEnemy: " + enemy.EnemyType.KeySingular);
+            }
+            foreach (IA_EnemyGroupModel enemy in mission.ReservedEnemyGroups)
+            {
+                missionData.Add("ReservedEnemy: " + enemy.EnemyType.KeySingular);
+            }
+            foreach (IA_AllyModel ally in mission.BlacklistedAllies)
+            {
+                missionData.Add("Blacklisted Ally: " + ally.NameKey);
+            }
+            foreach (IA_ProductModel product in mission.RequiredProducts)
+            {
+                missionData.Add("Required Product: " + product.NameKey);
+            }
+
+            File.WriteAllLines(outputDir + "campaign\\" + mission.NameKey + ".txt", missionData.ToArray());
         }
 
         public static void ExtractProduct(IA_ProductModel product)
@@ -48,12 +144,15 @@ namespace IADBExtract
             if (product.EnemyTypes.Length > 0)
             {
                 packData.Add("enemies.ini");
+                packData.Add("activations.ini");
                 List<string> enemyData = new List<string>();
-                List<string> enemyDataElite = new List<string>();
+                List<string> activations = new List<string>();
                 foreach (IA_EnemyTypeModel enemy in product.EnemyTypes)
                 {
+                    List<string> enemyDataElite = new List<string>();
+
                     enemyData.Add("[Monster" + enemy.KeySingular + "]");
-                    enemyDataElite.Add("[Monster" + enemy.KeySingular + "Elite]");
+                    enemyDataElite.Add("[MonsterElite" + enemy.KeySingular + "]");
 
                     enemyData.Add("name={ffg:" + enemy.KeySingular + "}");
                     enemyDataElite.Add("name={ffg:" + enemy.KeySingular + "}");
@@ -109,8 +208,8 @@ namespace IADBExtract
 
                     foreach (AudioClip audio in enemy.RevealSounds)
                     {
-                        enemyData.Add("; Audio: ");
-                        enemyDataElite.Add("; Audio: ");
+                        enemyData.Add("; Audio: " + audio.ToString());
+                        enemyDataElite.Add("; Audio: " + audio.ToString());
                     }
 
                     string enemyTraits = "traits=" + enemy.Size.ToString();
@@ -118,36 +217,68 @@ namespace IADBExtract
                     {
                         if ((enemy.TraitsSet1 & trait) != 0)
                         {
-                            enemyTraits += " " + trait.ToString().ToLower();
+                            enemyTraits += " " + trait.ToString();
                         }
                     }
                     enemyData.Add(enemyTraits);
                     enemyDataElite.Add(enemyTraits);
 
-/*		[Header("Activations Regular")]
-		public IA_EnemyActionModel[] ActionsReg;
+                    enemyData.Add("");
+                    enemyData.AddRange(enemyDataElite);
+                    enemyData.Add("");
 
-		public IA_EnemyBonusModel[] BonusReg;
+                    for (int activation = 0; activation < enemy.ActionsReg.Length; activation++)
+                    {
+                        activations.Add("[MonsterActivation" + enemy.KeySingular + activation + "]");
 
-		public IA_EnemyTargetModel[] TargetsReg;
+                        List<string> activationDetails = new List<string>();
+                        activationDetails.Add("ability={ffg:" + enemy.BonusReg[activation].Key + "}");
+                        activationDetails.Add("; Additional range: " + enemy.BonusReg[activation].AdditionalRange);
+                        activationDetails.Add("master={ffg:" + enemy.ActionsReg[activation].Key + "}");
+                        activationDetails.Add("; Default range: " + enemy.ActionsReg[activation].DefaultRange);
+                        activationDetails.Add("; Secondary Priority: " + enemy.ActionsReg[activation].SecondaryPriority);
+                        activationDetails.Add("; Target: " + enemy.TargetsReg[activation].Key);
+                        foreach (IA_HeroModel.HeroTraits trait in Enum.GetValues(typeof(IA_HeroModel.HeroTraits)))
+                        {
+                            if ((enemy.TargetTraitsReg[activation] & trait) != 0)
+                            {
+                                activationDetails.Add("; Target Trait: " + trait.ToString());
+                            }
+                        }
+                        activationDetails.Add("");
 
-		[BitMask(typeof(IA_HeroModel.HeroTraits))]
-		public IA_HeroModel.HeroTraits[] TargetTraitsReg;
+                        activations.AddRange(activationDetails);
+                        if (enemy.UseRegularActivations)
+                        {
+                            activations.Add("[MonsterActivationElite" + enemy.KeySingular + activation + "]");
+                            activations.AddRange(activationDetails);
+                        }
+                    }
 
-		public IA_EnemyActionModel[] ActionsElite;
-
-		public IA_EnemyBonusModel[] BonusElite;
-
-		public IA_EnemyTargetModel[] TargetsElite;
-
-		[BitMask(typeof(IA_HeroModel.HeroTraits))]
-		public IA_HeroModel.HeroTraits[] TargetTraitsElite;*/
-
-
-
+                    if (!enemy.UseRegularActivations)
+                    {
+                        for (int activation = 0; activation < enemy.ActionsElite.Length; activation++)
+                        {
+                            activations.Add("[MonsterActivationElite" + enemy.KeySingular + activation + "]");
+                            activations.Add("ability={ffg:" + enemy.BonusElite[activation].Key + "}");
+                            activations.Add("; Additional range: " + enemy.BonusElite[activation].AdditionalRange);
+                            activations.Add("master={ffg:" + enemy.ActionsElite[activation].Key + "}");
+                            activations.Add("; Default range: " + enemy.ActionsElite[activation].DefaultRange);
+                            activations.Add("; Secondary Priority: " + enemy.ActionsElite[activation].SecondaryPriority);
+                            activations.Add("; Target: " + enemy.TargetsElite[activation].Key);
+                            foreach (IA_HeroModel.HeroTraits trait in Enum.GetValues(typeof(IA_HeroModel.HeroTraits)))
+                            {
+                                if ((enemy.TargetTraitsElite[activation] & trait) != 0)
+                                {
+                                    activations.Add("; Target Trait: " + trait.ToString());
+                                }
+                            }
+                            activations.Add("");
+                        }
+                    }
                 }
-traits=ranged cave building small goblin
-activation=Range1 Range2 Range3
+                File.WriteAllLines(outputDir + product.Code + "\\enemies.ini", enemyData.ToArray());
+                File.WriteAllLines(outputDir + product.Code + "\\activations.ini", activations.ToArray());
             }
 
             if (product.Items.Length > 0)
@@ -176,6 +307,7 @@ activation=Range1 Range2 Range3
                     itemData.Add(itemTraits);
                     itemData.Add("");
                 }
+                File.WriteAllLines(outputDir + product.Code + "\\items.ini", itemData.ToArray());
             }
 
             if (product.Heroes.Length > 0)
@@ -197,7 +329,7 @@ activation=Range1 Range2 Range3
                     {
                         if ((hero.Traits & trait) != 0)
                         {
-                            heroTraits += " " + trait.ToString().ToLower();
+                            heroTraits += " " + trait.ToString();
                         }
                     }
 
@@ -224,7 +356,7 @@ activation=Range1 Range2 Range3
                         {
                             if ((skill.Exceptions & except) != 0)
                             {
-                                skillExceptions += " " + except.ToString().ToLower();
+                                skillExceptions += " " + except.ToString();
                             }
                         }
                         skillData.Add(skillExceptions);
