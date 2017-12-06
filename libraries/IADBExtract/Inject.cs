@@ -45,8 +45,6 @@ namespace IADBExtract
             campaignData.Add("Normal Gold per Hero: " + campaign.DifficultyNormal.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyNormal.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyNormal.PerilReduction);
             campaignData.Add("Hard Gold per Hero: " + campaign.DifficultyHard.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyHard.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyHard.PerilReduction);
 
-            //IA_CampaignTaskModel[] Tasks;
-
             foreach (IA_CampaignTaskModel task in campaign.Tasks)
             {
                 // TODO: Tasks details
@@ -54,9 +52,10 @@ namespace IADBExtract
             }
             foreach (IA_PerilModel peril in campaign.Perils)
             {
-                // TODO: Peril details
+                // TODO: Perils
                 campaignData.Add("Peril: " + peril.Level.ToString());
             }
+
             foreach (IA_MissionModel mission in campaign.StoryQuests)
             {
                 campaignData.Add("Story Mission: " + mission.NameKey);
