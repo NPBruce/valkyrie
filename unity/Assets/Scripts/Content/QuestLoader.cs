@@ -80,20 +80,27 @@ public class QuestLoader {
     // Return list of quests available in the user path unpackaged (editable)
     public static Dictionary<string, QuestData.Quest> GetUserUnpackedQuests()
     {
-        Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
+        var quests = new Dictionary<string, QuestData.Quest>();
 
         // Read user application data for quests
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
         List<string> questDirectories = GetQuests(dataLocation);
 
+        string tempPath = ContentData.TempPath;
+        string gameType = Game.Get().gameType.TypeName();
         // go through all found quests
         foreach (string p in questDirectories)
         {
+            // Android stores the temp path in the data dir, we don't want the extracted scenarios from there
+            if (p.StartsWith(tempPath, System.StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
             // read quest
-            QuestData.Quest q = new QuestData.Quest(p);
+            var q = new QuestData.Quest(p);
             // Check if valid and correct type
-            if (q.valid && q.type.Equals(Game.Get().gameType.TypeName()))
+            if (q.valid && q.type.Equals(gameType))
             {
                 quests.Add(p, q);
             }
