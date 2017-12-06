@@ -101,6 +101,12 @@ HEALTH_HERO,Per Hero
 HIGHLIGHT,Highlight
 HORROR_CHECK,Horror Check
 AWARENESS,Awareness
+IA_APP_NOT_FOUND,Unable to locate Legends of the Alliance, install via Steam
+IA_APP_NOT_FOUND_ANDROID,Unable to locate Legends of the Alliance
+IA_HEROES_NAME,Heroes
+IA_HERO_NAME,Hero
+IA_NAME,Star Wars: Imperial Assault EXPERIMENTAL
+IA_QUEST_NAME,Mission
 INDENT,  {0}
 INFO,Info
 INFORMATION,Information
