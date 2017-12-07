@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.bruce.valkyrie" android:installLocation="preferExternal" android:versionCode="1" android:versionName="1.5.0" platformBuildVersionCode="26" platformBuildVersionName="8.0.0">
   <supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true" />
   <application android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:icon="@drawable/app_icon" android:label="@string/app_name" android:isGame="true" android:largeHeap="true">
-    <activity android:name="com.unity3d.player.UnityPlayerActivity" android:label="@string/app_name" android:launchMode="singleTask" android:screenOrientation="reverseLandscape" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
+    <activity android:name="com.unity3d.player.UnityPlayerActivity" android:label="@string/app_name" android:launchMode="singleTask" android:screenOrientation="landscape|reverseLandscape" android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
