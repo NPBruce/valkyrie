@@ -52,7 +52,7 @@ namespace Unity_Studio
             fileGen = a_Stream.ReadInt32();
             int dataOffset = a_Stream.ReadInt32();
             sharedAssetsList[0].fileName = Path.GetFileName(fileName); //reference itself because sharedFileIDs start from 1
-
+            ValkyrieDebug.Log(fileGen);
             switch (fileGen)
             {
                 case 6://2.5.0 - 2.6.1
@@ -85,6 +85,8 @@ namespace Unity_Studio
                     }
                 case 14://5.0.0 beta and final
                 case 15://5.0.1 and up
+                case 16://5.5.0 and up
+                case 17://5.5.0 and up
                     {
                         a_Stream.Position += 4;//azero
                         m_Version = a_Stream.ReadStringToNull();
@@ -148,6 +150,7 @@ namespace Unity_Studio
             if (fileGen >= 7 && fileGen < 14) {a_Stream.Position += 4;}//azero
 
             int assetCount = a_Stream.ReadInt32();
+            ValkyrieDebug.Log(assetCount);
 
             #region asset preload table
             string assetIDfmt = "D" + assetCount.ToString().Length.ToString(); //format for unique ID
@@ -160,18 +163,33 @@ namespace Unity_Studio
                 AssetPreloadData asset = new AssetPreloadData();
                 if (fileGen < 14) { asset.m_PathID = a_Stream.ReadInt32(); }
                 else { asset.m_PathID = a_Stream.ReadInt64(); }
-                asset.Offset = a_Stream.ReadInt32();
-                asset.Offset += dataOffset;
-                asset.Size = a_Stream.ReadInt32();
-                asset.Type1 = a_Stream.ReadInt32();
-                asset.Type2 = a_Stream.ReadUInt16();
-                a_Stream.Position += 2;
-                if (fileGen >= 15)
+
+                if (fileGen > 15)
                 {
-                    a_Stream.ReadByte();
-                    //this is a single byte, not an int32
-                    //the next entry is aligned after this
-                    //but not the last!
+                    asset.Offset = a_Stream.ReadInt32();
+                    int tmp = asset.Offset;
+                    asset.Offset += dataOffset;
+                    asset.Size = a_Stream.ReadInt32();
+                    ValkyrieDebug.Log(asset.m_PathID.ToString("X") + " " + asset.Size.ToString("X") + " " + tmp.ToString("X") + " " + asset.Type1.ToString("X") + " " + asset.Type2.ToString("X"));
+                }
+                else
+                {
+                    asset.Offset = a_Stream.ReadInt32();
+                    asset.Offset += dataOffset;
+                    asset.Size = a_Stream.ReadInt32();
+                    if (fileGen < 16)
+                    {
+                        asset.Type1 = a_Stream.ReadInt32();
+                    }
+                    asset.Type2 = a_Stream.ReadUInt16();
+                    a_Stream.Position += 2;
+                    if (fileGen >= 15)
+                    {
+                        a_Stream.ReadByte();
+                        //this is a single byte, not an int32
+                        //the next entry is aligned after this
+                        //but not the last!
+                    }
                 }
 
                 if (UnityClassID.Names[asset.Type2] != null)
@@ -248,9 +266,22 @@ namespace Unity_Studio
 
         private void readBase5()
         {
-            int classID = a_Stream.ReadInt32();
-            if (classID < 0) { a_Stream.Position += 16; }
-            a_Stream.Position += 16;
+            int classID = 0;
+            classID = a_Stream.ReadInt32();
+            ValkyrieDebug.Log(classID);
+            if (fileGen < 16)
+            {
+                if (classID < 0) { a_Stream.Position += 16; }
+                a_Stream.Position += 16;
+            }
+            else
+            {
+                if (classID == 114)
+                {
+                    a_Stream.Position += 16;
+                }
+                a_Stream.Position += 19;
+            }
 
             if (baseDefinitions)
             {
