@@ -12,7 +12,6 @@ namespace FFGAppImport
     public class FetchContent
     {
         FFGImport importData;
-        List<AssetsFile> assetFiles; // All asset files
         string gameType;
         string contentPath;
         AppFinder finder = null;
@@ -154,12 +153,17 @@ namespace FFGAppImport
                 if (!CleanImport()) return;
                 
                 // List all assets files
-                string filter = "*.assets";
-                if (finder.platform == Platform.Android)
-                    filter = "*"; // Android has some assets in files named like 'd18b80b6f1c734d1eb70d521a2dbeda9' or 'level*'
+                var files = Directory.GetFiles(finder.location);
+
+                // get all asset files
+                var assetFiles = new List<string>();
+                assetFiles.AddRange(files.Where(x => x.EndsWith(".assets"))); // load '*.assets'
+                // TODO: Sort level, so that level2, level3 and level20 are in the right order
+                assetFiles.AddRange(files.Where(x => !x.EndsWith(".assets") && !x.StartsWith("level"))); // random named files like 'd18b80b6f1c734d1eb70d521a2dbeda9'
+                assetFiles.AddRange(files.Where(x => !x.EndsWith(".assets") && x.StartsWith("level")));  // load 'level*' files last.
 
                 // Import from all assets 
-                var assetFiles = Directory.GetFiles(finder.location, filter).ToList();
+                //var assetFiles = Directory.GetFiles(finder.location, filter).ToList();
 
                 // Get all asset content
                 BuildAssetStructures(assetFiles);
@@ -299,15 +303,10 @@ namespace FFGAppImport
             Directory.CreateDirectory(contentPath + "/img");
             // Default file name
             string fileCandidate = contentPath + "/img/" + asset.Text;
-            string fileName = fileCandidate + asset.extension;
+            // This should apends a postfix to the name to avoid collisions
+            string fileName = GetAvailableFileName(fileCandidate, asset.extension);
             ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
-            // This should apend a postfix to the name to avoid collisions, but as we import multiple times
-            // This is broken
-            while (File.Exists(fileName))
-            {
-                return;// Fixme;
-            }
-
+            
             switch (texture2D.m_TextureFormat)
             {
                 #region DDS
@@ -401,13 +400,9 @@ namespace FFGAppImport
             Directory.CreateDirectory(contentPath + "/audio");
 
             string fileCandidate = contentPath + "/audio/" + asset.Text;
-            string fileName = fileCandidate + ".ogg";
-            // This should apend a postfix to the name to avoid collisions, but as we import multiple times
-            // This is broken
-            while (File.Exists(fileName))
-            {
-                return;// Fixme;
-            }
+
+            // This should apends a postfix to the name to avoid collisions
+            string fileName = GetAvailableFileName(fileCandidate, ".ogg");
 
             // Pass to FSB Export
             audioClip = new Unity_Studio.AudioClip(asset, true);
@@ -421,25 +416,14 @@ namespace FFGAppImport
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/text");
             string fileCandidate = contentPath + "/text/" + asset.Text;
-            string fileName = fileCandidate + asset.extension;
-
+            
             textAsset = new Unity_Studio.TextAsset(asset, true);
-            // This should apend a postfix to the name to avoid collisions, but as we import multiple times
-            // This is broken
-            while (File.Exists(fileName))
-            {
-                return;// Fixme;
-            }
 
-            // Write to disk
-            using (var fs = File.Open(fileName, FileMode.Create))
-            {
-                using (var writer = new BinaryWriter(fs))
-                {
-                    // Pass the Deobfuscate key to decrypt
-                    writer.Write(textAsset.Deobfuscate(finder.ObfuscateKey()));
-                }
-            }
+            // This should apends a postfix to the name to avoid collisions
+            string fileName = GetAvailableFileName(fileCandidate, asset.extension);
+
+            // Write to disk, pass the Deobfuscate key to decrypt
+            File.WriteAllBytes(fileName, textAsset.Deobfuscate(finder.ObfuscateKey()));
 
             // Need to trim new lines from old D2E format
             if (asset.Text.Equals("Localization"))
@@ -484,27 +468,16 @@ namespace FFGAppImport
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(contentPath + "/fonts");
             string fileCandidate = contentPath + "/fonts/" + asset.Text;
-            string fileName = fileCandidate + ".ttf";
 
             font = new Unity_Studio.unityFont(asset, true);
             
             if (font.m_FontData == null) return;
 
-            // This should apend a postfix to the name to avoid collisions, but as we import multiple times
-            // This is broken
-            while (File.Exists(fileName))
-            {
-                return;// Fixme;
-            }
+            // This should apends a postfix to the name to avoid collisions
+            string fileName = GetAvailableFileName(fileCandidate, ".ttf");
 
             // Write to disk
-            using (var fs = File.Open(fileName, FileMode.Create))
-            {
-                using (var writer = new BinaryWriter(fs))
-                {
-                    writer.Write(font.m_FontData);
-                }
-            }
+            File.WriteAllBytes(fileName, font.m_FontData);
         }
 
         // Test version of the form a.b.c is newer or equal
@@ -592,6 +565,27 @@ namespace FFGAppImport
             string bundlesFile = Path.Combine(contentPath, "bundles.txt");
             ValkyrieDebug.Log("Writing '" + bundlesFile + "' containing " + bundles.Count + "' items");
             File.WriteAllLines(bundlesFile, bundles.ToArray());
+        }
+
+        /// <summary>
+        /// Checks if the file is already present on the file system and returns a file path that is available.
+        /// For example, if c:\temp\myfile.dds already exists, it will return the available file c:\temp\myfile_000002.dds and increment to c:\temp\myfile_000003.dds if that file would exist.
+        /// </summary>
+        /// <param name="fileCandidate">path prefix without extension</param>
+        /// <param name="extension">extension of the resulting file including the dot like '.ogg' for audio files</param>
+        /// <returns>File path, where no file exists.</returns>
+        private static string GetAvailableFileName(string fileCandidate, string extension)
+        {
+            if (fileCandidate == null) throw new ArgumentNullException("fileCandidate");
+            if (extension == null) throw new ArgumentNullException("extension");
+            string fileName = fileCandidate + extension;
+            int count = 1;
+            while (File.Exists(fileName))
+            {
+                count++;
+                fileName = fileCandidate + "_" + count.ToString().PadLeft(6, '0') + extension;
+            }
+            return fileName;
         }
     }
 }
