@@ -129,7 +129,7 @@ public class Audio : MonoBehaviour
         }
         else
         {
-            audioSourceEffect.PlayOneShot(file.GetAudioClip(), effectVolume);
+            audioSourceEffect.PlayOneShot(file.GetAudioClip(true, true), effectVolume);
         }
     }
 
