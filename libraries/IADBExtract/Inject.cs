@@ -205,7 +205,7 @@ namespace IADBExtract
                     enemyData.Add("; Elites use normal activations: " + enemy.UseRegularActivations);
                     enemyDataElite.Add("; Elites use normal activations: " + enemy.UseRegularActivations);
 
-                    foreach (AudioClip audio in enemy.RevealSounds)
+                    foreach (UnityEngine.AudioClip audio in enemy.RevealSounds)
                     {
                         enemyData.Add("; Audio: " + audio.ToString());
                         enemyDataElite.Add("; Audio: " + audio.ToString());

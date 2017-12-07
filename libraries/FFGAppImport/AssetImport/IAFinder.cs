@@ -39,15 +39,15 @@ namespace FFGAppImport
             {
                 return "";
             }
-            return "/Legends of the Alliance_Data";
+            return "/Imperial Assault_Data";
         }
         override public string Executable()
         {
             if (platform == Platform.MacOS)
             {
-                return "Legends of the Alliance.app";
+                return "Imperial Assault.app";
             }
-            return "Legends of the Alliance.exe";
+            return "Imperial Assault.exe";
         }
         // IA does not obfuscate text
         override public int ObfuscateKey()
