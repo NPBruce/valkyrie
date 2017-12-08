@@ -24,6 +24,7 @@ namespace Unity_Studio
         public Dictionary<long, AssetPreloadData> preloadTable = new Dictionary<long, AssetPreloadData>();
         public Dictionary<long, GameObject> GameObjectList = new Dictionary<long, GameObject>();
         public Dictionary<long, Transform> TransformList = new Dictionary<long, Transform>();
+        public Dictionary<int, ushort> classIDLookup = new Dictionary<int, ushort>();
 
         public List<AssetPreloadData> exportableAssets = new List<AssetPreloadData>();
         public List<UnityShared> sharedAssetsList = new List<UnityShared>() {new UnityShared()};
@@ -52,7 +53,6 @@ namespace Unity_Studio
             fileGen = a_Stream.ReadInt32();
             int dataOffset = a_Stream.ReadInt32();
             sharedAssetsList[0].fileName = Path.GetFileName(fileName); //reference itself because sharedFileIDs start from 1
-            ValkyrieDebug.Log(fileGen);
             switch (fileGen)
             {
                 case 6://2.5.0 - 2.6.1
@@ -144,13 +144,12 @@ namespace Unity_Studio
                     aClass.subItems.Add(classID.ToString());
                     ClassStructures.Add(classID, aClass);
                 }
-                else { readBase5(); }
+                else { readBase5(i); }
             }
 
             if (fileGen >= 7 && fileGen < 14) {a_Stream.Position += 4;}//azero
 
             int assetCount = a_Stream.ReadInt32();
-            ValkyrieDebug.Log(assetCount);
 
             #region asset preload table
             string assetIDfmt = "D" + assetCount.ToString().Length.ToString(); //format for unique ID
@@ -170,17 +169,18 @@ namespace Unity_Studio
                     int tmp = asset.Offset;
                     asset.Offset += dataOffset;
                     asset.Size = a_Stream.ReadInt32();
-                    ValkyrieDebug.Log(asset.m_PathID.ToString("X") + " " + asset.Size.ToString("X") + " " + tmp.ToString("X") + " " + asset.Type1.ToString("X") + " " + asset.Type2.ToString("X"));
+                    int classIndex = a_Stream.ReadUInt16();
+                    if (classIDLookup.ContainsKey(classIndex))
+                    {
+                        asset.Type2 = classIDLookup[classIndex];
+                    }
                 }
                 else
                 {
                     asset.Offset = a_Stream.ReadInt32();
                     asset.Offset += dataOffset;
                     asset.Size = a_Stream.ReadInt32();
-                    if (fileGen < 16)
-                    {
-                        asset.Type1 = a_Stream.ReadInt32();
-                    }
+                    asset.Type1 = a_Stream.ReadInt32();
                     asset.Type2 = a_Stream.ReadUInt16();
                     a_Stream.Position += 2;
                     if (fileGen >= 15)
@@ -221,6 +221,11 @@ namespace Unity_Studio
             buildType = m_Version.Split(new string[] { ".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }, StringSplitOptions.RemoveEmptyEntries);
             string[] strver = (m_Version.Split(new string[] { ".", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "\n" }, StringSplitOptions.RemoveEmptyEntries));
             version = Array.ConvertAll<string, int>(strver, int.Parse);
+
+            if (fileGen > 15)
+            {
+                a_Stream.Position += 2;
+            }
 
             if (fileGen >= 14)
             {
@@ -264,11 +269,10 @@ namespace Unity_Studio
             for (int i = 0; i < childrenCount; i++) { readBase(cb, level + 1); }
         }
 
-        private void readBase5()
+        private void readBase5(int indexRef)
         {
             int classID = 0;
             classID = a_Stream.ReadInt32();
-            ValkyrieDebug.Log(classID);
             if (fileGen < 16)
             {
                 if (classID < 0) { a_Stream.Position += 16; }
@@ -276,6 +280,7 @@ namespace Unity_Studio
             }
             else
             {
+                classIDLookup.Add(indexRef, (ushort)classID);
                 if (classID == 114)
                 {
                     a_Stream.Position += 16;
