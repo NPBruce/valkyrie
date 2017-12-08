@@ -11,45 +11,67 @@ namespace IADBExtract
     public static class Inject
     {
         public static string outputDir = "C:\\Users\\Bruce\\Desktop\\IA\\";
-        public static void Extract()
+
+        public static void Log(string toLog)
         {
+            File.WriteAllText(outputDir + "log.txt", toLog);
+        }
+
+        public static int Extract(bool unused)
+        {
+            if (File.Exists(outputDir + "log.txt")) return 0;
+            Log("Starting...");
             Extract(SingletonBehaviour<PersistentGameObject>.Instance.Database);
+            return 0;
         }
 
         public static void Extract(IA_Database db)
         {
+            Log("Got DB.");
             Directory.CreateDirectory(outputDir);
             foreach(IA_ProductModel product in db.Products)
             {
+                Log("Next Product");
                 ExtractProduct(product);
             }
             foreach (IA_CampaignModel campaign in db.Campaigns)
             {
+                Log("Next Campaign");
                 ExtractCampaign(campaign);
             }
         }
 
         public static void ExtractCampaign(IA_CampaignModel campaign)
         {
-
+            Log("Campaign " + campaign.Title.Key);
             Directory.CreateDirectory(outputDir + "campaign");
             List<string> campaignData = new List<string>();
             campaignData.Add("Title: " + campaign.Title.Key);
+            Log("C");
             campaignData.Add("Description: " + campaign.Description.Key);
+            Log("D");
             campaignData.Add("Contents: " + campaign.Contents.Key);
-            campaignData.Add("RequiredProduct: " + campaign.RequiredProduct.NameKey);
+            Log("F");
+            if (campaign.RequiredProduct != null)
+            {
+                campaignData.Add("RequiredProduct: " + campaign.RequiredProduct.NameKey);
+            }
+            Log("H");
             campaignData.Add("Image: " + campaign.Image.Path);
-
+            Log("J");
             campaignData.Add("Fame Insignificant: " + campaign.CampaignFameThresholds.Insignificant + " Noteworthy: " + campaign.CampaignFameThresholds.Noteworthy + " Impressive: " + campaign.CampaignFameThresholds.Impressive + " Celebrated: " + campaign.CampaignFameThresholds.Celebrated + " Heroic: " + campaign.CampaignFameThresholds.Heroic + " Legendary: " + campaign.CampaignFameThresholds.Legendary);
-
+            Log("Z");
             campaignData.Add("Normal Gold per Hero: " + campaign.DifficultyNormal.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyNormal.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyNormal.PerilReduction);
             campaignData.Add("Hard Gold per Hero: " + campaign.DifficultyHard.StartingGoldPerHero + " Start Peril: " + campaign.DifficultyHard.QuestStartingPeril + " Reduce Peril: " + campaign.DifficultyHard.PerilReduction);
+
+            Log("Campaign2 " + campaign.Title.Key);
 
             foreach (IA_CampaignTaskModel task in campaign.Tasks)
             {
                 // TODO: Tasks details
                 campaignData.Add("Task: " + task.NameKey);
             }
+            Log("Campaign3 " + campaign.Title.Key);
             foreach (IA_PerilModel peril in campaign.Perils)
             {
                 // TODO: Perils
@@ -61,14 +83,21 @@ namespace IADBExtract
                 campaignData.Add("Story Mission: " + mission.NameKey);
                 ExtractMission(mission);
             }
+            Log("Campaign4 " + campaign.Title.Key);
             foreach (IA_MissionModel mission in campaign.SideQuests)
             {
                 campaignData.Add("Side Mission: " + mission.NameKey);
                 ExtractMission(mission);
             }
             campaignData.Add("HasTutorial: " + campaign.HasTutorial);
+            Log("Campaign7 " + campaign.Title.Key);
             campaignData.Add("StartingMission: " + campaign.StartingMission.NameKey);
-            campaignData.Add("NewPlayersStartingMission: " + campaign.NewPlayersStartingMission.NameKey);
+            Log("Campaign8 " + campaign.Title.Key);
+            if (campaign.NewPlayersStartingMission != null)
+            {
+                campaignData.Add("NewPlayersStartingMission: " + campaign.NewPlayersStartingMission.NameKey);
+            }
+            Log("Campaign9 " + campaign.Title.Key);
             File.WriteAllLines(outputDir + "campaign\\" + campaign.Title.Key + ".txt", campaignData.ToArray());
         }
 
@@ -126,6 +155,7 @@ namespace IADBExtract
 
         public static void ExtractProduct(IA_ProductModel product)
         {
+            Log("Product Code: product.Code");
             Directory.CreateDirectory(outputDir + product.Code);
 
             List<string> packData = new List<string>();
@@ -142,12 +172,14 @@ namespace IADBExtract
             packData.Add("[ContentPackData]");
             if (product.EnemyTypes.Length > 0)
             {
+                Log("Product Code: " + product.Code + " Enemies");
                 packData.Add("enemies.ini");
                 packData.Add("activations.ini");
                 List<string> enemyData = new List<string>();
                 List<string> activations = new List<string>();
                 foreach (IA_EnemyTypeModel enemy in product.EnemyTypes)
                 {
+                    Log("Product Code: " + product.Code + " Enemy " + enemy.KeySingular);
                     List<string> enemyDataElite = new List<string>();
 
                     enemyData.Add("[Monster" + enemy.KeySingular + "]");
@@ -226,8 +258,15 @@ namespace IADBExtract
                     enemyData.AddRange(enemyDataElite);
                     enemyData.Add("");
 
+                    Log("test5");
                     for (int activation = 0; activation < enemy.ActionsReg.Length; activation++)
                     {
+                        Log("test6 " + activation);
+                        if (enemy.BonusReg.Length <= activation || enemy.TargetTraitsReg.Length <= activation || enemy.TargetsReg.Length <= activation)
+                        {
+                            activations.Add("; activation error");
+                            continue;
+                        }
                         activations.Add("[MonsterActivation" + enemy.KeySingular + activation + "]");
 
                         List<string> activationDetails = new List<string>();
@@ -254,10 +293,17 @@ namespace IADBExtract
                         }
                     }
 
+                    Log("test1");
                     if (!enemy.UseRegularActivations)
                     {
                         for (int activation = 0; activation < enemy.ActionsElite.Length; activation++)
                         {
+                            if (enemy.BonusElite.Length <= activation || enemy.TargetsElite.Length <= activation || enemy.TargetTraitsElite.Length <= activation)
+                            {
+                                activations.Add("; activation error");
+                                continue;
+                            }
+
                             activations.Add("[MonsterActivationElite" + enemy.KeySingular + activation + "]");
                             activations.Add("ability={ffg:" + enemy.BonusElite[activation].Key + "}");
                             activations.Add("; Additional range: " + enemy.BonusElite[activation].AdditionalRange);
@@ -274,7 +320,9 @@ namespace IADBExtract
                             }
                             activations.Add("");
                         }
+                        Log("test2");
                     }
+                    Log("test3");
                 }
                 File.WriteAllLines(outputDir + product.Code + "\\enemies.ini", enemyData.ToArray());
                 File.WriteAllLines(outputDir + product.Code + "\\activations.ini", activations.ToArray());
