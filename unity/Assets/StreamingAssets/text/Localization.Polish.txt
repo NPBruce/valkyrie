@@ -10,7 +10,7 @@ ACTIVATION,Aktywacja
 ACTIVATIONS,Aktywacje
 ADD_COMPONENTS,Dodaj Komponent:
 COMPONENTS,Komponenty
-RENAME,Zmień Nazwę
+RENAME,Zmień nazwę
 SAVE_TEST, Zapisz i przetestuj
 SOURCE,Źródło
 COMMENT,Komentarz
@@ -27,7 +27,7 @@ DIFFICULTY,Poziom Trudności
 VALIDATE_SCENARIO,Zatwierdź Scenariusz
 FILE,Plik
 OPTIMIZE_LOCALIZATION,Optymalizuj tłumaczenie
-CREATE_PACKAGE, Utwórz pakiet
+CREATE_PACKAGE,Utwórz pakiet
 REORDER_COMPONENTS,Zmień kolejność komponent.
 ASSIGN,Przydziel
 ATTACK,Atak
@@ -101,7 +101,7 @@ MOM_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przez Steam
 MOM_APP_NOT_FOUND_ANDROID,Nie znaleziono Posiadłości Szaleństwa
 MOM_HEROES_NAME,Badacze
 MOM_HERO_NAME,Badacz
-MOM_NAME,Posiadłość Szaleństwa 2. edycja
+MOM_NAME,Posiadłość Szaleństwa 2. Edycja
 MOM_QUEST_NAME,Scenariusz
 MONSTER,Potwór
 MONSTER_ATTACKS,Potwór Atakuje
@@ -141,13 +141,13 @@ PUZZLE_CLASS,Kategoria
 PUZZLE_CLASS_SELECT,Wybór Kategorii
 IMAGE,Obraz
 
-PUZZLE_LEVEL,Poziom Trudności
+PUZZLE_LEVEL,Poziom trudności
 PUZZLE_SELECT_SKILL,Wybierz Umiejętność
 PUZZLE_IMAGE_CLASS,obraz
 PUZZLE_CODE_CLASS,kod
 PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
-QUEST_NAME_DOWNLOAD,Pobieranie {0}a
+QUEST_NAME_DOWNLOAD,Pobieranie {0}y
 QUEST_NAME_EDITOR,Edytor {0}a
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}a
@@ -174,8 +174,8 @@ SELECT_EXPANSION,Wybierz Zawartość Rozszerzenia
 SELECT_IMAGE,Wybierz Obraz
 SELECT_ITEM,Wybierz Przedmiot
 SELECT_PACK,Wybierz Pakiet
-SELECT_TO_COPY,Wybierz {0} do Skopiowania
-SELECT_TO_DELETE,Wybierz {0} do Usunięcia
+SELECT_TO_COPY,Wybierz {0}e do Skopiowania
+SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDDEN,Ukryty
 ACTIVE,Aktywny
 SET,Ust.
