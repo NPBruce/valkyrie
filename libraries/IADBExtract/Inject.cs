@@ -471,10 +471,14 @@ namespace IADBExtract
             {
                 foreach (IA_ProductModel.ExpansionType packType in Enum.GetValues(typeof(IA_ProductModel.ExpansionType)))
                 {
+                    if (packType == IA_ProductModel.ExpansionType.CoreSet) continue;
                     packData.Add("");
                     packData.Add("[Pack" + packType.ToString() + "]");
                     packData.Add("name={pck:" + packType.ToString().ToUpper() + "}");
                 }
+                packData.Add("");
+                packData.Add("[LanguageData]");
+                packData.Add("pck Localization.English.txt");
             }
             else
             {

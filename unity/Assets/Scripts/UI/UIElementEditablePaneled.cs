@@ -21,8 +21,7 @@ namespace Assets.Scripts.UI
             new UIElementBorder(ui);
 
             base.SetLocationPixels(x, y + UIScaler.GetPixelsPerUnit(), width, height - UIScaler.GetPixelsPerUnit());
-            Dictionary<string, string> CHARS = null;
-            EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
+            Dictionary<string, string> CHARS = EventManager.GetCharacterMap(true);
 
             if (CHARS != null)
             {
