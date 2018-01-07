@@ -15,6 +15,7 @@ namespace Assets.Scripts.UI.Screens
         private StringKey OPTIONS = new StringKey("val", "OPTIONS");
         private StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
         private StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
+        private float ButtonWidth = 13;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public MainMenuScreen()
@@ -49,7 +50,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Button for start quest/scenario
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 5, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
             ui.SetText(new StringKey("val","START_QUEST",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -58,7 +59,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui);
 
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 8, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 8, ButtonWidth, 2);
             if (SaveManager.SaveExists())
             {
                 ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()));
@@ -76,7 +77,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Content selection page
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 11, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 11, ButtonWidth, 2);
             ui.SetText(SELECT_CONTENT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -86,7 +87,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Quest/Scenario editor
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 14, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 14, ButtonWidth, 2);
             ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -96,7 +97,7 @@ namespace Assets.Scripts.UI.Screens
 
             // About page (managed in this class)
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 17, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 17, ButtonWidth, 2);
             ui.SetText(ABOUT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -106,7 +107,7 @@ namespace Assets.Scripts.UI.Screens
             
             // Configuration menu
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 20, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 20, ButtonWidth, 2);
             ui.SetText(OPTIONS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -116,7 +117,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Exit Valkyrie
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 12) / 2, 23, 12, 2);
+            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 23, ButtonWidth, 2);
             ui.SetText(CommonStringKeys.EXIT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
