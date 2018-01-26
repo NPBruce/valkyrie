@@ -91,7 +91,7 @@ public class ShopInterface : Quest.BoardComponent
             ui.SetLocation(UIScaler.GetHCenter(-17), offset, 10, 2);
             ui.SetText(label, colour);
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(game.QuestStartEvent);
+            ui.SetButton(delegate { OnButton(tmp); });
             new UIElementBorder(ui, colour);
 
             offset += 3;
