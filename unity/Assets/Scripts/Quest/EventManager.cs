@@ -848,7 +848,7 @@ public class EventManager
         Dictionary<string, string> toReturn = new Dictionary<string, string>(CHARS_MAP[Game.Get().gameType.TypeName()]);
         if (addRnd)
         {
-            toReturn.Add("Rnd","{rnd:hero}");
+            toReturn.Add("{rnd:hero}", "Rnd");
         }
         if (addPacks)
         {

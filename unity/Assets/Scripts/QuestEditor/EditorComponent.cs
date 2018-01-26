@@ -31,6 +31,8 @@ public class EditorComponent {
     // Update redraws the selection UI
     virtual public void Update()
     {
+        RefreshReference();
+
         game = Game.Get();
 
         float scrollPos = -14.5f * UIScaler.GetPixelsPerUnit();
@@ -62,6 +64,11 @@ public class EditorComponent {
         new UIElementBorder(ui, Color.blue);
 
         AddTitle();
+    }
+
+    protected virtual void RefreshReference()
+    {
+        component = Game.Get().quest.qd.components[name];
     }
 
     protected virtual void AddTitle()

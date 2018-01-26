@@ -49,7 +49,13 @@ public class EditorComponentEvent : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        eventComponent = component as QuestData.Event;
+    }
+
     override public float AddSubComponents(float offset)
     {
         offset = AddPosition(offset);

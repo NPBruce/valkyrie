@@ -14,7 +14,13 @@ public class EditorComponentMPlace : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        mPlaceComponent = component as QuestData.MPlace;
+    }
+
     override public float AddSubComponents(float offset)
     {
         CameraController.SetCamera(mPlaceComponent.location);
