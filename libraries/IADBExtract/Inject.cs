@@ -389,10 +389,10 @@ namespace IADBExtract
                 itemData.Add("; Number of mod slots: " + item.NumberOfModSlots);
                 itemData.Add("; Starting Item: " + item.IsStartingItem);
                 string itemTraits = "traits=deck" + item.Deck.ToString() + " " + item.Type.ToString();
-                if (item.ModType != ModTraits.None)
+                /*if (item.ModType != ModTraits.None)
                 {
                     itemTraits += " mod" + item.ModType.ToString();
-                }
+                }*/
                 if (item.WeaponType != WeaponTraits.None)
                 {
                     itemTraits += " weapon" + item.WeaponType.ToString();

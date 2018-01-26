@@ -815,7 +815,7 @@ public class EventManager
 
         foreach (var conversion in GetCharacterMap(false, true))
         {
-            output = output.Replace(conversion.Value, conversion.Key);
+            output = output.Replace(conversion.Key, conversion.Value);
         }
 
         return output;
@@ -829,24 +829,23 @@ public class EventManager
     public static string InputSymbolReplace(string input)
     {
         string output = input;
-        foreach (string )
         Game game = Game.Get();        
 
         foreach (var conversion in GetCharacterMap(false, true))
         {
-            output = output.Replace(conversion.Key, conversion.Value);
+            output = output.Replace(conversion.Value, conversion.Key);
         }
 
         return output;
     }
 
-    public static readonly Dictionary<string, string> GetCharacterMap(bool addRnd = false, bool addPacks = false)
+    public static Dictionary<string, string> GetCharacterMap(bool addRnd = false, bool addPacks = false)
     {
         if (!CHARS_MAP.ContainsKey(Game.Get().gameType.TypeName()))
         {
             return null;
         }
-        Dictionary<string, string> toReturn = new Dictionary<string, string>(CHARS_MAP[Game.Get().gameType.TypeName()])
+        Dictionary<string, string> toReturn = new Dictionary<string, string>(CHARS_MAP[Game.Get().gameType.TypeName()]);
         if (addRnd)
         {
             toReturn.Add("Rnd","{rnd:hero}");
@@ -855,77 +854,76 @@ public class EventManager
         {
             foreach (var entry in CHAR_PACKS_MAP[Game.Get().gameType.TypeName()])
             {
-                toReturn.Add(entry.key, entry.value);
+                toReturn.Add(entry.Key, entry.Value);
             }
         }
         return toReturn;
     }
 
-    public static readonly Dictionary<string, Dictionary<string, string>> CHARS_MAP =
+    public static Dictionary<string, Dictionary<string, string>> CHARS_MAP = new Dictionary<string, Dictionary<string, string>>
     {
         { "D2E", new Dictionary<string,string>()
             {
-                {"≥","{heart}"},
-                {"∏","{fatigue}"},
-                {"∂","{might}"},
-                {"π","{will}"},
-                {"∞","{action}"},
-                {"∑","{knowledge}"},
-                {"μ","{awareness}"},
-                {"≤","{shield}" },
-                {"±","{surge}"},
+                {"{heart}", "≥"},
+                {"{fatigue}", "∏"},
+                {"{might}", "∂"},
+                {"{will}", "π"},
+                {"{action}", "∞"},
+                {"{knowledge}", "∑"},
+                {"{awareness}", "μ"},
+                {"{shield}", "≤"},
+                {"{surge}", "±"},
             }
         },
         { "MoM", new Dictionary<string,string>()
             {
-                {"","{will}"},
-                {"","{action}" },
-                {"","{strength}"},
-                {"","{agility}"},
-                {"","{lore}"},
-                {"","{influence}"},
-                {"","{observation}"},
-                {"","{success}"},
-                {"","{clue}"},
+                {"{will}", ""},
+                {"{action}", ""},
+                {"{strength}", ""},
+                {"{agility}", ""},
+                {"{lore}", ""},
+                {"{influence}", ""},
+                {"{observation}", ""},
+                {"{success}", ""},
+                {"{clue}", ""},
             }
-        }
+        },
         { "IA", new Dictionary<string,string>()
             {
-                {"","{SWI01}"},
-                {"","{action}"},
-                {"","{wound}"},
-                {"","{surge}"},
-                {"","{attack}"},
-                {"","{strain}"},
-                {"","{tech}"},
-                {"","{insight}"},
-                {"","{strength}"},
-                {"","{block}"},
-                {"","{evade}"},
-                {"","{dodge}"},
+                {"{action}", ""},
+                {"{wound}", ""},
+                {"{surge}", ""},
+                {"{attack}", ""},
+                {"{strain}", ""},
+                {"{tech}", ""},
+                {"{insight}", ""},
+                {"{strength}", ""},
+                {"{block}", ""},
+                {"{evade}", ""},
+                {"{dodge}", ""},
             }
         }
     };
 
-    public static readonly Dictionary<string, Dictionary<string, string>> CHAR_PACKS_MAP =
+    public static Dictionary<string, Dictionary<string, string>> CHAR_PACKS_MAP = new Dictionary<string, Dictionary<string, string>>
     {
         { "D2E", new Dictionary<string,string>()
         },
         { "MoM", new Dictionary<string,string>()
             {
-                {"","{MAD01}"},
-                {"","{MAD06}"},
-                {"","{MAD09}"},
-                {"","{MAD20}"},
-                {"","{MAD21}"},
-                {"","{MAD22}"},
-                {"","{MAD23}"},
-                {"","{MAD25}"},
+                {"{MAD01}", ""},
+                {"{MAD06}", ""},
+                {"{MAD09}", ""},
+                {"{MAD20}", ""},
+                {"{MAD21}", ""},
+                {"{MAD22}", ""},
+                {"{MAD23}", ""},
+                {"{MAD25}", ""},
             }
-        }
+        },
         { "IA", new Dictionary<string,string>()
             {
-                {"","{SWI01}"},
+                {"{SWI01}", ""},
             }
         }
     };
