@@ -36,6 +36,11 @@ namespace FFGAppImport
                 finder = new MoMFinder(import.platform);
                 gameType = "MoM";
             }
+            else if (import.type == GameType.IA)
+            {
+                finder = new IAFinder(import.platform);
+                gameType = "IA";
+            }
             else
             {
                 return;

@@ -100,7 +100,7 @@ public class QuestEditorData {
         select.AddNewComponentItem("CustomMonster");
         select.AddNewComponentItem("UI");
         select.AddNewComponentItem("QItem");
-        if (game.gameType is D2EGameType)
+        if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
             select.AddNewComponentItem("Activation");
             select.AddNewComponentItem("Door");

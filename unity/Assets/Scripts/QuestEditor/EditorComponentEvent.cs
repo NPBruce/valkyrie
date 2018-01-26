@@ -103,7 +103,7 @@ public class EditorComponentEvent : EditorComponent
         }
         offset++;
 
-        if (game.gameType is D2EGameType)
+        if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
             offset = AddHeroSelection(offset);
         }
@@ -927,7 +927,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem("#shop", traits);
         }
 
-        if (game.gameType is D2EGameType)
+        if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
             select.AddNewComponentItem("Door");
         }
