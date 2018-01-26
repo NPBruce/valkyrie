@@ -813,38 +813,10 @@ public class EventManager
             game.quest.log.Add(new Quest.LogEntry("Warning: Invalid var clause in text: " + input, true));
         }
 
-        output = output.Replace("{heart}", "≥");
-        output = output.Replace("{fatigue}", "∏");
-        output = output.Replace("{might}", "∂");
-        if (game.gameType is MoMGameType)
+        foreach (var conversion in GetCharacterMap(false, true))
         {
-            output = output.Replace("{will}", "");
-            output = output.Replace("{action}", "");
+            output = output.Replace(conversion.Key, conversion.Value);
         }
-        else
-        {
-            output = output.Replace("{will}", "π");
-            output = output.Replace("{action}", "∞");
-        }
-        output = output.Replace("{knowledge}", "∑");
-        output = output.Replace("{awareness}", "μ");
-        output = output.Replace("{shield}", "≤");
-        output = output.Replace("{surge}", "±");
-        output = output.Replace("{strength}", "");
-        output = output.Replace("{agility}", "");
-        output = output.Replace("{lore}", "");
-        output = output.Replace("{influence}", "");
-        output = output.Replace("{observation}", "");
-        output = output.Replace("{success}", "");
-        output = output.Replace("{clue}", "");
-        output = output.Replace("{MAD01}", "");
-        output = output.Replace("{MAD06}", "");
-        output = output.Replace("{MAD09}", "");
-        output = output.Replace("{MAD20}", "");
-        output = output.Replace("{MAD21}", "");
-        output = output.Replace("{MAD22}", "");
-        output = output.Replace("{MAD23}", "");
-        output = output.Replace("{MAD25}", "");
 
         return output;
     }
@@ -859,71 +831,101 @@ public class EventManager
         string output = input;
         Game game = Game.Get();        
 
-        output = output.Replace("≥", "{heart}");
-        output = output.Replace("∏", "{fatigue}");
-        output = output.Replace("∂", "{might}");
-        if (game.gameType is MoMGameType)
+        foreach (var conversion in GetCharacterMap(false, true))
         {
-            output = output.Replace("","{will}");
-            output = output.Replace("","{action}");
+            output = output.Replace(conversion.Value, conversion.Key);
         }
-        else
-        {
-            output = output.Replace("π","{will}");
-            output = output.Replace("∞","{action}");
-        }
-        output = output.Replace("∑", "{knowledge}");
-        output = output.Replace("μ", "{awareness}");
-        output = output.Replace("≤","{shield}" );
-        output = output.Replace( "±","{surge}");
-        output = output.Replace( "","{strength}");
-        output = output.Replace( "","{agility}");
-        output = output.Replace("","{lore}" );
-        output = output.Replace("","{influence}" );
-        output = output.Replace("","{observation}" );
-        output = output.Replace( "","{success}");
-        output = output.Replace("","{clue}" );
-        output = output.Replace("","{MAD01}");
-        output = output.Replace("","{MAD06}");
-        output = output.Replace("","{MAD09}");
-        output = output.Replace("","{MAD20}");
-        output = output.Replace("","{MAD21}");
-        output = output.Replace("","{MAD22}");
-        output = output.Replace("", "{MAD23}");
-        output = output.Replace("", "{MAD25}");
 
         return output;
     }
 
-    public static readonly Dictionary<string, Dictionary<string, string>> CHARS_MAP =
-        new Dictionary<string, Dictionary<string, string>>()
-                {
-                    { "D2E", new Dictionary<string,string>()
-                    {
-                        {"≥","{heart}"},
-                        {"∏","{fatigue}"},
-                        {"∂","{might}"},
-                        {"π","{will}"},
-                        {"∞","{action}"},
-                        {"∑","{knowledge}"},
-                        {"μ","{awareness}"},
-                        {"≤","{shield}" },
-                        {"±","{surge}"},
-                        {"Rnd","{rnd:hero}"}
-                    } },
-                    { "MoM", new Dictionary<string,string>()
-                    {
-                        {"","{will}"},
-                        {"","{action}" },
-                        {"","{strength}"},
-                        {"","{agility}"},
-                        {"","{lore}"},
-                        {"","{influence}"},
-                        {"","{observation}"},
-                        {"","{success}"},
-                        {"","{clue}"},
-                        {"Rnd","{rnd:hero}"}
-                    } }
-                };
+    public static Dictionary<string, string> GetCharacterMap(bool addRnd = false, bool addPacks = false)
+    {
+        if (!CHARS_MAP.ContainsKey(Game.Get().gameType.TypeName()))
+        {
+            return null;
+        }
+        Dictionary<string, string> toReturn = new Dictionary<string, string>(CHARS_MAP[Game.Get().gameType.TypeName()]);
+        if (addRnd)
+        {
+            toReturn.Add("Rnd","{rnd:hero}");
+        }
+        if (addPacks)
+        {
+            foreach (var entry in CHAR_PACKS_MAP[Game.Get().gameType.TypeName()])
+            {
+                toReturn.Add(entry.Key, entry.Value);
+            }
+        }
+        return toReturn;
+    }
+
+    public static Dictionary<string, Dictionary<string, string>> CHARS_MAP = new Dictionary<string, Dictionary<string, string>>
+    {
+        { "D2E", new Dictionary<string,string>()
+            {
+                {"{heart}", "≥"},
+                {"{fatigue}", "∏"},
+                {"{might}", "∂"},
+                {"{will}", "π"},
+                {"{action}", "∞"},
+                {"{knowledge}", "∑"},
+                {"{awareness}", "μ"},
+                {"{shield}", "≤"},
+                {"{surge}", "±"},
+            }
+        },
+        { "MoM", new Dictionary<string,string>()
+            {
+                {"{will}", ""},
+                {"{action}", ""},
+                {"{strength}", ""},
+                {"{agility}", ""},
+                {"{lore}", ""},
+                {"{influence}", ""},
+                {"{observation}", ""},
+                {"{success}", ""},
+                {"{clue}", ""},
+            }
+        },
+        { "IA", new Dictionary<string,string>()
+            {
+                {"{action}", ""},
+                {"{wound}", ""},
+                {"{surge}", ""},
+                {"{attack}", ""},
+                {"{strain}", ""},
+                {"{tech}", ""},
+                {"{insight}", ""},
+                {"{strength}", ""},
+                {"{block}", ""},
+                {"{evade}", ""},
+                {"{dodge}", ""},
+            }
+        }
+    };
+
+    public static Dictionary<string, Dictionary<string, string>> CHAR_PACKS_MAP = new Dictionary<string, Dictionary<string, string>>
+    {
+        { "D2E", new Dictionary<string,string>()
+        },
+        { "MoM", new Dictionary<string,string>()
+            {
+                {"{MAD01}", ""},
+                {"{MAD06}", ""},
+                {"{MAD09}", ""},
+                {"{MAD20}", ""},
+                {"{MAD21}", ""},
+                {"{MAD22}", ""},
+                {"{MAD23}", ""},
+                {"{MAD25}", ""},
+            }
+        },
+        { "IA", new Dictionary<string,string>()
+            {
+                {"{SWI01}", ""},
+            }
+        }
+    };
 }
 

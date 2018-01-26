@@ -1,4 +1,4 @@
-.,Polish
+﻿.,Polish
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
@@ -10,8 +10,8 @@ ACTIVATION,Aktywacja
 ACTIVATIONS,Aktywacje
 ADD_COMPONENTS,Dodaj Komponent:
 COMPONENTS,Komponenty
-RENAME,Zmień Nazwę
-SAVE_TEST,
+RENAME,Zmień nazwę
+SAVE_TEST, Zapisz i przetestuj
 SOURCE,Źródło
 COMMENT,Komentarz
 TRUE,Prawda
@@ -27,8 +27,8 @@ DIFFICULTY,Poziom Trudności
 VALIDATE_SCENARIO,Zatwierdź Scenariusz
 FILE,Plik
 OPTIMIZE_LOCALIZATION,Optymalizuj tłumaczenie
-CREATE_PACKAGE,
-REORDER_COMPONENTS,Zmiana Kolejności Komponentów
+CREATE_PACKAGE,Utwórz pakiet
+REORDER_COMPONENTS,Zmień kolejność komponent.
 ASSIGN,Przydziel
 ATTACK,Atak
 ATTACK_MESSAGE,Komunikat Ataku:
@@ -39,18 +39,18 @@ BUTTON,Przycisk
 BUTTONS,Przyciski
 CAMERA,Kamera
 CANCEL,Anuluj
-CHOOSE_LANG,Wybór Języka
+CHOOSE_LANG,Wybierz język
 CLEAR_FIRE,Usuń Ogień
 COLOR,Kolor
-COMPONENT_NAME,Nazwa Komponentu
-COMPONENT_TO_DELETE,Komponent do Usunięcia:
-CONTENT_IMPORT,Import Komponentu
-CONTENT_IMPORTING,Importowanie...
-CONTENT_REIMPORT,Zaimportuj Ponownie Komponent
+COMPONENT_NAME,Nazwa komponentu
+COMPONENT_TO_DELETE,Komponent do usunięcia:
+CONTENT_IMPORT,Zaimportuj dane
+CONTENT_IMPORTING,Importowanie danych...
+CONTENT_REIMPORT,Zaimportuj ponownie 
 CONTINUE,Kontynuuj
 COPY,Kopiuj
 CUSTOMMONSTER,Personalizacja Potwora
-D2E_APP_NOT_FOUND,Nie można zlokalizować Road to Legend, zainstaluj za pośrednictwem Steam
+D2E_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przy użyciu Steam
 D2E_HEROES_NAME,Bohaterowie
 D2E_HERO_NAME,Bohater
 D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
@@ -60,20 +60,23 @@ DELETE,Usuń
 DIALOG,Dialog
 DOOR,Drzwi
 DOWNLOAD,Pobierz
+DOWNLOAD_LIST,Pobieranie listy pakietów...
+DOWNLOAD_PACKAGE,Pobieranie pakietu...
 E,E
 EFFECTS,Efekty
 END_TURN,Koniec Tury
+ROUND,Runda {0}
 EVADE,Unik
 EVENT,Wydarzenie
 EXIT,Wyjście
-FINISHED,Skończony
+FINISHED,Zakończono
 FIRST,Pierwszy
 FORCE_ACTIVATE,Wymuś Aktywację
 
 HEALTH,Zdrowie
 HEALTH_HERO,Na jednego Bohatera
 HIGHLIGHT,Zaznacz
-HORROR_CHECK,Sprawdź
+HORROR_CHECK,Wykonaj Test Przerażenia
 INDENT,  {0}
 INFO,Info
 INFORMATION,Informacja
@@ -81,10 +84,11 @@ INITIAL_MESSAGE,Wiadomość Początkowa:
 ITEM,Przedmiot
 QITEM,Przedmiot Fabularny
 KO,KO
-LOAD_QUEST,Ładowanie {0}
-LOG,Dziennik
+LOAD_QUEST,Załaduj {0}
+LOG,Log
 SKILLS,Umiejętności
 ITEMS,Przedmioty
+ITEMS_SMALL,Items
 GOLD,Złoto
 MAIN_MENU,Menu Główne
 MAX,Max
@@ -93,9 +97,11 @@ MAX_CAM,Max Kam
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Kam
+MOM_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przez Steam
+MOM_APP_NOT_FOUND_ANDROID,Nie znaleziono Posiadłości Szaleństwa
 MOM_HEROES_NAME,Badacze
 MOM_HERO_NAME,Badacz
-MOM_NAME,Posiadłość Szaleństwa 2. edycja
+MOM_NAME,Posiadłość Szaleństwa 2. Edycja
 MOM_QUEST_NAME,Scenariusz
 MONSTER,Potwór
 MONSTER_ATTACKS,Potwór Atakuje
@@ -106,9 +112,9 @@ MONSTER_NORMAL,Normalny
 
 MONSTER_UNIQUE,Niepowtarzalny
 MOVES,Ruchy
-MPLACE,PPozycja
+MPLACE,Pozycja
 MUSIC,Muzyka
-NAME,Imie
+NAME,Imię
 NEW,Nowy
 NEW_X,{Nowy {0}}
 NONE,{Żaden}
@@ -135,16 +141,16 @@ PUZZLE_CLASS,Kategoria
 PUZZLE_CLASS_SELECT,Wybór Kategorii
 IMAGE,Obraz
 
-PUZZLE_LEVEL,Poziom Trudności
+PUZZLE_LEVEL,Poziom trudności
 PUZZLE_SELECT_SKILL,Wybierz Umiejętność
 PUZZLE_IMAGE_CLASS,obraz
 PUZZLE_CODE_CLASS,kod
 PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
-QUEST_NAME_DOWNLOAD,Pobieranie {0}
-QUEST_NAME_EDITOR,Edytor {0}
+QUEST_NAME_DOWNLOAD,Pobieranie {0}y
+QUEST_NAME_EDITOR,Edytor {0}a
 EDITOR,Edytor
-QUEST_NAME_UPDATE,  [Aktualizacja] {0}
+QUEST_NAME_UPDATE,  [Aktualizacja] {0}a
 QUOTA,Limit
 RECOVER,Wyzdrowieć
 
@@ -155,6 +161,7 @@ REQUIRES_EXPANSION, Wymaga: {0}
 
 REQ_TRAITS,Wymagane Atrybuty:
 RESET,Reset
+ROTATE_TO,Obróć: {0}
 ROTATION,Obrót
 SAVE,Zapisz
 AUTOSAVE,Autozapis
@@ -167,17 +174,17 @@ SELECT_EXPANSION,Wybierz Zawartość Rozszerzenia
 SELECT_IMAGE,Wybierz Obraz
 SELECT_ITEM,Wybierz Przedmiot
 SELECT_PACK,Wybierz Pakiet
-SELECT_TO_COPY,Wybierz {0} do Skopiowania
-SELECT_TO_DELETE,Wybierz {0} do Usunięcia
+SELECT_TO_COPY,Wybierz {0}e do Skopiowania
+SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDDEN,Ukryty
 ACTIVE,Aktywny
-SET,Ustaw
+SET,Ust.
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności
 SPAWN,Przywołaj
 STARTING_ITEM,Przedmiot Startowy
 STARTING_ITEMS,Przedmioty Startowe
-START_QUEST,Początek {0}
+START_QUEST,Nowy {0}
 START,Start
 
 TESTS,Testy
@@ -357,6 +364,7 @@ image,Obraz
 code,Kod
 slide,Suwak
 SYMBOL,Symbol
+ELEMENT,Element
 
 // Events
 Ordered,Uporządkowany
@@ -373,11 +381,11 @@ DOWN,Dół
 LEFT,Lewo
 RIGHT,Prawo
 
-PHASE_INVESTIGATOR,Faza badaczy
-PHASE_MYTHOS,Faza mitów
-MONSTER_STEP,Etap potworów
-HORROR_STEP,Etap przerażenia
-END_PHASE,Koniec fazy
+PHASE_INVESTIGATOR,Faza Badaczy
+PHASE_MYTHOS,Faza Mitów
+MONSTER_STEP,Etap Potworów
+HORROR_STEP,Etap Przerażenia
+END_PHASE,Koniec Fazy
 
 ATTACK_PROMPT,Jakim rodzajem broni atakujesz?
 ATTACK_WITH_HEAVY_WEAPON, Atak [i]Ciężką bronią[/i]

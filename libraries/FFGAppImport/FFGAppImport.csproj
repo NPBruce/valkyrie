@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetImport\AppFinder.cs" />
+    <Compile Include="AssetImport\IAFinder.cs" />
     <Compile Include="AssetImport\Unity_Studio\AssetPreloadData.cs" />
     <Compile Include="AssetImport\Unity_Studio\AssetsFile.cs" />
     <Compile Include="AssetImport\Unity_Studio\AudioClip.cs" />

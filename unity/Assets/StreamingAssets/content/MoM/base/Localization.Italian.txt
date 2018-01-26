@@ -1,0 +1,14 @@
+.,Italian
+BOXED,Espansioni
+FANDT,Raccolte di Miniature e Tessere
+CK,Kit di Conversione
+
+MAD09I,Il Richiamo della Foresta - Investigatori
+MAD09M,Il Richiamo della Foresta - Mostri
+MAD09T,Il Richiamo della Foresta - Tessere
+MAD06I,Alchimia Proibita - Investigatori
+MAD06M,Alchimia Proibita - Mostri
+MAD06T,Alchimia Proibita - Tessere
+MAD01I,Le Case della Follia Prima Edizione - Investigatori
+MAD01M,Le Case della Follia Prima Edizione - Mostri
+MAD01T,Le Case della Follia Prima Edizione - Tessere

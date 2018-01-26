@@ -318,7 +318,7 @@ namespace Assets.Scripts.Content
             if (!KeyExists(key)) return key;
 
             // Check current language first
-            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key))
+            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key) && data[currentLanguage][key].Length > 0)
             {
                 return data[currentLanguage][key];
             }
