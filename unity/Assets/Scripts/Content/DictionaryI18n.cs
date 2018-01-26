@@ -102,13 +102,46 @@ namespace Assets.Scripts.Content
         /// <param name="languageData">Language data</param>
         public void AddData(string[] languageData)
         {
+            List<string> textToAdd = new List<string>();
+            string partialLine = "";
+
+            // Remove extra new lines
+            foreach (string rawLine in languageData)
+            {
+                int sections = rawLine.Split('\"').Length;
+                if ((sections % 2) == 1)
+                {
+                    if (partialLine.Length == 0)
+                    {
+                        textToAdd.Add(rawLine);
+                    }
+                    else
+                    {
+                        partialLine += "\\n" + rawLine;
+                    }
+                }
+                else
+                {
+                    if (partialLine.Length == 0)
+                    {
+                        partialLine = rawLine;
+                    }
+                    else
+                    {
+                        partialLine += "\\n" + rawLine;
+                        textToAdd.Add(partialLine);
+                        partialLine = "";
+                    }
+                }
+            }
+
             string newLanguage = languageData[0].Split(COMMA)[1].Trim('"');
 
             if (!rawData.ContainsKey(newLanguage))
             {
                 rawData.Add(newLanguage, new List<string>());
             }
-            rawData[newLanguage].AddRange(languageData);
+            rawData[newLanguage].AddRange(textToAdd);
         }
 
         /// <summary>
