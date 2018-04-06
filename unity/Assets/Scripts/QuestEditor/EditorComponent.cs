@@ -242,14 +242,16 @@ public class EditorComponent {
     // Item renamed
     public void RenameFinished()
     {
-        // Trim non alpha numeric
+        // Remove all not allowed characters from name
         string newName = System.Text.RegularExpressions.Regex.Replace(rename.value, "[^A-Za-z0-9_]", "");
         // Must have a name
-        if (newName.Equals("")) return;
+        if (newName == string.Empty) return;
         // Add type
         string baseName = component.typeDynamic + newName;
         // Find first available unique name
         string name = baseName;
+        // If nothing has changed, skip renaming
+        if (component.sectionName.Equals(baseName, System.StringComparison.Ordinal)) return;
         Game game = Game.Get();
         int i = 0;
         while (game.quest.qd.components.ContainsKey(name))
