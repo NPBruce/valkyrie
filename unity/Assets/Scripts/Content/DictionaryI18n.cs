@@ -208,11 +208,11 @@ namespace Assets.Scripts.Content
 
             if (data[language].ContainsKey(key))
             {
-                data[language][key] = value;
+                data[language][key] = EscapeEntry(value);
             }
             else
             {
-                data[language].Add(key, value);
+                data[language].Add(key, EscapeEntry(value));
             }
         }
 
@@ -391,11 +391,32 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
+                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value);
                 }
             }
 
             return rawData;
+        }
+
+        /// <summary>
+        /// Escape entry values
+        /// </summary>
+        /// <param name="entry">entry value to replace</param>
+        /// <returns>Escaped entry, with newlines and quotes handled</returns>
+        protected string EscapeEntry(string entry)
+        {
+            if (entry == null) throw new ArgumentNullException("entry");
+            // Handle enter
+            string escapedEntry = entry.Replace("\n", "\\n");
+            if (escapedEntry.Length > 2 && escapedEntry.StartsWith("\"") && escapedEntry.EndsWith("\""))
+            {
+                // Trim leading and trailing quotes
+                escapedEntry = escapedEntry.Substring(1, escapedEntry.Length - 2);
+                escapedEntry = escapedEntry.Replace("\"", "\"\"");
+                escapedEntry = "\"\"\"" + escapedEntry + "\"\"\"";
+            }
+            // Handle quotes
+            return escapedEntry;
         }
 
         /// <summary>
@@ -405,9 +426,10 @@ namespace Assets.Scripts.Content
         /// <returns>Entry with newlines and quotes handled</returns>
         protected string ParseEntry(string entry)
         {
+            if (entry == null) throw new ArgumentNullException("entry");
             string parsedReturn = entry.Replace("\\n", "\n");
             // If entry is in quotes
-            if (parsedReturn.Length > 2 && parsedReturn[0] == '\"')
+            if (parsedReturn.Length > 2 && parsedReturn.StartsWith("\"") && parsedReturn.EndsWith("\""))
             {
                 // Trim leading and trailing quotes
                 parsedReturn = parsedReturn.Substring(1, parsedReturn.Length - 2);
