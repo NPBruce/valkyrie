@@ -391,7 +391,7 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value);
+                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
                 }
             }
 
