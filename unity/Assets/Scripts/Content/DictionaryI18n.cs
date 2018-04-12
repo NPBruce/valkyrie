@@ -407,8 +407,8 @@ namespace Assets.Scripts.Content
         {
             if (entry == null) throw new ArgumentNullException("entry");
             // Handle enter
-            string escapedEntry = entry.Replace("\r\n", "\\n");
-            escapedEntry = escapedEntry.Replace("\r", "\\n");
+            string escapedEntry = entry.Replace("\r\n", "\n");
+            escapedEntry = escapedEntry.Replace("\r", "\n");
             escapedEntry = escapedEntry.Replace("\n", "\\n");
             if (escapedEntry.Length > 2 && escapedEntry.StartsWith("\"") && escapedEntry.EndsWith("\""))
             {
