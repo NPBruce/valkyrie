@@ -1356,6 +1356,13 @@ public class EditorComponentEvent : EditorComponent
                 select.AddItem("#" + pack.id, traits);
             }
         }
+        foreach (HeroData hero in Game.Get().cd.heroes.Values)
+        {
+            if (hero.sectionName.Length > 0)
+            {
+                select.AddItem("#" + hero.sectionName, traits);
+            }
+        }
         select.Draw();
     }
 
