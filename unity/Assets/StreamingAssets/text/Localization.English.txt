@@ -272,6 +272,7 @@ MoM1E,MoM1E 
 base,base 
 RN,RN 
 SM,SM 
+SoT,SoT 
 
 //Items
 weapon,Weapon

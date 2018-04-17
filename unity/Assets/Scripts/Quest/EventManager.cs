@@ -919,6 +919,7 @@ public class EventManager
                 {"{MAD22}", ""},
                 {"{MAD23}", ""},
                 {"{MAD25}", ""},
+                {"{MAD26}", ""},
             }
         },
         { "IA", new Dictionary<string,string>()
