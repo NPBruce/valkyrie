@@ -391,7 +391,13 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
+                    string entryDiskFormat = entry.Value.Replace("\r\n", "\n");
+                    entryDiskFormat = entryDiskFormat.Replace("\r", "\n").Replace("\n", "\\n");
+                    if (entryDiskFormat.Contains("\""))
+                    {
+                        entryDiskFormat = "\"" + entryDiskFormat.Replace("\"", "\"\"") + "\"";
+                    }
+                    rawData[kv.Key].Add(entry.Key + ',' + entryDiskFormat);
                 }
             }
 
