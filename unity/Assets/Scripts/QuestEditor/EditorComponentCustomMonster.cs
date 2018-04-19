@@ -40,7 +40,13 @@ public class EditorComponentCustomMonster : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        monsterComponent = component as QuestData.CustomMonster;
+    }
+
     override public float AddSubComponents(float offset)
     {
         Game game = Game.Get();

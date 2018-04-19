@@ -30,6 +30,10 @@ public class EditorComponentQuest : EditorComponent
         Update();
     }
 
+    protected override void RefreshReference()
+    {
+    }
+
     override public float AddSubComponents(float offset)
     {
         Game game = Game.Get();

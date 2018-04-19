@@ -33,7 +33,13 @@ public class EditorComponentActivation : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        activationComponent = component as QuestData.Activation;
+    }
+
     override public float AddSubComponents(float offset)
     {
         if (game.gameType is MoMGameType)

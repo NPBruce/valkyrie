@@ -49,7 +49,13 @@ public class EditorComponentEvent : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        eventComponent = component as QuestData.Event;
+    }
+
     override public float AddSubComponents(float offset)
     {
         offset = AddPosition(offset);
@@ -1348,6 +1354,13 @@ public class EditorComponentEvent : EditorComponent
             if (pack.id.Length > 0)
             {
                 select.AddItem("#" + pack.id, traits);
+            }
+        }
+        foreach (HeroData hero in Game.Get().cd.heroes.Values)
+        {
+            if (hero.sectionName.Length > 0)
+            {
+                select.AddItem("#" + hero.sectionName, traits);
             }
         }
         select.Draw();
