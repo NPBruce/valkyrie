@@ -109,24 +109,43 @@ namespace Assets.Scripts.Content
             foreach (string rawLine in languageData)
             {
                 int sections = rawLine.Split('\"').Length;
+                // Even number of " characters, self contained line
+                // Or middle of quote block
                 if ((sections % 2) == 1)
                 {
+                    // No current block, self contained entry
                     if (partialLine.Length == 0)
                     {
                         textToAdd.Add(rawLine);
                     }
+                    // Current quote block, add line
                     else
                     {
                         partialLine += "\\n" + rawLine;
                     }
                 }
+                // Odd number of quotes *should* mean start or end of multi line block
                 else
                 {
+                    // Start of a new block
                     if (partialLine.Length == 0)
                     {
-                        partialLine = rawLine;
+                        // We need to support old data which may have " characters without a starting quote
+                        // These are always single line and do not have " as the first character
+                        string[] components = rawLine.Split(",".ToCharArray(), 2);
+                        // Text starts with ", it is a normal multi line block
+                        if (components.Length > 1 && components[1].Length > 0 && components[1][0] == '\"')
+                        {
+                            partialLine = rawLine;
+                        }
+                        else
+                        {
+                            // Text does not start with ", support for 1.6.1 and earlier which may have uneven single lines
+                            textToAdd.Add(rawLine);
+                        }
                     }
                     else
+                    // Block has started, this is the last line
                     {
                         partialLine += "\\n" + rawLine;
                         textToAdd.Add(partialLine);
