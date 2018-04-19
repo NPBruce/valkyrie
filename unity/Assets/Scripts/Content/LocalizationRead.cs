@@ -255,7 +255,7 @@ namespace Assets.Scripts.Content
                 ValkyrieDebug.Log("Error: current dictionary not loaded");
                 return key;
             }
-            return currentDict.GetValue(key);
+            return currentDict.GetParsedValue(key);
         }
 
         /// <summary>
