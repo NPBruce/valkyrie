@@ -161,7 +161,7 @@ namespace Assets.Scripts.Content
                 // Create a Dictionary for each language
                 data.Add(kv.Key, new Dictionary<string, string>());
                 // Check each line
-                for(int i = 1; i < kv.Value.Count; i++)
+                for (int i = 1; i < kv.Value.Count; i++)
                 {
                     // Ignore comments
                     if (kv.Value[i].Trim().IndexOf("//") == 0) continue;
@@ -173,7 +173,7 @@ namespace Assets.Scripts.Content
                     // Only store the first occurance of a key
                     if (!data[kv.Key].ContainsKey(components[0]))
                     {
-                        data[kv.Key].Add(components[0], ParseEntry(components[1]));
+                        data[kv.Key].Add(components[0], EscapeEntry(ParseEntry(components[1])));
                     }
                 }
             }
@@ -328,7 +328,7 @@ namespace Assets.Scripts.Content
                         }
                         else
                         {
-                            data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
+                            data[kv.Key].Add(key, EscapeEntry(ParseEntry(raw.Substring(raw.IndexOf(',') + 1))));
                         }
 
                         // Continue after found to ensure all languages are loaded
@@ -338,6 +338,11 @@ namespace Assets.Scripts.Content
             }
 
             return found;
+        }
+
+        public string GetParsedValue(string key)
+        {
+            return ParseEntry(GetValue(key));
         }
 
         /// <summary>
@@ -415,8 +420,13 @@ namespace Assets.Scripts.Content
                 // Trim leading and trailing quotes
                 escapedEntry = escapedEntry.Substring(1, escapedEntry.Length - 2);
                 escapedEntry = escapedEntry.Replace("\"", "\"\"");
-                escapedEntry = "\"\"\"" + escapedEntry + "\"\"\"";
+                escapedEntry = "\"\"" + escapedEntry + "\"\"";
             }
+            else
+            {
+                escapedEntry = escapedEntry.Replace("\"", "\"\"");
+            }
+            escapedEntry = "\"" + escapedEntry + "\"";
             // Handle quotes
             return escapedEntry;
         }
