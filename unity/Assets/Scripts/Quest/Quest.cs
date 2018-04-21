@@ -1570,6 +1570,10 @@ public class Quest
         {
             string text = qUI.uiText.Translate(true);
 
+            // Find and replace {q:element with the name of the
+            // element
+            text = EventManager.Event.ReplaceComponentText(text);
+
             // Fix new lines and replace symbol text with special characters
             return EventManager.OutputSymbolReplace(text).Replace("\\n", "\n");
         }
