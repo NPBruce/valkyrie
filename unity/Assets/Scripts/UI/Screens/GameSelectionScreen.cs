@@ -177,11 +177,13 @@ namespace Assets.Scripts.UI.Screens
             {
                 startColor = Color.gray;
             }
+            // Always disabled
+            startColor = Color.gray;
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 21, 30, 3);
             ui.SetText(IA_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate { IA(); });
+            //ui.SetButton(delegate { IA(); });
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
