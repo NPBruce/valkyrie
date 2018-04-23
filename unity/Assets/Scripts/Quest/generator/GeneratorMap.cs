@@ -90,7 +90,7 @@ public class GeneratorMap
             if ((tiles.joints.Count > 1) && singleJoint) continue;
 
             bool componentsAvailable = true;
-            foreach (KeyValuePair<Dictionary<string, int>> kv in candidate.GetComponentCounts())
+            foreach (KeyValuePair<string, int> kv in candidate.GetComponentCounts())
             {
                 if (!ComponentAvailable(kv.Key, kv.Value))
                 {
@@ -99,7 +99,7 @@ public class GeneratorMap
             }
             if (!componentsAvailable) continue;
 
-            if (checkJoinTo != null && !checkJoinTo.CheckMerge(candidate).Count == 0) continue;
+            if (checkJoinTo != null && !checkJoinTo.ValidMergeJoints(candidate).Count == 0) continue;
 
             availableTiles.Add(candidate);
         }

@@ -47,7 +47,7 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
                 {
                     SetSpace(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y, space);
                 }
-                if (System.Convert.ToByte((map[y][x]) >= System.Convert.ToByte('A') && System.Convert.ToByte((map[y][x]) <= System.Convert.ToByte('Z'))
+                if (System.Convert.ToByte(map[y][x]) >= System.Convert.ToByte('A') && System.Convert.ToByte(map[y][x]) <= System.Convert.ToByte('Z'))
                 {
                     joints.Add(new GeneratorMapJoint(new GeneratorMapVectory(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), map[y][x]))
                 }

@@ -14,8 +14,17 @@ public class GeneratorMapSegment
     {
     }
 
-
     public GeneratorMapSegment(GeneratorMapSegment in)
+    {
+        DuplicateFromSegment(in);
+    }
+
+    public GeneratorMapSegment(GeneratorMapSegment in, int rotation)
+    {
+         DuplicateFromSegment(in, rotation);
+    }
+
+    private void DuplicateFromSegment(GeneratorMapSegment in, int rotation = 0)
     {
         foreach (Tuple<string, GeneratorMapVector> c in in.components)
         {
@@ -23,20 +32,22 @@ public class GeneratorMapSegment
         }
         foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> kv in in.map)
         {
-            map.Add(kv.Key, new Dictionary<int, GeneratorMapSpace>>());
-            foreach (var column in kv.Value)
+            foreach (KeyValuePair<int, GeneratorMapSpace> column in kv.Value)
             {
-                map[kv.Key].Add(column.Key, new GeneratorMapSpace(column.Value));
+                SetSpace(GeneratorMapVector(kv.Key, column).Rotate(rotation), column.Value);
             }
         }
         foreach (GeneratorMapJoint j in in.joints)
         {
-            joints.Add(new GeneratorMapJoint(j));
+            joints.Add(new GeneratorMapJoint(j.location.Rotate(rotation), j.type));
         }
     }
 
-
-    public List<GeneratorMapJoint> CheckMerge(GeneratorMapSegment toMerge)
+    /// <summary>
+    /// Get a list of all valid merge joints between segments</summary>
+    /// <param name="toMerge">Segment to check against</param>
+    /// <returns>List of possible merge positions</returns>
+    public List<GeneratorMapJoint> ValidMergeJoints(GeneratorMapSegment toMerge)
     {
         List<GeneratorMapJoint> toReturn = new List<GeneratorMapJoint>();
 
@@ -44,10 +55,10 @@ public class GeneratorMapSegment
         {
             foreach (GeneratorMapJoint availableJoint in joints)
             {
-                if (inJoint.type != availableJoint.type) continue;
-
                 if (CheckJoin(toMerge, availableJoint, inJoint))
                 {
+                    // FIXME
+                    // t?
                     toReturn.Add(t);
                 }
             }
@@ -68,14 +79,14 @@ public class GeneratorMapSegment
         return toReturn;
     }
 
-    public List<Dictionary<string, int>> GetComponentCounts()
+    public Dictionary<string, int> GetComponentCounts()
     {
-        List<Dictionary<string, int>> toReturn = new List<Tuple<string, int>>();
+        Dictionary<string, int> toReturn = new Dictionary<string, int>();
         foreach (Tuple<string, GeneratorMapVector> component in components)
         {
             if (!toReturn.ContainsKey(component.Item1))
             {
-                toReturn.Add(component.Item1);
+                toReturn.Add(component.Item1, 0);
             }
             toReturn[component.Item1]++;
         }
@@ -83,6 +94,12 @@ public class GeneratorMapSegment
         return toReturn;
     }
 
+    /// <summary>
+    /// Check if segment can be merged using specified joints</summary>
+    /// <param name="toMerge">Segment to check against</param>
+    /// <param name="availableJoint">Joint on this segment to check</param>
+    /// <param name="inJoint">Joint on merging segment to check</param>
+    /// <returns>True if merge possible</returns>
     private bool CheckJoin(GeneratorMapSegment toMerge, GeneratorMapJoint availableJoint, GeneratorMapJoint inJoint)
     {
         if (inJoint.type != availableJoint.type) return false;
@@ -101,13 +118,13 @@ public class GeneratorMapSegment
 
         GeneratorMapVector offset = new GeneratorMapVector(availableJoint.location.x, availableJoint.location.y, rotation).Add(inJoint.location);
 
-        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace> row in toMerge.map)
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> row in toMerge.map)
         {
             foreach (KeyValuePair<int, GeneratorMapSpace> space in row.Value)
             {
                 if (space.Value == GeneratorMapSpace.Void) continue;
 
-                GeneratorMapVector targetVector = offset.Add(new GeneratorMapVector(row.Key, space.Key))
+                GeneratorMapVector targetVector = offset.Add(new GeneratorMapVector(row.Key, space.Key));
                 GeneratorMapSpace targetSpace = GetSpace(targetVector);
                 if (targetSpace == GeneratorMapSpace.Void) continue;
                 // join block checks go here
@@ -141,10 +158,14 @@ public class GeneratorMapSegment
 
     public bool Merge(GeneratorMapSegment toMerge)
     {
-        List<GeneratorMapJoint> j = CheckMerge(toMerge);
+        // Fixme
+        // ????
+        List<GeneratorMapJoint> j = ValidMergeJoints(toMerge);
     }
 
 
+// FIXME
+// Unused?
     public bool Merge(GeneratorMapSegment toMerge, GeneratorMapJoint availableJoint, GeneratorMapJoint inJoint)
     {
         int rotation = 180 + (availableJoint.rotation - inJoint.rotation);
