@@ -246,7 +246,7 @@ public class PuzzleCodeWindow
                     buttons.Add(new ButtonInfo(new StringKey(null, i.ToString(), false)));
                 }
             }
-            if (questPuzzle.imageType.Equals("element"))
+            else if (questPuzzle.imageType.Equals("element"))
             {
                 Texture2D dupeTex = Resources.Load("sprites/element" + i) as Texture2D;
                 if (dupeTex != null)
