@@ -17,7 +17,7 @@ public class QuestGenerator
         foreach (Tuple<string, GeneratorMapVector> tile in mapComponents)
         {
             string tileComponentName = GetUniqueName("Tile");
-            QuestData.Tile generatedTile = new QuestData.Tile(tileComponentName, tile.Item1, tile.Item2.x, int tile.Item2.y, tile.Item2.rotation);
+            QuestData.Tile generatedTile = new QuestData.Tile(tileComponentName, tile.Item1, tile.Item2.x, tile.Item2.y, tile.Item2.rotation);
             components.Add(generatedTile.sectionName, generatedTile);
             questTileIDs.Add(generatedTile.sectionName);
         }

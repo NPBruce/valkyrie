@@ -14,34 +14,34 @@ public class GeneratorMapSegment
     {
     }
 
-    public GeneratorMapSegment(GeneratorMapSegment in)
+    public GeneratorMapSegment(GeneratorMapSegment inSegment)
     {
-        DuplicateFromSegment(in);
+        DuplicateFromSegment(inSegment);
     }
 
-    public GeneratorMapSegment(GeneratorMapSegment in, int rotation)
+    public GeneratorMapSegment(GeneratorMapSegment inSegment, int rotation)
     {
-         DuplicateFromSegment(in, rotation);
+         DuplicateFromSegment(inSegment, rotation);
     }
 
     /// <summary>
     /// Populate map data from existing segment</summary>
     /// <param name="in">Segment to copy</param>
     /// <param name="rotation">Rotate copy in degrees</param>
-    private void DuplicateFromSegment(GeneratorMapSegment in, int rotation = 0)
+    private void DuplicateFromSegment(GeneratorMapSegment inSegment, int rotation = 0)
     {
-        foreach (Tuple<string, GeneratorMapVector> c in in.components)
+        foreach (Tuple<string, GeneratorMapVector> c in inSegment.components)
         {
             components.Add(new Tuple<string, GeneratorMapVector>(c.Item1, new GeneratorMapVector(c.Item2)));
         }
-        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> kv in in.map)
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> kv in inSegment.map)
         {
             foreach (KeyValuePair<int, GeneratorMapSpace> column in kv.Value)
             {
                 SetSpace(GeneratorMapVector(kv.Key, column).Rotate(rotation), column.Value);
             }
         }
-        foreach (GeneratorMapJoint j in in.joints)
+        foreach (GeneratorMapJoint j in inSegment.joints)
         {
             joints.Add(new GeneratorMapJoint(j.location.Rotate(rotation), j.type));
         }
@@ -113,7 +113,7 @@ public class GeneratorMapSegment
     {
         if (inJoint.type != availableJoint.type) return false;
 
-        int rotation = 180 + (availableJoint.rotation - inJoint.rotation);
+        int rotation = 180 + (availableJoint.location.rotation - inJoint.location.rotation);
 
         if (rotation < 0)
         {
@@ -175,7 +175,7 @@ public class GeneratorMapSegment
     /// <returns>True if merge successful</returns>
     public bool Merge(GeneratorMapSegment toMerge)
     {
-        List<Tupple<GeneratorMapJoint, GeneratorMapJoint>> joins = ValidMergeJoints(toMerge);
+        List<Tuple<GeneratorMapJoint, GeneratorMapJoint>> joins = ValidMergeJoints(toMerge);
         if (joints.Count < 1) return false;
 
         Tupple<GeneratorMapJoint, GeneratorMapJoint> randomJoin = joins[Random.Range(0, joins.Count)];
@@ -190,7 +190,7 @@ public class GeneratorMapSegment
     /// <returns>True if merge successful</returns>
     public bool Merge(GeneratorMapSegment toMerge, GeneratorMapJoint availableJoint, GeneratorMapJoint inJoint)
     {
-        int rotation = 180 + (availableJoint.rotation - inJoint.rotation);
+        int rotation = 180 + (availableJoint.location.rotation - inJoint.location.rotation);
 
         if (rotation < 0)
         {
@@ -204,7 +204,7 @@ public class GeneratorMapSegment
 
         GeneratorMapVector offset = new GeneratorMapVector(availableJoint.location.x, availableJoint.location.y, rotation).Add(inJoint.location);
 
-        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace> row in toMerge.map)
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> row in toMerge.map)
         {
             foreach (KeyValuePair<int, GeneratorMapSpace> space in row.Value)
             {
@@ -215,7 +215,8 @@ public class GeneratorMapSegment
         }
 
         joints.AddRange(toMerge.joints);
-        TrimJoints()
+        TrimJoints();
+        return true;
     }
 
     /// <summary>
@@ -246,7 +247,7 @@ public class GeneratorMapSegment
     /// <returns>Space type</returns>
     public GeneratorMapSpace GetSpace(GeneratorMapVector location)
     {
-        GetSpace(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
+        return GetSpace(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
     }
 
     /// <summary>
@@ -267,7 +268,16 @@ public class GeneratorMapSegment
     /// <param name="value">Space type</param>
     public void SetSpace(GeneratorMapVector location, GeneratorMapSpace value)
     {
-        SetSpace(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
+        SetSpace(location.x, location.y, value);
+    }
+
+    /// <summary>
+    /// Set space type at location</summary>
+    /// <param name="location">location to set</param>
+    /// <param name="value">Space type</param>
+    public void SetSpace(float x, float y, GeneratorMapSpace value)
+    {
+        SetSpace(Mathf.RoundToInt(x), Mathf.RoundToInt(y), value);
     }
 
     /// <summary>
@@ -294,7 +304,7 @@ public class GeneratorMapSegment
     public int Size()
     {
         int size = 0;
-        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace> row in map)
+        foreach (KeyValuePair<int, Dictionary<int, GeneratorMapSpace>> row in map)
         {
             foreach (KeyValuePair<int, GeneratorMapSpace> space in row.Value)
             {

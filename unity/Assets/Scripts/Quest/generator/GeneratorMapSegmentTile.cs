@@ -15,33 +15,33 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
     /// <param name="tileSideData">TileSide to use</param>
     protected void BuildMap(TileSideData tileSideData)
     {
-        for (int y = 0; y < tileSideData.map.Length; y++)
+        for (int y = 0; y < tileSideData.map.Count; y++)
         {
             char[] mapRow = tileSideData.map[y].ToCharArray();
             for (int x = 0; x < mapRow.Length; x++)
             {
                 GeneratorMapSpace space = GeneratorMapSpace.Void;
-                if (map[y][x] == '#')
+                if (tileSideData.map[y][x] == '#')
                 {
                     space = GeneratorMapSpace.Terrain;
                 }
-                if (map[y][x] == '*')
+                if (tileSideData.map[y][x] == '*')
                 {
                     space = GeneratorMapSpace.Obstacle;
                 }
-                if (map[y][x] == '_')
+                if (tileSideData.map[y][x] == '_')
                 {
                     space = GeneratorMapSpace.Pit;
                 }
-                if (map[y][x] == '=')
+                if (tileSideData.map[y][x] == '=')
                 {
                     space = GeneratorMapSpace.Sludge;
                 }
-                if (map[y][x] == '!')
+                if (tileSideData.map[y][x] == '!')
                 {
                     space = GeneratorMapSpace.Hazard;
                 }
-                if (map[y][x] == '~')
+                if (tileSideData.map[y][x] == '~')
                 {
                     space = GeneratorMapSpace.Water;
                 }
@@ -52,14 +52,15 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
                 }
                 if (System.Convert.ToByte(map[y][x]) >= System.Convert.ToByte('A') && System.Convert.ToByte(map[y][x]) <= System.Convert.ToByte('Z'))
                 {
-                    joints.Add(new GeneratorMapJoint(new GeneratorMapVectory(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), map[y][x]))
+                    joints.Add(new GeneratorMapJoint(new GeneratorMapVectory(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), tileSideData.map[y][x]));
                 }
             }
         }
-        for (int i = 0; i < joints.Length; i++)
+        for (int i = 0; i < joints.Count; i++)
         {
             GeneratorMapVector jointLocation = joints[i].location;
             // Possible join directions
+            // Fixme int/float and inconsistent
             bool Top = GetSpace(jointLocation.x, jointLocation.y + 1) != GeneratorMapSpace.Void;
             bool Bottom = GetSpace(joints[i].x, jointLocation.y - 1) != GeneratorMapSpace.Void;
             bool Left = GetSpace(jointLocation.x + 1, jointLocation.y) != GeneratorMapSpace.Void;

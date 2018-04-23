@@ -14,10 +14,10 @@ public class GeneratorMapJoint
         type = typeIn;
     }
 
-    public GeneratorMapJoint(GeneratorMapJoint in)
+    public GeneratorMapJoint(GeneratorMapJoint inJoint)
     {
-        location = new GeneratorMapVector(in.location);
-        type = in.type;
+        location = new GeneratorMapVector(inJoint.location);
+        type = inJoint.type;
     }
 
     /// <summary>
@@ -30,4 +30,8 @@ public class GeneratorMapJoint
         if (((j.location.rotation + location.rotation) % 360) != 0) return false;
         return (type == j.type);
     }
+
+    // FIXME
+    IsTypeADerivative()
+    remove Tupple/Tuple
 }

@@ -19,11 +19,11 @@ public class GeneratorMapVector
         rotation = rotationIn;
     }
 
-    public GeneratorMapVector(GeneratorMapVector in)
+    public GeneratorMapVector(GeneratorMapVector inVector)
     {
-        x = in.x;
-        y = in.y;
-        rotation = in.rotation;
+        x = inVector.x;
+        y = inVector.y;
+        rotation = inVector.rotation;
     }
 
     /// <summary>
@@ -57,8 +57,8 @@ public class GeneratorMapVector
     {
         if (x - compare.x < -0.8f) return false;
         if (x - compare.x > 0.8f) return false;
-        if (y - compare.Y < -0.8f) return false;
-        if (y - compare.Y > 0.8f) return false;
+        if (y - compare.y < -0.8f) return false;
+        if (y - compare.y > 0.8f) return false;
         return true;
     }
 
