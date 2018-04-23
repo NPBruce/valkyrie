@@ -22,6 +22,7 @@ namespace FFGAppImport
         public abstract string ObbPath();
         public string location = "";
         public string obbRoot = "";
+        public string obbVersion = "";
         public string exeLocation;
         public abstract int ObfuscateKey();
 
@@ -160,6 +161,36 @@ namespace FFGAppImport
             ConvertObbAssets();
         }
 
+        internal string ExtractObbVersion()
+        {
+            if (platform != Platform.Android) return "";
+            if (!string.IsNullOrEmpty(obbVersion)) return obbVersion; // lookup version only once
+            string obbPath = ObbPath();
+            ValkyrieDebug.Log("Extracting the version from " + obbPath + ".");
+            using (var zip = ZipFile.Read(obbPath))
+            {
+                using (var e = zip.GetEnumerator())
+                {
+                    while (e.MoveNext())
+                    {
+                        // We want the directory named like the version in the path 'assets/AssetBundles/1.4.1'
+                        string searchPath = "assets/AssetBundles/";
+                        string filename = e.Current.FileName;
+                        if (filename.StartsWith(searchPath) && filename.Count((c) => c == '/') > 2)
+                        {
+                            string version = filename.Remove(0, searchPath.Length);
+                            version = version.Remove(version.IndexOf("/"));
+                            ValkyrieDebug.Log("Version from Obb: " + version);
+                            obbVersion = version;
+                            return obbVersion;
+                        }
+                    }
+                }
+            }
+            ValkyrieDebug.Log("Extracting the version from " + obbPath + " could not resolve the version dir in 'assets/AssetBundles/<version>'.");
+            return "";
+        }
+
         private void ConvertObbAssets()
         {
             var dirContent = string.Join("\n", Directory.GetFiles(location));
@@ -196,10 +227,7 @@ namespace FFGAppImport
                     {
                         byte[] part = File.ReadAllBytes(file.Value);
                         fs.Write(part, 0, part.Length);
-                    }
-                    // delete all split files, to make space for the extracted files
-                    foreach (var file in e.Value)
-                    {
+                        // delete all split files, to make space for the extracted files
                         File.SetAttributes(file.Value, FileAttributes.Normal); // remove write protection
                         File.Delete(file.Value); // delete split files to free disk space
                     }
@@ -210,10 +238,10 @@ namespace FFGAppImport
         private void ConvertObbStreamingAssets()
         {
             if (obbRoot == null)
-                throw new ArgumentNullException("obbPath");
+                throw new InvalidOperationException("obbRoot is null");
 
             char dsc = Path.DirectorySeparatorChar;
-            string dirAssetBundles = Path.Combine(this.obbRoot, "assets" + dsc + "AssetBundles");
+            string dirAssetBundles = Path.Combine(obbRoot, "assets" + dsc + "AssetBundles");
             List<string> dirAssetBundlesDirs = Directory.GetDirectories(dirAssetBundles).ToList();
             if (dirAssetBundlesDirs.Count < 1)
             {
@@ -257,6 +285,20 @@ namespace FFGAppImport
             string dirAssetBundlesWin = Path.Combine(dirStreamingAssets, "AssetBundles");
             ValkyrieDebug.Log("Moving StreamingAssets dir '" + dirAssetBundles + "' to '" + dirAssetBundlesWin + "'");
             Directory.Move(dirAssetBundles, dirAssetBundlesWin);
+        }
+
+        protected string GetObbPath(string prefix, string suffix)
+        {
+            if (prefix == null) throw new ArgumentNullException("prefix");
+            if (suffix == null) throw new ArgumentNullException("suffix");
+
+            string location = Path.Combine(Android.GetStorage(), prefix);
+            if (!Directory.Exists(location))
+            {
+                return "";
+            }
+            var file = Directory.GetFiles(location).ToList().Find(x => x.EndsWith(suffix));
+            return file ?? "";
         }
     }
 }

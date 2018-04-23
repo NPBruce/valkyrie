@@ -11,24 +11,12 @@ public class InvestigatorAttack
 
     // The monster that raises this dialog
     public Quest.Monster monster;
-    public List<AttackData> attacks;
-    public HashSet<string> attackType;
     public string attackText = "";
 
     public InvestigatorAttack(Quest.Monster m)
     {
         monster = m;
         Game game = Game.Get();
-        attacks = new List<AttackData>();
-        attackType = new HashSet<string>();
-        foreach (KeyValuePair<string, AttackData> kv in game.cd.investigatorAttacks)
-        {
-            if (m.monsterData.ContainsTrait(kv.Value.target))
-            {
-                attacks.Add(kv.Value);
-                attackType.Add(kv.Value.attackType);
-            }
-        }
         AttackOptions();
     }
 
@@ -45,7 +33,7 @@ public class InvestigatorAttack
         new UIElementBorder(ui);
 
         float offset = 3f;
-        foreach (string type in attackType)
+        foreach (string type in monster.monsterData.GetAttackTypes())
         {
             string tmpType = type;
             ui = new UIElement();
@@ -78,16 +66,8 @@ public class InvestigatorAttack
 
     public void Attack(string type)
     {
-        List<AttackData> validAttacks = new List<AttackData>();
-        foreach (AttackData ad in attacks)
-        {
-            if (ad.attackType.Equals(type))
-            {
-                validAttacks.Add(ad);
-            }
-        }
-        AttackData attack = validAttacks[Random.Range(0, validAttacks.Count)];
-        attackText = attack.text.Translate().Replace("{0}", monster.monsterData.name.Translate());
+        StringKey text = monster.monsterData.GetRandomAttack(type);
+        attackText = text.Translate().Replace("{0}", monster.monsterData.name.Translate());
         Game.Get().quest.log.Add(new Quest.LogEntry(attackText.Replace("\n", "\\n")));
         Attack();
     }

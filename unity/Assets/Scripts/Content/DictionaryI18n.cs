@@ -102,13 +102,65 @@ namespace Assets.Scripts.Content
         /// <param name="languageData">Language data</param>
         public void AddData(string[] languageData)
         {
+            List<string> textToAdd = new List<string>();
+            string partialLine = "";
+
+            // Remove extra new lines
+            foreach (string rawLine in languageData)
+            {
+                int sections = rawLine.Split('\"').Length;
+                // Even number of " characters, self contained line
+                // Or middle of quote block
+                if ((sections % 2) == 1)
+                {
+                    // No current block, self contained entry
+                    if (partialLine.Length == 0)
+                    {
+                        textToAdd.Add(rawLine);
+                    }
+                    // Current quote block, add line
+                    else
+                    {
+                        partialLine += "\\n" + rawLine;
+                    }
+                }
+                // Odd number of quotes *should* mean start or end of multi line block
+                else
+                {
+                    // Start of a new block
+                    if (partialLine.Length == 0)
+                    {
+                        // We need to support old data which may have " characters without a starting quote
+                        // These are always single line and do not have " as the first character
+                        string[] components = rawLine.Split(",".ToCharArray(), 2);
+                        // Text starts with ", it is a normal multi line block
+                        if (components.Length > 1 && components[1].Length > 0 && components[1][0] == '\"')
+                        {
+                            partialLine = rawLine;
+                        }
+                        else
+                        {
+                            // Text does not start with ", support for 1.6.1 and earlier which may have uneven single lines
+                            textToAdd.Add(rawLine);
+                        }
+                    }
+                    else
+                    // Block has started, this is the last line
+                    {
+                        partialLine += "\\n" + rawLine;
+                        textToAdd.Add(partialLine);
+                        partialLine = "";
+                    }
+                }
+            }
+
             string newLanguage = languageData[0].Split(COMMA)[1].Trim('"');
 
             if (!rawData.ContainsKey(newLanguage))
             {
                 rawData.Add(newLanguage, new List<string>());
             }
-            rawData[newLanguage].AddRange(languageData);
+            rawData[newLanguage].AddRange(textToAdd);
         }
 
         /// <summary>
@@ -318,7 +370,7 @@ namespace Assets.Scripts.Content
             if (!KeyExists(key)) return key;
 
             // Check current language first
-            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key))
+            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key) && data[currentLanguage][key].Length > 0)
             {
                 return data[currentLanguage][key];
             }
@@ -358,7 +410,13 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    rawData[kv.Key].Add(entry.Key + ',' + entry.Value.Replace("\n", "\\n"));
+                    string entryDiskFormat = entry.Value.Replace("\r\n", "\n");
+                    entryDiskFormat = entryDiskFormat.Replace("\r", "\n").Replace("\n", "\\n");
+                    if (entryDiskFormat.Contains("\""))
+                    {
+                        entryDiskFormat = "\"" + entryDiskFormat.Replace("\"", "\"\"") + "\"";
+                    }
+                    rawData[kv.Key].Add(entry.Key + ',' + entryDiskFormat);
                 }
             }
 

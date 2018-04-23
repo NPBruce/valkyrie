@@ -181,23 +181,33 @@ public class HeroCanvas : MonoBehaviour {
 
             if (h.heroData != null)
             {
-
                 frameTex = Resources.Load("sprites/borders/blue_frame") as Texture2D;
                 if (game.gameType is MoMGameType)
                 {
                     frameTex = Resources.Load("sprites/borders/momframe") as Texture2D;
                 }
                 Texture2D heroTex = ContentData.FileToTexture(h.heroData.image);
-
-                Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
-
-                icons[h.id].sprite = heroSprite;
+                Sprite heroSprite = null;
+                if (heroTex != null)
+                {
+                    heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
+                }
+                if (heroSprite != null)
+                {
+                    icons[h.id].sprite = heroSprite;
+                }
                 icons[h.id].color = Color.white;
                 icon_frames[h.id].color = Color.white;
             }
-
-            Sprite frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
-            icon_frames[h.id].sprite = frameSprite;
+            Sprite frameSprite = null;
+            if (frameTex != null)
+            {
+                frameSprite = Sprite.Create(frameTex, new Rect(0, 0, frameTex.width, frameTex.height), Vector2.zero, 1);
+            }
+            if (frameSprite != null)
+            {
+                icon_frames[h.id].sprite = frameSprite;
+            }
         }
     }
 

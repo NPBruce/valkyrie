@@ -24,6 +24,7 @@ namespace Unity_Studio
         public Dictionary<long, AssetPreloadData> preloadTable = new Dictionary<long, AssetPreloadData>();
         public Dictionary<long, GameObject> GameObjectList = new Dictionary<long, GameObject>();
         public Dictionary<long, Transform> TransformList = new Dictionary<long, Transform>();
+        public Dictionary<int, ushort> classIDLookup = new Dictionary<int, ushort>();
 
         public List<AssetPreloadData> exportableAssets = new List<AssetPreloadData>();
         public List<UnityShared> sharedAssetsList = new List<UnityShared>() {new UnityShared()};
@@ -52,7 +53,6 @@ namespace Unity_Studio
             fileGen = a_Stream.ReadInt32();
             int dataOffset = a_Stream.ReadInt32();
             sharedAssetsList[0].fileName = Path.GetFileName(fileName); //reference itself because sharedFileIDs start from 1
-
             switch (fileGen)
             {
                 case 6://2.5.0 - 2.6.1
@@ -85,6 +85,8 @@ namespace Unity_Studio
                     }
                 case 14://5.0.0 beta and final
                 case 15://5.0.1 and up
+                case 16://5.5.0 and up
+                case 17://5.5.0 and up
                     {
                         a_Stream.Position += 4;//azero
                         m_Version = a_Stream.ReadStringToNull();
@@ -142,7 +144,7 @@ namespace Unity_Studio
                     aClass.subItems.Add(classID.ToString());
                     ClassStructures.Add(classID, aClass);
                 }
-                else { readBase5(); }
+                else { readBase5(i); }
             }
 
             if (fileGen >= 7 && fileGen < 14) {a_Stream.Position += 4;}//azero
@@ -160,18 +162,34 @@ namespace Unity_Studio
                 AssetPreloadData asset = new AssetPreloadData();
                 if (fileGen < 14) { asset.m_PathID = a_Stream.ReadInt32(); }
                 else { asset.m_PathID = a_Stream.ReadInt64(); }
-                asset.Offset = a_Stream.ReadInt32();
-                asset.Offset += dataOffset;
-                asset.Size = a_Stream.ReadInt32();
-                asset.Type1 = a_Stream.ReadInt32();
-                asset.Type2 = a_Stream.ReadUInt16();
-                a_Stream.Position += 2;
-                if (fileGen >= 15)
+
+                if (fileGen > 15)
                 {
-                    a_Stream.ReadByte();
-                    //this is a single byte, not an int32
-                    //the next entry is aligned after this
-                    //but not the last!
+                    asset.Offset = a_Stream.ReadInt32();
+                    int tmp = asset.Offset;
+                    asset.Offset += dataOffset;
+                    asset.Size = a_Stream.ReadInt32();
+                    int classIndex = a_Stream.ReadUInt16();
+                    if (classIDLookup.ContainsKey(classIndex))
+                    {
+                        asset.Type2 = classIDLookup[classIndex];
+                    }
+                }
+                else
+                {
+                    asset.Offset = a_Stream.ReadInt32();
+                    asset.Offset += dataOffset;
+                    asset.Size = a_Stream.ReadInt32();
+                    asset.Type1 = a_Stream.ReadInt32();
+                    asset.Type2 = a_Stream.ReadUInt16();
+                    a_Stream.Position += 2;
+                    if (fileGen >= 15)
+                    {
+                        a_Stream.ReadByte();
+                        //this is a single byte, not an int32
+                        //the next entry is aligned after this
+                        //but not the last!
+                    }
                 }
 
                 if (UnityClassID.Names[asset.Type2] != null)
@@ -203,6 +221,11 @@ namespace Unity_Studio
             buildType = m_Version.Split(new string[] { ".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }, StringSplitOptions.RemoveEmptyEntries);
             string[] strver = (m_Version.Split(new string[] { ".", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "\n" }, StringSplitOptions.RemoveEmptyEntries));
             version = Array.ConvertAll<string, int>(strver, int.Parse);
+
+            if (fileGen > 15)
+            {
+                a_Stream.Position += 2;
+            }
 
             if (fileGen >= 14)
             {
@@ -246,11 +269,24 @@ namespace Unity_Studio
             for (int i = 0; i < childrenCount; i++) { readBase(cb, level + 1); }
         }
 
-        private void readBase5()
+        private void readBase5(int indexRef)
         {
-            int classID = a_Stream.ReadInt32();
-            if (classID < 0) { a_Stream.Position += 16; }
-            a_Stream.Position += 16;
+            int classID = 0;
+            classID = a_Stream.ReadInt32();
+            if (fileGen < 16)
+            {
+                if (classID < 0) { a_Stream.Position += 16; }
+                a_Stream.Position += 16;
+            }
+            else
+            {
+                classIDLookup.Add(indexRef, (ushort)classID);
+                if (classID == 114)
+                {
+                    a_Stream.Position += 16;
+                }
+                a_Stream.Position += 19;
+            }
 
             if (baseDefinitions)
             {

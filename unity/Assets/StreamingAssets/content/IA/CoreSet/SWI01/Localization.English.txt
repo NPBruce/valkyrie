@@ -1,0 +1,5 @@
+,English
+BIGEXPANSION,Large Boxed Expansions
+SMALLEXPANSION,Small Boxed Expansions
+ALLYPACK,Ally Pack
+VILLAINPACK,Villain Pack

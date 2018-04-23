@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Content;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 // A monster quest class that is defined by the quest
 public class QuestMonster : MonsterData
@@ -112,6 +113,17 @@ public class QuestMonster : MonsterData
         {
             awareness = baseObject.awareness;
         }
+    }
+
+    override public StringKey GetRandomAttack(string type)
+    {
+        if (!cMonster.investigatorAttacks.ContainsKey(type))
+        {
+            return base.GetRandomAttack(type);
+        }
+
+        List<StringKey> attackOptions = cMonster.investigatorAttacks[type];
+        return attackOptions[Random.Range(0, attackOptions.Count)];
     }
 }
 

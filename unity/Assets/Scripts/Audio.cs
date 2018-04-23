@@ -105,11 +105,7 @@ public class Audio : MonoBehaviour
         foreach (string s in fileNames)
         {
             string fileName = s;
-            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-            {
-                fileName = "/" + s;
-            }
-            WWW file = new WWW(@"file://" + fileName);
+            var file = new WWW(new System.Uri(fileName).AbsoluteUri);
             yield return file;
             newMusic.Add(file.GetAudioClip());
         }
@@ -125,11 +121,7 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
-        if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-        {
-            fileName = "/" + fileName;
-        }
-        WWW file = new WWW(@"file://" + fileName);
+        var file = new WWW(new System.Uri(fileName).AbsoluteUri);
         yield return file;
         if (file.error != null)
         {

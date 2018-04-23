@@ -16,7 +16,13 @@ public class EditorComponentTile : EditorComponent
         name = component.sectionName;
         Update();
     }
-    
+
+    override protected void RefreshReference()
+    {
+        base.RefreshReference();
+        tileComponent = component as QuestData.Tile;
+    }
+
     override public float AddSubComponents(float offset)
     {
         Game game = Game.Get();
@@ -94,6 +100,7 @@ public class EditorComponentTile : EditorComponent
                 select.AddItem(kv.Value);
             }
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 
