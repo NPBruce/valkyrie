@@ -60,9 +60,8 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
         {
             GeneratorMapVector jointLocation = joints[i].location;
             // Possible join directions
-            // Fixme int/float and inconsistent
             bool Top = GetSpace(jointLocation.x, jointLocation.y + 1) != GeneratorMapSpace.Void;
-            bool Bottom = GetSpace(joints[i].x, jointLocation.y - 1) != GeneratorMapSpace.Void;
+            bool Bottom = GetSpace(jointLocation.x, jointLocation.y - 1) != GeneratorMapSpace.Void;
             bool Left = GetSpace(jointLocation.x + 1, jointLocation.y) != GeneratorMapSpace.Void;
             bool Right = GetSpace(jointLocation.x - 1, jointLocation.y) != GeneratorMapSpace.Void;
             

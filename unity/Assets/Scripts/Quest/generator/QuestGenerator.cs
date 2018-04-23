@@ -10,14 +10,14 @@ public class QuestGenerator
         GeneratorMap map = new GeneratorMap(data);
 
         ValkyrieDebug.Log("Building Map.");
-        List<Tuple<string, GeneratorMapVector>> mapComponents = map.Build();
+        List<GeneratorMapSegment.MapComponent> mapComponents = map.Build();
 
         List<sting> questTileIDs = new List<string>();
 
-        foreach (Tuple<string, GeneratorMapVector> tile in mapComponents)
+        foreach (GeneratorMapSegment.MapComponent tile in mapComponents)
         {
             string tileComponentName = GetUniqueName("Tile");
-            QuestData.Tile generatedTile = new QuestData.Tile(tileComponentName, tile.Item1, tile.Item2.x, tile.Item2.y, tile.Item2.rotation);
+            QuestData.Tile generatedTile = new QuestData.Tile(tileComponentName, tile.componentName, tile.position.x, tile.position.y, tile.position.rotation);
             components.Add(generatedTile.sectionName, generatedTile);
             questTileIDs.Add(generatedTile.sectionName);
         }

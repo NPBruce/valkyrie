@@ -20,7 +20,7 @@ public class GeneratorMap
     /// <summary>
     /// Build a random map</summary>
     /// <returns>List of component names and locations</returns>
-    public List<Tuple<string, GeneratorMapVector>> Build()
+    public List<GeneratorMapSegment.MapComponent> Build()
     {
         for (int i = 0; i < 1000; i++)
         {

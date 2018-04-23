@@ -31,7 +31,12 @@ public class GeneratorMapJoint
         return (type == j.type);
     }
 
-    // FIXME
-    IsTypeADerivative()
-    remove Tupple/Tuple
+    /// <summary>
+    /// Check if joint is a Type A derivative (same board side)</summary>
+    /// <returns>true if A/C/E etc board side</returns>
+    public bool IsTypeADerivative()
+    {
+        int characterOffset = System.Convert.ToByte(type) - System.Convert.ToByte('A');
+        return (characterOffset % 2) == 0;
+    }
 }
