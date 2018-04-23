@@ -287,6 +287,17 @@ public class QuestData
             }
         }
 
+        // Create new type and location (used by generator)
+        public Tile(string name, string tileSide, float xPos, float yPos, int inRotation) : base(name)
+        {
+            locationSpecified = true;
+            typeDynamic = type;
+            Game game = Game.Get();
+            tileSideName = tileSide;
+            location = new Vector2(xPos, yPos);
+            rotation = inRotation;
+        }
+
         // Save to ini string (used by editor)
         override public string ToString()
         {

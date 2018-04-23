@@ -17,6 +17,9 @@ public class GeneratorMap
         }
     }
 
+    /// <summary>
+    /// Build a random map</summary>
+    /// <returns>List of component names and locations</returns>
     public List<Tuple<string, GeneratorMapVector>> Build()
     {
         for (int i = 0; i < 1000; i++)
@@ -27,9 +30,13 @@ public class GeneratorMap
         return output.components;
     }
 
+    /// <summary>
+    /// Generate map</summary>
+    /// <returns>True if generation completed</returns>
     private bool GenerateComponents()
     {
-        output = new GeneratorMapSegment(tiles[Random.Range(0, tiles.Count)]);
+        int startRotation = Random.Range(0, 4) * 90;
+        output = new GeneratorMapSegment(tiles[Random.Range(0, tiles.Count)], startRotation);
 
         while (output.Size() < 30)
         {
@@ -67,6 +74,11 @@ public class GeneratorMap
         return true;
     }
 
+    /// <summary>
+    /// Check if additional components are available</summary>
+    /// <param name="name">Name of component to check</param>
+    /// <param name="count">Number of components required</param>
+    /// <returns>True if all components available</returns>
     public bool ComponentAvailable(string name, int count = 0)
     {
         if (name.IndexOf("TileSide") == 0)
@@ -80,6 +92,11 @@ public class GeneratorMap
         return false;
     }
 
+    /// <summary>
+    /// Check if additional components are available</summary>
+    /// <param name="name">Name of component to check</param>
+    /// <param name="count">Number of components required</param>
+    /// <returns>True if all components available</returns>
     public GeneratorMapSegment RandomTile(bool singleJoint, GeneratorMapSegment checkJoinTo = null)
     {
         List<GeneratorMapSegment> availableTiles = new List<GeneratorMapSegment>();

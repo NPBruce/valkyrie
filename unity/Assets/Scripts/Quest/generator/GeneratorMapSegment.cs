@@ -24,6 +24,10 @@ public class GeneratorMapSegment
          DuplicateFromSegment(in, rotation);
     }
 
+    /// <summary>
+    /// Populate map data from existing segment</summary>
+    /// <param name="in">Segment to copy</param>
+    /// <param name="rotation">Rotate copy in degrees</param>
     private void DuplicateFromSegment(GeneratorMapSegment in, int rotation = 0)
     {
         foreach (Tuple<string, GeneratorMapVector> c in in.components)
@@ -47,9 +51,9 @@ public class GeneratorMapSegment
     /// Get a list of all valid merge joints between segments</summary>
     /// <param name="toMerge">Segment to check against</param>
     /// <returns>List of possible merge positions</returns>
-    public List<GeneratorMapJoint> ValidMergeJoints(GeneratorMapSegment toMerge)
+    public List<Tupple<GeneratorMapJoint, GeneratorMapJoint>> ValidMergeJoints(GeneratorMapSegment toMerge)
     {
-        List<GeneratorMapJoint> toReturn = new List<GeneratorMapJoint>();
+        List<Tupple<GeneratorMapJoint, GeneratorMapJoint>> toReturn = new List<Tupple<GeneratorMapJoint, GeneratorMapJoint>>();
 
         foreach (GeneratorMapJoint inJoint in toMerge.joints)
         {
@@ -57,15 +61,17 @@ public class GeneratorMapSegment
             {
                 if (CheckJoin(toMerge, availableJoint, inJoint))
                 {
-                    // FIXME
-                    // t?
-                    toReturn.Add(t);
+                    toReturn.Add(new Tupple<GeneratorMapJoint, GeneratorMapJoint>(availableJoint, inJoint));
                 }
             }
         }
         return toReturn;
     }
 
+    /// <summary>
+    /// Get component use count</summary>
+    /// <param name="name">Component to check</param>
+    /// <returns>Number of component used</returns>
     public int GetComponentCount(string name)
     {
         int toReturn;
@@ -79,6 +85,9 @@ public class GeneratorMapSegment
         return toReturn;
     }
 
+    /// <summary>
+    /// Get all component usage counts</summary>
+    /// <returns>All component usage counts by component name</returns>
     public Dictionary<string, int> GetComponentCounts()
     {
         Dictionary<string, int> toReturn = new Dictionary<string, int>();
@@ -130,7 +139,7 @@ public class GeneratorMapSegment
                 // join block checks go here
                 foreach (GeneratorMapJoint j in GetJointsByLocation(targetVector))
                 {
-                    List<GeneratorMapJoint> incomingJoints = GetJointsByLocation(j.location);
+                    List<GeneratorMapJoint> incomingJoints = toMerge.GetJointsByLocation(new GeneratorMapVector(row.Key, space.Key));
                     if (incomingJoints.Count == 0) return false;
 
                     foreach (GeneratorMapJoint incomingJoint in incomingJoints)
@@ -143,6 +152,10 @@ public class GeneratorMapSegment
         return true;
     }
 
+    /// <summary>
+    /// Get all joints at a location</summary>
+    /// <param name="location">Location to check</param>
+    /// <returns>List of all joints at location</returns>
     public List<GeneratorMapJoint> GetJointsByLocation(GeneratorMapVector location)
     {
         List<GeneratorMapJoint> toReturn = new List<GeneratorMapJoint>();
@@ -156,16 +169,25 @@ public class GeneratorMapSegment
         return toReturn;
     }
 
+    /// <summary>
+    /// Merge segment at a random matching location</summary>
+    /// <param name="toMerge">segment to merge</param>
+    /// <returns>True if merge successful</returns>
     public bool Merge(GeneratorMapSegment toMerge)
     {
-        // Fixme
-        // ????
-        List<GeneratorMapJoint> j = ValidMergeJoints(toMerge);
+        List<Tupple<GeneratorMapJoint, GeneratorMapJoint>> joins = ValidMergeJoints(toMerge);
+        if (joints.Count < 1) return false;
+
+        Tupple<GeneratorMapJoint, GeneratorMapJoint> randomJoin = joins[Random.Range(0, joins.Count)];
+        return Merge(toMerge, randomJoin.Item1, randomJoin.Item2);
     }
 
-
-// FIXME
-// Unused?
+    /// <summary>
+    /// Merge segment at specified mating joints</summary>
+    /// <param name="toMerge">segment to merge</param>
+    /// <param name="availableJoint">Existing joint to use</param>
+    /// <param name="inJoint">Incoming joint to use</param>
+    /// <returns>True if merge successful</returns>
     public bool Merge(GeneratorMapSegment toMerge, GeneratorMapJoint availableJoint, GeneratorMapJoint inJoint)
     {
         int rotation = 180 + (availableJoint.rotation - inJoint.rotation);
@@ -196,6 +218,8 @@ public class GeneratorMapSegment
         TrimJoints()
     }
 
+    /// <summary>
+    /// Trim matching joints (used after merge)</summary>
     public void TrimJoints()
     {
         List<GeneratorMapJoint> toRemove = new List<GeneratorMapJoint>();
@@ -216,11 +240,20 @@ public class GeneratorMapSegment
         }
     }
 
+    /// <summary>
+    /// Get space type at location</summary>
+    /// <param name="location">location to check</param>
+    /// <returns>Space type</returns>
     public GeneratorMapSpace GetSpace(GeneratorMapVector location)
     {
         GetSpace(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
     }
 
+    /// <summary>
+    /// Get space type at location</summary>
+    /// <param name="x">x position to check</param>
+    /// <param name="y">y position to check</param>
+    /// <returns>Space type</returns>
     public GeneratorMapSpace GetSpace(int x, int y)
     {
         if (!map.ContainsKey(x)) return GeneratorMapSpace.Void;
@@ -228,12 +261,21 @@ public class GeneratorMapSegment
         return map[x][y];
     }
 
-    public GeneratorMapSpace SetSpace(GeneratorMapVector location, GeneratorMapSpace value)
+    /// <summary>
+    /// Set space type at location</summary>
+    /// <param name="location">location to set</param>
+    /// <param name="value">Space type</param>
+    public void SetSpace(GeneratorMapVector location, GeneratorMapSpace value)
     {
         SetSpace(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
     }
 
-    public GeneratorMapSpace SetSpace(int x, int y, GeneratorMapSpace value)
+    /// <summary>
+    /// Set space type at location</summary>
+    /// <param name="x">x location to set</param>
+    /// <param name="y">y location to set</param>
+    /// <param name="value">Space type</param>
+    public void SetSpace(int x, int y, GeneratorMapSpace value)
     {
         if (!map.ContainsKey(x))
         {
@@ -246,17 +288,9 @@ public class GeneratorMapSegment
         map[x][y] = value;;
     }
 
-    public GeneratorMapSegment Copy()
-    {
-        GeneratorMapSegment toReturn = new GeneratorMapSegment();
-
-        toReturn.components = new List<Tuple<string, GeneratorMapVector>>(components);
-        toReturn.map = new Dictionary<int, Dictionary<int, GeneratorMapSpace>>(map);
-        toReturn.joints = new List<GeneratorMapJoint>(joints);
-
-        return toReturn;
-    }
-
+    /// <summary>
+    /// Get number of spaces taken by map segment</summary>
+    /// <returns>Number of spaces</returns>
     public int Size()
     {
         int size = 0;

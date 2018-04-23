@@ -26,6 +26,10 @@ public class GeneratorMapVector
         rotation = in.rotation;
     }
 
+    /// <summary>
+    /// Get a vector which is a copy of this vector rotated about 0,0</summary>
+    /// <param name="degrees">degrees to rotate (0/90/180/270)</param>
+    /// <returns>New vector</returns>
     public GeneratorMapVector Rotate(int degrees)
     {
         if (degrees == 90)
@@ -42,9 +46,13 @@ public class GeneratorMapVector
         {
             return new GeneratorMapVector(y, -x, degrees + rotation);
         }
-        return vector;
+        return new GeneratorMapVector(this);
     }
 
+    /// <summary>
+    /// Is this vector within 1 space?</summary>
+    /// <param name="compare">Vector to check</param>
+    /// <returns>True if within 1 space</returns>
     public bool WithinASpace(GeneratorMapVector compare)
     {
         if (x - compare.x < -0.8f) return false;
@@ -54,6 +62,10 @@ public class GeneratorMapVector
         return true;
     }
 
+    /// <summary>
+    /// Create new vector which is output of vector addition</summary>
+    /// <param name="toAdd">Vector to add</param>
+    /// <returns>Resultant vector</returns>
     public GeneratorMapVector Add(GeneratorMapVector toAdd)
     {
         

@@ -10,6 +10,9 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
         BuildMap(t);
     }
 
+    /// <summary>
+    /// Populate segment with data from TileSide</summary>
+    /// <param name="tileSideData">TileSide to use</param>
     protected void BuildMap(TileSideData tileSideData)
     {
         for (int y = 0; y < tileSideData.map.Length; y++)
