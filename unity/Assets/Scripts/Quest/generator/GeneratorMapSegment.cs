@@ -38,7 +38,7 @@ public class GeneratorMapSegment
         {
             foreach (KeyValuePair<int, GeneratorMapSpace> column in kv.Value)
             {
-                SetSpace(GeneratorMapVector(kv.Key, column).Rotate(rotation), column.Value);
+                SetSpace(new GeneratorMapVector(kv.Key, column.Key).Rotate(rotation), column.Value);
             }
         }
         foreach (GeneratorMapJoint j in inSegment.joints)
@@ -74,7 +74,7 @@ public class GeneratorMapSegment
     /// <returns>Number of component used</returns>
     public int GetComponentCount(string name)
     {
-        int toReturn;
+        int toReturn = 0;
         foreach (MapComponent component in components)
         {
             if (component.componentName.Equals(name))
@@ -336,6 +336,18 @@ public class GeneratorMapSegment
         {
             componentName = toCopy.componentName;
             position = new GeneratorMapVector(toCopy.position);
+        }
+
+        public MapComponent(string inName)
+        {
+            componentName = inName;
+            position = new GeneratorMapVector();
+        }
+
+        public MapComponent(string inName, GeneratorMapVector inVector)
+        {
+            componentName = inName;
+            position = new GeneratorMapVector(inVector);
         }
     }
 }

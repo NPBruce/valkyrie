@@ -6,7 +6,7 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
 {
     public GeneratorMapSegmentTile(TileSideData t)
     {
-        components.Add(t.sectionName, new GeneratorMapVector());
+        components.Add(new MapComponent(t.sectionName));
         BuildMap(t);
     }
 
@@ -52,7 +52,7 @@ public class GeneratorMapSegmentTile : GeneratorMapSegment
                 }
                 if (System.Convert.ToByte(map[y][x]) >= System.Convert.ToByte('A') && System.Convert.ToByte(map[y][x]) <= System.Convert.ToByte('Z'))
                 {
-                    joints.Add(new GeneratorMapJoint(new GeneratorMapVectory(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), tileSideData.map[y][x]));
+                    joints.Add(new GeneratorMapJoint(new GeneratorMapVector(x - tileSideData.mapZero.x, y - tileSideData.mapZero.y), tileSideData.map[y][x]));
                 }
             }
         }

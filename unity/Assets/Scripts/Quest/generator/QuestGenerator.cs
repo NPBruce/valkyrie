@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 public class QuestGenerator
 {
-    public QuestGenerator(QuestData.Generator data, Dictionary<string, QuestComponent> components)
+    public QuestGenerator(QuestData.Generator data, Dictionary<string, QuestData.QuestComponent> components)
     {
         ValkyrieDebug.Log("Generating Components.");
         GeneratorMap map = new GeneratorMap(data);
@@ -12,7 +13,7 @@ public class QuestGenerator
         ValkyrieDebug.Log("Building Map.");
         List<GeneratorMapSegment.MapComponent> mapComponents = map.Build();
 
-        List<sting> questTileIDs = new List<string>();
+        List<string> questTileIDs = new List<string>();
 
         foreach (GeneratorMapSegment.MapComponent tile in mapComponents)
         {
@@ -38,7 +39,7 @@ public class QuestGenerator
     private string GetUniqueName(string baseName)
     {
         int uniqueId = 0;
-        while (components.ContainsKey(baseName + uniqueId))
+        while (Game.Get().quest.qd.components.ContainsKey(baseName + uniqueId))
         {
             uniqueId++;
         }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using ValkyrieTools;
 
 public class GeneratorMap
 {
@@ -11,7 +12,7 @@ public class GeneratorMap
     public GeneratorMap(QuestData.Generator data)
     {
         ValkyrieDebug.Log("Building map data for all tiles");
-        foreach (TileSideData t in Game.Get().cd.tiles)
+        foreach (TileSideData t in Game.Get().cd.tileSides.Values)
         {
             tiles.Add(new GeneratorMapSegmentTile(t));
         }
@@ -83,7 +84,7 @@ public class GeneratorMap
     {
         if (name.IndexOf("TileSide") == 0)
         {
-            return (Game.Get().cd.tiles[name].count > (output.GetComponentCount(name) + count));
+            return (Game.Get().cd.tileSides[name].count > (output.GetComponentCount(name) + count));
         }
         if (name.IndexOf("Token") == 0)
         {
@@ -102,9 +103,9 @@ public class GeneratorMap
         List<GeneratorMapSegment> availableTiles = new List<GeneratorMapSegment>();
         foreach (GeneratorMapSegment candidate in tiles)
         {
-            if (tiles.joints.Count == 0) continue;
-            if ((tiles.joints.Count == 1) && !singleJoint) continue;
-            if ((tiles.joints.Count > 1) && singleJoint) continue;
+            if (candidate.joints.Count == 0) continue;
+            if ((candidate.joints.Count == 1) && !singleJoint) continue;
+            if ((candidate.joints.Count > 1) && singleJoint) continue;
 
             bool componentsAvailable = true;
             foreach (KeyValuePair<string, int> kv in candidate.GetComponentCounts())
@@ -116,7 +117,7 @@ public class GeneratorMap
             }
             if (!componentsAvailable) continue;
 
-            if (checkJoinTo != null && !checkJoinTo.ValidMergeJoints(candidate).Count == 0) continue;
+            if (checkJoinTo != null && checkJoinTo.ValidMergeJoints(candidate).Count == 0) continue;
 
             availableTiles.Add(candidate);
         }
