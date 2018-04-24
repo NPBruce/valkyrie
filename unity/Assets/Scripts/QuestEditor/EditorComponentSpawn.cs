@@ -248,7 +248,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         if (traitOffset > offset) offset = traitOffset;
 
         offset++;
-        if (game.gameType is D2EGameType)
+        if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
             offset = AddPlacementComponenets(offset);
         }
@@ -379,6 +379,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 
@@ -407,6 +408,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 

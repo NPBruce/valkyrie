@@ -14,6 +14,7 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+        FFGImport fcIA;
         protected string importType = "";
         Thread importThread;
 
@@ -26,6 +27,9 @@ namespace Assets.Scripts.UI.Screens
         private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
         private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
         private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+        private StringKey IA_NAME = new StringKey("val", "IA_NAME");
+        private StringKey IA_APP_NOT_FOUND = new StringKey("val", "IA_APP_NOT_FOUND");
+        private StringKey IA_APP_NOT_FOUND_ANDROID = new StringKey("val", "IA_APP_NOT_FOUND_ANDROID");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -47,20 +51,24 @@ namespace Assets.Scripts.UI.Screens
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + "/", Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + "/", Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + "/", Application.isEditor);
             }
             else
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + "/", Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + "/", Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + "/", Application.isEditor);
             }
 
             fcD2E.Inspect();
             fcMoM.Inspect();
+            fcIA.Inspect();
 
             // Banner Image
             Sprite bannerSprite;
@@ -90,7 +98,7 @@ namespace Assets.Scripts.UI.Screens
             }
             // Draw D2E button
             UIElement ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 10, 30, 4);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 9, 30, 3);
             ui.SetText(D2E_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { D2E(); });
@@ -101,7 +109,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcD2E.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 14.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 12.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -111,7 +119,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 14.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 12.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
@@ -130,7 +138,7 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 4);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 15, 30, 3);
             ui.SetText(MOM_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { MoM(); });
@@ -141,7 +149,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcMoM.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 23.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 18.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -151,7 +159,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 23.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 18.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
@@ -159,6 +167,48 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                }
+                new UIElementBorder(ui, Color.red);
+            }
+
+            // Draw IA button
+            startColor = Color.white;
+            if (fcIA.NeedImport())
+            {
+                startColor = Color.gray;
+            }
+            // Always disabled
+            startColor = Color.gray;
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 21, 30, 3);
+            ui.SetText(IA_NAME, startColor);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            //ui.SetButton(delegate { IA(); });
+            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(ui, startColor);
+
+            // Draw IA import button
+            ui = new UIElement();
+            if (fcIA.ImportAvailable())
+            {
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 24.2f, 14, 2);
+                StringKey keyText = fcIA.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                ui.SetText(keyText);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Import("IA"); });
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui);
+            }
+            else // Import unavailable
+            {
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 24.2f, 24, 1);
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(IA_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(IA_APP_NOT_FOUND, Color.red);
                 }
                 new UIElementBorder(ui, Color.red);
             }
@@ -202,6 +252,10 @@ namespace Assets.Scripts.UI.Screens
             {
                 importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
             }
+            if (type.Equals("IA"))
+            {
+                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(); }));
+            }
             importThread.Start();
         }
 
@@ -221,6 +275,20 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
+        // Start game as IA
+        public void IA()
+        {
+            // Not working yet
+            return;
+            // Check if import neeeded
+            if (!fcIA.NeedImport())
+            {
+                Game.Get().gameType = new IAGameType();
+                loadLocalization();
+                Destroyer.MainMenu();
+            }
+        }
+
         /// <summary>
         /// After selecting game, we load the localization file.
         /// Deppends on the gameType selected.
@@ -232,7 +300,7 @@ namespace Assets.Scripts.UI.Screens
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
                 DictionaryI18n ffgDict = new DictionaryI18n();
-                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization*.txt"))
+                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt"))
                 {
                     ffgDict.AddDataFromFile(file);
                 }

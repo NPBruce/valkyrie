@@ -1,7 +1,7 @@
 ﻿.,Polish
 BOXED,Rozszerzenia Pudełkowe
 FANDT,Zestaw Figurek i Kafelków
-CK,Zestaw Konwersujący
+CK,Zestaw Konwertujący
 
 MAD09I,Zew Dziczy Badacze
 MAD09M,Zew Dziczy Potwory

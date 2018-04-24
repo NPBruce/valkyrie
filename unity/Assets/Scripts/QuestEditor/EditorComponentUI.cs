@@ -299,6 +299,7 @@ public class EditorComponentUI : EditorComponentEvent
         {
             select.AddItem(kv.Value);
         }
+        select.ExcludeExpansions();
         select.Draw();
     }
 

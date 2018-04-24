@@ -15,6 +15,8 @@ public class CameraController : MonoBehaviour {
     static int maxZoom = -1;
     // Max zoom out
     static int minZoom = -25;
+    // Pinch zoom speed
+    static float pinchZoomSpeed = 0.05f;
 
     public bool minLimit = false;
     public bool maxLimit = false;
@@ -33,6 +35,8 @@ public class CameraController : MonoBehaviour {
     private bool targetSet = false;
 
     private bool dragging = false;
+
+    private bool pinching = false;
 
     // Target position
     public Vector3 camTarget;
@@ -77,20 +81,56 @@ public class CameraController : MonoBehaviour {
     // Scrolling by keys go here to be at a fixed rate
     void FixedUpdate ()
     {
-        // Check if the scroll wheel has moved
-        if (Input.GetAxis("Mouse ScrollWheel") != 0 && ScrollEnabled())
+        if (ScrollEnabled())
         {
-            // disable automatic translating to avoid loops
-            targetSet = false;
+            bool zoomed = false;
+            // Check if the scroll wheel has moved
+            if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            {
+                zoomed = true;
 
-            // Translate the camera up/down
-            gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
+                // Translate the camera up/down
+                gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
+            }
+            // reset the pinching only when no more touch is present to avoid moving the scene, when one touch is raised.
+            if (Input.touchCount == 0)
+            {
+                pinching = false;
+            }
+            // If there are at least two touches on the device...
+            if (Input.touchCount > 1)
+            {
+                zoomed = true;
+                pinching = true;
 
-            // Limit how high/low the camera can go
-            if (gameObject.transform.position.z > maxZoom)
-                gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, maxZoom);
-            if (gameObject.transform.position.z < minZoom)
-                gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, minZoom);
+                // Store both touches.
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                // Find the position in the previous frame of each touch.
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition; 
+
+                // Find the magnitude of the vector (the distance) between the touches in each frame.
+                float prevTouchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+                float touchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+
+                // Find the difference in the distances between each frame.
+                float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+                gameObject.transform.Translate(new Vector3(0, 0, deltaMagnitudeDiff * pinchZoomSpeed), Space.World);
+            }
+            if (zoomed)
+            {
+                // disable automatic translating to avoid loops
+                targetSet = false;
+
+                // Limit how high/low the camera can go
+                if (gameObject.transform.position.z > maxZoom)
+                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, maxZoom);
+                if (gameObject.transform.position.z < minZoom)
+                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, minZoom);
+            }
         }
 
         if (!panDisable)
@@ -150,8 +190,9 @@ public class CameraController : MonoBehaviour {
             mouseDownMousePosition = GetMouseBoardPlane();
             dragging = true;
         }
-        // If mouse is held down update camera
-        if (Input.GetMouseButton(0))
+        // If mouse is held down and we are not pinching update camera. 
+        // If we wouldn't check for pinching here, the position would move when we pinch and raise one touch.
+        if (Input.GetMouseButton(0) && !pinching)
         {
             if (dragging)
             {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
@@ -240,10 +241,7 @@ public class ContentData {
     public List<string> GetPacks()
     {
         List<string> names = new List<string>();
-        foreach(ContentPack cp in allPacks)
-        {
-            names.Add(cp.name);
-        }
+        allPacks.ForEach(cp => names.Add(cp.name));
         return names;
     }
 
@@ -758,18 +756,50 @@ public class ContentData {
         public List<string> clone;
     }
 
-    // Get a unity texture from a file (dds or other unity supported format)
-    public static Texture2D FileToTexture(string file)
+    /// <summary>
+    /// This will resove the asset name to a matching file and return the full file path including the file extension or null, if the file can't be resolved.
+    /// </summary>
+    public static string ResolveTextureFile(string name)
     {
-        return FileToTexture(file, Vector2.zero, Vector2.zero);
+        if (name == null) throw new System.ArgumentNullException("name");
+        if (File.Exists(name))
+        {
+            return name;
+        }
+
+        // Check all possible extensions
+        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg" })
+        {
+            string file = name + extension;
+            if (File.Exists(file))
+            {
+                return file;
+            }
+        }
+        return null;
     }
 
     // Get a unity texture from a file (dds or other unity supported format)
+    public static Texture2D FileToTexture(string file)
+    {
+        if (file == null) throw new System.ArgumentNullException("file");
+        return FileToTexture(file, Vector2.zero, Vector2.zero);
+    }
+
+    // Get a unity texture from a file (dds, svr or other unity supported format)
     // Crop to pos and size in pixels
     public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
-        string imagePath = @"file://" + file;
-        WWW www = null;
+        if (file == null) throw new System.ArgumentNullException("file");
+        var resolvedFile = ResolveTextureFile(file);
+        // return if file could not be resolved
+        if (resolvedFile == null)
+        {
+            ValkyrieDebug.Log("Could not resolve file: '" + file + "'");
+            return null;
+        }
+        file = resolvedFile;
+
         Texture2D texture = null;
 
         if (textureCache == null)
@@ -783,104 +813,18 @@ public class ContentData {
         }
         else
         {
-            // Unity doesn't support dds directly, have to do hackery
-            if (Path.GetExtension(file).Equals(".dds"))
+            string ext = Path.GetExtension(file);
+            if (ext.Equals(".dds", System.StringComparison.InvariantCultureIgnoreCase))
             {
-                // Read the data
-                byte[] ddsBytes = null;
-                try
-                {
-                    ddsBytes = File.ReadAllBytes(file);
-                }
-                catch (System.Exception)
-                {
-                    ValkyrieDebug.Log("Warning: DDS Image missing: " + file);
-                    return null;
-                }
-                // Check for valid header
-                byte ddsSizeCheck = ddsBytes[4];
-                if (ddsSizeCheck != 124)
-                {
-                    ValkyrieDebug.Log("Warning: Image invalid: " + file);
-                    return null;
-                }
-
-                // Extract dimensions
-                int height = ddsBytes[13] * 256 + ddsBytes[12];
-                int width = ddsBytes[17] * 256 + ddsBytes[16];
-
-                /*20-23 pit
-                 * 24-27 dep
-                 * 28-31 mm
-                 * 32-35 al
-                 * 36-39 res
-                 * 40-43 sur
-                 * 44-51 over
-                 * 52-59 des
-                 * 60-67 sov
-                 * 68-75 sblt
-                 * 76-79 size
-                 * 80-83 flags
-                 * 84-87 fourCC
-                 * 88-91 bpp
-                 * 92-95 red
-                 */
-
-                char[] type = new char[4];
-                type[0] = (char)ddsBytes[84];
-                type[1] = (char)ddsBytes[85];
-                type[2] = (char)ddsBytes[86];
-                type[3] = (char)ddsBytes[87];
-
-                // Copy image data (skip header)
-                int DDS_HEADER_SIZE = 128;
-                byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
-                System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
-
-                if (ddsBytes[87] == '5')
-                {
-                    texture = new Texture2D(width, height, TextureFormat.DXT5, false);
-                }
-                else if (ddsBytes[87] == '1')
-                {
-                    texture = new Texture2D(width, height, TextureFormat.DXT1, false);
-                }
-                else if (ddsBytes[88] == 32)
-                {
-                    if (ddsBytes[92] == 0)
-                    {
-                        texture = new Texture2D(width, height, TextureFormat.BGRA32, false);
-                    }
-                    else
-                    {
-                        texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-                    }
-                }
-                else if (ddsBytes[88] == 24)
-                {
-                    texture = new Texture2D(width, height, TextureFormat.RGB24, false);
-                }
-                else
-                {
-                    ValkyrieDebug.Log("Warning: Image invalid: " + file);
-                }
-                texture.LoadRawTextureData(dxtBytes);
-                texture.Apply();
+                texture = DdsToTexture(file);
             }
-            else
-            // If the image isn't DDS just use unity file load
+            else if (ext.Equals(".pvr", System.StringComparison.InvariantCultureIgnoreCase))
             {
-                try
-                {
-                    www = new WWW(@"file://" + imagePath);
-                    texture = new Texture2D(256, 256, TextureFormat.DXT5, false);
-                    www.LoadImageIntoTexture(texture);
-                }
-                catch (System.Exception)
-                {
-                    ValkyrieDebug.Log("Warning: Image missing: " + file);
-                    return null;
-                }
+                texture = PvrToTexture(file);
+            }
+            else // If the image isn't one of the formats above, just use unity file load
+            {
+                texture = ImageToTexture(file);
             }
             if (!file.Contains(TempPath))
             {
@@ -894,12 +838,181 @@ public class ContentData {
         // Array of pixels from image
         Color[] pix = texture.GetPixels(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
         // Empty texture
-        Texture2D subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
+        var subTexture = new Texture2D(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y));
         // Set pixels
         subTexture.SetPixels(pix);
         subTexture.Apply();
         return subTexture;
     }
+
+    private static Texture2D DdsToTexture(string file)
+    {
+        if (file == null) throw new System.ArgumentNullException("file");
+        // Unity doesn't support dds directly, have to do hackery
+        // Read the data
+        byte[] ddsBytes = null;
+        try
+        {
+            ddsBytes = File.ReadAllBytes(file);
+        }
+        catch (System.Exception ex)
+        {
+            if (!File.Exists(file))
+                ValkyrieDebug.Log("Warning: DDS Image missing: '" + file + "'");
+            else
+                ValkyrieDebug.Log("Warning: DDS Image loading of file '" + file + "' failed with " + ex.GetType().Name + " message: " + ex.Message);
+            return null;
+        }
+        // Check for valid header
+        byte ddsSizeCheck = ddsBytes[4];
+        if (ddsSizeCheck != 124)
+        {
+            ValkyrieDebug.Log("Warning: Image invalid: '" + file + "'");
+            return null;
+        }
+
+        // Extract dimensions
+        int height = ddsBytes[13] * 256 + ddsBytes[12];
+        int width = ddsBytes[17] * 256 + ddsBytes[16];
+
+        /*20-23 pit
+         * 24-27 dep
+         * 28-31 mm
+         * 32-35 al
+         * 36-39 res
+         * 40-43 sur
+         * 44-51 over
+         * 52-59 des
+         * 60-67 sov
+         * 68-75 sblt
+         * 76-79 size
+         * 80-83 flags
+         * 84-87 fourCC
+         * 88-91 bpp
+         * 92-95 red
+         */
+
+        char[] type = new char[4];
+        type[0] = (char)ddsBytes[84];
+        type[1] = (char)ddsBytes[85];
+        type[2] = (char)ddsBytes[86];
+        type[3] = (char)ddsBytes[87];
+
+        // Copy image data (skip header)
+        const int DDS_HEADER_SIZE = 128;
+        byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
+        System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
+
+        Texture2D texture = null;
+
+        if (ddsBytes[87] == '5')
+        {
+            texture = new Texture2D(width, height, TextureFormat.DXT5, false);
+        }
+        else if (ddsBytes[87] == '1')
+        {
+            texture = new Texture2D(width, height, TextureFormat.DXT1, false);
+        }
+        else if (ddsBytes[88] == 32)
+        {
+            if (ddsBytes[92] == 0)
+            {
+                texture = new Texture2D(width, height, TextureFormat.BGRA32, false);
+            }
+            else
+            {
+                texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            }
+        }
+        else if (ddsBytes[88] == 24)
+        {
+            texture = new Texture2D(width, height, TextureFormat.RGB24, false);
+        }
+        else
+        {
+            ValkyrieDebug.Log("Warning: Image invalid: '" + file + "'");
+        }
+        texture.LoadRawTextureData(dxtBytes);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D PvrToTexture(string file)
+    {
+        if (file == null) throw new System.ArgumentNullException("file");
+
+        long pixelformat = -1;
+        try
+        {
+            string imagePath = new System.Uri(file).AbsoluteUri;
+            var www = new WWW(imagePath);
+
+            // *** HEADER ****
+            // int verison
+            // int flags
+            pixelformat = System.BitConverter.ToInt64(www.bytes, 8);
+            // int color space
+            // int channel type
+            int height = System.BitConverter.ToInt32(www.bytes, 24);
+            int width = System.BitConverter.ToInt32(www.bytes, 28);
+            // int depth
+            // int num surfaces
+            // int num faces
+            // int mip map count
+            // int meta data size
+
+            // *** IMAGE DATA ****
+            const int PVR_HEADER_SIZE = 52;
+            var image = new byte[www.bytesDownloaded - PVR_HEADER_SIZE];
+            System.Buffer.BlockCopy(www.bytes, PVR_HEADER_SIZE, image, 0, www.bytesDownloaded - PVR_HEADER_SIZE);
+            Texture2D texture = null;
+            switch (pixelformat)
+            {
+                case 22: // ETC2_RGB4
+                    texture = new Texture2D(width, height, TextureFormat.ETC2_RGB, false, true);
+                    texture.LoadRawTextureData(image);
+                    texture.Apply();
+                    break;
+                case 23:  // ETC2_RGB8
+                    texture = new Texture2D(width, height, TextureFormat.ETC2_RGBA8, false, true);
+                    texture.LoadRawTextureData(image);
+                    texture.Apply();
+                    break;
+                default:
+                    ValkyrieDebug.Log("Warning: PVR unknown pixelformat: '" + pixelformat + "' in file: '" + file + "'");
+                    break;
+            } 
+            return texture;
+        }
+        catch (System.Exception ex)
+        {
+            if (!File.Exists(file))
+                ValkyrieDebug.Log("Warning: PVR Image missing: '" + file + "'");
+            else
+                ValkyrieDebug.Log("Warning: PVR Image loading of file '" + file + "' failed with " + ex.GetType().Name + " message: " + ex.Message + " pixelformat: '" + pixelformat + "'");
+            return null;
+        }
+    }
+
+    private static Texture2D ImageToTexture(string file)
+    {
+        if (file == null) throw new System.ArgumentNullException("file");
+        try
+        {
+            string imagePath = new System.Uri(file).AbsoluteUri;
+            var www = new WWW(imagePath);
+            return www.texture;
+        }
+        catch (System.Exception ex)
+        {
+            if (!File.Exists(file))
+                ValkyrieDebug.Log("Warning: Image missing: '" + file + "'");
+            else
+                ValkyrieDebug.Log("Warning: Image loading of file '" + file + "' failed with " + ex.GetType().Name + " message: " + ex.Message);
+            return null;
+        }
+    }
+
 }
 
 // Class for tile specific data
@@ -937,7 +1050,15 @@ public class TileSideData : GenericData
         // pixel per D2E square (inch) of image
         if (content.ContainsKey("pps"))
         {
-            float.TryParse(content["pps"], out pxPerSquare);
+            if (content["pps"].StartsWith("*"))
+            {
+                float.TryParse(content["pps"].Remove(0, 1), out pxPerSquare);
+                pxPerSquare *= Game.Get().gameType.TilePixelPerSquare();
+            }
+            else
+            {
+                float.TryParse(content["pps"], out pxPerSquare);
+            }
         }
         else
         {
@@ -1126,6 +1247,32 @@ public class MonsterData : GenericData
         {
             int.TryParse(content["awareness"], out awareness);
         }
+    }
+
+    virtual public IEnumerable<string> GetAttackTypes()
+    {
+        HashSet<string> toReturn = new HashSet<string>();
+        foreach (KeyValuePair<string, AttackData> kv in Game.Get().cd.investigatorAttacks)
+        {
+            if (ContainsTrait(kv.Value.target))
+            {
+                toReturn.Add(kv.Value.attackType);
+            }
+        }
+        return toReturn;
+    }
+
+    virtual public StringKey GetRandomAttack(string type)
+    {
+        List<AttackData> validAttacks = new List<AttackData>();
+        foreach (AttackData ad in Game.Get().cd.investigatorAttacks.Values)
+        {
+            if (ad.attackType.Equals(type))
+            {
+                validAttacks.Add(ad);
+            }
+        }
+        return validAttacks[Random.Range(0, validAttacks.Count)].text;
     }
 }
 
@@ -1417,20 +1564,29 @@ public class GenericData
 
         // If image specified it is relative to the path of the ini file
         // absolute paths are not supported
-        if (content.ContainsKey("image"))
+        // resolve optional images like image, image2, image3 and so on
+        int count = 0;
+        while (true)
         {
-            if (content["image"].IndexOf("{import}") == 0)
+            string key = "image" + (count > 0 ? (count + 1).ToString() : "");
+            if (!content.ContainsKey(key))
             {
-                image = ContentData.ImportPath() + content["image"].Substring(8);
+                image = ""; // No image is a valid condition
+                break;
+            }
+            if (content[key].StartsWith("{import}"))
+            {
+                image = Path.Combine(ContentData.ImportPath(), content[key].Substring(9));
             }
             else
             {
-                image = path + "/" + content["image"];
+                image = Path.Combine(path, content[key]);
             }
-        }
-        else // No image is a valid condition
-        {
-            image = "";
+            if (ContentData.ResolveTextureFile(image) != null)
+            {
+                break;
+            }
+            count++;
         }
     }
 
@@ -1457,7 +1613,7 @@ public class PerilData : QuestData.Event
     public StringKey perilText;
     override public StringKey text { get { return perilText; } }
 
-    public PerilData(string name, Dictionary<string, string> data) : base(name, data, "")
+    public PerilData(string name, Dictionary<string, string> data) : base(name, data, "", QuestData.Quest.currentFormat)
     {
         typeDynamic = type;
         if (data.ContainsKey("priority"))

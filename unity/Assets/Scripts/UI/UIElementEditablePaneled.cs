@@ -21,22 +21,18 @@ namespace Assets.Scripts.UI
             new UIElementBorder(ui);
 
             base.SetLocationPixels(x, y + UIScaler.GetPixelsPerUnit(), width, height - UIScaler.GetPixelsPerUnit());
-            Dictionary<string, string> CHARS = null;
-            EventManager.CHARS_MAP.TryGetValue(Game.Get().gameType.TypeName(), out CHARS);
+            Dictionary<string, string> CHARS = EventManager.GetCharacterMap(true);
 
             if (CHARS != null)
             {
                 float buttonWidth = width / CHARS.Keys.Count;
                 float xPos = 0;
-                foreach (string oneChar in CHARS.Keys)
+                foreach (string textKey in CHARS.Keys)
                 {
-                    StringKey translated = new StringKey(null, oneChar);
-                    string translation = null;
-                    CHARS.TryGetValue(oneChar, out translation);
                     ui = new UIElement(tag, bg.transform);
                     ui.SetLocationPixels(xPos, -UIScaler.GetPixelsPerUnit(), buttonWidth, UIScaler.GetPixelsPerUnit());
-                    ui.SetText(translated);
-                    ui.SetButton(delegate { InsertCharacter(translation); });
+                    ui.SetText(CHARS[textKey]);
+                    ui.SetButton(delegate { InsertCharacter(textKey); });
 
                     xPos += buttonWidth;
                 }

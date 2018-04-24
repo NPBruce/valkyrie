@@ -247,6 +247,8 @@ class MoMGameType : GameType
     {
         // the base side of the tile is 1024 pixels, we are having 3.5 'squares' (3.5 inches) in this
         // These squares are the same size as D2E squares
+        if (Application.platform == RuntimePlatform.Android)
+            return 512f / 3.5f;
         return 1024f / 3.5f;
     }
 
@@ -274,6 +276,90 @@ class MoMGameType : GameType
     public override float TileRound()
     {
         return 3.5f;
+    }
+
+    public override bool MonstersGrouped()
+    {
+        return false;
+    }
+}
+
+// Things for IA
+public class IAGameType : GameType
+{
+    public override string DataDirectory()
+    {
+        return ContentData.ContentPath() + "IA/";
+    }
+
+    public override StringKey HeroName()
+    {
+        return new StringKey("val", "IA_HERO_NAME");
+    }
+
+    public override StringKey HeroesName()
+    {
+        return new StringKey("val", "IA_HEROES_NAME");
+    }
+
+    public override StringKey QuestName()
+    {
+        return new StringKey("val", "IA_QUEST_NAME");
+    }
+
+    public override Font GetFont()
+    {
+        return (Font)Resources.Load("fonts/gara_scenario_desc");
+    }
+
+    public override Font GetHeaderFont()
+    {
+        return (Font)Resources.Load("fonts/windl");
+    }
+
+    public override int MaxHeroes()
+    {
+        return 4;
+    }
+
+    public override int DefaultHeroes()
+    {
+        return 4;
+    }
+
+    public override bool DisplayHeroes()
+    {
+        return true;
+    }
+
+    // Tiles imported from RtL have 105 pixels per square (each 1 inch)
+    public override float TilePixelPerSquare()
+    {
+        return 105;
+    }
+
+    public override string TypeName()
+    {
+        return "IA";
+    }
+
+    public override bool TileOnGrid()
+    {
+        return true;
+    }
+    public override bool DisplayMorale()
+    {
+        return true;
+    }
+
+    public override float SelectionRound()
+    {
+        return 1f;
+    }
+
+    public override float TileRound()
+    {
+        return 1f;
     }
 
     public override bool MonstersGrouped()

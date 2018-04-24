@@ -1271,17 +1271,20 @@ public class Quest
             else
             {
                 // Fatal if not found
-                ValkyrieDebug.Log("Error: Failed to located TileSide: " + qTile.tileSideName + " in quest component: " + qTile.sectionName);
+                ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName + "' in quest component: '" + qTile.sectionName + "'");
                 Application.Quit();
+                return;
             }
 
             // Attempt to load image
-            Texture2D newTex = ContentData.FileToTexture(game.cd.tileSides[qTile.tileSideName].image);
+            var mTile = game.cd.tileSides[qTile.tileSideName];
+            Texture2D newTex = ContentData.FileToTexture(mTile.image);
             if (newTex == null)
             {
                 // Fatal if missing
-                ValkyrieDebug.Log("Error: cannot open image file for TileSide: " + game.cd.tileSides[qTile.tileSideName].image);
+                ValkyrieDebug.Log("Error: cannot open image file for TileSide: '" + mTile.image + "' named: '" + qTile.tileSideName + "'");
                 Application.Quit();
+                return;
             }
 
             // Create a unity object for the tile
@@ -1305,13 +1308,13 @@ public class Quest
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            float vPPS = game.cd.tileSides[qTile.tileSideName].pxPerSquare;
+            float vPPS = mTile.pxPerSquare;
             float hPPS = vPPS;
             // manual aspect control
             // We need this for the 3x2 MoM tiles because they don't have square pixels!!
-            if (game.cd.tileSides[qTile.tileSideName].aspect != 0)
+            if (mTile.aspect != 0)
             {
-                hPPS = (vPPS * newTex.width / newTex.height) / game.cd.tileSides[qTile.tileSideName].aspect;
+                hPPS = (vPPS * newTex.width / newTex.height) / mTile.aspect;
             }
 
             // Perform alignment move
@@ -1566,6 +1569,10 @@ public class Quest
         virtual public string GetText()
         {
             string text = qUI.uiText.Translate(true);
+
+            // Find and replace {q:element with the name of the
+            // element
+            text = EventManager.Event.ReplaceComponentText(text);
 
             // Fix new lines and replace symbol text with special characters
             return EventManager.OutputSymbolReplace(text).Replace("\\n", "\n");

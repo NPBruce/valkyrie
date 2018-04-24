@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
 using ValkyrieTools;
 using Ionic.Zip;
+using System.IO;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -345,14 +345,13 @@ public class Game : MonoBehaviour {
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            string appData = Android.GetStorage() + "/Valkyrie";
+            string appData = Path.Combine(Android.GetStorage(), "Valkyrie");
             if (appData != null)
             {
-                ValkyrieDebug.Log("AppData: " + appData);
                 return appData;
             }
         }
-        return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/Valkyrie";
+        return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "Valkyrie");
     }
 
     public void AddUpdateListener(IUpdateListener obj)

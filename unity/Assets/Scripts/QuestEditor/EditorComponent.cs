@@ -31,6 +31,8 @@ public class EditorComponent {
     // Update redraws the selection UI
     virtual public void Update()
     {
+        RefreshReference();
+
         game = Game.Get();
 
         float scrollPos = -14.5f * UIScaler.GetPixelsPerUnit();
@@ -62,6 +64,11 @@ public class EditorComponent {
         new UIElementBorder(ui, Color.blue);
 
         AddTitle();
+    }
+
+    protected virtual void RefreshReference()
+    {
+        component = Game.Get().quest.qd.components[name];
     }
 
     protected virtual void AddTitle()
@@ -159,7 +166,7 @@ public class EditorComponent {
 
         commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         commentUIE.SetLocation(0.5f, offset, 19, 15);
-        commentUIE.SetText(component.comment);
+        commentUIE.SetText(component.comment.Replace("\\n", "\n"));
         offset += commentUIE.HeightToTextPadding(1);
         commentUIE.SetButton(delegate { SetComment(); });
         new UIElementBorder(commentUIE);
@@ -235,14 +242,16 @@ public class EditorComponent {
     // Item renamed
     public void RenameFinished()
     {
-        // Trim non alpha numeric
+        // Remove all not allowed characters from name
         string newName = System.Text.RegularExpressions.Regex.Replace(rename.value, "[^A-Za-z0-9_]", "");
         // Must have a name
-        if (newName.Equals("")) return;
+        if (newName == string.Empty) return;
         // Add type
         string baseName = component.typeDynamic + newName;
         // Find first available unique name
         string name = baseName;
+        // If nothing has changed, skip renaming
+        if (component.sectionName.Equals(baseName, System.StringComparison.Ordinal)) return;
         Game game = Game.Get();
         int i = 0;
         while (game.quest.qd.components.ContainsKey(name))
