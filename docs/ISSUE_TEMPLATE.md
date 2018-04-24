@@ -4,11 +4,11 @@
 ### Valkyrie Version
 
 
-### Attach Save,Quest or Scenario
+### Attach Save, Quest or Scenario
 Saves:  
-%appdata/Valkyrie/MoM/Save  
-%appdata/Valkyrie/D2E/Save  
+%appdata%/Valkyrie/MoM/Save  
+%appdata%/Valkyrie/D2E/Save  
 Quest:  
-%appdata/Valkyrie/D2E/Editor  
+%appdata%/Valkyrie/D2E/Editor  
 Scenario:  
-%appdata/Valkyrie/MoM/Editor  
+%appdata%/Valkyrie/MoM/Editor  
