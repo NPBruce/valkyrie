@@ -246,14 +246,11 @@ river,Fiume
 street,Strada
 hallway,Corridoio
 bathroom,Bagno
-bedroom,Camera da Letto
 kitchen,Cucina
 dock,Molo
 storage,Magazzino
 outside,Esterno
 inside,Interno
-small,Piccola
-medium,Media
 big,Grande
 transition,Transizione
 throne,Trono

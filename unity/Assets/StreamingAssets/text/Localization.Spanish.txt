@@ -210,7 +210,6 @@ UNITS,Unidades
 HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Alinear
-POSITION,Posición
 SIZE,Tamaño
 TEXT_SIZE,Tamaño del Texto
 ASPECT,Aspecto
@@ -299,14 +298,11 @@ river,Río
 street,Calle
 hallway,Pasillo
 bathroom,Baño
-bedroom,Dormitorio
 kitchen,Cocina
 dock,Muelle
 storage,Almacén
 outside,Exterior
 inside,Interior
-small,Pequeño
-medium,Mediano
 big,Grande
 transition,Transición
 throne,Trono
