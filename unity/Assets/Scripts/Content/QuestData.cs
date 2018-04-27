@@ -1020,6 +1020,37 @@ public class QuestData
             }
             // If component is deleted, trim array
             removeComponents = RemoveFromArray(removeComponents, "");
+
+            // Quota var renamed
+            if (quotaVar.Equals(oldName))
+            {
+                quotaVar = newName;
+            }
+
+            // Update variable names in operations
+            foreach (VarOperation operation in operations)
+            {
+                if (operation.var.equals(oldName))
+                {
+                    operation.var = newName
+                }
+                if (operation.value.equals(oldName))
+                {
+                    operation.value = newName
+                }
+            }
+            // Update variable names in conditions
+            foreach (VarOperation condition in conditions)
+            {
+                if (condition.var.equals(oldName))
+                {
+                    condition.var = newName
+                }
+                if (condition.value.equals(oldName))
+                {
+                    condition.value = newName
+                }
+            }
         }
 
         // Save event to string (editor)
@@ -1323,6 +1354,149 @@ public class QuestData
                 r += "puzzlealtlevel=" + puzzleAltLevel + nl;
             }
             return r;
+        }
+    }
+
+    // Var Definition
+    public class VarDefinition : QuestComponent
+    {
+        new public static string type = "VarDefinition";
+        // A bast type is used for default values
+        public string variableType = "float";
+        public string internalVariableType
+        public float initialise = 0;
+        public bool minimumUsed = false;
+        public float minimum = 0;
+        public bool maximumUsed = false;
+        public float maximum = 1;
+        public bool campaign = false;
+
+        // Create new with name (editor)
+        public VarDefinition(string s) : base(s)
+        {
+            source = "vars.ini";
+            typeDynamic = type;
+        }
+
+        // Create from ini data
+        public VarDefinition(string iniName, Dictionary<string, string> data, string pathIn) : base(iniName, data, pathIn)
+        {
+            typeDynamic = type;
+            path = Path.GetDirectoryName(pathIn);
+            // Get variable type
+            if (data.ContainsKey("type"))
+            {
+                SetVariableType(data["type"]);
+            }
+            if (data.ContainsKey("minimum"))
+            {
+                minimumUsed = true;
+                float.TryParse(data["minimum"], out minimum)
+            }
+            if (data.ContainsKey("maximum"))
+            {
+                maximumUsed = true;
+                float.TryParse(data["maximum"], out maximum)
+            }
+            if (data.ContainsKey("campaign"))
+            {
+                bool.TryParse(data["campaign"], out campaign)
+            }
+        }
+
+        // Create component from old variable name
+        public static VarDefinition CreateFromName(string s)
+        {
+            if (s.IndexOf("#") == 0) return null;
+
+            if (s.IndexOf("$") == 0) return null;
+
+            VarDefinition toReturn = new VarDefinition("Var" + s);
+
+            if (s.IndexOf(%) >= 0)
+            {
+                toReturn.campaign = true;
+            }
+
+            if (s.IndexOf(@) >= 0)
+            {
+                toReturn.SetVariableType("trigger");
+            }
+
+            return toReturn;
+        }
+
+        public bool isBoolean()
+        {
+            if (!minimumUsed) return false;
+            if (!maximumUsed) return false;
+            if (minimum != 0) return false;
+            return maximum == 1;
+        }
+
+        public void SetVariableType(string newType)
+        {
+            if (newType.equals(variableType)) return;
+
+            if (newType.equals("trigger"))
+            {
+                variableType = newType;
+                internalVariableType = "int";
+                minimumUsed = true;
+                maximumUsed = true;
+                minimum = 0;
+                maximum = 1;
+            }
+            if (newType.equals("bool"))
+            {
+                variableType = newType;
+                internalVariableType = "int";
+                minimumUsed = true;
+                maximumUsed = true;
+                minimum = 0;
+                maximum = 1;
+            }
+            if (newType.equals("int"))
+            {
+                if (variableType.equals(bool))
+                {
+                    minimumUsed = false;
+                    maximumUsed = false;
+                }
+                variableType = newType;
+                internalVariableType = "int";
+            }
+            if (newType.equals("float"))
+            {
+                if (variableType.equals(bool))
+                {
+                    minimumUsed = false;
+                    maximumUsed = false;
+                }
+                variableType = newType;
+                internalVariableType = "float";
+            }
+        }
+
+        // Save to string (editor)
+        override public string ToString()
+        {
+            StringBuilder r = new StringBuilder().Append(base.ToString());
+
+            if (!variableType.equals("flaot"))
+            {
+                r.Append("type=").AppendLine(variableType);
+            }
+            if (minimumUsed)
+            {
+                r.Append("minimum=").AppendLine(minimum);
+            }
+            if (maximumUsed)
+            {
+                r.Append("maximum=").AppendLine(minimum);
+            }
+
+            return r.ToString();
         }
     }
 
