@@ -239,7 +239,6 @@ UNITS,Units
 HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Align
-POSITION,Position
 SIZE,Size
 TEXT_SIZE,Text Size
 ASPECT,Aspect
@@ -341,14 +340,11 @@ river,River
 street,Street
 hallway,Hallway
 bathroom,Bathroom
-bedroom,Bedroom
 kitchen,Kitchen
 dock,Dock
 storage,Storage
 outside,Outside
 inside,Inside
-small,Small
-medium,Medium
 big,Big
 transition,Transition
 throne,Throne

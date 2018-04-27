@@ -71,7 +71,6 @@ UNITS,Unidades
 HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Alinhamento
-POSITION,Posição
 SIZE,Tamanho
 TEXT_SIZE,Texto
 ASPECT,Aspecto
@@ -153,14 +152,11 @@ river,Rio
 street,Estrada
 hallway,Corredor
 bathroom,Banheiro
-bedroom,Quarto
 kitchen,Cozinha
 dock,Doca
 storage,Armazém
 outside,Externo
 inside,Interno
-small,Pequeno
-medium,Médio
 big,Grande
 transition,Transição
 throne,Trono
