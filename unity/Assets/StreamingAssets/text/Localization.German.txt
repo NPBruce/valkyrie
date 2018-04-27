@@ -201,7 +201,6 @@ UNITS,Einheiten
 HORIZONTAL,Horizontal
 VERTICAL,Vertikal
 ALIGN,Ausrichten
-POSITION,Position
 SIZE,Größe
 TEXT_SIZE,Textgröße
 ASPECT,Aspekt
@@ -288,14 +287,11 @@ river,Fluss
 street,Straße
 hallway,Flur
 bathroom,Badezimmer
-bedroom,Schlafraum
 kitchen,Küche
 dock,Hafen
 storage,Lager
 outside,Außen
 inside,Innen
-small,Klein
-medium,Mittel
 big,Groß
 transition,Übergang
 throne,Thron
