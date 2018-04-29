@@ -23,15 +23,9 @@ public class EditorComponentVar : EditorComponent
 
     override public float AddSubComponents(float offset)
     {
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0.5, offset, 8, 1);
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_TYPE")));
-
-        StringKey rotateKey = new StringKey("val","RIGHT");
-        if (mPlaceComponent.rotate)
-        {
-            rotateKey = new StringKey("val", "DOWN");
-        }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 8, 1);
@@ -42,7 +36,7 @@ public class EditorComponentVar : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_CAMPAIGN"));
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_CAMPAIGN")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 4, 1);
@@ -59,18 +53,18 @@ public class EditorComponentVar : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_INITIALISE"));
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_INITIALISE")));
 
-        string initString = varComponent.initialise;
-        if (varComponent.variableType.equals("bool"))
+        string initString = varComponent.initialise.ToString();
+        if (varComponent.variableType.Equals("bool"))
         {
             if (varComponent.initialise == 0)
             {
-                initString = ui.SetText(new StringKey("val","FALSE"));
+                initString = new StringKey("val","FALSE").Translate();
             }
             else
             {
-                initString = ui.SetText(new StringKey("val","TRUE"));
+                initString = new StringKey("val","TRUE").Translate();
             }
         }
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -86,15 +80,15 @@ public class EditorComponentVar : EditorComponent
 
     public void CycleVarType()
     {
-        if (varComponent.variableType.equals("float"))
+        if (varComponent.variableType.Equals("float"))
         {
             varComponent.SetVariableType("int");
         }
-        else if (varComponent.variableType.equals("int"))
+        else if (varComponent.variableType.Equals("int"))
         {
             varComponent.SetVariableType("bool");
         }
-        else if (varComponent.variableType.equals("bool"))
+        else if (varComponent.variableType.Equals("bool"))
         {
             varComponent.SetVariableType("trigger");
         }
@@ -109,5 +103,10 @@ public class EditorComponentVar : EditorComponent
     {
         varComponent.campaign = !varComponent.campaign;
         Update();
+    }
+
+    public void SetInitialise()
+    {
+
     }
 }

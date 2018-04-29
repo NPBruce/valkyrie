@@ -1030,25 +1030,25 @@ public class QuestData
             // Update variable names in operations
             foreach (VarOperation operation in operations)
             {
-                if (operation.var.equals(oldName))
+                if (operation.var.Equals(oldName))
                 {
-                    operation.var = newName
+                    operation.var = newName;
                 }
-                if (operation.value.equals(oldName))
+                if (operation.value.Equals(oldName))
                 {
-                    operation.value = newName
+                    operation.value = newName;
                 }
             }
             // Update variable names in conditions
             foreach (VarOperation condition in conditions)
             {
-                if (condition.var.equals(oldName))
+                if (condition.var.Equals(oldName))
                 {
-                    condition.var = newName
+                    condition.var = newName;
                 }
-                if (condition.value.equals(oldName))
+                if (condition.value.Equals(oldName))
                 {
-                    condition.value = newName
+                    condition.value = newName;
                 }
             }
         }
@@ -1363,7 +1363,7 @@ public class QuestData
         new public static string type = "VarDefinition";
         // A bast type is used for default values
         public string variableType = "float";
-        public string internalVariableType
+        public string internalVariableType;
         public float initialise = 0;
         public bool minimumUsed = false;
         public float minimum = 0;
@@ -1382,7 +1382,6 @@ public class QuestData
         public VarDefinition(string iniName, Dictionary<string, string> data, string pathIn) : base(iniName, data, pathIn)
         {
             typeDynamic = type;
-            path = Path.GetDirectoryName(pathIn);
             // Get variable type
             if (data.ContainsKey("type"))
             {
@@ -1391,16 +1390,16 @@ public class QuestData
             if (data.ContainsKey("minimum"))
             {
                 minimumUsed = true;
-                float.TryParse(data["minimum"], out minimum)
+                float.TryParse(data["minimum"], out minimum);
             }
             if (data.ContainsKey("maximum"))
             {
                 maximumUsed = true;
-                float.TryParse(data["maximum"], out maximum)
+                float.TryParse(data["maximum"], out maximum);
             }
             if (data.ContainsKey("campaign"))
             {
-                bool.TryParse(data["campaign"], out campaign)
+                bool.TryParse(data["campaign"], out campaign);
             }
         }
 
@@ -1413,12 +1412,12 @@ public class QuestData
 
             VarDefinition toReturn = new VarDefinition("Var" + s);
 
-            if (s.IndexOf(%) >= 0)
+            if (s.IndexOf("%") >= 0)
             {
                 toReturn.campaign = true;
             }
 
-            if (s.IndexOf(@) >= 0)
+            if (s.IndexOf("@") >= 0)
             {
                 toReturn.SetVariableType("trigger");
             }
@@ -1436,9 +1435,9 @@ public class QuestData
 
         public void SetVariableType(string newType)
         {
-            if (newType.equals(variableType)) return;
+            if (newType.Equals(variableType)) return;
 
-            if (newType.equals("trigger"))
+            if (newType.Equals("trigger"))
             {
                 variableType = newType;
                 internalVariableType = "int";
@@ -1447,7 +1446,7 @@ public class QuestData
                 minimum = 0;
                 maximum = 1;
             }
-            if (newType.equals("bool"))
+            if (newType.Equals("bool"))
             {
                 variableType = newType;
                 internalVariableType = "int";
@@ -1456,9 +1455,9 @@ public class QuestData
                 minimum = 0;
                 maximum = 1;
             }
-            if (newType.equals("int"))
+            if (newType.Equals("int"))
             {
-                if (variableType.equals(bool))
+                if (variableType.Equals("bool"))
                 {
                     minimumUsed = false;
                     maximumUsed = false;
@@ -1466,9 +1465,9 @@ public class QuestData
                 variableType = newType;
                 internalVariableType = "int";
             }
-            if (newType.equals("float"))
+            if (newType.Equals("float"))
             {
-                if (variableType.equals(bool))
+                if (variableType.Equals("bool"))
                 {
                     minimumUsed = false;
                     maximumUsed = false;
@@ -1483,17 +1482,17 @@ public class QuestData
         {
             StringBuilder r = new StringBuilder().Append(base.ToString());
 
-            if (!variableType.equals("flaot"))
+            if (!variableType.Equals("flaot"))
             {
                 r.Append("type=").AppendLine(variableType);
             }
             if (minimumUsed)
             {
-                r.Append("minimum=").AppendLine(minimum);
+                r.Append("minimum=").AppendLine(minimum.ToString());
             }
             if (maximumUsed)
             {
-                r.Append("maximum=").AppendLine(minimum);
+                r.Append("maximum=").AppendLine(maximum.ToString());
             }
 
             return r.ToString();
