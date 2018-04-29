@@ -148,6 +148,16 @@ public class QuestData
                 }
             }
         }
+
+        // Perform component generation
+        foreach (QuestComponent qc in components.Values)
+        {
+            Generator gen = qc as Generator;
+            if (gen != null)
+            {
+                new QuestGenerator(gen, components);
+            }
+        }
     }
 
     // Add a section from an ini file to the quest data.  Duplicates are not allowed
@@ -223,6 +233,11 @@ public class QuestData
             Activation c = new Activation(name, content, source);
             components.Add(name, c);
         }
+        if (name.IndexOf(Generator.type) == 0)
+        {
+            Generator c = new Generator(name, content, source);
+            components.Add(name, c);
+        }
         // If not known ignore
     }
 
@@ -270,6 +285,17 @@ public class QuestData
                 ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);
                 Application.Quit();
             }
+        }
+
+        // Create new type and location (used by generator)
+        public Tile(string name, string tileSide, float xPos, float yPos, int inRotation) : base(name)
+        {
+            locationSpecified = true;
+            typeDynamic = type;
+            Game game = Game.Get();
+            tileSideName = tileSide;
+            location = new Vector2(xPos, yPos);
+            rotation = inRotation;
         }
 
         // Save to ini string (used by editor)
@@ -1928,6 +1954,32 @@ public class QuestData
         }
     }
 
+    // Dynamic Generator component
+    public class Generator : QuestComponent
+    {
+        new public static string type = "Generator";
+
+        // Create new (editor)
+        public Generator(string s) : base(s)
+        {
+            source = "quest.ini";
+            typeDynamic = type;
+        }
+
+        // Create from ini data
+        public Generator(string name, Dictionary<string, string> data, string path) : base(name, data, path)
+        {
+            typeDynamic = type;
+        }
+
+        // Save to string
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            string r = base.ToString();
+            return r;
+        }
+    }
 
     // Scenario starting item
     public class QItem : QuestComponent
