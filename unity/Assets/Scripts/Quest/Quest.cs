@@ -857,7 +857,7 @@ public class Quest
         eManager = new EventManager(saveData.Get("EventManager"));
 
         // Update the screen
-        game.stageUI.Update();
+        game.stageUI = new NextStageButton();
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
     }
