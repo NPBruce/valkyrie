@@ -370,11 +370,11 @@ public class EditorComponentEvent : EditorComponent
 
             if (game.quest.qd.components.ContainsKey(eventComponent.quotaVar))
             {
-                string tmpName = op.value;
+                string tmpName = eventComponent.quotaVar;
                 UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 link.SetLocation(18, offset, 1, 1);
                 link.SetText("<b>⇨</b>", Color.blue);
-                link.SetButton(delegate { QuestEditorData.SelectComponent(eventComponent.quotaVar); });
+                link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
             }
         }
@@ -513,7 +513,8 @@ public class EditorComponentEvent : EditorComponent
                 link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
 
-                operationIsBoolean = game.quest.qd.components[op.var].isBoolean());
+                // FIXME need to cast
+                operationIsBoolean = game.quest.qd.components[op.var].IsBoolean();
             }
             else
             {
@@ -825,12 +826,12 @@ public class EditorComponentEvent : EditorComponent
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "VARS").Translate() });
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.Event)
+            if (kv.Value is QuestData.VarDefinition)
             {
                 QuestData.VarDefinition questVar = kv.Value as QuestData.VarDefinition;
                 if (questVar.variableType.Equals("trigger"))
                 {
-                    vars.Add(s, traits);
+                    select.AddItem(kv.Key, traits);
                 }
             }
         }
@@ -1239,7 +1240,7 @@ public class EditorComponentEvent : EditorComponent
         eventComponent.quotaVar = var;
         eventComponent.quota = 0;
 
-        if (op.var.Equals("{NEW:Var}"))
+        if (var.Equals("{NEW:Var}"))
         {
             int i = 0;
             while (game.quest.qd.components.ContainsKey("Var" + i))
@@ -1405,7 +1406,7 @@ public class EditorComponentEvent : EditorComponent
 
         AddQuestVars(select);
 
-        traits = new Dictionary<string, IEnumerable<string>>();
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "#" });
 
         select.AddItem("#monsters", traits);
@@ -1453,7 +1454,7 @@ public class EditorComponentEvent : EditorComponent
         {
             if (kv.Value is QuestData.VarDefinition)
             {
-                select.AddItem(kv.Value);
+                list.AddItem(kv.Value);
             }
         }
 
@@ -1469,7 +1470,7 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        traits = new Dictionary<string, IEnumerable<string>>();
+        Dictionary<string, IEnumerable<string>>  traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "$" });
         foreach (string s in dollarVars)
         {
@@ -1515,7 +1516,7 @@ public class EditorComponentEvent : EditorComponent
         op.value = "0";
         if (game.quest.qd.components.ContainsKey(op.var))
         {
-            if (game.quest.qd.components[op.var]..isBoolean())
+            if (game.quest.qd.components[op.var].IsBoolean())
             {
                 op.value = "true";
             }

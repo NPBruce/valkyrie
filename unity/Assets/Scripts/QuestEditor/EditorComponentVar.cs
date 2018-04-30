@@ -136,7 +136,7 @@ public class EditorComponentVar : EditorComponent
 
         offset += 2;
 
-        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_MAXIMUM")));
 
@@ -193,8 +193,6 @@ public class EditorComponentVar : EditorComponent
 
     public void SetInitialise()
     {
-        if (varComponent.variableType.Equals("triigger")) return offset;
-
         if (varComponent.variableType.Equals("bool"))
         {
             if (varComponent.initialise == 0)
@@ -208,7 +206,7 @@ public class EditorComponentVar : EditorComponent
         }
         else
         {
-            float.TryParse(initialiseUIE.GetText(), out eventComponent.initialise);
+            float.TryParse(initialiseUIE.GetText(), out varComponent.initialise);
         }
     }
 
@@ -226,13 +224,13 @@ public class EditorComponentVar : EditorComponent
 
     public void SetMinimum()
     {
-        float.TryParse(minimumUIE.GetText(), out eventComponent.minimum);
+        float.TryParse(minimumUIE.GetText(), out varComponent.minimum);
         Update();
     }
 
     public void SetMaximum()
     {
-        float.TryParse(maximumUIE.GetText(), out eventComponent.maximum);
+        float.TryParse(maximumUIE.GetText(), out varComponent.maximum);
         Update();
     }
 }

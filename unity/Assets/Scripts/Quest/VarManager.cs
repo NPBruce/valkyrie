@@ -23,13 +23,13 @@ public class VarManager
         }
     }
 
-    public VarDefinition GetDefinition(string variableName)
+    public QuestData.VarDefinition GetDefinition(string variableName)
     {
-        if (game.quest.qd.components.ContainsKey(variableName))
+        if (Game.Get().quest.qd.components.ContainsKey(variableName))
         {
-            return game.quest.qd.components[variableName];
+            return Game.Get().quest.qd.components[variableName] as QuestData.VarDefinition;
         }
-        return new VarDefinition("");
+        return new QuestData.VarDefinition("");
     }
 
     public Dictionary<string, float> GetPrefixVars(string prefix)
@@ -93,25 +93,11 @@ public class VarManager
     {
         if (!vars.ContainsKey(var))
         {
-            float initialiseValue = 0;
-            if (GetDefinition(var).IsBoolean())
-            {
-                bool boolInitialise = false;
-                bool.TryParse(GetDefinition(var).initialise, out boolInitialise);
-                if (boolInitialise)
-                {
-                    initialiseValue = 1;
-                }
-            }
-            else
-            {
-                float.TryParse(GetDefinition(var).initialise, out initialiseValue)
-            }
             if (Game.Get().quest != null && Game.Get().quest.log != null)
             {
-                Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var + " As: " + initialiseValue, true));
+                Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var + " As: " + GetDefinition(var).initialise, true));
             }
-            vars.Add(var, initialiseValue);
+            vars.Add(var, GetDefinition(var).initialise);
         }
         return vars[var];
     }
@@ -121,7 +107,7 @@ public class VarManager
         // Ensure var exists
         if (!vars.ContainsKey(op.var))
         {
-            GetValue(string op.var);
+            GetValue(op.var);
         }
         float r = 0;
         if (op.value.Length == 0)
@@ -154,7 +140,7 @@ public class VarManager
             }
         }
         // value is var
-        return GetValue(string op.var);
+        return GetValue(op.var);
     }
 
     public void Perform(QuestData.Event.VarOperation op)
@@ -284,14 +270,14 @@ public class VarManager
         {
             bool varAtZero = (vars[op.var] == 0);
             bool valueAtZero = (value == 0);
-            return !varAtZero || !valueAtZero
+            return !varAtZero || !valueAtZero;
         }
 
         if (op.operation.Equals("&"))
         {
             bool varAtZero = (vars[op.var] == 0);
             bool valueAtZero = (value == 0);
-            return !varAtZero && !valueAtZero
+            return !varAtZero && !valueAtZero;
         }
 
         // unknown tests fail
