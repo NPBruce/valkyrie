@@ -193,7 +193,9 @@ public class EditorComponentVar : EditorComponent
 
     public void SetInitialise()
     {
-        if (varComponent.variableType.Equals("bool")) return offset;
+        if (varComponent.variableType.Equals("triigger")) return offset;
+
+        if (varComponent.variableType.Equals("bool"))
         {
             if (varComponent.initialise == 0)
             {

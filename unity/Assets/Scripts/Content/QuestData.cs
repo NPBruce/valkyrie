@@ -1472,10 +1472,8 @@ public class QuestData
 
         public bool isBoolean()
         {
-            if (!minimumUsed) return false;
-            if (!maximumUsed) return false;
-            if (minimum != 0) return false;
-            return maximum == 1;
+            if (variableType.Equals("trigger")) return true;
+            return variableType.Equals("bool");
         }
 
         public void SetVariableType(string newType)

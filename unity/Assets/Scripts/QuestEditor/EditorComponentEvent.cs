@@ -500,6 +500,7 @@ public class EditorComponentEvent : EditorComponent
 
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
+            bool operationIsBoolean = false;
             QuestData.Event.VarOperation tmp = op;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             if (game.quest.qd.components.ContainsKey(op.var))
@@ -511,6 +512,8 @@ public class EditorComponentEvent : EditorComponent
                 link.SetText("<b>⇨</b>", Color.blue);
                 link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
+
+                operationIsBoolean = game.quest.qd.components[op.var].isBoolean());
             }
             else
             {
@@ -526,7 +529,7 @@ public class EditorComponentEvent : EditorComponent
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(11, offset, 7.5f, 1);
+            string displayValue = op.value;
             if (game.quest.qd.components.ContainsKey(op.value))
             {
                 ui.SetLocation(11, offset, 6.5f, 1);
@@ -539,9 +542,20 @@ public class EditorComponentEvent : EditorComponent
             }
             else
             {
+                if (operationIsBoolean && !displayValue.StartsWith("$") && !displayValue.StartsWith("#"))
+                {
+                    bool setToValue;
+                    bool.TryParse(displayValue, out setToValue);
+
+                    displayValue = new StringKey("val","FALSE").Translate();
+                    if (setToValue)
+                    {
+                        displayValue = new StringKey("val","TRUE").Translate();
+                    }
+                }
                 ui.SetLocation(11, offset, 7.5f, 1);
             }
-            ui.SetText(op.value);
+            ui.SetText(displayValue);
             ui.SetButton(delegate { SetValue(tmp); });
             new UIElementBorder(ui);
 
@@ -556,6 +570,8 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventVarOperationComponents(float offset)
     {
+        bool operationIsBoolean = false;
+
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
         ui.SetText(new StringKey("val", "X_COLON", ASSIGN));
@@ -579,6 +595,8 @@ public class EditorComponentEvent : EditorComponent
                 link.SetText("<b>⇨</b>", Color.blue);
                 link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
+
+                operationIsBoolean = game.quest.qd.components[op.var].isBoolean();
             }
             else
             {
@@ -594,6 +612,7 @@ public class EditorComponentEvent : EditorComponent
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            string displayValue = op.value;
             if (game.quest.qd.components.ContainsKey(op.value))
             {
                 ui.SetLocation(11, offset, 6.5f, 1);
@@ -606,9 +625,20 @@ public class EditorComponentEvent : EditorComponent
             }
             else
             {
+                if (operationIsBoolean && !displayValue.StartsWith("$") && !displayValue.StartsWith("#"))
+                {
+                    bool setToValue;
+                    bool.TryParse(displayValue, out setToValue);
+
+                    displayValue = new StringKey("val","FALSE").Translate();
+                    if (setToValue)
+                    {
+                        displayValue = new StringKey("val","TRUE").Translate();
+                    }
+                }
                 ui.SetLocation(11, offset, 7.5f, 1);
             }
-            ui.SetText(op.value);
+            ui.SetText(displayValue);
             ui.SetButton(delegate { SetValue(tmp); });
             new UIElementBorder(ui);
 
@@ -1479,9 +1509,17 @@ public class EditorComponentEvent : EditorComponent
         op.operation = "=";
         if (test)
         {
-            op.operation = ">";
+            op.operation = "==";
         }
+
         op.value = "0";
+        if (game.quest.qd.components.ContainsKey(op.var))
+        {
+            if (game.quest.qd.components[op.var]..isBoolean())
+            {
+                op.value = "true";
+            }
+        }
 
         if (op.var.Equals("{NEW:Var}"))
         {
@@ -1517,10 +1555,19 @@ public class EditorComponentEvent : EditorComponent
 
         select.AddItem("==");
         select.AddItem("!=");
-        select.AddItem(">=");
-        select.AddItem("<=");
-        select.AddItem(">");
-        select.AddItem("<");
+
+        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        {
+            select.AddItem("OR");
+            select.AddItem("&");
+        }
+        else
+        {
+            select.AddItem(">=");
+            select.AddItem("<=");
+            select.AddItem(">");
+            select.AddItem("<");
+        }
 
         select.Draw();
     }
@@ -1536,11 +1583,21 @@ public class EditorComponentEvent : EditorComponent
         UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
 
         select.AddItem("=");
-        select.AddItem("+");
-        select.AddItem("-");
-        select.AddItem("*");
-        select.AddItem("/");
-        select.AddItem("%");
+        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        {
+            select.AddItem("OR");
+            select.AddItem("&");
+            select.AddItem("!");
+            select.AddItem("^");
+        }
+        else
+        {
+            select.AddItem("+");
+            select.AddItem("-");
+            select.AddItem("*");
+            select.AddItem("/");
+            select.AddItem("%");
+        }
 
         select.Draw();
     }
@@ -1563,7 +1620,15 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits);
+        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        {
+            select.AddItem("{" + new StringKey("val","TRUE").Translate() + "}", "{TRUE}", traits);
+            select.AddItem("{" + new StringKey("val","FALSE").Translate() + "}", "{FALSE}", traits);
+        }
+        else
+        {
+            select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits);
+        }
 
         select.AddNewComponentItem("VAR");
 
@@ -1586,7 +1651,6 @@ public class EditorComponentEvent : EditorComponent
         select.Draw();
     }
 
-
     public void SelectSetValue(QuestData.Event.VarOperation op, string value)
     {
         if (value.Equals("{NUMBER}"))
@@ -1596,6 +1660,16 @@ public class EditorComponentEvent : EditorComponent
                 new StringKey("val","X_COLON",NUMBER), 
                 "", delegate { SetNumValue(op); });
             varText.EditText();
+        }
+        else if (value.Equals("{TRUE}"))
+        {
+            op.value = "true";
+            Update();
+        }
+        else if (value.Equals("{FALSE}"))
+        {
+            op.value = "false";
+            Update();
         }
         else
         {
