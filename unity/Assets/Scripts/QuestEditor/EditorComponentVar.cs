@@ -6,6 +6,10 @@ public class EditorComponentVar : EditorComponent
 {
     QuestData.VarDefinition varComponent;
 
+    UIElementEditable initialiseUIE;
+    UIElementEditable minimumUIE;
+    UIElementEditable maximumUIE;
+
     public EditorComponentVar(string nameIn) : base()
     {
         Game game = Game.Get();
@@ -29,12 +33,23 @@ public class EditorComponentVar : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 8, 1);
-        ui.SetText(new StringKey("val","VAR_TYPE" + varComponent.variableType));
+        ui.SetText(new StringKey("val","VAR_TYPE_" + varComponent.variableType));
         ui.SetButton(CycleVarType);
         new UIElementBorder(ui);
         offset += 2;
 
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        AddCampaignControl(offset);
+        AddInitialiseControl(offset);
+        AddLimitsControl(offset);
+
+        return offset;
+    }
+
+    protected float AddCampaignControl(float offset)
+    {
+        if (varComponent.variableType.Equals("trigger")) return offset;
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_CAMPAIGN")));
 
@@ -51,31 +66,102 @@ public class EditorComponentVar : EditorComponent
         ui.SetButton(CampaignToggle);
         new UIElementBorder(ui);
 
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        return offset + 2;
+    }
+
+    protected float AddInitialiseControl(float offset)
+    {
+        if (varComponent.variableType.Equals("trigger")) return offset;
+        if (varComponent.campaign) return offset;
+        
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_INITIALISE")));
 
-        string initString = varComponent.initialise.ToString();
         if (varComponent.variableType.Equals("bool"))
         {
-            if (varComponent.initialise == 0)
-            {
-                initString = new StringKey("val","FALSE").Translate();
-            }
-            else
+            string initString = new StringKey("val","FALSE").Translate();
+            if (varComponent.initialise != 0)
             {
                 initString = new StringKey("val","TRUE").Translate();
             }
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(8, offset, 4, 1);
+            ui.SetText(initString);
+            ui.SetButton(SetInitialise);
+            new UIElementBorder(ui);
         }
+        else
+        {
+            initialiseUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            initialiseUIE.SetLocation(8, offset, 4, 1);
+            initialiseUIE.SetText(varComponent.initialise.ToString());
+            initialiseUIE.SetButton(SetInitialise);
+            initialiseUIE.SetSingleLine();
+            new UIElementBorder(initialiseUIE);
+        }
+
+        return offset + 2;
+    }
+
+    protected float AddLimitsControl(float offset)
+    {
+        if (varComponent.variableType.Equals("trigger")) return offset;
+        if (varComponent.variableType.Equals("bool")) return offset;
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_MINIMUM")));
+
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(8, offset, 4, 1);
-        ui.SetText(initString);
-        ui.SetButton(SetInitialise);
+        string minEnableString = new StringKey("val","FALSE").Translate();
+        if (varComponent.minimumUsed)
+        {
+            minEnableString = new StringKey("val","TRUE").Translate();
+        }
+        ui.SetText(minEnableString);
+        ui.SetButton(SetMinimumEnable);
         new UIElementBorder(ui);
+
+        if (varComponent.minimumUsed)
+        {
+            minimumUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            minimumUIE.SetLocation(12.5f, offset, 4, 1);
+            minimumUIE.SetText(varComponent.minimum.ToString());
+            minimumUIE.SetButton(SetMinimum);
+            minimumUIE.SetSingleLine();
+            new UIElementBorder(minimumUIE);
+        }
 
         offset += 2;
 
-        return offset;
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_MAXIMUM")));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(8, offset, 4, 1);
+        string maxEnableString = new StringKey("val","FALSE").Translate();
+        if (varComponent.maximumUsed)
+        {
+            maxEnableString = new StringKey("val","TRUE").Translate();
+        }
+        ui.SetText(maxEnableString);
+        ui.SetButton(SetMaximumEnable);
+        new UIElementBorder(ui);
+
+        if (varComponent.maximumUsed)
+        {
+            maximumUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            maximumUIE.SetLocation(12.5f, offset, 4, 1);
+            maximumUIE.SetText(varComponent.maximum.ToString());
+            maximumUIE.SetButton(SetMaximum);
+            maximumUIE.SetSingleLine();
+            new UIElementBorder(maximumUIE);
+        }
+
+        return offset + 2;
     }
 
     public void CycleVarType()
@@ -107,6 +193,44 @@ public class EditorComponentVar : EditorComponent
 
     public void SetInitialise()
     {
+        if (varComponent.variableType.Equals("bool")) return offset;
+        {
+            if (varComponent.initialise == 0)
+            {
+                varComponent.initialise = 1;
+            }
+            else
+            {
+                varComponent.initialise = 0;
+            }
+        }
+        else
+        {
+            float.TryParse(initialiseUIE.GetText(), out eventComponent.initialise);
+        }
+    }
 
+    public void SetMinimumEnable()
+    {
+        varComponent.minimumUsed = !varComponent.minimumUsed;
+        Update();
+    }
+
+    public void SetMaximumEnable()
+    {
+        varComponent.maximumUsed = !varComponent.maximumUsed;
+        Update();
+    }
+
+    public void SetMinimum()
+    {
+        float.TryParse(minimumUIE.GetText(), out eventComponent.minimum);
+        Update();
+    }
+
+    public void SetMaximum()
+    {
+        float.TryParse(maximumUIE.GetText(), out eventComponent.maximum);
+        Update();
     }
 }

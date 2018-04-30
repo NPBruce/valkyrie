@@ -1413,19 +1413,38 @@ public class QuestData
             {
                 SetVariableType(data["type"]);
             }
-            if (data.ContainsKey("minimum"))
+            if (variableType.Equals("bool"))
             {
-                minimumUsed = true;
-                float.TryParse(data["minimum"], out minimum);
+                if (data.ContainsKey("initialise"))
+                {
+                    bool boolInit;
+                    bool.TryParse(data["initialise"], out boolInit);
+                    if (boolInit)
+                    {
+                        initialise = 1;
+                    }
+                }
             }
-            if (data.ContainsKey("maximum"))
+            else
             {
-                maximumUsed = true;
-                float.TryParse(data["maximum"], out maximum);
-            }
-            if (data.ContainsKey("campaign"))
-            {
-                bool.TryParse(data["campaign"], out campaign);
+                if (data.ContainsKey("minimum"))
+                {
+                    minimumUsed = true;
+                    float.TryParse(data["minimum"], out minimum);
+                }
+                if (data.ContainsKey("maximum"))
+                {
+                    maximumUsed = true;
+                    float.TryParse(data["maximum"], out maximum);
+                }
+                if (data.ContainsKey("campaign"))
+                {
+                    bool.TryParse(data["campaign"], out campaign);
+                }
+                if (data.ContainsKey("initialise"))
+                {
+                    float.TryParse(data["initialise"], out initialise);
+                }
             }
         }
 
@@ -1467,6 +1486,8 @@ public class QuestData
             {
                 variableType = newType;
                 internalVariableType = "int";
+                campaign = false;
+                initialise = 0;
                 minimumUsed = true;
                 maximumUsed = true;
                 minimum = 0;
@@ -1508,17 +1529,41 @@ public class QuestData
         {
             StringBuilder r = new StringBuilder().Append(base.ToString());
 
-            if (!variableType.Equals("flaot"))
+            if (variableType.Equals("trigger"))
             {
                 r.Append("type=").AppendLine(variableType);
             }
-            if (minimumUsed)
+            else if (variableType.Equals("bool"))
             {
-                r.Append("minimum=").AppendLine(minimum.ToString());
+                r.Append("type=").AppendLine(variableType);
+                r.Append("initialise=").AppendLine(bool.TrueString);
+                if (campaign)
+                {
+                    r.Append("campaign=").AppendLine(campaign.ToString());
+                }
             }
-            if (maximumUsed)
+            else
             {
-                r.Append("maximum=").AppendLine(maximum.ToString());
+                if (!variableType.Equals("float"))
+                {
+                    r.Append("type=").AppendLine(variableType);
+                }
+                if (minimumUsed)
+                {
+                    r.Append("minimum=").AppendLine(minimum.ToString());
+                }
+                if (maximumUsed)
+                {
+                    r.Append("maximum=").AppendLine(maximum.ToString());
+                }
+                if (campaign)
+                {
+                    r.Append("campaign=").AppendLine(campaign.ToString());
+                }
+                if (initialise != 0)
+                {
+                    r.Append("initialise=").AppendLine(initialise.ToString());
+                }
             }
 
             return r.ToString();

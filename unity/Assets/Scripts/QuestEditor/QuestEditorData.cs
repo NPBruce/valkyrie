@@ -100,6 +100,7 @@ public class QuestEditorData {
         select.AddNewComponentItem("CustomMonster");
         select.AddNewComponentItem("UI");
         select.AddNewComponentItem("QItem");
+        select.AddNewComponentItem("Var");
         if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
             select.AddNewComponentItem("Activation");
@@ -188,6 +189,11 @@ public class QuestEditorData {
             qed.NewActivation();
             return;
         }
+        if (name.Equals("{NEW:Var}"))
+        {
+            qed.NewVar();
+            return;
+        }
         if (name.Equals("{NEW:Event}"))
         {
             qed.NewEvent();
@@ -254,6 +260,11 @@ public class QuestEditorData {
         if (game.quest.qd.components[name] is QuestData.Activation)
         {
             SelectAsActivation(name);
+            return;
+        }
+        if (game.quest.qd.components[name] is QuestData.VarDefinition)
+        {
+            SelectAsVar(name);
             return;
         }
         if (game.quest.qd.components[name] is QuestData.Event)
@@ -331,6 +342,11 @@ public class QuestEditorData {
     {
         Game game = Game.Get();
         game.qed.NewSelection(new EditorComponentActivation(name));
+    }
+    public static void SelectAsVar(string name)
+    {
+        Game game = Game.Get();
+        game.qed.NewSelection(new EditorComponentVar(name));
     }
 
     // Create a new tile, use next available number
@@ -497,6 +513,19 @@ public class QuestEditorData {
         }
         game.quest.qd.components.Add("Activation" + index, new QuestData.Activation("Activation" + index));
         SelectComponent("Activation" + index);
+    }
+
+    public void NewVar()
+    {
+        Game game = Game.Get();
+        int index = 0;
+
+        while (game.quest.qd.components.ContainsKey("Var" + index))
+        {
+            index++;
+        }
+        game.quest.qd.components.Add("Var" + index, new QuestData.VarDefinition("Var" + index));
+        SelectComponent("Var" + index);
     }
 
     // Item selected from list for deletion
