@@ -931,7 +931,7 @@ public class QuestData
                 string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    operations.Add(new VarOperation(s));
+                    operations.Add(new VarOperation(s, format));
                 }
             }
             // Backwards support for format < 8
@@ -946,7 +946,7 @@ public class QuestData
                 string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    conditions.Add(new VarOperation(s));
+                    conditions.Add(new VarOperation(s, format));
                 }
             }
 
@@ -1231,26 +1231,24 @@ public class QuestData
             {
             }
 
-            public VarOperation(string inOp)
+            public VarOperation(string inOp, int format, Dictionary<string, QuestComponent> components)
             {
                 var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
                 operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
                 value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
 
                 // Support old internal var names (depreciated, format 3)
-                var = UpdateVarName(var);
-                value = UpdateVarName(value);
+
+                if (format < 11)
+                {
+                    var = VarDefinition.AddVarFromOldName(components, var);
+                    value = VarDefinition.AddVarFromOldName(components, value);
+                }
             }
 
             override public string ToString()
             {
                 return var + ',' + operation + ',' + value;
-            }
-
-            private string UpdateVarName(string s)
-            {
-                if (s.Equals("#fire")) return "$fire";
-                return s;
             }
         }
     }
@@ -1449,25 +1447,31 @@ public class QuestData
         }
 
         // Create component from old variable name
-        public static VarDefinition CreateFromName(string s)
+        public static string AddVarFromOldName(Dictionary<string, QuestComponent> components, string oldName)
         {
-            if (s.IndexOf("#") == 0) return null;
+            if (oldName.IndexOf("#") == 0) return oldName;
+            if (oldName.IndexOf("$") == 0) return oldName;
+            if (oldName.IndexOf("-") == 0) return oldName;
+            if (oldName.IndexOf(".") == 0) return oldName;
+            if (oldName.Length > 0 && char.IsNumber(oldName.value[0])) return oldName;
 
-            if (s.IndexOf("$") == 0) return null;
+            VarDefinition newVar = new VarDefinition("Var" + oldName);
 
-            VarDefinition toReturn = new VarDefinition("Var" + s);
-
-            if (s.IndexOf("%") >= 0)
+            if (oldName.IndexOf("%") >= 0)
             {
-                toReturn.campaign = true;
+                newVar.campaign = true;
             }
 
-            if (s.IndexOf("@") >= 0)
+            if (oldName.IndexOf("@") >= 0)
             {
-                toReturn.SetVariableType("trigger");
+                newVar.SetVariableType("trigger");
             }
 
-            return toReturn;
+            if (!components.ContainsKey("Var" + oldName))
+            {
+                components.Add("Var" + oldName, newVar);
+            }
+            return "Var" + oldName;
         }
 
         public bool isBoolean()
@@ -2159,7 +2163,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 9;
+        public static int currentFormat = 11;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
