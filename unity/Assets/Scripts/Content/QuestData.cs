@@ -49,6 +49,8 @@ public class QuestData
     {
         ValkyrieDebug.Log("Loading quest from: \"" + questPath + "\"" + System.Environment.NewLine);
         game = Game.Get();
+        // Access before constructor is finished
+        game.quest.qd = this;
 
         components = new Dictionary<string, QuestComponent>();
         questActivations = new Dictionary<string, ActivationData>();
@@ -1241,8 +1243,8 @@ public class QuestData
 
                 if (format < 11)
                 {
-                    var = VarDefinition.AddVarFromOldName(components, var);
-                    value = VarDefinition.AddVarFromOldName(components, value);
+                    var = VarDefinition.AddVarFromOldName(var);
+                    value = VarDefinition.AddVarFromOldName(value);
                 }
             }
 
@@ -1384,7 +1386,7 @@ public class QuestData
     // Var Definition
     public class VarDefinition : QuestComponent
     {
-        new public static string type = "VarDefinition";
+        new public static string type = "Var";
         // A bast type is used for default values
         public string variableType = "float";
         public string internalVariableType;
@@ -1394,6 +1396,7 @@ public class QuestData
         public bool maximumUsed = false;
         public float maximum = 1;
         public bool campaign = false;
+        public bool readOnly = false;
 
         // Create new with name (editor)
         public VarDefinition(string s) : base(s)
@@ -1447,31 +1450,41 @@ public class QuestData
         }
 
         // Create component from old variable name
-        public static string AddVarFromOldName(Dictionary<string, QuestComponent> components, string oldName)
+        public static string AddVarFromOldName(string oldName)
         {
-            if (oldName.IndexOf("#") == 0) return oldName;
-            if (oldName.IndexOf("$") == 0) return oldName;
-            if (oldName.IndexOf("-") == 0) return oldName;
-            if (oldName.IndexOf(".") == 0) return oldName;
-            if (oldName.Length > 0 && char.IsNumber(oldName.value[0])) return oldName;
+            if (oldName.IndexOf("$%") == 0 || oldName.IndexOf("$@") == 0)
+            {
+                return "ValkVar" + oldName.Substring(2));
+            }
+            if (oldName.IndexOf("#") == 0 || oldName.IndexOf("$") == 0)
+            {
+                return "ValkVar" + oldName.Substring(1));
+            }
+            if (oldName.IndexOf("-") == 0 || oldName.IndexOf(".") == 0)
+                || (oldName.Length > 0 && char.IsNumber(oldName.value[0]))
+            {
+                return oldName;
+            }
 
-            VarDefinition newVar = new VarDefinition("Var" + oldName);
+            newName = "Var" + oldName;
+            VarDefinition newDefinition = new VarDefinition(newName);
 
             if (oldName.IndexOf("%") >= 0)
             {
-                newVar.campaign = true;
+                newDefinition.campaign = true;
             }
 
             if (oldName.IndexOf("@") >= 0)
             {
-                newVar.SetVariableType("trigger");
+                newDefinition.SetVariableType("trigger");
             }
 
-            if (!components.ContainsKey("Var" + oldName))
+            if (!Game.Get().quest.qd.components.ContainsKey(newName))
             {
-                components.Add("Var" + oldName, newVar);
+                Game.Get().quest.qd.components.Add()
             }
-            return "Var" + oldName;
+
+            return newName;
         }
 
         public bool isBoolean()

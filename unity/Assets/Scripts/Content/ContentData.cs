@@ -25,6 +25,7 @@ public class ContentData {
     public Dictionary<string, HorrorData> horrorChecks;
     public Dictionary<string, TokenData> tokens;
     public Dictionary<string, PerilData> perils;
+    public Dictionary<string, VarDefinitionData> varDefinitions;
     public Dictionary<string, PuzzleData> puzzles;
     public Dictionary<string, ImageData> images;
     public Dictionary<string, AudioData> audio;
@@ -125,6 +126,9 @@ public class ContentData {
 
         // This has all avilable perils
         perils = new Dictionary<string, PerilData>();
+
+        // This has all avilable perils
+        varDefinitions = new Dictionary<string, VarDefinitionData>();
 
         // This has all avilable puzzle images
         puzzles = new Dictionary<string, PuzzleData>();
@@ -669,6 +673,26 @@ public class ContentData {
             {
                 perils.Remove(name);
                 perils.Add(name, d);
+            }
+        }
+
+        // Is this a "Var" entry?
+        if (name.IndexOf(VarDefinitionData.type) == 0)
+        {
+            VarDefinitionData d = new VarDefinitionData(name, content);
+            // Ignore invalid entry
+            if (d.sectionName.Equals(""))
+                return;
+            // If we don't already have one then add this
+            if (!varDefinitions.ContainsKey(name))
+            {
+                varDefinitions.Add(name, d);
+            }
+            // If we do replace if this has higher priority
+            else if (varDefinitions[name].priority < d.priority)
+            {
+                varDefinitions.Remove(name);
+                varDefinitions.Add(name, d);
             }
         }
 
@@ -1683,6 +1707,33 @@ public class PerilData : QuestData.Event
             else
             {
                 buttons[i] = StringKey.NULL;
+            }
+        }
+    }
+
+    // VarDefinitionData are content data that inherits from VarDefinition for reasons.
+    public class VarDefinitionData : QuestData.VarDefinition
+    {
+        new public static string type = "ValkVar";
+        public int priority = 0;
+        public bool private = false;
+
+        public PerilData(string name, Dictionary<string, string> data) : base(name, data, "")
+        {
+            typeDynamic = type;
+            if (data.ContainsKey("priority"))
+            {
+                int.TryParse(data["priority"], out priority);
+            }
+
+            if (data.ContainsKey("readonly"))
+            {
+                bool.TryParse(data["readonly"], out readOnly);
+            }
+
+            if (data.ContainsKey("private"))
+            {
+                bool.TryParse(data["private"], out private);
             }
         }
     }

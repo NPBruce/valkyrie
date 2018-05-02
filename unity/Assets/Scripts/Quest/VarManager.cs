@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ValkyrieTools;
 
 public class VarManager
 {
     public Dictionary<string, float> vars;
+    public HashSet<string> campaign = new HashSet<string>();
 
     public VarManager()
     {
@@ -18,40 +20,61 @@ public class VarManager
         foreach (KeyValuePair<string, string> kv in data)
         {
             float value = 0;
-            float.TryParse(kv.Value, out value);
+            string toParse = kv.Value;
+            if (toParse.Length > 0 && toParse[0].Equals('%'))
+            {
+                toParse = toParse.Substring(1);
+                campaign.Add(toParse);
+            }
+            float.TryParse(toParse, out value);
             vars.Add(kv.Key, value);
         }
     }
 
-    public QuestData.VarDefinition GetDefinition(string variableName)
+    public static QuestData.VarDefinition GetDefinition(string variableName)
     {
+        QuestData.VarDefinition definition = new QuestData.VarDefinition("")
         if (Game.Get().quest.qd.components.ContainsKey(variableName))
         {
-            return Game.Get().quest.qd.components[variableName] as QuestData.VarDefinition;
-        }
-        return new QuestData.VarDefinition("");
-    }
-
-    public Dictionary<string, float> GetPrefixVars(string prefix)
-    {
-        Dictionary<string, float> dict = new Dictionary<string, float>();
-        foreach (KeyValuePair<string, float> kv in vars)
-        {
-            if (kv.Key.IndexOf(prefix) == 0)
+            if (Game.Get().quest.qd.components[variableName] is QuestData.VarDefinition)
             {
-                dict.Add(kv.Key, kv.Value);
+                definition = Game.Get().quest.qd.components[variableName] as QuestData.VarDefinition;
             }
         }
-        return dict;
+        if (Game.Get().cd.VarDefinitions.ContainsKey(variableName))
+        {
+            definition = Game.Get().cd.VarDefinitions[variableName];
+        }
+        if (definition.campaign)
+        {
+            campaign.add(variableName)
+        }
+        ValkyrieDebug.Log("Warning: Unknown variable: " + variableName);
+        return definition;
+    }
+
+    public List<string> GetTriggerVars()
+    {
+        List<string> toReturn = new List<string>();
+        foreach (KeyValuePair<string, float> kv in vars)
+        {
+            if (kv.Value != 0)
+            {
+                if(GetDefinition(kv.Key).variableType.Equals("trigger"))
+                {
+                    toReturn.Add(kb.Key);
+                }
+            }
+        }
+        return toReturn;
     }
 
     public void TrimQuest()
     {
         Dictionary<string, float> newVars = new Dictionary<string, float>();
-        foreach (KeyValuePair<string, float> kv in vars)
+        foreach (string name in vars.Keys)
         {
-            if (kv.Key.Substring(0, 2).Equals("$%")) newVars.Add(kv.Key, kv.Value);
-            if (GetDefinition(kv.Key).campaign)
+            if (campaign.ContainsKey(name))
             {
                 newVars.Add(kv.Key, kv.Value);
             }
@@ -311,9 +334,14 @@ public class VarManager
 
         foreach (KeyValuePair<string, float> kv in vars)
         {
-            if (kv.Value != 0)
+            campaignPrefix = "";
+            if (campaign.ContainsKey(kv.Value))
             {
-                r += kv.Key + "=" + kv.Value.ToString() + nl;
+                campaignPrefix = "%";
+            }
+            if (kv.Value != 0 || !campaignPrefix.IsNullOrEmpty())
+            {
+                r += kv.Key + "=" + campaignPrefix + kv.Value.ToString() + nl;
             }
         }
         return r + nl;

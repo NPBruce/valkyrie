@@ -93,10 +93,19 @@ public class LogWindow
             ui.SetButton(delegate { UpdateValue(key); });
             new UIElementBorder(ui);
 
+            string valueToDisplay = kv.Value.ToString();
+            if (Game.Get().quest.vars.GetDefinition(key).IsBoolean())
+            {
+                valueToDisplay = new StringKey("val", "TRUE").Translate();
+                if (kv.Value == 0)
+                {
+                    valueToDisplay = new StringKey("val", "FALSE").Translate();
+                }
+            }
             UIElementEditable uie = new UIElementEditable(scrollArea.GetScrollTransform());
             uie.SetLocation(12.5f, offset, 2.5f, 1.2f);
             uie.SetBGColor(Color.white);
-            uie.SetText(kv.Value.ToString(), Color.black);
+            uie.SetText(valueToDisplay, Color.black);
             uie.SetSingleLine();
             uie.SetButton(delegate { UpdateValue(key); });
             new UIElementBorder(uie);
