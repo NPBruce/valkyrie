@@ -39,6 +39,7 @@ public class EditorComponentVar : EditorComponent
         offset += 2;
 
         AddCampaignControl(offset);
+        AddRandomControl(offset);
         AddInitialiseControl(offset);
         AddLimitsControl(offset);
 
@@ -69,10 +70,35 @@ public class EditorComponentVar : EditorComponent
         return offset + 2;
     }
 
+    protected float AddRandomControl(float offset)
+    {
+        if (varComponent.variableType.Equals("trigger")) return offset;
+
+        UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.5f, offset, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_RANDOM")));
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(8, offset, 4, 1);
+        if (varComponent.random)
+        {
+            ui.SetText(new StringKey("val","TRUE"));
+        }
+        else
+        {
+            ui.SetText(new StringKey("val","FALSE"));
+        }
+        ui.SetButton(RandomToggle);
+        new UIElementBorder(ui);
+
+        return offset + 2;
+    }
+
     protected float AddInitialiseControl(float offset)
     {
         if (varComponent.variableType.Equals("trigger")) return offset;
         if (varComponent.campaign) return offset;
+        if (varComponent.random) return offset;
         
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 8, 1);
@@ -113,16 +139,19 @@ public class EditorComponentVar : EditorComponent
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_MINIMUM")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(8, offset, 4, 1);
-        string minEnableString = new StringKey("val","FALSE").Translate();
-        if (varComponent.minimumUsed)
+        if (!varComponent.random)
         {
-            minEnableString = new StringKey("val","TRUE").Translate();
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(8, offset, 4, 1);
+            string minEnableString = new StringKey("val","FALSE").Translate();
+            if (varComponent.minimumUsed)
+            {
+                minEnableString = new StringKey("val","TRUE").Translate();
+            }
+            ui.SetText(minEnableString);
+            ui.SetButton(SetMinimumEnable);
+            new UIElementBorder(ui);
         }
-        ui.SetText(minEnableString);
-        ui.SetButton(SetMinimumEnable);
-        new UIElementBorder(ui);
 
         if (varComponent.minimumUsed)
         {
@@ -140,16 +169,18 @@ public class EditorComponentVar : EditorComponent
         ui.SetLocation(0.5f, offset, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "VAR_MAXIMUM")));
 
-        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(8, offset, 4, 1);
-        string maxEnableString = new StringKey("val","FALSE").Translate();
-        if (varComponent.maximumUsed)
-        {
-            maxEnableString = new StringKey("val","TRUE").Translate();
+        if (!varComponent.random)
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(8, offset, 4, 1);
+            string maxEnableString = new StringKey("val","FALSE").Translate();
+            if (varComponent.maximumUsed)
+            {
+                maxEnableString = new StringKey("val","TRUE").Translate();
+            }
+            ui.SetText(maxEnableString);
+            ui.SetButton(SetMaximumEnable);
+            new UIElementBorder(ui);
         }
-        ui.SetText(maxEnableString);
-        ui.SetButton(SetMaximumEnable);
-        new UIElementBorder(ui);
 
         if (varComponent.maximumUsed)
         {
@@ -188,6 +219,14 @@ public class EditorComponentVar : EditorComponent
     public void CampaignToggle()
     {
         varComponent.campaign = !varComponent.campaign;
+        Update();
+    }
+
+    public void RandomToggle()
+    {
+        varComponent.random = !varComponent.random;
+        varComponent.minimumUsed = true;
+        varComponent.maximumUsed = true;
         Update();
     }
 

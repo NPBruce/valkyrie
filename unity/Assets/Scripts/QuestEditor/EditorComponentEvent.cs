@@ -500,7 +500,7 @@ public class EditorComponentEvent : EditorComponent
 
         foreach (QuestData.Event.VarOperation op in eventComponent.conditions)
         {
-            bool operationIsBoolean = false;
+            bool operationIsBoolean = VarManager.GetDefinition(op.var).IsBoolean();
             QuestData.Event.VarOperation tmp = op;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             if (game.quest.qd.components.ContainsKey(op.var))
@@ -512,9 +512,6 @@ public class EditorComponentEvent : EditorComponent
                 link.SetText("<b>⇨</b>", Color.blue);
                 link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
-
-                // FIXME need to cast
-                operationIsBoolean = game.quest.qd.components[op.var].IsBoolean();
             }
             else
             {
@@ -543,7 +540,7 @@ public class EditorComponentEvent : EditorComponent
             }
             else
             {
-                if (operationIsBoolean && !displayValue.StartsWith("$") && !displayValue.StartsWith("#"))
+                if (operationIsBoolean && !Game.Get().cd.VarDefinitions.ContainsKey(op.value))
                 {
                     bool setToValue;
                     bool.TryParse(displayValue, out setToValue);
@@ -571,7 +568,7 @@ public class EditorComponentEvent : EditorComponent
 
     virtual public float AddEventVarOperationComponents(float offset)
     {
-        bool operationIsBoolean = false;
+        bool operationIsBoolean = VarManager.GetDefinition(op.var).IsBoolean();
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 18, 1);
@@ -596,8 +593,6 @@ public class EditorComponentEvent : EditorComponent
                 link.SetText("<b>⇨</b>", Color.blue);
                 link.SetButton(delegate { QuestEditorData.SelectComponent(tmpName); });
                 new UIElementBorder(link, Color.blue);
-
-                operationIsBoolean = game.quest.qd.components[op.var].isBoolean();
             }
             else
             {
@@ -626,7 +621,7 @@ public class EditorComponentEvent : EditorComponent
             }
             else
             {
-                if (operationIsBoolean && !displayValue.StartsWith("$") && !displayValue.StartsWith("#"))
+                if (operationIsBoolean && !Game.Get().cd.VarDefinitions.ContainsKey(op.value))
                 {
                     bool setToValue;
                     bool.TryParse(displayValue, out setToValue);
@@ -824,6 +819,13 @@ public class EditorComponentEvent : EditorComponent
 
         traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "VARS").Translate() });
+        foreach (KeyValuePair<string, QuestData.VarDefinition> kv in game.cd.VarDefinitions)
+        {
+            if (kv.Value.variableType.Equals("trigger"))
+            {
+                select.AddItem(kv.Key, traits);
+            }
+        }
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             if (kv.Value is QuestData.VarDefinition)
@@ -1458,49 +1460,14 @@ public class EditorComponentEvent : EditorComponent
             }
         }
 
-        HashSet<string> dollarVars = new HashSet<string>();
-        foreach (PerilData e in game.cd.perils.Values)
+        HashSet<string> valkVars = new HashSet<string>();
+        foreach (KeyValuePair<string, QuestData.VarDefinition> kv in game.cd.VarDefinitions)
         {
-            foreach (string s in ExtractVarsFromEvent(e))
+            if (!kv.Value.readonly)
             {
-                if (s[0] == '$')
-                {
-                    dollarVars.Add(s);
-                }
+                list.AddItem(kv.Value);
             }
         }
-
-        Dictionary<string, IEnumerable<string>>  traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "$" });
-        foreach (string s in dollarVars)
-        {
-            list.AddItem(s, traits);
-        }
-    }
-
-    public static HashSet<string> ExtractVarsFromEvent(QuestData.Event e)
-    {
-        HashSet<string> vars = new HashSet<string>();
-        foreach (QuestData.Event.VarOperation op in e.operations)
-        {
-            vars.Add(op.var);
-            if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
-            {
-                vars.Add(op.value);
-            }
-        }
-        foreach (QuestData.Event.VarOperation op in e.conditions)
-        {
-            if (op.var.Length > 0 && op.var[0] != '#')
-            {
-                vars.Add(op.var);
-            }
-            if (op.value.Length > 0 && op.value[0] != '#' && !char.IsNumber(op.value[0]) && op.value[0] != '-' && op.value[0] != '.')
-            {
-                vars.Add(op.value);
-            }
-        }
-        return vars;
     }
 
     public void SelectAddOp(string var, bool test = true)
@@ -1514,12 +1481,9 @@ public class EditorComponentEvent : EditorComponent
         }
 
         op.value = "0";
-        if (game.quest.qd.components.ContainsKey(op.var))
+        if (VarManager.GetDefinition(op.var).IsBoolean())
         {
-            if (game.quest.qd.components[op.var].IsBoolean())
-            {
-                op.value = "true";
-            }
+            op.value = "true";
         }
 
         if (op.var.Equals("{NEW:Var}"))
@@ -1557,7 +1521,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("==");
         select.AddItem("!=");
 
-        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        if (VarManager.GetDefinition(op.var).IsBoolean())
         {
             select.AddItem("OR");
             select.AddItem("&");
@@ -1584,7 +1548,7 @@ public class EditorComponentEvent : EditorComponent
         UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
 
         select.AddItem("=");
-        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        if (VarManager.GetDefinition(op.var).IsBoolean())
         {
             select.AddItem("OR");
             select.AddItem("&");
@@ -1621,7 +1585,7 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
-        if (game.quest.qd.components.ContainsKey(op.var) && game.quest.qd.components[op.var].isBoolean())
+        if (VarManager.GetDefinition(op.var).IsBoolean())
         {
             select.AddItem("{" + new StringKey("val","TRUE").Translate() + "}", "{TRUE}", traits);
             select.AddItem("{" + new StringKey("val","FALSE").Translate() + "}", "{FALSE}", traits);

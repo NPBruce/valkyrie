@@ -1397,6 +1397,7 @@ public class QuestData
         public float maximum = 1;
         public bool campaign = false;
         public bool readOnly = false;
+        public bool random = false;
 
         // Create new with name (editor)
         public VarDefinition(string s) : base(s)
@@ -1445,6 +1446,10 @@ public class QuestData
                 if (data.ContainsKey("initialise"))
                 {
                     float.TryParse(data["initialise"], out initialise);
+                }
+                if (data.ContainsKey("random"))
+                {
+                    float.TryParse(data["random"], out random);
                 }
             }
         }
@@ -1552,6 +1557,10 @@ public class QuestData
             {
                 r.Append("type=").AppendLine(variableType);
                 r.Append("initialise=").AppendLine(bool.TrueString);
+                if (random)
+                {
+                    r.Append("random=").AppendLine(random.ToString());
+                }
                 if (campaign)
                 {
                     r.Append("campaign=").AppendLine(campaign.ToString());
@@ -1562,6 +1571,10 @@ public class QuestData
                 if (!variableType.Equals("float"))
                 {
                     r.Append("type=").AppendLine(variableType);
+                }
+                if (random)
+                {
+                    r.Append("random=").AppendLine(random.ToString());
                 }
                 if (minimumUsed)
                 {

@@ -122,6 +122,17 @@ public class VarManager
             }
             vars.Add(var, GetDefinition(var).initialise);
         }
+        if (GetDefinition(var).random)
+        {
+            if (GetDefinition(var).internalVariableType.equals(int))
+            {
+                SetValue(var, Random.IntRange(GetDefinition(var).minimum, GetDefinition(var).maximum + 1));
+            }
+            else
+            {
+                SetValue(var, Random.Range(GetDefinition(var).minimum, GetDefinition(var).maximum));
+            }
+        }
         return vars[var];
     }
 
