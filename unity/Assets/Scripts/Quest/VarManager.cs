@@ -13,7 +13,7 @@ public class VarManager
         vars = new Dictionary<string, float>();
     }
 
-    public VarManager(Dictionary<string, string> data)
+    public VarManager(Dictionary<string, string> data, string valkyrieVersion)
     {
         vars = new Dictionary<string, float>();
 

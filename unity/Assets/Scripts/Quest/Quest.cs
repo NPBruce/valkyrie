@@ -704,8 +704,9 @@ public class Quest
             log.Add(new LogEntry(kv.Key, kv.Value));
         }
 
+        string valkyrieVersion = saveData.Get("Quest", "valkyrie")
         Dictionary<string, string> saveVars = saveData.Get("Vars");
-        vars = new VarManager(saveVars);
+        vars = new VarManager(saveVars, valkyrieVersion);
 
         itemSelect = saveData.Get("SelectItem");
         if (itemSelect == null)

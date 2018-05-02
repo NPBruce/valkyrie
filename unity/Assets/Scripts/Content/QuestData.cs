@@ -1463,7 +1463,10 @@ public class QuestData
             }
             if (oldName.IndexOf("#") == 0 || oldName.IndexOf("$") == 0)
             {
-                return "ValkVar" + oldName.Substring(1));
+                if (oldName.IndexOf("#rand") != 0)
+                {
+                    return "ValkVar" + oldName.Substring(1));
+                }
             }
             if (oldName.IndexOf("-") == 0 || oldName.IndexOf(".") == 0)
                 || (oldName.Length > 0 && char.IsNumber(oldName.value[0]))
@@ -1484,9 +1487,19 @@ public class QuestData
                 newDefinition.SetVariableType("trigger");
             }
 
+            if (oldName.IndexOf("#rand") == 0)
+            {
+                newDefinition.SetVariableType("int");
+                newDefinition.random = true;
+                newDefinition.minimumUsed = true;
+                newDefinition.minimum = 1;
+                newDefinition.maximumUsed = true;
+                float.TryParse(oldName.Substring(5), out newDefinition.maximum);
+            }
+
             if (!Game.Get().quest.qd.components.ContainsKey(newName))
             {
-                Game.Get().quest.qd.components.Add()
+                Game.Get().quest.qd.components.Add(newName, newDefinition)
             }
 
             return newName;
