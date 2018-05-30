@@ -48,6 +48,12 @@ public class EditorComponentTile : EditorComponent
         ui.SetText(CommonStringKeys.POSITION_SNAP);
         ui.SetButton(delegate { GetPosition(); });
         new UIElementBorder(ui);
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(9, offset, 4, 1);
+        ui.SetText(CommonStringKeys.POSITION_FREE);
+        ui.SetButton(delegate { GetPosition(false); });
+        new UIElementBorder(ui);
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
