@@ -7,6 +7,8 @@ using System.Collections.Generic;
 // Used to pan/zoom around the board
 public class CameraController : MonoBehaviour {
 
+    // True if the board is selected and we can zoom into the scene
+    bool scrollEnabled = false;
     // How fast to move the screen when arrows used
     static float keyScrollRate = 0.3f;
     // How much to zoom in/out with wheel
@@ -66,7 +68,6 @@ public class CameraController : MonoBehaviour {
 
         List<RaycastResult> raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointer, raycastResults);
-
         if (raycastResults.Count > 0)
         {
             foreach (RaycastResult hit in raycastResults)
@@ -81,16 +82,17 @@ public class CameraController : MonoBehaviour {
     // Scrolling by keys go here to be at a fixed rate
     void FixedUpdate ()
     {
-        if (ScrollEnabled())
+        if (scrollEnabled)
         {
             bool zoomed = false;
             // Check if the scroll wheel has moved
-            if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            float mouseAxis = Input.GetAxis("Mouse ScrollWheel");
+            if (mouseAxis != 0)
             {
                 zoomed = true;
 
                 // Translate the camera up/down
-                gameObject.transform.Translate(new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") * mouseWheelScrollRate), Space.World);
+                gameObject.transform.Translate(new Vector3(0, 0, mouseAxis * mouseWheelScrollRate), Space.World);
             }
             // reset the pinching only when no more touch is present to avoid moving the scene, when one touch is raised.
             if (Input.touchCount == 0)
@@ -183,6 +185,8 @@ public class CameraController : MonoBehaviour {
     // Scrolling by mouse/scripts goes here, rate is fixed, display needs to be smooth
     void Update()
     {
+        scrollEnabled = ScrollEnabled();
+
         // latch positions on mouse down
         if (Input.GetMouseButtonDown(0) && ScrollEnabled())
         {
