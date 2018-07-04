@@ -188,7 +188,7 @@ public class CameraController : MonoBehaviour {
         scrollEnabled = ScrollEnabled();
 
         // latch positions on mouse down
-        if (Input.GetMouseButtonDown(0) && ScrollEnabled())
+        if (Input.GetMouseButtonDown(0) && scrollEnabled)
         {
             mouseDownCamPosition = gameObject.transform.position;
             mouseDownMousePosition = GetMouseBoardPlane();
