@@ -70,7 +70,8 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND, bitte über Steam installieren","Impossibile trovare "Le Case della Follia"
+MOM_APP_NOT_FOUND,L'application Mansions of madness est introuvable, merci de l'installer via Steam
+MOM_APP_NOT_FOUND_ANDROID,L'application Mansions of madness est introuvable, merci de l'installer via Google Play
 MOM_HEROES_NAME,Investigateurs
 MOM_HERO_NAME,Investigateur
 MOM_NAME,Les Demeures de l'Epouvante Seconde Edition
