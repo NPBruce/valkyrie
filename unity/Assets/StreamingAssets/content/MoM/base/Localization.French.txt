@@ -1,0 +1,15 @@
+.,French
+BOXED,Boite d'extensions originales pour la 2ème édition
+FANDT,Kit de figurines et tuiles 1ère édition pour la 2ème édition
+CK,Les Demeures de l’Épouvante, produits de la 1re édition
+
+MAD09I,Extension L'appel de la forêt, Investigateurs
+MAD09M,Extension L'appel de la forêt, Monstres
+MAD09T,Extension L'appel de la forêt, Tuiles
+MAD06I,Extension Expériences Interdites, Investigateurs
+MAD06M,Extension Expériences Interdites, Monstres
+MAD06T,Extension Expériences Interdites, Tuiles
+MAD01I,Les Demeures de l’Épouvante, 1re édition, Investigateurs
+MAD01M,Les Demeures de l’Épouvante, 1re édition, Monstres
+MAD01T,Les Demeures de l’Épouvante, 1re édition, Tuiles
+
