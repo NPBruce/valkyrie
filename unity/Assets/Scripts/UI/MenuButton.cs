@@ -19,7 +19,7 @@ public class MenuButton {
         }
         else
         {
-            ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f),5, 2);
+            ui.SetLocation(UIScaler.GetRight(-5.5f), 0.5f ,5, 2);
         }
         ui.SetText(MENU);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
