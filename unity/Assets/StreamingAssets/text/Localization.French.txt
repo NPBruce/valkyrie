@@ -1,7 +1,7 @@
 .,French
 // TEXTS
 ABILITY,Capacité
-ABOUT,À propos
+ABOUT,A propos
 ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.
 ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
@@ -9,26 +9,6 @@ ACTIVATED,Activé
 ACTIVATION,Activation
 ACTIVATIONS,Activations
 ADD_COMPONENTS,Ajouter éléments :
-COMPONENTS,Composants
-RENAME,Renommer
-SAVE_TEST,Sauvegarder & Tester
-SOURCE,Source
-COMMENT,Commenter
-TRUE,Vrai
-FALSE,Faux
-SNAP,Casser
-FREE,Libre
-CONFIRM,Confirmé
-INSPECT,Inspect
-DURATION,Durée
-DESCRIPTION,Description
-AUTHORS,Auteurs
-DIFFICULTY,Difficulté
-VALIDATE_SCENARIO,Valider
-FILE,Fichier
-OPTIMIZE_LOCALIZATION,Optimiser traduction
-CREATE_PACKAGE,Créer Package
-REORDER_COMPONENTS,Réordonner Composants
 ASSIGN,Assigner
 ATTACK,Attaquer
 ATTACK_MESSAGE,Message en cas d'attaque :
@@ -38,65 +18,50 @@ BASE,Base
 BUTTON,Bouton
 BUTTONS,Boutons
 CAMERA,Camera
-CANCEL,Retour
+CANCEL,Annuler
 CHOOSE_LANG,Choix de la langue
-CLEAR_FIRE,Éteindre le feu
+CLEAR_FIRE,Eteindre le feu
 COLOR,Couleur
 COMPONENT_NAME,Nom de l'élément :
-COMPONENT_TO_DELETE,Élément à supprimer
+COMPONENT_TO_DELETE,Elément à supprimer
 CONTENT_IMPORT,Importer contenu
 CONTENT_IMPORTING,Import...
 CONTENT_REIMPORT,Réimporter contenu
 CONTINUE,Continuer
 COPY,Copier
 CUSTOMMONSTER,Monstre personnalisé
-D2E_APP_NOT_FOUND,Veuillez installer Road to Legend via Steam
-D2E_APP_NOT_FOUND_ANDROID,Veuillez installer Road to Legend via Google Play
+D2E_APP_NOT_FOUND,Impossible de localiser l'installation de Road to Legend via Steam
 D2E_HEROES_NAME,Héros
 D2E_HERO_NAME,Héro
 D2E_NAME,Descent : Voyages dans les Ténèbres (Seconde Edition)
 D2E_QUEST_NAME,Scenario
-DEFEATED,Éliminé
+DEFEATED,Eliminé
 DELETE,Supprimer
 DIALOG,Dialogue
 DOOR,Porte
 DOWNLOAD,Télécharger
-DOWNLOAD_LIST,Téléchargement de la liste des packages
-DOWNLOAD_PACKAGE,Téléchargement du Package
 E,E
 EFFECTS,Effets
 END_TURN,Fin du tour
-ROUND,Tour {0}
-EVADE,Évasion
-EVENT,Événement
+EVADE,Evasion
+EVENT,Evénement
 EXIT,Sortir
 FINISHED,Terminé
 FIRST,Premier
 FORCE_ACTIVATE,Forcer l'activation
 
 HEALTH,Santé
-HEALTH_HERO,Par Héros
+HEALTH_HERO,Per Hero
 HIGHLIGHT,Mettre en valeur
 HORROR_CHECK,Test d'horreur
-AWARENESS,Conscience
-IA_APP_NOT_FOUND,Veuillez installer Legends of the Alliance via Steam
-IA_APP_NOT_FOUND_ANDROID,Veuillez installer Legends of the Alliance via Google Play
-IA_HEROES_NAME,Heroes
-IA_HERO_NAME,Hero
-IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
-IA_QUEST_NAME,MissionINDENT,  {0}
+INDENT,  {0}
 INFO,Info
 INFORMATION,Information
 INITIAL_MESSAGE,Message de départ :
 ITEM,Objet
-QITEM,QItem
 KO,KO
 LOAD_QUEST,Charger {0}
-LOG,Journal
-SKILLS,Compétences
-ITEMS,Objets
-ITEMS_SMALL,Objets
-GOLD,Or
+LOG,Log
 MAIN_MENU,Menu principal
 MAX,Max
 MAX_X,Max {0}
@@ -105,12 +70,11 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,Veuillez installer Mansions of madness via Steam
-MOM_APP_NOT_FOUND_ANDROID,Veuillez installer Mansions of madness via Google Play
+MOM_APP_NOT_FOUND, bitte über Steam installieren","Impossibile trovare "Le Case della Follia"
 MOM_HEROES_NAME,Investigateurs
 MOM_HERO_NAME,Investigateur
-MOM_NAME,Les Demeures de l'Épouvante Seconde Edition
-MOM_QUEST_NAME,Scénario
+MOM_NAME,Les Demeures de l'Epouvante Seconde Edition
+MOM_QUEST_NAME,Scenario
 MONSTER,Monstre
 MONSTER_ATTACKS,Le monstre attaque.
 MONSTER_MASTER,Maître
@@ -127,7 +91,7 @@ NEW,Nouveau
 NEW_X,{Nouveau {0}}
 NONE,{Ninguno}
 
-NEXT_EVENTS,Événements suivants
+NEXT_EVENTS,Evénements suivants
 NOT_FIRST,Pas en premier
 NO_ATTACK_MESSAGE,Message en absence d'attaque :
 
@@ -156,13 +120,11 @@ PUZZLE_CODE_CLASS,code
 PUZZLE_SLIDE_CLASS,mécanisme
 QUEST,Scenario
 QUEST_NAME_DOWNLOAD,Télécharger {0}
-QUEST_NAME_EDITOR,Éditeur {0}
-EDITOR,Éditeur
+QUEST_NAME_EDITOR,Editeur {0}
+EDITOR,Editeur
 QUEST_NAME_UPDATE,  [Mise à jour] {0}
 QUOTA,Quota
 RECOVER,Récupérer
-INVESTIGATOR_ATTACKS,L'investigator Attaque
-
 
 RELOAD,Recharger
 REMOVE_COMPONENTS,Retirer des éléments
@@ -174,7 +136,7 @@ RESET,Reset
 ROTATION,Rotation
 SAVE,Sauver
 AUTOSAVE,Sauvegarde auto.
-SELECT_SAVE,Charger
+SELECT_SAVE,Choisir sauvegarde
 SELECT,Choisir {0}
 SELECT_CLASS,Choisir classe
 SELECTION,Sélection
@@ -187,7 +149,7 @@ SELECT_TO_COPY,Choisir {0} à copier
 SELECT_TO_DELETE,Sélectionner {0} pour le supprimmer
 HIDDEN,Caché
 ACTIVE,Actif
-SET,Action
+SET,Appliquer
 SKILL,Compétence
 SELECT_SKILLS,Choisir compétences
 SPAWN,Générer
@@ -200,7 +162,7 @@ TESTS,Tests
 TILE,Tuile
 
 TOKEN,Marqueur
-TOOLS,Outils
+TOOLS,
 TOTAL_MOVES,Déplacements totaux
 TRAITS,Traits
 TRIGGER,Déclencheur
@@ -219,7 +181,7 @@ TEXT_SIZE,Taille du texte
 ASPECT,Aspect
 BORDER,Bordure
 NO_BORDER,Sans bordure
-UNDO,Annuler action
+UNDO,Défaire
 UNIQUE_DEFEATED,Unique Battu
 UNIQUE_INFO,Info unique
 UNIQUE_MONSTER,Monstre unique
@@ -243,7 +205,7 @@ firearm,Arme à feu
 heavyweapon,Arme lourde
 heavy,Arme lourde
 tome,Tome
-equipment,Équipement
+equipment,Equipement
 lightsource,Source de lumière
 bladedweapon,Arme tranchante
 bladed,Arme tranchante
@@ -288,7 +250,7 @@ ranged,Distance
 goblin,Goblin
 cursed,Maudit
 cave,Cave
-wilderness,Étendue sauvage
+wilderness,Etendue sauvage
 civilized,Civilisé
 dark,Sombre
 mountain,Montagne
@@ -322,7 +284,7 @@ bridge,Pont
 stairs,Escaliers
 torture,Torture
 tents,Tentes
-stables,Étables
+stables,Etables
 hall,Salon
 map,Carte
 bedroom,Chambre
@@ -331,7 +293,7 @@ fountain,Fontaine
 blackrealm,Royaume noir
 altar,Autel
 beds,Lits
-study,Étude
+study,Etude
 prison,Prison
 plinth,Support
 tavern,Taverne
@@ -371,8 +333,6 @@ navy,Bleu marine
 image,Image
 code,Code
 slide,Mécanisme
-SYMBOL,Symbole
-ELEMENT,Élément
 
 // Events
 Ordered,Ordonné
