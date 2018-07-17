@@ -582,7 +582,8 @@ public class Quest
             h.activated = false;
             h.defeated = false;
             h.selected = false;
-            if (h.heroData != null) {
+            if (h.heroData != null)
+            {
                 heroCount++;
                 // Create variable to value 1 for each selected Hero
                 game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
@@ -888,9 +889,9 @@ public class Quest
     public void AdjustMorale(int m, bool delay = false)
     {
         Game game = Game.Get();
-        
+
         float morale = vars.GetValue("$%morale") + m;
-        vars.SetValue("$%morale", morale);        
+        vars.SetValue("$%morale", morale);
 
         // Test for no morale ending
         if (morale < 0)
@@ -1338,14 +1339,15 @@ public class Quest
             unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
             image.color = new Color(1, 1, 1, 0);
 
-            if(!Game.Get().quest.firstTileDisplayed)
+            if (!Game.Get().quest.firstTileDisplayed)
             {
                 Game.Get().quest.firstTileDisplayed = true;
 
                 // We wait for the first tile displayed on MoM to display the 'NextStage' button bar
-                if (game.gameType.TypeName() == "MoM")
+                // Don't do anything if quest is being loaded and stageUI does not exist yet
+                if (game.gameType.TypeName() == "MoM" && game.stageUI != null)
                 {
-                    Game.Get().stageUI.Update();
+                    game.stageUI.Update();
                 }
             }
         }
