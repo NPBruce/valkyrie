@@ -21,8 +21,8 @@ namespace Assets.Scripts.UI
         protected float textPadding = textPaddingDefault;
 
         // Used for calculating text size
-        protected static GameObject textWidthObj;
-        protected static GameObject textHeightObj;
+        protected GameObject textWidthObj;
+        protected GameObject textHeightObj;
 
         protected UnityEngine.Events.UnityAction buttonCall;
 
@@ -301,7 +301,7 @@ namespace Assets.Scripts.UI
         /// <param name="content">Text to translate.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(StringKey content)
+        public float GetStringWidth(StringKey content)
         {
             return GetStringWidth(content.Translate());
         }
@@ -311,7 +311,7 @@ namespace Assets.Scripts.UI
         /// <param name="content">Text to measure.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(string content)
+        public float GetStringWidth(string content)
         {
             return GetStringWidth(content, UIScaler.GetSmallFont());
         }
@@ -322,7 +322,7 @@ namespace Assets.Scripts.UI
         /// <param name="fontSize">Size of font.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(string content, int fontSize)
+        public float GetStringWidth(string content, int fontSize)
         {
             if (textWidthObj == null)
             {
@@ -344,7 +344,7 @@ namespace Assets.Scripts.UI
         /// <param name="width">Width of the text box in UIScaler units.</param>
         /// <returns>
         /// The required text box height in UIScaler units.</returns>
-        public static float GetStringHeight(StringKey content, float width)
+        public float GetStringHeight(StringKey content, float width)
         {
             return GetStringHeight(content.Translate(), width);
         }
@@ -355,7 +355,7 @@ namespace Assets.Scripts.UI
         /// <param name="width">Width of the text box in UIScaler units.</param>
         /// <returns>
         /// The required text box height in UIScaler units.</returns>
-        public static float GetStringHeight(string content, float width)
+        public float GetStringHeight(string content, float width)
         {
             if (textHeightObj == null)
             {

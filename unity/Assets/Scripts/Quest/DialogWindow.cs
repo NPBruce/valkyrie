@@ -64,13 +64,12 @@ public class DialogWindow {
     public void CreateWindow()
     {
         // Draw text
-        float offset = UIElement.GetStringHeight(text, 28);
+        UIElement ui = new UIElement();
+        float offset = ui.GetStringHeight(text, 28);
         if (offset < 4)
         {
             offset = 4;
         }
-
-        UIElement ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, offset);
         ui.SetText(text);
         new UIElementBorder(ui);
@@ -85,7 +84,7 @@ public class DialogWindow {
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
-            float length = UIElement.GetStringWidth(eb.GetLabel().Translate(), UIScaler.GetMediumFont());
+            float length = ui.GetStringWidth(eb.GetLabel().Translate(), UIScaler.GetMediumFont());
             if (length > buttonWidth)
             {
                 buttonWidth = length;
@@ -123,13 +122,12 @@ public class DialogWindow {
     public void CreateQuotaWindow()
     {
         // Draw text
-        float offset = UIElement.GetStringHeight(text, 28);
+        UIElement ui = new UIElement();
+        float offset = ui.GetStringHeight(text, 28);
         if (offset < 4)
         {
             offset = 4;
         }
-
-        UIElement ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, offset);
         ui.SetText(text);
         new UIElementBorder(ui);
