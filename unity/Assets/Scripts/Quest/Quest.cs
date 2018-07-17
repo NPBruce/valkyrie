@@ -80,9 +80,6 @@ public class Quest
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
 
-    // This is true once the first tile has been displayed
-    public bool firstTileDisplayed = false;
-
     // A list of music if custom music has been selected - used for save games
     public List<string> music = new List<string>();
 
@@ -1337,17 +1334,6 @@ public class Quest
             // Move tile into target location (Space.World is needed because tile has been rotated)
             unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
             image.color = new Color(1, 1, 1, 0);
-
-            if(!Game.Get().quest.firstTileDisplayed)
-            {
-                Game.Get().quest.firstTileDisplayed = true;
-
-                // We wait for the first tile displayed on MoM to display the 'NextStage' button bar
-                if (game.gameType.TypeName() == "MoM")
-                {
-                    Game.Get().stageUI.Update();
-                }
-            }
         }
 
         // Remove this tile
