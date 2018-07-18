@@ -101,14 +101,18 @@ public class NextStageButton
         ui.SetFontStyle(FontStyle.Italic);
 
         // Next phase button
+        // Tweak border size so that arrow is centered, should be changed if using another character or picture
         ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetRight(-4f), UIScaler.GetBottom(-2.5f), 3, 2);
+        ui.SetLocation(UIScaler.GetRight(-4f), UIScaler.GetBottom(-2.5f), 3f, 2.25f);
+        new UIElementBorder(ui);
+        // make button slightly smaller so it does not overlap border
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetRight(-3.95f), UIScaler.GetBottom(-2.45f), 2.9f, 1.9f);
         ui.SetText(CommonStringKeys.TAB);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
         ui.SetButton(Next);
         ui.SetBGColor(bgColor);
-        new UIElementBorder(ui);
     }
 
     // Button pressed
