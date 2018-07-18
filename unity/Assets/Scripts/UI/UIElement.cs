@@ -257,6 +257,16 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Set font style.</summary>
+        /// <param name="style">Style of text (bold, italic...) </param>
+        /// <remarks>
+        /// Must be called after SetText.</remarks>
+        public virtual void SetFontStyle(FontStyle style)
+        {
+            text.GetComponent<UnityEngine.UI.Text>().fontStyle = style;
+        }
+
+        /// <summary>
         /// Set font.</summary>
         /// <param name="font">Font to use.</param>
         /// <remarks>
@@ -307,6 +317,29 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Get the length of a text string at given size with given font.</summary>
+        /// <param name="content">Text to translate.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(StringKey content, int fontSize)
+        {
+            return GetStringWidth(content.Translate(), fontSize);
+        }
+
+        /// <summary>
+        /// Get the length of a text string at small size with given font.</summary>
+        /// <param name="content">Text to translate.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <param name="fontName">Name of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(StringKey content, int fontSize, Font fontName)
+        {
+            return GetStringWidth(content.Translate(), fontSize, fontName);
+        }
+        
+        /// <summary>
         /// Get the length of a text string at small size with standard font.</summary>
         /// <param name="content">Text to measure.</param>
         /// <returns>
@@ -324,13 +357,25 @@ namespace Assets.Scripts.UI
         /// The size of the text in UIScaler units.</returns>
         public float GetStringWidth(string content, int fontSize)
         {
+            return GetStringWidth(content, fontSize, Game.Get().gameType.GetFont());
+        }
+
+        /// <summary>
+        /// Get the length of a text string at small size with standard font.</summary>
+        /// <param name="content">Text to measure.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <param name="fontName">Name of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(string content, int fontSize, Font fontName)
+        {
             if (textWidthObj == null)
             {
                 textWidthObj = new GameObject("TextSizing");
                 textWidthObj.AddComponent<UnityEngine.UI.Text>();
                 RectTransform transform = textWidthObj.GetComponent<RectTransform>();
                 transform.offsetMax = new Vector2(20000, 20000);
-                textWidthObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
+                textWidthObj.GetComponent<UnityEngine.UI.Text>().font = fontName;
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = fontSize;
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
