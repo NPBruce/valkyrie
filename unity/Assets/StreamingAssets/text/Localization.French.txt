@@ -390,7 +390,7 @@ LEFT,Gauche
 RIGHT,Droite
 
 PHASE_INVESTIGATOR,Phase d'Investigateur
-PHASE_MYTHOS,Phase de Mythe
+PHASE_MYTHOS,Phase du Mythe
 MONSTER_STEP,Étape de monstre
 HORROR_STEP,Étape d'horreur
 END_PHASE,Terminer la phase
