@@ -92,7 +92,12 @@ public class NextStageButton
 
         // Text description for current phase
         ui = new UIElement(Game.UIPHASE);
-        ui.SetText(phase);
+        Color color;
+        if (phase == PHASE_INVESTIGATOR)
+            color = Color.white;
+        else
+            color = Color.red;
+        ui.SetText(phase, color);
         string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
         ui.SetLocation(UIScaler.GetRight(-4.5f - string_width), UIScaler.GetBottom(-2.5f), string_width, 2);
         ui.SetBGColor(bgColor);
