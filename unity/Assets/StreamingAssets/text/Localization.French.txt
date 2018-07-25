@@ -119,7 +119,7 @@ MONSTER_MINION,Serviteur
 MONSTER_NORMAL,Normal
 
 MONSTER_UNIQUE,Unique
-MOVES,Mouvements
+MOVES,Actions
 MPLACE,Position
 MUSIC,Musique
 NAME,Nom
@@ -201,7 +201,7 @@ TILE,Tuile
 
 TOKEN,Marqueur
 TOOLS,Outils
-TOTAL_MOVES,Déplacements totaux
+TOTAL_MOVES,Actions (total)
 TRAITS,Traits
 TRIGGER,Déclencheur
 TYPE,Type

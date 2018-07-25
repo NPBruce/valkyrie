@@ -94,7 +94,7 @@ public class PuzzleCodeWindow
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(6.5f), 1.5f, 6, 2);
+        ui.SetLocation(UIScaler.GetHCenter(6f), 1.5f, 7, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.SKILL));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
