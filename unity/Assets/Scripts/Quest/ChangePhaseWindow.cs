@@ -27,6 +27,10 @@ public class ChangePhaseWindow
         Game game = Game.Get();
         UIElement text;
 
+        // dot NOT display transition screen while we are in Editor mode
+        if (game.testMode)
+            return;
+
         // Background picture in full screen
         UIElement bg = new UIElement(Game.TRANSITION);
         Texture2D bgTex;
