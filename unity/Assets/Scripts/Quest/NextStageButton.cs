@@ -25,6 +25,10 @@ public class NextStageButton
         if (Game.Get().quest.questHasEnded)
             return;
 
+        // do not display the button bar in the editor
+        if (Game.Get().editMode)
+            return;
+
         // First tile has not been displayed, button bar is not required yet
         if (!Game.Get().quest.firstTileDisplayed) 
             return;
