@@ -2,7 +2,7 @@ rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
 rem set steam path
-set steampath=D:\Steam2
+set steampath=D:\Steam\
 rem set steampath=C:\Program Files %28x86%29\Steam\
 
 IF NOT EXIST %steampath% ( 
