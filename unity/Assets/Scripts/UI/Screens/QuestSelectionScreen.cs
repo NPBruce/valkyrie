@@ -152,7 +152,7 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetTextAlignment(TextAnchor.MiddleLeft);
                         ui.SetButton(delegate { Selection(key); });
 
-                        text_width = UIElement.GetStringWidth(symbol + symbol + symbol + symbol + symbol, (int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f));
+                        text_width = ui.GetStringWidth(symbol + symbol + symbol + symbol + symbol, (int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f));
                         Debug.Log("text_width: " + text_width + "\n");
 
                         ui = new UIElement(scrollArea.GetScrollTransform());
