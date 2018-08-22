@@ -1,6 +1,7 @@
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
+set steampath=D:\Steam\
 rem cleanup
 rmdir /s /q build\batch
 rmdir /s /q build\batchMac
