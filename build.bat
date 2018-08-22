@@ -1,6 +1,7 @@
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
+
 rem set steam path
 rem set steampath=D:\Steam\
 set steampath=C:\Program Files %28x86%29\Steam\
