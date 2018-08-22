@@ -1,15 +1,7 @@
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
-rem set steam path
-set steampath=D:\Steam2
-rem set steampath=C:\Program Files %28x86%29\Steam\
-
-IF NOT EXIST %steampath% ( 
-echo [31m--- ERROR --- Steam path not set : please set Steam path in build.bat [0m
-exit /B
-)
-
+set steampath=D:\Steam\
 rem cleanup
 rmdir /s /q build\batch
 rmdir /s /q build\batchMac
