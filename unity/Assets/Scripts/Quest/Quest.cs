@@ -4,6 +4,7 @@ using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using ValkyrieTools;
 using System.IO;
+using System.Linq;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -71,11 +72,17 @@ public class Quest
     // Event Log
     public List<LogEntry> log;
 
+    // Event list
+    public List<string> eventList;
+
     // Dictionary of picked monster types
     public Dictionary<string, string> monsterSelect;
 
     // game state variables
     public MoMPhase phase = MoMPhase.investigator;
+
+    // This is true when the quest is finished
+    public bool questHasEnded = false;
 
     // This is true once heros are selected and the quest is started
     public bool heroesSelected = false;
@@ -114,6 +121,7 @@ public class Quest
         eventQuota = new Dictionary<string, int>();
         undo = new Stack<string>();
         log = new List<LogEntry>();
+        eventList = new List<string>();
         monsterSelect = new Dictionary<string, string>();
 
         GenerateItemSelection();
@@ -708,6 +716,13 @@ public class Quest
             log.Add(new LogEntry(kv.Key, kv.Value));
         }
 
+        // Restore event list (do nothing if empty: '??' is here to avoid null exception)
+        eventList = new List<string>();
+        foreach (KeyValuePair<string, string> kv in saveData.Get("EventList") ?? Enumerable.Empty<KeyValuePair<string, string>>())
+        {
+            eventList.Add(kv.Value);
+        }
+
         Dictionary<string, string> saveVars = saveData.Get("Vars");
         vars = new VarManager(saveVars);
 
@@ -1198,6 +1213,14 @@ public class Quest
         foreach (LogEntry e in log)
         {
             r += e.ToString(i++);
+        }
+
+        r += "[EventList]" + nl;
+        i = 0;
+        foreach (string eventName in eventList)
+        {
+            r += "Event"+ i  + "="+ eventName + nl;
+            i++;
         }
 
         r += "[SelectMonster]" + nl;

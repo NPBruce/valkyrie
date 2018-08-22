@@ -912,6 +912,8 @@ public class QuestData
             if (format <= 8 && sectionName.StartsWith("EventEnd"))
             {
                 operations.Add(new VarOperation("$end,=,1"));
+
+                Game.Get().quest.questHasEnded = true;
             }
 
             conditions = new List<VarOperation>();

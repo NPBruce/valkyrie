@@ -25,6 +25,7 @@ namespace Assets.Scripts.UI
         protected GameObject textHeightObj;
 
         protected UnityEngine.Events.UnityAction buttonCall;
+        protected UnityEngine.Events.UnityAction<string> buttonCallWithParams;
 
         /// <summary>
         /// Construct a UI element with options tag name and parent.</summary>
@@ -167,6 +168,25 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Add button press event to element.</summary>
+        /// <param name="call">Function to call on button press with string parameters.</param>
+        /// <remarks>
+        /// Adds button properties to background area and text.</remarks>
+        public virtual void SetButtonWithParams(UnityEngine.Events.UnityAction<string> call, string value)
+        {
+            UnityEngine.UI.Button uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            uiButton.interactable = true;
+            uiButton.onClick.AddListener(delegate { call(value); });
+            if (text != null)
+            {
+                uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                uiButton.interactable = true;
+                uiButton.onClick.AddListener(delegate { call(value); } );
+            }
+            buttonCallWithParams = call;
+        }
+
+        /// <summary>
         /// Set horizontal text padding.</summary>
         /// <param name="pad">Padding in UIScaler units.</param>
         /// <remarks>
@@ -231,6 +251,13 @@ namespace Assets.Scripts.UI
                     UnityEngine.UI.Button uiButton = text.AddComponent<UnityEngine.UI.Button>();
                     uiButton.interactable = true;
                     uiButton.onClick.AddListener(buttonCall);
+                }
+                if (buttonCallWithParams != null)
+                {
+                    UnityEngine.UI.Button uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                    uiButton.interactable = true;
+                    // use button text as parameters
+                    uiButton.onClick.AddListener(delegate { buttonCallWithParams(content); } );
                 }
             }
             uiText = text.GetComponent<UnityEngine.UI.Text>();

@@ -403,3 +403,21 @@ ATTACK_WITH_SPELL, Attaquer avec un Sort
 ATTACK_WITH_UNARMED, Attaquer à mains nues
 
 ACTION_X, {0}
+
+
+STATS_WELCOME,Merci d'avoir joué.  Vous pouvez noter et partager votre expérience sur ce scénario avec les prochains joueurs. Vos actions en jeu seront envoyés à l'auteur pour lui permettre d'améliorer ce scénario.
+STATS_ASK_VICTORY,Avez vous gagné cette partie?
+STATS_ASK_VICTORY_YES,OUI !
+STATS_ASK_VICTORY_NO,Non...
+STATS_ASK_RATING,Quelle note donneriez vous à ce scénario\n(1: nul  10: exceptionnel)
+STATS_ASK_COMMENTS,Souhaitez vous laissez un commentaire pour l'auteur du scénario ?
+STATS_MISSING_INFO,Merci de noter le scénario, et d'indiquer votre résultat avant de soumettre.
+STATS_SEND_BUTTON,Envoyer
+STATS_MENU_BUTTON,Menu
+
+STATS_AVERAGE_WIN_RATIO,Ratio de victoire: {0}%
+STATS_NB_USER_REVIEWS,({0} évaluations)
+STATS_AVERAGE_DURATION,Durée moyenne: {0} min
+STATS_NO_AVERAGE_DURATION,Durée moyenne indisponible
+STATS_NO_AVERAGE_WIN_RATIO,Ratio de victoire indisponible
+
