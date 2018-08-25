@@ -61,7 +61,7 @@ class PerformBuild
         (new FileInfo(path)).Directory.Create();
 
         Debug.Log(string.Format("Switching Build Target to {0}", "Android"));
-        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
 
         Debug.Log("Starting Android Build!");
         BuildPipeline.BuildPlayer(scenes, path, BuildTarget.Android, BuildOptions.None);
