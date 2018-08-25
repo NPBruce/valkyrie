@@ -614,6 +614,9 @@ public class Quest
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
+        // Set static quest data
+        qd = new QuestData(saveData.Get("Quest", "path"));
+
         // Start quest music
         List<string> music = new List<string>();
         if (saveData.Get("Music") != null)
@@ -728,9 +731,6 @@ public class Quest
         {
             items.Add(kv.Key);
         }
-
-        // Set static quest data
-        qd = new QuestData(saveData.Get("Quest", "path"));
 
         questPath = saveData.Get("Quest", "originalpath");
 

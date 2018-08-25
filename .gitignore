@@ -3,3 +3,11 @@
 # FFG imported content
 /content/D2E/ffg
 /content/MoM/ffg
+*.dll
+/unity/Valkyrie_Data/
+/unity/.vs/
+/unity/mono/etc/
+unity/Valkyrie.exe
+unity/UnityCrashHandler64.exe
+unity/Packages/manifest.json
+unity/ProjectSettings/PresetManager.asset
