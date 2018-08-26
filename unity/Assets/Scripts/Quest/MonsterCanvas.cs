@@ -9,8 +9,6 @@ public class MonsterCanvas : MonoBehaviour
 {
     private readonly StringKey UP_ARROW = new StringKey(null, "˄", false);
     private readonly StringKey DOWN_ARROW = new StringKey(null, "˅", false);
-//    private readonly StringKey UP_ARROW = new StringKey(null, "⌃˄", false);
-//    private readonly StringKey DOWN_ARROW = new StringKey(null, "⌄˅", false);
 
     // offset stores the scoll position, reset at creation
     public int offset = 0;
