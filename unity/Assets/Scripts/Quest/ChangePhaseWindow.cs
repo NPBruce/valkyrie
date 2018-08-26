@@ -45,18 +45,21 @@ public class ChangePhaseWindow
         text = new UIElement(Game.TRANSITION, bg.GetTransform());
         if (phase == Quest.MoMPhase.investigator)
         {
-            text.SetLocation(UIScaler.GetHCenter()-15, 3, 30, 3);
-            text.SetText(PHASE_INVESTIGATOR, Color.white);
+            // Silver 	#C0C0C0 	(192,192,192)
+            text.SetText(PHASE_INVESTIGATOR, new Color32(192, 192, 192, 255));
+            text.SetLocation(5, 3, 30, 3);
         }
         else
         {
-            text.SetLocation(1, 2, 30, 3);
-            text.SetText(PHASE_MYTHOS, Color.red);
+            // Dark red #8B0000 (139,0,0)
+            text.SetText(PHASE_MYTHOS, new Color32(139, 0, 0, 255));
+            text.SetLocation(7, 3, 30, 3);
         }
         text.SetFont(game.gameType.GetHeaderFont());
         text.SetFontSize(UIScaler.GetLargeFont());
         text.SetFontStyle(FontStyle.Italic);
-        text.SetTextAlignment(TextAnchor.MiddleCenter);
+        text.SetTextAlignment(TextAnchor.MiddleLeft);
+        text.SetBGColor(Color.clear);
 
 
         if (phase == Quest.MoMPhase.investigator)
