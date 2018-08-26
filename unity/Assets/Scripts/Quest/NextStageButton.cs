@@ -45,7 +45,7 @@ public class NextStageButton
         else
         {
             phase = PHASE_INVESTIGATOR;
-            bgColor = new Color(0, 0.05f, 0, 0.9f);
+            bgColor = new Color(0, 0, 0, 0.9f);
         }
 
         float string_width=0f, offset=0.5f;
@@ -97,9 +97,10 @@ public class NextStageButton
             color = Color.white;
         else
             color = Color.red;
+        int text_size = (int) (UIScaler.GetMediumFont() * 1);
         ui.SetText(phase, color);
         string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
-        ui.SetLocation(UIScaler.GetRight(-4.5f - string_width), UIScaler.GetBottom(-2.5f), string_width, 2);
+        ui.SetLocation(offset + ((UIScaler.GetRight(-4f) - offset - string_width)*0.5f), UIScaler.GetBottom(-1.8f), string_width, 1.8f);
         ui.SetBGColor(bgColor);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
