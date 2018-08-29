@@ -21,10 +21,11 @@ namespace Assets.Scripts.UI
         protected float textPadding = textPaddingDefault;
 
         // Used for calculating text size
-        protected static GameObject textWidthObj;
-        protected static GameObject textHeightObj;
+        protected GameObject textWidthObj;
+        protected GameObject textHeightObj;
 
         protected UnityEngine.Events.UnityAction buttonCall;
+        protected UnityEngine.Events.UnityAction<string> buttonCallWithParams;
 
         /// <summary>
         /// Construct a UI element with options tag name and parent.</summary>
@@ -167,6 +168,25 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Add button press event to element.</summary>
+        /// <param name="call">Function to call on button press with string parameters.</param>
+        /// <remarks>
+        /// Adds button properties to background area and text.</remarks>
+        public virtual void SetButtonWithParams(UnityEngine.Events.UnityAction<string> call, string value)
+        {
+            UnityEngine.UI.Button uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            uiButton.interactable = true;
+            uiButton.onClick.AddListener(delegate { call(value); });
+            if (text != null)
+            {
+                uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                uiButton.interactable = true;
+                uiButton.onClick.AddListener(delegate { call(value); } );
+            }
+            buttonCallWithParams = call;
+        }
+
+        /// <summary>
         /// Set horizontal text padding.</summary>
         /// <param name="pad">Padding in UIScaler units.</param>
         /// <remarks>
@@ -232,6 +252,13 @@ namespace Assets.Scripts.UI
                     uiButton.interactable = true;
                     uiButton.onClick.AddListener(buttonCall);
                 }
+                if (buttonCallWithParams != null)
+                {
+                    UnityEngine.UI.Button uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                    uiButton.interactable = true;
+                    // use button text as parameters
+                    uiButton.onClick.AddListener(delegate { buttonCallWithParams(content); } );
+                }
             }
             uiText = text.GetComponent<UnityEngine.UI.Text>();
             uiText.color = textColor;
@@ -254,6 +281,16 @@ namespace Assets.Scripts.UI
         public virtual void SetFontSize(int size)
         {
             text.GetComponent<UnityEngine.UI.Text>().fontSize = size;
+        }
+
+        /// <summary>
+        /// Set font style.</summary>
+        /// <param name="style">Style of text (bold, italic...) </param>
+        /// <remarks>
+        /// Must be called after SetText.</remarks>
+        public virtual void SetFontStyle(FontStyle style)
+        {
+            text.GetComponent<UnityEngine.UI.Text>().fontStyle = style;
         }
 
         /// <summary>
@@ -301,17 +338,40 @@ namespace Assets.Scripts.UI
         /// <param name="content">Text to translate.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(StringKey content)
+        public float GetStringWidth(StringKey content)
         {
             return GetStringWidth(content.Translate());
         }
 
         /// <summary>
+        /// Get the length of a text string at given size with given font.</summary>
+        /// <param name="content">Text to translate.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(StringKey content, int fontSize)
+        {
+            return GetStringWidth(content.Translate(), fontSize);
+        }
+
+        /// <summary>
+        /// Get the length of a text string at small size with given font.</summary>
+        /// <param name="content">Text to translate.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <param name="fontName">Name of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(StringKey content, int fontSize, Font fontName)
+        {
+            return GetStringWidth(content.Translate(), fontSize, fontName);
+        }
+        
+        /// <summary>
         /// Get the length of a text string at small size with standard font.</summary>
         /// <param name="content">Text to measure.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(string content)
+        public float GetStringWidth(string content)
         {
             return GetStringWidth(content, UIScaler.GetSmallFont());
         }
@@ -322,7 +382,19 @@ namespace Assets.Scripts.UI
         /// <param name="fontSize">Size of font.</param>
         /// <returns>
         /// The size of the text in UIScaler units.</returns>
-        public static float GetStringWidth(string content, int fontSize)
+        public float GetStringWidth(string content, int fontSize)
+        {
+            return GetStringWidth(content, fontSize, Game.Get().gameType.GetFont());
+        }
+
+        /// <summary>
+        /// Get the length of a text string at small size with standard font.</summary>
+        /// <param name="content">Text to measure.</param>
+        /// <param name="fontSize">Size of font.</param>
+        /// <param name="fontName">Name of font.</param>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth(string content, int fontSize, Font fontName)
         {
             if (textWidthObj == null)
             {
@@ -330,7 +402,7 @@ namespace Assets.Scripts.UI
                 textWidthObj.AddComponent<UnityEngine.UI.Text>();
                 RectTransform transform = textWidthObj.GetComponent<RectTransform>();
                 transform.offsetMax = new Vector2(20000, 20000);
-                textWidthObj.GetComponent<UnityEngine.UI.Text>().font = Game.Get().gameType.GetFont();
+                textWidthObj.GetComponent<UnityEngine.UI.Text>().font = fontName;
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = fontSize;
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
@@ -344,7 +416,7 @@ namespace Assets.Scripts.UI
         /// <param name="width">Width of the text box in UIScaler units.</param>
         /// <returns>
         /// The required text box height in UIScaler units.</returns>
-        public static float GetStringHeight(StringKey content, float width)
+        public float GetStringHeight(StringKey content, float width)
         {
             return GetStringHeight(content.Translate(), width);
         }
@@ -355,7 +427,7 @@ namespace Assets.Scripts.UI
         /// <param name="width">Width of the text box in UIScaler units.</param>
         /// <returns>
         /// The required text box height in UIScaler units.</returns>
-        public static float GetStringHeight(string content, float width)
+        public float GetStringHeight(string content, float width)
         {
             if (textHeightObj == null)
             {

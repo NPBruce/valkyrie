@@ -44,9 +44,27 @@ namespace Assets.Scripts.UI.Screens
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
-            ui.SetText("Valkyrie");
+            ui.SetText("Valkyrie Brynhildr");
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
+
+            // Version type : alpha / beta should be displayed
+            if( Game.Get().version.EndsWith("a") )
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
+                ui.SetText("alpha version");
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+            }
+            if (Game.Get().version.EndsWith("n"))
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
+                ui.SetText("beta version");
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+            }
 
             // Button for start quest/scenario
             ui = new UIElement();

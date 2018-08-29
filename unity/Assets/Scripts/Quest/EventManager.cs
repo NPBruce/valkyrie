@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 using ValkyrieTools;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -414,7 +415,11 @@ public class EventManager
         // Has the quest ended?
         if (game.quest.vars.GetValue("$end") != 0)
         {
-            Destroyer.MainMenu();
+            game.quest.questHasEnded = true;
+            new EndGameScreen();
+
+            //  Destroyer.MainMenu();
+
             return;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
+using Assets.Scripts;
 using ValkyrieTools;
 using Ionic.Zip;
 using System.IO;
@@ -17,9 +18,12 @@ public class Game : MonoBehaviour {
     public static readonly string QUESTUI = "questui";
     public static readonly string EDITOR = "editor";
     public static readonly string UIPHASE = "uiphase";
+    public static readonly string TRANSITION = "transition";
     public static readonly string DIALOG = "dialog";
     public static readonly string ACTIVATION = "activation";
     public static readonly string SHOP = "shop";
+    public static readonly string ENDGAME = "endgame";
+    public static readonly string BG_TASKS = "bg_tasks";
 
     // This is populated at run time from the text asset
     public string version = "";
@@ -66,6 +70,8 @@ public class Game : MonoBehaviour {
     public Audio audioControl;
     // Quest started as test from editor
     public bool testMode = false;
+    // Stats manager for quest rating
+    public StatsManager stats;
 
     // List of things that want to know if the mouse is clicked
     protected List<IUpdateListener> updateList;
@@ -108,6 +114,8 @@ public class Game : MonoBehaviour {
         GameObject go = new GameObject("audio");
         audioControl = go.AddComponent<Audio>();
         updateList = new List<IUpdateListener>();
+        stats = new StatsManager();
+        stats.DownloadStats();
 
         if (config.data.Get("UserConfig") == null)
         {

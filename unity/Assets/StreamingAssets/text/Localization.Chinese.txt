@@ -1,24 +1,431 @@
 .,Chinese
-//Inherited from FFG localization files
+// TEXTS
+ABILITY,Ability
+ABOUT,關於
+ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ACTIONS,行動
+ACTIVATED,Activated
+ACTIVATION,Activation
+ACTIVATIONS,Activations
+ADD_COMPONENTS,添加組件:
+COMPONENTS,組件
+RENAME,重命名
+SAVE_TEST,保存 & 測試
+SOURCE,源碼
+COMMENT,備註
+TRUE,有效
+FALSE,無效
+SNAP,指定
+FREE,自由
+CONFIRM,確定
+INSPECT,調查
+DURATION,劇本時長
+DESCRIPTION,描述
+AUTHORS,作者
+DIFFICULTY,劇本難度
+VALIDATE_SCENARIO,生效
+FILE,文檔
+OPTIMIZE_LOCALIZATION,可選翻譯
+CREATE_PACKAGE,創建包
+REORDER_COMPONENTS,組件重新排序
+ASSIGN,指定
+ATTACK,攻擊
+ATTACK_MESSAGE,攻擊資訊
+AUDIO,音頻
+BACK,後退
+BASE,基礎
+BUTTON,按鈕
+BUTTONS,按鈕
+CAMERA,視角
+CANCEL,取消
+CHOOSE_LANG,語言選擇
+CLEAR_FIRE,清除火焰
+COLOR,顏色
+COMPONENT_NAME,組件名:
+COMPONENT_TO_DELETE,刪除組件:
+CONTENT_IMPORT,導入組件
+CONTENT_IMPORTING,導入中...
+CONTENT_REIMPORT,重新導入
+CONTINUE,繼續
+COPY,複製
+CUSTOMMONSTER,自定義怪物
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
+D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_HEROES_NAME,Heroes
+D2E_HERO_NAME,Hero
+D2E_NAME,Descent: Journeys in the Dark Second Edition
+D2E_QUEST_NAME,劇本
+DEFEATED,擊敗
+DELETE,刪除
+DIALOG,對話
+DOOR,Door
+DOWNLOAD,下載
+DOWNLOAD_LIST,下載列表中...
+DOWNLOAD_PACKAGE,下載中...
+E,E
+EFFECTS,音效
+EMPTY,空
+END_TURN,End Turn
+ROUND,回合 {0}
+EVADE,躲避
+EVENT,事件
+EXIT,退出
+FINISHED,完成
+FIRST,First
+FORCE_ACTIVATE,Force Activate
+
+HEALTH,生命值
+HEALTH_HERO,Per Hero
+HIGHLIGHT,高光
+HORROR_CHECK,恐懼判定
+AWARENESS,Awareness
+IA_APP_NOT_FOUND,Unable to locate Legends of the Alliance, install via Steam
+IA_APP_NOT_FOUND_ANDROID,Unable to locate Legends of the Alliance
+IA_HEROES_NAME,Heroes
+IA_HERO_NAME,Hero
+IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
+IA_QUEST_NAME,Mission
+INDENT,  {0}
+INFO,資訊
+INFORMATION,資訊
+INITIAL_MESSAGE,Initial Message:
+ITEM,道具
+QITEM,道具
+KO,KO
+LOAD_QUEST,讀取{0}
+LOG,記錄
+SKILLS,技能
+ITEMS,物品
+ITEMS_SMALL,物品
+GOLD,Gold
+MAIN_MENU,主界面
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Cam
+MENU,菜單
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Cam
+MOM_APP_NOT_FOUND,電腦上無法找到《瘋狂詭宅》安裝檔。請通過Steam安裝遊戲。
+MOM_APP_NOT_FOUND_ANDROID,無法找到《瘋狂詭宅》安裝檔。
+MOM_HEROES_NAME,調查員
+MOM_HERO_NAME,調查員
+MOM_NAME,《瘋狂詭宅》第二版
+MOM_QUEST_NAME,劇本
+MONSTER,怪物
+MONSTER_ATTACKS,怪物進行攻擊
+MONSTER_MASTER,Master
+MONSTER_MASTER_X,Master {0}
+MONSTER_MINION,Minion
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Unique
+MOVES,步驟數
+MPLACE,MPlace
+MUSIC,音樂
+NAME,名稱
+NEW,新建
+NEW_X,{新建 {0}}
+NONE,{None}
+
+NEXT_EVENTS,下一個事件
+NOT_FIRST,Not First
+NO_ATTACK_MESSAGE,No Attack Message:
+
+NUMBER,次數
+NUMBER_HEROS,{0} 調查員:
+OK,確定
+OP,Op
+OPTIONS,設置
+PLACEMENT,Placement
+
+PLACE_IMG,Place Img:
+POOL_TRAITS,Pool Traits:
+POSITION,位置
+POSITION_TYPE_HIGHLIGHT,高光
+POSITION_TYPE_UNUSED,不使用
+PUZZLE,謎題
+PUZZLE_ALT_LEVEL,Alt 等級
+PUZZLE_CLASS,類別
+PUZZLE_CLASS_SELECT,選擇類別
+IMAGE,圖片
+
+PUZZLE_LEVEL,等級
+PUZZLE_SELECT_SKILL,選擇技能
+PUZZLE_IMAGE_CLASS,圖片
+PUZZLE_CODE_CLASS,密码
+PUZZLE_SLIDE_CLASS,華容道
+QUEST,劇本
+QUEST_NAME_DOWNLOAD,下載{0}
+QUEST_NAME_EDITOR,{0}編輯器
+EDITOR,編輯器
+QUEST_NAME_UPDATE,  [Update] {0}
+QUOTA,配額
+RECOVER,恢復
+INVESTIGATOR_ATTACKS,研究者攻擊
+
+RELOAD,重新載入
+REMOVE_COMPONENTS,移除組件:
+REQUIRED_EXPANSIONS,所需擴展:
+REQUIRES_EXPANSION, 所需{0}
+
+REQ_TRAITS,Req. Traits:
+RESET,重置
+ROTATE_TO,旋轉至: {0}
+ROTATION,旋轉
+SAVE,保存
+AUTOSAVE,自動保存
+SELECT_SAVE,選擇存檔
+SELECT,選擇{0}
+SELECT_CLASS,選擇類別
+SELECTION,選項
+SELECT_CONTENT,選擇擴充
+SELECT_EXPANSION,選擇擴充
+SELECT_IMAGE,選擇圖片
+SELECT_ITEM,選擇物品
+SELECT_PACK,Select Pack
+SELECT_TO_COPY,Select {0} To Copy
+SELECT_TO_DELETE,Select {0} To Delete
+HIDDEN,隱藏
+ACTIVE,行動
+SET,設置
+SKILL,技能判定
+SELECT_SKILLS,選擇技能
+SPAWN,卵
+STARTING_ITEM,起始物品
+STARTING_ITEMS,起始物品
+START_QUEST,開始{0}
+START,開始
+
+TESTS,鑒定
+TILE,地圖板塊
+
+TOKEN,圖示
+TOOLS,工具
+TOTAL_MOVES,總步驟數
+TRAITS,特徵
+TRIGGER,觸發
+TYPE,類型
+TYPES,類型
+UNABLE_BUTTON,Unable Button:
+
+UI,UI
+UNITS,單位
+HORIZONTAL,水準
+VERTICAL,垂直
+ALIGN,對齊
+POSITION,位置
+SIZE,大小
+TEXT_SIZE,字體大小
+ASPECT,方面
+BORDER,邊框
+NO_BORDER,無邊框
+UNDO,撤銷
+UNIQUE_DEFEATED,Unique\nDefeated
+UNIQUE_INFO,Unique Information
+UNIQUE_MONSTER,Unique Monster
+UNIQUE_TITLE,Unique Title
+UNUSED,不使用
+VALUE,值
+VAR,變數
+VARS,變數
+VAR_NAME,變數名:
+X_ACTIVATED,{0} Activated
+
+BUY,購入
+SELL,賣出
+CLASS,類型
+ACT_1,Act I
+ACT_2,Act II
+
+X_COLON,{0}:
+
+//Packs
+SoA,SoA 
+BtT,BtT 
+CotW,CotW 
+FA,FA 
+MoM1E,MoM1E 
+CotWM,基礎包 一代 
+base,基礎包 二代
+RN,RN 
+SM,SM 
+SoT,SoT 
+
+//Items
+weapon,武器
+firearm,槍械
+heavyweapon,重型武器
+heavy,重型武器
+tome,書
+equipment,裝備
+lightsource,光源
+bladedweapon,銳器
+bladed,銳器
+spell,法術
+key,鑰匙
+evidence,證據
+ally,盟友
+common,共同
+unique,獨特
+spelldefence,特殊防禦
+spellattack,特殊攻擊
+
+
+//Audio
+menu,目錄
+music,音樂
+quest,劇本
+defeated,擊敗
+newround,新回合
+attack,攻擊
+unarmed,徒手
+horror,恐懼
+search,搜索
+explore,探索
+
+//Heroes
+latari,Latari
+dwarf,矮人
+gnome,地精
+male,男性
+female,女性
+
+//monsters Class
+undead,不死
+fleshless,無肉體
+humanoid,人形
+spirit,精神
+beast,野獸
+agent,代理人
+lieutenant,中尉
+small,小
+medium,中
+huge,大
+massive,海量
+building,建造
+melee,亂鬥
+ranged,遠程
+goblin,哥布林
+cursed,詛咒
+cave,洞穴
+wilderness,荒野
+civilized,文明
+dark,黑暗
+mountain,山
+cold,冷
+hot,熱
+water,水
+relic,遺跡
+elixir,靈藥
+
+
+//Tiles Class
+basement,地下室
+river,河
+street,街道
+hallway,走廊
+bathroom,浴室
+bedroom,臥室
+kitchen,廚房
+dock,碼頭
+storage,儲存室
+outside,室外
+inside,室內
+small,小
+medium,中
+big,大
+transition,過渡
+throne,王座
+pit,坑
+farm,農場
+tomb,墓地
+library,圖書館
+graves,墓穴
+bridge,橋
+stairs,樓梯
+torture,拷打
+tents,帳篷
+stables,馬廄
+hall,大廳
+map,地圖
+bedroom,臥室
+city,城市
+fountain,噴泉
+blackrealm,神秘領域
+altar,壇
+beds,床
+study,書房
+prison,監獄
+plinth,柱基
+tavern,酒館
+statues,雕像
+drawbridge,吊橋
+rubble,瓦礫
+treasure,寶藏
+stone,石頭
+dirt,污垢
+timber,木材
+snow,雪
+lava,岩漿
+swamp,沼澤
+sludge,污泥
+
+// Colors
+black,黑
+white,白
+red,紅
+lime,青檸
+blue,藍
+yellow,黃
+aqua,水綠
+cyan,青
+magenta,品紅
+fuchsia,紫紅
+silver,銀
+gray,灰
+maroon,栗
+olive,橄欖
+green,綠
+purple,紫
+teal,深藍
+navy,海軍藍
+
+//Puzzles
+image,拼圖
+code,密碼
+slide,華容道
+tower,漢諾塔
+SYMBOL,象徵
+ELEMENT,元素
+
+// Events
+Ordered,依次
+Random,隨機
+
+//Inherited from FFG localization files,
 SET_FIRE,點火
 INVESTIGATOR_ELIMINATED,調查員被消滅
 CLOSE,關閉
-PUZZLE_GUESS,猜測
+PUZZLE_GUESS,解谜
 
 UP,上
 DOWN,下
 LEFT,左
 RIGHT,右
 
-PHASE_INVESTIGATOR,調查階段
+PHASE_INVESTIGATOR,調查員階段
 PHASE_MYTHOS,神秘階段
 MONSTER_STEP,怪物步驟
-HORROR_STEP,恐怖步驟
+HORROR_STEP,恐懼步驟
 END_PHASE,結束步驟
 
 ATTACK_PROMPT,你想在攻擊時使用哪種類型的武器？
-ATTACK_WITH_HEAVY_WEAPON, 使用重型武器攻擊
-ATTACK_WITH_BLADED_WEAPON, 使用銳器攻擊
-ATTACK_WITH_FIREARM, 使用槍械攻擊
-ATTACK_WITH_SPELL, 使用法術攻擊
-ATTACK_WITH_UNARMED, 徒手攻擊
+ATTACK_WITH_HEAVY_WEAPON, 使用 [i]重型武器[/i] 攻擊
+ATTACK_WITH_BLADED_WEAPON, 使用 [i]銳器[/i] 攻擊
+ATTACK_WITH_FIREARM, 使用 [i]槍械[/i] 攻擊
+ATTACK_WITH_SPELL, 使用 [i]法術[/i] 攻擊
+ATTACK_WITH_UNARMED, 使用 [i]徒手[/i] 攻擊
+
+ACTION_X,行動 {0}

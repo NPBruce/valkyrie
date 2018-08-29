@@ -51,7 +51,7 @@ public class LogWindow
             string entry = e.GetEntry(developerToggle).Trim('\n');
             if (entry.Length == 0) continue;
             ui = new UIElement(scrollArea.GetScrollTransform());
-            float height = UIElement.GetStringHeight(entry, textWidth);
+            float height = ui.GetStringHeight(entry, textWidth);
             ui.SetLocation(0, offset, textWidth, height);
             ui.SetText(entry, Color.black);
             ui.SetBGColor(Color.white);
