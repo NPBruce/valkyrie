@@ -45,16 +45,16 @@ C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe libraries/libraries.sl
 
 rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
-copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-windows.log 
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-windows.log 
 
-"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
-copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-macos.log 
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-macos.log 
 
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
-copy %USERPROFILE%\\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-linux.log 
+rem copy %USERPROFILE%\\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-linux.log 
 
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\Valkyrie-android-%version%.apk
-copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-android.log 
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-android.log 
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
