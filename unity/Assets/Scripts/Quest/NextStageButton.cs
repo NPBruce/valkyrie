@@ -45,7 +45,7 @@ public class NextStageButton
         else
         {
             phase = PHASE_INVESTIGATOR;
-            bgColor = new Color(0, 0.05f, 0, 0.9f);
+            bgColor = new Color(0, 0, 0, 0.9f);
         }
 
         float string_width=0f, offset=0.5f;
@@ -92,23 +92,33 @@ public class NextStageButton
 
         // Text description for current phase
         ui = new UIElement(Game.UIPHASE);
-        ui.SetText(phase);
+        Color color;
+        if (phase == PHASE_INVESTIGATOR)
+            color = Color.white;
+        else
+            color = Color.red;
+        int text_size = (int) (UIScaler.GetMediumFont() * 1);
+        ui.SetText(phase, color);
         string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
-        ui.SetLocation(UIScaler.GetRight(-4.5f - string_width), UIScaler.GetBottom(-2.5f), string_width, 2);
+        ui.SetLocation(offset + ((UIScaler.GetRight(-4f) - offset - string_width)*0.5f), UIScaler.GetBottom(-1.8f), string_width, 1.8f);
         ui.SetBGColor(bgColor);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetFontStyle(FontStyle.Italic);
 
         // Next phase button
+        // Tweak border size so that arrow is centered, should be changed if using another character or picture
         ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetRight(-4f), UIScaler.GetBottom(-2.5f), 3, 2);
+        ui.SetLocation(UIScaler.GetRight(-4f), UIScaler.GetBottom(-2.5f), 3f, 2.25f);
+        new UIElementBorder(ui);
+        // make button slightly smaller so it does not overlap border
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetRight(-3.95f), UIScaler.GetBottom(-2.45f), 2.9f, 1.9f);
         ui.SetText(CommonStringKeys.TAB);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
         ui.SetButton(Next);
         ui.SetBGColor(bgColor);
-        new UIElementBorder(ui);
     }
 
     // Button pressed
