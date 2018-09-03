@@ -22,6 +22,9 @@ public class QuestData
     // Location of the quest.ini file
     public string questPath = "";
 
+    // Original package filename, this is required for quest with multiple quest
+    public string package_filename = "";
+
     // Dictionary of items to rename on reading
     public Dictionary<string, string> rename;
 
@@ -41,6 +44,14 @@ public class QuestData
     public QuestData(string path)
     {
         questPath = path;
+        LoadQuestData();
+    }
+    
+    // Read all data files and populate components for quest and save original package name (required for quest loaded from inside a quest)
+    public QuestData(string path, string package_filename)
+    {
+        questPath = path;
+        this.package_filename = package_filename;
         LoadQuestData();
     }
 
@@ -117,6 +128,18 @@ public class QuestData
             qstDict.AddDataFromFile(file);
         }
         LocalizationRead.AddDictionary("qst", qstDict);
+
+        // if package filename is already set, it means we are already in another quest: do not overwrite with data from sub-quest
+        if (package_filename == "") {
+            if (questIniData.Get("Package", "filename") != "")
+            {
+                package_filename = questIniData.Get("Package", "filename");
+            }
+            else
+            {
+                ValkyrieDebug.Log("Quest is not an archive");
+            }
+        }
 
         foreach (string f in iniFiles)
         {
@@ -1928,6 +1951,13 @@ public class QuestData
         {
             path = pathIn;
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
+
+            // do not parse the content of a quest from another game type
+            if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
+            {
+                valid = false;
+                return;
+            }
 
             //Read the localization data
             Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
