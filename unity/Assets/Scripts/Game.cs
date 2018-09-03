@@ -215,6 +215,9 @@ public class Game : MonoBehaviour {
     // This is called when a quest is selected
     public void StartQuest(QuestData.Quest q)
     {
+        // extract the full package
+        QuestLoader.ExtractFullPackage(ContentData.DownloadPath()+ Path.DirectorySeparatorChar + Path.GetFileName(q.path) );
+
         // Fetch all of the quest data and initialise the quest
         quest = new Quest(q);
 

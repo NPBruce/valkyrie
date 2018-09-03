@@ -465,12 +465,12 @@ public class QuestDownload : MonoBehaviour
     }
 
     /// <summary>
-    /// Get save directory without trailing '/'
+    /// Get download directory without trailing '/'
     /// </summary>
-    /// <returns>localtion to save packages</returns>
+    /// <returns>location to save packages</returns>
     public string saveLocation()
     {
-        return Game.AppData() + "/Download";
+        return ContentData.DownloadPath();
     }
 
     /// <summary>
