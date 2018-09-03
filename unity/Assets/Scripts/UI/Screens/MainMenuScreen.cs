@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(UIScaler.GetMediumFont());
             }
-            if (Game.Get().version.EndsWith("n"))
+            if (Game.Get().version.EndsWith("b"))
             {
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
