@@ -112,12 +112,13 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
+            if (File.Exists(game.quest.originalPath + "/" + name))
             {
                 events.Add(name, new StartQuestEvent(name));
             }
             else
             {
+                ValkyrieDebug.Log("Warning: Missing event called: " + name);
                 game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
                 return;
             }
@@ -396,13 +397,14 @@ public class EventManager
             // Check if the event doesn't exists - quest fault
             if (!events.ContainsKey(s))
             {
-                if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                if (File.Exists(game.quest.originalPath + "/" + s))
                 {
                     events.Add(s, new StartQuestEvent(s));
                     enabledEvents.Add(s);
                 }
                 else
                 {
+                    ValkyrieDebug.Log("Warning: Missing event called: " + s);
                     game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                 }
             }
@@ -660,13 +662,14 @@ public class EventManager
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
                     {
-                        if (File.Exists(game.quest.questPath + "/" + s))
+                        if (File.Exists(game.quest.originalPath + "/" + s))
                         {
                             game.quest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
                         }
                         else
                         {
+                            ValkyrieDebug.Log("Warning: Missing event called: " + s);
                             game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                             return false;
                         }

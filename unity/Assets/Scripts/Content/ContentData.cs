@@ -56,6 +56,15 @@ public class ContentData {
         return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
     }
 
+    /// <summary>
+    /// Get download directory without trailing '/'
+    /// </summary>
+    /// <returns>location to save / load packages</returns>
+    public static string DownloadPath()
+    {
+        return Game.AppData() + Path.DirectorySeparatorChar + "Download";
+    }
+
     public static string TempPath
     {
         get

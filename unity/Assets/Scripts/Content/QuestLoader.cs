@@ -19,12 +19,31 @@ public class QuestLoader {
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
         CleanTemp();
-        // Get a list of quest directories (extract found packages)
-        List<string> questDirectories = GetQuests(dataLocation);
 
-        // Add packaged quests that have been extracted
+        // Get a list of downloaded quest not packed
+        List<string> questDirectories = GetQuests(ContentData.DownloadPath());
+
+        // Extract only required files from downloaded packages 
+        ExtractPackages(ContentData.DownloadPath());
+
+        // Get the list of extracted packages
         questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
 
+        // Add the list of editor quest
+        if (game.gameType is MoMGameType)
+        {
+            dataLocation += "/MoM/Editor";
+        }
+        if (game.gameType is D2EGameType)
+        {
+            dataLocation += "/D2E/Editor";
+        }
+        if (game.gameType is IAGameType)
+        {
+            dataLocation += "/IA/Editor";
+        }
+        questDirectories.AddRange(GetQuests(dataLocation));
+        
         // Go through all directories
         foreach (string p in questDirectories)
         {
@@ -109,7 +128,7 @@ public class QuestLoader {
         return quests;
     }
 
-    // Get list of directories with quests at a path, and extract found packages
+    // Get list of directories with quests at a path
     public static List<string> GetQuests(string path)
     {
         List<string> quests = new List<string>();
@@ -129,11 +148,48 @@ public class QuestLoader {
                     quests.Add(p);
             }
         }
-        ExtractPackages(path);
 
         return quests;
     }
 
+    /// <summary>
+    /// Fully extract one single package, before starting a quest, and save package filename
+    /// </summary>
+    /// <param name="path">path of the file to extract</param>
+    public static void ExtractFullPackage(string path)
+    {
+        // Extract into temp
+        string tempValkyriePath = ContentData.TempValyriePath;
+        mkDir(tempValkyriePath);
+        string extractedPath = Path.Combine(tempValkyriePath, Path.GetFileName(path));
+        if (!Directory.Exists(extractedPath))
+        {
+            // should not be possible, just in case
+            mkDir(extractedPath);
+        }
+
+        try
+        {
+            ZipFile zip = ZipFile.Read(path);
+            zip.ExtractAll(extractedPath, ExtractExistingFileAction.OverwriteSilently);
+            zip.Dispose();
+        }
+        catch (System.Exception)
+        {
+            ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
+        }
+
+        // remember each package name, and use it when loading a quest
+        string nl = System.Environment.NewLine;
+        System.IO.File.AppendAllText(extractedPath + Path.DirectorySeparatorChar + "quest.ini",
+                                     nl + "[Package]" + nl + "filename=" + Path.GetFileName(path) + nl,
+                                     System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Partial extract of all package in a directory, to list quests,  and save package filename
+    /// </summary>
+    /// <param name="path">path of the directory containing .valkyrie package</param>
     public static void ExtractPackages(string path)
     {
         // Find all packages at path
@@ -161,13 +217,23 @@ public class QuestLoader {
             try
             {
                 ZipFile zip = ZipFile.Read(f);
-                zip.ExtractAll(extractedPath);
+                zip.ExtractSelectedEntries("name = quest.ini", null, extractedPath, ExtractExistingFileAction.OverwriteSilently);
+                zip.ExtractSelectedEntries("name = Localization.*.txt", null, extractedPath, ExtractExistingFileAction.OverwriteSilently);
+                Dictionary<string, string> iniData = IniRead.ReadFromIni(extractedPath + "/quest.ini", "Quest");
+                if (iniData.ContainsKey("image"))
+                    zip.ExtractSelectedEntries("name = " + iniData["image"], null, extractedPath, ExtractExistingFileAction.OverwriteSilently);
                 zip.Dispose();
             }
             catch (System.Exception)
             {
                 ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
             }
+
+            // remember each package name, and use it when loading a quest
+            string nl = System.Environment.NewLine;
+            System.IO.File.AppendAllText(extractedPath + Path.DirectorySeparatorChar + "quest.ini",
+                                        nl + "[Package]" + nl + "filename="+Path.GetFileName(f) + nl,
+                                         System.Text.Encoding.UTF8);
         }
     }
 

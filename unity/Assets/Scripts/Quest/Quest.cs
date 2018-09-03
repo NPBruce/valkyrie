@@ -15,9 +15,14 @@ public class Quest
     public QuestData qd;
 
     /// <summary>
-    /// Original Quest Path
+    /// Current Quest Path
     /// </summary>
     public string questPath = "";
+
+    /// <summary>
+    /// Original Quest Path
+    /// </summary>
+    public string originalPath = "";
 
     /// <summary>
     /// components on the board (tiles, tokens, doors)
@@ -113,6 +118,7 @@ public class Quest
         // Static data from the quest file
         qd = new QuestData(q);
         questPath = Path.GetDirectoryName(qd.questPath);
+        originalPath = Path.GetDirectoryName(qd.questPath);
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
@@ -555,11 +561,12 @@ public class Quest
         game.cc.maxLimit = false;
 
         // Set static quest data
-        qd = new QuestData(questPath + "/" + path);
+        qd = new QuestData(originalPath + "/" + path, qd.package_filename);
+        // set questPath but do not set original path, as we are loading from within a quest here.
         questPath = Path.GetDirectoryName(qd.questPath);
 
-        // Extract packages in case needed
-        QuestLoader.ExtractPackages(Game.AppData());
+        // Cannot load a quest from another archive (we don't know want to extract all available archives everytime here)
+        // QuestLoader.ExtractPackages(Game.AppData());
 
         vars.TrimQuest();
 
@@ -768,7 +775,15 @@ public class Quest
             items.Add(kv.Key);
         }
 
-        questPath = saveData.Get("Quest", "originalpath");
+        // Set static quest data
+        string pk_path = saveData.Get("Quest", "packagepath");
+        if (pk_path != "")
+            qd = new QuestData(saveData.Get("Quest", "path"), pk_path);
+        else
+            qd = new QuestData(saveData.Get("Quest", "path"));
+
+        originalPath = saveData.Get("Quest", "originalpath");
+        questPath = saveData.Get("Quest", "path");
 
         monsterSelect = saveData.Get("SelectMonster");
         if (monsterSelect == null)
@@ -1156,7 +1171,15 @@ public class Quest
         r += "valkyrie=" + game.version + nl;
 
         r += "path=" + qd.questPath + nl;
-        r += "originalpath=" + questPath + nl;
+        r += "originalpath=" + originalPath + nl;
+        r += "questname=" + qd.quest.name.Translate() + nl;
+
+        // we keep package filename to be able to extract the package when loading from a savegame
+        if (qd.package_filename != "")
+        {
+            r += "packagepath=" + qd.package_filename + nl;
+        }
+
         if (phase == MoMPhase.horror)
         {
             r += "horror=true" + nl;
