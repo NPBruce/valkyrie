@@ -55,6 +55,7 @@ D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
 D2E_QUEST_NAME,Szenario
 DEFEATED,Besiegt
 DELETE,Löschen
+UPDATE,Update
 DIALOG,Dialog
 DOOR,Tür
 DOWNLOAD,Download
@@ -387,3 +388,23 @@ ATTACK_WITH_SPELL, Mit einem Zauber angreifen
 ATTACK_WITH_UNARMED, Unbewaffnet angreifen
 
 ACTION_X, {0}
+
+STATS_WELCOME,Danke fürs Spielen. Bitte bewerte und sende uns deine Meinung für zukünftige Spieler. Deine Spielaktionen werden dabei mit den Autoren des Spiels geteilt, um ihm zu helfen dieses Szenario zu verbessern.
+STATS_ASK_VICTORY,Hast du das Spiel gewonnen?
+STATS_ASK_VICTORY_YES,JA!
+STATS_ASK_VICTORY_NO,Nein...
+STATS_ASK_RATING,Wie würdest du das Szenario bewerten?\n(1: schlecht 10: großartig)
+STATS_ASK_COMMENTS,Möchtest du dem Autor des Szenarios eine Nachricht zukommen lassen?
+STATS_MISSING_INFO,Bevor du sendest, bewerte das Szenario und teile uns mit, ob du gewonnen hast.
+STATS_SEND_BUTTON,Senden
+STATS_MENU_BUTTON,Menü
+
+STATS_AVERAGE_WIN_RATIO,Durchschittlich gewonnen haben: {0}%
+STATS_NB_USER_REVIEWS,({0} Benutzerbewertungen)
+STATS_AVERAGE_DURATION,Durchschittliche Spielzeit: {0} Min
+STATS_NO_AVERAGE_DURATION,Durchschittliche Spielzeit nicht verfügbar
+STATS_NO_AVERAGE_WIN_RATIO,Durchschittlich gewonnene Spiele nicht verfügbar
+
+STATS_DOWNLOAD_ONGOING,Lade Statistiken und Bewertungen...\nBitte lade die Seite in ein paar Sekunden neu
+STATS_ERROR_HTTP,Fehler beim Abrufen der Spielstatistik. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Fehler beim Abrufen der Spielstatistik, bitte überprüfe deine Internetverbindung

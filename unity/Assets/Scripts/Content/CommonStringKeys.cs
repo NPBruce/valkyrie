@@ -43,6 +43,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey QUEST = new StringKey(VAL, "QUEST");
         public static readonly StringKey TILE = new StringKey(VAL, "TILE");
         public static readonly StringKey DELETE = new StringKey(VAL, "DELETE");
+        public static readonly StringKey UPDATE = new StringKey(VAL, "UPDATE");
         public static readonly StringKey COPY = new StringKey(VAL, "COPY");
         public static readonly StringKey NEW = new StringKey(VAL, "NEW");
         public static readonly StringKey DOOR = new StringKey(VAL, "DOOR");
