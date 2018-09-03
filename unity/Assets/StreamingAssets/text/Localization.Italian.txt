@@ -37,6 +37,7 @@ D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
 D2E_QUEST_NAME,Scenario
 DEFEATED,Sconfitto
 DELETE,Cancella
+UPDATE,Aggiorna
 DIALOG,Dialogo
 DOOR,Porta
 DOWNLOAD,Scarica

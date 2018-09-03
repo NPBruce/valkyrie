@@ -57,6 +57,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'endgame'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.ENDGAME))
+            Object.Destroy(go);
+
         Game game = Game.Get();
 
         game.heroCanvas.Clean();

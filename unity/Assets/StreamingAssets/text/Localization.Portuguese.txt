@@ -36,6 +36,7 @@ D2E_NAME,Descent: Journeys in the Dark Second Edition
 D2E_QUEST_NAME,Aventura
 DEFEATED,Derrotado
 DELETE,Deletar
+UPDATE,Atualizar
 DIALOG,Diálogo
 DOOR,Porta
 DOWNLOAD,Download
@@ -252,3 +253,22 @@ ATTACK_WITH_SPELL, Atacar com um Feitiço
 ATTACK_WITH_UNARMED, Atacar Desarmado
 
 ACTION_X, {0}
+
+STATS_WELCOME, Muito obrigado por jogar este cenário. Por favor deixe sua avaliação e compartilhe sua experiência para os próximos jogadores. Suas ações no jogo serão compartilhadas com o autor para ajudá-lo a melhorar este cenário.
+STATS_ASK_VICTORY,Você venceu esta partida?
+STATS_ASK_VICTORY_YES,SIM!
+STATS_ASK_VICTORY_NO,Não...
+STATS_ASK_RATING, Como você avaliaria este cenário?\n(1:Horrível 10: Incrível )
+STATS_ASK_COMMENTS,Você gostaria de deixar um comentário para o criador do cenário?
+STATS_MISSING_INFO, Por favor avalie o cenário e nos informe se você venceu antes de enviar.
+STATS_SEND_BUTTON,Enviar
+STATS_MENU_BUTTON,Menu
+
+STATS_AVERAGE_WIN_RATIO, Porcentagem Média de vitórias: {0}%
+STATS_NB_USER_REVIEWS,({0} avaliações )
+STATS_AVERAGE_DURATION,Duração média: {0} min
+STATS_NO_AVERAGE_DURATION,Duração média indisponível
+STATS_NO_AVERAGE_WIN_RATIO, Porcentagem média de vitórias indisponível
+STATS_DOWNLOAD_ONGOING, Fazendo o download das estatísticas do jogo e avaliações...\n por favor recarregue a página em alguns segundos
+STATS_ERROR_HTTP, Erro ao acessar estatísticas do jogo, se esse problema persistir por favor informe esse problema no github Valkyrie \n{0}
+STATS_ERROR_Network, Erro acessando as estatísticas do jogo, por favor verifique sua conexão de Internet.

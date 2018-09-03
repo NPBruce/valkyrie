@@ -21,13 +21,18 @@ public class NextStageButton
 
     public void Update()
     {
+        // do not display the button bar when we reach the end of the game screen
+        if (Game.Get().quest.questHasEnded)
+            return;
+
         // First tile has not been displayed, button bar is not required yet
-        if (!Game.Get().quest.firstTileDisplayed) return;
+        if (!Game.Get().quest.firstTileDisplayed) 
+            return;
 
         // Clean up everything marked as 'uiphase'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
-
+                
         Color bgColor = new Color(0.05f, 0, 0, 0.9f);
         StringKey phase;
         if (Game.Get().quest.phase == Quest.MoMPhase.horror)
@@ -97,6 +102,7 @@ public class NextStageButton
             color = Color.white;
         else
             color = Color.red;
+
         int text_size = (int) (UIScaler.GetMediumFont() * 1);
         ui.SetText(phase, color);
         string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;

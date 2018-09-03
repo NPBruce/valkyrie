@@ -57,6 +57,7 @@ D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
 D2E_QUEST_NAME,Przygoda
 DEFEATED,Pokonany
 DELETE,Usuń
+UPDATE,Aktualizacja
 DIALOG,Dialog
 DOOR,Drzwi
 DOWNLOAD,Pobierz
