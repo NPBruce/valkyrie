@@ -1,6 +1,16 @@
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
+
+rem set steam path
+rem set steampath=D:\Steam\
+set steampath=C:\Program Files %28x86%29\Steam\
+
+IF NOT EXIST %steampath% ( 
+echo [31m--- ERROR --- Steam path not set : please set Steam path in build.bat [0m
+exit /B
+)
+
 rem cleanup
 rmdir /s /q build\batch
 rmdir /s /q build\batchMac
@@ -36,9 +46,16 @@ C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe libraries/libraries.sl
 
 rem build unity
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildWindowsPlayer ..\build\win\valkyrie.exe
-"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildOSXPlayer ..\build\macos\Valkyrie.app
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-windows.log 
+
+"%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-macos.log 
+
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -buildLinuxUniversalPlayer ..\build\linux\valkyrie
+rem copy %USERPROFILE%\\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-linux.log 
+
 "%ProgramFiles%\Unity\Editor\Unity.exe" -batchmode -quit -projectPath %~dp0unity -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation ..\build\Valkyrie-android-%version%.apk
+rem copy %USERPROFILE%\AppData\Local\Unity\Editor\Editor.log %USERPROFILE%\AppData\Local\Unity\Editor\Editor_valkyrie-android.log 
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
@@ -64,15 +81,18 @@ del build\valkyrie-linux-%version%.tar.gz
 
 rem create windows zip
 cd build\batch
-"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-windows-%version%.zip * -r
+"%ProgramFiles%\7-Zip\7z.exe" a ..\valkyrie-windows-%version%.7z * -r
+rem create windows 7z
+cd build\batch
+"%ProgramFiles%\7-Zip\7z.exe" a ..\valkyrie-windows-%version%.zip * -r
 rem create macos zip
 cd ..\batchMac
-"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-macos-%version%.zip * -r
+"%ProgramFiles%\7-Zip\7z.exe" a ..\valkyrie-macos-%version%.zip * -r
 rem create linux tar ball
 cd ..\batchLinux
-"C:\Program Files\7-Zip\7z.exe" a ..\valkyrie-linux-%version%.tar * -r
+"%ProgramFiles%\7-Zip\7z.exe" a ..\valkyrie-linux-%version%.tar * -r
 cd ..
-"C:\Program Files\7-Zip\7z.exe" a valkyrie-linux-%version%.tar.gz valkyrie-linux-%version%.tar
+"%ProgramFiles%\7-Zip\7z.exe" a valkyrie-linux-%version%.tar.gz valkyrie-linux-%version%.tar
 del valkyrie-linux-%version%.tar
 rem move apk
 move android\test.apk valkyrie-android-%version%.apk
@@ -82,8 +102,8 @@ cd ..
 set /a num=%version:~-1% 2>nul
 
 if "%num%"=="%version:~-1%" (
-    "C:\Program Files (x86)\NSIS\makensis" /DVERSION=%version% valkyrie.nsi
+    "%ProgramFiles(x86)%\NSIS\makensis" /DVERSION=%version% valkyrie.nsi
     goto :EOF
 )
 
-"C:\Program Files (x86)\NSIS\makensis" /DVERSION=%version% /DPRERELEASE valkyrie.nsi
+"%ProgramFiles(x86)%\NSIS\makensis" /DVERSION=%version% /DPRERELEASE valkyrie.nsi
