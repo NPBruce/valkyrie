@@ -60,6 +60,7 @@ D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
 D2E_QUEST_NAME,Aventura
 DEFEATED,Derrotado
 DELETE,Eliminar
+UPDATE,Actualizar
 DIALOG,Diálogo
 DOOR,Puerta
 DOWNLOAD,Descargar

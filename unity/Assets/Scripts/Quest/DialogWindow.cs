@@ -289,6 +289,9 @@ public class DialogWindow {
         // Add this to the log
         game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
+        // Add this to the eventList
+        game.quest.eventList.Add(eventData.qEvent.sectionName);
+
         // Event manager handles the aftermath
         game.quest.eManager.EndEvent(num-1);
     }
