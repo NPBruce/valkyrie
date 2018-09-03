@@ -87,4 +87,12 @@ public class Destroyer {
         Game.Get().logWindow = null;
         Resources.UnloadUnusedAssets();
     }
+
+    // Remove transition screen between phases
+    public static void Transition()
+    {
+        // Clean up everything marked as 'transition'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.TRANSITION))
+            Object.Destroy(go);
+    }
 }
