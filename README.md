@@ -1,6 +1,7 @@
 ![Valkyrie](https://raw.githubusercontent.com/NPBruce/valkyrie/master/web/banner.png)
 
 Valkyrie GM for Fantasy Flight Board Games
+
 Valkyrie Brynhildr is a branch of Valkyrie GM, that brings rating and many other fix to the already great Valkyrie app by NPBruce.
 
 Information:
