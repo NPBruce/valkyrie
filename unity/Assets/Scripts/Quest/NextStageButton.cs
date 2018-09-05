@@ -21,6 +21,9 @@ public class NextStageButton
 
     public void Update()
     {
+        // First tile has not been displayed, button bar is not required yet
+        if (!Game.Get().quest.firstTileDisplayed) return;
+
         // Clean up everything marked as 'uiphase'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
@@ -42,52 +45,80 @@ public class NextStageButton
         else
         {
             phase = PHASE_INVESTIGATOR;
-            bgColor = new Color(0, 0.05f, 0, 0.9f);
+            bgColor = new Color(0, 0, 0, 0.9f);
         }
 
-        UIElement ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetHCenter(12f), UIScaler.GetBottom(-2.5f), 4, 2);
-        ui.SetText(CommonStringKeys.TAB);
-        ui.SetFont(Game.Get().gameType.GetHeaderFont());
-        ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Next);
-        ui.SetBGColor(bgColor);
-        new UIElementBorder(ui);
+        float string_width=0f, offset=0.5f;
+        StringKey text;
 
-        ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetHCenter(16f), UIScaler.GetBottom(-2.5f), 4, 2);
-        ui.SetText(new StringKey("val", "ITEMS_SMALL"));
+        // Inventory button 
+        UIElement ui = new UIElement(Game.UIPHASE);
+        text = new StringKey("val", "ITEMS_SMALL");
+        ui.SetText(text);
+        string_width = ui.GetStringWidth(text, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
+        ui.SetLocation(offset, UIScaler.GetBottom(-2.5f), string_width, 2);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Items);
         ui.SetBGColor(bgColor);
         new UIElementBorder(ui);
+        offset += string_width;
 
+        // Action button
         ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetHCenter(-12f), UIScaler.GetBottom(-2.5f), 4, 2);
-        ui.SetText(CommonStringKeys.LOG);
-        ui.SetFont(Game.Get().gameType.GetHeaderFont());
-        ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Log);
-        ui.SetBGColor(bgColor);
-        new UIElementBorder(ui);
-
-        ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetHCenter(-8f), UIScaler.GetBottom(-2.5f), 4, 2);
-        ui.SetText(CommonStringKeys.SET);
+        text = CommonStringKeys.SET;
+        ui.SetText(text);
+        string_width = ui.GetStringWidth(text, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
+        ui.SetLocation(offset, UIScaler.GetBottom(-2.5f), string_width, 2);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(Set);
         ui.SetBGColor(bgColor);
         new UIElementBorder(ui);
+        offset += string_width;
 
+        // Log button (text from previous event)
         ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f), 16, 2);
-        ui.SetText(phase);
+        text = CommonStringKeys.LOG;
+        ui.SetText(text);
+        string_width = ui.GetStringWidth(text, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
+        ui.SetLocation(offset, UIScaler.GetBottom(-2.5f), string_width, 2);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(Log);
+        ui.SetBGColor(bgColor);
+        new UIElementBorder(ui);
+        offset += string_width;
+
+        // Text description for current phase
+        ui = new UIElement(Game.UIPHASE);
+        Color color;
+        if (phase == PHASE_INVESTIGATOR)
+            color = Color.white;
+        else
+            color = Color.red;
+        int text_size = (int) (UIScaler.GetMediumFont() * 1);
+        ui.SetText(phase, color);
+        string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
+        ui.SetLocation(offset + ((UIScaler.GetRight(-4f) - offset - string_width)*0.5f), UIScaler.GetBottom(-1.8f), string_width, 1.8f);
         ui.SetBGColor(bgColor);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetFontStyle(FontStyle.Italic);
+
+        // Next phase button
+        // Tweak border size so that arrow is centered, should be changed if using another character or picture
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetRight(-4f), UIScaler.GetBottom(-2.5f), 3f, 2.25f);
         new UIElementBorder(ui);
+        // make button slightly smaller so it does not overlap border
+        ui = new UIElement(Game.UIPHASE);
+        ui.SetLocation(UIScaler.GetRight(-3.95f), UIScaler.GetBottom(-2.45f), 2.9f, 1.9f);
+        ui.SetText(CommonStringKeys.TAB);
+        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
+        ui.SetButton(Next);
+        ui.SetBGColor(bgColor);
     }
 
     // Button pressed

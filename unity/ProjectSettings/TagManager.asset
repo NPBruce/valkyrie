@@ -14,6 +14,7 @@ TagManager:
   - uiphase
   - activation
   - shop
+  - transition
   layers:
   - Default
   - TransparentFX

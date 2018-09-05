@@ -24,6 +24,9 @@ public class RoundControllerMoM : RoundController
         // This will cause the next phase if nothing was added
         game.quest.eManager.TriggerEvent();
 
+        // Display the transition dialog for investigator phase
+        ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.mythos);
+
         return;
     }
 
@@ -160,6 +163,10 @@ public class RoundControllerMoM : RoundController
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
+        
+        // Display the transition dialog for investigator phase
+        ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.investigator);
+
         return true;
     }
 }

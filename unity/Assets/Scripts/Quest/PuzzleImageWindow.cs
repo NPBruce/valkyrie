@@ -72,17 +72,17 @@ public class PuzzleImageWindow
     {
         Destroyer.Dialog();
         UIElement ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 28, 22);
+        ui.SetLocation(UIScaler.GetHCenter(-14f), 0.5f, 29f, 22.5f);
         new UIElementBorder(ui);
 
         // Puzzle goes here
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(10), 8, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(7.75f), 8, 7f, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.SKILL));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(10), 10, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(9.75f), 10, 3, 2);
         ui.SetText(EventManager.OutputSymbolReplace(questPuzzle.skill));
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
@@ -94,29 +94,29 @@ public class PuzzleImageWindow
         }
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-13f), 20f, 6, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-13f), 20.5f, 6, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.MOVES));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-6), 20, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-6), 20.5f, 3, 2);
         ui.SetText((puzzle.moves - previousMoves).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-3f), 20f, 10, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-3f), 20.5f, 10, 2);
         ui.SetText(new StringKey("val","X_COLON",CommonStringKeys.TOTAL_MOVES));
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(7), 20, 3, 2);
+        ui.SetLocation(UIScaler.GetHCenter(7), 20.5f, 3, 2);
         ui.SetText(puzzle.moves.ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-13), 23.5f, 8, 2);
+        ui.SetLocation(UIScaler.GetHCenter(-13), 24f, 8, 2);
         if (solved)
         {
             ui.SetText(CommonStringKeys.CLOSE, Color.grey);
@@ -131,7 +131,7 @@ public class PuzzleImageWindow
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(5), 23.5f, 8, 2);
+        ui.SetLocation(UIScaler.GetHCenter(5), 24f, 8, 2);
         if (!solved)
         {
             ui.SetText(eventData.GetButtons()[0].GetLabel(), Color.grey);
