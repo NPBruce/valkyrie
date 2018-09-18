@@ -1545,7 +1545,7 @@ public class Quest
             }
             else if (qUI.imageName.Length > 0)
             {
-                newTex = ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + qUI.imageName);
+                newTex = ContentData.FileToTexture(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), qUI.imageName));
             }
 
             // Create object

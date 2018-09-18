@@ -545,7 +545,8 @@ public class QuestDownload : MonoBehaviour
             {
                 if (image == null && !imageError)
                 {
-                    qd.StartCoroutine(qd.Download(path + data["image"], delegate { ImageFetched(qd.download, call); }));
+                    string file = path + data["image"].Replace('\\', '/');
+                    qd.StartCoroutine(qd.Download(file, delegate { ImageFetched(qd.download, call); }));
                     return false;
                 }
             }
