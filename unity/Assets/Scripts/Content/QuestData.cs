@@ -458,7 +458,8 @@ public class QuestData
 
             if (data.ContainsKey("image"))
             {
-                imageName = data["image"];
+                string value = data["image"];
+                imageName = value != null ? value.Replace('\\', '/') : value;
             }
 
             if (data.ContainsKey("vunits"))
@@ -968,12 +969,17 @@ public class QuestData
             }
             if (data.ContainsKey("audio"))
             {
-                audio = data["audio"];
+                string value = data["audio"];
+                audio = value != null ? value.Replace('\\', '/') : value;
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
             {
                 music = new List<string>(data["music"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+                for (int i = 0; i < music.Count; i++)
+                {
+                    music[i] = music[i].Replace('\\', '/');
+                }
             }
         }
 
@@ -1305,7 +1311,8 @@ public class QuestData
             }
             if (data.ContainsKey("image"))
             {
-                imageType = data["image"];
+                string value = data["image"];
+                imageType = value != null ? value.Replace('\\', '/') : value;
             }
             if (data.ContainsKey("skill"))
             {
@@ -1530,7 +1537,8 @@ public class QuestData
 
             if (data.ContainsKey("image"))
             {
-                imagePath = data["image"];
+                string value = data["image"];
+                imagePath = value != null ? value.Replace('\\', '/') : value;
             }
 
             imagePlace = imagePath;
@@ -2085,7 +2093,8 @@ public class QuestData
 
             if (iniData.ContainsKey("image"))
             {
-                image = iniData["image"];
+                string value = iniData["image"];
+                image = value != null ? value.Replace('\\', '/') : value;
             }
 
             return true;
