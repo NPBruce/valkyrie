@@ -59,8 +59,10 @@ public class TokenBoard : MonoBehaviour {
         public void startEvent()
         {
             Game game = Game.Get();
-            // If in horror phase ignore
-            if (game.quest.phase != Quest.MoMPhase.investigator) return;
+
+            // If in horror phase ignore token, accept UI element (items)
+            if (c.GetEvent().typeDynamic=="Token"  &&  game.quest.phase != Quest.MoMPhase.investigator) return;
+
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;

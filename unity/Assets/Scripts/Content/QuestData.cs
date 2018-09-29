@@ -22,9 +22,6 @@ public class QuestData
     // Location of the quest.ini file
     public string questPath = "";
 
-    // Original package filename, this is required for quest with multiple quest
-    public string package_filename = "";
-
     // Dictionary of items to rename on reading
     public Dictionary<string, string> rename;
 
@@ -36,7 +33,7 @@ public class QuestData
     // Create from quest loader entry
     public QuestData(QuestData.Quest q)
     {
-        questPath = q.path + "/quest.ini";
+        questPath = q.path + Path.DirectorySeparatorChar + "quest.ini";
         LoadQuestData();
     }
 
@@ -47,14 +44,6 @@ public class QuestData
         LoadQuestData();
     }
     
-    // Read all data files and populate components for quest and save original package name (required for quest loaded from inside a quest)
-    public QuestData(string path, string package_filename)
-    {
-        questPath = path;
-        this.package_filename = package_filename;
-        LoadQuestData();
-    }
-
     // Populate data
     public void LoadQuestData()
     {
@@ -112,7 +101,7 @@ public class QuestData
                 if (file != null && file.Length > 0)
                 {
                     // path is relative to the main file (absolute not supported)
-                    localizationFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                    localizationFiles.Add(Path.GetDirectoryName(questPath) + Path.DirectorySeparatorChar + file);
                 }
             }
         }
@@ -128,18 +117,6 @@ public class QuestData
             qstDict.AddDataFromFile(file);
         }
         LocalizationRead.AddDictionary("qst", qstDict);
-
-        // if package filename is already set, it means we are already in another quest: do not overwrite with data from sub-quest
-        if (package_filename == "") {
-            if (questIniData.Get("Package", "filename") != "")
-            {
-                package_filename = questIniData.Get("Package", "filename");
-            }
-            else
-            {
-                ValkyrieDebug.Log("Quest is not an archive");
-            }
-        }
 
         foreach (string f in iniFiles)
         {
@@ -1618,7 +1595,7 @@ public class QuestData
                 // this will use the base monster type
                 return "";
             }
-            return path + "/" + imagePath;
+            return path + Path.DirectorySeparatorChar + imagePath;
         }
         public string GetImagePlacePath()
         {
@@ -1627,7 +1604,7 @@ public class QuestData
                 // this will use the base monster type
                 return "";
             }
-            return path + "/" + imagePlace;
+            return path + Path.DirectorySeparatorChar + imagePlace;
         }
 
         // Save to string (editor)
@@ -1958,7 +1935,18 @@ public class QuestData
         public Quest(string pathIn)
         {
             path = pathIn;
-            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
+            if (path.EndsWith("\\") || path.EndsWith("/"))
+            {
+                path = path.Substring(0, path.Length - 1);
+            }
+
+            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "Quest");
+            if (iniData == null)
+            {
+                ValkyrieDebug.Log("Could not load the quest.ini file in " + path + Path.DirectorySeparatorChar + "quest.ini");
+                valid = false;
+                return;
+            }
 
             // do not parse the content of a quest from another game type
             if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
@@ -1968,7 +1956,7 @@ public class QuestData
             }
 
             //Read the localization data
-            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
+            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "QuestText");
 
             localizationDict = new DictionaryI18n(defaultLanguage);
             foreach (string file in localizationData.Keys)

@@ -18,7 +18,7 @@ TRUE,Vrai
 FALSE,Faux
 SNAP,Casser
 FREE,Libre
-CONFIRM,Confirmé
+CONFIRM,Confirmer
 INSPECT,Inspect
 DURATION,Durée
 DESCRIPTION,Description

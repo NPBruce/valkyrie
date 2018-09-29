@@ -126,9 +126,9 @@ class GoogleFormPostman : MonoBehaviour
 
     public void AddFormField(string name, string value)
     {
-       if (formFields == null) formFields = new WWWForm();
+        if (formFields == null) formFields = new WWWForm();
 
-        Debug.Log("INFO: stats AddFormField"+ name+":"+value);
+        //Debug.Log("INFO: stats AddFormField"+ name+":"+value);
 
         formFields.AddField(name, value);
     }
@@ -206,7 +206,7 @@ public class StatsManager
         Quest quest = game.quest;
 
         // quest filename is the unique id
-        gameStats.scenario_name = Path.GetFileName(game.quest.questPath);
+        gameStats.scenario_name = Path.GetFileName(game.quest.originalPath);
 
         // language is required to see the quality of translations
         gameStats.language_selected = game.currentLang;

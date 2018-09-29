@@ -254,7 +254,7 @@ public class RoundController {
     }
 
     // All activations finished, start end of round
-    public void EndRound()
+    public virtual void EndRound()
     {
         Game game = Game.Get();
 

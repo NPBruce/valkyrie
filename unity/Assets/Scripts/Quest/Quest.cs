@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -20,7 +20,7 @@ public class Quest
     public string questPath = "";
 
     /// <summary>
-    /// Original Quest Path
+    /// Original Quest Path (required for quest within a quest)
     /// </summary>
     public string originalPath = "";
 
@@ -28,6 +28,12 @@ public class Quest
     /// components on the board (tiles, tokens, doors)
     /// </summary>
     public Dictionary<string, BoardComponent> boardItems;
+
+    /// <summary>
+    /// list of components on the board (tiles, tokens, doors) in the right order for savegames
+    ///  we need to use an ordered list of board item, to preserve items stacking order, Dictionary do not preserve order
+    /// </summary>
+    public List<string> ordered_boardItems;
 
     /// <summary>
     /// vars for the quest 
@@ -95,6 +101,12 @@ public class Quest
     // This is true once the first tile has been displayed
     public bool firstTileDisplayed = false;
 
+    // This is true once the first autoSave has been done
+    public bool firstAutoSaveDone = false;
+
+    // This is true if the game is loaded from a savegame
+    public bool fromSavegame = false;
+
     // Quest start time (or load time)
     public System.DateTime start_time;
 
@@ -122,6 +134,7 @@ public class Quest
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
+        ordered_boardItems = new List<string>();
         vars = new VarManager();
         items = new HashSet<string>();
         shops = new Dictionary<string, List<string>>();
@@ -561,12 +574,13 @@ public class Quest
         game.cc.maxLimit = false;
 
         // Set static quest data
-        qd = new QuestData(originalPath + "/" + path, qd.package_filename);
+        if (path.StartsWith("\\") || path.StartsWith("/"))
+        {
+            path = path.Substring(1, path.Length - 1);
+        }
+        qd = new QuestData(originalPath + Path.DirectorySeparatorChar + path);
         // set questPath but do not set original path, as we are loading from within a quest here.
         questPath = Path.GetDirectoryName(qd.questPath);
-
-        // Cannot load a quest from another archive (we don't know want to extract all available archives everytime here)
-        // QuestLoader.ExtractPackages(Game.AppData());
 
         vars.TrimQuest();
 
@@ -574,6 +588,7 @@ public class Quest
 
         // Initialise data
         boardItems = new Dictionary<string, BoardComponent>();
+        ordered_boardItems = new List<string>();
         monsters = new List<Monster>();
         heroSelection = new Dictionary<string, List<Quest.Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
@@ -642,6 +657,8 @@ public class Quest
         // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
         game.quest = this;
 
+        fromSavegame = true;
+
         // Set static quest data
         qd = new QuestData(saveData.Get("Quest", "path"));
 
@@ -659,7 +676,7 @@ public class Quest
                 }
                 else
                 {
-                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + "/" + s);
+                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + Path.DirectorySeparatorChar + s);
                 }
             }
             game.audioControl.Music(toPlay, false);
@@ -775,13 +792,6 @@ public class Quest
             items.Add(kv.Key);
         }
 
-        // Set static quest data
-        string pk_path = saveData.Get("Quest", "packagepath");
-        if (pk_path != "")
-            qd = new QuestData(saveData.Get("Quest", "path"), pk_path);
-        else
-            qd = new QuestData(saveData.Get("Quest", "path"));
-
         originalPath = saveData.Get("Quest", "originalpath");
         questPath = saveData.Get("Quest", "path");
 
@@ -801,28 +811,34 @@ public class Quest
 
         // Repopulate items on the baord
         boardItems = new Dictionary<string, BoardComponent>();
+        ordered_boardItems = new List<string>();
         Dictionary<string, string> saveBoard = saveData.Get("Board");
         foreach (KeyValuePair<string, string> kv in saveBoard)
         {
             if (kv.Key.IndexOf("Door") == 0)
             {
                 boardItems.Add(kv.Key, new Door(qd.components[kv.Key] as QuestData.Door, game));
+                ordered_boardItems.Add(kv.Key);
             }
             if (kv.Key.IndexOf("Token") == 0)
             {
                 boardItems.Add(kv.Key, new Token(qd.components[kv.Key] as QuestData.Token, game));
+                ordered_boardItems.Add(kv.Key);
             }
             if (kv.Key.IndexOf("Tile") == 0)
             {
                 boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
+                ordered_boardItems.Add(kv.Key);
             }
             if (kv.Key.IndexOf("UI") == 0)
             {
                 boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
+                ordered_boardItems.Add(kv.Key);
             }
             if (kv.Key.IndexOf("#shop") == 0)
             {
                 boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), activeShop));
+                ordered_boardItems.Add(kv.Key);
             }
         }
 
@@ -1011,18 +1027,22 @@ public class Quest
         if (qc is QuestData.Tile)
         {
             boardItems.Add(name, new Tile((QuestData.Tile)qc, game));
+            ordered_boardItems.Add(name);
         }
         if (qc is QuestData.Door)
         {
             boardItems.Add(name, new Door((QuestData.Door)qc, game));
+            ordered_boardItems.Add(name);
         }
         if (qc is QuestData.Token)
         {
             boardItems.Add(name, new Token((QuestData.Token)qc, game));
+            ordered_boardItems.Add(name);
         }
         if (qc is QuestData.UI)
         {
             boardItems.Add(name, new UI((QuestData.UI)qc, game));
+            ordered_boardItems.Add(name);
         }
         if (qc is QuestData.QItem && !shop)
         {
@@ -1057,6 +1077,7 @@ public class Quest
         {
             boardItems[name].Remove();
             boardItems.Remove(name);
+            ordered_boardItems.Remove(name);
         }
         if (monsterSelect.ContainsKey(name))
         {
@@ -1097,6 +1118,7 @@ public class Quest
                 bc.Remove();
             }
             boardItems.Clear();
+            ordered_boardItems.Clear();
         }
     }
 
@@ -1119,6 +1141,7 @@ public class Quest
         }
 
         boardItems.Clear();
+        ordered_boardItems.Clear();
     }
 
     // Change the transparency of a component on the board
@@ -1164,7 +1187,7 @@ public class Quest
         } else
         {
             // if previous duration is invalid, we are using an old savegame do not try to calculate anything
-            r += "duration=" + (-1);
+            r += "duration=" + (-1) + nl;
         }
 
         // Save valkyrie version
@@ -1173,12 +1196,6 @@ public class Quest
         r += "path=" + qd.questPath + nl;
         r += "originalpath=" + originalPath + nl;
         r += "questname=" + qd.quest.name.Translate() + nl;
-
-        // we keep package filename to be able to extract the package when loading from a savegame
-        if (qd.package_filename != "")
-        {
-            r += "packagepath=" + qd.package_filename + nl;
-        }
 
         if (phase == MoMPhase.horror)
         {
@@ -1210,9 +1227,11 @@ public class Quest
         }
 
         r += "[Board]" + nl;
-        foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        // we need to use an ordered list of board item, to preserve items stacking order, Dictionary do not preserve order
+        // foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+        foreach (string item in ordered_boardItems)
         {
-            r += kv.Key + nl;
+            r += item + nl;
         }
 
         r += vars.ToString();

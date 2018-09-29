@@ -29,6 +29,10 @@ public class NextStageButton
         if (!Game.Get().quest.firstTileDisplayed) 
             return;
 
+        // do not display the button bar when we are in the editor
+        if (Game.Get().editMode)
+            return;
+
         // Clean up everything marked as 'uiphase'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
@@ -103,7 +107,6 @@ public class NextStageButton
         else
             color = Color.red;
 
-        int text_size = (int) (UIScaler.GetMediumFont() * 1);
         ui.SetText(phase, color);
         string_width = ui.GetStringWidth(phase, UIScaler.GetMediumFont(), Game.Get().gameType.GetHeaderFont()) + 0.5f;
         ui.SetLocation(offset + ((UIScaler.GetRight(-4f) - offset - string_width)*0.5f), UIScaler.GetBottom(-1.8f), string_width, 1.8f);
@@ -145,6 +148,8 @@ public class NextStageButton
         if (game.quest.phase == Quest.MoMPhase.monsters)
         {
             game.audioControl.PlayTrait("horror");
+            game.quest.phase = Quest.MoMPhase.horror;
+            return;
         }
 
         if (game.quest.phase == Quest.MoMPhase.horror)
@@ -169,10 +174,8 @@ public class NextStageButton
 
     public void Log()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
+        // log window should always be available, do not test for Dialog existence
+
         new LogWindow();
     }
 

@@ -212,7 +212,7 @@ public class QuestEditSelection
     public void Copy(string key)
     {
         Game game = Game.Get();
-        string dataLocation = Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/Editor";
+        string dataLocation = Game.AppData() + Path.DirectorySeparatorChar + Game.Get().gameType.TypeName() + "/Editor";
         if (!Directory.Exists(dataLocation))
         {
             Directory.CreateDirectory(dataLocation);
@@ -304,7 +304,7 @@ public class QuestEditSelection
     public void NewQuest()
     {
         Game game = Game.Get();
-        string dataLocation = Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/Editor";
+        string dataLocation = Game.AppData() + Path.DirectorySeparatorChar + Game.Get().gameType.TypeName() + "/Editor";
         if (!Directory.Exists(dataLocation))
         {
             Directory.CreateDirectory(dataLocation);
