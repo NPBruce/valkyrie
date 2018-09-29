@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using System.IO;
 
 public class PuzzleImageWindow
 {
@@ -44,7 +45,7 @@ public class PuzzleImageWindow
         }
         else
         {
-            newTex = ContentData.FileToTexture(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + "/" + questPuzzle.imageType);
+            newTex = ContentData.FileToTexture(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + questPuzzle.imageType);
         }
         if (newTex.width > newTex.height)
         {

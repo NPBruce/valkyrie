@@ -802,7 +802,7 @@ public class EditorComponentEvent : EditorComponent
         }
         else
         {
-            string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/" + eventComponent.audio;
+            string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + eventComponent.audio;
             game.audioControl.Play(path);
         }
         Update();

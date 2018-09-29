@@ -7,7 +7,8 @@ namespace Assets.Scripts.UI.Screens
     // Class for creation and management of the main menu
     public class EndGameScreen
     {
-        private static readonly string IMG_BG_INVESTIGATORS_PHASE = "ImageGreenBG";
+        private static readonly string IMG_BG_MOM = "ImageGreenBG";
+        private static readonly string IMG_BG_DESCENT = "ImageDarkBackground";
         private static readonly StringKey STATS_WELCOME = new StringKey("val", "STATS_WELCOME");
         private static readonly StringKey STATS_ASK_VICTORY = new StringKey("val", "STATS_ASK_VICTORY");
         private static readonly StringKey STATS_ASK_VICTORY_YES = new StringKey("val", "STATS_ASK_VICTORY_YES");
@@ -42,7 +43,20 @@ namespace Assets.Scripts.UI.Screens
             // Investigator picture in background full screen
             UIElement bg = new UIElement(Game.ENDGAME);
             Texture2D bgTex;
-            bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_INVESTIGATORS_PHASE].image);
+            if (game.gameType.TypeName() == "MoM")
+            {
+                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_MOM].image);
+            }
+            else if (game.gameType.TypeName() == "D2E")
+            {
+                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_DESCENT].image);
+            }
+            else
+            {
+                // TODO: support a background picture for IA
+                Destroyer.MainMenu();
+                return;
+            }
             bg.SetImage(bgTex);
             bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
             

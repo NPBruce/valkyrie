@@ -16,7 +16,6 @@ public class QuestDownload : MonoBehaviour
     public Game game;
     List<RemoteQuest> remoteQuests;
     IniData localManifest;
-    Dictionary<string, Texture2D> textures;
 
     /// <summary>
     /// Download required files then draw screen
@@ -25,7 +24,6 @@ public class QuestDownload : MonoBehaviour
     {
         new LoadingScreen(new StringKey("val", "DOWNLOAD_LIST").Translate());
         game = Game.Get();
-        textures = new Dictionary<string, Texture2D>();
         remoteQuests = new List<RemoteQuest>();
         string remoteManifest = GetServerLocation() + "manifest.ini";
         StartCoroutine(Download(remoteManifest, DownloadManifest));
@@ -38,7 +36,7 @@ public class QuestDownload : MonoBehaviour
     public static string GetServerLocation()
     {
         string[] text = File.ReadAllLines(ContentData.ContentPath() + "../text/download.txt");
-        return text[0] + Game.Get().gameType.TypeName() + "/";
+        return text[0] + Game.Get().gameType.TypeName() + Path.DirectorySeparatorChar;
     }
 
     /// <summary>
@@ -113,7 +111,7 @@ public class QuestDownload : MonoBehaviour
 
             if (!formatOK) continue;
 
-            bool exists = File.Exists(saveLocation() + "/" + file);
+            bool exists = File.Exists(saveLocation() + Path.DirectorySeparatorChar + file);
             bool update = true;
             if (exists)
             {
@@ -372,7 +370,7 @@ public class QuestDownload : MonoBehaviour
 
             string file = kv.Key + ".valkyrie";
             // Size is 1.2 to be clear of characters with tails
-            if (File.Exists(saveLocation() + "/" + file))
+            if (File.Exists(saveLocation() + Path.DirectorySeparatorChar + file))
             {
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 8, 1.2f);
@@ -430,7 +428,7 @@ public class QuestDownload : MonoBehaviour
     /// <param file="file">File name to delete</param>
     public void Delete(string file)
     {
-        string toDelete = saveLocation() + "/" + file;
+        string toDelete = saveLocation() + Path.DirectorySeparatorChar + file;
         File.Delete(toDelete);
         Destroyer.Dialog();
         DrawList();
@@ -445,7 +443,7 @@ public class QuestDownload : MonoBehaviour
         QuestLoader.mkDir(saveLocation());
 
         // Write to disk
-        using (BinaryWriter writer = new BinaryWriter(File.Open(saveLocation() + "/" + rq.name + ".valkyrie", FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(saveLocation() + Path.DirectorySeparatorChar + rq.name + ".valkyrie", FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();
