@@ -462,3 +462,6 @@ STATS_NO_AVERAGE_WIN_RATIO,Average win ratio unavailable
 STATS_DOWNLOAD_ONGOING,Downloading game statistics and rating...\nPlease reload the page in a few seconds
 STATS_ERROR_HTTP,Error getting game statistic, if the problem persists please report the issue on github Valkyrie\n{0}
 STATS_ERROR_NETWORK,Error getting game statistic, please check your internet connection
+
+
+NEW_VERSION_AVAILABLE,New version available!

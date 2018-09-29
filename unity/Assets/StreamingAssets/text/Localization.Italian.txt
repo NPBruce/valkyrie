@@ -346,3 +346,5 @@ ATTACK_WITH_SPELL, Attacca con un Incantesimo
 ATTACK_WITH_UNARMED, Attacca Senza Armi
 
 ACTION_X, {0}
+
+NEW_VERSION_AVAILABLE,Aggiornamento disponibile!

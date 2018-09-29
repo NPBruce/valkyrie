@@ -425,3 +425,5 @@ STATS_NO_AVERAGE_WIN_RATIO,Ratio de victoire indisponible
 STATS_DOWNLOAD_ONGOING,Téléchargement des statistiques et notes...\nVeuillez recharger dans quelques secondes
 STATS_ERROR_HTTP,Erreur lors du téléchargement des statistiques, si le problème persiste merci de faire un retour sur Github Valkyrie\n{0}
 STATS_ERROR_NETWORK,Erreur lors du téléchargement des statistiques, veuillez vérifier votre connexion internet
+
+NEW_VERSION_AVAILABLE,Mise à jour disponible!

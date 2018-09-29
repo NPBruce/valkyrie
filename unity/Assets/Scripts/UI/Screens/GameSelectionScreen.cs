@@ -220,6 +220,9 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(Exit);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, Color.red);
+
+            // will display a button if a new version is available
+            VersionManager.GetLatestVersionAsync(CheckForNewValkyrieVersion);
         }
 
         // Start game as D2E
@@ -364,5 +367,33 @@ namespace Assets.Scripts.UI.Screens
         {
             Application.Quit();
         }
+
+        // Open link to releases and quit Valkyrie
+        public void GotoValkyrieVersion()
+        {
+            Application.OpenURL( VersionManager.GetlatestReleaseURL() );
+
+            Application.Quit();
+        }
+        
+        public void CheckForNewValkyrieVersion()
+        {
+            StringKey NEW_VERSION_AVAILABLE = new StringKey("val", "NEW_VERSION_AVAILABLE");
+
+            if ( VersionManager.VersionNewer(Game.Get().version, VersionManager.online_version) )
+            {
+                float string_width = 0f;
+                UIElement ui = new UIElement();
+                ui.SetText(NEW_VERSION_AVAILABLE, Color.green);
+                string_width = ui.GetStringWidth(NEW_VERSION_AVAILABLE, UIScaler.GetMediumFont());
+                ui.SetLocation(UIScaler.GetRight() - 3 - string_width, UIScaler.GetBottom(-3), string_width + 2, 2);
+                ui.SetText(NEW_VERSION_AVAILABLE, Color.green);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(GotoValkyrieVersion);
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui, Color.green);
+            }
+        }
+
     }
 }
