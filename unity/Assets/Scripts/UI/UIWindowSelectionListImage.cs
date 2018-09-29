@@ -84,7 +84,6 @@ namespace Assets.Scripts.UI
 
         protected override void DrawItemList()
         {
-            Game game = Game.Get();
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);

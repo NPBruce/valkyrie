@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -20,15 +19,6 @@ public class MonsterDialogMoM : MonsterDialog
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        // Get the offset position of the monster
-        int index = 0;
-        for (int i = 0; i < game.quest.monsters.Count; i++)
-        {
-            if (game.quest.monsters[i] == monster)
-            {
-                index = i;
-            }
-        }
 
         DrawMonster(monster);
 

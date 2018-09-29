@@ -7,8 +7,10 @@ using System.IO;
 
 public class EditorComponentQuest : EditorComponent
 {
+    // Not used yet
+    //private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
+
     private readonly StringKey HIDDEN = new StringKey("val", "HIDDEN");
-    private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
     private readonly StringKey SELECT_PACK = new StringKey("val", "SELECT_PACK");
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
@@ -311,7 +313,6 @@ public class EditorComponentQuest : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectQuestAddPack, SELECT_PACK);
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
