@@ -396,3 +396,5 @@ ATTACK_WITH_SPELL, Atak Zaklęciem
 ATTACK_WITH_UNARMED, Atak bez broni
 
 ACTION_X, {0}
+
+NEW_VERSION_AVAILABLE,Dostępna aktualizacja!

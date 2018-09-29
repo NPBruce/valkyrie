@@ -400,3 +400,5 @@ ATTACK_WITH_SPELL, Atacar con un Hechizo
 ATTACK_WITH_UNARMED, Atacar sin arma
 
 ACTION_X, {0}
+
+NEW_VERSION_AVAILABLE,¡Actualización disponible!
