@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts;
 
 /*
  * Form : https://goo.gl/forms/jrC9oKh8EPMMdO2l2
@@ -38,45 +39,6 @@ public struct ScenarioStats
     public float scenario_avg_win_ratio;
 }
 
-class DataDownloader : MonoBehaviour
-{
-
-    private Uri uri = null;
-    private Action<string,bool> callback_action;
-
-    public void download(string url, Action<string, bool> action)
-    {
-        uri = new Uri(url);
-        callback_action = action;
-
-        StartCoroutine(GetData());
-    }
-
-    private IEnumerator GetData()
-    {
-        UnityWebRequest www_get = UnityWebRequest.Get(uri);
-        yield return www_get.SendWebRequest();
-
-        if (www_get.isNetworkError)
-        {
-            // Most probably a connection error
-            callback_action("ERROR NETWORK", true);
-            Debug.Log("Error getting stats data : most probably a connectivity issue (please check your internet connection)");
-        }
-        else if (www_get.isHttpError)
-        {
-            // Most probably a connection error
-            callback_action(www_get.error + " " + www_get.responseCode, true);
-            Debug.Log("Error getting stats data : most probably a connection error (server error)");
-        }
-        else
-        {
-            // download OK
-            callback_action(www_get.downloadHandler.text, false);
-        }
-
-    }
-}
 
 class PublishedGameStats
 {
@@ -119,55 +81,6 @@ class PublishedGameStats
 
 }
 
-class GoogleFormPostman : MonoBehaviour
-{
-    private Uri uri = null;
-    private WWWForm formFields = null;
-
-    public void AddFormField(string name, string value)
-    {
-        if (formFields == null) formFields = new WWWForm();
-
-        //Debug.Log("INFO: stats AddFormField"+ name+":"+value);
-
-        formFields.AddField(name, value);
-    }
-
-    public void SetURL(string url)
-    {
-        uri = new Uri(url);
-    }
-
-    public void PostFormAsync()
-    {
-        StartCoroutine(PostForm());
-    }
-
-    private IEnumerator PostForm()
-    {
-        UnityWebRequest www = UnityWebRequest.Post(uri, formFields);
-
-        yield return www.SendWebRequest();
-
-        if (www.isNetworkError)
-        {
-            // Most probably a connectivity error
-            Debug.Log("Error sending stats : most probably a connectivity issue (please check your internet connection)");
-        }
-        else if (www.isHttpError)
-        {
-            // Most probably a connection error
-            Debug.Log("Error sending stats : most probably a connection error");
-        }
-        else
-        {
-            Debug.Log("INFO: stats sent");
-            // success! thank you
-        }
-
-    }
-}
-
 // This class provides functions to submit game stats download game stats
 public class StatsManager
 {
@@ -182,10 +95,6 @@ public class StatsManager
 
     // stats for current scenario, to be submitted
     private PublishedGameStats gameStats = null;
-    private GameObject network_post = null;
-    private GameObject network_get = null;
-    private GoogleFormPostman post_client = null;
-    private DataDownloader json_client = null;
 
     public void PrepareStats(string victory, int rating, string comments)
     {
@@ -260,54 +169,35 @@ public class StatsManager
     // send data to google forms
     public void PublishData()
     {
-        if (network_post == null)
-        {
-            //Use WebClient Class to submit a new entry
-            network_post = new GameObject("StatsManager");
-            network_post.tag = Game.BG_TASKS;
-        }
+        WWWForm formFields = new WWWForm();
 
-        if (post_client==null)
-        { 
-            post_client = network_post.AddComponent<GoogleFormPostman>();
-        }
+        formFields.AddField("entry.1875990408", gameStats.scenario_name);
+        formFields.AddField("entry.989998412",  gameStats.quest_name);
+        formFields.AddField("entry.84574628",   gameStats.victory);
+        formFields.AddField("entry.227102998",  gameStats.rating);
+        formFields.AddField("entry.2125749314", gameStats.comments);
+        formFields.AddField("entry.170795919",  gameStats.duration.ToString());
+        formFields.AddField("entry.376629889",  gameStats.players_count.ToString());
+        formFields.AddField("entry.1150567176", gameStats.investigators_list);
+        formFields.AddField("entry.2106598722", gameStats.language_selected);
+        formFields.AddField("entry.1047979960", gameStats.events_list);
 
-
-        post_client.AddFormField("entry.1875990408", gameStats.scenario_name);
-        post_client.AddFormField("entry.989998412",  gameStats.quest_name);
-        post_client.AddFormField("entry.84574628",   gameStats.victory);
-        post_client.AddFormField("entry.227102998",  gameStats.rating);
-        post_client.AddFormField("entry.2125749314", gameStats.comments);
-        post_client.AddFormField("entry.170795919",  gameStats.duration.ToString());
-        post_client.AddFormField("entry.376629889",  gameStats.players_count.ToString());
-        post_client.AddFormField("entry.1150567176", gameStats.investigators_list);
-        post_client.AddFormField("entry.2106598722", gameStats.language_selected);
-        post_client.AddFormField("entry.1047979960", gameStats.events_list);
-
-        post_client.SetURL("https://docs.google.com/forms/u/1/d/e/1FAIpQLSfiFPuQOTXJI54LI-WNvn1K6qCkM5xErxJdUUJRhCZthaIqcA/formResponse?hl=en");
-
-        // submit:
-        post_client.PostFormAsync();
+        // submit async
+        HTTPManager.Upload("https://docs.google.com/forms/u/1/d/e/1FAIpQLSfiFPuQOTXJI54LI-WNvn1K6qCkM5xErxJdUUJRhCZthaIqcA/formResponse?hl=en",
+                           formFields,
+                           StatsUpload_callback);
     }
 
+    private void StatsUpload_callback(string data, bool error)
+    {
+        // todo : do something ?
+    }
 
     // Download JSON
     public void DownloadStats()
     {
-        if (network_get == null)
-        {
-            //Use WebClient Class to submit a new entry
-            network_get = new GameObject("StatsManager");
-            network_get.tag = Game.BG_TASKS;
-        }
-
-        if (json_client == null)
-        {
-            json_client = network_get.AddComponent<DataDownloader>();
-        }
-
         download_ongoing = true;
-        json_client.download("https://drive.google.com/uc?id=1lEhwFWrryzNH6DUMbte37G1p22SyDhu9&export=download", StatsDownload_callback);
+        HTTPManager.Get("https://drive.google.com/uc?id=1lEhwFWrryzNH6DUMbte37G1p22SyDhu9&export=download", StatsDownload_callback);
     }
 
     private void StatsDownload_callback(string data, bool error)
@@ -327,10 +217,10 @@ public class StatsManager
         if(stats_json==null)
             Debug.Log("ERROR: Stat file is empty\n");
 
+        // one entry per scenario
         foreach (ScenarioStats stats in stats_json.scenarios_stats)
         {
             scenarios_stats[stats.scenario_name] = stats;
-//            Debug.Log("INFO:Stat filename: " + stats.scenario_name + "\n");
         }
 
     }

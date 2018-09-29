@@ -272,3 +272,5 @@ STATS_NO_AVERAGE_WIN_RATIO, Porcentagem média de vitórias indisponível
 STATS_DOWNLOAD_ONGOING, Fazendo o download das estatísticas do jogo e avaliações...\n por favor recarregue a página em alguns segundos
 STATS_ERROR_HTTP, Erro ao acessar estatísticas do jogo, se esse problema persistir por favor informe esse problema no github Valkyrie \n{0}
 STATS_ERROR_Network, Erro acessando as estatísticas do jogo, por favor verifique sua conexão de Internet.
+
+NEW_VERSION_AVAILABLE,Atualização disponível!
