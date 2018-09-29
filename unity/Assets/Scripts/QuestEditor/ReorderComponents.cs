@@ -61,8 +61,6 @@ public class ReorderComponents
         {
             if (!c.source.Equals(source)) continue;
 
-            string name = c.sectionName;
-
             int tmp = index++;
             if (!first)
             {

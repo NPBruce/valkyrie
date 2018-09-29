@@ -62,7 +62,6 @@ public class QuestDownload : MonoBehaviour
         {
             if (!rq.FetchContent(this, DownloadQuestFiles)) return;
         }
-        string remoteDict = GetServerLocation() + "Localization.txt";
         DrawList();
     }
 

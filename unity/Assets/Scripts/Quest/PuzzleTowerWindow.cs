@@ -166,7 +166,6 @@ public class PuzzleTowerWindow : IUpdateListener
     /// <param name="blocks">Block sizes to draw</param>
     public void CreateTower(float hCentre, float vBottom, List<int> blocks)
     {
-        float offset = vBottom;
         foreach (int size in blocks)
         {
             CreateBlock(hCentre, vBottom, size);

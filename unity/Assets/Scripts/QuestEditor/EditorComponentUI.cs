@@ -369,8 +369,8 @@ public class EditorComponentUI : EditorComponentEvent
         {
             LocalizationRead.updateScenarioText(uiComponent.uitext_key, textUIE.GetText());
         }
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        game.quest.Remove(uiComponent.sectionName);
+        game.quest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -388,7 +388,6 @@ public class EditorComponentUI : EditorComponentEvent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectColour, CommonStringKeys.SELECT_ITEM);
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())

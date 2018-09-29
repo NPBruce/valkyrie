@@ -16,7 +16,6 @@ public class InvestigatorAttack
     public InvestigatorAttack(Quest.Monster m)
     {
         monster = m;
-        Game game = Game.Get();
         AttackOptions();
     }
 
