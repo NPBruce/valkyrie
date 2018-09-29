@@ -49,7 +49,7 @@ namespace Assets.Scripts.UI
             }
             else
             {
-                string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/" + key;
+                string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + key;
                 game.audioControl.Play(path);
             }
         }

@@ -112,7 +112,7 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            if (File.Exists(game.quest.originalPath + "/" + name))
+            if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + name))
             {
                 events.Add(name, new StartQuestEvent(name));
             }
@@ -174,7 +174,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + e.qEvent.audio);
         }
 
         // Set Music
@@ -189,7 +189,7 @@ public class EventManager
                 }
                 else
                 {
-                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s);
+                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + s);
                 }
             }
             game.audioControl.Music(music, false);
@@ -317,6 +317,7 @@ public class EventManager
         if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
         {
             game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+            game.quest.ordered_boardItems.Add("#shop");
         }
         else if (!e.qEvent.display)
         {
@@ -397,7 +398,7 @@ public class EventManager
             // Check if the event doesn't exists - quest fault
             if (!events.ContainsKey(s))
             {
-                if (File.Exists(game.quest.originalPath + "/" + s))
+                if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
                 {
                     events.Add(s, new StartQuestEvent(s));
                     enabledEvents.Add(s);
@@ -418,10 +419,18 @@ public class EventManager
         if (game.quest.vars.GetValue("$end") != 0)
         {
             game.quest.questHasEnded = true;
-            new EndGameScreen();
 
-            //  Destroyer.MainMenu();
-
+            if( Path.GetFileName(game.quest.originalPath).StartsWith("EditorScenario") 
+             || !Path.GetFileName(game.quest.originalPath).EndsWith(".valkyrie") )
+            {
+                // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
+                Destroyer.MainMenu();
+            }
+            else
+            {
+                new EndGameScreen();
+            }
+            
             return;
         }
 
@@ -662,7 +671,7 @@ public class EventManager
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
                     {
-                        if (File.Exists(game.quest.originalPath + "/" + s))
+                        if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
                         {
                             game.quest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
