@@ -116,9 +116,7 @@ public class GameMenu {
         // Stop music
         game.audioControl.Music(new List<string>());
 
-        // Fetch all of the quest data
-        game.quest = new Quest(new QuestData.Quest(path));
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
-        QuestEditor.Begin();
+        QuestEditor.Begin(path);
     }
 }

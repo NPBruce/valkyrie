@@ -369,15 +369,17 @@ public class QuestEditSelection
     {
         Game game = Game.Get();
 
+        // Remove all current components
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
+
+        if (game.quest!=null) game.quest.RemoveAll();
 
         game.audioControl.Music(new List<string>());
 
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
-        game.quest = new Quest(questList[key]);
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
-        QuestEditor.Begin();
+        QuestEditor.Begin(questList[key].path);
     }
 }
