@@ -13,7 +13,6 @@ class SaveManager
     // This gets the path to the save game file.  Only one file is used/supported per game type.
     public static string SaveFile(int num = 0)
     {
-        Game game = Game.Get();
         string number = num.ToString();
         if (num == 0) number = "Auto";
         return Path.Combine(ContentData.GameTypePath, "Save") + Path.DirectorySeparatorChar + "save" + number + ".vSave";

@@ -282,7 +282,7 @@ namespace Assets.Scripts.UI.Screens
         public void IA()
         {
             // Not working yet
-            return;
+#if false
             // Check if import neeeded
             if (!fcIA.NeedImport())
             {
@@ -290,6 +290,7 @@ namespace Assets.Scripts.UI.Screens
                 loadLocalization();
                 Destroyer.MainMenu();
             }
+#endif
         }
 
         /// <summary>

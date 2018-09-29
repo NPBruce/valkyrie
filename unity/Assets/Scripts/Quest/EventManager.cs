@@ -846,7 +846,6 @@ public class EventManager
     public static string InputSymbolReplace(string input)
     {
         string output = input;
-        Game game = Game.Get();        
 
         foreach (var conversion in GetCharacterMap(false, true))
         {
