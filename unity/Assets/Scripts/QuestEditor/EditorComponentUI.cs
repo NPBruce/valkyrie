@@ -199,11 +199,11 @@ public class EditorComponentUI : EditorComponentEvent
 
         // Create a grey zone outside of the 16x9 boundary
         // Find quest UI panel
-        GameObject panel = GameObject.Find("QuestUIPanel");
+        GameObject panel = GameObject.Find("QuestUICanvas");
         if (panel == null)
         {
             // Create UI Panel
-            panel = new GameObject("QuestUIPanel");
+            panel = new GameObject("QuestUICanvas");
             panel.tag = Game.BOARD;
             panel.transform.SetParent(game.uICanvas.transform);
             panel.transform.SetAsFirstSibling();
