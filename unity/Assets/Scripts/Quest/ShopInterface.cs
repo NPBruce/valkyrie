@@ -27,19 +27,7 @@ public class ShopInterface : Quest.BoardComponent
             game.quest.shops.Add(eventName, contentItems);
         }
         eventData = game.quest.qd.components[eventName] as QuestData.Event;
-        // Find quest UI panel
-        panel = GameObject.Find("QuestUIPanel");
-        if (panel == null)
-        {
-            // Create UI Panel
-            panel = new GameObject("QuestUIPanel");
-            panel.tag = Game.BOARD;
-            panel.transform.SetParent(game.uICanvas.transform);
-            panel.transform.SetAsFirstSibling();
-            panel.AddComponent<RectTransform>();
-            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
-            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
-        }
+
         Update();
     }
 

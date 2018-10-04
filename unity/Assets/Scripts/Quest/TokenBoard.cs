@@ -52,7 +52,6 @@ public class TokenBoard : MonoBehaviour {
             UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent(); });
-            c = component;
         }
 
         // On click the tokens start an event
