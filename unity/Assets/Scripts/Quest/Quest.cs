@@ -564,7 +564,12 @@ public class Quest
 
         // Clean up everything marked as 'board'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.BOARD))
-            Object.Destroy(go);
+        {
+            // do not destroy Quest UI panel in case we are using it again :
+            // findGameObject would find it as "Actual object destruction is always delayed until after the current Update loop" (see issue #820)
+            if (go.name != "QuestUICanvas")
+                Object.Destroy(go);
+        }
         game.tokenBoard.tc.Clear();
 
         phase = MoMPhase.investigator;
@@ -1542,11 +1547,11 @@ public class Quest
             qUI = questUI;
 
             // Find quest UI panel
-            GameObject panel = GameObject.Find("QuestUIPanel");
+            GameObject panel = GameObject.Find("QuestUICanvas");
             if (panel == null)
             {
                 // Create UI Panel
-                panel = new GameObject("QuestUIPanel");
+                panel = new GameObject("QuestUICanvas");
                 panel.tag = Game.BOARD;
                 panel.transform.SetParent(game.uICanvas.transform);
                 panel.transform.SetAsFirstSibling();
