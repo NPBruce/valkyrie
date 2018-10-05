@@ -440,6 +440,7 @@ ATTACK_WITH_UNARMED, Attack Unarmed
 ACTION_X, {0}
 
 STATS_WELCOME,Thank you for playing. Please rate and share your experience for future players. Your game actions will be shared with the game authors to help them improve this scenario.
+
 STATS_ASK_VICTORY,Did you win this game?
 STATS_ASK_VICTORY_YES,YES!
 STATS_ASK_VICTORY_NO,No...
@@ -459,5 +460,7 @@ STATS_DOWNLOAD_ONGOING,Downloading game statistics and rating...\nPlease reload 
 STATS_ERROR_HTTP,Error getting game statistic, if the problem persists please report the issue on github Valkyrie\n{0}
 STATS_ERROR_NETWORK,Error getting game statistic, please check your internet connection
 
+ERROR_HTTP,Error downloading file, if the problem persists please report the issue on github Valkyrie\n{0}
+ERROR_NETWORK,Error downloading file, please check your internet connection
 
 NEW_VERSION_AVAILABLE,New version available!

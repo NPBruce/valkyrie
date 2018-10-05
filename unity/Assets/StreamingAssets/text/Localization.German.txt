@@ -405,5 +405,7 @@ STATS_DOWNLOAD_ONGOING,Lade Statistiken und Bewertungen...\nBitte lade die Seite
 STATS_ERROR_HTTP,Fehler beim Abrufen der Spielstatistik. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
 STATS_ERROR_NETWORK,Fehler beim Abrufen der Spielstatistik, bitte überprüfe deine Internetverbindung
 
-NEW_VERSION_AVAILABLE,Update verfügbar!
+ERROR_HTTP,Fehler beim Abrufen der datei. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
+ERROR_NETWORK,Fehler beim Abrufen der datei, bitte überprüfe deine Internetverbindung
 
+NEW_VERSION_AVAILABLE,Update verfügbar!
