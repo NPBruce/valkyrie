@@ -26,7 +26,7 @@ public class QuestDownload : MonoBehaviour
         game = Game.Get();
         remoteQuests = new List<RemoteQuest>();
         string remoteManifest = GetServerLocation() + "manifest.ini";
-        StartCoroutine(Download(remoteManifest, DownloadManifest));
+        HTTPManager.Get(remoteManifest, DownloadManifest_callback);
     }
 
     /// <summary>
@@ -42,10 +42,46 @@ public class QuestDownload : MonoBehaviour
     /// <summary>
     /// Parse the downloaded remote manifest and start download of individual quest files
     /// </summary>
-    public void DownloadManifest()
+    public void DownloadManifest_callback(string data, bool error)
     {
-        if (download.error != null) Application.Quit();
-        IniData remoteManifest = IniRead.ReadFromString(download.text);
+        if (error)
+        {
+            // Hide loading screen
+            Destroyer.Dialog();
+
+            // draw error message
+            float error_string_width = 0;
+            UIElement ui = new UIElement();
+            if (data == "ERROR NETWORK")
+            {
+                StringKey ERROR_NETWORK = new StringKey("val", "ERROR_NETWORK");
+                ui.SetText(ERROR_NETWORK, Color.red);
+                error_string_width = ui.GetStringWidth(ERROR_NETWORK, UIScaler.GetMediumFont());
+            }
+            else
+            {
+                StringKey ERROR_HTTP = new StringKey("val", "ERROR_HTTP", game.stats.error_download_description);
+                ui.SetText(ERROR_HTTP, Color.red);
+                error_string_width = ui.GetStringWidth(ERROR_HTTP, UIScaler.GetMediumFont());
+            }
+            ui.SetLocation(UIScaler.GetHCenter() - (error_string_width / 2f), UIScaler.GetVCenter(), error_string_width, 2.4f);
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetLargeFont());
+            ui.SetBGColor(Color.clear);
+
+            // draw return button
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetButton(delegate { Cancel(); });
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui, Color.red);
+
+            return;
+        }
+
+        IniData remoteManifest = IniRead.ReadFromString(data);
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in remoteManifest.data)
         {
             remoteQuests.Add(new RemoteQuest(kv));
@@ -482,6 +518,7 @@ public class QuestDownload : MonoBehaviour
         if (!string.IsNullOrEmpty(download.error))
         {
             // fixme not fatal
+            ValkyrieDebug.Log("Error while downloading :" + file);
             ValkyrieDebug.Log(download.error);
             //Application.Quit();
         }
