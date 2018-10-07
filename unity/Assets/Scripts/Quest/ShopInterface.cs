@@ -141,14 +141,14 @@ public class ShopInterface : Quest.BoardComponent
             ui.SetLocation(3, vOffset + 4, 3, 1);
             ui.SetText(act);
             ui.SetButton(delegate { Buy(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
             ui.SetText(GetPurchasePrice(game.cd.items[s]).ToString());
             ui.SetButton(delegate { Buy(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
@@ -207,14 +207,14 @@ public class ShopInterface : Quest.BoardComponent
             ui.SetLocation(3, vOffset + 4, 3, 1);
             ui.SetText(act);
             ui.SetButton(delegate { Sell(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
             ui.SetText(GetSellPrice(game.cd.items[itemName]).ToString());
             ui.SetButton(delegate { Sell(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
