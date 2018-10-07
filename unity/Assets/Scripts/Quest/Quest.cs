@@ -279,21 +279,52 @@ public class Quest
                     exclude.Add(t);
                 }
             }
+
+            // add user inventory in exclude list
             exclude.AddRange(items);
+
+            // we don't want duplicate in the shop
+            exclude.AddRange(itemSelect.Values.ToList());
+
+            //  remove items with qty not yet reached from exclude list
+            foreach (string item in exclude)
+            {
+                if (game.cd.items.ContainsKey(item) 
+                    && game.cd.items[item].qty != 1
+                    && exclude.Count(element => element == item) < game.cd.items[item].qty
+                    )
+                      exclude.RemoveAll(element => element == item);
+            }
 
             // Start a list of matches
             List<string> list = new List<string>();
             foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
             {
-                bool allFound = true;
+                bool next=false;
+
                 foreach (string t in qItem.traits)
                 {
                     // Does the item have this trait?
                     if (!kv.Value.ContainsTrait(t))
                     {
                         // Trait missing, exclude monster
-                        allFound = false;
+                        next = true;
                     }
+                }
+                if (next) continue;
+
+                foreach (string t in exclude)
+                {
+                    if (t.Equals(kv.Key))
+                        next = true;
+                }
+                if (next) continue;
+
+
+                if (kv.Value.minFame > 0)
+                {
+                    if (kv.Value.minFame > fame) continue;
+                    if (kv.Value.maxFame < fame) continue;
                 }
 
                 // Must have one of these traits
@@ -307,25 +338,8 @@ public class Quest
                     }
                 }
 
-                bool excludeBool = false;
-                foreach (string t in exclude)
-                {
-                    if (t.Equals(kv.Key)) excludeBool = true;
-                }
-
-                bool fameOK = true;
-                if (kv.Value.minFame > 0)
-                {
-                    if (kv.Value.minFame > fame) fameOK = false;
-                    if (kv.Value.maxFame < fame) fameOK = false;
-                }
-                foreach (string t in exclude)
-                {
-                    if (t.Equals(kv.Key)) excludeBool = true;
-                }
-
                 // item has all traits
-                if (allFound && oneFound && !excludeBool && fameOK)
+                if (oneFound)
                 {
                     list.Add(kv.Key);
                 }
