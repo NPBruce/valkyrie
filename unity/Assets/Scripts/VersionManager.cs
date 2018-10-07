@@ -12,14 +12,8 @@ class VersionManager
     /// <param name="action">Callback when version number has been downloaded (not called in case of error).</param>
     public static void GetLatestVersionAsync(Action action)
     {
-        string url = "";
-#if BRYNHILDR
-        // check here for BRYNHILDR
-        url = "https://raw.githubusercontent.com/BenRQ/valkyrie/master/unity/Assets/Resources/version.txt";
-#else
         // check here for official release
-        url = "https://raw.githubusercontent.com/NPBruce/valkyrie/master/unity/Assets/Resources/version.txt";
-#endif
+        string url = "https://raw.githubusercontent.com/NPBruce/valkyrie/master/unity/Assets/Resources/version.txt";
 
         version_downloaded_action = action;
 
@@ -31,15 +25,7 @@ class VersionManager
     /// Provide URL to latest release.</summary>
     public static string GetlatestReleaseURL()
     {
-        string url = "";
-#if BRYNHILDR
-            // For Brynhildr release :
-        url = "https://github.com/BenRQ/valkyrie/releases/latest";
-#else
-        // For official release :
-        url = "https://github.com/NPBruce/valkyrie/releases/latest";
-#endif
-
+        string url = "https://github.com/NPBruce/valkyrie/releases/latest";
         return url;
     }
 
