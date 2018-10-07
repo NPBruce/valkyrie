@@ -1195,6 +1195,7 @@ public class ItemData : GenericData
     public int price = 0;
     public int minFame = -1;
     public int maxFame = -1;
+    public int qty = 1;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -1213,6 +1214,10 @@ public class ItemData : GenericData
         if (content.ContainsKey("maxfame"))
         {
             maxFame = Fame(content["maxfame"]);
+        }
+        if (content.ContainsKey("qty"))
+        {
+            int.TryParse(content["qty"], out qty);
         }
     }
 
