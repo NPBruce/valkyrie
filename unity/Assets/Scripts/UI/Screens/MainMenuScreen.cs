@@ -44,7 +44,7 @@ namespace Assets.Scripts.UI.Screens
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
-            ui.SetText("Valkyrie Brynhildr");
+            ui.SetText("Valkyrie");
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
 			
