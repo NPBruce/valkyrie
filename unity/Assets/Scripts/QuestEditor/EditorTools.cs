@@ -101,32 +101,39 @@ public class EditorTools
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
-            string destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName;
+            string desktopDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+            string destination = Path.Combine(desktopDir, packageName);
             int postfix = 2;
             while (Directory.Exists(destination))
             {
-                destination = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/" + packageName + postfix++;
+                destination = Path.Combine(desktopDir, packageName + postfix++);
             }
             Directory.CreateDirectory(destination);
 
-            ZipFile zip = new ZipFile();
-            zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath));
-            zip.Save(destination + "/" + packageName + ".valkyrie");
+            string packageFile = Path.Combine(destination, packageName + ".valkyrie");
 
-            string icon = game.quest.qd.quest.image;
+            using (var zip = new ZipFile())
+            {
+                zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath));
+                zip.Save(packageFile);
+            }
+
+            string icon = game.quest.qd.quest.image.Replace('\\', '/');
             if (icon.Length > 0)
             {
                 string iconName = Path.GetFileName(icon);
                 // Temp hack to get ToString to output local file
                 game.quest.qd.quest.image = iconName;
-                File.Copy(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), icon), destination + "/" + iconName);
+                string src = Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), icon);
+                string dest = Path.Combine(destination, iconName);
+                File.Copy(src, dest);
             }
             string manifest = game.quest.qd.quest.ToString();
             // Restore icon
             game.quest.qd.quest.image = icon;
 
             // Append sha version
-            using (FileStream stream = File.OpenRead(destination + "/" + packageName + ".valkyrie"))
+            using (FileStream stream = File.OpenRead(packageFile))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
                 manifest += "version=" + System.BitConverter.ToString(checksum) + "\n";
@@ -137,8 +144,7 @@ public class EditorTools
                 manifest += "name." + kv.Key + "=" + kv.Value + "\n";
             }
 
-
-            File.WriteAllText(destination + "/" + packageName + ".ini", manifest);
+            File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);
         }
         catch (System.IO.IOException e)
         {
