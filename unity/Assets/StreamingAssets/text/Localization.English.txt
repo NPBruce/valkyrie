@@ -289,6 +289,8 @@ spell,Spell
 key,Key
 evidence,Evidence
 ally,Ally
+spelldefence,Defence spell
+spellattack,Attack spell
 
 //Audio
 menu,Menu
@@ -333,6 +335,9 @@ mountain,Mountain
 cold,Cold
 hot,Hot
 water,Water
+fleshless,Fleshless
+relic,Relic
+elixir,Elixir
 
 //Tiles
 basement,Basement
@@ -340,6 +345,7 @@ river,River
 street,Street
 hallway,Hallway
 bathroom,Bathroom
+bedroom,Bedroom
 kitchen,Kitchen
 dock,Dock
 storage,Storage

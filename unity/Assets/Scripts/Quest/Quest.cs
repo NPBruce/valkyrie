@@ -539,7 +539,7 @@ public class Quest
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
-                Destroyer.MainMenu();
+                game.quest.log.Add(new Quest.LogEntry("Error: Unable to find monster of traits specified in spawn event: " + spawn.sectionName, true));
                 return false;
             }
 
