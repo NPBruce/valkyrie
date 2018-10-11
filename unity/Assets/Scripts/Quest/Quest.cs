@@ -2019,7 +2019,21 @@ public class Quest
             HashSet<int> dupe = new HashSet<int>();
             foreach (Monster m in game.quest.monsters)
             {
-                if (m.monsterData == monsterData || m.duplicate != 0)
+                string active_monster = "";
+                string new_monster = "";
+
+                // also check for custom monster base type
+                if (m.monsterData.sectionName.IndexOf("CustomMonster") == 0)
+                    active_monster = ((m.monsterData) as QuestMonster).derivedType;
+                else
+                    active_monster = m.monsterData.sectionName;
+
+                if (monsterData.sectionName.IndexOf("CustomMonster") == 0)
+                    new_monster = ((monsterData) as QuestMonster).derivedType;
+                else
+                    new_monster = monsterData.sectionName;
+                
+                if (active_monster == new_monster || m.duplicate != 0)
                 {
                     dupe.Add(m.duplicate);
                 }
