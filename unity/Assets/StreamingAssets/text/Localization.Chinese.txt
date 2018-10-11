@@ -215,7 +215,6 @@ UNITS,單位
 HORIZONTAL,水準
 VERTICAL,垂直
 ALIGN,對齊
-POSITION,位置
 SIZE,大小
 TEXT_SIZE,字體大小
 ASPECT,方面
@@ -247,8 +246,7 @@ BtT,BtT 
 CotW,CotW 
 FA,FA 
 MoM1E,MoM1E 
-CotWM,基礎包 一代 
-base,基礎包 二代
+base,基礎包 二代 
 RN,RN 
 SM,SM 
 SoT,SoT 
@@ -267,8 +265,6 @@ spell,法術
 key,鑰匙
 evidence,證據
 ally,盟友
-common,共同
-unique,獨特
 spelldefence,特殊防禦
 spellattack,特殊攻擊
 
@@ -294,7 +290,6 @@ female,女性
 
 //monsters Class
 undead,不死
-fleshless,無肉體
 humanoid,人形
 spirit,精神
 beast,野獸
@@ -317,6 +312,7 @@ mountain,山
 cold,冷
 hot,熱
 water,水
+fleshless,無肉體
 relic,遺跡
 elixir,靈藥
 
@@ -333,8 +329,6 @@ dock,碼頭
 storage,儲存室
 outside,室外
 inside,室內
-small,小
-medium,中
 big,大
 transition,過渡
 throne,王座
