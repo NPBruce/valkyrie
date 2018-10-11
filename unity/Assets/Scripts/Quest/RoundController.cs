@@ -42,6 +42,11 @@ public class RoundController {
         m.masterStarted = true;
     }
 
+    public void Reset()
+    {
+        activationsFinished = false;
+    }
+
     // A monster has activated, work out what to do next
     virtual public void MonsterActivated()
     {

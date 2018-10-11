@@ -669,6 +669,9 @@ public class Quest
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
 
+        // when starting a new quest, reset round countroller
+        game.roundControl.Reset();
+
         // Start round events
         eManager.EventTriggerType("StartRound", false);
         // Start the quest (top of stack)
