@@ -60,6 +60,7 @@ D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
 D2E_QUEST_NAME,Aventura
 DEFEATED,Derrotado
 DELETE,Eliminar
+UPDATE,Actualizar
 DIALOG,Diálogo
 DOOR,Puerta
 DOWNLOAD,Descargar
@@ -210,7 +211,6 @@ UNITS,Unidades
 HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Alinear
-POSITION,Posición
 SIZE,Tamaño
 TEXT_SIZE,Tamaño del Texto
 ASPECT,Aspecto
@@ -299,14 +299,11 @@ river,Río
 street,Calle
 hallway,Pasillo
 bathroom,Baño
-bedroom,Dormitorio
 kitchen,Cocina
 dock,Muelle
 storage,Almacén
 outside,Exterior
 inside,Interior
-small,Pequeño
-medium,Mediano
 big,Grande
 transition,Transición
 throne,Trono
@@ -399,3 +396,29 @@ ATTACK_WITH_SPELL, Atacar con un Hechizo
 ATTACK_WITH_UNARMED, Atacar sin arma
 
 ACTION_X, {0}
+
+STATS_WELCOME, Gracias por jugar. Por favor comparta y puntúe su experiencia para futuros jugadores. Sus acciones de juego se compartirán con el autor para ayudarle a mejorar el escenario.
+
+STATS_ASK_VICTORY,¿Habéis conseguido vencer? 
+STATS_ASK_VICTORY_YES,¡SÍ! 
+STATS_ASK_VICTORY_NO,No... 
+STATS_ASK_RATING,¿Cómo puntuarías este escenario?\n(1: horroroso  10: espectacular) 
+STATS_ASK_COMMENTS,¿Queréis dejar algún comentario de este escenario para el autor? 
+STATS_MISSING_INFO,Por favor puntúa el escenario y dinos si has ganado antes de enviar.
+STATS_SEND_BUTTON,Enviar
+STATS_MENU_BUTTON,Menú
+
+STATS_AVERAGE_WIN_RATIO, Porcentaje medio de victorias: {0}% 
+STATS_NB_USER_REVIEWS,({0} reseñas de los usuarios) 
+STATS_AVERAGE_DURATION,Duración Media: {0} min 
+STATS_NO_AVERAGE_DURATION,Duración Media no disponible
+STATS_NO_AVERAGE_WIN_RATIO,Media de victorias no disponible
+
+STATS_DOWNLOAD_ONGOING,Descargando las estadísticas de juego y puntuaciones...\nPor favor recargue la página en unos segundos
+STATS_ERROR_HTTP,Error al obtener las estadísticas de juego, i el problema persiste, por favor reporte el problema en github Valkyrie\n{0} 
+STATS_ERROR_NETWORK,Error al obtener las estadísticas de juego, por favor compruebe su conexión a internet
+
+ERROR_HTTP,Error al obtener el fichero, i el problema persiste, por favor reporte el problema en github Valkyrie\n{0} 
+ERROR_NETWORK,Error al obtener el fichero, por favor compruebe su conexión a internet
+
+NEW_VERSION_AVAILABLE,¡Actualización disponible!

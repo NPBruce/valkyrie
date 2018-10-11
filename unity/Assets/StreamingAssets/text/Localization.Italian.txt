@@ -37,6 +37,7 @@ D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
 D2E_QUEST_NAME,Scenario
 DEFEATED,Sconfitto
 DELETE,Cancella
+UPDATE,Aggiorna
 DIALOG,Dialogo
 DOOR,Porta
 DOWNLOAD,Scarica
@@ -246,14 +247,11 @@ river,Fiume
 street,Strada
 hallway,Corridoio
 bathroom,Bagno
-bedroom,Camera da Letto
 kitchen,Cucina
 dock,Molo
 storage,Magazzino
 outside,Esterno
 inside,Interno
-small,Piccola
-medium,Media
 big,Grande
 transition,Transizione
 throne,Trono
@@ -345,3 +343,5 @@ ATTACK_WITH_SPELL, Attacca con un Incantesimo
 ATTACK_WITH_UNARMED, Attacca Senza Armi
 
 ACTION_X, {0}
+
+NEW_VERSION_AVAILABLE,Aggiornamento disponibile!

@@ -57,6 +57,7 @@ D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
 D2E_QUEST_NAME,Przygoda
 DEFEATED,Pokonany
 DELETE,Usuń
+UPDATE,Aktualizacja
 DIALOG,Dialog
 DOOR,Drzwi
 DOWNLOAD,Pobierz
@@ -204,7 +205,6 @@ UNITS,Jednostki
 HORIZONTAL,Poziomy
 VERTICAL,Pionowy
 ALIGN,Wyrównaj
-POSITION,Pozycja
 SIZE,Rozmiar
 TEXT_SIZE,Rozmiar Tekstu
 ASPECT,Stosunek
@@ -294,14 +294,11 @@ river,Rzeka
 street,Droga
 hallway,Korytarz
 bathroom,Łazienka
-bedroom,Sypialnia
 kitchen,Kuchnia
 dock,Dok
 storage,Magazyn
 outside,Zewnętrze
 inside,Wnętrze
-small,Mały
-medium,Średni
 big,Duży
 transition,Przejście
 throne,Tron
@@ -395,3 +392,5 @@ ATTACK_WITH_SPELL, Atak Zaklęciem
 ATTACK_WITH_UNARMED, Atak bez broni
 
 ACTION_X, {0}
+
+NEW_VERSION_AVAILABLE,Dostępna aktualizacja!

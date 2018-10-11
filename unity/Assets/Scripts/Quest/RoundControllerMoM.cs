@@ -6,6 +6,8 @@ using Assets.Scripts.Content;
 // This round controller extends the standard controller for MoM specific round order
 public class RoundControllerMoM : RoundController
 {
+    bool endRoundRequested = false;
+
     // Investigators have finished
     override public void HeroActivated()
     {
@@ -23,6 +25,9 @@ public class RoundControllerMoM : RoundController
         game.quest.eManager.EventTriggerType("Mythos", false);
         // This will cause the next phase if nothing was added
         game.quest.eManager.TriggerEvent();
+
+        // Display the transition dialog for investigator phase
+        ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.mythos);
 
         return;
     }
@@ -59,7 +64,19 @@ public class RoundControllerMoM : RoundController
         for (int i = 0; i < game.quest.monsters.Count; i++)
         {
             if (!game.quest.monsters[i].activated)
-                notActivated.Add(i);
+            {
+                QuestMonster qm = game.quest.monsters[i].monsterData as QuestMonster;
+                if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0 
+                    && game.quest.eManager.events[qm.activations[0]].Disabled())
+                {
+                    // monster cannot be activated, mark as activated
+                    game.quest.monsters[i].activated = true;
+                }
+                else
+                {
+                    notActivated.Add(i);
+                }
+            }
         }
 
         if (notActivated.Count > 0)
@@ -85,6 +102,13 @@ public class RoundControllerMoM : RoundController
         return true;
     }
 
+    public override void EndRound()
+    {
+        endRoundRequested = true;
+        base.EndRound();
+    }
+
+
     // Check if there are events that are required at the end of the round
     public override bool CheckNewRound()
     {
@@ -108,10 +132,20 @@ public class RoundControllerMoM : RoundController
         {
             if (game.quest.monsters.Count > 0)
             {
-                game.quest.phase = Quest.MoMPhase.monsters;
-                game.stageUI.Update();
-                ActivateMonster();
-                return game.quest.eManager.currentEvent != null;
+                if (ActivateMonster())
+                {
+                    // no monster can be activated (activation conditions may prevent existing monster from doing anything), switch to horror phase
+                    game.quest.phase = Quest.MoMPhase.horror;
+                    game.stageUI.Update();
+                    return false;
+                }
+                else
+                {
+                    // going through monster activation: switch to phase monsters
+                    game.quest.phase = Quest.MoMPhase.monsters;
+                    game.stageUI.Update();
+                    return game.quest.eManager.currentEvent != null;
+                }
             }
             else
             {
@@ -129,7 +163,17 @@ public class RoundControllerMoM : RoundController
             return false;
         }
 
+        // we need this test to make sure user can do the horro test, as a random event would switch the game to investigator phase 
+        if (!endRoundRequested && game.quest.phase == Quest.MoMPhase.horror && game.quest.monsters.Count > 0)
+        {
+            return false;
+        }
+
         // Finishing the round
+
+        // reset the endRound Request
+        endRoundRequested = false;
+
         // Clear all investigator activated
         foreach (Quest.Hero h in game.quest.heroes)
         {
@@ -160,6 +204,10 @@ public class RoundControllerMoM : RoundController
         // Start of round events
         game.quest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
+        
+        // Display the transition dialog for investigator phase
+        ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.investigator);
+
         return true;
     }
 }
