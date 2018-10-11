@@ -149,8 +149,8 @@ public class Quest
         eventList = new List<string>();
         monsterSelect = new Dictionary<string, string>();
 
-        start_time=System.DateTime.UtcNow;
-        duration=0;
+        start_time = System.DateTime.UtcNow;
+        duration = 0;
 
         GenerateItemSelection();
         GenerateMonsterSelection();
@@ -289,18 +289,18 @@ public class Quest
             //  remove items with qty not yet reached from exclude list
             foreach (string item in exclude)
             {
-                if (game.cd.items.ContainsKey(item) 
+                if (game.cd.items.ContainsKey(item)
                     && game.cd.items[item].qty != 1
                     && exclude.Count(element => element == item) < game.cd.items[item].qty
                     )
-                      exclude.RemoveAll(element => element == item);
+                    exclude.RemoveAll(element => element == item);
             }
 
             // Start a list of matches
             List<string> list = new List<string>();
             foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
             {
-                bool next=false;
+                bool next = false;
 
                 foreach (string t in qItem.traits)
                 {
@@ -448,8 +448,8 @@ public class Quest
             // monster already selected
             foreach (KeyValuePair<string, string> entry in monsterSelect)
             {
-                if(!exclude.Contains(entry.Value))
-                { 
+                if (!exclude.Contains(entry.Value))
+                {
                     exclude.Add(entry.Value);
                 }
             }
@@ -790,7 +790,7 @@ public class Quest
         // Set start time to now
         start_time = System.DateTime.UtcNow;
         // get previous duration, if not present, we are using an old savegame so do not use the duration
-        if (! int.TryParse(saveData.Get("Quest", "duration"), out duration) )
+        if (!int.TryParse(saveData.Get("Quest", "duration"), out duration))
         {
             duration = -1;
         }
@@ -1208,11 +1208,12 @@ public class Quest
         r += "time=" + System.DateTime.Now.ToString() + nl;
 
         // Current game duration + duration of previous game session before loading
-        if(duration>=0)
-        { 
-            System.TimeSpan current_duration = System.DateTime.UtcNow.Subtract( start_time );
+        if (duration >= 0)
+        {
+            System.TimeSpan current_duration = System.DateTime.UtcNow.Subtract(start_time);
             r += "duration=" + (int)(this.duration + current_duration.TotalMinutes) + nl;
-        } else
+        }
+        else
         {
             // if previous duration is invalid, we are using an old savegame do not try to calculate anything
             r += "duration=" + (-1) + nl;
@@ -1317,7 +1318,7 @@ public class Quest
         i = 0;
         foreach (string eventName in eventList)
         {
-            r += "Event"+ i  + "="+ eventName + nl;
+            r += "Event" + i + "=" + eventName + nl;
             i++;
         }
 
