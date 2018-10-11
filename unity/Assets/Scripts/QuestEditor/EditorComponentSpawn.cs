@@ -6,10 +6,12 @@ using Assets.Scripts.UI;
 
 public class EditorComponentSpawn : EditorComponentEvent
 {
+    // Not used yet
+    //private readonly StringKey MONSTER_NORMAL = new StringKey("val", "MONSTER_NORMAL");
+
     private readonly StringKey POSITION_TYPE_UNUSED = new StringKey("val", "POSITION_TYPE_UNUSED");
     private readonly StringKey POSITION_TYPE_HIGHLIGHT = new StringKey("val", "POSITION_TYPE_HIGHLIGHT");
     private readonly StringKey MONSTER_UNIQUE = new StringKey("val", "MONSTER_UNIQUE");
-    private readonly StringKey MONSTER_NORMAL = new StringKey("val", "MONSTER_NORMAL");
 
     private readonly StringKey UNIQUE_TITLE = new StringKey("val", "UNIQUE_TITLE");
     private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");

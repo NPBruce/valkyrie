@@ -12,8 +12,8 @@ namespace Assets.Scripts.UI
         protected SortedList<int, SelectionItem> items = new SortedList<int, SelectionItem>();
         protected SortedList<string, SelectionItem> alphaItems = new SortedList<string, SelectionItem>();
 
-        protected bool alphaSort = false;
-        protected bool reverseSort = false;
+        static protected bool alphaSort = false;
+        static protected bool reverseSort = false;
 
         public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "")
         {

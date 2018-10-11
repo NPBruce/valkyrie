@@ -48,15 +48,15 @@ namespace Assets.Scripts.UI.Screens
             offset += 4;
             for (int i = 0; i < saves.Count; i++)
             {
+                if (i == 0 && save)
+                    continue;
+
                 int tmp = i;
                 if (saves[i].valid)
                 {
                     string name = SAVE.Translate() + " " + i;
                     if (i == 0)
-                    {
-                        if (save) continue;
-                        name = AUTOSAVE.Translate();
-                    }
+                    { name = AUTOSAVE.Translate(); }
 
                     ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-20), offset, 40, 4);
@@ -89,7 +89,7 @@ namespace Assets.Scripts.UI.Screens
 
                     ui = new UIElement();
                     ui.SetLocation(UIScaler.GetHCenter(-12), offset + 2.6f, 31, 1);
-                    ui.SetText(saves[i].quest);
+                    ui.SetText(saves[i].quest_name);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetButton(delegate { Select(tmp); });
                 }
@@ -130,7 +130,7 @@ namespace Assets.Scripts.UI.Screens
         {
             if (save)
             {
-                SaveManager.SaveWithScreen(num);
+                SaveManager.Save(num);
                 Destroyer.Dialog();
             }
             else

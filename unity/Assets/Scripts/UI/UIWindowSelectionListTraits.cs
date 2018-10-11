@@ -279,6 +279,7 @@ namespace Assets.Scripts.UI
             }
             ui.SetBGColor(item.GetColor());
             ui.SetText(item.GetDisplay(), Color.black);
+            if (alphaSort) ui.SetTextAlignment(TextAnchor.MiddleLeft);
             return offset + 1.05f;
         }
 

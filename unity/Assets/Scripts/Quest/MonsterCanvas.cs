@@ -7,8 +7,8 @@ using Assets.Scripts.UI;
 // This class controls the list of monsters
 public class MonsterCanvas : MonoBehaviour
 {
-    private readonly StringKey UP_ARROW = new StringKey(null, "/\\", false);
-    private readonly StringKey DOWN_ARROW = new StringKey(null, "\\/", false);
+    private readonly StringKey UP_ARROW = new StringKey(null, "˄", false);
+    private readonly StringKey DOWN_ARROW = new StringKey(null, "˅", false);
 
     // offset stores the scoll position, reset at creation
     public int offset = 0;
@@ -71,7 +71,7 @@ public class MonsterCanvas : MonoBehaviour
         }
         // If at top
         UIElement ui = new UIElement(Game.MONSTERS);
-        ui.SetLocation(UIScaler.GetRight(-4.25f), 1, 4, 2);
+        ui.SetLocation(UIScaler.GetRight(-4.25f), 3, 4, 1);
         if (offset == 0)
         {
             ui.SetText(UP_ARROW, Color.gray);
@@ -98,7 +98,7 @@ public class MonsterCanvas : MonoBehaviour
         }
         // If at buttom
         UIElement ui = new UIElement(Game.MONSTERS);
-        ui.SetLocation(UIScaler.GetRight(-4.25f), 27, 4, 2);
+        ui.SetLocation(UIScaler.GetRight(-4.25f), 26.1f, 4, 1);
         if (game.quest.monsters.Count - offset <  6)
         {
             ui.SetText(DOWN_ARROW, Color.gray);
@@ -176,6 +176,9 @@ public class MonsterCanvas : MonoBehaviour
         // Draw monster if in scroll range (offset is scroll position)
         public void Draw(int offset)
         {
+            float top_position_y = 4.3f; //3.75
+            float offset_y = 4.4f; // 4.5
+
             // Check if in scroll range
             if (index < offset)
             {
@@ -191,7 +194,7 @@ public class MonsterCanvas : MonoBehaviour
             mImg.transform.SetParent(game.uICanvas.transform);
 
             RectTransform trans = mImg.AddComponent<RectTransform>();
-            trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+            trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (top_position_y + ((index - offset) * offset_y)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
             mImg.AddComponent<CanvasRenderer>();
 
@@ -212,7 +215,7 @@ public class MonsterCanvas : MonoBehaviour
                 mImgFrame.transform.SetParent(game.uICanvas.transform);
 
                 RectTransform transFrame = mImgFrame.AddComponent<RectTransform>();
-                transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
+                transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (top_position_y + ((index - offset) * offset_y)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
                 transFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit());
                 mImgFrame.AddComponent<CanvasRenderer>();
 
@@ -227,7 +230,7 @@ public class MonsterCanvas : MonoBehaviour
                 if (m.GetHealth() != 0)
                 {
                     UIElement ui = new UIElement(Game.MONSTERS);
-                    ui.SetLocation(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * 4.5f), 2, 2);
+                    ui.SetLocation(UIScaler.GetRight(-2.25f), 5.75f + ((index - offset) * offset_y), 2, 2);
                     ui.SetText(m.GetHealth().ToString(), Color.red);
                     ui.SetFontSize(UIScaler.GetMediumFont());
                     ui.SetButton(MonsterDiag);
@@ -239,11 +242,11 @@ public class MonsterCanvas : MonoBehaviour
                 // MoM
                 if(game.quest.phase == Quest.MoMPhase.investigator)
                 {
-                    DrawAwareness(3.75f + ((index - offset) * 4.5f));
+                    DrawAwareness(top_position_y + ((index - offset) * offset_y));
                 }
                 else
                 {
-                    DrawHorror(3.75f + ((index - offset) * 4.5f));
+                    DrawHorror(top_position_y + ((index - offset) * offset_y));
                 }
             }
 
@@ -255,7 +258,7 @@ public class MonsterCanvas : MonoBehaviour
                 mImgDupe.transform.SetParent(game.uICanvas.transform);
 
                 RectTransform dupeFrame = mImgDupe.AddComponent<RectTransform>();
-                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, ((monsterSize / 2f) + 3.75f + ((index - offset) * 4.5f)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
+                dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, ((monsterSize / 2f) + top_position_y + ((index - offset) * offset_y)) * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
                 dupeFrame.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 2.25f * UIScaler.GetPixelsPerUnit(), monsterSize * UIScaler.GetPixelsPerUnit() / 2f);
                 mImgDupe.AddComponent<CanvasRenderer>();
 

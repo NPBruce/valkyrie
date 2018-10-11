@@ -42,6 +42,11 @@ public class RoundController {
         m.masterStarted = true;
     }
 
+    public void Reset()
+    {
+        activationsFinished = false;
+    }
+
     // A monster has activated, work out what to do next
     virtual public void MonsterActivated()
     {
@@ -254,7 +259,7 @@ public class RoundController {
     }
 
     // All activations finished, start end of round
-    public void EndRound()
+    public virtual void EndRound()
     {
         Game game = Game.Get();
 
