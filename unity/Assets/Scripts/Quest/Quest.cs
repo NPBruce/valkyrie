@@ -445,6 +445,15 @@ public class Quest
                 }
             }
 
+            // monster already selected
+            foreach (KeyValuePair<string, string> entry in monsterSelect)
+            {
+                if(!exclude.Contains(entry.Value))
+                { 
+                    exclude.Add(entry.Value);
+                }
+            }
+
             // Start a list of matches
             List<string> list = new List<string>();
             foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
