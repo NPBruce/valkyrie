@@ -100,7 +100,7 @@ class SaveManager
             {
                 zip_update = true;
             }
-            else
+            else if (num == 0)
             {
                 game.quest.firstAutoSaveDone = true;
             }
@@ -340,9 +340,7 @@ class SaveManager
                     return;
                 }
 
-                // Translate quest name
-                LocalizationRead.AddDictionary("qst", q.localizationDict);
-                quest_name = q.name.Translate();
+                quest_name = saveData.Get("Quest", "questname");
 
                 if (VersionManager.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
