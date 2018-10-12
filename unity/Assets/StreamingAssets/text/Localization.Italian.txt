@@ -37,6 +37,7 @@ D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
 D2E_QUEST_NAME,Scenario
 DEFEATED,Sconfitto
 DELETE,Cancella
+UPDATE,Aggiorna
 DIALOG,Dialogo
 DOOR,Porta
 DOWNLOAD,Scarica
@@ -246,14 +247,11 @@ river,Fiume
 street,Strada
 hallway,Corridoio
 bathroom,Bagno
-bedroom,Camera da Letto
 kitchen,Cucina
 dock,Molo
 storage,Magazzino
 outside,Esterno
 inside,Interno
-small,Piccola
-medium,Media
 big,Grande
 transition,Transizione
 throne,Trono
@@ -345,3 +343,26 @@ ATTACK_WITH_SPELL, Attacca con un Incantesimo
 ATTACK_WITH_UNARMED, Attacca Senza Armi
 
 ACTION_X, {0}
+
+STATS_WELCOME,Grazie per aver giocato. Per favore esprimi la tua opinione sullo scenario e condividila con i futuri giocatori. Le tue azioni di gioco saranno condivise con l'autore per aiutarlo a migliorare questo scenario.
+STATS_ASK_VICTORY,Hai vinto questa partita?
+STATS_ASK_VICTORY_YES,SI!
+STATS_ASK_VICTORY_NO,No...
+STATS_ASK_RATING,Come valuteresti questo scenario?\n(1: terribile  10: stupefacente)
+STATS_ASK_COMMENTS,Vorresti lasciare un commento all'autore dello scenario?
+STATS_MISSING_INFO,Per favore valuta lo scenario e comunicaci se hai vinto prima di confermare l'invio. 
+STATS_SEND_BUTTON,Conferma
+STATS_MENU_BUTTON,Menu
+
+STATS_AVERAGE_WIN_RATIO,Percentuale di vincita: {0}%
+STATS_NB_USER_REVIEWS,({0} valutazione utente)
+STATS_AVERAGE_DURATION,Durata media: {0} min
+STATS_NO_AVERAGE_DURATION,Durata media non disponibile
+STATS_NO_AVERAGE_WIN_RATIO,Percentuale di vincita non disponibile
+
+STATS_DOWNLOAD_ONGOING,Acquisizione delle statistice e valutazioni di gioco in corso...\nPer favore ricarica la pagine tra qualche secondo
+STATS_ERROR_HTTP,Errore durante l'acquisizione delle statistiche di gioco, se il problema persiste segnalalo su github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Errore durante l'acquisizione delle statistiche di gioco, per favore controlla la tua connessione ad internet
+
+NEW_VERSION_AVAILABLE,Aggiornamento disponibile!
+

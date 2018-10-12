@@ -33,7 +33,7 @@ public class QuestData
     // Create from quest loader entry
     public QuestData(QuestData.Quest q)
     {
-        questPath = q.path + "/quest.ini";
+        questPath = q.path + Path.DirectorySeparatorChar + "quest.ini";
         LoadQuestData();
     }
 
@@ -43,7 +43,7 @@ public class QuestData
         questPath = path;
         LoadQuestData();
     }
-
+    
     // Populate data
     public void LoadQuestData()
     {
@@ -101,7 +101,7 @@ public class QuestData
                 if (file != null && file.Length > 0)
                 {
                     // path is relative to the main file (absolute not supported)
-                    localizationFiles.Add(Path.GetDirectoryName(questPath) + "/" + file);
+                    localizationFiles.Add(Path.GetDirectoryName(questPath) + Path.DirectorySeparatorChar + file);
                 }
             }
         }
@@ -435,7 +435,8 @@ public class QuestData
 
             if (data.ContainsKey("image"))
             {
-                imageName = data["image"];
+                string value = data["image"];
+                imageName = value != null ? value.Replace('\\', '/') : value;
             }
 
             if (data.ContainsKey("vunits"))
@@ -912,6 +913,8 @@ public class QuestData
             if (format <= 8 && sectionName.StartsWith("EventEnd"))
             {
                 operations.Add(new VarOperation("$end,=,1"));
+
+                Game.Get().quest.questHasEnded = true;
             }
 
             conditions = new List<VarOperation>();
@@ -943,12 +946,17 @@ public class QuestData
             }
             if (data.ContainsKey("audio"))
             {
-                audio = data["audio"];
+                string value = data["audio"];
+                audio = value != null ? value.Replace('\\', '/') : value;
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
             {
                 music = new List<string>(data["music"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+                for (int i = 0; i < music.Count; i++)
+                {
+                    music[i] = music[i].Replace('\\', '/');
+                }
             }
         }
 
@@ -1280,7 +1288,8 @@ public class QuestData
             }
             if (data.ContainsKey("image"))
             {
-                imageType = data["image"];
+                string value = data["image"];
+                imageType = value != null ? value.Replace('\\', '/') : value;
             }
             if (data.ContainsKey("skill"))
             {
@@ -1505,7 +1514,8 @@ public class QuestData
 
             if (data.ContainsKey("image"))
             {
-                imagePath = data["image"];
+                string value = data["image"];
+                imagePath = value != null ? value.Replace('\\', '/') : value;
             }
 
             imagePlace = imagePath;
@@ -1585,7 +1595,7 @@ public class QuestData
                 // this will use the base monster type
                 return "";
             }
-            return path + "/" + imagePath;
+            return path + Path.DirectorySeparatorChar + imagePath;
         }
         public string GetImagePlacePath()
         {
@@ -1594,7 +1604,7 @@ public class QuestData
                 // this will use the base monster type
                 return "";
             }
-            return path + "/" + imagePlace;
+            return path + Path.DirectorySeparatorChar + imagePlace;
         }
 
         // Save to string (editor)
@@ -1925,10 +1935,28 @@ public class QuestData
         public Quest(string pathIn)
         {
             path = pathIn;
-            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + "/quest.ini", "Quest");
+            if (path.EndsWith("\\") || path.EndsWith("/"))
+            {
+                path = path.Substring(0, path.Length - 1);
+            }
+
+            Dictionary<string, string> iniData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "Quest");
+            if (iniData == null)
+            {
+                ValkyrieDebug.Log("Could not load the quest.ini file in " + path + Path.DirectorySeparatorChar + "quest.ini");
+                valid = false;
+                return;
+            }
+
+            // do not parse the content of a quest from another game type
+            if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
+            {
+                valid = false;
+                return;
+            }
 
             //Read the localization data
-            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + "/quest.ini", "QuestText");
+            Dictionary<string, string> localizationData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "QuestText");
 
             localizationDict = new DictionaryI18n(defaultLanguage);
             foreach (string file in localizationData.Keys)
@@ -2053,7 +2081,8 @@ public class QuestData
 
             if (iniData.ContainsKey("image"))
             {
-                image = iniData["image"];
+                string value = iniData["image"];
+                image = value != null ? value.Replace('\\', '/') : value;
             }
 
             return true;

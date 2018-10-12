@@ -52,15 +52,16 @@ public class TokenBoard : MonoBehaviour {
             UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent(); });
-            c = component;
         }
 
         // On click the tokens start an event
         public void startEvent()
         {
             Game game = Game.Get();
-            // If in horror phase ignore
-            if (game.quest.phase != Quest.MoMPhase.investigator) return;
+
+            // If in horror phase ignore token, accept UI element (items)
+            if (c.GetEvent().typeDynamic=="Token"  &&  game.quest.phase != Quest.MoMPhase.investigator) return;
+
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;
