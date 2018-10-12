@@ -98,7 +98,7 @@ namespace Assets.Scripts.UI.Screens
             }
             // Draw D2E button
             UIElement ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 9, 30, 3);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 12, 30, 3);
             ui.SetText(D2E_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { D2E(); });
@@ -109,7 +109,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcD2E.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 12.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 15.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -119,7 +119,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 12.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 15.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
@@ -138,7 +138,7 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 15, 30, 3);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
             ui.SetText(MOM_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { MoM(); });
@@ -149,7 +149,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcMoM.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 18.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 22.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -159,7 +159,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 18.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 22.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
@@ -171,6 +171,7 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, Color.red);
             }
 
+#if false
             // Draw IA button
             startColor = Color.white;
             if (fcIA.NeedImport())
@@ -212,6 +213,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 new UIElementBorder(ui, Color.red);
             }
+#endif
 
             ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
