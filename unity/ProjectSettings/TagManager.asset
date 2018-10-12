@@ -14,6 +14,9 @@ TagManager:
   - uiphase
   - activation
   - shop
+  - endgame
+  - bg_tasks
+  - transition
   layers:
   - Default
   - TransparentFX

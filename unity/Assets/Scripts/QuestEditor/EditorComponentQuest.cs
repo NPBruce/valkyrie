@@ -7,8 +7,10 @@ using System.IO;
 
 public class EditorComponentQuest : EditorComponent
 {
+    // Not used yet
+    //private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
+
     private readonly StringKey HIDDEN = new StringKey("val", "HIDDEN");
-    private readonly StringKey ACTIVE = new StringKey("val", "ACTIVE");
     private readonly StringKey SELECT_PACK = new StringKey("val", "SELECT_PACK");
     private readonly StringKey REQUIRED_EXPANSIONS = new StringKey("val", "REQUIRED_EXPANSIONS");
 
@@ -225,26 +227,39 @@ public class EditorComponentQuest : EditorComponent
 
     public void Image()
     {
-        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, new StringKey("val", "SELECT_IMAGE"));
+        var select = new UIWindowSelectionListImage(SelectImage, new StringKey("val", "SELECT_IMAGE"));
         select.AddItem("{NONE}", "");
-
-        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        var traits = new Dictionary<string, IEnumerable<string>>
+        {
+            {
+                new StringKey("val", "SOURCE").Translate(),
+                new string[] { new StringKey("val", "FILE").Translate() }
+            }
+        };
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath.Replace('\\', '/'))).FullName.Replace('\\', '/');
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
-            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+            string file = s.Replace('\\', '/');
+            select.AddItem(file.Substring(relativePath.Length + 1), traits);
         }
         foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
         {
-            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+            string file = s.Replace('\\', '/');
+            select.AddItem(file.Substring(relativePath.Length + 1), traits);
         }
         select.Draw();
     }
 
     public void SelectImage(string image)
     {
-        game.quest.qd.quest.image = image;
+        if (image == null)
+        {
+            game.quest.qd.quest.image = image;
+        }
+        else
+        {
+            game.quest.qd.quest.image = image.Replace('\\', '/');
+        }
         Update();
     }
 
@@ -298,7 +313,6 @@ public class EditorComponentQuest : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectQuestAddPack, SELECT_PACK);
         foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)

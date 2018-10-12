@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Ionic.Zip;
 using ValkyrieTools;
 
 // Class for getting lists of quest with details
-// TODO: work out why this is so slow
 public class QuestLoader {
 
     // Return a dictionary of all available quests
@@ -19,12 +16,32 @@ public class QuestLoader {
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
         CleanTemp();
-        // Get a list of quest directories (extract found packages)
-        List<string> questDirectories = GetQuests(dataLocation);
+        mkDir(ContentData.DownloadPath());
 
-        // Add packaged quests that have been extracted
+        // Get a list of downloaded quest not packed
+        List<string> questDirectories = GetQuests(ContentData.DownloadPath());
+
+        // Extract only required files from downloaded packages 
+        ExtractPackages(ContentData.DownloadPath());
+
+        // Get the list of extracted packages
         questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
 
+        // Add the list of editor quest
+        if (game.gameType is MoMGameType)
+        {
+            dataLocation += "/MoM/Editor";
+        }
+        if (game.gameType is D2EGameType)
+        {
+            dataLocation += "/D2E/Editor";
+        }
+        if (game.gameType is IAGameType)
+        {
+            dataLocation += "/IA/Editor";
+        }
+        questDirectories.AddRange(GetQuests(dataLocation));
+        
         // Go through all directories
         foreach (string p in questDirectories)
         {
@@ -109,7 +126,7 @@ public class QuestLoader {
         return quests;
     }
 
-    // Get list of directories with quests at a path, and extract found packages
+    // Get list of directories with quests at a path
     public static List<string> GetQuests(string path)
     {
         List<string> quests = new List<string>();
@@ -129,45 +146,50 @@ public class QuestLoader {
                     quests.Add(p);
             }
         }
-        ExtractPackages(path);
 
         return quests;
     }
 
+    /// <summary>
+    /// Fully extract one single package, before starting a quest, and save package filename
+    /// </summary>
+    /// <param name="path">path of the file to extract</param>
+    public static void ExtractSinglePackageFull(string path)
+    {
+        // Extract into temp
+        string tempValkyriePath = ContentData.TempValyriePath;
+        mkDir(tempValkyriePath);
+
+        string extractedPath = Path.Combine(tempValkyriePath, Path.GetFileName(path));
+        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
+    }
+
+    /// <summary>
+    /// Partial extract of a single package, before listing the savegames
+    /// Only the quest.ini and translations needs to be extracted to validate quest and get its name
+    /// </summary>
+    /// <param name="path">path of the file to extract</param>
+    public static void ExtractSinglePackagePartial(string path)
+    {
+        // Extract into temp
+        string extractedPath = Path.Combine(ContentData.TempValyriePath, Path.GetFileName(path));
+        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT);
+    }
+
+    /// <summary>
+    /// Partial extract of all package in a directory, to list quests,  and save package filename
+    /// </summary>
+    /// <param name="path">path of the directory containing .valkyrie package</param>
     public static void ExtractPackages(string path)
     {
         // Find all packages at path
         string[] archives = Directory.GetFiles(path, "*.valkyrie", SearchOption.AllDirectories);
+
         // Extract all packages
         foreach (string f in archives)
         {
-            // Extract into temp
-            string tempValkyriePath = ContentData.TempValyriePath;
-            mkDir(tempValkyriePath);
-            string extractedPath = Path.Combine(tempValkyriePath, Path.GetFileName(f));
-            if (Directory.Exists(extractedPath))
-            {
-                try
-                {
-                    Directory.Delete(extractedPath, true);
-                }
-                catch (System.Exception)
-                {
-                    ValkyrieDebug.Log("Warning: Unable to remove old temporary files: " + extractedPath);
-                }
-            }
-            mkDir(extractedPath);
-
-            try
-            {
-                ZipFile zip = ZipFile.Read(f);
-                zip.ExtractAll(extractedPath);
-                zip.Dispose();
-            }
-            catch (System.Exception)
-            {
-                ValkyrieDebug.Log("Warning: Unable to read file: " + extractedPath);
-            }
+            string extractedPath = Path.Combine(ContentData.TempValyriePath, Path.GetFileName(f));
+            ZipManager.Extract(extractedPath, f, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC);
         }
     }
 

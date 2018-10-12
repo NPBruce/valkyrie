@@ -7,7 +7,9 @@ using System.IO;
 
 public class EditorComponentPuzzle : EditorComponentEvent
 {
-    private readonly StringKey PUZZLE = new StringKey("val", "PUZZLE");
+    // Not used yet
+    //private readonly StringKey PUZZLE = new StringKey("val", "PUZZLE");
+
     private readonly StringKey PUZZLE_CLASS = new StringKey("val", "PUZZLE_CLASS");
     private readonly StringKey PUZZLE_CLASS_SELECT = new StringKey("val", "PUZZLE_CLASS_SELECT");
     private readonly StringKey PUZZLE_LEVEL = new StringKey("val", "PUZZLE_LEVEL");

@@ -47,7 +47,25 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText("Valkyrie");
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
-
+			
+           // Version type : alpha / beta should be displayed
+            if( Game.Get().version.EndsWith("a") )
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
+                ui.SetText("alpha version");
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+            }
+            if (Game.Get().version.EndsWith("b"))
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
+                ui.SetText("beta version");
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+            }
+			
             // Button for start quest/scenario
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);

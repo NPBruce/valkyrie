@@ -75,16 +75,15 @@ namespace Assets.Scripts.UI
                 aspect = game.cd.tileSides[key].aspect;
                 return ContentData.FileToTexture(game.cd.tileSides[key].image);
             }
-            else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + key))
+            else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + key))
             {
-                return ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + key);
+                return ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + key);
             }
             return null;
         }
 
         protected override void DrawItemList()
         {
-            Game game = Game.Get();
             UIElementScrollVertical itemScrollArea = new UIElementScrollVertical();
             itemScrollArea.SetLocation(UIScaler.GetHCenter(-3.5f), 2, 21, 25);
             new UIElementBorder(itemScrollArea);

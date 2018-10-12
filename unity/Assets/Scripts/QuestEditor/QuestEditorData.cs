@@ -8,7 +8,9 @@ using Assets.Scripts.UI;
 // FIXME: Rename, not a good name any more
 public class QuestEditorData {
 
-    private readonly StringKey COMPONENT_TO_DELETE = new StringKey("val", "COMPONENT_TO_DELETE");
+    // Not used yet
+    //private readonly StringKey COMPONENT_TO_DELETE = new StringKey("val", "COMPONENT_TO_DELETE");
+
     // This is the currently selected component
     public EditorComponent selection;
     // The selection stack is used for the 'back' button

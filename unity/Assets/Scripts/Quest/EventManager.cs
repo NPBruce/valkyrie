@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
 using ValkyrieTools;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -111,12 +112,13 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + name))
+            if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + name))
             {
                 events.Add(name, new StartQuestEvent(name));
             }
             else
             {
+                ValkyrieDebug.Log("Warning: Missing event called: " + name);
                 game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
                 return;
             }
@@ -172,7 +174,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + e.qEvent.audio);
+            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + e.qEvent.audio);
         }
 
         // Set Music
@@ -187,7 +189,7 @@ public class EventManager
                 }
                 else
                 {
-                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s);
+                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + s);
                 }
             }
             game.audioControl.Music(music, false);
@@ -315,6 +317,7 @@ public class EventManager
         if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
         {
             game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+            game.quest.ordered_boardItems.Add("#shop");
         }
         else if (!e.qEvent.display)
         {
@@ -395,13 +398,14 @@ public class EventManager
             // Check if the event doesn't exists - quest fault
             if (!events.ContainsKey(s))
             {
-                if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + "/" + s))
+                if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
                 {
                     events.Add(s, new StartQuestEvent(s));
                     enabledEvents.Add(s);
                 }
                 else
                 {
+                    ValkyrieDebug.Log("Warning: Missing event called: " + s);
                     game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                 }
             }
@@ -414,7 +418,19 @@ public class EventManager
         // Has the quest ended?
         if (game.quest.vars.GetValue("$end") != 0)
         {
-            Destroyer.MainMenu();
+            game.quest.questHasEnded = true;
+
+            if( Path.GetFileName(game.quest.originalPath).StartsWith("EditorScenario") 
+             || !Path.GetFileName(game.quest.originalPath).EndsWith(".valkyrie") )
+            {
+                // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
+                Destroyer.MainMenu();
+            }
+            else
+            {
+                new EndGameScreen();
+            }
+            
             return;
         }
 
@@ -655,13 +671,14 @@ public class EventManager
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
                     {
-                        if (File.Exists(game.quest.questPath + "/" + s))
+                        if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
                         {
                             game.quest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
                         }
                         else
                         {
+                            ValkyrieDebug.Log("Warning: Missing event called: " + s);
                             game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                             return false;
                         }
@@ -829,7 +846,6 @@ public class EventManager
     public static string InputSymbolReplace(string input)
     {
         string output = input;
-        Game game = Game.Get();        
 
         foreach (var conversion in GetCharacterMap(false, true))
         {
