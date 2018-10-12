@@ -66,7 +66,7 @@ public class InvestigatorAttack
     public void Attack(string type)
     {
         StringKey text = monster.monsterData.GetRandomAttack(type);
-        attackText = text.Translate().Replace("{0}", monster.monsterData.name.Translate());
+        attackText = EventManager.OutputSymbolReplace(text.Translate().Replace("{0}", monster.monsterData.name.Translate()));
         Game.Get().quest.log.Add(new Quest.LogEntry(attackText.Replace("\n", "\\n")));
         Attack();
     }
