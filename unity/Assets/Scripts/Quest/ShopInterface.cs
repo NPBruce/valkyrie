@@ -263,6 +263,8 @@ public class ShopInterface : Quest.BoardComponent
 
     public void Buy(string item)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
         ItemData itemData = game.cd.items[item];
         if (game.quest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
 
@@ -274,6 +276,8 @@ public class ShopInterface : Quest.BoardComponent
 
     public void Sell(string item)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
         game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(game.cd.items[item]));
         game.quest.shops[eventData.sectionName].Add(item);
         game.quest.items.Remove(item);
