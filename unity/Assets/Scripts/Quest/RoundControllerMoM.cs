@@ -89,6 +89,7 @@ public class RoundControllerMoM : RoundController
             if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0)
             {
                 toActivate.masterStarted = true;
+                toActivate.activated = true;
                 game.quest.eManager.monsterImage = toActivate;
                 game.quest.eManager.QueueEvent(qm.activations[0]);
             }
