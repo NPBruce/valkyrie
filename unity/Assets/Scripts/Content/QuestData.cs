@@ -1970,9 +1970,10 @@ public class QuestData
         // Create from ini data
         public Quest(Dictionary<string, string> iniData)
         {
-            localizationDict = LocalizationRead.dicts["qst"];
-            if (localizationDict == null)
-            {
+            if (LocalizationRead.dicts.ContainsKey("qst"))
+            { 
+                localizationDict = LocalizationRead.dicts["qst"];
+            } else {
                 localizationDict = new DictionaryI18n(new string[1] { ".," + Game.Get().currentLang }, defaultLanguage);
             }
             valid = Populate(iniData);
