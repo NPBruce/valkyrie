@@ -19,8 +19,6 @@ public class LogWindow
 
     public void Update(bool toggle = false)
     {
-        Destroyer.Dialog();
-
         developerToggle ^= toggle;
 
         float textWidth = 28;
@@ -34,13 +32,13 @@ public class LogWindow
         Game game = Game.Get();
         game.logWindow = this;
         // white background because font rendering is broken
-        UIElement ui = new UIElement();
+        UIElement ui = new UIElement(Game.LOGS);
         ui.SetLocation(textStart, 0.5f, textWidth, 24.5f);
         ui.SetBGColor(Color.white);
-        ui = new UIElement();
+        ui = new UIElement(Game.LOGS);
         ui.SetLocation(textStart + textWidth, 0.5f, 1, 24.5f);
 
-        UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+        UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.LOGS);
         scrollArea.SetLocation(textStart, 0.5f, textWidth + 1, 24.5f);
         scrollArea.SetBGColor(Color.clear);
         new UIElementBorder(scrollArea);
@@ -60,11 +58,11 @@ public class LogWindow
         }
         scrollArea.SetScrollSize(offset);
 
-        ui = new UIElement();
+        ui = new UIElement(Game.LOGS);
         ui.SetLocation(UIScaler.GetHCenter(-3f), 25, 6, 2);
         ui.SetText(CommonStringKeys.CLOSE);
         ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Destroyer.Dialog);
+        ui.SetButton(Destroyer.Logs);
         new UIElementBorder(ui);
 
         if (developerToggle)
@@ -75,7 +73,7 @@ public class LogWindow
 
     public void DrawVarList()
     {
-        UIElementScrollVertical scrollArea = new UIElementScrollVertical();
+        UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.LOGS);
         scrollArea.SetLocation(UIScaler.GetHCenter(2.5f), 0.5f, 16, 24.5f);
         new UIElementBorder(scrollArea);
 

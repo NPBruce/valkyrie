@@ -17,6 +17,7 @@ TagManager:
   - endgame
   - bg_tasks
   - transition
+  - logs
   layers:
   - Default
   - TransparentFX
