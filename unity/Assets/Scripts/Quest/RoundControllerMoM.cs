@@ -140,7 +140,8 @@ public class RoundControllerMoM : RoundController
                     game.stageUI.Update();
                     return false;
                 }
-                else
+                // this is a recursive call, so we don't want to bring back monsters, if we have reached the end of activations
+                else if (game.quest.phase != Quest.MoMPhase.horror)
                 {
                     // going through monster activation: switch to phase monsters
                     game.quest.phase = Quest.MoMPhase.monsters;
