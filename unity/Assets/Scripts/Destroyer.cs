@@ -80,6 +80,14 @@ public class Destroyer {
         game.testMode = false;
     }
 
+    // Close logs
+    public static void Logs()
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.LOGS))
+            Object.Destroy(go);
+    }
+
     // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
     public static void Dialog()
     {

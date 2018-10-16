@@ -89,6 +89,7 @@ public class RoundControllerMoM : RoundController
             if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0)
             {
                 toActivate.masterStarted = true;
+                toActivate.activated = true;
                 game.quest.eManager.monsterImage = toActivate;
                 game.quest.eManager.QueueEvent(qm.activations[0]);
             }
@@ -139,7 +140,8 @@ public class RoundControllerMoM : RoundController
                     game.stageUI.Update();
                     return false;
                 }
-                else
+                // this is a recursive call, so we don't want to bring back monsters, if we have reached the end of activations
+                else if (game.quest.phase != Quest.MoMPhase.horror)
                 {
                     // going through monster activation: switch to phase monsters
                     game.quest.phase = Quest.MoMPhase.monsters;

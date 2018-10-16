@@ -76,6 +76,7 @@ xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%version%
 rem delete previous build
 del build\valkyrie-windows-%version%.exe
 del build\valkyrie-windows-%version%.zip
+del build\valkyrie-windows-%version%.7z
 del build\valkyrie-macos-%version%.zip
 del build\valkyrie-linux-%version%.tar.gz
 

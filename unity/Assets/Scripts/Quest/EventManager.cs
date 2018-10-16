@@ -693,7 +693,8 @@ public class EventManager
         // Is this event disabled?
         virtual public bool Disabled()
         {
-            return !game.quest.vars.Test(qEvent.conditions);
+            // check if condition is valid, and if there is something to do in this event (see #916)
+            return (!game.quest.vars.Test(qEvent.conditions));
         }
     }
 

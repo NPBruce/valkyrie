@@ -148,6 +148,7 @@ public class QuestEditor {
             }
         }
 
+        Destroyer.Dialog();
     }
 
     /// <summary>
