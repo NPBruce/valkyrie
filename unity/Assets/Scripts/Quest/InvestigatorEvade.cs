@@ -83,7 +83,6 @@ public class InvestigatorEvade {
         }
         ui.SetFontSize(UIScaler.GetMediumFont());
 
-        MonsterDialogMoM.DrawMonster(m);
-        MonsterDialogMoM.DrawMonsterHealth(m, delegate { Draw(); });
+        MonsterDialogMoM.DrawMonster(m, true);
     }
 }
