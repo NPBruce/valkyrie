@@ -27,9 +27,11 @@ namespace Assets.Scripts.UI.Screens
         private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
         private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
         private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+#if IA
         private StringKey IA_NAME = new StringKey("val", "IA_NAME");
         private StringKey IA_APP_NOT_FOUND = new StringKey("val", "IA_APP_NOT_FOUND");
         private StringKey IA_APP_NOT_FOUND_ANDROID = new StringKey("val", "IA_APP_NOT_FOUND_ANDROID");
+#endif
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -171,7 +173,7 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, Color.red);
             }
 
-#if false
+#if IA
             // Draw IA button
             startColor = Color.white;
             if (fcIA.NeedImport())
