@@ -330,7 +330,7 @@ public class EventManager
         {
             if (monsterImage != null)
             {
-                MonsterDialogMoM.DrawMonster(monsterImage);
+                MonsterDialogMoM.DrawMonster(monsterImage, true);
                 if (monsterHealth)
                 {
                 }

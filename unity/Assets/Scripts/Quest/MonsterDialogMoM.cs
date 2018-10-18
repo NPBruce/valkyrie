@@ -74,7 +74,7 @@ public class MonsterDialogMoM : MonsterDialog
         }
     }
 
-    public static void DrawMonster(Quest.Monster monster)
+    public static void DrawMonster(Quest.Monster monster, bool displayHealth=false)
     {
         Game game = Game.Get();
 
@@ -116,9 +116,12 @@ public class MonsterDialogMoM : MonsterDialog
             iconDupe.sprite = duplicateSprite;
             iconDupe.rectTransform.sizeDelta = new Vector2(4f * UIScaler.GetPixelsPerUnit(), 4f * UIScaler.GetPixelsPerUnit());
         }
+
+        if (displayHealth)
+            DrawMonsterHealth(monster, DrawMonster);
     }
 
-    public static void DrawMonsterHealth(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    private static void DrawMonsterHealth(Quest.Monster monster, UnityEngine.Events.UnityAction<Quest.Monster, bool> call)
     {
         UIElement ui = new UIElement();
         ui.SetLocation(0.2f, 0.2f, 2, 2);
@@ -191,24 +194,24 @@ public class MonsterDialogMoM : MonsterDialog
         }
     }
 
-    public static void MonsterDamageDec(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    public static void MonsterDamageDec(Quest.Monster monster, UnityEngine.Events.UnityAction<Quest.Monster, bool> call)
     {
         monster.damage -= 1;
         if (monster.damage < 0)
         {
             monster.damage = 0;
         }
-        call();
+        call(monster, true);
     }
 
-    public static void MonsterDamageInc(Quest.Monster monster, UnityEngine.Events.UnityAction call)
+    public static void MonsterDamageInc(Quest.Monster monster, UnityEngine.Events.UnityAction<Quest.Monster, bool> call)
     {
         monster.damage += 1;
         if (monster.damage > monster.GetHealth())
         {
             monster.damage = monster.GetHealth();
         }
-        call();
+        call(monster, true);
     }
 
 
