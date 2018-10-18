@@ -153,7 +153,6 @@ public class Quest
         duration = 0;
 
         GenerateItemSelection();
-        GenerateMonsterSelection();
         eManager = new EventManager();
 
         // Populate null hero list, these can then be selected as hero types
@@ -358,32 +357,17 @@ public class Quest
         return false;
     }
 
-    public void GenerateMonsterSelection()
+    public bool RuntimeMonsterSelection(string spawn_name)
     {
         // Determine monster types
-        bool progress = false;
-        bool force = false;
-        bool done = false;
-        while (!done)
+        if(qd.components.ContainsKey(spawn_name))
+        { 
+            QuestData.Spawn qs = qd.components[spawn_name] as QuestData.Spawn;
+            return AttemptMonsterMatch(qs);
+        }
+        else
         {
-            progress = false;
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
-            {
-                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
-                if (qs != null)
-                {
-                    progress |= AttemptMonsterMatch(qs, force);
-                    if (progress && force) force = false;
-                }
-            }
-            if (!progress && !force)
-            {
-                force = true;
-            }
-            else if (!progress && force)
-            {
-                done = true;
-            }
+            return false;
         }
     }
 
@@ -391,7 +375,7 @@ public class Quest
     {
         if (monsterSelect.ContainsKey(spawn.sectionName))
         {
-            return false;
+            return true;
         }
         if ((spawn.mTraitsPool.Length + spawn.mTraitsRequired.Length) == 0)
         {
@@ -445,12 +429,23 @@ public class Quest
                 }
             }
 
-            // monster already selected
-            foreach (KeyValuePair<string, string> entry in monsterSelect)
+            if (game.gameType.TypeName() == "D2E")
             {
-                if (!exclude.Contains(entry.Value))
+                // monster already selected
+                foreach (KeyValuePair<string, string> entry in monsterSelect)
                 {
-                    exclude.Add(entry.Value);
+                    if (!exclude.Contains(entry.Value))
+                    {
+                        exclude.Add(entry.Value);
+                    }
+                }
+                // monster already present in the board
+                foreach (Monster entry in monsters)
+                {
+                    if (!exclude.Contains(entry.monsterData.sectionName))
+                    {
+                        exclude.Add(entry.monsterData.sectionName);
+                    }
                 }
             }
 
@@ -628,7 +623,6 @@ public class Quest
         shops = new Dictionary<string, List<string>>();
         activeShop = "";
 
-        GenerateMonsterSelection();
         GenerateItemSelection();
         eManager = new EventManager();
 
@@ -831,7 +825,6 @@ public class Quest
         {
             // Support old saves
             monsterSelect = new Dictionary<string, string>();
-            GenerateMonsterSelection();
         }
 
         // Clear all tokens
