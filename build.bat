@@ -1,7 +1,8 @@
 @echo off
 rem read build version
-rem read build version
 set /p version=<unity\Assets\Resources\version.txt
+rem read build version code
+set /p versioncode=<unity\Assets\Resources\versioncode.txt
 
 rem set steam path
 IF "%steampath%"=="" SET steampath=%programfiles(x86)%\Steam
@@ -11,13 +12,27 @@ exit /B
 )
 
 rem set java path
-IF "%JAVA_HOME%"=="" SET JAVA_HOME=%ProgramFiles%\Java\jdk1.8.0_192\bin
-IF NOT EXIST "%JAVA_HOME%" ( 
-echo [31m--- ERROR --- JAVA_HOME path not set : please set Java home path in build.bat [0m
+IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
+IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\Java\jdk1.8.0_192\bin
+IF NOT EXIST "%JDK_HOME%" ( 
+echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
 exit /B
 )
 
-SET PATH=%PATH%;%JAVA_HOME%;%ProgramFiles%\Unity\Editor;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS
+rem set java path
+IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
+IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
+echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
+exit /B
+)
+
+IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
+IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
+echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
+exit /B
+)
+
+SET PATH=%PATH%;%JDK_HOME%;%ProgramFiles%\Unity\Editor;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
 @echo on
 
 rem cleanup
@@ -54,6 +69,9 @@ set Target=
 rem Build libraries
 msbuild libraries/libraries.sln /nologo /p:Configuration="Release" /p:NoWarn=0108
 
+rem this will change the version information in the project settings
+SetVersion %~dp0
+
 rem build unity
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-windows.log 
@@ -70,7 +88,10 @@ rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Edit
 rem delete the META-INF from the apk
 7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
 rem jarsigner comes form the JDK
-jarsigner -verbose -keystore "%~dp0unity\user.keystore" -digestalg SHA1 -sigalg MD5withRSA -storepass valkyrie -signedjar "%~dp0build\Valkyrie-android-%version%.apk" "%~dp0build\android\Valkyrie-android.apk" com.bruce.valkyrie
+jarsigner -keystore "%~dp0unity\user.keystore" -storepass valkyrie -keypass valkyrie "%~dp0build\android\Valkyrie-android.apk" com.bruce.valkyrie
+jarsigner -verify -verbose -certs "%~dp0build\android\Valkyrie-android.apk"
+rem zipalign comes from the android build tools
+zipalign -v 4 "%~dp0build\android\Valkyrie-android.apk" "%~dp0build\Valkyrie-android-%version%.apk"
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
