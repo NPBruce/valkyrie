@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: d860260bc87622640a6ebbe491bd6b3c
-timeCreated: 1491898175
-licenseType: Free
 TrueTypeFontImporter:
+  externalObjects: {}
   serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
@@ -12,10 +11,14 @@ TrueTypeFontImporter:
   fontName: OldNewspaperTypes
   fontNames:
   - OldNewspaperTypes
-  fallbackFontReferences: []
+  - Noto Sans Symbols
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: cb9d7a95315980547b416b0c3e03c5e6, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

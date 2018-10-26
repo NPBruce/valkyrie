@@ -122,7 +122,7 @@ public class NextStageButton
         new UIElementBorder(ui);
         // make button slightly smaller so it does not overlap border
         ui = new UIElement(Game.UIPHASE);
-        ui.SetLocation(UIScaler.GetRight(-3.95f), UIScaler.GetBottom(-2.45f), 2.9f, 1.9f);
+        ui.SetLocation(UIScaler.GetRight(-3.95f), UIScaler.GetBottom(-2.5f), 2.9f, 1.65f);
         ui.SetText(CommonStringKeys.TAB);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
