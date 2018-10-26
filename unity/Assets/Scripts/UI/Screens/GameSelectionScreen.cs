@@ -14,7 +14,9 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+#if IA
         FFGImport fcIA;
+#endif
         protected string importType = "";
         Thread importThread;
 
@@ -53,24 +55,32 @@ namespace Assets.Scripts.UI.Screens
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
             else
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
 
             fcD2E.Inspect();
             fcMoM.Inspect();
+#if IA
             fcIA.Inspect();
+#endif
 
             // Banner Image
             Sprite bannerSprite;
@@ -259,10 +269,12 @@ namespace Assets.Scripts.UI.Screens
             {
                 importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
             }
+#if IA
             if (type.Equals("IA"))
             {
                 importThread = new Thread(new ThreadStart(delegate { fcIA.Import(); }));
             }
+#endif
             importThread.Start();
         }
 
