@@ -226,6 +226,13 @@ public class QuestEditSelection
         }
         string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
 
+        // Fully extract this scenario before copy if this is a package
+        if (Path.GetExtension(Path.GetFileName(key)) == ".valkyrie")
+        {
+            // extract the full package
+            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(key));
+        }
+
         // Copy files
         try
         {
