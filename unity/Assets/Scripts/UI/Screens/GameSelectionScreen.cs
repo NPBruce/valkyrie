@@ -119,13 +119,13 @@ namespace Assets.Scripts.UI.Screens
 
             // Draw D2E import button
             ui = new UIElement();
-            if (fcD2E.ImportAvailable())
+            if (fcD2E.ImportAvailable() || ( !fcD2E.NeedImport() && (Application.platform != RuntimePlatform.Android) ) )
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 15.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("D2E"); });
+                ui.SetButton(delegate { Import("D2E", !fcD2E.ImportAvailable()); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
@@ -140,32 +140,49 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetText(D2E_APP_NOT_FOUND, Color.red);
                 }
+                // Allow manual selection of directory for import
+                if (Application.platform != RuntimePlatform.Android)
+                {
+                    ui.SetButton(delegate { Import("D2E", true); });
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
             // Draw MoM button
-            startColor = Color.white;
-            if (fcMoM.NeedImport())
-            {
-                startColor = Color.gray;
-            }
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
             ui.SetText(MOM_NAME, startColor);
+            if (fcMoM.NeedImport())
+            {
+                startColor = Color.gray;
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
+                }
+                else
+                {
+                    ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                }
+            }
+            else
+            {
+                startColor = Color.white;
+                ui.SetText(MOM_NAME, startColor);
+                ui.SetButton(delegate { MoM(); });
+            }
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate { MoM(); });
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
             // Draw MoM import button
             ui = new UIElement();
-            if (fcMoM.ImportAvailable())
+            if (fcMoM.ImportAvailable() || (!fcMoM.NeedImport() && (Application.platform != RuntimePlatform.Android)) )
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 22.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("MoM"); });
+                ui.SetButton(delegate { Import("MoM", !fcMoM.ImportAvailable()); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
@@ -179,6 +196,11 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     ui.SetText(MOM_APP_NOT_FOUND, Color.red);
+                }
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (Application.platform != RuntimePlatform.Android)
+                {
+                    ui.SetButton(delegate { Import("MoM", true); });
                 }
                 new UIElementBorder(ui, Color.red);
             }
@@ -254,25 +276,37 @@ namespace Assets.Scripts.UI.Screens
         }
 
         // Import content
-        public void Import(string type)
+        public void Import(string type, bool manual_path_selection=false)
         {
             Destroyer.Destroy();
+
+            string path = null;
+
+            if(manual_path_selection)
+            {
+                string app_filename="";
+                if (type.Equals("D2E")) app_filename = "Road to Legend";
+                if (type.Equals("MoM")) app_filename = "Mansions of Madness";
+
+                string[] array_path = SFB.StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
+                path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename+"_Data");
+            }
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
 
             if (type.Equals("D2E"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(path); }));
             }
             if (type.Equals("MoM"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(path); }));
             }
 #if IA
             if (type.Equals("IA"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(path); }));
             }
 #endif
             importThread.Start();

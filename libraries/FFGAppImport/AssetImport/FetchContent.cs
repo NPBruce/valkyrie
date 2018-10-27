@@ -158,8 +158,12 @@ namespace FFGAppImport
         }
 
         // Import from app
-        public void Import()
+        public void Import(string path)
         {
+            if (path != null)
+            {
+                finder.location = path;
+            }
             try
             {
                 // Does nothing, if we aren't on Android

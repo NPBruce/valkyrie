@@ -38,9 +38,9 @@ namespace FFGAppImport
             return fc.importAvailable;
         }
 
-        public bool Import()
+        public bool Import(string import_path)
         {
-            fc.Import();
+            fc.Import(import_path);
             return true;
         }
     }
