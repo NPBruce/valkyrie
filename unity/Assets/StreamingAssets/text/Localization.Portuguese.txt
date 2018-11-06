@@ -73,6 +73,7 @@ VERTICAL,Vertical
 ALIGN,Alinhamento
 SIZE,Tamanho
 TEXT_SIZE,Texto
+BACKGROUND_COLOUR,Cor de fundo
 ASPECT,Aspecto
 BORDER,Borda
 NO_BORDER,Sem Borda

@@ -241,6 +241,7 @@ VERTICAL,Vertical
 ALIGN,Align
 SIZE,Size
 TEXT_SIZE,Text Size
+BACKGROUND_COLOUR,Background colour
 ASPECT,Aspect
 BORDER,Border
 NO_BORDER,No Border

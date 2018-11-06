@@ -207,6 +207,7 @@ VERTICAL,Pionowy
 ALIGN,Wyrównaj
 SIZE,Rozmiar
 TEXT_SIZE,Rozmiar Tekstu
+BACKGROUND_COLOUR,Kolor tła
 ASPECT,Stosunek
 BORDER,Brzeg
 NO_BORDER,Brak Brzegów

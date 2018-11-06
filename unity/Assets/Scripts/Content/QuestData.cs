@@ -409,6 +409,7 @@ public class QuestData
         public float size = 1;
         public float textSize = 1;
         public string textColor = "white";
+        public string textBackgroundColor = "transparent";
         public float aspect = 1;
         public bool border = false;
 
@@ -464,6 +465,11 @@ public class QuestData
                 textColor = data["textcolor"];
             }
 
+            if (data.ContainsKey("textbackgroundcolor"))
+            {
+                textBackgroundColor = data["textbackgroundcolor"];
+            }
+            
             if (data.ContainsKey("halign"))
             {
                 if (data["halign"].Equals("left"))
@@ -511,6 +517,11 @@ public class QuestData
             if (!textColor.Equals("white"))
             {
                 r += "textcolor=" + textColor + nl;
+            }
+
+            if (!textBackgroundColor.Equals("transparent"))
+            {
+                r += "textbackgroundcolor=" + textBackgroundColor + nl;
             }
 
             if (verticalUnits)

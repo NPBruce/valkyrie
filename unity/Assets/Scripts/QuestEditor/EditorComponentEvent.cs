@@ -406,10 +406,14 @@ public class EditorComponentEvent : EditorComponent
 
             StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
             string colorRGB = ColorUtil.FromName(eventComponent.buttonColors[buttonTmp - 1]);
-            Color c = Color.white;
-            c[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            c[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            c[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            Color32 c = Color.white;
+            c.r = (byte)System.Convert.ToByte(colorRGB.Substring(1, 2), 16);
+            c.g = (byte)System.Convert.ToByte(colorRGB.Substring(3, 2), 16);
+            c.b = (byte)System.Convert.ToByte(colorRGB.Substring(5, 2), 16);
+            if (colorRGB.Length == 9)
+                c.a = (byte)System.Convert.ToByte(colorRGB.Substring(7, 2), 16);
+            else
+                c.a = 255; // opaque by default
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 3, 1);
