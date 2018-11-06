@@ -1559,7 +1559,9 @@ public class Quest
         public QuestData.UI qUI;
         public UIElementBorder border;
 
+        GameObject unityObject_text = null;
         UnityEngine.UI.Text uiText;
+        UnityEngine.UI.Image uiTextBG;
 
         // Construct with quest info and reference to Game
         public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
@@ -1600,9 +1602,19 @@ public class Quest
 
             float aspect = 1;
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
+            RectTransform rectTransform_text = null;
+
             if (qUI.imageName.Length == 0)
             {
-                uiText = unityObject.AddComponent<UnityEngine.UI.Text>();
+                uiTextBG = unityObject.AddComponent<UnityEngine.UI.Image>();
+                uiTextBG.color = ColorUtil.ColorFromName(qUI.textBackgroundColor);
+
+                unityObject_text = new GameObject("Object" + qUI.sectionName + "text");
+                unityObject_text.tag = Game.BOARD;
+                unityObject_text.transform.SetParent(unityObject.transform);
+                rectTransform_text = unityObject_text.AddComponent<RectTransform>();
+
+                uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
                 uiText.text = GetText();
                 uiText.alignment = TextAnchor.MiddleCenter;
                 uiText.font = game.gameType.GetFont();
@@ -1637,27 +1649,45 @@ public class Quest
             if (qUI.hAlign < 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, hSize);
             }
             else if (qUI.hAlign > 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, hSize);
             }
             else
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, hSize);
             }
 
             if (qUI.vAlign < 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vSize);
             }
             else if (qUI.vAlign > 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, vSize);
             }
             else
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vSize);
             }
 
             if (qUI.border)
@@ -1679,6 +1709,13 @@ public class Quest
             if (image != null && image.gameObject != null) image.color = c;
             if (uiText != null && uiText.gameObject != null) uiText.color = c;
             if (border != null) border.SetColor(c);
+            // Text BG has its own color, only alpha is changing
+            if (uiTextBG != null && uiTextBG.gameObject != null && qUI.textBackgroundColor != "transparent")
+            {
+                Color tmp = uiTextBG.color;
+                tmp.a = c.a;
+                uiTextBG.color = tmp;
+            }
         }
 
         override public Color GetColor()
@@ -1715,6 +1752,8 @@ public class Quest
         // Clean up
         public override void Remove()
         {
+            if (unityObject_text != null)
+                Object.Destroy(unityObject_text);
             Object.Destroy(unityObject);
         }
     }

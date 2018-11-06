@@ -203,6 +203,7 @@ VERTICAL,Vertikal
 ALIGN,Ausrichten
 SIZE,Größe
 TEXT_SIZE,Textgröße
+BACKGROUND_COLOUR,Hintergrundfarbe
 ASPECT,Aspekt
 BORDER,Umrandung
 NO_BORDER,Keine Umrandung

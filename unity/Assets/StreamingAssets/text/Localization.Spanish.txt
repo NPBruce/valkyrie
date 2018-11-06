@@ -213,6 +213,7 @@ VERTICAL,Vertical
 ALIGN,Alinear
 SIZE,Tamaño
 TEXT_SIZE,Tamaño del Texto
+BACKGROUND_COLOUR,Color de fondo
 ASPECT,Aspecto
 BORDER,Borde
 NO_BORDER,Sin Borde
