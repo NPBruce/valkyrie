@@ -200,6 +200,9 @@ START,Démarrer
 TESTS,Tests
 TILE,Tuile
 
+AND,ET
+OR,OU
+
 TOKEN,Marqueur
 TOOLS,Outils
 TOTAL_MOVES,Actions (total)

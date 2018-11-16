@@ -148,6 +148,38 @@ public class VarManager
         }
     }
 
+
+    public bool Test(QuestData.Event.EventTests tests)
+    {
+        if (tests.testComponents.Count == 0) return true;
+
+        bool result = true;
+        string current_operator = "AND";
+
+        foreach (QuestData.Event.TestComponent tc in tests.testComponents)
+        {
+            if (tc is QuestData.Event.VarOperation)
+            {
+                if (current_operator == "AND")
+                    result = (result && Test((QuestData.Event.VarOperation)tc));
+                if (current_operator == "OR")
+                    result = (result || Test((QuestData.Event.VarOperation)tc));
+            }
+            if (tc is QuestData.Event.TestLogicalOperator)
+            {
+                current_operator = ((QuestData.Event.TestLogicalOperator)tc).op;
+            }
+            if (tc is QuestData.Event.TestParenthesis)
+            {
+
+            }
+        }
+
+        Debug.Log("Test " + tests.ToString() + "\n returns " + result);
+        return result;
+    }
+
+
     public bool Test(QuestData.Event.VarOperation op)
     {
         float value = GetOpValue(op);
@@ -185,18 +217,6 @@ public class VarManager
         return false;
     }
     
-    public bool Test(List<QuestData.Event.VarOperation> ops)
-    {
-        foreach (QuestData.Event.VarOperation op in ops)
-        {
-            if (!Test(op))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void Perform(List<QuestData.Event.VarOperation> ops)
     {
         foreach (QuestData.Event.VarOperation op in ops)

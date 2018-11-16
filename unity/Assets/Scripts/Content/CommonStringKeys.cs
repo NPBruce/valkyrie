@@ -24,6 +24,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MINUS = new StringKey(null,"-", false);
         public static readonly StringKey HASH = new StringKey(null,"#", false);
         public static readonly StringKey TAB = new StringKey(null, "➤", false);
+        public static readonly StringKey UP = new StringKey(null, "▲", false);
+        public static readonly StringKey DOWN = new StringKey(null, "▼", false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");

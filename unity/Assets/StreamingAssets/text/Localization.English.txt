@@ -225,6 +225,9 @@ START,Start
 TESTS,Tests
 TILE,Tile
 
+AND,AND
+OR,OR
+
 TOKEN,Token
 TOOLS,Tools
 TOTAL_MOVES,Total Moves

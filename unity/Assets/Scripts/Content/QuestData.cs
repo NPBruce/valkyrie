@@ -368,7 +368,7 @@ public class QuestData
             cancelable = true;
 
             // Tokens don't have conditions
-            conditions = new List<VarOperation>();
+            eventTests = null;
 
             tokenName = "";
             if (data.ContainsKey("type"))
@@ -770,7 +770,7 @@ public class QuestData
         public string[] addComponents;
         public string[] removeComponents;
         public List<VarOperation> operations;
-        public List<VarOperation> conditions;
+        public EventTests eventTests;
         public bool cancelable = false;
         public bool highlight = false;
         public bool randomEvents = false;
@@ -797,7 +797,7 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            conditions = new List<VarOperation>();
+            eventTests = new EventTests();
             minCam = false;
             maxCam = false;
             music = new List<string>();
@@ -926,13 +926,26 @@ public class QuestData
                 operations.Add(new VarOperation("$end,=,1"));
             }
 
-            conditions = new List<VarOperation>();
-            if (data.ContainsKey("conditions"))
+            eventTests = new EventTests();
+            if (data.ContainsKey("eventtests"))
             {
-                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                //todo load save
+                string[] array = data["eventtests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    conditions.Add(new VarOperation(s));
+                    eventTests.Add(s);
+                }
+            }
+            // Backwards support for conditions
+            else if (data.ContainsKey("conditions"))
+            {
+                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                int i = 0;
+                foreach (string s in array)
+                {
+                    if(i>0) eventTests.Add(new TestLogicalOperator("AND"));
+                    eventTests.Add(new VarOperation(s));
+                    i++;
                 }
             }
 
@@ -1134,14 +1147,9 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            if (conditions.Count > 0)
+            if (eventTests != null && eventTests.testComponents.Count > 0)
             {
-                r += "conditions=";
-                foreach (VarOperation o in conditions)
-                {
-                    r += o.ToString() + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
+                r += "eventtests=" + eventTests.ToString() + nl;
             }
 
             if (randomEvents)
@@ -1181,7 +1189,158 @@ public class QuestData
             return r;
         }
 
-        public class VarOperation
+        public class EventTests
+        {
+            public List<TestComponent> testComponents=null;
+
+            public EventTests()
+            {
+                testComponents = new List<TestComponent>();
+            }
+
+            public EventTests(string inOp)
+            {
+//todo
+            }
+
+            override public string ToString()
+            {
+                string result = "";
+                foreach(var v in testComponents)
+                {
+                    result += v.GetClassTestComponentType() + ":" + v.ToString() + " ";
+                }
+                return result;
+            }
+
+            public void Add(string str)
+            {
+                string[] part = str.Split(':');
+
+                if(part[0].Equals(TestLogicalOperator.GetTestComponentType()))
+                {
+                    testComponents.Add(new TestLogicalOperator(part[1]));
+                }
+                if (part[0].Equals(TestParenthesis.GetTestComponentType()))
+                {
+                    testComponents.Add(new TestParenthesis(part[1]));
+                }
+                if (part[0].Equals(VarOperation.GetTestComponentType()))
+                {
+                    testComponents.Add(new VarOperation(part[1]));
+                }
+            }
+
+            public void Add(TestComponent tc)
+            {
+                testComponents.Add(tc);
+            }
+
+            public void Remove(int index)
+            {
+                if(index!=1)
+                { 
+                    // remove operator then tests
+                    testComponents.RemoveAt(index-1);
+                    testComponents.RemoveAt(index-1);
+                }
+                else
+                { 
+                    testComponents.RemoveAt(index);
+                }
+            }
+
+            public void moveComponent(int index, bool up)
+            {
+                TestComponent tmp = testComponents[index];
+
+
+            // todo : take parenthesis into account
+                if(up) // up arrow means down in the list
+                {
+                    testComponents.Reverse(index-2, 3);
+                }
+                else
+                {
+                    testComponents.Reverse(index, 3);
+                }
+            }
+        }
+
+        abstract public class TestComponent : System.Object
+        {
+            abstract public string GetClassTestComponentType();
+        }
+
+        public class TestLogicalOperator : TestComponent
+        {
+            public string op;
+
+            public TestLogicalOperator()
+            {
+                op = "AND";
+            }
+
+            public TestLogicalOperator(string inOp)
+            {
+                op = inOp;
+            }
+
+            override public string ToString()
+            {
+                return op;
+            }
+
+            public void NextLogicalOperator()
+            {
+                if (op == "AND")
+                    op = "OR";
+                else
+                    op = "AND";
+            }
+
+            public static string GetTestComponentType()
+            {
+                return "TestLogicalOperator";
+            }
+
+            override public string GetClassTestComponentType()
+            {
+                return GetTestComponentType();
+            }
+        }
+
+        public class TestParenthesis : TestComponent
+        {
+            public string parenthesis;
+
+            public TestParenthesis()
+            {
+            }
+
+            // can be "(" or ")"
+            public TestParenthesis(string inOp)
+            {
+                parenthesis = inOp;
+            }
+
+            override public string ToString()
+            {
+               return parenthesis;
+            }
+
+            public static string GetTestComponentType()
+            {
+                return "TestParenthesis";
+            }
+
+            override public string GetClassTestComponentType()
+            {
+                return GetTestComponentType();
+            }
+        }
+
+        public class VarOperation : TestComponent
         {
             public string var = "";
             public string operation = "";
@@ -1212,6 +1371,17 @@ public class QuestData
                 if (s.Equals("#fire")) return "$fire";
                 return s;
             }
+
+            public static string GetTestComponentType()
+            {
+                return "VarOperation";
+            }
+
+            override public string GetClassTestComponentType()
+            {
+                return GetTestComponentType();
+            }
+
         }
     }
 
