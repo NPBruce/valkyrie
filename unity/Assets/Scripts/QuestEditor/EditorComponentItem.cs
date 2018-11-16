@@ -63,9 +63,10 @@ public class EditorComponentItem : EditorComponent
                 ui.SetLocation(0.5f, offset, 17, 1);
                 UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 link.SetLocation(17.5f, offset, 1, 1);
-                link.SetText("<b>⇨</b>", Color.blue);
+                link.SetText("<b>⇨</b>", Color.cyan);
+                link.SetTextAlignment(TextAnchor.LowerCenter);
                 link.SetButton(delegate { QuestEditorData.SelectComponent(itemComponent.itemName[tmp]); });
-                new UIElementBorder(link, Color.blue);
+                new UIElementBorder(link, Color.cyan);
             }
             else
             {
@@ -168,9 +169,10 @@ public class EditorComponentItem : EditorComponent
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
-            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetText("<b>⇨</b>", Color.cyan);
+            ui.SetTextAlignment(TextAnchor.LowerCenter);
             ui.SetButton(delegate { QuestEditorData.SelectComponent(itemComponent.inspect); });
-            new UIElementBorder(ui, Color.blue);
+            new UIElementBorder(ui, Color.cyan);
         }
         return offset + 2;
     }

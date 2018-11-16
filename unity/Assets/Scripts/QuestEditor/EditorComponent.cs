@@ -58,10 +58,11 @@ public class EditorComponent {
 
         UIElement ui = new UIElement(Game.EDITOR);
         ui.SetLocation(0, 0, 1, 1);
-        ui.SetText("<b>⇦</b>", Color.blue);
+        ui.SetText("<b>⇦</b>", Color.cyan);
+        ui.SetTextAlignment(TextAnchor.LowerCenter);
         ui.SetButton(delegate { QuestEditorData.Back(); });
         ui.SetBGColor(Color.black);
-        new UIElementBorder(ui, Color.blue);
+        new UIElementBorder(ui, Color.cyan);
 
         AddTitle();
     }

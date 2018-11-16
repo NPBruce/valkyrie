@@ -348,9 +348,10 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset, 1, 1);
-                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetText("<b>⇨</b>", Color.cyan);
+                ui.SetTextAlignment(TextAnchor.LowerCenter);
                 ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.evadeEvent); });
-                new UIElementBorder(ui, Color.blue);
+                new UIElementBorder(ui, Color.cyan);
             }
             offset += 2;
 
@@ -368,9 +369,10 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset, 1, 1);
-                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetTextAlignment(TextAnchor.LowerCenter);
+                ui.SetText("<b>⇨</b>", Color.cyan);
                 ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.horrorEvent); });
-                new UIElementBorder(ui, Color.blue);
+                new UIElementBorder(ui, Color.cyan);
             }
             offset += 2;
         }
@@ -403,9 +405,10 @@ public class EditorComponentCustomMonster : EditorComponent
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(17.5f, offset, 1, 1);
-            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetText("<b>⇨</b>", Color.cyan);
+            ui.SetTextAlignment(TextAnchor.LowerCenter);
             ui.SetButton(delegate { QuestEditorData.SelectComponent("Activation" + monsterComponent.activations[i]); });
-            new UIElementBorder(ui, Color.blue);
+            new UIElementBorder(ui, Color.cyan);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
@@ -441,9 +444,10 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(monsterComponent.activations[0]);
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
-            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetText("<b>⇨</b>", Color.cyan);
+            ui.SetTextAlignment(TextAnchor.LowerCenter);
             ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[0]); });
-            new UIElementBorder(ui, Color.blue);
+            new UIElementBorder(ui, Color.cyan);
         }
 
         return offset + 2;
