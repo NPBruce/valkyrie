@@ -97,7 +97,7 @@ public class Game : MonoBehaviour {
     }
 
     // Unity fires off this function
-    void Start()
+    void Awake()
     {
 
         // Find the common objects we use.  These are created by unity.
