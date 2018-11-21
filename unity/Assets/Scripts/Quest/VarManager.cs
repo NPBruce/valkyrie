@@ -151,31 +151,71 @@ public class VarManager
 
     public bool Test(QuestData.Event.EventTests tests)
     {
-        if (tests.testComponents.Count == 0) return true;
+        if (tests == null || tests.testComponents == null || tests.testComponents.Count == 0)
+            return true;
 
         bool result = true;
         string current_operator = "AND";
+        int index = 0;
+        int ignore_inside_parenthesis=0;
 
         foreach (QuestData.Event.TestComponent tc in tests.testComponents)
         {
+            // ignore tests while we are running inside a parenthesis
+            if (ignore_inside_parenthesis > 0)
+            {
+                if (tc is QuestData.Event.TestParenthesis)
+                {
+                    QuestData.Event.TestParenthesis tp = (QuestData.Event.TestParenthesis)tc;
+                    if (tp.parenthesis == "(")
+                        ignore_inside_parenthesis++;
+                    else if (tp.parenthesis == ")")
+                        ignore_inside_parenthesis--;
+                }
+
+                index++;
+                continue;
+            }
+
             if (tc is QuestData.Event.VarOperation)
             {
                 if (current_operator == "AND")
                     result = (result && Test((QuestData.Event.VarOperation)tc));
-                if (current_operator == "OR")
+                else if (current_operator == "OR")
                     result = (result || Test((QuestData.Event.VarOperation)tc));
             }
-            if (tc is QuestData.Event.TestLogicalOperator)
+            else if (tc is QuestData.Event.TestLogicalOperator)
             {
                 current_operator = ((QuestData.Event.TestLogicalOperator)tc).op;
             }
-            if (tc is QuestData.Event.TestParenthesis)
+            else if (tc is QuestData.Event.TestParenthesis)
             {
+                QuestData.Event.TestParenthesis tp = (QuestData.Event.TestParenthesis)tc;
+                if (tp.parenthesis == "(")
+                {
+                    List<QuestData.Event.TestComponent> remaining_tests = tests.testComponents.GetRange(index+1, tests.testComponents.Count - (index+1));
+                    if (current_operator == "AND")
+                        result = (result && Test(new QuestData.Event.EventTests(remaining_tests)));
+                    else if (current_operator == "OR")
+                        result = (result || Test(new QuestData.Event.EventTests(remaining_tests)));
 
+                    ignore_inside_parenthesis = 1;
+                }
+                else if (tp.parenthesis == ")")
+                {
+                    return result;
+                }
             }
+
+            index++;
         }
 
-        Debug.Log("Test " + tests.ToString() + "\n returns " + result);
+        if(ignore_inside_parenthesis>0)
+        {
+            // we should not get here
+            ValkyrieTools.ValkyrieDebug.Log("Invalid Test :" + tests.ToString() + "\n returns " + result);
+        }
+
         return result;
     }
 
