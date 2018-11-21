@@ -495,10 +495,25 @@ public class EditorComponentEvent : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", TESTS));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetLocation(18.5f, offset, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTestOp(); });
         new UIElementBorder(ui, Color.green);
+
+        if(eventComponent.eventTests.testComponents.Count > 0)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.PLUS, Color.green);
+            ui.SetButton(delegate { SelectAddParenthesis(); });
+            new UIElementBorder(ui, Color.green);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(1.5f, offset, 2, 1);
+            ui.SetText("(...)");
+        }
+
+        offset++;
 
         int component_index = 0;
         foreach (QuestData.Event.TestComponent tc in eventComponent.eventTests.testComponents)
@@ -507,7 +522,11 @@ public class EditorComponentEvent : EditorComponent
             {
                 int tmp_index = component_index;
 
-                if(component_index!=(eventComponent.eventTests.testComponents.Count-1) && eventComponent.eventTests.testComponents.Count>1)
+                // only display arrows if item can be moved
+                if(component_index!=(eventComponent.eventTests.testComponents.Count-1) 
+                   && eventComponent.eventTests.testComponents.Count>1
+                   && eventComponent.eventTests.testComponents.FindIndex(component_index+1, x => x.GetClassTestComponentType() == QuestData.Event.TestLogicalOperator.GetTestComponentType()) != -1
+                   )
                 {
                     ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                     ui.SetLocation(0.5f, offset, 1, 1);
@@ -517,7 +536,9 @@ public class EditorComponentEvent : EditorComponent
                     new UIElementBorder(ui, Color.yellow);
                 }
 
-                if (component_index != 0)
+                if (component_index != 0
+                    && eventComponent.eventTests.testComponents.FindLastIndex(component_index - 1, x => x.GetClassTestComponentType() == QuestData.Event.TestLogicalOperator.GetTestComponentType()) != -1
+                )
                 {
                     ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                     ui.SetLocation(1.5f, offset, 1, 1);
@@ -557,7 +578,7 @@ public class EditorComponentEvent : EditorComponent
                 QuestData.Event.TestLogicalOperator tmp = (QuestData.Event.TestLogicalOperator)tc;
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(2.5f, offset, 4, 1);
+                ui.SetLocation(10f, offset, 4, 1);
                 if(tmp.op.Equals("AND"))
                     ui.SetText(AND);
                 else if (tmp.op.Equals("OR"))
@@ -570,33 +591,77 @@ public class EditorComponentEvent : EditorComponent
             if (tc is QuestData.Event.TestParenthesis)
             {
                 int tmp_index = component_index;
+                QuestData.Event.TestParenthesis tp = (QuestData.Event.TestParenthesis)tc;
 
-                if (component_index != (eventComponent.eventTests.testComponents.Count - 1))
+                if (component_index != (eventComponent.eventTests.testComponents.Count - 1)
+                    && eventComponent.eventTests.testComponents.FindIndex(component_index + 1, x => x.GetClassTestComponentType() == QuestData.Event.VarOperation.GetTestComponentType()) != -1
+                    )
                 {
-                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                    ui.SetLocation(0.5f, offset, 1, 1);
-                    ui.SetText(CommonStringKeys.DOWN, Color.yellow);
-                    ui.SetTextAlignment(TextAnchor.LowerCenter);
-                    ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, false); Update(); });
-                    new UIElementBorder(ui, Color.yellow);
+                    if (tp.parenthesis == "(")
+                    {
+                        int valid_index = eventComponent.eventTests.FindNextValidPosition(component_index, false);
+                        if (valid_index != -1 
+                            && eventComponent.eventTests.FindClosingParenthesis(valid_index) != -1)
+                        {
+                            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                            ui.SetLocation(0.5f, offset, 1, 1);
+                            ui.SetText(CommonStringKeys.DOWN, Color.yellow);
+                            ui.SetTextAlignment(TextAnchor.LowerCenter);
+                            ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, false); Update(); });
+                            new UIElementBorder(ui, Color.yellow);
+                        }
+                    }
+                    else if (tp.parenthesis == ")")
+                    {
+                        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                        ui.SetLocation(0.5f, offset, 1, 1);
+                        ui.SetText(CommonStringKeys.DOWN, Color.yellow);
+                        ui.SetTextAlignment(TextAnchor.LowerCenter);
+                        ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, false); Update(); });
+                        new UIElementBorder(ui, Color.yellow);
+                    }
                 }
 
-                if (component_index != 0)
+                if (component_index != 0
+                    && eventComponent.eventTests.testComponents.FindLastIndex(component_index - 1, x => x.GetClassTestComponentType() == QuestData.Event.VarOperation.GetTestComponentType()) != -1
+                    )
                 {
-                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                    ui.SetLocation(1.5f, offset, 1, 1);
-                    ui.SetText(CommonStringKeys.UP, Color.yellow);
-                    ui.SetTextAlignment(TextAnchor.LowerCenter);
-                    ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, true); Update(); });
-                    new UIElementBorder(ui, Color.yellow);
+                    if (tp.parenthesis == "(")
+                    {
+                        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                        ui.SetLocation(1.5f, offset, 1, 1);
+                        ui.SetText(CommonStringKeys.UP, Color.yellow);
+                        ui.SetTextAlignment(TextAnchor.LowerCenter);
+                        ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, true); Update(); });
+                        new UIElementBorder(ui, Color.yellow);
+                    }
+                    else if (tp.parenthesis == ")")
+                    {
+                        int valid_index = eventComponent.eventTests.FindNextValidPosition(component_index, true);
+                        if (valid_index != -1
+                            && eventComponent.eventTests.FindOpeningParenthesis(valid_index) != -1)
+                        {
+                            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                            ui.SetLocation(1.5f, offset, 1, 1);
+                            ui.SetText(CommonStringKeys.UP, Color.yellow);
+                            ui.SetTextAlignment(TextAnchor.LowerCenter);
+                            ui.SetButton(delegate { eventComponent.eventTests.moveComponent(tmp_index, true); Update(); });
+                            new UIElementBorder(ui, Color.yellow);
+                        }
+                    }
                 }
-
-                QuestData.Event.TestParenthesis tmp = (QuestData.Event.TestParenthesis)tc;
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(2.5f, offset, 4, 1);
-                ui.SetText(tmp.parenthesis);
+                ui.SetLocation(2.5f, offset, 2, 1);
+                ui.SetText(tp.parenthesis);
                 new UIElementBorder(ui);
+
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(4.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { eventComponent.eventTests.Remove(tmp_index); Update(); });
+                new UIElementBorder(ui, Color.red);
+
                 offset++;
             }
 
@@ -1550,6 +1615,13 @@ public class EditorComponentEvent : EditorComponent
         return vars;
     }
 
+    public void SelectAddParenthesis(bool test = true)
+    {
+        eventComponent.eventTests.Add(new QuestData.Event.TestParenthesis(")"));
+        eventComponent.eventTests.Add(new QuestData.Event.TestParenthesis("("));
+        Update();
+    }
+
     public void SelectAddOp(string var, bool test = true)
     {
         QuestData.Event.VarOperation op = new QuestData.Event.VarOperation();
@@ -1744,7 +1816,7 @@ public class EditorComponentEvent : EditorComponent
     // only tests element are removed by index
     public void RemoveOp(int index)
     {
-        if (eventComponent.eventTests.testComponents.Count-1 > index)
+        if (index < eventComponent.eventTests.testComponents.Count)
             eventComponent.eventTests.Remove(index);
         Update();
     }

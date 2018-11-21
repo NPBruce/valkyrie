@@ -1198,9 +1198,9 @@ public class QuestData
                 testComponents = new List<TestComponent>();
             }
 
-            public EventTests(string inOp)
+            public EventTests(List<TestComponent> inTC)
             {
-//todo
+                testComponents = inTC;
             }
 
             override public string ToString()
@@ -1233,36 +1233,223 @@ public class QuestData
 
             public void Add(TestComponent tc)
             {
-                testComponents.Add(tc);
+                if (tc.GetClassTestComponentType().Equals("TestParenthesis"))
+                {
+                    testComponents.Insert(0, tc);
+                }
+                else
+                {
+                    testComponents.Add(tc);
+                }
+            }
+
+
+            /// <summary> Seach for the corresponding parenthesis of specified opening parenthesis </summary>
+            /// <param name="index_open">index of opening parenthesis</param>
+            /// <returns> index of closing parenthesis</returns>
+            public int FindClosingParenthesis(int index_open)
+            {
+                TestParenthesis tmp;
+                int count = 0;
+
+                for(int i= index_open+1; i< testComponents.Count;i++)
+                {
+                    if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
+                    {
+                        tmp = (TestParenthesis)testComponents[i];
+
+                        if (tmp.parenthesis == "(")
+                            count++;
+                        else if (tmp.parenthesis == ")" && count == 0)
+                            return i;
+                        else
+                            count--;
+                    }
+                }
+
+                // not found
+                return -1;
+            }
+
+            /// <summary> Seach for the opening parenthesis of specified closing parenthesis </summary>
+            /// <param name="index_close">index of closing parenthesis</param>
+            /// <returns> index of opening parenthesis</returns>
+            public int FindOpeningParenthesis(int index_close)
+            {
+                TestParenthesis tmp;
+                int count = 0;
+
+                for (int i = index_close - 1; i >= 0; i--)
+                {
+                    if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
+                    {
+                        tmp = (TestParenthesis)testComponents[i];
+
+                        if (tmp.parenthesis == ")")
+                            count++;
+                        else if (tmp.parenthesis == "(" && count == 0)
+                            return i;
+                        else
+                            count--;
+                    }
+                }
+
+                // not found
+                return -1;
+            }
+
+            /// <summary> Search for the next valid position for parenthesis or varOperation </summary>
+            /// <param name="index">index of current item to move</param>
+            /// <param name="up">direction of requested movement (visually on UI)</param>
+            /// <returns> index of next position</returns>
+            public int FindNextValidPosition(int index, bool up)
+            {
+                if (testComponents[index].GetClassTestComponentType() != TestParenthesis.GetTestComponentType()
+                    && testComponents[index].GetClassTestComponentType() != VarOperation.GetTestComponentType())
+                {
+                    return -1;
+                }
+
+                int i = index;
+
+                if (up) i--;
+                else i++;
+
+                if (testComponents[index].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
+                {
+                    TestParenthesis tmp = (TestParenthesis)testComponents[index];
+                    while (i >= 0 && i <= testComponents.Count - 1)
+                    {
+                       
+                        if (  // "(" should be before a varOperation or at the beginning a&(b  a&((b  (a&b 
+                            (tmp.parenthesis == "("
+                             && testComponents[i].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                             ||
+                            // ")" should be before a LogicalOperator or at the end  a)&b  a))&b  a&b)
+                             (tmp.parenthesis == ")"
+                             && testComponents[i].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
+                           )
+                        {
+                            if (up)
+                                return i;
+                            else if (i != index + 1)// if going down, ignore first item found
+                                return i-1;
+                        }
+
+                        if (up) i--;
+                        else i++;
+                    }
+
+                    if (i >= testComponents.Count && tmp.parenthesis == ")")
+                        return testComponents.Count - 1;
+                    else if (i <= 0 && tmp.parenthesis == "(")
+                        return 0;
+                }
+                else if (testComponents[index].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                {
+                    while (i >= 0 && i <= testComponents.Count - 1)
+                    {
+                        // varOperation should take the place of another varOperation
+                        if (testComponents[i].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                        {
+                            return i;
+                        }
+
+                        if (up) i--;
+                        else i++;
+                    }
+                }
+
+                if (i < 0 || i >= testComponents.Count) return -1;
+
+                // this should not happen
+                ValkyrieDebug.Log("Invalid test position");
+
+                return -1;
             }
 
             public void Remove(int index)
             {
-                if(index!=1)
-                { 
-                    // remove operator then tests
-                    testComponents.RemoveAt(index-1);
-                    testComponents.RemoveAt(index-1);
+                if(testComponents[index].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                {
+                    if (index > 0 && testComponents[index - 1].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
+                    {
+                        // remove TestOperator then VarOperation
+                        testComponents.RemoveAt(index - 1);
+                        testComponents.RemoveAt(index - 1);
+                    }
+                    else if (index < testComponents.Count - 1 && testComponents[index + 1].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
+                    {
+                        // remove VarOperation then TestOperator
+                        testComponents.RemoveAt(index);
+                        testComponents.RemoveAt(index);
+                    }
+                    else if (testComponents.Count == 1)
+                    {
+                        testComponents.RemoveAt(0);
+                    }
+                    else
+                    {
+                        // no operator before and after: items must be between parenthesis, we delete and run again
+                        testComponents.RemoveAt(index + 1);
+                        testComponents.RemoveAt(index - 1);
+                        Remove(index - 1);
+                    }
                 }
-                else
-                { 
-                    testComponents.RemoveAt(index);
+                else if ( testComponents[index].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
+                {
+                    TestParenthesis tmp = (TestParenthesis)testComponents[index];
+                    int other_parenthesis_index = -1;
+
+                    if (tmp.parenthesis == "(")
+                    {
+                        other_parenthesis_index = FindClosingParenthesis(index);
+                        testComponents.RemoveAt(other_parenthesis_index);
+                        testComponents.RemoveAt(index);
+                    }
+                    else if(tmp.parenthesis == ")")
+                    {
+                        other_parenthesis_index = FindOpeningParenthesis(index);
+                        testComponents.RemoveAt(index);
+                        testComponents.RemoveAt(other_parenthesis_index);
+                    }
                 }
+
             }
 
             public void moveComponent(int index, bool up)
             {
-                TestComponent tmp = testComponents[index];
+                int next_position = FindNextValidPosition(index, up);
 
-
-            // todo : take parenthesis into account
                 if(up) // up arrow means down in the list
                 {
-                    testComponents.Reverse(index-2, 3);
+                    for(int i = index;i > next_position;i--)
+                    {
+                        testComponents.Reverse(i - 1, 2);
+                    }
+
+                    if (testComponents[next_position].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                    {
+                        for (int i = next_position+1; i < index; i++)
+                        {
+                            testComponents.Reverse(i, 2);
+                        }
+                    }
                 }
                 else
                 {
-                    testComponents.Reverse(index, 3);
+                    for (int i = index; i < next_position; i++)
+                    {
+                        testComponents.Reverse(i, 2);
+                    }
+
+                    if (testComponents[next_position].GetClassTestComponentType() == VarOperation.GetTestComponentType())
+                    {
+                        for (int i = next_position - 1; i > index; i--)
+                        {
+                            testComponents.Reverse(i-1, 2);
+                        }
+                    }
                 }
             }
         }
@@ -1338,6 +1525,7 @@ public class QuestData
             {
                 return GetTestComponentType();
             }
+
         }
 
         public class VarOperation : TestComponent
