@@ -1252,7 +1252,7 @@ public class QuestData
                 TestParenthesis tmp;
                 int count = 0;
 
-                for(int i= index_open+1; i< testComponents.Count;i++)
+                for(int i= index_open; i< testComponents.Count;i++)
                 {
                     if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
                     {
@@ -1279,7 +1279,7 @@ public class QuestData
                 TestParenthesis tmp;
                 int count = 0;
 
-                for (int i = index_close - 1; i >= 0; i--)
+                for (int i = index_close; i >= 0; i--)
                 {
                     if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
                     {
