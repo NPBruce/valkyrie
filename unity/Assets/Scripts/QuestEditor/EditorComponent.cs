@@ -93,7 +93,7 @@ public class EditorComponent {
             Object.Destroy(go);
 
         // Dim all components, this component will be made solid later
-        Game.Get().quest.ChangeAlphaAll(0.2f);
+        Game.Get().quest.ChangeAlphaAll();
     }
 
     public void AddScrollArea()

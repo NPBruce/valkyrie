@@ -189,6 +189,7 @@ SELECT_TO_DELETE,Sélectionner {0} pour le supprimmer
 HIDDEN,Caché
 ACTIVE,Actif
 SET,Action
+SET_EDITOR_ALPHA,Transparence éditeur
 SKILL,Compétence
 SELECT_SKILLS,Choisir compétences
 SPAWN,Générer
