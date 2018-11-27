@@ -69,6 +69,8 @@ public class Game : MonoBehaviour {
     public LogWindow logWindow;
     // Class for stage control UI
     public Audio audioControl;
+    // Transparecny value for non selected component in the editor
+    public float editorTransparency;
     // Quest started as test from editor
     public bool testMode = false;
     // Stats manager for quest rating
@@ -126,6 +128,12 @@ public class Game : MonoBehaviour {
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
 
+        string vSet = config.data.Get("UserConfig", "editorTransparency");
+        if (vSet == "")
+            editorTransparency = 0.3f;
+        else
+            float.TryParse(vSet, out editorTransparency);
+        
         // On android extract streaming assets for use
         if (Application.platform == RuntimePlatform.Android)
         {

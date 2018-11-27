@@ -9,10 +9,15 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
+        private static readonly string IMG_LOW_EDITOR_TRANSPARENCY    = "ImageLowEditorTransparency";
+        private static readonly string IMG_MEDIUM_EDITOR_TRANSPARENCY = "ImageMediumEditorTransparency";
+        private static readonly string IMG_HIGH_EDITOR_TRANSPARENCY   = "ImageHighEditorTransparency";
+
         private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
         private readonly StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
         private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
+        private readonly StringKey SET_EDITOR_ALPHA = new StringKey("val", "SET_EDITOR_ALPHA");
 
         Game game = Game.Get();
 
@@ -26,6 +31,20 @@ namespace Assets.Scripts.UI.Screens
         {
             // This will destroy all, because we shouldn't have anything left at the main menu
             Destroyer.Destroy();
+
+            game = Game.Get();
+
+            // Find any content packs at the location
+            game.cd = new ContentData(game.gameType.DataDirectory());
+            // Check if we found anything (must have found at least base)
+            if (game.cd.allPacks.Count == 0)
+            {
+                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                Application.Quit();
+            }
+
+            // load base to get types
+            game.cd.LoadContentID("");
 
             // Create elements for the screen
             CreateElements();
@@ -48,6 +67,8 @@ namespace Assets.Scripts.UI.Screens
 
             CreateAudioElements();
 
+            CreateEditorTransparencyElements();
+
             // Button for back to main menu
             ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
@@ -58,10 +79,51 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui, Color.red);
         }
 
+        private void CreateEditorTransparencyElements()
+        {
+            Game game = Game.Get();
+
+            // Select language text
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter() - 10, 5, 20, 2);
+            ui.SetText(SET_EDITOR_ALPHA);
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            Texture2D SampleTex = ContentData.FileToTexture(game.cd.images[IMG_LOW_EDITOR_TRANSPARENCY].image);
+            Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(UIScaler.GetHCenter()-3, 8, 6, 6);
+            ui.SetButton(delegate { UpdateEditorTransparency(0.2f); });
+            ui.SetImage(SampleSprite);
+            if(game.editorTransparency == 0.2f)
+                new UIElementBorder(ui, Color.white);
+
+            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_MEDIUM_EDITOR_TRANSPARENCY].image);
+            SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(UIScaler.GetHCenter() - 3, 15, 6, 6);
+            ui.SetButton(delegate { UpdateEditorTransparency(0.3f); });
+            ui.SetImage(SampleSprite);
+            if (game.editorTransparency == 0.3f)
+                new UIElementBorder(ui, Color.white);
+            
+            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_HIGH_EDITOR_TRANSPARENCY].image);
+            SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
+            ui = new UIElement(Game.HEROSELECT);
+            ui.SetLocation(UIScaler.GetHCenter() - 3, 22, 6, 6);
+            ui.SetButton(delegate { UpdateEditorTransparency(0.4f); });
+            ui.SetImage(SampleSprite);
+            if (game.editorTransparency == 0.4f)
+                new UIElementBorder(ui, Color.white);
+
+        }
+
         private void CreateAudioElements()
         {
             UIElement ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 8, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 8, 10, 2);
             ui.SetText(MUSIC);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -72,7 +134,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 11, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 11, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -82,7 +144,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
 
             GameObject musicFill = new GameObject("musicfill");
@@ -101,7 +163,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
 
@@ -119,7 +181,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - mVolume;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 5, 14, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 14, 10, 2);
             ui.SetText(EFFECTS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -130,7 +192,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) eVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 7, 17, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 17, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -140,7 +202,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerUp;
@@ -163,7 +225,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 7) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
             effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
@@ -190,7 +252,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Select langauge text
             UIElement ui = new UIElement();
-            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 9, 4, 18, 2);
+            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 10, 4, 18, 2);
             ui.SetText(CHOOSE_LANG);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -213,7 +275,7 @@ namespace Assets.Scripts.UI.Screens
                 string currentLanguage = langs[i];
 
                 ui = new UIElement();
-                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 4, verticalStart + (2f * position), 8, 1.8f);
+                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 5, verticalStart + (2f * position), 8, 1.8f);
                 if (!enabled_langs.Contains(currentLanguage))
                 {
                     ui.SetText(currentLanguage, Color.red);
@@ -236,6 +298,16 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(UIScaler.GetMediumFont());
             }
         }
+
+        private void UpdateEditorTransparency(float alpha)
+        {
+            game.config.data.Add("UserConfig", "editorTransparency", alpha.ToString());
+            game.config.Save();
+            game.editorTransparency = alpha;
+
+            new OptionsScreen();
+        }
+
 
         private void UpdateMusic()
         {

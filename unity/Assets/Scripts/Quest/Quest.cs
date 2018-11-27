@@ -1176,12 +1176,12 @@ public class Quest
         boardItems[name].SetVisible(alpha);
     }
 
-    // Change the transparency of all baord components
-    public void ChangeAlphaAll(float alpha)
+    // Change the transparency of all board components
+    public void ChangeAlphaAll()
     {
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
         {
-            kv.Value.SetVisible(alpha);
+            kv.Value.SetVisible(game.editorTransparency);
         }
     }
 
