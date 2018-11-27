@@ -1076,15 +1076,12 @@ public class EditorComponentEvent : EditorComponent
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddVisibility(add, index, s); }, new StringKey("val", "SELECT", new StringKey("val", "COMPONENT")));
 
-        if (!add)
-        {
-            Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Special" });
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Special" });
 
-            select.AddItem("#boardcomponents", traits);
-            select.AddItem("#monsters", traits);
-            select.AddItem("#shop", traits);
-        }
+        select.AddItem("#boardcomponents", traits);
+        select.AddItem("#monsters", traits);
+        select.AddItem("#shop", traits);
 
         if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
@@ -1101,7 +1098,7 @@ public class EditorComponentEvent : EditorComponent
             {
                 select.AddItem(kv.Value);
             }
-            if (kv.Value is QuestData.Spawn && !add)
+            if (kv.Value is QuestData.Spawn)
             {
                 select.AddItem(kv.Value);
             }
