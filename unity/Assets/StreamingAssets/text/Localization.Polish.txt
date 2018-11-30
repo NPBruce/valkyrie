@@ -180,6 +180,7 @@ SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDDEN,Ukryty
 ACTIVE,Aktywny
 SET,Ust.
+SET_EDITOR_ALPHA,Przeźroczystość Edytora
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności
 SPAWN,Przywołaj

@@ -231,6 +231,8 @@ INVESTIGATOR_ELIMINATED,Investigador Eliminado
 CLOSE,Fechar
 PUZZLE_GUESS,Tentar
 
+SET_EDITOR_ALPHA,Transparência Editor
+
 UP,Para Cima
 DOWN,Para Baixo
 LEFT,Para a Esquerda

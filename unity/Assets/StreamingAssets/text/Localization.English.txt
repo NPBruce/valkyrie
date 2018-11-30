@@ -214,7 +214,7 @@ SELECT_TO_DELETE,Select {0} To Delete
 HIDDEN,Hidden
 ACTIVE,Active
 SET,Set
-SET_EDITOR_ALPHA,Editor transparency
+SET_EDITOR_ALPHA,Editor Transparency
 SKILL,Skill
 SELECT_SKILLS,Select Skills
 SPAWN,Spawn
