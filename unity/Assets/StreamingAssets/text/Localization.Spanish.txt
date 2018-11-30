@@ -186,6 +186,7 @@ SELECT_TO_DELETE,Selección de {0} a Eliminar
 HIDDEN,Oculto
 ACTIVE,Activo
 SET,Set
+SET_EDITOR_ALPHA,Transparencia Editor
 SKILL,Atributo
 SELECT_SKILLS,Selección de Habilidades
 SPAWN,Generar

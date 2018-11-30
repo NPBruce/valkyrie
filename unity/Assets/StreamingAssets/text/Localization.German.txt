@@ -176,6 +176,7 @@ SELECT_TO_DELETE,{0} zur Löschung ausgewählt
 HIDDEN,Versteckt
 ACTIVE,Aktiv
 SET,Setze
+SET_EDITOR_ALPHA,Editor-Transparenz
 SKILL,Fähigkeit
 SELECT_SKILLS,Fähigkeiten wählen
 SPAWN,Spawn

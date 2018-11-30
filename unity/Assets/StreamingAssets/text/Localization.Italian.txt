@@ -150,6 +150,7 @@ SELECT_TO_DELETE,Selezione {0} da Cancellare
 HIDDEN,
 ACTIVE,
 SET,Set
+SET_EDITOR_ALPHA,Editor Trasparenza
 SKILL,Abilità
 SELECT_SKILLS,
 SPAWN,Generazione
