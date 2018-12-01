@@ -112,6 +112,13 @@ public class EditorComponentActivation : EditorComponent
         minionActionsUIE.SetButton(delegate { UpdateMinionActions(); });
         new UIElementBorder(minionActionsUIE);
 
+        offset++;
+
+        if (activationComponent.tests == null)
+            activationComponent.tests = new VarTests();
+
+        offset = AddEventVarConditionComponents(offset);
+
         return offset + 1;
     }
 
