@@ -69,7 +69,7 @@ public class VarManager
         return vars[var];
     }
 
-    public float GetOpValue(QuestData.Event.VarOperation op)
+    public float GetOpValue(VarOperation op)
     {
         if (!vars.ContainsKey(op.var))
         {
@@ -102,7 +102,7 @@ public class VarManager
         return vars[op.value];
     }
 
-    public void Perform(QuestData.Event.VarOperation op)
+    public void Perform(VarOperation op)
     {
         float value = GetOpValue(op);
 
@@ -149,9 +149,9 @@ public class VarManager
     }
 
 
-    public bool Test(QuestData.Event.EventTests tests)
+    public bool Test(VarTests tests)
     {
-        if (tests == null || tests.testComponents == null || tests.testComponents.Count == 0)
+        if (tests == null || tests.VarTestsComponents == null || tests.VarTestsComponents.Count == 0)
             return true;
 
         bool result = true;
@@ -159,14 +159,14 @@ public class VarManager
         int index = 0;
         int ignore_inside_parenthesis=0;
 
-        foreach (QuestData.Event.TestComponent tc in tests.testComponents)
+        foreach (VarTestsComponent tc in tests.VarTestsComponents)
         {
             // ignore tests while we are running inside a parenthesis
             if (ignore_inside_parenthesis > 0)
             {
-                if (tc is QuestData.Event.TestParenthesis)
+                if (tc is VarTestsParenthesis)
                 {
-                    QuestData.Event.TestParenthesis tp = (QuestData.Event.TestParenthesis)tc;
+                    VarTestsParenthesis tp = (VarTestsParenthesis)tc;
                     if (tp.parenthesis == "(")
                         ignore_inside_parenthesis++;
                     else if (tp.parenthesis == ")")
@@ -177,27 +177,27 @@ public class VarManager
                 continue;
             }
 
-            if (tc is QuestData.Event.VarOperation)
+            if (tc is VarOperation)
             {
                 if (current_operator == "AND")
-                    result = (result && Test((QuestData.Event.VarOperation)tc));
+                    result = (result && Test((VarOperation)tc));
                 else if (current_operator == "OR")
-                    result = (result || Test((QuestData.Event.VarOperation)tc));
+                    result = (result || Test((VarOperation)tc));
             }
-            else if (tc is QuestData.Event.TestLogicalOperator)
+            else if (tc is VarTestsLogicalOperator)
             {
-                current_operator = ((QuestData.Event.TestLogicalOperator)tc).op;
+                current_operator = ((VarTestsLogicalOperator)tc).op;
             }
-            else if (tc is QuestData.Event.TestParenthesis)
+            else if (tc is VarTestsParenthesis)
             {
-                QuestData.Event.TestParenthesis tp = (QuestData.Event.TestParenthesis)tc;
+                VarTestsParenthesis tp = (VarTestsParenthesis)tc;
                 if (tp.parenthesis == "(")
                 {
-                    List<QuestData.Event.TestComponent> remaining_tests = tests.testComponents.GetRange(index+1, tests.testComponents.Count - (index+1));
+                    List<VarTestsComponent> remaining_tests = tests.VarTestsComponents.GetRange(index+1, tests.VarTestsComponents.Count - (index+1));
                     if (current_operator == "AND")
-                        result = (result && Test(new QuestData.Event.EventTests(remaining_tests)));
+                        result = (result && Test(new VarTests(remaining_tests)));
                     else if (current_operator == "OR")
-                        result = (result || Test(new QuestData.Event.EventTests(remaining_tests)));
+                        result = (result || Test(new VarTests(remaining_tests)));
 
                     ignore_inside_parenthesis = 1;
                 }
@@ -220,7 +220,7 @@ public class VarManager
     }
 
 
-    public bool Test(QuestData.Event.VarOperation op)
+    public bool Test(VarOperation op)
     {
         float value = GetOpValue(op);
         if (op.operation.Equals("=="))
@@ -257,9 +257,9 @@ public class VarManager
         return false;
     }
     
-    public void Perform(List<QuestData.Event.VarOperation> ops)
+    public void Perform(List<VarOperation> ops)
     {
-        foreach (QuestData.Event.VarOperation op in ops)
+        foreach (VarOperation op in ops)
         {
             Perform(op);
         }
