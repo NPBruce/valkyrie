@@ -368,7 +368,7 @@ public class QuestData
             cancelable = true;
 
             // Tokens don't have conditions
-            eventTests = null;
+            VarTests = null;
 
             tokenName = "";
             if (data.ContainsKey("type"))
@@ -770,7 +770,7 @@ public class QuestData
         public string[] addComponents;
         public string[] removeComponents;
         public List<VarOperation> operations;
-        public EventTests eventTests;
+        public VarTests VarTests;
         public bool cancelable = false;
         public bool highlight = false;
         public bool randomEvents = false;
@@ -797,7 +797,7 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            eventTests = new EventTests();
+            VarTests = new VarTests();
             minCam = false;
             maxCam = false;
             music = new List<string>();
@@ -872,7 +872,7 @@ public class QuestData
                     quotaVar = data["quota"];
                 }
             }
-            
+
             // minimum heros required to be selected for event
             if (data.ContainsKey("minhero"))
             {
@@ -926,14 +926,14 @@ public class QuestData
                 operations.Add(new VarOperation("$end,=,1"));
             }
 
-            eventTests = new EventTests();
-            if (data.ContainsKey("eventtests"))
+            VarTests = new VarTests();
+            if (data.ContainsKey("VarTests"))
             {
                 //todo load save
-                string[] array = data["eventtests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] array = data["VarTests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
-                    eventTests.Add(s);
+                    VarTests.Add(s);
                 }
             }
             // Backwards support for conditions
@@ -943,8 +943,8 @@ public class QuestData
                 int i = 0;
                 foreach (string s in array)
                 {
-                    if(i>0) eventTests.Add(new TestLogicalOperator("AND"));
-                    eventTests.Add(new VarOperation(s));
+                    if (i > 0) VarTests.Add(new VarTestsLogicalOperator("AND"));
+                    VarTests.Add(new VarOperation(s));
                     i++;
                 }
             }
@@ -1147,9 +1147,9 @@ public class QuestData
                 r = r.Substring(0, r.Length - 1) + nl;
             }
 
-            if (eventTests != null && eventTests.testComponents.Count > 0)
+            if (VarTests != null && VarTests.VarTestsComponents.Count > 0)
             {
-                r += "eventtests=" + eventTests.ToString() + nl;
+                r += "VarTests=" + VarTests.ToString() + nl;
             }
 
             if (randomEvents)
@@ -1187,396 +1187,6 @@ public class QuestData
             }
 
             return r;
-        }
-
-        public class EventTests
-        {
-            public List<TestComponent> testComponents=null;
-
-            public EventTests()
-            {
-                testComponents = new List<TestComponent>();
-            }
-
-            public EventTests(List<TestComponent> inTC)
-            {
-                testComponents = inTC;
-            }
-
-            override public string ToString()
-            {
-                string result = "";
-                foreach(var v in testComponents)
-                {
-                    result += v.GetClassTestComponentType() + ":" + v.ToString() + " ";
-                }
-                return result;
-            }
-
-            public void Add(string str)
-            {
-                string[] part = str.Split(':');
-
-                if(part[0].Equals(TestLogicalOperator.GetTestComponentType()))
-                {
-                    testComponents.Add(new TestLogicalOperator(part[1]));
-                }
-                if (part[0].Equals(TestParenthesis.GetTestComponentType()))
-                {
-                    testComponents.Add(new TestParenthesis(part[1]));
-                }
-                if (part[0].Equals(VarOperation.GetTestComponentType()))
-                {
-                    testComponents.Add(new VarOperation(part[1]));
-                }
-            }
-
-            public void Add(TestComponent tc)
-            {
-                if (tc.GetClassTestComponentType().Equals("TestParenthesis"))
-                {
-                    testComponents.Insert(0, tc);
-                }
-                else
-                {
-                    testComponents.Add(tc);
-                }
-            }
-
-
-            /// <summary> Seach for the corresponding parenthesis of specified opening parenthesis </summary>
-            /// <param name="index_open">index of opening parenthesis</param>
-            /// <returns> index of closing parenthesis</returns>
-            public int FindClosingParenthesis(int index_open)
-            {
-                TestParenthesis tmp;
-                int count = 0;
-
-                for(int i= index_open; i< testComponents.Count;i++)
-                {
-                    if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
-                    {
-                        tmp = (TestParenthesis)testComponents[i];
-
-                        if (tmp.parenthesis == "(")
-                            count++;
-                        else if (tmp.parenthesis == ")" && count == 0)
-                            return i;
-                        else
-                            count--;
-                    }
-                }
-
-                // not found
-                return -1;
-            }
-
-            /// <summary> Seach for the opening parenthesis of specified closing parenthesis </summary>
-            /// <param name="index_close">index of closing parenthesis</param>
-            /// <returns> index of opening parenthesis</returns>
-            public int FindOpeningParenthesis(int index_close)
-            {
-                TestParenthesis tmp;
-                int count = 0;
-
-                for (int i = index_close; i >= 0; i--)
-                {
-                    if (testComponents[i].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
-                    {
-                        tmp = (TestParenthesis)testComponents[i];
-
-                        if (tmp.parenthesis == ")")
-                            count++;
-                        else if (tmp.parenthesis == "(" && count == 0)
-                            return i;
-                        else
-                            count--;
-                    }
-                }
-
-                // not found
-                return -1;
-            }
-
-            /// <summary> Search for the next valid position for parenthesis or varOperation </summary>
-            /// <param name="index">index of current item to move</param>
-            /// <param name="up">direction of requested movement (visually on UI)</param>
-            /// <returns> index of next position</returns>
-            public int FindNextValidPosition(int index, bool up)
-            {
-                if (testComponents[index].GetClassTestComponentType() != TestParenthesis.GetTestComponentType()
-                    && testComponents[index].GetClassTestComponentType() != VarOperation.GetTestComponentType())
-                {
-                    return -1;
-                }
-
-                int i = index;
-
-                if (up) i--;
-                else i++;
-
-                if (testComponents[index].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
-                {
-                    TestParenthesis tmp = (TestParenthesis)testComponents[index];
-                    while (i >= 0 && i <= testComponents.Count - 1)
-                    {
-                       
-                        if (  // "(" should be before a varOperation or at the beginning a&(b  a&((b  (a&b 
-                            (tmp.parenthesis == "("
-                             && testComponents[i].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                             ||
-                            // ")" should be before a LogicalOperator or at the end  a)&b  a))&b  a&b)
-                             (tmp.parenthesis == ")"
-                             && testComponents[i].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
-                           )
-                        {
-                            if (up)
-                                return i;
-                            else if (i != index + 1)// if going down, ignore first item found
-                                return i-1;
-                        }
-
-                        if (up) i--;
-                        else i++;
-                    }
-
-                    if (i >= testComponents.Count && tmp.parenthesis == ")")
-                        return testComponents.Count - 1;
-                    else if (i <= 0 && tmp.parenthesis == "(")
-                        return 0;
-                }
-                else if (testComponents[index].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                {
-                    while (i >= 0 && i <= testComponents.Count - 1)
-                    {
-                        // varOperation should take the place of another varOperation
-                        if (testComponents[i].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                        {
-                            return i;
-                        }
-
-                        if (up) i--;
-                        else i++;
-                    }
-                }
-
-                if (i < 0 || i >= testComponents.Count) return -1;
-
-                // this should not happen
-                ValkyrieDebug.Log("Invalid test position");
-
-                return -1;
-            }
-
-            public void Remove(int index)
-            {
-                if(testComponents[index].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                {
-                    if (index > 0 && testComponents[index - 1].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
-                    {
-                        // remove TestOperator then VarOperation
-                        testComponents.RemoveAt(index - 1);
-                        testComponents.RemoveAt(index - 1);
-                    }
-                    else if (index < testComponents.Count - 1 && testComponents[index + 1].GetClassTestComponentType() == TestLogicalOperator.GetTestComponentType())
-                    {
-                        // remove VarOperation then TestOperator
-                        testComponents.RemoveAt(index);
-                        testComponents.RemoveAt(index);
-                    }
-                    else if (testComponents.Count == 1)
-                    {
-                        testComponents.RemoveAt(0);
-                    }
-                    else
-                    {
-                        // no operator before and after: items must be between parenthesis, we delete and run again
-                        testComponents.RemoveAt(index + 1);
-                        testComponents.RemoveAt(index - 1);
-                        Remove(index - 1);
-                    }
-                }
-                else if ( testComponents[index].GetClassTestComponentType() == TestParenthesis.GetTestComponentType())
-                {
-                    TestParenthesis tmp = (TestParenthesis)testComponents[index];
-                    int other_parenthesis_index = -1;
-
-                    if (tmp.parenthesis == "(")
-                    {
-                        other_parenthesis_index = FindClosingParenthesis(index);
-                        testComponents.RemoveAt(other_parenthesis_index);
-                        testComponents.RemoveAt(index);
-                    }
-                    else if(tmp.parenthesis == ")")
-                    {
-                        other_parenthesis_index = FindOpeningParenthesis(index);
-                        testComponents.RemoveAt(index);
-                        testComponents.RemoveAt(other_parenthesis_index);
-                    }
-                }
-
-            }
-
-            public void moveComponent(int index, bool up)
-            {
-                int next_position = FindNextValidPosition(index, up);
-
-                if(up) // up arrow means down in the list
-                {
-                    for(int i = index;i > next_position;i--)
-                    {
-                        testComponents.Reverse(i - 1, 2);
-                    }
-
-                    if (testComponents[next_position].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                    {
-                        for (int i = next_position+1; i < index; i++)
-                        {
-                            testComponents.Reverse(i, 2);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = index; i < next_position; i++)
-                    {
-                        testComponents.Reverse(i, 2);
-                    }
-
-                    if (testComponents[next_position].GetClassTestComponentType() == VarOperation.GetTestComponentType())
-                    {
-                        for (int i = next_position - 1; i > index; i--)
-                        {
-                            testComponents.Reverse(i-1, 2);
-                        }
-                    }
-                }
-            }
-        }
-
-        abstract public class TestComponent : System.Object
-        {
-            abstract public string GetClassTestComponentType();
-        }
-
-        public class TestLogicalOperator : TestComponent
-        {
-            public string op;
-
-            public TestLogicalOperator()
-            {
-                op = "AND";
-            }
-
-            public TestLogicalOperator(string inOp)
-            {
-                op = inOp;
-            }
-
-            override public string ToString()
-            {
-                return op;
-            }
-
-            public void NextLogicalOperator()
-            {
-                if (op == "AND")
-                    op = "OR";
-                else
-                    op = "AND";
-            }
-
-            public static string GetTestComponentType()
-            {
-                return "TestLogicalOperator";
-            }
-
-            override public string GetClassTestComponentType()
-            {
-                return GetTestComponentType();
-            }
-        }
-
-        public class TestParenthesis : TestComponent
-        {
-            public string parenthesis;
-
-            public TestParenthesis()
-            {
-            }
-
-            // can be "(" or ")"
-            public TestParenthesis(string inOp)
-            {
-                parenthesis = inOp;
-            }
-
-            override public string ToString()
-            {
-               return parenthesis;
-            }
-
-            public static string GetTestComponentType()
-            {
-                return "TestParenthesis";
-            }
-
-            override public string GetClassTestComponentType()
-            {
-                return GetTestComponentType();
-            }
-
-        }
-
-        public class VarOperation : TestComponent
-        {
-            public string var = "";
-            public string operation = "";
-            public string value = "";
-
-            public VarOperation()
-            {
-            }
-
-            public VarOperation(string inOp)
-            {
-                string []splitted_string = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-
-                if(splitted_string.Length != 3)
-                {
-                    ValkyrieDebug.Log("Invalid var operation: " + inOp);
-                }
-
-                var = splitted_string[0];
-                operation = splitted_string[1];
-                value = splitted_string[2];
-
-                // Support old internal var names (depreciated, format 3)
-                var = UpdateVarName(var);
-                value = UpdateVarName(value);
-            }
-
-            override public string ToString()
-            {
-                return var + ',' + operation + ',' + value;
-            }
-
-            private string UpdateVarName(string s)
-            {
-                if (s.Equals("#fire")) return "$fire";
-                return s;
-            }
-
-            public static string GetTestComponentType()
-            {
-                return "VarOperation";
-            }
-
-            override public string GetClassTestComponentType()
-            {
-                return GetTestComponentType();
-            }
-
         }
     }
 
