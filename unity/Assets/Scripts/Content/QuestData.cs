@@ -1425,7 +1425,7 @@ public class QuestData
                 r += "comment=" + comment + nl;
             }
 
-            if (operations.Count > 0)
+            if (operations != null && operations.Count > 0)
             {
                 r += "operations=";
                 foreach (VarOperation o in operations)
