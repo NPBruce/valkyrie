@@ -1540,9 +1540,16 @@ public class QuestData
 
             public VarOperation(string inOp)
             {
-                var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
-                operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
-                value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
+                string []splitted_string = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+
+                if(splitted_string.Length != 3)
+                {
+                    ValkyrieDebug.Log("Invalid var operation: " + inOp);
+                }
+
+                var = splitted_string[0];
+                operation = splitted_string[1];
+                value = splitted_string[2];
 
                 // Support old internal var names (depreciated, format 3)
                 var = UpdateVarName(var);
