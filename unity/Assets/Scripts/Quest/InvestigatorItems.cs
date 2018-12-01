@@ -28,7 +28,8 @@ public class InvestigatorItems
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
             QuestData.QItem item = kv.Value as QuestData.QItem;
-            if (item != null && item.starting && game.quest.itemSelect.ContainsKey(kv.Key))
+            if (item != null && item.starting && game.quest.itemSelect.ContainsKey(kv.Key)
+                && item.tests != null && game.quest.vars.Test(item.tests))
             {
                 game.quest.items.Add(game.quest.itemSelect[kv.Key]);
                 if (item.inspect.Length > 0)

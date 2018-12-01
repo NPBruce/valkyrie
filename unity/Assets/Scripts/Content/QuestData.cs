@@ -368,7 +368,7 @@ public class QuestData
             cancelable = true;
 
             // Tokens don't have conditions
-            VarTests = null;
+            tests = null;
 
             tokenName = "";
             if (data.ContainsKey("type"))
@@ -769,8 +769,6 @@ public class QuestData
         public int maxHeroes = 0;
         public string[] addComponents;
         public string[] removeComponents;
-        public List<VarOperation> operations;
-        public VarTests VarTests;
         public bool cancelable = false;
         public bool highlight = false;
         public bool randomEvents = false;
@@ -797,14 +795,14 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            VarTests = new VarTests();
+            tests = new VarTests();
             minCam = false;
             maxCam = false;
             music = new List<string>();
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path)
+        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path, format)
         {
             typeDynamic = type;
 
@@ -909,44 +907,6 @@ public class QuestData
             if (data.ContainsKey("trigger"))
             {
                 trigger = data["trigger"];
-            }
-
-            operations = new List<VarOperation>();
-            if (data.ContainsKey("operations"))
-            {
-                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in array)
-                {
-                    operations.Add(new VarOperation(s));
-                }
-            }
-            // Backwards support for format < 8
-            if (format <= 8 && sectionName.StartsWith("EventEnd"))
-            {
-                operations.Add(new VarOperation("$end,=,1"));
-            }
-
-            VarTests = new VarTests();
-            if (data.ContainsKey("VarTests"))
-            {
-                //todo load save
-                string[] array = data["VarTests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in array)
-                {
-                    VarTests.Add(s);
-                }
-            }
-            // Backwards support for conditions
-            else if (data.ContainsKey("conditions"))
-            {
-                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                int i = 0;
-                foreach (string s in array)
-                {
-                    if (i > 0) VarTests.Add(new VarTestsLogicalOperator("AND"));
-                    VarTests.Add(new VarOperation(s));
-                    i++;
-                }
             }
 
             // Randomise next event setting
@@ -1137,21 +1097,6 @@ public class QuestData
                 r += "trigger=" + trigger + nl;
             }
 
-            if (operations.Count > 0)
-            {
-                r += "operations=";
-                foreach (VarOperation o in operations)
-                {
-                    r += o.ToString() + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-
-            if (VarTests != null && VarTests.VarTestsComponents.Count > 0)
-            {
-                r += "VarTests=" + VarTests.ToString() + nl;
-            }
-
             if (randomEvents)
             {
                 r += "randomevents=true" + nl;
@@ -1337,6 +1282,10 @@ public class QuestData
         public UnityEngine.UI.Image image;
         // comment for developers
         public string comment = "";
+        // Var tests and operations if required
+        public VarTests tests = null;
+        public List<VarOperation> operations = null;
+
         private static char DOT = '.';
         public string genKey(string element)
         {
@@ -1357,7 +1306,7 @@ public class QuestData
         }
 
         // Construct from ini data
-        public QuestComponent(string nameIn, Dictionary<string, string> data, string sourceIn)
+        public QuestComponent(string nameIn, Dictionary<string, string> data, string sourceIn, int format=-1)
         {
             typeDynamic = type;
             sectionName = nameIn;
@@ -1380,6 +1329,45 @@ public class QuestData
             if (data.ContainsKey("comment"))
             {
                 comment = data["comment"];
+            }
+
+            operations = new List<VarOperation>();
+            if (data.ContainsKey("operations"))
+            {
+                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    operations.Add(new VarOperation(s));
+                }
+            }
+
+            // Backwards support for format < 8
+            if (format <= 8 && sectionName.StartsWith("EventEnd"))
+            {
+                operations.Add(new VarOperation("$end,=,1"));
+            }
+
+            tests = new VarTests();
+            if (data.ContainsKey("vartests"))
+            {
+                //todo load save
+                string[] array = data["vartests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    tests.Add(s);
+                }
+            }
+            // Backwards support for conditions
+            else if (data.ContainsKey("conditions"))
+            {
+                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                int i = 0;
+                foreach (string s in array)
+                {
+                    if (i > 0) tests.Add(new VarTestsLogicalOperator("AND"));
+                    tests.Add(new VarOperation(s));
+                    i++;
+                }
             }
         }
 
@@ -1436,6 +1424,22 @@ public class QuestData
             {
                 r += "comment=" + comment + nl;
             }
+
+            if (operations.Count > 0)
+            {
+                r += "operations=";
+                foreach (VarOperation o in operations)
+                {
+                    r += o.ToString() + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            if (tests != null && tests.VarTestsComponents.Count > 0)
+            {
+                r += "vartests=" + tests.ToString() + nl;
+            }
+
             return r;
         }
     }

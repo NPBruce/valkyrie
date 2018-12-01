@@ -148,7 +148,17 @@ public class EditorComponentItem : EditorComponent
         if (offset < traitOffset) offset = traitOffset;
         offset++;
 
-        return AddInspect(offset);
+        offset = AddInspect(offset);
+
+        if (itemComponent.starting)
+        {
+            if(itemComponent.tests==null)
+                itemComponent.tests = new VarTests();
+
+            offset = AddEventVarConditionComponents(offset);
+        }
+
+        return offset;
     }
 
     public float AddInspect(float offset)
