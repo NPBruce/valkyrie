@@ -126,7 +126,7 @@ MUSIC,Musique
 NAME,Nom
 NEW,Nouveau
 NEW_X,{Nouveau {0}}
-NONE,{Ninguno}
+NONE,{Aucun}
 
 NEXT_EVENTS,Événements suivants
 NOT_FIRST,Pas en premier
