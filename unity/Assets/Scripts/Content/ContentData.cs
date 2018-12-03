@@ -672,6 +672,11 @@ public class ContentData {
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
+            if (d.image.Equals(""))
+            {
+                ValkyrieDebug.Log("Token " + d.name + "did not have an image. Skipping");
+                return;
+            }
             // If we don't already have one then add this
             if (!tokens.ContainsKey(name))
             {
