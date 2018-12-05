@@ -18,7 +18,7 @@ namespace ImportTest
                 Console.Write("D2E Import Avaialable");
             if (d2e.NeedImport())
                 Console.Write("D2E Import Needed");
-            if (d2e.Import(null))
+            if (d2e.Import())
                 Console.Write("D2E Import Complete");
 
             FFGImport mom = new FFGImport(GameType.MoM, Platform.Windows, ".");
@@ -27,7 +27,7 @@ namespace ImportTest
                 Console.Write("MoM Import Avaialable");
             if (mom.NeedImport())
                 Console.Write("MoM Import Needed");
-            if (mom.Import(null))
+            if (mom.Import())
                 Console.Write("MoM Import Complete");
         }
     }
