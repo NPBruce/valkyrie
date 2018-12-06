@@ -1402,11 +1402,21 @@ public class TokenData : GenericData
 
     public void init(Dictionary<string, string> content)
     {
-        if (content.ContainsKey("x"))
+
+        if (Application.platform == RuntimePlatform.Android && content.ContainsKey("x_android"))
+        {
+            int.TryParse(content["x_android"], out x);
+        }
+        else if (content.ContainsKey("x"))
         {
             int.TryParse(content["x"], out x);
         }
-        if (content.ContainsKey("y"))
+
+        if (Application.platform == RuntimePlatform.Android && content.ContainsKey("y_android"))
+        {
+            int.TryParse(content["y_android"], out y);
+        }
+        else if (content.ContainsKey("y"))
         {
             int.TryParse(content["y"], out y);
         }

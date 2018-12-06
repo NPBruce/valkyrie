@@ -404,6 +404,7 @@ namespace Assets.Scripts.UI.Screens
                         ValkyrieDebug.Log("Writing text asset to '" + f + "'");
                         File.WriteAllText(f, asset.ToString());
                     }
+                    bundle.Unload(false);
                 }
             }
             catch (System.Exception ex)
