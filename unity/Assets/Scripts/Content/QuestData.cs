@@ -1192,6 +1192,7 @@ public class QuestData
         public string skill = "{observation}";
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
+        public string puzzleSolution = "";
         public string imageType = "";
 
         // Create a new puzzle with name (editor)
@@ -1232,6 +1233,10 @@ public class QuestData
             {
                 int.TryParse(data["puzzlealtlevel"], out puzzleAltLevel);
             }
+            if (data.ContainsKey("puzzlesolution"))
+            {
+                puzzleSolution = data["puzzlesolution"];
+            }
         }
 
         // Save to string (editor)
@@ -1259,6 +1264,10 @@ public class QuestData
             if (puzzleAltLevel != 3)
             {
                 r += "puzzlealtlevel=" + puzzleAltLevel + nl;
+            }
+            if (!puzzleSolution.Equals(""))
+            {
+                r += "puzzlesolution=" + puzzleSolution + nl;
             }
             return r;
         }
