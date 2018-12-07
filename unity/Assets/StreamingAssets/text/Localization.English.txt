@@ -417,6 +417,7 @@ navy,Navy
 image,Image
 code,Code
 slide,Slide
+tower,Tower
 SYMBOL,Symbol
 ELEMENT,Element
 

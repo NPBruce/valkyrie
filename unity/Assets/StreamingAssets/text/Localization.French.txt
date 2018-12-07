@@ -373,6 +373,7 @@ navy,Bleu marine
 image,Image
 code,Code
 slide,Mécanisme
+tower,Tour d'Hanoï
 SYMBOL,Symbole
 ELEMENT,Élément
 
