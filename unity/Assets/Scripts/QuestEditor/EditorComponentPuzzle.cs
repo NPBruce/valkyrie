@@ -195,18 +195,19 @@ public class EditorComponentPuzzle : EditorComponentEvent
     public void UpdatePuzzleSolution()
     {
         ValkyrieDebug.Log("Setting puzzle solution");
+        var solutionArray = puzzleSolutionUIE.GetText().Split(" ".ToCharArray());
 
         // Validate puzzle solution and mark it with red if it's not valid
         bool invalid = false;
         // Check the solution's length
-        if (puzzleSolutionUIE.GetText().Split(" ".ToCharArray()).Length > puzzleComponent.puzzleLevel)
+        if (solutionArray.Length != puzzleComponent.puzzleLevel)
         {
-            ValkyrieDebug.Log("Puzzle solution too big");
+            ValkyrieDebug.Log("Puzzle solution must be the same length as puzzleLevel");
             invalid = true;
         }
 
         // Check the solution's characters to be valid and in range
-        foreach (string part in puzzleSolutionUIE.GetText().Split(" ".ToCharArray()))
+        foreach (string part in solutionArray)
         {
             int j;
             if (!int.TryParse(part, out j))
