@@ -99,7 +99,10 @@ public class EditorComponentPuzzle : EditorComponentEvent
             ui.SetButton(delegate { Image(); });
             new UIElementBorder(ui);
             offset += 2;
-
+        }
+        
+        if (puzzleComponent.puzzleClass.Equals("code")) 
+        {
             // Initialize the puzzle solution UI element
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 5, 1);
