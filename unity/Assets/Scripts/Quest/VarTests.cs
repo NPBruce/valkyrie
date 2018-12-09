@@ -217,13 +217,13 @@ public class VarTests
 
             if (tmp.parenthesis == "(")
             {
-                other_parenthesis_index = FindClosingParenthesis(index);
+                other_parenthesis_index = FindClosingParenthesis(index+1);
                 VarTestsComponents.RemoveAt(other_parenthesis_index);
                 VarTestsComponents.RemoveAt(index);
             }
             else if (tmp.parenthesis == ")")
             {
-                other_parenthesis_index = FindOpeningParenthesis(index);
+                other_parenthesis_index = FindOpeningParenthesis(index-1);
                 VarTestsComponents.RemoveAt(index);
                 VarTestsComponents.RemoveAt(other_parenthesis_index);
             }
