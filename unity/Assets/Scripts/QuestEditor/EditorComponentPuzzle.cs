@@ -222,10 +222,11 @@ public class EditorComponentPuzzle : EditorComponentEvent
             }
         }
 
-        // Error out if it's invalid
+        // Error out if it's invalid and reset the puzzle solution
         if (invalid)
         {
             puzzleSolutionUIE.SetColor(Color.red);
+            puzzleComponent.puzzleSolution = "";
             return;
         }
 
