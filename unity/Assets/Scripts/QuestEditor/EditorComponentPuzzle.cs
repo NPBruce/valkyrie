@@ -35,6 +35,21 @@ public class EditorComponentPuzzle : EditorComponentEvent
     {
         return offset;
     }
+
+    /* Write an example puzzle solution with dim grey color:
+     * If puzzlelevel=5 and puzzlelevel=4, we give example "1 2 3 4 1". */
+    private void ProvidePuzzleSolutionExample()
+    {
+        string example_str = "";
+        // build string
+        for (int i=0; i < puzzleComponent.puzzleLevel ; i++) {
+            example_str += ((i%puzzleComponent.puzzleAltLevel)+1).ToString() + " ";
+        }
+        example_str = example_str.TrimEnd(); // kill that last space
+        // Set the text field and put it in grey color
+        puzzleSolutionUIE.SetText(example_str);
+        puzzleSolutionUIE.SetColor(Color.grey);
+    }
     
     override public float AddSubEventComponents(float offset)
     {
@@ -110,7 +125,12 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
             puzzleSolutionUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
             puzzleSolutionUIE.SetLocation(5, offset, 8, 1);
-            puzzleSolutionUIE.SetText(puzzleComponent.puzzleSolution.ToString());
+            /* If there is no set puzzlesolution give an example with gray letters */
+            if (puzzleComponent.puzzleSolution.Length == 0) {
+                ProvidePuzzleSolutionExample();
+            } else { /* otherwise display the solution  */
+                puzzleSolutionUIE.SetText(puzzleComponent.puzzleSolution);
+            }
             puzzleSolutionUIE.SetSingleLine();
             puzzleSolutionUIE.SetButton(delegate { UpdatePuzzleSolution(); });
             new UIElementBorder(puzzleSolutionUIE);
@@ -215,7 +235,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
                 ValkyrieDebug.Log("Solution needs to be a number (e.g. 1 2 3)");
                 invalid = true;
             }
-            if (j > puzzleComponent.puzzleAltLevel)
+            if (j == 0 || j > puzzleComponent.puzzleAltLevel)
             {
                 ValkyrieDebug.Log("Puzzle solution " + j + " out of AltLevel " + puzzleComponent.puzzleAltLevel + " range.");
                 invalid = true;
