@@ -84,8 +84,8 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
 
             // Select language text
-            UIElement ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 10, 5, 20, 2);
+            UIElement ui = new UIElement(Game.DIALOG);
+            ui.SetLocation(UIScaler.GetHCenter() - 8, 5, 16, 2);
             ui.SetText(SET_EDITOR_ALPHA);
             ui.SetTextAlignment(TextAnchor.MiddleCenter);
             ui.SetFont(game.gameType.GetHeaderFont());
@@ -93,7 +93,7 @@ namespace Assets.Scripts.UI.Screens
 
             Texture2D SampleTex = ContentData.FileToTexture(game.cd.images[IMG_LOW_EDITOR_TRANSPARENCY].image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
-            ui = new UIElement(Game.HEROSELECT);
+            ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter()-3, 8, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.2f); });
             ui.SetImage(SampleSprite);
@@ -102,7 +102,7 @@ namespace Assets.Scripts.UI.Screens
 
             SampleTex = ContentData.FileToTexture(game.cd.images[IMG_MEDIUM_EDITOR_TRANSPARENCY].image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
-            ui = new UIElement(Game.HEROSELECT);
+            ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 15, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.3f); });
             ui.SetImage(SampleSprite);
@@ -111,7 +111,7 @@ namespace Assets.Scripts.UI.Screens
             
             SampleTex = ContentData.FileToTexture(game.cd.images[IMG_HIGH_EDITOR_TRANSPARENCY].image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
-            ui = new UIElement(Game.HEROSELECT);
+            ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 22, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.4f); });
             ui.SetImage(SampleSprite);
