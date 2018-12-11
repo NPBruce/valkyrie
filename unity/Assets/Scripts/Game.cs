@@ -165,6 +165,10 @@ public class Game : MonoBehaviour {
         // The newline at the end stops the stack trace appearing in the log
         ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
+#if UNITY_STANDALONE
+        SetScreenOrientationToLandscape();
+#endif
+
         // Bring up the Game selector
         gameSelect = new GameSelectionScreen();
     }
@@ -381,6 +385,27 @@ public class Game : MonoBehaviour {
     {
         updateList.Add(obj);
     }
+
+#if UNITY_STANDALONE
+    [System.Runtime.InteropServices.DllImport("User32.dll")]
+    private static extern bool SetDisplayAutoRotationPreferences(int value);
+
+    private static void SetScreenOrientationToLandscape()
+    {
+        SetDisplayAutoRotationPreferences((int)ORIENTATION_PREFERENCE.ORIENTATION_PREFERENCE_LANDSCAPE |
+            (int)ORIENTATION_PREFERENCE.ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED);
+    }
+
+    private enum ORIENTATION_PREFERENCE
+    {
+        ORIENTATION_PREFERENCE_NONE = 0x0,
+        ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
+        ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
+        ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
+        ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
+    }
+#endif
+
 }
 
 public interface IUpdateListener
