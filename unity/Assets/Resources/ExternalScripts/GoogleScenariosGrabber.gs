@@ -42,7 +42,21 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        var ini_url = url + element.name + '.ini' ;
        
        Logger.log("fetch " + ini_url);
-       response = UrlFetchApp.fetch(ini_url);
+       
+       var fetch_OK=true;
+       for (var i=0; i<3; i++) 
+       {
+           try {
+              response = UrlFetchApp.fetch(ini_url);
+           }
+           catch (err)
+           {
+             Logger.log("fetch error "+ i + " : "+ err + " for URL " + ini_url);
+             fetch_OK = false;
+           }
+         
+           if(fetch_OK) i=3;
+       }
        
        quest_parser = new ConfigIniParser(delimiter);
 
