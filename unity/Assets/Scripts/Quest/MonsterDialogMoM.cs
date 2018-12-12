@@ -192,6 +192,12 @@ public class MonsterDialogMoM : MonsterDialog
         {
             game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
         }
+
+        // fix #982
+        if (game.quest.phase == Quest.MoMPhase.monsters)
+        {
+            Game.Get().roundControl.MonsterActivated();
+        }
     }
 
     public static void MonsterDamageDec(Quest.Monster monster, UnityEngine.Events.UnityAction<Quest.Monster, bool> call)
