@@ -158,4 +158,10 @@ public class Audio : MonoBehaviour
         // Set next music
         musicIndex++;
     }
+
+    public void StopAudioEffect()
+    {
+        if(audioSourceEffect!=null)
+            audioSourceEffect.Stop();
+    }
 }
