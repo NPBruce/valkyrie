@@ -63,6 +63,8 @@ public class Destroyer {
 
         Game game = Game.Get();
 
+        game.audioControl.StopAudioEffect();
+
         game.heroCanvas.Clean();
         game.cc.maxLimit = false;
         game.cc.minLimit = false;
