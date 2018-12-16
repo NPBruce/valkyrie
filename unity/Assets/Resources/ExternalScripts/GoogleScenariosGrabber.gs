@@ -66,8 +66,8 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        // add URL in the data
        quest_parser.set("Quest", "url", url);
        
-       // rename [Quest] into [ScenarioName.valkyrie]
-       quest_parser.renameSection("Quest", element.name+".valkyrie");
+       // rename [Quest] into [ScenarioName]
+       quest_parser.renameSection("Quest", element.name);
        
        var text_content = quest_parser.stringify('\n');
        
