@@ -6,6 +6,28 @@ function ScenariosGrabber(gameType) {
 
 }
 
+function fetch_with_retry(uri) 
+{
+   var fetch_OK=true;
+   var response="invalid";
+   for (var retry=0; retry<3; retry++) 
+   {
+       try {
+          response = UrlFetchApp.fetch(uri);
+       }
+       catch (err)
+       {
+         Logger.log("fetch error "+ retry + " : "+ err + " for URL " + ini_url);
+         fetch_OK = false;
+       }
+     
+       if(fetch_OK) retry=3;
+   }
+
+   return response;
+}
+
+
 
 ScenariosGrabber.prototype.generate_ini = function generate_ini()
 {
@@ -21,7 +43,13 @@ ScenariosGrabber.prototype.generate_ini = function generate_ini()
 ScenariosGrabber.prototype._getContent = function _getContent() {
   
   // Make a GET request of scenarios list 
-  var response = UrlFetchApp.fetch("https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/"+ this._gameType +"/manifest.ini");
+  var response = fetch_with_retry("https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/"+ this._gameType +"/manifest.ini");
+  
+  if(response=="invalid")
+  {
+    throw "Invalid get request, stopping here";
+  }
+  
   Logger.log("Get list of scenarios:\n" + response.getContentText());
   
   var delimiter = "\n"; //or "\n" for *nux
@@ -43,21 +71,13 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        
        Logger.log("fetch " + ini_url);
        
-       var fetch_OK=true;
-       for (var i=0; i<3; i++) 
+       response = fetch_with_retry(ini_url);
+
+       if(response=="invalid")
        {
-           try {
-              response = UrlFetchApp.fetch(ini_url);
-           }
-           catch (err)
-           {
-             Logger.log("fetch error "+ i + " : "+ err + " for URL " + ini_url);
-             fetch_OK = false;
-           }
-         
-           if(fetch_OK) i=3;
+          throw "Invalid get request, stopping here";
        }
-       
+  
        quest_parser = new ConfigIniParser(delimiter);
 
        Logger.log("parse");
