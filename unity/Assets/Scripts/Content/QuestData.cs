@@ -2290,6 +2290,16 @@ public class QuestData
         public int lengthMin = 0;
         public int lengthMax = 0;
 
+        // -- data for initial scenario listing
+        // CRC32 of valkyrie package
+        public string version = "";
+        // languages availables with scenario name <"English", "The Fall of House Lynch">
+        public Dictionary<string, string> languages_name = null;
+        // URL of the package
+        public string package_url = "";
+        // is package available locally
+        public bool downloaded = false;
+
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
         public string authors_key { get { return "quest.authors"; } }
@@ -2451,6 +2461,32 @@ public class QuestData
             {
                 string value = iniData["image"];
                 image = value != null ? value.Replace('\\', '/') : value;
+            }
+
+            // parse data for scenario explorer
+            version = "";
+            if (iniData.ContainsKey("version"))
+            {
+                version = iniData["version"];
+            }
+
+            if (iniData.ContainsKey("name."+defaultLanguage))
+            {
+                languages_name = new Dictionary<string, string>();
+
+                foreach(KeyValuePair<string,string> kv in iniData)
+                {
+                    if(kv.Key.Contains("name."))
+                    {
+                        languages_name.Add(kv.Key.Substring(5), kv.Value);
+                    }
+                }
+            }
+
+            package_url = "";
+            if (iniData.ContainsKey("url"))
+            {
+                package_url = iniData["url"];
             }
 
             return true;

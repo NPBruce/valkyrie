@@ -268,6 +268,8 @@ namespace Assets.Scripts.UI.Screens
             if (!fcD2E.NeedImport())
             {
                 Game.Get().gameType = new D2EGameType();
+                // Download quests list
+                Game.Get().questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
@@ -319,6 +321,8 @@ namespace Assets.Scripts.UI.Screens
             if (!fcMoM.NeedImport())
             {
                 Game.Get().gameType = new MoMGameType();
+                // Download quests list
+                Game.Get().questsList = new QuestsManager();
                 // MoM also has a special reound controller
                 Game.Get().roundControl = new RoundControllerMoM();
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
