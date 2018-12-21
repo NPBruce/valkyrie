@@ -111,11 +111,9 @@ namespace Assets.Scripts.UI.Screens
         public void Cancel()
         {
             Destroyer.Dialog();
-            // Get a list of available quests
-            Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
 
             // Pull up the quest selection page
-            new QuestSelectionScreen(ql);
+            new QuestSelectionScreen();
         }
 
         // Select a quest

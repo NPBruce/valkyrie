@@ -63,6 +63,38 @@ public class QuestLoader {
         return quests;
     }
 
+    // Return a single quest, quest name is without file extension
+    public static QuestData.Quest GetSingleQuest(string questName, bool getHidden = false)
+    {
+        QuestData.Quest quest = null;
+
+        Game game = Game.Get();
+        // Look in the user application data directory
+        string dataLocation = Game.AppData();
+        mkDir(dataLocation);
+        CleanTemp();
+        mkDir(ContentData.DownloadPath());
+
+        string path = ContentData.DownloadPath() + Path.DirectorySeparatorChar + questName + ".valkyrie";
+        QuestLoader.ExtractSinglePackagePartial(path);
+
+        // load quest
+        QuestData.Quest q = new QuestData.Quest(Path.Combine(ContentData.TempValyriePath, Path.GetFileName(path)));
+        // Check quest is valid and of the right type
+        if (q.valid && q.type.Equals(game.gameType.TypeName()))
+        {
+            // Is the quest hidden?
+            if (!q.hidden || getHidden)
+            {
+                // Add quest to quest list
+                quest = q;
+            }
+        }
+
+        // Return list of available quests
+        return quest;
+    }
+
     // Return list of quests available in the user path (includes packages)
     public static Dictionary<string, QuestData.Quest> GetUserQuests()
     {
@@ -173,7 +205,7 @@ public class QuestLoader {
     {
         // Extract into temp
         string extractedPath = Path.Combine(ContentData.TempValyriePath, Path.GetFileName(path));
-        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT);
+        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC);
     }
 
     /// <summary>

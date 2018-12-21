@@ -75,6 +75,8 @@ public class Game : MonoBehaviour {
     public bool testMode = false;
     // Stats manager for quest rating
     public StatsManager stats;
+    // Quests manager
+    public QuestsManager questsList;
 
     // List of things that want to know if the mouse is clicked
     protected List<IUpdateListener> updateList;
@@ -192,11 +194,8 @@ public class Game : MonoBehaviour {
             }
         }
 
-        // Get a list of available quests
-        Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
-
         // Pull up the quest selection page
-        new QuestSelectionScreen(ql);
+        new QuestSelectionScreen();
     }
 
     // This is called by editor on the main menu

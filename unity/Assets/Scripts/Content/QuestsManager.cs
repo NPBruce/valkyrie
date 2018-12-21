@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Assets.Scripts.Content;
+using Assets.Scripts.UI.Screens;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -25,7 +28,7 @@ public class QuestsManager
 
     public bool error_download = false;
     public string error_download_description = "";
-    public bool download_available = false;
+    public bool download_done = false;
 
 
     public QuestsManager()
@@ -53,7 +56,7 @@ public class QuestsManager
 
     private void QuestsDownload_callback(string data, bool error)
     {
-        download_available = true;
+        download_done = true;
 
         if (error)
         {
@@ -167,6 +170,64 @@ public class QuestsManager
     }
 
 
+
 }
 
+// Class for quest selection window
+public class QuestDownload2 : MonoBehaviour
+{
+    private WWW download;
 
+    /// <summary>
+    /// Download required files then draw screen
+    /// </summary>
+    void Start()
+    {
+        new LoadingScreen(new StringKey("val", "DOWNLOAD_LIST").Translate());
+    }
+
+    /// <summary>
+    /// Select to download
+    /// </summary>
+    /// <param name="key">Quest name to download</param>
+    public void Download(string key)
+    {
+        string package = Game.Get().questsList.remote_quests[key].package_url + key + ".valkyrie";
+        StartCoroutine(Download(package, delegate { Save(key); }));
+    }
+
+    /// <summary>
+    /// Called after download finished to save to disk
+    /// </summary>
+    /// <param name="key">Quest name to download</param>
+    private void Save(string key)
+    {
+        QuestLoader.mkDir(ContentData.DownloadPath());
+
+        // Write to disk
+        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
+        {
+            writer.Write(download.bytes);
+            writer.Close();
+        }
+    }
+
+    /// <summary>
+    /// Download and call function
+    /// </summary>
+    /// <param name="file">Path to download</param>
+    /// <param name="call">function to call on completion</param>
+    private IEnumerator Download(string file, UnityEngine.Events.UnityAction call)
+    {
+        download = new WWW(file);
+        yield return download;
+        if (!string.IsNullOrEmpty(download.error))
+        {
+            // fixme not fatal
+            ValkyrieDebug.Log("Error while downloading :" + file);
+            ValkyrieDebug.Log(download.error);
+            //Application.Quit();
+        }
+        call();
+    }
+}

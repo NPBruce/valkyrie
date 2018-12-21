@@ -249,7 +249,7 @@ public class StatsManager
         }
 
         // this is required if list of quests are downloaded before the stats
-        if(Game.Get().questsList != null && Game.Get().questsList.download_available)
+        if(Game.Get().questsList != null && Game.Get().questsList.download_done)
         {
             Game.Get().questsList.SortQuests();
         }
