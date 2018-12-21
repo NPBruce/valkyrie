@@ -278,8 +278,6 @@ namespace Assets.Scripts.UI.Screens
         // Import content
         public void Import(string type, bool manual_path_selection=false)
         {
-            Destroyer.Destroy();
-
             string path = null;
 
             if(manual_path_selection)
@@ -289,8 +287,19 @@ namespace Assets.Scripts.UI.Screens
                 if (type.Equals("MoM")) app_filename = "Mansions of Madness";
 
                 string[] array_path = SFB.StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
-                path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename+"_Data");
+
+                // return when pressing back
+                if (array_path.Length == 0)
+                    return;
+
+                path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename + "_Data");
+
+                // return if wrong file is selected
+                if (!Directory.Exists(path))
+                    return;
             }
+
+            Destroyer.Destroy();
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
