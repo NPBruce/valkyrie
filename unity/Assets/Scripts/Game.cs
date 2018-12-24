@@ -16,6 +16,7 @@ public class Game : MonoBehaviour {
     public static readonly string HEROSELECT = "heroselect";
     public static readonly string BOARD = "board";
     public static readonly string QUESTUI = "questui";
+    public static readonly string QUESTLIST = "questlist";
     public static readonly string EDITOR = "editor";
     public static readonly string UIPHASE = "uiphase";
     public static readonly string TRANSITION = "transition";

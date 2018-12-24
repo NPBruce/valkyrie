@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using ValkyrieTools;
 
@@ -12,10 +13,12 @@ public class QuestsManager
     // Ini content for all remote quests
     //   key : quest name
     //   value : Quest object
-    public Dictionary<string, QuestData.Quest> remote_quests = null;
+    public Dictionary<string, QuestData.Quest> remote_quests_data = null;
 
-    // List of all locally available quests (sorted by name)
-    public List<string> local_quests = null;
+    // Ini content for all local quests (only required when offline)
+    //   key : quest name
+    //   value : Quest object
+    public Dictionary<string, QuestData.Quest> local_quests_data = null;
 
     // List of all quests sorted from small to high (should be displayed the other way)
     //   key : sort value 
@@ -33,8 +36,7 @@ public class QuestsManager
 
     public QuestsManager()
 	{
-        remote_quests = new Dictionary<string, QuestData.Quest>();
-        local_quests = new List<string>();
+        remote_quests_data = new Dictionary<string, QuestData.Quest>();
 
         Game game = Game.Get();
 
@@ -56,8 +58,6 @@ public class QuestsManager
 
     private void QuestsDownload_callback(string data, bool error)
     {
-        download_done = true;
-
         if (error)
         {
             error_download = true;
@@ -65,42 +65,46 @@ public class QuestsManager
             return;
         }
 
+        download_done = true;
+
         // Parse ini
         IniData remoteManifest = IniRead.ReadFromString(data);
         foreach (KeyValuePair<string, Dictionary<string, string>> quest_kv in remoteManifest.data)
         {
-            remote_quests.Add(quest_kv.Key, new QuestData.Quest(quest_kv.Value));
+            remote_quests_data.Add(quest_kv.Key, new QuestData.Quest(quest_kv.Value));
         }
 
-        if (remote_quests.Count == 0)
+        if (remote_quests_data.Count == 0)
         {
             Debug.Log("ERROR: Quest list is empty\n");
             return;
         }
 
-        UpdateLocalQuestList();
+        CheckLocalAvailability();
 
         SortQuests();
     }
 
-    private void UpdateLocalQuestList()
+    private void CheckLocalAvailability()
     {
+        // List of all locally available quests (sorted by name)
+        List<string> local_quests_name = new List<string>();
+
         // Check list of package (note: this does not check package content)
         string[] archives = Directory.GetFiles(ContentData.DownloadPath(), "*.valkyrie", SearchOption.AllDirectories);
         foreach (string f in archives)
         {
-            local_quests.Add(f.ToLower());
+            local_quests_name.Add(f.ToLower());
         }
 
-        local_quests.Sort();
+        local_quests_name.Sort();
 
-        // Update status for each questData
-        foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests)
+        // Update download status for each questData
+        foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
         {
             string pkg_name = quest_data.Key.ToLower() + ".valkyrie";
-            quest_data.Value.downloaded = local_quests.Contains(pkg_name);
+            quest_data.Value.downloaded = local_quests_name.Contains(pkg_name);
         }
-
     }
 
     /// <summary>
@@ -134,7 +138,7 @@ public class QuestsManager
     //   by Difficulty(easy to difficult);
     //   by Duration(short to long).
     //   by update / creation date  (TODO)
-    public void SortQuests()
+    public void SortQuests(bool isLocalQuest=false)
     {
         Game game = Game.Get();
 
@@ -144,32 +148,89 @@ public class QuestsManager
         quests_sorted_by_duration = new SortedList<int, string>(new DuplicateKeyComparer<int>());
         quests_sorted_by_date = new SortedList<string, string>(new DuplicateKeyComparer<string>());
 
-        if (game.stats != null && game.stats.scenarios_stats != null) // we should wait for stats to be available
+        if(isLocalQuest)
         {
-            foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests)
+            foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
-                string pkg_name = quest_data.Key.ToLower() + ".valkyrie";
-                if (game.stats.scenarios_stats.ContainsKey(pkg_name))
-                {
-                    quests_sorted_by_rating.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_rating, quest_data.Key);
-                }
-                else
-                {
-                    quests_sorted_by_rating.Add(0.0f, quest_data.Key);
-                }
-
                 quests_sorted_by_name.Add(quest_data.Key, quest_data.Key);
                 quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                 quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
-
                 // TODO support by date
                 // quests_sorted_by_date.Add(quest_data.Value.difficulty, quest_data.Key);
+            }
+        }
+        else
+        {
+            if (game.stats != null && game.stats.scenarios_stats != null) // we should wait for stats to be available
+            {
+                foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
+                {
+                    string pkg_name = quest_data.Key.ToLower() + ".valkyrie";
+                    if (game.stats.scenarios_stats.ContainsKey(pkg_name))
+                    {
+                        quests_sorted_by_rating.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_rating, quest_data.Key);
+                    }
+                    else
+                    {
+                        quests_sorted_by_rating.Add(0.0f, quest_data.Key);
+                    }
 
+                    quests_sorted_by_name.Add(quest_data.Key, quest_data.Key);
+                    quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
+                    quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
+
+                    // TODO support by date
+                    // quests_sorted_by_date.Add(quest_data.Value.difficulty, quest_data.Key);
+
+                }
             }
         }
     }
 
+    public List<string> GetList(string sortOrder)
+    {
+        switch(sortOrder)
+        {
+            case "rating":
+                return quests_sorted_by_rating.Values.Reverse().ToList();
 
+            case "name":
+                return quests_sorted_by_name.Values.ToList();
+
+            case "difficulty":
+                return quests_sorted_by_difficulty.Values.ToList();
+
+            case "duration":
+                return quests_sorted_by_duration.Values.ToList();
+
+            case "date":
+                return quests_sorted_by_date.Values.ToList();
+
+            default:
+                return null;
+        }
+    }
+
+    public QuestData.Quest getQuestData(string key)
+    {
+        if (local_quests_data != null)
+            return local_quests_data[key];
+        else
+            return remote_quests_data[key];
+    }
+
+    // --- Management of local quests, when offline ---
+    // TODO : support sort options for local list of quests
+    public List<string> GetLocalList()
+    {
+        return local_quests_data.Select(d => d.Key).ToList<string>();
+    }
+
+    public void loadAllLocalQuests()
+    {
+        local_quests_data = QuestLoader.GetQuests();
+        SortQuests(true);
+    }
 
 }
 
@@ -192,7 +253,7 @@ public class QuestDownload2 : MonoBehaviour
     /// <param name="key">Quest name to download</param>
     public void Download(string key)
     {
-        string package = Game.Get().questsList.remote_quests[key].package_url + key + ".valkyrie";
+        string package = Game.Get().questsList.remote_quests_data[key].package_url + key + ".valkyrie";
         StartCoroutine(Download(package, delegate { Save(key); }));
     }
 
@@ -210,6 +271,8 @@ public class QuestDownload2 : MonoBehaviour
             writer.Write(download.bytes);
             writer.Close();
         }
+
+        Game.Get().questsList.remote_quests_data[key].downloaded = true;
     }
 
     /// <summary>
@@ -227,7 +290,9 @@ public class QuestDownload2 : MonoBehaviour
             ValkyrieDebug.Log("Error while downloading :" + file);
             ValkyrieDebug.Log(download.error);
             //Application.Quit();
+        } else
+        {
+            call();
         }
-        call();
     }
 }
