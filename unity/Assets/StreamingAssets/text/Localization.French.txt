@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos
-ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.
-ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, UnityStandaloneFileBrowser de gkngkc et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activé
 ACTIVATION,Activation

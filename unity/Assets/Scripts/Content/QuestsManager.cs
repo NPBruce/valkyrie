@@ -131,7 +131,6 @@ public class QuestsManager
         #endregion
     }
 
-
     // Build sorted lists
     //   by User rating
     //   by name
@@ -175,7 +174,12 @@ public class QuestsManager
                         quests_sorted_by_rating.Add(0.0f, quest_data.Key);
                     }
 
-                    quests_sorted_by_name.Add(quest_data.Key, quest_data.Key);
+                    // select default language or default language for sort by name
+                    if(quest_data.Value.languages_name.Keys.Contains(game.currentLang))
+                        quests_sorted_by_name.Add(quest_data.Value.languages_name[game.currentLang], quest_data.Key);
+                    else
+                        quests_sorted_by_name.Add(quest_data.Value.languages_name[quest_data.Value.defaultLanguage], quest_data.Key);
+
                     quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                     quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
 
@@ -189,26 +193,37 @@ public class QuestsManager
 
     public List<string> GetList(string sortOrder)
     {
+        List<string> ret;
+
         switch(sortOrder)
         {
             case "rating":
-                return quests_sorted_by_rating.Values.Reverse().ToList();
+                ret = quests_sorted_by_rating.Values.ToList();
+                break;
 
             case "name":
-                return quests_sorted_by_name.Values.ToList();
+                ret = quests_sorted_by_name.Values.ToList();
+                break;
 
             case "difficulty":
-                return quests_sorted_by_difficulty.Values.ToList();
+                ret = quests_sorted_by_difficulty.Values.ToList();
+                break;
 
             case "duration":
-                return quests_sorted_by_duration.Values.ToList();
+                ret = quests_sorted_by_duration.Values.ToList();
+                break;
 
             case "date":
-                return quests_sorted_by_date.Values.ToList();
+                ret = quests_sorted_by_date.Values.ToList();
+                break;
 
             default:
-                return null;
+                ret = quests_sorted_by_rating.Values.ToList();
+                break;
         }
+
+
+        return ret;
     }
 
     public QuestData.Quest getQuestData(string key)

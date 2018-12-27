@@ -22,8 +22,8 @@ ICON_PRODUCT_MAD25,
 // TEXTS
 ABILITY,Ability
 ABOUT,About
-ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activated
 ACTIVATION,Activation
@@ -475,3 +475,24 @@ ERROR_HTTP,Error downloading file, if the problem persists please report the iss
 ERROR_NETWORK,Error downloading file, please check your internet connection
 
 NEW_VERSION_AVAILABLE,New version available!
+
+SORT_TITLE,Sort
+SORT_SELECT_CRITERIA,Select the sort criteria:
+SORT_SELECT_ORDER,Order by:
+SORT_ASCENDING,Ascending
+SORT_DESCENDING,Descending
+
+SORT_BY_AUTHOR,Author
+SORT_BY_NAME,Name
+SORT_BY_DIFFICULTY,Difficulty
+SORT_BY_DURATION,Duration
+
+SORT_BY_RATING,Rating
+SORT_BY_AVERAGE_DURATION,Avg duration
+SORT_BY_WIN_RATIO,Victory ratio
+SORT_BY_DATE,Update date
+
+FILTER_TITLE,Select filters
+FILTER_SELECT_LANG,Select the language(s) you are speaking:
+FILTER_MISSING_EXPANSIONS_ON,Hide scenarios with missing expansions  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Hide scenarios with missing expansions  ☐

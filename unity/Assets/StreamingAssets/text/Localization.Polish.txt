@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
-ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa.
-ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
 ACTIONS,Akcje
 ACTIVATED,Aktywowano
 ACTIVATION,Aktywacja

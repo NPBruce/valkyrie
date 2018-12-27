@@ -46,6 +46,14 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Destroy a UI element.</summary>
+        public void Destroy()
+        {
+            if(bg!=null)
+                Object.Destroy(bg);
+        }
+
+        /// <summary>
         /// The tranform that should be used for sub elements.</summary>
         /// <returns>
         /// The background Transform.</returns>

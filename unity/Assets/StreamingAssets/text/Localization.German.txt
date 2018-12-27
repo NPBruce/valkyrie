@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
-ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen.
-ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
 ACTIVATION,Aktivierung

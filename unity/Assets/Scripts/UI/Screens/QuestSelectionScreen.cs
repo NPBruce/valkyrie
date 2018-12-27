@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
-using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -10,10 +9,44 @@ namespace Assets.Scripts.UI.Screens
     {
         List<string> questList = null;
         UIElementScrollVertical scrollArea = null;
+        UIElement sortOptionsPopup = null;
+        UIElement filtersPopup = null;
+        UIElement filter_missing_expansions_text = null;
+
+        Game game = null;
+
+        private readonly StringKey SORT_TITLE = new StringKey("val", "SORT_TITLE");
+        private readonly StringKey SORT_SELECT_CRITERIA = new StringKey("val", "SORT_SELECT_CRITERIA");
+        private readonly StringKey SORT_SELECT_ORDER = new StringKey("val", "SORT_SELECT_ORDER");
+        private readonly StringKey SORT_ASCENDING = new StringKey("val", "SORT_ASCENDING");
+        private readonly StringKey SORT_DESCENDING = new StringKey("val", "SORT_DESCENDING");
+
+        private readonly StringKey SORT_BY_AUTHOR = new StringKey("val", "SORT_BY_AUTHOR");
+        private readonly StringKey SORT_BY_NAME = new StringKey("val", "SORT_BY_NAME");
+        private readonly StringKey SORT_BY_DIFFICULTY = new StringKey("val", "SORT_BY_DIFFICULTY");
+        private readonly StringKey SORT_BY_DURATION = new StringKey("val", "SORT_BY_DURATION");
+        private readonly StringKey SORT_BY_RATING = new StringKey("val", "SORT_BY_RATING");
+        private readonly StringKey SORT_BY_AVERAGE_DURATION = new StringKey("val", "SORT_BY_AVERAGE_DURATION");
+        private readonly StringKey SORT_BY_WIN_RATIO = new StringKey("val", "SORT_BY_WIN_RATIO");
+        private readonly StringKey SORT_BY_DATE = new StringKey("val", "SORT_BY_DATE");
+
+        private readonly StringKey FILTER_TITLE = new StringKey("val", "FILTER_TITLE");
+        private readonly StringKey FILTER_SELECT_LANG = new StringKey("val", "FILTER_SELECT_LANG");
+        private readonly StringKey FILTER_MISSING_EXPANSIONS_ON = new StringKey("val", "FILTER_MISSING_EXPANSIONS_ON");
+        private readonly StringKey FILTER_MISSING_EXPANSIONS_OFF = new StringKey("val", "FILTER_MISSING_EXPANSIONS_OFF");
+
+        // filters
+        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
+        Dictionary<string, bool> langs_selected = null;
+        bool filter_missing_expansions = false;
+
+        // sort options
+        string sort_criteria = "rating";
+        string sort_order = "descending";
 
         public QuestSelectionScreen()
         {
-            Game game = Game.Get();
+            game = Game.Get();
 
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
@@ -39,68 +72,55 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { Cancel(); });
             new UIElementBorder(ui, Color.red);
 
-            // Sort options
-            //sorted_by_rating = nu
-            //sorted_by_name = null
-            //sorted_by_difficulty
-            //sorted_by_duration = nul
-            //sorted_by_date = null
-
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetWidthUnits()-7, 1f, 7, 1f);
-            if (game.questsList.download_done)
+            // Initialize filters
+            langs_selected = new Dictionary<string, bool>();
+            foreach (string lang in langs)
             {
-                ui.SetText("rating");
-                ui.SetButton(delegate { SetSort("rating"); });
+                // initialize dict
+                langs_selected.Add(lang, true);
             }
-            else
-            {
-                ui.SetText("rating", Color.red);
-            }
-            ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetSmallFont());
-            new UIElementBorder(ui, Color.red);
-
+            langs_selected["Japanese"] = false;
+            langs_selected["Czech"] = false;
+            
+            // Show filter button
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetWidthUnits() - 7, 2f, 7, 1f);
-            ui.SetText("name");
-            ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetSmallFont());
-            ui.SetButton(delegate { SetSort("name"); });
-            new UIElementBorder(ui, Color.red);
+            Texture2D filterTex = null;
+            filterTex = Resources.Load("sprites/filter") as Texture2D;
+            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
+            ui.SetImage(filterTex);
+            ui.SetButton(delegate { FilterPopup(); });
+            new UIElementBorder(ui);
 
+            // Show sort button
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetWidthUnits() - 7, 3f, 7, 1f);
-            ui.SetText("difficulty");
-            ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetSmallFont());
-            ui.SetButton(delegate { SetSort("difficulty"); });
-            new UIElementBorder(ui, Color.red);
+            Texture2D sortTex = null;
+            sortTex = Resources.Load("sprites/sort") as Texture2D;
+            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f, 3.5f , 1.5f, 1.5f);
+            ui.SetImage(sortTex);
+            ui.SetButton(delegate { SortByPopup(); });
+            new UIElementBorder(ui);
 
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetWidthUnits() - 7, 4f, 7, 1f);
-            ui.SetText("duration");
-            ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetSmallFont());
-            ui.SetButton(delegate { SetSort("duration"); });
-            new UIElementBorder(ui, Color.red);
-
+            // check if connected on internet, and display scenario list accordingly (local or online)
             if (game.questsList.download_done)
             {
                 questList = game.questsList.GetList("rating");
+                if (sort_order == "descending")
+                    questList.Reverse();
             }
             else
             {
                 // Display offline message
                 ui = new UIElement();
-                ui.SetLocation(UIScaler.GetHCenter(), 0.1f, 8, 1.2f);
+                ui.SetLocation(UIScaler.GetWidthUnits()-10, 1f, 8, 1.2f);
                 ui.SetText("OFFLINE", Color.red);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetTextAlignment(TextAnchor.MiddleCenter);
+                ui.SetTextAlignment(TextAnchor.MiddleRight);
 
                 // Get and load a list of all locally available quests
                 game.questsList.loadAllLocalQuests();
                 questList = game.questsList.GetLocalList();
+                if (sort_order == "descending")
+                    questList.Reverse();
             }
 
             // scroll area
@@ -108,10 +128,307 @@ namespace Assets.Scripts.UI.Screens
             scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
             new UIElementBorder(scrollArea);
 
-            RefreshQuestList();
+            DrawQuestList();
         }
 
-        public void DestroyQuestList()
+
+        // Show button and initialize the popup
+        private void FilterPopup()
+        {
+            if (sortOptionsPopup != null || filtersPopup != null)
+                return;
+
+            // popup background
+            filtersPopup = new UIElement();
+            filtersPopup.SetLocation(UIScaler.GetHCenter(-21), 3, 42, 24);
+            filtersPopup.SetBGColor(Color.black);
+            new UIElementBorder(filtersPopup);
+
+            // Title
+            UIElement ui = new UIElement(filtersPopup.GetTransform());
+            ui.SetLocation(11, 2, 20, 3);
+            ui.SetText(FILTER_TITLE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetLargeFont());
+
+            // List of flags
+            ui = new UIElement(filtersPopup.GetTransform());
+            ui.SetLocation(6, 9, 30, 2);
+            ui.SetText(FILTER_SELECT_LANG);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            DrawFlags();
+
+            // Missing expansions checkbox
+            filter_missing_expansions_text = new UIElement(filtersPopup.GetTransform());
+            filter_missing_expansions_text.SetLocation(6, 15, 30, 2);
+            if(filter_missing_expansions)
+                filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
+            else
+                filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_OFF);
+            filter_missing_expansions_text.SetFont(game.gameType.GetHeaderFont());
+            filter_missing_expansions_text.SetFontSize(UIScaler.GetMediumFont());
+            filter_missing_expansions_text.SetButton(delegate { FilterMissingExpansions(); });
+
+            // OK button closes popup and refresh quest list
+            ui = new UIElement(filtersPopup.GetTransform());
+            ui.SetLocation(18, 20, 6, 2);
+            ui.SetText(CommonStringKeys.OK);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { filtersPopup.Destroy(); filtersPopup = null; ReloadQuestList(); });
+            new UIElementBorder(ui);
+        }
+
+        private void FilterMissingExpansions()
+        {
+            if (filter_missing_expansions)
+            {
+                filter_missing_expansions = false;
+                filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_OFF);
+            }
+            else
+            {
+                filter_missing_expansions = true;
+                filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
+            }
+        }
+
+
+        private void DrawFlags()
+        {
+            float x_offset = 11f;
+            float y_offset = 11f;
+            const float flag_size = 1.7f;
+
+            foreach (KeyValuePair<string,bool> k in langs_selected)
+            {
+                string lang = k.Key;
+                bool activated = k.Value;
+                
+                UIElement ui = null;
+                ui = new UIElement(filtersPopup.GetTransform());
+                Texture2D flagTex = null;
+                flagTex = Resources.Load("sprites/flags/" + lang) as Texture2D;
+                ui.SetLocation(x_offset, y_offset, flag_size, flag_size);
+                ui.SetImage(flagTex);
+                ui.SetButton(delegate { FilterLang(lang); });
+
+                if(!activated)
+                {
+                    ui = new UIElement(filtersPopup.GetTransform());
+                    ui.SetLocation(x_offset, y_offset, flag_size, flag_size);
+                    ui.SetBGColor(new Color(0, 0, 0, 0.8f));
+                    ui.SetButton(delegate { FilterLang(lang); });
+                }
+
+                x_offset += flag_size + 0.3f;
+            }
+        }
+
+        private void FilterLang(string lang)
+        {
+            langs_selected[lang] = !langs_selected[lang];
+            // lazy : display on top
+            DrawFlags(); 
+        }
+
+        // Initialize the popup
+        private void SortByPopup()
+        {
+            if (sortOptionsPopup != null || filtersPopup != null)
+                return;
+
+            // popup background
+            sortOptionsPopup = new UIElement();
+            sortOptionsPopup.SetLocation(UIScaler.GetHCenter(-21), 3, 42, 24);
+            sortOptionsPopup.SetBGColor(Color.black);
+            new UIElementBorder(sortOptionsPopup);
+
+            // Title
+            UIElement ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(11, 1.5f, 20, 3);
+            ui.SetText(SORT_TITLE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetLargeFont());
+
+            // Show sort options
+            ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(6, 6, 30, 2);
+            ui.SetText(SORT_SELECT_CRITERIA);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            DrawSortCriteriaButtons();
+
+            // Show sort options
+            ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(6, 14, 30, 2);
+            ui.SetText(SORT_SELECT_ORDER);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            DrawSortOrderButtons();
+            
+            // OK button closes popup and refresh quest list
+            ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(18, 21, 6, 2);
+            ui.SetText(CommonStringKeys.OK);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { sortOptionsPopup.Destroy(); sortOptionsPopup = null; ReloadQuestList(); });
+            new UIElementBorder(ui);
+        }
+
+        //sorted_by_rating
+        //sorted_by_name
+        //sorted_by_difficulty
+        //sorted_by_duration
+        //sorted_by_date
+        public class SortOption
+        {
+            public string name;
+            public StringKey button_text;
+
+            public SortOption(string p_name, StringKey p_button_text)
+            {
+                name = p_name;
+                button_text = p_button_text;
+            }
+        }
+
+
+        private void DrawSortCriteriaButtons()
+        {
+            const float button_size = 7f;
+            const float space_between_buttons = 1f;
+            float x_offset = 5f;
+            float y_offset = 8f;
+
+            List<SortOption> sort_options_offline = new List<SortOption>();
+            sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
+            sort_options_offline.Add(new SortOption("name", SORT_BY_NAME));
+            sort_options_offline.Add(new SortOption("difficulty", SORT_BY_DIFFICULTY));
+            sort_options_offline.Add(new SortOption("duration", SORT_BY_DURATION));
+
+            List<SortOption> sort_options_online = new List<SortOption>();
+            sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
+            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
+            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
+            sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
+
+            // sort type
+            UIElement ui = null;
+
+            Color button_color=Color.grey;
+
+            foreach (SortOption s in sort_options_offline)
+            {
+                if(s.name == sort_criteria)
+                    button_color = Color.white;
+
+                // local var required as button is called later with this value
+                string local_name = s.name;
+
+                ui = new UIElement(sortOptionsPopup.GetTransform());
+                ui.SetLocation(x_offset, y_offset, button_size, 2f);
+                ui.SetText(s.button_text, button_color);
+                ui.SetFont(Game.Get().gameType.GetHeaderFont());
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { SetSort(local_name); });
+                new UIElementBorder(ui, button_color);
+                
+                x_offset += button_size + space_between_buttons;
+                button_color = Color.grey;
+            }
+
+            y_offset += 2.5f;
+            x_offset = 5f;
+
+            foreach (SortOption s in sort_options_online)
+            {
+                if (s.name == sort_criteria)
+                    button_color = Color.white;
+                if (!game.questsList.download_done)
+                    button_color = Color.red;
+
+                // local var required as button is called later with this value
+                string local_name = s.name;
+
+                ui = new UIElement(sortOptionsPopup.GetTransform());
+                ui.SetLocation(x_offset, y_offset, button_size, 2f);
+                ui.SetText(s.button_text, button_color);
+                ui.SetFont(Game.Get().gameType.GetHeaderFont());
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (game.questsList.download_done)
+                    ui.SetButton(delegate { SetSort(local_name); });
+                new UIElementBorder(ui, button_color);
+
+                x_offset += button_size + space_between_buttons;
+                button_color = Color.grey;
+            }
+        }
+
+
+        private void DrawSortOrderButtons()
+        {
+            const float button_size = 7f;
+            const float space_between_buttons = 1f;
+            float x_offset = 13f;
+            float y_offset = 16f;
+            Color ascending_color = Color.white;
+            Color descending_color = Color.white;
+
+            if (sort_order == "ascending")
+                descending_color = Color.grey;
+            else
+                ascending_color = Color.grey;
+
+            // sort order
+            UIElement ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(x_offset, y_offset, button_size, 2f);
+            ui.SetText(SORT_ASCENDING, ascending_color);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { sort_order="ascending";  DrawSortOrderButtons(); SetSort(sort_criteria); });
+            new UIElementBorder(ui, ascending_color);
+
+            x_offset += button_size + space_between_buttons;
+
+            ui = new UIElement(sortOptionsPopup.GetTransform());
+            ui.SetLocation(x_offset, y_offset, button_size, 2f);
+            ui.SetText(SORT_DESCENDING, descending_color);
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { sort_order = "descending"; DrawSortOrderButtons(); SetSort(sort_criteria); });
+            new UIElementBorder(ui, descending_color);
+        }
+
+        public void SetSort(string sort_selected_option)
+        {
+            sort_criteria = sort_selected_option;
+
+            questList = Game.Get().questsList.GetList(sort_selected_option);
+            if (sort_order == "descending")
+                questList.Reverse();
+
+            DrawSortCriteriaButtons();
+        }
+
+        public void ReloadQuestList()
+        {
+            CleanQuestList();
+            DrawQuestList();
+        }
+
+        public void CleanQuestList()
         {
             // Clean up everything marked as 'questlist'
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
@@ -123,18 +440,74 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(scrollArea);
         }
 
-        public void RefreshQuestList()
+        // check if the quest proposes at least one selected language
+        public bool HasSelectedLanguage(QuestData.Quest q)
         {
-            Game game = Game.Get();
+            foreach (KeyValuePair<string, bool> lang in langs_selected)
+            {
+                // check if lang is selected in filters
+                if (!lang.Value)
+                    continue;
+
+                if (!game.questsList.download_done)
+                {
+                    // check list of languages when offline
+                    if (q.localizationDict == null)
+                    {
+                        Debug.Log("Scenario " + q.package_url + " does not have dictionary, this should not happen");
+                        return false;
+                    }
+                    if (q.localizationDict.SerializeMultiple() == null)
+                    {
+                        Debug.Log("Scenario " + q.package_url + " does not have any languages, this should not happen");
+                        return false;
+                    }
+
+                    if (q.localizationDict.SerializeMultiple().ContainsKey(lang.Key))
+                    {
+                        return true;
+                    }
+
+                }
+                else
+                {
+                    // check list of languages when online
+                    if (q == null || q.languages_name == null)
+                    {
+                        Debug.Log("Scenario " + q.package_url + " does not have a name, this should not happen");
+                        return false;
+                    }
+
+                    if (q.languages_name.ContainsKey(lang.Key))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void DrawQuestList()
+        {
             UIElement ui = null;
 
             // Start here
             float offset = 0;
+
             // Loop through all available quests
             foreach (string key in questList)
             {
                 QuestData.Quest q = game.questsList.getQuestData(key);
+                               
+                // Filter langs
+                if (!HasSelectedLanguage(q))
+                    continue;
 
+                // Filter packages
+                if(filter_missing_expansions && q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count!=0)
+                    continue;
+                
                 string translation = "";
                 if (game.questsList.download_done)
                 {
@@ -349,13 +722,6 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
-        }
-
-        public void SetSort(string sort_option)
-        {
-            questList = Game.Get().questsList.GetList(sort_option);
-            DestroyQuestList();
-            RefreshQuestList();
         }
 
     }
