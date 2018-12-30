@@ -155,6 +155,7 @@ public class QuestsManager
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
                 // only first line of author is taken
+                LocalizationRead.AddDictionary("qst", quest_data.Value.localizationDict);
                 string short_author = quest_data.Value.authors.Translate();
                 if (short_author.IndexOf(Environment.NewLine) > -1)
                     short_author = short_author.Substring(0, short_author.IndexOf(Environment.NewLine));
