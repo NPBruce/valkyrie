@@ -17,7 +17,7 @@ function fetch_with_retry(uri)
        }
        catch (err)
        {
-         Logger.log("fetch error "+ retry + " : "+ err + " for URL " + ini_url);
+         Logger.log("fetch error "+ retry + " : "+ err + " for URL " + uri);
          fetch_OK = false;
        }
      
@@ -69,7 +69,7 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        var url = parser.get( element.name, "external");  
        var ini_url = url + element.name + '.ini' ;
        
-       Logger.log("fetch " + ini_url);
+       Logger.log("fetch ini :" + ini_url);
        
        response = fetch_with_retry(ini_url);
 
@@ -86,9 +86,32 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        // add URL in the data
        quest_parser.set("Quest", "url", url);
        
+       // This "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/ExoticMaterial/ExoticMaterial.ini"
+       // should become this : "https://api.github.com/repos/NPBruce/valkyrie-store/commits?path=MoM/ExoticMaterial/ExoticMaterial.valkyrie"
+       var regex = /https:\/\/raw.githubusercontent.com\/(.+?\/.+?)\/.+?\/(.+\/*.*).ini/;
+       var package_url = ini_url.replace(regex, 'https://api.github.com/repos/$1/commits?path=$2.valkyrie')
+       
+       Logger.log("fetch commit package :" + package_url);
+       
+       response = fetch_with_retry(package_url);
+
+       if(response=="invalid")
+       {
+          throw "Invalid get request for package, stopping here";
+       }
+       
+       // Make request to API and get response before this point.
+       var commit_json = response.getContentText();
+       var commit_data = JSON.parse(commit_json);
+       Logger.log("Latest commit date is : " + commit_data[0].commit.committer.date);
+      
+       // add latest update date in the data
+       quest_parser.set("Quest", "latest_update", commit_data[0].commit.committer.date);
+
        // rename [Quest] into [ScenarioName]
        quest_parser.renameSection("Quest", element.name);
-       
+
+       // Create text from .ini object
        var text_content = quest_parser.stringify('\n');
        
        Logger.log("Add :" + text_content);
@@ -102,7 +125,7 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
   var date = (new Date()).toISOString();
   date = date.slice(0, date.length-5); // get a clean date
   
-  var technical_information = "# Generated the " + date + "'UTC' with " + parser._ini.sections.length + " scenarios\n";
+  var technical_information = "# Generated the " + date + "'UTC' with " + (parser._ini.sections.length - 1) + " scenarios\n";
 
   this._all_scenarios_ini_content = technical_information + all_scenarios_ini_content;
   

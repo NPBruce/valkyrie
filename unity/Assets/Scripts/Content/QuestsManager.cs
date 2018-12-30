@@ -23,11 +23,15 @@ public class QuestsManager
     // List of all quests sorted from small to high (should be displayed the other way)
     //   key : sort value 
     //   value : Quest package name
-    SortedList<float, string>  quests_sorted_by_rating = null;
+    SortedList<string, string> quests_sorted_by_author = null;
     SortedList<string, string> quests_sorted_by_name = null;
     SortedList<float, string>  quests_sorted_by_difficulty = null;
     SortedList<int, string> quests_sorted_by_duration = null;
-    SortedList<string, string> quests_sorted_by_date = null;
+
+    SortedList<float, string> quests_sorted_by_rating = null;
+    SortedList<System.DateTime, string> quests_sorted_by_date = null;
+    SortedList<float, string> quests_sorted_by_win_ratio = null;
+    SortedList<float, string> quests_sorted_by_avg_duration = null;
 
     public bool error_download = false;
     public string error_download_description = "";
@@ -132,30 +136,32 @@ public class QuestsManager
     }
 
     // Build sorted lists
-    //   by User rating
-    //   by name
-    //   by Difficulty(easy to difficult);
-    //   by Duration(short to long).
-    //   by update / creation date  (TODO)
     public void SortQuests(bool isLocalQuest=false)
     {
         Game game = Game.Get();
 
-        quests_sorted_by_rating = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+        quests_sorted_by_author = new SortedList<string, string>(new DuplicateKeyComparer<string>());
         quests_sorted_by_name = new SortedList<string, string>(new DuplicateKeyComparer<string>());
         quests_sorted_by_difficulty = new SortedList<float, string>(new DuplicateKeyComparer<float>());
         quests_sorted_by_duration = new SortedList<int, string>(new DuplicateKeyComparer<int>());
-        quests_sorted_by_date = new SortedList<string, string>(new DuplicateKeyComparer<string>());
 
-        if(isLocalQuest)
+        quests_sorted_by_rating = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+        quests_sorted_by_date = new SortedList<System.DateTime, string>(new DuplicateKeyComparer<System.DateTime>());
+        quests_sorted_by_avg_duration = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+        quests_sorted_by_win_ratio = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+
+        if (isLocalQuest)
         {
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
-                quests_sorted_by_name.Add(quest_data.Key, quest_data.Key);
+                // only first line of author is taken
+                string short_author = quest_data.Value.authors.Translate();
+                if (short_author.IndexOf(Environment.NewLine) > -1)
+                    short_author = short_author.Substring(0, short_author.IndexOf(Environment.NewLine));
+                quests_sorted_by_author.Add(short_author, quest_data.Key);
+                quests_sorted_by_name.Add(quest_data.Value.name.Translate(), quest_data.Key);
                 quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                 quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
-                // TODO support by date
-                // quests_sorted_by_date.Add(quest_data.Value.difficulty, quest_data.Key);
             }
         }
         else
@@ -168,23 +174,27 @@ public class QuestsManager
                     if (game.stats.scenarios_stats.ContainsKey(pkg_name))
                     {
                         quests_sorted_by_rating.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_rating, quest_data.Key);
+                        quests_sorted_by_avg_duration.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_duration, quest_data.Key);
+                        quests_sorted_by_win_ratio.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_win_ratio, quest_data.Key);
                     }
                     else
                     {
                         quests_sorted_by_rating.Add(0.0f, quest_data.Key);
+                        quests_sorted_by_avg_duration.Add(0.0f, quest_data.Key);
+                        quests_sorted_by_win_ratio.Add(0.0f, quest_data.Key);
                     }
 
-                    // select default language or default language for sort by name
+                    // Use player selected language or scenario default language for sort by name
                     if(quest_data.Value.languages_name.Keys.Contains(game.currentLang))
                         quests_sorted_by_name.Add(quest_data.Value.languages_name[game.currentLang], quest_data.Key);
                     else
                         quests_sorted_by_name.Add(quest_data.Value.languages_name[quest_data.Value.defaultLanguage], quest_data.Key);
-
                     quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                     quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
+                    quests_sorted_by_date.Add(quest_data.Value.latest_update, quest_data.Key);
 
-                    // TODO support by date
-                    // quests_sorted_by_date.Add(quest_data.Value.difficulty, quest_data.Key);
+                    // TODO support by author
+                    // quests_sorted_by_author.Add(quest_data.Value.difficulty, quest_data.Key);
 
                 }
             }
@@ -197,8 +207,8 @@ public class QuestsManager
 
         switch(sortOrder)
         {
-            case "rating":
-                ret = quests_sorted_by_rating.Values.ToList();
+           case "author":
+                ret = quests_sorted_by_author.Values.ToList();
                 break;
 
             case "name":
@@ -213,11 +223,24 @@ public class QuestsManager
                 ret = quests_sorted_by_duration.Values.ToList();
                 break;
 
+            case "rating":
+                ret = quests_sorted_by_rating.Values.ToList();
+                break;
+
             case "date":
                 ret = quests_sorted_by_date.Values.ToList();
                 break;
 
+            case "average_win_ratio":
+                ret = quests_sorted_by_win_ratio.Values.ToList();
+                break;
+
+            case "average_duration":
+                ret = quests_sorted_by_avg_duration.Values.ToList();
+                break;
+
             default:
+                Debug.Log("Setting an unknown sort type, this should not happen");
                 ret = quests_sorted_by_rating.Values.ToList();
                 break;
         }
@@ -235,7 +258,6 @@ public class QuestsManager
     }
 
     // --- Management of local quests, when offline ---
-    // TODO : support sort options for local list of quests
     public List<string> GetLocalList()
     {
         return local_quests_data.Select(d => d.Key).ToList<string>();

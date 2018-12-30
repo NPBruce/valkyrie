@@ -496,3 +496,4 @@ FILTER_TITLE,Select filters
 FILTER_SELECT_LANG,Select the language(s) you are speaking:
 FILTER_MISSING_EXPANSIONS_ON,Hide scenarios with missing expansions  ☑
 FILTER_MISSING_EXPANSIONS_OFF,Hide scenarios with missing expansions  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenario(s) filtered out

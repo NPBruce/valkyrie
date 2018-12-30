@@ -2297,6 +2297,8 @@ public class QuestData
         public Dictionary<string, string> languages_name = null;
         // URL of the package
         public string package_url = "";
+        // latest_update date if file is stored on Github
+        public System.DateTime latest_update;
         // is package available locally
         public bool downloaded = false;
 
@@ -2487,6 +2489,12 @@ public class QuestData
             if (iniData.ContainsKey("url"))
             {
                 package_url = iniData["url"];
+            }
+
+            latest_update = new System.DateTime(0);
+            if (iniData.ContainsKey("latest_update"))
+            {
+                System.DateTime.TryParse(iniData["latest_update"], out latest_update);
             }
 
             return true;

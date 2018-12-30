@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI.Screens
     public class QuestSelectionScreen
     {
         List<string> questList = null;
+        UIElement text_number_of_filtered_scenario = null;
         UIElementScrollVertical scrollArea = null;
         UIElement sortOptionsPopup = null;
         UIElement filtersPopup = null;
@@ -81,7 +82,15 @@ namespace Assets.Scripts.UI.Screens
             }
             langs_selected["Japanese"] = false;
             langs_selected["Czech"] = false;
-            
+
+            // initialize text indicator for filtered scenario
+            text_number_of_filtered_scenario = new UIElement();
+            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
+            text_number_of_filtered_scenario.SetText(" ");
+            text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
+            text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
+            text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
+
             // Show filter button
             ui = new UIElement();
             Texture2D filterTex = null;
@@ -307,10 +316,10 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawSortCriteriaButtons()
         {
-            const float button_size = 7f;
-            const float space_between_buttons = 1f;
-            float x_offset = 5f;
-            float y_offset = 8f;
+            const float button_size = 9f;
+            const float space_between_buttons = 0.8f;
+            float x_offset = 1.5f;
+            float y_offset = 8.2f;
 
             List<SortOption> sort_options_offline = new List<SortOption>();
             sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
@@ -320,9 +329,9 @@ namespace Assets.Scripts.UI.Screens
 
             List<SortOption> sort_options_online = new List<SortOption>();
             sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
-            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
-            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
             sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
+            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
+            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
 
             // sort type
             UIElement ui = null;
@@ -350,7 +359,7 @@ namespace Assets.Scripts.UI.Screens
             }
 
             y_offset += 2.5f;
-            x_offset = 5f;
+            x_offset = 1.5f;
 
             foreach (SortOption s in sort_options_online)
             {
@@ -494,20 +503,27 @@ namespace Assets.Scripts.UI.Screens
 
             // Start here
             float offset = 0;
+            int nb_filtered_out_quest = 0;
 
             // Loop through all available quests
             foreach (string key in questList)
             {
                 QuestData.Quest q = game.questsList.getQuestData(key);
-                               
+
                 // Filter langs
                 if (!HasSelectedLanguage(q))
+                { 
+                    nb_filtered_out_quest++;
                     continue;
+                }
 
                 // Filter packages
-                if(filter_missing_expansions && q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count!=0)
+                if (filter_missing_expansions && q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count!=0)
+                {
+                    nb_filtered_out_quest++;
                     continue;
-                
+                }
+
                 string translation = "";
                 if (game.questsList.download_done)
                 {
@@ -699,6 +715,11 @@ namespace Assets.Scripts.UI.Screens
 
             scrollArea.SetScrollSize(offset);
 
+            if(nb_filtered_out_quest > 0)
+            {
+                 StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                 text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+            }
         }
 
         // Return to main menu
