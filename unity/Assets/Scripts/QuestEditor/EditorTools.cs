@@ -98,6 +98,9 @@ public class EditorTools
         Destroyer.Dialog();
         Game game = Game.Get();
 
+        // save content before creating the package
+        QuestEditor.Save();
+
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
@@ -136,13 +139,15 @@ public class EditorTools
             using (FileStream stream = File.OpenRead(packageFile))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + System.BitConverter.ToString(checksum) + "\n";
+                manifest += "version=" + System.BitConverter.ToString(checksum) + System.Environment.NewLine;
             }
 
             foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
             {
-                manifest += "name." + kv.Key + "=" + kv.Value + "\n";
+                manifest += "name." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
             }
+
+            manifest += "authors_short=" + game.quest.qd.quest.short_authors.Translate(true) + System.Environment.NewLine;
 
             File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);
         }

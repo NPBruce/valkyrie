@@ -23,6 +23,7 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditable maxLengthUIE;
     public UIElementEditablePaneled descriptionUIE;
     public UIElementEditablePaneled authorsUIE;
+    public UIElementEditablePaneled short_authorsUIE;
 
     // Quest is a special component with meta data
     public EditorComponentQuest()
@@ -102,6 +103,20 @@ public class EditorComponentQuest : EditorComponent
         new UIElementBorder(authorsUIE);
         offset += 1;
 
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(1, offset++, 35, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS_SHORT")));
+        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+
+        short_authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+        short_authorsUIE.SetLocation(0.5f, offset, 19, 1f);
+
+        short_authorsUIE.SetText(game.quest.qd.quest.short_authors.Translate(true));
+        offset += short_authorsUIE.HeightToTextPadding(0);
+        short_authorsUIE.SetButton(delegate { UpdateQuestShortAuth(); });
+        new UIElementBorder(short_authorsUIE);
+        offset += 1;
+        
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset, 10, 1);
         ui.SetText(REQUIRED_EXPANSIONS);
@@ -295,6 +310,25 @@ public class EditorComponentQuest : EditorComponent
                 LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_key, authorsUIE.GetText());
             }
             if (!authorsUIE.HeightAtTextPadding(1))
+            {
+                Update();
+            }
+        }
+    }
+
+    public void UpdateQuestShortAuth()
+    {
+        if (short_authorsUIE.Changed())
+        {
+            if (short_authorsUIE.Empty())
+            {
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.short_authors_key);
+            }
+            else
+            {
+                LocalizationRead.updateScenarioText(game.quest.qd.quest.short_authors_key, short_authorsUIE.GetText());
+            }
+            if (!short_authorsUIE.HeightAtTextPadding(1))
             {
                 Update();
             }

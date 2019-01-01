@@ -2305,10 +2305,12 @@ public class QuestData
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
         public string authors_key { get { return "quest.authors"; } }
+        public string short_authors_key { get { return "quest.short_authors"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
+        public StringKey short_authors { get { return new StringKey("qst", short_authors_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -2558,6 +2560,17 @@ public class QuestData
                 }
             }
             return r;
+        }
+
+        public string GetShortAuthor()
+        {
+            string sa = short_authors.Translate();
+            // if not translated, it means short_authors is not found, we then use first line of authors
+            if (sa==short_authors.key)
+            {
+                return (new StringKey("val", "AUTHOR_UNKNOWN").Translate());
+            }
+            return sa;
         }
     }
 }

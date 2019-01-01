@@ -154,12 +154,8 @@ public class QuestsManager
         {
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
-                // only first line of author is taken
                 LocalizationRead.AddDictionary("qst", quest_data.Value.localizationDict);
-                string short_author = quest_data.Value.authors.Translate();
-                if (short_author.IndexOf(Environment.NewLine) > -1)
-                    short_author = short_author.Substring(0, short_author.IndexOf(Environment.NewLine));
-                quests_sorted_by_author.Add(short_author, quest_data.Key);
+                quests_sorted_by_author.Add(quest_data.Value.GetShortAuthor(), quest_data.Key);
                 quests_sorted_by_name.Add(quest_data.Value.name.Translate(), quest_data.Key);
                 quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                 quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
@@ -193,10 +189,7 @@ public class QuestsManager
                     quests_sorted_by_difficulty.Add(quest_data.Value.difficulty, quest_data.Key);
                     quests_sorted_by_duration.Add(quest_data.Value.lengthMax, quest_data.Key);
                     quests_sorted_by_date.Add(quest_data.Value.latest_update, quest_data.Key);
-
-                    // TODO support by author
-                    // quests_sorted_by_author.Add(quest_data.Value.difficulty, quest_data.Key);
-
+                    quests_sorted_by_author.Add(quest_data.Value.GetShortAuthor(), quest_data.Key);
                 }
             }
         }

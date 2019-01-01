@@ -112,9 +112,8 @@ namespace Assets.Scripts.UI.Screens
             // check if connected on internet, and display scenario list accordingly (local or online)
             if (game.questsList.download_done)
             {
-                questList = game.questsList.GetList("rating");
-                if (sort_order == "descending")
-                    questList.Reverse();
+                sort_criteria = "rating";
+                sort_order = "descending";
             }
             else
             {
@@ -127,10 +126,14 @@ namespace Assets.Scripts.UI.Screens
 
                 // Get and load a list of all locally available quests
                 game.questsList.loadAllLocalQuests();
-                questList = game.questsList.GetLocalList();
-                if (sort_order == "descending")
-                    questList.Reverse();
+                sort_criteria = "name";
+                sort_order = "ascending";
             }
+
+            // Get sorted list
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
 
             // scroll area
             scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
@@ -699,6 +702,8 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
 
+                offset += 4.5f;
+
                 foreach (string s in q.GetMissingPacks(game.cd.GetLoadedPackIDs()))
                 {
                     ui = new UIElement(scrollArea.GetScrollTransform());
@@ -708,9 +713,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetBGColor(new Color(0.4f, 0.4f, 0.4f));
                     offset += 1.2f;
                 }
-
-                offset += 4.5f;
-
             }
 
             scrollArea.SetScrollSize(offset);
