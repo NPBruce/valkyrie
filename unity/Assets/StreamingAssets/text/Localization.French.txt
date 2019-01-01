@@ -431,3 +431,28 @@ ERROR_HTTP,Erreur lors du téléchargement du fichier, si le problème persiste 
 ERROR_NETWORK,Erreur lors du téléchargement du fichier, veuillez vérifier votre connexion internet
 
 NEW_VERSION_AVAILABLE,Mise à jour disponible!
+
+SORT_TITLE,Tri
+SORT_SELECT_CRITERIA,Selectionnez le critère de tri:
+SORT_SELECT_ORDER,Ordre:
+SORT_ASCENDING,Ascendant
+SORT_DESCENDING,Descendant
+
+SORT_BY_AUTHOR,Auteurs
+SORT_BY_NAME,Nom
+SORT_BY_DIFFICULTY,Difficulté
+SORT_BY_DURATION,Durée
+
+SORT_BY_RATING,Notes
+SORT_BY_AVERAGE_DURATION,Durée moy.
+SORT_BY_WIN_RATIO,% victoire
+SORT_BY_DATE,Mise à jour
+
+FILTER_TITLE,Filtres
+FILTER_SELECT_LANG,Sélectionnez le(s) language(s) que vous comprenez:
+FILTER_MISSING_EXPANSIONS_ON,Cachez les scénarios avec une extension manquante  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Cachez les scénarios avec une extension manquante  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scénario(s) ont été filtré
+
+AUTHORS_SHORT,Auteurs en une ligne de texte (pour  le "tri par auteurs")
+AUTHORS_UNKNOWN,Auteurs inconnus (le scénario doit être mis à jour pour avoir cette information)

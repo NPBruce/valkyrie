@@ -175,7 +175,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Missing expansions checkbox
             filter_missing_expansions_text = new UIElement(filtersPopup.GetTransform());
-            filter_missing_expansions_text.SetLocation(6, 15, 30, 2);
+            filter_missing_expansions_text.SetLocation(2, 15, 38, 2);
             if(filter_missing_expansions)
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             else
@@ -391,9 +391,9 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawSortOrderButtons()
         {
-            const float button_size = 7f;
+            const float button_size = 9f;
             const float space_between_buttons = 1f;
-            float x_offset = 13f;
+            float x_offset = 12f;
             float y_offset = 16f;
             Color ascending_color = Color.white;
             Color descending_color = Color.white;
