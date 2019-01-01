@@ -72,7 +72,6 @@ public class Destroyer {
         game.cc.minLimit = false;
 
         // Clear up all data
-        game.cd = null;
         game.quest = null;
         game.qed = null;
         game.moraleDisplay = null;

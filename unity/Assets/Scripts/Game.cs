@@ -175,17 +175,6 @@ public class Game : MonoBehaviour {
     // This is called by 'start quest' on the main menu
     public void SelectQuest()
     {
-        // Find any content packs at the location
-        cd = new ContentData(gameType.DataDirectory());
-        // Check if we found anything
-        if (cd.GetPacks().Count == 0)
-        {
-            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
-            Application.Quit();
-        }
-
-        // Load configured packs
-        cd.LoadContentID("");
         Dictionary<string, string> packs = config.data.Get(gameType.TypeName() + "Packs");
         if (packs != null)
         {
@@ -202,15 +191,6 @@ public class Game : MonoBehaviour {
     // This is called by editor on the main menu
     public void SelectEditQuest()
     {
-        // Find any content packs at the location
-        cd = new ContentData(gameType.DataDirectory());
-        // Check if we found anything
-        if (cd.GetPacks().Count == 0)
-        {
-            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + gameType.DataDirectory() + System.Environment.NewLine);
-            Application.Quit();
-        }
-
         // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
