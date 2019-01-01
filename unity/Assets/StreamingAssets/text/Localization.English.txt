@@ -280,6 +280,17 @@ RN,RN 
 SM,SM 
 SoT,SoT 
 
+//Packs symbols
+SoA_SYMBOL,
+BtT_SYMBOL,
+CotW_SYMBOL,
+FA_SYMBOL,
+MoM1E_SYMBOL,
+base_SYMBOL,
+RN_SYMBOL,
+SM_SYMBOL,
+SoT_SYMBOL,
+
 //Items
 weapon,Weapon
 firearm,Firearm
@@ -500,3 +511,5 @@ FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenario(s) filtered out
 
 AUTHORS_SHORT,Single text line for Authors (for "sort by author" option)
 AUTHORS_UNKNOWN,Unknown authors (needs a scenario update by author)
+
+SYNOPSYS,Synopsys (max 100 characters)

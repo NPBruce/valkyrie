@@ -147,6 +147,11 @@ public class EditorTools
                 manifest += "name." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
             }
 
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.synopsys"))
+            {
+                manifest += "synopsys." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+            
             manifest += "authors_short=" + game.quest.qd.quest.short_authors.Translate(true) + System.Environment.NewLine;
 
             File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);

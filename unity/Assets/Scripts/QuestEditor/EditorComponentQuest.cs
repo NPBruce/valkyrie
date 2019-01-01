@@ -22,6 +22,7 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditable minLengthUIE;
     public UIElementEditable maxLengthUIE;
     public UIElementEditablePaneled descriptionUIE;
+    public UIElementEditablePaneled synopsysUIE;
     public UIElementEditablePaneled authorsUIE;
     public UIElementEditablePaneled short_authorsUIE;
 
@@ -91,9 +92,21 @@ public class EditorComponentQuest : EditorComponent
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(1, offset++, 30, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SYNOPSYS")));
+        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+
+        synopsysUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+        synopsysUIE.SetLocation(0.5f, offset, 19, 4);
+        synopsysUIE.SetText(game.quest.qd.quest.synopsys.Translate(true));
+        offset += synopsysUIE.HeightToTextPadding(1);
+        synopsysUIE.SetButton(delegate { UpdateQuestSynopsys(); });
+        new UIElementBorder(synopsysUIE);
+        offset += 1;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
-
 
         authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         authorsUIE.SetLocation(0.5f, offset, 19, 16);
@@ -297,6 +310,26 @@ public class EditorComponentQuest : EditorComponent
         }
     }
 
+    public void UpdateQuestSynopsys()
+    {
+        if (synopsysUIE.Changed())
+        {
+            if (synopsysUIE.Empty())
+            {
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.synopsys_key);
+            }
+            else
+            {
+                LocalizationRead.updateScenarioText(game.quest.qd.quest.synopsys_key, synopsysUIE.GetText());
+            }
+            if (!synopsysUIE.HeightAtTextPadding(1))
+            {
+                Update();
+            }
+        }
+    }
+
+
     public void UpdateQuestAuth()
     {
         if (authorsUIE.Changed())
@@ -328,7 +361,7 @@ public class EditorComponentQuest : EditorComponent
             {
                 LocalizationRead.updateScenarioText(game.quest.qd.quest.short_authors_key, short_authorsUIE.GetText());
             }
-            if (!short_authorsUIE.HeightAtTextPadding(1))
+            if (!short_authorsUIE.HeightAtTextPadding(0))
             {
                 Update();
             }

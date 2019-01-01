@@ -544,7 +544,7 @@ namespace Assets.Scripts.UI.Screens
 
                 // Frame
                 ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(0.95f, offset, UIScaler.GetWidthUnits() - 4.9f, 3.6f);
+                ui.SetLocation(0.3f, offset, UIScaler.GetWidthUnits() - 3.7f, 5f);
                 ui.SetBGColor(Color.white);
                 ui.SetButton(delegate { Selection(key); });
                 offset += 0.05f;
@@ -560,6 +560,20 @@ namespace Assets.Scripts.UI.Screens
                     //ui.SetImage(ContentData.FileToTexture(Path.Combine(q.Value.path, q.Value.image)));
                 }
 
+                // languages flags
+                Texture2D flagTex = null;
+                float flag_x_offset = 0.6f;
+                float flag_y_offset = offset + 3.7f;
+                const float flag_size = 0.8f;
+                foreach (KeyValuePair<string,string> lang_name in q.languages_name)
+                {
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
+                    ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
+                    ui.SetImage(flagTex);
+                    flag_x_offset += flag_size + 0.1f;
+                }
+
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
@@ -571,8 +585,21 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
 
-                // TODO support missing packs
-                //if (q.Value.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count > 0)
+                // Required expansions
+                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
+                Color expansion_text_color = Color.black;
+                float expansion_x_offset = 0.6f;
+                float expansion_y_offset = offset + 4.7f;
+                foreach (string pack in q.packs)
+                {
+                    if(missing_packs.Contains(pack))
+                        expansion_text_color = Color.red;
+                    else
+                        expansion_text_color = Color.black;
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetLocation(expansion_x_offset, expansion_y_offset, 1, 1);
+                    ui.SetText(game.cd.packSymbol[pack].Translate(), expansion_text_color);
+                }
 
                 // Duration
                 if (q.lengthMax != 0)

@@ -2295,6 +2295,8 @@ public class QuestData
         public string version = "";
         // languages availables with scenario name <"English", "The Fall of House Lynch">
         public Dictionary<string, string> languages_name = null;
+        // languages availables with synopsys name <"English", "This is the synopsys">
+        public Dictionary<string, string> languages_synopsys = null;
         // URL of the package
         public string package_url = "";
         // latest_update date if file is stored on Github
@@ -2304,11 +2306,13 @@ public class QuestData
 
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string synopsys_key { get { return "quest.synopsys"; } }
         public string authors_key { get { return "quest.authors"; } }
         public string short_authors_key { get { return "quest.short_authors"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey synopsys { get { return new StringKey("qst", synopsys_key); } }
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
         public StringKey short_authors { get { return new StringKey("qst", short_authors_key); } }
 
@@ -2483,6 +2487,19 @@ public class QuestData
                     if(kv.Key.Contains("name."))
                     {
                         languages_name.Add(kv.Key.Substring(5), kv.Value);
+                    }
+                }
+            }
+
+            if (iniData.ContainsKey("synopsys." + defaultLanguage))
+            {
+                languages_synopsys = new Dictionary<string, string>();
+
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("synopsys."))
+                    {
+                        languages_synopsys.Add(kv.Key.Substring(9), kv.Value);
                     }
                 }
             }
