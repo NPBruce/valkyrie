@@ -88,6 +88,9 @@ public class Game : MonoBehaviour {
     // Set when in quest editor
     public bool editMode = false;
 
+    // Debug option
+    public bool debugTests = false;
+
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
     {
@@ -133,7 +136,15 @@ public class Game : MonoBehaviour {
             editorTransparency = 0.3f;
         else
             float.TryParse(vSet, out editorTransparency);
-        
+
+        string s_debug_tests = config.data.Get("Debug", "tests");
+        if (s_debug_tests != "")
+        {
+            s_debug_tests = s_debug_tests.ToLower();
+            if (s_debug_tests == "true" || s_debug_tests == "1")
+                debugTests = true;
+        }
+
         // On android extract streaming assets for use
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -266,7 +277,7 @@ public class Game : MonoBehaviour {
         ui.SetButton(Destroyer.QuestSelect);
         new UIElementBorder(ui, Color.red);
     }
-    
+
     // HeroCanvas validates selection and starts quest if everything is good
     public void EndSelection()
     {
