@@ -1510,6 +1510,11 @@ public class Quest
             Vector2 texPos = new Vector2(game.cd.tokens[tokenName].x, game.cd.tokens[tokenName].y);
             Vector2 texSize = new Vector2(game.cd.tokens[tokenName].width, game.cd.tokens[tokenName].height);
             Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image, texPos, texSize);
+            if(newTex==null)
+            {
+                ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
+                return;
+            }
 
             // Create object
             unityObject = new GameObject("Object" + qToken.sectionName);
