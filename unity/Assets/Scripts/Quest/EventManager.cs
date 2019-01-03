@@ -695,6 +695,9 @@ public class EventManager
         // Is this event disabled?
         virtual public bool Disabled()
         {
+            if (game.debugTests)
+                ValkyrieDebug.Log("Event test " + qEvent.sectionName + " result is : " + game.quest.vars.Test(qEvent.tests));
+
             // check if condition is valid, and if there is something to do in this event (see #916)
             return (!game.quest.vars.Test(qEvent.tests));
         }
