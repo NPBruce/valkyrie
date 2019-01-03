@@ -411,3 +411,28 @@ ERROR_HTTP,Fehler beim Abrufen der datei. Wenn das Problem weiterhin besteht, me
 ERROR_NETWORK,Fehler beim Abrufen der datei, bitte überprüfe deine Internetverbindung
 
 NEW_VERSION_AVAILABLE,Update verfügbar!
+
+SORT_TITLE,Sortieren
+SORT_SELECT_CRITERIA,Sortierkriterien auswählen:
+SORT_SELECT_ORDER,Sortieren nach:
+SORT_ASCENDING,Aufsteigend
+SORT_DESCENDING,Absteigend
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Name
+SORT_BY_DIFFICULTY,Schwierigkeit
+SORT_BY_DURATION,Dauer
+
+SORT_BY_RATING,Bewertung
+SORT_BY_AVERAGE_DURATION,Ø Dauer
+SORT_BY_WIN_RATIO,Siegrate
+SORT_BY_DATE,Updatedatum
+
+FILTER_TITLE,Filter auswählen
+FILTER_SELECT_LANG,Bitte Sprachen wählen:
+FILTER_MISSING_EXPANSIONS_ON,Scenarien mit fehlenden Erweiterungen verstecken  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Scenarien mit fehlenden Erweiterungen verstecken  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Scenarien gefunden
+
+AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
+AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor um dies zu hinterlegen)
