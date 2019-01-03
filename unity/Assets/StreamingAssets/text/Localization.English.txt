@@ -284,8 +284,17 @@ SoT,SoT 
 SoA_SYMBOL,
 BtT_SYMBOL,
 CotW_SYMBOL,
+CotWT_SYMBOL,
+CotWI_SYMBOL,
+CotWM_SYMBOL,
 FA_SYMBOL,
+FAT_SYMBOL,
+FAI_SYMBOL,
+FAM_SYMBOL,
 MoM1E_SYMBOL,
+MoM1ET_SYMBOL,
+MoM1EI_SYMBOL,
+MoM1EM_SYMBOL,
 base_SYMBOL,
 RN_SYMBOL,
 SM_SYMBOL,
@@ -382,7 +391,6 @@ tents,Tents
 stables,Stables
 hall,Hall
 map,Map
-bedroom,Bedroom
 city,City
 fountain,Fountain
 blackrealm,Blackrealm

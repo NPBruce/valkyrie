@@ -280,7 +280,6 @@ public class ContentData {
 
             // Add symbol
             packSymbol.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
-            Debug.Log("adding " + pack.id + " is translated to " + packSymbol[pack.id].Translate());
 
             // We finish without actually loading the content, this is done later (content optional)
         }

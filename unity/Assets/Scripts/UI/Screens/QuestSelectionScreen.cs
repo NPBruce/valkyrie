@@ -512,6 +512,7 @@ namespace Assets.Scripts.UI.Screens
             foreach (string key in questList)
             {
                 QuestData.Quest q = game.questsList.getQuestData(key);
+                UIElement frame = null;
 
                 // Filter langs
                 if (!HasSelectedLanguage(q))
@@ -527,28 +528,13 @@ namespace Assets.Scripts.UI.Screens
                     continue;
                 }
 
-                string translation = "";
-                if (game.questsList.download_done)
-                {
-                    // quest name is local language, or default language
-                    if (q.languages_name != null && !q.languages_name.TryGetValue(game.currentLang, out translation))
-                    {
-                        translation = q.languages_name[q.defaultLanguage];
-                    }
-                }
-                else
-                {
-                    LocalizationRead.AddDictionary("qst", q.localizationDict);
-                    translation = q.name.Translate();
-                }
-
                 // Frame
-                ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetLocation(0.3f, offset, UIScaler.GetWidthUnits() - 3.7f, 5f);
-                ui.SetBGColor(Color.white);
-                ui.SetButton(delegate { Selection(key); });
+                frame = new UIElement(scrollArea.GetScrollTransform());
+                frame.SetLocation(0.3f, offset, UIScaler.GetWidthUnits() - 3.7f, 5.6f);
+                frame.SetBGColor(Color.white);
+                frame.SetButton(delegate { Selection(key); });
                 offset += 0.05f;
-                new UIElementBorder(ui, Color.grey);
+                new UIElementBorder(frame, Color.grey);
 
                 // Draw Image
                 ui = new UIElement(scrollArea.GetScrollTransform());
@@ -563,7 +549,7 @@ namespace Assets.Scripts.UI.Screens
                 // languages flags
                 Texture2D flagTex = null;
                 float flag_x_offset = 0.6f;
-                float flag_y_offset = offset + 3.7f;
+                float flag_y_offset = offset + 3.5f;
                 const float flag_size = 0.8f;
                 foreach (KeyValuePair<string,string> lang_name in q.languages_name)
                 {
@@ -574,48 +560,97 @@ namespace Assets.Scripts.UI.Screens
                     flag_x_offset += flag_size + 0.1f;
                 }
 
+                // Required expansions
+                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
+                Color expansion_text_color = Color.black;
+                float expansion_x_offset = 0.4f;
+                float expansion_y_offset = offset + 4.3f;
+                List<string> expansion_symbols = new List<string>();
+                foreach (string pack in q.packs)
+                {
+                    string symbol = game.cd.packSymbol[pack].Translate();
+                    if (symbol != "" && !expansion_symbols.Contains(symbol))
+                    {
+                        expansion_symbols.Add(symbol);
+                        if (missing_packs.Contains(pack))
+                            expansion_text_color = Color.red;
+                        else
+                            expansion_text_color = Color.black;
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        float symbol_width = ui.GetStringWidth(symbol);
+                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
+                        ui.SetText(symbol, expansion_text_color);
+                        //Color transparent = Color.black;
+                        //transparent.a = 1;
+                        //ui.SetBGColor(transparent);
+                        expansion_x_offset += symbol_width - 0.3f;
+                    }
+                }
+
+
+                string name_translation = "";
+                string synopsys_translation = "";
+                if (game.questsList.download_done)
+                {
+                    // quest name is local language, or default language
+                    if (q.languages_name != null && !q.languages_name.TryGetValue(game.currentLang, out name_translation))
+                    {
+                        name_translation = q.languages_name[q.defaultLanguage];
+                    }
+                    // quest name is local language, or default language
+                    if (q.languages_synopsys != null && !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
+                    {
+                        synopsys_translation = q.languages_synopsys[q.defaultLanguage];
+                    }
+                }
+                else
+                {
+                    LocalizationRead.AddDictionary("qst", q.localizationDict);
+                    name_translation = q.name.Translate();
+                    LocalizationRead.AddDictionary("qst", q.localizationDict);
+                    synopsys_translation = q.synopsys.Translate();
+                }
+
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset - 0.2f, UIScaler.GetWidthUnits() - 8, 2.5f);
+                ui.SetLocation(5f, offset, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
-                ui.SetText(translation, Color.black);
+                ui.SetText(name_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
 
-                // Required expansions
-                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
-                Color expansion_text_color = Color.black;
-                float expansion_x_offset = 0.6f;
-                float expansion_y_offset = offset + 4.7f;
-                foreach (string pack in q.packs)
-                {
-                    if(missing_packs.Contains(pack))
-                        expansion_text_color = Color.red;
-                    else
-                        expansion_text_color = Color.black;
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(expansion_x_offset, expansion_y_offset, 1, 1);
-                    ui.SetText(game.cd.packSymbol[pack].Translate(), expansion_text_color);
-                }
+                // Synopsys
+                synopsys_translation = "The Gordon family has contacted you to find their daughter, Felicia.\nThe last clue is an appointment in her personal diary: 22.30h at the bird shop";
+
+                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetBGColor(Color.clear);
+                ui.SetLocation(5.2f, offset + 1.4f, UIScaler.GetWidthUnits() - 8, 2.2f);
+                ui.SetTextPadding(0.5f);
+                ui.SetText(synopsys_translation, Color.black);
+                ui.SetButton(delegate { Selection(key); });
+                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
+                ui.SetFontStyle(FontStyle.Italic);
+                ui.SetFont(game.gameType.GetHeaderFont());
 
                 // Duration
                 if (q.lengthMax != 0)
                 {
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(6.5f, offset + 2.3f, 4, 1);
+                    ui.SetLocation(6.5f, offset + 4.3f, 4, 1);
                     ui.SetText(new StringKey("val", "DURATION"), Color.black);
                     ui.SetButton(delegate { Selection(key); });
-                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetTextAlignment(TextAnchor.LowerRight);
                     ui.SetBGColor(Color.clear);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(10.5f, offset + 2.3f, 5, 1);
+                    ui.SetLocation(10.5f, offset + 4.3f, 5, 1);
                     ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
                     ui.SetButton(delegate { Selection(key); });
-                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                 }
 
@@ -623,10 +658,10 @@ namespace Assets.Scripts.UI.Screens
                 if (q.difficulty != 0)
                 {
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter() - 5.5f, offset + 2.3f, 6, 1);
+                    ui.SetLocation(UIScaler.GetHCenter() - 5.5f, offset + 4.3f, 6, 1);
                     ui.SetText(new StringKey("val", "DIFFICULTY"), Color.black);
                     ui.SetButton(delegate { Selection(key); });
-                    ui.SetTextAlignment(TextAnchor.MiddleRight);
+                    ui.SetTextAlignment(TextAnchor.LowerRight);
                     ui.SetBGColor(Color.clear);
 
                     string symbol = "π"; // will
@@ -635,14 +670,15 @@ namespace Assets.Scripts.UI.Screens
                         symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                     }
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter(), offset + 1.8f, 9, 2);
+                    ui.SetLocation(UIScaler.GetHCenter(), offset + 3.3f, 9, 2);
                     ui.SetText(symbol + symbol + symbol + symbol + symbol, Color.black);
+                    ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(UIScaler.GetMediumFont());
                     ui.SetButton(delegate { Selection(key); });
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter() + 1.05f + (q.difficulty * 6.9f), offset + 1.8f, (1 - q.difficulty) * 6.9f, 1.6f);
+                    ui.SetLocation(UIScaler.GetHCenter() + 1.05f + (q.difficulty * 6.9f), offset + 3.5f, (1 - q.difficulty) * 6.9f, 2f);
                     ui.SetBGColor(new Color(1, 1, 1, 0.7f));
                     ui.SetButton(delegate { Selection(key); });
                 }
@@ -697,39 +733,31 @@ namespace Assets.Scripts.UI.Screens
 
                     if (q_stats.scenario_avg_duration > 0 || win_ratio >= 0)
                     {
-                        // Additional information in Grey frame
-                        ui = new UIElement(scrollArea.GetScrollTransform());
-                        ui.SetLocation(3.5f + 1f, offset + 3.6f, UIScaler.GetWidthUnits() - 4.9f - 3.5f - 0.05f, 1.2f);
-                        ui.SetBGColor(Color.grey);
-                        ui.SetButton(delegate { Selection(key); });
-
                         //  average duration
                         ui = new UIElement(scrollArea.GetScrollTransform());
-                        ui.SetLocation(5f, offset + 3.8f, 14, 1);
+                        ui.SetLocation(UIScaler.GetRight(-13), offset + 3.4f, 15, 1);
                         if (q_stats.scenario_avg_duration > 0)
-                            ui.SetText(STATS_AVERAGE_DURATION, Color.white);
+                            ui.SetText(STATS_AVERAGE_DURATION, Color.black);
                         else
-                            ui.SetText(STATS_NO_AVERAGE_DURATION, Color.white);
+                            ui.SetText(STATS_NO_AVERAGE_DURATION, Color.black);
                         ui.SetTextAlignment(TextAnchor.MiddleLeft);
                         ui.SetBGColor(Color.clear);
                         ui.SetButton(delegate { Selection(key); });
 
                         //  average win ratio
                         ui = new UIElement(scrollArea.GetScrollTransform());
-                        ui.SetLocation(UIScaler.GetHCenter() - 5.5f, offset + 3.8f, 15, 1);
+                        ui.SetLocation(UIScaler.GetRight(-13), offset + 4.4f, 15, 1);
                         if (win_ratio >= 0)
-                            ui.SetText(STATS_AVERAGE_WIN_RATIO, Color.white);
+                            ui.SetText(STATS_AVERAGE_WIN_RATIO, Color.black);
                         else
-                            ui.SetText(STATS_NO_AVERAGE_WIN_RATIO, Color.white);
+                            ui.SetText(STATS_NO_AVERAGE_WIN_RATIO, Color.black);
                         ui.SetBGColor(Color.clear);
-                        ui.SetTextAlignment(TextAnchor.MiddleCenter);
+                        ui.SetTextAlignment(TextAnchor.MiddleLeft);
                         ui.SetButton(delegate { Selection(key); });
-
-                        offset += 1.2f;
                     }
                 }
 
-                offset += 4.5f;
+                offset += 6.5f;
 
                 foreach (string s in q.GetMissingPacks(game.cd.GetLoadedPackIDs()))
                 {
