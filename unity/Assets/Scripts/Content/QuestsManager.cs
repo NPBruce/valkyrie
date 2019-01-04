@@ -60,7 +60,7 @@ public class QuestsManager
         }
     }
 
-    private void QuestsDownload_callback(string data, bool error)
+    private void QuestsDownload_callback(string data, bool error, System.Uri uri)
     {
         if (error)
         {

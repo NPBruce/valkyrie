@@ -42,7 +42,7 @@ public class QuestDownload : MonoBehaviour
     /// <summary>
     /// Parse the downloaded remote manifest and start download of individual quest files
     /// </summary>
-    public void DownloadManifest_callback(string data, bool error)
+    public void DownloadManifest_callback(string data, bool error, System.Uri uri)
     {
         if (error)
         {
