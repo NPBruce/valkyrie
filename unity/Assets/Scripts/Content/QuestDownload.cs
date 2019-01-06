@@ -441,7 +441,7 @@ public class QuestDownload : MonoBehaviour
         Destroyer.Dialog();
 
         // Pull up the quest selection page
-        new QuestSelectionScreen();
+        Game.Get().questSelectionScreen.Show();
     }
 
     /// <summary>

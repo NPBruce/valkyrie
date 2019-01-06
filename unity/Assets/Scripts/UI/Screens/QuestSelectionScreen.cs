@@ -52,10 +52,71 @@ namespace Assets.Scripts.UI.Screens
         string sort_criteria = "rating";
         string sort_order = "descending";
 
+        // textures
+        Texture2D scroll_paper = null;
+        Texture2D picture_shadow = null;
+        Texture2D picture_pin = null;
+        Texture2D button_download = null;
+        Texture2D button_update = null;
+        Texture2D button_play = null;
+
         public QuestSelectionScreen()
         {
             game = Game.Get();
 
+            // Initialize filters
+            langs_selected = new Dictionary<string, bool>();
+            foreach (string lang in langs)
+            {
+                // initialize dict
+                langs_selected.Add(lang, true);
+            }
+            langs_selected["Japanese"] = false;
+            langs_selected["Czech"] = false;
+
+            // initialize text indicator for filtered scenario
+            text_number_of_filtered_scenario = new UIElement();
+            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
+            text_number_of_filtered_scenario.SetText(" ");
+            text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
+            text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
+            text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
+
+            // check if connected on internet, and display scenario list accordingly (local or online)
+            if (game.questsList.download_done)
+            {
+                sort_criteria = "rating";
+                sort_order = "descending";
+            }
+            else
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.loadAllLocalQuests();
+                sort_criteria = "name";
+                sort_order = "ascending";
+            }
+
+            // Get sorted list
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
+
+            // Initialize list of images for asynchronous loading
+            images_list = new ImgAsyncLoader(this);
+
+            // preload textures
+            scroll_paper = Resources.Load("sprites/scenario_list/scroll_paper") as Texture2D;
+            picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
+            picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
+
+            //TODO
+            //button_download = null;
+            //button_update = null;
+            //button_play = null;
+        }
+
+        public void Show()
+        {
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Object.Destroy(go);
@@ -80,24 +141,6 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { Cancel(); });
             new UIElementBorder(ui, Color.red);
 
-            // Initialize filters
-            langs_selected = new Dictionary<string, bool>();
-            foreach (string lang in langs)
-            {
-                // initialize dict
-                langs_selected.Add(lang, true);
-            }
-            langs_selected["Japanese"] = false;
-            langs_selected["Czech"] = false;
-
-            // initialize text indicator for filtered scenario
-            text_number_of_filtered_scenario = new UIElement();
-            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
-            text_number_of_filtered_scenario.SetText(" ");
-            text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
-            text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
-            text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
-
             // Show filter button
             ui = new UIElement();
             Texture2D filterTex = null;
@@ -116,43 +159,18 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
-            // check if connected on internet, and display scenario list accordingly (local or online)
-            if (game.questsList.download_done)
-            {
-                sort_criteria = "rating";
-                sort_order = "descending";
-            }
-            else
-            {
-                // Display offline message
+            // Display offline message
+            if (!game.questsList.download_done)
+            { 
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 ui.SetText("OFFLINE", Color.red);
                 ui.SetFontSize(UIScaler.GetMediumFont());
                 ui.SetTextAlignment(TextAnchor.MiddleRight);
-
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
             }
-
-            // Get sorted list
-            questList = game.questsList.GetList(sort_criteria);
-            if (sort_order == "descending")
-                questList.Reverse();
-
-            // scroll area
-            scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
-            scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
-            new UIElementBorder(scrollArea);
-
-            // List of images for asynchronous loading
-            images_list = new ImgAsyncLoader();
 
             DrawQuestList();
         }
-
 
         // Show button and initialize the popup
         private void FilterPopup()
@@ -250,6 +268,32 @@ namespace Assets.Scripts.UI.Screens
                 x_offset += flag_size + 0.3f;
             }
         }
+
+        public void DrawScenarioPicture(string url, UIElement ui_picture_shadow)
+        {
+            float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
+            UnityEngine.Events.UnityAction buttonCall = ui_picture_shadow.GetAction();
+
+            // draw picture shadow
+            ui_picture_shadow.SetImage(picture_shadow);
+
+            // draw image
+            UIElement picture = new UIElement(ui_picture_shadow.GetTransform());
+            picture.SetLocation(0.30f, 0.30f, width_heigth-0.6f, width_heigth-0.6f);
+            picture.SetBGColor(Color.clear);
+            picture.SetImage(images_list.GetTexture(url));
+            picture.SetButton(buttonCall);
+
+            // draw pin
+            const float pin_width = 1.4f;
+            const float pin_height = 1.6f;
+            UIElement pin = new UIElement(picture.GetTransform());
+            pin.SetLocation((width_heigth/2f)-(pin_width/1.5f), (-pin_height /2f), pin_width, pin_height);
+            pin.SetBGColor(Color.clear);
+            pin.SetImage(picture_pin);
+            pin.SetButton(buttonCall);
+        }
+
 
         private void FilterLang(string lang)
         {
@@ -447,6 +491,7 @@ namespace Assets.Scripts.UI.Screens
         public void ReloadQuestList()
         {
             CleanQuestList();
+
             DrawQuestList();
         }
 
@@ -456,10 +501,7 @@ namespace Assets.Scripts.UI.Screens
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
                 Object.Destroy(go);
 
-            // scroll area
-            scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
-            scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
-            new UIElementBorder(scrollArea);
+            scrollArea = null;
 
             // quest images
             images_list.Clear();
@@ -521,6 +563,14 @@ namespace Assets.Scripts.UI.Screens
             float offset = 0;
             int nb_filtered_out_quest = 0;
 
+            if(scrollArea==null)
+            {
+                // scroll area
+                scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
+                scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
+                new UIElementBorder(scrollArea, Color.grey);
+            }
+
             // Loop through all available quests
             foreach (string key in questList)
             {
@@ -559,22 +609,23 @@ namespace Assets.Scripts.UI.Screens
 
                 // Frame
                 frame = new UIElement(scrollArea.GetScrollTransform());
-                frame.SetLocation(0.3f, offset, UIScaler.GetWidthUnits() - 3.7f, 6.2f);
+                frame.SetLocation(0f, offset, UIScaler.GetWidthUnits() - 3.2f, 6.7f);
                 frame.SetBGColor(Color.white);
                 frame.SetButton(delegate { Selection(key); });
-                offset += 0.05f;
-                new UIElementBorder(frame, Color.grey);
+                frame.SetImage(scroll_paper);
+                offset += 0.15f;
 
-                // prepare list of Images
+                // prepare/draw list of Images
                 if (q.image.Length > 0)
                 {
+                    // this is the location for the shadow (to be displayed first)
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(0.6f, offset + 0.3f, 4.5f, 4.5f);
-                    ui.SetBGColor(Color.white);
+                    ui.SetLocation(0.8f, offset + 0.6f, 4.5f, 4.5f);
+                    ui.SetBGColor(Color.clear);
                     ui.SetButton(delegate { Selection(key); });
                     if(images_list.IsImageAvailable(q.package_url + q.image))
                     {
-                        ui.SetImage(images_list.GetTexture(q.package_url + q.image));
+                        DrawScenarioPicture(q.package_url + q.image, ui);
                     }
                     else
                     {
@@ -583,23 +634,27 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 // languages flags
-                Texture2D flagTex = null;
-                const float flag_size = 0.9f;
-                float flag_x_offset = (UIScaler.GetWidthUnits() - 4f) - q.languages_name.Count*(flag_size+0.2f); // align right
-                float flag_y_offset = offset + 0.15f;
-                foreach (KeyValuePair<string, string> lang_name in q.languages_name)
+                if(q.languages_name!=null)
                 {
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-                    flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
-                    ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
-                    ui.SetImage(flagTex);
-                    flag_x_offset += flag_size + 0.2f;
+                    Texture2D flagTex = null;
+                    const float flag_size = 0.9f;
+                    float flag_y_offset = offset + 0.25f;
+                    float flag_x_offset = (UIScaler.GetWidthUnits() - 10f) - q.languages_name.Count * (flag_size + 0.2f); // align right
+                    foreach (KeyValuePair<string, string> lang_name in q.languages_name)
+                    {
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
+                        ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
+                        ui.SetImage(flagTex);
+                        ui.SetButton(delegate { Selection(key); });
+                        flag_x_offset += flag_size + 0.2f;
+                    }
                 }
 
                 // Required expansions
                 List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
                 Color expansion_text_color = Color.black;
-                float expansion_x_offset = 0.4f;
+                float expansion_x_offset = 0.5f;
                 float expansion_y_offset = offset + 5.1f;
                 List<string> expansion_symbols = new List<string>();
                 foreach (string pack in q.packs)
@@ -617,6 +672,7 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
                         ui.SetText(pack_symbol, expansion_text_color);
                         ui.SetBGColor(Color.clear);
+                        ui.SetButton(delegate { Selection(key); });
                         expansion_x_offset += symbol_width - 0.25f;
                     }
                 }
@@ -647,7 +703,7 @@ namespace Assets.Scripts.UI.Screens
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset + 0.1f, UIScaler.GetWidthUnits() - 8, 1.5f);
+                ui.SetLocation(5f, offset + 0.2f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(name_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
@@ -661,7 +717,7 @@ namespace Assets.Scripts.UI.Screens
 
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset + 1.6f, UIScaler.GetRight(-11f) - 5, 2f);
+                ui.SetLocation(5f, offset + 1.7f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(synopsys_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
@@ -823,77 +879,86 @@ namespace Assets.Scripts.UI.Screens
         {
             Destroyer.Dialog();
 
+            CleanQuestList();
+
             new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
         }
 
-    }
 
 
-    class ImgAsyncLoader
-    {
-        // URL and UI element
-        private Dictionary<string, UIElement> images_list = null;
-        // URL and Texture
-        private Dictionary<string, Texture2D> texture_list = null;
-
-        public ImgAsyncLoader()
+        private class ImgAsyncLoader
         {
-            images_list = new Dictionary<string, UIElement>();
-            texture_list = new Dictionary<string, Texture2D>();
-        }
+            // URL and UI element
+            private Dictionary<string, UIElement> images_list = null;
+            // URL and Texture
+            private Dictionary<string, Texture2D> texture_list = null;
 
-        public void Add(string url, UIElement uie)
-        {
-            images_list.Add(url, uie);
-        }
+            // Father class
+            QuestSelectionScreen questSelectionScreen = null;
 
-        public void Clear()
-        {
-            images_list.Clear();
-            // do not clear Texture, we don't want to download pictures again
-        }
+            public ImgAsyncLoader(QuestSelectionScreen qss)
+            {
+                questSelectionScreen = qss;
+                images_list = new Dictionary<string, UIElement>();
+                texture_list = new Dictionary<string, Texture2D>();
+            }
 
-        public void StartDownloadASync()
-        {
-            if(images_list.Count>0)
-            { 
-                foreach (KeyValuePair<string, UIElement> kv in images_list)
+            public void Add(string url, UIElement uie)
+            {
+                images_list.Add(url, uie);
+            }
+
+            public void Clear()
+            {
+                images_list.Clear();
+                // do not clear Texture, we don't want to download pictures again
+            }
+
+            public void StartDownloadASync()
+            {
+                if (images_list.Count > 0)
                 {
-                    HTTPManager.GetImage(kv.Key, ImageDownloaded_callback);
+                    foreach (KeyValuePair<string, UIElement> kv in images_list)
+                    {
+                        HTTPManager.GetImage(kv.Key, ImageDownloaded_callback);
+                    }
                 }
             }
-        }
 
-        /// <summary>
-        /// Parse the downloaded remote manifest and start download of individual quest files
-        /// </summary>
-        public void ImageDownloaded_callback(Texture2D texture, bool error, System.Uri uri)
-        {
-            if (error)
+            /// <summary>
+            /// Parse the downloaded remote manifest and start download of individual quest files
+            /// </summary>
+            public void ImageDownloaded_callback(Texture2D texture, bool error, System.Uri uri)
             {
-                Debug.Log("Error downloading picture : " + uri.ToString());
-            }
-            else
-            {
-                // we might have started two downloads of the same picture (changing sort options before end of download)
-                if (!texture_list.ContainsKey(uri.ToString()))
+                if (error)
                 {
-                    // Display pictures
-                    images_list[uri.ToString()].SetImage(texture);
-                    // save texture
-                    texture_list.Add(uri.ToString(), texture);
+                    Debug.Log("Error downloading picture : " + uri.ToString());
+                }
+                else
+                {
+                    // we might have started two downloads of the same picture (changing sort options before end of download)
+                    if (!texture_list.ContainsKey(uri.ToString()))
+                    {
+                        // save texture
+                        texture_list.Add(uri.ToString(), texture);
+
+                        // Display pictures
+                        if(images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
+                            questSelectionScreen.DrawScenarioPicture(uri.ToString(), images_list[uri.ToString()]);
+                    }
                 }
             }
-        }
 
-        public bool IsImageAvailable(string package_url)
-        {
-            return texture_list.ContainsKey(package_url);
-        }
+            public bool IsImageAvailable(string package_url)
+            {
+                return texture_list.ContainsKey(package_url);
+            }
 
-        public Texture2D GetTexture(string package_url)
-        {
-            return texture_list[package_url];
+            public Texture2D GetTexture(string package_url)
+            {
+                return texture_list[package_url];
+            }
         }
     }
+
 }

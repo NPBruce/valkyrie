@@ -85,6 +85,9 @@ public class Game : MonoBehaviour {
     // Import thread
     public GameSelectionScreen gameSelect;
 
+    // List of quests window
+    public QuestSelectionScreen questSelectionScreen = null;
+
     // Current language
     public string currentLang;
 
@@ -185,7 +188,9 @@ public class Game : MonoBehaviour {
         }
 
         // Pull up the quest selection page
-        new QuestSelectionScreen();
+        if(questSelectionScreen==null)
+            questSelectionScreen = new QuestSelectionScreen();
+        questSelectionScreen.Show();
     }
 
     // This is called by editor on the main menu

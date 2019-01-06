@@ -113,7 +113,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             // Pull up the quest selection page
-            new QuestSelectionScreen();
+            Game.Get().questSelectionScreen.Show();
         }
 
         // Select a quest

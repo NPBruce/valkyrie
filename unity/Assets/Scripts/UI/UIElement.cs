@@ -54,6 +54,15 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// The action if a button is assigned</summary>
+        /// <returns>
+        /// The action .</returns>
+        public UnityEngine.Events.UnityAction GetAction()
+        {
+            return buttonCall;
+        }
+
+        /// <summary>
         /// The tranform that should be used for sub elements.</summary>
         /// <returns>
         /// The background Transform.</returns>
