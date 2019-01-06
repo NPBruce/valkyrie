@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
-using System.Collections;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -573,7 +572,14 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation(0.6f, offset + 0.3f, 4.5f, 4.5f);
                     ui.SetBGColor(Color.white);
                     ui.SetButton(delegate { Selection(key); });
-                    images_list.Add(q.package_url + q.image, ui);
+                    if(images_list.IsImageAvailable(q.package_url + q.image))
+                    {
+                        ui.SetImage(images_list.GetTexture(q.package_url + q.image));
+                    }
+                    else
+                    {
+                        images_list.Add(q.package_url + q.image, ui);
+                    }
                 }
 
                 // languages flags
@@ -825,11 +831,15 @@ namespace Assets.Scripts.UI.Screens
 
     class ImgAsyncLoader
     {
+        // URL and UI element
         private Dictionary<string, UIElement> images_list = null;
+        // URL and Texture
+        private Dictionary<string, Texture2D> texture_list = null;
 
         public ImgAsyncLoader()
         {
             images_list = new Dictionary<string, UIElement>();
+            texture_list = new Dictionary<string, Texture2D>();
         }
 
         public void Add(string url, UIElement uie)
@@ -840,6 +850,7 @@ namespace Assets.Scripts.UI.Screens
         public void Clear()
         {
             images_list.Clear();
+            // do not clear Texture, we don't want to download pictures again
         }
 
         public void StartDownloadASync()
@@ -864,8 +875,25 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                images_list[uri.ToString()].SetImage(texture);
+                // we might have started two downloads of the same picture (changing sort options before end of download)
+                if (!texture_list.ContainsKey(uri.ToString()))
+                {
+                    // Display pictures
+                    images_list[uri.ToString()].SetImage(texture);
+                    // save texture
+                    texture_list.Add(uri.ToString(), texture);
+                }
             }
+        }
+
+        public bool IsImageAvailable(string package_url)
+        {
+            return texture_list.ContainsKey(package_url);
+        }
+
+        public Texture2D GetTexture(string package_url)
+        {
+            return texture_list[package_url];
         }
     }
 }
