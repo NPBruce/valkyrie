@@ -121,6 +121,13 @@ public class EditorTools
                 zip.Save(packageFile);
             }
 
+            // Append sha version
+            using (FileStream stream = File.OpenRead(packageFile))
+            {
+                byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
+                game.quest.qd.quest.version = System.BitConverter.ToString(checksum);
+            }
+
             string icon = game.quest.qd.quest.image.Replace('\\', '/');
             if (icon.Length > 0)
             {
@@ -134,25 +141,6 @@ public class EditorTools
             string manifest = game.quest.qd.quest.ToString();
             // Restore icon
             game.quest.qd.quest.image = icon;
-
-            // Append sha version
-            using (FileStream stream = File.OpenRead(packageFile))
-            {
-                byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + System.BitConverter.ToString(checksum) + System.Environment.NewLine;
-            }
-
-            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
-            {
-                manifest += "name." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
-            }
-
-            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.synopsys"))
-            {
-                manifest += "synopsys." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
-            }
-            
-            manifest += "authors_short=" + game.quest.qd.quest.short_authors.Translate(true) + System.Environment.NewLine;
 
             File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);
         }

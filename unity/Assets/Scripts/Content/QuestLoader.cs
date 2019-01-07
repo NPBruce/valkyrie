@@ -19,13 +19,13 @@ public class QuestLoader {
         mkDir(ContentData.DownloadPath());
 
         // Get a list of downloaded quest not packed
-        List<string> questDirectories = GetQuests(ContentData.DownloadPath());
+        List<string> questDirectories = GetUnpackedQuests(ContentData.DownloadPath());
 
         // Extract only required files from downloaded packages 
         ExtractPackages(ContentData.DownloadPath());
 
         // Get the list of extracted packages
-        questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
+        questDirectories.AddRange(GetUnpackedQuests(ContentData.TempValyriePath));
 
         // Add the list of editor quest
         if (game.gameType is MoMGameType)
@@ -40,7 +40,7 @@ public class QuestLoader {
         {
             dataLocation += "/IA/Editor";
         }
-        questDirectories.AddRange(GetQuests(dataLocation));
+        questDirectories.AddRange(GetUnpackedQuests(dataLocation));
         
         // Go through all directories
         foreach (string p in questDirectories)
@@ -106,10 +106,10 @@ public class QuestLoader {
         // Read user application data for quests
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        List<string> questDirectories = GetQuests(dataLocation);
+        List<string> questDirectories = GetUnpackedQuests(dataLocation);
 
         // Read extracted packages
-        questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
+        questDirectories.AddRange(GetUnpackedQuests(ContentData.TempValyriePath));
 
         // go through all found quests
         foreach (string p in questDirectories)
@@ -134,7 +134,7 @@ public class QuestLoader {
         // Read user application data for quests
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        List<string> questDirectories = GetQuests(dataLocation);
+        List<string> questDirectories = GetUnpackedQuests(dataLocation);
 
         string tempPath = ContentData.TempPath;
         string gameType = Game.Get().gameType.TypeName();
@@ -158,8 +158,8 @@ public class QuestLoader {
         return quests;
     }
 
-    // Get list of directories with quests at a path
-    public static List<string> GetQuests(string path)
+    // Get list of directories with quests at a path (unpacked quests)
+    public static List<string> GetUnpackedQuests(string path)
     {
         List<string> quests = new List<string>();
 

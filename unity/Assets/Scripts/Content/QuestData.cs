@@ -2303,6 +2303,7 @@ public class QuestData
         public System.DateTime latest_update;
         // is package available locally
         public bool downloaded = false;
+        public bool update_available = false;
 
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
@@ -2478,10 +2479,9 @@ public class QuestData
                 version = iniData["version"];
             }
 
+            languages_name = new Dictionary<string, string>();
             if (iniData.ContainsKey("name."+defaultLanguage))
             {
-                languages_name = new Dictionary<string, string>();
-
                 foreach(KeyValuePair<string,string> kv in iniData)
                 {
                     if(kv.Key.Contains("name."))
@@ -2491,10 +2491,9 @@ public class QuestData
                 }
             }
 
+            languages_synopsys = new Dictionary<string, string>();
             if (iniData.ContainsKey("synopsys." + defaultLanguage))
             {
-                languages_synopsys = new Dictionary<string, string>();
-
                 foreach (KeyValuePair<string, string> kv in iniData)
                 {
                     if (kv.Key.Contains("synopsys."))
@@ -2563,6 +2562,23 @@ public class QuestData
                 r.Append("image=").AppendLine(image);
             }
 
+            if(version != "")
+            {
+                r.Append("version=").AppendLine(version);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_name)
+            {
+                r.Append("name."+ kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_synopsys)
+            {
+                r.Append("synopsys." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            r.Append("authors_short=").AppendLine(GetShortAuthor());
+
             return r.ToString();
         }
 
@@ -2582,11 +2598,12 @@ public class QuestData
         public string GetShortAuthor()
         {
             string sa = short_authors.Translate();
-            // if not translated, it means short_authors is not found, we then use first line of authors
-            if (sa==short_authors.key)
+            // if not translated, it means short_authors is not found
+            if (sa==short_authors.fullKey)
             {
-                return (new StringKey("val", "AUTHOR_UNKNOWN").Translate());
+                return (new StringKey("val", "AUTHORS_UNKNOWN").Translate());
             }
+            Debug.Log("sa " + sa + "\nshort_authors.Translate() " + short_authors.Translate() + "\nshort_authors.fullKey "  + short_authors.fullKey);
             return sa;
         }
     }

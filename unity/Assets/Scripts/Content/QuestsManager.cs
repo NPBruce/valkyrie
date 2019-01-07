@@ -91,24 +91,24 @@ public class QuestsManager
 
     private void CheckLocalAvailability()
     {
-        // List of all locally available quests (sorted by name)
-        List<string> local_quests_name = new List<string>();
+        // load information on local quests
+        IniData localManifest = IniRead.ReadFromIni(ContentData.DownloadPath() + "/manifest.ini");
 
-        // Check list of package (note: this does not check package content)
-        string[] archives = Directory.GetFiles(ContentData.DownloadPath(), "*.valkyrie", SearchOption.AllDirectories);
-        foreach (string f in archives)
-        {
-            local_quests_name.Add(f.ToLower());
-        }
-
-        local_quests_name.Sort();
-
-        // Update download status for each questData
+        // Update download status for each questData and check if update is available
         foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
         {
-            string pkg_name = quest_data.Key.ToLower() + ".valkyrie";
-            quest_data.Value.downloaded = local_quests_name.Contains(pkg_name);
+            if(localManifest.data.ContainsKey(quest_data.Key))
+            {
+                quest_data.Value.downloaded = true;
+                quest_data.Value.update_available = (localManifest.data[quest_data.Key]["version"] != quest_data.Value.version);
+            }
         }
+    }
+    
+    public void SetAvailable(string key)
+    {
+        remote_quests_data[key].downloaded = true;
+        remote_quests_data[key].update_available = false;
     }
 
     /// <summary>
@@ -252,78 +252,10 @@ public class QuestsManager
     }
 
     // --- Management of local quests, when offline ---
-    public List<string> GetLocalList()
-    {
-        return local_quests_data.Select(d => d.Key).ToList<string>();
-    }
-
     public void loadAllLocalQuests()
     {
         local_quests_data = QuestLoader.GetQuests();
         SortQuests(true);
     }
 
-}
-
-// Class for quest selection window
-public class QuestDownload2 : MonoBehaviour
-{
-    private WWW download;
-
-    /// <summary>
-    /// Download required files then draw screen
-    /// </summary>
-    void Start()
-    {
-        new LoadingScreen(new StringKey("val", "DOWNLOAD_LIST").Translate());
-    }
-
-    /// <summary>
-    /// Select to download
-    /// </summary>
-    /// <param name="key">Quest name to download</param>
-    public void Download(string key)
-    {
-        string package = Game.Get().questsList.remote_quests_data[key].package_url + key + ".valkyrie";
-        StartCoroutine(Download(package, delegate { Save(key); }));
-    }
-
-    /// <summary>
-    /// Called after download finished to save to disk
-    /// </summary>
-    /// <param name="key">Quest name to download</param>
-    private void Save(string key)
-    {
-        QuestLoader.mkDir(ContentData.DownloadPath());
-
-        // Write to disk
-        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
-        {
-            writer.Write(download.bytes);
-            writer.Close();
-        }
-
-        Game.Get().questsList.remote_quests_data[key].downloaded = true;
-    }
-
-    /// <summary>
-    /// Download and call function
-    /// </summary>
-    /// <param name="file">Path to download</param>
-    /// <param name="call">function to call on completion</param>
-    private IEnumerator Download(string file, UnityEngine.Events.UnityAction call)
-    {
-        download = new WWW(file);
-        yield return download;
-        if (!string.IsNullOrEmpty(download.error))
-        {
-            // fixme not fatal
-            ValkyrieDebug.Log("Error while downloading :" + file);
-            ValkyrieDebug.Log(download.error);
-            //Application.Quit();
-        } else
-        {
-            call();
-        }
-    }
 }

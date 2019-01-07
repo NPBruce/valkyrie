@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
+using System.IO;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for quest selection window
     public class QuestSelectionScreen
     {
+        // List of Quest.QuestData to display (either local or remote)
         List<string> questList = null;
+
+        // Persistent UI Element (access and modified later)
         UIElement text_number_of_filtered_scenario = null;
         UIElementScrollVertical scrollArea = null;
         UIElement sortOptionsPopup = null;
@@ -16,7 +20,6 @@ namespace Assets.Scripts.UI.Screens
 
         // Class to handle async images to display
         ImgAsyncLoader images_list = null;
-
 
         Game game = null;
 
@@ -651,45 +654,21 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
 
-                // Required expansions
-                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
-                Color expansion_text_color = Color.black;
-                float expansion_x_offset = 0.5f;
-                float expansion_y_offset = offset + 5.1f;
-                List<string> expansion_symbols = new List<string>();
-                foreach (string pack in q.packs)
-                {
-                    string pack_symbol = game.cd.packSymbol[pack].Translate();
-                    if (pack_symbol != "" && !expansion_symbols.Contains(pack_symbol))
-                    {
-                        expansion_symbols.Add(pack_symbol);
-                        if (missing_packs.Contains(pack))
-                            expansion_text_color = Color.red;
-                        else
-                            expansion_text_color = Color.black;
-                        ui = new UIElement(scrollArea.GetScrollTransform());
-                        float symbol_width = ui.GetStringWidth(pack_symbol);
-                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
-                        ui.SetText(pack_symbol, expansion_text_color);
-                        ui.SetBGColor(Color.clear);
-                        ui.SetButton(delegate { Selection(key); });
-                        expansion_x_offset += symbol_width - 0.25f;
-                    }
-                }
-
                 string name_translation = "";
                 string synopsys_translation = "";
                 if (game.questsList.download_done)
                 {
                     // quest name is local language, or default language
-                    if (q.languages_name != null && !q.languages_name.TryGetValue(game.currentLang, out name_translation))
+                    if (q.languages_name != null &&
+                        !q.languages_name.TryGetValue(game.currentLang, out name_translation))
                     {
-                        name_translation = q.languages_name[q.defaultLanguage];
+                        q.languages_name.TryGetValue(q.defaultLanguage, out name_translation);
                     }
                     // same thing for synopsys: local language, or default language
-                    if (q.languages_synopsys != null && !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
+                    if ( q.languages_synopsys != null &&
+                        !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
                     {
-                        synopsys_translation = q.languages_synopsys[q.defaultLanguage];
+                        q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
                     }
                 }
                 else
@@ -715,6 +694,7 @@ namespace Assets.Scripts.UI.Screens
                 synopsys_translation = "The Gordon family has contacted you to find their daughter, Felicia. " +
                     "The last clue is an appointment in her personal diary: 22.30h at the bird shop";
 
+                // Quest short description (synopsys)
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(5f, offset + 1.7f, UIScaler.GetRight(-11f) - 5, 2f);
@@ -726,7 +706,58 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontStyle(FontStyle.Italic);
                 ui.SetFont(game.gameType.GetHeaderFont());
 
+
+                // Action Button
+                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetBGColor(Color.clear);
+                ui.SetLocation(UIScaler.GetRight(-11f), offset + 1.5f, 8, 2f);
+                ui.SetTextPadding(0.5f);
+                if(q.downloaded)
+                {
+                    if (q.update_available)
+                        ui.SetText("UPDATE");
+                    else
+                        ui.SetText("PLAY");
+                }
+                else
+                {
+                        ui.SetText("DOWNLOAD");
+                }
+                ui.SetButton(delegate { Selection(key); });
+                ui.SetTextAlignment(TextAnchor.MiddleCenter);
+                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.1f));
+                ui.SetFontStyle(FontStyle.Bold);
+                ui.SetFont(game.gameType.GetHeaderFont());
+
+
+                // all texts below use this y value as reference
                 float top_text_y = offset + 4.1f;
+
+                // Required expansions
+                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
+                Color expansion_text_color = Color.black;
+                float expansion_x_offset = 0.5f;
+                float expansion_y_offset = top_text_y + 1f;
+                List<string> expansion_symbols = new List<string>();
+                foreach (string pack in q.packs)
+                {
+                    string pack_symbol = game.cd.packSymbol[pack].Translate();
+                    if (pack_symbol != "" && !expansion_symbols.Contains(pack_symbol))
+                    {
+                        expansion_symbols.Add(pack_symbol);
+                        if (missing_packs.Contains(pack))
+                            expansion_text_color = Color.red;
+                        else
+                            expansion_text_color = Color.black;
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        float symbol_width = ui.GetStringWidth(pack_symbol);
+                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
+                        ui.SetText(pack_symbol, expansion_text_color);
+                        ui.SetBGColor(Color.clear);
+                        ui.SetButton(delegate { Selection(key); });
+                        expansion_x_offset += symbol_width - 0.25f;
+                    }
+                }
 
                 // Duration
                 if (q.lengthMax != 0)
@@ -865,25 +896,40 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.MainMenu();
         }
 
-        // Return to main menu
-        public void Download()
+        /// <summary>
+        /// Select to delete
+        /// </summary>
+        /// <param file="file">File name to delete</param>
+        public void Delete(string file)
         {
-            Destroyer.Dialog();
-            GameObject download = new GameObject("downloadPage");
-            download.tag = Game.QUESTUI;
-            download.AddComponent<QuestDownload>();
+            string toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + file;
+            File.Delete(toDelete);
+            ReloadQuestList();
         }
 
         // Select a quest
         public void Selection(string key)
         {
-            Destroyer.Dialog();
+            QuestData.Quest q = game.questsList.getQuestData(key);
 
-            CleanQuestList();
-
-            new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
+            if ((q.downloaded && !q.update_available))
+            {
+                // Play
+                Destroyer.Dialog();
+                CleanQuestList();
+                new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
+            }
+            else
+            {
+                // Download / Update
+                Destroyer.Dialog();
+                CleanQuestList();
+                GameObject download = new GameObject("downloadPage");
+                download.tag = Game.QUESTUI;
+                QuestDownload qd = download.AddComponent<QuestDownload>();
+                qd.Download(key);
+            }
         }
-
 
 
         private class ImgAsyncLoader
