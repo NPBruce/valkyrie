@@ -521,3 +521,11 @@ AUTHORS_SHORT,Single text line for Authors (for "sort by author" option)
 AUTHORS_UNKNOWN,Unknown authors (needs a scenario update by author)
 
 SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Updated this week
+UPDATED_THIS_MONTH,Updated this month
+UPDATED_THIS_TRIMESTER,Updated this trimester
+UPDATED_THIS_SEMESTER,Updated this semester
+UPDATED_THIS_YEAR,Updated this year
+UPDATED_TWO_YEARS_AGO,Updated two years ago
+UPDATE_OLDER_THAN_TWO_YEAR,Latest update older than two years

@@ -54,6 +54,9 @@ namespace Assets.Scripts.UI.Screens
         // sort options
         string sort_criteria = "rating";
         string sort_order = "descending";
+        string last_author = "";
+        StringKey last_update_info = null;
+        SortedDictionary<float, StringKey> nbDays_durationText = null;
 
         // textures
         Texture2D scroll_paper = null;
@@ -67,29 +70,65 @@ namespace Assets.Scripts.UI.Screens
         {
             game = Game.Get();
 
-            // Initialize filters
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // initalize list of langs
             langs_selected = new Dictionary<string, bool>();
             foreach (string lang in langs)
             {
                 // initialize dict
-                langs_selected.Add(lang, true);
+                langs_selected.Add(lang, false);
             }
-            langs_selected["Japanese"] = false;
-            langs_selected["Czech"] = false;
 
-            // initialize text indicator for filtered scenario
-            text_number_of_filtered_scenario = new UIElement();
-            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
-            text_number_of_filtered_scenario.SetText(" ");
-            text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
-            text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
-            text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
+            // apply lang configuration
+            if (config_values.ContainsKey("filterLangs"))
+            {
+                // saved configuration
+                foreach (string lang in config_values["filterLangs"].Split(';'))
+                {
+                    if(langs_selected.ContainsKey(lang))
+                        langs_selected[lang] = true;
+                }
+            }
+            else
+            {
+                // default configuration
+                foreach (string lang in langs)
+                {
+                    // initialize dict
+                    langs_selected[lang] = true;
+                }
+                langs_selected["Japanese"] = false;
+                langs_selected["Czech"] = false;
+            }
+
+            if (config_values.ContainsKey("filterMissingExpansions"))
+            {
+                filter_missing_expansions = false;
+                bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
+            }
 
             // check if connected on internet, and display scenario list accordingly (local or online)
             if (game.questsList.download_done)
             {
-                sort_criteria = "rating";
-                sort_order = "descending";
+                if (config_values.ContainsKey("sortCriteria"))
+                {
+                    sort_criteria = config_values["sortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "rating";
+                }
+
+                if (config_values.ContainsKey("sortOrder"))
+                {
+                    sort_order = config_values["sortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
             }
             else
             {
@@ -98,6 +137,16 @@ namespace Assets.Scripts.UI.Screens
                 sort_criteria = "name";
                 sort_order = "ascending";
             }
+
+            // initialize sort information
+            nbDays_durationText = new SortedDictionary<float, StringKey>();
+            nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
+            nbDays_durationText.Add(30, new StringKey("val", "UPDATED_THIS_MONTH"));
+            nbDays_durationText.Add(90, new StringKey("val", "UPDATED_THIS_TRIMESTER"));
+            nbDays_durationText.Add(180, new StringKey("val", "UPDATED_THIS_SEMESTER"));
+            nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
+            nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
+            nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
 
             // Get sorted list
             questList = game.questsList.GetList(sort_criteria);
@@ -143,6 +192,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { Cancel(); });
             new UIElementBorder(ui, Color.red);
+
+            // initialize text indicator for filtered scenario
+            text_number_of_filtered_scenario = new UIElement();
+            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
+            text_number_of_filtered_scenario.SetText(" ");
+            text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
+            text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
+            text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
 
             // Show filter button
             ui = new UIElement();
@@ -213,7 +270,7 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_OFF);
             filter_missing_expansions_text.SetFont(game.gameType.GetHeaderFont());
             filter_missing_expansions_text.SetFontSize(UIScaler.GetMediumFont());
-            filter_missing_expansions_text.SetButton(delegate { FilterMissingExpansions(); });
+            filter_missing_expansions_text.SetButton(delegate { SetFilterMissingExpansions(); });
 
             // OK button closes popup and refresh quest list
             ui = new UIElement(filtersPopup.GetTransform());
@@ -226,8 +283,13 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui);
         }
 
-        private void FilterMissingExpansions()
+        private void SetFilterMissingExpansions()
         {
+            // save filter configuration
+            game.config.data.Add("UserConfig", "filterMissingExpansions", (!filter_missing_expansions).ToString());
+            game.config.Save();
+
+            // update configuration
             if (filter_missing_expansions)
             {
                 filter_missing_expansions = false;
@@ -258,14 +320,14 @@ namespace Assets.Scripts.UI.Screens
                 flagTex = Resources.Load("sprites/flags/" + lang) as Texture2D;
                 ui.SetLocation(x_offset, y_offset, flag_size, flag_size);
                 ui.SetImage(flagTex);
-                ui.SetButton(delegate { FilterLang(lang); });
+                ui.SetButton(delegate { SetFilterLang(lang); });
 
                 if (!activated)
                 {
                     ui = new UIElement(filtersPopup.GetTransform());
                     ui.SetLocation(x_offset, y_offset, flag_size, flag_size);
                     ui.SetBGColor(new Color(0, 0, 0, 0.8f));
-                    ui.SetButton(delegate { FilterLang(lang); });
+                    ui.SetButton(delegate { SetFilterLang(lang); });
                 }
 
                 x_offset += flag_size + 0.3f;
@@ -298,10 +360,31 @@ namespace Assets.Scripts.UI.Screens
         }
 
 
-        private void FilterLang(string lang)
+        private void SetFilterLang(string lang)
         {
+            // update configuration
             langs_selected[lang] = !langs_selected[lang];
-            // lazy : display on top
+
+            // count active langs
+            string list_langs = "";
+            foreach (KeyValuePair<string, bool> ls in langs_selected)
+            {
+                if (ls.Value) list_langs += ls.Key + ";";
+            }
+
+            // ignore last flag deactivation
+            if (list_langs.Length == 0)
+            {
+                langs_selected[lang] = !langs_selected[lang];
+                return;
+            }
+
+            // save filter configuration
+            list_langs = list_langs.Substring(0, list_langs.Length - 1);
+            game.config.data.Add("UserConfig", "filterLangs", list_langs);
+            game.config.Save();
+
+            // lazy : display new flag on top
             DrawFlags();
         }
 
@@ -480,14 +563,76 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui, descending_color);
         }
 
+        private float DrawSortInfo(string key, float offset)
+        {
+            switch (sort_criteria)
+            {
+                 case "author":
+                    string current_author = game.questsList.getQuestData(key).GetShortAuthor();
+                    if(current_author != last_author)
+                    {
+                        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(1f, offset+0.4f, UIScaler.GetWidthUnits() - 5f, 2f);
+                        ui.SetText(current_author, Color.black);
+                        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+                        ui.SetFontSize(UIScaler.GetMediumFont());
+                        ui.SetBGColor(Color.grey);
+                        last_author = current_author;
+                        offset += 2.7f;
+                    }
+                    break;
+
+                case "date":
+                    System.DateTime currentQuestDate = game.questsList.getQuestData(key).latest_update;
+                    float nb_days_since_update = (System.DateTime.Today - currentQuestDate).Days;
+                    StringKey current_update_information = null;
+
+                    foreach (KeyValuePair<float,StringKey> duration_text in nbDays_durationText)
+                    {
+                        if(nb_days_since_update < duration_text.Key)
+                        {
+                            current_update_information = duration_text.Value;
+                            break;
+                        }
+                    }
+
+                    if (current_update_information != last_update_info)
+                    {
+                        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                        ui.SetLocation(1f, offset + 0.4f, UIScaler.GetWidthUnits() - 5f, 2f);
+                        ui.SetText(current_update_information, Color.black);
+                        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                        ui.SetFont(Game.Get().gameType.GetHeaderFont());
+                        ui.SetFontSize(UIScaler.GetMediumFont());
+                        ui.SetBGColor(Color.grey);
+                        last_update_info = current_update_information;
+                        offset += 2.6f;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            
+            return offset;
+        }
+
         public void SetSort(string sort_selected_option)
         {
+            // save sort configuration
+            game.config.data.Add("UserConfig", "sortCriteria", sort_selected_option);
+            game.config.data.Add("UserConfig", "sortOrder", sort_order);
+            game.config.Save();
+
+            // apply sort configuration
             sort_criteria = sort_selected_option;
 
             questList = Game.Get().questsList.GetList(sort_selected_option);
             if (sort_order == "descending")
                 questList.Reverse();
 
+            // update sort popup
             DrawSortCriteriaButtons();
         }
 
@@ -574,6 +719,10 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(scrollArea, Color.grey);
             }
 
+            // reset sort information
+            last_author = "";
+            last_update_info = null;
+
             // Loop through all available quests
             foreach (string key in questList)
             {
@@ -609,6 +758,36 @@ namespace Assets.Scripts.UI.Screens
                     stats_avg_duration = (int)(q_stats.scenario_avg_duration);
                     stats_rating = q_stats.scenario_avg_rating / 10;
                 }
+
+                // Get data translation
+                string name_translation = "";
+                string synopsys_translation = "";
+                if (game.questsList.download_done)
+                {
+                    // quest name is local language, or default language
+                    if (q.languages_name != null &&
+                        !q.languages_name.TryGetValue(game.currentLang, out name_translation))
+                    {
+                        q.languages_name.TryGetValue(q.defaultLanguage, out name_translation);
+                    }
+                    // same thing for synopsys: local language, or default language
+                    if (q.languages_synopsys != null &&
+                        !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
+                    {
+                        q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
+                    }
+                }
+                else
+                {
+                    LocalizationRead.AddDictionary("qst", q.localizationDict);
+                    name_translation = q.name.Translate();
+                    LocalizationRead.AddDictionary("qst", q.localizationDict);
+                    synopsys_translation = q.synopsys.Translate();
+                }
+
+
+                // Text information displayed depending on sort option
+                offset = DrawSortInfo(key, offset);
 
                 // Frame
                 frame = new UIElement(scrollArea.GetScrollTransform());
@@ -654,31 +833,6 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
 
-                string name_translation = "";
-                string synopsys_translation = "";
-                if (game.questsList.download_done)
-                {
-                    // quest name is local language, or default language
-                    if (q.languages_name != null &&
-                        !q.languages_name.TryGetValue(game.currentLang, out name_translation))
-                    {
-                        q.languages_name.TryGetValue(q.defaultLanguage, out name_translation);
-                    }
-                    // same thing for synopsys: local language, or default language
-                    if ( q.languages_synopsys != null &&
-                        !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
-                    {
-                        q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
-                    }
-                }
-                else
-                {
-                    LocalizationRead.AddDictionary("qst", q.localizationDict);
-                    name_translation = q.name.Translate();
-                    LocalizationRead.AddDictionary("qst", q.localizationDict);
-                    synopsys_translation = q.synopsys.Translate();
-                }
-
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
@@ -689,10 +843,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
-
-                // Synopsys TODO remove
-                synopsys_translation = "The Gordon family has contacted you to find their daughter, Felicia. " +
-                    "The last clue is an appointment in her personal diary: 22.30h at the bird shop";
 
                 // Quest short description (synopsys)
                 ui = new UIElement(scrollArea.GetScrollTransform());
@@ -705,7 +855,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
                 ui.SetFontStyle(FontStyle.Italic);
                 ui.SetFont(game.gameType.GetHeaderFont());
-
 
                 // Action Button
                 ui = new UIElement(scrollArea.GetScrollTransform());

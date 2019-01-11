@@ -2297,6 +2297,8 @@ public class QuestData
         public Dictionary<string, string> languages_name = null;
         // languages availables with synopsys name <"English", "This is the synopsys">
         public Dictionary<string, string> languages_synopsys = null;
+        // languages availables with synopsys name <"English", "Authors in one line">
+        public Dictionary<string, string> languages_authors_short = null;
         // URL of the package
         public string package_url = "";
         // latest_update date if file is stored on Github
@@ -2305,17 +2307,18 @@ public class QuestData
         public bool downloaded = false;
         public bool update_available = false;
 
+        // -- data inside translation file (for unzipped quest)
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
         public string synopsys_key { get { return "quest.synopsys"; } }
         public string authors_key { get { return "quest.authors"; } }
-        public string short_authors_key { get { return "quest.short_authors"; } }
+        public string authors_short_key { get { return "quest.authors_short"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
         public StringKey synopsys { get { return new StringKey("qst", synopsys_key); } }
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
-        public StringKey short_authors { get { return new StringKey("qst", short_authors_key); } }
+        public StringKey authors_short { get { return new StringKey("qst", authors_short_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -2503,6 +2506,18 @@ public class QuestData
                 }
             }
 
+            languages_authors_short = new Dictionary<string, string>();
+            if (iniData.ContainsKey("authors_short." + defaultLanguage))
+            {
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("authors_short."))
+                    {
+                        languages_authors_short.Add(kv.Key.Substring(14), kv.Value);
+                    }
+                }
+            }
+
             package_url = "";
             if (iniData.ContainsKey("url"))
             {
@@ -2577,7 +2592,10 @@ public class QuestData
                 r.Append("synopsys." + kv.Key + "=").AppendLine(kv.Value);
             }
 
-            r.Append("authors_short=").AppendLine(GetShortAuthor());
+            foreach (KeyValuePair<string, string> kv in languages_authors_short)
+            {
+                r.Append("authors_short." + kv.Key + "=").AppendLine(kv.Value);
+            }
 
             return r.ToString();
         }
@@ -2597,14 +2615,33 @@ public class QuestData
 
         public string GetShortAuthor()
         {
-            string sa = short_authors.Translate();
-            // if not translated, it means short_authors is not found
-            if (sa==short_authors.fullKey)
-            {
-                return (new StringKey("val", "AUTHORS_UNKNOWN").Translate());
+            string authors_short_translation = "";
+
+            // if languages_authors_short is available, we are in scenarios explorer and don't have access to .txt files yet
+            if (languages_authors_short != null) {
+                // Try to get current language
+                if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
+                {
+                    // Try to get default language
+                    if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))
+                    {
+                        // if not translated, returns unknown
+                        authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                    }
+                }
             }
-            Debug.Log("sa " + sa + "\nshort_authors.Translate() " + short_authors.Translate() + "\nshort_authors.fullKey "  + short_authors.fullKey);
-            return sa;
+            else
+            {
+                authors_short_translation = authors_short.Translate();
+                // if not translated, it means authors_short is not found in txt files
+                if (authors_short_translation == authors_short.fullKey)
+                {
+                    authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                }
+                Debug.Log("sa " + authors_short_translation + "\nauthors_short.Translate() " + authors_short.Translate() + "\nauthors_short.fullKey " + authors_short.fullKey);
+            }
+
+            return authors_short_translation;
         }
     }
 }

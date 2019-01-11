@@ -24,7 +24,7 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditablePaneled descriptionUIE;
     public UIElementEditablePaneled synopsysUIE;
     public UIElementEditablePaneled authorsUIE;
-    public UIElementEditablePaneled short_authorsUIE;
+    public UIElementEditablePaneled authors_shortUIE;
 
     // Quest is a special component with meta data
     public EditorComponentQuest()
@@ -121,13 +121,13 @@ public class EditorComponentQuest : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS_SHORT")));
         ui.SetTextAlignment(TextAnchor.MiddleLeft);
 
-        short_authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
-        short_authorsUIE.SetLocation(0.5f, offset, 19, 1f);
+        authors_shortUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+        authors_shortUIE.SetLocation(0.5f, offset, 19, 1f);
 
-        short_authorsUIE.SetText(game.quest.qd.quest.short_authors.Translate(true));
-        offset += short_authorsUIE.HeightToTextPadding(0);
-        short_authorsUIE.SetButton(delegate { UpdateQuestShortAuth(); });
-        new UIElementBorder(short_authorsUIE);
+        authors_shortUIE.SetText(game.quest.qd.quest.authors_short.Translate(true));
+        offset += authors_shortUIE.HeightToTextPadding(0);
+        authors_shortUIE.SetButton(delegate { UpdateQuestShortAuth(); });
+        new UIElementBorder(authors_shortUIE);
         offset += 1;
         
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -351,17 +351,17 @@ public class EditorComponentQuest : EditorComponent
 
     public void UpdateQuestShortAuth()
     {
-        if (short_authorsUIE.Changed())
+        if (authors_shortUIE.Changed())
         {
-            if (short_authorsUIE.Empty())
+            if (authors_shortUIE.Empty())
             {
-                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.short_authors_key);
+                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.authors_short_key);
             }
             else
             {
-                LocalizationRead.updateScenarioText(game.quest.qd.quest.short_authors_key, short_authorsUIE.GetText());
+                LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_short_key, authors_shortUIE.GetText());
             }
-            if (!short_authorsUIE.HeightAtTextPadding(0))
+            if (!authors_shortUIE.HeightAtTextPadding(0))
             {
                 Update();
             }

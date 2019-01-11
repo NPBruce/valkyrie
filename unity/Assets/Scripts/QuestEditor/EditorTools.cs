@@ -142,6 +142,21 @@ public class EditorTools
             // Restore icon
             game.quest.qd.quest.image = icon;
 
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
+            {
+                manifest += "name." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.synopsys"))
+            {
+                manifest += "synopsys." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.authors_short"))
+            {
+                manifest += "authors_short." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
             File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);
         }
         catch (System.IO.IOException e)
