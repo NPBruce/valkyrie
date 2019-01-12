@@ -199,9 +199,9 @@ namespace Assets.Scripts.UI.Screens
             // In D2E there is an additional language
             // It can change in future
 
-            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Russian,Chinese".Split(',');
             // For now, English and Spanish languages available.
-            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese,Polish,Chinese".Split(','));
+            HashSet<string> enabled_langs = new HashSet<string> ("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-1f) - langs.Length;
