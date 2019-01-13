@@ -43,46 +43,20 @@ public class QuestDownload : MonoBehaviour
     public void Save(string key)
     {
         QuestData.Quest q = game.questsList.getQuestData(key);
-        QuestLoader.mkDir(saveLocation());
+        QuestLoader.mkDir(ContentData.DownloadPath());
 
         // Write to disk
-        using (BinaryWriter writer = new BinaryWriter(File.Open(saveLocation() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();
         }
-
-        IniData localManifest = IniRead.ReadFromString("");
-        if (File.Exists(saveLocation() + "/manifest.ini"))
-        {
-            localManifest = IniRead.ReadFromIni(saveLocation() + "/manifest.ini");
-        }
-
-        localManifest.Remove(key);
-
-        IniData downloaded_quest = IniRead.ReadFromString(q.ToString());
-        localManifest.Add(key, downloaded_quest.data["Quest"]);
-
-        if (File.Exists(saveLocation() + "/manifest.ini"))
-        {
-            File.Delete(saveLocation() + "/manifest.ini");
-        }
-        File.WriteAllText(saveLocation() + "/manifest.ini", localManifest.ToString());
 
         // update quest status : downloaded/updated
         game.questsList.SetAvailable(key);
 
         Destroyer.Dialog();
         game.questSelectionScreen.Show();
-    }
-
-    /// <summary>
-    /// Get download directory without trailing '/'
-    /// </summary>
-    /// <returns>location to save packages</returns>
-    public string saveLocation()
-    {
-        return ContentData.DownloadPath();
     }
 
     /// <summary>

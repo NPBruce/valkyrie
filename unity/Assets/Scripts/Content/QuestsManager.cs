@@ -105,9 +105,35 @@ public class QuestsManager
         }
     }
     
-    public void SetAvailable(string key)
+    public void SetAvailable(string key, bool isAvailable=true)
     {
-        remote_quests_data[key].downloaded = true;
+        // update list of local quest
+        IniData localManifest = IniRead.ReadFromString("");
+        string saveLocation = ContentData.DownloadPath();
+
+        if (File.Exists(saveLocation + "/manifest.ini"))
+        {
+            localManifest = IniRead.ReadFromIni(saveLocation + "/manifest.ini");
+        }
+
+        if(isAvailable)
+        {
+            IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
+            localManifest.Add(key, downloaded_quest.data["Quest"]);
+        }
+        else
+        {
+            localManifest.Remove(key);
+        }
+
+        if (File.Exists(saveLocation + "/manifest.ini"))
+        {
+            File.Delete(saveLocation + "/manifest.ini");
+        }
+        File.WriteAllText(saveLocation + "/manifest.ini", localManifest.ToString());
+
+        // update status quest
+        remote_quests_data[key].downloaded = isAvailable;
         remote_quests_data[key].update_available = false;
     }
 

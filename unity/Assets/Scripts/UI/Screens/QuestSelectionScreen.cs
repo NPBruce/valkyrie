@@ -65,6 +65,7 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_download = null;
         Texture2D button_update = null;
         Texture2D button_play = null;
+        Texture2D button_hole = null;
 
         public QuestSelectionScreen()
         {
@@ -160,11 +161,10 @@ namespace Assets.Scripts.UI.Screens
             scroll_paper = Resources.Load("sprites/scenario_list/scroll_paper") as Texture2D;
             picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
             picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
-
-            //TODO
-            //button_download = null;
-            //button_update = null;
-            //button_play = null;
+            button_hole = Resources.Load("sprites/scenario_list/button_hole") as Texture2D;
+            button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
+            button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
+            button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
         }
 
         public void Show()
@@ -857,27 +857,28 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFont(game.gameType.GetHeaderFont());
 
                 // Action Button
+                // - First burnt hole
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(UIScaler.GetRight(-11f), offset + 1.5f, 8, 2f);
-                ui.SetTextPadding(0.5f);
+                ui.SetLocation(UIScaler.GetRight(-10.5f), offset + 0.5f, 6, 4f);
+                ui.SetImage(button_hole);
+                ui.SetButton(delegate { Selection(key); });
+                // - then action button
+                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetBGColor(Color.clear);
+                ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
                 if(q.downloaded)
                 {
                     if (q.update_available)
-                        ui.SetText("UPDATE");
+                        ui.SetImage(button_update);
                     else
-                        ui.SetText("PLAY");
+                        ui.SetImage(button_play);
                 }
                 else
                 {
-                        ui.SetText("DOWNLOAD");
+                    ui.SetImage(button_download);
                 }
                 ui.SetButton(delegate { Selection(key); });
-                ui.SetTextAlignment(TextAnchor.MiddleCenter);
-                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.1f));
-                ui.SetFontStyle(FontStyle.Bold);
-                ui.SetFont(game.gameType.GetHeaderFont());
-
 
                 // all texts below use this y value as reference
                 float top_text_y = offset + 4.1f;
@@ -1001,14 +1002,14 @@ namespace Assets.Scripts.UI.Screens
 
                     ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
                     score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, (int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f)) + 1;
-                    ui.SetLocation(UIScaler.GetRight(-9f), top_text_y + 0.5f, score_text_width, 1.5f);
+                    ui.SetLocation(UIScaler.GetRight(-10f), top_text_y + 0.5f, score_text_width, 1.5f);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize((int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f));
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetButton(delegate { Selection(key); });
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetRight(-9) + (stats_rating * (score_text_width - 1)), top_text_y + 0.5f, (1 - stats_rating) * score_text_width, 1.5f);
+                    ui.SetLocation(UIScaler.GetRight(-10) + (stats_rating * (score_text_width - 1)), top_text_y + 0.5f, (1 - stats_rating) * score_text_width, 1.5f);
                     ui.SetBGColor(new Color(1, 1, 1, 0.7f));
                     ui.SetButton(delegate { Selection(key); });
 
@@ -1017,7 +1018,7 @@ namespace Assets.Scripts.UI.Screens
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     user_review_text_width = ui.GetStringWidth(STATS_NB_USER_REVIEWS, UIScaler.GetSmallFont()) + 1;
                     ui.SetText(STATS_NB_USER_REVIEWS, Color.black);
-                    ui.SetLocation(UIScaler.GetRight(-9) - (user_review_text_width), top_text_y + 0.7f, user_review_text_width, 1);
+                    ui.SetLocation(UIScaler.GetRight(-10) - (user_review_text_width), top_text_y + 0.7f, user_review_text_width, 1);
                     ui.SetTextAlignment(TextAnchor.MiddleRight);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(UIScaler.GetSmallFont());
@@ -1043,17 +1044,6 @@ namespace Assets.Scripts.UI.Screens
         public void Cancel()
         {
             Destroyer.MainMenu();
-        }
-
-        /// <summary>
-        /// Select to delete
-        /// </summary>
-        /// <param file="file">File name to delete</param>
-        public void Delete(string file)
-        {
-            string toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + file;
-            File.Delete(toDelete);
-            ReloadQuestList();
         }
 
         // Select a quest
