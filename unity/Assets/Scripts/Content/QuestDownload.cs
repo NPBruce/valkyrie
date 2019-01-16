@@ -42,19 +42,18 @@ public class QuestDownload : MonoBehaviour
     /// <param name="key">Quest id</param>
     public void Save(string key)
     {
-        QuestData.Quest q = game.questsList.getQuestData(key);
-        QuestLoader.mkDir(ContentData.DownloadPath());
-
         // Write to disk
+        QuestLoader.mkDir(ContentData.DownloadPath());
         using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();
         }
 
-        // update quest status : downloaded/updated
+        // update local list of quest and current status 
         game.questsList.SetAvailable(key);
 
+        // cleanup screen and go back to list of quests
         Destroyer.Dialog();
         game.questSelectionScreen.Show();
     }

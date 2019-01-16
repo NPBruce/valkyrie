@@ -166,6 +166,15 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Set the text Horizontal overflow</summary>
+        /// <param name="mode">wrap or overflow</param>
+        public virtual void SetTextHorizontalOverflow(HorizontalWrapMode mode)
+        {
+            if (text == null) return;
+            text.GetComponent<UnityEngine.UI.Text>().horizontalOverflow = mode;
+        }
+
+        /// <summary>
         /// Add button press event to element.</summary>
         /// <param name="call">Function to call on button press.</param>
         /// <remarks>
@@ -317,6 +326,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetFont(Font font)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetFont called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().font = font;
         }
 
@@ -327,6 +337,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetTextAlignment(TextAnchor align)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetTextAlignment called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().alignment = align;
         }
 

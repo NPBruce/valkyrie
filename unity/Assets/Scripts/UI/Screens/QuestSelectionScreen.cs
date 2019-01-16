@@ -11,7 +11,7 @@ namespace Assets.Scripts.UI.Screens
         // List of Quest.QuestData to display (either local or remote)
         List<string> questList = null;
 
-        // Persistent UI Element (access and modified later)
+        // Persistent UI Element
         UIElement text_number_of_filtered_scenario = null;
         UIElementScrollVertical scrollArea = null;
         UIElement sortOptionsPopup = null;
@@ -23,6 +23,7 @@ namespace Assets.Scripts.UI.Screens
 
         Game game = null;
 
+        // texts
         private readonly StringKey SORT_TITLE = new StringKey("val", "SORT_TITLE");
         private readonly StringKey SORT_SELECT_CRITERIA = new StringKey("val", "SORT_SELECT_CRITERIA");
         private readonly StringKey SORT_SELECT_ORDER = new StringKey("val", "SORT_SELECT_ORDER");
@@ -45,6 +46,9 @@ namespace Assets.Scripts.UI.Screens
 
         private readonly StringKey STATS_NO_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_NO_AVERAGE_WIN_RATIO");
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
+
+        // text colors
+        private readonly Color grey_text = new Color(0.8f, 0.8f, 0.8f);
 
         // filters
         string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
@@ -836,7 +840,7 @@ namespace Assets.Scripts.UI.Screens
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset + 0.2f, UIScaler.GetWidthUnits() - 8, 1.5f);
+                ui.SetLocation(5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(name_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
@@ -954,22 +958,30 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetBGColor(Color.clear);
 
                     string difficulty_symbol = "π"; // will
+                    int font_size = (int)System.Math.Round(UIScaler.GetSmallFont() * 1.1f);
                     if (game.gameType is MoMGameType)
                     {
                         difficulty_symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
                     }
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter(), top_text_y, 9, 1);
-                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
-                    ui.SetTextAlignment(TextAnchor.LowerLeft);
-                    ui.SetBGColor(Color.clear);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { Selection(key); });
+                    float difficulty_string_width = 0;
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter() + 1.05f + (q.difficulty * 6.9f), top_text_y-0.1f, (1 - q.difficulty) * 6.9f, 1.2f);
-                    ui.SetBGColor(new Color(1, 1, 1, 0.7f));
+                    difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
+                    ui.SetLocation(UIScaler.GetHCenter(), top_text_y + 0.1f, difficulty_string_width+1, 1);
+                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_text);
+                    ui.SetTextAlignment(TextAnchor.LowerLeft);
+                    ui.SetBGColor(Color.clear);
+                    ui.SetFontSize(font_size);
                     ui.SetButton(delegate { Selection(key); });
+
+                    UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
+                    uic.SetLocation(UIScaler.GetHCenter(), top_text_y + 0.1f, difficulty_string_width, 1);
+                    uic.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
+                    uic.SetTextAlignment(TextAnchor.LowerLeft);
+                    uic.SetBGColor(Color.clear);
+                    uic.SetFontSize(font_size);
+                    uic.SetButton(delegate { Selection(key); });
+                    uic.CropHorizontal(q.difficulty);
                 }
 
                 //  average win ratio
@@ -990,39 +1002,48 @@ namespace Assets.Scripts.UI.Screens
                 //  rating
                 if (has_stats)
                 {
-                    StringKey STATS_NB_USER_REVIEWS = new StringKey("val", "STATS_NB_USER_REVIEWS", stats_play_count);
-                    string rating_symbol = "★";
-                    if (game.gameType is MoMGameType)
-                    {
-                        rating_symbol = new StringKey("val", "ICON_TENTACLE").Translate();
-                    }
-                    float score_text_width = 0;
-
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-
-                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
-                    score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, (int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f)) + 1;
-                    ui.SetLocation(UIScaler.GetRight(-10f), top_text_y + 0.5f, score_text_width, 1.5f);
-                    ui.SetBGColor(Color.clear);
-                    ui.SetFontSize((int)System.Math.Round(UIScaler.GetMediumFont() * 1.2f));
-                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                    ui.SetButton(delegate { Selection(key); });
-
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetRight(-10) + (stats_rating * (score_text_width - 1)), top_text_y + 0.5f, (1 - stats_rating) * score_text_width, 1.5f);
-                    ui.SetBGColor(new Color(1, 1, 1, 0.7f));
-                    ui.SetButton(delegate { Selection(key); });
-
                     //  Number of user reviews
+                    StringKey STATS_NB_USER_REVIEWS = new StringKey("val", "STATS_NB_USER_REVIEWS", stats_play_count);
                     float user_review_text_width = 0;
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     user_review_text_width = ui.GetStringWidth(STATS_NB_USER_REVIEWS, UIScaler.GetSmallFont()) + 1;
                     ui.SetText(STATS_NB_USER_REVIEWS, Color.black);
-                    ui.SetLocation(UIScaler.GetRight(-10) - (user_review_text_width), top_text_y + 0.7f, user_review_text_width, 1);
+                    ui.SetLocation(UIScaler.GetRight(-10.5f) - (user_review_text_width), top_text_y + 0.7f, user_review_text_width, 1);
                     ui.SetTextAlignment(TextAnchor.MiddleRight);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(UIScaler.GetSmallFont());
                     ui.SetButton(delegate { Selection(key); });
+
+                    // rating
+                    string rating_symbol = "★";
+                    int font_size = (int)System.Math.Round(UIScaler.GetMediumFont() * 1.05f);
+                    if (game.gameType is MoMGameType)
+                    {
+                        rating_symbol = new StringKey("val", "ICON_TENTACLE").Translate();
+                        font_size = (int)System.Math.Round(UIScaler.GetMediumFont() * 1.4f);
+                    }
+                    float score_text_width = 0;
+
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_text);
+                    score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, font_size);
+                    ui.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
+                    ui.SetBGColor(Color.clear);
+                    ui.SetFontSize(font_size);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
+                    ui.SetButton(delegate { Selection(key); });
+
+                    UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
+                    uic.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
+                    uic.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
+                    uic.SetBGColor(Color.clear);
+                    uic.SetFontSize(font_size);
+                    uic.SetTextAlignment(TextAnchor.MiddleLeft);
+                    uic.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
+                    uic.CropHorizontal(stats_rating);
+                    uic.SetButton(delegate { Selection(key); });
+
                 }
 
                 offset += 7.1f;
@@ -1043,6 +1064,8 @@ namespace Assets.Scripts.UI.Screens
         // Return to main menu
         public void Cancel()
         {
+            CleanQuestList();
+
             Destroyer.MainMenu();
         }
 
