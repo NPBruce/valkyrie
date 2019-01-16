@@ -456,3 +456,13 @@ FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scénario(s) ont été filtré
 
 AUTHORS_SHORT,Auteurs en une ligne de texte (pour  le "tri par auteurs")
 AUTHORS_UNKNOWN,Auteurs inconnus (le scénario doit être mis à jour pour avoir cette information)
+
+SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Mis à jour cette semaine
+UPDATED_THIS_MONTH,Mis à jour ce mois ci
+UPDATED_THIS_TRIMESTER,Mis à jour ces 3 derniers mois
+UPDATED_THIS_SEMESTER,Mis à jour ces 6 derniers mois
+UPDATED_THIS_YEAR,Mis à jour il y a moins d'un an
+UPDATED_TWO_YEARS_AGO,Mis à jour il y a moins de deux ans
+UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans 

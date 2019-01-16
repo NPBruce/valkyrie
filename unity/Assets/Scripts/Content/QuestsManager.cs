@@ -94,6 +94,9 @@ public class QuestsManager
         // load information on local quests
         IniData localManifest = IniRead.ReadFromIni(ContentData.DownloadPath() + "/manifest.ini");
 
+        if (localManifest == null)
+            return;
+
         // Update download status for each questData and check if update is available
         foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
         {
