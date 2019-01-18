@@ -29,8 +29,8 @@ public class QuestData
     public Quest quest;
 
     Game game;
-	
-	/// <summary>
+
+    /// <summary>
     /// Choise file for localization. 
     /// </summary>
     /// <param name="name">File name</param>
@@ -450,7 +450,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageName = value != null ? value.Replace('\\', '/') : value;
-				 imageName = ChoiseLocalizedSource(imageName, path);
+                imageName = ChoiseLocalizedSource(imageName, path);
             }
 
             if (data.ContainsKey("vunits"))
@@ -943,7 +943,7 @@ public class QuestData
             {
                 string value = data["audio"];
                 audio = value != null ? value.Replace('\\', '/') : value;
-				 audio = ChoiseLocalizedSource(audio, path);
+                audio = ChoiseLocalizedSource(audio, path);
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
@@ -952,7 +952,7 @@ public class QuestData
                 for (int i = 0; i < music.Count; i++)
                 {
                     music[i] = music[i].Replace('\\', '/');
-					 music[i] = ChoiseLocalizedSource(music[i], path);
+                    music[i] = ChoiseLocalizedSource(music[i], path);
                 }
             }
         }
@@ -1235,7 +1235,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
-				 imageType = ChoiseLocalizedSource(imageType, path);
+                imageType = ChoiseLocalizedSource(imageType, path);
             }
             if (data.ContainsKey("skill"))
             {
