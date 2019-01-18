@@ -29,6 +29,18 @@ public class QuestData
     public Quest quest;
 
     Game game;
+	
+	/// <summary>
+    /// Choise file for localization. 
+    /// </summary>
+    /// <param name="name">File name</param>
+    /// <param name="source">Path to file</param>
+    private static string ChoiseLocalizedSource(string name, string source)
+    {
+        if (System.IO.File.Exists(source + Path.DirectorySeparatorChar + Game.game.currentLang + Path.DirectorySeparatorChar + name))
+            return name = Game.game.currentLang + Path.DirectorySeparatorChar + name;
+        return name;
+    }
 
     // Create from quest loader entry
     public QuestData(QuestData.Quest q)
@@ -135,7 +147,7 @@ public class QuestData
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
                 // Add the section to our quest data
-                AddData(section.Key, section.Value, f);
+                AddData(section.Key, section.Value, Path.GetDirectoryName(questPath));
             }
 
             // Update all references to this component
@@ -438,6 +450,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageName = value != null ? value.Replace('\\', '/') : value;
+				 imageName = ChoiseLocalizedSource(imageName, path);
             }
 
             if (data.ContainsKey("vunits"))
@@ -930,6 +943,7 @@ public class QuestData
             {
                 string value = data["audio"];
                 audio = value != null ? value.Replace('\\', '/') : value;
+				 audio = ChoiseLocalizedSource(audio, path);
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
@@ -938,6 +952,7 @@ public class QuestData
                 for (int i = 0; i < music.Count; i++)
                 {
                     music[i] = music[i].Replace('\\', '/');
+					 music[i] = ChoiseLocalizedSource(music[i], path);
                 }
             }
         }
@@ -1220,6 +1235,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
+				 imageType = ChoiseLocalizedSource(imageType, path);
             }
             if (data.ContainsKey("skill"))
             {
