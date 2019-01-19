@@ -146,8 +146,8 @@ public class QuestData
             // Loop through all ini sections
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
-                // Add the section to our quest data
-                AddData(section.Key, section.Value, Path.GetDirectoryName(questPath));
+                // Add the section to our quest data. For the editor, turn off the choice of localization.
+                AddData(section.Key, section.Value, game.editMode ? f : Path.GetDirectoryName(questPath));
             }
 
             // Update all references to this component
