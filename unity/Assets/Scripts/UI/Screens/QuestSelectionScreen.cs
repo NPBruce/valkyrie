@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
 
         // text colors
-        private readonly Color grey_text = new Color(0.8f, 0.8f, 0.8f);
+        private readonly Color grey_text = new Color(0.1f, 0.1f, 0.1f, 0.50f);
 
         // filters
         string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
@@ -891,14 +891,14 @@ namespace Assets.Scripts.UI.Screens
                 List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
                 Color expansion_text_color = Color.black;
                 float expansion_x_offset = 0.5f;
-                float expansion_y_offset = top_text_y + 1f;
-                List<string> expansion_symbols = new List<string>();
+                float expansion_y_offset = top_text_y + 0.9f;
+                List<string> displayed_expansion_symbols = new List<string>();
                 foreach (string pack in q.packs)
                 {
-                    string pack_symbol = game.cd.packSymbol[pack].Translate();
-                    if (pack_symbol != "" && !expansion_symbols.Contains(pack_symbol))
+                    string pack_symbol = game.cd.packSymbol[pack].Translate(true);
+                    if (pack_symbol != "" && !displayed_expansion_symbols.Contains(pack_symbol))
                     {
-                        expansion_symbols.Add(pack_symbol);
+                        displayed_expansion_symbols.Add(pack_symbol);
                         if (missing_packs.Contains(pack))
                             expansion_text_color = Color.red;
                         else
@@ -909,7 +909,11 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(pack_symbol, expansion_text_color);
                         ui.SetBGColor(Color.clear);
                         ui.SetButton(delegate { Selection(key); });
-                        expansion_x_offset += symbol_width - 0.25f;
+                        ui.SetFont(game.gameType.GetSymbolFont());
+                        if(game.gameType.TypeName()=="MoM")
+                            expansion_x_offset += symbol_width - 0.2f;
+                        else
+                            expansion_x_offset += symbol_width - 0.1f;
                     }
                 }
 

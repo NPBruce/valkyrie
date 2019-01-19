@@ -16,6 +16,7 @@ public abstract class GameType
     // There are actually two fonts, should expand to include header/text
     public abstract Font GetFont();
     public abstract Font GetHeaderFont();
+    public abstract Font GetSymbolFont();
     public abstract string TypeName();
     public abstract bool TileOnGrid();
     public abstract bool DisplayMorale();
@@ -54,6 +55,11 @@ public class NoGameType : GameType
     }
 
     public override Font GetHeaderFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
+    }
+
+    public override Font GetSymbolFont()
     {
         return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
@@ -145,6 +151,11 @@ public class D2EGameType : GameType
         return (Font)Resources.Load("Fonts/Windl");
     }
 
+    public override Font GetSymbolFont()
+    {
+        return (Font)Resources.Load("Fonts/Descent_symbol");
+    }
+
     public override int MaxHeroes()
     {
         return 4;
@@ -226,6 +237,11 @@ class MoMGameType : GameType
     public override Font GetHeaderFont()
     {
         return (Font)Resources.Load("Fonts/OldNewspaperTypes");
+    }
+
+    public override Font GetSymbolFont()
+    {
+        return (Font)Resources.Load("Fonts/MADGaramondPro");
     }
 
     public override int MaxHeroes()
@@ -315,6 +331,11 @@ public class IAGameType : GameType
     public override Font GetHeaderFont()
     {
         return (Font)Resources.Load("Fonts/Windl");
+    }
+
+    public override Font GetSymbolFont()
+    {
+        return (Font)Resources.Load("Fonts/Gara_Scenario_Desc");
     }
 
     public override int MaxHeroes()
