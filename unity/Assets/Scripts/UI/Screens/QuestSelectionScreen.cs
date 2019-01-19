@@ -806,7 +806,7 @@ namespace Assets.Scripts.UI.Screens
                 {
                     // this is the location for the shadow (to be displayed first)
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(0.8f, offset + 0.6f, 4.5f, 4.5f);
+                    ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f);
                     ui.SetBGColor(Color.clear);
                     ui.SetButton(delegate { Selection(key); });
                     if(images_list.IsImageAvailable(q.package_url + q.image))
@@ -840,7 +840,7 @@ namespace Assets.Scripts.UI.Screens
                 // Quest name
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
+                ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(name_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
@@ -848,10 +848,48 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
 
+                // Required expansions
+                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
+                Color expansion_text_color = Color.black;
+                float expansion_x_offset = 5.8f;
+                float expansion_y_offset = offset + 1.6f;
+                float char_spacing = 0.2f;
+                int expansions_symbol_font_size = UIScaler.GetSmallFont();
+                if (game.gameType.TypeName() == "D2E")
+                {
+                    // fine tune D2E placement, has fonts don't look the same
+                    expansion_x_offset = 5.55f;
+                    expansion_y_offset = offset + 1.45f;
+                    char_spacing = 0.1f;
+                    expansions_symbol_font_size = Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.1f);
+                }
+                List<string> displayed_expansion_symbols = new List<string>();
+                foreach (string pack in q.packs)
+                {
+                    string pack_symbol = game.cd.packSymbol[pack].Translate(true);
+                    if (pack_symbol != "" && !displayed_expansion_symbols.Contains(pack_symbol))
+                    {
+                        displayed_expansion_symbols.Add(pack_symbol);
+                        if (missing_packs.Contains(pack))
+                            expansion_text_color = Color.red;
+                        else
+                            expansion_text_color = Color.black;
+                        ui = new UIElement(scrollArea.GetScrollTransform());
+                        float symbol_width = ui.GetStringWidth(pack_symbol, expansions_symbol_font_size);
+                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
+                        ui.SetText(pack_symbol, expansion_text_color);
+                        ui.SetBGColor(Color.clear);
+                        ui.SetButton(delegate { Selection(key); });
+                        ui.SetFont(game.gameType.GetSymbolFont());
+                        ui.SetFontSize(expansions_symbol_font_size);
+                        expansion_x_offset += symbol_width - char_spacing;
+                    }
+                }
+
                 // Quest short description (synopsys)
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5f, offset + 1.7f, UIScaler.GetRight(-11f) - 5, 2f);
+                ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(synopsys_translation, Color.black);
                 ui.SetButton(delegate { Selection(key); });
@@ -887,48 +925,18 @@ namespace Assets.Scripts.UI.Screens
                 // all texts below use this y value as reference
                 float top_text_y = offset + 4.1f;
 
-                // Required expansions
-                List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
-                Color expansion_text_color = Color.black;
-                float expansion_x_offset = 0.5f;
-                float expansion_y_offset = top_text_y + 0.9f;
-                List<string> displayed_expansion_symbols = new List<string>();
-                foreach (string pack in q.packs)
-                {
-                    string pack_symbol = game.cd.packSymbol[pack].Translate(true);
-                    if (pack_symbol != "" && !displayed_expansion_symbols.Contains(pack_symbol))
-                    {
-                        displayed_expansion_symbols.Add(pack_symbol);
-                        if (missing_packs.Contains(pack))
-                            expansion_text_color = Color.red;
-                        else
-                            expansion_text_color = Color.black;
-                        ui = new UIElement(scrollArea.GetScrollTransform());
-                        float symbol_width = ui.GetStringWidth(pack_symbol);
-                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
-                        ui.SetText(pack_symbol, expansion_text_color);
-                        ui.SetBGColor(Color.clear);
-                        ui.SetButton(delegate { Selection(key); });
-                        ui.SetFont(game.gameType.GetSymbolFont());
-                        if(game.gameType.TypeName()=="MoM")
-                            expansion_x_offset += symbol_width - 0.2f;
-                        else
-                            expansion_x_offset += symbol_width - 0.1f;
-                    }
-                }
-
                 // Duration
                 if (q.lengthMax != 0)
                 {
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(7f, top_text_y, 4, 1);
+                    ui.SetLocation(6f, top_text_y, 4, 1);
                     ui.SetText(new StringKey("val", "DURATION"), Color.black);
                     ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(11f, top_text_y, 5, 1);
+                    ui.SetLocation(10f, top_text_y, 5, 1);
                     ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
                     ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -940,7 +948,7 @@ namespace Assets.Scripts.UI.Screens
                 {
                     StringKey STATS_AVERAGE_DURATION = new StringKey("val", "STATS_AVERAGE_DURATION", stats_avg_duration);
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(7, top_text_y + 1, 15, 1);
+                    ui.SetLocation(6, top_text_y + 1, 15, 1);
                     if (stats_avg_duration > 0)
                         ui.SetText(STATS_AVERAGE_DURATION, Color.black);
                     else
