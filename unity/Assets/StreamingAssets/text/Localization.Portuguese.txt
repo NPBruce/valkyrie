@@ -289,8 +289,8 @@ SORT_BY_DIFFICULTY,Dificuldade
 SORT_BY_DURATION,Duração
 
 SORT_BY_RATING,Avaliações
-SORT_BY_AVERAGE_DURATION,Duração média
-SORT_BY_WIN_RATIO,Porcentagem de vitória
+SORT_BY_AVERAGE_DURATION,Duração méd.
+SORT_BY_WIN_RATIO,% de vitória
 SORT_BY_DATE,Atualizado em
 
 FILTER_TITLE,Selecione os filtros
