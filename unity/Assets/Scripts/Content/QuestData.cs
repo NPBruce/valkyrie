@@ -31,11 +31,12 @@ public class QuestData
     Game game;
 
     /// <summary>
-    /// Choise file for localization. 
+    /// Find and return audio or picture file for localization
     /// </summary>
     /// <param name="name">File name</param>
     /// <param name="source">Path to file</param>
-    private static string ChoiseLocalizedSource(string name, string source)
+    /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default filename</returns>
+    private static string FindLocalisedMultimediaFile(string name, string source)
     {
         if (System.IO.File.Exists(source + Path.DirectorySeparatorChar + Game.game.currentLang + Path.DirectorySeparatorChar + name))
             return name = Game.game.currentLang + Path.DirectorySeparatorChar + name;
@@ -450,7 +451,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageName = value != null ? value.Replace('\\', '/') : value;
-                imageName = ChoiseLocalizedSource(imageName, path);
+                imageName = FindLocalisedMultimediaFile(imageName, path);
             }
 
             if (data.ContainsKey("vunits"))
@@ -943,7 +944,7 @@ public class QuestData
             {
                 string value = data["audio"];
                 audio = value != null ? value.Replace('\\', '/') : value;
-                audio = ChoiseLocalizedSource(audio, path);
+                audio = FindLocalisedMultimediaFile(audio, path);
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
@@ -952,7 +953,7 @@ public class QuestData
                 for (int i = 0; i < music.Count; i++)
                 {
                     music[i] = music[i].Replace('\\', '/');
-                    music[i] = ChoiseLocalizedSource(music[i], path);
+                    music[i] = FindLocalisedMultimediaFile(music[i], path);
                 }
             }
         }
@@ -1235,7 +1236,7 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
-                imageType = ChoiseLocalizedSource(imageType, path);
+                imageType = FindLocalisedMultimediaFile(imageType, path);
             }
             if (data.ContainsKey("skill"))
             {
