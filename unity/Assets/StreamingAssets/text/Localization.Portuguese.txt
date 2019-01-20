@@ -276,3 +276,38 @@ ERROR_HTTP, Erro ao acessar o arquivo, se esse problema persistir por favor info
 ERROR_NETWORK, Erro acessando o arquivo, por favor verifique sua conexão de Internet.
 
 NEW_VERSION_AVAILABLE,Atualização disponível!
+
+SORT_TITLE,Ordenar
+SORT_SELECT_CRITERIA,Escolha o critério de ordenação:
+SORT_SELECT_ORDER,Ordenar por:
+SORT_ASCENDING,Ascendente
+SORT_DESCENDING,Descendente
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Nome
+SORT_BY_DIFFICULTY,Dificuldade
+SORT_BY_DURATION,Duração
+
+SORT_BY_RATING,Avaliações
+SORT_BY_AVERAGE_DURATION,Duração média
+SORT_BY_WIN_RATIO,Porcentagem de vitória
+SORT_BY_DATE,Atualizado em
+
+FILTER_TITLE,Selecione os filtros
+FILTER_SELECT_LANG,Selecione os idioma:
+FILTER_MISSING_EXPANSIONS_ON,Esconder cenários com expansões faltando ☑
+FILTER_MISSING_EXPANSIONS_OFF,Esconder cenários com expansões faltando ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} cenários(s) filtrados
+
+AUTHORS_SHORT,Autores em uma única linha (para opção "ordenar por autor")
+AUTHORS_UNKNOWN,Autores desconhecidos (necessita uma atualização do cenário pelo autor)
+
+SYNOPSYS,Sinopse (máximo 100 caracteres)
+
+UPDATED_THIS_WEEK,Atualizado essa semana
+UPDATED_THIS_MONTH,Atualizado esse mês
+UPDATED_THIS_TRIMESTER,Atualizado esse trimestre
+UPDATED_THIS_SEMESTER,Atualizado esse semestre
+UPDATED_THIS_YEAR,Atualizado esse ano
+UPDATED_TWO_YEARS_AGO,Atualizado em até 2 anos
+UPDATE_OLDER_THAN_TWO_YEAR,Última atualização faz mais de 2 anos

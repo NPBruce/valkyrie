@@ -80,8 +80,9 @@ public class EditorComponentQuest : EditorComponent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset++, 8, 1);
+        ui.SetLocation(0.5f, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DESCRIPTION")));
+        ui.SetTextAlignment(TextAnchor.MiddleLeft);
 
         descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         descriptionUIE.SetLocation(0.5f, offset, 19, 30);
@@ -92,7 +93,7 @@ public class EditorComponentQuest : EditorComponent
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(1, offset++, 30, 1);
+        ui.SetLocation(0.5f, offset++, 30, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SYNOPSYS")));
         ui.SetTextAlignment(TextAnchor.MiddleLeft);
 
@@ -105,8 +106,9 @@ public class EditorComponentQuest : EditorComponent
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset++, 8, 1);
+        ui.SetLocation(0.5f, offset++, 8, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS")));
+        ui.SetTextAlignment(TextAnchor.MiddleLeft);
 
         authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         authorsUIE.SetLocation(0.5f, offset, 19, 16);
@@ -117,7 +119,7 @@ public class EditorComponentQuest : EditorComponent
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(1, offset++, 35, 1);
+        ui.SetLocation(0.5f, offset++, 35, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS_SHORT")));
         ui.SetTextAlignment(TextAnchor.MiddleLeft);
 

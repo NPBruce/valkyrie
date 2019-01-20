@@ -367,3 +367,37 @@ STATS_ERROR_NETWORK,Errore durante l'acquisizione delle statistiche di gioco, pe
 
 NEW_VERSION_AVAILABLE,Aggiornamento disponibile!
 
+SORT_TITLE,Filtra
+SORT_SELECT_CRITERIA,Seleziona i criteri:
+SORT_SELECT_ORDER,In Ordine:
+SORT_ASCENDING,Ascendente
+SORT_DESCENDING,Discendente
+
+SORT_BY_AUTHOR,Autore
+SORT_BY_NAME,Nome
+SORT_BY_DIFFICULTY,Difficoltà
+SORT_BY_DURATION,Durata
+
+SORT_BY_RATING,Valutazione
+SORT_BY_AVERAGE_DURATION,Durata media
+SORT_BY_WIN_RATIO,Tasso di vittoria
+SORT_BY_DATE,Ultimo aggiornamento
+
+FILTER_TITLE,Seleziona filtri
+FILTER_SELECT_LANG,Seleziona le lingue che parli:
+FILTER_MISSING_EXPANSIONS_ON,Nascondi scenari con espansioni mancanti ☑
+FILTER_MISSING_EXPANSIONS_OFF,Nascondi scenari con espansioni mancanti ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenari filtrati
+
+AUTHORS_SHORT,Linea di testo per Autori (per l’opzione "filtra per autore")
+AUTHORS_UNKNOWN,Autori sconosciuti (richiede aggiornamento scenario dell’autore)
+
+SYNOPSYS,Sinossi (max 100 caratteri)
+
+UPDATED_THIS_WEEK,Aggiornati questa settimana
+UPDATED_THIS_MONTH,Aggiornati questo mese
+UPDATED_THIS_TRIMESTER,Aggiornati negli ultimi tre mesi
+UPDATED_THIS_SEMESTER,Aggiornati negli ultimi sei mesi
+UPDATED_THIS_YEAR,Aggiornati quest’anno
+UPDATED_TWO_YEARS_AGO,Aggiornati due anni fa
+UPDATE_OLDER_THAN_TWO_YEAR,Ultimo aggiornamento più di due anni fa
