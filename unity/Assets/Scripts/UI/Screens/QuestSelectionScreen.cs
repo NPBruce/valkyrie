@@ -803,14 +803,13 @@ namespace Assets.Scripts.UI.Screens
                 offset += 0.15f;
 
                 // prepare/draw list of Images
+                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f); // this is the location for the shadow (to be displayed first)
+                ui.SetBGColor(Color.clear);
+                ui.SetButton(delegate { Selection(key); });
                 if (q.image.Length > 0)
                 {
-                    // this is the location for the shadow (to be displayed first)
-                    ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f);
-                    ui.SetBGColor(Color.clear);
-                    ui.SetButton(delegate { Selection(key); });
-                    if(images_list.IsImageAvailable(q.package_url + q.image))
+                    if (images_list.IsImageAvailable(q.package_url + q.image))
                     {
                         DrawScenarioPicture(q.package_url + q.image, ui);
                     }
@@ -819,9 +818,14 @@ namespace Assets.Scripts.UI.Screens
                         images_list.Add(q.package_url + q.image, ui);
                     }
                 }
+                else
+                {
+                    // Draw default Valkyrie picture
+                    DrawScenarioPicture(null, ui);
+                }
 
                 // languages flags
-                if(q.languages_name!=null)
+                if (q.languages_name!=null)
                 {
                     Texture2D flagTex = null;
                     const float flag_size = 0.9f;
@@ -1074,6 +1078,10 @@ namespace Assets.Scripts.UI.Screens
                 StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
                 text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
             }
+            else
+            {
+                text_number_of_filtered_scenario.SetText(" ");
+            }
 
             images_list.StartDownloadASync();
 
@@ -1119,6 +1127,8 @@ namespace Assets.Scripts.UI.Screens
             // URL and Texture
             private Dictionary<string, Texture2D> texture_list = null;
 
+            Texture2D default_quest_picture = null;
+
             // Father class
             QuestSelectionScreen questSelectionScreen = null;
 
@@ -1127,6 +1137,7 @@ namespace Assets.Scripts.UI.Screens
                 questSelectionScreen = qss;
                 images_list = new Dictionary<string, UIElement>();
                 texture_list = new Dictionary<string, Texture2D>();
+                default_quest_picture = Resources.Load("sprites/scenario_list/default_quest_picture") as Texture2D;
             }
 
             public void Add(string url, UIElement uie)
@@ -1159,6 +1170,10 @@ namespace Assets.Scripts.UI.Screens
                 if (error)
                 {
                     Debug.Log("Error downloading picture : " + uri.ToString());
+
+                    // Display default picture
+                    if (images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
+                        questSelectionScreen.DrawScenarioPicture(null, images_list[uri.ToString()]);
                 }
                 else
                 {
@@ -1182,7 +1197,10 @@ namespace Assets.Scripts.UI.Screens
 
             public Texture2D GetTexture(string package_url)
             {
-                return texture_list[package_url];
+                if (package_url == null)
+                    return default_quest_picture;
+                else
+                    return texture_list[package_url];
             }
         }
     }
