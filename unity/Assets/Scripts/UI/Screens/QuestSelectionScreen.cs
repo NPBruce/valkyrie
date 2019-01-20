@@ -48,7 +48,8 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
 
         // text colors
-        private readonly Color grey_text = new Color(0.1f, 0.1f, 0.1f, 0.50f);
+        private readonly Color grey_transparent_text = new Color(0.1f, 0.1f, 0.1f, 0.50f);
+        private readonly Color dark_grey_text = new Color(0.1f, 0.1f, 0.1f);
 
         // filters
         string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
@@ -891,7 +892,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
-                ui.SetText(synopsys_translation, Color.black);
+                ui.SetText(synopsys_translation, dark_grey_text);
                 ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
@@ -928,15 +929,18 @@ namespace Assets.Scripts.UI.Screens
                 // Duration
                 if (q.lengthMax != 0)
                 {
+                    float duration_text_offset = 0f;
+
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(6f, top_text_y, 4, 1);
                     ui.SetText(new StringKey("val", "DURATION"), Color.black);
+                    duration_text_offset=ui.GetStringWidth(new StringKey("val", "DURATION"));
+                    ui.SetLocation(6f, top_text_y, duration_text_offset + 0.5f, 1);
                     ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(10f, top_text_y, 5, 1);
+                    ui.SetLocation(6f+duration_text_offset+0.5f, top_text_y, 5, 1);
                     ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
                     ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -961,9 +965,11 @@ namespace Assets.Scripts.UI.Screens
                 // Difficulty
                 if (q.difficulty != 0)
                 {
+                    float difficulty_text_offset = 0f;
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y, 6, 1);
                     ui.SetText(new StringKey("val", "DIFFICULTY"), Color.black);
+                    difficulty_text_offset = ui.GetStringWidth(new StringKey("val", "DIFFICULTY"));
+                    ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y, difficulty_text_offset+0.5f, 1);
                     ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetFontSize(UIScaler.GetSmallFont());
@@ -979,15 +985,15 @@ namespace Assets.Scripts.UI.Screens
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
-                    ui.SetLocation(UIScaler.GetHCenter(), top_text_y + 0.1f, difficulty_string_width+1, 1);
-                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_text);
+                    ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width+1, 1);
+                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
                     ui.SetButton(delegate { Selection(key); });
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
-                    uic.SetLocation(UIScaler.GetHCenter(), top_text_y + 0.1f, difficulty_string_width, 1);
+                    uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width + 1, 1);
                     uic.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
                     uic.SetTextAlignment(TextAnchor.LowerLeft);
                     uic.SetBGColor(Color.clear);
@@ -1037,7 +1043,7 @@ namespace Assets.Scripts.UI.Screens
                     float score_text_width = 0;
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_text);
+                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_transparent_text);
                     score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, font_size);
                     ui.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
                     ui.SetBGColor(Color.clear);

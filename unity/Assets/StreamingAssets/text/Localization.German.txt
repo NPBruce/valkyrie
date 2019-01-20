@@ -436,3 +436,13 @@ FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Scenarien gefunden
 
 AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
 AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor um dies zu hinterlegen)
+
+SYNOPSYS,Zusammenfassung (max. 100 Zeichen)
+
+UPDATED_THIS_WEEK,Innerhalb dieser Woche aktualisiert
+UPDATED_THIS_MONTH,Innerhalb dieses Monats aktualisiert
+UPDATED_THIS_TRIMESTER,Innerhalb diesers Quartals aktualisiert
+UPDATED_THIS_SEMESTER,Innerhalb dieses Semesters aktualisiert
+UPDATED_THIS_YEAR,Innerhalb dieses Jahres aktualisiert
+UPDATED_TWO_YEARS_AGO,Vor zwei Jahren aktualisiert
+UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre
