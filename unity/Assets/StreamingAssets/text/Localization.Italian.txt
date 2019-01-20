@@ -380,8 +380,8 @@ SORT_BY_DURATION,Durata
 
 SORT_BY_RATING,Valutazione
 SORT_BY_AVERAGE_DURATION,Durata media
-SORT_BY_WIN_RATIO,Tasso di vittoria
-SORT_BY_DATE,Ultimo aggiornamento
+SORT_BY_WIN_RATIO,% di vittoria
+SORT_BY_DATE,Ultimo agg.
 
 FILTER_TITLE,Seleziona filtri
 FILTER_SELECT_LANG,Seleziona le lingue che parli:
