@@ -122,6 +122,7 @@ public class QuestsManager
         if(isAvailable)
         {
             IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
+            localManifest.Remove(key);
             localManifest.Add(key, downloaded_quest.data["Quest"]);
         }
         else
