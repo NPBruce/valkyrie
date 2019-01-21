@@ -30,19 +30,6 @@ public class QuestData
 
     Game game;
 
-    /// <summary>
-    /// Find and return audio or picture file for localization
-    /// </summary>
-    /// <param name="name">File name</param>
-    /// <param name="source">Path to file</param>
-    /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default filename</returns>
-    private static string FindLocalisedMultimediaFile(string name, string source)
-    {
-        if (System.IO.File.Exists(source + Path.DirectorySeparatorChar + Game.game.currentLang + Path.DirectorySeparatorChar + name))
-            return name = Game.game.currentLang + Path.DirectorySeparatorChar + name;
-        return name;
-    }
-
     // Create from quest loader entry
     public QuestData(QuestData.Quest q)
     {
@@ -147,8 +134,8 @@ public class QuestData
             // Loop through all ini sections
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
-                // Add the section to our quest data. For the editor, turn off the choice of localization.
-                AddData(section.Key, section.Value, game.editMode ? f : Path.GetDirectoryName(questPath));
+                // Add the section to our quest data.
+                AddData(section.Key, section.Value, f);
             }
 
             // Update all references to this component
@@ -451,7 +438,6 @@ public class QuestData
             {
                 string value = data["image"];
                 imageName = value != null ? value.Replace('\\', '/') : value;
-                imageName = FindLocalisedMultimediaFile(imageName, path);
             }
 
             if (data.ContainsKey("vunits"))
@@ -944,7 +930,6 @@ public class QuestData
             {
                 string value = data["audio"];
                 audio = value != null ? value.Replace('\\', '/') : value;
-                audio = FindLocalisedMultimediaFile(audio, path);
             }
             music = new List<string>();
             if (data.ContainsKey("music"))
@@ -953,7 +938,6 @@ public class QuestData
                 for (int i = 0; i < music.Count; i++)
                 {
                     music[i] = music[i].Replace('\\', '/');
-                    music[i] = FindLocalisedMultimediaFile(music[i], path);
                 }
             }
         }
@@ -1236,7 +1220,6 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
-                imageType = FindLocalisedMultimediaFile(imageType, path);
             }
             if (data.ContainsKey("skill"))
             {

@@ -119,6 +119,19 @@ public class Quest
     // Reference back to the game object
     public Game game;
 
+    /// <summary>
+    /// Find and return audio or picture file for localization. Disabled for the editor scenario
+    /// </summary>
+    /// <param name="name">File name</param>
+    /// <param name="source">Path to file</param>
+    /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default file</returns>
+    public static string FindLocalisedMultimediaFile(string name, string source)
+    {
+        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang), name)))
+            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
+        return Path.Combine(source, name);
+    }
+
     // Construct a new quest from quest data
     public Quest(QuestData.Quest q)
     {
@@ -1591,7 +1604,7 @@ public class Quest
             }
             else if (qUI.imageName.Length > 0)
             {
-                newTex = ContentData.FileToTexture(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), qUI.imageName));
+                newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
             }
 
             // Create object

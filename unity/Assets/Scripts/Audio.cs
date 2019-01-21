@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using ValkyrieTools;
 
 public class Audio : MonoBehaviour
@@ -104,8 +105,7 @@ public class Audio : MonoBehaviour
         List<AudioClip> newMusic = new List<AudioClip>();
         foreach (string s in fileNames)
         {
-            string fileName = s;
-            var file = new WWW(new System.Uri(fileName).AbsoluteUri);
+            var file = new WWW(new System.Uri(Quest.FindLocalisedMultimediaFile(Path.GetFileName(s), Path.GetDirectoryName(s))).AbsoluteUri);
             yield return file;
             newMusic.Add(file.GetAudioClip());
         }
@@ -121,7 +121,7 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
-        var file = new WWW(new System.Uri(fileName).AbsoluteUri);
+        var file = new WWW(new System.Uri(Quest.FindLocalisedMultimediaFile(Path.GetFileName(fileName), Path.GetDirectoryName(fileName))).AbsoluteUri);
         yield return file;
         if (file.error != null)
         {
