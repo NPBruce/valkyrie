@@ -120,15 +120,22 @@ public class Quest
     public Game game;
 
     /// <summary>
-    /// Find and return audio or picture file for localization. Disabled for the editor scenario
+    /// Find and return audio or picture file for localization. Disabled for the editor scenario. Disabled for imput files.
     /// </summary>
     /// <param name="name">File name</param>
     /// <param name="source">Path to file</param>
     /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default file</returns>
     public static string FindLocalisedMultimediaFile(string name, string source)
     {
-        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang), name)))
-            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
+        if (Game.game.quest != null && !Game.game.editMode)
+        {
+            var stringPath = Path.GetDirectoryName(Game.game.quest.qd.questPath);
+            if (source.Contains(stringPath) &&
+             File.Exists(Path.Combine(Path.Combine(stringPath, Game.game.currentLang), Path.Combine(source.Replace(stringPath, "") != "" ? source.Replace(stringPath, "").Remove(0, 1) : "", name))))
+            {
+                return Path.Combine(Path.Combine(stringPath, Game.game.currentLang), Path.Combine(source.Replace(stringPath, "") != "" ? source.Replace(stringPath, "").Remove(0, 1) : "", name));
+            }
+        }
         return Path.Combine(source, name);
     }
 
