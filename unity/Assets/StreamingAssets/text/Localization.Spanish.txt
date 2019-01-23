@@ -437,9 +437,9 @@ SORT_BY_DIFFICULTY, Dificultad
 SORT_BY_DURATION,Duración
 
 SORT_BY_RATING,Calificación
-SORT_BY_AVERAGE_DURATION,Duración media
-SORT_BY_WIN_RATIO,Ratio de Victorias
-SORT_BY_DATE, fecha de actualización
+SORT_BY_AVERAGE_DURATION, Tiempo medio
+SORT_BY_WIN_RATIO, Victorias
+SORT_BY_DATE, Actualización
 
 FILTER_TITLE,Seleccionar filtros
 FILTER_SELECT_LANG,Seleccione el(los) idioma(s) que habla:
@@ -447,10 +447,10 @@ FILTER_MISSING_EXPANSIONS_ON,Ocultar escenarios con ampliaciones que faltan ☑
 FILTER_MISSING_EXPANSIONS_OFF,Ocultar escenarios con ampliaciones que faltan ☐
 FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} escenario(s) filtrado(s)
 
-AUTHORS_SHORT,Línea de texto única para Autores (para la opción "ordenar por autor")
+AUTHORS_SHORT,Autores en una sola línia (para "ordenar por autor")
 AUTHORS_UNKNOWN,Autores desconocidos (necesita una actualización de escenario por autor)
 
-SYNOPSYS,Synopsys (máx. 100 caracteres)
+SYNOPSYS,Sinopsis (máx. 100 caracteres)
 
 UPDATED_THIS_WEEK,Actualizado esta semana
 UPDATED_THIS_MONTH,Actualizado este mes
@@ -458,4 +458,4 @@ UPDATED_THIS_TRIMESTER,Actualizado este trimestre
 UPDATED_THIS_SEMESTER,Actualizado este semestre
 UPDATED_THIS_YEAR,Actualizado este año
 UPDATED_TWO_YEARS_AGO,Actualizado hace dos años
-UPDATE_OLDER_THAN_TWO_YEAR,Última acutalización más antigua a dos años.
+UPDATE_OLDER_THAN_TWO_YEAR,Acutalización anterior a dos años

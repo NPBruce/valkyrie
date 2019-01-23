@@ -468,6 +468,7 @@ namespace Assets.Scripts.UI.Screens
             const float space_between_buttons = 0.8f;
             float x_offset = 1.5f;
             float y_offset = 8.2f;
+            int font_size_sort_buttons = (int)(UIScaler.GetMediumFont() * 0.95f);
 
             List<SortOption> sort_options_offline = new List<SortOption>();
             sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
@@ -523,7 +524,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(x_offset, y_offset, button_size, 2f);
                 ui.SetText(s.button_text, button_color);
                 ui.SetFont(Game.Get().gameType.GetHeaderFont());
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetFontSize(font_size_sort_buttons);
                 if (game.questsList.download_done)
                     ui.SetButton(delegate { SetSort(local_name); });
                 new UIElementBorder(ui, button_color);
@@ -542,6 +543,7 @@ namespace Assets.Scripts.UI.Screens
             float y_offset = 16f;
             Color ascending_color = Color.white;
             Color descending_color = Color.white;
+            int font_size_sort_order_buttons = (int)(UIScaler.GetMediumFont() * 0.95f);
 
             if (sort_order == "ascending")
                 descending_color = Color.grey;
@@ -553,7 +555,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(x_offset, y_offset, button_size, 2f);
             ui.SetText(SORT_ASCENDING, ascending_color);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetFontSize(font_size_sort_order_buttons);
             ui.SetButton(delegate { sort_order = "ascending"; DrawSortOrderButtons(); SetSort(sort_criteria); });
             new UIElementBorder(ui, ascending_color);
 
@@ -563,7 +565,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(x_offset, y_offset, button_size, 2f);
             ui.SetText(SORT_DESCENDING, descending_color);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetFontSize(font_size_sort_order_buttons);
             ui.SetButton(delegate { sort_order = "descending"; DrawSortOrderButtons(); SetSort(sort_criteria); });
             new UIElementBorder(ui, descending_color);
         }
