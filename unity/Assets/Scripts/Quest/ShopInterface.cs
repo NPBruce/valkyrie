@@ -64,15 +64,20 @@ public class ShopInterface : Quest.BoardComponent
             Color colour = Color.white;
             string colorRGB = ColorUtil.FromName(eventData.buttonColors[i]);
             // Check format is valid
-            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
             {
                 Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
             }
 
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            colour.r = (byte)System.Convert.ToByte(colorRGB.Substring(1, 2), 16);
+            colour.g = (byte)System.Convert.ToByte(colorRGB.Substring(3, 2), 16);
+            colour.b = (byte)System.Convert.ToByte(colorRGB.Substring(5, 2), 16);
+
+            if (colorRGB.Length == 9)
+                colour.a = (byte)System.Convert.ToByte(colorRGB.Substring(7, 2), 16);
+            else
+                colour.a = 255; // opaque by default
 
             int tmp = i;
             UIElement ui = new UIElement(Game.SHOP);

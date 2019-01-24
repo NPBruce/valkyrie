@@ -47,7 +47,7 @@ public class QuestEditor {
             game.quest.Add(kv.Key);
         }
         // Set all components to mostly transparent
-        game.quest.ChangeAlphaAll(0.2f);
+        game.quest.ChangeAlphaAll();
 
         // Create a new QED
         game.qed = new QuestEditorData(game.qed);

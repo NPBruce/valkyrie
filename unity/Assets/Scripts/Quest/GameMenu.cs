@@ -107,7 +107,6 @@ public class GameMenu {
         string path = game.quest.questPath;
         Destroyer.Destroy();
 
-        game.cd = new ContentData(game.gameType.DataDirectory());
         foreach (string pack in game.cd.GetPacks())
         {
             game.cd.LoadContent(pack);

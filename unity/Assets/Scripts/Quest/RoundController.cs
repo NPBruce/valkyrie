@@ -153,7 +153,9 @@ public class RoundController {
                 foreach (string s in qm.activations)
                 {
                     // Find the activation in quest data
-                    if (game.quest.qd.components.ContainsKey("Activation" + s))
+                    if (game.quest.qd.components.ContainsKey("Activation" + s)
+                        && game.quest.vars.Test((game.quest.qd.components["Activation" + s] as QuestData.Activation).tests)
+                       )
                     {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }

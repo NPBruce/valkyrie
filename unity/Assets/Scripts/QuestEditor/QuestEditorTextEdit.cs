@@ -41,6 +41,11 @@ public class QuestEditorTextEdit {
         ui.SetLocation(UIScaler.GetHCenter(-9.5f), 1, 19, 1);
         ui.SetText(title);
 
+        // Text background
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetHCenter(-9f), 2.9f, 18, 1);
+        ui.SetBGColor(new Color(0.3f,0.3f,0.3f));
+
         Game game = Game.Get();
         GameObject textObj = new GameObject("textEdit");
         GameObject inputObj = new GameObject("textInput");

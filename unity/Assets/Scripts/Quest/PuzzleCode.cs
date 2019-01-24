@@ -1,16 +1,27 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ValkyrieTools;
 
 public class PuzzleCode : Puzzle
 {
     public Answer answer;
     public List<CodeGuess> guess;
 
-    public PuzzleCode(int items, int options)
+    public PuzzleCode(int items, int options, string solution)
     {
         guess = new List<CodeGuess>();
-        answer = new Answer(items, options);
+
+        // Initialize puzzle answer depending on whether we have a pre-determined solution or not.
+        if (solution.Length > 0)
+        {
+            ValkyrieDebug.Log("Setting solution to " + solution);
+            answer = new Answer(solution);
+        }
+        else
+        {
+            answer = new Answer(items, options);
+        }
     }
 
     public PuzzleCode(Dictionary<string, string> data)
@@ -84,6 +95,8 @@ public class PuzzleCode : Puzzle
             }
         }
 
+        /* Setup a code answer with 's'. Used for saved data.
+         * Example: s = "1 3 5 4" */
         public Answer(string s)
         {
             state = new List<int>();

@@ -220,6 +220,8 @@ public class EventManager
         {
             MonsterEvent qe = (MonsterEvent)e;
 
+            qe.MonsterEventSelection();
+
             // Is this type new?
             Quest.Monster oldMonster = null;
             foreach (Quest.Monster m in game.quest.monsters)
@@ -328,7 +330,7 @@ public class EventManager
         {
             if (monsterImage != null)
             {
-                MonsterDialogMoM.DrawMonster(monsterImage);
+                MonsterDialogMoM.DrawMonster(monsterImage, true);
                 if (monsterHealth)
                 {
                 }
@@ -693,8 +695,11 @@ public class EventManager
         // Is this event disabled?
         virtual public bool Disabled()
         {
+            if (game.debugTests)
+                ValkyrieDebug.Log("Event test " + qEvent.sectionName + " result is : " + game.quest.vars.Test(qEvent.tests));
+
             // check if condition is valid, and if there is something to do in this event (see #916)
-            return (!game.quest.vars.Test(qEvent.conditions));
+            return (!game.quest.vars.Test(qEvent.tests));
         }
     }
 
@@ -724,7 +729,12 @@ public class EventManager
             // cast the monster event
             qMonster = qEvent as QuestData.Spawn;
 
-            if (!game.quest.monsterSelect.ContainsKey(qMonster.sectionName))
+            // monsters are generated on the fly to avoid duplicate for D2E when using random
+        }
+
+        public void MonsterEventSelection()
+        {
+            if (!game.quest.RuntimeMonsterSelection(qMonster.sectionName))
             {
                 ValkyrieDebug.Log("Warning: Monster type unknown in event: " + qMonster.sectionName);
                 return;

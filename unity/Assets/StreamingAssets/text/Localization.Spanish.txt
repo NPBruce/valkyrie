@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Capacidad
 ABOUT,Acerca de
-ABOUT_FFG,Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados.
-ABOUT_LIBS,Valkyrie utiliza DotNetZip-For-Unity y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie es una App de ayuda de director de juego inspirada por Descent: Camino a Leyenda, de Fantasy Flight Games. La mayoría de las imágenes utilizadas se importan de la aplicación de FFG y son propiedad de FFG con todos los derechos reservados. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie utiliza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc y posee código derivado de Unity Studio y .NET Ogg Vorbis Encoder.
 ACTIONS,Acciones
 ACTIVATED,Activado
 ACTIVATION,Activación
@@ -186,6 +186,7 @@ SELECT_TO_DELETE,Selección de {0} a Eliminar
 HIDDEN,Oculto
 ACTIVE,Activo
 SET,Set
+SET_EDITOR_ALPHA,Transparencia Editor
 SKILL,Atributo
 SELECT_SKILLS,Selección de Habilidades
 SPAWN,Generar
@@ -213,6 +214,7 @@ VERTICAL,Vertical
 ALIGN,Alinear
 SIZE,Tamaño
 TEXT_SIZE,Tamaño del Texto
+BACKGROUND_COLOUR,Color de fondo
 ASPECT,Aspecto
 BORDER,Borde
 NO_BORDER,Sin Borde
@@ -422,3 +424,38 @@ ERROR_HTTP,Error al obtener el fichero, i el problema persiste, por favor report
 ERROR_NETWORK,Error al obtener el fichero, por favor compruebe su conexión a internet
 
 NEW_VERSION_AVAILABLE,¡Actualización disponible!
+
+SORT_TITLE, Clasificar
+SORT_SELECT_CRITERIA,Seleccione los criterios de clasificación:
+SORT_SELECT_ORDER,Ordenar por:
+SORT_ASCENDING,Ascendente
+SORT_DESCENDING,Descendente
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Nombre
+SORT_BY_DIFFICULTY, Dificultad
+SORT_BY_DURATION,Duración
+
+SORT_BY_RATING,Calificación
+SORT_BY_AVERAGE_DURATION, Tiempo medio
+SORT_BY_WIN_RATIO, Victorias
+SORT_BY_DATE, Actualización
+
+FILTER_TITLE,Seleccionar filtros
+FILTER_SELECT_LANG,Seleccione el(los) idioma(s) que habla:
+FILTER_MISSING_EXPANSIONS_ON,Ocultar escenarios con ampliaciones que faltan ☑
+FILTER_MISSING_EXPANSIONS_OFF,Ocultar escenarios con ampliaciones que faltan ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} escenario(s) filtrado(s)
+
+AUTHORS_SHORT,Autores en una sola línia (para "ordenar por autor")
+AUTHORS_UNKNOWN,Autores desconocidos (necesita una actualización de escenario por autor)
+
+SYNOPSYS,Sinopsis (máx. 100 caracteres)
+
+UPDATED_THIS_WEEK,Actualizado esta semana
+UPDATED_THIS_MONTH,Actualizado este mes
+UPDATED_THIS_TRIMESTER,Actualizado este trimestre
+UPDATED_THIS_SEMESTER,Actualizado este semestre
+UPDATED_THIS_YEAR,Actualizado este año
+UPDATED_TWO_YEARS_AGO,Actualizado hace dos años
+UPDATE_OLDER_THAN_TWO_YEAR,Acutalización anterior a dos años

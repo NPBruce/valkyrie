@@ -82,6 +82,10 @@ namespace ValkyrieTools
             // Parse all lines
             foreach (string l in lines)
             {
+                // ignore comments
+                if (l.Length > 0 && l.Trim()[0] == '#')
+                    continue;
+
                 // Start of new section
                 if (l.Length > 0 && l.Trim()[0] == '[')
                 {
@@ -137,7 +141,7 @@ namespace ValkyrieTools
                     // This won't go anywhere if we don't have a section
                     if (entryName.Equals(""))
                     {
-                        ValkyrieDebug.Log("Warning: data without section in " + path + " will be ignored.");
+                        ValkyrieDebug.Log("Warning: data "+ l + " without section in " + path + " will be ignored.");
                     }
                 }
             }

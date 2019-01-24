@@ -19,9 +19,12 @@ ExportedObj/
 *.booproj
 *.svd
 
+# Visual Studio cache directory
+.vs/
 
 # Unity3D generated meta files
 *.pidb.meta
+*.pdb.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
@@ -33,3 +36,19 @@ sysinfo.txt
 # FFG imported content
 /content/D2E/ffg
 /content/MoM/ffg
+
+# Auto generated dll files
+/Assets/Plugins/FFGAppImport.dll
+/Assets/Plugins/FFGAppImport.dll.mdb
+/Assets/Plugins/FFGAppImport.dll.mdb.meta
+/Assets/Plugins/FFGAppImport.dll.meta
+/Assets/Plugins/FFGAppImport.pdb
+/Assets/Plugins/UnityEngine.dll
+/Assets/Plugins/UnityEngine.dll.meta
+/Assets/Plugins/UnityEngine.xml
+/Assets/Plugins/UnityEngine.xml.meta
+/Assets/Plugins/ValkyrieTools.dll
+/Assets/Plugins/ValkyrieTools.dll.mdb
+/Assets/Plugins/ValkyrieTools.dll.mdb.meta
+/Assets/Plugins/ValkyrieTools.dll.meta
+/Assets/Plugins/ValkyrieTools.pdb
