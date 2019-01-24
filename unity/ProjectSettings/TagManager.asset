@@ -18,6 +18,7 @@ TagManager:
   - bg_tasks
   - transition
   - logs
+  - questlist
   layers:
   - Default
   - TransparentFX

@@ -2,8 +2,6 @@
 // TEXTS
 ABILITY,Ability
 ABOUT,關於
-ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,行動
 ACTIVATED,Activated
 ACTIVATION,Activation
@@ -425,3 +423,38 @@ ATTACK_WITH_SPELL, 使用 [i]法術[/i] 攻擊
 ATTACK_WITH_UNARMED, 使用 [i]徒手[/i] 攻擊
 
 ACTION_X,行動 {0}
+
+SORT_TITLE,分类
+SORT_SELECT_CRITERIA,选择分类条件:
+SORT_SELECT_ORDER,排列顺序:
+SORT_ASCENDING,按字母顺序
+SORT_DESCENDING,反字母顺序
+
+SORT_BY_AUTHOR,作者
+SORT_BY_NAME,名称
+SORT_BY_DIFFICULTY,难度级别
+SORT_BY_DURATION,持续时间
+
+SORT_BY_RATING,评分
+SORT_BY_AVERAGE_DURATION,平均持续时间
+SORT_BY_WIN_RATIO,胜利比率
+SORT_BY_DATE,更新日期
+
+FILTER_TITLE,选择删选条件
+FILTER_SELECT_LANG, 选择您的语言:
+FILTER_MISSING_EXPANSIONS_ON, 隐藏无扩展的场景 ☑
+FILTER_MISSING_EXPANSIONS_OFF, 隐藏无扩展的场景 ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} 过滤掉的场景
+
+AUTHORS_SHORT,给作者的短消息（“按作者排序”选项）
+AUTHORS_UNKNOWN,未知作者（场景需要作者更新）
+
+SYNOPSYS,简介 (最多100个字)
+
+UPDATED_THIS_WEEK,本周更新
+UPDATED_THIS_MONTH,本月更新
+UPDATED_THIS_TRIMESTER,这个三个月更新
+UPDATED_THIS_SEMESTER,本学期更新
+UPDATED_THIS_YEAR,今年更新
+UPDATED_TWO_YEARS_AGO,两年前更新
+UPDATE_OLDER_THAN_TWO_YEAR,最新更新超过两年

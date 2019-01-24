@@ -1920,13 +1920,35 @@ public class QuestData
         public int lengthMin = 0;
         public int lengthMax = 0;
 
+        // -- data for initial scenario listing
+        // CRC32 of valkyrie package
+        public string version = "";
+        // languages availables with scenario name <"English", "The Fall of House Lynch">
+        public Dictionary<string, string> languages_name = null;
+        // languages availables with synopsys name <"English", "This is the synopsys">
+        public Dictionary<string, string> languages_synopsys = null;
+        // languages availables with synopsys name <"English", "Authors in one line">
+        public Dictionary<string, string> languages_authors_short = null;
+        // URL of the package
+        public string package_url = "";
+        // latest_update date if file is stored on Github
+        public System.DateTime latest_update;
+        // is package available locally
+        public bool downloaded = false;
+        public bool update_available = false;
+
+        // -- data inside translation file (for unzipped quest)
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string synopsys_key { get { return "quest.synopsys"; } }
         public string authors_key { get { return "quest.authors"; } }
+        public string authors_short_key { get { return "quest.authors_short"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey synopsys { get { return new StringKey("qst", synopsys_key); } }
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
+        public StringKey authors_short { get { return new StringKey("qst", authors_short_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -2083,6 +2105,61 @@ public class QuestData
                 image = value != null ? value.Replace('\\', '/') : value;
             }
 
+            // parse data for scenario explorer
+            version = "";
+            if (iniData.ContainsKey("version"))
+            {
+                version = iniData["version"];
+            }
+
+            languages_name = new Dictionary<string, string>();
+            if (iniData.ContainsKey("name."+defaultLanguage))
+            {
+                foreach(KeyValuePair<string,string> kv in iniData)
+                {
+                    if(kv.Key.Contains("name."))
+                    {
+                        languages_name.Add(kv.Key.Substring(5), kv.Value);
+                    }
+                }
+            }
+
+            languages_synopsys = new Dictionary<string, string>();
+            if (iniData.ContainsKey("synopsys." + defaultLanguage))
+            {
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("synopsys."))
+                    {
+                        languages_synopsys.Add(kv.Key.Substring(9), kv.Value);
+                    }
+                }
+            }
+
+            languages_authors_short = new Dictionary<string, string>();
+            if (iniData.ContainsKey("authors_short." + defaultLanguage))
+            {
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("authors_short."))
+                    {
+                        languages_authors_short.Add(kv.Key.Substring(14), kv.Value);
+                    }
+                }
+            }
+
+            package_url = "";
+            if (iniData.ContainsKey("url"))
+            {
+                package_url = iniData["url"];
+            }
+
+            latest_update = new System.DateTime(0);
+            if (iniData.ContainsKey("latest_update"))
+            {
+                System.DateTime.TryParse(iniData["latest_update"], out latest_update);
+            }
+
             return true;
         }
 
@@ -2130,6 +2207,26 @@ public class QuestData
                 r.Append("image=").AppendLine(image);
             }
 
+            if(version != "")
+            {
+                r.Append("version=").AppendLine(version);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_name)
+            {
+                r.Append("name."+ kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_synopsys)
+            {
+                r.Append("synopsys." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_authors_short)
+            {
+                r.Append("authors_short." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
             return r.ToString();
         }
 
@@ -2144,6 +2241,37 @@ public class QuestData
                 }
             }
             return r;
+        }
+
+        public string GetShortAuthor()
+        {
+            string authors_short_translation = "";
+
+            // if languages_authors_short is available, we are in scenarios explorer and don't have access to .txt files yet
+            if (languages_authors_short != null) {
+                // Try to get current language
+                if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
+                {
+                    // Try to get default language
+                    if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))
+                    {
+                        // if not translated, returns unknown
+                        authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                    }
+                }
+            }
+            else
+            {
+                authors_short_translation = authors_short.Translate();
+                // if not translated, it means authors_short is not found in txt files
+                if (authors_short_translation == authors_short.fullKey)
+                {
+                    authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                }
+                Debug.Log("sa " + authors_short_translation + "\nauthors_short.Translate() " + authors_short.Translate() + "\nauthors_short.fullKey " + authors_short.fullKey);
+            }
+
+            return authors_short_translation;
         }
     }
 }

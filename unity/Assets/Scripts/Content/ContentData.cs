@@ -13,6 +13,7 @@ public class ContentData {
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
     public Dictionary<string, PackTypeData> packTypes;
+    public Dictionary<string, StringKey> packSymbol;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heroes;
     public Dictionary<string, ClassData> classes;
@@ -128,6 +129,9 @@ public class ContentData {
         // This is pack type for sorting packs
         packTypes = new Dictionary<string, PackTypeData>();
 
+        // This is pack symbol list
+        packSymbol = new Dictionary<string, StringKey>();
+    
         // This is all of the available sides of tiles (not currently tracking physical tiles)
         tileSides = new Dictionary<string, TileSideData>();
 
@@ -273,6 +277,9 @@ public class ContentData {
 
             // Add content pack
             allPacks.Add(pack);
+
+            // Add symbol
+            packSymbol.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
 
             // We finish without actually loading the content, this is done later (content optional)
         }
