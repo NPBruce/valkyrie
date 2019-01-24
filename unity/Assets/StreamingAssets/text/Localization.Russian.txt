@@ -470,3 +470,38 @@ ERROR_HTTP,Ошибка загрузки, если проблема сохран
 ERROR_NETWORK,Ошибка загрузки, проверьте подключение к интернету
 
 NEW_VERSION_AVAILABLE,Новая версия доступна!
+
+SORT_TITLE,Сортировка
+SORT_SELECT_CRITERIA,Сортировать по:
+SORT_SELECT_ORDER,Упорядочить по:
+SORT_ASCENDING,Возрастанию
+SORT_DESCENDING,Убыванию
+
+SORT_BY_AUTHOR,Автор
+SORT_BY_NAME,Название
+SORT_BY_DIFFICULTY,Сложность
+SORT_BY_DURATION,Время игры
+
+SORT_BY_RATING,Рейтинг
+SORT_BY_AVERAGE_DURATION,Ср-нее время
+SORT_BY_WIN_RATIO,Процент побед
+SORT_BY_DATE,Дата обн-ния
+
+FILTER_TITLE,Фильтры
+FILTER_SELECT_LANG,Выберите язык(-и), на котором вы говорите:
+FILTER_MISSING_EXPANSIONS_ON,Скрыть сценарии с отсутствующими дополнениями ☑
+FILTER_MISSING_EXPANSIONS_OFF,Скрыть сценарии с отсутствующими дополнениями ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Найдено сценариев: {0}
+
+AUTHORS_SHORT,Автор сценария (для "сортировки по авторам")
+AUTHORS_UNKNOWN,Аноним (требуется обновление сценария автором)
+
+SYNOPSYS,Синопсис (до 100 знаков)
+
+UPDATED_THIS_WEEK,Обновлено на этой неделе
+UPDATED_THIS_MONTH,Обновлено в этом месяце
+UPDATED_THIS_TRIMESTER,Обновлено в этом квартале
+UPDATED_THIS_SEMESTER,Обновлено в этом полугодии
+UPDATED_THIS_YEAR,Обновлено год назад
+UPDATED_TWO_YEARS_AGO,Обновлено два года назад
+UPDATE_OLDER_THAN_TWO_YEAR,Текущая версия старше двух лет

@@ -52,7 +52,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly Color dark_grey_text = new Color(0.1f, 0.1f, 0.1f);
 
         // filters
-        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Japanese,Chinese,Czech".Split(',');
+        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech".Split(',');
         Dictionary<string, bool> langs_selected = null;
         bool filter_missing_expansions = false;
 
