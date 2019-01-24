@@ -46,6 +46,23 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Destroy a UI element.</summary>
+        public void Destroy()
+        {
+            if(bg!=null)
+                Object.Destroy(bg);
+        }
+
+        /// <summary>
+        /// The action if a button is assigned</summary>
+        /// <returns>
+        /// The action .</returns>
+        public UnityEngine.Events.UnityAction GetAction()
+        {
+            return buttonCall;
+        }
+
+        /// <summary>
         /// The tranform that should be used for sub elements.</summary>
         /// <returns>
         /// The background Transform.</returns>
@@ -146,6 +163,15 @@ namespace Assets.Scripts.UI
             RectTransform transBg = bg.GetComponent<RectTransform>();
             transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, y, height);
             transBg.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, x, width);
+        }
+
+        /// <summary>
+        /// Set the text Horizontal overflow</summary>
+        /// <param name="mode">wrap or overflow</param>
+        public virtual void SetTextHorizontalOverflow(HorizontalWrapMode mode)
+        {
+            if (text == null) return;
+            text.GetComponent<UnityEngine.UI.Text>().horizontalOverflow = mode;
         }
 
         /// <summary>
@@ -300,6 +326,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetFont(Font font)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetFont called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().font = font;
         }
 
@@ -310,6 +337,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetTextAlignment(TextAnchor align)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetTextAlignment called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().alignment = align;
         }
 

@@ -34,18 +34,6 @@ namespace Assets.Scripts.UI.Screens
 
             game = Game.Get();
 
-            // Find any content packs at the location
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Check if we found anything (must have found at least base)
-            if (game.cd.allPacks.Count == 0)
-            {
-                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
-                Application.Quit();
-            }
-
-            // load base to get types
-            game.cd.LoadContentID("");
-
             // Create elements for the screen
             CreateElements();
         }

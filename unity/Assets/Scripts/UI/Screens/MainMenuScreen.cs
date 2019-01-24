@@ -24,16 +24,6 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             Game game = Game.Get();
 
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Check if we found anything
-            if (game.cd.GetPacks().Count == 0)
-            {
-                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
-                Application.Quit();
-            }
-            // Load base
-            game.cd.LoadContentID("");
-
             List<string> music = new List<string>();
             foreach (AudioData ad in game.cd.audio.Values)
             {

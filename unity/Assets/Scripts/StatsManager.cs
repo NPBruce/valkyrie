@@ -225,7 +225,7 @@ public class StatsManager
         HTTPManager.Get("https://drive.google.com/uc?id=1lEhwFWrryzNH6DUMbte37G1p22SyDhu9&export=download", StatsDownload_callback);
     }
 
-    private void StatsDownload_callback(string data, bool error)
+    private void StatsDownload_callback(string data, bool error, System.Uri uri)
     {
         download_ongoing = false;
 
@@ -248,6 +248,11 @@ public class StatsManager
             scenarios_stats[stats.scenario_name] = stats;
         }
 
+        // this is required if list of quests are downloaded before the stats
+        if(Game.Get().questsList != null && Game.Get().questsList.download_done)
+        {
+            Game.Get().questsList.SortQuests();
+        }
     }
 
 }

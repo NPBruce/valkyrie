@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos
-ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.
-ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, UnityStandaloneFileBrowser de gkngkc et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activé
 ACTIVATION,Activation
@@ -432,3 +432,38 @@ ERROR_HTTP,Erreur lors du téléchargement du fichier, si le problème persiste 
 ERROR_NETWORK,Erreur lors du téléchargement du fichier, veuillez vérifier votre connexion internet
 
 NEW_VERSION_AVAILABLE,Mise à jour disponible!
+
+SORT_TITLE,Tri
+SORT_SELECT_CRITERIA,Selectionnez le critère de tri:
+SORT_SELECT_ORDER,Ordre:
+SORT_ASCENDING,Ascendant
+SORT_DESCENDING,Descendant
+
+SORT_BY_AUTHOR,Auteurs
+SORT_BY_NAME,Nom
+SORT_BY_DIFFICULTY,Difficulté
+SORT_BY_DURATION,Durée
+
+SORT_BY_RATING,Notes
+SORT_BY_AVERAGE_DURATION,Durée moy.
+SORT_BY_WIN_RATIO,% victoire
+SORT_BY_DATE,Mise à jour
+
+FILTER_TITLE,Filtres
+FILTER_SELECT_LANG,Sélectionnez le(s) language(s) que vous comprenez:
+FILTER_MISSING_EXPANSIONS_ON,Cachez les scénarios avec une extension manquante  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Cachez les scénarios avec une extension manquante  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scénario(s) ont été filtré
+
+AUTHORS_SHORT,Auteurs en une ligne de texte (pour  le "tri par auteurs")
+AUTHORS_UNKNOWN,Auteurs inconnus (le scénario doit être mis à jour pour avoir cette information)
+
+SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Mis à jour cette semaine
+UPDATED_THIS_MONTH,Mis à jour ce mois ci
+UPDATED_THIS_TRIMESTER,Mis à jour ces 3 derniers mois
+UPDATED_THIS_SEMESTER,Mis à jour ces 6 derniers mois
+UPDATED_THIS_YEAR,Mis à jour il y a moins d'un an
+UPDATED_TWO_YEARS_AGO,Mis à jour il y a moins de deux ans
+UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans 

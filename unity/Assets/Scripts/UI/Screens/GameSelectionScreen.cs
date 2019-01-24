@@ -267,7 +267,23 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcD2E.NeedImport())
             {
-                Game.Get().gameType = new D2EGameType();
+                Game game = Game.Get();
+
+                game.gameType = new D2EGameType();
+
+                // Loading list of content - doing this later is not required
+                game.cd = new ContentData(game.gameType.DataDirectory());
+                // Check if we found anything
+                if (game.cd.GetPacks().Count == 0)
+                {
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    Application.Quit();
+                }
+                // Load the base content - pack will be loaded later if required
+                game.cd.LoadContentID("");
+
+                // Download quests list
+                game.questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();
@@ -327,9 +343,24 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcMoM.NeedImport())
             {
-                Game.Get().gameType = new MoMGameType();
+                Game game = Game.Get();
+                game.gameType = new MoMGameType();
+
+                // Loading list of content - doing this later is not required
+                game.cd = new ContentData(game.gameType.DataDirectory());
+                // Check if we found anything
+                if (game.cd.GetPacks().Count == 0)
+                {
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    Application.Quit();
+                }
+                // Load the base content - pack will be loaded later if required
+                game.cd.LoadContentID("");
+
+                // Download quests list
+                game.questsList = new QuestsManager();
                 // MoM also has a special reound controller
-                Game.Get().roundControl = new RoundControllerMoM();
+                game.roundControl = new RoundControllerMoM();
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
                 loadLocalization();

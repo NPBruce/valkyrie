@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
-ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen.
-ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
 ACTIVATION,Aktivierung
@@ -411,3 +411,38 @@ ERROR_HTTP,Fehler beim Abrufen der datei. Wenn das Problem weiterhin besteht, me
 ERROR_NETWORK,Fehler beim Abrufen der datei, bitte überprüfe deine Internetverbindung
 
 NEW_VERSION_AVAILABLE,Update verfügbar!
+
+SORT_TITLE,Sortieren
+SORT_SELECT_CRITERIA,Sortierkriterien auswählen:
+SORT_SELECT_ORDER,Sortieren nach:
+SORT_ASCENDING,Aufsteigend
+SORT_DESCENDING,Absteigend
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Name
+SORT_BY_DIFFICULTY,Schwierigkeit
+SORT_BY_DURATION,Dauer
+
+SORT_BY_RATING,Bewertung
+SORT_BY_AVERAGE_DURATION,Ø Dauer
+SORT_BY_WIN_RATIO,Siegrate
+SORT_BY_DATE,Updatedatum
+
+FILTER_TITLE,Filter auswählen
+FILTER_SELECT_LANG,Bitte Sprachen wählen:
+FILTER_MISSING_EXPANSIONS_ON,Scenarien mit fehlenden Erweiterungen verstecken  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Scenarien mit fehlenden Erweiterungen verstecken  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Scenarien gefunden
+
+AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
+AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor um dies zu hinterlegen)
+
+SYNOPSYS,Zusammenfassung (max. 100 Zeichen)
+
+UPDATED_THIS_WEEK,Innerhalb dieser Woche aktualisiert
+UPDATED_THIS_MONTH,Innerhalb dieses Monats aktualisiert
+UPDATED_THIS_TRIMESTER,Innerhalb diesers Quartals aktualisiert
+UPDATED_THIS_SEMESTER,Innerhalb dieses Semesters aktualisiert
+UPDATED_THIS_YEAR,Innerhalb dieses Jahres aktualisiert
+UPDATED_TWO_YEARS_AGO,Vor zwei Jahren aktualisiert
+UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre
