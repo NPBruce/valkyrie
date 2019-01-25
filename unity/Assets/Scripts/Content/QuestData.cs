@@ -134,7 +134,7 @@ public class QuestData
             // Loop through all ini sections
             foreach (KeyValuePair<string, Dictionary<string, string>> section in questIniData.data)
             {
-                // Add the section to our quest data.
+                // Add the section to our quest data
                 AddData(section.Key, section.Value, f);
             }
 

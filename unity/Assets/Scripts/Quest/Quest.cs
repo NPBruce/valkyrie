@@ -120,21 +120,20 @@ public class Quest
     public Game game;
 
     /// <summary>
-    /// Find and return audio or picture file for localization. Disabled for the editor scenario. Disabled for imput files.
+    /// Find and return audio or picture file for localization. Use only for scenarios.
     /// </summary>
-    /// <param name="name">File name</param>
-    /// <param name="source">Path to file</param>
+    /// <param name="name">Path from root folder scenario to file and File Name</param>
+    /// <param name="source">Path to root scenario folder</param>
     /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default file</returns>
+    /// <remarks> 
+    /// param "name" should contain name and path from root folder scenario to file, as in *.ini. Real path ".../.../[ScenarioName]/.../FileName", "name" = ".../FileName".
+    /// param "source" should contain path to scenario. ".../.../[ScenarioName]".
+    /// </remarks>
     public static string FindLocalisedMultimediaFile(string name, string source)
     {
-        if (Game.game.quest != null && !Game.game.editMode)
+        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang),name)))
         {
-            var stringPath = Path.GetDirectoryName(Game.game.quest.qd.questPath);
-            if (source.Contains(stringPath) &&
-             File.Exists(Path.Combine(Path.Combine(stringPath, Game.game.currentLang), Path.Combine(source.Replace(stringPath, "") != "" ? source.Replace(stringPath, "").Remove(0, 1) : "", name))))
-            {
-                return Path.Combine(Path.Combine(stringPath, Game.game.currentLang), Path.Combine(source.Replace(stringPath, "") != "" ? source.Replace(stringPath, "").Remove(0, 1) : "", name));
-            }
+            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
         }
         return Path.Combine(source, name);
     }
@@ -721,7 +720,7 @@ public class Quest
                 }
                 else
                 {
-                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + Path.DirectorySeparatorChar + s);
+                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
                 }
             }
             game.audioControl.Music(toPlay, false);
