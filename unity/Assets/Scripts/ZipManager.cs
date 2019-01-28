@@ -113,7 +113,7 @@ public class ZipManager : MonoBehaviour
                 {
                     Dictionary<string, string> iniData = IniRead.ReadFromIni(target_path + "/quest.ini", "Quest");
                     if (iniData.ContainsKey("image"))
-                        zip.ExtractSelectedEntries("name = " + iniData["image"], null, target_path, ExtractExistingFileAction.OverwriteSilently);
+                        zip.ExtractSelectedEntries("name = '" + iniData["image"] +"'", null, target_path, ExtractExistingFileAction.OverwriteSilently);
                 }
             }
 
