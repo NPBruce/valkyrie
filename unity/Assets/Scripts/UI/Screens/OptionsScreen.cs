@@ -343,7 +343,7 @@ namespace Assets.Scripts.UI.Screens
         private void SelectLang(string lang)
         {
             // Set newn lang in UI...
-            string newLang = lang;        
+            string newLang = lang;
 
             // ... and in configuration
             game.config.data.Add("UserConfig", "currentLang", newLang);
@@ -351,6 +351,16 @@ namespace Assets.Scripts.UI.Screens
             game.currentLang = newLang;
             LocalizationRead.changeCurrentLangTo(newLang);
             ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
+
+            // sort quests according to new language
+            if (game.questsList.download_done)
+            {
+                game.questsList.SortQuests();
+            }
+            else
+            {
+                game.questsList.loadAllLocalQuests();
+            }
 
             new OptionsScreen();
         }
