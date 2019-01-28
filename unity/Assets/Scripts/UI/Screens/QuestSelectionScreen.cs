@@ -226,7 +226,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Display offline message
             if (!game.questsList.download_done)
-            { 
+            {
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 ui.SetText("OFFLINE", Color.red);
@@ -789,7 +789,7 @@ namespace Assets.Scripts.UI.Screens
                     LocalizationRead.AddDictionary("qst", q.localizationDict);
                     name_translation = q.name.Translate();
                     LocalizationRead.AddDictionary("qst", q.localizationDict);
-                    synopsys_translation = q.synopsys.Translate();
+                    synopsys_translation = q.synopsys.Translate(true);
                 }
 
 
@@ -811,11 +811,17 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetButton(delegate { Selection(key); });
                 if (q.image.Length > 0)
                 {
-                    if (images_list.IsImageAvailable(q.package_url + q.image))
+                    if (!game.questsList.download_done)
+                    {
+                        Texture2D picTex = ContentData.FileToTexture(Path.Combine(q.path, q.image));
+                        if(picTex!=null)
+                            ui.SetImage(picTex);
+                    }
+                    else if (images_list.IsImageAvailable(q.package_url + q.image))
                     {
                         DrawScenarioPicture(q.package_url + q.image, ui);
                     }
-                    else
+                    else 
                     {
                         images_list.Add(q.package_url + q.image, ui);
                     }
@@ -916,7 +922,11 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-                if(q.downloaded)
+                if(!game.questsList.download_done)
+                {
+                    ui.SetImage(button_play);
+                }
+                else if(q.downloaded)
                 {
                     if (q.update_available)
                         ui.SetImage(button_update);
@@ -1102,18 +1112,22 @@ namespace Assets.Scripts.UI.Screens
         {
             QuestData.Quest q = game.questsList.getQuestData(key);
 
-            if ((q.downloaded && !q.update_available))
+            Destroyer.Dialog();
+            CleanQuestList();
+
+            if (!game.questsList.download_done)
             {
                 // Play
-                Destroyer.Dialog();
-                CleanQuestList();
+                new QuestDetailsScreen(q);
+            }
+            else if ((q.downloaded && !q.update_available) || (!game.questsList.download_done))
+            {
+                // Play
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
             }
             else
             {
                 // Download / Update
-                Destroyer.Dialog();
-                CleanQuestList();
                 GameObject download = new GameObject("downloadPage");
                 download.tag = Game.QUESTUI;
                 QuestDownload qd = download.AddComponent<QuestDownload>();
