@@ -382,7 +382,7 @@ public class Game : MonoBehaviour {
         updateList.Add(obj);
     }
 
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE_WIN
     [System.Runtime.InteropServices.DllImport("User32.dll")]
     private static extern bool SetDisplayAutoRotationPreferences(int value);
 
