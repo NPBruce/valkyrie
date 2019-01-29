@@ -149,27 +149,15 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw MoM button
-            ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
-            ui.SetText(MOM_NAME, startColor);
+            startColor = Color.white;
             if (fcMoM.NeedImport())
             {
                 startColor = Color.gray;
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
-                }
-                else
-                {
-                    ui.SetText(MOM_APP_NOT_FOUND, Color.red);
-                }
             }
-            else
-            {
-                startColor = Color.white;
-                ui.SetText(MOM_NAME, startColor);
-                ui.SetButton(delegate { MoM(); });
-            }
+            ui = new UIElement();
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
+            ui.SetText(MOM_NAME, startColor);
+            ui.SetButton(delegate { MoM(); });
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
