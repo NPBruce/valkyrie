@@ -115,35 +115,6 @@ namespace Assets.Scripts.UI.Screens
                 bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
             }
 
-            // check if connected on internet, and display scenario list accordingly (local or online)
-            if (game.questsList.download_done)
-            {
-                if (config_values.ContainsKey("sortCriteria"))
-                {
-                    sort_criteria = config_values["sortCriteria"];
-                }
-                else
-                {
-                    sort_criteria = "rating";
-                }
-
-                if (config_values.ContainsKey("sortOrder"))
-                {
-                    sort_order = config_values["sortOrder"];
-                }
-                else
-                {
-                    sort_order = "descending";
-                }
-            }
-            else
-            {
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
-            }
-
             // initialize sort information
             nbDays_durationText = new SortedDictionary<float, StringKey>();
             nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
@@ -153,11 +124,6 @@ namespace Assets.Scripts.UI.Screens
             nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
             nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
             nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
-
-            // Get sorted list
-            questList = game.questsList.GetList(sort_criteria);
-            if (sort_order == "descending")
-                questList.Reverse();
 
             // Initialize list of images for asynchronous loading
             images_list = new ImgAsyncLoader(this);
@@ -233,6 +199,8 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(UIScaler.GetMediumFont());
                 ui.SetTextAlignment(TextAnchor.MiddleRight);
             }
+
+            PrepareQuestList();
 
             DrawQuestList();
         }
@@ -694,7 +662,7 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     // check list of languages when online
-                    if (q == null || q.languages_name == null)
+                    if (q == null || (q != null && q.languages_name != null && q.languages_name.Count <= 0))
                     {
                         Debug.Log("Scenario " + q.package_url + " does not have a name, this should not happen");
                         return false;
@@ -708,6 +676,46 @@ namespace Assets.Scripts.UI.Screens
             }
 
             return false;
+        }
+
+        public void PrepareQuestList()
+        {
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // check if connected on internet, and display scenario list accordingly (local or online)
+            if (game.questsList.download_done)
+            {
+                if (config_values.ContainsKey("sortCriteria"))
+                {
+                    sort_criteria = config_values["sortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "rating";
+                }
+
+                if (config_values.ContainsKey("sortOrder"))
+                {
+                    sort_order = config_values["sortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
+            }
+            else
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.loadAllLocalQuests();
+                sort_criteria = "name";
+                sort_order = "ascending";
+            }
+
+            // Get sorted list
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
         }
 
         public void DrawQuestList()
