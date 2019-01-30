@@ -364,14 +364,13 @@ public class MonsterCanvas : MonoBehaviour
                 return;
 
             Game game = Game.Get();
-            // This is a bad test
-            if (game.gameType.DisplayHeroes())
+            if (game.gameType.TypeName()=="MoM")
             {
-                new MonsterDialog(m);
+                new MonsterDialogMoM(m);
             }
             else
             {
-                new MonsterDialogMoM(m);
+                new MonsterDialog(m);
             }
         }
     }

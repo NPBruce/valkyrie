@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
-ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa.
-ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
 ACTIONS,Akcje
 ACTIVATED,Aktywowano
 ACTIVATION,Aktywacja
@@ -180,6 +180,7 @@ SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDDEN,Ukryty
 ACTIVE,Aktywny
 SET,Ust.
+SET_EDITOR_ALPHA,Przeźroczystość Edytora
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności
 SPAWN,Przywołaj
@@ -207,6 +208,7 @@ VERTICAL,Pionowy
 ALIGN,Wyrównaj
 SIZE,Rozmiar
 TEXT_SIZE,Rozmiar Tekstu
+BACKGROUND_COLOUR,Kolor tła
 ASPECT,Stosunek
 BORDER,Brzeg
 NO_BORDER,Brak Brzegów
@@ -394,3 +396,38 @@ ATTACK_WITH_UNARMED, Atak bez broni
 ACTION_X, {0}
 
 NEW_VERSION_AVAILABLE,Dostępna aktualizacja!
+
+SORT_TITLE,Sortuj według
+SORT_SELECT_CRITERIA,Wybierz kryterium sortowania:
+SORT_SELECT_ORDER,Uporządkuj:
+SORT_ASCENDING,Rosnąco
+SORT_DESCENDING,Malejąco
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Nazwa
+SORT_BY_DIFFICULTY,Trudność
+SORT_BY_DURATION,Długość
+
+SORT_BY_RATING,Ocena
+SORT_BY_AVERAGE_DURATION,Śr. czas ukoń.
+SORT_BY_WIN_RATIO,Śr. licz. zwyc.
+SORT_BY_DATE,Data aktual.
+
+FILTER_TITLE,Wybierz kryteria
+FILTER_SELECT_LANG,Wybierz język(i), którymi się posługujesz:
+FILTER_MISSING_EXPANSIONS_ON,Ukryj scenariusze, do których nie posiadasz rozszerzeń  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Ukryj scenariusze, do których nie posiadasz rozszerzeń  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Wyfiltrowane scenariusze: {0}
+
+AUTHORS_SHORT,Krótka wiadomość od Autora (opcja "sortuj wg autora")
+AUTHORS_UNKNOWN,Autor nieznany (scenariusz wymagana aktualizacja przez autora)
+
+SYNOPSYS,Streszczenie (maks. 100 znaków)
+
+UPDATED_THIS_WEEK,Zaktualizowane w tym tygodniu
+UPDATED_THIS_MONTH,Zaktualizowane w tym miesiącu
+UPDATED_THIS_TRIMESTER,Zaktualizowane w tym kwartale
+UPDATED_THIS_SEMESTER,Zaktualizowane w tym półroczu
+UPDATED_THIS_YEAR,Zaktualizowane w tym roku
+UPDATED_TWO_YEARS_AGO,Zaktualizowane dwa lata temu
+UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata

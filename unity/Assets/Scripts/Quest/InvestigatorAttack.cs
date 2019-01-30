@@ -59,8 +59,7 @@ public class InvestigatorAttack
         }
         ui.SetFontSize(UIScaler.GetMediumFont());
 
-        MonsterDialogMoM.DrawMonster(monster);
-        MonsterDialogMoM.DrawMonsterHealth(monster, delegate { AttackOptions(); });
+        MonsterDialogMoM.DrawMonster(monster, true);
     }
 
     public void Attack(string type)
@@ -95,7 +94,6 @@ public class InvestigatorAttack
         }
         ui.SetFontSize(UIScaler.GetMediumFont());
 
-        MonsterDialogMoM.DrawMonster(monster);
-        MonsterDialogMoM.DrawMonsterHealth(monster, delegate { Attack(); });
+        MonsterDialogMoM.DrawMonster(monster, true);
     }
 }

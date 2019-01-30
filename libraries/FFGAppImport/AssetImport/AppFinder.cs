@@ -100,7 +100,7 @@ namespace FFGAppImport
             {
                 // Attempt to get steam install location (current 32/64 level)
                 location = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App " + AppId(), "InstallLocation", "");
-                if (location.Equals(""))
+                if (location == null || location.Equals(""))
                 {
                     // If we are on a 64 bit system, need to read the 64bit registry from a 32 bit app (Valkyrie)
                     try

@@ -13,6 +13,7 @@ public class ContentData {
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
     public Dictionary<string, PackTypeData> packTypes;
+    public Dictionary<string, StringKey> packSymbol;
     public Dictionary<string, TileSideData> tileSides;
     public Dictionary<string, HeroData> heroes;
     public Dictionary<string, ClassData> classes;
@@ -128,6 +129,9 @@ public class ContentData {
         // This is pack type for sorting packs
         packTypes = new Dictionary<string, PackTypeData>();
 
+        // This is pack symbol list
+        packSymbol = new Dictionary<string, StringKey>();
+    
         // This is all of the available sides of tiles (not currently tracking physical tiles)
         tileSides = new Dictionary<string, TileSideData>();
 
@@ -274,6 +278,9 @@ public class ContentData {
             // Add content pack
             allPacks.Add(pack);
 
+            // Add symbol
+            packSymbol.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
+
             // We finish without actually loading the content, this is done later (content optional)
         }
     }
@@ -337,7 +344,18 @@ public class ContentData {
         // Don't reload content
         if (loadedPacks.Contains(cp.id)) return;
 
-        foreach(string ini in cp.iniFiles)
+        foreach (KeyValuePair<string, List<string>> kv in cp.localizationFiles)
+        {
+            DictionaryI18n packageDict = new DictionaryI18n();
+            foreach (string file in kv.Value)
+            {
+                packageDict.AddDataFromFile(file);
+            }
+
+            LocalizationRead.AddDictionary(kv.Key, packageDict);
+        }
+
+        foreach (string ini in cp.iniFiles)
         {
             IniData d = IniRead.ReadFromIni(ini);
             // Bad ini file not a fatal error, just ignore (will be in log)
@@ -351,16 +369,6 @@ public class ContentData {
             }
         }
 
-        foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
-        {
-            DictionaryI18n packageDict = new DictionaryI18n();
-            foreach(string file in kv.Value)
-            {
-                packageDict.AddDataFromFile(file);
-            }
-
-            LocalizationRead.AddDictionary(kv.Key, packageDict);
-        }
 
         loadedPacks.Add(cp.id);
 
@@ -672,6 +680,11 @@ public class ContentData {
             // Ignore invalid entry
             if (d.name.Equals(""))
                 return;
+            if (d.image.Equals(""))
+            {
+                ValkyrieDebug.Log("Token " + d.name + "did not have an image. Skipping");
+                return;
+            }
             // If we don't already have one then add this
             if (!tokens.ContainsKey(name))
             {

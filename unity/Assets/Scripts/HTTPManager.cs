@@ -16,7 +16,7 @@ class HTTPManager
     /// Download a text file, and call action() when done.</summary>
     /// <param name="url">Url of the file to download</param>
     /// <param name="action">Callback with content in string or error in case of problem, and bool containing download status (true:success).</param>
-    public static void Get(string url, Action<string, bool> action)
+    public static void Get(string url, Action<string, bool, Uri> action)
     {
         if (network_go == null)
         {
@@ -29,6 +29,25 @@ class HTTPManager
 
         dd.DownloadAsync(url, action);
     }
+
+    /// <summary>
+    /// Download an image file, and call action() when done.</summary>
+    /// <param name="url">Url of the file to download</param>
+    /// <param name="action">Callback with content in string or error in case of problem, and bool containing download status (true:success).</param>
+    public static void GetImage(string url, Action<Texture2D, bool, Uri> action)
+    {
+        if (network_go == null)
+        {
+            network_go = new GameObject("NetworkManager");
+            network_go.tag = Game.BG_TASKS;
+        }
+
+        //Use WebClient Class
+        DataDownloaderImage ddi = network_go.AddComponent<DataDownloaderImage>();
+
+        ddi.DownloadImageAsync(url, action);
+    }
+
 
     /// <summary>
     /// HTTP POST content to a URL, and call action() when done.</summary>
@@ -55,9 +74,9 @@ class HTTPManager
 class DataDownloader : MonoBehaviour
 {
     private Uri uri = null;
-    private Action<string, bool> callback_action;
+    private Action<string, bool, Uri> callback_action=null;
 
-    public void DownloadAsync(string url, Action<string, bool> action)
+    public void DownloadAsync(string url, Action<string, bool, Uri> action)
     {
         uri = new Uri(url);
         callback_action = action;
@@ -73,19 +92,57 @@ class DataDownloader : MonoBehaviour
         if (www_get.isNetworkError)
         {
             // Most probably a connection error
-            callback_action("ERROR NETWORK", true);
             Debug.Log("Error downloading data : most probably a connectivity issue (please check your internet connection)");
+            callback_action("ERROR NETWORK", true, uri);
         }
         else if (www_get.isHttpError)
         {
             // Most probably a connection error
-            callback_action(www_get.error + " " + www_get.responseCode, true);
-            Debug.Log("Error downloading data : most probably a connection error (server error)");
+            Debug.Log("Error downloading data : HTTP error " + www_get.responseCode + " most probably a connection error (server error)");
+            callback_action(www_get.error + " " + www_get.responseCode, true, uri);
         }
         else
         {
             // download OK
-            callback_action(www_get.downloadHandler.text, false);
+            callback_action(www_get.downloadHandler.text, false, uri);
+        }
+    }
+}
+
+class DataDownloaderImage : MonoBehaviour
+{
+    private Uri uri = null;
+    private Action<Texture2D, bool, Uri> callback_action_img = null;
+
+    public void DownloadImageAsync(string url, Action<Texture2D, bool, Uri> action)
+    {
+        uri = new Uri(url);
+        callback_action_img = action;
+
+        StartCoroutine(GetData());
+    }
+
+    private IEnumerator GetData()
+    {
+        UnityWebRequest www_get = UnityWebRequestTexture.GetTexture(uri);
+        yield return www_get.SendWebRequest();
+
+        if (www_get.isNetworkError)
+        {
+            // Most probably a connection error
+            Debug.Log("Error downloading data : most probably a connectivity issue (please check your internet connection)");
+            callback_action_img(null, true, uri);
+        }
+        else if (www_get.isHttpError)
+        {
+            // Most probably a connection error
+            Debug.Log("Error downloading data : HTTP error " + www_get.responseCode + " most probably a connection error (server error)");
+            callback_action_img(null, true, uri);
+        }
+        else
+        {
+            // download OK
+            callback_action_img(DownloadHandlerTexture.GetContent(www_get), false, uri);
         }
     }
 }

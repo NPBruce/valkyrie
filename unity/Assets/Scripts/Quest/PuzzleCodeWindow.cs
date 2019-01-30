@@ -28,12 +28,14 @@ public class PuzzleCodeWindow
 
         if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
+            // This puzzle was played before. Load up the previous moves.
             puzzle = game.quest.puzzle[questPuzzle.sectionName] as PuzzleCode;
             previousMoves = puzzle.guess.Count;
         }
         else
         {
-            puzzle = new PuzzleCode(questPuzzle.puzzleLevel, questPuzzle.puzzleAltLevel);
+            // Initialize a new puzzle
+            puzzle = new PuzzleCode(questPuzzle.puzzleLevel, questPuzzle.puzzleAltLevel, questPuzzle.puzzleSolution);
         }
 
         CreateWindow();

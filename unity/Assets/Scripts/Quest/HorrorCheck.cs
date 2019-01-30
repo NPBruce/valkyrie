@@ -71,6 +71,6 @@ public class HorrorCheck {
         ui.SetButton(Destroyer.Dialog);
         new UIElementBorder(ui);
 
-        MonsterDialogMoM.DrawMonster(m);
+        MonsterDialogMoM.DrawMonster(m, true);
     }
 }

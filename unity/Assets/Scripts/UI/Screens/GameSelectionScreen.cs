@@ -14,7 +14,9 @@ namespace Assets.Scripts.UI.Screens
     {
         FFGImport fcD2E;
         FFGImport fcMoM;
+#if IA
         FFGImport fcIA;
+#endif
         protected string importType = "";
         Thread importThread;
 
@@ -27,9 +29,11 @@ namespace Assets.Scripts.UI.Screens
         private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
         private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
         private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+#if IA
         private StringKey IA_NAME = new StringKey("val", "IA_NAME");
         private StringKey IA_APP_NOT_FOUND = new StringKey("val", "IA_APP_NOT_FOUND");
         private StringKey IA_APP_NOT_FOUND_ANDROID = new StringKey("val", "IA_APP_NOT_FOUND_ANDROID");
+#endif
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -51,24 +55,32 @@ namespace Assets.Scripts.UI.Screens
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
             else
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+#endif
             }
 
             fcD2E.Inspect();
             fcMoM.Inspect();
+#if IA
             fcIA.Inspect();
+#endif
 
             // Banner Image
             Sprite bannerSprite;
@@ -107,13 +119,13 @@ namespace Assets.Scripts.UI.Screens
 
             // Draw D2E import button
             ui = new UIElement();
-            if (fcD2E.ImportAvailable())
+            if (fcD2E.ImportAvailable() || ( !fcD2E.NeedImport() && (Application.platform != RuntimePlatform.Android) ) )
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 15.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("D2E"); });
+                ui.SetButton(delegate { Import("D2E", !fcD2E.ImportAvailable()); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
@@ -128,6 +140,11 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetText(D2E_APP_NOT_FOUND, Color.red);
                 }
+                // Allow manual selection of directory for import
+                if (Application.platform != RuntimePlatform.Android)
+                {
+                    ui.SetButton(delegate { Import("D2E", true); });
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
@@ -140,20 +157,20 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
             ui.SetText(MOM_NAME, startColor);
-            ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { MoM(); });
+            ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
             // Draw MoM import button
             ui = new UIElement();
-            if (fcMoM.ImportAvailable())
+            if (fcMoM.ImportAvailable() || (!fcMoM.NeedImport() && (Application.platform != RuntimePlatform.Android)) )
             {
                 ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 22.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("MoM"); });
+                ui.SetButton(delegate { Import("MoM", !fcMoM.ImportAvailable()); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
@@ -168,10 +185,15 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetText(MOM_APP_NOT_FOUND, Color.red);
                 }
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (Application.platform != RuntimePlatform.Android)
+                {
+                    ui.SetButton(delegate { Import("MoM", true); });
+                }
                 new UIElementBorder(ui, Color.red);
             }
 
-#if false
+#if IA
             // Draw IA button
             startColor = Color.white;
             if (fcIA.NeedImport())
@@ -233,17 +255,58 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcD2E.NeedImport())
             {
-                Game.Get().gameType = new D2EGameType();
+                Game game = Game.Get();
+
+                game.gameType = new D2EGameType();
+
+                // Loading list of content - doing this later is not required
+                game.cd = new ContentData(game.gameType.DataDirectory());
+                // Check if we found anything
+                if (game.cd.GetPacks().Count == 0)
+                {
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    Application.Quit();
+                }
+
+                // Load localization before content
+                loadLocalization();
+
+                // Load the base content - pack will be loaded later if required
+                game.cd.LoadContentID("");
+
+                // Download quests list
+                game.questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-                loadLocalization();
+
                 Destroyer.MainMenu();
             }
         }
 
         // Import content
-        public void Import(string type)
+        public void Import(string type, bool manual_path_selection=false)
         {
+            string path = null;
+
+            if(manual_path_selection)
+            {
+                string app_filename="";
+                if (type.Equals("D2E")) app_filename = "Road to Legend";
+                if (type.Equals("MoM")) app_filename = "Mansions of Madness";
+
+                string[] array_path = SFB.StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
+
+                // return when pressing back
+                if (array_path.Length == 0)
+                    return;
+
+                path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename + "_Data");
+
+                // return if wrong file is selected
+                if (!Directory.Exists(path))
+                    return;
+            }
+
             Destroyer.Destroy();
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
@@ -251,16 +314,18 @@ namespace Assets.Scripts.UI.Screens
 
             if (type.Equals("D2E"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(path); }));
             }
             if (type.Equals("MoM"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(path); }));
             }
+#if IA
             if (type.Equals("IA"))
             {
-                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(); }));
+                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(path); }));
             }
+#endif
             importThread.Start();
         }
 
@@ -270,12 +335,31 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcMoM.NeedImport())
             {
-                Game.Get().gameType = new MoMGameType();
+                Game game = Game.Get();
+                game.gameType = new MoMGameType();
+
+                // Loading list of content - doing this later is not required
+                game.cd = new ContentData(game.gameType.DataDirectory());
+                // Check if we found anything
+                if (game.cd.GetPacks().Count == 0)
+                {
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    Application.Quit();
+                }
+
+                // Load localization before content
+                loadLocalization();
+
+                // Load the base content - pack will be loaded later if required
+                game.cd.LoadContentID("");
+
+                // Download quests list
+                game.questsList = new QuestsManager();
                 // MoM also has a special reound controller
-                Game.Get().roundControl = new RoundControllerMoM();
+                game.roundControl = new RoundControllerMoM();
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-                loadLocalization();
+
                 Destroyer.MainMenu();
             }
         }

@@ -98,6 +98,9 @@ public class EditorTools
         Destroyer.Dialog();
         Game game = Game.Get();
 
+        // save content before creating the package
+        QuestEditor.Save();
+
         string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
         try
         {
@@ -118,6 +121,13 @@ public class EditorTools
                 zip.Save(packageFile);
             }
 
+            // Append sha version
+            using (FileStream stream = File.OpenRead(packageFile))
+            {
+                byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
+                game.quest.qd.quest.version = System.BitConverter.ToString(checksum);
+            }
+
             string icon = game.quest.qd.quest.image.Replace('\\', '/');
             if (icon.Length > 0)
             {
@@ -132,16 +142,29 @@ public class EditorTools
             // Restore icon
             game.quest.qd.quest.image = icon;
 
-            // Append sha version
-            using (FileStream stream = File.OpenRead(packageFile))
-            {
-                byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                manifest += "version=" + System.BitConverter.ToString(checksum) + "\n";
-            }
-
             foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
             {
-                manifest += "name." + kv.Key + "=" + kv.Value + "\n";
+                manifest += "name." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.synopsys"))
+            {
+                manifest += "synopsys." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.description"))
+            {
+                manifest += "description." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.authors"))
+            {
+                manifest += "authors." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.authors_short"))
+            {
+                manifest += "authors_short." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
             }
 
             File.WriteAllText(Path.Combine(destination, packageName + ".ini"), manifest);
