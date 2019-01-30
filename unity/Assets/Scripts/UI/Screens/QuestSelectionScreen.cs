@@ -800,7 +800,6 @@ namespace Assets.Scripts.UI.Screens
                 frame = new UIElement(scrollArea.GetScrollTransform());
                 frame.SetLocation(0f, offset, UIScaler.GetWidthUnits() - 3.2f, 6.7f);
                 frame.SetBGColor(Color.white);
-                frame.SetButton(delegate { Selection(key); });
                 frame.SetImage(scroll_paper);
                 offset += 0.15f;
 
@@ -808,7 +807,6 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f); // this is the location for the shadow (to be displayed first)
                 ui.SetBGColor(Color.clear);
-                ui.SetButton(delegate { Selection(key); });
                 if (q.image.Length > 0)
                 {
                     if (!game.questsList.download_done)
@@ -845,7 +843,6 @@ namespace Assets.Scripts.UI.Screens
                         flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
                         ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
                         ui.SetImage(flagTex);
-                        ui.SetButton(delegate { Selection(key); });
                         flag_x_offset += flag_size + 0.2f;
                     }
                 }
@@ -856,7 +853,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(name_translation, Color.black);
-                ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
@@ -892,7 +888,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
                         ui.SetText(pack_symbol, expansion_text_color);
                         ui.SetBGColor(Color.clear);
-                        ui.SetButton(delegate { Selection(key); });
                         ui.SetFont(game.gameType.GetSymbolFont());
                         ui.SetFontSize(expansions_symbol_font_size);
                         expansion_x_offset += symbol_width - char_spacing;
@@ -905,7 +900,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(synopsys_translation, dark_grey_text);
-                ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
                 ui.SetFontStyle(FontStyle.Italic);
@@ -951,14 +945,12 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(new StringKey("val", "DURATION"), Color.black);
                     duration_text_offset=ui.GetStringWidth(new StringKey("val", "DURATION"));
                     ui.SetLocation(6f, top_text_y, duration_text_offset + 0.5f, 1);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     ui.SetLocation(6f+duration_text_offset+0.5f, top_text_y, 5, 1);
                     ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
                 }
@@ -975,7 +967,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(STATS_NO_AVERAGE_DURATION, Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
-                    ui.SetButton(delegate { Selection(key); });
                 }
 
                 // Difficulty
@@ -986,7 +977,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(new StringKey("val", "DIFFICULTY"), Color.black);
                     difficulty_text_offset = ui.GetStringWidth(new StringKey("val", "DIFFICULTY"));
                     ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y, difficulty_text_offset+0.5f, 1);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetFontSize(UIScaler.GetSmallFont());
                     ui.SetBGColor(Color.clear);
@@ -1006,7 +996,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
-                    ui.SetButton(delegate { Selection(key); });
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
                     uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width + 1, 1);
@@ -1014,7 +1003,6 @@ namespace Assets.Scripts.UI.Screens
                     uic.SetTextAlignment(TextAnchor.LowerLeft);
                     uic.SetBGColor(Color.clear);
                     uic.SetFontSize(font_size);
-                    uic.SetButton(delegate { Selection(key); });
                     uic.CropHorizontal(q.difficulty);
                 }
 
@@ -1030,7 +1018,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(STATS_NO_AVERAGE_WIN_RATIO, Color.black);
                     ui.SetBGColor(Color.clear);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
-                    ui.SetButton(delegate { Selection(key); });
                 }
 
                 //  rating
@@ -1046,7 +1033,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetTextAlignment(TextAnchor.MiddleRight);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { Selection(key); });
 
                     // rating
                     string rating_symbol = "★";
@@ -1066,7 +1052,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetFontSize(font_size);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
-                    ui.SetButton(delegate { Selection(key); });
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
                     uic.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
@@ -1076,7 +1061,6 @@ namespace Assets.Scripts.UI.Screens
                     uic.SetTextAlignment(TextAnchor.MiddleLeft);
                     uic.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
                     uic.CropHorizontal(stats_rating);
-                    uic.SetButton(delegate { Selection(key); });
 
                 }
 
