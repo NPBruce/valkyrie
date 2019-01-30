@@ -344,7 +344,18 @@ public class ContentData {
         // Don't reload content
         if (loadedPacks.Contains(cp.id)) return;
 
-        foreach(string ini in cp.iniFiles)
+        foreach (KeyValuePair<string, List<string>> kv in cp.localizationFiles)
+        {
+            DictionaryI18n packageDict = new DictionaryI18n();
+            foreach (string file in kv.Value)
+            {
+                packageDict.AddDataFromFile(file);
+            }
+
+            LocalizationRead.AddDictionary(kv.Key, packageDict);
+        }
+
+        foreach (string ini in cp.iniFiles)
         {
             IniData d = IniRead.ReadFromIni(ini);
             // Bad ini file not a fatal error, just ignore (will be in log)
@@ -358,16 +369,6 @@ public class ContentData {
             }
         }
 
-        foreach(KeyValuePair<string, List<string>> kv in cp.localizationFiles)
-        {
-            DictionaryI18n packageDict = new DictionaryI18n();
-            foreach(string file in kv.Value)
-            {
-                packageDict.AddDataFromFile(file);
-            }
-
-            LocalizationRead.AddDictionary(kv.Key, packageDict);
-        }
 
         loadedPacks.Add(cp.id);
 

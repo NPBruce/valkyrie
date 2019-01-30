@@ -267,6 +267,10 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
                     Application.Quit();
                 }
+
+                // Load localization before content
+                loadLocalization();
+
                 // Load the base content - pack will be loaded later if required
                 game.cd.LoadContentID("");
 
@@ -274,7 +278,7 @@ namespace Assets.Scripts.UI.Screens
                 game.questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-                loadLocalization();
+
                 Destroyer.MainMenu();
             }
         }
@@ -342,6 +346,10 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
                     Application.Quit();
                 }
+
+                // Load localization before content
+                loadLocalization();
+
                 // Load the base content - pack will be loaded later if required
                 game.cd.LoadContentID("");
 
@@ -351,7 +359,7 @@ namespace Assets.Scripts.UI.Screens
                 game.roundControl = new RoundControllerMoM();
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-                loadLocalization();
+
                 Destroyer.MainMenu();
             }
         }
