@@ -372,7 +372,7 @@ navy,Marineblau
 image,Bild
 code,Code
 slide,Schieberaetsel
-tower,Tower
+tower,Turm
 SYMBOL,Symbol
 
 // Events
