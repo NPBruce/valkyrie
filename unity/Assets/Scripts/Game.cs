@@ -182,7 +182,7 @@ public class Game : MonoBehaviour {
         // The newline at the end stops the stack trace appearing in the log
         ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE_WIN
         SetScreenOrientationToLandscape();
 #endif
 
