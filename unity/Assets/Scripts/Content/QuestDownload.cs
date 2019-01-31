@@ -55,7 +55,7 @@ public class QuestDownload : MonoBehaviour
         }
 
         // update local list of quest and current status 
-        game.questsList.SetAvailable(key);
+        game.questsList.SetQuestAvailability(key, true);
 
         // cleanup screen and go back to list of quests
         Destroyer.Dialog();

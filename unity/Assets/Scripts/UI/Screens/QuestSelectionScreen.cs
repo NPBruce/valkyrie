@@ -12,6 +12,7 @@ namespace Assets.Scripts.UI.Screens
         List<string> questList = null;
 
         // Persistent UI Element
+        UIElement text_connection_status = null;
         UIElement text_number_of_filtered_scenario = null;
         UIElementScrollVertical scrollArea = null;
         UIElement sortOptionsPopup = null;
@@ -190,19 +191,83 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
-            // Display offline message
-            if (!game.questsList.download_done)
+            // Display connection status message
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
             {
-                ui = new UIElement();
-                ui.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                ui.SetText("OFFLINE", Color.red);
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetTextAlignment(TextAnchor.MiddleRight);
+                // error download (no connection, timeout, of file not available)
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+            }
+            else if(game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                // Download ongoing
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("DOWNLOADING...", Color.blue);
+                text_connection_status.SetFontSize(UIScaler.GetSmallFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
+            }
+            else
+            {
+                // Download done, we are online
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
             }
 
-            PrepareQuestList();
+            GetQuestList();
 
             DrawQuestList();
+        }
+
+        private void RemoteQuestsListDownload_cb(bool is_available)
+        {
+            if(is_available)
+            {
+                text_connection_status.SetText("GO ONLINE", Color.green);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+            }
+            else
+            {
+                text_connection_status.SetText("OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+            }
+        }
+
+        private void SetOnlineMode(bool go_online)
+        {
+            if(go_online)
+            {
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+
+                game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
+                ReloadQuestList();
+            }
+            else
+            {
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO ONLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+
+                game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
+                ReloadQuestList();
+            }
         }
 
         // Show button and initialize the popup
@@ -457,6 +522,7 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (SortOption s in sort_options_offline)
             {
+                button_color = Color.grey;
                 if (s.name == sort_criteria)
                     button_color = Color.white;
 
@@ -472,7 +538,6 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, button_color);
 
                 x_offset += button_size + space_between_buttons;
-                button_color = Color.grey;
             }
 
             y_offset += 2.5f;
@@ -480,9 +545,10 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (SortOption s in sort_options_online)
             {
+                button_color = Color.grey;
                 if (s.name == sort_criteria)
                     button_color = Color.white;
-                if (!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     button_color = Color.red;
 
                 // local var required as button is called later with this value
@@ -493,12 +559,11 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetText(s.button_text, button_color);
                 ui.SetFont(Game.Get().gameType.GetHeaderFont());
                 ui.SetFontSize(font_size_sort_buttons);
-                if (game.questsList.download_done)
+                if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
                     ui.SetButton(delegate { SetSort(local_name); });
                 new UIElementBorder(ui, button_color);
 
                 x_offset += button_size + space_between_buttons;
-                button_color = Color.grey;
             }
         }
 
@@ -611,9 +676,54 @@ namespace Assets.Scripts.UI.Screens
             DrawSortCriteriaButtons();
         }
 
+        public void GetQuestList()
+        {
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // check if connected on internet, and display scenario list accordingly (local or online)
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                if (config_values.ContainsKey("sortCriteria"))
+                {
+                    sort_criteria = config_values["sortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "rating";
+                }
+
+                if (config_values.ContainsKey("sortOrder"))
+                {
+                    sort_order = config_values["sortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
+            }
+            else
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.loadAllLocalQuests();
+                sort_criteria = "name";
+                sort_order = "ascending";
+
+            }
+
+            // Get sorted list
+            game.questsList.SortQuests();
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
+        }
+
         public void ReloadQuestList()
         {
             CleanQuestList();
+
+            // we may have changed from online to offline
+            GetQuestList();
 
             DrawQuestList();
         }
@@ -639,7 +749,7 @@ namespace Assets.Scripts.UI.Screens
                 if (!lang.Value)
                     continue;
 
-                if (!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                 {
                     // check list of languages when offline
                     if (q.localizationDict == null)
@@ -678,45 +788,6 @@ namespace Assets.Scripts.UI.Screens
             return false;
         }
 
-        public void PrepareQuestList()
-        {
-            // Get all user configuration
-            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
-
-            // check if connected on internet, and display scenario list accordingly (local or online)
-            if (game.questsList.download_done)
-            {
-                if (config_values.ContainsKey("sortCriteria"))
-                {
-                    sort_criteria = config_values["sortCriteria"];
-                }
-                else
-                {
-                    sort_criteria = "rating";
-                }
-
-                if (config_values.ContainsKey("sortOrder"))
-                {
-                    sort_order = config_values["sortOrder"];
-                }
-                else
-                {
-                    sort_order = "descending";
-                }
-            }
-            else
-            {
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
-            }
-
-            // Get sorted list
-            questList = game.questsList.GetList(sort_criteria);
-            if (sort_order == "descending")
-                questList.Reverse();
-        }
 
         public void DrawQuestList()
         {
@@ -777,7 +848,7 @@ namespace Assets.Scripts.UI.Screens
                 // Get data translation
                 string name_translation = "";
                 string synopsys_translation = "";
-                if (game.questsList.download_done)
+                if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
                 {
                     // quest name is local language, or default language
                     if (q.languages_name != null &&
@@ -817,7 +888,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 if (q.image.Length > 0)
                 {
-                    if (!game.questsList.download_done)
+                    if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     {
                         Texture2D picTex = ContentData.FileToTexture(Path.Combine(q.path, q.image));
                         if(picTex!=null)
@@ -924,7 +995,7 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-                if(!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                 {
                     ui.SetImage(button_play);
                 }
@@ -1107,12 +1178,12 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
             CleanQuestList();
 
-            if (!game.questsList.download_done)
+            if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
             {
                 // Play
                 new QuestDetailsScreen(q);
             }
-            else if ((q.downloaded && !q.update_available) || (!game.questsList.download_done))
+            else if (q.downloaded && !q.update_available)
             {
                 // Play
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));

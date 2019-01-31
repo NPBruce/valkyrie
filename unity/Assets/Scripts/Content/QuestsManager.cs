@@ -33,10 +33,20 @@ public class QuestsManager
     SortedList<float, string> quests_sorted_by_win_ratio = null;
     SortedList<float, string> quests_sorted_by_avg_duration = null;
 
+    // status of download of quest list
     public bool error_download = false;
     public string error_download_description = "";
-    public bool download_done = false;
+    bool download_done = false;
 
+    // Callback when download is done
+    Action<bool> cb_download = null;
+
+    // Current mode to get quest list
+    // Default is local, it changes when file has been downloaded
+    // It can also be set by user
+    public enum QuestListMode { ONLINE, LOCAL, DOWNLOADING, ERROR_DOWNLOAD };
+    public QuestListMode quest_list_mode = QuestListMode.LOCAL;
+    bool force_local_quest = false;
 
     public QuestsManager()
 	{
@@ -48,15 +58,37 @@ public class QuestsManager
         if (game.gameType.TypeName() == "MoM")
         {
             HTTPManager.Get("https://drive.google.com/uc?id=13JEtzRQ1LcCAAhKluxii0tgKDW71XODV&export=download", QuestsDownload_callback);
+            quest_list_mode = QuestListMode.DOWNLOADING;
         }
         else if (game.gameType.TypeName() == "D2E")
         {
             HTTPManager.Get("https://drive.google.com/uc?id=1oa6NhKLUFn61RH1niPJzpFT4fG9iQFas&export=download", QuestsDownload_callback);
+            quest_list_mode = QuestListMode.DOWNLOADING;
         }
         else
         {
             ValkyrieTools.ValkyrieDebug.Log("ERROR: DownloadQuests is called when no game type has been selected");
             return;
+        }
+    }
+
+    public void Register_cb_download(Action<bool> cb_download_p)
+    {
+        cb_download = cb_download_p;
+    }
+
+    // This is called by a user action
+    public void SetMode(QuestListMode qlm)
+    {
+        quest_list_mode = qlm;
+
+        if (qlm == QuestListMode.ONLINE)
+        {
+            force_local_quest = false;
+        }
+        else
+        {
+            force_local_quest = true;
         }
     }
 
@@ -66,10 +98,19 @@ public class QuestsManager
         {
             error_download = true;
             error_download_description = data;
+            // Callback to display screen
+            if (cb_download != null)
+                cb_download(false);
+
+            quest_list_mode = QuestListMode.ERROR_DOWNLOAD;
+
             return;
         }
 
         download_done = true;
+
+        if(!force_local_quest)
+            quest_list_mode = QuestListMode.ONLINE;
 
         // Parse ini
         IniData remoteManifest = IniRead.ReadFromString(data);
@@ -81,12 +122,17 @@ public class QuestsManager
         if (remote_quests_data.Count == 0)
         {
             Debug.Log("ERROR: Quest list is empty\n");
+            error_download = true;
+            error_download_description = "ERROR: Quest list is empty";
+            if (cb_download != null)
+                cb_download(false);
             return;
         }
 
         CheckLocalAvailability();
 
-        SortQuests();
+        if (cb_download != null)
+            cb_download(true);
     }
 
     private void CheckLocalAvailability()
@@ -108,7 +154,7 @@ public class QuestsManager
         }
     }
     
-    public void SetAvailable(string key, bool isAvailable=true)
+    public void SetQuestAvailability(string key, bool isAvailable)
     {
         // update list of local quest
         IniData localManifest = IniRead.ReadFromString("");
@@ -166,7 +212,7 @@ public class QuestsManager
     }
 
     // Build sorted lists
-    public void SortQuests(bool isLocalQuest=false)
+    public void SortQuests()
     {
         Game game = Game.Get();
 
@@ -180,7 +226,7 @@ public class QuestsManager
         quests_sorted_by_avg_duration = new SortedList<float, string>(new DuplicateKeyComparer<float>());
         quests_sorted_by_win_ratio = new SortedList<float, string>(new DuplicateKeyComparer<float>());
 
-        if (isLocalQuest)
+        if (quest_list_mode != QuestListMode.ONLINE || force_local_quest)
         {
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
@@ -269,13 +315,12 @@ public class QuestsManager
                 break;
         }
 
-
         return ret;
     }
 
     public QuestData.Quest getQuestData(string key)
     {
-        if (download_done)
+        if (quest_list_mode == QuestListMode.ONLINE && !force_local_quest)
             return remote_quests_data[key];
         else
             return local_quests_data[key];
@@ -285,7 +330,6 @@ public class QuestsManager
     public void loadAllLocalQuests()
     {
         local_quests_data = QuestLoader.GetQuests();
-        SortQuests(true);
     }
 
 }
