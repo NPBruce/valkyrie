@@ -352,16 +352,6 @@ namespace Assets.Scripts.UI.Screens
             LocalizationRead.changeCurrentLangTo(newLang);
             ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
 
-            // sort quests according to new language
-            if (game.questsList.download_done)
-            {
-                game.questsList.SortQuests();
-            }
-            else
-            {
-                game.questsList.loadAllLocalQuests();
-            }
-
             new OptionsScreen();
         }
     }

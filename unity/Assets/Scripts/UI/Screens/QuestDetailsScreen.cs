@@ -129,7 +129,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             // update quest status : downloaded/updated
-            Game.Get().questsList.SetAvailable(Path.GetFileNameWithoutExtension(q.path), false);
+            Game.Get().questsList.SetQuestAvailability(Path.GetFileNameWithoutExtension(q.path), false);
 
             // Pull up the quest selection page
             Game.Get().questSelectionScreen.Show();
