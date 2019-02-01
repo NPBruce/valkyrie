@@ -462,5 +462,15 @@ namespace Assets.Scripts.Content
             }
             return returnData;
         }
+
+
+        /// <summary>
+        /// Get list of languages
+        /// </summary>
+        /// <returns>List of all available languages</returns>
+        public List<string> GetLanguagesList()
+        {
+            return new List<string>(data.Keys);
+        }
     }
 }
