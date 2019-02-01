@@ -910,16 +910,30 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 // languages flags
-                if (q.languages_name!=null)
+                if (
+                    (q.languages_name!=null && q.languages_name.Count>0) ||
+                    (q.localizationDict!=null && game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+                    )
                 {
+                    List<string> languages = null;
+                    if(q.languages_name.Count > 0)
+                    {
+                        languages = new List<string>(q.languages_name.Keys);
+                    }
+                    else
+                    {
+                        languages = q.localizationDict.GetLanguagesList();
+                    }
+
                     Texture2D flagTex = null;
                     const float flag_size = 0.9f;
                     float flag_y_offset = offset + 0.25f;
-                    float flag_x_offset = (UIScaler.GetWidthUnits() - 10f) - q.languages_name.Count * (flag_size + 0.2f); // align right
-                    foreach (KeyValuePair<string, string> lang_name in q.languages_name)
+                    float flag_x_offset = (UIScaler.GetWidthUnits() - 10f) - languages.Count * (flag_size + 0.2f); // align right
+
+                    foreach (string lang_name in languages)
                     {
                         ui = new UIElement(scrollArea.GetScrollTransform());
-                        flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
+                        flagTex = Resources.Load("sprites/flags/" + lang_name) as Texture2D;
                         ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
                         ui.SetImage(flagTex);
                         flag_x_offset += flag_size + 0.2f;
