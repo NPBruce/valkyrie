@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
+using System.Collections;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for quest selection window
-    public class QuestSelectionScreen
+    public class QuestSelectionScreen: MonoBehaviour
     {
         // List of Quest.QuestData to display (either local or remote)
         List<string> questList = null;
@@ -73,7 +74,7 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_play = null;
         Texture2D button_hole = null;
 
-        public QuestSelectionScreen()
+        public void Start()
         {
             game = Game.Get();
 
@@ -137,6 +138,8 @@ namespace Assets.Scripts.UI.Screens
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
+
+            Show();
         }
 
         public void Show()
@@ -224,7 +227,8 @@ namespace Assets.Scripts.UI.Screens
 
             GetQuestList();
 
-            DrawQuestList();
+            StopCoroutine(DrawQuestList());
+            StartCoroutine(DrawQuestList());
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)
@@ -725,7 +729,8 @@ namespace Assets.Scripts.UI.Screens
             // we may have changed from online to offline
             GetQuestList();
 
-            DrawQuestList();
+            StopCoroutine(DrawQuestList());
+            StartCoroutine(DrawQuestList());
         }
 
         public void CleanQuestList()
@@ -789,7 +794,7 @@ namespace Assets.Scripts.UI.Screens
         }
 
 
-        public void DrawQuestList()
+        public IEnumerator DrawQuestList()
         {
             UIElement ui = null;
 
@@ -1158,22 +1163,23 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 offset += 7.1f;
-            }
 
-            scrollArea.SetScrollSize(offset);
+                scrollArea.SetScrollSize(offset);
 
-            if (nb_filtered_out_quest > 0)
-            {
-                StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
-                text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
-            }
-            else
-            {
-                text_number_of_filtered_scenario.SetText(" ");
+                if (nb_filtered_out_quest > 0)
+                {
+                    StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+                }
+                else
+                {
+                    text_number_of_filtered_scenario.SetText(" ");
+                }
+
+                yield return null;
             }
 
             images_list.StartDownloadASync();
-
         }
 
         // Return to main menu
