@@ -181,12 +181,24 @@ namespace Assets.Scripts.UI
         /// Adds button properties to background area and text.</remarks>
         public virtual void SetButton(UnityEngine.Events.UnityAction call)
         {
-            UnityEngine.UI.Button uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            UnityEngine.UI.Button uiButton = bg.GetComponent<UnityEngine.UI.Button>();
+            if (uiButton == null)
+            { 
+                uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            }
+            else
+            {
+                Debug.Log("Multiple actions have been set on button " + tag);
+            }
             uiButton.interactable = true;
             uiButton.onClick.AddListener(call);
             if (text != null)
             {
-                uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                uiButton = text.GetComponent<UnityEngine.UI.Button>();
+                if(uiButton==null)
+                { 
+                    uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                }
                 uiButton.interactable = true;
                 uiButton.onClick.AddListener(call);
             }
@@ -424,6 +436,7 @@ namespace Assets.Scripts.UI
         /// The size of the text in UIScaler units.</returns>
         public float GetStringWidth(string content, int fontSize, Font fontName)
         {
+            float width = 0f;
             if (textWidthObj == null)
             {
                 textWidthObj = new GameObject("TextSizing");
@@ -434,7 +447,9 @@ namespace Assets.Scripts.UI
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = fontSize;
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            Object.Destroy(textWidthObj);
+            textWidthObj = null;
             return width;
         }
 
@@ -457,6 +472,7 @@ namespace Assets.Scripts.UI
         /// The required text box height in UIScaler units.</returns>
         public float GetStringHeight(string content, float width)
         {
+            float height = 0f;
             if (textHeightObj == null)
             {
                 textHeightObj = new GameObject("TextSizing");
@@ -468,7 +484,10 @@ namespace Assets.Scripts.UI
                 textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             textHeightObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            return (textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            height = (textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            Object.Destroy(textHeightObj);
+            textHeightObj = null;
+            return height;
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
         /// <summary>
         /// Construct a UI element with parent.</summary>
         /// <param name="parent">Parent transform, cannot be changed after construction.</param>
-        public UIElementCropped(Transform parent)
+        public UIElementCropped(Transform parent) : base(parent)
         {
             CreateMask(parent);
         }
@@ -37,6 +37,8 @@ namespace Assets.Scripts.UI
             mask.AddComponent<UnityEngine.UI.RectMask2D>();
             if (parent == null) parent = Game.Get().uICanvas.transform;
             mask.transform.SetParent(parent);
+            // destroy base bg and create a new one
+            Object.Destroy(bg);
             base.CreateBG(mask.transform);
         }
 
