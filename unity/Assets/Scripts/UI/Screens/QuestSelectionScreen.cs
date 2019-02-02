@@ -1089,14 +1089,14 @@ namespace Assets.Scripts.UI.Screens
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
-                    ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width+1, 1);
+                    ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                     ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
-                    uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width + 1, 1);
+                    uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                     uic.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
                     uic.SetTextAlignment(TextAnchor.LowerLeft);
                     uic.SetBGColor(Color.clear);
