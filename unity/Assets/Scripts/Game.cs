@@ -86,6 +86,7 @@ public class Game : MonoBehaviour {
     public GameSelectionScreen gameSelect;
 
     // List of quests window
+    public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
     // Current language
@@ -204,8 +205,10 @@ public class Game : MonoBehaviour {
 
         // Pull up the quest selection page
         if(questSelectionScreen==null)
-            questSelectionScreen = new QuestSelectionScreen();
-        questSelectionScreen.Show();
+        {
+            go_questSelectionScreen = new GameObject("QuestSelectionScreen");
+            questSelectionScreen = go_questSelectionScreen.AddComponent<QuestSelectionScreen>();
+        }
     }
 
     // This is called by editor on the main menu
