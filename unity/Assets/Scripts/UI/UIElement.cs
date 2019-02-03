@@ -188,7 +188,8 @@ namespace Assets.Scripts.UI
             }
             else
             {
-                Debug.Log("Multiple actions have been set on button " + tag);
+                // Multiple actions have been set on this button, using only the last one
+                uiButton.onClick.RemoveAllListeners();
             }
             uiButton.interactable = true;
             uiButton.onClick.AddListener(call);
@@ -198,6 +199,11 @@ namespace Assets.Scripts.UI
                 if(uiButton==null)
                 { 
                     uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                }
+                else
+                {
+                    // Multiple actions have been set on this text button, using only the last one
+                    uiButton.onClick.RemoveAllListeners();
                 }
                 uiButton.interactable = true;
                 uiButton.onClick.AddListener(call);

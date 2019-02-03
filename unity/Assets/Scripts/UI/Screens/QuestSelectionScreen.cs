@@ -62,6 +62,10 @@ namespace Assets.Scripts.UI.Screens
         bool filter_missing_expansions = false;
 
         // sort options
+
+        List<SortOption> sort_options_offline = null;
+        List<SortOption> sort_options_online = null;
+
         string sort_criteria = "rating";
         string sort_order = "descending";
         string last_author = "";
@@ -81,45 +85,6 @@ namespace Assets.Scripts.UI.Screens
         {
             game = Game.Get();
 
-            // Get all user configuration
-            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
-
-            // initalize list of langs
-            langs_selected = new Dictionary<string, bool>();
-            foreach (string lang in langs)
-            {
-                // initialize dict
-                langs_selected.Add(lang, false);
-            }
-
-            // apply lang configuration
-            if (config_values.ContainsKey("filterLangs"))
-            {
-                // saved configuration
-                foreach (string lang in config_values["filterLangs"].Split(';'))
-                {
-                    if(langs_selected.ContainsKey(lang))
-                        langs_selected[lang] = true;
-                }
-            }
-            else
-            {
-                // default configuration
-                foreach (string lang in langs)
-                {
-                    // initialize dict
-                    langs_selected[lang] = true;
-                }
-                langs_selected["Japanese"] = false;
-                langs_selected["Czech"] = false;
-            }
-
-            if (config_values.ContainsKey("filterMissingExpansions"))
-            {
-                filter_missing_expansions = false;
-                bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
-            }
-
             // initialize sort information
             nbDays_durationText = new SortedDictionary<float, StringKey>();
             nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
@@ -129,6 +94,17 @@ namespace Assets.Scripts.UI.Screens
             nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
             nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
             nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
+
+            sort_options_offline = new List<SortOption>();
+            sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
+            sort_options_offline.Add(new SortOption("name", SORT_BY_NAME));
+            sort_options_offline.Add(new SortOption("difficulty", SORT_BY_DIFFICULTY));
+            sort_options_offline.Add(new SortOption("duration", SORT_BY_DURATION));
+            sort_options_online = new List<SortOption>();
+            sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
+            sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
+            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
+            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
 
             // Initialize list of images for asynchronous loading
             images_list = new ImgAsyncLoader(this);
@@ -154,6 +130,44 @@ namespace Assets.Scripts.UI.Screens
             // Clean up downloader if present
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
                 Object.Destroy(go);
+
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // initalize list of langs
+            langs_selected = new Dictionary<string, bool>();
+            foreach (string lang in langs)
+            {
+                // initialize dict
+                langs_selected.Add(lang, false);
+            }
+
+            // apply lang configuration
+            if (config_values.ContainsKey("filterLangs"))
+            {
+                // saved configuration
+                foreach (string lang in config_values["filterLangs"].Split(';'))
+                {
+                    if (langs_selected.ContainsKey(lang))
+                        langs_selected[lang] = true;
+                }
+            }
+            else
+            {
+                // default configuration
+                foreach (string lang in langs)
+                {
+                    // initialize dict
+                    langs_selected[lang] = true;
+                }
+                langs_selected["Japanese"] = false;
+            }
+
+            if (config_values.ContainsKey("filterMissingExpansions"))
+            {
+                filter_missing_expansions = false;
+                bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
+            }
 
             // Heading
             UIElement ui = new UIElement();
@@ -197,11 +211,12 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
+            text_connection_status = new UIElement();
+
             // Display connection status message
             if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
             {
                 // error download (no connection, timeout, of file not available)
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("OFFLINE (network error)", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
@@ -210,7 +225,6 @@ namespace Assets.Scripts.UI.Screens
             else if(game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
             {
                 // Download ongoing
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("DOWNLOADING...", Color.blue);
                 text_connection_status.SetFontSize(UIScaler.GetSmallFont());
@@ -221,7 +235,6 @@ namespace Assets.Scripts.UI.Screens
             else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
             {
                 // Download done, we are online
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("GO OFFLINE", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
@@ -231,7 +244,6 @@ namespace Assets.Scripts.UI.Screens
             else
             {
                 // Download done, user has switched offline modline
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("GO ONLINE", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
@@ -262,9 +274,8 @@ namespace Assets.Scripts.UI.Screens
 
         private void SetOnlineMode(bool go_online)
         {
-            if(go_online)
+            if (go_online)
             {
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("GO OFFLINE", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
@@ -276,7 +287,6 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
                 text_connection_status.SetText("GO ONLINE", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
@@ -357,7 +367,6 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             }
         }
-
 
         private void DrawFlags()
         {
@@ -521,18 +530,6 @@ namespace Assets.Scripts.UI.Screens
             float y_offset = 8.2f;
             int font_size_sort_buttons = (int)(UIScaler.GetMediumFont() * 0.95f);
 
-            List<SortOption> sort_options_offline = new List<SortOption>();
-            sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
-            sort_options_offline.Add(new SortOption("name", SORT_BY_NAME));
-            sort_options_offline.Add(new SortOption("difficulty", SORT_BY_DIFFICULTY));
-            sort_options_offline.Add(new SortOption("duration", SORT_BY_DURATION));
-
-            List<SortOption> sort_options_online = new List<SortOption>();
-            sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
-            sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
-            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
-            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
-
             // sort type
             UIElement ui = null;
 
@@ -678,10 +675,20 @@ namespace Assets.Scripts.UI.Screens
 
         public void SetSort(string sort_selected_option)
         {
-            // save sort configuration
-            game.config.data.Add("UserConfig", "sortCriteria", sort_selected_option);
-            game.config.data.Add("UserConfig", "sortOrder", sort_order);
-            game.config.Save();
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            { 
+                // save sort configuration
+                game.config.data.Add("UserConfig", "sortCriteria", sort_selected_option);
+                game.config.data.Add("UserConfig", "sortOrder", sort_order);
+                game.config.Save();
+            }
+            else
+            {
+                // save sort configuration
+                game.config.data.Add("UserConfig", "offlineSortCriteria", sort_selected_option);
+                game.config.data.Add("UserConfig", "offlineSortOrder", sort_order);
+                game.config.Save();
+            }
 
             // apply sort configuration
             sort_criteria = sort_selected_option;
@@ -722,11 +729,24 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
+                // check offline sort option is available
+                if (config_values.ContainsKey("offlineSortCriteria"))
+                {
+                    sort_criteria = config_values["offlineSortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "name";
+                }
 
+                if (config_values.ContainsKey("offlineSortOrder"))
+                {
+                    sort_order = config_values["offlineSortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
             }
 
             // Get sorted list
@@ -833,6 +853,12 @@ namespace Assets.Scripts.UI.Screens
                 yield return null;
             }
 
+            if(game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.loadAllLocalQuests();
+            }
+
             // get quest list dependant on mode (online/offline)
             GetQuestList();
 
@@ -931,7 +957,7 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     // Draw default Valkyrie picture
-                    DrawScenarioPicture(null, ui);
+                    DrawScenarioPicture(images_list.GetTexture(null), ui);
                 }
 
                 // languages flags

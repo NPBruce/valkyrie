@@ -326,7 +326,7 @@ public class QuestsManager
     // --- Management of local quests, when offline ---
     public void loadAllLocalQuests()
     {
-        local_quests_data = QuestLoader.GetQuests();
+        if(local_quests_data==null)
+            local_quests_data = QuestLoader.GetQuests();
     }
-
 }
