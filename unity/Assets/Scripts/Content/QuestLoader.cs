@@ -15,7 +15,6 @@ public class QuestLoader {
         // Look in the user application data directory
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        CleanTemp();
         mkDir(ContentData.DownloadPath());
 
         // Get a list of downloaded quest not packed
@@ -72,7 +71,6 @@ public class QuestLoader {
         // Look in the user application data directory
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        CleanTemp();
         mkDir(ContentData.DownloadPath());
 
         string path = ContentData.DownloadPath() + Path.DirectorySeparatorChar + questName + ".valkyrie";
@@ -99,9 +97,6 @@ public class QuestLoader {
     public static Dictionary<string, QuestData.Quest> GetUserQuests()
     {
         Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
-
-        // Clean up extracted packages
-        CleanTemp();
 
         // Read user application data for quests
         string dataLocation = Game.AppData();
