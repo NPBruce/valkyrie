@@ -382,7 +382,7 @@ public class QuestEditSelection
 
         if (game.quest!=null) game.quest.RemoveAll();
 
-        game.audioControl.Music(new List<string>());
+        game.audioControl.StopMusic();
 
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);

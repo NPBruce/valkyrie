@@ -289,7 +289,7 @@ public class Game : MonoBehaviour {
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
-        audioControl.Music(music);
+        audioControl.PlayDefaultQuestMusic(music);
 
         Destroyer.Dialog();
         // Create the menu button

@@ -657,7 +657,7 @@ public class Quest
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
-        game.audioControl.Music(music);
+        game.audioControl.PlayDefaultQuestMusic(music);
 
         // Update the screen
         game.monsterCanvas.UpdateList();
@@ -704,7 +704,7 @@ public class Quest
                     toPlay.Add(Path.GetDirectoryName(qd.questPath) + Path.DirectorySeparatorChar + s);
                 }
             }
-            game.audioControl.Music(toPlay, false);
+            game.audioControl.PlayMusic(toPlay);
         }
         else
         {
@@ -712,7 +712,7 @@ public class Quest
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }
-            game.audioControl.Music(music);
+            game.audioControl.PlayDefaultQuestMusic(music);
         }
 
         // Get state
