@@ -192,7 +192,7 @@ public class EventManager
                     music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + s);
                 }
             }
-            game.audioControl.Music(music, false);
+            game.audioControl.PlayMusic(music);
             if (music.Count > 1)
             {
                 game.quest.music = new List<string>(e.qEvent.music);

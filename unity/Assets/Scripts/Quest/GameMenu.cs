@@ -113,7 +113,7 @@ public class GameMenu {
         }
 
         // Stop music
-        game.audioControl.Music(new List<string>());
+        game.audioControl.StopMusic();
 
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin(path);

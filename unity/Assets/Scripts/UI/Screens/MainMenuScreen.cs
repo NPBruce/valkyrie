@@ -29,7 +29,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 if (ad.ContainsTrait("menu")) music.Add(ad.file);
             }
-            game.audioControl.Music(music);
+            game.audioControl.PlayDefaultQuestMusic(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
