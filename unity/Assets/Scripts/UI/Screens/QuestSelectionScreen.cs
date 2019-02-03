@@ -23,6 +23,9 @@ namespace Assets.Scripts.UI.Screens
         // Class to handle async images to display
         ImgAsyncLoader images_list = null;
 
+        // Display coroutine
+        Coroutine co_display=null;
+
         Game game = null;
 
         // texts
@@ -200,7 +203,7 @@ namespace Assets.Scripts.UI.Screens
                 // error download (no connection, timeout, of file not available)
                 text_connection_status = new UIElement();
                 text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("OFFLINE", Color.red);
+                text_connection_status.SetText("OFFLINE (network error)", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
                 text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
             }
@@ -212,9 +215,10 @@ namespace Assets.Scripts.UI.Screens
                 text_connection_status.SetText("DOWNLOADING...", Color.blue);
                 text_connection_status.SetFontSize(UIScaler.GetSmallFont());
                 text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
                 game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
             }
-            else
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
             {
                 // Download done, we are online
                 text_connection_status = new UIElement();
@@ -224,25 +228,35 @@ namespace Assets.Scripts.UI.Screens
                 text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
                 text_connection_status.SetButton(delegate { SetOnlineMode(false); });
             }
+            else
+            {
+                // Download done, user has switched offline modline
+                text_connection_status = new UIElement();
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO ONLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+            }
 
-            GetQuestList();
-
-            StopCoroutine(DrawQuestList());
-            StartCoroutine(DrawQuestList());
+            if(co_display!=null)
+                StopCoroutine(co_display);
+            co_display = StartCoroutine(DrawQuestList());
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)
         {
             if(is_available)
             {
-                text_connection_status.SetText("GO ONLINE", Color.green);
+                text_connection_status.SetText("GO OFFLINE", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
             }
             else
             {
-                text_connection_status.SetText("OFFLINE", Color.red);
+                text_connection_status.SetText("OFFLINE (network error)", Color.red);
                 text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
             }
         }
 
@@ -376,7 +390,7 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        public void DrawScenarioPicture(string url, UIElement ui_picture_shadow)
+        public void DrawScenarioPicture(Texture2D texture, UIElement ui_picture_shadow)
         {
             float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
             UnityEngine.Events.UnityAction buttonCall = ui_picture_shadow.GetAction();
@@ -388,7 +402,7 @@ namespace Assets.Scripts.UI.Screens
             UIElement picture = new UIElement(ui_picture_shadow.GetTransform());
             picture.SetLocation(0.30f, 0.30f, width_heigth-0.6f, width_heigth-0.6f);
             picture.SetBGColor(Color.clear);
-            picture.SetImage(images_list.GetTexture(url));
+            picture.SetImage(texture);
             picture.SetButton(buttonCall);
 
             // draw pin
@@ -726,11 +740,7 @@ namespace Assets.Scripts.UI.Screens
         {
             CleanQuestList();
 
-            // we may have changed from online to offline
-            GetQuestList();
-
-            StopCoroutine(DrawQuestList());
-            StartCoroutine(DrawQuestList());
+            co_display = StartCoroutine(DrawQuestList());
         }
 
         public void CleanQuestList()
@@ -743,6 +753,9 @@ namespace Assets.Scripts.UI.Screens
 
             // quest images
             images_list.Clear();
+
+            if (co_display != null)
+                StopCoroutine(co_display);
         }
 
         // check if the quest proposes at least one selected language
@@ -813,6 +826,15 @@ namespace Assets.Scripts.UI.Screens
             // reset sort information
             last_author = "";
             last_update_info = null;
+
+            // wait for the quest list to be downloaded
+            while(game.questsList.quest_list_mode==QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                yield return null;
+            }
+
+            // get quest list dependant on mode (online/offline)
+            GetQuestList();
 
             // Loop through all available quests
             foreach (string key in questList)
@@ -895,13 +917,11 @@ namespace Assets.Scripts.UI.Screens
                 {
                     if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     {
-                        Texture2D picTex = ContentData.FileToTexture(Path.Combine(q.path, q.image));
-                        if(picTex!=null)
-                            ui.SetImage(picTex);
+                        DrawScenarioPicture(ContentData.FileToTexture(Path.Combine(q.path, q.image)), ui); ;
                     }
                     else if (images_list.IsImageAvailable(q.package_url + q.image))
                     {
-                        DrawScenarioPicture(q.package_url + q.image, ui);
+                        DrawScenarioPicture(images_list.GetTexture(q.package_url + q.image), ui);
                     }
                     else 
                     {
@@ -1284,7 +1304,7 @@ namespace Assets.Scripts.UI.Screens
 
                         // Display pictures
                         if(images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                            questSelectionScreen.DrawScenarioPicture(uri.ToString(), images_list[uri.ToString()]);
+                            questSelectionScreen.DrawScenarioPicture(GetTexture(uri.ToString()),  images_list[uri.ToString()]);
                     }
                 }
             }

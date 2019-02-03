@@ -36,7 +36,6 @@ public class QuestsManager
     // status of download of quest list
     public bool error_download = false;
     public string error_download_description = "";
-    bool download_done = false;
 
     // Callback when download is done
     Action<bool> cb_download = null;
@@ -106,8 +105,6 @@ public class QuestsManager
 
             return;
         }
-
-        download_done = true;
 
         if(!force_local_quest)
             quest_list_mode = QuestListMode.ONLINE;
