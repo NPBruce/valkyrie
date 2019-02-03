@@ -209,6 +209,10 @@ public class Game : MonoBehaviour {
             go_questSelectionScreen = new GameObject("QuestSelectionScreen");
             questSelectionScreen = go_questSelectionScreen.AddComponent<QuestSelectionScreen>();
         }
+        else
+        {
+            questSelectionScreen.Show();
+        }
     }
 
     // This is called by editor on the main menu
