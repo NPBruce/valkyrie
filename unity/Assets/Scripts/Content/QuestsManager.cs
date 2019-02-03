@@ -326,7 +326,12 @@ public class QuestsManager
     // --- Management of local quests, when offline ---
     public void loadAllLocalQuests()
     {
-        if(local_quests_data==null)
+        if (local_quests_data == null)
+        {
+            // Clean up temporary files
+            QuestLoader.CleanTemp();
+            // extract and load local quest
             local_quests_data = QuestLoader.GetQuests();
+        }
     }
 }
