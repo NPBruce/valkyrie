@@ -22,7 +22,7 @@ public class QuestDownload : MonoBehaviour
             return;
         }
 
-        QuestData.Quest q = game.questsList.getQuestData(key);
+        QuestData.Quest q = game.questsList.GetQuestData(key);
 
         string package = q.package_url + key + ".valkyrie";
         StartCoroutine(Download(package, delegate { Save(key); }));
@@ -55,7 +55,7 @@ public class QuestDownload : MonoBehaviour
         }
 
         // update local list of quest and current status 
-        game.questsList.SetAvailable(key);
+        game.questsList.SetQuestAvailability(key, true);
 
         // cleanup screen and go back to list of quests
         Destroyer.Dialog();

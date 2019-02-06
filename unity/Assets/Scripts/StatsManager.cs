@@ -247,12 +247,6 @@ public class StatsManager
         {
             scenarios_stats[stats.scenario_name] = stats;
         }
-
-        // this is required if list of quests are downloaded before the stats
-        if(Game.Get().questsList != null && Game.Get().questsList.download_done)
-        {
-            Game.Get().questsList.SortQuests();
-        }
     }
 
 }

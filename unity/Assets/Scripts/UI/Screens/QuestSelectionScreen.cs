@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
+using System.Collections;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for quest selection window
-    public class QuestSelectionScreen
+    public class QuestSelectionScreen: MonoBehaviour
     {
         // List of Quest.QuestData to display (either local or remote)
         List<string> questList = null;
 
         // Persistent UI Element
+        UIElement text_connection_status = null;
         UIElement text_number_of_filtered_scenario = null;
         UIElementScrollVertical scrollArea = null;
         UIElement sortOptionsPopup = null;
@@ -20,6 +22,9 @@ namespace Assets.Scripts.UI.Screens
 
         // Class to handle async images to display
         ImgAsyncLoader images_list = null;
+
+        // Display coroutine
+        Coroutine co_display=null;
 
         Game game = null;
 
@@ -57,6 +62,10 @@ namespace Assets.Scripts.UI.Screens
         bool filter_missing_expansions = false;
 
         // sort options
+
+        List<SortOption> sort_options_offline = null;
+        List<SortOption> sort_options_online = null;
+
         string sort_criteria = "rating";
         string sort_order = "descending";
         string last_author = "";
@@ -72,9 +81,55 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_play = null;
         Texture2D button_hole = null;
 
-        public QuestSelectionScreen()
+        public void Start()
         {
             game = Game.Get();
+
+            // initialize sort information
+            nbDays_durationText = new SortedDictionary<float, StringKey>();
+            nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
+            nbDays_durationText.Add(30, new StringKey("val", "UPDATED_THIS_MONTH"));
+            nbDays_durationText.Add(90, new StringKey("val", "UPDATED_THIS_TRIMESTER"));
+            nbDays_durationText.Add(180, new StringKey("val", "UPDATED_THIS_SEMESTER"));
+            nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
+            nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
+            nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
+
+            sort_options_offline = new List<SortOption>();
+            sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
+            sort_options_offline.Add(new SortOption("name", SORT_BY_NAME));
+            sort_options_offline.Add(new SortOption("difficulty", SORT_BY_DIFFICULTY));
+            sort_options_offline.Add(new SortOption("duration", SORT_BY_DURATION));
+            sort_options_online = new List<SortOption>();
+            sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
+            sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
+            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
+            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
+
+            // Initialize list of images for asynchronous loading
+            images_list = new ImgAsyncLoader(this);
+
+            // preload textures
+            scroll_paper = Resources.Load("sprites/scenario_list/scroll_paper") as Texture2D;
+            picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
+            picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
+            button_hole = Resources.Load("sprites/scenario_list/button_hole") as Texture2D;
+            button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
+            button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
+            button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
+
+            Show();
+        }
+
+        public void Show()
+        {
+            // If a dialog window is open we force it closed (this shouldn't happen)
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+                Object.Destroy(go);
+
+            // Clean up downloader if present
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+                Object.Destroy(go);
 
             // Get all user configuration
             Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
@@ -93,7 +148,7 @@ namespace Assets.Scripts.UI.Screens
                 // saved configuration
                 foreach (string lang in config_values["filterLangs"].Split(';'))
                 {
-                    if(langs_selected.ContainsKey(lang))
+                    if (langs_selected.ContainsKey(lang))
                         langs_selected[lang] = true;
                 }
             }
@@ -106,7 +161,6 @@ namespace Assets.Scripts.UI.Screens
                     langs_selected[lang] = true;
                 }
                 langs_selected["Japanese"] = false;
-                langs_selected["Czech"] = false;
             }
 
             if (config_values.ContainsKey("filterMissingExpansions"))
@@ -114,39 +168,6 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions = false;
                 bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
             }
-
-            // initialize sort information
-            nbDays_durationText = new SortedDictionary<float, StringKey>();
-            nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
-            nbDays_durationText.Add(30, new StringKey("val", "UPDATED_THIS_MONTH"));
-            nbDays_durationText.Add(90, new StringKey("val", "UPDATED_THIS_TRIMESTER"));
-            nbDays_durationText.Add(180, new StringKey("val", "UPDATED_THIS_SEMESTER"));
-            nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
-            nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
-            nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
-
-            // Initialize list of images for asynchronous loading
-            images_list = new ImgAsyncLoader(this);
-
-            // preload textures
-            scroll_paper = Resources.Load("sprites/scenario_list/scroll_paper") as Texture2D;
-            picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
-            picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
-            button_hole = Resources.Load("sprites/scenario_list/button_hole") as Texture2D;
-            button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
-            button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
-            button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
-        }
-
-        public void Show()
-        {
-            // If a dialog window is open we force it closed (this shouldn't happen)
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
-                Object.Destroy(go);
-
-            // Clean up downloader if present
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
-                Object.Destroy(go);
 
             // Heading
             UIElement ui = new UIElement();
@@ -190,19 +211,91 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
-            // Display offline message
-            if (!game.questsList.download_done)
+            text_connection_status = new UIElement();
+
+            // Display connection status message
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
             {
-                ui = new UIElement();
-                ui.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                ui.SetText("OFFLINE", Color.red);
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetTextAlignment(TextAnchor.MiddleRight);
+                // error download (no connection, timeout, of file not available)
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("OFFLINE (network error)", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+            }
+            else if(game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                // Download ongoing
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("DOWNLOADING...", Color.blue);
+                text_connection_status.SetFontSize(UIScaler.GetSmallFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
+            }
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                // Download done, we are online
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+            }
+            else
+            {
+                // Download done, user has switched offline modline
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO ONLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
             }
 
-            PrepareQuestList();
+            if(co_display!=null)
+                StopCoroutine(co_display);
+            co_display = StartCoroutine(DrawQuestList());
+        }
 
-            DrawQuestList();
+        private void RemoteQuestsListDownload_cb(bool is_available)
+        {
+            if(is_available)
+            {
+                text_connection_status.SetText("GO OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+            }
+            else
+            {
+                text_connection_status.SetText("OFFLINE (network error)", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+            }
+        }
+
+        private void SetOnlineMode(bool go_online)
+        {
+            if (go_online)
+            {
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO OFFLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+
+                game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
+                ReloadQuestList();
+            }
+            else
+            {
+                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
+                text_connection_status.SetText("GO ONLINE", Color.red);
+                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
+                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+
+                game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
+                ReloadQuestList();
+            }
         }
 
         // Show button and initialize the popup
@@ -275,7 +368,6 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-
         private void DrawFlags()
         {
             float x_offset = 11f;
@@ -307,7 +399,7 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        public void DrawScenarioPicture(string url, UIElement ui_picture_shadow)
+        public void DrawScenarioPicture(Texture2D texture, UIElement ui_picture_shadow)
         {
             float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
             UnityEngine.Events.UnityAction buttonCall = ui_picture_shadow.GetAction();
@@ -319,7 +411,7 @@ namespace Assets.Scripts.UI.Screens
             UIElement picture = new UIElement(ui_picture_shadow.GetTransform());
             picture.SetLocation(0.30f, 0.30f, width_heigth-0.6f, width_heigth-0.6f);
             picture.SetBGColor(Color.clear);
-            picture.SetImage(images_list.GetTexture(url));
+            picture.SetImage(texture);
             picture.SetButton(buttonCall);
 
             // draw pin
@@ -438,18 +530,6 @@ namespace Assets.Scripts.UI.Screens
             float y_offset = 8.2f;
             int font_size_sort_buttons = (int)(UIScaler.GetMediumFont() * 0.95f);
 
-            List<SortOption> sort_options_offline = new List<SortOption>();
-            sort_options_offline.Add(new SortOption("author", SORT_BY_AUTHOR));
-            sort_options_offline.Add(new SortOption("name", SORT_BY_NAME));
-            sort_options_offline.Add(new SortOption("difficulty", SORT_BY_DIFFICULTY));
-            sort_options_offline.Add(new SortOption("duration", SORT_BY_DURATION));
-
-            List<SortOption> sort_options_online = new List<SortOption>();
-            sort_options_online.Add(new SortOption("rating", SORT_BY_RATING));
-            sort_options_online.Add(new SortOption("date", SORT_BY_DATE));
-            sort_options_online.Add(new SortOption("average_win_ratio", SORT_BY_WIN_RATIO));
-            sort_options_online.Add(new SortOption("average_duration", SORT_BY_AVERAGE_DURATION));
-
             // sort type
             UIElement ui = null;
 
@@ -457,6 +537,7 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (SortOption s in sort_options_offline)
             {
+                button_color = Color.grey;
                 if (s.name == sort_criteria)
                     button_color = Color.white;
 
@@ -472,7 +553,6 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, button_color);
 
                 x_offset += button_size + space_between_buttons;
-                button_color = Color.grey;
             }
 
             y_offset += 2.5f;
@@ -480,9 +560,10 @@ namespace Assets.Scripts.UI.Screens
 
             foreach (SortOption s in sort_options_online)
             {
+                button_color = Color.grey;
                 if (s.name == sort_criteria)
                     button_color = Color.white;
-                if (!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     button_color = Color.red;
 
                 // local var required as button is called later with this value
@@ -493,12 +574,11 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetText(s.button_text, button_color);
                 ui.SetFont(Game.Get().gameType.GetHeaderFont());
                 ui.SetFontSize(font_size_sort_buttons);
-                if (game.questsList.download_done)
+                if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
                     ui.SetButton(delegate { SetSort(local_name); });
                 new UIElementBorder(ui, button_color);
 
                 x_offset += button_size + space_between_buttons;
-                button_color = Color.grey;
             }
         }
 
@@ -543,7 +623,7 @@ namespace Assets.Scripts.UI.Screens
             switch (sort_criteria)
             {
                  case "author":
-                    string current_author = game.questsList.getQuestData(key).GetShortAuthor();
+                    string current_author = game.questsList.GetQuestData(key).GetShortAuthor();
                     if(current_author != last_author)
                     {
                         UIElement ui = new UIElement(scrollArea.GetScrollTransform());
@@ -559,7 +639,7 @@ namespace Assets.Scripts.UI.Screens
                     break;
 
                 case "date":
-                    System.DateTime currentQuestDate = game.questsList.getQuestData(key).latest_update;
+                    System.DateTime currentQuestDate = game.questsList.GetQuestData(key).latest_update;
                     float nb_days_since_update = (System.DateTime.Today - currentQuestDate).Days;
                     StringKey current_update_information = null;
 
@@ -595,10 +675,20 @@ namespace Assets.Scripts.UI.Screens
 
         public void SetSort(string sort_selected_option)
         {
-            // save sort configuration
-            game.config.data.Add("UserConfig", "sortCriteria", sort_selected_option);
-            game.config.data.Add("UserConfig", "sortOrder", sort_order);
-            game.config.Save();
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            { 
+                // save sort configuration
+                game.config.data.Add("UserConfig", "sortCriteria", sort_selected_option);
+                game.config.data.Add("UserConfig", "sortOrder", sort_order);
+                game.config.Save();
+            }
+            else
+            {
+                // save sort configuration
+                game.config.data.Add("UserConfig", "offlineSortCriteria", sort_selected_option);
+                game.config.data.Add("UserConfig", "offlineSortOrder", sort_order);
+                game.config.Save();
+            }
 
             // apply sort configuration
             sort_criteria = sort_selected_option;
@@ -611,11 +701,66 @@ namespace Assets.Scripts.UI.Screens
             DrawSortCriteriaButtons();
         }
 
+        public void GetQuestList()
+        {
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // check if connected on internet, and display scenario list accordingly (local or online)
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                if (config_values.ContainsKey("sortCriteria"))
+                {
+                    sort_criteria = config_values["sortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "rating";
+                }
+
+                if (config_values.ContainsKey("sortOrder"))
+                {
+                    sort_order = config_values["sortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
+            }
+            else
+            {
+                // check offline sort option is available
+                if (config_values.ContainsKey("offlineSortCriteria"))
+                {
+                    sort_criteria = config_values["offlineSortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "name";
+                }
+
+                if (config_values.ContainsKey("offlineSortOrder"))
+                {
+                    sort_order = config_values["offlineSortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
+            }
+
+            // Get sorted list
+            game.questsList.SortQuests();
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
+        }
+
         public void ReloadQuestList()
         {
             CleanQuestList();
 
-            DrawQuestList();
+            co_display = StartCoroutine(DrawQuestList());
         }
 
         public void CleanQuestList()
@@ -628,6 +773,9 @@ namespace Assets.Scripts.UI.Screens
 
             // quest images
             images_list.Clear();
+
+            if (co_display != null)
+                StopCoroutine(co_display);
         }
 
         // check if the quest proposes at least one selected language
@@ -639,7 +787,7 @@ namespace Assets.Scripts.UI.Screens
                 if (!lang.Value)
                     continue;
 
-                if (!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                 {
                     // check list of languages when offline
                     if (q.localizationDict == null)
@@ -678,47 +826,8 @@ namespace Assets.Scripts.UI.Screens
             return false;
         }
 
-        public void PrepareQuestList()
-        {
-            // Get all user configuration
-            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
 
-            // check if connected on internet, and display scenario list accordingly (local or online)
-            if (game.questsList.download_done)
-            {
-                if (config_values.ContainsKey("sortCriteria"))
-                {
-                    sort_criteria = config_values["sortCriteria"];
-                }
-                else
-                {
-                    sort_criteria = "rating";
-                }
-
-                if (config_values.ContainsKey("sortOrder"))
-                {
-                    sort_order = config_values["sortOrder"];
-                }
-                else
-                {
-                    sort_order = "descending";
-                }
-            }
-            else
-            {
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
-            }
-
-            // Get sorted list
-            questList = game.questsList.GetList(sort_criteria);
-            if (sort_order == "descending")
-                questList.Reverse();
-        }
-
-        public void DrawQuestList()
+        public IEnumerator DrawQuestList()
         {
             UIElement ui = null;
 
@@ -738,10 +847,25 @@ namespace Assets.Scripts.UI.Screens
             last_author = "";
             last_update_info = null;
 
+            // wait for the quest list to be downloaded
+            while(game.questsList.quest_list_mode==QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                yield return null;
+            }
+
+            if(game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.LoadAllLocalQuests();
+            }
+
+            // get quest list dependant on mode (online/offline)
+            GetQuestList();
+
             // Loop through all available quests
             foreach (string key in questList)
             {
-                QuestData.Quest q = game.questsList.getQuestData(key);
+                QuestData.Quest q = game.questsList.GetQuestData(key);
                 UIElement frame = null;
 
                 // Filter langs
@@ -777,7 +901,7 @@ namespace Assets.Scripts.UI.Screens
                 // Get data translation
                 string name_translation = "";
                 string synopsys_translation = "";
-                if (game.questsList.download_done)
+                if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
                 {
                     // quest name is local language, or default language
                     if (q.languages_name != null &&
@@ -817,15 +941,13 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 if (q.image.Length > 0)
                 {
-                    if (!game.questsList.download_done)
+                    if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     {
-                        Texture2D picTex = ContentData.FileToTexture(Path.Combine(q.path, q.image));
-                        if(picTex!=null)
-                            ui.SetImage(picTex);
+                        DrawScenarioPicture(ContentData.FileToTexture(Path.Combine(q.path, q.image)), ui); ;
                     }
                     else if (images_list.IsImageAvailable(q.package_url + q.image))
                     {
-                        DrawScenarioPicture(q.package_url + q.image, ui);
+                        DrawScenarioPicture(images_list.GetTexture(q.package_url + q.image), ui);
                     }
                     else 
                     {
@@ -835,20 +957,34 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     // Draw default Valkyrie picture
-                    DrawScenarioPicture(null, ui);
+                    DrawScenarioPicture(images_list.GetTexture(null), ui);
                 }
 
                 // languages flags
-                if (q.languages_name!=null)
+                if (
+                    (q.languages_name!=null && q.languages_name.Count>0) ||
+                    (q.localizationDict!=null && game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+                    )
                 {
+                    List<string> languages = null;
+                    if(q.languages_name.Count > 0)
+                    {
+                        languages = new List<string>(q.languages_name.Keys);
+                    }
+                    else
+                    {
+                        languages = q.localizationDict.GetLanguagesList();
+                    }
+
                     Texture2D flagTex = null;
                     const float flag_size = 0.9f;
                     float flag_y_offset = offset + 0.25f;
-                    float flag_x_offset = (UIScaler.GetWidthUnits() - 10f) - q.languages_name.Count * (flag_size + 0.2f); // align right
-                    foreach (KeyValuePair<string, string> lang_name in q.languages_name)
+                    float flag_x_offset = (UIScaler.GetWidthUnits() - 10f) - languages.Count * (flag_size + 0.2f); // align right
+
+                    foreach (string lang_name in languages)
                     {
                         ui = new UIElement(scrollArea.GetScrollTransform());
-                        flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
+                        flagTex = Resources.Load("sprites/flags/" + lang_name) as Texture2D;
                         ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
                         ui.SetImage(flagTex);
                         flag_x_offset += flag_size + 0.2f;
@@ -924,7 +1060,7 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-                if(!game.questsList.download_done)
+                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                 {
                     ui.SetImage(button_play);
                 }
@@ -999,14 +1135,14 @@ namespace Assets.Scripts.UI.Screens
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
-                    ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width+1, 1);
+                    ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                     ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
-                    uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width + 1, 1);
+                    uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                     uic.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
                     uic.SetTextAlignment(TextAnchor.LowerLeft);
                     uic.SetBGColor(Color.clear);
@@ -1073,22 +1209,23 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 offset += 7.1f;
-            }
 
-            scrollArea.SetScrollSize(offset);
+                scrollArea.SetScrollSize(offset);
 
-            if (nb_filtered_out_quest > 0)
-            {
-                StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
-                text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
-            }
-            else
-            {
-                text_number_of_filtered_scenario.SetText(" ");
+                if (nb_filtered_out_quest > 0)
+                {
+                    StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+                }
+                else
+                {
+                    text_number_of_filtered_scenario.SetText(" ");
+                }
+
+                yield return null;
             }
 
             images_list.StartDownloadASync();
-
         }
 
         // Return to main menu
@@ -1102,17 +1239,17 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Selection(string key)
         {
-            QuestData.Quest q = game.questsList.getQuestData(key);
+            QuestData.Quest q = game.questsList.GetQuestData(key);
 
             Destroyer.Dialog();
             CleanQuestList();
 
-            if (!game.questsList.download_done)
+            if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
             {
                 // Play
                 new QuestDetailsScreen(q);
             }
-            else if ((q.downloaded && !q.update_available) || (!game.questsList.download_done))
+            else if (q.downloaded && !q.update_available)
             {
                 // Play
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
@@ -1193,7 +1330,7 @@ namespace Assets.Scripts.UI.Screens
 
                         // Display pictures
                         if(images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                            questSelectionScreen.DrawScenarioPicture(uri.ToString(), images_list[uri.ToString()]);
+                            questSelectionScreen.DrawScenarioPicture(GetTexture(uri.ToString()),  images_list[uri.ToString()]);
                     }
                 }
             }
