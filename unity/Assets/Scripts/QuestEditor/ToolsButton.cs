@@ -43,6 +43,20 @@ public class ToolsButton
         string path = game.quest.questPath;
         Destroyer.Destroy();
 
+        // All content data has been loaded by editor, cleanup everything
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        // Load the base content
+        game.cd.LoadContentID("");
+        // Load current configuration
+        Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
+        if (packs != null)
+        {
+            foreach (KeyValuePair<string, string> kv in packs)
+            {
+                game.cd.LoadContentID(kv.Key);
+            }
+        }
+
         game.testMode = true;
         // Fetch all of the quest data and initialise the quest
         game.quest = new Quest(new QuestData.Quest(path));
