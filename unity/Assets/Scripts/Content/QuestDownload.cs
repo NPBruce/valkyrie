@@ -22,7 +22,7 @@ public class QuestDownload : MonoBehaviour
             return;
         }
 
-        QuestData.Quest q = game.questsList.getQuestData(key);
+        QuestData.Quest q = game.questsList.GetQuestData(key);
 
         string package = q.package_url + key + ".valkyrie";
         StartCoroutine(Download(package, delegate { Save(key); }));

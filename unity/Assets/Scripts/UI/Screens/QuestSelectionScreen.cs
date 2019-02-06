@@ -623,7 +623,7 @@ namespace Assets.Scripts.UI.Screens
             switch (sort_criteria)
             {
                  case "author":
-                    string current_author = game.questsList.getQuestData(key).GetShortAuthor();
+                    string current_author = game.questsList.GetQuestData(key).GetShortAuthor();
                     if(current_author != last_author)
                     {
                         UIElement ui = new UIElement(scrollArea.GetScrollTransform());
@@ -639,7 +639,7 @@ namespace Assets.Scripts.UI.Screens
                     break;
 
                 case "date":
-                    System.DateTime currentQuestDate = game.questsList.getQuestData(key).latest_update;
+                    System.DateTime currentQuestDate = game.questsList.GetQuestData(key).latest_update;
                     float nb_days_since_update = (System.DateTime.Today - currentQuestDate).Days;
                     StringKey current_update_information = null;
 
@@ -856,7 +856,7 @@ namespace Assets.Scripts.UI.Screens
             if(game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
             {
                 // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
+                game.questsList.LoadAllLocalQuests();
             }
 
             // get quest list dependant on mode (online/offline)
@@ -865,7 +865,7 @@ namespace Assets.Scripts.UI.Screens
             // Loop through all available quests
             foreach (string key in questList)
             {
-                QuestData.Quest q = game.questsList.getQuestData(key);
+                QuestData.Quest q = game.questsList.GetQuestData(key);
                 UIElement frame = null;
 
                 // Filter langs
@@ -1239,7 +1239,7 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Selection(string key)
         {
-            QuestData.Quest q = game.questsList.getQuestData(key);
+            QuestData.Quest q = game.questsList.GetQuestData(key);
 
             Destroyer.Dialog();
             CleanQuestList();

@@ -13,6 +13,10 @@ public class QuestEditSelection
     public QuestEditSelection()
     {
         Game game = Game.Get();
+
+        // clear list of local quests to make sure we take the latest changes
+        game.questsList.UnloadLocalQuests();
+
         // Get list of unpacked quest in user location (editable)
         // TODO: open/save in packages
         questList = QuestLoader.GetUserUnpackedQuests();
