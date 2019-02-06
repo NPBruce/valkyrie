@@ -315,7 +315,7 @@ public class QuestsManager
         return ret;
     }
 
-    public QuestData.Quest getQuestData(string key)
+    public QuestData.Quest GetQuestData(string key)
     {
         if (quest_list_mode == QuestListMode.ONLINE && !force_local_quest)
             return remote_quests_data[key];
@@ -324,14 +324,24 @@ public class QuestsManager
     }
 
     // --- Management of local quests, when offline ---
-    public void loadAllLocalQuests()
+    public void LoadAllLocalQuests()
     {
         if (local_quests_data == null)
         {
             // Clean up temporary files
-            QuestLoader.CleanTemp();
+            UnloadLocalQuests();
             // extract and load local quest
             local_quests_data = QuestLoader.GetQuests();
+        }
+    }
+
+    public void UnloadLocalQuests()
+    {
+        if (local_quests_data != null)
+        {
+            // Clean up temporary files
+            QuestLoader.CleanTemp();
+            local_quests_data = null;
         }
     }
 }
