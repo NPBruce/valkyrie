@@ -152,6 +152,16 @@ public class EditorTools
                 manifest += "synopsys." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
             }
 
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.description"))
+            {
+                manifest += "description." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
+            foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.authors"))
+            {
+                manifest += "authors." + kv.Key + "=" + kv.Value + System.Environment.NewLine;
+            }
+
             foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.authors_short"))
             {
                 manifest += "authors_short." + kv.Key + "=" + kv.Value + System.Environment.NewLine;

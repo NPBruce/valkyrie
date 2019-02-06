@@ -275,10 +275,10 @@ public class QuestsManager
 
     public QuestData.Quest getQuestData(string key)
     {
-        if (local_quests_data != null)
-            return local_quests_data[key];
-        else
+        if (download_done)
             return remote_quests_data[key];
+        else
+            return local_quests_data[key];
     }
 
     // --- Management of local quests, when offline ---

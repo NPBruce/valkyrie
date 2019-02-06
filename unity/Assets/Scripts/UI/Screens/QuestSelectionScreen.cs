@@ -115,35 +115,6 @@ namespace Assets.Scripts.UI.Screens
                 bool.TryParse(config_values["filterMissingExpansions"], out filter_missing_expansions);
             }
 
-            // check if connected on internet, and display scenario list accordingly (local or online)
-            if (game.questsList.download_done)
-            {
-                if (config_values.ContainsKey("sortCriteria"))
-                {
-                    sort_criteria = config_values["sortCriteria"];
-                }
-                else
-                {
-                    sort_criteria = "rating";
-                }
-
-                if (config_values.ContainsKey("sortOrder"))
-                {
-                    sort_order = config_values["sortOrder"];
-                }
-                else
-                {
-                    sort_order = "descending";
-                }
-            }
-            else
-            {
-                // Get and load a list of all locally available quests
-                game.questsList.loadAllLocalQuests();
-                sort_criteria = "name";
-                sort_order = "ascending";
-            }
-
             // initialize sort information
             nbDays_durationText = new SortedDictionary<float, StringKey>();
             nbDays_durationText.Add(7, new StringKey("val", "UPDATED_THIS_WEEK"));
@@ -153,11 +124,6 @@ namespace Assets.Scripts.UI.Screens
             nbDays_durationText.Add(356, new StringKey("val", "UPDATED_THIS_YEAR"));
             nbDays_durationText.Add(700, new StringKey("val", "UPDATED_TWO_YEARS_AGO"));
             nbDays_durationText.Add(999999, new StringKey("val", "UPDATE_OLDER_THAN_TWO_YEAR"));
-
-            // Get sorted list
-            questList = game.questsList.GetList(sort_criteria);
-            if (sort_order == "descending")
-                questList.Reverse();
 
             // Initialize list of images for asynchronous loading
             images_list = new ImgAsyncLoader(this);
@@ -233,6 +199,8 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(UIScaler.GetMediumFont());
                 ui.SetTextAlignment(TextAnchor.MiddleRight);
             }
+
+            PrepareQuestList();
 
             DrawQuestList();
         }
@@ -694,7 +662,7 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     // check list of languages when online
-                    if (q == null || q.languages_name == null)
+                    if (q == null || (q != null && q.languages_name != null && q.languages_name.Count <= 0))
                     {
                         Debug.Log("Scenario " + q.package_url + " does not have a name, this should not happen");
                         return false;
@@ -708,6 +676,46 @@ namespace Assets.Scripts.UI.Screens
             }
 
             return false;
+        }
+
+        public void PrepareQuestList()
+        {
+            // Get all user configuration
+            Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
+
+            // check if connected on internet, and display scenario list accordingly (local or online)
+            if (game.questsList.download_done)
+            {
+                if (config_values.ContainsKey("sortCriteria"))
+                {
+                    sort_criteria = config_values["sortCriteria"];
+                }
+                else
+                {
+                    sort_criteria = "rating";
+                }
+
+                if (config_values.ContainsKey("sortOrder"))
+                {
+                    sort_order = config_values["sortOrder"];
+                }
+                else
+                {
+                    sort_order = "descending";
+                }
+            }
+            else
+            {
+                // Get and load a list of all locally available quests
+                game.questsList.loadAllLocalQuests();
+                sort_criteria = "name";
+                sort_order = "ascending";
+            }
+
+            // Get sorted list
+            questList = game.questsList.GetList(sort_criteria);
+            if (sort_order == "descending")
+                questList.Reverse();
         }
 
         public void DrawQuestList()
@@ -800,7 +808,6 @@ namespace Assets.Scripts.UI.Screens
                 frame = new UIElement(scrollArea.GetScrollTransform());
                 frame.SetLocation(0f, offset, UIScaler.GetWidthUnits() - 3.2f, 6.7f);
                 frame.SetBGColor(Color.white);
-                frame.SetButton(delegate { Selection(key); });
                 frame.SetImage(scroll_paper);
                 offset += 0.15f;
 
@@ -808,7 +815,6 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f); // this is the location for the shadow (to be displayed first)
                 ui.SetBGColor(Color.clear);
-                ui.SetButton(delegate { Selection(key); });
                 if (q.image.Length > 0)
                 {
                     if (!game.questsList.download_done)
@@ -845,7 +851,6 @@ namespace Assets.Scripts.UI.Screens
                         flagTex = Resources.Load("sprites/flags/" + lang_name.Key) as Texture2D;
                         ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
                         ui.SetImage(flagTex);
-                        ui.SetButton(delegate { Selection(key); });
                         flag_x_offset += flag_size + 0.2f;
                     }
                 }
@@ -856,7 +861,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(name_translation, Color.black);
-                ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
                 ui.SetFont(game.gameType.GetHeaderFont());
@@ -892,7 +896,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
                         ui.SetText(pack_symbol, expansion_text_color);
                         ui.SetBGColor(Color.clear);
-                        ui.SetButton(delegate { Selection(key); });
                         ui.SetFont(game.gameType.GetSymbolFont());
                         ui.SetFontSize(expansions_symbol_font_size);
                         expansion_x_offset += symbol_width - char_spacing;
@@ -905,7 +908,6 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
                 ui.SetText(synopsys_translation, dark_grey_text);
-                ui.SetButton(delegate { Selection(key); });
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
                 ui.SetFontStyle(FontStyle.Italic);
@@ -951,14 +953,12 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(new StringKey("val", "DURATION"), Color.black);
                     duration_text_offset=ui.GetStringWidth(new StringKey("val", "DURATION"));
                     ui.SetLocation(6f, top_text_y, duration_text_offset + 0.5f, 1);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     ui.SetLocation(6f+duration_text_offset+0.5f, top_text_y, 5, 1);
                     ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
                 }
@@ -975,7 +975,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(STATS_NO_AVERAGE_DURATION, Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetBGColor(Color.clear);
-                    ui.SetButton(delegate { Selection(key); });
                 }
 
                 // Difficulty
@@ -986,7 +985,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(new StringKey("val", "DIFFICULTY"), Color.black);
                     difficulty_text_offset = ui.GetStringWidth(new StringKey("val", "DIFFICULTY"));
                     ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y, difficulty_text_offset+0.5f, 1);
-                    ui.SetButton(delegate { Selection(key); });
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetFontSize(UIScaler.GetSmallFont());
                     ui.SetBGColor(Color.clear);
@@ -1006,7 +1004,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
-                    ui.SetButton(delegate { Selection(key); });
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
                     uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width + 1, 1);
@@ -1014,7 +1011,6 @@ namespace Assets.Scripts.UI.Screens
                     uic.SetTextAlignment(TextAnchor.LowerLeft);
                     uic.SetBGColor(Color.clear);
                     uic.SetFontSize(font_size);
-                    uic.SetButton(delegate { Selection(key); });
                     uic.CropHorizontal(q.difficulty);
                 }
 
@@ -1030,7 +1026,6 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetText(STATS_NO_AVERAGE_WIN_RATIO, Color.black);
                     ui.SetBGColor(Color.clear);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
-                    ui.SetButton(delegate { Selection(key); });
                 }
 
                 //  rating
@@ -1046,7 +1041,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetTextAlignment(TextAnchor.MiddleRight);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { Selection(key); });
 
                     // rating
                     string rating_symbol = "★";
@@ -1066,7 +1060,6 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetFontSize(font_size);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
-                    ui.SetButton(delegate { Selection(key); });
 
                     UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
                     uic.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
@@ -1076,7 +1069,6 @@ namespace Assets.Scripts.UI.Screens
                     uic.SetTextAlignment(TextAnchor.MiddleLeft);
                     uic.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
                     uic.CropHorizontal(stats_rating);
-                    uic.SetButton(delegate { Selection(key); });
 
                 }
 

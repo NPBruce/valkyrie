@@ -42,6 +42,10 @@ public class QuestDownload : MonoBehaviour
     /// <param name="key">Quest id</param>
     public void Save(string key)
     {
+        // in case of error during download, do nothing
+        if (!string.IsNullOrEmpty(download.error) || download.bytesDownloaded <= 0)
+            return;
+
         // Write to disk
         QuestLoader.mkDir(ContentData.DownloadPath());
         using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
@@ -75,6 +79,7 @@ public class QuestDownload : MonoBehaviour
             ValkyrieDebug.Log(download.error);
             //Application.Quit();
         }
+
         call();
     }
 }
