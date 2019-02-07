@@ -13,6 +13,10 @@ public class QuestEditSelection
     public QuestEditSelection()
     {
         Game game = Game.Get();
+
+        // clear list of local quests to make sure we take the latest changes
+        game.questsList.UnloadLocalQuests();
+
         // Get list of unpacked quest in user location (editable)
         // TODO: open/save in packages
         questList = QuestLoader.GetUserUnpackedQuests();
@@ -85,6 +89,12 @@ public class QuestEditSelection
 
     public void Cancel()
     {
+        Game game = Game.Get();
+        // All content data has been loaded by editor, cleanup everything
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        // Load the base content - pack will be loaded later if required
+        game.cd.LoadContentID("");
+
         Destroyer.MainMenu();
     }
 
@@ -382,7 +392,7 @@ public class QuestEditSelection
 
         if (game.quest!=null) game.quest.RemoveAll();
 
-        game.audioControl.Music(new List<string>());
+        game.audioControl.StopMusic();
 
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);

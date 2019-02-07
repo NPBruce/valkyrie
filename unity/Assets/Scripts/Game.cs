@@ -86,6 +86,7 @@ public class Game : MonoBehaviour {
     public GameSelectionScreen gameSelect;
 
     // List of quests window
+    public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
     // Current language
@@ -182,7 +183,7 @@ public class Game : MonoBehaviour {
         // The newline at the end stops the stack trace appearing in the log
         ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
 
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE_WIN
         SetScreenOrientationToLandscape();
 #endif
 
@@ -204,8 +205,14 @@ public class Game : MonoBehaviour {
 
         // Pull up the quest selection page
         if(questSelectionScreen==null)
-            questSelectionScreen = new QuestSelectionScreen();
-        questSelectionScreen.Show();
+        {
+            go_questSelectionScreen = new GameObject("QuestSelectionScreen");
+            questSelectionScreen = go_questSelectionScreen.AddComponent<QuestSelectionScreen>();
+        }
+        else
+        {
+            questSelectionScreen.Show();
+        }
     }
 
     // This is called by editor on the main menu
@@ -286,7 +293,7 @@ public class Game : MonoBehaviour {
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
-        audioControl.Music(music);
+        audioControl.PlayDefaultQuestMusic(music);
 
         Destroyer.Dialog();
         // Create the menu button

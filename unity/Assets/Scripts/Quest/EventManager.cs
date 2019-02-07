@@ -174,7 +174,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + e.qEvent.audio);
+            game.audioControl.Play(Quest.FindLocalisedMultimediaFile(e.qEvent.audio, Path.GetDirectoryName(game.quest.qd.questPath)));
         }
 
         // Set Music
@@ -189,10 +189,10 @@ public class EventManager
                 }
                 else
                 {
-                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + s);
+                    music.Add(Quest.FindLocalisedMultimediaFile(s, Path.GetDirectoryName(game.quest.qd.questPath)));
                 }
             }
-            game.audioControl.Music(music, false);
+            game.audioControl.PlayMusic(music);
             if (music.Count > 1)
             {
                 game.quest.music = new List<string>(e.qEvent.music);

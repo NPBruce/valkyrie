@@ -1,29 +1,10 @@
 .,Russian
-// ICONS,
-ICON_SKILL_STRENGTH,
-ICON_SKILL_AGILITY,
-ICON_SKILL_OBSERVATION,
-ICON_SKILL_LORE,
-ICON_SKILL_INFLUENCE,
-ICON_SKILL_WILL,
-ICON_ACTION,
-ICON_SUCCESS_RESULT,
-ICON_INVESTIGATION_RESULT,
-ICON_TENTACLE,
-ICON_PRODUCT_MAD01,
-ICON_PRODUCT_MAD06,
-ICON_PRODUCT_MAD09,
-ICON_PRODUCT_MAD20,
-ICON_PRODUCT_MAD21,
-ICON_PRODUCT_MAD22,
-ICON_PRODUCT_MAD23,
-ICON_PRODUCT_MAD25,
 
-// TEXTS,
+// TEXTS
 ABILITY,Способность
 ABOUT,О Приложении
-ABOUT_FFG,Valkyrie - это GameMaster для игр Fantasy Flight Games, созданный по мотивам игры «Descent: Road to Legend». Большинство используемых изображений импортируются из приложений FFG, являются собственностью FFG и других правообладателей.
-ABOUT_LIBS,Valkyrie использует DotNetZip-For-Unity и код полученный из Unity Studio и .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie - это GameMaster для игр Fantasy Flight Games, созданный по мотивам игры «Descent: Road to Legend». Большинство используемых изображений импортируются из приложений FFG, являются собственностью FFG и других правообладателей. Языковые флаги сделаны Freepik с www.flaticon.com.
+ABOUT_LIBS,Valkyrie использует DotNetZip-For-Unity, UnityStandaloneFileBrowser от gkngkc и код полученный из Unity Studio и .NET Ogg Vorbis Encoder.
 ACTIONS,Действия
 ACTIVATED,Активен
 ACTIVATION,Активация
@@ -34,8 +15,8 @@ RENAME,Название
 SAVE_TEST,Запустить
 SOURCE,Источник
 COMMENT,Описание
-TRUE,ДА
-FALSE,НЕТ
+TRUE,Да
+FALSE,Нет
 SNAP,Сетка
 FREE,Своб.
 CONFIRM,Подтвердить
@@ -49,8 +30,6 @@ FILE,Файл
 OPTIMIZE_LOCALIZATION,Настроить локализацию
 CREATE_PACKAGE,Создать Сценарий
 REORDER_COMPONENTS,Переупорядочить компоненты
-POSITION_SNAP,╳ {val:SNAP}
-POSITION_FREE,〜 {val:FREE}
 ASSIGN,Присвоить
 ATTACK,Атаковать
 ATTACK_MESSAGE,Сообщение атаки:
@@ -86,9 +65,7 @@ DOOR,Дверь
 DOWNLOAD,Загрузить
 DOWNLOAD_LIST,Загружается список сценариев
 DOWNLOAD_PACKAGE,Сценарий загружается
-E,E
 EFFECTS,Эффекты
-EMPTY,
 END_TURN,Конец поворота
 ROUND,Раунд {0}
 EVADE,Уклонение
@@ -115,7 +92,6 @@ INFORMATION,Информация
 INITIAL_MESSAGE,Исходное сообщение:
 ITEM,Предмет
 QITEM,Квестовый предмет
-KO,KO
 LOAD_QUEST,Загрузить {0}
 LOG,Журнал
 SKILLS,Навыки
@@ -123,13 +99,9 @@ ITEMS,Предметы
 ITEMS_SMALL,Предметы
 GOLD,Золото
 MAIN_MENU,Главное Меню
-MAX,Max
 MAX_X,{0} до
-MAX_CAM,Max Cam
 MENU,Меню
-MIN,Min
 MIN_X,{0} от
-MIN_CAM,Min Cam
 MOM_APP_NOT_FOUND,Не найдено Mansions of Madness, установите из Steam
 MOM_APP_NOT_FOUND_ANDROID,Не найдено Mansions of Madness
 MOM_HEROES_NAME,Сыщиков
@@ -145,7 +117,6 @@ MONSTER_NORMAL,Обычный
 
 MONSTER_UNIQUE,Уникальный
 MOVES,Ход
-MPLACE,MPlace
 MUSIC,Музыка
 NAME,Имя
 NEW,Создать
@@ -158,8 +129,6 @@ NO_ATTACK_MESSAGE,Обычное сообщение:
 
 NUMBER,Номер
 NUMBER_HEROS,{0} Герои:
-OK,Ok
-OP,Op
 OPTIONS,Настройки
 PLACEMENT,Помещение
 
@@ -170,6 +139,7 @@ POSITION_TYPE_HIGHLIGHT,Отметка
 POSITION_TYPE_UNUSED,Нет
 PUZZLE,Головоломка
 PUZZLE_ALT_LEVEL,Alt Уровень
+PUZZLE_SOLUTION,Решение
 PUZZLE_CLASS,Тип
 PUZZLE_CLASS_SELECT,Выбрать тип
 IMAGE,Картинка
@@ -214,6 +184,7 @@ SELECT_TO_DELETE,Выберите {0} для удаления
 HIDDEN,Скрыть
 ACTIVE,Активный
 SET,Настр.
+SET_EDITOR_ALPHA,Прозрачность редактора
 SKILL,Навык
 SELECT_SKILLS,Выберите навыки
 SPAWN,Генератор Монстров
@@ -225,6 +196,9 @@ START,Начать
 TESTS,Проверки
 TILE,Фрагмент поля
 
+AND,И
+OR,ИЛИ
+
 TOKEN,Жетон
 TOOLS,Функции
 TOTAL_MOVES,Всего ходов
@@ -232,7 +206,6 @@ TRAITS,Особенности
 TRIGGER,Триггер
 TYPE,Тип
 TYPES,Типы
-UNABLE_BUTTON,Unable Button:
 
 UI,Интерфейс
 UNITS,Блоки
@@ -241,6 +214,7 @@ VERTICAL,Вертикально
 ALIGN,Позиция
 SIZE,Размер
 TEXT_SIZE,Размер Текста
+BACKGROUND_COLOUR,Цвет фона
 ASPECT,Аспект
 BORDER,С границами
 NO_BORDER,Без границ
@@ -262,20 +236,12 @@ CLASS,Класс
 ACT_1,Акт I
 ACT_2,Акт II
 
-X_COLON,{0}:
 
-//Packs,
-SoA,SoA 
-BtT,BtT 
-CotW,CotW 
-FA,FA 
-MoM1E,MoM1E 
-base,base 
-RN,RN 
-SM,SM 
-SoT,SoT 
 
-//Items,
+
+
+
+//Items
 weapon,Оружие
 firearm,Огнестрельное
 heavyweapon,Тяжелое оружие
@@ -292,7 +258,7 @@ ally,Союзник
 spelldefence,Защитное заклинаниеэ
 spellattack,Атакующее заклинание
 
-//Audio,
+//Audio
 menu,Меню
 music,Музыка
 quest,Задание
@@ -304,14 +270,14 @@ horror,Ужас
 search,Осмотреть
 explore,Исследовать
 
-//Heroes,
+//Heroes
 latari,Латари
 dwarf,Дворф
 gnome,Гном
 male,Мужчина
 female,Женщина
 
-//monsters,
+//monsters
 undead,Зомби
 humanoid,Гуманоид
 spirit,Дух
@@ -339,7 +305,7 @@ fleshless,Бесплотный
 relic,Святой
 elixir,Эликсир
 
-//Tiles,
+//Tiles
 basement,Подвал
 river,Река
 street,Улица
@@ -366,7 +332,6 @@ tents,Шатер
 stables,Конюшни
 hall,Зал
 map,Карта
-bedroom,Спальня
 city,Город
 fountain,Фонтан
 blackrealm,Черное царство
@@ -388,7 +353,7 @@ lava,Лава
 swamp,Болото
 sludge,Сточные воды
 
-// Colors,
+// Colors
 black,Черный
 white,Белый
 red,Красный
@@ -408,18 +373,19 @@ purple,Фиолетовый
 teal,Темно-голубой
 navy,Темно-синий
 
-//Puzzles,
+//Puzzles
 image,Пятнашки
 code,Пароль
 slide,Замок
+tower,Башня
 SYMBOL,Символ
 ELEMENT,Элемент
-tower,Башня
-// Events,
+
+// Events
 Ordered,Очередь
 Random,Наугад
 
-//Inherited from FFG localization files,
+//Inherited from FFG localization files
 SET_FIRE,Поджечь
 INVESTIGATOR_ELIMINATED,Сыщик погиб
 CLOSE,Закрыть
@@ -443,7 +409,6 @@ ATTACK_WITH_FIREARM, Атаковать [i]Огнестрельным ору�
 ATTACK_WITH_SPELL, Атаковать заклинанием
 ATTACK_WITH_UNARMED, Атаковать без оружия
 
-ACTION_X, {0}
 
 STATS_WELCOME,Спасибо за игру. Пожалуйста, оцените и поделитесь своим опытом для будущих игроков. Ваши действия в игре будут переданы авторам игры, чтобы помочь им улучшить этот сценарий.
 
@@ -459,7 +424,7 @@ STATS_MENU_BUTTON,Меню
 STATS_AVERAGE_WIN_RATIO,Средний процент побед: {0}%
 STATS_NB_USER_REVIEWS,(Отзывов: {0})
 STATS_AVERAGE_DURATION,Среднее время игры: {0} мин
-STATS_NO_AVERAGE_DURATION,Среднее время игры недоступна
+STATS_NO_AVERAGE_DURATION,Среднее время игры недоступно
 STATS_NO_AVERAGE_WIN_RATIO,Средний процент побед недоступен
 
 STATS_DOWNLOAD_ONGOING,Загрузка статистики игры и рейтинга...\nПожалуйста, обновите страницу через несколько секунд
@@ -491,7 +456,7 @@ FILTER_TITLE,Фильтры
 FILTER_SELECT_LANG,Выберите язык(-и), на котором вы говорите:
 FILTER_MISSING_EXPANSIONS_ON,Скрыть сценарии с отсутствующими дополнениями ☑
 FILTER_MISSING_EXPANSIONS_OFF,Скрыть сценарии с отсутствующими дополнениями ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Найдено сценариев: {0}
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Скрыто сценариев: {0}
 
 AUTHORS_SHORT,Автор сценария (для "сортировки по авторам")
 AUTHORS_UNKNOWN,Аноним (требуется обновление сценария автором)
