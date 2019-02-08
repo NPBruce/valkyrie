@@ -17,12 +17,24 @@ namespace Assets.Scripts.UI
 
         protected UIElementScrollVertical traitScrollArea;
 
+        string val_base_translated = null;
+        string val_source_translated = null;
+        string val_traits_translated = null;
+        string val_type_translated = null;
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
+            val_base_translated = new StringKey("val", "base").Translate();
+            val_source_translated = new StringKey("val", "SOURCE").Translate();
+            val_traits_translated = new StringKey("val", "TRAITS").Translate();
+            val_type_translated = new StringKey("val", "TYPE").Translate();
         }
 
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, StringKey title) : base(call, title)
         {
+            val_base_translated = new StringKey("val", "base").Translate();
+            val_source_translated = new StringKey("val", "SOURCE").Translate();
+            val_traits_translated = new StringKey("val", "TRAITS").Translate();
+            val_type_translated = new StringKey("val", "TYPE").Translate();
         }
 
 
@@ -213,7 +225,7 @@ namespace Assets.Scripts.UI
                     ui.SetBGColor(Color.red);
                     ui.SetTextPadding(0);
                     ui.SetText("X", Color.black);
-                    ui.SetButton(delegate { ExcludeTrait(tmpGroup, tmpTrait); });
+                    ui.SetButton(delegate { ExcludeTrait(tmpGroup, tmpTrait, true); });
 
                     offset += 1.05f;
                 }
@@ -292,13 +304,14 @@ namespace Assets.Scripts.UI
             Update();
         }
 
-        protected void ExcludeTrait(TraitGroup group, string trait)
+        protected void ExcludeTrait(TraitGroup group, string trait, bool update)
         {
             if (!group.traits.ContainsKey(trait)) return;
 
             group.traits[trait].excluded = !group.traits[trait].excluded;
             group.traits[trait].selected = false;
-            Update();
+            if(update)
+                Update();
         }
 
         public void AddItem(StringKey stringKey, Dictionary<string, IEnumerable<string>> traits)
@@ -335,8 +348,8 @@ namespace Assets.Scripts.UI
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", qc.typeDynamic.ToUpper()).Translate() });
-            traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { qc.source });
+            traits.Add(val_type_translated, new string[] { new StringKey("val", qc.typeDynamic.ToUpper()).Translate() });
+            traits.Add(val_source_translated, new string[] { qc.source });
 
             AddItem(new SelectionItemTraits(qc.sectionName, qc.sectionName, traits));
         }
@@ -387,21 +400,21 @@ namespace Assets.Scripts.UI
             {
                 if (s.Length == 0)
                 {
-                    sets.Add(new StringKey("val", "base").Translate());
+                    sets.Add(val_base_translated);
                 }
                 else
                 {
                     sets.Add(new StringKey("val", s).Translate());
                 }
             }
-            traits.Add(new StringKey("val", "SOURCE").Translate(), sets);
+            traits.Add(val_source_translated, sets);
 
             List<string> traitlocal = new List<string>();
             foreach (string s in component.traits)
             {
                 traitlocal.Add(new StringKey("val", s).Translate());
             }
-            traits.Add(new StringKey("val", "TRAITS").Translate(), traitlocal);
+            traits.Add(val_traits_translated, traitlocal);
 
             return new SelectionItemTraits(component.name.Translate(), component.sectionName, traits);
         }
@@ -410,8 +423,8 @@ namespace Assets.Scripts.UI
         {
             Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
 
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", type.ToUpper()).Translate() });
-            traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "NEW").Translate() });
+            traits.Add(val_type_translated, new string[] { new StringKey("val", type.ToUpper()).Translate() });
+            traits.Add(val_source_translated, new string[] { new StringKey("val", "NEW").Translate() });
 
             AddItem(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits));
         }
@@ -434,7 +447,7 @@ namespace Assets.Scripts.UI
             {
                 if (tg.GetName().Equals(type))
                 {
-                    ExcludeTrait(tg, trait);
+                    ExcludeTrait(tg, trait, false);
                     return;
                 }
             }
@@ -452,7 +465,7 @@ namespace Assets.Scripts.UI
         public void ExcludeExpansions()
         {
             List<string> enabled = new List<string>();
-            enabled.Add(new StringKey("val", "base").Translate());
+            enabled.Add(val_base_translated);
             foreach (string anyPack in Game.Get().cd.GetLoadedPackIDs())
             {
                 bool packRequired = false;
@@ -467,7 +480,7 @@ namespace Assets.Scripts.UI
                 }
                 if (!packRequired)
                 {
-                    InitExcludeTrait(new StringKey("val", "SOURCE").Translate(), new StringKey("val", anyPack).Translate());
+                    InitExcludeTrait(val_source_translated, new StringKey("val", anyPack).Translate());
                 }
             }
         }

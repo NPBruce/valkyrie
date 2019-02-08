@@ -40,10 +40,13 @@ namespace Assets.Scripts.Content
             // Count the number of replaces. One lookup should not replace more than RECURSIVE_LIMIT elements.
             int recursiveCount = 0;
 
+            string lookupRegexKey = LookupRegexKey();
+            Match match_result = Regex.Match(output, lookupRegexKey);
+
             //while (output.IndexOf("{ffg:") != -1)
-            while (Regex.Match(output, LookupRegexKey()).Success && recursiveCount < RECURSIVE_LIMIT)
+            while (match_result.Success && recursiveCount < RECURSIVE_LIMIT)
             {
-                int pos = Regex.Match(output, LookupRegexKey()).Index;
+                int pos = match_result.Index;
                 // Can be nested
                 int bracketLevel = 1;
                 // Start of lookup
@@ -94,6 +97,8 @@ namespace Assets.Scripts.Content
                 output = output.Replace("{" + dict + ":" + lookup + "}", result);
                 // Increase the recursive count
                 recursiveCount++;
+
+                match_result = Regex.Match(output, lookupRegexKey);
             }
 
             if (recursiveCount == RECURSIVE_LIMIT)
