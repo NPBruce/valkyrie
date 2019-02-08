@@ -356,6 +356,9 @@ namespace Assets.Scripts.Content
                 }
             }
 
+            if (!found)
+               ValkyrieDebug.Log("Key not found: " + key);
+
             return found;
         }
 
