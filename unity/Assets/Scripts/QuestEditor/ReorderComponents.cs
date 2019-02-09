@@ -19,7 +19,7 @@ public class ReorderComponents
             if (!(c is PerilData)) sources.Add(c.source);
         }
 
-        UIWindowSelectionList select = new UIWindowSelectionList(ReorderSource, new StringKey("val", "SELECT", new StringKey("val", "FILE")));
+        UIWindowSelectionList select = new UIWindowSelectionList(ReorderSource, new StringKey("val", "SELECT", CommonStringKeys.FILE));
         foreach (string s in sources)
         {
             select.AddItem(s);

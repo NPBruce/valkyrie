@@ -23,18 +23,18 @@ namespace Assets.Scripts.UI
         string val_type_translated = null;
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
-            val_base_translated = new StringKey("val", "base").Translate();
-            val_source_translated = new StringKey("val", "SOURCE").Translate();
-            val_traits_translated = new StringKey("val", "TRAITS").Translate();
-            val_type_translated = new StringKey("val", "TYPE").Translate();
+            val_base_translated = CommonStringKeys.BASE.Translate();
+            val_source_translated = CommonStringKeys.SOURCE.Translate();
+            val_traits_translated = CommonStringKeys.TRAITS.Translate();
+            val_type_translated = CommonStringKeys.TYPE.Translate();
         }
 
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, StringKey title) : base(call, title)
         {
-            val_base_translated = new StringKey("val", "base").Translate();
-            val_source_translated = new StringKey("val", "SOURCE").Translate();
-            val_traits_translated = new StringKey("val", "TRAITS").Translate();
-            val_type_translated = new StringKey("val", "TYPE").Translate();
+            val_base_translated = CommonStringKeys.BASE.Translate();
+            val_source_translated = CommonStringKeys.SOURCE.Translate();
+            val_traits_translated = CommonStringKeys.TRAITS.Translate();
+            val_type_translated = CommonStringKeys.TYPE.Translate();
         }
 
 
