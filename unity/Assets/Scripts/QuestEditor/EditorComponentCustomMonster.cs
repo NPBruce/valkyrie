@@ -831,7 +831,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void NewAttackType()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", new StringKey("val", "TYPE")));
+        UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", CommonStringKeys.TYPE));
 
         HashSet<string> attackTypes = new HashSet<string>();
         foreach (AttackData a in Game.Get().cd.investigatorAttacks.Values)

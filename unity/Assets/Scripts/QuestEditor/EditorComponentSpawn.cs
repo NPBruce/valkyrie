@@ -66,7 +66,7 @@ public class EditorComponentSpawn : EditorComponentEvent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(6, offset, 3, 1);
-                ui.SetText(new StringKey("val", "FALSE"));
+                ui.SetText(CommonStringKeys.FALSE);
                 ui.SetButton(delegate { UniqueToggle(); });
                 new UIElementBorder(ui);
                 offset += 2;
@@ -75,7 +75,7 @@ public class EditorComponentSpawn : EditorComponentEvent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(6, offset, 3, 1);
-                ui.SetText(new StringKey("val", "TRUE"));
+                ui.SetText(CommonStringKeys.TRUE);
                 ui.SetButton(delegate { UniqueToggle(); });
                 new UIElementBorder(ui);
                 offset += 2;

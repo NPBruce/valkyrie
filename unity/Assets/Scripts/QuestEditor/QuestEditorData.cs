@@ -114,7 +114,7 @@ public class QuestEditorData {
         }
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem(CommonStringKeys.QUEST.Translate(), "Quest", traits);
 
         foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
@@ -128,7 +128,7 @@ public class QuestEditorData {
         select.Draw();
         if (type.Length > 0)
         {
-            select.SelectTrait(new StringKey("val", "TYPE").Translate(), new StringKey("val", type.ToUpper()).Translate());
+            select.SelectTrait(CommonStringKeys.TYPE.Translate(), new StringKey("val", type.ToUpper()).Translate());
         }
     }
 

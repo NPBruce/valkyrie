@@ -38,7 +38,7 @@ public class EditorComponentToken : EditorComponentEvent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TYPE")));
+        ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TYPE));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 12, 1);
