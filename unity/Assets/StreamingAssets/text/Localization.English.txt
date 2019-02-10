@@ -274,8 +274,17 @@ X_COLON,{0}:
 SoA,SoA 
 BtT,BtT 
 CotW,CotW 
+CotWT,CotWT 
+CotWI,CotWI 
+CotWM,CotWM 
 FA,FA 
+FAT,FAT 
+FAI,FAI 
+FAM,FAM 
 MoM1E,MoM1E 
+MoM1ET,MoM1ET 
+MoM1EI,MoM1EI 
+MoM1EM,MoM1EM 
 base,base 
 RN,RN 
 SM,SM 

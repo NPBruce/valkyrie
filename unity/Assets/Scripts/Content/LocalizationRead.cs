@@ -157,8 +157,13 @@ namespace Assets.Scripts.Content
         /// <returns></returns>
         private static string DictQuery(string dict, string input)
         {
+            // Fast translation if nothing to transform
+            if (input.IndexOf('{') == -1)
+                return DictKeyLookup(dict, input);
+
             int bracketLevel = 0;
             int lastSection = 0;
+            Debug.Log("New in DictQuery : " + input);
             List<string> elements = new List<string>();
 
             // Separate the input into sections
