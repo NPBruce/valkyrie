@@ -92,7 +92,7 @@ INFORMATION,Информация
 INITIAL_MESSAGE,Исходное сообщение:
 ITEM,Предмет
 QITEM,Квестовый предмет
-LOAD_QUEST,Загрузить {0}
+LOAD_QUEST,Продолжить
 LOG,Журнал
 SKILLS,Навыки
 ITEMS,Предметы

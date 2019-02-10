@@ -10,11 +10,14 @@ namespace Assets.Scripts.UI.Screens
     // Class for creation and management of the main menu
     public class MainMenuScreen
     {
-        private StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
-        private StringKey ABOUT = new StringKey("val", "ABOUT");
-        private StringKey OPTIONS = new StringKey("val", "OPTIONS");
-        private StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
-        private StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
+        private static readonly StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
+        private static readonly StringKey ABOUT = new StringKey("val", "ABOUT");
+        private static readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private static readonly StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
+        private static readonly StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
+        private static readonly StringKey START_QUEST = new StringKey("val", "START_QUEST");
+        private static readonly StringKey LOAD_QUEST = new StringKey("val", "LOAD_QUEST");
+
         private float ButtonWidth = 13;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
@@ -59,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
             // Button for start quest/scenario
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
-            ui.SetText(new StringKey("val","START_QUEST",game.gameType.QuestName()));
+            ui.SetText(START_QUEST);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Start);
@@ -70,14 +73,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 8, ButtonWidth, 2);
             if (SaveManager.SaveExists())
             {
-                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()));
+                ui.SetText(LOAD_QUEST);
                 ui.SetButton(delegate { new SaveSelectScreen(); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
             else
             {
-                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()), Color.grey);
+                ui.SetText(LOAD_QUEST, Color.grey);
                 new UIElementBorder(ui, Color.grey);
             }
             ui.SetFont(game.gameType.GetHeaderFont());

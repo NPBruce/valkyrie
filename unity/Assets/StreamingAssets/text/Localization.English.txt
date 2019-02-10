@@ -116,7 +116,7 @@ INITIAL_MESSAGE,Initial Message:
 ITEM,Item
 QITEM,QItem
 KO,KO
-LOAD_QUEST,Load {0}
+LOAD_QUEST,Continue
 LOG,Log
 SKILLS,Skills
 ITEMS,Items
@@ -221,7 +221,7 @@ SELECT_SKILLS,Select Skills
 SPAWN,Spawn
 STARTING_ITEM,Starting Item
 STARTING_ITEMS,Starting Items
-START_QUEST,Start {0}
+START_QUEST,New game
 START,Start
 
 TESTS,Tests

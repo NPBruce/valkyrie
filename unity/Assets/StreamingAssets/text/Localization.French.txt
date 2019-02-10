@@ -55,7 +55,7 @@ D2E_APP_NOT_FOUND_ANDROID,Veuillez installer Road to Legend via Google Play
 D2E_HEROES_NAME,Héros
 D2E_HERO_NAME,Héro
 D2E_NAME,Descent : Voyages dans les Ténèbres (Seconde Edition)
-D2E_QUEST_NAME,Scenario
+D2E_QUEST_NAME,mission
 DEFEATED,Éliminé
 DELETE,Supprimer
 UPDATE,Mise à jour
@@ -92,7 +92,7 @@ INITIAL_MESSAGE,Message de départ :
 ITEM,Objet
 QITEM,QItem
 KO,KO
-LOAD_QUEST,Charger {0}
+LOAD_QUEST,Reprendre une partie
 LOG,Journal
 SKILLS,Compétences
 ITEMS,Objets
@@ -111,7 +111,7 @@ MOM_APP_NOT_FOUND_ANDROID,Veuillez installer Mansions of madness via Google Play
 MOM_HEROES_NAME,Investigateurs
 MOM_HERO_NAME,Investigateur
 MOM_NAME,Les Demeures de l'Épouvante Seconde Edition
-MOM_QUEST_NAME,Scénario
+MOM_QUEST_NAME,scénario
 MONSTER,Monstre
 MONSTER_ATTACKS,Le monstre attaque.
 MONSTER_MASTER,Maître
@@ -155,9 +155,9 @@ PUZZLE_SELECT_SKILL,Choisir compétence
 PUZZLE_IMAGE_CLASS,image
 PUZZLE_CODE_CLASS,code
 PUZZLE_SLIDE_CLASS,mécanisme
-QUEST,Scenario
+QUEST,Scénario
 QUEST_NAME_DOWNLOAD,Télécharger {0}
-QUEST_NAME_EDITOR,Éditeur {0}
+QUEST_NAME_EDITOR,Éditeur de {0}
 EDITOR,Éditeur
 QUEST_NAME_UPDATE,  [Mise à jour] {0}
 QUOTA,Quota
@@ -195,7 +195,7 @@ SELECT_SKILLS,Choisir compétences
 SPAWN,Générer
 STARTING_ITEM,Objets de départ
 STARTING_ITEMS,Objets de départ
-START_QUEST,Démarrer {0}
+START_QUEST,Nouvelle partie
 START,Démarrer
 
 TESTS,Tests
@@ -260,8 +260,6 @@ ally,Allié
 //Audio
 menu,Menu
 music,Musique
-quest,Scenario
-defeated,Echec
 newround,Nouveau tour
 attack,Attaque
 unarmed,Sans arme
