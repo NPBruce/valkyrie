@@ -163,7 +163,6 @@ namespace Assets.Scripts.Content
 
             int bracketLevel = 0;
             int lastSection = 0;
-            Debug.Log("New in DictQuery : " + input);
             List<string> elements = new List<string>();
 
             // Separate the input into sections
