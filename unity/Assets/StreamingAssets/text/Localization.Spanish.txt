@@ -90,7 +90,7 @@ INITIAL_MESSAGE,Mensaje Inicial:
 ITEM,Objeto
 QITEM,Objeto de Escenario
 KO,KO
-LOAD_QUEST,Cargar {0}
+LOAD_QUEST,Continuar
 LOG,Log
 SKILLS,Habilidades
 ITEMS,Objetos
@@ -192,7 +192,7 @@ SELECT_SKILLS,Selección de Habilidades
 SPAWN,Generar
 STARTING_ITEM,Objeto Inicial
 STARTING_ITEMS,Equipo Inicial
-START_QUEST,Iniciar {0}
+START_QUEST,Partida nueva
 START,Iniciar
 
 TESTS,Pruebas

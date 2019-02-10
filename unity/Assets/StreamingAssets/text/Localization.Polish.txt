@@ -85,7 +85,7 @@ INITIAL_MESSAGE,Wiadomość Początkowa:
 ITEM,Przedmiot
 QITEM,Przedmiot Fabularny
 KO,KO
-LOAD_QUEST,Załaduj {0}
+LOAD_QUEST,Kontynuuj
 LOG,Log
 SKILLS,Umiejętności
 ITEMS,Przedmioty
@@ -186,7 +186,7 @@ SELECT_SKILLS,Wybierz Umiejętności
 SPAWN,Przywołaj
 STARTING_ITEM,Przedmiot Startowy
 STARTING_ITEMS,Przedmioty Startowe
-START_QUEST,Nowy {0}
+START_QUEST,Nowa gra
 START,Start
 
 TESTS,Testy

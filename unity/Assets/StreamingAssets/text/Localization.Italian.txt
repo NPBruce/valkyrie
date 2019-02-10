@@ -61,7 +61,7 @@ INFO,info
 INFORMATION,Informazioni
 INITIAL_MESSAGE,Messaggio iniziale
 ITEM,Oggetto
-LOAD_QUEST,Carica {0}
+LOAD_QUEST,Continua
 LOG,Log
 MAIN_MENU,Menu Principale
 MAX,Max
@@ -156,7 +156,7 @@ SELECT_SKILLS,
 SPAWN,Generazione
 STARTING_ITEM,
 STARTING_ITEMS,Oggetti Iniziali
-START_QUEST,Inizio {0}
+START_QUEST,Nuova partita
 START,Inizio
 
 TESTS,Prove

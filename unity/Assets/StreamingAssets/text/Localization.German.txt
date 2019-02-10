@@ -89,7 +89,7 @@ INFORMATION,Information
 INITIAL_MESSAGE,Eingangstext:
 ITEM,Gegenstand
 KO,KO
-LOAD_QUEST,Lade {0}
+LOAD_QUEST,Weiter
 LOG,Log
 SKILLS,Fähigkeiten
 ITEMS,Inventar
@@ -191,7 +191,7 @@ SELECT_SKILLS,Fähigkeiten wählen
 SPAWN,Spawn
 STARTING_ITEM,Startgegenstand
 STARTING_ITEMS,Startgegenstände
-START_QUEST,Starte {0}
+START_QUEST,Neues spiel
 START,Starte
 
 TESTS,Tests

@@ -4,6 +4,8 @@ SET_FIRE,炎トークンを置く
 INVESTIGATOR_ELIMINATED,探索者の死亡
 CLOSE,閉じる
 PUZZLE_GUESS,入力
+START_QUEST,新しいゲーム
+LOAD_QUEST,ゲームを続ける
 
 UP,上
 DOWN,下

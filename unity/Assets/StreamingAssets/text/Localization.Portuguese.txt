@@ -53,6 +53,8 @@ EXIT,Sair
 FINISHED,Terminado
 FIRST,Primeiro
 FORCE_ACTIVATE,Ativação Forçada
+START_QUEST,Novo jogo
+LOAD_QUEST,Continuar
 
 HEALTH,Vida
 HEALTH_HERO,Por Herói
