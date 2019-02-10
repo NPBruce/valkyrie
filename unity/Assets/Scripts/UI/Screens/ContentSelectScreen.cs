@@ -108,7 +108,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.MainMenu);
+            ui.SetButton(Quit);
             new UIElementBorder(ui);
         }
 
@@ -228,10 +228,21 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                ui.SetButton(Destroyer.MainMenu);
+                ui.SetButton(Quit);
             }
         }
-        
+
+        public static void Quit()
+        {
+            Game game = Game.Get();
+            // Clear content data in case something has changed
+            game.cd = new ContentData(game.gameType.DataDirectory());
+            // Load the base content - pack will be loaded later if required
+            game.cd.LoadContentID("");
+
+            Destroyer.MainMenu();
+        }
+
         public void Update()
         {
             foreach (KeyValuePair<string, List<UIElement>> kv in buttons)
