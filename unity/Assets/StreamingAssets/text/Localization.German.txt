@@ -47,6 +47,7 @@ CONTENT_IMPORTING,Importiere...
 CONTENT_REIMPORT,Reimportiere Inhalt
 CONTENT_INSTALL_VIA_STEAM,Über Steam installieren
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Über Google Play installieren
+CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
