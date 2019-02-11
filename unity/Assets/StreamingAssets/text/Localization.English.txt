@@ -69,11 +69,13 @@ COMPONENT_TO_DELETE,Component to Delete:
 CONTENT_IMPORT,Import Content
 CONTENT_IMPORTING,Importing...
 CONTENT_REIMPORT,Reimport Content
+CONTENT_LOCATE,Locate the game
+CONTENT_INSTALL_VIA_STEAM,Install via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
 CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
-D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
-D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -130,8 +132,7 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness, install via Steam
-MOM_APP_NOT_FOUND_ANDROID,Unable to locate Mansions of Madness
+MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness
 MOM_HEROES_NAME,Investigators
 MOM_HERO_NAME,Investigator
 MOM_NAME,Mansions of Madness Second Edition

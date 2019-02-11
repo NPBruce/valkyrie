@@ -27,10 +27,12 @@ COMPONENT_TO_DELETE,Contenuto da Eliminare
 CONTENT_IMPORT,Contenuto Importato
 CONTENT_IMPORTING,In aggiornamento...
 CONTENT_REIMPORT,Reimporta Contenuto
+CONTENT_INSTALL_VIA_STEAM,Installalo con Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Installalo con Google Play
 CONTINUE,Continua
 COPY,Copia
 CUSTOMMONSTER,Mostro personalizzato
-D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend", installalo con Steam
+D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend"
 D2E_HEROES_NAME,Eroi
 D2E_HERO_NAME,Eroe
 D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione

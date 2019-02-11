@@ -48,8 +48,7 @@ CONTENT_REIMPORT,重新導入
 CONTINUE,繼續
 COPY,複製
 CUSTOMMONSTER,自定義怪物
-D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
-D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -105,8 +104,7 @@ MENU,菜單
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,電腦上無法找到《瘋狂詭宅》安裝檔。請通過Steam安裝遊戲。
-MOM_APP_NOT_FOUND_ANDROID,無法找到《瘋狂詭宅》安裝檔。
+MOM_APP_NOT_FOUND,電腦上無法找到《瘋狂詭宅》安裝檔。
 MOM_HEROES_NAME,調查員
 MOM_HERO_NAME,調查員
 MOM_NAME,《瘋狂詭宅》第二版
