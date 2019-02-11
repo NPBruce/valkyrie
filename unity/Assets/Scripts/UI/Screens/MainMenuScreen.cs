@@ -18,7 +18,7 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey START_QUEST = new StringKey("val", "START_QUEST");
         private static readonly StringKey LOAD_QUEST = new StringKey("val", "LOAD_QUEST");
 
-        private float ButtonWidth = 13;
+        private float ButtonWidth = 14;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public MainMenuScreen()
