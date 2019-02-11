@@ -504,14 +504,27 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(new StringKey("val", attackType));
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetLocation(17.5f, offset, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { NewInvestigatorAttack(aType); });
             new UIElementBorder(ui, Color.green);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveInvestigatorAttackType(aType); });
+            new UIElementBorder(ui, Color.red);
             offset += 1;
 
             foreach (StringKey attack in monsterComponent.investigatorAttacks[attackType])
             {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { RemoveInvestigatorAttack(attackType, attack); });
+                new UIElementBorder(ui, Color.red);
+                offset += 1;
+
                 UIElementEditablePaneled uie = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
                 uie.SetLocation(0.5f, offset, 19, 18);
                 uie.SetText(attack.Translate());
@@ -856,6 +869,18 @@ public class EditorComponentCustomMonster : EditorComponent
         StringKey newAttack = new StringKey("qst", monsterComponent.sectionName + ".Attack_" + type + "_" + position);
         monsterComponent.investigatorAttacks[type].Add(newAttack);
         LocalizationRead.updateScenarioText(newAttack.key, "-");
+        Update();
+    }
+
+    public void RemoveInvestigatorAttack(string type, StringKey attack)
+    {
+        monsterComponent.investigatorAttacks[type].Remove(attack);
+        Update();
+    }
+
+    public void RemoveInvestigatorAttackType(string type)
+    {
+        monsterComponent.investigatorAttacks.Remove(type);
         Update();
     }
 
