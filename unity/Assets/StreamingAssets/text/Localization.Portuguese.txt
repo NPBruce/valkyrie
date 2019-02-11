@@ -26,10 +26,12 @@ COMPONENT_TO_DELETE,Deletar Componente
 CONTENT_IMPORT,Importar Componente
 CONTENT_IMPORTING,Importando...
 CONTENT_REIMPORT,Reimportar Componente
+CONTENT_INSTALL_VIA_STEAM,Instalar via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar via Google Play
 CONTINUE,Continuar
 COPY,Copiar
 CUSTOMMONSTER,Monstro Personalizado
-D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend", instalar via Steam
+D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend"
 D2E_HEROES_NAME,Heróis
 D2E_HERO_NAME,Herói
 D2E_NAME,Descent: Journeys in the Dark Second Edition

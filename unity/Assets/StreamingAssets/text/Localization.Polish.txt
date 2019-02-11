@@ -47,10 +47,12 @@ COMPONENT_TO_DELETE,Komponent do usunięcia:
 CONTENT_IMPORT,Zaimportuj dane
 CONTENT_IMPORTING,Importowanie danych...
 CONTENT_REIMPORT,Zaimportuj ponownie 
+CONTENT_INSTALL_VIA_STEAM,Zainstaluj przy użyciu Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
 CONTINUE,Kontynuuj
 COPY,Kopiuj
 CUSTOMMONSTER,Personalizacja Potwora
-D2E_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przy użyciu Steam
+D2E_APP_NOT_FOUND,Nie znaleziono gry.
 D2E_HEROES_NAME,Bohaterowie
 D2E_HERO_NAME,Bohater
 D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
@@ -98,8 +100,7 @@ MAX_CAM,Max Kam
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Kam
-MOM_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przez Steam
-MOM_APP_NOT_FOUND_ANDROID,Nie znaleziono Posiadłości Szaleństwa
+MOM_APP_NOT_FOUND,Nie znaleziono gry.
 MOM_HEROES_NAME,Badacze
 MOM_HERO_NAME,Badacz
 MOM_NAME,Posiadłość Szaleństwa 2. Edycja

@@ -20,15 +20,25 @@ namespace Assets.Scripts.UI.Screens
         protected string importType = "";
         Thread importThread;
 
-        private StringKey D2E_NAME = new StringKey("val","D2E_NAME");
-        private StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
-        private StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
-        private StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
-        private StringKey D2E_APP_NOT_FOUND_ANDROID = new StringKey("val", "D2E_APP_NOT_FOUND_ANDROID");
-        private StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
-        private StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
-        private StringKey MOM_APP_NOT_FOUND_ANDROID = new StringKey("val", "MOM_APP_NOT_FOUND_ANDROID");
-        private StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+        private static readonly StringKey D2E_NAME = new StringKey("val","D2E_NAME");
+        private static readonly StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
+
+        private static readonly StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
+        private static readonly StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
+
+        private static readonly StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
+        private static readonly StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
+        private static readonly StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+        private static readonly StringKey CONTENT_LOCATE = new StringKey("val", "CONTENT_LOCATE");
+        private static readonly StringKey CONTENT_INSTALL_VIA_STEAM = new StringKey("val", "CONTENT_INSTALL_VIA_STEAM");
+        private static readonly StringKey CONTENT_INSTALL_VIA_GOOGLEPLAY = new StringKey("val", "CONTENT_INSTALL_VIA_GOOGLEPLAY");
+
+        private static readonly string MOM_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom";
+        private static readonly string MOM_APP_URL_STEAM = "https://store.steampowered.com/app/478980/Mansions_of_Madness/";
+
+        private static readonly string D2E_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl";
+        private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
+
 #if IA
         private StringKey IA_NAME = new StringKey("val", "IA_NAME");
         private StringKey IA_APP_NOT_FOUND = new StringKey("val", "IA_APP_NOT_FOUND");
@@ -102,97 +112,155 @@ namespace Assets.Scripts.UI.Screens
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
 
-            Color startColor = Color.white;
-            // If we need to import we can't play this type
-            if (fcD2E.NeedImport())
-            {
-                startColor = Color.gray;
-            }
+            // first button y offset
+            float offset = 12f;
+
             // Draw D2E button
+            bool D2E_need_import = fcD2E.NeedImport();
+            bool D2E_import_available = fcD2E.ImportAvailable();
+            Color startColor = D2E_need_import ? Color.grey : Color.white;
+            int fontSize = UIScaler.GetMediumFont();
+
             UIElement ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 12, 30, 3);
-            ui.SetText(D2E_NAME, startColor);
-            ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate { D2E(); });
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, offset, 30, 3);
+            // If we need to import we can't play this type
+            if (!D2E_need_import)
+            {
+                ui.SetText(D2E_NAME, startColor);
+                ui.SetButton(delegate { D2E(); });
+            }
+            else
+            {
+                string message = "";
+                if (D2E_import_available)
+                {
+                    message = D2E_NAME.Translate();
+                } else
+                {
+                    message = D2E_NAME.Translate() + System.Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
+                    fontSize = (int) (UIScaler.GetMediumFont() / 1.05f);
+                }
+                ui.SetText(message, startColor);
+            }
+            ui.SetFontSize(fontSize);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
             // Draw D2E import button
             ui = new UIElement();
-            if (fcD2E.ImportAvailable() || ( !fcD2E.NeedImport() && (Application.platform != RuntimePlatform.Android) ) )
+            if (D2E_import_available || !D2E_need_import)
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 15.2f, 14, 2);
-                StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
+                StringKey keyText = D2E_need_import ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("D2E", !fcD2E.ImportAvailable()); });
+                ui.SetButton(delegate { Import("D2E", !D2E_import_available); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 15.2f, 24, 1);
+                // only install button for Android
                 if (Application.platform == RuntimePlatform.Android)
                 {
-                    ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, offset + 3.2f, 24, 1.3f);
+                    ui.SetText(CONTENT_INSTALL_VIA_GOOGLEPLAY, Color.red);
+                    ui.SetButton(delegate { GotoWebBrowser(D2E_APP_URL_ANDROID); });
+                    new UIElementBorder(ui, Color.red);
                 }
                 else
                 {
-                    ui.SetText(D2E_APP_NOT_FOUND, Color.red);
-                }
-                // Allow manual selection of directory for import
-                if (Application.platform != RuntimePlatform.Android)
-                {
+                    // install and locate button for other systems
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits()/ 2) - 13, offset + 3.2f, 12, 1.3f);
+                    ui.SetText(CONTENT_INSTALL_VIA_STEAM, Color.red);
+                    ui.SetButton(delegate { GotoWebBrowser(D2E_APP_URL_STEAM); });
+                    new UIElementBorder(ui, Color.red);
+
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits() /2) + 1, offset + 3.2f, 12, 1.3f);
+                    ui.SetText(CONTENT_LOCATE, Color.red);
                     ui.SetButton(delegate { Import("D2E", true); });
+                    new UIElementBorder(ui, Color.red);
                 }
-                new UIElementBorder(ui, Color.red);
             }
 
+            offset += 7f;
+
             // Draw MoM button
-            startColor = Color.white;
-            if (fcMoM.NeedImport())
-            {
-                startColor = Color.gray;
-            }
+            bool MoM_need_import = fcMoM.NeedImport();
+            bool MoM_import_available = fcMoM.ImportAvailable();
+            startColor = MoM_need_import ? Color.grey : Color.white;
+            fontSize = UIScaler.GetMediumFont();
+
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
-            ui.SetText(MOM_NAME, startColor);
-            ui.SetButton(delegate { MoM(); });
-            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, offset, 30, 3);
+            // If we need to import we can't play this type
+            if (!MoM_need_import)
+            {
+                ui.SetText(MOM_NAME, startColor);
+                ui.SetButton(delegate { MoM(); });
+            }
+            else
+            {
+                string message = "";
+                if (MoM_import_available)
+                {
+                    message = MOM_NAME.Translate();
+                }
+                else
+                {
+                    message = MOM_NAME.Translate() + System.Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
+                    fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
+                }
+                ui.SetText(message, startColor);
+            }
+            ui.SetFontSize(fontSize);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
             // Draw MoM import button
             ui = new UIElement();
-            if (fcMoM.ImportAvailable() || (!fcMoM.NeedImport() && (Application.platform != RuntimePlatform.Android)) )
+            if (MoM_import_available || !MoM_need_import)
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 22.2f, 14, 2);
-                StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
+                StringKey keyText = MoM_need_import ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("MoM", !fcMoM.ImportAvailable()); });
+                ui.SetButton(delegate { Import("MoM", !MoM_import_available); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 22.2f, 24, 1);
+                // only install button for Android
                 if (Application.platform == RuntimePlatform.Android)
                 {
-                    ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, offset + 3.2f, 24, 1.3f);
+                    ui.SetText(CONTENT_INSTALL_VIA_GOOGLEPLAY, Color.red);
+                    ui.SetButton(delegate { GotoWebBrowser(MOM_APP_URL_ANDROID); });
+                    new UIElementBorder(ui, Color.red);
                 }
                 else
                 {
-                    ui.SetText(MOM_APP_NOT_FOUND, Color.red);
-                }
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                if (Application.platform != RuntimePlatform.Android)
-                {
+                    // install and locate button for other systems
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 13, offset + 3.2f, 12, 1.3f);
+                    ui.SetText(CONTENT_INSTALL_VIA_STEAM, Color.red);
+                    ui.SetButton(delegate { GotoWebBrowser(MOM_APP_URL_STEAM); });
+                    new UIElementBorder(ui, Color.red);
+
+                    ui = new UIElement();
+                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) + 1, offset + 3.2f, 12, 1.3f);
+                    ui.SetText(CONTENT_LOCATE, Color.red);
                     ui.SetButton(delegate { Import("MoM", true); });
+                    new UIElementBorder(ui, Color.red);
                 }
-                new UIElementBorder(ui, Color.red);
             }
 
+            
 #if IA
             // Draw IA button
             startColor = Color.white;
@@ -456,14 +524,14 @@ namespace Assets.Scripts.UI.Screens
             Application.Quit();
         }
 
-        // Open link to releases and quit Valkyrie
-        public void GotoValkyrieVersion()
+        // Open link and quit Valkyrie
+        public void GotoWebBrowser(string url)
         {
-            Application.OpenURL( VersionManager.GetlatestReleaseURL() );
+            Application.OpenURL(url);
 
             Application.Quit();
         }
-        
+
         public void CheckForNewValkyrieVersion()
         {
             StringKey NEW_VERSION_AVAILABLE = new StringKey("val", "NEW_VERSION_AVAILABLE");
@@ -477,7 +545,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(UIScaler.GetRight() - 3 - string_width, UIScaler.GetBottom(-3), string_width + 2, 2);
                 ui.SetText(NEW_VERSION_AVAILABLE, Color.green);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(GotoValkyrieVersion);
+                ui.SetButton(delegate { GotoWebBrowser(VersionManager.GetlatestReleaseURL()); } );
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui, Color.green);
             }
