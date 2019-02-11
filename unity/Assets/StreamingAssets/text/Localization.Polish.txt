@@ -49,6 +49,7 @@ CONTENT_IMPORTING,Importowanie danych...
 CONTENT_REIMPORT,Zaimportuj ponownie 
 CONTENT_INSTALL_VIA_STEAM,Zainstaluj przy użyciu Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
+CONTENT_LOCATE,Zlokalizuj katalog z grą
 CONTINUE,Kontynuuj
 COPY,Kopiuj
 CUSTOMMONSTER,Personalizacja Potwora

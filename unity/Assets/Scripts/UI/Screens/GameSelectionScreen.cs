@@ -211,7 +211,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 else
                 {
-                    message = MOM_NAME.Translate() + System.Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
+                    message = MOM_NAME.Translate() + System.Environment.NewLine + MOM_APP_NOT_FOUND.Translate();
                     fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
                 }
                 ui.SetText(message, startColor);
