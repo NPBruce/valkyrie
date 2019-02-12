@@ -27,7 +27,7 @@ public class SkillWindow
 
         // Add a title to the page
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-6), 1, 12, 3);
+        ui.SetLocation(UIScaler.GetHCenter(-14), 1, 28, 3);
         ui.SetText(new StringKey("val", "SELECT_SKILLS"));
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
@@ -64,10 +64,10 @@ public class SkillWindow
             {
                 ui = new UIElement();
                 ui.SetLocation(xOffset + 2, 5.5f, 2, 2);
-                ui.SetText(availableXP.ToString(), Color.blue);
+                ui.SetText(availableXP.ToString(), Color.cyan);
                 ui.SetFontSize(UIScaler.GetMediumFont());
                 ui.SetButton(delegate { Update(tmp); });
-                new UIElementBorder(ui, Color.blue);
+                new UIElementBorder(ui, Color.cyan);
             }
 
             xOffset += 6f;
