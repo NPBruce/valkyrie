@@ -892,13 +892,16 @@ public class Quest
         // Fetch hero state
         heroes = new List<Hero>();
         monsters = new List<Monster>();
+        int heroCount = 0;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
             if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
             {
+                heroCount++;
                 heroes.Add(new Hero(kv.Value));
             }
         }
+        game.quest.vars.SetValue("#heroes", heroCount);
 
         // Monsters must be after heros because some activations refer to heros
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
