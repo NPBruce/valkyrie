@@ -433,3 +433,8 @@ UPDATED_THIS_SEMESTER,Zaktualizowane w tym półroczu
 UPDATED_THIS_YEAR,Zaktualizowane w tym roku
 UPDATED_TWO_YEARS_AGO,Zaktualizowane dwa lata temu
 UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata
+
+GO_OFFLINE, Włączyć tryb Offline
+GO_ONLINE, Włączyć tryb Online
+DOWNLOAD_ONGOING,Pobieranie...
+OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)

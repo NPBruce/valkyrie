@@ -629,3 +629,8 @@ UPDATED_THIS_SEMESTER,Updated this semester
 UPDATED_THIS_YEAR,Updated this year
 UPDATED_TWO_YEARS_AGO,Updated two years ago
 UPDATE_OLDER_THAN_TWO_YEAR,Latest update older than two years
+
+GO_OFFLINE,GO OFFLINE
+GO_ONLINE,GO ONLINE
+DOWNLOAD_ONGOING,Downloading...
+OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
