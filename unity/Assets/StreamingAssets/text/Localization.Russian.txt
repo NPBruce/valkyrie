@@ -470,3 +470,6 @@ UPDATED_THIS_SEMESTER,Обновлено в этом полугодии
 UPDATED_THIS_YEAR,Обновлено год назад
 UPDATED_TWO_YEARS_AGO,Обновлено два года назад
 UPDATE_OLDER_THAN_TWO_YEAR,Текущая версия старше двух лет
+
+GO_OFFLINE,Перейти в Офлайн-режим
+GO_ONLINE,Перейти в Онлайн-режим

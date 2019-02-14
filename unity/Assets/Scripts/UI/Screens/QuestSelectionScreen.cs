@@ -52,6 +52,11 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey STATS_NO_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_NO_AVERAGE_WIN_RATIO");
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
 
+        private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
+        private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
+        private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
+        private readonly StringKey OFFLINE_DUE_TO_ERROR = new StringKey("val", "OFFLINE_DUE_TO_ERROR");
+
         // text colors
         private readonly Color grey_transparent_text = new Color(0.1f, 0.1f, 0.1f, 0.50f);
         private readonly Color dark_grey_text = new Color(0.1f, 0.1f, 0.1f);
@@ -211,91 +216,32 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
-            text_connection_status = new UIElement();
+            // Show offline/online button (or info)
+            DrawOnlineModeButton();
 
-            // Display connection status message
-            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
-            {
-                // error download (no connection, timeout, of file not available)
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("OFFLINE (network error)", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-            }
-            else if(game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
-            {
-                // Download ongoing
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("DOWNLOADING...", Color.blue);
-                text_connection_status.SetFontSize(UIScaler.GetSmallFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
-            }
-            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
-            {
-                // Download done, we are online
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-            }
-            else
-            {
-                // Download done, user has switched offline modline
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO ONLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-            }
-
-            if(co_display!=null)
+            if (co_display!=null)
                 StopCoroutine(co_display);
             co_display = StartCoroutine(DrawQuestList());
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)
         {
-            if(is_available)
-            {
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-            }
-            else
-            {
-                text_connection_status.SetText("OFFLINE (network error)", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-            }
+            DrawOnlineModeButton();
         }
 
         private void SetOnlineMode(bool go_online)
         {
             if (go_online)
             {
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-
                 game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
-                ReloadQuestList();
             }
             else
             {
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO ONLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-
                 game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
-                ReloadQuestList();
             }
+
+            DrawOnlineModeButton();
+            ReloadQuestList();
         }
 
         // Show button and initialize the popup
@@ -366,6 +312,53 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions = true;
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             }
+        }
+
+        private void DrawOnlineModeButton()
+        {
+            float text_width = 0f;
+            bool border = false;
+
+            if (text_connection_status != null)
+                text_connection_status.Destroy();
+
+            text_connection_status = new UIElement();
+
+            // Display connection status message
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
+            {
+                // error download (no connection, timeout, of file not available)
+                text_connection_status.SetText(OFFLINE_DUE_TO_ERROR, Color.red);
+            }
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                // Download ongoing
+                text_connection_status.SetText(DOWNLOAD_ONGOING, Color.cyan);
+                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
+            }
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                // Download done, we are online
+                text_connection_status.SetText(GO_OFFLINE, Color.red);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+                border = true;
+            }
+            else
+            {
+                // Download done, user has switched offline modline
+                text_connection_status.SetText(GO_ONLINE, Color.green);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+                border = true;
+            }
+
+            text_width = text_connection_status.GetStringWidth(text_connection_status.GetText(), UIScaler.GetSmallFont(), game.gameType.GetHeaderFont());
+            text_connection_status.SetLocation(UIScaler.GetWidthUnits() - text_width - 1, 0.5f, text_width, 1.2f);
+            text_connection_status.SetFont(game.gameType.GetHeaderFont());
+            text_connection_status.SetFontSize(UIScaler.GetSmallFont());
+            text_connection_status.SetTextAlignment(TextAnchor.MiddleCenter);
+            if(border)
+                new UIElementBorder(text_connection_status, text_connection_status.GetTextColor());
+
         }
 
         private void DrawFlags()
