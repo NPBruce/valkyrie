@@ -215,7 +215,7 @@ public class DialogWindow {
         ui.SetImage(sprite);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-22), 6.5f, 8, 1);
+        ui.SetLocation(UIScaler.GetHCenter(-22.5f), 6.5f, 9, 1);
         ui.SetText(game.cd.items[game.quest.itemSelect[item]].name);
     }
 
