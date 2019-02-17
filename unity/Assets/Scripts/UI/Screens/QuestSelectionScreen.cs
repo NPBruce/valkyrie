@@ -1302,6 +1302,8 @@ namespace Assets.Scripts.UI.Screens
                 download.tag = Game.QUESTUI;
                 QuestDownload qd = download.AddComponent<QuestDownload>();
                 qd.Download(key);
+                // We need to refresh local quest list after download
+                game.questsList.UnloadLocalQuests();
             }
         }
 
