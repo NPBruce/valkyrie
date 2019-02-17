@@ -1250,6 +1250,17 @@ namespace Assets.Scripts.UI.Screens
                 yield return null;
             }
 
+            // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
+            if (nb_filtered_out_quest > 0)
+            {
+                StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+            }
+            else
+            {
+                text_number_of_filtered_scenario.SetText(" ");
+            }
+
             images_list.StartDownloadASync();
         }
 
