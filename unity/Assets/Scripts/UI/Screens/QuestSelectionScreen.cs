@@ -1055,15 +1055,20 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 // Quest short description (synopsys)
-                ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetBGColor(Color.clear);
-                ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
-                ui.SetTextPadding(0.5f);
-                ui.SetText(synopsys_translation, dark_grey_text_color);
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
-                ui.SetFontStyle(FontStyle.Italic);
-                ui.SetFont(game.gameType.GetHeaderFont());
+                if (synopsys_translation != null)
+                { 
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetBGColor(Color.clear);
+                    ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
+                    ui.SetTextPadding(0.5f);
+                    if (synopsys_translation.Length >= 105)
+                        synopsys_translation=synopsys_translation.Substring(0, 100) + "(...)";
+                    ui.SetText(synopsys_translation, dark_grey_text_color);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
+                    ui.SetFontStyle(FontStyle.Italic);
+                    ui.SetFont(game.gameType.GetHeaderFont());
+                }
 
                 // Action Button
                 // - First burnt hole
