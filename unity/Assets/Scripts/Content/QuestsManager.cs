@@ -171,6 +171,8 @@ public class QuestsManager
         else
         {
             localManifest.Remove(key);
+            // we need to delete /temp and reload list
+            UnloadLocalQuests();
         }
 
         if (File.Exists(saveLocation + "/manifest.ini"))
