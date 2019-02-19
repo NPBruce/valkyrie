@@ -2248,7 +2248,7 @@ public class QuestData
             string authors_short_translation = "";
 
             // if languages_authors_short is available, we are in scenarios explorer and don't have access to .txt files yet
-            if (languages_authors_short != null) {
+            if (languages_authors_short.Count != 0) {
                 // Try to get current language
                 if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
                 {
@@ -2268,8 +2268,10 @@ public class QuestData
                 {
                     authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
                 }
-                Debug.Log("sa " + authors_short_translation + "\nauthors_short.Translate() " + authors_short.Translate() + "\nauthors_short.fullKey " + authors_short.fullKey);
             }
+
+            if (authors_short_translation.Length > 80)
+                authors_short_translation = authors_short_translation.Substring(0, 75) + "(...)";
 
             return authors_short_translation;
         }
