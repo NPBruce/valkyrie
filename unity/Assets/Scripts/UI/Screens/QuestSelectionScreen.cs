@@ -1033,8 +1033,8 @@ namespace Assets.Scripts.UI.Screens
                 if(pack_symbol_available!="")
                 { 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size);
-                    ui.SetLocation(expansion_x_offset, expansion_y_offset, symbols_available_width, 1);
+                    symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                    ui.SetLocation(expansion_x_offset, expansion_y_offset, symbols_available_width+1, 1);
                     ui.SetText(pack_symbol_available, Color.black);
                     ui.SetBGColor(Color.clear);
                     ui.SetFont(game.gameType.GetSymbolFont());
@@ -1046,8 +1046,8 @@ namespace Assets.Scripts.UI.Screens
                     is_expansion_missing = true;
                     pack_symbol_missing = MISSING_EXPANSIONS.Translate() + pack_symbol_missing;
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size);
-                    ui.SetLocation(expansion_x_offset+ symbols_available_width, expansion_y_offset, symbols_missing_width, 1);
+                    float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                    ui.SetLocation(expansion_x_offset+ symbols_available_width, expansion_y_offset, symbols_missing_width + 1, 1);
                     ui.SetText(pack_symbol_missing, dark_red_text_color);
                     ui.SetBGColor(Color.clear);
                     ui.SetFont(game.gameType.GetSymbolFont());

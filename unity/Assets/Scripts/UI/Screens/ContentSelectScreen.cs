@@ -192,6 +192,8 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
+                    int text_font_size = (int) (UIScaler.GetMediumFont() * 0.9f);
+
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
@@ -205,7 +207,25 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(game.cd.GetContentName(id), Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetFont(game.gameType.GetHeaderFont());
-                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetFontSize(text_font_size);
+                    ui.SetButton(delegate { Select(id); });
+                    buttons[id].Add(ui);
+
+                    float text_width = ui.GetStringWidth()+0.5f;
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    if (left)
+                    {
+                        ui.SetLocation(8+ text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 19 - text_width, 3);
+                    }
+                    else
+                    {
+                        ui.SetLocation(10 + text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 20 - text_width, 3);
+                    }
+                    ui.SetBGColor(bgColor);
+                    ui.SetText("("+game.cd.GetContentAcronym(id)+")", Color.black);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(text_font_size);
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
