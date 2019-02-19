@@ -1007,7 +1007,7 @@ namespace Assets.Scripts.UI.Screens
                 List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
                 Color expansion_text_color = Color.black;
                 float expansion_x_offset = 5.8f;
-                float expansion_y_offset = offset + 1.6f;
+                float expansion_y_offset = offset + 1.7f;
                 int expansions_symbol_font_size = UIScaler.GetSmallFont();
                 if (game.gameType.TypeName() == "D2E")
                 {
