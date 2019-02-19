@@ -438,3 +438,5 @@ GO_OFFLINE, Włączyć tryb Offline
 GO_ONLINE, Włączyć tryb Online
 DOWNLOAD_ONGOING,Pobieranie...
 OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
+
+MISSING_EXPANSIONS,Brakujące rozszerzenia: 
