@@ -2262,12 +2262,12 @@ public class QuestData
             }
             else
             {
-                authors_short_translation = authors_short.Translate();
-                // if not translated, it means authors_short is not found in txt files
-                if (authors_short_translation == authors_short.fullKey)
-                {
-                    authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
-                }
+                authors_short_translation = authors_short.Translate(true);
+            }
+
+            if (authors_short_translation == "")
+            {
+                authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
             }
 
             if (authors_short_translation.Length > 80)
