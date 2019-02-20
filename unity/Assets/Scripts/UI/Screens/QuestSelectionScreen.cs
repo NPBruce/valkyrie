@@ -630,8 +630,11 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetLocation(1f, offset+0.4f, UIScaler.GetWidthUnits() - 5f, 2f);
                         ui.SetText(current_author, Color.black);
                         ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                        ui.SetFont(Game.Get().gameType.GetHeaderFont());
-                        ui.SetFontSize(UIScaler.GetMediumFont());
+                        ui.SetFont(game.gameType.GetHeaderFont());
+                        if(game.gameType.TypeName()=="D2E")
+                            ui.SetFontSize((int)(UIScaler.GetMediumFont()*0.9f));
+                        if (game.gameType.TypeName() == "MoM")
+                            ui.SetFontSize(UIScaler.GetMediumFont());
                         ui.SetBGColor(Color.grey);
                         last_author = current_author;
                         offset += 2.7f;
