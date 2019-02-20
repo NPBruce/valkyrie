@@ -368,7 +368,7 @@ public class QuestData
             cancelable = true;
 
             // Tokens don't have conditions
-            conditions = new List<VarOperation>();
+            tests = null;
 
             tokenName = "";
             if (data.ContainsKey("type"))
@@ -409,6 +409,7 @@ public class QuestData
         public float size = 1;
         public float textSize = 1;
         public string textColor = "white";
+        public string textBackgroundColor = "transparent";
         public float aspect = 1;
         public bool border = false;
 
@@ -464,6 +465,11 @@ public class QuestData
                 textColor = data["textcolor"];
             }
 
+            if (data.ContainsKey("textbackgroundcolor"))
+            {
+                textBackgroundColor = data["textbackgroundcolor"];
+            }
+            
             if (data.ContainsKey("halign"))
             {
                 if (data["halign"].Equals("left"))
@@ -511,6 +517,11 @@ public class QuestData
             if (!textColor.Equals("white"))
             {
                 r += "textcolor=" + textColor + nl;
+            }
+
+            if (!textBackgroundColor.Equals("transparent"))
+            {
+                r += "textbackgroundcolor=" + textBackgroundColor + nl;
             }
 
             if (verticalUnits)
@@ -758,8 +769,6 @@ public class QuestData
         public int maxHeroes = 0;
         public string[] addComponents;
         public string[] removeComponents;
-        public List<VarOperation> operations;
-        public List<VarOperation> conditions;
         public bool cancelable = false;
         public bool highlight = false;
         public bool randomEvents = false;
@@ -786,14 +795,14 @@ public class QuestData
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
-            conditions = new List<VarOperation>();
+            tests = new VarTests();
             minCam = false;
             maxCam = false;
             music = new List<string>();
         }
 
         // Create event from ini data
-        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path)
+        public Event(string name, Dictionary<string, string> data, string path, int format) : base(name, data, path, format)
         {
             typeDynamic = type;
 
@@ -861,7 +870,7 @@ public class QuestData
                     quotaVar = data["quota"];
                 }
             }
-            
+
             // minimum heros required to be selected for event
             if (data.ContainsKey("minhero"))
             {
@@ -898,31 +907,6 @@ public class QuestData
             if (data.ContainsKey("trigger"))
             {
                 trigger = data["trigger"];
-            }
-
-            operations = new List<VarOperation>();
-            if (data.ContainsKey("operations"))
-            {
-                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in array)
-                {
-                    operations.Add(new VarOperation(s));
-                }
-            }
-            // Backwards support for format < 8
-            if (format <= 8 && sectionName.StartsWith("EventEnd"))
-            {
-                operations.Add(new VarOperation("$end,=,1"));
-            }
-
-            conditions = new List<VarOperation>();
-            if (data.ContainsKey("conditions"))
-            {
-                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
-                foreach (string s in array)
-                {
-                    conditions.Add(new VarOperation(s));
-                }
             }
 
             // Randomise next event setting
@@ -1113,26 +1097,6 @@ public class QuestData
                 r += "trigger=" + trigger + nl;
             }
 
-            if (operations.Count > 0)
-            {
-                r += "operations=";
-                foreach (VarOperation o in operations)
-                {
-                    r += o.ToString() + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-
-            if (conditions.Count > 0)
-            {
-                r += "conditions=";
-                foreach (VarOperation o in conditions)
-                {
-                    r += o.ToString() + " ";
-                }
-                r = r.Substring(0, r.Length - 1) + nl;
-            }
-
             if (randomEvents)
             {
                 r += "randomevents=true" + nl;
@@ -1168,39 +1132,6 @@ public class QuestData
             }
 
             return r;
-        }
-
-        public class VarOperation
-        {
-            public string var = "";
-            public string operation = "";
-            public string value = "";
-
-            public VarOperation()
-            {
-            }
-
-            public VarOperation(string inOp)
-            {
-                var = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[0];
-                operation = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[1];
-                value = inOp.Split(",".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)[2];
-
-                // Support old internal var names (depreciated, format 3)
-                var = UpdateVarName(var);
-                value = UpdateVarName(value);
-            }
-
-            override public string ToString()
-            {
-                return var + ',' + operation + ',' + value;
-            }
-
-            private string UpdateVarName(string s)
-            {
-                if (s.Equals("#fire")) return "$fire";
-                return s;
-            }
         }
     }
 
@@ -1261,6 +1192,7 @@ public class QuestData
         public string skill = "{observation}";
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
+        public string puzzleSolution = "";
         public string imageType = "";
 
         // Create a new puzzle with name (editor)
@@ -1301,6 +1233,10 @@ public class QuestData
             {
                 int.TryParse(data["puzzlealtlevel"], out puzzleAltLevel);
             }
+            if (data.ContainsKey("puzzlesolution"))
+            {
+                puzzleSolution = data["puzzlesolution"];
+            }
         }
 
         // Save to string (editor)
@@ -1329,6 +1265,10 @@ public class QuestData
             {
                 r += "puzzlealtlevel=" + puzzleAltLevel + nl;
             }
+            if (!puzzleSolution.Equals(""))
+            {
+                r += "puzzlesolution=" + puzzleSolution + nl;
+            }
             return r;
         }
     }
@@ -1351,6 +1291,10 @@ public class QuestData
         public UnityEngine.UI.Image image;
         // comment for developers
         public string comment = "";
+        // Var tests and operations if required
+        public VarTests tests = null;
+        public List<VarOperation> operations = null;
+
         private static char DOT = '.';
         public string genKey(string element)
         {
@@ -1371,7 +1315,7 @@ public class QuestData
         }
 
         // Construct from ini data
-        public QuestComponent(string nameIn, Dictionary<string, string> data, string sourceIn)
+        public QuestComponent(string nameIn, Dictionary<string, string> data, string sourceIn, int format=-1)
         {
             typeDynamic = type;
             sectionName = nameIn;
@@ -1394,6 +1338,45 @@ public class QuestData
             if (data.ContainsKey("comment"))
             {
                 comment = data["comment"];
+            }
+
+            operations = new List<VarOperation>();
+            if (data.ContainsKey("operations"))
+            {
+                string[] array = data["operations"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    operations.Add(new VarOperation(s));
+                }
+            }
+
+            // Backwards support for format < 8
+            if (format <= 8 && sectionName.StartsWith("EventEnd"))
+            {
+                operations.Add(new VarOperation("$end,=,1"));
+            }
+
+            tests = new VarTests();
+            if (data.ContainsKey("vartests"))
+            {
+                //todo load save
+                string[] array = data["vartests"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    tests.Add(s);
+                }
+            }
+            // Backwards support for conditions
+            else if (data.ContainsKey("conditions"))
+            {
+                string[] array = data["conditions"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                int i = 0;
+                foreach (string s in array)
+                {
+                    if (i > 0) tests.Add(new VarTestsLogicalOperator("AND"));
+                    tests.Add(new VarOperation(s));
+                    i++;
+                }
             }
         }
 
@@ -1450,6 +1433,22 @@ public class QuestData
             {
                 r += "comment=" + comment + nl;
             }
+
+            if (operations != null && operations.Count > 0)
+            {
+                r += "operations=";
+                foreach (VarOperation o in operations)
+                {
+                    r += o.ToString() + " ";
+                }
+                r = r.Substring(0, r.Length - 1) + nl;
+            }
+
+            if (tests != null && tests.VarTestsComponents.Count > 0)
+            {
+                r += "vartests=" + tests.ToString() + nl;
+            }
+
             return r;
         }
     }
@@ -1899,7 +1898,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 9;
+        public static int currentFormat = 10;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -1921,13 +1920,35 @@ public class QuestData
         public int lengthMin = 0;
         public int lengthMax = 0;
 
+        // -- data for initial scenario listing
+        // CRC32 of valkyrie package
+        public string version = "";
+        // languages availables with scenario name <"English", "The Fall of House Lynch">
+        public Dictionary<string, string> languages_name = null;
+        // languages availables with synopsys name <"English", "This is the synopsys">
+        public Dictionary<string, string> languages_synopsys = null;
+        // languages availables with synopsys name <"English", "Authors in one line">
+        public Dictionary<string, string> languages_authors_short = null;
+        // URL of the package
+        public string package_url = "";
+        // latest_update date if file is stored on Github
+        public System.DateTime latest_update;
+        // is package available locally
+        public bool downloaded = false;
+        public bool update_available = false;
+
+        // -- data inside translation file (for unzipped quest)
         public string name_key { get { return "quest.name"; } }
         public string description_key { get { return "quest.description"; } }
+        public string synopsys_key { get { return "quest.synopsys"; } }
         public string authors_key { get { return "quest.authors"; } }
+        public string authors_short_key { get { return "quest.authors_short"; } }
 
         public StringKey name { get { return new StringKey("qst", name_key); } }
         public StringKey description { get { return new StringKey("qst", description_key); } }
+        public StringKey synopsys { get { return new StringKey("qst", synopsys_key); } }
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
+        public StringKey authors_short { get { return new StringKey("qst", authors_short_key); } }
 
         // Create from path
         public Quest(string pathIn)
@@ -2084,6 +2105,61 @@ public class QuestData
                 image = value != null ? value.Replace('\\', '/') : value;
             }
 
+            // parse data for scenario explorer
+            version = "";
+            if (iniData.ContainsKey("version"))
+            {
+                version = iniData["version"];
+            }
+
+            languages_name = new Dictionary<string, string>();
+            if (iniData.ContainsKey("name."+defaultLanguage))
+            {
+                foreach(KeyValuePair<string,string> kv in iniData)
+                {
+                    if(kv.Key.Contains("name."))
+                    {
+                        languages_name.Add(kv.Key.Substring(5), kv.Value);
+                    }
+                }
+            }
+
+            languages_synopsys = new Dictionary<string, string>();
+            if (iniData.ContainsKey("synopsys." + defaultLanguage))
+            {
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("synopsys."))
+                    {
+                        languages_synopsys.Add(kv.Key.Substring(9), kv.Value);
+                    }
+                }
+            }
+
+            languages_authors_short = new Dictionary<string, string>();
+            if (iniData.ContainsKey("authors_short." + defaultLanguage))
+            {
+                foreach (KeyValuePair<string, string> kv in iniData)
+                {
+                    if (kv.Key.Contains("authors_short."))
+                    {
+                        languages_authors_short.Add(kv.Key.Substring(14), kv.Value);
+                    }
+                }
+            }
+
+            package_url = "";
+            if (iniData.ContainsKey("url"))
+            {
+                package_url = iniData["url"];
+            }
+
+            latest_update = new System.DateTime(0);
+            if (iniData.ContainsKey("latest_update"))
+            {
+                System.DateTime.TryParse(iniData["latest_update"], out latest_update);
+            }
+
             return true;
         }
 
@@ -2131,6 +2207,26 @@ public class QuestData
                 r.Append("image=").AppendLine(image);
             }
 
+            if(version != "")
+            {
+                r.Append("version=").AppendLine(version);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_name)
+            {
+                r.Append("name."+ kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_synopsys)
+            {
+                r.Append("synopsys." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_authors_short)
+            {
+                r.Append("authors_short." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
             return r.ToString();
         }
 
@@ -2145,6 +2241,43 @@ public class QuestData
                 }
             }
             return r;
+        }
+
+        public string GetShortAuthor()
+        {
+            string authors_short_translation = "";
+
+            // if languages_authors_short is available, we are online in scenarios explorer and don't have access to .txt files yet
+            if (Game.Get().questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                if (languages_authors_short.Count != 0)
+                {
+                    // Try to get current language
+                    if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
+                    {
+                        // Try to get default language
+                        if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))
+                        {
+                            // if not translated, returns unknown
+                            authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                authors_short_translation = authors_short.Translate(true);
+            }
+
+            if (authors_short_translation == "")
+            {
+                authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+            }
+
+            if (authors_short_translation.Length > 80)
+                authors_short_translation = authors_short_translation.Substring(0, 75) + "(...)";
+
+            return authors_short_translation;
         }
     }
 }

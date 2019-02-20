@@ -215,7 +215,7 @@ public class DialogWindow {
         ui.SetImage(sprite);
 
         ui = new UIElement();
-        ui.SetLocation(UIScaler.GetHCenter(-22), 6.5f, 8, 1);
+        ui.SetLocation(UIScaler.GetHCenter(-22.5f), 6.5f, 9, 1);
         ui.SetText(game.cd.items[game.quest.itemSelect[item]].name);
     }
 
@@ -340,7 +340,7 @@ public class DialogWindow {
     public class EventButton
     {
         StringKey label = StringKey.NULL;
-        public Color colour = Color.white;
+        public Color32 colour = Color.white;
 
         public EventButton(StringKey newLabel,string newColour)
         {
@@ -348,15 +348,20 @@ public class DialogWindow {
             string colorRGB = ColorUtil.FromName(newColour);      
 
             // Check format is valid
-            if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
+            if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
             {
                 Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
             }
 
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            colour.r = (byte)System.Convert.ToByte(colorRGB.Substring(1, 2), 16);
+            colour.g = (byte)System.Convert.ToByte(colorRGB.Substring(3, 2), 16);
+            colour.b = (byte)System.Convert.ToByte(colorRGB.Substring(5, 2), 16);
+
+            if (colorRGB.Length == 9)
+                colour.a = (byte)System.Convert.ToByte(colorRGB.Substring(7, 2), 16);
+            else
+                colour.a = 255; // opaque by default
         }
 
         public StringKey GetLabel()

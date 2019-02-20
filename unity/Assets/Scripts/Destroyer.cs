@@ -49,6 +49,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'questlist'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
+            Object.Destroy(go);
+
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
@@ -63,12 +67,13 @@ public class Destroyer {
 
         Game game = Game.Get();
 
+        game.audioControl.StopAudioEffect();
+
         game.heroCanvas.Clean();
         game.cc.maxLimit = false;
         game.cc.minLimit = false;
 
         // Clear up all data
-        game.cd = null;
         game.quest = null;
         game.qed = null;
         game.moraleDisplay = null;

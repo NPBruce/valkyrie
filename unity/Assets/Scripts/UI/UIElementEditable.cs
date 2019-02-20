@@ -58,7 +58,16 @@ namespace Assets.Scripts.UI
                     uiInput.onEndEdit.AddListener(delegate { buttonCall(); });
                 }
             }
-            uiText = text.GetComponent<UnityEngine.UI.Text>();
+
+            this.SetColor(textColor);
+            input.GetComponent<PanCancelInputField>().text = content;
+            lastText = content;
+        }
+
+        // Set the color of this text
+        public void SetColor(Color textColor)
+        {
+            UnityEngine.UI.Text uiText = text.GetComponent<UnityEngine.UI.Text>();
             uiText.color = textColor;
             if (textColor.Equals(Color.black))
             {
@@ -68,8 +77,6 @@ namespace Assets.Scripts.UI
             {
                 uiText.material = uiText.font.material;
             }
-            input.GetComponent<PanCancelInputField>().text = content;
-            lastText = content;
         }
 
         public void SetSingleLine()

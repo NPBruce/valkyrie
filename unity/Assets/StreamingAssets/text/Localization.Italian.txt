@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Abilità
 ABOUT,Informazioni su
-ABOUT_FFG,Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi.
-ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ABOUT_FFG,Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
 ACTIONS,Azioni
 ACTIVATED,Attivo
 ACTIVATION,Attivazione
@@ -27,10 +27,12 @@ COMPONENT_TO_DELETE,Contenuto da Eliminare
 CONTENT_IMPORT,Contenuto Importato
 CONTENT_IMPORTING,In aggiornamento...
 CONTENT_REIMPORT,Reimporta Contenuto
+CONTENT_INSTALL_VIA_STEAM,Installalo con Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Installalo con Google Play
 CONTINUE,Continua
 COPY,Copia
 CUSTOMMONSTER,Mostro personalizzato
-D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend", installalo con Steam
+D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend"
 D2E_HEROES_NAME,Eroi
 D2E_HERO_NAME,Eroe
 D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
@@ -61,7 +63,7 @@ INFO,info
 INFORMATION,Informazioni
 INITIAL_MESSAGE,Messaggio iniziale
 ITEM,Oggetto
-LOAD_QUEST,Carica {0}
+LOAD_QUEST,Continua
 LOG,Log
 MAIN_MENU,Menu Principale
 MAX,Max
@@ -150,12 +152,13 @@ SELECT_TO_DELETE,Selezione {0} da Cancellare
 HIDDEN,
 ACTIVE,
 SET,Set
+SET_EDITOR_ALPHA,Editor Trasparenza
 SKILL,Abilità
 SELECT_SKILLS,
 SPAWN,Generazione
 STARTING_ITEM,
 STARTING_ITEMS,Oggetti Iniziali
-START_QUEST,Inizio {0}
+START_QUEST,Nuova partita
 START,Inizio
 
 TESTS,Prove
@@ -350,7 +353,7 @@ STATS_ASK_VICTORY_YES,SI!
 STATS_ASK_VICTORY_NO,No...
 STATS_ASK_RATING,Come valuteresti questo scenario?\n(1: terribile  10: stupefacente)
 STATS_ASK_COMMENTS,Vorresti lasciare un commento all'autore dello scenario?
-STATS_MISSING_INFO,Per favore valuta lo scenario e comunicaci se hai vinto prima di confermare l'invio. 
+STATS_MISSING_INFO,Per favore valuta lo scenario e comunicaci se hai vinto prima di confermare l'invio.
 STATS_SEND_BUTTON,Conferma
 STATS_MENU_BUTTON,Menu
 
@@ -366,3 +369,37 @@ STATS_ERROR_NETWORK,Errore durante l'acquisizione delle statistiche di gioco, pe
 
 NEW_VERSION_AVAILABLE,Aggiornamento disponibile!
 
+SORT_TITLE,Filtra
+SORT_SELECT_CRITERIA,Seleziona i criteri:
+SORT_SELECT_ORDER,In Ordine:
+SORT_ASCENDING,Ascendente
+SORT_DESCENDING,Discendente
+
+SORT_BY_AUTHOR,Autore
+SORT_BY_NAME,Nome
+SORT_BY_DIFFICULTY,Difficoltà
+SORT_BY_DURATION,Durata
+
+SORT_BY_RATING,Valutazione
+SORT_BY_AVERAGE_DURATION,Durata media
+SORT_BY_WIN_RATIO,% di vittoria
+SORT_BY_DATE,Ultimo agg.
+
+FILTER_TITLE,Seleziona filtri
+FILTER_SELECT_LANG,Seleziona le lingue che parli:
+FILTER_MISSING_EXPANSIONS_ON,Nascondi scenari con espansioni mancanti ☑
+FILTER_MISSING_EXPANSIONS_OFF,Nascondi scenari con espansioni mancanti ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenari filtrati
+
+AUTHORS_SHORT,Linea di testo per Autori (per l’opzione "filtra per autore")
+AUTHORS_UNKNOWN,Autori sconosciuti (richiede aggiornamento scenario dell’autore)
+
+SYNOPSYS,Sinossi (max 100 caratteri)
+
+UPDATED_THIS_WEEK,Aggiornati questa settimana
+UPDATED_THIS_MONTH,Aggiornati questo mese
+UPDATED_THIS_TRIMESTER,Aggiornati negli ultimi tre mesi
+UPDATED_THIS_SEMESTER,Aggiornati negli ultimi sei mesi
+UPDATED_THIS_YEAR,Aggiornati quest’anno
+UPDATED_TWO_YEARS_AGO,Aggiornati due anni fa
+UPDATE_OLDER_THAN_TWO_YEAR,Ultimo aggiornamento più di due anni fa

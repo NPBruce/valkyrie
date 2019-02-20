@@ -91,6 +91,14 @@ namespace Assets.Scripts.UI.Screens
             }
 
             ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-8.5f), 0.5f, 8, 2);
+            ui.SetText(CommonStringKeys.DELETE, Color.grey);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { Delete(q); });
+            new UIElementBorder(ui, Color.grey);
+
+            ui = new UIElement();
             ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(game.gameType.GetHeaderFont());
@@ -105,17 +113,47 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { Start(q); });
             new UIElementBorder(ui, Color.green);
+
+
+        }
+
+        /// <summary>
+        /// Select to delete
+        /// </summary>
+        /// <param file="file">File name to delete</param>
+        public void Delete(QuestData.Quest q)
+        {
+            string toDelete = "";
+
+            if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+            {
+                toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path);
+                File.Delete(toDelete);
+
+                // update quest status : downloaded/updated
+                Game.Get().questsList.SetQuestAvailability(Path.GetFileNameWithoutExtension(q.path), false);
+            }
+            else
+            {
+                // this is not an archive, it is a local quest within a directory
+                Directory.Delete(q.path, true);
+
+                Game.Get().questsList.UnloadLocalQuests();
+            }
+
+            Destroyer.Dialog();
+
+            // Pull up the quest selection page
+            Game.Get().questSelectionScreen.Show();
         }
 
         // Return to quest selection
         public void Cancel()
         {
             Destroyer.Dialog();
-            // Get a list of available quests
-            Dictionary<string, QuestData.Quest> ql = QuestLoader.GetQuests();
 
             // Pull up the quest selection page
-            new QuestSelectionScreen(ql);
+            Game.Get().questSelectionScreen.Show();
         }
 
         // Select a quest

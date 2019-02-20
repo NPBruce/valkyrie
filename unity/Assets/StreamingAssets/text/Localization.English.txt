@@ -22,8 +22,8 @@ ICON_PRODUCT_MAD25,
 // TEXTS
 ABILITY,Ability
 ABOUT,About
-ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activated
 ACTIVATION,Activation
@@ -69,11 +69,13 @@ COMPONENT_TO_DELETE,Component to Delete:
 CONTENT_IMPORT,Import Content
 CONTENT_IMPORTING,Importing...
 CONTENT_REIMPORT,Reimport Content
+CONTENT_LOCATE,Locate the game
+CONTENT_INSTALL_VIA_STEAM,Install via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
 CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
-D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
-D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -116,7 +118,7 @@ INITIAL_MESSAGE,Initial Message:
 ITEM,Item
 QITEM,QItem
 KO,KO
-LOAD_QUEST,Load {0}
+LOAD_QUEST,Continue
 LOG,Log
 SKILLS,Skills
 ITEMS,Items
@@ -130,8 +132,7 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness, install via Steam
-MOM_APP_NOT_FOUND_ANDROID,Unable to locate Mansions of Madness
+MOM_APP_NOT_FOUND,Unable to locate Mansions of Madness
 MOM_HEROES_NAME,Investigators
 MOM_HERO_NAME,Investigator
 MOM_NAME,Mansions of Madness Second Edition
@@ -170,6 +171,7 @@ POSITION_TYPE_HIGHLIGHT,Highlight
 POSITION_TYPE_UNUSED,Unused
 PUZZLE,Puzzle
 PUZZLE_ALT_LEVEL,Alt Level
+PUZZLE_SOLUTION,Solution
 PUZZLE_CLASS,Class
 PUZZLE_CLASS_SELECT,Select Class
 IMAGE,Image
@@ -214,16 +216,20 @@ SELECT_TO_DELETE,Select {0} To Delete
 HIDDEN,Hidden
 ACTIVE,Active
 SET,Set
+SET_EDITOR_ALPHA,Editor Transparency
 SKILL,Skill
 SELECT_SKILLS,Select Skills
 SPAWN,Spawn
 STARTING_ITEM,Starting Item
 STARTING_ITEMS,Starting Items
-START_QUEST,Start {0}
+START_QUEST,New game
 START,Start
 
 TESTS,Tests
 TILE,Tile
+
+AND,AND
+OR,OR
 
 TOKEN,Token
 TOOLS,Tools
@@ -241,6 +247,7 @@ VERTICAL,Vertical
 ALIGN,Align
 SIZE,Size
 TEXT_SIZE,Text Size
+BACKGROUND_COLOUR,Background colour
 ASPECT,Aspect
 BORDER,Border
 NO_BORDER,No Border
@@ -268,12 +275,129 @@ X_COLON,{0}:
 SoA,SoA 
 BtT,BtT 
 CotW,CotW 
+CotWT,CotWT 
+CotWI,CotWI 
+CotWM,CotWM 
 FA,FA 
+FAT,FAT 
+FAI,FAI 
+FAM,FAM 
 MoM1E,MoM1E 
+MoM1ET,MoM1ET 
+MoM1EI,MoM1EI 
+MoM1EM,MoM1EM 
 base,base 
 RN,RN 
 SM,SM 
 SoT,SoT 
+
+//Packs symbols MoM
+SoA_SYMBOL,
+BtT_SYMBOL,
+CotW_SYMBOL,
+CotWT_SYMBOL,
+CotWI_SYMBOL,
+CotWM_SYMBOL,
+FA_SYMBOL,
+FAT_SYMBOL,
+FAI_SYMBOL,
+FAM_SYMBOL,
+MoM1E_SYMBOL,
+MoM1ET_SYMBOL,
+MoM1EI_SYMBOL,
+MoM1EM_SYMBOL,
+base_SYMBOL,
+RN_SYMBOL,
+SM_SYMBOL,
+SoT_SYMBOL,
+
+//Packs symbols D2E
+LoR_SYMBOL,
+LotW_SYMBOL,
+MoB_SYMBOL,
+MoR_SYMBOL,
+SoN_SYMBOL,
+TCTR_SYMBOL,
+TT_SYMBOL,
+BotW_SYMBOL,
+CoD_SYMBOL,
+CotF_SYMBOL,
+GoD_SYMBOL,
+OotO_SYMBOL,
+SoE_SYMBOL,
+SotS_SYMBOL,
+ToC_SYMBOL,
+VoD_SYMBOL,
+CKAoD_SYMBOL,ck
+CKD1E_SYMBOL,ck
+CKDQ_SYMBOL,ck
+CKPromo_SYMBOL,ck
+CKToI_SYMBOL,ck
+CKWoD_SYMBOL,ck
+DJ09_SYMBOL,lt
+DJ10_SYMBOL,lt
+DJ11_SYMBOL,lt
+DJ12_SYMBOL,lt
+DJ13_SYMBOL,lt
+DJ14_SYMBOL,lt
+DJ15_SYMBOL,lt
+DJ16_SYMBOL,lt
+DJ17_SYMBOL,lt
+DJ18_SYMBOL,lt
+DJ19_SYMBOL,lt
+DJ20_SYMBOL,lt
+DJ22_SYMBOL,lt
+DJ23_SYMBOL,lt
+DJ24_SYMBOL,lt
+DJ25_SYMBOL,lt
+DJ35_SYMBOL,lt
+DJ41_SYMBOL,lt
+DJ42_SYMBOL,lt
+DJ43_SYMBOL,lt
+
+// Expansions name D2E (for performance)
+LoR,LoR 
+LotW,LotW 
+MoB,MoB 
+MoR,MoR 
+SoN,SoN 
+TCTR,TCTR 
+TT,TT 
+BotW,BotW 
+CoD,CoD 
+CotF,CotF 
+GoD,GoD 
+OotO,OotO 
+SoE,SoE 
+SotS,SotS 
+ToC,ToC 
+VoD,VoD 
+CKAoD,CKAoD
+CKD1E,CKD1E
+CKDQ,CKDQ
+CKPromo,CKPromo
+CKToI,CKToI
+CKWoD,CKWoD
+DJ09,DJ09
+DJ10,DJ10
+DJ11,DJ11
+DJ12,DJ12
+DJ13,DJ13
+DJ14,DJ14
+DJ15,DJ15
+DJ16,DJ16
+DJ17,DJ17
+DJ18,DJ18
+DJ19,DJ19
+DJ20,DJ20
+DJ22,DJ22
+DJ23,DJ23
+DJ24,DJ24
+DJ25,DJ25
+DJ35,DJ35
+DJ41,DJ41
+DJ42,DJ42
+DJ43,DJ43
 
 //Items
 weapon,Weapon
@@ -366,7 +490,6 @@ tents,Tents
 stables,Stables
 hall,Hall
 map,Map
-bedroom,Bedroom
 city,City
 fountain,Fountain
 blackrealm,Blackrealm
@@ -412,6 +535,7 @@ navy,Navy
 image,Image
 code,Code
 slide,Slide
+tower,Tower
 SYMBOL,Symbol
 ELEMENT,Element
 
@@ -452,7 +576,7 @@ STATS_ASK_VICTORY_YES,YES!
 STATS_ASK_VICTORY_NO,No...
 STATS_ASK_RATING,How would you rate this scenario?\n(1: awful  10: amazing)
 STATS_ASK_COMMENTS,Would you like to leave a comment for the scenario author?
-STATS_MISSING_INFO,Please rate the scenario and tell us if you won before submitting. 
+STATS_MISSING_INFO,Please rate the scenario and tell us if you won before submitting.
 STATS_SEND_BUTTON,Submit
 STATS_MENU_BUTTON,Menu
 
@@ -470,3 +594,45 @@ ERROR_HTTP,Error downloading file, if the problem persists please report the iss
 ERROR_NETWORK,Error downloading file, please check your internet connection
 
 NEW_VERSION_AVAILABLE,New version available!
+
+SORT_TITLE,Sort
+SORT_SELECT_CRITERIA,Select the sort criteria:
+SORT_SELECT_ORDER,Order by:
+SORT_ASCENDING,Ascending
+SORT_DESCENDING,Descending
+
+SORT_BY_AUTHOR,Author
+SORT_BY_NAME,Name
+SORT_BY_DIFFICULTY,Difficulty
+SORT_BY_DURATION,Duration
+
+SORT_BY_RATING,Rating
+SORT_BY_AVERAGE_DURATION,Avg duration
+SORT_BY_WIN_RATIO,Victory ratio
+SORT_BY_DATE,Update date
+
+FILTER_TITLE,Select filters
+FILTER_SELECT_LANG,Select the language(s) you are speaking:
+FILTER_MISSING_EXPANSIONS_ON,Hide scenarios with missing expansions  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Hide scenarios with missing expansions  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenario(s) filtered out
+
+AUTHORS_SHORT,Single text line for Authors (for "sort by author" option)
+AUTHORS_UNKNOWN,Unknown authors (needs a scenario update by author)
+
+SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Updated this week
+UPDATED_THIS_MONTH,Updated this month
+UPDATED_THIS_TRIMESTER,Updated this trimester
+UPDATED_THIS_SEMESTER,Updated this semester
+UPDATED_THIS_YEAR,Updated this year
+UPDATED_TWO_YEARS_AGO,Updated two years ago
+UPDATE_OLDER_THAN_TWO_YEAR,Latest update older than two years
+
+GO_OFFLINE,GO OFFLINE
+GO_ONLINE,GO ONLINE
+DOWNLOAD_ONGOING,Downloading...
+OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
+
+MISSING_EXPANSIONS,Missing expansions:

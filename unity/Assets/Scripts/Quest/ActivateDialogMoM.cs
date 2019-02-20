@@ -56,7 +56,7 @@ public class ActivateDialogMoM : ActivateDialog
         ui.SetButton(CreateMoveWindow);
         new UIElementBorder(ui);
 
-        MonsterDialogMoM.DrawMonster(monster);
+        MonsterDialogMoM.DrawMonster(monster, true);
     }
 
     public void CreateAttackWindow()
@@ -88,7 +88,7 @@ public class ActivateDialogMoM : ActivateDialog
         ui.SetButton(activated);
         new UIElementBorder(ui);
 
-        MonsterDialogMoM.DrawMonster(monster);
+        MonsterDialogMoM.DrawMonster(monster, true);
     }
 
     public void CreateMoveWindow()

@@ -15,17 +15,16 @@ public class QuestLoader {
         // Look in the user application data directory
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        CleanTemp();
         mkDir(ContentData.DownloadPath());
 
         // Get a list of downloaded quest not packed
-        List<string> questDirectories = GetQuests(ContentData.DownloadPath());
+        List<string> questDirectories = GetUnpackedQuests(ContentData.DownloadPath());
 
         // Extract only required files from downloaded packages 
         ExtractPackages(ContentData.DownloadPath());
 
         // Get the list of extracted packages
-        questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
+        questDirectories.AddRange(GetUnpackedQuests(ContentData.TempValyriePath));
 
         // Add the list of editor quest
         if (game.gameType is MoMGameType)
@@ -40,7 +39,7 @@ public class QuestLoader {
         {
             dataLocation += "/IA/Editor";
         }
-        questDirectories.AddRange(GetQuests(dataLocation));
+        questDirectories.AddRange(GetUnpackedQuests(dataLocation));
         
         // Go through all directories
         foreach (string p in questDirectories)
@@ -63,21 +62,49 @@ public class QuestLoader {
         return quests;
     }
 
+    // Return a single quest, quest name is without file extension
+    public static QuestData.Quest GetSingleQuest(string questName, bool getHidden = false)
+    {
+        QuestData.Quest quest = null;
+
+        Game game = Game.Get();
+        // Look in the user application data directory
+        string dataLocation = Game.AppData();
+        mkDir(dataLocation);
+        mkDir(ContentData.DownloadPath());
+
+        string path = ContentData.DownloadPath() + Path.DirectorySeparatorChar + questName + ".valkyrie";
+        QuestLoader.ExtractSinglePackagePartial(path);
+
+        // load quest
+        QuestData.Quest q = new QuestData.Quest(Path.Combine(ContentData.TempValyriePath, Path.GetFileName(path)));
+        // Check quest is valid and of the right type
+        if (q.valid && q.type.Equals(game.gameType.TypeName()))
+        {
+            // Is the quest hidden?
+            if (!q.hidden || getHidden)
+            {
+                // Add quest to quest list
+                quest = q;
+            }
+        }
+
+        // Return list of available quests
+        return quest;
+    }
+
     // Return list of quests available in the user path (includes packages)
     public static Dictionary<string, QuestData.Quest> GetUserQuests()
     {
         Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
 
-        // Clean up extracted packages
-        CleanTemp();
-
         // Read user application data for quests
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        List<string> questDirectories = GetQuests(dataLocation);
+        List<string> questDirectories = GetUnpackedQuests(dataLocation);
 
         // Read extracted packages
-        questDirectories.AddRange(GetQuests(ContentData.TempValyriePath));
+        questDirectories.AddRange(GetUnpackedQuests(ContentData.TempValyriePath));
 
         // go through all found quests
         foreach (string p in questDirectories)
@@ -102,7 +129,7 @@ public class QuestLoader {
         // Read user application data for quests
         string dataLocation = Game.AppData();
         mkDir(dataLocation);
-        List<string> questDirectories = GetQuests(dataLocation);
+        List<string> questDirectories = GetUnpackedQuests(dataLocation);
 
         string tempPath = ContentData.TempPath;
         string gameType = Game.Get().gameType.TypeName();
@@ -126,8 +153,8 @@ public class QuestLoader {
         return quests;
     }
 
-    // Get list of directories with quests at a path
-    public static List<string> GetQuests(string path)
+    // Get list of directories with quests at a path (unpacked quests)
+    public static List<string> GetUnpackedQuests(string path)
     {
         List<string> quests = new List<string>();
 
@@ -173,7 +200,7 @@ public class QuestLoader {
     {
         // Extract into temp
         string extractedPath = Path.Combine(ContentData.TempValyriePath, Path.GetFileName(path));
-        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT);
+        ZipManager.Extract(extractedPath, path, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC);
     }
 
     /// <summary>

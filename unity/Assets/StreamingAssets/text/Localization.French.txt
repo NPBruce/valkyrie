@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos
-ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés.
-ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, UnityStandaloneFileBrowser de gkngkc et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activé
 ACTIVATION,Activation
@@ -47,15 +47,17 @@ COMPONENT_TO_DELETE,Élément à supprimer
 CONTENT_IMPORT,Importer contenu
 CONTENT_IMPORTING,Import...
 CONTENT_REIMPORT,Réimporter contenu
+CONTENT_LOCATE,Localiser le jeu
+CONTENT_INSTALL_VIA_STEAM,Installer via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Installer via Google Play
 CONTINUE,Continuer
 COPY,Copier
 CUSTOMMONSTER,Monstre personnalisé
-D2E_APP_NOT_FOUND,Veuillez installer Road to Legend via Steam
-D2E_APP_NOT_FOUND_ANDROID,Veuillez installer Road to Legend via Google Play
+D2E_APP_NOT_FOUND,L'application "Road to Legend" est introuvable
 D2E_HEROES_NAME,Héros
 D2E_HERO_NAME,Héro
-D2E_NAME,Descent : Voyages dans les Ténèbres (Seconde Edition)
-D2E_QUEST_NAME,Scenario
+D2E_NAME,Descent: Voyages dans les Ténèbres (2nde édition)
+D2E_QUEST_NAME,mission
 DEFEATED,Éliminé
 DELETE,Supprimer
 UPDATE,Mise à jour
@@ -92,7 +94,7 @@ INITIAL_MESSAGE,Message de départ :
 ITEM,Objet
 QITEM,QItem
 KO,KO
-LOAD_QUEST,Charger {0}
+LOAD_QUEST,Reprendre une partie
 LOG,Journal
 SKILLS,Compétences
 ITEMS,Objets
@@ -106,12 +108,11 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,Veuillez installer Mansions of madness via Steam
-MOM_APP_NOT_FOUND_ANDROID,Veuillez installer Mansions of madness via Google Play
+MOM_APP_NOT_FOUND,L'application "Mansions of Madness" est introuvable
 MOM_HEROES_NAME,Investigateurs
 MOM_HERO_NAME,Investigateur
 MOM_NAME,Les Demeures de l'Épouvante Seconde Edition
-MOM_QUEST_NAME,Scénario
+MOM_QUEST_NAME,scénario
 MONSTER,Monstre
 MONSTER_ATTACKS,Le monstre attaque.
 MONSTER_MASTER,Maître
@@ -126,7 +127,7 @@ MUSIC,Musique
 NAME,Nom
 NEW,Nouveau
 NEW_X,{Nouveau {0}}
-NONE,{Ninguno}
+NONE,{Aucun}
 
 NEXT_EVENTS,Événements suivants
 NOT_FIRST,Pas en premier
@@ -155,14 +156,14 @@ PUZZLE_SELECT_SKILL,Choisir compétence
 PUZZLE_IMAGE_CLASS,image
 PUZZLE_CODE_CLASS,code
 PUZZLE_SLIDE_CLASS,mécanisme
-QUEST,Scenario
+QUEST,Scénario
 QUEST_NAME_DOWNLOAD,Télécharger {0}
-QUEST_NAME_EDITOR,Éditeur {0}
+QUEST_NAME_EDITOR,Éditeur de {0}
 EDITOR,Éditeur
 QUEST_NAME_UPDATE,  [Mise à jour] {0}
 QUOTA,Quota
 RECOVER,Récupérer
-INVESTIGATOR_ATTACKS,L'investigator Attaque
+INVESTIGATOR_ATTACKS,Attaques de l'investigateur
 
 
 RELOAD,Recharger
@@ -189,16 +190,20 @@ SELECT_TO_DELETE,Sélectionner {0} pour le supprimmer
 HIDDEN,Caché
 ACTIVE,Actif
 SET,Action
+SET_EDITOR_ALPHA,Transparence Éditeur
 SKILL,Compétence
 SELECT_SKILLS,Choisir compétences
 SPAWN,Générer
 STARTING_ITEM,Objets de départ
 STARTING_ITEMS,Objets de départ
-START_QUEST,Démarrer {0}
+START_QUEST,Nouvelle partie
 START,Démarrer
 
 TESTS,Tests
 TILE,Tuile
+
+AND,ET
+OR,OU
 
 TOKEN,Marqueur
 TOOLS,Outils
@@ -216,6 +221,7 @@ VERTICAL,Vertical
 ALIGN,Aligner
 SIZE,Taille
 TEXT_SIZE,Taille du texte
+BACKGROUND_COLOUR,Couleur de fond
 ASPECT,Aspect
 BORDER,Bordure
 NO_BORDER,Sans bordure
@@ -255,8 +261,6 @@ ally,Allié
 //Audio
 menu,Menu
 music,Musique
-quest,Scenario
-defeated,Echec
 newround,Nouveau tour
 attack,Attaque
 unarmed,Sans arme
@@ -368,6 +372,7 @@ navy,Bleu marine
 image,Image
 code,Code
 slide,Mécanisme
+tower,Tour d'Hanoï
 SYMBOL,Symbole
 ELEMENT,Élément
 
@@ -426,3 +431,45 @@ ERROR_HTTP,Erreur lors du téléchargement du fichier, si le problème persiste 
 ERROR_NETWORK,Erreur lors du téléchargement du fichier, veuillez vérifier votre connexion internet
 
 NEW_VERSION_AVAILABLE,Mise à jour disponible!
+
+SORT_TITLE,Tri
+SORT_SELECT_CRITERIA,Selectionnez le critère de tri:
+SORT_SELECT_ORDER,Ordre:
+SORT_ASCENDING,Ascendant
+SORT_DESCENDING,Descendant
+
+SORT_BY_AUTHOR,Auteurs
+SORT_BY_NAME,Nom
+SORT_BY_DIFFICULTY,Difficulté
+SORT_BY_DURATION,Durée
+
+SORT_BY_RATING,Notes
+SORT_BY_AVERAGE_DURATION,Durée moy.
+SORT_BY_WIN_RATIO,% victoire
+SORT_BY_DATE,Mise à jour
+
+FILTER_TITLE,Filtres
+FILTER_SELECT_LANG,Sélectionnez le(s) language(s) que vous comprenez:
+FILTER_MISSING_EXPANSIONS_ON,Cachez les scénarios avec une extension manquante  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Cachez les scénarios avec une extension manquante  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scénario(s) ont été filtré
+
+AUTHORS_SHORT,Auteurs en une ligne de texte (pour  le "tri par auteurs")
+AUTHORS_UNKNOWN,Auteurs inconnus (le scénario doit être mis à jour pour avoir cette information)
+
+SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Mis à jour cette semaine
+UPDATED_THIS_MONTH,Mis à jour ce mois ci
+UPDATED_THIS_TRIMESTER,Mis à jour ces 3 derniers mois
+UPDATED_THIS_SEMESTER,Mis à jour ces 6 derniers mois
+UPDATED_THIS_YEAR,Mis à jour il y a moins d'un an
+UPDATED_TWO_YEARS_AGO,Mis à jour il y a moins de deux ans
+UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans
+
+GO_OFFLINE,PASSER EN HORS LIGNE
+GO_ONLINE,ALLER EN LIGNE
+DOWNLOAD_ONGOING,Téléchargement en cours...
+OFFLINE_DUE_TO_ERROR,MODE HORS LIGNE (erreur réseau)
+
+MISSING_EXPANSIONS,Extension manquante:

@@ -348,9 +348,10 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset, 1, 1);
-                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetText("<b>⇨</b>", Color.cyan);
+                ui.SetTextAlignment(TextAnchor.LowerCenter);
                 ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.evadeEvent); });
-                new UIElementBorder(ui, Color.blue);
+                new UIElementBorder(ui, Color.cyan);
             }
             offset += 2;
 
@@ -368,9 +369,10 @@ public class EditorComponentCustomMonster : EditorComponent
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(18.5f, offset, 1, 1);
-                ui.SetText("<b>⇨</b>", Color.blue);
+                ui.SetTextAlignment(TextAnchor.LowerCenter);
+                ui.SetText("<b>⇨</b>", Color.cyan);
                 ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.horrorEvent); });
-                new UIElementBorder(ui, Color.blue);
+                new UIElementBorder(ui, Color.cyan);
             }
             offset += 2;
         }
@@ -403,9 +405,10 @@ public class EditorComponentCustomMonster : EditorComponent
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(17.5f, offset, 1, 1);
-            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetText("<b>⇨</b>", Color.cyan);
+            ui.SetTextAlignment(TextAnchor.LowerCenter);
             ui.SetButton(delegate { QuestEditorData.SelectComponent("Activation" + monsterComponent.activations[i]); });
-            new UIElementBorder(ui, Color.blue);
+            new UIElementBorder(ui, Color.cyan);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
@@ -441,9 +444,10 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(monsterComponent.activations[0]);
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(18.5f, offset, 1, 1);
-            ui.SetText("<b>⇨</b>", Color.blue);
+            ui.SetText("<b>⇨</b>", Color.cyan);
+            ui.SetTextAlignment(TextAnchor.LowerCenter);
             ui.SetButton(delegate { QuestEditorData.SelectComponent(monsterComponent.activations[0]); });
-            new UIElementBorder(ui, Color.blue);
+            new UIElementBorder(ui, Color.cyan);
         }
 
         return offset + 2;
@@ -500,14 +504,27 @@ public class EditorComponentCustomMonster : EditorComponent
             ui.SetText(new StringKey("val", attackType));
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetLocation(17.5f, offset, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { NewInvestigatorAttack(aType); });
             new UIElementBorder(ui, Color.green);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(18.5f, offset, 1, 1);
+            ui.SetText(CommonStringKeys.MINUS, Color.red);
+            ui.SetButton(delegate { RemoveInvestigatorAttackType(aType); });
+            new UIElementBorder(ui, Color.red);
             offset += 1;
 
             foreach (StringKey attack in monsterComponent.investigatorAttacks[attackType])
             {
+                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+                ui.SetLocation(18.5f, offset, 1, 1);
+                ui.SetText(CommonStringKeys.MINUS, Color.red);
+                ui.SetButton(delegate { RemoveInvestigatorAttack(attackType, attack); });
+                new UIElementBorder(ui, Color.red);
+                offset += 1;
+
                 UIElementEditablePaneled uie = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
                 uie.SetLocation(0.5f, offset, 19, 18);
                 uie.SetText(attack.Translate());
@@ -827,7 +844,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void NewAttackType()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", new StringKey("val", "TYPE")));
+        UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", CommonStringKeys.TYPE));
 
         HashSet<string> attackTypes = new HashSet<string>();
         foreach (AttackData a in Game.Get().cd.investigatorAttacks.Values)
@@ -852,6 +869,18 @@ public class EditorComponentCustomMonster : EditorComponent
         StringKey newAttack = new StringKey("qst", monsterComponent.sectionName + ".Attack_" + type + "_" + position);
         monsterComponent.investigatorAttacks[type].Add(newAttack);
         LocalizationRead.updateScenarioText(newAttack.key, "-");
+        Update();
+    }
+
+    public void RemoveInvestigatorAttack(string type, StringKey attack)
+    {
+        monsterComponent.investigatorAttacks[type].Remove(attack);
+        Update();
+    }
+
+    public void RemoveInvestigatorAttackType(string type)
+    {
+        monsterComponent.investigatorAttacks.Remove(type);
         Update();
     }
 

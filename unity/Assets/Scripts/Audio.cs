@@ -15,8 +15,7 @@ public class Audio : MonoBehaviour
     public int musicIndex = 0;
     public float effectVolume;
     public float musicVolume;
-    public List<AudioClip> previousMusic;
-    public bool loop = true;
+    public List<AudioClip> defaultQuestMusic;
 
     void Start()
     {
@@ -29,7 +28,7 @@ public class Audio : MonoBehaviour
 
         gameObject.transform.SetParent(game.cc.gameObject.transform);
         music = new List<AudioClip>();
-        previousMusic = music;
+        defaultQuestMusic = null;
 
         effectsObject = new GameObject("audioeffects");
         effectsObject.transform.SetParent(game.cc.gameObject.transform);
@@ -58,16 +57,19 @@ public class Audio : MonoBehaviour
         }
     }
 
-    public void Music(string fileName)
+    public void StopMusic()
     {
-        List<string> toPlay = new List<string>();
-        toPlay.Add(fileName);
-        Music(toPlay);
+        StartCoroutine(PlayMusic(new List<string>(), false));
+    }
+    
+    public void PlayDefaultQuestMusic(List<string> fileNames)
+    {
+        StartCoroutine(PlayMusic(fileNames, true));
     }
 
-    public void Music(List<string> fileNames, bool alwaysLoop = true)
+    public void PlayMusic(List<string> fileNames)
     {
-        StartCoroutine(PlayMusic(fileNames, alwaysLoop));
+        StartCoroutine(PlayMusic(fileNames, false));
     }
 
     public void PlayTrait(string trait)
@@ -94,7 +96,7 @@ public class Audio : MonoBehaviour
         audioSourceEffect.PlayOneShot(test, effectVolume);
     }
 
-    public IEnumerator PlayMusic(List<string> fileNames, bool alwaysLoop = true)
+    private IEnumerator PlayMusic(List<string> fileNames, bool isDefaultQuestMusic)
     {
         while (fetchingMusic)
         {
@@ -110,10 +112,11 @@ public class Audio : MonoBehaviour
             newMusic.Add(file.GetAudioClip());
         }
         music = newMusic;
-        if (newMusic.Count > 1 || alwaysLoop)
+        if (isDefaultQuestMusic)
         {
-            previousMusic = music;
+            defaultQuestMusic = music;
         }
+
         musicIndex = 0;
         fetchingMusic = false;
         if (audioSource.isPlaying) fadeOut = true;
@@ -135,27 +138,25 @@ public class Audio : MonoBehaviour
 
     public void UpdateMusic()
     {
-        if (music != previousMusic && loop)
-        {
-            loop = false;
-        }
-        else
-        {
-            loop = true;
-            music = previousMusic;
-        }
         if (music.Count == 0)
-        {
-            audioSource.Stop();
             return;
-        }
+
+        // if previous music has ended, play or restart default quest music
         if (musicIndex >= music.Count)
         {
+            music = defaultQuestMusic;
             musicIndex = 0;
         }
+
         audioSource.clip = music[musicIndex];
         audioSource.Play();
         // Set next music
         musicIndex++;
+    }
+
+    public void StopAudioEffect()
+    {
+        if(audioSourceEffect!=null)
+            audioSourceEffect.Stop();
     }
 }

@@ -107,14 +107,13 @@ public class GameMenu {
         string path = game.quest.questPath;
         Destroyer.Destroy();
 
-        game.cd = new ContentData(game.gameType.DataDirectory());
         foreach (string pack in game.cd.GetPacks())
         {
             game.cd.LoadContent(pack);
         }
 
         // Stop music
-        game.audioControl.Music(new List<string>());
+        game.audioControl.StopMusic();
 
         ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
         QuestEditor.Begin(path);

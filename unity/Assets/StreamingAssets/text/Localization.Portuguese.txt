@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie
-ABOUT_FFG,Valkyrie é um App de ajuda de criação de aventuras inspirado por Fantasy Flight Games' Descent: Road to Legend. A maioria das imagens utilizadas no App são da FFG e são de propriedade da FFG com todos os direitos reservados.
-ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ABOUT_FFG,Valkyrie é um App de ajuda de criação de aventuras inspirado por Fantasy Flight Games' Descent: Road to Legend. A maioria das imagens utilizadas no App são da FFG e são de propriedade da FFG com todos os direitos reservados. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
 ACTIONS,Ações
 ACTIVATED,Ativado
 ACTIVATION,Ativação
@@ -26,10 +26,12 @@ COMPONENT_TO_DELETE,Deletar Componente
 CONTENT_IMPORT,Importar Componente
 CONTENT_IMPORTING,Importando...
 CONTENT_REIMPORT,Reimportar Componente
+CONTENT_INSTALL_VIA_STEAM,Instalar via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar via Google Play
 CONTINUE,Continuar
 COPY,Copiar
 CUSTOMMONSTER,Monstro Personalizado
-D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend", instalar via Steam
+D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend"
 D2E_HEROES_NAME,Heróis
 D2E_HERO_NAME,Herói
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -53,6 +55,8 @@ EXIT,Sair
 FINISHED,Terminado
 FIRST,Primeiro
 FORCE_ACTIVATE,Ativação Forçada
+START_QUEST,Novo jogo
+LOAD_QUEST,Continuar
 
 HEALTH,Vida
 HEALTH_HERO,Por Herói
@@ -73,6 +77,7 @@ VERTICAL,Vertical
 ALIGN,Alinhamento
 SIZE,Tamanho
 TEXT_SIZE,Texto
+BACKGROUND_COLOUR,Cor de fundo
 ASPECT,Aspecto
 BORDER,Borda
 NO_BORDER,Sem Borda
@@ -230,6 +235,8 @@ INVESTIGATOR_ELIMINATED,Investigador Eliminado
 CLOSE,Fechar
 PUZZLE_GUESS,Tentar
 
+SET_EDITOR_ALPHA,Transparência Editor
+
 UP,Para Cima
 DOWN,Para Baixo
 LEFT,Para a Esquerda
@@ -273,3 +280,38 @@ ERROR_HTTP, Erro ao acessar o arquivo, se esse problema persistir por favor info
 ERROR_NETWORK, Erro acessando o arquivo, por favor verifique sua conexão de Internet.
 
 NEW_VERSION_AVAILABLE,Atualização disponível!
+
+SORT_TITLE,Ordenar
+SORT_SELECT_CRITERIA,Escolha o critério de ordenação:
+SORT_SELECT_ORDER,Ordenar por:
+SORT_ASCENDING,Ascendente
+SORT_DESCENDING,Descendente
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Nome
+SORT_BY_DIFFICULTY,Dificuldade
+SORT_BY_DURATION,Duração
+
+SORT_BY_RATING,Avaliações
+SORT_BY_AVERAGE_DURATION,Duração méd.
+SORT_BY_WIN_RATIO,% de vitória
+SORT_BY_DATE,Atualizado em
+
+FILTER_TITLE,Selecione os filtros
+FILTER_SELECT_LANG,Selecione os idioma:
+FILTER_MISSING_EXPANSIONS_ON,Esconder cenários com expansões faltando ☑
+FILTER_MISSING_EXPANSIONS_OFF,Esconder cenários com expansões faltando ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} cenários(s) filtrados
+
+AUTHORS_SHORT,Autores em uma única linha (para opção "ordenar por autor")
+AUTHORS_UNKNOWN,Autores desconhecidos (necessita uma atualização do cenário pelo autor)
+
+SYNOPSYS,Sinopse (máximo 100 caracteres)
+
+UPDATED_THIS_WEEK,Atualizado essa semana
+UPDATED_THIS_MONTH,Atualizado esse mês
+UPDATED_THIS_TRIMESTER,Atualizado esse trimestre
+UPDATED_THIS_SEMESTER,Atualizado esse semestre
+UPDATED_THIS_YEAR,Atualizado esse ano
+UPDATED_TWO_YEARS_AGO,Atualizado em até 2 anos
+UPDATE_OLDER_THAN_TWO_YEAR,Última atualização faz mais de 2 anos

@@ -24,17 +24,6 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             game = Game.Get();
 
-            // Find any content packs at the location
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Check if we found anything (must have found at least base)
-            if (game.cd.allPacks.Count == 0)
-            {
-                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
-                Application.Quit();
-            }
-
-            // load base to get types
-            game.cd.LoadContentID("");
             if (game.cd.packTypes.Count > 1)
             {
                 DrawTypeList();
@@ -119,7 +108,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.MainMenu);
+            ui.SetButton(Quit);
             new UIElementBorder(ui);
         }
 
@@ -203,6 +192,8 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
+                    int text_font_size = (int) (UIScaler.GetMediumFont() * 0.9f);
+
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
@@ -216,7 +207,25 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetText(game.cd.GetContentName(id), Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetFont(game.gameType.GetHeaderFont());
-                    ui.SetFontSize(UIScaler.GetMediumFont());
+                    ui.SetFontSize(text_font_size);
+                    ui.SetButton(delegate { Select(id); });
+                    buttons[id].Add(ui);
+
+                    float text_width = ui.GetStringWidth()+0.5f;
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    if (left)
+                    {
+                        ui.SetLocation(8+ text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 19 - text_width, 3);
+                    }
+                    else
+                    {
+                        ui.SetLocation(10 + text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 20 - text_width, 3);
+                    }
+                    ui.SetBGColor(bgColor);
+                    ui.SetText("("+game.cd.GetContentAcronym(id)+")", Color.black);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(text_font_size);
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
@@ -239,10 +248,21 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                ui.SetButton(Destroyer.MainMenu);
+                ui.SetButton(Quit);
             }
         }
-        
+
+        public static void Quit()
+        {
+            Game game = Game.Get();
+            // Clear content data in case something has changed
+            game.cd = new ContentData(game.gameType.DataDirectory());
+            // Load the base content - pack will be loaded later if required
+            game.cd.LoadContentID("");
+
+            Destroyer.MainMenu();
+        }
+
         public void Update()
         {
             foreach (KeyValuePair<string, List<UIElement>> kv in buttons)

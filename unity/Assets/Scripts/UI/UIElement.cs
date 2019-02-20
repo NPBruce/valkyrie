@@ -46,6 +46,23 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Destroy a UI element.</summary>
+        public void Destroy()
+        {
+            if(bg!=null)
+                Object.Destroy(bg);
+        }
+
+        /// <summary>
+        /// The action if a button is assigned</summary>
+        /// <returns>
+        /// The action .</returns>
+        public UnityEngine.Events.UnityAction GetAction()
+        {
+            return buttonCall;
+        }
+
+        /// <summary>
         /// The tranform that should be used for sub elements.</summary>
         /// <returns>
         /// The background Transform.</returns>
@@ -149,18 +166,45 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Set the text Horizontal overflow</summary>
+        /// <param name="mode">wrap or overflow</param>
+        public virtual void SetTextHorizontalOverflow(HorizontalWrapMode mode)
+        {
+            if (text == null) return;
+            text.GetComponent<UnityEngine.UI.Text>().horizontalOverflow = mode;
+        }
+
+        /// <summary>
         /// Add button press event to element.</summary>
         /// <param name="call">Function to call on button press.</param>
         /// <remarks>
         /// Adds button properties to background area and text.</remarks>
         public virtual void SetButton(UnityEngine.Events.UnityAction call)
         {
-            UnityEngine.UI.Button uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            UnityEngine.UI.Button uiButton = bg.GetComponent<UnityEngine.UI.Button>();
+            if (uiButton == null)
+            { 
+                uiButton = bg.AddComponent<UnityEngine.UI.Button>();
+            }
+            else
+            {
+                // Multiple actions have been set on this button, using only the last one
+                uiButton.onClick.RemoveAllListeners();
+            }
             uiButton.interactable = true;
             uiButton.onClick.AddListener(call);
             if (text != null)
             {
-                uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                uiButton = text.GetComponent<UnityEngine.UI.Button>();
+                if(uiButton==null)
+                { 
+                    uiButton = text.AddComponent<UnityEngine.UI.Button>();
+                }
+                else
+                {
+                    // Multiple actions have been set on this text button, using only the last one
+                    uiButton.onClick.RemoveAllListeners();
+                }
                 uiButton.interactable = true;
                 uiButton.onClick.AddListener(call);
             }
@@ -300,6 +344,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetFont(Font font)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetFont called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().font = font;
         }
 
@@ -310,6 +355,7 @@ namespace Assets.Scripts.UI
         /// Must be called after SetText.</remarks>
         public virtual void SetTextAlignment(TextAnchor align)
         {
+            if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetTextAlignment called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().alignment = align;
         }
 
@@ -321,6 +367,16 @@ namespace Assets.Scripts.UI
         {
             if (text == null) return "";
             return text.GetComponent<UnityEngine.UI.Text>().text;
+        }
+
+        /// <summary>
+        /// Get the color of the UIElement display text.</summary>
+        /// <returns>
+        /// The display text color or Color.clear if text is not set.</returns>
+        public virtual Color GetTextColor()
+        {
+            if (text == null) return Color.clear;
+            return text.GetComponent<UnityEngine.UI.Text>().color;
         }
 
         /// <summary>
@@ -365,7 +421,16 @@ namespace Assets.Scripts.UI
         {
             return GetStringWidth(content.Translate(), fontSize, fontName);
         }
-        
+
+        /// <summary>
+        /// Get the length of the currently displayed text string.</summary>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth()
+        {
+            return text.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit();
+        }
+
         /// <summary>
         /// Get the length of a text string at small size with standard font.</summary>
         /// <param name="content">Text to measure.</param>
@@ -396,6 +461,7 @@ namespace Assets.Scripts.UI
         /// The size of the text in UIScaler units.</returns>
         public float GetStringWidth(string content, int fontSize, Font fontName)
         {
+            float width = 0f;
             if (textWidthObj == null)
             {
                 textWidthObj = new GameObject("TextSizing");
@@ -406,7 +472,9 @@ namespace Assets.Scripts.UI
                 textWidthObj.GetComponent<UnityEngine.UI.Text>().fontSize = fontSize;
             }
             textWidthObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            float width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            width = (textWidthObj.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            Object.Destroy(textWidthObj);
+            textWidthObj = null;
             return width;
         }
 
@@ -429,6 +497,7 @@ namespace Assets.Scripts.UI
         /// The required text box height in UIScaler units.</returns>
         public float GetStringHeight(string content, float width)
         {
+            float height = 0f;
             if (textHeightObj == null)
             {
                 textHeightObj = new GameObject("TextSizing");
@@ -440,7 +509,10 @@ namespace Assets.Scripts.UI
                 textHeightObj.GetComponent<UnityEngine.UI.Text>().fontSize = UIScaler.GetSmallFont();
             }
             textHeightObj.GetComponent<UnityEngine.UI.Text>().text = content;
-            return (textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            height = (textHeightObj.GetComponent<UnityEngine.UI.Text>().preferredHeight / UIScaler.GetPixelsPerUnit()) + (textPaddingDefault * 2);
+            Object.Destroy(textHeightObj);
+            textHeightObj = null;
+            return height;
         }
 
         /// <summary>

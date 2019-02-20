@@ -64,6 +64,7 @@ class PublishedGameStats
     public string investigators_list = "";
     public string language_selected = "";
     public string events_list = "";
+    public string vars_list = "";
 
 
     public void Reset()
@@ -77,6 +78,7 @@ class PublishedGameStats
         investigators_list = "";
         language_selected = "";
         events_list = "";
+        vars_list = "";
     }
 
 }
@@ -151,6 +153,28 @@ public class StatsManager
             gameStats.events_list = "---Beginning of event list is not included to avoid exceeding google sheet max size---" + gameStats.events_list;
         }
 
+        // Get the list of vars
+        if (quest.vars != null)
+        {
+            foreach (KeyValuePair<string, float> kv in quest.vars.vars)
+            {
+                if (kv.Value != 0)
+                {
+                    gameStats.vars_list += kv.Key + "=" + kv.Value.ToString() + ";";
+                }
+            }
+        }
+        else
+        {
+            gameStats.events_list = "no vars (old save?)";
+        }
+        // max cell size of Google sheet is 50k characters
+        if (gameStats.vars_list.Length > 50000)
+        {
+            gameStats.vars_list.Remove(88 + (gameStats.vars_list.Length - 50000), 50000);
+            gameStats.vars_list = "---Beginning of vars list is not included to avoid exceeding google sheet max size---" + gameStats.events_list;
+        }
+
         if (quest.duration>=0)
         {
             TimeSpan current_duration = System.DateTime.UtcNow.Subtract(quest.start_time);
@@ -181,6 +205,7 @@ public class StatsManager
         formFields.AddField("entry.1150567176", gameStats.investigators_list);
         formFields.AddField("entry.2106598722", gameStats.language_selected);
         formFields.AddField("entry.1047979960", gameStats.events_list);
+        formFields.AddField("entry.571357850",  gameStats.vars_list);
 
         // submit async
         HTTPManager.Upload("https://docs.google.com/forms/u/1/d/e/1FAIpQLSfiFPuQOTXJI54LI-WNvn1K6qCkM5xErxJdUUJRhCZthaIqcA/formResponse?hl=en",
@@ -200,7 +225,7 @@ public class StatsManager
         HTTPManager.Get("https://drive.google.com/uc?id=1lEhwFWrryzNH6DUMbte37G1p22SyDhu9&export=download", StatsDownload_callback);
     }
 
-    private void StatsDownload_callback(string data, bool error)
+    private void StatsDownload_callback(string data, bool error, System.Uri uri)
     {
         download_ongoing = false;
 
@@ -222,7 +247,6 @@ public class StatsManager
         {
             scenarios_stats[stats.scenario_name] = stats;
         }
-
     }
 
 }

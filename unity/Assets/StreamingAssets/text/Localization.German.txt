@@ -2,8 +2,8 @@
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
-ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen.
-ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
 ACTIVATION,Aktivierung
@@ -25,6 +25,7 @@ DIFFICULTY,Schwierigkeit
 VALIDATE_SCENARIO,Validieren
 FILE,Datei
 OPTIMIZE_LOCALIZATION,Übersetzungen optimieren
+CREATE_PACKAGE,Paket erstellen
 REORDER_COMPONENTS,Komponenten neu ordnen
 ASSIGN,Hinzu
 ATTACK,Angriff
@@ -44,11 +45,13 @@ COMPONENT_TO_DELETE,Zu löschende Erweiterung:
 CONTENT_IMPORT,Importiere Inhalt
 CONTENT_IMPORTING,Importiere...
 CONTENT_REIMPORT,Reimportiere Inhalt
+CONTENT_INSTALL_VIA_STEAM,Über Steam installieren
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Über Google Play installieren
+CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
-D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden, bitte über Steam installieren
-D2E_APP_NOT_FOUND_ANDROID,"Wege zum Ruhm" nicht gefunden
+D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden
 D2E_HEROES_NAME,Helden
 D2E_HERO_NAME,Held
 D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
@@ -76,13 +79,19 @@ HEALTH_HERO,Pro Held
 HIGHLIGHT,Markieren
 HORROR_CHECK,Horrortest
 AWARENESS,Aufmerksamkeit
+IA_APP_NOT_FOUND,"Imperial Assault" nicht gefunden, bitte über Steam installieren
+IA_APP_NOT_FOUND_ANDROID,"Imperial Assault" nicht gefunden
+IA_HEROES_NAME,Helden
+IA_HERO_NAME,Held
+IA_NAME,Star Wars: Imperial Assault
+IA_QUEST_NAME,Mission
 INDENT,  {0}
 INFO,Info
 INFORMATION,Information
 INITIAL_MESSAGE,Eingangstext:
 ITEM,Gegenstand
 KO,KO
-LOAD_QUEST,Lade {0}
+LOAD_QUEST,Weiter
 LOG,Log
 SKILLS,Fähigkeiten
 ITEMS,Inventar
@@ -96,8 +105,7 @@ MENU,Menü
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Kam Min
-MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden, bitte über Steam installieren
-MOM_APP_NOT_FOUND_ANDROID,"Villen des Wahnsinns" nicht gefunden
+MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden
 MOM_HERO_NAME,Ermittler
 MOM_HEROES_NAME,Ermittler
 MOM_NAME,Villen des Wahnsinns: 2. Edition
@@ -134,6 +142,7 @@ POSITION_TYPE_HIGHLIGHT,Markieren
 POSITION_TYPE_UNUSED,Unbenutzt
 PUZZLE,Puzzle
 PUZZLE_ALT_LEVEL,Schwierigkeit
+PUZZLE_SOLUTION,Lösung
 PUZZLE_CLASS,Klasse
 PUZZLE_CLASS_SELECT,Klasse wählen
 IMAGE,Bild
@@ -150,6 +159,7 @@ EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Quote
 RECOVER,Erholen
+INVESTIGATOR_ATTACKS,Emittler greifen an
 
 RELOAD,Aktualisieren
 REMOVE_COMPONENTS,Komponente entfernen:
@@ -176,16 +186,20 @@ SELECT_TO_DELETE,{0} zur Löschung ausgewählt
 HIDDEN,Versteckt
 ACTIVE,Aktiv
 SET,Setze
+SET_EDITOR_ALPHA,Editor-Transparenz
 SKILL,Fähigkeit
 SELECT_SKILLS,Fähigkeiten wählen
 SPAWN,Spawn
 STARTING_ITEM,Startgegenstand
 STARTING_ITEMS,Startgegenstände
-START_QUEST,Starte {0}
+START_QUEST,Neues spiel
 START,Starte
 
 TESTS,Tests
 TILE,Teil
+
+AND,UND
+OR,ODER
 
 TOKEN,Marker
 TOOLS,Werkzeuge
@@ -203,6 +217,7 @@ VERTICAL,Vertikal
 ALIGN,Ausrichten
 SIZE,Größe
 TEXT_SIZE,Textgröße
+BACKGROUND_COLOUR,Hintergrundfarbe
 ASPECT,Aspekt
 BORDER,Umrandung
 NO_BORDER,Keine Umrandung
@@ -236,6 +251,8 @@ spell,Zauber
 key,Schlüssel
 evidence,Beweis
 ally,Verbündeter
+spelldefence,Verteid-Zauber
+spellattack,Angriff-Zauber
 
 //Audio
 menu,Menü
@@ -280,6 +297,9 @@ mountain,Berg
 cold,Kalt
 hot,Heiß
 water,Wasser
+fleshless,Fleischlos
+relic,Relikt
+elixir,Elexir
 
 //Tiles
 basement,Keller
@@ -287,6 +307,7 @@ river,Fluss
 street,Straße
 hallway,Flur
 bathroom,Badezimmer
+bedroom,Schlafraum
 kitchen,Küche
 dock,Hafen
 storage,Lager
@@ -307,7 +328,6 @@ tents,Zelte
 stables,Ställe
 hall,Halle
 map,Karte
-bedroom,Schlafraum
 city,Stadt
 fountain,Fontäne
 blackrealm,Dunkelreich
@@ -353,6 +373,7 @@ navy,Marineblau
 image,Bild
 code,Code
 slide,Schieberaetsel
+tower,Turm
 SYMBOL,Symbol
 
 // Events
@@ -409,3 +430,43 @@ ERROR_HTTP,Fehler beim Abrufen der datei. Wenn das Problem weiterhin besteht, me
 ERROR_NETWORK,Fehler beim Abrufen der datei, bitte überprüfe deine Internetverbindung
 
 NEW_VERSION_AVAILABLE,Update verfügbar!
+
+SORT_TITLE,Sortieren
+SORT_SELECT_CRITERIA,Sortierkriterien auswählen:
+SORT_SELECT_ORDER,Sortieren nach:
+SORT_ASCENDING,Aufsteigend
+SORT_DESCENDING,Absteigend
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Name
+SORT_BY_DIFFICULTY,Schwierigkeit
+SORT_BY_DURATION,Dauer
+
+SORT_BY_RATING,Bewertung
+SORT_BY_AVERAGE_DURATION,Ø Dauer
+SORT_BY_WIN_RATIO,Siegrate
+SORT_BY_DATE,Updatedatum
+
+FILTER_TITLE,Filter auswählen
+FILTER_SELECT_LANG,Bitte Sprachen wählen:
+FILTER_MISSING_EXPANSIONS_ON,Scenarien mit fehlenden Erweiterungen verstecken  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Scenarien mit fehlenden Erweiterungen verstecken  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Scenarien gefunden
+
+AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
+AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor um dies zu hinterlegen)
+
+SYNOPSYS,Zusammenfassung (max. 100 Zeichen)
+
+UPDATED_THIS_WEEK,Innerhalb dieser Woche aktualisiert
+UPDATED_THIS_MONTH,Innerhalb dieses Monats aktualisiert
+UPDATED_THIS_TRIMESTER,Innerhalb diesers Quartals aktualisiert
+UPDATED_THIS_SEMESTER,Innerhalb dieses Semesters aktualisiert
+UPDATED_THIS_YEAR,Innerhalb dieses Jahres aktualisiert
+UPDATED_TWO_YEARS_AGO,Vor zwei Jahren aktualisiert
+UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre
+
+GO_OFFLINE,OFFLINE GEHEN
+GO_ONLINE,ONLINE GEHEN
+DOWNLOAD_ONGOING,Lade herunter...
+OFFLINE_DUE_TO_ERROR,OFFLINE (Netzwerkfehler)

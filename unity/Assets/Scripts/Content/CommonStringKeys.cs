@@ -24,6 +24,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MINUS = new StringKey(null,"-", false);
         public static readonly StringKey HASH = new StringKey(null,"#", false);
         public static readonly StringKey TAB = new StringKey(null, "➤", false);
+        public static readonly StringKey UP = new StringKey(null, "▲", false);
+        public static readonly StringKey DOWN = new StringKey(null, "▼", false);
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
@@ -31,20 +33,24 @@ namespace Assets.Scripts.Content
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
 
-        public static readonly StringKey FINISHED = new StringKey("val", "FINISHED");
+        public static readonly StringKey FINISHED = new StringKey(VAL, "FINISHED");
 
         public static readonly StringKey SKILL = new StringKey(VAL, "SKILL");
         public static readonly StringKey MOVES = new StringKey(VAL, "MOVES");
         public static readonly StringKey TOTAL_MOVES = new StringKey(VAL, "TOTAL_MOVES");
 
+        public static readonly StringKey BASE = new StringKey(VAL, "BASE");
         public static readonly StringKey TYPE = new StringKey(VAL, "TYPE");
+        public static readonly StringKey SOURCE = new StringKey(VAL, "SOURCE");
         public static readonly StringKey SELECT_ITEM = new StringKey(VAL, "SELECT_ITEM");
 
         public static readonly StringKey QUEST = new StringKey(VAL, "QUEST");
         public static readonly StringKey TILE = new StringKey(VAL, "TILE");
         public static readonly StringKey DELETE = new StringKey(VAL, "DELETE");
+        public static readonly StringKey RENAME = new StringKey(VAL, "RENAME");
         public static readonly StringKey UPDATE = new StringKey(VAL, "UPDATE");
         public static readonly StringKey COPY = new StringKey(VAL, "COPY");
+        public static readonly StringKey CONFIRM = new StringKey(VAL, "CONFIRM");
         public static readonly StringKey NEW = new StringKey(VAL, "NEW");
         public static readonly StringKey DOOR = new StringKey(VAL, "DOOR");
         public static readonly StringKey TOKEN = new StringKey(VAL, "TOKEN");
@@ -65,5 +71,9 @@ namespace Assets.Scripts.Content
         public static readonly StringKey LOG = new StringKey(VAL, "LOG");
         public static readonly StringKey SET = new StringKey(VAL, "SET");
         public static readonly StringKey RESET = new StringKey(VAL, "RESET");
+        public static readonly StringKey FILE = new StringKey(VAL, "FILE");
+
+        public static readonly StringKey TRUE = new StringKey(VAL, "TRUE");
+        public static readonly StringKey FALSE = new StringKey(VAL, "FALSE");
     }
 }

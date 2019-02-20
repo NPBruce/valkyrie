@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using System.IO;
+using ValkyrieTools;
 
 public class EditorComponentPuzzle : EditorComponentEvent
 {
@@ -15,6 +16,8 @@ public class EditorComponentPuzzle : EditorComponentEvent
     private readonly StringKey PUZZLE_LEVEL = new StringKey("val", "PUZZLE_LEVEL");
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
     private readonly StringKey PUZZLE_ALT_LEVEL = new StringKey("val", "PUZZLE_ALT_LEVEL");
+    private readonly StringKey PUZZLE_SOLUTION = new StringKey("val", "PUZZLE_SOLUTION");
+
     private readonly StringKey PUZZLE_SELECT_SKILL = new StringKey("val", "PUZZLE_SELECT_SKILL");
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
 
@@ -22,6 +25,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
 
     UIElementEditable levelUIE;
     UIElementEditable altLevelUIE;
+    UIElementEditable puzzleSolutionUIE;
 
     public EditorComponentPuzzle(string nameIn) : base(nameIn)
     {
@@ -30,6 +34,21 @@ public class EditorComponentPuzzle : EditorComponentEvent
     override public float AddPosition(float offset)
     {
         return offset;
+    }
+
+    /* Write an example puzzle solution with dim grey color:
+     * If puzzlelevel=5 and puzzlelevel=4, we give example "1 2 3 4 1". */
+    private void ProvidePuzzleSolutionExample()
+    {
+        string example_str = "";
+        // build string
+        for (int i=0; i < puzzleComponent.puzzleLevel ; i++) {
+            example_str += ((i%puzzleComponent.puzzleAltLevel)+1).ToString() + " ";
+        }
+        example_str = example_str.TrimEnd(); // kill that last space
+        // Set the text field and put it in grey color
+        puzzleSolutionUIE.SetText(example_str);
+        puzzleSolutionUIE.SetColor(Color.grey);
     }
     
     override public float AddSubEventComponents(float offset)
@@ -94,6 +113,27 @@ public class EditorComponentPuzzle : EditorComponentEvent
             ui.SetText(puzzleComponent.imageType);
             ui.SetButton(delegate { Image(); });
             new UIElementBorder(ui);
+            offset += 2;
+        }
+        
+        if (puzzleComponent.puzzleClass.Equals("code")) 
+        {
+            // Initialize the puzzle solution UI element
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", PUZZLE_SOLUTION));
+
+            puzzleSolutionUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
+            puzzleSolutionUIE.SetLocation(5, offset, 8, 1);
+            /* If there is no set puzzlesolution give an example with gray letters */
+            if (puzzleComponent.puzzleSolution.Length == 0) {
+                ProvidePuzzleSolutionExample();
+            } else { /* otherwise display the solution  */
+                puzzleSolutionUIE.SetText(puzzleComponent.puzzleSolution);
+            }
+            puzzleSolutionUIE.SetSingleLine();
+            puzzleSolutionUIE.SetButton(delegate { UpdatePuzzleSolution(); });
+            new UIElementBorder(puzzleSolutionUIE);
             offset += 2;
         }
 
@@ -169,7 +209,51 @@ public class EditorComponentPuzzle : EditorComponentEvent
         int.TryParse(altLevelUIE.GetText(), out puzzleComponent.puzzleAltLevel);
         Update();
     }
-    
+
+    // A pre-made puzzle solution has been specified. Validate it and update it.
+    // A valid solution for a puzzle with level=5 and altlevel=4 might look like "3 2 1 4 1"
+    public void UpdatePuzzleSolution()
+    {
+        ValkyrieDebug.Log("Setting puzzle solution");
+        var solutionArray = puzzleSolutionUIE.GetText().Split(" ".ToCharArray());
+
+        // Validate puzzle solution and mark it with red if it's not valid
+        bool invalid = false;
+        // Check the solution's length
+        if (solutionArray.Length != puzzleComponent.puzzleLevel)
+        {
+            ValkyrieDebug.Log("Puzzle solution must be the same length as puzzleLevel");
+            invalid = true;
+        }
+
+        // Check the solution's characters to be valid and in range
+        foreach (string part in solutionArray)
+        {
+            int j;
+            if (!int.TryParse(part, out j))
+            {
+                ValkyrieDebug.Log("Solution needs to be a number (e.g. 1 2 3)");
+                invalid = true;
+            }
+            if (j == 0 || j > puzzleComponent.puzzleAltLevel)
+            {
+                ValkyrieDebug.Log("Puzzle solution " + j + " out of AltLevel " + puzzleComponent.puzzleAltLevel + " range.");
+                invalid = true;
+            }
+        }
+
+        // Error out if it's invalid and reset the puzzle solution
+        if (invalid)
+        {
+            puzzleSolutionUIE.SetColor(Color.red);
+            puzzleComponent.puzzleSolution = "";
+            return;
+        }
+
+        puzzleComponent.puzzleSolution = puzzleSolutionUIE.GetText();
+        Update();
+    }
+
     public void Image()
     {
         if (puzzleComponent.puzzleClass.Equals("code"))
@@ -185,7 +269,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
         UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, SELECT_IMAGE.Translate());
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {

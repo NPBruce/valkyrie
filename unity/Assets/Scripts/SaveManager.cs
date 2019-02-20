@@ -205,24 +205,10 @@ class SaveManager
 
                 Destroyer.Dialog();
 
-                // Restart contend data so we can select from save
-                game.cd = new ContentData(game.gameType.DataDirectory());
-                // Check if we found anything
-                if (game.cd.GetPacks().Count == 0)
-                {
-                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
-                    Application.Quit();
-                }
-
-                game.cd.LoadContentID("");
-                // Load the base content
-
                 // Load content that the save game uses
                 Dictionary<string, string> packs = saveData.Get("Packs");
                 foreach (KeyValuePair<string, string> kv in packs)
                 {
-                    game.cd.LoadContentID("");
-
                     // Support for save games from 1.2 and older
                     if (kv.Key.Equals("FA"))
                     {

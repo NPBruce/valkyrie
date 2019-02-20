@@ -1,21 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFGAppImport", "FFGAppImport\FFGAppImport.csproj", "{F6151E78-A984-415C-9F2C-551F145BB493}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValkyrieTools", "ValkyrieTools\ValkyrieTools.csproj", "{E0926125-3544-4592-9F07-9D13EA7CDCA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportTest", "ImportTest\ImportTest.csproj", "{E3369EE9-B885-4324-8C1D-D74BE64D299E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injection", "Injection\Injection.csproj", "{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObbExtract", "ObbExtract\ObbExtract.csproj", "{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoMInjection", "MoMInjection\MoMInjection.csproj", "{96DE0CA8-7F84-4184-9F89-8B1ED6B13165}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IADBExtract", "IADBExtract\IADBExtract.csproj", "{BCFBB92E-2902-4E7C-8FD8-E0369927DA99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetVersion", "SetVersion\SetVersion.csproj", "{823679C3-FF2B-423D-AAB6-B57BBDFC2FE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,28 +25,19 @@ Global
 		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0926125-3544-4592-9F07-9D13EA7CDCA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3369EE9-B885-4324-8C1D-D74BE64D299E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CCA46F7-1212-454D-B0D5-F4B75F7CC71C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B00BEA9-38B0-4C4F-AD79-1B5A1EFCEED3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96DE0CA8-7F84-4184-9F89-8B1ED6B13165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96DE0CA8-7F84-4184-9F89-8B1ED6B13165}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96DE0CA8-7F84-4184-9F89-8B1ED6B13165}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96DE0CA8-7F84-4184-9F89-8B1ED6B13165}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BCFBB92E-2902-4E7C-8FD8-E0369927DA99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BCFBB92E-2902-4E7C-8FD8-E0369927DA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BCFBB92E-2902-4E7C-8FD8-E0369927DA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BCFBB92E-2902-4E7C-8FD8-E0369927DA99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{823679C3-FF2B-423D-AAB6-B57BBDFC2FE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{823679C3-FF2B-423D-AAB6-B57BBDFC2FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{823679C3-FF2B-423D-AAB6-B57BBDFC2FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{823679C3-FF2B-423D-AAB6-B57BBDFC2FE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFC5B80C-12A5-4A0C-9ED5-E6CEFF9C3626}
 	EndGlobalSection
 EndGlobal

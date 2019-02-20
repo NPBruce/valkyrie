@@ -174,7 +174,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + e.qEvent.audio);
+            game.audioControl.Play(Quest.FindLocalisedMultimediaFile(e.qEvent.audio, Path.GetDirectoryName(game.quest.qd.questPath)));
         }
 
         // Set Music
@@ -189,10 +189,10 @@ public class EventManager
                 }
                 else
                 {
-                    music.Add(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + s);
+                    music.Add(Quest.FindLocalisedMultimediaFile(s, Path.GetDirectoryName(game.quest.qd.questPath)));
                 }
             }
-            game.audioControl.Music(music, false);
+            game.audioControl.PlayMusic(music);
             if (music.Count > 1)
             {
                 game.quest.music = new List<string>(e.qEvent.music);
@@ -219,6 +219,8 @@ public class EventManager
         if (e is MonsterEvent)
         {
             MonsterEvent qe = (MonsterEvent)e;
+
+            qe.MonsterEventSelection();
 
             // Is this type new?
             Quest.Monster oldMonster = null;
@@ -267,6 +269,12 @@ public class EventManager
         {
             if (s.IndexOf("QItem") == 0)
             {
+                // Fix #998
+                if (game.gameType.TypeName() == "MoM" && itemList.Count==1)
+                {
+                    ValkyrieDebug.Log("WARNING: only one QItem can be used in event " + e.qEvent.sectionName + ", ignoring other items");
+                    break;
+                }
                 itemList.Add(s);
             }
         }
@@ -328,7 +336,7 @@ public class EventManager
         {
             if (monsterImage != null)
             {
-                MonsterDialogMoM.DrawMonster(monsterImage);
+                MonsterDialogMoM.DrawMonster(monsterImage, true);
                 if (monsterHealth)
                 {
                 }
@@ -693,8 +701,11 @@ public class EventManager
         // Is this event disabled?
         virtual public bool Disabled()
         {
+            if (game.debugTests)
+                ValkyrieDebug.Log("Event test " + qEvent.sectionName + " result is : " + game.quest.vars.Test(qEvent.tests));
+
             // check if condition is valid, and if there is something to do in this event (see #916)
-            return (!game.quest.vars.Test(qEvent.conditions));
+            return (!game.quest.vars.Test(qEvent.tests));
         }
     }
 
@@ -724,7 +735,12 @@ public class EventManager
             // cast the monster event
             qMonster = qEvent as QuestData.Spawn;
 
-            if (!game.quest.monsterSelect.ContainsKey(qMonster.sectionName))
+            // monsters are generated on the fly to avoid duplicate for D2E when using random
+        }
+
+        public void MonsterEventSelection()
+        {
+            if (!game.quest.RuntimeMonsterSelection(qMonster.sectionName))
             {
                 ValkyrieDebug.Log("Warning: Monster type unknown in event: " + qMonster.sectionName);
                 return;

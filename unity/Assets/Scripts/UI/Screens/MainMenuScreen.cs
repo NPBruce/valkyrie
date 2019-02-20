@@ -10,12 +10,15 @@ namespace Assets.Scripts.UI.Screens
     // Class for creation and management of the main menu
     public class MainMenuScreen
     {
-        private StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
-        private StringKey ABOUT = new StringKey("val", "ABOUT");
-        private StringKey OPTIONS = new StringKey("val", "OPTIONS");
-        private StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
-        private StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
-        private float ButtonWidth = 13;
+        private static readonly StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
+        private static readonly StringKey ABOUT = new StringKey("val", "ABOUT");
+        private static readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private static readonly StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
+        private static readonly StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
+        private static readonly StringKey START_QUEST = new StringKey("val", "START_QUEST");
+        private static readonly StringKey LOAD_QUEST = new StringKey("val", "LOAD_QUEST");
+
+        private float ButtonWidth = 14;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public MainMenuScreen()
@@ -24,22 +27,12 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             Game game = Game.Get();
 
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Check if we found anything
-            if (game.cd.GetPacks().Count == 0)
-            {
-                ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
-                Application.Quit();
-            }
-            // Load base
-            game.cd.LoadContentID("");
-
             List<string> music = new List<string>();
             foreach (AudioData ad in game.cd.audio.Values)
             {
                 if (ad.ContainsTrait("menu")) music.Add(ad.file);
             }
-            game.audioControl.Music(music);
+            game.audioControl.PlayDefaultQuestMusic(music);
 
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
@@ -69,7 +62,7 @@ namespace Assets.Scripts.UI.Screens
             // Button for start quest/scenario
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
-            ui.SetText(new StringKey("val","START_QUEST",game.gameType.QuestName()));
+            ui.SetText(START_QUEST);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Start);
@@ -80,14 +73,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 8, ButtonWidth, 2);
             if (SaveManager.SaveExists())
             {
-                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()));
+                ui.SetText(LOAD_QUEST);
                 ui.SetButton(delegate { new SaveSelectScreen(); });
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui);
             }
             else
             {
-                ui.SetText(new StringKey("val", "LOAD_QUEST", game.gameType.QuestName()), Color.grey);
+                ui.SetText(LOAD_QUEST, Color.grey);
                 new UIElementBorder(ui, Color.grey);
             }
             ui.SetFont(game.gameType.GetHeaderFont());

@@ -119,6 +119,25 @@ public class Quest
     // Reference back to the game object
     public Game game;
 
+    /// <summary>
+    /// Find and return audio or picture file for localization. Use only for scenarios.
+    /// </summary>
+    /// <param name="name">Path from root folder scenario to file and File Name</param>
+    /// <param name="source">Path to root scenario folder</param>
+    /// <returns>Find and return audio or picture file for localization, if it exists. Otherwise return default file</returns>
+    /// <remarks> 
+    /// param "name" should contain name and path from root folder scenario to file, as in *.ini. Real path ".../.../[ScenarioName]/.../FileName", "name" = ".../FileName".
+    /// param "source" should contain path to scenario. ".../.../[ScenarioName]".
+    /// </remarks>
+    public static string FindLocalisedMultimediaFile(string name, string source)
+    {
+        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang),name)))
+        {
+            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
+        }
+        return Path.Combine(source, name);
+    }
+
     // Construct a new quest from quest data
     public Quest(QuestData.Quest q)
     {
@@ -153,7 +172,6 @@ public class Quest
         duration = 0;
 
         GenerateItemSelection();
-        GenerateMonsterSelection();
         eManager = new EventManager();
 
         // Populate null hero list, these can then be selected as hero types
@@ -358,32 +376,17 @@ public class Quest
         return false;
     }
 
-    public void GenerateMonsterSelection()
+    public bool RuntimeMonsterSelection(string spawn_name)
     {
         // Determine monster types
-        bool progress = false;
-        bool force = false;
-        bool done = false;
-        while (!done)
+        if(qd.components.ContainsKey(spawn_name))
+        { 
+            QuestData.Spawn qs = qd.components[spawn_name] as QuestData.Spawn;
+            return AttemptMonsterMatch(qs);
+        }
+        else
         {
-            progress = false;
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in qd.components)
-            {
-                QuestData.Spawn qs = kv.Value as QuestData.Spawn;
-                if (qs != null)
-                {
-                    progress |= AttemptMonsterMatch(qs, force);
-                    if (progress && force) force = false;
-                }
-            }
-            if (!progress && !force)
-            {
-                force = true;
-            }
-            else if (!progress && force)
-            {
-                done = true;
-            }
+            return false;
         }
     }
 
@@ -391,7 +394,7 @@ public class Quest
     {
         if (monsterSelect.ContainsKey(spawn.sectionName))
         {
-            return false;
+            return true;
         }
         if ((spawn.mTraitsPool.Length + spawn.mTraitsRequired.Length) == 0)
         {
@@ -445,12 +448,23 @@ public class Quest
                 }
             }
 
-            // monster already selected
-            foreach (KeyValuePair<string, string> entry in monsterSelect)
+            if (game.gameType.TypeName() == "D2E")
             {
-                if (!exclude.Contains(entry.Value))
+                // monster already selected
+                foreach (KeyValuePair<string, string> entry in monsterSelect)
                 {
-                    exclude.Add(entry.Value);
+                    if (!exclude.Contains(entry.Value))
+                    {
+                        exclude.Add(entry.Value);
+                    }
+                }
+                // monster already present in the board
+                foreach (Monster entry in monsters)
+                {
+                    if (!exclude.Contains(entry.monsterData.sectionName))
+                    {
+                        exclude.Add(entry.monsterData.sectionName);
+                    }
                 }
             }
 
@@ -628,7 +642,6 @@ public class Quest
         shops = new Dictionary<string, List<string>>();
         activeShop = "";
 
-        GenerateMonsterSelection();
         GenerateItemSelection();
         eManager = new EventManager();
 
@@ -663,7 +676,7 @@ public class Quest
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
-        game.audioControl.Music(music);
+        game.audioControl.PlayDefaultQuestMusic(music);
 
         // Update the screen
         game.monsterCanvas.UpdateList();
@@ -707,10 +720,10 @@ public class Quest
                 }
                 else
                 {
-                    toPlay.Add(Path.GetDirectoryName(qd.questPath) + Path.DirectorySeparatorChar + s);
+                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
                 }
             }
-            game.audioControl.Music(toPlay, false);
+            game.audioControl.PlayMusic(toPlay);
         }
         else
         {
@@ -718,7 +731,7 @@ public class Quest
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }
-            game.audioControl.Music(music);
+            game.audioControl.PlayDefaultQuestMusic(music);
         }
 
         // Get state
@@ -831,7 +844,6 @@ public class Quest
         {
             // Support old saves
             monsterSelect = new Dictionary<string, string>();
-            GenerateMonsterSelection();
         }
 
         // Clear all tokens
@@ -880,13 +892,16 @@ public class Quest
         // Fetch hero state
         heroes = new List<Hero>();
         monsters = new List<Monster>();
+        int heroCount = 0;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
             if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
             {
+                heroCount++;
                 heroes.Add(new Hero(kv.Value));
             }
         }
+        game.quest.vars.SetValue("#heroes", heroCount);
 
         // Monsters must be after heros because some activations refer to heros
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
@@ -1183,12 +1198,12 @@ public class Quest
         boardItems[name].SetVisible(alpha);
     }
 
-    // Change the transparency of all baord components
-    public void ChangeAlphaAll(float alpha)
+    // Change the transparency of all board components
+    public void ChangeAlphaAll()
     {
         foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
         {
-            kv.Value.SetVisible(alpha);
+            kv.Value.SetVisible(game.editorTransparency);
         }
     }
 
@@ -1517,6 +1532,11 @@ public class Quest
             Vector2 texPos = new Vector2(game.cd.tokens[tokenName].x, game.cd.tokens[tokenName].y);
             Vector2 texSize = new Vector2(game.cd.tokens[tokenName].width, game.cd.tokens[tokenName].height);
             Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image, texPos, texSize);
+            if(newTex==null)
+            {
+                ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
+                return;
+            }
 
             // Create object
             unityObject = new GameObject("Object" + qToken.sectionName);
@@ -1566,7 +1586,9 @@ public class Quest
         public QuestData.UI qUI;
         public UIElementBorder border;
 
+        GameObject unityObject_text = null;
         UnityEngine.UI.Text uiText;
+        UnityEngine.UI.Image uiTextBG;
 
         // Construct with quest info and reference to Game
         public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
@@ -1596,7 +1618,7 @@ public class Quest
             }
             else if (qUI.imageName.Length > 0)
             {
-                newTex = ContentData.FileToTexture(Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), qUI.imageName));
+                newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
             }
 
             // Create object
@@ -1607,9 +1629,19 @@ public class Quest
 
             float aspect = 1;
             RectTransform rectTransform = unityObject.AddComponent<RectTransform>();
+            RectTransform rectTransform_text = null;
+
             if (qUI.imageName.Length == 0)
             {
-                uiText = unityObject.AddComponent<UnityEngine.UI.Text>();
+                uiTextBG = unityObject.AddComponent<UnityEngine.UI.Image>();
+                uiTextBG.color = ColorUtil.ColorFromName(qUI.textBackgroundColor);
+
+                unityObject_text = new GameObject("Object" + qUI.sectionName + "text");
+                unityObject_text.tag = Game.BOARD;
+                unityObject_text.transform.SetParent(unityObject.transform);
+                rectTransform_text = unityObject_text.AddComponent<RectTransform>();
+
+                uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
                 uiText.text = GetText();
                 uiText.alignment = TextAnchor.MiddleCenter;
                 uiText.font = game.gameType.GetFont();
@@ -1644,27 +1676,45 @@ public class Quest
             if (qUI.hAlign < 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset, hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, hSize);
             }
             else if (qUI.hAlign > 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, hOffset, hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, hSize);
             }
             else
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, hSize);
             }
 
             if (qUI.vAlign < 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset, vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vSize);
             }
             else if (qUI.vAlign > 0)
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, vOffset, vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, vSize);
             }
             else
             {
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+                rectTransform.ForceUpdateRectTransforms();
+                if (rectTransform_text != null)
+                    rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vSize);
             }
 
             if (qUI.border)
@@ -1686,6 +1736,13 @@ public class Quest
             if (image != null && image.gameObject != null) image.color = c;
             if (uiText != null && uiText.gameObject != null) uiText.color = c;
             if (border != null) border.SetColor(c);
+            // Text BG has its own color, only alpha is changing
+            if (uiTextBG != null && uiTextBG.gameObject != null && qUI.textBackgroundColor != "transparent")
+            {
+                Color tmp = uiTextBG.color;
+                tmp.a = c.a;
+                uiTextBG.color = tmp;
+            }
         }
 
         override public Color GetColor()
@@ -1722,6 +1779,8 @@ public class Quest
         // Clean up
         public override void Remove()
         {
+            if (unityObject_text != null)
+                Object.Destroy(unityObject_text);
             Object.Destroy(unityObject);
         }
     }

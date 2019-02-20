@@ -13,6 +13,7 @@ public class EditorComponentUI : EditorComponentEvent
     UIElementEditable sizeUIE;
     UIElementEditable aspectUIE;
     UIElementEditable textSizeUIE;
+    UIElementEditable backgroundColourUIE;
     UIElementEditablePaneled textUIE;
 
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
@@ -157,8 +158,19 @@ public class EditorComponentUI : EditorComponentEvent
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(14.5f, offset, 5, 1);
-            ui.SetText(uiComponent.textColor);
+            ui.SetText(new StringKey("val", uiComponent.textColor));
             ui.SetButton(delegate { SetColour(); });
+            new UIElementBorder(ui);
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 8.5f, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "BACKGROUND_COLOUR")));
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(8.5f, offset, 4.5f, 1);
+            ui.SetText(new StringKey("val", uiComponent.textBackgroundColor));
+            ui.SetButton(delegate { SetBackgroundColour(); });
             new UIElementBorder(ui);
             offset += 2;
 
@@ -285,7 +297,7 @@ public class EditorComponentUI : EditorComponentEvent
         select.AddItem("{NONE}", "");
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "SOURCE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
@@ -400,6 +412,29 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectColour(string color)
     {
         uiComponent.textColor = color;
+        Game.Get().quest.Remove(uiComponent.sectionName);
+        Game.Get().quest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    public void SetBackgroundColour()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectBackgroundColour, CommonStringKeys.SELECT_ITEM);
+        foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())
+        {
+            select.AddItem(new StringKey("val", kv.Key));
+        }
+        select.Draw();
+    }
+
+    public void SelectBackgroundColour(string color)
+    {
+        uiComponent.textBackgroundColor = color;
         Game.Get().quest.Remove(uiComponent.sectionName);
         Game.Get().quest.Add(uiComponent.sectionName);
         Update();

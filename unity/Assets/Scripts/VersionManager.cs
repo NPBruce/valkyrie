@@ -29,7 +29,7 @@ class VersionManager
         return url;
     }
 
-    private static void GetLatestVersion_callback(string data, bool error)
+    private static void GetLatestVersion_callback(string data, bool error, System.Uri uri)
     {
         // do nothing in case of error
         if (error)
