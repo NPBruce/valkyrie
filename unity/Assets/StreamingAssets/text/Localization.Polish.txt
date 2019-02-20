@@ -46,7 +46,7 @@ COMPONENT_NAME,Nazwa komponentu
 COMPONENT_TO_DELETE,Komponent do usunięcia:
 CONTENT_IMPORT,Zaimportuj dane
 CONTENT_IMPORTING,Importowanie danych...
-CONTENT_REIMPORT,Zaimportuj ponownie 
+CONTENT_REIMPORT,Zaimportuj ponownie
 CONTENT_INSTALL_VIA_STEAM,Zainstaluj przy użyciu Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
 CONTENT_LOCATE,Zlokalizuj katalog z grą
@@ -439,4 +439,4 @@ GO_ONLINE, Włączyć tryb Online
 DOWNLOAD_ONGOING,Pobieranie...
 OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
 
-MISSING_EXPANSIONS,Brakujące rozszerzenia: 
+MISSING_EXPANSIONS,Brakujące rozszerzenia:

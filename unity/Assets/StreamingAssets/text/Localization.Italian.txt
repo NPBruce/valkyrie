@@ -353,7 +353,7 @@ STATS_ASK_VICTORY_YES,SI!
 STATS_ASK_VICTORY_NO,No...
 STATS_ASK_RATING,Come valuteresti questo scenario?\n(1: terribile  10: stupefacente)
 STATS_ASK_COMMENTS,Vorresti lasciare un commento all'autore dello scenario?
-STATS_MISSING_INFO,Per favore valuta lo scenario e comunicaci se hai vinto prima di confermare l'invio. 
+STATS_MISSING_INFO,Per favore valuta lo scenario e comunicaci se hai vinto prima di confermare l'invio.
 STATS_SEND_BUTTON,Conferma
 STATS_MENU_BUTTON,Menu
 

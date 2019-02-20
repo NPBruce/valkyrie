@@ -372,7 +372,7 @@ SoE,SoE 
 SotS,SotS 
 ToC,ToC 
 VoD,VoD 
-CKAoD,CKAoD 
+CKAoD,CKAoD
 CKD1E,CKD1E
 CKDQ,CKDQ
 CKPromo,CKPromo
@@ -576,7 +576,7 @@ STATS_ASK_VICTORY_YES,YES!
 STATS_ASK_VICTORY_NO,No...
 STATS_ASK_RATING,How would you rate this scenario?\n(1: awful  10: amazing)
 STATS_ASK_COMMENTS,Would you like to leave a comment for the scenario author?
-STATS_MISSING_INFO,Please rate the scenario and tell us if you won before submitting. 
+STATS_MISSING_INFO,Please rate the scenario and tell us if you won before submitting.
 STATS_SEND_BUTTON,Submit
 STATS_MENU_BUTTON,Menu
 
@@ -635,4 +635,4 @@ GO_ONLINE,GO ONLINE
 DOWNLOAD_ONGOING,Downloading...
 OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
 
-MISSING_EXPANSIONS,Missing expansions: 
+MISSING_EXPANSIONS,Missing expansions:

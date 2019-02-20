@@ -163,7 +163,7 @@ EDITOR,Éditeur
 QUEST_NAME_UPDATE,  [Mise à jour] {0}
 QUOTA,Quota
 RECOVER,Récupérer
-INVESTIGATOR_ATTACKS,Attaques de l'investigateur  
+INVESTIGATOR_ATTACKS,Attaques de l'investigateur
 
 
 RELOAD,Recharger
@@ -465,11 +465,11 @@ UPDATED_THIS_TRIMESTER,Mis à jour ces 3 derniers mois
 UPDATED_THIS_SEMESTER,Mis à jour ces 6 derniers mois
 UPDATED_THIS_YEAR,Mis à jour il y a moins d'un an
 UPDATED_TWO_YEARS_AGO,Mis à jour il y a moins de deux ans
-UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans 
+UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans
 
 GO_OFFLINE,PASSER EN HORS LIGNE
 GO_ONLINE,ALLER EN LIGNE
 DOWNLOAD_ONGOING,Téléchargement en cours...
 OFFLINE_DUE_TO_ERROR,MODE HORS LIGNE (erreur réseau)
 
-MISSING_EXPANSIONS,Extension manquante: 
+MISSING_EXPANSIONS,Extension manquante:
