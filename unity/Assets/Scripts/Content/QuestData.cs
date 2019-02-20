@@ -2247,16 +2247,20 @@ public class QuestData
         {
             string authors_short_translation = "";
 
-            // if languages_authors_short is available, we are in scenarios explorer and don't have access to .txt files yet
-            if (languages_authors_short.Count != 0) {
-                // Try to get current language
-                if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
+            // if languages_authors_short is available, we are online in scenarios explorer and don't have access to .txt files yet
+            if (Game.Get().questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                if (languages_authors_short.Count != 0)
                 {
-                    // Try to get default language
-                    if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))
+                    // Try to get current language
+                    if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
                     {
-                        // if not translated, returns unknown
-                        authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                        // Try to get default language
+                        if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))
+                        {
+                            // if not translated, returns unknown
+                            authors_short_translation = new StringKey("val", "AUTHORS_UNKNOWN").Translate();
+                        }
                     }
                 }
             }
