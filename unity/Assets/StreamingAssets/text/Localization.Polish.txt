@@ -47,10 +47,13 @@ COMPONENT_TO_DELETE,Komponent do usunięcia:
 CONTENT_IMPORT,Zaimportuj dane
 CONTENT_IMPORTING,Importowanie danych...
 CONTENT_REIMPORT,Zaimportuj ponownie 
+CONTENT_INSTALL_VIA_STEAM,Zainstaluj przy użyciu Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
+CONTENT_LOCATE,Zlokalizuj katalog z grą
 CONTINUE,Kontynuuj
 COPY,Kopiuj
 CUSTOMMONSTER,Personalizacja Potwora
-D2E_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przy użyciu Steam
+D2E_APP_NOT_FOUND,Nie znaleziono gry.
 D2E_HEROES_NAME,Bohaterowie
 D2E_HERO_NAME,Bohater
 D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
@@ -85,7 +88,7 @@ INITIAL_MESSAGE,Wiadomość Początkowa:
 ITEM,Przedmiot
 QITEM,Przedmiot Fabularny
 KO,KO
-LOAD_QUEST,Załaduj {0}
+LOAD_QUEST,Kontynuuj
 LOG,Log
 SKILLS,Umiejętności
 ITEMS,Przedmioty
@@ -98,8 +101,7 @@ MAX_CAM,Max Kam
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Kam
-MOM_APP_NOT_FOUND,Nie znaleziono gry. Zainstaluj przez Steam
-MOM_APP_NOT_FOUND_ANDROID,Nie znaleziono Posiadłości Szaleństwa
+MOM_APP_NOT_FOUND,Nie znaleziono gry.
 MOM_HEROES_NAME,Badacze
 MOM_HERO_NAME,Badacz
 MOM_NAME,Posiadłość Szaleństwa 2. Edycja
@@ -186,7 +188,7 @@ SELECT_SKILLS,Wybierz Umiejętności
 SPAWN,Przywołaj
 STARTING_ITEM,Przedmiot Startowy
 STARTING_ITEMS,Przedmioty Startowe
-START_QUEST,Nowy {0}
+START_QUEST,Nowa gra
 START,Start
 
 TESTS,Testy
@@ -431,3 +433,10 @@ UPDATED_THIS_SEMESTER,Zaktualizowane w tym półroczu
 UPDATED_THIS_YEAR,Zaktualizowane w tym roku
 UPDATED_TWO_YEARS_AGO,Zaktualizowane dwa lata temu
 UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata
+
+GO_OFFLINE, Włączyć tryb Offline
+GO_ONLINE, Włączyć tryb Online
+DOWNLOAD_ONGOING,Pobieranie...
+OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
+
+MISSING_EXPANSIONS,Brakujące rozszerzenia: 

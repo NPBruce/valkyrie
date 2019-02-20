@@ -575,7 +575,7 @@ public class EditorComponentEvent : EditorComponent
 
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "GENERAL").Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { new StringKey("val", "GENERAL").Translate() });
         select.AddItem("{NONE}", "", traits);
 
         bool startPresent = false;
@@ -633,7 +633,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("StartRound", traits);
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "MONSTER").Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.MONSTER.Translate() });
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
@@ -650,6 +650,7 @@ public class EditorComponentEvent : EditorComponent
                 select.AddItem("DefeatedUnique" + kv.Key, traits);
             }
 
+
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
@@ -664,7 +665,8 @@ public class EditorComponentEvent : EditorComponent
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "VARS").Translate() });
+
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { new StringKey("val", "VARS").Translate() });
 
         foreach (string s in vars)
         {
@@ -695,7 +697,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("{NONE}", "");
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
 
         foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
         {
@@ -705,8 +707,8 @@ public class EditorComponentEvent : EditorComponent
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
             traits = new Dictionary<string, IEnumerable<string>>();
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "FFG" });
-            traits.Add(new StringKey("val", "TRAITS").Translate(), kv.Value.traits);
+            traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });
+            traits.Add(CommonStringKeys.TRAITS.Translate(), kv.Value.traits);
 
             select.AddItem(kv.Key, traits);
         }
@@ -745,7 +747,7 @@ public class EditorComponentEvent : EditorComponent
         select.AddItem("{NONE}", "");
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { new StringKey("val", "FILE").Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
 
         foreach (string s in Directory.GetFiles(relativePath, "*.ogg", SearchOption.AllDirectories))
         {
@@ -755,8 +757,8 @@ public class EditorComponentEvent : EditorComponent
         foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
         {
             traits = new Dictionary<string, IEnumerable<string>>();
-            traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "FFG" });
-            traits.Add(new StringKey("val", "TRAITS").Translate(), kv.Value.traits);
+            traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });
+            traits.Add(CommonStringKeys.TRAITS.Translate(), kv.Value.traits);
 
             select.AddItem(kv.Key, traits);
         }
@@ -846,7 +848,7 @@ public class EditorComponentEvent : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddVisibility(add, index, s); }, new StringKey("val", "SELECT", new StringKey("val", "COMPONENT")));
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Special" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Special" });
 
         select.AddItem("#boardcomponents", traits);
         select.AddItem("#monsters", traits);
@@ -1060,7 +1062,7 @@ public class EditorComponentEvent : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectQuotaVar, new StringKey("val", "SELECT", VAR));
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
 
         AddQuestVars(select);

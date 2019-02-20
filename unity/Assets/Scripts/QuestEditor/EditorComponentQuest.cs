@@ -60,11 +60,11 @@ public class EditorComponentQuest : EditorComponent
         new UIElementBorder(ui);
         if (game.quest.qd.quest.hidden)
         {
-            ui.SetText(new StringKey("val", "TRUE"));
+            ui.SetText(CommonStringKeys.TRUE);
         }
         else
         {
-            ui.SetText(new StringKey("val", "FALSE"));
+            ui.SetText(CommonStringKeys.FALSE);
         }
         offset += 2;
 
@@ -262,8 +262,8 @@ public class EditorComponentQuest : EditorComponent
         var traits = new Dictionary<string, IEnumerable<string>>
         {
             {
-                new StringKey("val", "SOURCE").Translate(),
-                new string[] { new StringKey("val", "FILE").Translate() }
+                CommonStringKeys.SOURCE.Translate(),
+                new string[] { CommonStringKeys.FILE.Translate() }
             }
         };
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath.Replace('\\', '/'))).FullName.Replace('\\', '/');

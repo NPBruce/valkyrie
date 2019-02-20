@@ -45,11 +45,13 @@ COMPONENT_TO_DELETE,Zu löschende Erweiterung:
 CONTENT_IMPORT,Importiere Inhalt
 CONTENT_IMPORTING,Importiere...
 CONTENT_REIMPORT,Reimportiere Inhalt
+CONTENT_INSTALL_VIA_STEAM,Über Steam installieren
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Über Google Play installieren
+CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
-D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden, bitte über Steam installieren
-D2E_APP_NOT_FOUND_ANDROID,"Wege zum Ruhm" nicht gefunden
+D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden
 D2E_HEROES_NAME,Helden
 D2E_HERO_NAME,Held
 D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
@@ -89,7 +91,7 @@ INFORMATION,Information
 INITIAL_MESSAGE,Eingangstext:
 ITEM,Gegenstand
 KO,KO
-LOAD_QUEST,Lade {0}
+LOAD_QUEST,Weiter
 LOG,Log
 SKILLS,Fähigkeiten
 ITEMS,Inventar
@@ -103,8 +105,7 @@ MENU,Menü
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Kam Min
-MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden, bitte über Steam installieren
-MOM_APP_NOT_FOUND_ANDROID,"Villen des Wahnsinns" nicht gefunden
+MOM_APP_NOT_FOUND,"Villen des Wahnsinns" nicht gefunden
 MOM_HERO_NAME,Ermittler
 MOM_HEROES_NAME,Ermittler
 MOM_NAME,Villen des Wahnsinns: 2. Edition
@@ -191,7 +192,7 @@ SELECT_SKILLS,Fähigkeiten wählen
 SPAWN,Spawn
 STARTING_ITEM,Startgegenstand
 STARTING_ITEMS,Startgegenstände
-START_QUEST,Starte {0}
+START_QUEST,Neues spiel
 START,Starte
 
 TESTS,Tests
@@ -464,3 +465,8 @@ UPDATED_THIS_SEMESTER,Innerhalb dieses Semesters aktualisiert
 UPDATED_THIS_YEAR,Innerhalb dieses Jahres aktualisiert
 UPDATED_TWO_YEARS_AGO,Vor zwei Jahren aktualisiert
 UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre
+
+GO_OFFLINE,OFFLINE GEHEN
+GO_ONLINE,ONLINE GEHEN
+DOWNLOAD_ONGOING,Lade herunter...
+OFFLINE_DUE_TO_ERROR,OFFLINE (Netzwerkfehler)

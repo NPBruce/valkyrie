@@ -269,6 +269,12 @@ public class EventManager
         {
             if (s.IndexOf("QItem") == 0)
             {
+                // Fix #998
+                if (game.gameType.TypeName() == "MoM" && itemList.Count==1)
+                {
+                    ValkyrieDebug.Log("WARNING: only one QItem can be used in event " + e.qEvent.sectionName + ", ignoring other items");
+                    break;
+                }
                 itemList.Add(s);
             }
         }

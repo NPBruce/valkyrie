@@ -120,13 +120,13 @@ public class EditorComponent {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(2, offset, 5, 1);
-        ui.SetText(new StringKey("val", "RENAME"));
+        ui.SetText(CommonStringKeys.RENAME);
         ui.SetButton(delegate { Rename(); });
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(13, offset, 5, 1);
-        ui.SetText(new StringKey("val", "DELETE"), Color.red);
+        ui.SetText(CommonStringKeys.DELETE, Color.red);
         ui.SetButton(delegate { Delete(); });
         new UIElementBorder(ui, Color.red);
 
@@ -148,7 +148,7 @@ public class EditorComponent {
         // Heading
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-6f), 1, 12, 1);
-        ui.SetText(new StringKey("val", "CONFIRM"));
+        ui.SetText(CommonStringKeys.CONFIRM);
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-5.5f), 3, 6, 1);
@@ -190,7 +190,7 @@ public class EditorComponent {
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 5, 1);
-        ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "SOURCE"))));
+        ui.SetText(new StringKey("val", "X_COLON", (CommonStringKeys.SOURCE)));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 14.5f, 1);
@@ -519,7 +519,7 @@ public class EditorComponent {
 
     public void ChangeSource()
     {
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, new StringKey("val", "SELECT", new StringKey("val", "FILE")));
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, new StringKey("val", "SELECT", CommonStringKeys.FILE));
 
         select.AddItem("{NEW:File}");
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
@@ -534,7 +534,7 @@ public class EditorComponent {
     {
         if (source.Equals("{NEW:File}"))
         {
-            sourceFileText = new QuestEditorTextEdit(new StringKey("val", "FILE"), "", delegate { NewSource(); });
+            sourceFileText = new QuestEditorTextEdit(CommonStringKeys.FILE, "", delegate { NewSource(); });
             sourceFileText.EditText();
         }
         else
@@ -569,13 +569,13 @@ public class EditorComponent {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddOp(s); }, new StringKey("val", "SELECT", VAR));
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
 
         AddQuestVars(select);
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "#" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "#" });
 
         select.AddItem("#monsters", traits);
         select.AddItem("#heroes", traits);
@@ -608,7 +608,7 @@ public class EditorComponent {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddOp(s, false); }, new StringKey("val", "SELECT", VAR));
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
 
         AddQuestVars(select);
@@ -638,7 +638,7 @@ public class EditorComponent {
         }
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         foreach (string s in vars)
         {
             list.AddItem(s, traits);
@@ -657,7 +657,7 @@ public class EditorComponent {
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "$" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "$" });
         foreach (string s in dollarVars)
         {
             list.AddItem(s, traits);
@@ -826,13 +826,13 @@ public class EditorComponent {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectSetValue(op, s); }, new StringKey("val", "SELECT", VALUE));
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits);
 
         AddQuestVars(select);
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(new StringKey("val", "TYPE").Translate(), new string[] { "#" });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "#" });
 
         select.AddItem("#monsters", traits);
         select.AddItem("#heroes", traits);

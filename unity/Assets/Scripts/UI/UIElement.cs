@@ -370,6 +370,16 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
+        /// Get the color of the UIElement display text.</summary>
+        /// <returns>
+        /// The display text color or Color.clear if text is not set.</returns>
+        public virtual Color GetTextColor()
+        {
+            if (text == null) return Color.clear;
+            return text.GetComponent<UnityEngine.UI.Text>().color;
+        }
+
+        /// <summary>
         /// Is there any display text?</summary>
         /// <returns>
         /// True if text not set or empty</returns>
@@ -411,7 +421,16 @@ namespace Assets.Scripts.UI
         {
             return GetStringWidth(content.Translate(), fontSize, fontName);
         }
-        
+
+        /// <summary>
+        /// Get the length of the currently displayed text string.</summary>
+        /// <returns>
+        /// The size of the text in UIScaler units.</returns>
+        public float GetStringWidth()
+        {
+            return text.GetComponent<UnityEngine.UI.Text>().preferredWidth / UIScaler.GetPixelsPerUnit();
+        }
+
         /// <summary>
         /// Get the length of a text string at small size with standard font.</summary>
         /// <param name="content">Text to measure.</param>

@@ -305,6 +305,30 @@ public class ContentData {
         return "";
     }
 
+    public string GetContentAcronym(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return new StringKey("val", cp.id).Translate();
+            }
+        }
+        return "";
+    }
+
+    public string GetContentSymbol(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return new StringKey("val", cp.id+"_SYMBOL").Translate();
+            }
+        }
+        return "";
+    }
+
     // Return a list of id for all enbaled content packs
     public List<string> GetLoadedPackIDs()
     {

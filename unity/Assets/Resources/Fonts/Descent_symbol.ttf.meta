@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Descent_symbol
+  fontName: Descent_symbols
   fontNames:
-  - Descent_symbol
+  - Descent_symbols
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

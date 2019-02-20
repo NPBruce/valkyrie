@@ -48,8 +48,7 @@ CONTENT_REIMPORT,重新導入
 CONTINUE,繼續
 COPY,複製
 CUSTOMMONSTER,自定義怪物
-D2E_APP_NOT_FOUND,Unable to locate Road to Legend, install via Steam
-D2E_APP_NOT_FOUND_ANDROID,Unable to locate Road to Legend
+D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
 D2E_NAME,Descent: Journeys in the Dark Second Edition
@@ -91,7 +90,7 @@ INITIAL_MESSAGE,Initial Message:
 ITEM,道具
 QITEM,道具
 KO,KO
-LOAD_QUEST,讀取{0}
+LOAD_QUEST,繼續
 LOG,記錄
 SKILLS,技能
 ITEMS,物品
@@ -105,8 +104,7 @@ MENU,菜單
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Min Cam
-MOM_APP_NOT_FOUND,電腦上無法找到《瘋狂詭宅》安裝檔。請通過Steam安裝遊戲。
-MOM_APP_NOT_FOUND_ANDROID,無法找到《瘋狂詭宅》安裝檔。
+MOM_APP_NOT_FOUND,電腦上無法找到《瘋狂詭宅》安裝檔。
 MOM_HEROES_NAME,調查員
 MOM_HERO_NAME,調查員
 MOM_NAME,《瘋狂詭宅》第二版
@@ -194,7 +192,7 @@ SELECT_SKILLS,選擇技能
 SPAWN,卵
 STARTING_ITEM,起始物品
 STARTING_ITEMS,起始物品
-START_QUEST,開始{0}
+START_QUEST,新遊戲
 START,開始
 
 TESTS,鑒定

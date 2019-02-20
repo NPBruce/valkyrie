@@ -49,11 +49,12 @@ COMPONENT_TO_DELETE,Componente a Eliminar:
 CONTENT_IMPORT,Importar Contenido
 CONTENT_IMPORTING,Importando...
 CONTENT_REIMPORT,Reimportar Contenido
+CONTENT_INSTALL_VIA_STEAM,Instalar desde Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar desde Google Play
 CONTINUE,Continuar
 COPY,Copiar
 CUSTOMMONSTER,Monstruo Personalizado
-D2E_APP_NOT_FOUND,Imposible localizar "Road to Legend", instalar desde Steam
-D2E_APP_NOT_FOUND_ANDROID,Imposible localizar "Road to Legend"
+D2E_APP_NOT_FOUND,Imposible localizar "Road to Legend"
 D2E_HEROES_NAME,Héroes
 D2E_HERO_NAME,Héroe
 D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
@@ -90,7 +91,7 @@ INITIAL_MESSAGE,Mensaje Inicial:
 ITEM,Objeto
 QITEM,Objeto de Escenario
 KO,KO
-LOAD_QUEST,Cargar {0}
+LOAD_QUEST,Continuar
 LOG,Log
 SKILLS,Habilidades
 ITEMS,Objetos
@@ -104,8 +105,7 @@ MENU,Menú
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Cam Min
-MOM_APP_NOT_FOUND,Imposible localizar "Mansions of Madness", instalar desde Steam
-MOM_APP_NOT_FOUND_ANDROID,Imposible localizar "Mansions of Madness"
+MOM_APP_NOT_FOUND,Imposible localizar "Mansions of Madness"
 MOM_HEROES_NAME,Investigadores
 MOM_HERO_NAME,Investigador
 MOM_NAME,Las Mansiones de la Locura: Segunda Edición
@@ -192,7 +192,7 @@ SELECT_SKILLS,Selección de Habilidades
 SPAWN,Generar
 STARTING_ITEM,Objeto Inicial
 STARTING_ITEMS,Equipo Inicial
-START_QUEST,Iniciar {0}
+START_QUEST,Partida nueva
 START,Iniciar
 
 TESTS,Pruebas

@@ -49,12 +49,22 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey FILTER_MISSING_EXPANSIONS_ON = new StringKey("val", "FILTER_MISSING_EXPANSIONS_ON");
         private readonly StringKey FILTER_MISSING_EXPANSIONS_OFF = new StringKey("val", "FILTER_MISSING_EXPANSIONS_OFF");
 
+        private readonly StringKey MISSING_EXPANSIONS = new StringKey("val", "MISSING_EXPANSIONS");
+
         private readonly StringKey STATS_NO_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_NO_AVERAGE_WIN_RATIO");
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
 
+        private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
+        private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
+        private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
+        private readonly StringKey OFFLINE_DUE_TO_ERROR = new StringKey("val", "OFFLINE_DUE_TO_ERROR");
+
+            
         // text colors
-        private readonly Color grey_transparent_text = new Color(0.1f, 0.1f, 0.1f, 0.50f);
-        private readonly Color dark_grey_text = new Color(0.1f, 0.1f, 0.1f);
+        private readonly Color grey_transparent_text_color = new Color(0.1f, 0.1f, 0.1f, 0.50f);
+        private readonly Color dark_grey_text_color = new Color(0.1f, 0.1f, 0.1f);
+//        private readonly Color dark_red_text_color = new Color(0.686f, 0.031f, 0.023f);
+        private readonly Color dark_red_text_color = new Color(0.686f, 0.031f, 0.023f);
 
         // filters
         string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech".Split(',');
@@ -79,6 +89,7 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_download = null;
         Texture2D button_update = null;
         Texture2D button_play = null;
+        Texture2D button_no_entry = null;
         Texture2D button_hole = null;
 
         public void Start()
@@ -117,6 +128,7 @@ namespace Assets.Scripts.UI.Screens
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
+            button_no_entry = Resources.Load("sprites/scenario_list/button_no_entry") as Texture2D;
 
             Show();
         }
@@ -211,91 +223,32 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
 
-            text_connection_status = new UIElement();
+            // Show offline/online button (or info)
+            DrawOnlineModeButton();
 
-            // Display connection status message
-            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
-            {
-                // error download (no connection, timeout, of file not available)
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("OFFLINE (network error)", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-            }
-            else if(game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
-            {
-                // Download ongoing
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("DOWNLOADING...", Color.blue);
-                text_connection_status.SetFontSize(UIScaler.GetSmallFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
-            }
-            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
-            {
-                // Download done, we are online
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-            }
-            else
-            {
-                // Download done, user has switched offline modline
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO ONLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-            }
-
-            if(co_display!=null)
+            if (co_display!=null)
                 StopCoroutine(co_display);
             co_display = StartCoroutine(DrawQuestList());
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)
         {
-            if(is_available)
-            {
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-            }
-            else
-            {
-                text_connection_status.SetText("OFFLINE (network error)", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-            }
+            DrawOnlineModeButton();
         }
 
         private void SetOnlineMode(bool go_online)
         {
             if (go_online)
             {
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO OFFLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
-
                 game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
-                ReloadQuestList();
             }
             else
             {
-                text_connection_status.SetLocation(UIScaler.GetWidthUnits() - 10, 1f, 8, 1.2f);
-                text_connection_status.SetText("GO ONLINE", Color.red);
-                text_connection_status.SetFontSize(UIScaler.GetMediumFont());
-                text_connection_status.SetTextAlignment(TextAnchor.MiddleRight);
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
-
                 game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
-                ReloadQuestList();
             }
+
+            DrawOnlineModeButton();
+            ReloadQuestList();
         }
 
         // Show button and initialize the popup
@@ -366,6 +319,53 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions = true;
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             }
+        }
+
+        private void DrawOnlineModeButton()
+        {
+            float text_width = 0f;
+            bool border = false;
+
+            if (text_connection_status != null)
+                text_connection_status.Destroy();
+
+            text_connection_status = new UIElement();
+
+            // Display connection status message
+            if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
+            {
+                // error download (no connection, timeout, of file not available)
+                text_connection_status.SetText(OFFLINE_DUE_TO_ERROR, Color.red);
+            }
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+            {
+                // Download ongoing
+                text_connection_status.SetText(DOWNLOAD_ONGOING, Color.cyan);
+                game.questsList.Register_cb_download(RemoteQuestsListDownload_cb);
+            }
+            else if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            {
+                // Download done, we are online
+                text_connection_status.SetText(GO_OFFLINE, Color.red);
+                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+                border = true;
+            }
+            else
+            {
+                // Download done, user has switched offline modline
+                text_connection_status.SetText(GO_ONLINE, Color.green);
+                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+                border = true;
+            }
+
+            text_width = text_connection_status.GetStringWidth(text_connection_status.GetText(), UIScaler.GetSmallFont(), game.gameType.GetHeaderFont());
+            text_connection_status.SetLocation(UIScaler.GetWidthUnits() - text_width - 1, 0.5f, text_width, 1.2f);
+            text_connection_status.SetFont(game.gameType.GetHeaderFont());
+            text_connection_status.SetFontSize(UIScaler.GetSmallFont());
+            text_connection_status.SetTextAlignment(TextAnchor.MiddleCenter);
+            if(border)
+                new UIElementBorder(text_connection_status, text_connection_status.GetTextColor());
+
         }
 
         private void DrawFlags()
@@ -834,6 +834,7 @@ namespace Assets.Scripts.UI.Screens
             // Start here
             float offset = 0;
             int nb_filtered_out_quest = 0;
+            bool is_expansion_missing = false;
 
             if(scrollArea==null)
             {
@@ -867,6 +868,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 QuestData.Quest q = game.questsList.GetQuestData(key);
                 UIElement frame = null;
+                is_expansion_missing = false;
 
                 // Filter langs
                 if (!HasSelectedLanguage(q))
@@ -1005,49 +1007,68 @@ namespace Assets.Scripts.UI.Screens
                 List<string> missing_packs = q.GetMissingPacks(game.cd.GetLoadedPackIDs());
                 Color expansion_text_color = Color.black;
                 float expansion_x_offset = 5.8f;
-                float expansion_y_offset = offset + 1.6f;
-                float char_spacing = 0.2f;
+                float expansion_y_offset = offset + 1.7f;
                 int expansions_symbol_font_size = UIScaler.GetSmallFont();
                 if (game.gameType.TypeName() == "D2E")
                 {
                     // fine tune D2E placement, has fonts don't look the same
                     expansion_x_offset = 5.55f;
                     expansion_y_offset = offset + 1.45f;
-                    char_spacing = 0.1f;
                     expansions_symbol_font_size = Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.1f);
                 }
-                List<string> displayed_expansion_symbols = new List<string>();
+                string pack_symbol_available = "";
+                string pack_symbol_missing = "";
                 foreach (string pack in q.packs)
                 {
                     string pack_symbol = game.cd.packSymbol[pack].Translate(true);
-                    if (pack_symbol != "" && !displayed_expansion_symbols.Contains(pack_symbol))
+                    if (pack_symbol != "" && !(pack_symbol_available.Contains(pack_symbol) || pack_symbol_missing.Contains(pack_symbol)))
                     {
-                        displayed_expansion_symbols.Add(pack_symbol);
                         if (missing_packs.Contains(pack))
-                            expansion_text_color = Color.red;
+                            pack_symbol_missing += pack_symbol;
                         else
-                            expansion_text_color = Color.black;
-                        ui = new UIElement(scrollArea.GetScrollTransform());
-                        float symbol_width = ui.GetStringWidth(pack_symbol, expansions_symbol_font_size);
-                        ui.SetLocation(expansion_x_offset, expansion_y_offset, symbol_width, 1);
-                        ui.SetText(pack_symbol, expansion_text_color);
-                        ui.SetBGColor(Color.clear);
-                        ui.SetFont(game.gameType.GetSymbolFont());
-                        ui.SetFontSize(expansions_symbol_font_size);
-                        expansion_x_offset += symbol_width - char_spacing;
+                            pack_symbol_available += pack_symbol;
                     }
+                }
+                float symbols_available_width = 0;
+                if(pack_symbol_available!="")
+                { 
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                    ui.SetLocation(expansion_x_offset, expansion_y_offset, symbols_available_width+1, 1);
+                    ui.SetText(pack_symbol_available, Color.black);
+                    ui.SetBGColor(Color.clear);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(expansions_symbol_font_size);
+                }
+
+                if(pack_symbol_missing!="")
+                {
+                    is_expansion_missing = true;
+                    pack_symbol_missing = MISSING_EXPANSIONS.Translate() + pack_symbol_missing;
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                    ui.SetLocation(expansion_x_offset+ symbols_available_width, expansion_y_offset, symbols_missing_width + 1, 1);
+                    ui.SetText(pack_symbol_missing, dark_red_text_color);
+                    ui.SetBGColor(Color.clear);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(expansions_symbol_font_size);
                 }
 
                 // Quest short description (synopsys)
-                ui = new UIElement(scrollArea.GetScrollTransform());
-                ui.SetBGColor(Color.clear);
-                ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
-                ui.SetTextPadding(0.5f);
-                ui.SetText(synopsys_translation, dark_grey_text);
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
-                ui.SetFontStyle(FontStyle.Italic);
-                ui.SetFont(game.gameType.GetHeaderFont());
+                if (synopsys_translation != null)
+                { 
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetBGColor(Color.clear);
+                    ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
+                    ui.SetTextPadding(0.5f);
+                    if (synopsys_translation.Length >= 105)
+                        synopsys_translation=synopsys_translation.Substring(0, 100) + "(...)";
+                    ui.SetText(synopsys_translation, dark_grey_text_color);
+                    ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
+                    ui.SetFontStyle(FontStyle.Italic);
+                    ui.SetFont(game.gameType.GetHeaderFont());
+                }
 
                 // Action Button
                 // - First burnt hole
@@ -1055,14 +1076,22 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-10.5f), offset + 0.5f, 6, 4f);
                 ui.SetImage(button_hole);
-                ui.SetButton(delegate { Selection(key); });
+                if (!is_expansion_missing)
+                {
+                    ui.SetButton(delegate { Selection(key); });
+                }
                 // - then action button
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-                if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+                if(is_expansion_missing)
+                {
+                    ui.SetImage(button_no_entry);
+                }
+                else if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                 {
                     ui.SetImage(button_play);
+                    ui.SetButton(delegate { Selection(key); });
                 }
                 else if(q.downloaded)
                 {
@@ -1070,12 +1099,13 @@ namespace Assets.Scripts.UI.Screens
                         ui.SetImage(button_update);
                     else
                         ui.SetImage(button_play);
+                    ui.SetButton(delegate { Selection(key); });
                 }
                 else
                 {
                     ui.SetImage(button_download);
+                    ui.SetButton(delegate { Selection(key); });
                 }
-                ui.SetButton(delegate { Selection(key); });
 
                 // all texts below use this y value as reference
                 float top_text_y = offset + 4.1f;
@@ -1136,7 +1166,7 @@ namespace Assets.Scripts.UI.Screens
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
                     ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
-                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text);
+                    ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text_color);
                     ui.SetTextAlignment(TextAnchor.LowerLeft);
                     ui.SetBGColor(Color.clear);
                     ui.SetFontSize(font_size);
@@ -1189,7 +1219,7 @@ namespace Assets.Scripts.UI.Screens
                     float score_text_width = 0;
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
-                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_transparent_text);
+                    ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_transparent_text_color);
                     score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, font_size);
                     ui.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
                     ui.SetBGColor(Color.clear);
@@ -1223,6 +1253,17 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 yield return null;
+            }
+
+            // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
+            if (nb_filtered_out_quest > 0)
+            {
+                StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+            }
+            else
+            {
+                text_number_of_filtered_scenario.SetText(" ");
             }
 
             images_list.StartDownloadASync();
@@ -1261,6 +1302,8 @@ namespace Assets.Scripts.UI.Screens
                 download.tag = Game.QUESTUI;
                 QuestDownload qd = download.AddComponent<QuestDownload>();
                 qd.Download(key);
+                // We need to refresh local quest list after download
+                game.questsList.UnloadLocalQuests();
             }
         }
 

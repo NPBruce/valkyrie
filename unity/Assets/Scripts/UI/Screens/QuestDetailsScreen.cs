@@ -123,18 +123,29 @@ namespace Assets.Scripts.UI.Screens
         /// <param file="file">File name to delete</param>
         public void Delete(QuestData.Quest q)
         {
-            string toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path);
-            File.Delete(toDelete);
+            string toDelete = "";
+
+            if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+            {
+                toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path);
+                File.Delete(toDelete);
+
+                // update quest status : downloaded/updated
+                Game.Get().questsList.SetQuestAvailability(Path.GetFileNameWithoutExtension(q.path), false);
+            }
+            else
+            {
+                // this is not an archive, it is a local quest within a directory
+                Directory.Delete(q.path, true);
+
+                Game.Get().questsList.UnloadLocalQuests();
+            }
 
             Destroyer.Dialog();
-
-            // update quest status : downloaded/updated
-            Game.Get().questsList.SetQuestAvailability(Path.GetFileNameWithoutExtension(q.path), false);
 
             // Pull up the quest selection page
             Game.Get().questSelectionScreen.Show();
         }
-
 
         // Return to quest selection
         public void Cancel()

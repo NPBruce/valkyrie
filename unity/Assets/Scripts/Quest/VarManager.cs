@@ -19,7 +19,15 @@ public class VarManager
         {
             float value = 0;
             float.TryParse(kv.Value, out value);
-            vars.Add(kv.Key, value);
+            // There is a \ before var starting with #, so they don't get ignored.
+            if(kv.Key.IndexOf("\\")==0)
+            {
+                vars.Add(kv.Key.Substring(1, kv.Key.Length - 1), value);
+            }
+            else
+            {
+                vars.Add(kv.Key, value);
+            }
         }
     }
 
@@ -272,9 +280,17 @@ public class VarManager
 
         foreach (KeyValuePair<string, float> kv in vars)
         {
-            if (kv.Value != 0)
-            {
-                r += kv.Key + "=" + kv.Value.ToString() + nl;
+            if(kv.Value != 0)
+            { 
+                if (kv.Key.IndexOf("#") == 0)
+                {
+                    // # means comments in .ini
+                    r += "\\" + kv.Key + "=" + kv.Value.ToString() + nl;
+                }
+                else
+                {
+                    r += kv.Key + "=" + kv.Value.ToString() + nl;
+                }
             }
         }
         return r + nl;
