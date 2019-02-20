@@ -37,7 +37,7 @@ public class EditorMenu {
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-        ui.SetButton(QuestEditor.Reload);
+        ui.SetButton(delegate { QuestEditor.Reload(game.quest.originalPath); });
         new UIElementBorder(ui);
 
         ui = new UIElement();

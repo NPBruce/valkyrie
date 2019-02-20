@@ -49,21 +49,21 @@ namespace Assets.Scripts.UI.Screens
             // Get the current content for games
             if (Application.platform == RuntimePlatform.OSXPlayer)
             {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + "/", Application.isEditor);
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + "/", Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + "/", Application.isEditor);
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + "/", Application.isEditor);
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
             }
             else
             {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + "/", Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + "/", Application.isEditor);
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + "/", Application.isEditor);
+                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
             }
 
             fcD2E.Inspect();
@@ -98,7 +98,7 @@ namespace Assets.Scripts.UI.Screens
             }
             // Draw D2E button
             UIElement ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 9, 30, 3);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 12, 30, 3);
             ui.SetText(D2E_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { D2E(); });
@@ -109,7 +109,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcD2E.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 12.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 15.2f, 14, 2);
                 StringKey keyText = fcD2E.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -119,7 +119,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 12.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 15.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(D2E_APP_NOT_FOUND_ANDROID, Color.red);
@@ -138,7 +138,7 @@ namespace Assets.Scripts.UI.Screens
                 startColor = Color.gray;
             }
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 15, 30, 3);
+            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 19, 30, 3);
             ui.SetText(MOM_NAME, startColor);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { MoM(); });
@@ -149,7 +149,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             if (fcMoM.ImportAvailable())
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 18.2f, 14, 2);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 22.2f, 14, 2);
                 StringKey keyText = fcMoM.NeedImport() ? CONTENT_IMPORT : CONTENT_REIMPORT;
                 ui.SetText(keyText);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -159,7 +159,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else // Import unavailable
             {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 18.2f, 24, 1);
+                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 22.2f, 24, 1);
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     ui.SetText(MOM_APP_NOT_FOUND_ANDROID, Color.red);
@@ -171,6 +171,7 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, Color.red);
             }
 
+#if false
             // Draw IA button
             startColor = Color.white;
             if (fcIA.NeedImport())
@@ -212,6 +213,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 new UIElementBorder(ui, Color.red);
             }
+#endif
 
             ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
@@ -220,6 +222,9 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(Exit);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, Color.red);
+
+            // will display a button if a new version is available
+            VersionManager.GetLatestVersionAsync(CheckForNewValkyrieVersion);
         }
 
         // Start game as D2E
@@ -279,7 +284,7 @@ namespace Assets.Scripts.UI.Screens
         public void IA()
         {
             // Not working yet
-            return;
+#if false
             // Check if import neeeded
             if (!fcIA.NeedImport())
             {
@@ -287,6 +292,7 @@ namespace Assets.Scripts.UI.Screens
                 loadLocalization();
                 Destroyer.MainMenu();
             }
+#endif
         }
 
         /// <summary>
@@ -350,6 +356,7 @@ namespace Assets.Scripts.UI.Screens
                         ValkyrieDebug.Log("Writing text asset to '" + f + "'");
                         File.WriteAllText(f, asset.ToString());
                     }
+                    bundle.Unload(false);
                 }
             }
             catch (System.Exception ex)
@@ -364,5 +371,33 @@ namespace Assets.Scripts.UI.Screens
         {
             Application.Quit();
         }
+
+        // Open link to releases and quit Valkyrie
+        public void GotoValkyrieVersion()
+        {
+            Application.OpenURL( VersionManager.GetlatestReleaseURL() );
+
+            Application.Quit();
+        }
+        
+        public void CheckForNewValkyrieVersion()
+        {
+            StringKey NEW_VERSION_AVAILABLE = new StringKey("val", "NEW_VERSION_AVAILABLE");
+
+            if ( VersionManager.VersionNewer(Game.Get().version, VersionManager.online_version) )
+            {
+                float string_width = 0f;
+                UIElement ui = new UIElement();
+                ui.SetText(NEW_VERSION_AVAILABLE, Color.green);
+                string_width = ui.GetStringWidth(NEW_VERSION_AVAILABLE, UIScaler.GetMediumFont());
+                ui.SetLocation(UIScaler.GetRight() - 3 - string_width, UIScaler.GetBottom(-3), string_width + 2, 2);
+                ui.SetText(NEW_VERSION_AVAILABLE, Color.green);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(GotoValkyrieVersion);
+                ui.SetBGColor(new Color(0, 0.03f, 0f));
+                new UIElementBorder(ui, Color.green);
+            }
+        }
+
     }
 }

@@ -32,17 +32,17 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Draw Description
-            float height = UIElement.GetStringHeight(q.description, 30);
-            if (height > 25) height = 25;
             ui = new UIElement();
+            float height = ui.GetStringHeight(q.description, 30);
+            if (height > 25) height = 25;
             ui.SetLocation(UIScaler.GetHCenter(-7), 15 - (height / 2), 30, height);
             ui.SetText(q.description);
             new UIElementBorder(ui);
 
             // Draw authors
-            height = UIElement.GetStringHeight(q.authors, 14);
-            if (height > 25) height = 25;
             ui = new UIElement();
+            height = ui.GetStringHeight(q.authors, 14);
+            if (height > 25) height = 25;
             ui.SetLocation(UIScaler.GetHCenter(-23), 18.5f - (height / 2), 14, height);
             ui.SetText(q.authors);
             new UIElementBorder(ui);

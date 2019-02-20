@@ -27,19 +27,7 @@ public class ShopInterface : Quest.BoardComponent
             game.quest.shops.Add(eventName, contentItems);
         }
         eventData = game.quest.qd.components[eventName] as QuestData.Event;
-        // Find quest UI panel
-        panel = GameObject.Find("QuestUIPanel");
-        if (panel == null)
-        {
-            // Create UI Panel
-            panel = new GameObject("QuestUIPanel");
-            panel.tag = Game.BOARD;
-            panel.transform.SetParent(game.uICanvas.transform);
-            panel.transform.SetAsFirstSibling();
-            panel.AddComponent<RectTransform>();
-            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
-            panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
-        }
+
         Update();
     }
 
@@ -153,14 +141,14 @@ public class ShopInterface : Quest.BoardComponent
             ui.SetLocation(3, vOffset + 4, 3, 1);
             ui.SetText(act);
             ui.SetButton(delegate { Buy(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
             ui.SetText(GetPurchasePrice(game.cd.items[s]).ToString());
             ui.SetButton(delegate { Buy(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
@@ -219,14 +207,14 @@ public class ShopInterface : Quest.BoardComponent
             ui.SetLocation(3, vOffset + 4, 3, 1);
             ui.SetText(act);
             ui.SetButton(delegate { Sell(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
             ui.SetText(GetSellPrice(game.cd.items[itemName]).ToString());
             ui.SetButton(delegate { Sell(itemName); });
-            ui.SetBGColor(Color.yellow);
+            ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
 
             vOffset += 7;
@@ -275,6 +263,8 @@ public class ShopInterface : Quest.BoardComponent
 
     public void Buy(string item)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
         ItemData itemData = game.cd.items[item];
         if (game.quest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
 
@@ -286,6 +276,8 @@ public class ShopInterface : Quest.BoardComponent
 
     public void Sell(string item)
     {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
         game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(game.cd.items[item]));
         game.quest.shops[eventData.sectionName].Add(item);
         game.quest.items.Remove(item);

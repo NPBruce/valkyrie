@@ -53,7 +53,16 @@ public class ContentData {
     /// The path as a string without a trailing '/'.</returns>
     public static string ImportPath()
     {
-        return Game.AppData() + "/" + Game.Get().gameType.TypeName() + "/import";
+        return GameTypePath + Path.DirectorySeparatorChar + "import";
+    }
+
+    /// <summary>
+    /// Get download directory without trailing '/'
+    /// </summary>
+    /// <returns>location to save / load packages</returns>
+    public static string DownloadPath()
+    {
+        return Game.AppData() + Path.DirectorySeparatorChar + "Download";
     }
 
     public static string TempPath
@@ -73,6 +82,38 @@ public class ContentData {
         get
         {
             return Path.Combine(TempPath, "Valkyrie");
+        }
+    }
+
+    public static string GameTypePath
+    {
+        get
+        {
+            return Path.Combine(Game.AppData() , Game.Get().gameType.TypeName());
+        }
+    }
+
+    public static string ValkyrieLoadPath
+    {
+        get
+        {
+            return Path.Combine(TempValyriePath, "Load");
+        }
+    }
+
+    public static string ValkyriePreloadPath
+    {
+        get
+        {
+            return Path.Combine(TempValyriePath, "Preload");
+        }
+    }
+
+    public static string ValkyrieLoadQuestPath
+    {
+        get
+        {
+            return Path.Combine(ValkyrieLoadPath, "quest");
         }
     }
 
@@ -147,23 +188,23 @@ public class ContentData {
     public void PopulatePackList(string path)
     {
         // All packs must have a content_pack.ini, otherwise ignore
-        if (File.Exists(path + "/content_pack.ini"))
+        if (File.Exists(path + Path.DirectorySeparatorChar + "content_pack.ini"))
         {
             ContentPack pack = new ContentPack();
 
             // Get all data from the file
-            IniData d = IniRead.ReadFromIni(path + "/content_pack.ini");
+            IniData d = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "content_pack.ini");
             // Todo: better error handling
             if (d == null)
             {
-                ValkyrieDebug.Log("Failed to get any data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get any data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
                 Application.Quit();
             }
 
             pack.name = d.Get("ContentPack", "name");
             if (pack.name.Equals(""))
             {
-                ValkyrieDebug.Log("Failed to get name data out of " + path + "/content_pack.ini!");
+                ValkyrieDebug.Log("Failed to get name data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
                 Application.Quit();
             }
 
@@ -177,7 +218,7 @@ public class ContentData {
             }
             else
             {
-                pack.image = path + "/" + d.Get("ContentPack", "image");
+                pack.image = path + Path.DirectorySeparatorChar + d.Get("ContentPack", "image");
             }
 
             // Black description isn't fatal
@@ -197,14 +238,14 @@ public class ContentData {
             // Get all the other ini files in the pack
             List<string> files = new List<string>();
             // content_pack file is included
-            files.Add(path + "/content_pack.ini");
+            files.Add(path + Path.DirectorySeparatorChar + "content_pack.ini");
 
             // No extra files is valid
             if (d.Get("ContentPackData") != null)
             {
                 foreach (string file in d.Get("ContentPackData").Keys)
                 {
-                    files.Add(path + "/" + file);
+                    files.Add(path + Path.DirectorySeparatorChar + file);
                 }
             }
             // Save list of files
@@ -224,7 +265,7 @@ public class ContentData {
                     {
                         dictFiles.Add(id, new List<string>());
                     }
-                    dictFiles[id].Add(path + "/" + file);
+                    dictFiles[id].Add(path + Path.DirectorySeparatorChar + file);
                 }
             }
             // Save list of files
@@ -1154,6 +1195,7 @@ public class ItemData : GenericData
     public int price = 0;
     public int minFame = -1;
     public int maxFame = -1;
+    public int qty = 1;
 
     public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
     {
@@ -1172,6 +1214,10 @@ public class ItemData : GenericData
         if (content.ContainsKey("maxfame"))
         {
             maxFame = Fame(content["maxfame"]);
+        }
+        if (content.ContainsKey("qty"))
+        {
+            int.TryParse(content["qty"], out qty);
         }
     }
 
@@ -1219,7 +1265,7 @@ public class MonsterData : GenericData
             }
             else
             {
-                imagePlace = path + "/" + content["imageplace"];
+                imagePlace = path + Path.DirectorySeparatorChar + content["imageplace"];
             }
         }
         else // No image is a valid condition
@@ -1351,11 +1397,21 @@ public class TokenData : GenericData
 
     public void init(Dictionary<string, string> content)
     {
-        if (content.ContainsKey("x"))
+
+        if (Application.platform == RuntimePlatform.Android && content.ContainsKey("x_android"))
+        {
+            int.TryParse(content["x_android"], out x);
+        }
+        else if (content.ContainsKey("x"))
         {
             int.TryParse(content["x"], out x);
         }
-        if (content.ContainsKey("y"))
+
+        if (Application.platform == RuntimePlatform.Android && content.ContainsKey("y_android"))
+        {
+            int.TryParse(content["y_android"], out y);
+        }
+        else if (content.ContainsKey("y"))
         {
             int.TryParse(content["y"], out y);
         }
@@ -1504,7 +1560,7 @@ public class AudioData : GenericData
             }
             else
             {
-                file = path + "/" + content["file"];
+                file = path + Path.DirectorySeparatorChar + content["file"];
             }
         }
     }

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using Ionic.Zip;
 using ValkyrieTools;
 using Assets.Scripts.Content;
+using Assets.Scripts;
 
 // This class provides functions to load and save games.
 class SaveManager
@@ -13,19 +13,20 @@ class SaveManager
     // This gets the path to the save game file.  Only one file is used/supported per game type.
     public static string SaveFile(int num = 0)
     {
-        Game game = Game.Get();
         string number = num.ToString();
         if (num == 0) number = "Auto";
-        return Game.AppData() + "/" + game.gameType.TypeName() + "/Save/save" + number + ".vSave";
+        return Path.Combine(ContentData.GameTypePath, "Save") + Path.DirectorySeparatorChar + "save" + number + ".vSave";
     }
 
     // This saves the current game to disk.  Will overwrite any previous saves
     public static void Save(int num = 0, bool quit = false)
     {
+        // wait to not overwrite save.ini and screen capture
+        ZipManager.Wait4PreviousSave();
         Game.Get().cc.TakeScreenshot(delegate { SaveWithScreen(num, quit); });
     }
 
-    public static void SaveWithScreen(int num, bool quit = false)
+    private static void SaveWithScreen(int num, bool quit = false)
     {
         Game game = Game.Get();
         try
@@ -34,13 +35,13 @@ class SaveManager
             {
                 Directory.CreateDirectory(Game.AppData());
             }
-            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName()))
+            if (!Directory.Exists(ContentData.GameTypePath))
             {
-                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName());
+                Directory.CreateDirectory(ContentData.GameTypePath);
             }
-            if (!Directory.Exists(Game.AppData() + "/" + game.gameType.TypeName() + "/Save"))
+            if (!Directory.Exists(Path.Combine(ContentData.GameTypePath, "Save")))
             {
-                Directory.CreateDirectory(Game.AppData() + "/" + game.gameType.TypeName() + "/Save");
+                Directory.CreateDirectory(Path.Combine(ContentData.GameTypePath, "Save"));
             }
             string tempValkyriePath = ContentData.TempValyriePath;
             if (!Directory.Exists(tempValkyriePath))
@@ -92,11 +93,31 @@ class SaveManager
             outTex.Apply();
             File.WriteAllBytes(Path.Combine(tempValkyriePath, "image.png"), outTex.EncodeToPNG());
 
-            ZipFile zip = new ZipFile();
-            zip.AddFile(Path.Combine(tempValkyriePath, "save.ini"), "");
-            zip.AddFile(Path.Combine(tempValkyriePath, "image.png"), "");
-            zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath), "quest");
-            zip.Save(SaveFile(num));
+            // Check if we should update the zip file or write a new one with quest content
+            // first autosave is a new zip file, following autosave just update the zip
+            bool zip_update = false;
+            if (num==0 && game.quest.firstAutoSaveDone)
+            {
+                zip_update = true;
+            }
+            else if (num == 0)
+            {
+                game.quest.firstAutoSaveDone = true;
+            }
+
+            // Quest content can be in original path, or savegame path
+            string quest_content_path;
+            if(game.quest.fromSavegame)
+            {
+                quest_content_path = ContentData.ValkyrieLoadQuestPath;
+            }
+            else
+            {
+                quest_content_path = game.quest.originalPath;
+            }
+
+            // zip in a separate thread
+            ZipManager.WriteZipAsync(tempValkyriePath, quest_content_path, SaveFile(num), zip_update);
         }
         catch (System.IO.IOException e)
         {
@@ -104,6 +125,7 @@ class SaveManager
         }
         if (quit)
         {
+            ZipManager.Wait4PreviousSave();
             Destroyer.MainMenu();
         }
     }
@@ -141,35 +163,40 @@ class SaveManager
                 }
 
                 Directory.Delete(valkyrieLoadPath, true);
-                ZipFile zip = ZipFile.Read(SaveFile(num));
-                zip.ExtractAll(valkyrieLoadPath);
-                zip.Dispose();
+                ZipManager.Extract(valkyrieLoadPath, SaveFile(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
 
+                string savefile_content = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
+                IniData saveData = IniRead.ReadFromString(savefile_content);
+
+                // when loading a quest, path should always be $TMP/load/quest/$subquest/quest.ini
+                // Make sure it is when loading a quest saved for the first time, as in that case it is the original load path
+                string questLoadPath = Path.GetDirectoryName(saveData.Get("Quest", "path"));
+                string questOriginalPath = saveData.Get("Quest", "originalpath");
+
+                // loading a quest saved for the first time
+                if (questLoadPath.Contains(questOriginalPath))
+                {
+                    questLoadPath = questLoadPath.Replace(questOriginalPath, ContentData.ValkyrieLoadQuestPath);
+                }
+                
                 // Check that quest in save is valid
-                QuestData.Quest q = new QuestData.Quest(Path.Combine(valkyrieLoadPath, "quest"));
+                QuestData.Quest q = new QuestData.Quest(questLoadPath);
                 if (!q.valid)
                 {
                     ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
                     return;
                 }
+                saveData.data["Quest"]["path"] = Path.Combine(questLoadPath, "quest.ini");
 
-                string data = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
-
-                IniData saveData = IniRead.ReadFromString(data);
-
-                saveData.data["Quest"]["path"] = Path.Combine(valkyrieLoadPath, "quest" + Path.DirectorySeparatorChar + "quest.ini");
-
-                saveData.Get("Quest","valkyrie");
-
-                if (VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
+                if (VersionManager.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Error: save is from a future version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
                     return;
                 }
 
-                if (!VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
+                if (!VersionManager.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Error: save is from an old unsupported version." + System.Environment.NewLine);
                     Destroyer.MainMenu();
@@ -253,57 +280,6 @@ class SaveManager
         }
     }
 
-    // Test version of the form a.b.c is newer or equal
-    public static bool VersionNewerOrEqual(string oldVersion, string newVersion)
-    {
-        string oldS = System.Text.RegularExpressions.Regex.Replace(oldVersion, "[^0-9]", "");
-        string newS = System.Text.RegularExpressions.Regex.Replace(newVersion, "[^0-9]", "");
-        // If numbers are the same they are equal
-        if (oldS.Equals(newS)) return true;
-        return VersionNewer(oldVersion, newVersion);
-    }
-
-    // Test version of the form a.b.c is newer
-    public static bool VersionNewer(string oldVersion, string newVersion)
-    {
-        // Split into components
-        string[] oldV = oldVersion.Split('.');
-        string[] newV = newVersion.Split('.');
-
-        if (newVersion.Equals("")) return false;
-
-        if (oldVersion.Equals("")) return true;
-
-        // Different number of components
-        if (oldV.Length != newV.Length)
-        {
-            return true;
-        }
-        // Check each component
-        for (int i = 0; i < oldV.Length; i++)
-        {
-            // Strip for only numbers
-            string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
-            string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
-            try
-            {
-                if (int.Parse(oldS) < int.Parse(newS))
-                {
-                    return true;
-                }
-                if (int.Parse(oldS) > int.Parse(newS))
-                {
-                    return false;
-                }
-            }
-            catch (System.Exception)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static List<SaveData> GetSaves()
     {
         List<SaveData> saves = new List<SaveData>();
@@ -317,7 +293,7 @@ class SaveManager
     public class SaveData
     {
         public bool valid = false;
-        public string quest;
+        public string quest_name;
         public System.DateTime saveTime;
         public Texture2D image;
 
@@ -331,45 +307,48 @@ class SaveManager
                 {
                     Directory.CreateDirectory(ContentData.TempValyriePath);
                 }
-                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Load");
+                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Preload");
                 if (!Directory.Exists(valkyrieLoadPath))
                 {
                     Directory.CreateDirectory(valkyrieLoadPath);
                 }
 
-                Directory.Delete(valkyrieLoadPath, true);
-                ZipFile zip = ZipFile.Read(SaveFile(num));
-                zip.ExtractAll(valkyrieLoadPath);
-                zip.Dispose();
+                ZipManager.Extract(valkyrieLoadPath, SaveFile(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_SAVE_INI_PIC);
 
                 image = ContentData.FileToTexture(Path.Combine(valkyrieLoadPath, "image.png"));
 
-                // Check that quest in save is valid
-                QuestData.Quest q = new QuestData.Quest(Path.Combine(valkyrieLoadPath, "quest"));
+                string data = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
+                IniData saveData = IniRead.ReadFromString(data);
+
+                // when loading a quest, path should always be $TMP/load/quest/$subquest/quest.ini
+                // Make sure it is when loading a quest saved for the first time, as in that case it is the original load path
+                string questLoadPath = Path.GetDirectoryName(saveData.Get("Quest", "path"));
+                string questOriginalPath = saveData.Get("Quest", "originalpath");
+
+                // loading a quest saved for the first time
+                if (questLoadPath.Contains(questOriginalPath))
+                {
+                    questLoadPath = questLoadPath.Replace(questOriginalPath, ContentData.ValkyrieLoadQuestPath);
+                }
+
+                // use preload path rather than load
+                questLoadPath = questLoadPath.Replace(ContentData.ValkyrieLoadPath, ContentData.ValkyriePreloadPath);
+                QuestData.Quest q = new QuestData.Quest(questLoadPath);
                 if (!q.valid)
                 {
                     ValkyrieDebug.Log("Warning: Save " + num + " contains unsupported quest version." + System.Environment.NewLine);
                     return;
                 }
 
-                DictionaryI18n tmpDict = LocalizationRead.selectDictionary("qst");
-                LocalizationRead.AddDictionary("qst", q.localizationDict);
-                quest = q.name.Translate();
-                LocalizationRead.AddDictionary("qst", tmpDict);
+                quest_name = saveData.Get("Quest", "questname");
 
-                string data = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
-
-                IniData saveData = IniRead.ReadFromString(data);
-
-                saveData.Get("Quest", "valkyrie");
-
-                if (VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
+                if (VersionManager.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Warning: Save " + num + " is from a future version." + System.Environment.NewLine);
                     return;
                 }
 
-                if (!VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
+                if (!VersionManager.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
                 {
                     ValkyrieDebug.Log("Warning: Save " + num + " is from an old unsupported version." + System.Environment.NewLine);
                     return;
@@ -381,7 +360,7 @@ class SaveManager
             }
             catch (System.Exception e)
             {
-                ValkyrieDebug.Log("Warning: Unable to open save file: " + SaveFile(num) + " " + e.Message);
+                ValkyrieDebug.Log("Warning: Unable to open save file: " + SaveFile(num) + "\nException: " + e.ToString());
             }
         }
     }

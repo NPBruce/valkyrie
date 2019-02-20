@@ -292,6 +292,8 @@ namespace FFGAppImport
         {
             if (file == null) throw new ArgumentNullException("file");
 
+            ValkyrieDebug.Log("Import asset from " + file);
+
             using (FileStream fs = File.OpenRead(file))
             {
                 using (var endianStream = new EndianStream(fs, EndianType.BigEndian))
@@ -333,7 +335,12 @@ namespace FFGAppImport
                 //case 89: //CubeMap
                 case 128: //Font
                     {
-                        ExportFont(assetPreloadData);
+                        /*
+                         * Do not Import fonts from Unity package anymore : an exception error on Android is blocking the Import for MoM.
+						 * see #964: MoM 1.7.0 - broken import on Android bug 
+						 */
+						
+						// ExportFont(assetPreloadData);
                         break;
                     }
                 //case 129: //PlayerSettings
@@ -523,8 +530,12 @@ namespace FFGAppImport
             string fileCandidate = Path.Combine(fontsPath, asset.Text);
 
             font = new Unity_Studio.unityFont(asset, true);
-            
-            if (font.m_FontData == null) return;
+
+            if (font.m_FontData == null)
+            {
+                ValkyrieDebug.Log("ERROR ExportFont: '" + asset.Text);
+                return;
+            }
 
             // This should apends a postfix to the name to avoid collisions
             string fileName = GetAvailableFileName(fileCandidate, ".ttf");

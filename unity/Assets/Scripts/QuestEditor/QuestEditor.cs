@@ -9,7 +9,7 @@ using System.Text;
 public class QuestEditor {
 
     // start editing a quest
-    public static void Begin()
+    public static void Begin(string path)
     {
         Game game = Game.Get();
         game.editMode = true;
@@ -18,24 +18,25 @@ public class QuestEditor {
         new ToolsButton();
 
         // re-read quest data
-        Reload();
+        Reload(path);
     }
 
     // Reload a quest from file
-    public static void Reload()
+    public static void Reload(string path)
     {
         Destroyer.Dialog();
 
         Game game = Game.Get();
+
         // Remove all current components
-        game.quest.RemoveAll();
+        if (game.quest != null)   game.quest.RemoveAll();
 
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
 
         // Read from file
-        game.quest.qd = new QuestData(game.quest.qd.questPath);
+        game.quest = new Quest(new QuestData.Quest(path));
 
         // Is this needed?
         game.quest.RemoveAll();
@@ -147,8 +148,7 @@ public class QuestEditor {
             }
         }
 
-        // Reload quest
-        Reload();
+        Destroyer.Dialog();
     }
 
     /// <summary>

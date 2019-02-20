@@ -57,6 +57,10 @@ public class Destroyer {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.UIPHASE))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'endgame'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.ENDGAME))
+            Object.Destroy(go);
+
         Game game = Game.Get();
 
         game.heroCanvas.Clean();
@@ -76,6 +80,14 @@ public class Destroyer {
         game.testMode = false;
     }
 
+    // Close logs
+    public static void Logs()
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.LOGS))
+            Object.Destroy(go);
+    }
+
     // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
     public static void Dialog()
     {
@@ -86,5 +98,13 @@ public class Destroyer {
         CameraController.panDisable = false;
         Game.Get().logWindow = null;
         Resources.UnloadUnusedAssets();
+    }
+
+    // Remove transition screen between phases
+    public static void Transition()
+    {
+        // Clean up everything marked as 'transition'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.TRANSITION))
+            Object.Destroy(go);
     }
 }

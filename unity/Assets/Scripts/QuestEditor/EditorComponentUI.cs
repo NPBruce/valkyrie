@@ -199,11 +199,11 @@ public class EditorComponentUI : EditorComponentEvent
 
         // Create a grey zone outside of the 16x9 boundary
         // Find quest UI panel
-        GameObject panel = GameObject.Find("QuestUIPanel");
+        GameObject panel = GameObject.Find("QuestUICanvas");
         if (panel == null)
         {
             // Create UI Panel
-            panel = new GameObject("QuestUIPanel");
+            panel = new GameObject("QuestUICanvas");
             panel.tag = Game.BOARD;
             panel.transform.SetParent(game.uICanvas.transform);
             panel.transform.SetAsFirstSibling();
@@ -369,8 +369,8 @@ public class EditorComponentUI : EditorComponentEvent
         {
             LocalizationRead.updateScenarioText(uiComponent.uitext_key, textUIE.GetText());
         }
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        game.quest.Remove(uiComponent.sectionName);
+        game.quest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -388,7 +388,6 @@ public class EditorComponentUI : EditorComponentEvent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectColour, CommonStringKeys.SELECT_ITEM);
         foreach (KeyValuePair<string, string> kv in ColorUtil.LookUp())

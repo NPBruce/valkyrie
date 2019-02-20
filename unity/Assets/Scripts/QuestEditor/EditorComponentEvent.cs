@@ -6,6 +6,10 @@ using Assets.Scripts.UI;
 
 public class EditorComponentEvent : EditorComponent
 {
+    //  Not used yet
+    //private readonly StringKey NEXT_EVENTS = new StringKey("val", "NEXT_EVENTS");
+    //private readonly StringKey VARS = new StringKey("val", "VARS");
+
     private readonly StringKey MIN_CAM = new StringKey("val", "MIN_CAM");
     private readonly StringKey MAX_CAM = new StringKey("val", "MAX_CAM");
     private readonly StringKey UNUSED = new StringKey("val", "UNUSED");
@@ -16,8 +20,6 @@ public class EditorComponentEvent : EditorComponent
     private readonly StringKey MAX = new StringKey("val", "MAX");
     private readonly StringKey MIN = new StringKey("val", "MIN");
     private readonly StringKey DIALOG = new StringKey("val", "DIALOG");
-    private readonly StringKey NEXT_EVENTS = new StringKey("val", "NEXT_EVENTS");
-    private readonly StringKey VARS = new StringKey("val", "VARS");
     private readonly StringKey SELECTION = new StringKey("val", "SELECTION");
     private readonly StringKey AUDIO = new StringKey("val", "AUDIO");
     private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
@@ -802,7 +804,7 @@ public class EditorComponentEvent : EditorComponent
         }
         else
         {
-            string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + "/" + eventComponent.audio;
+            string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + eventComponent.audio;
             game.audioControl.Play(path);
         }
         Update();
@@ -1137,7 +1139,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectQuotaVar, new StringKey("val", "SELECT", VAR));
 
@@ -1332,7 +1333,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddOp(s); }, new StringKey("val", "SELECT", VAR));
 
@@ -1372,7 +1372,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectAddOp(s, false); }, new StringKey("val", "SELECT", VAR));
 
@@ -1524,7 +1523,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
 
@@ -1544,7 +1542,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s); }, new StringKey("val", "SELECT", OP));
 
@@ -1570,7 +1567,6 @@ public class EditorComponentEvent : EditorComponent
         {
             return;
         }
-        Game game = Game.Get();
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectSetValue(op, s); }, new StringKey("val", "SELECT", VALUE));
 
