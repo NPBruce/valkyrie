@@ -1001,9 +1001,14 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
                 ui.SetTextPadding(0.5f);
+                if (name_translation.Length >= 70)
+                    name_translation = name_translation.Substring(0, 65) + "(...)";
                 ui.SetText(name_translation, Color.black);
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
+                if (game.gameType.TypeName() == "MoM")
+                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
+                if (game.gameType.TypeName() == "D2E")
+                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.28f));
                 ui.SetFont(game.gameType.GetHeaderFont());
 
                 // Required expansions
@@ -1068,7 +1073,10 @@ namespace Assets.Scripts.UI.Screens
                         synopsys_translation=synopsys_translation.Substring(0, 100) + "(...)";
                     ui.SetText(synopsys_translation, dark_grey_text_color);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                    ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.85f));
+                    if (game.gameType.TypeName() == "MoM")
+                        ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.87f));
+                    if (game.gameType.TypeName() == "D2E")
+                        ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.80f));
                     ui.SetFontStyle(FontStyle.Italic);
                     ui.SetFont(game.gameType.GetHeaderFont());
                 }
