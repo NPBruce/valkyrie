@@ -5,8 +5,8 @@ UnityConnectSettings:
   m_ObjectHideFlags: 0
   m_Enabled: 1
   m_TestMode: 0
-  m_TestEventUrl: 
-  m_TestConfigUrl: 
+  m_TestEventUrl:
+  m_TestConfigUrl:
   m_TestInitMode: 0
   CrashReportingSettings:
     m_EventUrl: https://perf-events.cloud.unity3d.com/api/events/crashes
@@ -20,15 +20,15 @@ UnityConnectSettings:
     m_Enabled: 0
     m_InitializeOnStartup: 1
     m_TestMode: 0
-    m_TestEventUrl: 
-    m_TestConfigUrl: 
+    m_TestEventUrl:
+    m_TestConfigUrl:
   UnityAdsSettings:
     m_Enabled: 0
     m_InitializeOnStartup: 1
     m_TestMode: 0
-    m_IosGameId: 
-    m_AndroidGameId: 
+    m_IosGameId:
+    m_AndroidGameId:
     m_GameIds: {}
-    m_GameId: 
+    m_GameId:
   PerformanceReportingSettings:
     m_Enabled: 0

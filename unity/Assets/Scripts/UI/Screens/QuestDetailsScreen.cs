@@ -90,13 +90,17 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(UIScaler.GetMediumFont());
             }
 
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetRight(-8.5f), 0.5f, 8, 2);
-            ui.SetText(CommonStringKeys.DELETE, Color.grey);
-            ui.SetFont(game.gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate { Delete(q); });
-            new UIElementBorder(ui, Color.grey);
+            // DELETE button (only for archive, directory might be edited by user)
+            if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetRight(-8.5f), 0.5f, 8, 2);
+                ui.SetText(CommonStringKeys.DELETE, Color.grey);
+                ui.SetFont(game.gameType.GetHeaderFont());
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Delete(q); });
+                new UIElementBorder(ui, Color.grey);
+            }
 
             ui = new UIElement();
             ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
