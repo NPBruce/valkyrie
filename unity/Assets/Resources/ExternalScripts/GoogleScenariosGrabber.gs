@@ -85,6 +85,9 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        Logger.log("parse");
        quest_parser.parse(response.getContentText());
        
+       if(quest_parser.invalidContent != "" && MailApp.getRemainingDailyQuota()>0)
+          MailApp.sendEmail("valkyrieboardgameapp@gmail.com", "ALERT: Invalid content in "+element.name, parser.invalidContent);
+       
        // add URL in the data
        quest_parser.set("Quest", "url", url);
        
