@@ -138,6 +138,8 @@
         };
 
         this._ini.sections.push(_createSection(DEFAULT_SECTION));
+      
+        this.invalidContent = "";
     };
 
     /*
@@ -179,7 +181,7 @@
      * Get a specify option value
      * @param {string} sectionName the name defined in ini [section name]
      * @param {string} optionName the name defined in ini option-name = option-value
-     * @param {object} defaultValue use the default value if the option is not exist
+     * @param {object} defaultValue use the default value if the option does not exist
      * @return {string/object} the string value of the option or the defaultValue
      */
     ConfigIniParser.prototype.get = function (sectionName, optionName, defaultValue) {
@@ -438,7 +440,10 @@
                 continue;
             }
 
-            throw error;
+            // if we are here, it means invalid text is in the ini file, raise an alert
+            this.invalidContent += "ALERT: Invalid lines in one scenario content! : "+ iniContent;
+            Logger.log("ALERT: Invalid lines in one scenario content! : "+ iniContent);
+            // we continue anyway (this will generate spam)
         }
         return this;
     };
