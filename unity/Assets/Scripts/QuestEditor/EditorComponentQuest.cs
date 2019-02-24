@@ -24,7 +24,7 @@ public class EditorComponentQuest : EditorComponent
     public UIElementEditablePaneled descriptionUIE;
     public UIElementEditablePaneled synopsysUIE;
     public UIElementEditablePaneled authorsUIE;
-    public UIElementEditablePaneled authors_shortUIE;
+    public UIElementEditable authors_shortUIE;
 
     // Quest is a special component with meta data
     public EditorComponentQuest()
@@ -102,6 +102,7 @@ public class EditorComponentQuest : EditorComponent
         synopsysUIE.SetText(game.quest.qd.quest.synopsys.Translate(true));
         offset += synopsysUIE.HeightToTextPadding(1);
         synopsysUIE.SetButton(delegate { UpdateQuestSynopsys(); });
+        synopsysUIE.SetSingleLine();
         new UIElementBorder(synopsysUIE);
         offset += 1;
 
@@ -123,12 +124,12 @@ public class EditorComponentQuest : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "AUTHORS_SHORT")));
         ui.SetTextAlignment(TextAnchor.MiddleLeft);
 
-        authors_shortUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
+        authors_shortUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         authors_shortUIE.SetLocation(0.5f, offset, 19, 1f);
-
         authors_shortUIE.SetText(game.quest.qd.quest.authors_short.Translate(true));
         offset += authors_shortUIE.HeightToTextPadding(0);
         authors_shortUIE.SetButton(delegate { UpdateQuestShortAuth(); });
+        authors_shortUIE.SetSingleLine();
         new UIElementBorder(authors_shortUIE);
         offset += 1;
         

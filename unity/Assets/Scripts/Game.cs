@@ -395,8 +395,17 @@ public class Game : MonoBehaviour {
 
     private static void SetScreenOrientationToLandscape()
     {
+        try
+        {
         SetDisplayAutoRotationPreferences((int)ORIENTATION_PREFERENCE.ORIENTATION_PREFERENCE_LANDSCAPE |
             (int)ORIENTATION_PREFERENCE.ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED);
+        }
+
+        catch (System.EntryPointNotFoundException e)
+        {
+            Debug.Log("Exception triggered and caught :" + e.GetType().Name);
+            Debug.Log("message :" + e.Message);
+        }
     }
 
     private enum ORIENTATION_PREFERENCE

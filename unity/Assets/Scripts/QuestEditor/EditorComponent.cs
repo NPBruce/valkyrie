@@ -761,8 +761,15 @@ public class EditorComponent {
             }
             if (test)
             {
-                //component.conditions.Add(op);
-                component.tests.Add(op);
+                if (component.tests.VarTestsComponents.Count == 0)
+                {
+                    component.tests.Add(op);
+                }
+                else
+                {
+                    component.tests.Add(new VarTestsLogicalOperator());
+                    component.tests.Add(op);
+                }
             }
             else
             {
