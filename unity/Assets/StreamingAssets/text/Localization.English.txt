@@ -512,6 +512,8 @@ snow,Snow
 lava,Lava
 swamp,Swamp
 sludge,Sludge
+ship,Ship
+train,Train
 
 // Colors
 black,Black
