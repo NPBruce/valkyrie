@@ -348,6 +348,8 @@ snow,Schnee
 lava,Lava
 swamp,Sumpf
 sludge,Schlamm
+ship,Schiff
+train,Zug
 
 // Colors
 black,Schwarz
