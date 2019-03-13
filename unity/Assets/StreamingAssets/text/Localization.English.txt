@@ -282,6 +282,7 @@ FA,FA 
 FAT,FAT 
 FAI,FAI 
 FAM,FAM 
+HJ,HJ 
 MoM1E,MoM1E 
 MoM1ET,MoM1ET 
 MoM1EI,MoM1EI 
@@ -302,6 +303,7 @@ FA_SYMBOL,
 FAT_SYMBOL,
 FAI_SYMBOL,
 FAM_SYMBOL,
+HJ_SYMBOL,
 MoM1E_SYMBOL,
 MoM1ET_SYMBOL,
 MoM1EI_SYMBOL,
@@ -510,6 +512,8 @@ snow,Snow
 lava,Lava
 swamp,Swamp
 sludge,Sludge
+ship,Ship
+train,Train
 
 // Colors
 black,Black
