@@ -925,7 +925,6 @@ namespace Assets.Scripts.UI.Screens
                 {
                     LocalizationRead.AddDictionary("qst", q.localizationDict);
                     name_translation = q.name.Translate();
-                    LocalizationRead.AddDictionary("qst", q.localizationDict);
                     synopsys_translation = q.synopsys.Translate(true);
                 }
 
