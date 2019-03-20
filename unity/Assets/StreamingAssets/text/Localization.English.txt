@@ -67,7 +67,7 @@ COLOR,Colour
 COMPONENT_NAME,Component Name:
 COMPONENT_TO_DELETE,Component to Delete:
 CONTENT_IMPORT,Import Content
-CONTENT_IMPORTING,Importing...
+CONTENT_IMPORTING,Importing...\nThis may take a few minutes
 CONTENT_REIMPORT,Reimport Content
 CONTENT_LOCATE,Locate the game
 CONTENT_INSTALL_VIA_STEAM,Install via Steam

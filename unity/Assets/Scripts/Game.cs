@@ -116,6 +116,9 @@ public class Game : MonoBehaviour {
         {
             // activate crashlytics
             DebugManager.Enable();
+
+            // deactivate screen timeount while in Valkyrie
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
         // Find the common objects we use.  These are created by unity.
