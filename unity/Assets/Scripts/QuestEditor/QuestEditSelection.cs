@@ -384,6 +384,8 @@ public class QuestEditSelection
     // Select a quest for editing
     public void Selection(string key)
     {
+        ValkyrieDebug.Log("INFO: Select quest " + key + " for editing");
+
         Game game = Game.Get();
 
         // Remove all current components

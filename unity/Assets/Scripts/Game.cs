@@ -111,6 +111,12 @@ public class Game : MonoBehaviour {
     // Unity fires off this function
     void Awake()
     {
+        // Set specific configuration for Android 
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // activate crashlytics
+            DebugManager.Enable();
+        }
 
         // Find the common objects we use.  These are created by unity.
         cc = GameObject.FindObjectOfType<CameraController>();

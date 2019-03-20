@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Content;
 using UnityEngine;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -38,6 +39,8 @@ namespace Assets.Scripts.UI.Screens
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public EndGameScreen()
         {
+            ValkyrieDebug.Log("INFO: Show end screen");
+
             Game game = Game.Get();
 
             // Investigator picture in background full screen
@@ -189,7 +192,9 @@ namespace Assets.Scripts.UI.Screens
         // Send data to Google forms
         private void SendStats()
         {
-            if(game_won=="not set" || selected_rating == 0)
+            ValkyrieDebug.Log("INFO: Go back to main menu and provide feedback");
+
+            if (game_won=="not set" || selected_rating == 0)
             {
                 error_message.SetText(STATS_MISSING_INFO,Color.red);
                 error_message.SetBGColor(Color.clear);
@@ -205,6 +210,7 @@ namespace Assets.Scripts.UI.Screens
 
         private void MainMenu()
         {
+            ValkyrieDebug.Log("INFO: Go back to main menu without providing feedback");
             Destroyer.MainMenu();
         }
 

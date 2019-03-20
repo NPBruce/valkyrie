@@ -9,4 +9,5 @@
     <meta-data android:name="io.fabric.kits" android:value="crashlytics" />
     <meta-data android:name="io.fabric.InitializationType" android:value="Automatic" />
   </application>
+  <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26" />
 </manifest>

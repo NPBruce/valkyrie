@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
 using System.Collections;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -240,10 +241,13 @@ namespace Assets.Scripts.UI.Screens
         {
             if (go_online)
             {
+                ValkyrieDebug.Log("INFO: Set online mode for quests");
+
                 game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
             }
             else
             {
+                ValkyrieDebug.Log("INFO: Set offline mode for quests");
                 game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
             }
 
@@ -1290,6 +1294,8 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Selection(string key)
         {
+            ValkyrieDebug.Log("INFO: Select quest "+ key);
+
             QuestData.Quest q = game.questsList.GetQuestData(key);
 
             Destroyer.Dialog();
@@ -1298,16 +1304,19 @@ namespace Assets.Scripts.UI.Screens
             if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
             {
                 // Play
+                ValkyrieDebug.Log("INFO: ... and launch offline quest");
                 new QuestDetailsScreen(q);
             }
             else if (q.downloaded && !q.update_available)
             {
                 // Play
+                ValkyrieDebug.Log("INFO: ... and launch online quest");
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
             }
             else
             {
                 // Download / Update
+                ValkyrieDebug.Log("INFO: ... and download quest");
                 GameObject download = new GameObject("downloadPage");
                 download.tag = Game.QUESTUI;
                 QuestDownload qd = download.AddComponent<QuestDownload>();

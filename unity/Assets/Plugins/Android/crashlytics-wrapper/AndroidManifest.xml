@@ -2,4 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.fabric.unity.crashlytics.android.crashlyticswrapper">
   <application>
   </application>
+  <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26" />
 </manifest>
