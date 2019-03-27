@@ -2046,6 +2046,10 @@ public class Quest
     {
         // Content Data
         public MonsterData monsterData;
+
+        // Spawn event name used later for defeated triggers
+        public string spawnEventName;
+
         // What dulpicate number is the monster?
         public int duplicate = 0;
 
@@ -2072,6 +2076,7 @@ public class Quest
         public Monster(EventManager.MonsterEvent monsterEvent)
         {
             monsterData = monsterEvent.cMonster;
+            spawnEventName = monsterEvent.qMonster.sectionName;
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
