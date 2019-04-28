@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -127,6 +128,8 @@ namespace Assets.Scripts.UI.Screens
         /// <param file="file">File name to delete</param>
         public void Delete(QuestData.Quest q)
         {
+            ValkyrieDebug.Log("INFO: Delete quest");
+
             string toDelete = "";
 
             if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
@@ -154,6 +157,8 @@ namespace Assets.Scripts.UI.Screens
         // Return to quest selection
         public void Cancel()
         {
+            ValkyrieDebug.Log("INFO: Return to quest list from details screen");
+
             Destroyer.Dialog();
 
             // Pull up the quest selection page
@@ -163,6 +168,8 @@ namespace Assets.Scripts.UI.Screens
         // Select a quest
         public void Start(QuestData.Quest q)
         {
+            ValkyrieDebug.Log("INFO: Start quest from details screen");
+
             Destroyer.Dialog();
             Game.Get().StartQuest(q);
         }

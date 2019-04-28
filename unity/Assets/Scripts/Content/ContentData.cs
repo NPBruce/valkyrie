@@ -1352,7 +1352,15 @@ public class MonsterData : GenericData
         {
             if (ad.attackType.Equals(type))
             {
-                validAttacks.Add(ad);
+                if(traits.Length == 0)
+                {
+                    ValkyrieDebug.Log("Monster with no traits, this should not happen");
+                    validAttacks.Add(ad);
+                }
+                else if (traits.Contains(ad.target))
+                {
+                    validAttacks.Add(ad);
+                }
             }
         }
         return validAttacks[Random.Range(0, validAttacks.Count)].text;

@@ -98,6 +98,9 @@ public class Game : MonoBehaviour {
     // Debug option
     public bool debugTests = false;
 
+    // main thread Id
+    public System.Threading.Thread mainThread = null;
+
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
     {
@@ -111,6 +114,18 @@ public class Game : MonoBehaviour {
     // Unity fires off this function
     void Awake()
     {
+        // save main thread Id
+        mainThread = System.Threading.Thread.CurrentThread;
+
+        // Set specific configuration for Android 
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // activate crashlytics
+            DebugManager.Enable();
+
+            // deactivate screen timeount while in Valkyrie
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        }
 
         // Find the common objects we use.  These are created by unity.
         cc = GameObject.FindObjectOfType<CameraController>();

@@ -185,6 +185,9 @@ public class MonsterDialogMoM : MonsterDialog
         
         game.audioControl.PlayTrait("defeated");
 
+        // end this event (fix #1112)
+        Game.Get().quest.eManager.currentEvent = null;
+        
         // Trigger defeated event
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         // If unique trigger defeated unique event

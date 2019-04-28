@@ -320,6 +320,8 @@ namespace Assets.Scripts.UI.Screens
         // Start game as D2E
         public void D2E()
         {
+            ValkyrieDebug.Log("INFO: Start game as D2E");
+
             // Check if import neeeded
             if (!fcD2E.NeedImport())
             {
@@ -356,7 +358,10 @@ namespace Assets.Scripts.UI.Screens
         {
             string path = null;
 
-            if(manual_path_selection)
+            ValkyrieDebug.Log("INFO: Import "+type);
+
+
+            if (manual_path_selection)
             {
                 string app_filename="";
                 if (type.Equals("D2E")) app_filename = "Road to Legend";
@@ -400,6 +405,8 @@ namespace Assets.Scripts.UI.Screens
         // Start game as MoM
         public void MoM()
         {
+            ValkyrieDebug.Log("INFO: Start game as MoM");
+
             // Check if import neeeded
             if (!fcMoM.NeedImport())
             {
@@ -521,12 +528,16 @@ namespace Assets.Scripts.UI.Screens
         // Exit Valkyrie
         public void Exit()
         {
+            ValkyrieDebug.Log("INFO: Leaving Valkyrie");
+
             Application.Quit();
         }
 
         // Open link and quit Valkyrie
         public void GotoWebBrowser(string url)
         {
+            ValkyrieDebug.Log("INFO: Accessing new version");
+
             Application.OpenURL(url);
 
             Application.Quit();

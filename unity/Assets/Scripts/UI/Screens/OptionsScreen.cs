@@ -353,6 +353,9 @@ namespace Assets.Scripts.UI.Screens
             ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
 
             new OptionsScreen();
+
+            // clear list of local quests to make sure we take the latest changes
+            Game.Get().questsList.UnloadLocalQuests();
         }
     }
 }
