@@ -7,3 +7,5 @@
 # Auto generated files
 /libraries/FFGAppImport/obj
 /libraries/ValkyrieTools/obj
+unity/Assets/StreamingAssets/crashlytics-build.properties
+unity/Assets/StreamingAssets/crashlytics-build.properties.meta

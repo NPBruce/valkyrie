@@ -1,4 +1,4 @@
-﻿.,Polish
+.,Polish
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
@@ -16,8 +16,8 @@ SOURCE,Źródło
 COMMENT,Komentarz
 TRUE,Prawda
 FALSE,Fałsz
-SNAP,Zdjęcie
-FREE,Darmowy
+SNAP,Ustaw
+FREE,Dowolnie
 CONFIRM,Potwierdź
 INSPECT,Sprawdź
 DURATION,Czas Trwania
@@ -28,8 +28,8 @@ VALIDATE_SCENARIO,Zatwierdź Scenariusz
 FILE,Plik
 OPTIMIZE_LOCALIZATION,Optymalizuj tłumaczenie
 CREATE_PACKAGE,Utwórz pakiet
-REORDER_COMPONENTS,Zmień kolejność komponent.
-ASSIGN,Przydziel
+REORDER_COMPONENTS,Zmień kolejność komponentów.
+ASSIGN,Przydziel zmienną
 ATTACK,Atak
 ATTACK_MESSAGE,Komunikat Ataku:
 AUDIO,Audio
@@ -52,7 +52,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
 CONTENT_LOCATE,Zlokalizuj katalog z grą
 CONTINUE,Kontynuuj
 COPY,Kopiuj
-CUSTOMMONSTER,Personalizacja Potwora
+CUSTOMMONSTER,Modyfikacja Potwora
 D2E_APP_NOT_FOUND,Nie znaleziono gry.
 D2E_HEROES_NAME,Bohaterowie
 D2E_HERO_NAME,Bohater
@@ -60,12 +60,12 @@ D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
 D2E_QUEST_NAME,Przygoda
 DEFEATED,Pokonany
 DELETE,Usuń
-UPDATE,Aktualizacja
-DIALOG,Dialog
+UPDATE,Aktualizuj
+DIALOG,Wyświetlany tekst
 DOOR,Drzwi
 DOWNLOAD,Pobierz
-DOWNLOAD_LIST,Pobieranie listy pakietów...
-DOWNLOAD_PACKAGE,Pobieranie pakietu...
+DOWNLOAD_LIST,Pobierz listy pakietów...
+DOWNLOAD_PACKAGE,Pobierz pakietu...
 E,E
 EFFECTS,Efekty
 END_TURN,Koniec Tury
@@ -92,7 +92,7 @@ LOAD_QUEST,Kontynuuj
 LOG,Log
 SKILLS,Umiejętności
 ITEMS,Przedmioty
-ITEMS_SMALL,Items
+ITEMS_SMALL, Małe przedmioty
 GOLD,Złoto
 MAIN_MENU,Menu Główne
 MAX,Max
@@ -110,7 +110,7 @@ MONSTER,Potwór
 MONSTER_ATTACKS,Potwór Atakuje
 MONSTER_MASTER,Elitarny
 MONSTER_MASTER_X,Elitarny {0}
-MONSTER_MINION,Sługus
+MONSTER_MINION,Sługa
 MONSTER_NORMAL,Normalny
 
 MONSTER_UNIQUE,Niepowtarzalny
@@ -122,11 +122,11 @@ NEW,Nowy
 NEW_X,{Nowy {0}}
 NONE,{Żaden}
 
-NEXT_EVENTS,Kolejne Wydarzenie
+NEXT_EVENTS,Porządek wydarzeń
 NOT_FIRST,Nie Pierwszy
 NO_ATTACK_MESSAGE,Wiadomość Poza Atakiem:
 
-NUMBER,Numer
+NUMBER,Liczba
 NUMBER_HEROS,{0} Bohater:
 OK,Ok
 OP,Operator
@@ -135,9 +135,9 @@ PLACEMENT,Rozmieszczenie
 
 PLACE_IMG,Umieść Obraz
 POOL_TRAITS,Pula Atrybutów:
-POSITION,Pozycja
+POSITION,Pozycja kamery
 POSITION_TYPE_HIGHLIGHT,Podświetl
-POSITION_TYPE_UNUSED,Nieużywany
+POSITION_TYPE_UNUSED,Brak
 PUZZLE,Zagadka
 PUZZLE_ALT_LEVEL,Alternatywny Poziom Trudności
 PUZZLE_CLASS,Kategoria
@@ -154,7 +154,7 @@ QUEST_NAME_DOWNLOAD,Pobieranie {0}y
 QUEST_NAME_EDITOR,Edytor {0}a
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}a
-QUOTA,Limit
+QUOTA,Wartość testu
 RECOVER,Wyzdrowieć
 
 RELOAD,Przeładuj
@@ -179,7 +179,7 @@ SELECT_ITEM,Wybierz Przedmiot
 SELECT_PACK,Wybierz Pakiet
 SELECT_TO_COPY,Wybierz {0}e do Skopiowania
 SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
-HIDDEN,Ukryty
+HIDDEN,Ukryj
 ACTIVE,Aktywny
 SET,Ust.
 SET_EDITOR_ALPHA,Przeźroczystość Edytora
@@ -191,7 +191,7 @@ STARTING_ITEMS,Przedmioty Startowe
 START_QUEST,Nowa gra
 START,Start
 
-TESTS,Testy
+TESTS,Test zmiennej
 TILE,Pole
 
 TOKEN,Znacznik
@@ -215,12 +215,11 @@ ASPECT,Stosunek
 BORDER,Brzeg
 NO_BORDER,Brak Brzegów
 UNDO,Cofnij
-UNIQUE_DEFEATED,Unikatowy
-Pokonany
+UNIQUE_DEFEATED,Unikatowy Pokonany
 UNIQUE_INFO,Unikatowa Informacja
 UNIQUE_MONSTER,Unikatowy Potwór
 UNIQUE_TITLE,Unikatowy Tytuł
-UNUSED,Nieużywany
+UNUSED,Brak
 VALUE,Wartość
 VAR,Zmienna
 VARS,Zmienne
@@ -368,8 +367,8 @@ SYMBOL,Symbol
 ELEMENT,Element
 
 // Events
-Ordered,Uporządkowany
-Random,Losowy
+Ordered,Kolejno
+Random,Losowo
 
 //Inherited from FFG localization files
 SET_FIRE,Podpalenie

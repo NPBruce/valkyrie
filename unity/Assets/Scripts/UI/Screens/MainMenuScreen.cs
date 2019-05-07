@@ -49,6 +49,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetText("alpha version");
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { TestCrash(); });
             }
             if (Game.Get().version.EndsWith("b"))
             {
@@ -57,8 +58,9 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetText("beta version");
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { TestCrash(); });
             }
-			
+
             // Button for start quest/scenario
             ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
@@ -140,6 +142,8 @@ namespace Assets.Scripts.UI.Screens
         // Start quest
         public void Start()
         {
+            ValkyrieDebug.Log("INFO: Accessing quests");
+
             Game game = Game.Get();
 
             // Remove the main menu
@@ -150,24 +154,41 @@ namespace Assets.Scripts.UI.Screens
 
         public void Content()
         {
+            ValkyrieDebug.Log("INFO: Accessing content selection screen");
+
             new ContentSelectScreen();
         }
 
         public void Editor()
         {
+            ValkyrieDebug.Log("INFO: Accessing content selection screen");
+
             Game game = Game.Get();
             game.SelectEditQuest();
         }
 
         private void Config()
         {
+            ValkyrieDebug.Log("INFO: Accessing config");
             new OptionsScreen();
         }
 
+        static int click_counter = 0;
+        static public void TestCrash()
+        {
+            click_counter++;
+
+            if(click_counter >= 5)
+            {
+                DebugManager.Crash();
+            }
+        }
 
         // Create the about dialog
         public void About()
         {
+            ValkyrieDebug.Log("INFO: Accessing about");
+
             // This will destroy all, because we shouldn't have anything left at the main menu
             Destroyer.Destroy();
 

@@ -102,7 +102,7 @@ public class EditorComponentQuest : EditorComponent
         synopsysUIE.SetText(game.quest.qd.quest.synopsys.Translate(true));
         offset += synopsysUIE.HeightToTextPadding(1);
         synopsysUIE.SetButton(delegate { UpdateQuestSynopsys(); });
-        synopsysUIE.SetSingleLine();
+        synopsysUIE.SetMaxCharacters(100);
         new UIElementBorder(synopsysUIE);
         offset += 1;
 
@@ -130,6 +130,7 @@ public class EditorComponentQuest : EditorComponent
         offset += authors_shortUIE.HeightToTextPadding(0);
         authors_shortUIE.SetButton(delegate { UpdateQuestShortAuth(); });
         authors_shortUIE.SetSingleLine();
+        authors_shortUIE.SetMaxCharacters(75);
         new UIElementBorder(authors_shortUIE);
         offset += 1;
         

@@ -84,6 +84,11 @@ namespace Assets.Scripts.UI
             input.GetComponent<PanCancelInputField>().lineType = UnityEngine.UI.InputField.LineType.SingleLine;
         }
 
+        public void SetMaxCharacters(int maxCharacter)
+        {
+            input.GetComponent<PanCancelInputField>().characterLimit = maxCharacter;
+        }
+
         public override string GetText()
         {
             if (input == null) return "";
