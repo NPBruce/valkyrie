@@ -59,7 +59,7 @@
 #if UNITY_5_6_OR_NEWER
 			string bundleIdentifier = PlayerSettings.applicationIdentifier;
 #else
-			string bundleIdentifier = PlayerSettings.bundleIdentifier;
+			string bundleIdentifier = PlayerSettings.applicationIdentifier;
 #endif
 			BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
 

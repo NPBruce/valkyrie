@@ -4,35 +4,37 @@ set /p version=<unity\Assets\Resources\version.txt
 rem read build version code
 set /p versioncode=<unity\Assets\Resources\versioncode.txt
 
-rem set steam path
+rem set steam path. You can get it from https://store.steampowered.com/
 IF "%steampath%"=="" SET steampath=%programfiles(x86)%\Steam
 IF NOT EXIST "%steampath%" ( 
 echo [31m--- ERROR --- Steam path not set : please set Steam path in build.bat [0m
 exit /B
 )
 
-rem set java path
+rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
 IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
-IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\Java\jdk1.8.0_192\bin
+IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
 IF NOT EXIST "%JDK_HOME%" ( 
 echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
 exit /B
 )
 
-rem set java path
+rem set android sdk path. You can get it from https://developer.android.com/studio/.
 IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
 IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
 echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
 exit /B
 )
 
+rem set android build tools. The come with the android sdk. Don't use the latest 29.0.0-rc3 as the unity build will fail (if the build tools folder for it exists, manually delete it).
 IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
 IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
 echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
 exit /B
 )
 
-SET PATH=%PATH%;%JDK_HOME%;%ProgramFiles%\Unity\Editor;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
+rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
+SET PATH=%PATH%;%JDK_HOME%\bin;%ProgramFiles%\Unity\Editor;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
 @echo on
 
 rem cleanup
@@ -80,7 +82,7 @@ Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buil
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-macos.log 
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\build\linux\valkyrie
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-linux.log 
+rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-android.log

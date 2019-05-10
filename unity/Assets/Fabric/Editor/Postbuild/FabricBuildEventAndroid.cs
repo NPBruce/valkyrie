@@ -36,7 +36,7 @@
 #if UNITY_5_6_OR_NEWER
 			var bundleId = PlayerSettings.applicationIdentifier;
 #else
-			var bundleId = PlayerSettings.bundleIdentifier;
+			var bundleId = PlayerSettings.applicationIdentifier;
 #endif
 			WWWForm form = new WWWForm();
 			form.AddField("app_name", bundleId);
