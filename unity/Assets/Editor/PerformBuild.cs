@@ -64,7 +64,7 @@ class PerformBuild
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
 
         // automatically set build system to internal, as gradle is not working (see #882)
-        EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Internal;
+        //EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Internal;
 
         Debug.Log("Starting Android Build!");
         BuildPipeline.BuildPlayer(scenes, path, BuildTarget.Android, BuildOptions.None);
