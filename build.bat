@@ -1,8 +1,6 @@
 @echo off
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
-rem read build version code
-set /p versioncode=<unity\Assets\Resources\versioncode.txt
 
 rem set steam path. You can get it from https://store.steampowered.com/
 IF "%steampath%"=="" SET steampath=%programfiles(x86)%\Steam
