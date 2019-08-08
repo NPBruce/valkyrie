@@ -620,7 +620,14 @@ public class Quest
         {
             path = path.Substring(1, path.Length - 1);
         }
-        qd = new QuestData(originalPath + Path.DirectorySeparatorChar + path);
+
+        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + path;
+        if (game.quest.fromSavegame)
+        {
+            questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + path;
+        }
+
+        qd = new QuestData(questToTransition);
         // set questPath but do not set original path, as we are loading from within a quest here.
         questPath = Path.GetDirectoryName(qd.questPath);
 
