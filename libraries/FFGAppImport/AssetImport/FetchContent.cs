@@ -339,12 +339,15 @@ namespace FFGAppImport
                 //case 89: //CubeMap
                 case 128: //Font
                     {
-                        /*
-                         * Do not Import fonts from Unity package anymore : an exception error on Android is blocking the Import for MoM.
-						 * see #964: MoM 1.7.0 - broken import on Android bug 
-						 */
-						
-						// ExportFont(assetPreloadData);
+                        // There have been issues with android font exports in the past, failing the font export is not fatal.
+                        try
+                        {
+                            ExportFont(assetPreloadData);
+                        }
+                        catch (Exception e)
+                        {
+                            ValkyrieDebug.Log("Font export error: '" + e.Message);
+                        }
                         break;
                     }
                 //case 129: //PlayerSettings

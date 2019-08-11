@@ -1050,8 +1050,9 @@ public class QuestData
             {
                 if (!s.Equals("white"))
                 {
-                    r += "buttoncolor" + buttonNum++ + "=\"" + s + "\"" + nl;
+                    r += "buttoncolor" + buttonNum + "=\"" + s + "\"" + nl;
                 }
+                buttonNum++;
             }
 
             if (!heroListName.Equals(""))
