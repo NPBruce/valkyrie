@@ -305,13 +305,23 @@ public class Quest
             exclude.AddRange(itemSelect.Values.ToList());
 
             //  remove items with qty not yet reached from exclude list
+            Dictionary<string, int> itemsRemaining = new Dictionary<string, int>();
             foreach (string item in exclude)
             {
-                if (game.cd.items.ContainsKey(item)
-                    && game.cd.items[item].qty != 1
-                    && exclude.Count(element => element == item) < game.cd.items[item].qty
-                    )
+                if (game.cd.items.ContainsKey(item))
+                {
+                    if (!itemsRemaining.ContainsKey(item))
+                    {
+                        itemsRemaining.Add(item, game.cd.items[item].qty);
+                    }
+                }
+            }
+            foreach (string item in itemsRemaining.Keys)
+            {
+                if (itemsRemaining[item] <= exclude.Count(element => element == item))
+                {
                     exclude.RemoveAll(element => element == item);
+                }
             }
 
             // Start a list of matches

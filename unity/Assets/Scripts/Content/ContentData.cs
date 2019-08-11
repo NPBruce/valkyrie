@@ -1246,7 +1246,7 @@ public class ItemData : GenericData
         }
         if (content.ContainsKey("minfame"))
         {
-            minFame = Fame(content["maxfame"]);
+            minFame = Fame(content["minfame"]);
         }
         if (content.ContainsKey("maxfame"))
         {
