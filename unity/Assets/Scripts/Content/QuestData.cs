@@ -1050,8 +1050,9 @@ public class QuestData
             {
                 if (!s.Equals("white"))
                 {
-                    r += "buttoncolor" + buttonNum++ + "=\"" + s + "\"" + nl;
+                    r += "buttoncolor" + buttonNum + "=\"" + s + "\"" + nl;
                 }
+                buttonNum++;
             }
 
             if (!heroListName.Equals(""))
@@ -1898,7 +1899,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 10;
+        public static int currentFormat = 12;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;

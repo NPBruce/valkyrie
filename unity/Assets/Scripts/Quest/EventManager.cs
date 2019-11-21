@@ -112,7 +112,12 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + name))
+            string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + name;
+            if (game.quest.fromSavegame)
+            {
+                questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + name;
+            }
+            if (File.Exists(questToTransition))
             {
                 events.Add(name, new StartQuestEvent(name));
             }
@@ -406,7 +411,12 @@ public class EventManager
             // Check if the event doesn't exists - quest fault
             if (!events.ContainsKey(s))
             {
-                if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
+                string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + s;
+                if (game.quest.fromSavegame)
+                {
+                    questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + s;
+                }
+                if (File.Exists(questToTransition))
                 {
                     events.Add(s, new StartQuestEvent(s));
                     enabledEvents.Add(s);
@@ -679,7 +689,12 @@ public class EventManager
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
                     {
-                        if (File.Exists(game.quest.originalPath + Path.DirectorySeparatorChar + s))
+                        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + s;
+                        if (game.quest.fromSavegame)
+                        {
+                            questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + s;
+                        }
+                        if (File.Exists(questToTransition))
                         {
                             game.quest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
@@ -953,6 +968,7 @@ public class EventManager
                 {"{MAD23}", ""},
                 {"{MAD25}", ""},
                 {"{MAD26}", ""},
+                {"{MAD27}", ""},
             }
         },
         { "IA", new Dictionary<string,string>()

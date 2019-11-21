@@ -304,16 +304,6 @@ public class Quest
             // we don't want duplicate in the shop
             exclude.AddRange(itemSelect.Values.ToList());
 
-            //  remove items with qty not yet reached from exclude list
-            foreach (string item in exclude)
-            {
-                if (game.cd.items.ContainsKey(item)
-                    && game.cd.items[item].qty != 1
-                    && exclude.Count(element => element == item) < game.cd.items[item].qty
-                    )
-                    exclude.RemoveAll(element => element == item);
-            }
-
             // Start a list of matches
             List<string> list = new List<string>();
             foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
@@ -620,7 +610,14 @@ public class Quest
         {
             path = path.Substring(1, path.Length - 1);
         }
-        qd = new QuestData(originalPath + Path.DirectorySeparatorChar + path);
+
+        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + path;
+        if (game.quest.fromSavegame)
+        {
+            questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + path;
+        }
+
+        qd = new QuestData(questToTransition);
         // set questPath but do not set original path, as we are loading from within a quest here.
         questPath = Path.GetDirectoryName(qd.questPath);
 
@@ -858,30 +855,35 @@ public class Quest
         Dictionary<string, string> saveBoard = saveData.Get("Board");
         foreach (KeyValuePair<string, string> kv in saveBoard)
         {
-            if (kv.Key.IndexOf("Door") == 0)
+            string boardItem = kv.Key;
+            if (boardItem[0] == '\\')
             {
-                boardItems.Add(kv.Key, new Door(qd.components[kv.Key] as QuestData.Door, game));
-                ordered_boardItems.Add(kv.Key);
+                boardItem = boardItem.Substring(1);
             }
-            if (kv.Key.IndexOf("Token") == 0)
+            if (boardItem.IndexOf("Door") == 0)
             {
-                boardItems.Add(kv.Key, new Token(qd.components[kv.Key] as QuestData.Token, game));
-                ordered_boardItems.Add(kv.Key);
+                boardItems.Add(boardItem, new Door(qd.components[boardItem] as QuestData.Door, game));
+                ordered_boardItems.Add(boardItem);
             }
-            if (kv.Key.IndexOf("Tile") == 0)
+            if (boardItem.IndexOf("Token") == 0)
             {
-                boardItems.Add(kv.Key, new Tile(qd.components[kv.Key] as QuestData.Tile, game));
-                ordered_boardItems.Add(kv.Key);
+                boardItems.Add(boardItem, new Token(qd.components[boardItem] as QuestData.Token, game));
+                ordered_boardItems.Add(boardItem);
             }
-            if (kv.Key.IndexOf("UI") == 0)
+            if (boardItem.IndexOf("Tile") == 0)
             {
-                boardItems.Add(kv.Key, new UI(qd.components[kv.Key] as QuestData.UI, game));
-                ordered_boardItems.Add(kv.Key);
+                boardItems.Add(boardItem, new Tile(qd.components[boardItem] as QuestData.Tile, game));
+                ordered_boardItems.Add(boardItem);
             }
-            if (kv.Key.IndexOf("#shop") == 0)
+            if (boardItem.IndexOf("UI") == 0)
             {
-                boardItems.Add(kv.Key, new ShopInterface(new List<string>(), Game.Get(), activeShop));
-                ordered_boardItems.Add(kv.Key);
+                boardItems.Add(boardItem, new UI(qd.components[boardItem] as QuestData.UI, game));
+                ordered_boardItems.Add(boardItem);
+            }
+            if (boardItem.IndexOf("#shop") == 0)
+            {
+                boardItems.Add(boardItem, new ShopInterface(new List<string>(), Game.Get(), activeShop));
+                ordered_boardItems.Add(boardItem);
             }
         }
 
@@ -1278,7 +1280,8 @@ public class Quest
         // foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
         foreach (string item in ordered_boardItems)
         {
-            r += item + nl;
+            // Hack to prevent items from being treated as comments
+            r += '\\' + item + nl;
         }
 
         r += vars.ToString();
