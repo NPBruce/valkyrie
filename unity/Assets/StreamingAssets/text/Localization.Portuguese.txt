@@ -198,6 +198,9 @@ snow,Neve
 lava,Lava
 swamp,Pântano
 sludge,Lama
+ship,Navio
+temple,Templo
+train,Trem
 
 // Colors
 black,Preto

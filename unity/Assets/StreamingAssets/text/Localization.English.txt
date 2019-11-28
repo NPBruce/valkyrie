@@ -290,6 +290,7 @@ MoM1ET,MoM1ET 
 MoM1EI,MoM1EI 
 MoM1EM,MoM1EM 
 base,base 
+PotS,PotS 
 RN,RN 
 SM,SM 
 SoT,SoT 
@@ -311,6 +312,7 @@ MoM1ET_SYMBOL,
 MoM1EI_SYMBOL,
 MoM1EM_SYMBOL,
 base_SYMBOL,
+PotS_SYMBOL,
 RN_SYMBOL,
 SM_SYMBOL,
 SoT_SYMBOL,
@@ -515,6 +517,7 @@ lava,Lava
 swamp,Swamp
 sludge,Sludge
 ship,Ship
+temple,Temple
 train,Train
 
 // Colors

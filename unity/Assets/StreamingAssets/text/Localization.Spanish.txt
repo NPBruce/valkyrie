@@ -342,6 +342,9 @@ snow,Nieve
 lava,Lava
 swamp,Pantano
 sludge,Lodo
+ship,Enviar
+temple,Templo
+train,Entrenar
 
 // Colors
 black,Negro

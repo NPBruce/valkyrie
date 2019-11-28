@@ -363,6 +363,9 @@ snow,雪
 lava,岩漿
 swamp,沼澤
 sludge,污泥
+ship,船
+temple,寺庙
+train,培养
 
 // Colors
 black,黑

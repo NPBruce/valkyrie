@@ -338,6 +338,9 @@ snow,Śnieg
 lava,Lawa
 swamp,Mokradła
 sludge,Błoto
+ship,Statek
+temple,Świątynia
+train,Pociąg
 
 // Colors
 black,Czarny

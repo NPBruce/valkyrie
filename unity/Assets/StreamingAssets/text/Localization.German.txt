@@ -349,6 +349,7 @@ lava,Lava
 swamp,Sumpf
 sludge,Schlamm
 ship,Schiff
+temple,Tempel
 train,Zug
 
 // Colors
