@@ -338,6 +338,10 @@ public class Game : MonoBehaviour {
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor
     void Update()
     {
+        if (updateList == null)
+        {
+            return;
+        }
         updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
         for(int i = 0; i < updateList.Count; i++)
         {
