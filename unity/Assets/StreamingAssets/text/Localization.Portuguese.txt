@@ -1,4 +1,5 @@
 .,Portuguese
+
 // TEXTS
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie
@@ -8,24 +9,48 @@ ACTIONS,Ações
 ACTIVATED,Ativado
 ACTIVATION,Ativação
 ACTIVATIONS,Ativações
-ADD_COMPONENTS,Adicionar Componentes
+ADD_COMPONENTS,Adicionar Componentes:
+COMPONENTS,Componentes
+RENAME,Renomear
+SAVE_TEST,Salvar & Testar
+SOURCE,Caminho:
+COMMENT,Comentário
+TRUE,Verdadeiro
+FALSE,Falso
+SNAP,Modo Grudar
+FREE,Modo Livre
+CONFIRM,Confirmar
+INSPECT,Inspecionar
+DURATION,Duração:
+DESCRIPTION,Descrição
+AUTHORS,Autores
+DIFFICULTY,Dificuldade:
+VALIDATE_SCENARIO,Validade
+FILE,Arquivo
+OPTIMIZE_LOCALIZATION,Otimizar localização
+CREATE_PACKAGE,Criação de Pacote
+REORDER_COMPONENTS,Reordenar Componentes
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
+ASSIGN,Atribuir
 ATTACK,Ataque
-ATTACK_MESSAGE,Mensagem de Ataque
-AUDIO,Audio
-BACK,voltar
+ATTACK_MESSAGE,Mensagem de Ataque:
+AUDIO,Áudio
+BACK,Voltar
 BASE,Base
 BUTTON,Botão
 BUTTONS,Botões
-CAMERA,Camera
+CAMERA,Câmera
 CANCEL,Cancelar
 CHOOSE_LANG,Escolher Idioma
 CLEAR_FIRE,Apagar Incêndio
 COLOR,Cor
-COMPONENT_NAME,Nome do Componente
-COMPONENT_TO_DELETE,Deletar Componente
-CONTENT_IMPORT,Importar Componente
-CONTENT_IMPORTING,Importando...
+COMPONENT_NAME,Nome do Componente:
+COMPONENT_TO_DELETE,Deletar Componente:
+CONTENT_IMPORT,Importar conteúdo
+CONTENT_IMPORTING,Importando...\nIsso pode levar alguns minutos
 CONTENT_REIMPORT,Reimportar Componente
+CONTENT_LOCATE,Localizar o jogo
 CONTENT_INSTALL_VIA_STEAM,Instalar via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar via Google Play
 CONTINUE,Continuar
@@ -42,13 +67,13 @@ UPDATE,Atualizar
 DIALOG,Diálogo
 DOOR,Porta
 DOWNLOAD,Download
-DOWNLOAD_LIST,
-DOWNLOAD_PACKAGE,
+DOWNLOAD_LIST,Downloading Lista de Pacotes
+DOWNLOAD_PACKAGE,Downloading de Pacote
 E,E
 EFFECTS,Efeitos
 EMPTY,
 END_TURN,Fim do Turno
-ROUND,
+ROUND,Rodada {0}
 EVADE,Evasão
 EVENT,Evento
 EXIT,Sair
@@ -62,13 +87,141 @@ HEALTH,Vida
 HEALTH_HERO,Por Herói
 HIGHLIGHT,Destaque
 HORROR_CHECK,Teste de Horror
-AWARENESS,
+AWARENESS,Consciência
+IA_APP_NOT_FOUND,Não foi possível localizar Legends of the Alliance, instale via Steam
+IA_APP_NOT_FOUND_ANDROID,Não foi possível localizar Legends of the Alliance
+IA_HEROES_NAME,Heróis
+IA_HERO_NAME,Heróis
+IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
+IA_QUEST_NAME,Missão
 INDENT,  {0}
 INFO,Info
 INFORMATION,Informação
-INITIAL_MESSAGE,Mensagem Inicial
-ITEM,Objeto
+INITIAL_MESSAGE,Mensagem Inicial:
+ITEM,Item
+QITEM,Quest Item
+KO,KO
+LOAD_QUEST,Continue
+LOG,Log
+SKILLS,Habilidades
+ITEMS,Itens
+ITEMS_SMALL,Itens
+GOLD,Ouro
+MAIN_MENU,Menu Principal
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Cam
 MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Cam
+MOM_APP_NOT_FOUND,Não foi possível localizar Mansions of Madness
+MOM_HEROES_NAME,Investigadores
+MOM_HERO_NAME,Investigador
+MOM_NAME,Mansions of Madness Second Edition
+MOM_QUEST_NAME,Cenário
+MONSTER,Monstro
+MONSTER_ATTACKS,O monstro ataca.
+MONSTER_MASTER,Mestre
+MONSTER_MASTER_X,Mestre {0}
+MONSTER_MINION,Minion
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Único
+MOVES,Movimento
+MPLACE,Local de Monstro
+MUSIC,Música
+NAME,Nome
+NEW,Novo
+NEW_X,Novo {0}
+NONE,Nenhum
+
+NEXT_EVENTS,Próximos Eventos
+NOT_FIRST,Não primeiro
+NO_ATTACK_MESSAGE,Nenhuma mensagem de ataque:
+
+NUMBER,Número
+NUMBER_HEROS,{0} Heróis:
+OK,Ok
+OP,Op
+OPTIONS,Opções
+PLACEMENT,Atribuição
+
+PLACE_IMG,Atribuir Img:
+POOL_TRAITS,Traços:
+POSITION,Posição
+POSITION_TYPE_HIGHLIGHT,Realçar
+POSITION_TYPE_UNUSED,Não Usado
+PUZZLE,Enigma
+PUZZLE_ALT_LEVEL,Alt Level
+PUZZLE_SOLUTION,Solução
+PUZZLE_CLASS,Classe
+PUZZLE_CLASS_SELECT,Selecionar Classe
+IMAGE,Imagem
+
+PUZZLE_LEVEL,Nível
+PUZZLE_SELECT_SKILL,Selecionar habilidade
+PUZZLE_IMAGE_CLASS,imagem
+PUZZLE_CODE_CLASS,código
+PUZZLE_SLIDE_CLASS,deslizar
+QUEST,Quest
+QUEST_NAME_DOWNLOAD,Download {0}
+QUEST_NAME_EDITOR,{0} Editor
+EDITOR,Editor
+QUEST_NAME_UPDATE,  [Update] {0}
+QUOTA,Cota
+RECOVER,Recuperar
+INVESTIGATOR_ATTACKS,Ataques do investigador
+
+
+RELOAD,Recarregar
+REMOVE_COMPONENTS,Remover Componentes:
+REQUIRED_EXPANSIONS,Expanção Requerida:
+REQUIRES_EXPANSION, Requer: {0}
+
+REQ_TRAITS,Traços Req.:
+RESET,Resetar
+ROTATE_TO,Rotacionar: {0}
+ROTATION,Rotação
+SAVE,Salvar
+AUTOSAVE,Auto Salvamento
+SELECT_SAVE,Selecionar Save
+SELECT,Selecionar {0}
+SELECT_CLASS,Selecionar Classe
+SELECTION,Seleção
+SELECT_CONTENT,Selecionar Conteúdo
+SELECT_EXPANSION,Selecionar conteúdo de expansão
+SELECT_IMAGE,Selecionar imagem
+SELECT_ITEM,Selecionar Item
+SELECT_PACK,Selecionar Pacote
+SELECT_TO_COPY,Selecionar {0} para copiar
+SELECT_TO_DELETE,Selecionar {0} para deletar
+HIDDEN,Escondido
+ACTIVE,Activado
+SET,Setado
+SET_EDITOR_ALPHA,Editar Transparencia
+SKILL,Habilidade
+SELECT_SKILLS,Selecionar Habilidade
+SPAWN,Spawn
+STARTING_ITEM,Item inicial
+STARTING_ITEMS,Itens iniciais
+START_QUEST,Novo Jogo
+START,Começar
+
+TESTS,Testes
+TILE,Azulejo (Tile)
+
+AND,e
+OR,ou
+
+TOKEN,Marcador
+TOOLS,Ferramentas
+TOTAL_MOVES,Total de movimentos
+TRAITS,Traços
+TRIGGER,Gatilho/Ação
+TYPE,Tipo
+TYPES,Tipos
+UNABLE_BUTTON,Botão Impossibilitado:
 
 UI,Interface
 UNITS,Unidades
@@ -82,8 +235,7 @@ ASPECT,Aspecto
 BORDER,Borda
 NO_BORDER,Sem Borda
 UNDO,Desfazer
-UNIQUE_DEFEATED,Única
-Derrota
+UNIQUE_DEFEATED,Derrota\nÚnica
 UNIQUE_INFO,Informação Única
 UNIQUE_MONSTER,Monstro Único
 UNIQUE_TITLE,Titulo Único
@@ -91,6 +243,14 @@ UNUSED,Não Usado
 VALUE,Valor
 VAR,Variável
 VARS,Variáveis
+VAR_NAME,Nome da Variável:
+X_ACTIVATED,{0} Ativado
+
+BUY,Comprar
+SELL,Vender
+CLASS,Classe
+ACT_1,Ato I
+ACT_2,Ato II
 
 //Items
 weapon,Arma
@@ -106,6 +266,8 @@ spell,Feitiço
 key,Chave
 evidence,Evidência
 ally,Aliado
+spelldefence,Feitiço de Defesa
+spellattack,Feitiço de Ataque
 
 //Audio
 menu,Menu
@@ -150,6 +312,9 @@ mountain,Montanha
 cold,Frio
 hot,Quente
 water,Água
+fleshless,Sem Carne
+relic,Relíquia
+elixir,Elixir
 
 //Tiles
 basement,Porão
@@ -157,6 +322,7 @@ river,Rio
 street,Estrada
 hallway,Corredor
 bathroom,Banheiro
+bedroom,Quarto
 kitchen,Cozinha
 dock,Doca
 storage,Armazém
@@ -177,7 +343,6 @@ tents,Tendas
 stables,Estábulo
 hall,Hall
 map,Mapa
-bedroom,Quarto
 city,Cidade
 fountain,Fonte
 blackrealm,Reino Obscuro
@@ -198,6 +363,8 @@ snow,Neve
 lava,Lava
 swamp,Pântano
 sludge,Lama
+ship,Navio
+train,Trem
 
 // Colors
 black,Preto
@@ -223,7 +390,9 @@ navy,Azul Marinho
 image,Mosaico
 code,Código
 slide,Mecanismo
-SYMBOL,Símbolo
+tower,Torre
+SYMBOL,Simbolo
+ELEMENT,Elemento
 
 // Events
 Ordered,Ordenado
@@ -234,8 +403,6 @@ SET_FIRE,Tocar Fogo
 INVESTIGATOR_ELIMINATED,Investigador Eliminado
 CLOSE,Fechar
 PUZZLE_GUESS,Tentar
-
-SET_EDITOR_ALPHA,Transparência Editor
 
 UP,Para Cima
 DOWN,Para Baixo
@@ -293,7 +460,7 @@ SORT_BY_DIFFICULTY,Dificuldade
 SORT_BY_DURATION,Duração
 
 SORT_BY_RATING,Avaliações
-SORT_BY_AVERAGE_DURATION,Duração méd.
+SORT_BY_AVERAGE_DURATION,Duração média
 SORT_BY_WIN_RATIO,% de vitória
 SORT_BY_DATE,Atualizado em
 
