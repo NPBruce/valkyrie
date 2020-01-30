@@ -15,7 +15,7 @@ namespace FFGAppImport
         // If the installed app isn't this or higher don't import
         override public string RequiredFFGVersion()
         {
-            return "1.4.0";
+            return "1.5.2";
         }
         // Steam app ID
         override public string AppId()
