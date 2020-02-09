@@ -127,6 +127,7 @@ male,Homem
 female,Mulher
 
 //monsters
+monster,Monstro
 undead,Morto Vivo
 humanoid,Humanoide
 spirit,Espírito

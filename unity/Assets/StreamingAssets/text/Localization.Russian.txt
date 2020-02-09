@@ -278,6 +278,7 @@ male,Мужчина
 female,Женщина
 
 //monsters
+monster,монстр
 undead,Зомби
 humanoid,Гуманоид
 spirit,Дух

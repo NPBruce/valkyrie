@@ -220,6 +220,7 @@ male,Maschio
 female,Femmina
 
 //monsters
+monster,Mostro
 undead,Non-Morto
 humanoid,Umanoide
 spirit,Spirito

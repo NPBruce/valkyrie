@@ -271,6 +271,7 @@ male,Hombre
 female,Mujer
 
 //monsters
+monster,Monstruo
 undead,No Muerto
 humanoid,Humanoide
 spirit,Espíritu

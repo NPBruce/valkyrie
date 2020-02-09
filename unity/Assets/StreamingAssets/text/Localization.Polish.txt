@@ -267,6 +267,7 @@ male,Mężczyzna
 female,Kobieta
 
 //monsters
+monster,Potwór
 undead,Nieumarły
 humanoid,Humanoid
 spirit,Duch

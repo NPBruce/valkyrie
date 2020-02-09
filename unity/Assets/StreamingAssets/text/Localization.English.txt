@@ -440,6 +440,7 @@ male,Male
 female,Female
 
 //monsters
+monster,Monster
 undead,Undead
 humanoid,Humanoid
 spirit,Spirit

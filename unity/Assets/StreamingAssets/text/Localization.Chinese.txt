@@ -287,6 +287,7 @@ male,男性
 female,女性
 
 //monsters Class
+monster,怪物
 undead,不死
 humanoid,人形
 spirit,精神
