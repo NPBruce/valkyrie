@@ -353,6 +353,9 @@ snow,Снег
 lava,Лава
 swamp,Болото
 sludge,Сточные воды
+ship,Корабль
+temple,Храм
+train,Поезд
 
 // Colors
 black,Черный

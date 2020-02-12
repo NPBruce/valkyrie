@@ -349,6 +349,7 @@ lava,Lave
 swamp,Marécage
 sludge,Boue
 ship,Navire
+temple,Temple
 train,Train
 
 // Colors
