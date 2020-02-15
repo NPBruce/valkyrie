@@ -10,10 +10,20 @@ function fetch_with_retry(uri)
 {
    var fetch_OK=true;
    var response="invalid";
+
+   // Fetch with Github authentication token
+   var options = {
+     'method' : 'get',
+     'headers' : {
+       'Authorization': 'token  NOT SAVED HERE'
+     }
+   };
+   
    for (var retry=0; retry<3; retry++) 
    {
-       try {
-          response = UrlFetchApp.fetch(uri);
+       try
+       {
+          response = UrlFetchApp.fetch(uri, options);
        }
        catch (err)
        {
@@ -94,7 +104,7 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        // This "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/ExoticMaterial/ExoticMaterial.ini"
        // should become this : "https://api.github.com/repos/NPBruce/valkyrie-store/commits?path=MoM/ExoticMaterial/ExoticMaterial.valkyrie"
        var regex = /https:\/\/raw.githubusercontent.com\/(.+?\/.+?)\/(.+?)\/(.+\/*.*).ini/;
-       var commit_info_url = ini_url.replace(regex, 'https://api.github.com/repos/$1/commits?sha=$2&path=$3.valkyrie&access_token= NOT SAVED HERE')
+       var commit_info_url = ini_url.replace(regex, 'https://api.github.com/repos/$1/commits?sha=$2&path=$3.valkyrie')
        
        Logger.log("fetch commit package :" + commit_info_url);
        
