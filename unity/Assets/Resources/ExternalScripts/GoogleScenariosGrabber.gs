@@ -10,6 +10,7 @@ function fetch_with_retry(uri)
 {
    var fetch_OK=true;
    var response="invalid";
+   var log_for_email="";
 
    // Fetch with Github authentication token
    var options = {
@@ -27,13 +28,22 @@ function fetch_with_retry(uri)
        }
        catch (err)
        {
-         Logger.log("fetch error "+ retry + " : "+ err + " for URL " + uri);
+         Logger.log("Fetch error "+ retry + " : "+ err + " for URL " + uri);
+         log_for_email += "Fetch error (try "+ retry + ") while trying to access below URL:\n" + uri + "\nError description:\n"+ err + "\n\n";
          fetch_OK = false;
        }
      
        Utilities.sleep(50);
        
        if(fetch_OK) retry=3;
+   }
+  
+   if(response=="invalid")
+   {
+      var subject = 'Valkyrie scenario grabber encountered an error';
+      var sheet = SpreadsheetApp.getActiveSheet();
+
+      MailApp.sendEmail("valkyrieboardgameapp@gmail.com", subject, log_for_email);
    }
 
    return response;
