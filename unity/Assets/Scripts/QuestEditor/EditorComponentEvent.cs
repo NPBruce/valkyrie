@@ -676,7 +676,6 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Spawn)
             {
                 select.AddItem("Defeated" + kv.Key, traits);
-                select.AddItem("DefeatedUnique" + kv.Key, traits);
             }
         }
 
