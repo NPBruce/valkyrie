@@ -127,6 +127,7 @@ public class MonsterDialog
         if (monster.unique)
         {
             game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.spawnEventName);
         }
     }
 

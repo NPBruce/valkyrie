@@ -193,12 +193,6 @@ public class MonsterDialogMoM : MonsterDialog
         // Trigger defeated event by spawn name
         game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
 
-        // If unique trigger defeated unique event
-        if (monster.unique)
-        {
-            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
-        }
-
         // fix #982
         if (game.quest.phase == Quest.MoMPhase.monsters)
         {

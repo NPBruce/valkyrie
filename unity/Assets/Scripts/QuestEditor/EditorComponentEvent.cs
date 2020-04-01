@@ -664,7 +664,10 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.CustomMonster)
             {
                 select.AddItem("Defeated" + kv.Key, traits);
-                select.AddItem("DefeatedUnique" + kv.Key, traits);
+                if (game.gameType is D2EGameType)
+                {
+                    select.AddItem("DefeatedUnique" + kv.Key, traits);
+                }
             }
         }
 
@@ -676,6 +679,11 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Spawn)
             {
                 select.AddItem("Defeated" + kv.Key, traits);
+                if (game.gameType is D2EGameType)
+                {
+                    select.AddItem("DefeatedUnique" + kv.Key, traits);
+                }
+                
             }
         }
 
