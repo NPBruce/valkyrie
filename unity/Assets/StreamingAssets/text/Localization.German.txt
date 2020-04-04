@@ -51,6 +51,7 @@ CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
+DEFAULTMUSICON,Standardmusik einschalten
 D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden
 D2E_HEROES_NAME,Helden
 D2E_HERO_NAME,Held

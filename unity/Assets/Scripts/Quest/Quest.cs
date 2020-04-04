@@ -113,6 +113,9 @@ public class Quest
     // Quest gameplay duration
     public int duration;
 
+    // Default music will be played when you start the quest
+    public bool defaultMusicOn;
+
     // A list of music if custom music has been selected - used for save games
     public List<string> music = new List<string>();
 
@@ -170,6 +173,7 @@ public class Quest
 
         start_time = System.DateTime.UtcNow;
         duration = 0;
+        defaultMusicOn = q.defaultMusicOn;
 
         GenerateItemSelection();
         eManager = new EventManager();

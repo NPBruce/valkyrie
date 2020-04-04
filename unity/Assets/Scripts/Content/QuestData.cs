@@ -1910,6 +1910,8 @@ public class QuestData
         public string[] packs;
         // Default language for the text
         public string defaultLanguage = "English";
+        //Default music will be played when starting the quest
+        public bool defaultMusicOn = false;
         // raw localization dictionary
         public DictionaryI18n localizationDict = null;
 
@@ -2065,6 +2067,11 @@ public class QuestData
                 localizationDict.defaultLanguage = defaultLanguage;
             }
 
+            if (iniData.ContainsKey("defaultmusicon"))
+            {
+                bool.TryParse(iniData["defaultmusicon"], out defaultMusicOn);
+            }
+
             if (iniData.ContainsKey("hidden"))
             {
                 bool.TryParse(iniData["hidden"], out hidden);
@@ -2175,6 +2182,7 @@ public class QuestData
             r.Append("hidden=").AppendLine(hidden.ToString());
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
+            r.Append("defaultmusicon=").AppendLine(defaultMusicOn.ToString());
             if (packs.Length > 0)
             {
                 r.Append("packs=");

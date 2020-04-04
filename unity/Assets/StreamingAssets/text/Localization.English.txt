@@ -78,6 +78,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
 CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
+DEFAULTMUSICON,Turn on default music
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
