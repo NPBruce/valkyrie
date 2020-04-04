@@ -2071,6 +2071,10 @@ public class QuestData
             {
                 bool.TryParse(iniData["defaultmusicon"], out defaultMusicOn);
             }
+            else
+            {
+                defaultMusicOn = true;
+            }
 
             if (iniData.ContainsKey("hidden"))
             {
