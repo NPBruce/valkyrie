@@ -74,8 +74,12 @@ namespace FFGAppImport
         {
             // Read the import log
             logFile = Path.Combine(contentPath, "import.ini");
+            // If no import log, import is required
+            if (!File.Exists(logFile))
+            {
+                return true;
+            }
             IniData log = IniRead.ReadFromIni(logFile);
-
             // If no import log, import is required
             if (log == null)
             {

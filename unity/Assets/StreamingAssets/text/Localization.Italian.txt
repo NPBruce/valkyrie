@@ -220,6 +220,7 @@ male,Maschio
 female,Femmina
 
 //monsters
+monster,Mostro
 undead,Non-Morto
 humanoid,Umanoide
 spirit,Spirito
@@ -291,6 +292,9 @@ snow,Neve
 lava,Lava
 swamp,Palude
 sludge,Fango
+ship,Nave
+temple,Tempio
+train,Treno
 
 // Colors
 black,Nero

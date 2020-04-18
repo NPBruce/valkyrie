@@ -267,6 +267,7 @@ male,Mężczyzna
 female,Kobieta
 
 //monsters
+monster,Potwór
 undead,Nieumarły
 humanoid,Humanoid
 spirit,Duch
@@ -338,6 +339,9 @@ snow,Śnieg
 lava,Lawa
 swamp,Mokradła
 sludge,Błoto
+ship,Statek
+temple,Świątynia
+train,Pociąg
 
 // Colors
 black,Czarny

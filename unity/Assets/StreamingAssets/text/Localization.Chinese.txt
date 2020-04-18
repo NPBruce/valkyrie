@@ -239,15 +239,8 @@ ACT_2,Act II
 X_COLON,{0}:
 
 //Packs
-SoA,SoA 
-BtT,BtT 
-CotW,CotW 
-FA,FA 
-MoM1E,MoM1E 
 base,基礎包 二代 
-RN,RN 
-SM,SM 
-SoT,SoT 
+
 
 //Items
 weapon,武器
@@ -287,6 +280,7 @@ male,男性
 female,女性
 
 //monsters Class
+monster,怪物
 undead,不死
 humanoid,人形
 spirit,精神
@@ -342,7 +336,6 @@ tents,帳篷
 stables,馬廄
 hall,大廳
 map,地圖
-bedroom,臥室
 city,城市
 fountain,噴泉
 blackrealm,神秘領域
@@ -363,6 +356,9 @@ snow,雪
 lava,岩漿
 swamp,沼澤
 sludge,污泥
+ship,船
+temple,寺庙
+train,培养
 
 // Colors
 black,黑
