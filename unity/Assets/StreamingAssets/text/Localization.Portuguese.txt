@@ -289,6 +289,7 @@ male,Homem
 female,Mulher
 
 //monsters
+monster,Monstro
 undead,Morto Vivo
 humanoid,Humanoide
 spirit,Espírito
@@ -364,6 +365,7 @@ lava,Lava
 swamp,Pântano
 sludge,Lama
 ship,Navio
+temple,Templo
 train,Trem
 
 // Colors

@@ -51,6 +51,7 @@ CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CUSTOMMONSTER,Spezial-Monster
+DEFAULTMUSICON,Standardmusik einschalten
 D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden
 D2E_HEROES_NAME,Helden
 D2E_HERO_NAME,Held
@@ -274,6 +275,7 @@ male,Mann
 female,Frau
 
 //monsters
+monster,Monster
 undead,Untot
 humanoid,Mensch
 spirit,Geist
@@ -349,6 +351,7 @@ lava,Lava
 swamp,Sumpf
 sludge,Schlamm
 ship,Schiff
+temple,Tempel
 train,Zug
 
 // Colors

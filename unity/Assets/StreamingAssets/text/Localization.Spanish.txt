@@ -271,6 +271,7 @@ male,Hombre
 female,Mujer
 
 //monsters
+monster,Monstruo
 undead,No Muerto
 humanoid,Humanoide
 spirit,Espíritu
@@ -342,6 +343,9 @@ snow,Nieve
 lava,Lava
 swamp,Pantano
 sludge,Lodo
+ship,Enviar
+temple,Templo
+train,Entrenar
 
 // Colors
 black,Negro

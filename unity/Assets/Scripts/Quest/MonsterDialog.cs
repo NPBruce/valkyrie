@@ -118,12 +118,16 @@ public class MonsterDialog
 
         game.audioControl.PlayTrait("defeated");
         
-        // Trigger defeated event
+        // Trigger defeated event by monster type
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
+        // Trigger defeated event by spawn name
+        game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
+
         // If unique trigger defeated unique event
         if (monster.unique)
         {
             game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.spawnEventName);
         }
     }
 

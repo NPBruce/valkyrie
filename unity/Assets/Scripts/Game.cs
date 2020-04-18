@@ -10,7 +10,8 @@ using System.IO;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
-public class Game : MonoBehaviour {
+public class Game : MonoBehaviour
+{
 
     public static readonly string MONSTERS = "monsters";
     public static readonly string HEROSELECT = "heroselect";
@@ -219,7 +220,7 @@ public class Game : MonoBehaviour {
         }
 
         // Pull up the quest selection page
-        if(questSelectionScreen==null)
+        if (questSelectionScreen == null)
         {
             go_questSelectionScreen = new GameObject("QuestSelectionScreen");
             questSelectionScreen = go_questSelectionScreen.AddComponent<QuestSelectionScreen>();
@@ -246,10 +247,10 @@ public class Game : MonoBehaviour {
     // This is called when a quest is selected
     public void StartQuest(QuestData.Quest q)
     {
-        if(Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
-        { 
+        if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+        {
             // extract the full package
-            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath()+ Path.DirectorySeparatorChar + Path.GetFileName(q.path) );
+            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));
         }
 
         // Fetch all of the quest data and initialise the quest
@@ -270,7 +271,7 @@ public class Game : MonoBehaviour {
         // Add a title to the page
         ui = new UIElement(Game.HEROSELECT);
         ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3);
-        ui.SetText(new StringKey("val","SELECT",gameType.HeroesName()));
+        ui.SetText(new StringKey("val", "SELECT", gameType.HeroesName()));
         ui.SetFont(gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
 
@@ -302,14 +303,9 @@ public class Game : MonoBehaviour {
 
     public void QuestStartEvent()
     {
-        // Start quest music
-        List<string> music = new List<string>();
-        foreach (AudioData ad in cd.audio.Values)
-        {
-            if (ad.ContainsTrait("quest")) music.Add(ad.file);
-        }
+        List<string> music = GetDefaultQuestMusic();
         audioControl.PlayDefaultQuestMusic(music);
-
+        
         Destroyer.Dialog();
         // Create the menu button
         new MenuButton();
@@ -326,8 +322,24 @@ public class Game : MonoBehaviour {
         quest.eManager.TriggerEvent();
     }
 
+    private List<string> GetDefaultQuestMusic()
+    {
+        List<string> music = new List<string>();
+        //If default quest music  has been turned off do not add any audio files to the list
+        if (quest.defaultMusicOn)
+        {
+            // Start quest music
+            foreach (AudioData ad in cd.audio.Values)
+            {
+                if (ad.ContainsTrait("quest")) music.Add(ad.file);
+            }
+        }
+
+        return music;
+    }
+
     // On quitting
-    void OnApplicationQuit ()
+    void OnApplicationQuit()
     {
         // This exists for the editor, because quitting doesn't actually work.
         Destroyer.Destroy();
@@ -338,8 +350,12 @@ public class Game : MonoBehaviour {
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor
     void Update()
     {
+        if (updateList == null)
+        {
+            return;
+        }
         updateList.RemoveAll(delegate (IUpdateListener o) { return o == null; });
-        for(int i = 0; i < updateList.Count; i++)
+        for (int i = 0; i < updateList.Count; i++)
         {
             if (!updateList[i].Update())
             {
@@ -350,7 +366,7 @@ public class Game : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            foreach(IUpdateListener iul in updateList)
+            foreach (IUpdateListener iul in updateList)
             {
                 iul.Click();
             }

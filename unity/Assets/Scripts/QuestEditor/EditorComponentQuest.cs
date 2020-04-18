@@ -73,11 +73,31 @@ public class EditorComponentQuest : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 12, 1);
+        ui.SetLocation(5, offset, 3, 1);
         ui.SetButton(delegate { Image(); });
         ui.SetText(game.quest.qd.quest.image);
         new UIElementBorder(ui);
         offset += 2;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0.4f, offset, 8, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DEFAULTMUSICON")));
+        ui.SetTextAlignment(TextAnchor.MiddleLeft);
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(8, offset, 3, 1);
+        ui.SetButton(delegate { ToggleDefaultMusicOff(); });
+        new UIElementBorder(ui);
+        if (game.quest.qd.quest.defaultMusicOn)
+        {
+            ui.SetText(CommonStringKeys.TRUE);
+        }
+        else
+        {
+            ui.SetText(CommonStringKeys.FALSE);
+        }
+        offset += 2;
+
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0.5f, offset++, 8, 1);
@@ -370,6 +390,12 @@ public class EditorComponentQuest : EditorComponent
                 Update();
             }
         }
+    }
+
+    public void ToggleDefaultMusicOff()
+    {
+        game.quest.qd.quest.defaultMusicOn = !game.quest.qd.quest.defaultMusicOn;
+        Update();
     }
 
     public void ToggleHidden()

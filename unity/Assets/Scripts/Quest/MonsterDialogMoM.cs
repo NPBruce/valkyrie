@@ -187,14 +187,11 @@ public class MonsterDialogMoM : MonsterDialog
 
         // end this event (fix #1112)
         Game.Get().quest.eManager.currentEvent = null;
-        
-        // Trigger defeated event
+
+        // Trigger defeated event by monster type
         game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
-        // If unique trigger defeated unique event
-        if (monster.unique)
-        {
-            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
-        }
+        // Trigger defeated event by spawn name
+        game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
 
         // fix #982
         if (game.quest.phase == Quest.MoMPhase.monsters)
