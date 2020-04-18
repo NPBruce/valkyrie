@@ -365,7 +365,6 @@ lava,Lava
 swamp,Pântano
 sludge,Lama
 ship,Navio
-train,Trem
 temple,Templo
 train,Trem
 
