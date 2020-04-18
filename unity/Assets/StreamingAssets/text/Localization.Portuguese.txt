@@ -101,7 +101,6 @@ INITIAL_MESSAGE,Mensagem Inicial:
 ITEM,Item
 QITEM,Quest Item
 KO,KO
-LOAD_QUEST,Continue
 LOG,Log
 SKILLS,Habilidades
 ITEMS,Itens
@@ -205,7 +204,6 @@ SELECT_SKILLS,Selecionar Habilidade
 SPAWN,Spawn
 STARTING_ITEM,Item inicial
 STARTING_ITEMS,Itens iniciais
-START_QUEST,Novo Jogo
 START,Começar
 
 TESTS,Testes
