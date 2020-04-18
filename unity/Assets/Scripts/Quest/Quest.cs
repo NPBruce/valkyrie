@@ -864,6 +864,10 @@ public class Quest
             {
                 boardItem = boardItem.Substring(1);
             }
+            if (!qd.components.ContainsKey(boardItem))
+            {
+                ValkyrieDebug.Log("Missing component:" + boardItem + "Probably corrupted save");
+            }
             if (boardItem.IndexOf("Door") == 0)
             {
                 boardItems.Add(boardItem, new Door(qd.components[boardItem] as QuestData.Door, game));
