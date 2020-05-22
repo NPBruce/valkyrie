@@ -291,6 +291,10 @@ mountain,Góra
 cold,Zimno
 hot,Gorąco
 water,Woda
+fleshless,Bezcielesny
+snakeperson,Osoba węża
+relic,Relikt
+elixir,Eliksir
 
 //Tiles
 basement,Podziemie

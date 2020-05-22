@@ -295,6 +295,10 @@ mountain,Montaña
 cold,Frío
 hot,Caliente
 water,Agua
+fleshless,Sin carne
+snakeperson,Persona serpiente
+relic,Reliquia
+elixir,Elixir
 
 //Tiles
 basement,Sótano

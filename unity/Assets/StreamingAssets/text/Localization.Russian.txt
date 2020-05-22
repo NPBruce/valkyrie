@@ -303,6 +303,7 @@ cold,Холодный
 hot,Горячий
 water,Вода
 fleshless,Бесплотный
+snakeperson,змеиный человек
 relic,Святой
 elixir,Эликсир
 

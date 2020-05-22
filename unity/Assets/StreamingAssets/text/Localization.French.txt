@@ -300,6 +300,10 @@ mountain,Montagne
 cold,Froid
 hot,Chaud
 water,Eau
+fleshless,Sans Chair
+snakeperson,Personne de serpent
+relic,Relique
+elixir,Élixir
 
 //Tiles
 basement,Sous-sol
