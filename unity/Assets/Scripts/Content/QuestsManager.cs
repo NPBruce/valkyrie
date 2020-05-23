@@ -216,18 +216,40 @@ public class QuestsManager
     {
         Game game = Game.Get();
 
-        quests_sorted_by_author = new SortedList<string, string>(new DuplicateKeyComparer<string>());
-        quests_sorted_by_name = new SortedList<string, string>(new DuplicateKeyComparer<string>());
-        quests_sorted_by_difficulty = new SortedList<float, string>(new DuplicateKeyComparer<float>());
-        quests_sorted_by_duration = new SortedList<int, string>(new DuplicateKeyComparer<int>());
+        if(quests_sorted_by_author==null)
+        { 
+            quests_sorted_by_author = new SortedList<string, string>(new DuplicateKeyComparer<string>());
+            quests_sorted_by_name = new SortedList<string, string>(new DuplicateKeyComparer<string>());
+            quests_sorted_by_difficulty = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+            quests_sorted_by_duration = new SortedList<int, string>(new DuplicateKeyComparer<int>());
 
-        quests_sorted_by_rating = new SortedList<float, string>(new DuplicateKeyComparer<float>());
-        quests_sorted_by_date = new SortedList<System.DateTime, string>(new DuplicateKeyComparer<System.DateTime>());
-        quests_sorted_by_avg_duration = new SortedList<float, string>(new DuplicateKeyComparer<float>());
-        quests_sorted_by_win_ratio = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+            quests_sorted_by_rating = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+            quests_sorted_by_date = new SortedList<System.DateTime, string>(new DuplicateKeyComparer<System.DateTime>());
+            quests_sorted_by_avg_duration = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+            quests_sorted_by_win_ratio = new SortedList<float, string>(new DuplicateKeyComparer<float>());
+        }
+        else
+        {
+            quests_sorted_by_author.Clear();
+            quests_sorted_by_name.Clear();
+            quests_sorted_by_difficulty.Clear();
+            quests_sorted_by_duration.Clear();
+
+            quests_sorted_by_rating.Clear();
+            quests_sorted_by_date.Clear();
+            quests_sorted_by_avg_duration.Clear();
+            quests_sorted_by_win_ratio.Clear();
+        }
 
         if (quest_list_mode != QuestListMode.ONLINE || force_local_quest)
         {
+            if(local_quests_data==null)
+            {
+                ValkyrieDebug.Log("INFO: No list of local quests available");
+                return;
+            }
+            ValkyrieDebug.Log("INFO: Sorting through "+ local_quests_data.Count + " local quests");
+
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
                 LocalizationRead.AddDictionary("qst", quest_data.Value.localizationDict);
@@ -241,6 +263,14 @@ public class QuestsManager
         {
             if (game.stats != null && game.stats.scenarios_stats != null) // we should wait for stats to be available
             {
+                if (remote_quests_data == null)
+                {
+                    ValkyrieDebug.Log("INFO: No list of external quests available");
+                    return;
+                }
+
+                ValkyrieDebug.Log("INFO: Sorting through stats data available for " + remote_quests_data.Count + " scenarios");
+
                 foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
                 {
                     string pkg_name = quest_data.Key.ToLower() + ".valkyrie";

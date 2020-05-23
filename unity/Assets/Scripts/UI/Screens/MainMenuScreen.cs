@@ -161,7 +161,7 @@ namespace Assets.Scripts.UI.Screens
 
         public void Editor()
         {
-            ValkyrieDebug.Log("INFO: Accessing content selection screen");
+            ValkyrieDebug.Log("INFO: Accessing editor selection screen");
 
             Game game = Game.Get();
             game.SelectEditQuest();
