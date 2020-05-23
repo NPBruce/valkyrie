@@ -204,9 +204,7 @@ SELECT_SKILLS,Selecionar Habilidade
 SPAWN,Spawn
 STARTING_ITEM,Item inicial
 STARTING_ITEMS,Itens iniciais
-START_QUEST,Novo Jogo
 START,Começar
-LOAD_QUEST,Continue
 TESTS,Testes
 TILE,Azulejo (Tile)
 
