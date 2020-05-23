@@ -301,7 +301,7 @@ cold,Froid
 hot,Chaud
 water,Eau
 fleshless,Sans Chair
-snakeperson,Personne de serpent
+snakeperson,Être Serpent
 relic,Relique
 elixir,Élixir
 
