@@ -245,7 +245,7 @@ cold,Freddo
 hot,Caldo
 water,Acqua
 fleshless,Scarno
-snakeperson,Persona Serpente
+snakeperson,Uomo Serpente
 relic,Reliquia
 elixir,Elisir
 
