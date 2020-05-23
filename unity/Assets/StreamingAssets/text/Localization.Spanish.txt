@@ -296,7 +296,7 @@ cold,Frío
 hot,Caliente
 water,Agua
 fleshless,Sin carne
-snakeperson,Persona serpiente
+snakeperson,Hombre serpiente
 relic,Reliquia
 elixir,Elixir
 
