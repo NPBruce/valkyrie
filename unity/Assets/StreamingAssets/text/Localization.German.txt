@@ -300,6 +300,7 @@ cold,Kalt
 hot,Heiß
 water,Wasser
 fleshless,Fleischlos
+snakeperson,Schlangenmensch
 relic,Relikt
 elixir,Elexir
 

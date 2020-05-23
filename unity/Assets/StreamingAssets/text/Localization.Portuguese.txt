@@ -205,7 +205,6 @@ SPAWN,Spawn
 STARTING_ITEM,Item inicial
 STARTING_ITEMS,Itens iniciais
 START,Começar
-
 TESTS,Testes
 TILE,Azulejo (Tile)
 
@@ -312,6 +311,7 @@ cold,Frio
 hot,Quente
 water,Água
 fleshless,Sem Carne
+snakeperson,Pessoa Cobra
 relic,Relíquia
 elixir,Elixir
 

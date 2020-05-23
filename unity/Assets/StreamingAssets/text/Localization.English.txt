@@ -469,6 +469,7 @@ cold,Cold
 hot,Hot
 water,Water
 fleshless,Fleshless
+snakeperson,Snake Person
 relic,Relic
 elixir,Elixir
 

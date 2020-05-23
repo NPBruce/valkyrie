@@ -305,9 +305,9 @@ cold,冷
 hot,熱
 water,水
 fleshless,無肉體
+snakeperson,蛇人
 relic,遺跡
 elixir,靈藥
-
 
 //Tiles Class
 basement,地下室
