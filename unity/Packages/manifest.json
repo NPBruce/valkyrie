@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "com.unity.ads": "2.0.8",
+    "com.google.external-dependency-manager": "1.2.155",
+    "com.google.firebase.app": "6.14.1",
+    "com.google.firebase.crashlytics": "6.14.1",
     "com.unity.analytics": "3.2.3",
     "com.unity.collab-proxy": "1.2.15",
     "com.unity.package-manager-ui": "2.0.8",
@@ -36,5 +38,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Game Package Registry by Google",
+      "url": "https://unityregistry-pa.googleapis.com",
+      "scopes": [
+        "com.google"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "409081743146",
+    "firebase_url": "https://valkyrie-59b81.firebaseio.com",
+    "project_id": "valkyrie-59b81",
+    "storage_bucket": "valkyrie-59b81.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409081743146:android:e7567ac63f88eb6d0c8053",
+        "android_client_info": {
+          "package_name": "com.bruce.valkyrie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409081743146-79n3cfb760dm5nd66aj824117t4qu9pe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPR8-kHOhSSblR6tTYiZxNCaYy5aH3FVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409081743146-79n3cfb760dm5nd66aj824117t4qu9pe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
