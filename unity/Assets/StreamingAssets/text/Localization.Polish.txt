@@ -292,7 +292,7 @@ cold,Zimno
 hot,Gorąco
 water,Woda
 fleshless,Bezcielesny
-snakeperson,Osoba węża
+snakeperson,Wężoczłek
 relic,Relikt
 elixir,Eliksir
 
