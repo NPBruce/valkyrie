@@ -313,7 +313,7 @@ namespace Assets.Scripts.Content
         /// Check if a key exists in any language, also ensures all matching values are loaded into Dictionary objects
         /// </summary>
         /// <param name="key">key to check</param>
-        public bool KeyExists(string key)
+        public bool KeyExists(in string key)
         {
             // Check loaded Dictionary data
             foreach (Dictionary<string, string> languageData in data.Values)
@@ -329,31 +329,9 @@ namespace Assets.Scripts.Content
             // Check all languages
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
-                // Check all lines
-                foreach (string raw in kv.Value)
-                {
-                    if (raw.IndexOf(key + ',') == 0)
-                    {
-                        // Add this language to Dictionary data
-                        if (!data.ContainsKey(kv.Key))
-                        {
-                            data.Add(kv.Key, new Dictionary<string, string>());
-                        }
-
-                        // If already present log warning
-                        if (data[kv.Key].ContainsKey(key))
-                        {
-                            ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
-                        }
-                        else
-                        {
-                            data[kv.Key].Add(key, ParseEntry(raw.Substring(raw.IndexOf(',') + 1)));
-                        }
-
-                        // Continue after found to ensure all languages are loaded
-                        found = true;
-                    }
-                }
+                // Continue after found to ensure all languages are loaded
+                // todo: only loads current language
+                found |= LookInOneLanguage(kv, key);
             }
 
             if (!found)
@@ -363,11 +341,50 @@ namespace Assets.Scripts.Content
         }
 
         /// <summary>
+        /// Check if a key exists language 'kv.key' and load it
+        /// This function exists as we need to leave foreach loop after finding the right value, without leaving the initial foreach
+        /// </summary>
+        /// <param name="key">key to check</param>
+        private bool LookInOneLanguage(in KeyValuePair<string, List<string>> kv, in string key)
+        {
+            string key_searched = key + ',';
+            // Check all lines
+            foreach (string raw in kv.Value)
+            {
+                if (raw.StartsWith(key_searched, false, null))
+                {
+                    string parsed_raw = ParseEntry(raw.Substring(key.Length + 1));
+
+                    // Add this language to Dictionary data
+                    if (!data.ContainsKey(kv.Key))
+                    {
+                        data.Add(kv.Key, new Dictionary<string, string>(500));
+                    }
+
+                    // If already present log warning
+                    if (data[kv.Key].ContainsKey(key))
+                    {
+                        ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
+                    }
+                    else
+                    {
+                        data[kv.Key].Add(key, parsed_raw);
+                    }
+
+                    // stop searching here, won't find duplicate
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Get the value for a key.  First check current language, then default, then any.  Returns key if not found.
         /// </summary>
         /// <param name="key">key to retreive</param>
         /// <returns>Value found or 'key' if not found</returns>
-        public string GetValue(string key)
+        public string GetValue(in string key)
         {
             // KeyExists ensures any matches are loaded to Dictionary data
             if (!KeyExists(key)) return key;
@@ -431,7 +448,7 @@ namespace Assets.Scripts.Content
         /// </summary>
         /// <param name="entry">entry from raw text</param>
         /// <returns>Entry with newlines and quotes handled</returns>
-        protected string ParseEntry(string entry)
+        protected string ParseEntry(in string entry)
         {
             string parsedReturn = entry.Replace("\\n", "\n");
             // If entry is in quotes
