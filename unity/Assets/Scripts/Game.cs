@@ -118,6 +118,10 @@ public class Game : MonoBehaviour
         // save main thread Id
         mainThread = System.Threading.Thread.CurrentThread;
 
+        // used for float.TryParse
+        mainThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+        mainThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+
         // Set specific configuration for Android 
         if (Application.platform == RuntimePlatform.Android)
         {
