@@ -1621,15 +1621,18 @@ public class Quest
             }
 
             Texture2D newTex = null;
-            if (game.cd.images.ContainsKey(qUI.imageName))
+            if (qUI.imageName.Length > 0)
             {
-                Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
-                Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
-                newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
-            }
-            else if (qUI.imageName.Length > 0)
-            {
-                newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
+                if (game.cd.images.ContainsKey(qUI.imageName))
+                {
+                    Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
+                    Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
+                    newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+                }
+                else
+                {
+                    newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
+                }
             }
 
             // Create object
