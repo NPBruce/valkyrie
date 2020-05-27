@@ -303,6 +303,7 @@ cold,Холодный
 hot,Горячий
 water,Вода
 fleshless,Бесплотный
+snakeperson,змеиный человек
 relic,Святой
 elixir,Эликсир
 
@@ -353,6 +354,9 @@ snow,Снег
 lava,Лава
 swamp,Болото
 sludge,Сточные воды
+ship,Корабль
+temple,Храм
+train,Поезд
 
 // Colors
 black,Черный

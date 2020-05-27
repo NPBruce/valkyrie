@@ -20,6 +20,7 @@ ICON_PRODUCT_MAD23,
 ICON_PRODUCT_MAD25,
 ICON_PRODUCT_MAD26,
 ICON_PRODUCT_MAD27,
+ICON_PRODUCT_MAD28,
 
 // TEXTS
 ABILITY,Ability
@@ -77,6 +78,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
 CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
+DEFAULTMUSICON,Turn on default music
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
@@ -290,6 +292,7 @@ MoM1ET,MoM1ET 
 MoM1EI,MoM1EI 
 MoM1EM,MoM1EM 
 base,base 
+PotS,PotS 
 RN,RN 
 SM,SM 
 SoT,SoT 
@@ -311,6 +314,7 @@ MoM1ET_SYMBOL,
 MoM1EI_SYMBOL,
 MoM1EM_SYMBOL,
 base_SYMBOL,
+PotS_SYMBOL,
 RN_SYMBOL,
 SM_SYMBOL,
 SoT_SYMBOL,
@@ -465,6 +469,7 @@ cold,Cold
 hot,Hot
 water,Water
 fleshless,Fleshless
+snakeperson,Snake Person
 relic,Relic
 elixir,Elixir
 
@@ -516,6 +521,7 @@ lava,Lava
 swamp,Swamp
 sludge,Sludge
 ship,Ship
+temple,Temple
 train,Train
 
 // Colors

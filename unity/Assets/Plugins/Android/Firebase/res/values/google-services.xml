@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="firebase_database_url" translatable="false">https://valkyrie-59b81.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">409081743146</string>
+  <string name="google_storage_bucket" translatable="false">valkyrie-59b81.appspot.com</string>
+  <string name="project_id" translatable="false">valkyrie-59b81</string>
+  <string name="google_api_key" translatable="false">AIzaSyBPR8-kHOhSSblR6tTYiZxNCaYy5aH3FVc</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBPR8-kHOhSSblR6tTYiZxNCaYy5aH3FVc</string>
+  <string name="google_app_id" translatable="false">1:409081743146:android:e7567ac63f88eb6d0c8053</string>
+  <string name="default_web_client_id" translatable="false">409081743146-79n3cfb760dm5nd66aj824117t4qu9pe.apps.googleusercontent.com</string>
+</resources>

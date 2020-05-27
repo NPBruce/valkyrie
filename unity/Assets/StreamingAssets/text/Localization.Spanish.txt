@@ -295,6 +295,10 @@ mountain,Montaña
 cold,Frío
 hot,Caliente
 water,Agua
+fleshless,Sin carne
+snakeperson,Hombre serpiente
+relic,Reliquia
+elixir,Elixir
 
 //Tiles
 basement,Sótano
@@ -343,6 +347,9 @@ snow,Nieve
 lava,Lava
 swamp,Pantano
 sludge,Lodo
+ship,Enviar
+temple,Templo
+train,Entrenar
 
 // Colors
 black,Negro

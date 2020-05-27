@@ -113,6 +113,9 @@ public class Quest
     // Quest gameplay duration
     public int duration;
 
+    // Default music will be played when you start the quest
+    public bool defaultMusicOn;
+
     // A list of music if custom music has been selected - used for save games
     public List<string> music = new List<string>();
 
@@ -170,6 +173,7 @@ public class Quest
 
         start_time = System.DateTime.UtcNow;
         duration = 0;
+        defaultMusicOn = q.defaultMusicOn;
 
         GenerateItemSelection();
         eManager = new EventManager();
@@ -859,6 +863,10 @@ public class Quest
             if (boardItem[0] == '\\')
             {
                 boardItem = boardItem.Substring(1);
+            }
+            if (!qd.components.ContainsKey(boardItem))
+            {
+                ValkyrieDebug.Log("Missing component:" + boardItem + "Probably corrupted save");
             }
             if (boardItem.IndexOf("Door") == 0)
             {
@@ -1613,15 +1621,18 @@ public class Quest
             }
 
             Texture2D newTex = null;
-            if (game.cd.images.ContainsKey(qUI.imageName))
+            if (qUI.imageName.Length > 0)
             {
-                Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
-                Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
-                newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
-            }
-            else if (qUI.imageName.Length > 0)
-            {
-                newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
+                if (game.cd.images.ContainsKey(qUI.imageName))
+                {
+                    Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
+                    Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
+                    newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+                }
+                else
+                {
+                    newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
+                }
             }
 
             // Create object
@@ -2049,6 +2060,10 @@ public class Quest
     {
         // Content Data
         public MonsterData monsterData;
+
+        // Spawn event name used later for defeated triggers
+        public string spawnEventName;
+
         // What dulpicate number is the monster?
         public int duplicate = 0;
 
@@ -2075,6 +2090,7 @@ public class Quest
         public Monster(EventManager.MonsterEvent monsterEvent)
         {
             monsterData = monsterEvent.cMonster;
+            spawnEventName = monsterEvent.qMonster.sectionName;
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;

@@ -291,6 +291,10 @@ mountain,Góra
 cold,Zimno
 hot,Gorąco
 water,Woda
+fleshless,Bezcielesny
+snakeperson,Wężoczłek
+relic,Relikt
+elixir,Eliksir
 
 //Tiles
 basement,Podziemie
@@ -339,6 +343,9 @@ snow,Śnieg
 lava,Lawa
 swamp,Mokradła
 sludge,Błoto
+ship,Statek
+temple,Świątynia
+train,Pociąg
 
 // Colors
 black,Czarny

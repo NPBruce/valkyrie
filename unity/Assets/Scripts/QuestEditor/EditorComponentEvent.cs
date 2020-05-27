@@ -644,13 +644,6 @@ public class EditorComponentEvent : EditorComponent
         HashSet<string> vars = new HashSet<string>();
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
-            if (kv.Value is QuestData.CustomMonster)
-            {
-                select.AddItem("Defeated" + kv.Key, traits);
-                select.AddItem("DefeatedUnique" + kv.Key, traits);
-            }
-
-
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
@@ -665,7 +658,36 @@ public class EditorComponentEvent : EditorComponent
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.CUSTOMMONSTER.Translate() });
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.CustomMonster)
+            {
+                select.AddItem("Defeated" + kv.Key, traits);
+                if (game.gameType is D2EGameType)
+                {
+                    select.AddItem("DefeatedUnique" + kv.Key, traits);
+                }
+            }
+        }
 
+        traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.SPAWN.Translate() });
+
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        {
+            if (kv.Value is QuestData.Spawn)
+            {
+                select.AddItem("Defeated" + kv.Key, traits);
+                if (game.gameType is D2EGameType)
+                {
+                    select.AddItem("DefeatedUnique" + kv.Key, traits);
+                }
+                
+            }
+        }
+
+        traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { new StringKey("val", "VARS").Translate() });
 
         foreach (string s in vars)
