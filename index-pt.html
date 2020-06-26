@@ -323,8 +323,8 @@
                   <li>Mansions of Madness Second Edition precisa do <a href="http://store.steampowered.com/app/478980/" target="_blank">Mansions of Madness</a> app.</li>
                   <li>Descent: Journeys in the Dark (Second Edition) precisa do <a href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Road to Legend</a> app.</li>
                 </ul>
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-windows-zip">Download Último ZIP</a>
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-windows-exe">Download Último EXE</a>
+                <a id="valkyrieWindowsZip" class="btn-solid-reg popup-with-move-anim">Download Último ZIP</a>
+                <a id="valkyrieWindowsExe" class="btn-solid-reg popup-with-move-anim">Download Último EXE</a>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
           </div> <!-- end of row -->
@@ -353,7 +353,7 @@
                 <p>Se você ver apenas uma tela preta, vá até as configurações do aplicativo e verifique se as permissões de armazenamento estão habilitadas.</p>
 
                 <p>Se a importação falhar, verifique se você tem espaço suficiente. Cada jogo precisa de até 300 MB. Para garantir, tenha 1 GB de espaço livre.</p>
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-android-apk">Download Último</a>
+                <a id="valkyrieAndroid" class="btn-solid-reg popup-with-move-anim">Download Último</a>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
             <div class="col-lg-3">
@@ -381,7 +381,7 @@
                 <p>2. O app está salvo como uma exceção em suas configurações de segurança, e você pode abrir no futuro clicando duas vezes, como qualquer outro aplicativo.</p>
                 <p>Se a importação não for completa tente rodar Valkyrie como mais permissões.</p>
                 <p>Além disso, garanta que você não tem nenhuma permissão na pasta. Mova seu download fo Valkyrie para a pasta Applications dentro do Finder. Então execute no terminal "chmod +x /Applications/Valkyrie.app/Contents/MacOS/Valkyrie"</p>
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-macos-zip">Download Último</a>
+                <a id="valkyrieMacos" class="btn-solid-reg popup-with-move-anim">Download Último</a>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
           </div> <!-- end of row -->
@@ -399,7 +399,7 @@
                 <p>Para o Linux também não há importação automática:</p>
                 <p>1. Copie content/&lt;type&gt;/ffg para outra instalação or</p>
                 <p>2. Rode com -import &lt;location&gt; where &lt;location&gt; é Road to Legend ou Mansions of Madness data. Exemplo /home/&lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend for Road to Legend.</p>
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-linux-tar">Download Último</a>
+                <a id="valkyrieLinux" class="btn-solid-reg popup-with-move-anim">Download Último</a>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
             <div class="col-lg-3">
@@ -429,8 +429,7 @@
                 <p><b>Road to Legend</b>: com.fantasyflightgames.rtl/ main.459.com.fantasyflightgames.rtl.obb</p>
 
                 <p>Habilite "Unknown Sources" (Fontes desconhecidas) em Settings → Security → Unknown Sources (Configurações → Segurança → Fontes Desconhecidas). Copie o APK do Valkyrie para seu dispositivo. Rode o APK para instalar. Depois da instalação, você vai enconotrar um App chamado "Valkyrie" em seus aplicativos. Rode. Permita todas as permissões que o App peça. Aperte o botão "Import" dentro do App do Valkyrie. A importação pode levar um tempo. Depois da importação ser concluída você pode selecionar qual jogo quer usar.</p>
-
-                <a class="btn-solid-reg popup-with-move-anim" href="https://bit.ly/valk-android-apk">Download Último</a>
+                <a id="valkyrieAndroid2" class="btn-solid-reg popup-with-move-anim">Download Último</a>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
           </div> <!-- end of row -->
@@ -469,6 +468,50 @@
     <script src="web/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="web/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="web/js/scripts.js"></script> <!-- Custom scripts -->
+
+    <script>
+        $(document).ready(function () {
+            fallbackDownloadUrl = "https://github.com/NPBruce/valkyrie/releases/latest";
+            valkyrieAndroid = fallbackDownloadUrl;
+            valkyrieLinux = fallbackDownloadUrl;
+            valkyrieMacos = fallbackDownloadUrl;
+            valkyrieWindowsExe = fallbackDownloadUrl;
+            valkyrieWindows7z = fallbackDownloadUrl;
+            valkyrieWindowsZip = fallbackDownloadUrl;
+
+            $.get('https://api.github.com/repos/NPBruce/valkyrie/releases/latest', function (data) {
+                $.each(data.assets, function(i, v) {
+                    if (v.name.toLowerCase().startsWith("valkyrie-android") == true){
+                        valkyrieAndroid = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-linux") == true){
+                        valkyrieLinux = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-macos") == true){
+                        valkyrieMacos = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".exe") == true){
+                        valkyrieWindowsExe = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".7z") == true){
+                        valkyrieWindows7z = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".zip") == true){
+                        valkyrieWindowsZip = v.browser_download_url;
+                    }
+                });
+
+                $('#valkyrieAndroid2').attr('href', valkyrieAndroid);
+                $('#valkyrieAndroid').attr('href', valkyrieAndroid);
+                $('#valkyrieLinux').attr('href', valkyrieLinux);
+                $('#valkyrieMacos').attr('href', valkyrieMacos);
+                $('#valkyrieWindows7z').attr('href', valkyrieWindows7z);
+                $('#valkyrieWindowsExe').attr('href', valkyrieWindowsExe);
+                $('#valkyrieWindowsZip').attr('href', valkyrieWindowsZip);
+            });
+        });
+    </script>
+
   </body>
 </html>
     
