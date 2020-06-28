@@ -2,5 +2,6 @@
 
 Valkyrie GM for Fantasy Flight Board Games
 
-Information:
-https://github.com/NPBruce/valkyrie/wiki
+Website: https://npbruce.github.io/valkyrie/
+
+Information: https://github.com/NPBruce/valkyrie/wiki
