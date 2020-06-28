@@ -88,6 +88,7 @@
             <a class="nav-link page-scroll" href="https://github.com/NPBruce/valkyrie/wiki/QuestGuide" target="_blank">QUEST CREATION GUIDE</a>
           </li>
 
+            <a class="nav-link page-scroll" href="https://github.com/NPBruce/valkyrie/issues" target="_blank">SOPORTE</a>
           <li class="nav-item">
               <a class="nav-link page-scroll" href="https://discord.gg/yrVeSVt" target="_blank">DISCORD</a>
           </li>
@@ -122,7 +123,7 @@
             <div class="col-lg-6">
               <div class="text-container">
                 <h2>CREADOR DE ESCENARIOS/MISIONES PARA<br></h2> <h3><span id="js-rotating">MANSIONES DE LA LOCURA, DESCENT</span></h3>
-                <p class="p-large">Valkyrie is an App to users built scenarios/quests for Fantasy Flight Board Games.</p>
+                <p class="p-large">Valkiria es una aplicación para los usuarios que construyeron escenarios/cuestiones para los Juegos de Tablero de Vuelo de Fantasía.</p>
                 <a class="btn-solid-lg page-scroll" href="#download-windows"><i class="fab fa-windows"></i>WINDOWS</a>
                 <a class="btn-solid-lg page-scroll" href="#download-android"><i class="fab fa-android"></i>ANDROID</a>
                 <a class="btn-solid-lg page-scroll" href="#download-macos"><i class="fab fa-apple"></i>MAC OS</a>
@@ -475,50 +476,8 @@
     <script src="web/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="web/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="web/js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="web/js/indexScripts.js"></script> <!-- additional scripts for this page (e.g. for generating download links) -->
 
-    <script>
-        $(document).ready(function () {
-            fallbackDownloadUrl = "https://github.com/NPBruce/valkyrie/releases/latest";
-            valkyrieAndroid = fallbackDownloadUrl;
-            valkyrieLinux = fallbackDownloadUrl;
-            valkyrieMacos = fallbackDownloadUrl;
-            valkyrieWindowsExe = fallbackDownloadUrl;
-            valkyrieWindows7z = fallbackDownloadUrl;
-            valkyrieWindowsZip = fallbackDownloadUrl;
-
-            $.get('https://api.github.com/repos/NPBruce/valkyrie/releases/latest', function (data) {
-                $.each(data.assets, function(i, v) {
-                    if (v.name.toLowerCase().startsWith("valkyrie-android") == true){
-                        valkyrieAndroid = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-linux") == true){
-                        valkyrieLinux = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-macos") == true){
-                        valkyrieMacos = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".exe") == true){
-                        valkyrieWindowsExe = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".7z") == true){
-                        valkyrieWindows7z = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".zip") == true){
-                        valkyrieWindowsZip = v.browser_download_url;
-                    }
-                });
-
-                $('#valkyrieAndroid2').prop('href', valkyrieAndroid);
-                $('#valkyrieAndroid').prop('href', valkyrieAndroid);
-                $('#valkyrieLinux').prop('href', valkyrieLinux);
-                $('#valkyrieMacos').prop('href', valkyrieMacos);
-                $('#valkyrieWindows7z').prop('href', valkyrieWindows7z);
-                $('#valkyrieWindowsExe').prop('href', valkyrieWindowsExe);
-                $('#valkyrieWindowsZip').prop('href', valkyrieWindowsZip);
-
-            });
-        });
-    </script>
   </body>
 </html>
     

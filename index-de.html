@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Valkyrie is an App to build scenarios/quests and share them with players around the world. Both Mnsions of Madness Second Edition and Descent are supported and scenarios can be available in multiple languages, localized by the community.">
+  <meta name="description" content="Valkyrie ist eine App zur Erstellung von nutzergenerierten Inhalten für Fantasy Flight Brettspiele. Sowohl Mansions of Madness Second Edition als auch Descent werden unterstützt, und die Szenarien sind in mehreren Sprachen verfügbar, die von der Community lokalisiert werden können.">
 
   <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
-	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site_name" content="Valkyrie Content Creator" /> <!-- website name -->
 	<meta property="og:site" content="" /> <!-- website link -->
 	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
 	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
@@ -122,7 +122,7 @@
             <div class="col-lg-6">
               <div class="text-container">
                 <h2>Quest Editor für<br></h2> <h3><span id="js-rotating">Villen des Wahnsinns, DESCENT</span></h3>
-                <p class="p-large">Valkyrie ist eine App für nutzergenerierte Scenarios/Quests für Fantasy Flight Brettspiele.</p>
+                <p class="p-large">Valkyrie ist eine App zur Erstellung von nutzergenerierten Inhalten für Fantasy Flight Brettspiele.</p>
                 <a class="btn-solid-lg page-scroll" href="#download-windows"><i class="fab fa-windows"></i>WINDOWS</a>
                 <a class="btn-solid-lg page-scroll" href="#download-android"><i class="fab fa-android"></i>ANDROID</a>
                 <a class="btn-solid-lg page-scroll" href="#download-macos"><i class="fab fa-apple"></i>MAC OS</a>
@@ -186,7 +186,7 @@
                     <div class="card left-pane">
                       <div class="card-body">
                         <div class="text-wrapper">
-                            <h4 class="card-title">Scenario Editor</h4>
+                            <h4 class="card-title">Szenario Editor</h4>
                             <p>Verwenden den Szenario-Editor, um Tokens und Spielplanteile zu platzieren.</p>
                         </div>
                       </div>
@@ -241,7 +241,7 @@
                   <!-- Text And Icon Cards Area -->
                   <div class="col-md-6">
                     <div class="text-area">
-                      <h3>Teste dein Scenario</h3>
+                      <h3>Teste dein Szenario</h3>
                       <p>Nachdem du dein Szenario fertiggestellt hast, kannst du es spielen oder Quests von anderen Autoren spielen.</p>
                     </div> <!-- end of text-area -->
                     
@@ -466,49 +466,6 @@
     <script src="web/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="web/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="web/js/scripts.js"></script> <!-- Custom scripts -->
-
-    <script>
-        $(document).ready(function () {
-            fallbackDownloadUrl = "https://github.com/NPBruce/valkyrie/releases/latest";
-            valkyrieAndroid = fallbackDownloadUrl;
-            valkyrieLinux = fallbackDownloadUrl;
-            valkyrieMacos = fallbackDownloadUrl;
-            valkyrieWindowsExe = fallbackDownloadUrl;
-            valkyrieWindows7z = fallbackDownloadUrl;
-            valkyrieWindowsZip = fallbackDownloadUrl;
-
-            $.get('https://api.github.com/repos/NPBruce/valkyrie/releases/latest', function (data) {
-                $.each(data.assets, function(i, v) {
-                    if (v.name.toLowerCase().startsWith("valkyrie-android") == true){
-                        valkyrieAndroid = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-linux") == true){
-                        valkyrieLinux = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-macos") == true){
-                        valkyrieMacos = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".exe") == true){
-                        valkyrieWindowsExe = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".7z") == true){
-                        valkyrieWindows7z = v.browser_download_url;
-                    }
-                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".zip") == true){
-                        valkyrieWindowsZip = v.browser_download_url;
-                    }
-                });
-
-                $('#valkyrieAndroid2').prop('href', valkyrieAndroid);
-                $('#valkyrieAndroid').prop('href', valkyrieAndroid);
-                $('#valkyrieLinux').prop('href', valkyrieLinux);
-                $('#valkyrieMacos').prop('href', valkyrieMacos);
-                $('#valkyrieWindows7z').prop('href', valkyrieWindows7z);
-                $('#valkyrieWindowsExe').prop('href', valkyrieWindowsExe);
-                $('#valkyrieWindowsZip').prop('href', valkyrieWindowsZip);
-            });
-        });
-    </script>
+    <script src="web/js/indexScripts.js"></script> <!-- additional scripts for this page (e.g. for generating download links) -->
   </body>
 </html>
-    
