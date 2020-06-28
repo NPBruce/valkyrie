@@ -9,7 +9,7 @@
   <meta name="description" content="Valkyrie is an App to build scenarios/quests and share them with players around the world. Both Mnsions of Madness Second Edition and Descent are supported and scenarios can be available in multiple languages, localized by the community.">
 
   <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
-	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site_name" content="Valkyrie Content Creator" /> <!-- website name -->
 	<meta property="og:site" content="" /> <!-- website link -->
 	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
 	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
@@ -67,7 +67,7 @@
           </li>
           <!-- Dropdown Menu -->          
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle page-scroll" href="#details" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">DO POBRANIA</a>
+            <a class="nav-link dropdown-toggle page-scroll" href="#details" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">DOWNLOAD</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#download-windows"><span class="item-text">WINDOWS</span></a>
                 <div class="dropdown-items-divide-hr"></div>
@@ -85,28 +85,34 @@
           <!-- end of dropdown menu -->
 
           <li class="nav-item">
-            <a class="nav-link page-scroll" href="https://github.com/NPBruce/valkyrie/wiki/QuestGuide" target="_blank">TWORZENIE PRZYGÓD - INSTRUKCJA</a>
+            <a class="nav-link page-scroll" href="https://github.com/NPBruce/valkyrie/wiki/QuestGuide" target="_blank">GUIA DE CAMPANHA</a>
           </li>
+<<<<<<< HEAD
 
+=======
+          <li class="nav-item">
+            <a class="nav-link page-scroll" href="https://github.com/NPBruce/valkyrie/issues" target="_blank">SUPPORT</a>
+          </li>
+>>>>>>> e701556c... Moved scripts from index.html to its own js file.
           <li class="nav-item">
               <a class="nav-link page-scroll" href="https://discord.gg/yrVeSVt" target="_blank">DISCORD</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle page-scroll" href="#details" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">JĘZYK</a>
+            <a class="nav-link dropdown-toggle page-scroll" href="#details" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Idioma</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="index.html"><span class="item-text">Angielski</span></a>
+                <a class="dropdown-item" href="index.html"><span class="item-text">Inglês</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="index-es.html"><span class="item-text">Hiszpański</span></a>
+                <a class="dropdown-item" href="index-es.html"><span class="item-text">Espanhol</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="index-it.html"><span class="item-text">Włoski</span></a>
+                <a class="dropdown-item" href="index-it.html"><span class="item-text">Italiano</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="index-fr.html"><span class="item-text">Francuski</span></a>
+                <a class="dropdown-item" href="index-fr.html"><span class="item-text">Francês</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="index-pt.html"><span class="item-text">Portugalski</span></a>
+                <a class="dropdown-item" href="index-pt.html"><span class="item-text">Português</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="#index-pl.html"><span class="item-text">Polski</span></a>
+                <a class="dropdown-item" href="index-pl.html"><span class="item-text">Polonês</span></a>
                 <div class="dropdown-items-divide-hr"></div>
-                <a class="dropdown-item" href="#index-de.html"><span class="item-text">Niemiecki</span></a>
+                <a class="dropdown-item" href="index-de.html"><span class="item-text">Alemão</span></a>
             </div>
           </li>
         </ul>
@@ -121,8 +127,8 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="text-container">
-                <h2>EDYTOR SCENARIUSZY DO GIER<br></h2> <h3><span id="js-rotating">POSIADŁOŚĆ SZALEŃSTWA, DESCENT</span></h3>
-                <p class="p-large">Valkyrie jest aplikacją do tworzenia scenariuszy/przygód do gier od Fantasy Flight Games.</p>
+                <h2>CRIADOR DE CAMPANHA PARA<br></h2> <h3><span id="js-rotating">MANSIONS OF MADNESS, DESCENT</span></h3>
+                <p class="p-large">Valkyrie é um App para que usuários criem suas aventuras/cenários para os jogos de tabuleiro da Fantasy Flight Board Games e compartilhar com jogadores no mundo todo.</p>
                 <a class="btn-solid-lg page-scroll" href="#download-windows"><i class="fab fa-windows"></i>WINDOWS</a>
                 <a class="btn-solid-lg page-scroll" href="#download-android"><i class="fab fa-android"></i>ANDROID</a>
                 <a class="btn-solid-lg page-scroll" href="#download-macos"><i class="fab fa-apple"></i>MAC OS</a>
@@ -150,18 +156,18 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <h2>OPIS</h2>
-            <div class="p-heading p-large">Valkyrie została stworzona przez użytkowników, którzy chcieli tworzyć własne przygody, którymi mogliby dzielić się z innymi graczami.</div>
+            <h2>FEATURES</h2>
+            <div class="p-heading p-large">Valkyrie foi criado para que usuários possam criar suas próprias aventuras e compartilhar com a comunidade.</div>
           </div> <!-- end of col -->
         </div> <!-- end of row -->
         <div class="row">
           <!-- Tabs Links -->
           <ul class="nav nav-tabs" id="lenoTabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">TWORZENIE</a>
+              <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">CRIE</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">ROZGRYWKA</a>
+              <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">JOGUE</a>
             </li>
           </ul>
           <!-- end of tabs links -->
@@ -178,16 +184,16 @@
                     <div class="card left-pane first">
                       <div class="card-body">
                           <div class="text-wrapper">
-                              <h4 class="card-title">Tworzenie własnej przygody</h4>
-                              <p>Zostań Mistrzem Gry i rozpocznij tworzenie własnych przygód.</p>
+                              <h4 class="card-title">Crie sua Aventura</h4>
+                              <p>Seja o mestre e comece a criar suas próprias histórias.</p>
                           </div>
                       </div>
                     </div>
                     <div class="card left-pane">
                       <div class="card-body">
                         <div class="text-wrapper">
-                            <h4 class="card-title">Edytor Scenariusza</h4>
-                            <p>Używaj Edytora Scenariuszy żeby rozmieszczać według własnego uznania żetony oraz kafle terenu.</p>
+                            <h4 class="card-title">Editor de Cenário</h4>
+                            <p>Use o Editor de Cenário para colocar Marcadores e mapas como você quiser.</p>
                         </div>
                       </div>
                     </div>
@@ -206,16 +212,16 @@
                     <div class="card right-pane first">
                       <div class="card-body">
                         <div class="text-wrapper">
-                            <h4 class="card-title">Sterowanie Wydarzeniami</h4>
-                            <p>Twórz wydarzenia połączone z żetonami, kaflami terenu oraz bohaterami.</p>
+                            <h4 class="card-title">Direcionado a Eventos</h4>
+                            <p>Crie eventos para seus marcadores, mapas, heróis e mais.</p>
                         </div>
                       </div>
                     </div>
                     <div class="card right-pane">
                       <div class="card-body">
                         <div class="text-wrapper">
-                          <h4 class="card-title">Podziel się swoim dziełem.</h4>
-                          <p>Po zakończeniu pracy w edytorze możesz podzielić się efektami swojej pracy z innymi graczami na całym świecie.</p>
+                          <h4 class="card-title">Compartilhe com a comunidade</h4>
+                          <p>Depois de terminar outros podem jogar seu cenário.</p>
                         </div>
                       </div>
                     </div>
@@ -241,21 +247,21 @@
                   <!-- Text And Icon Cards Area -->
                   <div class="col-md-6">
                     <div class="text-area">
-                      <h3>Wypróbuj Scenariusz</h3>
-                      <p>Możesz zagrać w stworzony przez siebie scenariusz lub zagrać w dzieła innych graczy.</p>
+                      <h3>Teste seu Cenário</h3>
+                      <p>Depois de terminar seu cenário você pode jogar com seus amigos or jogar cenários de outros criadoores de conteúdo</p>
                     </div> <!-- end of text-area -->
                     
                     <div class="icon-cards-area">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Wybór Języka</h4>
-                          <p>Scenariusze są dostępne w różnych językach. Społeczność jest międzynarodowa i zajmuje się ich tłumaczeniem.</p>
+                          <h4 class="card-title">Seleção de Idioma</h4>
+                          <p>Os Cenários são disponíveis em diversas línguas, a própria comunidade pode localizar seu conteúdo</p>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Zostaw Opinię</h4>
-                          <p>Po zakończeniu scenariusza gracze są proszeni o napisanie swojej opinii o scenariuszu. Daje to cenne informacje zwrotne dla twórcy.</p>
+                          <h4 class="card-title">Deixe um Feedback</h4>
+                          <p>Os jogadores são convidados a deixar um feedback no fim de cada partida, criando assim uma conexão entre jogador e criador.</p>
                         </div>
                       </div>
                     </div> <!-- end of icon cards area -->
@@ -277,8 +283,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Przegląd</h2>
-                    <div class="p-heading p-large">Krótki film wprowadzający</div>
+                    <h2>PREVIEW</h2>
+                    <div class="p-heading p-large">Pequeno vídeo introdutório</div>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -316,15 +322,15 @@
             <div class="col-lg-9">
               <div class="text-container">
                 <h3>Windows</h3>
-                <p>Uruchom instalator i zainstaluj aplikację w wybranej lokalizacji, następnie uruchom Valkyrie. Importowanie może zająć kilka chwil więc bądź cierpliwy. Jeżeli import danych do aplikacji się nie powiedzie, sprawdź sekcję <a href="https://github.com/NPBruce/valkyrie/wiki/Troubleshooting" target="_blank">Troubleshooting</a>.</p>
-                <p>Wymagane jest posiadanie zainstalowanej aplikacji od FFG powiązanej z grą, w którą chcesz zagrać.</p>
-                  <ul>
-                    <li>Posiadłość Szaleństwa druga edycja wymaga aplikacji <a href="http://store.steampowered.com/app/478980/" target="_blank">Posiadłość Szaleństwa</a>.</li>
-                    <li>Descent: Wędrówki w mroku (Druga Edycja) wymaga aplikacji <a href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Droga do Legendy</a>.</li>
-                  </ul>
+                <p>Rode o instalador e instale na pasta de sua preferência, e então, inicie o Valkyrie. A importação pode levar alguns minutes, então não fique ansioso. Se a importação não terminar ou não funcionar verifique a seção de <a href="https://github.com/NPBruce/valkyrie/wiki/Troubleshooting" target="_blank">Troubleshooting</a> (em inglês).</p>
+                <p>É necessário instalar o App da FFG correspondente ao boardgame que você quer jogar:
+                <ul>
+                  <li>Mansions of Madness Second Edition precisa do <a href="http://store.steampowered.com/app/478980/" target="_blank">Mansions of Madness</a> app.</li>
+                  <li>Descent: Journeys in the Dark (Second Edition) precisa do <a href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Road to Legend</a> app.</li>
+                </ul>
 
-                  <a id="valkyrieWindowsZip" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobierz najnowszy ZIP</a>
-                  <a id="valkyrieWindowsExe" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobiesz najnowszy EXE</a>
+                <a id="valkyrieWindowsZip" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último ZIP</a>
+                <a id="valkyrieWindowsExe" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último EXE</a>
 
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
@@ -340,27 +346,27 @@
             <div class="col-lg-9">
               <div class="text-container">
                 <h3>Android</h3>
-                <p>Jeśli posiadasz już zainstalowaną wcześniejsza wersję Valkyrie, najpierw ją odinstaluj.</p>
-                <p>Zainstaluj oficjalną aplikację ze sklepu Google Play:</p>
+                <p>Se você já tem uma versão do Valkyrie instalada, por favor desinstale primeiro.</p>
+                <p>Instale o App Oficial usando a Google Play Store:</p>
                 <ul>
-                  <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom" target="_blank">Posiadłość Szaleństwa Druga Edycja</a></li>
-                  <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl" target="_blank">Descent: Droga do Legendy</a></li>
+                  <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom" target="_blank">Mansions Of Madness Second Edition</a></li>
+                  <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl" target="_blank">Descent: Road to Legend</a></li>
                 </ul>
-                <p>1. Uruchom oficjalną aplikację i poczekaj aż zakończy się ładowanie(poczekaj aż kursor w menu głównym zniknie).</p> 
-                <p>2. Włącz zezwolenie na instalowanie aplikacji z nieznanych źródeł w menu Ustawienia → Bezpieczeństwo → Nieznane Źródła. Skopiuj plik Valkyrie APK na swoje urządzenie.</p>
-                <p>3. Uruchom Valkyrie APK i poczekaj aż się zainstaluje. Po zakończeniu instalacji znajdziesz aplikację o nazwie Valkyrie na liście aplikacji. </p>
-                <p>4. Uruchom ją. Udziel zezwoleń wymaganych przez aplikację. Nacisnij przycik "Zaimportuj". Ten proces może chwilę zająć. Gdy importowanie plików się zakończy możesz użyć wybranej gry.</p>
+                <p>1. Inicie o App Oficial e espere até que o carregamento esteja completo (o cursor dentro do menu principal ira desaparecer).</p> 
+                <p>2. Habilite "Unknown Sources" (Fontes desconhecidas) em Settings → Security → Unknown Sources (Configurações → Segurança → Fontes Desconhecidas). Copie o APK do Valkyrie para seu dispositivo.</p>
+                <p>3. Rode o APK do Valkyrie para instalar. Após instalar você vai encontrar um App chamado "Valkyrie" entre seus aplicativos. </p>
+                <p>4. Rode. Permita todas as permissões que o App peça. Aperte o botão "Import" dentro do App do Valkyrie. A importação pode levar um tempo. Depois da importação ser concluída você pode selecionar qual jogo quer usar.</p>
 
-                <p>Jeżeli ekran pozostaje czarny sprawdź w ustawieniach aplikacji czy została udzielona zgoda na dostęp do plików.</p>
+                <p>Se você ver apenas uma tela preta, vá até as configurações do aplicativo e verifique se as permissões de armazenamento estão habilitadas.</p>
 
-                <p>Jeżeli import zakończy się niepowodzeniem, sprawdź czy posiadasz wystarczającą ilość wolnego miejsca we wbudowanej pamięci. Każda z gier wymaga do 300 MB. Dla pewności warto mieć ok. 1GB wolnego miejsca.</p>
+                <p>Se a importação falhar, verifique se você tem espaço suficiente. Cada jogo precisa de até 300 MB. Para garantir, tenha 1 GB de espaço livre.</p>
 
-                <a id="valkyrieAndroid" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobierz</a>
+                <a id="valkyrieAndroid" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último</a>
 
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
             <div class="col-lg-3">
-                <img class="img-fluid" src="web/images/android-logo.png" alt="alternative">
+              <img class="img-fluid" src="web/images/android-logo.png" alt="alternative">
             </div> <!-- end of col -->
           </div> <!-- end of row -->
         </div> <!-- end of container -->
@@ -376,15 +382,16 @@
             </div> <!-- end of col -->
             <div class="col-lg-9">
               <div class="text-container">
-                  <h3>MAC OS</h3>
-                  <p>Dla Mac OS, Gatekeeper musi być wyłączony:</p>
-                  <p>Przy pomocy Findera znajdź aplikację, którą chcesz uruchomić. Nie używaj do tego Lauchpada. Launchpad nie pozwala na dostęp do menu skrótów.</p>
-                  <p>1. Wciśnij przycisk Control i kliknij w ikonę aplikacji, następnie wybierz Otwórz z menu.
-                  <p>2. Aplikacja została zapisana jako wyjątek w ustawieniach zabezpieczeń i w przyszłości możesz ją otworzyć przez podwójne kliknięcie tak jak inne zarejestrowane aplikacje.</p>
-                  <p>Jeżeli importowanie się nie zakończy, spróbuj uruchomić Valkyrie używając wyższego poziomu uprawnień.</p>
-                  <p>Sprawdź też czy posiadasz uprawnienia dostępu do folderów. Przenieś ściągnięty plik Valkyrie do folderu Applications w aplikacji Finder. Następnie uruchom chmod +x/Applications/Valkyrie.app/Contents/MacOS/Valkyrie w aplikacji Terminal.</p>
+                <h3>MAC OS</h3>
+                <p>Mac OS Gatekeeper deve estar desabilitado:</p>
+                <p>No Finder, localize o app que você quer abrir. Não use o Launchpad para fazer isso. Launchpad não deixa você acessar o menu de atalhos.</p>
+                <p>1. Pressione a tecla Control e clique no ícone do app, e então abra a partir do menu de atalho.
+                Clique Abrir.</p>
+                <p>2. O app está salvo como uma exceção em suas configurações de segurança, e você pode abrir no futuro clicando duas vezes, como qualquer outro aplicativo.</p>
+                <p>Se a importação não for completa tente rodar Valkyrie como mais permissões.</p>
+                <p>Além disso, garanta que você não tem nenhuma permissão na pasta. Mova seu download fo Valkyrie para a pasta Applications dentro do Finder. Então execute no terminal "chmod +x /Applications/Valkyrie.app/Contents/MacOS/Valkyrie"</p>
 
-                  <a id="valkyrieMacos" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobierz</a>
+                <a id="valkyrieMacos" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último</a>
 
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
@@ -400,12 +407,11 @@
             <div class="col-lg-9">
               <div class="text-container">
                 <h3>Linux</h3>
-                <p>Linux nie wspiera automatycznego importu. Możesz:</p>
-                <p>1. Skopiować zawartość /&lt;type&gt;/ffg z innej zaimportowanej aplikacji lub</p>
-                <p>2. Uruchomić -import &lt;location&gt; gdzie &lt;location&gt; to Road to Legend lub Mansions of Madness data.</p> 
-                <p>Na przykład /home/ &lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend dla Drogi do Legendy.</p>
+                <p>Para o Linux também não há importação automática:</p>
+                <p>1. Copie content/&lt;type&gt;/ffg para outra instalação or</p>
+                <p>2. Rode com -import &lt;location&gt; where &lt;location&gt; é Road to Legend ou Mansions of Madness data. Exemplo /home/&lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend for Road to Legend.</p>
 
-                <a id="valkyrieLinux" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobierz</a>
+                <a id="valkyrieLinux" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último</a>
 
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
@@ -427,17 +433,17 @@
             <div class="col-lg-9">
               <div class="text-container">
                 <h3>Fire OS</h3>
-                <p>Użyj wersji Valkyrie dla systemu Android, będzie działała także na Fire OS.</p>
-                <p>Musisz pobrać i zanstalować oficjalny plik OBB ręcznie(Znajdziesz go <a href="https://apkplz.net" target="_blank">tutaj</a>).</p>
-                <p>Skopiuj plik do &lt;storage&gt;/Android/obb/&lt;game&gt; (Jeśli lokalizacja nie istnieje, utwórz ją).</p>
-                <p>1. &lt; storage &gt; Powinno być &quot;Internal Storage&quot;. /storage/emulated/0 w większości przypadków.</p>
-                <p>2. &lt; game &gt; musi być jednym z dwóch:</p>
-                <p><b>Posiadłość Szaleństwa:</b> com.fantasyflightgames.mom/ main.906.com.fantasyflightgames.mom.obb</p>
-                <p><b>Droga do Legendy</b>: com.fantasyflightgames.rtl/ main.459.com.fantasyflightgames.rtl.obb</p>
+                <p>Use a versão Android do Valkyrie, também deve funcionar em seu Fire OS.</p>
+                <p>Você deve fazer o download e instalar o arquivo oficial OBB manualmente (Você pode obter <a href="https://apkplz.net" target="_blank">aqui</a>)</p>
+                <p>Copie o arquivo para &lt;storage&gt;/Android/obb/&lt;game&gt; (Se o caminho não existir, crie)</p>
+                <p>1. &lt;storage&gt; deve ser "Internal Storage". /storage/emulated/0 na maioria dos casos. </p>
+                <p>2. &lt;game&gt; deve ser um dos a seguir</p>
+                <p><b>Mansions of Madness</b>: com.fantasyflightgames.mom/ main.906.com.fantasyflightgames.mom.obb</p>
+                <p><b>Road to Legend</b>: com.fantasyflightgames.rtl/ main.459.com.fantasyflightgames.rtl.obb</p>
 
-                <p>Włącz "Nieznane Źródła" w Ustawienia → Zabezpieczenia → Nieznane Źródła. Skopiuj plik Valkyrie APK na swoje urządzenie. Uruchom i zainstaluj Valkyrie APK. Po zakończeniu instalacji "Valkyrie" pojawi się na liście aplikacji. Uruchom ją. Udziel aplikacji wymaganych zezwoleń. Wciśnij przycisk "Zaimportuj". Proces może potrwać dłuższą chwilę. Po zakończeniu importu możesz wybrać i rozpocząć grę.</p>
+                <p>Habilite "Unknown Sources" (Fontes desconhecidas) em Settings → Security → Unknown Sources (Configurações → Segurança → Fontes Desconhecidas). Copie o APK do Valkyrie para seu dispositivo. Rode o APK para instalar. Depois da instalação, você vai enconotrar um App chamado "Valkyrie" em seus aplicativos. Rode. Permita todas as permissões que o App peça. Aperte o botão "Import" dentro do App do Valkyrie. A importação pode levar um tempo. Depois da importação ser concluída você pode selecionar qual jogo quer usar.</p>
 
-                <a id="valkyrieAndroid2" class="btn-solid-reg" rel="external nofollow" target="_blank">Pobierz</a>
+                <a id="valkyrieAndroid2" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último</a>
 
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
@@ -452,10 +458,10 @@
             <div class="col-lg-12">
               <div class="text-container">
                 <h3>iOS</h3>
-                <p>Pomimo tego, że ze względu na wymagania App Store, nie udostępniamy Valkyrie na urządzenia z iOS, możesz jednak streamować ją ze swojego PC-ta z Windowsem przy pomocy <a href="http://kinoconsole.kinoni.com/" target="_blank">KinoConsole</a>.</p> 
-                <p>Zainstaluj Valkyrie oraz <a href="http://kinoconsole.kinoni.com/#server" target="_blank">KinoConsole Server</a> na swoim komputerze (wymagane jest ponowne uruchomienie komputera). Uruchom aplikację "Kinoni Streamer". Wybierz "Quick Launch", "Browse..." i wybierz Valkyrie.exe (domyślnie znajduje się w C:\Program Files (x86)\Valkyrie\Valkyrie.exe).</p> 
-                <p>Zainstaluj aplikację<a href="https://itunes.apple.com/app/kinoconsole-stream-pc-games/id965075144" target="_blank"> KinoConsole</a> z App Store. Jeśli twoje urządzenie z iOS oraz PC są w tej samej sieci, serwer powinien zostać wykryty automatycznie i "Valkyrie" powinno wyświetlić się na liście aplikacji możliwych do włączenia. Sprawdź też: Official Setup Guide.</p>
-                <p>Starsze wersje iOS (< iOS 10) Nie wspierają <a href="http://kinoconsole.kinoni.com/" target="_blank">KinoKonsole</a>. Możesz spróbować użyć na nich Splashtop Personal.</p>
+                <p>Por enquanto nós não temos uma versão para iOS devido a algumas políticas da App Store, mas você pode fazer um stream do Valkyrie para o iOS a partir do seu PC Windows usando <a href="http://kinoconsole.kinoni.com/" target="_blank">KinoConsole</a>.</p> 
+                <p>Instale o Valkyrie e oo <a href="http://kinoconsole.kinoni.com/#server" target="_blank">KinoConsole Server</a> no seu PC (reinicie conforme pedido). Inicie o recém instalado "Kinoni Streamer". Vá até  "Quick Launch", "Browse..." e adicione o Valkyrie.exe (geralmente encontrado em C:\Program Files (x86)\Valkyrie\Valkyrie.exe).</p> 
+                <p>Instale o App<a href="https://itunes.apple.com/app/kinoconsole-stream-pc-games/id965075144" target="_blank"> KinoConsole</a> na App Store. Se o seu dispostivo iOS device e PC estiverem na mesma WLAN, ele deve automaticamente identificar o servidor e você encontrará "Valkyrie" na lista de App. Veja também: <a href="http://kinoconsole.kinoni.com/iossetup.html" target="_blank">Official Setup Guide.</a></p>
+                <p>Versões mais antigas de iOS (< iOS 10) não tem suporte ao <a href="http://kinoconsole.kinoni.com/" target="_blank">KinoKonsole</a>. Você pode tentar usar o <a href="https://www.splashtop.com/personal" target="_blank">Splashtop Personal</a>.</p>
               </div> <!-- end of text-container -->
             </div> <!-- end of col -->
           </div> <!-- end of row -->
@@ -477,8 +483,54 @@
     <script src="web/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
     <script src="web/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="web/js/scripts.js"></script> <!-- Custom scripts -->
-    <script src="web/js/indexScripts.js"></script> <!-- additional scripts for this page (e.g. for generating download links) -->
+<<<<<<< HEAD
 
+    <script>
+        $(document).ready(function () {
+            fallbackDownloadUrl = "https://github.com/NPBruce/valkyrie/releases/latest";
+            valkyrieAndroid = fallbackDownloadUrl;
+            valkyrieLinux = fallbackDownloadUrl;
+            valkyrieMacos = fallbackDownloadUrl;
+            valkyrieWindowsExe = fallbackDownloadUrl;
+            valkyrieWindows7z = fallbackDownloadUrl;
+            valkyrieWindowsZip = fallbackDownloadUrl;
+
+            $.get('https://api.github.com/repos/NPBruce/valkyrie/releases/latest', function (data) {
+                $.each(data.assets, function(i, v) {
+                    if (v.name.toLowerCase().startsWith("valkyrie-android") == true){
+                        valkyrieAndroid = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-linux") == true){
+                        valkyrieLinux = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-macos") == true){
+                        valkyrieMacos = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".exe") == true){
+                        valkyrieWindowsExe = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".7z") == true){
+                        valkyrieWindows7z = v.browser_download_url;
+                    }
+                    else if (v.name.toLowerCase().startsWith("valkyrie-windows") == true && v.name.toLowerCase().endsWith(".zip") == true){
+                        valkyrieWindowsZip = v.browser_download_url;
+                    }
+                });
+
+                $('#valkyrieAndroid2').prop('href', valkyrieAndroid);
+                $('#valkyrieAndroid').prop('href', valkyrieAndroid);
+                $('#valkyrieLinux').prop('href', valkyrieLinux);
+                $('#valkyrieMacos').prop('href', valkyrieMacos);
+                $('#valkyrieWindows7z').prop('href', valkyrieWindows7z);
+                $('#valkyrieWindowsExe').prop('href', valkyrieWindowsExe);
+                $('#valkyrieWindowsZip').prop('href', valkyrieWindowsZip);
+
+            });
+        });
+    </script>
+
+=======
+    <script src="web/js/indexScripts.js"></script> <!-- additional scripts for this page (e.g. for generating download links) -->
+>>>>>>> e701556c... Moved scripts from index.html to its own js file.
   </body>
 </html>
-   
