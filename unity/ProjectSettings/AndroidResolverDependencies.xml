@@ -1,10 +1,10 @@
 <dependencies>
   <packages>
-    <package>com.crashlytics.sdk.android:crashlytics:2.9.9</package>
-    <package>com.google.firebase:firebase-analytics:17.3.0</package>
-    <package>com.google.firebase:firebase-app-unity:6.14.1</package>
+    <package>com.google.firebase:firebase-analytics:17.4.1</package>
+    <package>com.google.firebase:firebase-app-unity:6.15.2</package>
     <package>com.google.firebase:firebase-common:19.3.0</package>
-    <package>com.google.firebase:firebase-crashlytics-unity:6.14.1</package>
+    <package>com.google.firebase:firebase-crashlytics:17.0.0</package>
+    <package>com.google.firebase:firebase-crashlytics-unity:6.15.2</package>
   </packages>
   <files>
     <file>Assets/Plugins/Android/androidx.annotation.annotation-1.1.0.jar</file>
@@ -34,31 +34,37 @@
     <file>Assets/Plugins/Android/androidx.swiperefreshlayout.swiperefreshlayout-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.versionedparcelable.versionedparcelable-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.crashlytics.sdk.android.answers-1.4.7.aar</file>
-    <file>Assets/Plugins/Android/com.crashlytics.sdk.android.beta-1.2.10.aar</file>
-    <file>Assets/Plugins/Android/com.crashlytics.sdk.android.crashlytics-2.9.9.aar</file>
-    <file>Assets/Plugins/Android/com.crashlytics.sdk.android.crashlytics-core-2.6.8.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.datatransport.transport-api-2.2.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.datatransport.transport-backend-cct-2.2.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.datatransport.transport-runtime-2.2.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-identifier-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-base-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-17.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-api-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-impl-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-17.3.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-api-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-impl-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-17.4.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-stats-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-tasks-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.auto.value.auto-value-annotations-1.6.5.jar</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-analytics-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-app-unity-6.14.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.dagger.dagger-2.27.jar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-analytics-17.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-app-unity-6.15.2.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-common-19.3.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-components-16.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-crashlytics-unity-6.14.1.aar</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-20.0.2.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-crashlytics-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-crashlytics-unity-6.15.2.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-encoders-json-16.1.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-20.1.5.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-interop-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-installations-16.2.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-installations-interop-16.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-measurement-connector-18.0.0.aar</file>
-    <file>Assets/Plugins/Android/io.fabric.sdk.android.fabric-1.4.8.aar</file>
+    <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-3.12.1.jar</file>
+    <file>Assets/Plugins/Android/com.squareup.okio.okio-1.15.0.jar</file>
+    <file>Assets/Plugins/Android/javax.inject.javax.inject-1.jar</file>
   </files>
   <settings>
     <setting name="androidAbis" value="armeabi-v7a,x86" />

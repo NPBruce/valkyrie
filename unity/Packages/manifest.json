@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "com.google.external-dependency-manager": "1.2.155",
-    "com.google.firebase.app": "6.14.1",
-    "com.google.firebase.crashlytics": "6.14.1",
-    "com.unity.package-manager-ui": "2.0.8",
+    "com.google.external-dependency-manager": "1.2.159",
+    "com.google.firebase.app": "6.15.2",
+    "com.google.firebase.crashlytics": "6.15.2",
+    "com.unity.package-manager-ui": "2.0.13",
     "com.unity.textmeshpro": "1.4.1",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
