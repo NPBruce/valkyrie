@@ -208,7 +208,7 @@ public class EditorComponentQuest : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MIN_X", new StringKey("val", "DURATION"))));
+        ui.SetText(new StringKey("val", "MIN_X", new StringKey("val", "DURATION")));
 
         minLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         minLengthUIE.SetLocation(7.5f, offset, 2, 1);
@@ -219,7 +219,7 @@ public class EditorComponentQuest : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(9.5f, offset, 7.5f, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "MAX_X", new StringKey("val", "DURATION"))));
+        ui.SetText(new StringKey("val", "MAX_X", new StringKey("val", "DURATION")));
 
         maxLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         maxLengthUIE.SetLocation(17, offset, 2, 1);
@@ -231,7 +231,7 @@ public class EditorComponentQuest : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 7.5f, 1);
-        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "DIFFICULTY")));
+        ui.SetText(new StringKey("val", "DIFFICULTY"));
 
         difficultyUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         difficultyUIE.SetLocation(7.5f, offset, 3, 1);
