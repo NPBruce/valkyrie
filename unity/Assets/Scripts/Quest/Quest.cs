@@ -905,7 +905,8 @@ public class Quest
         int heroCount = 0;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
-            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
+            // Only real heroes contains key "type" in loaded dictionary
+            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0 && kv.Value.ContainsKey("type"))
             {
                 heroCount++;
                 heroes.Add(new Hero(kv.Value));
