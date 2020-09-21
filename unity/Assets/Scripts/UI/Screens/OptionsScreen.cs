@@ -240,7 +240,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Select langauge text
             UIElement ui = new UIElement();
-            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 10, 4, 18, 2);
+            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 11, 2, 18, 2);
             ui.SetText(CHOOSE_LANG);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -249,12 +249,12 @@ namespace Assets.Scripts.UI.Screens
             // In D2E there is an additional language
             // It can change in future
 
-            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech".Split(','); // Japanese removed to fit into screen
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech".Split(','); // Japanese removed to fit into screen
             // For now, the languages below are available.
-            HashSet<string> enabled_langs = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese".Split(','));
+            HashSet<string> enabled_langs = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean".Split(','));
 
             //The first button in the list of buttons should start in this vertical coordinate
-            float verticalStart = UIScaler.GetVCenter(-1f) - langs.Length;
+            float verticalStart = UIScaler.GetVCenter(-2f) - langs.Length;
 
             for (int i = 0; i < langs.Length; i++)
             {
@@ -263,7 +263,7 @@ namespace Assets.Scripts.UI.Screens
                 string currentLanguage = langs[i];
 
                 ui = new UIElement();
-                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 5, verticalStart + (2f * position), 8, 1.8f);
+                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (2f * position), 8, 1.8f);
                 if (!enabled_langs.Contains(currentLanguage))
                 {
                     ui.SetText(currentLanguage, Color.red);
