@@ -1749,7 +1749,11 @@ public class Quest
         override public void SetColor(Color c)
         {
             if (image != null && image.gameObject != null) image.color = c;
-            if (uiText != null && uiText.gameObject != null) uiText.color = c;
+            if (uiText != null && uiText.gameObject != null)
+            {
+                uiText.color = c;
+                uiText.canvasRenderer.SetAlpha(c.a);
+            }
             if (border != null) border.SetColor(c);
             // Text BG has its own color, only alpha is changing
             if (uiTextBG != null && uiTextBG.gameObject != null && qUI.textBackgroundColor != "transparent")
