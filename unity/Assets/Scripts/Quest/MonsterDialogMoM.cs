@@ -193,7 +193,7 @@ public class MonsterDialogMoM : MonsterDialog
         // Trigger defeated event by spawn name
         game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
 
-        // fix #982
+        // fix #982 and #1352
         if (game.quest.phase == Quest.MoMPhase.monsters && Game.Get().quest.eManager.currentEvent == null)
         {
             Game.Get().roundControl.MonsterActivated();
