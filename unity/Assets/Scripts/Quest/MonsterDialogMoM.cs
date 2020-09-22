@@ -194,7 +194,7 @@ public class MonsterDialogMoM : MonsterDialog
         game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
 
         // fix #982
-        if (game.quest.phase == Quest.MoMPhase.monsters)
+        if (game.quest.phase == Quest.MoMPhase.monsters && Game.Get().quest.eManager.currentEvent == null)
         {
             Game.Get().roundControl.MonsterActivated();
         }
