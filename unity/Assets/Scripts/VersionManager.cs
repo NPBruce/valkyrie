@@ -13,7 +13,7 @@ class VersionManager
     public static void GetLatestVersionAsync(Action action)
     {
         // check here for official release
-        string url = "https://raw.githubusercontent.com/NPBruce/valkyrie/master/unity/Assets/Resources/version.txt";
+        string url = "https://raw.githubusercontent.com/NPBruce/valkyrie/master/unity/Assets/Resources/prod_version.txt";
 
         version_downloaded_action = action;
 
