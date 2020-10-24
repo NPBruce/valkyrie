@@ -127,29 +127,23 @@ namespace Assets.Scripts.UI
             if (texture == null) return;
             SetBGColor(Color.white);
             var component = bg.GetComponent<UnityEngine.UI.Image>();
-            component.preserveAspect = preserveAspect;
-            if (aspectMode != null)
-            {
-                var fitter = bg.GetComponent<AspectRatioFitter>();
-                if (!(fitter is AspectRatioFitter))
-                {
-                    fitter = bg.AddComponent<AspectRatioFitter>();
-                }
-
-                fitter.enabled = false;
-                fitter.aspectRatio = (float) texture.width / (float) texture.height;
-                fitter.aspectMode = (AspectRatioFitter.AspectMode) aspectMode;
-                fitter.enabled = true;
-            }
-            else
-            {
-                var fitter = bg.GetComponent<AspectRatioFitter>();
-                if (fitter is AspectRatioFitter)
-                {
-                    Object.Destroy(fitter);
-                }
-            }
             component.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
+            component.preserveAspect = preserveAspect;
+            
+            var fitter = bg.GetComponent<AspectRatioFitter>();
+            if (aspectMode == null && !(fitter is null))
+            {
+                Object.Destroy(fitter);
+                return;
+            }
+            
+            if (fitter is null)
+            {
+                fitter = bg.AddComponent<AspectRatioFitter>();
+            }
+
+            fitter.aspectRatio = (float) texture.width / (float) texture.height;
+            fitter.aspectMode = (AspectRatioFitter.AspectMode) aspectMode;
         }
 
         /// <summary>
