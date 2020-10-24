@@ -286,7 +286,7 @@ public class Game : MonoBehaviour
         ui.SetText(CommonStringKeys.BACK, Color.red);
         ui.SetFont(gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Destroyer.QuestSelect);
+        ui.SetButton(Destroyer.RestartQuest);
         new UIElementBorder(ui, Color.red);
     }
 

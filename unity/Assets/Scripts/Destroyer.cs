@@ -21,6 +21,24 @@ public class Destroyer {
         game.SelectQuest();
     }
 
+    public static void RestartQuest()
+    {
+        Game game = Game.Get();
+        var currentQuestPath = game.quest?.originalPath;
+        if (currentQuestPath == null)
+        {
+            // Failsafe. Go to quest selection if there's no valid quest loaded 
+            QuestSelect();
+            return;
+        }
+
+
+        // Go back to quest details
+        Destroy();
+        var currentQuest = new QuestData.Quest(currentQuestPath);
+        new QuestDetailsScreen(currentQuest);
+    }
+    
     // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
