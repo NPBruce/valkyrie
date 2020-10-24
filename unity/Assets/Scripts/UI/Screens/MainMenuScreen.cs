@@ -2,6 +2,7 @@
 ﻿using Assets.Scripts.UI.Screens;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -34,13 +35,20 @@ namespace Assets.Scripts.UI.Screens
             }
             game.audioControl.PlayDefaultQuestMusic(music);
 
+            // Background image. 
+            UIElement bg = new UIElement();
+            bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
+            bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
+
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
             ui.SetText("Valkyrie");
+            ui.SetBGColor(Color.clear);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
-			
+            ui.SetTextOutline(Color.black, 1);
+            
            // Version type : alpha / beta should be displayed
             if( Game.Get().version.EndsWith("a") )
             {
@@ -61,9 +69,11 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetButton(delegate { TestCrash(); });
             }
 
+            float menuButtonsX = UIScaler.GetWidthUnits() * 0.1f;
+            
             // Button for start quest/scenario
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 5, ButtonWidth, 2);
             ui.SetText(START_QUEST);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -72,7 +82,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui);
 
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 8, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 8, ButtonWidth, 2);
             if (SaveManager.SaveExists())
             {
                 ui.SetText(LOAD_QUEST);
@@ -90,7 +100,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Content selection page
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 11, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 11, ButtonWidth, 2);
             ui.SetText(SELECT_CONTENT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -100,7 +110,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Quest/Scenario editor
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 14, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 14, ButtonWidth, 2);
             ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -110,7 +120,7 @@ namespace Assets.Scripts.UI.Screens
 
             // About page (managed in this class)
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 17, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 17, ButtonWidth, 2);
             ui.SetText(ABOUT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -120,7 +130,7 @@ namespace Assets.Scripts.UI.Screens
             
             // Configuration menu
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 20, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 20, ButtonWidth, 2);
             ui.SetText(OPTIONS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -130,7 +140,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Exit Valkyrie
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 23, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 23, ButtonWidth, 2);
             ui.SetText(CommonStringKeys.EXIT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());

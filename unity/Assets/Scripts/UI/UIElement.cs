@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
+using UnityEditor;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -115,13 +117,39 @@ namespace Assets.Scripts.UI
         /// <summary>
         /// Set a background image.</summary>
         /// <param name="texture">Texture2D to use.</param>
+        /// <param name="preserveAspect">If the image should preserve the original aspect ratio.</param>
+        /// <param name="aspectMode">Applies.</param>
         /// <remarks>
         /// Will also set the background color to white.</remarks>
-        public void SetImage(Texture2D texture)
+        public void SetImage(Texture2D texture, 
+            bool preserveAspect = false, AspectRatioFitter.AspectMode? aspectMode = null)
         {
             if (texture == null) return;
             SetBGColor(Color.white);
-            bg.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
+            var component = bg.GetComponent<UnityEngine.UI.Image>();
+            component.preserveAspect = preserveAspect;
+            if (aspectMode != null)
+            {
+                var fitter = bg.GetComponent<AspectRatioFitter>();
+                if (!(fitter is AspectRatioFitter))
+                {
+                    fitter = bg.AddComponent<AspectRatioFitter>();
+                }
+
+                fitter.enabled = false;
+                fitter.aspectRatio = (float) texture.width / (float) texture.height;
+                fitter.aspectMode = (AspectRatioFitter.AspectMode) aspectMode;
+                fitter.enabled = true;
+            }
+            else
+            {
+                var fitter = bg.GetComponent<AspectRatioFitter>();
+                if (fitter is AspectRatioFitter)
+                {
+                    Object.Destroy(fitter);
+                }
+            }
+            component.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero, 1);
         }
 
         /// <summary>
@@ -315,6 +343,24 @@ namespace Assets.Scripts.UI
                 uiText.material = uiText.font.material;
             }
             uiText.text = content;
+        }
+
+        /// <summary>
+        /// Set Outline color and size.</summary>
+        /// <param name="size">Size in pixels.</param>
+        /// <param name="color">Outline color.</param>
+        /// <remarks>
+        /// Must be called after SetText.</remarks>
+        public void SetTextOutline(Color color, int size)
+        {
+            var outline = text.GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = text.AddComponent<Outline>();
+            }
+
+            outline.effectColor = color;
+            outline.effectDistance = new Vector2(size, size);
         }
 
         /// <summary>
