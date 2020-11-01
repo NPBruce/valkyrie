@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -763,7 +764,7 @@ public class QuestData
         public List<StringKey> buttons;
         public List<string> buttonColors;
         public string trigger = "";
-        public List<List<string>> nextEvent;
+        public List<NextEventData> nextEvent;
         public string heroListName = "";
         public int minHeroes = 0;
         public int maxHeroes = 0;
@@ -789,7 +790,7 @@ public class QuestData
             source = "events.ini";
             display = false;
             typeDynamic = type;
-            nextEvent = new List<List<string>>();
+            nextEvent = new List<NextEventData>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
             addComponents = new string[0];
@@ -817,7 +818,7 @@ public class QuestData
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            nextEvent = new List<List<string>>();
+            nextEvent = new List<NextEventData>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
 
@@ -836,13 +837,16 @@ public class QuestData
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
                 buttons.Add(genQuery("button" + buttonNum));
-                if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
+                
+                data.TryGetValue("event" + buttonNum, out var nextEventString);
+                if (String.IsNullOrWhiteSpace(nextEventString))
                 {
-                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
+                    NextEventData eventData = NextEventDataSerializer.FromString(nextEventString);
+                    nextEvent.Add(eventData);
                 }
                 else
                 {
-                    nextEvent.Add(new List<string>());
+                    nextEvent.Add(new NextEventData(new List<string>()));
                 }
 
                 if (data.ContainsKey("buttoncolor" + buttonNum) && display)
@@ -961,21 +965,25 @@ public class QuestData
             // a next event is changed
             for (int i = 0; i < nextEvent.Count; i++)
             {
-                for (int j = 0; j < nextEvent[i].Count; j++)
+                List<string> eventNames = nextEvent[i].EventNames;
+                // Handle event removal
+                if (newName == string.Empty)
                 {
-                    if (nextEvent[i][j].Equals(oldName))
+                    eventNames.Remove(oldName);
+                    if (eventNames.Count <= 0 && !nextEvent[i].HasCondition)
                     {
-                        nextEvent[i][j] = newName;
+                        nextEvent.RemoveAt(i--);
                     }
+                    continue;
                 }
-            }
-            // If next event is deleted, trim array
-            for (int i = 0; i < nextEvent.Count; i++)
-            {
-                bool removed = true;
-                while (removed)
+                
+                // Handle event name change
+                for (int j = 0; j < eventNames.Count; j++)
                 {
-                    removed = nextEvent[i].Remove("");
+                    if (eventNames[j].Equals(oldName))
+                    {
+                        eventNames[j] = newName;
+                    }
                 }
             }
 
@@ -1031,18 +1039,9 @@ public class QuestData
             r += "buttons=" + buttons.Count + nl;
 
             int buttonNum = 1;
-            foreach (List<string> l in nextEvent)
+            foreach (NextEventData nextEventData in nextEvent)
             {
-                r += "event" + buttonNum++ + "=";
-                foreach (string s in l)
-                {
-                    r += s + " ";
-                }
-                if (l.Count > 0)
-                {
-                    r = r.Substring(0, r.Length - 1);
-                }
-                r += nl;
+                r += "event" + buttonNum++ + "=" + NextEventDataSerializer.ToString(nextEventData);
             }
 
             buttonNum = 1;
@@ -1201,7 +1200,7 @@ public class QuestData
         {
             source = "puzzles.ini";
             typeDynamic = type;
-            nextEvent.Add(new List<string>());
+            nextEvent.Add(new NextEventData());
             buttonColors.Add("white");
             buttons.Add(genQuery("button1"));
             LocalizationRead.updateScenarioText(genKey("button1"),

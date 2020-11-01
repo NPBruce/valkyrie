@@ -394,7 +394,7 @@ public class EditorComponentEvent : EditorComponent
         int index = 0;
         float lastButtonOffset = 0;
         buttonUIE = new List<UIElementEditable>();
-        foreach (List<string> l in eventComponent.nextEvent)
+        foreach (NextEventData nextEvent in eventComponent.nextEvent)
         {
             lastButtonOffset = offset;
             int buttonTmp = button++;
@@ -425,7 +425,7 @@ public class EditorComponentEvent : EditorComponent
             buttonUIE.Add(buttonEdit);
 
             index = 0;
-            foreach (string s in l)
+            foreach (string s in nextEvent.EventNames)
             {
                 int i = index++;
                 string tmpName = s;
@@ -544,7 +544,7 @@ public class EditorComponentEvent : EditorComponent
                 if (eventComponent.buttons.Count == 0)
                 {
                     eventComponent.buttons.Add(eventComponent.genQuery("button1"));
-                    eventComponent.nextEvent.Add(new List<string>());
+                    eventComponent.nextEvent.Add(new NextEventData());
                     eventComponent.buttonColors.Add("white");
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
@@ -1133,7 +1133,7 @@ public class EditorComponentEvent : EditorComponent
     public void AddButton()
     {
         int count = eventComponent.nextEvent.Count + 1;
-        eventComponent.nextEvent.Add(new List<string>());
+        eventComponent.nextEvent.Add(new NextEventData());
         eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
         eventComponent.buttonColors.Add("white");
         LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), BUTTON.Translate() + count);
@@ -1253,18 +1253,18 @@ public class EditorComponentEvent : EditorComponent
 
         if (replace)
         {
-            eventComponent.nextEvent[button - 1][index] = toAdd;
+            eventComponent.nextEvent[button - 1].EventNames[index] = toAdd;
         }
         else
         {
-            eventComponent.nextEvent[button - 1].Insert(index, toAdd);
+            eventComponent.nextEvent[button - 1].EventNames.Insert(index, toAdd);
         }
         Update();
     }
 
     public void RemoveEvent(int index, int button)
     {
-        eventComponent.nextEvent[button - 1].RemoveAt(index);
+        eventComponent.nextEvent[button - 1].EventNames.RemoveAt(index);
         Update();
     }
 

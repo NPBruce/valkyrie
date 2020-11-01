@@ -401,7 +401,7 @@ public class EventManager
         List<string> eventList = new List<string>();
         if (eventData.nextEvent.Count > state)
         {
-            eventList = eventData.nextEvent[state];
+            eventList = eventData.nextEvent[state].EventNames;
         }
 
         // Only take enabled events from list
@@ -671,7 +671,8 @@ public class EventManager
 
             for (int i = 0; i < qEvent.buttons.Count; i++)
             {
-                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]));
+                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i], 
+                    qEvent.nextEvent[i].Condition, qEvent.nextEvent[i].ConditionFailedAction));
             }
             return buttons;
         }
@@ -682,9 +683,9 @@ public class EventManager
             // If the event can't be canceled it must have buttons
             if (!qEvent.cancelable) return true;
             // Check if any of the next events are enabled
-            foreach (List<string> l in qEvent.nextEvent)
+            foreach (NextEventData l in qEvent.nextEvent)
             {
-                foreach (string s in l)
+                foreach (string s in l.EventNames)
                 {
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))

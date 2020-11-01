@@ -80,7 +80,7 @@ public class DialogWindow {
         float hOffset = UIScaler.GetWidthUnits() - 19f;
         float hOffsetCancel = 11;
         float offsetCancel = offset;
-
+        
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
@@ -341,8 +341,11 @@ public class DialogWindow {
     {
         StringKey label = StringKey.NULL;
         public Color32 colour = Color.white;
+        public VarOperation condition = null;
+        public ButtonAction conditionFailedAction = ButtonAction.NONE;
 
-        public EventButton(StringKey newLabel,string newColour)
+        public EventButton(StringKey newLabel, string newColour, 
+            VarOperation condition = null, ButtonAction conditionFailedAction = ButtonAction.NONE)
         {
             label = newLabel;
             string colorRGB = ColorUtil.FromName(newColour);      
@@ -362,6 +365,9 @@ public class DialogWindow {
                 colour.a = (byte)System.Convert.ToByte(colorRGB.Substring(7, 2), 16);
             else
                 colour.a = 255; // opaque by default
+
+            this.condition = condition;
+            this.conditionFailedAction = conditionFailedAction;
         }
 
         public StringKey GetLabel()
