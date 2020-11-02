@@ -28,6 +28,13 @@ namespace Assets.Scripts.Content
         public bool HasCondition => Condition != null;
     }
 
+    public enum ButtonAction
+    {
+        NONE,
+        DISABLE,
+        HIDE
+    }
+
     public class NextEventDataSerializer
     {
         private static readonly char[] EVENT_NAME_SEPARATOR = {' '};
@@ -85,12 +92,5 @@ namespace Assets.Scripts.Content
 
             return string.Join(",", result);
         }
-    }
-
-    public enum ButtonAction
-    {
-        NONE,
-        DISABLE,
-        HIDE
     }
 }
