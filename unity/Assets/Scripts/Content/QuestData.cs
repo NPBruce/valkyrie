@@ -962,18 +962,17 @@ public class QuestData
             {
                 heroListName = newName;
             }
+
+            bool isRemoveOperation = newName == string.Empty;
             // a next event is changed
             for (int i = 0; i < nextEvent.Count; i++)
             {
                 List<string> eventNames = nextEvent[i].EventNames;
+            
                 // Handle event removal
-                if (newName == string.Empty)
+                if (isRemoveOperation)
                 {
                     eventNames.Remove(oldName);
-                    if (eventNames.Count <= 0 && !nextEvent[i].HasCondition)
-                    {
-                        nextEvent.RemoveAt(i--);
-                    }
                     continue;
                 }
                 
