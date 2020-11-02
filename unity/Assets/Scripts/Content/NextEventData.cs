@@ -52,6 +52,7 @@ namespace Assets.Scripts.Content
                 return new NextEventData();
             }
 
+            // Extract event names
             var strings = eventDataString.Split(EVENT_PARAMETER_SEPARATOR);
             if (strings.Length <= 0)
             {
@@ -60,14 +61,16 @@ namespace Assets.Scripts.Content
 
             var questNames = strings[0].Split(EVENT_NAME_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
+            // Skip conditional event parameters if not all parameters are present
             if (strings.Length < 4)
             {
                 return new NextEventData(questNames.ToList());
             }
-
+            
             var conditionString = string.Join(",", strings[1], strings[2], strings[3]);
             VarOperation condition = new VarOperation(conditionString);
 
+            // Optional ButtonAction parameter (defaults to DISABLE, but can be HIDE or NONE as well)
             if (strings.Length > 4 && Enum.TryParse(strings[4], true, out ButtonAction action))
             {
                 return new NextEventData(questNames.ToList(), condition, action);
