@@ -26,6 +26,11 @@ namespace Assets.Scripts.Content
         protected internal ButtonAction? RawAction { get; }
 
         public bool HasCondition => Condition != null;
+
+        public override string ToString()
+        {
+            return NextEventDataSerializer.ToString(this);
+        }
     }
 
     public enum ButtonAction
