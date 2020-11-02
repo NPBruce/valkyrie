@@ -839,7 +839,7 @@ public class QuestData
                 buttons.Add(genQuery("button" + buttonNum));
                 
                 data.TryGetValue("event" + buttonNum, out var nextEventString);
-                if (String.IsNullOrWhiteSpace(nextEventString))
+                if (!String.IsNullOrWhiteSpace(nextEventString))
                 {
                     NextEventData eventData = NextEventDataSerializer.FromString(nextEventString);
                     nextEvent.Add(eventData);
@@ -1041,7 +1041,7 @@ public class QuestData
             int buttonNum = 1;
             foreach (NextEventData nextEventData in nextEvent)
             {
-                r += "event" + buttonNum++ + "=" + NextEventDataSerializer.ToString(nextEventData);
+                r += "event" + buttonNum++ + "=" + NextEventDataSerializer.ToString(nextEventData) + nl;
             }
 
             buttonNum = 1;

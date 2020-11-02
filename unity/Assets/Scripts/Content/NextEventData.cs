@@ -19,10 +19,11 @@ namespace Assets.Scripts.Content
         public VarOperation Condition { get; }
 
         public ButtonAction ConditionFailedAction => RawAction ??
-                                                        (HasCondition
-                                                            ? ButtonAction.DISABLE
-                                                            : ButtonAction.NONE);
-        protected ButtonAction? RawAction { get; }
+                                                     (HasCondition
+                                                         ? ButtonAction.DISABLE
+                                                         : ButtonAction.NONE);
+
+        protected internal ButtonAction? RawAction { get; }
 
         public bool HasCondition => Condition != null;
     }
@@ -39,7 +40,7 @@ namespace Assets.Scripts.Content
                 return new NextEventData();
             }
 
-            var strings = eventDataString.Split(EVENT_PARAMETER_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+            var strings = eventDataString.Split(EVENT_PARAMETER_SEPARATOR);
             if (strings.Length <= 0)
             {
                 return new NextEventData();
@@ -47,7 +48,20 @@ namespace Assets.Scripts.Content
 
             var questNames = strings[0].Split(EVENT_NAME_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
-            return new NextEventData(questNames.ToList());
+            if (strings.Length < 4)
+            {
+                return new NextEventData(questNames.ToList());
+            }
+
+            var conditionString = string.Join(",", strings[1], strings[2], strings[3]);
+            VarOperation condition = new VarOperation(conditionString);
+
+            if (strings.Length > 4 && Enum.TryParse(strings[4], true, out ButtonAction action))
+            {
+                return new NextEventData(questNames.ToList(), condition, action);
+            }
+
+            return new NextEventData(questNames.ToList(), condition);
         }
 
         public static string ToString(NextEventData eventData)
@@ -57,7 +71,19 @@ namespace Assets.Scripts.Content
                 return string.Empty;
             }
 
-            return string.Join(" ", eventData.EventNames);
+            List<string> result = new List<string> {string.Join(" ", eventData.EventNames)};
+
+            if (eventData.HasCondition)
+            {
+                result.Add(eventData.Condition.ToString());
+            }
+
+            if (eventData.RawAction != null)
+            {
+                result.Add(eventData.RawAction.ToString().ToLower());
+            }
+
+            return string.Join(",", result);
         }
     }
 
