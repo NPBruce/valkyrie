@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI.Screens
             else
             {
                 // TODO: support a background picture for IA
-                Destroyer.MainMenu();
+                GameStateManager.MainMenu();
                 return;
             }
             bg.SetImage(bgTex);
@@ -205,13 +205,13 @@ namespace Assets.Scripts.UI.Screens
             Game.Get().stats.PublishData();
 
             // todo: manage the result / error with a callback
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
 
         private void MainMenu()
         {
             ValkyrieDebug.Log("INFO: Go back to main menu without providing feedback");
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
 
 

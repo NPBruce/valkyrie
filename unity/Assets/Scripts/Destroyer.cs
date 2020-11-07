@@ -1,44 +1,8 @@
 ﻿using UnityEngine;
-using Assets.Scripts.UI.Screens;
 
 // This is a helper class because we often need to clean things up.
-public class Destroyer {
-
-    // This function takes us back to the main menu
-    public static void MainMenu()
-    {
-        // Destroy everything
-        Destroy();
-        new MainMenuScreen();
-    }
-
-    // This takes us to the quest select screen
-    public static void QuestSelect()
-    {
-        // Destroy everything
-        Destroy();
-        Game game = Game.Get();
-        game.SelectQuest();
-    }
-
-    public static void RestartQuest()
-    {
-        Game game = Game.Get();
-        var currentQuestPath = game.quest?.originalPath;
-        if (currentQuestPath == null)
-        {
-            // Failsafe. Go to quest selection if there's no valid quest loaded 
-            QuestSelect();
-            return;
-        }
-
-
-        // Go back to quest details
-        Destroy();
-        var currentQuest = new QuestData.Quest(currentQuestPath);
-        new QuestDetailsScreen(currentQuest);
-    }
-    
+public class Destroyer
+{
     // Destroy everything.  This still keeps game type, Valkyrie must be restarted to swap games
     public static void Destroy()
     {
@@ -99,6 +63,7 @@ public class Destroyer {
         {
             game.tokenBoard.tc.Clear();
         }
+
         game.editMode = false;
         game.testMode = false;
     }
