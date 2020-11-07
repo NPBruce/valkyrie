@@ -394,7 +394,7 @@ public class EditorComponentEvent : EditorComponent
         int index = 0;
         float lastButtonOffset = 0;
         buttonUIE = new List<UIElementEditable>();
-        foreach (NextEventData nextEvent in eventComponent.nextEvent)
+        foreach (EventButtonData nextEvent in eventComponent.buttonEvents)
         {
             lastButtonOffset = offset;
             int buttonTmp = button++;
@@ -544,7 +544,7 @@ public class EditorComponentEvent : EditorComponent
                 if (eventComponent.buttons.Count == 0)
                 {
                     eventComponent.buttons.Add(eventComponent.genQuery("button1"));
-                    eventComponent.nextEvent.Add(new NextEventData());
+                    eventComponent.buttonEvents.Add(new EventButtonData());
                     eventComponent.buttonColors.Add("white");
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
@@ -1132,8 +1132,8 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddButton()
     {
-        int count = eventComponent.nextEvent.Count + 1;
-        eventComponent.nextEvent.Add(new NextEventData());
+        int count = eventComponent.buttonEvents.Count + 1;
+        eventComponent.buttonEvents.Add(new EventButtonData());
         eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
         eventComponent.buttonColors.Add("white");
         LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), BUTTON.Translate() + count);
@@ -1142,8 +1142,8 @@ public class EditorComponentEvent : EditorComponent
 
     public void RemoveButton()
     {
-        int count = eventComponent.nextEvent.Count;
-        eventComponent.nextEvent.RemoveAt(count - 1);
+        int count = eventComponent.buttonEvents.Count;
+        eventComponent.buttonEvents.RemoveAt(count - 1);
         eventComponent.buttons.RemoveAt(count - 1);
         eventComponent.buttonColors.RemoveAt(count - 1);
         LocalizationRead.dicts["qst"].Remove(eventComponent.genKey("button" + count));
@@ -1253,18 +1253,18 @@ public class EditorComponentEvent : EditorComponent
 
         if (replace)
         {
-            eventComponent.nextEvent[button - 1].EventNames[index] = toAdd;
+            eventComponent.buttonEvents[button - 1].EventNames[index] = toAdd;
         }
         else
         {
-            eventComponent.nextEvent[button - 1].EventNames.Insert(index, toAdd);
+            eventComponent.buttonEvents[button - 1].EventNames.Insert(index, toAdd);
         }
         Update();
     }
 
     public void RemoveEvent(int index, int button)
     {
-        eventComponent.nextEvent[button - 1].EventNames.RemoveAt(index);
+        eventComponent.buttonEvents[button - 1].EventNames.RemoveAt(index);
         Update();
     }
 

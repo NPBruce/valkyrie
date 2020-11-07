@@ -764,7 +764,7 @@ public class QuestData
         public List<StringKey> buttons;
         public List<string> buttonColors;
         public string trigger = "";
-        public List<NextEventData> nextEvent;
+        public List<EventButtonData> buttonEvents;
         public string heroListName = "";
         public int minHeroes = 0;
         public int maxHeroes = 0;
@@ -790,7 +790,7 @@ public class QuestData
             source = "events.ini";
             display = false;
             typeDynamic = type;
-            nextEvent = new List<NextEventData>();
+            buttonEvents = new List<EventButtonData>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
             addComponents = new string[0];
@@ -818,7 +818,7 @@ public class QuestData
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            nextEvent = new List<NextEventData>();
+            buttonEvents = new List<EventButtonData>();
             buttons = new List<StringKey>();
             buttonColors = new List<string>();
 
@@ -841,12 +841,12 @@ public class QuestData
                 data.TryGetValue("event" + buttonNum, out var nextEventString);
                 if (!String.IsNullOrWhiteSpace(nextEventString))
                 {
-                    NextEventData eventData = NextEventDataSerializer.FromString(nextEventString);
-                    nextEvent.Add(eventData);
+                    EventButtonData eventButtonData = EventButtonSerializer.FromString(nextEventString);
+                    buttonEvents.Add(eventButtonData);
                 }
                 else
                 {
-                    nextEvent.Add(new NextEventData(new List<string>()));
+                    buttonEvents.Add(new EventButtonData(new List<string>()));
                 }
 
                 if (data.ContainsKey("buttoncolor" + buttonNum) && display)
@@ -965,9 +965,9 @@ public class QuestData
 
             bool isRemoveOperation = newName == string.Empty;
             // a next event is changed
-            for (int i = 0; i < nextEvent.Count; i++)
+            for (int i = 0; i < buttonEvents.Count; i++)
             {
-                List<string> eventNames = nextEvent[i].EventNames;
+                List<string> eventNames = buttonEvents[i].EventNames;
             
                 // Handle event removal
                 if (isRemoveOperation)
@@ -1038,9 +1038,9 @@ public class QuestData
             r += "buttons=" + buttons.Count + nl;
 
             int buttonNum = 1;
-            foreach (NextEventData nextEventData in nextEvent)
+            foreach (EventButtonData nextEventData in buttonEvents)
             {
-                r += "event" + buttonNum++ + "=" + NextEventDataSerializer.ToString(nextEventData) + nl;
+                r += "event" + buttonNum++ + "=" + EventButtonSerializer.ToString(nextEventData) + nl;
             }
 
             buttonNum = 1;
@@ -1199,7 +1199,7 @@ public class QuestData
         {
             source = "puzzles.ini";
             typeDynamic = type;
-            nextEvent.Add(new NextEventData());
+            buttonEvents.Add(new EventButtonData());
             buttonColors.Add("white");
             buttons.Add(genQuery("button1"));
             LocalizationRead.updateScenarioText(genKey("button1"),

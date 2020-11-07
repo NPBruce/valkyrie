@@ -100,14 +100,14 @@ public class DialogWindow {
         {
             // Handle condition failure
             var buttonConditionFailed = eb.condition != null && !varManager.Test(eb.condition);
-            if (buttonConditionFailed && eb.conditionFailedAction == ButtonAction.HIDE)
+            if (buttonConditionFailed && eb.action == EventButtonAction.HIDE)
             {
                 continue;
             }
             int numTmp = num++;
             ui = new UIElement();
             ui.SetLocation(hOffset, offset, buttonWidth, 2);
-            if (buttonConditionFailed && eb.conditionFailedAction == ButtonAction.DISABLE)
+            if (buttonConditionFailed && eb.action == EventButtonAction.DISABLE)
             {
                 ui.SetText(eb.GetLabel(), Color.gray);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -359,10 +359,10 @@ public class DialogWindow {
         StringKey label = StringKey.NULL;
         public Color32 colour = Color.white;
         public VarOperation condition = null;
-        public ButtonAction conditionFailedAction = ButtonAction.NONE;
+        public EventButtonAction action = EventButtonAction.NONE;
 
         public EventButton(StringKey newLabel, string newColour, 
-            VarOperation condition = null, ButtonAction conditionFailedAction = ButtonAction.NONE)
+            VarOperation condition = null, EventButtonAction action = EventButtonAction.NONE)
         {
             label = newLabel;
             string colorRGB = ColorUtil.FromName(newColour);      
@@ -384,7 +384,7 @@ public class DialogWindow {
                 colour.a = 255; // opaque by default
 
             this.condition = condition;
-            this.conditionFailedAction = conditionFailedAction;
+            this.action = action;
         }
 
         public StringKey GetLabel()
