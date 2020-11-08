@@ -1721,17 +1721,5 @@ public class PerilData : QuestData.Event
         {
             perilText = new StringKey(data["text"]);
         }
-
-        for (int i = 0; i < buttons.Count; i++)
-        {
-            if (data.ContainsKey("button" + (i + 1)))
-            {
-                buttons[i] = new StringKey(data["button" + (i + 1)]);
-            }
-            else
-            {
-                buttons[i] = StringKey.NULL;
-            }
-        }
     }
 }
