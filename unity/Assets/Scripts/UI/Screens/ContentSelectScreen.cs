@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
-using Assets.Scripts.UI;
-using ValkyrieTools;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -260,7 +258,7 @@ namespace Assets.Scripts.UI.Screens
             // Load the base content - pack will be loaded later if required
             game.cd.LoadContentID("");
 
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
 
         public void Update()

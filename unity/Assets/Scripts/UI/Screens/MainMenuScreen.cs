@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Content;
-﻿using Assets.Scripts.UI.Screens;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Content;
 using UnityEngine;
+using UnityEngine.UI;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -140,7 +140,7 @@ namespace Assets.Scripts.UI.Screens
         }
 
         // Start quest
-        public void Start()
+        internal void Start()
         {
             ValkyrieDebug.Log("INFO: Accessing quests");
 
@@ -206,7 +206,7 @@ namespace Assets.Scripts.UI.Screens
             banner.AddComponent<CanvasRenderer>();
 
 
-            UnityEngine.UI.Image image = banner.AddComponent<UnityEngine.UI.Image>();
+            Image image = banner.AddComponent<Image>();
             bannerSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
@@ -231,7 +231,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.MainMenu);
+            ui.SetButton(GameStateManager.MainMenu);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui);
         }

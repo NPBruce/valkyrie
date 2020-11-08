@@ -1,9 +1,12 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Assets.Scripts.Content;
-using System.IO;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using Assets.Scripts.Content;
+using UnityEngine;
+using UnityEngine.Events;
 using ValkyrieTools;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -138,11 +141,11 @@ namespace Assets.Scripts.UI.Screens
         {
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
-                Object.Destroy(go);
+                Destroy(go);
 
             // Clean up downloader if present
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
-                Object.Destroy(go);
+                Destroy(go);
 
             // Get all user configuration
             Dictionary<string, string> config_values = game.config.data.Get("UserConfig");
@@ -406,7 +409,7 @@ namespace Assets.Scripts.UI.Screens
         public void DrawScenarioPicture(Texture2D texture, UIElement ui_picture_shadow)
         {
             float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
-            UnityEngine.Events.UnityAction buttonCall = ui_picture_shadow.GetAction();
+            UnityAction buttonCall = ui_picture_shadow.GetAction();
 
             // draw picture shadow
             ui_picture_shadow.SetImage(picture_shadow);
@@ -646,8 +649,8 @@ namespace Assets.Scripts.UI.Screens
                     break;
 
                 case "date":
-                    System.DateTime currentQuestDate = game.questsList.GetQuestData(key).latest_update;
-                    float nb_days_since_update = (System.DateTime.Today - currentQuestDate).Days;
+                    DateTime currentQuestDate = game.questsList.GetQuestData(key).latest_update;
+                    float nb_days_since_update = (DateTime.Today - currentQuestDate).Days;
                     StringKey current_update_information = null;
 
                     foreach (KeyValuePair<float,StringKey> duration_text in nbDays_durationText)
@@ -774,7 +777,7 @@ namespace Assets.Scripts.UI.Screens
         {
             // Clean up everything marked as 'questlist'
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
-                Object.Destroy(go);
+                Destroy(go);
 
             scrollArea = null;
 
@@ -1170,7 +1173,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetBGColor(Color.clear);
 
                     string difficulty_symbol = "π"; // will
-                    int font_size = (int)System.Math.Round(UIScaler.GetSmallFont() * 1.1f);
+                    int font_size = (int)Math.Round(UIScaler.GetSmallFont() * 1.1f);
                     if (game.gameType is MoMGameType)
                     {
                         difficulty_symbol = new StringKey("val", "ICON_SUCCESS_RESULT").Translate();
@@ -1224,11 +1227,11 @@ namespace Assets.Scripts.UI.Screens
 
                     // rating
                     string rating_symbol = "★";
-                    int font_size = (int)System.Math.Round(UIScaler.GetMediumFont() * 1.05f);
+                    int font_size = (int)Math.Round(UIScaler.GetMediumFont() * 1.05f);
                     if (game.gameType is MoMGameType)
                     {
                         rating_symbol = new StringKey("val", "ICON_TENTACLE").Translate();
-                        font_size = (int)System.Math.Round(UIScaler.GetMediumFont() * 1.4f);
+                        font_size = (int)Math.Round(UIScaler.GetMediumFont() * 1.4f);
                     }
                     float score_text_width = 0;
 
@@ -1288,7 +1291,7 @@ namespace Assets.Scripts.UI.Screens
         {
             CleanQuestList();
 
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
 
         // Select a quest
@@ -1372,7 +1375,7 @@ namespace Assets.Scripts.UI.Screens
             /// <summary>
             /// Parse the downloaded remote manifest and start download of individual quest files
             /// </summary>
-            public void ImageDownloaded_callback(Texture2D texture, bool error, System.Uri uri)
+            public void ImageDownloaded_callback(Texture2D texture, bool error, Uri uri)
             {
                 if (error)
                 {
