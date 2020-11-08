@@ -37,7 +37,11 @@ namespace Assets.Scripts.UI
             }
 
             // Set the thickness of the lines
-            float thick = (float)Math.Ceiling(0.05f * UIScaler.GetPixelsPerUnit());
+            float thick = (float)Math.Floor(0.05f * UIScaler.GetPixelsPerUnit());
+            if (thick == 0)
+            {
+                thick = 1.0f;
+            }
 
             bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, thick);
             bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, rectTrans.rect.width);
