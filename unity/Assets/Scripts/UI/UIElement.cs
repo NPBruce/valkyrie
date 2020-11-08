@@ -131,12 +131,16 @@ namespace Assets.Scripts.UI
             component.preserveAspect = preserveAspect;
             
             var fitter = bg.GetComponent<AspectRatioFitter>();
-            if (aspectMode == null && !(fitter is null))
+
+            if (aspectMode == null)
             {
-                Object.Destroy(fitter);
+                if (!(fitter is null))
+                {
+                    Object.Destroy(fitter);
+                }
                 return;
             }
-            
+
             if (fitter is null)
             {
                 fitter = bg.AddComponent<AspectRatioFitter>();
