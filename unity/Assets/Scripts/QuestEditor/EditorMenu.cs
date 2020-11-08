@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using Assets.Scripts.Content;
+﻿using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using UnityEngine;
 
 // Menu popup when in editor
-public class EditorMenu {
-
+public class EditorMenu
+{
     private static readonly StringKey SAVE = new StringKey("val", "SAVE");
     private static readonly StringKey RELOAD = new StringKey("val", "RELOAD");
     private static readonly StringKey MAIN_MENU = new StringKey("val", "MAIN_MENU");
@@ -67,6 +67,6 @@ public class EditorMenu {
         // Load the base content - pack will be loaded later if required
         game.cd.LoadContentID("");
 
-        Destroyer.MainMenu();
+        GameStateManager.MainMenu();
     }
 }

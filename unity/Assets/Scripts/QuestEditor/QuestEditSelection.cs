@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using UnityEngine;
 using ValkyrieTools;
+using Object = UnityEngine.Object;
 
 public class QuestEditSelection
 {
@@ -95,7 +97,7 @@ public class QuestEditSelection
         // Load the base content - pack will be loaded later if required
         game.cd.LoadContentID("");
 
-        Destroyer.MainMenu();
+        GameStateManager.MainMenu();
     }
 
     // Change the dialog to a delete dialog
@@ -153,7 +155,7 @@ public class QuestEditSelection
         {
             Directory.Delete(key, true);
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             ValkyrieDebug.Log("Failed to delete quest: " + key);
         }
@@ -269,7 +271,7 @@ public class QuestEditSelection
             // Write back to ini file
             File.WriteAllLines(targetLocation + "/quest.ini", questData);
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             ValkyrieDebug.Log("Error: Failed to copy quest.");
             Application.Quit();
@@ -369,10 +371,10 @@ public class QuestEditSelection
                 // Write localization file
                 File.WriteAllText(
                     targetLocation + "/Localization." + oneLang + ".txt",
-                    string.Join(System.Environment.NewLine, localization_files[oneLang].ToArray()));
+                    string.Join(Environment.NewLine, localization_files[oneLang].ToArray()));
             }
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             ValkyrieDebug.Log("Error: Failed to create new quest: " + e.Message);
             Application.Quit();
@@ -394,11 +396,8 @@ public class QuestEditSelection
 
         if (game.quest!=null) game.quest.RemoveAll();
 
-        game.audioControl.StopMusic();
-
         // Fetch all of the quest data
-        ValkyrieDebug.Log("Selecting Quest: " + key + System.Environment.NewLine);
-        ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
-        QuestEditor.Begin(questList[key].path);
+        ValkyrieDebug.Log("Selecting Quest: " + key + Environment.NewLine);
+        GameStateManager.Editor.EditQuest(questList[key].path);
     }
 }

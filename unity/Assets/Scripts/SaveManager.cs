@@ -1,9 +1,8 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 using ValkyrieTools;
-using Assets.Scripts.Content;
-using Assets.Scripts;
 
 // This class provides functions to load and save games.
 class SaveManager
@@ -119,14 +118,14 @@ class SaveManager
             // zip in a separate thread
             ZipManager.WriteZipAsync(tempValkyriePath, quest_content_path, SaveFile(num), zip_update);
         }
-        catch (System.IO.IOException e)
+        catch (IOException e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
         if (quit)
         {
             ZipManager.Wait4PreviousSave();
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
     }
 
@@ -183,23 +182,23 @@ class SaveManager
                 QuestData.Quest q = new QuestData.Quest(questLoadPath);
                 if (!q.valid)
                 {
-                    ValkyrieDebug.Log("Error: save contains unsupported quest version." + System.Environment.NewLine);
-                    Destroyer.MainMenu();
+                    ValkyrieDebug.Log("Error: save contains unsupported quest version." + Environment.NewLine);
+                    GameStateManager.MainMenu();
                     return;
                 }
                 saveData.data["Quest"]["path"] = Path.Combine(questLoadPath, "quest.ini");
 
                 if (VersionManager.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
-                    ValkyrieDebug.Log("Error: save is from a future version." + System.Environment.NewLine);
-                    Destroyer.MainMenu();
+                    ValkyrieDebug.Log("Error: save is from a future version." + Environment.NewLine);
+                    GameStateManager.MainMenu();
                     return;
                 }
 
                 if (!VersionManager.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
                 {
-                    ValkyrieDebug.Log("Error: save is from an old unsupported version." + System.Environment.NewLine);
-                    Destroyer.MainMenu();
+                    ValkyrieDebug.Log("Error: save is from an old unsupported version." + Environment.NewLine);
+                    GameStateManager.MainMenu();
                     return;
                 }
 
@@ -280,7 +279,7 @@ class SaveManager
     {
         public bool valid = false;
         public string quest_name;
-        public System.DateTime saveTime;
+        public DateTime saveTime;
         public Texture2D image;
 
         public SaveData(int num = 0)
@@ -322,7 +321,7 @@ class SaveManager
                 QuestData.Quest q = new QuestData.Quest(questLoadPath);
                 if (!q.valid)
                 {
-                    ValkyrieDebug.Log("Warning: Save " + num + " contains unsupported quest version." + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Warning: Save " + num + " contains unsupported quest version." + Environment.NewLine);
                     return;
                 }
 
@@ -330,21 +329,21 @@ class SaveManager
 
                 if (VersionManager.VersionNewer(game.version, saveData.Get("Quest", "valkyrie")))
                 {
-                    ValkyrieDebug.Log("Warning: Save " + num + " is from a future version." + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Warning: Save " + num + " is from a future version." + Environment.NewLine);
                     return;
                 }
 
                 if (!VersionManager.VersionNewerOrEqual(minValkyieVersion, saveData.Get("Quest", "valkyrie")))
                 {
-                    ValkyrieDebug.Log("Warning: Save " + num + " is from an old unsupported version." + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Warning: Save " + num + " is from an old unsupported version." + Environment.NewLine);
                     return;
                 }
 
-                saveTime = System.DateTime.Parse(saveData.Get("Quest", "time"));
+                saveTime = DateTime.Parse(saveData.Get("Quest", "time"));
 
                 valid = true;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 ValkyrieDebug.Log("Warning: Unable to open save file: " + SaveFile(num) + "\nException: " + e.ToString());
             }

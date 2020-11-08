@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Content;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Content;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.Screens
@@ -120,7 +120,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
                 ui.SetText(CommonStringKeys.BACK, Color.red);
                 ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(Destroyer.MainMenu);
+                ui.SetButton(GameStateManager.MainMenu);
                 new UIElementBorder(ui, Color.red);
             }
             ui.SetFont(game.gameType.GetHeaderFont());
