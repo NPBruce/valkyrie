@@ -17,6 +17,9 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey ABOUT_LIBS = new StringKey("val", "ABOUT_LIBS");
         private static readonly StringKey START_QUEST = new StringKey("val", "START_QUEST");
         private static readonly StringKey LOAD_QUEST = new StringKey("val", "LOAD_QUEST");
+        private static readonly Color BUTTON_BG_COLOR = new Color(0, 0.03f, 0f, 0.9f);
+        private static readonly Color BUTTON_BORDER_COLOR_ACTIVE = new Color(1, 1, 1, 0.8f);
+        private static readonly Color BUTTON_BORDER_COLOR_INACTIVE = new Color(Color.gray.r, Color.gray.g, Color.gray.b, 0.8f);
 
         private float ButtonWidth = 14;
 
@@ -34,13 +37,21 @@ namespace Assets.Scripts.UI.Screens
             }
             game.audioControl.PlayDefaultQuestMusic(music);
 
+            // Background image. 
+            UIElement bg = new UIElement();
+            bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
+            bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
+
             // Name.  Should this be the banner, or better to print Valkyrie with the game font?
             UIElement ui = new UIElement();
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
             ui.SetText("Valkyrie");
+            ui.SetBGColor(Color.clear);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
-			
+            ui.SetTextOutline(Color.black, 1);
+            
+            
            // Version type : alpha / beta should be displayed
             if( Game.Get().version.EndsWith("a") )
             {
@@ -61,82 +72,84 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetButton(delegate { TestCrash(); });
             }
 
+            float menuButtonsX = UIScaler.GetWidthUnits() * 0.1f;
+            
             // Button for start quest/scenario
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 5, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 5, ButtonWidth, 2);
             ui.SetText(START_QUEST);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Start);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 8, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 8, ButtonWidth, 2);
+            ui.SetBGColor(BUTTON_BG_COLOR);
             if (SaveManager.SaveExists())
             {
                 ui.SetText(LOAD_QUEST);
                 ui.SetButton(delegate { new SaveSelectScreen(); });
-                ui.SetBGColor(new Color(0, 0.03f, 0f));
-                new UIElementBorder(ui);
+                new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
             }
             else
             {
                 ui.SetText(LOAD_QUEST, Color.grey);
-                new UIElementBorder(ui, Color.grey);
+                new UIElementBorder(ui, BUTTON_BORDER_COLOR_INACTIVE);
             }
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Content selection page
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 11, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 11, ButtonWidth, 2);
             ui.SetText(SELECT_CONTENT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Content);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
             // Quest/Scenario editor
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 14, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 14, ButtonWidth, 2);
             ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Editor);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
             // About page (managed in this class)
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 17, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 17, ButtonWidth, 2);
             ui.SetText(ABOUT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(About);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
             
             // Configuration menu
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 20, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 20, ButtonWidth, 2);
             ui.SetText(OPTIONS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Config);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
             // Exit Valkyrie
             ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - ButtonWidth) / 2, 23, ButtonWidth, 2);
+            ui.SetLocation(menuButtonsX, 23, ButtonWidth, 2);
             ui.SetText(CommonStringKeys.EXIT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Exit);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
         }
 
         // Start quest
@@ -174,6 +187,7 @@ namespace Assets.Scripts.UI.Screens
         }
 
         static int click_counter = 0;
+
         static public void TestCrash()
         {
             click_counter++;
@@ -232,7 +246,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(GameStateManager.MainMenu);
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
+            ui.SetBGColor(BUTTON_BG_COLOR);
             new UIElementBorder(ui);
         }
 
