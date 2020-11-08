@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Assets.Scripts.Content;
 using ValkyrieTools;
@@ -761,10 +762,8 @@ public class QuestData
         new public static string type = "Event";
 
         public bool display = true;
-        public List<StringKey> buttons;
-        public List<string> buttonColors;
         public string trigger = "";
-        public List<EventButtonData> buttonEvents;
+        public List<QuestButtonData> buttons;
         public string heroListName = "";
         public int minHeroes = 0;
         public int maxHeroes = 0;
@@ -790,9 +789,7 @@ public class QuestData
             source = "events.ini";
             display = false;
             typeDynamic = type;
-            buttonEvents = new List<EventButtonData>();
-            buttons = new List<StringKey>();
-            buttonColors = new List<string>();
+            buttons = new List<QuestButtonData>();
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
@@ -818,9 +815,7 @@ public class QuestData
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            buttonEvents = new List<EventButtonData>();
-            buttons = new List<StringKey>();
-            buttonColors = new List<string>();
+            buttons = new List<QuestButtonData>();
 
             int buttonCount = 0;
             if (data.ContainsKey("buttons"))
@@ -836,27 +831,24 @@ public class QuestData
 
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
-                buttons.Add(genQuery("button" + buttonNum));
+                var buttonLabel = ReadButtonLabel(data, buttonNum);
                 
-                data.TryGetValue("event" + buttonNum, out var nextEventString);
-                if (!String.IsNullOrWhiteSpace(nextEventString))
+                QuestButtonData questButtonData;
+                if (data.TryGetValue("event" + buttonNum, out var nextEventString))
                 {
-                    EventButtonData eventButtonData = EventButtonSerializer.FromString(nextEventString);
-                    buttonEvents.Add(eventButtonData);
+                    questButtonData = QuestButtonDataSerializer.FromString(buttonLabel, nextEventString);
                 }
                 else
                 {
-                    buttonEvents.Add(new EventButtonData(new List<string>()));
+                    questButtonData = new QuestButtonData(buttonLabel, new List<string>());
                 }
 
                 if (data.ContainsKey("buttoncolor" + buttonNum) && display)
                 {
-                    buttonColors.Add(data["buttoncolor" + buttonNum]);
+                    questButtonData.Color = data["buttoncolor" + buttonNum];
                 }
-                else
-                {
-                    buttonColors.Add("white");
-                }
+
+                buttons.Add(questButtonData);
             }
 
             // Heros from another event can be hilighted
@@ -946,6 +938,17 @@ public class QuestData
             }
         }
 
+        private StringKey ReadButtonLabel(Dictionary<string, string> data, int buttonNum)
+        {
+            var buttonDataKey = "button" + (buttonNum);
+            if (data.TryGetValue(buttonDataKey, out string buttonDataValue))
+            {
+                return new StringKey(buttonDataValue);
+            }
+
+            return genQuery("button" + buttonNum);
+        }
+
         // Check all references when a component name is changed
         override public void ChangeReference(string oldName, string newName)
         {
@@ -953,7 +956,7 @@ public class QuestData
             {
                 for (int i = 1; i <= buttons.Count; i++)
                 {
-                    buttons[i - 1] = new StringKey("qst", newName + '.' + "button" + i);
+                    buttons[i - 1].Label = new StringKey("qst", newName + '.' + "button" + i);
                 }
             }
 
@@ -965,9 +968,9 @@ public class QuestData
 
             bool isRemoveOperation = newName == string.Empty;
             // a next event is changed
-            for (int i = 0; i < buttonEvents.Count; i++)
+            for (int i = 0; i < buttons.Count; i++)
             {
-                List<string> eventNames = buttonEvents[i].EventNames;
+                List<string> eventNames = buttons[i].EventNames;
             
                 // Handle event removal
                 if (isRemoveOperation)
@@ -1037,20 +1040,13 @@ public class QuestData
 
             r += "buttons=" + buttons.Count + nl;
 
-            int buttonNum = 1;
-            foreach (EventButtonData nextEventData in buttonEvents)
+            foreach (var i in buttons.Select((b, i) => new { index = i + 1, buttonData = b }))
             {
-                r += "event" + buttonNum++ + "=" + EventButtonSerializer.ToString(nextEventData) + nl;
-            }
-
-            buttonNum = 1;
-            foreach (string s in buttonColors)
-            {
-                if (!s.Equals("white"))
+                r += "event" + i.index + "=" + QuestButtonDataSerializer.ToEventString(i.buttonData) + nl;
+                if (!i.buttonData.Color.Equals(QuestButtonData.DEFAULT_COLOR))
                 {
-                    r += "buttoncolor" + buttonNum + "=\"" + s + "\"" + nl;
+                    r += "buttoncolor" + i.index + "=\"" + i.buttonData.Color + "\"" + nl;
                 }
-                buttonNum++;
             }
 
             if (!heroListName.Equals(""))
@@ -1199,9 +1195,7 @@ public class QuestData
         {
             source = "puzzles.ini";
             typeDynamic = type;
-            buttonEvents.Add(new EventButtonData());
-            buttonColors.Add("white");
-            buttons.Add(genQuery("button1"));
+            buttons.Add(new QuestButtonData(genQuery("button1")));
             LocalizationRead.updateScenarioText(genKey("button1"),
                 new StringKey("val","PUZZLE_GUESS").Translate());
         }

@@ -394,13 +394,13 @@ public class EditorComponentEvent : EditorComponent
         int index = 0;
         float lastButtonOffset = 0;
         buttonUIE = new List<UIElementEditable>();
-        foreach (EventButtonData nextEvent in eventComponent.buttonEvents)
+        foreach (QuestButtonData nextEvent in eventComponent.buttons)
         {
             lastButtonOffset = offset;
             int buttonTmp = button++;
 
-            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
-            string colorRGB = ColorUtil.FromName(eventComponent.buttonColors[buttonTmp - 1]);
+            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1].Label;
+            string colorRGB = ColorUtil.FromName(eventComponent.buttons[buttonTmp - 1].Color);
             Color32 c = Color.white;
             c.r = (byte)System.Convert.ToByte(colorRGB.Substring(1, 2), 16);
             c.g = (byte)System.Convert.ToByte(colorRGB.Substring(3, 2), 16);
@@ -543,9 +543,8 @@ public class EditorComponentEvent : EditorComponent
                 LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextUIE.GetText());
                 if (eventComponent.buttons.Count == 0)
                 {
-                    eventComponent.buttons.Add(eventComponent.genQuery("button1"));
-                    eventComponent.buttonEvents.Add(new EventButtonData());
-                    eventComponent.buttonColors.Add("white");
+                    var buttonLabel = eventComponent.genQuery("button1");
+                    eventComponent.buttons.Add(new QuestButtonData(buttonLabel));
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
                 }
@@ -1132,20 +1131,17 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddButton()
     {
-        int count = eventComponent.buttonEvents.Count + 1;
-        eventComponent.buttonEvents.Add(new EventButtonData());
-        eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
-        eventComponent.buttonColors.Add("white");
+        int count = eventComponent.buttons.Count + 1;
+        var butonLabelKey = eventComponent.genQuery("button" + count);
+        eventComponent.buttons.Add(new QuestButtonData(butonLabelKey));
         LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), BUTTON.Translate() + count);
         Update();
     }
 
     public void RemoveButton()
     {
-        int count = eventComponent.buttonEvents.Count;
-        eventComponent.buttonEvents.RemoveAt(count - 1);
+        int count = eventComponent.buttons.Count;
         eventComponent.buttons.RemoveAt(count - 1);
-        eventComponent.buttonColors.RemoveAt(count - 1);
         LocalizationRead.dicts["qst"].Remove(eventComponent.genKey("button" + count));
         Update();
     }
@@ -1169,7 +1165,7 @@ public class EditorComponentEvent : EditorComponent
 
     public void SelectButtonColour(int number, string color)
     {
-        eventComponent.buttonColors[number - 1] = color;
+        eventComponent.buttons[number - 1].Color = color;
         Update();
     }
 
@@ -1253,18 +1249,18 @@ public class EditorComponentEvent : EditorComponent
 
         if (replace)
         {
-            eventComponent.buttonEvents[button - 1].EventNames[index] = toAdd;
+            eventComponent.buttons[button - 1].EventNames[index] = toAdd;
         }
         else
         {
-            eventComponent.buttonEvents[button - 1].EventNames.Insert(index, toAdd);
+            eventComponent.buttons[button - 1].EventNames.Insert(index, toAdd);
         }
         Update();
     }
 
     public void RemoveEvent(int index, int button)
     {
-        eventComponent.buttonEvents[button - 1].EventNames.RemoveAt(index);
+        eventComponent.buttons[button - 1].EventNames.RemoveAt(index);
         Update();
     }
 

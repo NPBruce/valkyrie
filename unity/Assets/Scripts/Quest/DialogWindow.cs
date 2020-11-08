@@ -100,14 +100,14 @@ public class DialogWindow {
         {
             // Handle condition failure
             var buttonConditionFailed = eb.condition != null && !varManager.Test(eb.condition);
-            if (buttonConditionFailed && eb.action == EventButtonAction.HIDE)
+            if (buttonConditionFailed && eb.action == QuestButtonAction.HIDE)
             {
                 continue;
             }
             int numTmp = num++;
             ui = new UIElement();
             ui.SetLocation(hOffset, offset, buttonWidth, 2);
-            if (buttonConditionFailed && eb.action == EventButtonAction.DISABLE)
+            if (buttonConditionFailed && eb.action == QuestButtonAction.DISABLE)
             {
                 ui.SetText(eb.GetLabel(), Color.gray);
                 ui.SetFontSize(UIScaler.GetMediumFont());
@@ -359,13 +359,12 @@ public class DialogWindow {
         StringKey label = StringKey.NULL;
         public Color32 colour = Color.white;
         public VarOperation condition = null;
-        public EventButtonAction action = EventButtonAction.NONE;
+        public QuestButtonAction action = QuestButtonAction.NONE;
 
-        public EventButton(StringKey newLabel, string newColour, 
-            VarOperation condition = null, EventButtonAction action = EventButtonAction.NONE)
+        public EventButton(QuestButtonData buttonData)
         {
-            label = newLabel;
-            string colorRGB = ColorUtil.FromName(newColour);      
+            label = buttonData.Label;
+            string colorRGB = ColorUtil.FromName(buttonData.Color);      
 
             // Check format is valid
             if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
@@ -383,8 +382,8 @@ public class DialogWindow {
             else
                 colour.a = 255; // opaque by default
 
-            this.condition = condition;
-            this.action = action;
+            this.condition = buttonData.Condition;
+            this.action = buttonData.ConditionFailedAction;
         }
 
         public StringKey GetLabel()

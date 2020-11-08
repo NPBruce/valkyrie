@@ -60,9 +60,9 @@ public class ShopInterface : Quest.BoardComponent
 
         for (int i = 0; i < eventData.buttons.Count; i++)
         {
-            StringKey label = new StringKey(null, EventManager.OutputSymbolReplace(eventData.buttons[i].Translate()), false);
+            StringKey label = new StringKey(null, EventManager.OutputSymbolReplace(eventData.buttons[i].Label.Translate()), false);
             Color colour = Color.white;
-            string colorRGB = ColorUtil.FromName(eventData.buttonColors[i]);
+            string colorRGB = ColorUtil.FromName(eventData.buttons[i].Color);
             // Check format is valid
             if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
             {
