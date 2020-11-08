@@ -666,8 +666,12 @@ public class Quest
             if (h.heroData != null)
             {
                 heroCount++;
-                // Create variable to value 1 for each selected Hero
+                // Create variable to value 1 for each selected Hero and Class
                 game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                if (!string.IsNullOrEmpty(h.className))
+                {
+                    game.quest.vars.SetValue("#" + h.className, 1);
+                }
             }
         }
         game.quest.vars.SetValue("#heroes", heroCount);
