@@ -104,7 +104,7 @@ public class VarManager
         // value is var
         if (!vars.ContainsKey(op.value))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
+            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.value, true));
             vars.Add(op.value, 0);
         }
         return vars[op.value];
