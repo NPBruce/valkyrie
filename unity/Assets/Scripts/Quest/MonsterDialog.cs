@@ -144,6 +144,7 @@ public class MonsterDialog
         game.monsterCanvas.UpdateList();
         // Trigger unique defeated event
         game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
+        game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.spawnEventName);
     }
 
     // Cancel cleans up
