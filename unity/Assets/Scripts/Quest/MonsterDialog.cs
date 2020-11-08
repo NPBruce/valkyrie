@@ -118,16 +118,12 @@ public class MonsterDialog
 
         game.audioControl.PlayTrait("defeated");
         
-        // Trigger defeated event by monster type
-        game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
-        // Trigger defeated event by spawn name
-        game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
+        TriggerDefeatedEvents(game, "Defeated");
 
         // If unique trigger defeated unique event
         if (monster.unique)
         {
-            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
-            game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.spawnEventName);
+            TriggerDefeatedEvents(game, "DefeatedUnique");
         }
     }
 
@@ -143,8 +139,15 @@ public class MonsterDialog
         monster.healthMod = 0;
         game.monsterCanvas.UpdateList();
         // Trigger unique defeated event
-        game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.monsterData.sectionName);
-        game.quest.eManager.EventTriggerType("DefeatedUnique" + monster.spawnEventName);
+        TriggerDefeatedEvents(game, "DefeatedUnique");
+    }
+
+    private void TriggerDefeatedEvents(Game game, string eventType)
+    {
+        // Trigger defeated event by monster type
+        game.quest.eManager.EventTriggerType(eventType + monster.monsterData.sectionName);
+        // Trigger defeated event by spawn name
+        game.quest.eManager.EventTriggerType(eventType + monster.spawnEventName);
     }
 
     // Cancel cleans up
