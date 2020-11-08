@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
-using Assets.Scripts.UI;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -63,8 +63,18 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.QuestSelect);
+            ui.SetButton(BackButtonAction());
             new UIElementBorder(ui, Color.red);
+        }
+
+        private static UnityAction BackButtonAction()
+        {
+            Game game = Game.Get();
+            if (game.testMode)
+            {
+                return GameStateManager.Editor.EditCurrentQuest;
+            }
+            return GameStateManager.Quest.RestartFromHeroSelection;
         }
 
         public void DrawHero(float xOffset, int hero)

@@ -442,7 +442,7 @@ public class EventManager
              || !Path.GetFileName(game.quest.originalPath).EndsWith(".valkyrie") )
             {
                 // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
-                Destroyer.MainMenu();
+                GameStateManager.MainMenu();
             }
             else
             {
