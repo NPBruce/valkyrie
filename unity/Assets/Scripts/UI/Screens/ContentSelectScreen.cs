@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             game = Game.Get();
 
-            if (game.cd.packTypes.Count > 1)
+            if (game.cd.Count<PackTypeData>() > 1)
             {
                 DrawTypeList();
             }
@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI.Screens
             float offset = 4.5f;
             bool left = true;
             // Note this is currently unordered
-            foreach (PackTypeData type in game.cd.packTypes.Values)
+            foreach (PackTypeData type in game.cd.Values<PackTypeData>())
             {
                 // Create a sprite with the category image
                 Texture2D tex = ContentData.FileToTexture(type.image);
@@ -240,7 +240,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             new UIElementBorder(ui, Color.red);
-            if (game.cd.packTypes.Count > 1)
+            if (game.cd.Count<PackTypeData>() > 1)
             {
                 ui.SetButton(DrawTypeList);
             }

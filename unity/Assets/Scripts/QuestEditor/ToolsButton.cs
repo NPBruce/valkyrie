@@ -64,7 +64,7 @@ public class ToolsButton
 
         int heroCount = Random.Range(game.quest.qd.quest.minHero, game.quest.qd.quest.maxHero + 1);
 
-        List<HeroData> hOptions = new List<HeroData>(game.cd.heroes.Values);
+        List<HeroData> hOptions = new List<HeroData>(game.cd.Values<HeroData>());
         for (int i = 0; i < heroCount; i++)
         {
             game.quest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];

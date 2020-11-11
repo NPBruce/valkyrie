@@ -113,32 +113,32 @@ public class ShopInterface : Quest.BoardComponent
 
         float vOffset = 0.5f;
 
-        foreach (string s in game.quest.shops[eventData.sectionName])
+        foreach (string itemName in game.quest.shops[eventData.sectionName])
         {
-            string itemName = s;
+            var itemData = game.cd.Get<ItemData>(itemName);
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
-            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetText(itemData.name, Color.black);
             ui.SetButton(delegate { Buy(itemName); });
             ui.SetBGColor(Color.white);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(2.5f, vOffset + 0.5f, 4, 4);
             ui.SetButton(delegate { Buy(itemName); });
-            Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
+            Texture2D itemTex = ContentData.FileToTexture(itemData.image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             ui.SetImage(itemSprite);
 
             StringKey act = new StringKey(null, "-", false);
-            if (game.cd.items[s].ContainsTrait("class"))
+            if (itemData.ContainsTrait("class"))
             {
                 act = new StringKey("val", "CLASS");
             }
-            if (game.cd.items[s].ContainsTrait("act1"))
+            if (itemData.ContainsTrait("act1"))
             {
                 act = new StringKey("val", "ACT_1");
             }
-            if (game.cd.items[s].ContainsTrait("act2"))
+            if (itemData.ContainsTrait("act2"))
             {
                 act = new StringKey("val", "ACT_2");
             }
@@ -151,7 +151,7 @@ public class ShopInterface : Quest.BoardComponent
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
-            ui.SetText(GetPurchasePrice(game.cd.items[s]).ToString());
+            ui.SetText(GetPurchasePrice(itemData).ToString());
             ui.SetButton(delegate { Buy(itemName); });
             ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
@@ -177,34 +177,34 @@ public class ShopInterface : Quest.BoardComponent
 
         float vOffset = 0.5f;
 
-        foreach (string s in game.quest.items)
+        foreach (string itemName in game.quest.items)
         {
-            string itemName = s;
-            if (game.cd.items[itemName].ContainsTrait("relic")) continue;
+            var itemData = game.cd.Get<ItemData>(itemName);
+            if (itemData.ContainsTrait("relic")) continue;
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
-            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetText(itemData.name, Color.black);
             ui.SetButton(delegate { Sell(itemName); });
             ui.SetBGColor(Color.white);
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(2.5f, vOffset + 0.5f, 4, 4);
             ui.SetButton(delegate { Sell(itemName); });
-            Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
+            Texture2D itemTex = ContentData.FileToTexture(itemData.image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
             ui.SetImage(itemSprite);
 
             StringKey act = new StringKey(null, "-", false);
-            if (game.cd.items[s].ContainsTrait("class"))
+            if (itemData.ContainsTrait("class"))
             {
                 act = new StringKey("val", "CLASS");
             }
-            if (game.cd.items[s].ContainsTrait("act1"))
+            if (itemData.ContainsTrait("act1"))
             {
                 act = new StringKey("val", "ACT_1");
             }
-            if (game.cd.items[s].ContainsTrait("act2"))
+            if (itemData.ContainsTrait("act2"))
             {
                 act = new StringKey("val", "ACT_2");
             }
@@ -217,7 +217,7 @@ public class ShopInterface : Quest.BoardComponent
 
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(3, vOffset, 3, 1);
-            ui.SetText(GetSellPrice(game.cd.items[itemName]).ToString());
+            ui.SetText(GetSellPrice(itemData).ToString());
             ui.SetButton(delegate { Sell(itemName); });
             ui.SetBGColor(new Color32(178, 154, 0, 255)); // dark gold
             new UIElementBorder(ui, Color.black);
@@ -270,7 +270,7 @@ public class ShopInterface : Quest.BoardComponent
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
-        ItemData itemData = game.cd.items[item];
+        ItemData itemData = game.cd.Get<ItemData>(item);
         if (game.quest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
 
         game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") - GetPurchasePrice(itemData));
@@ -283,7 +283,8 @@ public class ShopInterface : Quest.BoardComponent
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
-        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(game.cd.items[item]));
+        ItemData itemData = game.cd.Get<ItemData>(item);
+        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(itemData));
         game.quest.shops[eventData.sectionName].Add(item);
         game.quest.items.Remove(item);
         Update();

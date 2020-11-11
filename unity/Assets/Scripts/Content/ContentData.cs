@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// This class reads and stores all of the content for a base game and expansions.</summary>
@@ -12,23 +14,85 @@ public class ContentData {
 
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
-    public Dictionary<string, PackTypeData> packTypes;
     public Dictionary<string, StringKey> packSymbol;
-    public Dictionary<string, TileSideData> tileSides;
-    public Dictionary<string, HeroData> heroes;
-    public Dictionary<string, ClassData> classes;
-    public Dictionary<string, SkillData> skills;
-    public Dictionary<string, ItemData> items;
-    public Dictionary<string, MonsterData> monsters;
-    public Dictionary<string, ActivationData> activations;
-    public Dictionary<string, AttackData> investigatorAttacks;
-    public Dictionary<string, EvadeData> investigatorEvades;
-    public Dictionary<string, HorrorData> horrorChecks;
-    public Dictionary<string, TokenData> tokens;
-    public Dictionary<string, PerilData> perils;
-    public Dictionary<string, PuzzleData> puzzles;
-    public Dictionary<string, ImageData> images;
-    public Dictionary<string, AudioData> audio;
+
+    private Dictionary<Type, Dictionary<string, IContent>> Content = new Dictionary<Type, Dictionary<string, IContent>>
+    {
+        // This is pack type for sorting packs
+        { typeof(PackTypeData),  new Dictionary<string, IContent> () },
+        // This is all of the available sides of tiles (not currently tracking physical tiles)
+        { typeof(TileSideData),  new Dictionary<string, IContent> () },
+        // Available heroes
+        { typeof(HeroData),  new Dictionary<string, IContent> () },
+        // Available classes
+        { typeof(ClassData),  new Dictionary<string, IContent> () },
+        // Available skills
+        { typeof(SkillData),  new Dictionary<string, IContent> () },
+        // Available items
+        { typeof(ItemData),  new Dictionary<string, IContent> () },
+        // Available monsters
+        { typeof(MonsterData),  new Dictionary<string, IContent> () },
+        // This has all monster activations
+        { typeof(ActivationData),  new Dictionary<string, IContent> () },
+        // This has all available attacks
+        { typeof(AttackData),  new Dictionary<string, IContent> () },
+        // This has all available evades
+        { typeof(EvadeData),  new Dictionary<string, IContent> () },
+        // This has all available evades
+        { typeof(HorrorData),  new Dictionary<string, IContent> () },
+        // This has all available tokens
+        { typeof(TokenData),  new Dictionary<string, IContent> () },
+        // This has all available perils
+        { typeof(PerilData),  new Dictionary<string, IContent> () },
+        // This has all available puzzle images
+        { typeof(PuzzleData),  new Dictionary<string, IContent> () },
+        // This has all available general images
+        { typeof(ImageData),  new Dictionary<string, IContent> () },
+        // This has all available puzzle images
+        { typeof(AudioData),  new Dictionary<string, IContent> () }
+    };
+
+    public void AddOrReplace<T>(string name, T content) where T : IContent
+    {
+        Content[typeof(T)][name] = content;
+    }
+
+    public bool TryGet<T>(string name, out T value) where T : IContent
+    {
+        var contains = Content[typeof(T)].TryGetValue(name, out IContent obj);
+        value = (T) obj;
+        return contains;
+    }
+    
+    public T Get<T>(string name) where T : IContent
+    {
+        return (T) Content[typeof(T)][name];
+    }
+    public IEnumerable<string> Keys<T>() where T : IContent
+    {
+        return Content[typeof(T)].Keys.AsEnumerable();
+    }
+    
+    public IEnumerable<T> Values<T>() where T : IContent
+    {
+        return Content[typeof(T)].Values.Cast<T>().AsEnumerable();
+    }
+
+    public bool ContainsKey<T>(string key) where T : IContent
+    {
+        return Content[typeof(T)].ContainsKey(key);
+    }
+
+    public IEnumerable<KeyValuePair<string, T>> GetAll<T>() where T : IContent
+    {
+        return Content[typeof(T)].AsEnumerable()
+            .Select(t => new KeyValuePair<string, T>(t.Key, (T)t.Value));
+    }
+
+    public int Count<T>() where T : IContent
+    {
+        return Content[typeof(T)].Count;
+    }
 
     // textureCache is used to store previously loaded textures so they are faster next time
     // For the editor all defined images are loaded, requires ~1GB RAM
@@ -126,59 +190,12 @@ public class ContentData {
         // This is pack type for sorting packs
         loadedPacks = new HashSet<string>();
 
-        // This is pack type for sorting packs
-        packTypes = new Dictionary<string, PackTypeData>();
-
         // This is pack symbol list
         packSymbol = new Dictionary<string, StringKey>();
     
-        // This is all of the available sides of tiles (not currently tracking physical tiles)
-        tileSides = new Dictionary<string, TileSideData>();
-
-        // Available heros
-        heroes = new Dictionary<string, HeroData>();
-
-        // Available classes
-        classes = new Dictionary<string, ClassData>();
-
-        // Available skills
-        skills = new Dictionary<string, SkillData>();
-
-        // Available items
-        items = new Dictionary<string, ItemData>();
-
-        // Available monsters
-        monsters = new Dictionary<string, MonsterData>();
-
         //This has the game game and all expansions, general info
         allPacks = new List<ContentPack>();
 
-        // This has all monster activations
-        activations = new Dictionary<string, ActivationData>();
-
-        // This has all available attacks
-        investigatorAttacks = new Dictionary<string, AttackData>();
-
-        // This has all available evades
-        investigatorEvades = new Dictionary<string, EvadeData>();
-
-        // This has all available evades
-        horrorChecks = new Dictionary<string, HorrorData>();
-
-        // This has all available tokens
-        tokens = new Dictionary<string, TokenData>();
-
-        // This has all avilable perils
-        perils = new Dictionary<string, PerilData>();
-
-        // This has all avilable puzzle images
-        puzzles = new Dictionary<string, PuzzleData>();
-
-        // This has all avilable general images
-        images = new Dictionary<string, ImageData>();
-
-        // This has all avilable puzzle images
-        audio = new Dictionary<string, AudioData>();
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
         string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
@@ -401,331 +418,101 @@ public class ContentData {
             LoadContentID(s);
         }
     }
-
+    
     // Add a section of an ini file to game content
     // name is from the ini file and must start with the type
     // path is relative and is used for images or other paths in the content
     void AddContent(string name, Dictionary<string, string> content, string path, string packID)
     {
+        var sets = string.IsNullOrWhiteSpace(packID) ? new List<string>() : new List<string> { packID };
+        
         // Is this a "PackType" entry?
         if(name.IndexOf(PackTypeData.type) == 0)
         {
-            PackTypeData d = new PackTypeData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if(!packTypes.ContainsKey(name))
-            {
-                packTypes.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if(packTypes[name].priority < d.priority)
-            {
-                packTypes.Remove(name);
-                packTypes.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (packTypes[name].priority == d.priority)
-            {
-                packTypes[name].sets.Add(packID);
-            }
+            PackTypeData d = new PackTypeData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "TileSide" entry?
         if(name.IndexOf(TileSideData.type) == 0)
         {
-            TileSideData d = new TileSideData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if(!tileSides.ContainsKey(name))
-            {
-                tileSides.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if(tileSides[name].priority < d.priority)
-            {
-                tileSides.Remove(name);
-                tileSides.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (tileSides[name].priority == d.priority)
-            {
-                tileSides[name].sets.Add(packID);
-            }
+            TileSideData d = new TileSideData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Hero" entry?
         if (name.IndexOf(HeroData.type) == 0)
         {
-            HeroData d = new HeroData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!heroes.ContainsKey(name))
-            {
-                heroes.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (heroes[name].priority < d.priority)
-            {
-                heroes.Remove(name);
-                heroes.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (heroes[name].priority == d.priority)
-            {
-                heroes[name].sets.Add(packID);
-            }
+            HeroData d = new HeroData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Class" entry?
         if (name.IndexOf(ClassData.type) == 0)
         {
-            ClassData d = new ClassData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!classes.ContainsKey(name))
-            {
-                classes.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (classes[name].priority < d.priority)
-            {
-                classes.Remove(name);
-                classes.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (classes[name].priority == d.priority)
-            {
-                classes[name].sets.Add(packID);
-            }
+            ClassData d = new ClassData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Skill" entry?
         if (name.IndexOf(SkillData.type) == 0)
         {
-            SkillData d = new SkillData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!skills.ContainsKey(name))
-            {
-                skills.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (skills[name].priority < d.priority)
-            {
-                skills.Remove(name);
-                skills.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (skills[name].priority == d.priority)
-            {
-                skills[name].sets.Add(packID);
-            }
+            SkillData d = new SkillData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Item" entry?
         if (name.IndexOf(ItemData.type) == 0)
         {
-            ItemData d = new ItemData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!items.ContainsKey(name))
-            {
-                items.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (items[name].priority < d.priority)
-            {
-                items.Remove(name);
-                items.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (items[name].priority == d.priority)
-            {
-                items[name].sets.Add(packID);
-            }
+            ItemData d = new ItemData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Monster" entry?
         if (name.IndexOf(MonsterData.type) == 0)
         {
-            MonsterData d = new MonsterData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // Ignore monster activations
-            if (name.IndexOf(ActivationData.type) != 0)
-            {
-                // If we don't already have one then add this
-                if (!monsters.ContainsKey(name))
-                {
-                    monsters.Add(name, d);
-                    d.sets.Add(packID);
-                }
-                // If we do replace if this has higher priority
-                else if (monsters[name].priority < d.priority)
-                {
-                    monsters.Remove(name);
-                    monsters.Add(name, d);
-                }
-                // items of the same priority belong to multiple packs
-                else if (monsters[name].priority == d.priority)
-                {
-                    monsters[name].sets.Add(packID);
-                }
-            }
+            MonsterData d = new MonsterData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Activation" entry?
         if (name.IndexOf(ActivationData.type) == 0)
         {
-            ActivationData d = new ActivationData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!activations.ContainsKey(name))
-            {
-                activations.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (activations[name].priority < d.priority)
-            {
-                activations.Remove(name);
-                activations.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (activations[name].priority == d.priority)
-            {
-                activations[name].sets.Add(packID);
-            }
+            ActivationData d = new ActivationData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
         
         // Is this a "Attack" entry?
         if (name.IndexOf(AttackData.type) == 0)
         {
-            AttackData d = new AttackData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!investigatorAttacks.ContainsKey(name))
-            {
-                investigatorAttacks.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (investigatorAttacks[name].priority < d.priority)
-            {
-                investigatorAttacks.Remove(name);
-                investigatorAttacks.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (investigatorAttacks[name].priority == d.priority)
-            {
-                investigatorAttacks[name].sets.Add(packID);
-            }
+            AttackData d = new AttackData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Evade" entry?
         if (name.IndexOf(EvadeData.type) == 0)
         {
-            EvadeData d = new EvadeData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!investigatorEvades.ContainsKey(name))
-            {
-                investigatorEvades.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (investigatorEvades[name].priority < d.priority)
-            {
-                investigatorEvades.Remove(name);
-                investigatorEvades.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (investigatorEvades[name].priority == d.priority)
-            {
-                investigatorEvades[name].sets.Add(packID);
-            }
+            EvadeData d = new EvadeData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Horror" entry?
         if (name.IndexOf(HorrorData.type) == 0)
         {
-            HorrorData d = new HorrorData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!horrorChecks.ContainsKey(name))
-            {
-                horrorChecks.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (horrorChecks[name].priority < d.priority)
-            {
-                horrorChecks.Remove(name);
-                horrorChecks.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (horrorChecks[name].priority == d.priority)
-            {
-                horrorChecks[name].sets.Add(packID);
-            }
+            HorrorData d = new HorrorData(name, content, path, sets);
+            AddContentInternal(name, d);
         }
 
         // Is this a "Token" entry?
         if (name.IndexOf(TokenData.type) == 0)
         {
-            TokenData d = new TokenData(name, content, path);
-            // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
+            TokenData d = new TokenData(name, content, path, sets);
             if (d.image.Equals(""))
             {
                 ValkyrieDebug.Log("Token " + d.name + "did not have an image. Skipping");
                 return;
             }
-            // If we don't already have one then add this
-            if (!tokens.ContainsKey(name))
-            {
-                tokens.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (tokens[name].priority < d.priority)
-            {
-                tokens.Remove(name);
-                tokens.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (tokens[name].priority == d.priority)
-            {
-                tokens[name].sets.Add(packID);
-            }
+            AddContentInternal(name, d);
         }
 
         // Is this a "Peril" entry?
@@ -735,89 +522,46 @@ public class ContentData {
             // Ignore invalid entry
             if (d.sectionName.Equals(""))
                 return;
-            // If we don't already have one then add this
-            if (!perils.ContainsKey(name))
-            {
-                perils.Add(name, d);
-            }
-            // If we do replace if this has higher priority
-            else if (perils[name].priority < d.priority)
-            {
-                perils.Remove(name);
-                perils.Add(name, d);
-            }
+            AddContentInternal(name, d);
         }
 
         // Is this a "Puzzle" entry?
         if (name.IndexOf(PuzzleData.type) == 0)
         {
-            PuzzleData d = new PuzzleData(name, content, path);
+            PuzzleData d = new PuzzleData(name, content, path, sets);
             // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!puzzles.ContainsKey(name))
-            {
-                puzzles.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (puzzles[name].priority < d.priority)
-            {
-                puzzles.Remove(name);
-                puzzles.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (puzzles[name].priority == d.priority)
-            {
-                puzzles[name].sets.Add(packID);
-            }
+            AddContentInternal(name, d);
         }
 
         // Is this a "Image" entry?
         if (name.IndexOf(ImageData.type) == 0)
         {
-            ImageData d = new ImageData(name, content, path);
+            ImageData d = new ImageData(name, content, path, sets);
             // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!images.ContainsKey(name))
-            {
-                images.Add(name, d);
-                d.sets.Add(packID);
-            }
-            // If we do replace if this has higher priority
-            else if (images[name].priority < d.priority)
-            {
-                images.Remove(name);
-                images.Add(name, d);
-            }
-            // items of the same priority belong to multiple packs
-            else if (images[name].priority == d.priority)
-            {
-                images[name].sets.Add(packID);
-            }
+            AddContentInternal(name, d);
         }
 
         // Is this a "Audio" entry?
         if (name.IndexOf(AudioData.type) == 0)
         {
-            AudioData d = new AudioData(name, content, path);
+            AudioData d = new AudioData(name, content, path, sets);
             // Ignore invalid entry
-            if (d.name.Equals(""))
-                return;
-            // If we don't already have one then add this
-            if (!audio.ContainsKey(name))
-            {
-                audio.Add(name, d);
-            }
-            // If we do replace if this has higher priority
-            else if (audio[name].priority < d.priority)
-            {
-                audio.Remove(name);
-                audio.Add(name, d);
-            }
+            AddContentInternal(name, d);
+        }
+    }
+
+    private void AddContentInternal<T>(string name, T d) where T : IContent
+    {
+        // If we don't already have one or it's lower priority then add this
+        if (!TryGet(name, out T existingPackData)
+            || existingPackData.Priority < d.Priority)
+        {
+            AddOrReplace(name, d);
+        }
+        // items of the same priority belong to multiple packs
+        else if (existingPackData.Priority == d.Priority)
+        {
+            existingPackData.Sets.AddRange(d.Sets);
         }
     }
 
@@ -1098,7 +842,7 @@ public class PackTypeData : GenericData
 {
     public static new string type = "PackType";
 
-    public PackTypeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public PackTypeData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
     }
 }
@@ -1111,9 +855,9 @@ public class TileSideData : GenericData
     public float pxPerSquare;
     public float aspect = 0;
     public string reverse = "";
-    public static new string type = "TileSide";
+    public new static string type = "TileSide";
 
-    public TileSideData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public TileSideData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get location of top left square in tile image, default 0
         if (content.ContainsKey("top"))
@@ -1164,7 +908,7 @@ public class HeroData : GenericData
     public static new string type = "Hero";
     public string item = "";
 
-    public HeroData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public HeroData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get archetype
         if (content.ContainsKey("archetype"))
@@ -1187,7 +931,7 @@ public class ClassData : GenericData
     public static new string type = "Class";
     public List<string> items;
 
-    public ClassData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public ClassData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get archetype
         if (content.ContainsKey("archetype"))
@@ -1214,7 +958,7 @@ public class SkillData : GenericData
     public static new string type = "Skill";
     public int xp = 0;
 
-    public SkillData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public SkillData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get archetype
         if (content.ContainsKey("xp"))
@@ -1233,7 +977,7 @@ public class ItemData : GenericData
     public int minFame = -1;
     public int maxFame = -1;
 
-    public ItemData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public ItemData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         if (name.IndexOf("ItemUnique") == 0)
         {
@@ -1282,7 +1026,7 @@ public class MonsterData : GenericData
     {
     }
 
-    public MonsterData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public MonsterData(string name, Dictionary<string, string> content, string path, List<string> sets) : base(name, content, path, type, sets)
     {
         // Get usage info
         if (content.ContainsKey("info"))
@@ -1330,11 +1074,11 @@ public class MonsterData : GenericData
     virtual public IEnumerable<string> GetAttackTypes()
     {
         HashSet<string> toReturn = new HashSet<string>();
-        foreach (KeyValuePair<string, AttackData> kv in Game.Get().cd.investigatorAttacks)
+        foreach (AttackData kv in Game.Get().cd.Values<AttackData>())
         {
-            if (ContainsTrait(kv.Value.target))
+            if (ContainsTrait(kv.target))
             {
-                toReturn.Add(kv.Value.attackType);
+                toReturn.Add(kv.attackType);
             }
         }
         return toReturn;
@@ -1343,7 +1087,7 @@ public class MonsterData : GenericData
     virtual public StringKey GetRandomAttack(string type)
     {
         List<AttackData> validAttacks = new List<AttackData>();
-        foreach (AttackData ad in Game.Get().cd.investigatorAttacks.Values)
+        foreach (AttackData ad in Game.Get().cd.Values<AttackData>())
         {
             if (ad.attackType.Equals(type))
             {
@@ -1378,7 +1122,7 @@ public class ActivationData : GenericData
     {
     }
 
-    public ActivationData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public ActivationData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get ability
         if (content.ContainsKey("ability"))
@@ -1425,12 +1169,12 @@ public class TokenData : GenericData
     public float pxPerSquare = 0;
     public static new string type = "Token";
 
-    public TokenData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public TokenData(string name, Dictionary<string, string> content, string path, List<String> sets = null) : base(name, content, path, type, sets)
     {
         init(content);
     }
 
-    public TokenData(string name, Dictionary<string, string> content, string path, string typeIn) : base(name, content, path, typeIn)
+    public TokenData(string name, Dictionary<string, string> content, string path, string typeIn, List<String> sets = null) : base(name, content, path, typeIn, sets)
     {
         init(content);
     }
@@ -1492,7 +1236,7 @@ public class AttackData : GenericData
     // Attack type (heavy, unarmed)
     public string attackType = "";
 
-    public AttackData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public AttackData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get attack text
         if (content.ContainsKey("text"))
@@ -1523,7 +1267,7 @@ public class EvadeData : GenericData
     public StringKey text = StringKey.NULL;
     public string monster = "";
 
-    public EvadeData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public EvadeData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get attack text
         if (content.ContainsKey("text"))
@@ -1548,7 +1292,7 @@ public class HorrorData : GenericData
     public StringKey text = StringKey.NULL;
     public string monster = "";
 
-    public HorrorData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public HorrorData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {
         // Get attack text
         if (content.ContainsKey("text"))
@@ -1569,7 +1313,7 @@ public class PuzzleData : GenericData
 {
     public static new string type = "Puzzle";
 
-    public PuzzleData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public PuzzleData(string name, Dictionary<string, string> content, string path, List<string> sets) : base(name, content, path, type, sets)
     {
     }
 }
@@ -1579,7 +1323,7 @@ public class ImageData : TokenData
 {
     public static new string type = "Image";
 
-    public ImageData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public ImageData(string name, Dictionary<string, string> content, string path, List<string> sets) : base(name, content, path, type, sets)
     {
     }
 }
@@ -1590,7 +1334,7 @@ public class AudioData : GenericData
     public static new string type = "Audio";
     public string file = "";
 
-    public AudioData(string name, Dictionary<string, string> content, string path) : base(name, content, path, type)
+    public AudioData(string name, Dictionary<string, string> content, string path, List<string> sets) : base(name, content, path, type, sets)
     {
         if (content.ContainsKey("file"))
         {
@@ -1607,7 +1351,7 @@ public class AudioData : GenericData
 }
 
 // Super class for all content loaded from content packs
-public class GenericData
+public class GenericData : IContent
 {
     // name from section title or data
     public StringKey name = StringKey.NULL;
@@ -1619,20 +1363,23 @@ public class GenericData
     public string[] traits;
     // Path to image
     public string image;
-    // priority for duplicates
-    public int priority;
     // for sub classes to set type
     public static string type = "";
+    // priority for duplicates
+    protected int priority;
+
+    public List<string> Sets => sets;
+    public int Priority => priority;
 
     public GenericData()
     {
     }
 
     // generic constructor gets common things
-    public GenericData(string name_ini, Dictionary<string, string> content, string path, string type)
+    public GenericData(string name_ini, Dictionary<string, string> content, string path, string type, List<string> sets)
     {
         sectionName = name_ini;
-        sets = new List<string>();
+        this.sets = sets ?? new List<string>();
 
         // Has the name been specified?
         if (content.ContainsKey("name"))
@@ -1701,10 +1448,13 @@ public class GenericData
 }
 
 // Perils are content data that inherits from QuestData for reasons.
-public class PerilData : QuestData.Event
+public class PerilData : QuestData.Event, IContent
 {
     new public static string type = "Peril";
-    public int priority = 0;
+    private int priority = 0;
+
+    public int Priority => priority;
+    public List<string> Sets { get; } = new List<string>();
 
     public StringKey perilText;
     override public StringKey text { get { return perilText; } }

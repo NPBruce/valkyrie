@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
 
             List<string> music = new List<string>();
-            foreach (AudioData ad in game.cd.audio.Values)
+            foreach (AudioData ad in game.cd.Values<AudioData>())
             {
                 if (ad.ContainsTrait("menu")) music.Add(ad.file);
             }

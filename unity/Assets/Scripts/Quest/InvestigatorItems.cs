@@ -18,7 +18,7 @@ public class InvestigatorItems
         {
             if (h.heroData != null)
             {
-                if (game.cd.items.ContainsKey(h.heroData.item))
+                if (game.cd.ContainsKey<ItemData>(h.heroData.item))
                 {
                     game.quest.items.Add(h.heroData.item);
                 }
@@ -64,7 +64,7 @@ public class InvestigatorItems
                 if (System.Char.IsUpper(item[charIndex++])) break;
             }
             string typeString = item.Substring(0, charIndex);
-            string translationString = game.cd.items[item].name.Translate();
+            string translationString = game.cd.Get<ItemData>(item).name.Translate();
 
             if (!itemSort.ContainsKey(typeString))
             {
@@ -86,7 +86,8 @@ public class InvestigatorItems
         {
             foreach (string item in itemSort[category].Values)
             {
-                Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
+                var itemData = game.cd.Get<ItemData>(item);
+                Texture2D tex = ContentData.FileToTexture(itemData.image);
                 Sprite sprite = null;
                 if (tex != null)
                 {
@@ -102,7 +103,7 @@ public class InvestigatorItems
 
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
-                ui.SetText(game.cd.items[item].name);
+                ui.SetText(itemData.name);
 
                 x++;
                 if (x > 4)

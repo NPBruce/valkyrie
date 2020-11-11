@@ -39,9 +39,9 @@ public class PuzzleImageWindow
         width = 19f / questPuzzle.puzzleLevel;
 
         Texture2D newTex = null;
-        if (game.cd.puzzles.ContainsKey(questPuzzle.imageType))
+        if (game.cd.TryGet(questPuzzle.imageType, out PuzzleData puzzleData))
         {
-            newTex = ContentData.FileToTexture(game.cd.puzzles[questPuzzle.imageType].image);
+            newTex = ContentData.FileToTexture(puzzleData.image);
         }
         else
         {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -29,25 +30,16 @@ public class InvestigatorEvade {
     public void PickEvade(Quest.Monster m)
     {
         Game game = Game.Get();
-        List<EvadeData> evades = new List<EvadeData>();
-        foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
-        {
-            if (m.monsterData.sectionName.Equals("Monster" + kv.Value.monster))
-            {
-                evades.Add(kv.Value);
-            }
-        }
+        List<EvadeData> evades = game.cd.Values<EvadeData>()
+            .Where(md => m.monsterData.sectionName.Equals(MonsterData.type + md.monster))
+            .ToList();
 
         QuestMonster qm = m.monsterData as QuestMonster;
-        if (evades.Count == 0 && qm != null && qm.derivedType.Length > 0)
+        if (evades.Count == 0 && qm != null && !string.IsNullOrWhiteSpace(qm.derivedType))
         {
-            foreach (KeyValuePair<string, EvadeData> kv in game.cd.investigatorEvades)
-            {
-                if (qm.derivedType.Equals("Monster" + kv.Value.monster))
-                {
-                    evades.Add(kv.Value);
-                }
-            }
+            var derivedEvades = game.cd.Values<EvadeData>()
+                .Where(kv => qm.derivedType.Equals(MonsterData.type + kv.monster));
+            evades.AddRange(derivedEvades);
         }
 
         if (evades.Count > 0)

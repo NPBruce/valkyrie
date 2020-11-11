@@ -23,7 +23,7 @@ public class HeroSelection {
 
         Game game = Game.Get();
         // Get all available heros
-        List<string> heroList = new List<string>(game.cd.heroes.Keys);
+        List<string> heroList = new List<string>(game.cd.Keys<HeroData>());
         heroList.Sort();
 
         UIElementScrollVertical scrollArea = new UIElementScrollVertical(Game.HEROSELECT);
@@ -40,7 +40,7 @@ public class HeroSelection {
             buttons.Add(hero, new List<UIElement>());
 
             // Should be game type specific
-            Texture2D newTex = ContentData.FileToTexture(game.cd.heroes[hero].image);
+            Texture2D newTex = ContentData.FileToTexture(game.cd.Get<HeroData>(hero).image);
 
             ui = new UIElement(Game.HEROSELECT, scrollArea.GetScrollTransform());
             if (left)
@@ -78,7 +78,7 @@ public class HeroSelection {
                 ui.SetLocation(8.75f, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 1.5f);
             }
             ui.SetBGColor(Color.white);
-            ui.SetText(game.cd.heroes[hero].name, Color.black);
+            ui.SetText(game.cd.Get<HeroData>(hero).name, Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate { Select(hero); });
@@ -94,11 +94,11 @@ public class HeroSelection {
     {
         Game game = Game.Get();
         HeroData hData = null;
-        foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
+        foreach (HeroData hd  in game.cd.Values<HeroData>())
         {
-            if (hd.Value.sectionName.Equals(name))
+            if (hd.sectionName.Equals(name))
             {
-                hData = hd.Value;
+                hData = hd;
                 break;
             }
         }

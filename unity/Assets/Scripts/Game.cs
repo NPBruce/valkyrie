@@ -198,7 +198,8 @@ public class Game : MonoBehaviour
         }
 
         DictionaryI18n valDict = new DictionaryI18n();
-        foreach (string file in Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt"))
+        var localizationFiles = Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt");
+        foreach (string file in localizationFiles)
         {
             valDict.AddDataFromFile(file);
         }
@@ -342,7 +343,7 @@ public class Game : MonoBehaviour
         if (quest.defaultMusicOn)
         {
             // Start quest music
-            foreach (AudioData ad in cd.audio.Values)
+            foreach (AudioData ad in cd.Values<AudioData>())
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }

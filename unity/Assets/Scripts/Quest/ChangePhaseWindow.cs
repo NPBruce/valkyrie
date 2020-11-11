@@ -35,9 +35,9 @@ public class ChangePhaseWindow
         UIElement bg = new UIElement(Game.TRANSITION);
         Texture2D bgTex;
         if (phase == Quest.MoMPhase.investigator)
-            bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_INVESTIGATORS_PHASE].image);
+            bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_INVESTIGATORS_PHASE).image);
         else
-            bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_MYTHOS_PHASE].image);
+            bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_MYTHOS_PHASE).image);
         bg.SetImage(bgTex);
         bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
 

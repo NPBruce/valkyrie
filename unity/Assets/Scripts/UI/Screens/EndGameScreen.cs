@@ -48,11 +48,11 @@ namespace Assets.Scripts.UI.Screens
             Texture2D bgTex;
             if (game.gameType.TypeName() == "MoM")
             {
-                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_MOM].image);
+                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_MOM).image);
             }
             else if (game.gameType.TypeName() == "D2E")
             {
-                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_DESCENT].image);
+                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_MOM).image);
             }
             else
             {

@@ -17,14 +17,11 @@ public class QuestMonster : MonsterData
         cMonster = qm;
 
         // Get base derived monster type
-        MonsterData baseObject = null;
-
         // Check for content data monster defined as base
-        if (game.cd.monsters.ContainsKey(qm.baseMonster))
+        if (game.cd.TryGet(qm.baseMonster, out MonsterData baseObject))
         {
             // Set base monster type
             derivedType = qm.baseMonster;
-            baseObject = game.cd.monsters[qm.baseMonster];
         }
 
         // If name not set use base type
