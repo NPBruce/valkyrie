@@ -217,7 +217,7 @@ namespace Assets.Scripts.UI
             {
                 _key = key;
                 _display = display;
-                alwaysOnTop = alwaysOnTop;
+                AlwaysOnTop = alwaysOnTop;
             }
 
             public SelectionItem(string display, string key, Color color)

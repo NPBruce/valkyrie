@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
     {
         protected List<TraitGroup> traitData = new List<TraitGroup>();
 
+        protected List<SelectionItemTraits> allItems = new List<SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alwaysOnTopTraitItems = new SortedList<string, SelectionItemTraits>();
         protected SortedList<int, SelectionItemTraits> traitItems = new SortedList<int, SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alphaTraitItems = new SortedList<string, SelectionItemTraits>();
@@ -41,7 +42,7 @@ namespace Assets.Scripts.UI
 
         override public void Draw()
         {
-            foreach (SelectionItemTraits item in traitItems.Values)
+            foreach (SelectionItemTraits item in allItems)
             {
                 foreach (string category in item.GetTraits().Keys)
                 {
@@ -64,7 +65,7 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            foreach (SelectionItemTraits item in traitItems.Values)
+            foreach (SelectionItemTraits item in allItems)
             {
                 foreach (TraitGroup tg in traitData)
                 {
@@ -381,6 +382,7 @@ namespace Assets.Scripts.UI
 
         private void AddTraitItem(SelectionItemTraits traitItem)
         {
+            allItems.Add(traitItem);
             if (traitItem.AlwaysOnTop)
             {
                 alwaysOnTopTraitItems.Add(traitItem.GetDisplay(), traitItem);
