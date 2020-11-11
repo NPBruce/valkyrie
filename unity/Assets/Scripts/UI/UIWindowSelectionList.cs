@@ -168,7 +168,7 @@ namespace Assets.Scripts.UI
                 lineNum++;
             }
 
-            scrollArea.SetScrollSize(items.Count * 1.05f);
+            scrollArea.SetScrollSize(toDisplay.Count * 1.05f);
 
             // Cancel button
             ui = new UIElement();
