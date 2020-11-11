@@ -9,7 +9,7 @@ namespace Assets.Scripts.UI
         protected string _title = "";
         protected UnityEngine.Events.UnityAction<string> _call;
 
-        protected SortedList<string, SelectionItem> priorityItems = new SortedList<string, SelectionItem>();
+        protected SortedList<string, SelectionItem> alwaysOnTopItems = new SortedList<string, SelectionItem>();
         protected SortedList<int, SelectionItem> items = new SortedList<int, SelectionItem>();
         protected SortedList<string, SelectionItem> alphaItems = new SortedList<string, SelectionItem>();
 
@@ -37,9 +37,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItem(stringKey.Translate(), stringKey.key, color));
         }
 
-        public void AddItem(string item, bool priority = false)
+        public void AddItem(string item, bool alwaysOnTop = false)
         {
-            AddItem(new SelectionItem(item, item, priority));
+            AddItem(new SelectionItem(item, item, alwaysOnTop));
         }
 
         public void AddItem(string item, Color color)
@@ -47,9 +47,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItem(item, item, color));
         }
 
-        public void AddItem(string display, string key, bool priority = false)
+        public void AddItem(string display, string key, bool alwaysOnTop = false)
         {
-            AddItem(new SelectionItem(display, key, priority));
+            AddItem(new SelectionItem(display, key, alwaysOnTop));
         }
 
         public void AddItem(string display, string key, Color color)
@@ -59,9 +59,9 @@ namespace Assets.Scripts.UI
 
         virtual public void AddItem(SelectionItem item)
         {
-            if (item.Priority)
+            if (item.AlwaysOnTop)
             {
-                priorityItems.Add(item.GetDisplay(), item);
+                alwaysOnTopItems.Add(item.GetDisplay(), item);
                 return;
             }
             items.Add(items.Count, item);
@@ -150,7 +150,7 @@ namespace Assets.Scripts.UI
                 toDisplay.Reverse();
             }
             
-            toDisplay.InsertRange(0, priorityItems.Values);
+            toDisplay.InsertRange(0, alwaysOnTopItems.Values);
 
             int lineNum = 0;
             foreach(SelectionItem item in toDisplay)
@@ -211,13 +211,13 @@ namespace Assets.Scripts.UI
             string _key = "";
             Color _color = Color.white;
 
-            public bool Priority { get; protected set; }
+            public bool AlwaysOnTop { get; protected set; }
 
-            public SelectionItem(string display, string key, bool priority = false)
+            public SelectionItem(string display, string key, bool alwaysOnTop = false)
             {
                 _key = key;
                 _display = display;
-                Priority = priority;
+                alwaysOnTop = alwaysOnTop;
             }
 
             public SelectionItem(string display, string key, Color color)

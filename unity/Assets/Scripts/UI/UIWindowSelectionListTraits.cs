@@ -8,7 +8,7 @@ namespace Assets.Scripts.UI
     {
         protected List<TraitGroup> traitData = new List<TraitGroup>();
 
-        protected SortedList<string, SelectionItemTraits> priorityTraitItems = new SortedList<string, SelectionItemTraits>();
+        protected SortedList<string, SelectionItemTraits> alwaysOnTopTraitItems = new SortedList<string, SelectionItemTraits>();
         protected SortedList<int, SelectionItemTraits> traitItems = new SortedList<int, SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alphaTraitItems = new SortedList<string, SelectionItemTraits>();
 
@@ -265,7 +265,7 @@ namespace Assets.Scripts.UI
                 toDisplay.Reverse();
             }
             
-            toDisplay.InsertRange(0, priorityTraitItems.Values);
+            toDisplay.InsertRange(0, alwaysOnTopTraitItems.Values);
 
             float offset = 0;
             foreach (SelectionItemTraits item in toDisplay)
@@ -337,9 +337,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItemTraits(item, item, traits), color);
         }
 
-        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool priority = false)
+        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool alwaysOnTop = false)
         {
-            AddItem(new SelectionItemTraits(display, key, traits, priority));
+            AddItem(new SelectionItemTraits(display, key, traits, alwaysOnTop));
         }
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
@@ -381,9 +381,9 @@ namespace Assets.Scripts.UI
 
         private void AddTraitItem(SelectionItemTraits traitItem)
         {
-            if (traitItem.Priority)
+            if (traitItem.AlwaysOnTop)
             {
-                priorityTraitItems.Add(traitItem.GetDisplay(), traitItem);
+                alwaysOnTopTraitItems.Add(traitItem.GetDisplay(), traitItem);
                 return;
             }
             
@@ -506,12 +506,12 @@ namespace Assets.Scripts.UI
             {
             }
 
-            public SelectionItemTraits(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool priority = false) : base(display, key, priority)
+            public SelectionItemTraits(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool alwaysOnTop = false) : base(display, key, alwaysOnTop)
             {
                 _traits = traits;
             }
 
-            public SelectionItemTraits(SelectionItem item) : base(item.GetDisplay(), item.GetKey(), item.Priority)
+            public SelectionItemTraits(SelectionItem item) : base(item.GetDisplay(), item.GetKey(), item.AlwaysOnTop)
             {
             }
 

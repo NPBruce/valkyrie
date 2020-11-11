@@ -98,7 +98,7 @@ namespace Assets.Scripts.UI
             {
                 toDisplay.Reverse();
             }
-            toDisplay.InsertRange(0, priorityTraitItems.Values);
+            toDisplay.InsertRange(0, alwaysOnTopTraitItems.Values);
 
             float offset = 0;
             float xOffset = 0;
