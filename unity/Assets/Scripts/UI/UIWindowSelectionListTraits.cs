@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
     {
         protected List<TraitGroup> traitData = new List<TraitGroup>();
 
+        protected SortedList<string, SelectionItemTraits> priorityTraitItems = new SortedList<string, SelectionItemTraits>();
         protected SortedList<int, SelectionItemTraits> traitItems = new SortedList<int, SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alphaTraitItems = new SortedList<string, SelectionItemTraits>();
 
@@ -263,6 +264,8 @@ namespace Assets.Scripts.UI
             {
                 toDisplay.Reverse();
             }
+            
+            toDisplay.InsertRange(0, priorityTraitItems.Values);
 
             float offset = 0;
             foreach (SelectionItemTraits item in toDisplay)
@@ -334,9 +337,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItemTraits(item, item, traits), color);
         }
 
-        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits)
+        public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool priority = false)
         {
-            AddItem(new SelectionItemTraits(display, key, traits));
+            AddItem(new SelectionItemTraits(display, key, traits, priority));
         }
 
         public void AddItem(string display, string key, Dictionary<string, IEnumerable<string>> traits, Color color)
@@ -366,23 +369,33 @@ namespace Assets.Scripts.UI
 
         override public void AddItem(SelectionItem item)
         {
-            string key = item.GetDisplay();
-            int duplicateIndex = 0;
-            while (alphaTraitItems.ContainsKey(key))
+            if (item is SelectionItemTraits traitItem)
             {
-                key = item.GetDisplay() + "_" + duplicateIndex++;
-            }
-
-            if (item is SelectionItemTraits)
-            {
-                traitItems.Add(traitItems.Count, item as SelectionItemTraits);
-                alphaTraitItems.Add(key, item as SelectionItemTraits);
+                AddTraitItem(traitItem);
             }
             else
             {
-                traitItems.Add(traitItems.Count, new SelectionItemTraits(item));
-                alphaTraitItems.Add(key, new SelectionItemTraits(item));
+                AddTraitItem(new SelectionItemTraits(item));
             }
+        }
+
+        private void AddTraitItem(SelectionItemTraits traitItem)
+        {
+            if (traitItem.Priority)
+            {
+                priorityTraitItems.Add(traitItem.GetDisplay(), traitItem);
+                return;
+            }
+            
+            string key = traitItem.GetDisplay();
+            int duplicateIndex = 0;
+            while (alphaTraitItems.ContainsKey(key))
+            {
+                key = traitItem.GetDisplay() + "_" + duplicateIndex++;
+            }
+
+            traitItems.Add(traitItems.Count, traitItem);
+            alphaTraitItems.Add(key, traitItem);
         }
 
         protected void AddItem(SelectionItem item, Color color)
@@ -426,7 +439,7 @@ namespace Assets.Scripts.UI
             traits.Add(val_type_translated, new string[] { new StringKey("val", type.ToUpper()).Translate() });
             traits.Add(val_source_translated, new string[] { new StringKey("val", "NEW").Translate() });
 
-            AddItem(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits));
+            AddItem(new SelectionItemTraits(new StringKey("val", "NEW_X", new StringKey("val", type.ToUpper())).Translate(), "{NEW:" + type + "}", traits, true));
         }
 
         public void SelectTrait(string type, string trait)
@@ -493,12 +506,12 @@ namespace Assets.Scripts.UI
             {
             }
 
-            public SelectionItemTraits(string display, string key, Dictionary<string, IEnumerable<string>> traits) : base(display, key)
+            public SelectionItemTraits(string display, string key, Dictionary<string, IEnumerable<string>> traits, bool priority = false) : base(display, key, priority)
             {
                 _traits = traits;
             }
 
-            public SelectionItemTraits(SelectionItem item) : base(item.GetDisplay(), item.GetKey())
+            public SelectionItemTraits(SelectionItem item) : base(item.GetDisplay(), item.GetKey(), item.Priority)
             {
             }
 

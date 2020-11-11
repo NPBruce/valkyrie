@@ -280,7 +280,7 @@ public class EditorComponentQuest : EditorComponent
     public void Image()
     {
         var select = new UIWindowSelectionListImage(SelectImage, new StringKey("val", "SELECT_IMAGE"));
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         var traits = new Dictionary<string, IEnumerable<string>>
         {
             {
