@@ -427,84 +427,84 @@ public class ContentData {
         var sets = string.IsNullOrWhiteSpace(packID) ? new List<string>() : new List<string> { packID };
         
         // Is this a "PackType" entry?
-        if(name.IndexOf(PackTypeData.type) == 0)
+        if(name.StartsWith(PackTypeData.type))
         {
             PackTypeData d = new PackTypeData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "TileSide" entry?
-        if(name.IndexOf(TileSideData.type) == 0)
+        if(name.StartsWith(TileSideData.type))
         {
             TileSideData d = new TileSideData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Hero" entry?
-        if (name.IndexOf(HeroData.type) == 0)
+        if (name.StartsWith(HeroData.type))
         {
             HeroData d = new HeroData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Class" entry?
-        if (name.IndexOf(ClassData.type) == 0)
+        if (name.StartsWith(ClassData.type))
         {
             ClassData d = new ClassData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Skill" entry?
-        if (name.IndexOf(SkillData.type) == 0)
+        if (name.StartsWith(SkillData.type))
         {
             SkillData d = new SkillData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Item" entry?
-        if (name.IndexOf(ItemData.type) == 0)
+        if (name.StartsWith(ItemData.type))
         {
             ItemData d = new ItemData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Monster" entry?
-        if (name.IndexOf(MonsterData.type) == 0)
+        if (name.StartsWith(MonsterData.type))
         {
             MonsterData d = new MonsterData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Activation" entry?
-        if (name.IndexOf(ActivationData.type) == 0)
+        if (name.StartsWith(ActivationData.type))
         {
             ActivationData d = new ActivationData(name, content, path, sets);
             AddContentInternal(name, d);
         }
         
         // Is this a "Attack" entry?
-        if (name.IndexOf(AttackData.type) == 0)
+        if (name.StartsWith(AttackData.type))
         {
             AttackData d = new AttackData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Evade" entry?
-        if (name.IndexOf(EvadeData.type) == 0)
+        if (name.StartsWith(EvadeData.type))
         {
             EvadeData d = new EvadeData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Horror" entry?
-        if (name.IndexOf(HorrorData.type) == 0)
+        if (name.StartsWith(HorrorData.type))
         {
             HorrorData d = new HorrorData(name, content, path, sets);
             AddContentInternal(name, d);
         }
 
         // Is this a "Token" entry?
-        if (name.IndexOf(TokenData.type) == 0)
+        if (name.StartsWith(TokenData.type))
         {
             TokenData d = new TokenData(name, content, path, sets);
             if (d.image.Equals(""))
@@ -516,7 +516,7 @@ public class ContentData {
         }
 
         // Is this a "Peril" entry?
-        if (name.IndexOf(PerilData.type) == 0)
+        if (name.StartsWith(PerilData.type))
         {
             PerilData d = new PerilData(name, content);
             // Ignore invalid entry
@@ -526,7 +526,7 @@ public class ContentData {
         }
 
         // Is this a "Puzzle" entry?
-        if (name.IndexOf(PuzzleData.type) == 0)
+        if (name.StartsWith(PuzzleData.type))
         {
             PuzzleData d = new PuzzleData(name, content, path, sets);
             // Ignore invalid entry
@@ -534,7 +534,7 @@ public class ContentData {
         }
 
         // Is this a "Image" entry?
-        if (name.IndexOf(ImageData.type) == 0)
+        if (name.StartsWith(ImageData.type))
         {
             ImageData d = new ImageData(name, content, path, sets);
             // Ignore invalid entry
@@ -542,7 +542,7 @@ public class ContentData {
         }
 
         // Is this a "Audio" entry?
-        if (name.IndexOf(AudioData.type) == 0)
+        if (name.StartsWith(AudioData.type))
         {
             AudioData d = new AudioData(name, content, path, sets);
             // Ignore invalid entry
