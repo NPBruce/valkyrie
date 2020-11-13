@@ -130,6 +130,10 @@ public class Game : MonoBehaviour
         // used for float.TryParse
         mainThread.CurrentCulture = CultureInfo.InvariantCulture;
         mainThread.CurrentUICulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
         // Set specific configuration for Android 
         if (Application.platform == RuntimePlatform.Android)
