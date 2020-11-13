@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
 using System.IO;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
-using DefaultNamespace;
 
 public class EditorComponentCustomMonster : EditorComponent
 {
