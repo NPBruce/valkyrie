@@ -383,22 +383,30 @@ namespace Assets.Scripts.Content
         /// Get the value for a key.  First check current language, then default, then any.  Returns key if not found.
         /// </summary>
         /// <param name="key">key to retreive</param>
+        /// <param name="additionalLanguage">language to use also use if present</param>
         /// <returns>Value found or 'key' if not found</returns>
-        public string GetValue(in string key)
+        public string GetValue(in string key, string additionalLanguage = null)
         {
             // KeyExists ensures any matches are loaded to Dictionary data
             if (!KeyExists(key)) return key;
 
-            // Check current language first
-            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key) && data[currentLanguage][key].Length > 0)
+            string suffix = string.Empty;
+            // Check forced language first
+            if (data.ContainsKey(additionalLanguage) && data[additionalLanguage].TryGetValue(key, out string additionalLanguageValue))
             {
-                return data[currentLanguage][key];
+                suffix = $" [{additionalLanguageValue}]";
+            }
+
+            // Check current language first
+            if (data.ContainsKey(currentLanguage) && data[currentLanguage].TryGetValue(key, out string currentLanguageValue) && !string.IsNullOrWhiteSpace(currentLanguageValue))
+            {
+                return currentLanguageValue + suffix;
             }
 
             // Then check default language
             if (data.ContainsKey(defaultLanguage) && data[defaultLanguage].ContainsKey(key))
             {
-                return data[defaultLanguage][key];
+                return data[defaultLanguage][key] + suffix;
             }
 
             // Not in current or default, find any match
@@ -406,7 +414,7 @@ namespace Assets.Scripts.Content
             {
                 if (langData.ContainsKey(key))
                 {
-                    return langData[key];
+                    return langData[key] + suffix;
                 }
             }
             // Should never happen
