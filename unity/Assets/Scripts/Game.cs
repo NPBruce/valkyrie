@@ -39,7 +39,12 @@ public class Game : MonoBehaviour
 
     // These components are referenced here for easy of use
     // Data included in content packs
-    public ContentData cd;
+    public ContentData cd
+    {
+        get => _cd;
+        internal set { _cd = value; CONTENT_LOADER = new ContentLoader(value);}
+    }
+
     // Data for the current quest
     public Quest quest;
     // Canvas for UI components (fixed on screen)
@@ -93,6 +98,9 @@ public class Game : MonoBehaviour
     public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
+    private ContentLoader CONTENT_LOADER;
+    public ContentLoader ContentLoader => CONTENT_LOADER;
+
     // Current language
     public string currentLang;
 
@@ -104,6 +112,8 @@ public class Game : MonoBehaviour
 
     // main thread Id
     public Thread mainThread = null;
+    private ContentData _cd;
+
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -233,7 +243,7 @@ public class Game : MonoBehaviour
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                cd.LoadContentID(kv.Key);
+                CONTENT_LOADER.LoadContentID(kv.Key);
             }
         }
 
@@ -255,7 +265,7 @@ public class Game : MonoBehaviour
         // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
-            cd.LoadContent(pack);
+            CONTENT_LOADER.LoadContent(pack);
         }
 
         // Pull up the quest selection page

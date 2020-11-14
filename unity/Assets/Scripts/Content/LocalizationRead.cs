@@ -310,5 +310,9 @@ namespace Assets.Scripts.Content
             }
             return regexKey.Substring(0, regexKey.Length - 1) + "):";
         }
+
+        public static void RegisterAdditionalTranslationKey(string dict, StringKey translationKey)
+        {
+        }
     }
 }

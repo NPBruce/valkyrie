@@ -16,82 +16,59 @@ public class ContentData {
     public List<ContentPack> allPacks;
     public Dictionary<string, StringKey> packSymbol;
 
-    private Dictionary<Type, Dictionary<string, IContent>> Content = new Dictionary<Type, Dictionary<string, IContent>>
+    private Dictionary<Type, Dictionary<string, IContent>> Content = new Dictionary<Type, Dictionary<string, IContent>>();
+
+    protected Dictionary<string, IContent> ContentOfType<T>() where T : IContent
     {
-        // This is pack type for sorting packs
-        { typeof(PackTypeData),  new Dictionary<string, IContent> () },
-        // This is all of the available sides of tiles (not currently tracking physical tiles)
-        { typeof(TileSideData),  new Dictionary<string, IContent> () },
-        // Available heroes
-        { typeof(HeroData),  new Dictionary<string, IContent> () },
-        // Available classes
-        { typeof(ClassData),  new Dictionary<string, IContent> () },
-        // Available skills
-        { typeof(SkillData),  new Dictionary<string, IContent> () },
-        // Available items
-        { typeof(ItemData),  new Dictionary<string, IContent> () },
-        // Available monsters
-        { typeof(MonsterData),  new Dictionary<string, IContent> () },
-        // This has all monster activations
-        { typeof(ActivationData),  new Dictionary<string, IContent> () },
-        // This has all available attacks
-        { typeof(AttackData),  new Dictionary<string, IContent> () },
-        // This has all available evades
-        { typeof(EvadeData),  new Dictionary<string, IContent> () },
-        // This has all available evades
-        { typeof(HorrorData),  new Dictionary<string, IContent> () },
-        // This has all available tokens
-        { typeof(TokenData),  new Dictionary<string, IContent> () },
-        // This has all available perils
-        { typeof(PerilData),  new Dictionary<string, IContent> () },
-        // This has all available puzzle images
-        { typeof(PuzzleData),  new Dictionary<string, IContent> () },
-        // This has all available general images
-        { typeof(ImageData),  new Dictionary<string, IContent> () },
-        // This has all available puzzle images
-        { typeof(AudioData),  new Dictionary<string, IContent> () }
-    };
+        Content.TryGetValue(typeof(T), out Dictionary<string, IContent> content);
+        if (content == null)
+        {
+            content = new Dictionary<string, IContent>();
+            Content[typeof(T)] = content;
+        }
+        return content;
+    }
 
     public void AddOrReplace<T>(string name, T content) where T : IContent
     {
-        Content[typeof(T)][name] = content;
+        ContentOfType<T>()[name] = content;
     }
 
     public bool TryGet<T>(string name, out T value) where T : IContent
     {
-        var contains = Content[typeof(T)].TryGetValue(name, out IContent obj);
+        var contains = ContentOfType<T>().TryGetValue(name, out IContent obj);
         value = (T) obj;
         return contains;
     }
     
     public T Get<T>(string name) where T : IContent
     {
-        return (T) Content[typeof(T)][name];
+        return (T) ContentOfType<T>()[name];
     }
     public IEnumerable<string> Keys<T>() where T : IContent
     {
-        return Content[typeof(T)].Keys.AsEnumerable();
+        return ContentOfType<T>().Keys.AsEnumerable();
     }
     
     public IEnumerable<T> Values<T>() where T : IContent
     {
-        return Content[typeof(T)].Values.Cast<T>().AsEnumerable();
+        return ContentOfType<T>().Values.Cast<T>().AsEnumerable();
     }
 
     public bool ContainsKey<T>(string key) where T : IContent
     {
-        return Content[typeof(T)].ContainsKey(key);
+        return ContentOfType<T>().ContainsKey(key);
     }
 
     public IEnumerable<KeyValuePair<string, T>> GetAll<T>() where T : IContent
     {
-        return Content[typeof(T)].AsEnumerable()
+        return ContentOfType<T>().AsEnumerable()
             .Select(t => new KeyValuePair<string, T>(t.Key, (T)t.Value));
     }
 
     public int Count<T>() where T : IContent
     {
-        return Content[typeof(T)].Count;
+        return ContentOfType<T>().Count;
     }
 
     // textureCache is used to store previously loaded textures so they are faster next time
@@ -111,6 +88,13 @@ public class ContentData {
         }
         return Application.streamingAssetsPath + "/content/";
     }
+
+    // Return a list of id for all enbaled content packs
+    public List<string> GetLoadedPackIDs()
+    {
+        return new List<string>(loadedPacks);
+    }
+
 
     /// <summary>
     /// Get the path where ffg app content is imported.</summary>
@@ -345,212 +329,8 @@ public class ContentData {
         }
         return "";
     }
-
-    // Return a list of id for all enbaled content packs
-    public List<string> GetLoadedPackIDs()
-    {
-        return new List<string>(loadedPacks);
-    }
-
-    // This loads content from a pack by name
-    // Duplicate content will be replaced by the higher priority value
-    public void LoadContent(string name)
-    {
-        foreach (ContentPack cp in allPacks)
-        {
-            if(cp.name.Equals(name))
-            {
-                LoadContent(cp);
-            }
-        }
-    }
-
-    // This loads content from a pack by ID
-    // Duplicate content will be replaced by the higher priority value
-    public void LoadContentID(string id)
-    {
-        foreach (ContentPack cp in allPacks)
-        {
-            if (cp.id.Equals(id))
-            {
-                LoadContent(cp);
-            }
-        }
-    }
-
-    // This loads content from a pack by object
-    // Duplicate content will be replaced by the higher priority value
-    void LoadContent(ContentPack cp)
-    {
-        // Don't reload content
-        if (loadedPacks.Contains(cp.id)) return;
-
-        foreach (KeyValuePair<string, List<string>> kv in cp.localizationFiles)
-        {
-            DictionaryI18n packageDict = new DictionaryI18n();
-            foreach (string file in kv.Value)
-            {
-                packageDict.AddDataFromFile(file);
-            }
-
-            LocalizationRead.AddDictionary(kv.Key, packageDict);
-        }
-
-        foreach (string ini in cp.iniFiles)
-        {
-            IniData d = IniRead.ReadFromIni(ini);
-            // Bad ini file not a fatal error, just ignore (will be in log)
-            if (d == null)
-                return;
-
-            // Add each section
-            foreach(KeyValuePair<string, Dictionary<string, string>> section in d.data)
-            {
-                AddContent(section.Key, section.Value, Path.GetDirectoryName(ini), cp.id);
-            }
-        }
-
-
-        loadedPacks.Add(cp.id);
-
-        foreach (string s in cp.clone)
-        {
-            LoadContentID(s);
-        }
-    }
     
-    // Add a section of an ini file to game content
-    // name is from the ini file and must start with the type
-    // path is relative and is used for images or other paths in the content
-    void AddContent(string name, Dictionary<string, string> content, string path, string packID)
-    {
-        var sets = string.IsNullOrWhiteSpace(packID) ? new List<string>() : new List<string> { packID };
-        
-        // Is this a "PackType" entry?
-        if(name.StartsWith(PackTypeData.type))
-        {
-            PackTypeData d = new PackTypeData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "TileSide" entry?
-        if(name.StartsWith(TileSideData.type))
-        {
-            TileSideData d = new TileSideData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Hero" entry?
-        if (name.StartsWith(HeroData.type))
-        {
-            HeroData d = new HeroData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Class" entry?
-        if (name.StartsWith(ClassData.type))
-        {
-            ClassData d = new ClassData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Skill" entry?
-        if (name.StartsWith(SkillData.type))
-        {
-            SkillData d = new SkillData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Item" entry?
-        if (name.StartsWith(ItemData.type))
-        {
-            ItemData d = new ItemData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Monster" entry?
-        if (name.StartsWith(MonsterData.type))
-        {
-            MonsterData d = new MonsterData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Activation" entry?
-        if (name.StartsWith(ActivationData.type))
-        {
-            ActivationData d = new ActivationData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-        
-        // Is this a "Attack" entry?
-        if (name.StartsWith(AttackData.type))
-        {
-            AttackData d = new AttackData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Evade" entry?
-        if (name.StartsWith(EvadeData.type))
-        {
-            EvadeData d = new EvadeData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Horror" entry?
-        if (name.StartsWith(HorrorData.type))
-        {
-            HorrorData d = new HorrorData(name, content, path, sets);
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Token" entry?
-        if (name.StartsWith(TokenData.type))
-        {
-            TokenData d = new TokenData(name, content, path, sets);
-            if (d.image.Equals(""))
-            {
-                ValkyrieDebug.Log("Token " + d.name + "did not have an image. Skipping");
-                return;
-            }
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Peril" entry?
-        if (name.StartsWith(PerilData.type))
-        {
-            PerilData d = new PerilData(name, content);
-            // Ignore invalid entry
-            if (d.sectionName.Equals(""))
-                return;
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Puzzle" entry?
-        if (name.StartsWith(PuzzleData.type))
-        {
-            PuzzleData d = new PuzzleData(name, content, path, sets);
-            // Ignore invalid entry
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Image" entry?
-        if (name.StartsWith(ImageData.type))
-        {
-            ImageData d = new ImageData(name, content, path, sets);
-            // Ignore invalid entry
-            AddContentInternal(name, d);
-        }
-
-        // Is this a "Audio" entry?
-        if (name.StartsWith(AudioData.type))
-        {
-            AudioData d = new AudioData(name, content, path, sets);
-            // Ignore invalid entry
-            AddContentInternal(name, d);
-        }
-    }
-
-    private void AddContentInternal<T>(string name, T d) where T : IContent
+    internal void AddContent<T>(string name, T d) where T : IContent
     {
         // If we don't already have one or it's lower priority then add this
         if (!TryGet(name, out T existingPackData)
@@ -1370,6 +1150,9 @@ public class GenericData : IContent
 
     public List<string> Sets => sets;
     public int Priority => priority;
+    public string SectionName => sectionName;
+    
+    public StringKey TranslationKey => name;
 
     public GenericData()
     {
@@ -1457,6 +1240,11 @@ public class PerilData : QuestData.Event, IContent
     public List<string> Sets { get; } = new List<string>();
 
     public StringKey perilText;
+
+    public string SectionName => type;
+
+    public StringKey TranslationKey => text; 
+
     override public StringKey text { get { return perilText; } }
 
     public PerilData(string name, Dictionary<string, string> data) : base(name, data, "", QuestData.Quest.currentFormat)

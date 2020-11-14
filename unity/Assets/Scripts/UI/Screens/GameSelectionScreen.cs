@@ -344,9 +344,6 @@ namespace Assets.Scripts.UI.Screens
                 // Load localization before content
                 loadLocalization();
 
-                // Load the base content - pack will be loaded later if required
-                game.cd.LoadContentID("");
-
                 // Download quests list
                 game.questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
@@ -427,9 +424,6 @@ namespace Assets.Scripts.UI.Screens
 
                 // Load localization before content
                 loadLocalization();
-
-                // Load the base content - pack will be loaded later if required
-                game.cd.LoadContentID("");
 
                 // Download quests list
                 game.questsList = new QuestsManager();

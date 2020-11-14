@@ -392,7 +392,7 @@ namespace Assets.Scripts.Content
 
             string suffix = string.Empty;
             // Check forced language first
-            if (data.ContainsKey(additionalLanguage) && data[additionalLanguage].TryGetValue(key, out string additionalLanguageValue))
+            if (additionalLanguage != null && data.ContainsKey(additionalLanguage) && data[additionalLanguage].TryGetValue(key, out string additionalLanguageValue))
             {
                 suffix = $" [{additionalLanguageValue}]";
             }

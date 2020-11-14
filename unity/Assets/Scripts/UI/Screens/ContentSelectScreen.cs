@@ -252,12 +252,6 @@ namespace Assets.Scripts.UI.Screens
 
         public static void Quit()
         {
-            Game game = Game.Get();
-            // Clear content data in case something has changed
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Load the base content - pack will be loaded later if required
-            game.cd.LoadContentID("");
-
             GameStateManager.MainMenu();
         }
 

@@ -46,14 +46,14 @@ public class ToolsButton
         // All content data has been loaded by editor, cleanup everything
         game.cd = new ContentData(game.gameType.DataDirectory());
         // Load the base content
-        game.cd.LoadContentID("");
+        game.ContentLoader.LoadContentID("");
         // Load current configuration
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (packs != null)
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                game.cd.LoadContentID(kv.Key);
+                game.ContentLoader.LoadContentID(kv.Key);
             }
         }
 
