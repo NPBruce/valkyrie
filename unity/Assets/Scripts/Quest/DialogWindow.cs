@@ -224,7 +224,8 @@ public class DialogWindow {
 
         if (!game.quest.itemSelect.ContainsKey(item)) return;
 
-        Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
+        var selectedItemData = game.cd.Get<ItemData>(game.quest.itemSelect[item]);
+        Texture2D tex = ContentData.FileToTexture(selectedItemData.image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
         UIElement ui = new UIElement();
@@ -233,7 +234,7 @@ public class DialogWindow {
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-22.5f), 6.5f, 9, 1);
-        ui.SetText(game.cd.items[game.quest.itemSelect[item]].name);
+        ui.SetText(selectedItemData.name);
     }
 
     public void quotaDec()

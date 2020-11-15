@@ -91,11 +91,11 @@ public class EditorComponentTile : EditorComponent
             if (t != null)
             {
                 usedSides.Add(t.tileSideName);
-                usedSides.Add(game.cd.tileSides[t.tileSideName].reverse);
+                usedSides.Add(game.cd.Get<TileSideData>(t.tileSideName).reverse);
             }
         }
 
-        foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
+        foreach (KeyValuePair<string, TileSideData> kv in game.cd.GetAll<TileSideData>())
         {
             if (usedSides.Contains(kv.Key))
             {

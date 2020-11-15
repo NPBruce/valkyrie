@@ -43,6 +43,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey TYPE = new StringKey(VAL, "TYPE");
         public static readonly StringKey SOURCE = new StringKey(VAL, "SOURCE");
         public static readonly StringKey SELECT_ITEM = new StringKey(VAL, "SELECT_ITEM");
+        public static readonly StringKey CHOOSE_LANGUAGE = new StringKey(VAL, "CHOOSE_LANG");
 
         public static readonly StringKey QUEST = new StringKey(VAL, "QUEST");
         public static readonly StringKey TILE = new StringKey(VAL, "TILE");

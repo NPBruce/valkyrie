@@ -308,7 +308,8 @@ public class TokenBoard : MonoBehaviour {
         itemObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
-        Texture2D newTex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
+        ItemData itemData = game.cd.Get<ItemData>(game.quest.itemSelect[item]);
+        Texture2D newTex = ContentData.FileToTexture(itemData.image);
         UnityEngine.UI.Image image = itemObject.AddComponent<UnityEngine.UI.Image>();
         Sprite iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
         image.sprite = iconSprite;

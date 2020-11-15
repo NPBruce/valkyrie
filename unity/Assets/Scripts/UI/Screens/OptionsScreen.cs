@@ -11,6 +11,8 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
+        public static readonly HashSet<string> ENABLED_LANGS = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean".Split(','));
+        
         private static readonly string IMG_LOW_EDITOR_TRANSPARENCY    = "ImageLowEditorTransparency";
         private static readonly string IMG_MEDIUM_EDITOR_TRANSPARENCY = "ImageMediumEditorTransparency";
         private static readonly string IMG_HIGH_EDITOR_TRANSPARENCY   = "ImageHighEditorTransparency";
@@ -81,7 +83,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            Texture2D SampleTex = ContentData.FileToTexture(game.cd.images[IMG_LOW_EDITOR_TRANSPARENCY].image);
+            Texture2D SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_LOW_EDITOR_TRANSPARENCY).image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter()-3, 8, 6, 6);
@@ -90,7 +92,7 @@ namespace Assets.Scripts.UI.Screens
             if(game.editorTransparency == 0.2f)
                 new UIElementBorder(ui, Color.white);
 
-            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_MEDIUM_EDITOR_TRANSPARENCY].image);
+            SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_MEDIUM_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 15, 6, 6);
@@ -99,7 +101,7 @@ namespace Assets.Scripts.UI.Screens
             if (game.editorTransparency == 0.3f)
                 new UIElementBorder(ui, Color.white);
             
-            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_HIGH_EDITOR_TRANSPARENCY].image);
+            SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_HIGH_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 22, 6, 6);
@@ -253,7 +255,7 @@ namespace Assets.Scripts.UI.Screens
 
             string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech".Split(','); // Japanese removed to fit into screen
             // For now, the languages below are available.
-            HashSet<string> enabled_langs = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean".Split(','));
+            HashSet<string> enabled_langs = ENABLED_LANGS;
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-2f) - langs.Length;

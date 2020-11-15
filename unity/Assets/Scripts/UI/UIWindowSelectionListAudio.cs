@@ -78,9 +78,9 @@ namespace Assets.Scripts.UI
             var game = Game.Get();
             
             // FFG/Valkyrie audio
-            if (game.cd.audio.ContainsKey(key))
+            if (game.cd.TryGet(key, out AudioData audioData))
             {
-                return game.cd.audio[key].file;
+                return audioData.file;
             }
             
             // Custom Quest audio

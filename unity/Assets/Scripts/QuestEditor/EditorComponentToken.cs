@@ -85,9 +85,9 @@ public class EditorComponentToken : EditorComponentEvent
 
         select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
-        foreach (KeyValuePair<string, TokenData> kv in game.cd.tokens)
+        foreach (TokenData kv in game.cd.Values<TokenData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(kv);
         }
         select.ExcludeExpansions();
         select.Draw();

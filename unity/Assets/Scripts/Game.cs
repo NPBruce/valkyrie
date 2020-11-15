@@ -39,7 +39,12 @@ public class Game : MonoBehaviour
 
     // These components are referenced here for easy of use
     // Data included in content packs
-    public ContentData cd;
+    public ContentData cd
+    {
+        get => _cd;
+        internal set { _cd = value; _contentLoader = new ContentLoader(value);}
+    }
+
     // Data for the current quest
     public Quest quest;
     // Canvas for UI components (fixed on screen)
@@ -93,6 +98,9 @@ public class Game : MonoBehaviour
     public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
+    private ContentLoader _contentLoader;
+    public ContentLoader ContentLoader => _contentLoader;
+
     // Current language
     public string currentLang;
 
@@ -104,6 +112,8 @@ public class Game : MonoBehaviour
 
     // main thread Id
     public Thread mainThread = null;
+    private ContentData _cd;
+
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -202,7 +212,8 @@ public class Game : MonoBehaviour
         }
 
         DictionaryI18n valDict = new DictionaryI18n();
-        foreach (string file in Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt"))
+        var localizationFiles = Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt");
+        foreach (string file in localizationFiles)
         {
             valDict.AddDataFromFile(file);
         }
@@ -232,10 +243,10 @@ public class Game : MonoBehaviour
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                cd.LoadContentID(kv.Key);
+                _contentLoader.LoadContentID(kv.Key);
             }
         }
-
+            
         // Pull up the quest selection page
         if (questSelectionScreen == null)
         {
@@ -254,7 +265,7 @@ public class Game : MonoBehaviour
         // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
-            cd.LoadContent(pack);
+            _contentLoader.LoadContent(pack);
         }
 
         // Pull up the quest selection page
@@ -346,7 +357,7 @@ public class Game : MonoBehaviour
         if (quest.defaultMusicOn)
         {
             // Start quest music
-            foreach (AudioData ad in cd.audio.Values)
+            foreach (AudioData ad in cd.Values<AudioData>())
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }

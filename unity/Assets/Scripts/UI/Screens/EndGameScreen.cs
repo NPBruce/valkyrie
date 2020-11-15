@@ -48,11 +48,11 @@ namespace Assets.Scripts.UI.Screens
             Texture2D bgTex;
             if (game.gameType.TypeName() == "MoM")
             {
-                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_MOM].image);
+                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_MOM).image);
             }
             else if (game.gameType.TypeName() == "D2E")
             {
-                bgTex = ContentData.FileToTexture(game.cd.images[IMG_BG_DESCENT].image);
+                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_DESCENT).image);
             }
             else
             {
@@ -163,7 +163,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(STATS_MENU_BUTTON);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(MainMenu);
+            ui.SetButton(GameStateManager.MainMenu);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui);
 
@@ -207,13 +207,6 @@ namespace Assets.Scripts.UI.Screens
             // todo: manage the result / error with a callback
             GameStateManager.MainMenu();
         }
-
-        private void MainMenu()
-        {
-            ValkyrieDebug.Log("INFO: Go back to main menu without providing feedback");
-            GameStateManager.MainMenu();
-        }
-
 
         private void PressVictoryYes()
         {

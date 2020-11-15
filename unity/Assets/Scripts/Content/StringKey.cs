@@ -42,7 +42,7 @@ namespace Assets.Scripts.Content
             }
         }
 
-        private string dict;
+        public string dict { get; private set; }
 
         public readonly string key;
 

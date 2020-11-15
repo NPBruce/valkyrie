@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -548,9 +547,9 @@ public class EditorComponentCustomMonster : EditorComponent
 
         select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monster in game.cd.Values<MonsterData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(monster);
         }
         select.ExcludeExpansions();
         select.Draw();
@@ -747,10 +746,9 @@ public class EditorComponentCustomMonster : EditorComponent
         Game game = Game.Get();
 
         HashSet<string> traits = new HashSet<string>();
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monster in game.cd.Values<MonsterData>())
         {
-
-            foreach (string s in kv.Value.traits)
+            foreach (string s in monster.traits)
             {
                 traits.Add(s);
             }
@@ -846,11 +844,9 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", CommonStringKeys.TYPE));
 
-        HashSet<string> attackTypes = new HashSet<string>();
-        foreach (AttackData a in Game.Get().cd.investigatorAttacks.Values)
-        {
-            attackTypes.Add(a.attackType);
-        }
+        HashSet<string> attackTypes = Game.Get().cd.Values<AttackData>()
+            .Select(a => a.attackType)
+            .ToSet();
 
         foreach(string s in attackTypes)
         {

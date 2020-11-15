@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
 using ValkyrieTools;
-
 
 namespace Assets.Scripts.Content
 {
@@ -20,6 +18,9 @@ namespace Assets.Scripts.Content
         public string defaultLanguage = "English";
 
         public string currentLanguage = "English";
+        
+        private Dictionary<string, string> keyToGroup = new Dictionary<string, string>();
+        private Dictionary<string, string> groupToLanguage = new Dictionary<string, string>();
 
         // Each language has it's own dictionary
         private Dictionary<string, Dictionary<string, string>> data;
@@ -87,10 +88,10 @@ namespace Assets.Scripts.Content
             // Read the whole file
             try
             {
-                lines = System.IO.File.ReadAllLines(file);
+                lines = File.ReadAllLines(file);
                 AddData(lines);
             }
-            catch (System.IO.IOException e)
+            catch (IOException e)
             {
                 ValkyrieDebug.Log("Error loading localization file " + file + ":" + e.Message);
             }
@@ -389,28 +390,51 @@ namespace Assets.Scripts.Content
             // KeyExists ensures any matches are loaded to Dictionary data
             if (!KeyExists(key)) return key;
 
-            // Check current language first
-            if (data.ContainsKey(currentLanguage) && data[currentLanguage].ContainsKey(key) && data[currentLanguage][key].Length > 0)
+            string additionalLanguage = null;
+            if (groupToLanguage.Count > 0)
             {
-                return data[currentLanguage][key];
+                if (keyToGroup.TryGetValue(key, out string group))
+                {
+                    groupToLanguage.TryGetValue(group, out additionalLanguage);
+                }
+            }
+
+            string secondLanguageValue = null;
+            if (additionalLanguage != null && data.ContainsKey(additionalLanguage) && data[additionalLanguage].TryGetValue(key, out secondLanguageValue))
+            {
+            }
+
+            // Check current language first
+            if (data.ContainsKey(currentLanguage) && data[currentLanguage].TryGetValue(key, out string currentLanguageValue) && !string.IsNullOrWhiteSpace(currentLanguageValue))
+            {
+                return Combine(currentLanguageValue, secondLanguageValue);
             }
 
             // Then check default language
-            if (data.ContainsKey(defaultLanguage) && data[defaultLanguage].ContainsKey(key))
+            if (data.ContainsKey(defaultLanguage) && data[defaultLanguage].TryGetValue(key, out string defaultLanguageValue) && !string.IsNullOrWhiteSpace(defaultLanguageValue))
             {
-                return data[defaultLanguage][key];
+                return Combine(defaultLanguageValue, secondLanguageValue);
             }
 
             // Not in current or default, find any match
             foreach (Dictionary<string, string> langData in data.Values)
             {
-                if (langData.ContainsKey(key))
+                if (langData.TryGetValue(key, out string languageValue))
                 {
-                    return langData[key];
+                    return Combine(languageValue, secondLanguageValue);
                 }
             }
             // Should never happen
             return "";
+        }
+
+        private string Combine(string mainLanguageValue, string secondLanguageValue)
+        {
+            if (secondLanguageValue == null || secondLanguageValue == mainLanguageValue)
+            {
+                return mainLanguageValue;
+            }
+            return $"{mainLanguageValue} [{secondLanguageValue}]";
         }
 
         /// <summary>
@@ -491,6 +515,22 @@ namespace Assets.Scripts.Content
         public List<string> GetLanguagesList()
         {
             return new List<string>(data.Keys);
+        }
+
+        public void SetKeyToGroup(string key, string groupId)
+        {
+            keyToGroup[key] = groupId;
+        }
+
+        public void SetGroupTranslationLanguage(string groupId, string language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                groupToLanguage.Remove(groupId);
+                return;
+            }
+
+            groupToLanguage[groupId] = language;
         }
     }
 }

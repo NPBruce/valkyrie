@@ -279,9 +279,9 @@ public class EditorComponentPuzzle : EditorComponentEvent
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
+        foreach (PuzzleData puzzleData in Game.Get().cd.Values<PuzzleData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(puzzleData);
         }
         select.ExcludeExpansions();
         select.Draw();

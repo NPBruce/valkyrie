@@ -135,9 +135,9 @@ public class RoundController {
         if (qm != null)
         {
             // Get the base monster type
-            if (game.cd.monsters.ContainsKey(qm.derivedType))
+            if (game.cd.ContainsKey<MonsterData>(qm.derivedType))
             {
-                md = game.cd.monsters[qm.derivedType];
+                md = game.cd.Get<MonsterData>(qm.derivedType);
             }
             // Determine if the monster has quest specific activations
             customActivations = !qm.useMonsterTypeActivations;
@@ -160,9 +160,9 @@ public class RoundController {
                         adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
                     }
                     // Otherwise look for the activation in content data
-                    else if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                    else if (game.cd.TryGet("MonsterActivation" + s, out ActivationData activationData))
                     {
-                        adList.Add(game.cd.activations["MonsterActivation" + s]);
+                        adList.Add(activationData);
                     }
                     else // Invalid activation
                     {
@@ -174,7 +174,7 @@ public class RoundController {
         else // Content Data activations only
         {
             // Find all possible activations
-            foreach (KeyValuePair<string, ActivationData> kv in game.cd.activations)
+            foreach (KeyValuePair<string, ActivationData> kv in game.cd.GetAll<ActivationData>())
             {
                 // Is this activation for this monster type? (replace "Monster" with "MonsterActivation", ignore specific variety)
                 if (kv.Key.IndexOf("MonsterActivation" + md.sectionName.Substring("Monster".Length)) == 0)
@@ -185,9 +185,9 @@ public class RoundController {
             // Search for additional common activations
             foreach (string s in md.activations)
             {
-                if (game.cd.activations.ContainsKey("MonsterActivation" + s))
+                if (game.cd.TryGet("MonsterActivation" + s, out ActivationData activationData))
                 {
-                    adList.Add(game.cd.activations["MonsterActivation" + s]);
+                    adList.Add(activationData);
                 }
                 else
                 {
