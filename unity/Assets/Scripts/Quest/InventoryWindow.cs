@@ -36,12 +36,13 @@ public class InventoryWindow
 
         foreach (string s in game.quest.items)
         {
+            var itemData = game.cd.Get<ItemData>(s);
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(xOffset, 9, 8, 2);
-            ui.SetText(game.cd.items[s].name, Color.black);
+            ui.SetText(itemData.name, Color.black);
             ui.SetBGColor(Color.white);
 
-            Texture2D itemTex = ContentData.FileToTexture(game.cd.items[s].image);
+            Texture2D itemTex = ContentData.FileToTexture(itemData.image);
             Sprite itemSprite = Sprite.Create(itemTex, new Rect(0, 0, itemTex.width, itemTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
             ui = new UIElement(scrollArea.GetScrollTransform());

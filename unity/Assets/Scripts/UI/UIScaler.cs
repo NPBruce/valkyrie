@@ -77,6 +77,12 @@ public class UIScaler {
     }
 
     // small (standard) font size
+    public static int GetSmallerFont()
+    {
+        return Mathf.RoundToInt(GetPixelsPerUnit() * 0.7f);
+    }
+    
+    // small (standard) font size
     public static int GetSmallFont()
     {
         return Mathf.RoundToInt(GetPixelsPerUnit() * 0.8f);

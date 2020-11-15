@@ -307,9 +307,9 @@ public class EditorComponentUI : EditorComponentEvent
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        foreach (KeyValuePair<string, ImageData> kv in Game.Get().cd.images)
+        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(imageData);
         }
         select.ExcludeExpansions();
         select.Draw();

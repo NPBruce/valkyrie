@@ -46,14 +46,14 @@ public class ToolsButton
         // All content data has been loaded by editor, cleanup everything
         game.cd = new ContentData(game.gameType.DataDirectory());
         // Load the base content
-        game.cd.LoadContentID("");
+        game.ContentLoader.LoadContentID("");
         // Load current configuration
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (packs != null)
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                game.cd.LoadContentID(kv.Key);
+                game.ContentLoader.LoadContentID(kv.Key);
             }
         }
 
@@ -64,7 +64,7 @@ public class ToolsButton
 
         int heroCount = Random.Range(game.quest.qd.quest.minHero, game.quest.qd.quest.maxHero + 1);
 
-        List<HeroData> hOptions = new List<HeroData>(game.cd.heroes.Values);
+        List<HeroData> hOptions = new List<HeroData>(game.cd.Values<HeroData>());
         for (int i = 0; i < heroCount; i++)
         {
             game.quest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];

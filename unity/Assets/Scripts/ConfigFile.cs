@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Assets.Scripts.Content;
 using ValkyrieTools;
 
 // Class to control user configuration of Valkyrie
@@ -20,6 +24,29 @@ public class ConfigFile
         }
     }
 
+    public IEnumerable<string> GetPacks(string gameType)
+    {
+        return data.Get(gameType + "Packs")?.Keys ?? Enumerable.Empty<string>();
+    }
+    public Dictionary<string, string> GetPackLanguages(string gameType)
+    {
+        return data.Get(gameType + "Packs") ?? new Dictionary<string, string>();
+    }
+
+    public void RemovePack(string gameType, string pack)
+    {
+        data.Remove(gameType + "Packs", pack);
+        LocalizationRead.SetGroupTranslationLanguage(pack, "");
+        Save();
+    }
+    
+    public void AddPack(string gameType, string pack, string language = "")
+    {
+        data.Add(gameType + "Packs", pack, language);
+        LocalizationRead.SetGroupTranslationLanguage(pack, language);
+        Save();
+    }
+    
     // Save the configuration in memory to disk
     public void Save()
     {

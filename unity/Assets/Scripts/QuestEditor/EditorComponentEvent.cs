@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -638,12 +639,12 @@ public class EditorComponentEvent : EditorComponent
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.MONSTER.Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new[] { CommonStringKeys.MONSTER.Translate() });
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (string monsterKey in game.cd.Keys<MonsterData>())
         {
-            select.AddItem("Defeated" + kv.Key, traits);
-            select.AddItem("DefeatedUnique" + kv.Key, traits);
+            select.AddItem("Defeated" + monsterKey, traits);
+            select.AddItem("DefeatedUnique" + monsterKey, traits);
         }
 
         HashSet<string> vars = new HashSet<string>();
@@ -731,7 +732,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
-        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.GetAll<AudioData>())
         {
             traits = new Dictionary<string, IEnumerable<string>>();
             traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });
@@ -747,9 +748,9 @@ public class EditorComponentEvent : EditorComponent
     {
         Game game = Game.Get();
         eventComponent.audio = audio;
-        if (game.cd.audio.ContainsKey(eventComponent.audio))
+        if (game.cd.TryGet(eventComponent.audio, out AudioData audioData))
         {
-            game.audioControl.Play(game.cd.audio[eventComponent.audio].file);
+            game.audioControl.Play(audioData.file);
         }
         else
         {
@@ -781,7 +782,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
-        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.GetAll<AudioData>())
         {
             traits = new Dictionary<string, IEnumerable<string>>();
             traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });

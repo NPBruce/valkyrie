@@ -46,7 +46,7 @@ public class EditorMenu
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-        ui.SetButton(Quit);
+        ui.SetButton(GameStateManager.MainMenu);
         new UIElementBorder(ui);
 
         ui = new UIElement();
@@ -57,16 +57,5 @@ public class EditorMenu
         ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
         ui.SetButton(Destroyer.Dialog);
         new UIElementBorder(ui);
-    }
-
-    public static void Quit()
-    {
-        Game game = Game.Get();
-        // All content data has been loaded by editor, cleanup everything
-        game.cd = new ContentData(game.gameType.DataDirectory());
-        // Load the base content - pack will be loaded later if required
-        game.cd.LoadContentID("");
-
-        GameStateManager.MainMenu();
     }
 }

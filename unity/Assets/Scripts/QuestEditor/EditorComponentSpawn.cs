@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -379,9 +379,9 @@ public class EditorComponentSpawn : EditorComponentEvent
             }
         }
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monsterData in game.cd.Values<MonsterData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(monsterData);
         }
         select.ExcludeExpansions();
         select.Draw();
@@ -408,9 +408,9 @@ public class EditorComponentSpawn : EditorComponentEvent
             }
         }
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monsterData in game.cd.Values<MonsterData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(monsterData);
         }
         select.ExcludeExpansions();
         select.Draw();
@@ -473,15 +473,10 @@ public class EditorComponentSpawn : EditorComponentEvent
             return;
         }
         Game game = Game.Get();
-        HashSet<string> traits = new HashSet<string>();
-
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-        {
-            foreach (string s in kv.Value.traits)
-            {
-                traits.Add(s);
-            }
-        }
+        
+        HashSet<string> traits = game.cd.Values<MonsterData>()
+            .SelectMany(m => m.traits)
+            .ToSet();
 
         UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectMonsterTraitReplace(pos, pool, s); }, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
         foreach (string s in traits)
@@ -511,16 +506,11 @@ public class EditorComponentSpawn : EditorComponentEvent
             return;
         }
         Game game = Game.Get();
-        HashSet<string> traits = new HashSet<string>();
-
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-        {
-            foreach (string s in kv.Value.traits)
-            {
-                traits.Add(s);
-            }
-        }
-
+        
+        HashSet<string> traits = game.cd.Values<MonsterData>()
+            .SelectMany(m => m.traits)
+            .ToSet();
+        
         UIWindowSelectionList select = new UIWindowSelectionList(delegate(string s) { SelectMonsterTrait(pool, s); }, new StringKey("val", "SELECT", CommonStringKeys.TRAITS));
         foreach (string s in traits)
         {

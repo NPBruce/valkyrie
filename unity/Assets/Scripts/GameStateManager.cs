@@ -9,6 +9,13 @@ public class GameStateManager
     {
         // Destroy everything
         Destroyer.Destroy();
+        
+        Game game = Game.Get();
+        // All content data has been loaded by editor, cleanup everything
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        // Load the base content - pack will be loaded later if required
+        game.ContentLoader.LoadContentID("");
+
         new MainMenuScreen();
     }
 

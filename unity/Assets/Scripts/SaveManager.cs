@@ -211,25 +211,25 @@ class SaveManager
                     // Support for save games from 1.2 and older
                     if (kv.Key.Equals("FA"))
                     {
-                        game.cd.LoadContentID("FAI");
-                        game.cd.LoadContentID("FAM");
-                        game.cd.LoadContentID("FAT");
+                        game.ContentLoader.LoadContentID("FAI");
+                        game.ContentLoader.LoadContentID("FAM");
+                        game.ContentLoader.LoadContentID("FAT");
                     }
                     if (kv.Key.Equals("CotW"))
                     {
-                        game.cd.LoadContentID("CotWI");
-                        game.cd.LoadContentID("CotWM");
-                        game.cd.LoadContentID("CotWT");
+                        game.ContentLoader.LoadContentID("CotWI");
+                        game.ContentLoader.LoadContentID("CotWM");
+                        game.ContentLoader.LoadContentID("CotWT");
                     }
                     if (kv.Key.Equals("MoM1E"))
                     {
-                        game.cd.LoadContentID("MoM1EI");
-                        game.cd.LoadContentID("MoM1EM");
-                        game.cd.LoadContentID("MoM1ET");
+                        game.ContentLoader.LoadContentID("MoM1EI");
+                        game.ContentLoader.LoadContentID("MoM1EM");
+                        game.ContentLoader.LoadContentID("MoM1ET");
                     }
                     else
                     {
-                        game.cd.LoadContentID(kv.Key);
+                        game.ContentLoader.LoadContentID(kv.Key);
                     }
                 }
 

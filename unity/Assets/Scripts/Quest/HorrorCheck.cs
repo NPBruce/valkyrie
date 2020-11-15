@@ -26,22 +26,22 @@ public class HorrorCheck {
     {
         Game game = Game.Get();
         List<HorrorData> horrors = new List<HorrorData>();
-        foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
+        foreach (HorrorData hd in game.cd.Values<HorrorData>())
         {
-            if (m.monsterData.sectionName.Equals("Monster" + kv.Value.monster))
+            if (m.monsterData.sectionName.Equals(MonsterData.type + hd.monster))
             {
-                horrors.Add(kv.Value);
+                horrors.Add(hd);
             }
         }
 
         QuestMonster qm = m.monsterData as QuestMonster;
-        if (horrors.Count == 0 && qm != null && qm.derivedType.Length > 0)
+        if (horrors.Count == 0 && qm != null && !string.IsNullOrWhiteSpace(qm.derivedType))
         {
-            foreach (KeyValuePair<string, HorrorData> kv in game.cd.horrorChecks)
+            foreach (HorrorData horrorData in game.cd.Values<HorrorData>())
             {
-                if (qm.derivedType.Equals("Monster" + kv.Value.monster))
+                if (qm.derivedType.Equals("Monster" + horrorData.monster))
                 {
-                    horrors.Add(kv.Value);
+                    horrors.Add(horrorData);
                 }
             }
         }

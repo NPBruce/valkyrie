@@ -588,7 +588,7 @@ public class EditorComponent {
                 select.AddItem("#" + pack.id, traits);
             }
         }
-        foreach (HeroData hero in Game.Get().cd.heroes.Values)
+        foreach (HeroData hero in Game.Get().cd.Values<HeroData>())
         {
             if (hero.sectionName.Length > 0)
             {
@@ -645,7 +645,7 @@ public class EditorComponent {
         }
 
 
-        foreach (PerilData e in game.cd.perils.Values)
+        foreach (PerilData e in game.cd.Values<PerilData>())
         {
             foreach (string s in ExtractVarsFromEvent(e))
             {

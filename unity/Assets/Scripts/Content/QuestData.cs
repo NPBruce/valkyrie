@@ -242,11 +242,7 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             source = "tiles.ini";
-            foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
-            {
-                tileSideName = kv.Key;
-                break;
-            }
+            tileSideName = game.cd.Keys<TileSideData>().FirstOrDefault();
         }
 
         // Create tile from ini data
@@ -591,12 +587,8 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             mTypes = new string[1];
-            // This gets the first type available, because we need something
-            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-            {
-                mTypes[0] = kv.Key;
-                break;
-            }
+            mTypes[0] = game.cd.Keys<MonsterData>().First();
+            
             mTraitsRequired = new string[0];
             mTraitsPool = new string[0];
 
@@ -1891,7 +1883,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 13;
+        public static int currentFormat = 14;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
