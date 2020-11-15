@@ -369,7 +369,7 @@ public class EditorComponentItem : EditorComponent
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectInspectEvent, new StringKey("val", "SELECT", CommonStringKeys.SELECT_ITEM));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)

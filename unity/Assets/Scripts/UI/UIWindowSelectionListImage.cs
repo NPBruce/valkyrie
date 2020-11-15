@@ -98,11 +98,12 @@ namespace Assets.Scripts.UI
             {
                 toDisplay.Reverse();
             }
+            toDisplay.InsertRange(0, alwaysOnTopTraitItems.Values);
 
             float offset = 0;
             float xOffset = 0;
             float yOffset = 4;
-            foreach (SelectionItemTraits item in toDisplay)
+            foreach (SelectionItemTraits item in allItems)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)

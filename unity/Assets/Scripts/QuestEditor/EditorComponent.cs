@@ -521,7 +521,7 @@ public class EditorComponent {
     {
         UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, new StringKey("val", "SELECT", CommonStringKeys.FILE));
 
-        select.AddItem("{NEW:File}");
+        select.AddItem("{NEW:File}", true);
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
         foreach(string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
         {
@@ -570,7 +570,7 @@ public class EditorComponent {
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
         AddQuestVars(select);
 
@@ -609,7 +609,7 @@ public class EditorComponent {
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
         AddQuestVars(select);
 
@@ -834,7 +834,7 @@ public class EditorComponent {
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits);
+        select.AddItem("{" + CommonStringKeys.NUMBER.Translate() + "}", "{NUMBER}", traits, true);
 
         AddQuestVars(select);
 

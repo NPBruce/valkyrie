@@ -83,7 +83,7 @@ public class EditorComponentToken : EditorComponentEvent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
 
-        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
         foreach (KeyValuePair<string, TokenData> kv in game.cd.tokens)
         {

@@ -575,7 +575,7 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { new StringKey("val", "GENERAL").Translate() });
-        select.AddItem("{NONE}", "", traits);
+        select.AddItem("{NONE}", "", traits, true);
 
         bool startPresent = false;
         bool noMorale = false;
@@ -715,7 +715,7 @@ public class EditorComponentEvent : EditorComponent
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
@@ -765,7 +765,7 @@ public class EditorComponentEvent : EditorComponent
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
@@ -809,9 +809,7 @@ public class EditorComponentEvent : EditorComponent
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventHighlight, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
 
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -1084,7 +1082,7 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
         AddQuestVars(select);
 
