@@ -9,6 +9,7 @@ namespace Assets.Scripts.UI
         protected string _title = "";
         protected UnityEngine.Events.UnityAction<string> _call;
 
+        protected SortedList<string, SelectionItem> alwaysOnTopItems = new SortedList<string, SelectionItem>();
         protected SortedList<int, SelectionItem> items = new SortedList<int, SelectionItem>();
         protected SortedList<string, SelectionItem> alphaItems = new SortedList<string, SelectionItem>();
 
@@ -21,12 +22,11 @@ namespace Assets.Scripts.UI
             _call = call;
         }
 
-        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title)
+        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title) 
+            : this(call, title.Translate())
         {
-            _title = title.Translate();
-            _call = call;
+            
         }
-
         public void AddItem(StringKey stringKey)
         {
             AddItem(new SelectionItem(stringKey.Translate(), stringKey.key));
@@ -37,9 +37,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItem(stringKey.Translate(), stringKey.key, color));
         }
 
-        public void AddItem(string item)
+        public void AddItem(string item, bool alwaysOnTop = false)
         {
-            AddItem(new SelectionItem(item, item));
+            AddItem(new SelectionItem(item, item, alwaysOnTop));
         }
 
         public void AddItem(string item, Color color)
@@ -47,9 +47,9 @@ namespace Assets.Scripts.UI
             AddItem(new SelectionItem(item, item, color));
         }
 
-        public void AddItem(string display, string key)
+        public void AddItem(string display, string key, bool alwaysOnTop = false)
         {
-            AddItem(new SelectionItem(display, key));
+            AddItem(new SelectionItem(display, key, alwaysOnTop));
         }
 
         public void AddItem(string display, string key, Color color)
@@ -59,6 +59,11 @@ namespace Assets.Scripts.UI
 
         virtual public void AddItem(SelectionItem item)
         {
+            if (item.AlwaysOnTop)
+            {
+                alwaysOnTopItems.Add(item.GetDisplay(), item);
+                return;
+            }
             items.Add(items.Count, item);
             string key = item.GetDisplay();
             int duplicateIndex = 0;
@@ -144,6 +149,8 @@ namespace Assets.Scripts.UI
             {
                 toDisplay.Reverse();
             }
+            
+            toDisplay.InsertRange(0, alwaysOnTopItems.Values);
 
             int lineNum = 0;
             foreach(SelectionItem item in toDisplay)
@@ -161,7 +168,7 @@ namespace Assets.Scripts.UI
                 lineNum++;
             }
 
-            scrollArea.SetScrollSize(items.Count * 1.05f);
+            scrollArea.SetScrollSize(toDisplay.Count * 1.05f);
 
             // Cancel button
             ui = new UIElement();
@@ -204,10 +211,13 @@ namespace Assets.Scripts.UI
             string _key = "";
             Color _color = Color.white;
 
-            public SelectionItem(string display, string key)
+            public bool AlwaysOnTop { get; protected set; }
+
+            public SelectionItem(string display, string key, bool alwaysOnTop = false)
             {
                 _key = key;
                 _display = display;
+                AlwaysOnTop = alwaysOnTop;
             }
 
             public SelectionItem(string display, string key, Color color)

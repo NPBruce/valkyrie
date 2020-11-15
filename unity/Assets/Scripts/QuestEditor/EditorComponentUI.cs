@@ -294,7 +294,7 @@ public class EditorComponentUI : EditorComponentEvent
     public void SetImage()
     {
         UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, SELECT_IMAGE.Translate());
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });

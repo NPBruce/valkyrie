@@ -546,7 +546,7 @@ public class EditorComponentCustomMonster : EditorComponent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetBase, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
-        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
         foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
         {
@@ -684,7 +684,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
         {
@@ -1008,7 +1008,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
         
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
@@ -1041,7 +1041,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
