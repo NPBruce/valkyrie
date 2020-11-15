@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
@@ -19,6 +20,8 @@ namespace Assets.Scripts.UI.Screens
         public List<string> selected;
 
         public Dictionary<string, List<UIElement>> buttons;
+        public Dictionary<string, UIElement> languageButtons;
+        private static readonly StringKey DEFAULT_LANGUAGE_KEY = CommonStringKeys.BASE;
 
         // Create page
         public ContentSelectScreen()
@@ -145,6 +148,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(scrollArea);
 
             buttons = new Dictionary<string, List<UIElement>>();
+            languageButtons = new Dictionary<string, UIElement>();
             // Start here
             float offset = 0.5f;
             bool left = true;
@@ -242,13 +246,14 @@ namespace Assets.Scripts.UI.Screens
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     ui.SetLocation(UIScaler.GetWidthUnits() - 17, offset + 2.5f, 5, 1);
                     ui.SetBGColor(Color.black);
-                    ui.SetText(string.IsNullOrWhiteSpace(packLanguage) ? CommonStringKeys.BASE.Translate() : packLanguage, Color.white);
+                    ui.SetText(string.IsNullOrWhiteSpace(packLanguage) ? DEFAULT_LANGUAGE_KEY.Translate() : packLanguage, Color.white);
                     ui.SetTextAlignment(TextAnchor.MiddleCenter);
                     ui.SetFont(game.gameType.GetSymbolFont());
                     ui.SetFontSize(UIScaler.GetSmallFont());
                     ui.SetButton(delegate { SelectLanguage(id, type); });
                     new UIElementBorder(ui, Color.black, 0.1f);
                     new UIElementBorder(ui, Color.white);
+                    languageButtons.Add(id, ui);
 
                     left = !left;
                     offset += 4f;
@@ -277,9 +282,9 @@ namespace Assets.Scripts.UI.Screens
         private void SelectLanguage(string id, string type)
         {
             UIWindowSelectionList select = new UIWindowSelectionList(
-                delegate(string val) { UpdateLanguage(id, val, type); }, new StringKey("val", "CHOOSE_LANG"), false);
+                delegate(string val) { UpdateLanguage(id, val, type); }, CommonStringKeys.CHOOSE_LANGUAGE, false);
 
-            select.AddItem(CommonStringKeys.BASE);
+            select.AddItem(DEFAULT_LANGUAGE_KEY);
             foreach (var s in OptionsScreen.ENABLED_LANGS)
             {
                 select.AddItem(s);
@@ -290,7 +295,7 @@ namespace Assets.Scripts.UI.Screens
 
         private void UpdateLanguage(string id, string val, string type)
         {
-            if (val == CommonStringKeys.BASE.key)
+            if (val == DEFAULT_LANGUAGE_KEY.key)
             {
                 val = "";
             }
@@ -319,6 +324,14 @@ namespace Assets.Scripts.UI.Screens
                     {
                         ui.SetBGColor(new Color(0.4f, 0.4f, 0.4f));
                     }
+                }
+            }
+
+            foreach (KeyValuePair<string, UIElement> kv in languageButtons)
+            {
+                if (!packs.Contains(kv.Key))
+                {
+                    kv.Value.SetText(DEFAULT_LANGUAGE_KEY);
                 }
             }
         }
