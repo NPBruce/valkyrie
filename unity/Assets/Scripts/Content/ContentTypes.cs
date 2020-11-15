@@ -119,7 +119,7 @@ public class ClassData : GenericData
         items = new List<string>();
         if (content.ContainsKey("items"))
         {
-            items.AddRange(content["items"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+            items.AddRange(content["items"].Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

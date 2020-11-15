@@ -1,12 +1,10 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Assets.Scripts.Content;
+using UnityEngine;
 using ValkyrieTools;
-using Random = UnityEngine.Random;
 
 /// <summary>
 /// This class reads and stores all of the content for a base game and expansions.</summary>
@@ -219,7 +217,7 @@ public class ContentData {
             // If this is invalid we will just handle it later, not fatal
             if (d.Get("ContentPack", "image").IndexOf("{import}") == 0)
             {
-                pack.image = ContentData.ImportPath() + d.Get("ContentPack", "image").Substring(8);
+                pack.image = ImportPath() + d.Get("ContentPack", "image").Substring(8);
             }
             else
             {
@@ -235,7 +233,7 @@ public class ContentData {
             // Get cloned packs
             string cloneString = d.Get("ContentPack", "clone");
             pack.clone = new List<string>();
-            foreach (string s in cloneString.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+            foreach (string s in cloneString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
             {
                 pack.clone.Add(s);
             }
@@ -368,7 +366,7 @@ public class ContentData {
     /// </summary>
     public static string ResolveTextureFile(string name)
     {
-        if (name == null) throw new System.ArgumentNullException("name");
+        if (name == null) throw new ArgumentNullException("name");
         if (File.Exists(name))
         {
             return name;
@@ -389,7 +387,7 @@ public class ContentData {
     // Get a unity texture from a file (dds or other unity supported format)
     public static Texture2D FileToTexture(string file)
     {
-        if (file == null) throw new System.ArgumentNullException("file");
+        if (file == null) throw new ArgumentNullException("file");
         return FileToTexture(file, Vector2.zero, Vector2.zero);
     }
 
@@ -397,7 +395,7 @@ public class ContentData {
     // Crop to pos and size in pixels
     public static Texture2D FileToTexture(string file, Vector2 pos, Vector2 size)
     {
-        if (file == null) throw new System.ArgumentNullException("file");
+        if (file == null) throw new ArgumentNullException("file");
         var resolvedFile = ResolveTextureFile(file);
         // return if file could not be resolved
         if (resolvedFile == null)
@@ -421,11 +419,11 @@ public class ContentData {
         else
         {
             string ext = Path.GetExtension(file);
-            if (ext.Equals(".dds", System.StringComparison.InvariantCultureIgnoreCase))
+            if (ext.Equals(".dds", StringComparison.InvariantCultureIgnoreCase))
             {
                 texture = DdsToTexture(file);
             }
-            else if (ext.Equals(".pvr", System.StringComparison.InvariantCultureIgnoreCase))
+            else if (ext.Equals(".pvr", StringComparison.InvariantCultureIgnoreCase))
             {
                 texture = PvrToTexture(file);
             }
@@ -454,7 +452,7 @@ public class ContentData {
 
     private static Texture2D DdsToTexture(string file)
     {
-        if (file == null) throw new System.ArgumentNullException("file");
+        if (file == null) throw new ArgumentNullException("file");
         // Unity doesn't support dds directly, have to do hackery
         // Read the data
         byte[] ddsBytes = null;
@@ -462,7 +460,7 @@ public class ContentData {
         {
             ddsBytes = File.ReadAllBytes(file);
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             if (!File.Exists(file))
                 ValkyrieDebug.Log("Warning: DDS Image missing: '" + file + "'");
@@ -508,7 +506,7 @@ public class ContentData {
         // Copy image data (skip header)
         const int DDS_HEADER_SIZE = 128;
         byte[] dxtBytes = new byte[ddsBytes.Length - DDS_HEADER_SIZE];
-        System.Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
+        Buffer.BlockCopy(ddsBytes, DDS_HEADER_SIZE, dxtBytes, 0, ddsBytes.Length - DDS_HEADER_SIZE);
 
         Texture2D texture = null;
 
@@ -546,22 +544,22 @@ public class ContentData {
 
     private static Texture2D PvrToTexture(string file)
     {
-        if (file == null) throw new System.ArgumentNullException("file");
+        if (file == null) throw new ArgumentNullException("file");
 
         long pixelformat = -1;
         try
         {
-            string imagePath = new System.Uri(file).AbsoluteUri;
+            string imagePath = new Uri(file).AbsoluteUri;
             var www = new WWW(imagePath);
 
             // *** HEADER ****
             // int verison
             // int flags
-            pixelformat = System.BitConverter.ToInt64(www.bytes, 8);
+            pixelformat = BitConverter.ToInt64(www.bytes, 8);
             // int color space
             // int channel type
-            int height = System.BitConverter.ToInt32(www.bytes, 24);
-            int width = System.BitConverter.ToInt32(www.bytes, 28);
+            int height = BitConverter.ToInt32(www.bytes, 24);
+            int width = BitConverter.ToInt32(www.bytes, 28);
             // int depth
             // int num surfaces
             // int num faces
@@ -571,7 +569,7 @@ public class ContentData {
             // *** IMAGE DATA ****
             const int PVR_HEADER_SIZE = 52;
             var image = new byte[www.bytesDownloaded - PVR_HEADER_SIZE];
-            System.Buffer.BlockCopy(www.bytes, PVR_HEADER_SIZE, image, 0, www.bytesDownloaded - PVR_HEADER_SIZE);
+            Buffer.BlockCopy(www.bytes, PVR_HEADER_SIZE, image, 0, www.bytesDownloaded - PVR_HEADER_SIZE);
             Texture2D texture = null;
             switch (pixelformat)
             {
@@ -591,7 +589,7 @@ public class ContentData {
             } 
             return texture;
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             if (!File.Exists(file))
                 ValkyrieDebug.Log("Warning: PVR Image missing: '" + file + "'");
@@ -603,14 +601,14 @@ public class ContentData {
 
     private static Texture2D ImageToTexture(string file)
     {
-        if (file == null) throw new System.ArgumentNullException("file");
+        if (file == null) throw new ArgumentNullException("file");
         try
         {
-            string imagePath = new System.Uri(file).AbsoluteUri;
+            string imagePath = new Uri(file).AbsoluteUri;
             var www = new WWW(imagePath);
             return www.texture;
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             if (!File.Exists(file))
                 ValkyrieDebug.Log("Warning: Image missing: '" + file + "'");
