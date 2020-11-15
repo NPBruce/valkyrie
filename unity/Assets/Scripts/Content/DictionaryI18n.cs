@@ -101,7 +101,6 @@ namespace Assets.Scripts.Content
         /// Add language data to dictionary
         /// </summary>
         /// <param name="languageData">Language data</param>
-        /// <param name="group">Group for figuring out additional pack language data</param>
         public void AddData(string[] languageData)
         {
             List<string> textToAdd = new List<string>();
@@ -385,7 +384,6 @@ namespace Assets.Scripts.Content
         /// Get the value for a key.  First check current language, then default, then any.  Returns key if not found.
         /// </summary>
         /// <param name="key">key to retreive</param>
-        /// <param name="additionalLanguage">language to use also use if present</param>
         /// <returns>Value found or 'key' if not found</returns>
         public string GetValue(in string key)
         {

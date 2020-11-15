@@ -42,7 +42,7 @@ public class Game : MonoBehaviour
     public ContentData cd
     {
         get => _cd;
-        internal set { _cd = value; CONTENT_LOADER = new ContentLoader(value);}
+        internal set { _cd = value; _contentLoader = new ContentLoader(value);}
     }
 
     // Data for the current quest
@@ -98,8 +98,8 @@ public class Game : MonoBehaviour
     public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
-    private ContentLoader CONTENT_LOADER;
-    public ContentLoader ContentLoader => CONTENT_LOADER;
+    private ContentLoader _contentLoader;
+    public ContentLoader ContentLoader => _contentLoader;
 
     // Current language
     public string currentLang;
@@ -243,7 +243,7 @@ public class Game : MonoBehaviour
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                CONTENT_LOADER.LoadContentID(kv.Key);
+                _contentLoader.LoadContentID(kv.Key);
             }
         }
             
@@ -265,7 +265,7 @@ public class Game : MonoBehaviour
         // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
-            CONTENT_LOADER.LoadContent(pack);
+            _contentLoader.LoadContent(pack);
         }
 
         // Pull up the quest selection page
