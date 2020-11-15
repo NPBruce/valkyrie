@@ -36,11 +36,15 @@ public class ConfigFile
     public void RemovePack(string gameType, string pack)
     {
         data.Remove(gameType + "Packs", pack);
+        LocalizationRead.SetGroupTranslationLanguage(pack, "");
+        Save();
     }
     
     public void AddPack(string gameType, string pack, string language = "")
     {
         data.Add(gameType + "Packs", pack, language);
+        LocalizationRead.SetGroupTranslationLanguage(pack, language);
+        Save();
     }
     
     // Save the configuration in memory to disk
