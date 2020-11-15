@@ -22,7 +22,9 @@ public class RoundControllerMoM : RoundController
         game.stageUI.Update();
         game.monsterCanvas.UpdateList();
 
+        game.quest.eManager.EventTriggerType("BeforeMonsterActivation", false);
         game.quest.eManager.EventTriggerType("Mythos", false);
+        game.quest.eManager.EventTriggerType("EndInvestigatorTurn", false);
         // This will cause the next phase if nothing was added
         game.quest.eManager.TriggerEvent();
 
