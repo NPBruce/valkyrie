@@ -6,7 +6,7 @@ using ValkyrieTools;
 
 public class ContentLoader
 {
-    private static readonly List<IContentLoader> ContentTypeLoaders = new List<IContentLoader>()
+    private static readonly List<IContentLoader> CONTENT_TYPE_LOADERS = new List<IContentLoader>()
     {
         new PackTypeDataLoader(),
         new TileSideDataLoader(),
@@ -106,7 +106,7 @@ public class ContentLoader
     // path is relative and is used for images or other paths in the content
     void LoadContent(string name, Dictionary<string, string> content, string path, string packID)
     {
-        foreach (var loader in ContentTypeLoaders.Where(l => l.Supports(name)))
+        foreach (var loader in CONTENT_TYPE_LOADERS.Where(l => l.Supports(name)))
         {
             loader.LoadContent(cd, name, content, path, new List<string> { packID });
         }
@@ -139,10 +139,10 @@ public abstract class ContentLoader<T> : IContentLoader where T : IContent
             return;
         }
 
-        cd.AddContent(name, t);
-        if (AdditionalTranslation)
+        var isNew = cd.AddContent(name, t);
+        if (isNew && AdditionalTranslation)
         {
-            LocalizationRead.RegisterAdditionalTranslationKey("ffg", t.TranslationKey);
+            t.Sets.ForEach(id => LocalizationRead.RegisterKeyInGroup(t.TranslationKey, id));
         }
     }
 

@@ -330,19 +330,24 @@ public class ContentData {
         return "";
     }
     
-    internal void AddContent<T>(string name, T d) where T : IContent
+    internal bool AddContent<T>(string name, T d) where T : IContent
     {
+        bool added = false;
         // If we don't already have one or it's lower priority then add this
         if (!TryGet(name, out T existingPackData)
             || existingPackData.Priority < d.Priority)
         {
             AddOrReplace(name, d);
+            return true;
         }
         // items of the same priority belong to multiple packs
         else if (existingPackData.Priority == d.Priority)
         {
             existingPackData.Sets.AddRange(d.Sets);
+            return false;
         }
+
+        return false;
     }
 
     // Holding class for contentpack data

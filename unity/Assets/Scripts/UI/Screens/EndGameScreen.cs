@@ -52,7 +52,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else if (game.gameType.TypeName() == "D2E")
             {
-                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_MOM).image);
+                bgTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_BG_DESCENT).image);
             }
             else
             {

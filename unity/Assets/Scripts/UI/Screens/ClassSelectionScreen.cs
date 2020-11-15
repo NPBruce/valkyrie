@@ -7,6 +7,7 @@ namespace Assets.Scripts.UI.Screens
 {
     class ClassSelectionScreen
     {
+        private const int LARGE_FONT_LIMIT = 24;
         protected List<float> scrollOffset = new List<float>();
         protected List<UIElementScrollVertical> scrollArea = new List<UIElementScrollVertical>();
 
@@ -102,7 +103,14 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(Game.HEROSELECT);
                 ui.SetLocation(xOffset + 1, yStart + 0.5f, 7, 4);
                 ui.SetText(classData.name, Color.black);
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (ui.GetText().Length > LARGE_FONT_LIMIT)
+                {
+                    ui.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                }
                 ui.SetButton(delegate { Select(hero, hybridClass); });
                 ui.SetBGColor(new Color(0, 0.7f, 0));
                 new UIElementBorder(ui, Color.black);
@@ -161,7 +169,14 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
                 ui.SetText(cd.name, Color.black);
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (ui.GetText().Length > LARGE_FONT_LIMIT)
+                {
+                    ui.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                }
 
                 yOffset += 5f;
             }

@@ -1,7 +1,7 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using ValkyrieTools;
 
 namespace Assets.Scripts.Content
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Content
     public static class LocalizationRead
     {
         public static Dictionary<string, DictionaryI18n> dicts = new Dictionary<string, DictionaryI18n>();
-
+        
         /// <summary>
         /// Change all dictionary languages
         /// </summary>
@@ -274,7 +274,7 @@ namespace Assets.Scripts.Content
         /// <returns>dictionary selected</returns>
         public static DictionaryI18n selectDictionary(string dict)
         {
-            if (!dicts.ContainsKey(dict)) return null;
+            if (dict == null || !dicts.ContainsKey(dict)) return null;
 
             return dicts[dict];
         }
@@ -287,14 +287,7 @@ namespace Assets.Scripts.Content
         /// <returns>void</returns>
         public static void AddDictionary(string name, DictionaryI18n dict)
         {
-            if (!dicts.ContainsKey(name))
-            {
-                dicts.Add(name, dict);
-            }
-            else
-            {
-                dicts[name] = dict;
-            }
+            dicts[name] = dict;
         }
 
         /// <summary>
@@ -311,8 +304,17 @@ namespace Assets.Scripts.Content
             return regexKey.Substring(0, regexKey.Length - 1) + "):";
         }
 
-        public static void RegisterAdditionalTranslationKey(string dict, StringKey translationKey)
+        public static void RegisterKeyInGroup(StringKey translationKey, string groupId)
         {
+            selectDictionary(translationKey.dict)?.SetKeyToGroup(translationKey.key, groupId);
+        }
+
+        public static void SetGroupTranslationLanguage(string groupId, string language)
+        {
+            foreach (var dictionary in dicts.Values)
+            {
+                dictionary.SetGroupTranslationLanguage(groupId, language);    
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Assets.Scripts.Content;
 using FFGAppImport;
@@ -332,6 +334,10 @@ namespace Assets.Scripts.UI.Screens
 
                 game.gameType = new D2EGameType();
 
+               
+                // Load localization before content
+                loadLocalization();
+
                 // Loading list of content - doing this later is not required
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
@@ -340,9 +346,6 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
                     Application.Quit();
                 }
-
-                // Load localization before content
-                loadLocalization();
 
                 // Download quests list
                 game.questsList = new QuestsManager();
@@ -413,6 +416,9 @@ namespace Assets.Scripts.UI.Screens
                 Game game = Game.Get();
                 game.gameType = new MoMGameType();
 
+                // Load localization before content
+                loadLocalization();
+
                 // Loading list of content - doing this later is not required
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
@@ -421,9 +427,6 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
                     Application.Quit();
                 }
-
-                // Load localization before content
-                loadLocalization();
 
                 // Download quests list
                 game.questsList = new QuestsManager();
@@ -476,6 +479,13 @@ namespace Assets.Scripts.UI.Screens
                     cshDict.AddDataFromFile(file);
                 }
                 LocalizationRead.AddDictionary("csh", cshDict);
+
+                var game = Game.Get();
+                foreach (var packInfo in game.config.GetPackLanguages(game.gameType.TypeName())
+                    .Where(kv => !string.IsNullOrWhiteSpace(kv.Value)))
+                {
+                    LocalizationRead.SetGroupTranslationLanguage(packInfo.Key, packInfo.Value);
+                }
             }
         }
 

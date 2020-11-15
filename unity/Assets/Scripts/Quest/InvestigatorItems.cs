@@ -7,6 +7,8 @@ using Assets.Scripts.UI;
 // Window with starting Investigator items
 public class InvestigatorItems
 {
+    private const int LARGE_FONT_LIMIT = 16;
+
     private readonly StringKey STARTING_ITEMS = new StringKey("val", "STARTING_ITEMS");
 
     public InvestigatorItems()
@@ -104,7 +106,7 @@ public class InvestigatorItems
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
                 ui.SetText(itemData.name);
-
+                ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT ? UIScaler.GetSmallerFont() : UIScaler.GetSmallFont());
                 x++;
                 if (x > 4)
                 {

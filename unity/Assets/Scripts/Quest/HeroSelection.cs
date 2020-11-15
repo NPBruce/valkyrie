@@ -7,6 +7,7 @@ using Assets.Scripts.UI;
 // Hero selection options
 // This comes up when selection a hero icon to pick hero
 public class HeroSelection {
+    private const int LARGE_FONT_LIMIT = 40;
 
     public Dictionary<string, List<UIElement>> buttons;
 
@@ -80,7 +81,7 @@ public class HeroSelection {
             ui.SetBGColor(Color.white);
             ui.SetText(game.cd.Get<HeroData>(hero).name, Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
-            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT ? UIScaler.GetSmallFont() : UIScaler.GetMediumFont());
             ui.SetButton(delegate { Select(hero); });
             buttons[hero].Add(ui);
 

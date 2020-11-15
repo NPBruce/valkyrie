@@ -7,6 +7,8 @@ using System.Collections.Generic;
 // Tokens are events that are tied to a token placed on the board
 public class ShopInterface : Quest.BoardComponent
 {
+    private const int LARGE_FONT_LIMIT = 36;
+
     GameObject panel;
     QuestData.Event eventData;
 
@@ -119,6 +121,7 @@ public class ShopInterface : Quest.BoardComponent
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
             ui.SetText(itemData.name, Color.black);
+            ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT ? UIScaler.GetSmallerFont() : UIScaler.GetSmallFont());
             ui.SetButton(delegate { Buy(itemName); });
             ui.SetBGColor(Color.white);
 
@@ -143,8 +146,9 @@ public class ShopInterface : Quest.BoardComponent
                 act = new StringKey("val", "ACT_2");
             }
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
-            ui.SetLocation(3, vOffset + 4, 3, 1);
+            ui.SetLocation(3, vOffset + 3.9f, 3, 0.7f);
             ui.SetText(act);
+            ui.SetFontSize(UIScaler.GetSmallerFont());
             ui.SetButton(delegate { Buy(itemName); });
             ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
@@ -185,6 +189,7 @@ public class ShopInterface : Quest.BoardComponent
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, vOffset + 4.5f, 8, 2);
             ui.SetText(itemData.name, Color.black);
+            ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT ? UIScaler.GetSmallerFont() : UIScaler.GetSmallFont());
             ui.SetButton(delegate { Sell(itemName); });
             ui.SetBGColor(Color.white);
 
@@ -209,8 +214,9 @@ public class ShopInterface : Quest.BoardComponent
                 act = new StringKey("val", "ACT_2");
             }
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
-            ui.SetLocation(3, vOffset + 4, 3, 1);
+            ui.SetLocation(3, vOffset + 3.9f, 3, 0.7f);
             ui.SetText(act);
+            ui.SetFontSize(UIScaler.GetSmallerFont());
             ui.SetButton(delegate { Sell(itemName); });
             ui.SetBGColor(Color.grey);
             new UIElementBorder(ui, Color.black);
