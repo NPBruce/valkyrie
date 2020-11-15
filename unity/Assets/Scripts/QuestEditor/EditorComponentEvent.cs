@@ -628,9 +628,15 @@ public class EditorComponentEvent : EditorComponent
            select.AddItem("Eliminated", traits);
         }
 
-        select.AddItem("Mythos", traits);
         select.AddItem("EndRound", traits);
         select.AddItem("StartRound", traits);
+        
+        if (game.gameType is MoMGameType)
+        {
+            select.AddItem("Mythos", traits);
+            select.AddItem("EndInvestigatorTurn", traits);
+            select.AddItem("BeforeMonsterActivation", traits);
+        }
 
         traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new[] { CommonStringKeys.MONSTER.Translate() });
