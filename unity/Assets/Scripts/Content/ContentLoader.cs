@@ -14,8 +14,8 @@ public class ContentLoader
         new ClassDataLoader(),
         new SkillDataLoader(),
         new ItemDataLoader(),
-        new MonsterDataLoader(),
         new ActivationDataLoader(),
+        new MonsterDataLoader(),
         new AttackDataLoader(),
         new EvadeDataLoader(),
         new HorrorDataLoader(),
@@ -108,7 +108,8 @@ public class ContentLoader
     {
         foreach (var loader in CONTENT_TYPE_LOADERS.Where(l => l.Supports(name)))
         {
-            loader.LoadContent(cd, name, content, path, new List<string> { packID });
+            var handled = loader.LoadContent(cd, name, content, path, new List<string> { packID });
+            if (handled) break;
         }
     }
 }
@@ -118,17 +119,17 @@ public interface IContentLoader
 {
     bool Supports(string name);
 
-    void LoadContent(ContentData cd, string name, Dictionary<string, string> content, string path, List<string> sets);
+    bool LoadContent(ContentData cd, string name, Dictionary<string, string> content, string path, List<string> sets);
 }
 
 public abstract class ContentLoader<T> : IContentLoader where T : IContent
 {
-    public bool Supports(string name)
+    public virtual bool Supports(string name)
     {
         return name.StartsWith(TypePrefix);
     }
 
-    public void LoadContent(ContentData cd, string name, Dictionary<string, string> content, string path,
+    public bool LoadContent(ContentData cd, string name, Dictionary<string, string> content, string path,
         List<string> sets)
     {
         T t = Create(name, content, path, sets);
@@ -136,7 +137,7 @@ public abstract class ContentLoader<T> : IContentLoader where T : IContent
         if (string.IsNullOrWhiteSpace(t?.SectionName))
         {
             ValkyrieDebug.Log($"Ignored invalid entry {name}");
-            return;
+            return false;
         }
 
         var isNew = cd.AddContent(name, t);
@@ -144,6 +145,8 @@ public abstract class ContentLoader<T> : IContentLoader where T : IContent
         {
             t.Sets.ForEach(id => LocalizationRead.RegisterKeyInGroup(t.TranslationKey, id));
         }
+
+        return true;
     }
 
     protected virtual bool AdditionalTranslation { get; } = false;
