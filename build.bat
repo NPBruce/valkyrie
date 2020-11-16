@@ -120,15 +120,17 @@ rem delete previous build
 del build\valkyrie-windows-%version%.exe
 del build\valkyrie-windows-%version%.zip
 del build\valkyrie-windows-%version%.7z
-del build\valkyrie-macos-%version%.zip
+del build\valkyrie-macos-%version%.tar.gz
 del build\valkyrie-linux-%version%.tar.gz
 
 rem create windows zip
 7z a "%~dp0build\valkyrie-windows-%version%.7z" "%~dp0build\batch\*" -r
 rem create windows 7z
 7z a "%~dp0build\valkyrie-windows-%version%.zip" "%~dp0build\batch\*" -r
-rem create macos zip
-7z a "%~dp0build\valkyrie-macos-%version%.zip" "%~dp0build\batchMac\*" -r
+rem create macos tar ball
+7z a "%~dp0build\batchMac\valkyrie-macos-%version%.tar" "%~dp0build\batchMac\*" -r
+7z a "%~dp0build\valkyrie-macos-%version%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+del "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
 rem create linux tar ball
 7z a "%~dp0build\batchLinux\valkyrie-linux-%version%.tar" "%~dp0build\batchLinux\*" -r
 7z a "%~dp0build\valkyrie-linux-%version%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
