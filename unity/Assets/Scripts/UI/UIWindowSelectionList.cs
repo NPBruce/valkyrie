@@ -15,17 +15,17 @@ namespace Assets.Scripts.UI
 
         static protected bool alphaSort = false;
         static protected bool reverseSort = false;
-        protected bool _cancelButton = true;
+        protected bool callAfterCancel = true;
 
-        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "", bool cancelButton = true)
+        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false)
         {
             _title = title;
             _call = call;
-            _cancelButton = cancelButton;
+            this.callAfterCancel = callAfterCancel;
         }
 
-        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title, bool cancelButton = true) 
-            : this(call, title.Translate(), cancelButton)
+        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title, bool callAfterCancel = false) 
+            : this(call, title.Translate(), callAfterCancel)
         {
             
         }
@@ -172,16 +172,20 @@ namespace Assets.Scripts.UI
 
             scrollArea.SetScrollSize(toDisplay.Count * 1.05f);
 
-            if (_cancelButton)
+            // Cancel button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetText(CommonStringKeys.CANCEL);
+            ui.SetButton(delegate
             {
-                // Cancel button
-                ui = new UIElement();
-                ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
-                ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-                ui.SetText(CommonStringKeys.CANCEL);
-                ui.SetButton(delegate { Destroyer.Dialog(); });
-                new UIElementBorder(ui);
-            }
+                Destroyer.Dialog();
+                if (callAfterCancel)
+                {
+                    _call(null);
+                }
+            });
+            new UIElementBorder(ui);
         }
 
         protected void SortNumerical()
