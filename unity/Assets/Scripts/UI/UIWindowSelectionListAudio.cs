@@ -24,10 +24,7 @@ namespace Assets.Scripts.UI
             UIElement ui = new UIElement(transform);
             ui.SetLocation(0, offset, 18.9f, 1);
             var audioFilePath = FindAudioPathIfExists(key);
-            if (!string.IsNullOrEmpty(audioFilePath))
-            {
-                ui.SetButton(delegate { SelectItem(key); });
-            }
+            ui.SetButton(delegate { SelectItem(key ?? ""); });
             ui.SetBGColor(item.GetColor());
             ui.SetText(item.GetDisplay(), Color.black);
 
