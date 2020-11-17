@@ -359,7 +359,7 @@ public class DialogWindow {
     {
         StringKey label = StringKey.NULL;
         public Color32 colour = Color.white;
-        public VarOperation condition = null;
+        public VarTests condition = null;
         public QuestButtonAction action = QuestButtonAction.NONE;
 
         public EventButton(QuestButtonData buttonData)

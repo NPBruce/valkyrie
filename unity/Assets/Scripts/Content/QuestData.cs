@@ -823,24 +823,7 @@ public class QuestData
 
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
-                var buttonLabel = ReadButtonLabel(data, buttonNum);
-                
-                QuestButtonData questButtonData;
-                if (data.TryGetValue("event" + buttonNum, out var nextEventString))
-                {
-                    questButtonData = QuestButtonDataSerializer.FromString(buttonLabel, nextEventString);
-                }
-                else
-                {
-                    questButtonData = new QuestButtonData(buttonLabel, new List<string>());
-                }
-
-                if (data.ContainsKey("buttoncolor" + buttonNum) && display)
-                {
-                    questButtonData.Color = data["buttoncolor" + buttonNum];
-                }
-
-                buttons.Add(questButtonData);
+                buttons.Add(QuestButtonDataSerializer.FromData(data, buttonNum, sectionName));
             }
 
             // Heros from another event can be hilighted
@@ -928,17 +911,6 @@ public class QuestData
                     music[i] = music[i].Replace('\\', '/');
                 }
             }
-        }
-
-        private StringKey ReadButtonLabel(Dictionary<string, string> data, int buttonNum)
-        {
-            var buttonDataKey = "button" + (buttonNum);
-            if (data.TryGetValue(buttonDataKey, out string buttonDataValue))
-            {
-                return new StringKey(buttonDataValue);
-            }
-
-            return genQuery("button" + buttonNum);
         }
 
         // Check all references when a component name is changed
@@ -1034,11 +1006,7 @@ public class QuestData
 
             foreach (var i in buttons.Select((b, i) => new { index = i + 1, buttonData = b }))
             {
-                r += "event" + i.index + "=" + QuestButtonDataSerializer.ToEventString(i.buttonData) + nl;
-                if (!i.buttonData.Color.Equals(QuestButtonData.DEFAULT_COLOR))
-                {
-                    r += "buttoncolor" + i.index + "=\"" + i.buttonData.Color + "\"" + nl;
-                }
+                r += QuestButtonDataSerializer.ToEventString(i.index, i.buttonData);
             }
 
             if (!heroListName.Equals(""))
