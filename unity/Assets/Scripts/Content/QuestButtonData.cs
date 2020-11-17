@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Assets.Scripts.Content
 {
@@ -8,7 +10,7 @@ namespace Assets.Scripts.Content
     {
         public static readonly string DEFAULT_COLOR = "white";
 
-        public QuestButtonData(StringKey label, List<string> eventNames = null, VarOperation condition = null,
+        public QuestButtonData(StringKey label, List<string> eventNames = null, VarTests condition = null,
             QuestButtonAction? rawConditionFailedAction = null)
         {
             Label = label;
@@ -19,7 +21,7 @@ namespace Assets.Scripts.Content
 
         public List<string> EventNames { get; }
 
-        public VarOperation Condition { get; }
+        public VarTests Condition { get; internal set; }
         
         public StringKey Label { get; set; }
 
@@ -30,13 +32,13 @@ namespace Assets.Scripts.Content
                                                          ? QuestButtonAction.DISABLE
                                                          : QuestButtonAction.NONE);
 
-        protected internal QuestButtonAction? RawConditionFailedAction { get; }
+        protected internal QuestButtonAction? RawConditionFailedAction { get; internal set; }
 
         public bool HasCondition => Condition != null;
 
         public override string ToString()
         {
-            return QuestButtonDataSerializer.ToEventString(this);
+            return QuestButtonDataSerializer.ToEventString(0, this);
         }
     }
 
@@ -52,7 +54,48 @@ namespace Assets.Scripts.Content
         private static readonly char[] EVENT_NAME_SEPARATOR = {' '};
         private static readonly char[] EVENT_PARAMETER_SEPARATOR = {','};
 
-        public static QuestButtonData FromString(StringKey labelKey, string eventDataString)
+
+        public static QuestButtonData FromData(Dictionary<string, string> data, int position, string sectionName)
+        {
+            var buttonLabel = ReadButtonLabel(data, position, sectionName);
+            QuestButtonData questButtonData = null;
+            if (data.TryGetValue("event" + position, out var nextEventString))
+            {
+                questButtonData = FromSingleString(buttonLabel, nextEventString);
+            }
+            else
+            {
+                questButtonData = new QuestButtonData(buttonLabel, new List<string>());
+            }
+
+            if (data.TryGetValue($"event{position}Condition" , out var conditionString) && !string.IsNullOrWhiteSpace(conditionString))
+            {
+                var tests = new VarTests();
+                string[] array = conditionString.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in array)
+                {
+                    tests.Add(s);
+                }
+
+                questButtonData.Condition = tests;
+
+                if (data.TryGetValue($"event{position}ConditionAction", out var conditionActionString) 
+                    && !string.IsNullOrWhiteSpace(conditionActionString) 
+                    && Enum.TryParse(conditionActionString, true, out QuestButtonAction action))
+                {
+                    questButtonData.RawConditionFailedAction = action;
+                }
+            }
+            
+            if (data.ContainsKey("buttoncolor" + position))
+            {
+                questButtonData.Color = data["buttoncolor" + position];
+            }
+            
+            return questButtonData;
+        }
+        
+        public static QuestButtonData FromSingleString(StringKey labelKey, string eventDataString)
         {
             if (string.IsNullOrWhiteSpace(eventDataString))
             {
@@ -68,6 +111,8 @@ namespace Assets.Scripts.Content
 
             var questNames = strings[0].Split(EVENT_NAME_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
+            // Backward compatibility with unreleased 2.4.11a
+            
             // Skip conditional event parameters if not all parameters are present
             if (strings.Length < 4)
             {
@@ -76,36 +121,58 @@ namespace Assets.Scripts.Content
             
             var conditionString = string.Join(",", strings[1], strings[2], strings[3]);
             VarOperation condition = new VarOperation(conditionString);
+            var varTests = new VarTests();
+            varTests.Add(condition);
 
             // Optional ButtonAction parameter (defaults to DISABLE, but can be HIDE or NONE as well)
             if (strings.Length > 4 && Enum.TryParse(strings[4], true, out QuestButtonAction action))
             {
-                return new QuestButtonData(labelKey, questNames.ToList(), condition, action);
+                return new QuestButtonData(labelKey, questNames.ToList(), varTests, action);
             }
 
-            return new QuestButtonData(labelKey, questNames.ToList(), condition);
+            return new QuestButtonData(labelKey, questNames.ToList(), varTests);
         }
 
-        public static string ToEventString(QuestButtonData questButtonData)
+        private static StringKey ReadButtonLabel(Dictionary<string, string> data, int buttonNum, string sectionName)
         {
-            if (questButtonData?.EventNames == null)
+            var buttonDataKey = "button" + (buttonNum);
+            if (data.TryGetValue(buttonDataKey, out string buttonDataValue))
             {
-                return string.Empty;
+                return new StringKey(buttonDataValue);
             }
 
-            List<string> result = new List<string> {string.Join(" ", questButtonData.EventNames)};
+            return new StringKey("qst", $"{sectionName}.button{buttonNum}");
+        }
 
+
+        public static string ToEventString(int position, QuestButtonData questButtonData)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"event{position}={SerializeEventNames(questButtonData.EventNames)}").AppendLine();
             if (questButtonData.HasCondition)
             {
-                result.Add(questButtonData.Condition.ToString());
+                sb.Append($"event{position}Condition={questButtonData.Condition}").AppendLine();
+                if (questButtonData.RawConditionFailedAction != null)
+                {
+                    sb.Append($"event{position}ConditionAction={questButtonData.RawConditionFailedAction.ToString().ToLower()}").AppendLine();
+                }
             }
-
-            if (questButtonData.RawConditionFailedAction != null)
+            if (!questButtonData.Color.Equals(QuestButtonData.DEFAULT_COLOR))
             {
-                result.Add(questButtonData.RawConditionFailedAction.ToString().ToLower());
+                sb.Append($"buttoncolor{position}=\"{questButtonData.Color}\"").AppendLine();
             }
 
-            return string.Join(",", result);
+            return sb.ToString();
+        }
+
+        private static string SerializeEventNames(List<string> eventNames)
+        {
+            if (eventNames == null)
+            {
+                return "";
+            }
+
+            return String.Join(" ", eventNames);
         }
     }
 }

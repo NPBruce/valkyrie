@@ -72,7 +72,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetButton(delegate { TestCrash(); });
             }
 
-            float menuButtonsX = UIScaler.GetWidthUnits() * 0.1f;
+            float menuButtonsX = UIScaler.GetWidthUnits() * 0.05f;
             
             // Button for start quest/scenario
             ui = new UIElement();
