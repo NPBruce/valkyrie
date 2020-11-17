@@ -282,7 +282,7 @@ namespace Assets.Scripts.UI.Screens
         private void SelectLanguage(string id, string type)
         {
             UIWindowSelectionList select = new UIWindowSelectionList(
-                delegate(string val) { UpdateLanguage(id, val, type); }, CommonStringKeys.CHOOSE_LANGUAGE, false);
+                delegate(string val) { UpdateLanguage(id, val, type); }, CommonStringKeys.CHOOSE_LANGUAGE, true);
 
             select.AddItem(DEFAULT_LANGUAGE_KEY);
             foreach (var s in OptionsScreen.ENABLED_LANGS)
@@ -300,7 +300,12 @@ namespace Assets.Scripts.UI.Screens
                 val = "";
             }
 
-            game.config.AddPack(game.gameType.TypeName(), id, val);
+            // Cancel button
+            if (val != null)
+            {
+                game.config.AddPack(game.gameType.TypeName(), id, val);
+            }
+
             DrawList(type);
         }
 
