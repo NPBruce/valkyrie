@@ -73,7 +73,7 @@ public class EditorComponentQuest : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 3, 1);
+        ui.SetLocation(5, offset, 14, 1);
         ui.SetButton(delegate { Image(); });
         ui.SetText(game.quest.qd.quest.image);
         new UIElementBorder(ui);

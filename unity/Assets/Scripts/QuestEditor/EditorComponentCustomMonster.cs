@@ -276,7 +276,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(3, offset, 13.5f, 1);
+            ui.SetLocation(5, offset, 14, 1);
             ui.SetText(monsterComponent.imagePath);
             ui.SetButton(delegate { SetImage(); });
             new UIElementBorder(ui);
