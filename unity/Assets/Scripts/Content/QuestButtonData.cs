@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Assets.Scripts.Content
 {
-    public class QuestButtonData
+    public class QuestButtonData: ITestable
     {
         public static readonly string DEFAULT_COLOR = "white";
 
@@ -36,6 +36,10 @@ namespace Assets.Scripts.Content
 
         public bool HasCondition => Condition != null;
 
+        // ITestable implementation
+        public VarTests Tests => Condition;
+        public List<VarOperation> Operations { get; } = new List<VarOperation>();
+        
         public override string ToString()
         {
             return QuestButtonDataSerializer.ToEventString(0, this);

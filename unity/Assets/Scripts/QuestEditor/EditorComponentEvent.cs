@@ -465,6 +465,21 @@ public class EditorComponentEvent : EditorComponent
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddEvent(tmp, buttonTmp); });
             new UIElementBorder(ui, Color.green);
+            
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(17.5f, lastButtonOffset, 1, 1);
+            ui.SetButton(delegate { EditCondition(nextEvent); });
+            if (nextEvent.HasCondition)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.green);
+                new UIElementBorder(ui, Color.green);
+            }
+            else
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.white);
+                new UIElementBorder(ui, Color.white);
+            }
         }
 
         if (lastButtonOffset != 0)
@@ -479,6 +494,10 @@ public class EditorComponentEvent : EditorComponent
         return offset + 1;
     }
 
+    private void EditCondition(QuestButtonData nextEvent)
+    {
+        
+    }
 
 
     virtual public void Highlight()
@@ -653,7 +672,7 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (string s in ExtractVarsFromEvent(e))
+                foreach (string s in EditorComponentVarTestsUtil.ExtractVarsFromEvent(e))
                 {
                     if (s[0] == '@')
                     {
@@ -1091,7 +1110,7 @@ public class EditorComponentEvent : EditorComponent
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
-        AddQuestVars(select);
+        EditorComponentVarTestsUtil.AddQuestVars(select);
 
         select.Draw();
     }
@@ -1100,7 +1119,7 @@ public class EditorComponentEvent : EditorComponent
     {
         if (var.Equals("{NEW}"))
         {
-            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
+            varText = new QuestEditorTextEdit(VAR_NAME, "", s => NewQuotaVar());
             varText.EditText();
         }
         else
