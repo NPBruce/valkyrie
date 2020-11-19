@@ -94,17 +94,19 @@ public class DialogWindow {
             }
         }
 
-        int num = 1;
+        
         var varManager = Game.Get().quest.vars;
+        
+        int num = 0;
         foreach (EventButton eb in buttons)
         {
+            var numTmp = num++;
             // Handle condition failure
             var buttonConditionFailed = eb.condition != null && !varManager.Test(eb.condition);
             if (buttonConditionFailed && eb.action == QuestButtonAction.HIDE)
             {
                 continue;
             }
-            int numTmp = num++;
             ui = new UIElement();
             ui.SetLocation(hOffset, offset, buttonWidth, 2);
             if (buttonConditionFailed && eb.action == QuestButtonAction.DISABLE)
@@ -257,7 +259,7 @@ public class DialogWindow {
         if (eventData.qEvent.quotaVar.Length > 0)
         {
             game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota);
-            onButton(1);
+            onButton(0);
             return;
         }
         
@@ -272,11 +274,11 @@ public class DialogWindow {
         if (game.quest.eventQuota[eventData.qEvent.sectionName] >= eventData.qEvent.quota)
         {
             game.quest.eventQuota.Remove(eventData.qEvent.sectionName);
-            onButton(1);
+            onButton(0);
         }
         else
         {
-            onButton(2);
+            onButton(1);
         }
     }
 
@@ -311,7 +313,7 @@ public class DialogWindow {
         game.quest.eventList.Add(eventData.qEvent.sectionName);
 
         // Event manager handles the aftermath
-        game.quest.eManager.EndEvent(num-1);
+        game.quest.eManager.EndEvent(num);
     }
 
     // Check that the correct number of heroes are selected
