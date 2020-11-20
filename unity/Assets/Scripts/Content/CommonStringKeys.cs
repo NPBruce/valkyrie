@@ -33,6 +33,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey NONE = new StringKey(VAL, "NONE");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
+        public static readonly StringKey CONTINUE = new StringKey("val", "CONTINUE");
 
         public static readonly StringKey FINISHED = new StringKey(VAL, "FINISHED");
 

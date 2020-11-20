@@ -183,6 +183,8 @@ SELECT_ITEM,Escoger Elemento
 SELECT_PACK,Selección de Paquetes
 SELECT_TO_COPY,Selección de {0} a Copiar
 SELECT_TO_DELETE,Selección de {0} a Eliminar
+DISABLE,Desactivar
+HIDE,Ocultar
 HIDDEN,Oculto
 ACTIVE,Activo
 SET,Set

@@ -183,6 +183,8 @@ SELECT_ITEM,選擇物品
 SELECT_PACK,Select Pack
 SELECT_TO_COPY,Select {0} To Copy
 SELECT_TO_DELETE,Select {0} To Delete
+DISABLE,禁用
+HIDE,隐藏
 HIDDEN,隱藏
 ACTIVE,行動
 SET,設置

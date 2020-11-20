@@ -226,16 +226,11 @@ public class EditorComponentVarTestsUtil
         return yOffset + 1;
     }
 
-    public static void AddTestOp(ITestable testable, Action updateAction)
+    private static void AddTestOp(ITestable testable, Action updateAction)
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(
             s => SelectAddOp(s, testable, updateAction) , 
-            new StringKey("val", "SELECT", CommonStringKeys.VAR));
+            new StringKey("val", "SELECT", CommonStringKeys.VAR), true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
@@ -347,16 +342,21 @@ public class EditorComponentVarTestsUtil
         return vars;
     }
 
-    public static void SelectAddParenthesis(ITestable testable, Action updateAction)
+    private static void SelectAddParenthesis(ITestable testable, Action updateAction)
     {
         testable.Tests.Add(new VarTestsParenthesis(")"));
         testable.Tests.Add(new VarTestsParenthesis("("));
         updateAction.Invoke();
     }
 
-    public static void SelectAddOp(string var, ITestable testable, Action updateAction,
-        bool test = true)
+    public static void SelectAddOp(string var, ITestable testable, Action updateAction, bool test = true)
     {
+        if (var == null)
+        {
+            updateAction.Invoke();
+            return;
+        }
+
         VarTests tests = testable.Tests;
         List<VarOperation> operations = testable.Operations;
         VarOperation op = new VarOperation();
@@ -397,7 +397,7 @@ public class EditorComponentVarTestsUtil
         }
     }
 
-    public static void NewVar(string value, VarOperation op, bool test, ITestable testable, Action updateAction)
+    private static void NewVar(string value, VarOperation op, bool test, ITestable testable, Action updateAction)
     {
         op.var = System.Text.RegularExpressions.Regex.Replace(value, "[^A-Za-z0-9_]", "");
         if (op.var.Length > 0)
@@ -434,14 +434,9 @@ public class EditorComponentVarTestsUtil
         updateAction.Invoke();
     }
 
-    public static void SetTestOpp(VarOperation op, Action updateAction)
+    private static void SetTestOpp(VarOperation op, Action updateAction)
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
-        UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s, updateAction); }, CommonStringKeys.SELECT_OP);
+        UIWindowSelectionList select = new UIWindowSelectionList(delegate (string s) { SelectSetOp(op, s, updateAction); }, CommonStringKeys.SELECT_OP, true);
 
         @select.AddItem("==");
         @select.AddItem("!=");
@@ -455,19 +450,19 @@ public class EditorComponentVarTestsUtil
 
     public static void SelectSetOp(VarOperation op, string operation, Action updateAction)
     {
+        if (operation == null)
+        {
+            updateAction.Invoke();
+            return;
+        }
         op.operation = operation;
         updateAction.Invoke();
     }
 
     public static void SetValue(VarOperation op, Action updateAction)
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(s => SelectSetValue(op, s, updateAction),
-            new StringKey("val", "SELECT", CommonStringKeys.VALUE));
+            new StringKey("val", "SELECT", CommonStringKeys.VALUE), true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
@@ -492,8 +487,14 @@ public class EditorComponentVarTestsUtil
         @select.Draw();
     }
 
-    public static void SelectSetValue(VarOperation op, string value, Action updateAction)
+    private static void SelectSetValue(VarOperation op, string value, Action updateAction)
     {
+        if (value == null)
+        {
+            updateAction.Invoke();
+            return;
+        }
+
         if (value.Equals("{NUMBER}"))
         {
             // Vars doesnt localize
@@ -508,7 +509,7 @@ public class EditorComponentVarTestsUtil
         }
     }
 
-    public static void SetNumValue(VarOperation op, string stringValue, Action updateAction)
+    private static void SetNumValue(VarOperation op, string stringValue, Action updateAction)
     {
         if (stringValue.StartsWith("#rand"))
         {
@@ -537,7 +538,7 @@ public class EditorComponentVarTestsUtil
         updateAction.Invoke();
     }
 
-    public static void RemoveOp(VarTests tests, int index, Action updateAction)
+    private static void RemoveOp(VarTests tests, int index, Action updateAction)
     {
         if (index < tests.VarTestsComponents.Count)
             tests.Remove(index);

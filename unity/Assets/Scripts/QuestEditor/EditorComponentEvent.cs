@@ -470,15 +470,21 @@ public class EditorComponentEvent : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(17.5f, lastButtonOffset, 1, 1);
             ui.SetButton(delegate { EditCondition(nextEvent); });
-            if (nextEvent.HasCondition)
-            {
-                ui.SetText(CommonStringKeys.CONDITION, Color.green);
-                new UIElementBorder(ui, Color.green);
-            }
-            else
+            if (!nextEvent.HasCondition || nextEvent.ConditionFailedAction == QuestButtonAction.NONE)
             {
                 ui.SetText(CommonStringKeys.CONDITION, Color.white);
                 new UIElementBorder(ui, Color.white);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.DISABLE)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.yellow);
+                new UIElementBorder(ui, Color.yellow);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.HIDE)
+            {
+                var orange = new Color(1f, 0.5215686f, 0.01568628f, 1f);
+                ui.SetText(CommonStringKeys.CONDITION, orange);
+                new UIElementBorder(ui, orange);
             }
         }
 
@@ -496,7 +502,14 @@ public class EditorComponentEvent : EditorComponent
 
     private void EditCondition(QuestButtonData nextEvent)
     {
-        
+        var editorWindowVarTestsEdit = new EditorWindowQuestButtonEdit(CommonStringKeys.TRIGGER, nextEvent, 
+            button =>
+        {
+            nextEvent.Condition = button.Condition;
+            nextEvent.RawConditionFailedAction = button.RawConditionFailedAction;
+            Update();
+        });
+        editorWindowVarTestsEdit.Draw();
     }
 
 
