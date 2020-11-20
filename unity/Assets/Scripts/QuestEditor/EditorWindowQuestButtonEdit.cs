@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Content;
+using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using UnityEngine;
 
@@ -61,7 +61,7 @@ public class EditorWindowQuestButtonEdit
             ui.SetLocation(leftBorder + 0.5f + i * optionWidth, 24, optionWidth, 1);
             Color buttonColor = newButton.ConditionFailedAction == action ? Color.white : Color.gray;
             ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
-            ui.SetText(action.ToString(), buttonColor);
+            ui.SetText(new StringKey("val", action.ToString()).Translate(), buttonColor);
             ui.SetButton(delegate
             {
                 this.newButton.RawConditionFailedAction = action;
