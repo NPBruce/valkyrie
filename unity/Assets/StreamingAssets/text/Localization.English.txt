@@ -217,6 +217,8 @@ SELECT_ITEM,Select Item
 SELECT_PACK,Select Pack
 SELECT_TO_COPY,Select {0} To Copy
 SELECT_TO_DELETE,Select {0} To Delete
+DISABLE,Disable
+HIDE,Hide
 HIDDEN,Hidden
 ACTIVE,Active
 SET,Set

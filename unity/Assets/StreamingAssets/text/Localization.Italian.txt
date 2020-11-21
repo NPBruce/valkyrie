@@ -149,6 +149,8 @@ SELECT_ITEM,Seleziona Oggetto
 SELECT_PACK,Seleziona Pacchetto
 SELECT_TO_COPY,Selezione {0} da Copiare
 SELECT_TO_DELETE,Selezione {0} da Cancellare
+DISABLE,Disabiliti
+HIDE,Nascondi
 HIDDEN,
 ACTIVE,
 SET,Set

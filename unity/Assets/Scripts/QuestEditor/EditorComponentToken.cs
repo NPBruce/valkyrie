@@ -57,9 +57,9 @@ public class EditorComponentToken : EditorComponentEvent
         return offset;
     }
 
-    override public float AddEventVarConditionComponents(float offset)
+    public override float AddEventVarConditionComponents(float yOffset)
     {
-        return offset;
+        return yOffset;
     }
 
     public void Rotate()

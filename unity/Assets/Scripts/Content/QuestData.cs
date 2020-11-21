@@ -1227,7 +1227,7 @@ public class QuestData
     }
 
     // Super class for all quest components
-    public class QuestComponent
+    public class QuestComponent: ITestable
     {
         // Source file
         public string source = "";
@@ -1247,6 +1247,8 @@ public class QuestData
         // Var tests and operations if required
         public VarTests tests = null;
         public List<VarOperation> operations = null;
+        public VarTests Tests => tests;
+        public List<VarOperation> Operations => operations;
 
         private static char DOT = '.';
         public string genKey(string element)

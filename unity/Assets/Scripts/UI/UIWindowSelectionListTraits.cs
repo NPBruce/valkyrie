@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
         string val_source_translated = null;
         string val_traits_translated = null;
         string val_type_translated = null;
-        public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
+        public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false) : base(call, title, callAfterCancel)
         {
             val_base_translated = CommonStringKeys.BASE.Translate();
             val_source_translated = CommonStringKeys.SOURCE.Translate();
@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI
             val_type_translated = CommonStringKeys.TYPE.Translate();
         }
 
-        public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, StringKey title) : base(call, title)
+        public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, StringKey title, bool callAfterCancel = false) : base(call, title, callAfterCancel)
         {
             val_base_translated = CommonStringKeys.BASE.Translate();
             val_source_translated = CommonStringKeys.SOURCE.Translate();
@@ -246,7 +246,14 @@ namespace Assets.Scripts.UI
             ui.SetLocation(UIScaler.GetHCenter(-4.5f), 28, 9, 1);
             ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
             ui.SetText(CommonStringKeys.CANCEL);
-            ui.SetButton(delegate { Destroyer.Dialog(); });
+            ui.SetButton(delegate
+            {
+                Destroyer.Dialog();
+                if (callAfterCancel)
+                {
+                    _call(null);
+                }
+            });
             new UIElementBorder(ui);
         }
 

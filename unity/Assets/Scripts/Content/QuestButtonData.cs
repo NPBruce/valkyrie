@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Assets.Scripts.Content
 {
-    public class QuestButtonData
+    public class QuestButtonData: ITestable
     {
         public static readonly string DEFAULT_COLOR = "white";
 
@@ -16,7 +15,7 @@ namespace Assets.Scripts.Content
             Label = label;
             EventNames = eventNames ?? new List<string>();
             RawConditionFailedAction = rawConditionFailedAction;
-            Condition = condition;
+            Condition = condition ?? new VarTests();
         }
 
         public List<string> EventNames { get; }
@@ -32,10 +31,14 @@ namespace Assets.Scripts.Content
                                                          ? QuestButtonAction.DISABLE
                                                          : QuestButtonAction.NONE);
 
-        protected internal QuestButtonAction? RawConditionFailedAction { get; internal set; }
+        protected internal QuestButtonAction? RawConditionFailedAction { get; set; }
 
-        public bool HasCondition => Condition != null;
+        public bool HasCondition => (Condition?.VarTestsComponents?.Count ?? 0) > 0;
 
+        // ITestable implementation
+        public VarTests Tests => Condition;
+        public List<VarOperation> Operations { get; } = new List<VarOperation>();
+        
         public override string ToString()
         {
             return QuestButtonDataSerializer.ToEventString(0, this);
@@ -71,7 +74,7 @@ namespace Assets.Scripts.Content
             if (data.TryGetValue($"event{position}Condition" , out var conditionString) && !string.IsNullOrWhiteSpace(conditionString))
             {
                 var tests = new VarTests();
-                string[] array = conditionString.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] array = conditionString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in array)
                 {
                     tests.Add(s);

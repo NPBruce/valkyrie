@@ -6,6 +6,7 @@ using ValkyrieTools;
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
+using System.Linq;
 
 // Class for managing quest events
 public class EventManager
@@ -676,6 +677,13 @@ public class EventManager
             {
                 buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i]));
             }
+
+            // If there are no enabled buttons - add a default continue button
+            if (!buttons.Where(b => b.action == QuestButtonAction.NONE || Game.Get().quest.vars.Test(b.condition)).Any())
+            {
+                buttons.Add(new DialogWindow.EventButton(new QuestButtonData(CommonStringKeys.CONTINUE)));
+            }
+            
             return buttons;
         }
 

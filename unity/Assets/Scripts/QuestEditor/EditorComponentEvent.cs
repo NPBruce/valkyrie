@@ -465,6 +465,27 @@ public class EditorComponentEvent : EditorComponent
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddEvent(tmp, buttonTmp); });
             new UIElementBorder(ui, Color.green);
+            
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(17.5f, lastButtonOffset, 1, 1);
+            ui.SetButton(delegate { EditCondition(nextEvent); });
+            if (!nextEvent.HasCondition || nextEvent.ConditionFailedAction == QuestButtonAction.NONE)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.white);
+                new UIElementBorder(ui, Color.white);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.DISABLE)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.yellow);
+                new UIElementBorder(ui, Color.yellow);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.HIDE)
+            {
+                var orange = new Color(1f, 0.5215686f, 0.01568628f, 1f);
+                ui.SetText(CommonStringKeys.CONDITION, orange);
+                new UIElementBorder(ui, orange);
+            }
         }
 
         if (lastButtonOffset != 0)
@@ -479,6 +500,17 @@ public class EditorComponentEvent : EditorComponent
         return offset + 1;
     }
 
+    private void EditCondition(QuestButtonData nextEvent)
+    {
+        var editorWindowVarTestsEdit = new EditorWindowQuestButtonEdit(CommonStringKeys.TRIGGER, nextEvent, 
+            button =>
+        {
+            nextEvent.Condition = button.Condition;
+            nextEvent.RawConditionFailedAction = button.RawConditionFailedAction;
+            Update();
+        });
+        editorWindowVarTestsEdit.Draw();
+    }
 
 
     virtual public void Highlight()
@@ -653,7 +685,7 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (string s in ExtractVarsFromEvent(e))
+                foreach (string s in EditorComponentVarTestsUtil.ExtractVarsFromEvent(e))
                 {
                     if (s[0] == '@')
                     {
@@ -1091,7 +1123,7 @@ public class EditorComponentEvent : EditorComponent
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
-        AddQuestVars(select);
+        EditorComponentVarTestsUtil.AddQuestVars(select);
 
         select.Draw();
     }
@@ -1100,7 +1132,7 @@ public class EditorComponentEvent : EditorComponent
     {
         if (var.Equals("{NEW}"))
         {
-            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
+            varText = new QuestEditorTextEdit(VAR_NAME, "", s => NewQuotaVar());
             varText.EditText();
         }
         else

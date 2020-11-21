@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using UnityEngine.Events;
 
 // Editable text box for use in quest editor
 public class QuestEditorTextEdit {
 
     public string value = "";
     public StringKey title;
-    public UnityEngine.Events.UnityAction returnCall;
+    public UnityEngine.Events.UnityAction<string> returnCall;
     public UnityEngine.Events.UnityAction cancelCall;
     public PanCancelInputField iField;
-
+    
     // Create a new text box with title, initial value and call back
-    public QuestEditorTextEdit(StringKey t, string initial, UnityEngine.Events.UnityAction call)
+    public QuestEditorTextEdit(StringKey t, string initial, UnityAction<string> call)
     {
         value = initial;
         title = t;
@@ -98,6 +99,6 @@ public class QuestEditorTextEdit {
     {
         value = iField.text;
         Destroyer.Dialog();
-        returnCall();
+        returnCall(value);
     }
 }

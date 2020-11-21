@@ -22,6 +22,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey POSITION_FREE = new StringKey(VAL, "POSITION_FREE");
         public static readonly StringKey PLUS = new StringKey(null,"+", false);
         public static readonly StringKey MINUS = new StringKey(null,"-", false);
+        public static readonly StringKey CONDITION = new StringKey(null,"?", false);
         public static readonly StringKey HASH = new StringKey(null,"#", false);
         public static readonly StringKey TAB = new StringKey(null, "➤", false);
         public static readonly StringKey UP = new StringKey(null, "▲", false);
@@ -32,6 +33,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey NONE = new StringKey(VAL, "NONE");
         public static readonly StringKey TRAITS = new StringKey(VAL, "TRAITS");
         public static readonly StringKey PLACEMENT = new StringKey(VAL, "PLACEMENT");
+        public static readonly StringKey CONTINUE = new StringKey("val", "CONTINUE");
 
         public static readonly StringKey FINISHED = new StringKey(VAL, "FINISHED");
 
@@ -39,10 +41,25 @@ namespace Assets.Scripts.Content
         public static readonly StringKey MOVES = new StringKey(VAL, "MOVES");
         public static readonly StringKey TOTAL_MOVES = new StringKey(VAL, "TOTAL_MOVES");
 
+        public static readonly StringKey TRUE = new StringKey(VAL, "TRUE");
+        public static readonly StringKey FALSE = new StringKey(VAL, "FALSE");
+        public static readonly StringKey TESTS = new StringKey("val", "TESTS");
+        public static readonly StringKey VAR = new StringKey("val", "VAR");
+        public static readonly StringKey OP = new StringKey("val", "OP");
+        public static readonly StringKey VALUE = new StringKey("val", "VALUE");
+        public static readonly StringKey ASSIGN = new StringKey("val", "ASSIGN");
+        public static readonly StringKey VAR_NAME = new StringKey("val", "VAR_NAME");
+        public static readonly StringKey AND = new StringKey("val", "AND");
+        public static readonly StringKey OR = new StringKey("val", "OR");
+
+        public static readonly StringKey FILE = new StringKey(VAL, "FILE");
         public static readonly StringKey BASE = new StringKey(VAL, "BASE");
         public static readonly StringKey TYPE = new StringKey(VAL, "TYPE");
         public static readonly StringKey SOURCE = new StringKey(VAL, "SOURCE");
         public static readonly StringKey SELECT_ITEM = new StringKey(VAL, "SELECT_ITEM");
+        public static readonly StringKey SELECT_VAR = new StringKey(VAL, "SELECT", VAR);
+        public static readonly StringKey SELECT_OP = new StringKey(VAL, "SELECT", OP);
+        public static readonly StringKey SELECT_FILE = new StringKey(VAL, "SELECT", FILE);
         public static readonly StringKey CHOOSE_LANGUAGE = new StringKey(VAL, "CHOOSE_LANG");
 
         public static readonly StringKey QUEST = new StringKey(VAL, "QUEST");
@@ -72,9 +89,6 @@ namespace Assets.Scripts.Content
         public static readonly StringKey LOG = new StringKey(VAL, "LOG");
         public static readonly StringKey SET = new StringKey(VAL, "SET");
         public static readonly StringKey RESET = new StringKey(VAL, "RESET");
-        public static readonly StringKey FILE = new StringKey(VAL, "FILE");
 
-        public static readonly StringKey TRUE = new StringKey(VAL, "TRUE");
-        public static readonly StringKey FALSE = new StringKey(VAL, "FALSE");
     }
 }
