@@ -502,7 +502,7 @@ public class EditorComponentEvent : EditorComponent
 
     private void EditCondition(QuestButtonData nextEvent)
     {
-        var editorWindowVarTestsEdit = new EditorWindowQuestButtonEdit(CommonStringKeys.TRIGGER, nextEvent, 
+        var editorWindowVarTestsEdit = new EditorWindowQuestButtonEdit(CommonStringKeys.TRIGGER.Translate() +  " - " + nextEvent.Label.Translate(), nextEvent, 
             button =>
         {
             nextEvent.Condition = button.Condition;

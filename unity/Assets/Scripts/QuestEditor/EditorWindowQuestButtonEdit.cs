@@ -7,13 +7,13 @@ using UnityEngine;
 
 public class EditorWindowQuestButtonEdit
 {
-    private readonly StringKey title;
+    private readonly string title;
     private readonly QuestButtonData newButton;
     private readonly QuestButtonData originalButton;
     private readonly Action<QuestButtonData> okAction;
     private static readonly List<QuestButtonAction> QUEST_BUTTON_ACTIONS = Enum.GetValues(typeof(QuestButtonAction)).Cast<QuestButtonAction>().ToList();
 
-    public EditorWindowQuestButtonEdit(StringKey title, QuestButtonData questButton, Action<QuestButtonData> okAction)
+    public EditorWindowQuestButtonEdit(string title, QuestButtonData questButton, Action<QuestButtonData> okAction)
     {
         this.title = title;
         this.originalButton = questButton;

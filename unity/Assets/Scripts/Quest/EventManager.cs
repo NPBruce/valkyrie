@@ -336,7 +336,11 @@ public class EventManager
         else if (!e.qEvent.display)
         {
             // Only raise dialog if there is text, otherwise auto confirm
-            EndEvent();
+
+            var firstEnabledButtonIndex = e.qEvent.buttons
+                .TakeWhile(b => !IsButtonEnabled(b, game.quest.vars))
+                .Count();
+            EndEvent(firstEnabledButtonIndex);
         }
         else
         {
@@ -349,6 +353,11 @@ public class EventManager
             }
             new DialogWindow(e);
         }
+    }
+
+    private static bool IsButtonEnabled(QuestButtonData b, VarManager varManager)
+    {
+        return b.ConditionFailedAction == QuestButtonAction.NONE || !b.HasCondition || varManager.Test(b.Condition);
     }
 
     public void ResumeEvent()
