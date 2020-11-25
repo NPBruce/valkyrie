@@ -1,9 +1,14 @@
-﻿using Assets.Scripts.Content;
-using UnityEngine;
-using FFGAppImport;
-using ValkyrieTools;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using Assets.Scripts.Content;
+using FFGAppImport;
+using SFB;
+using UnityEngine;
+using UnityEngine.UI;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -107,7 +112,7 @@ namespace Assets.Scripts.UI.Screens
             banner.AddComponent<CanvasRenderer>();
 
 
-            UnityEngine.UI.Image image = banner.AddComponent<UnityEngine.UI.Image>();
+            Image image = banner.AddComponent<Image>();
             bannerSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.sprite = bannerSprite;
             image.rectTransform.sizeDelta = new Vector2(18f * UIScaler.GetPixelsPerUnit(), 7f * UIScaler.GetPixelsPerUnit());
@@ -137,7 +142,7 @@ namespace Assets.Scripts.UI.Screens
                     message = D2E_NAME.Translate();
                 } else
                 {
-                    message = D2E_NAME.Translate() + System.Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
+                    message = D2E_NAME.Translate() + Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
                     fontSize = (int) (UIScaler.GetMediumFont() / 1.05f);
                 }
                 ui.SetText(message, startColor);
@@ -211,7 +216,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 else
                 {
-                    message = MOM_NAME.Translate() + System.Environment.NewLine + MOM_APP_NOT_FOUND.Translate();
+                    message = MOM_NAME.Translate() + Environment.NewLine + MOM_APP_NOT_FOUND.Translate();
                     fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
                 }
                 ui.SetText(message, startColor);
@@ -329,27 +334,25 @@ namespace Assets.Scripts.UI.Screens
 
                 game.gameType = new D2EGameType();
 
+               
+                // Load localization before content
+                loadLocalization();
+
                 // Loading list of content - doing this later is not required
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
                 {
-                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
                     Application.Quit();
                 }
-
-                // Load localization before content
-                loadLocalization();
-
-                // Load the base content - pack will be loaded later if required
-                game.cd.LoadContentID("");
 
                 // Download quests list
                 game.questsList = new QuestsManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
 
-                Destroyer.MainMenu();
+                GameStateManager.MainMenu();
             }
         }
 
@@ -367,7 +370,7 @@ namespace Assets.Scripts.UI.Screens
                 if (type.Equals("D2E")) app_filename = "Road to Legend";
                 if (type.Equals("MoM")) app_filename = "Mansions of Madness";
 
-                string[] array_path = SFB.StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
+                string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
 
                 // return when pressing back
                 if (array_path.Length == 0)
@@ -413,20 +416,17 @@ namespace Assets.Scripts.UI.Screens
                 Game game = Game.Get();
                 game.gameType = new MoMGameType();
 
+                // Load localization before content
+                loadLocalization();
+
                 // Loading list of content - doing this later is not required
                 game.cd = new ContentData(game.gameType.DataDirectory());
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
                 {
-                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + System.Environment.NewLine);
+                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
                     Application.Quit();
                 }
-
-                // Load localization before content
-                loadLocalization();
-
-                // Load the base content - pack will be loaded later if required
-                game.cd.LoadContentID("");
 
                 // Download quests list
                 game.questsList = new QuestsManager();
@@ -435,7 +435,7 @@ namespace Assets.Scripts.UI.Screens
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
 
-                Destroyer.MainMenu();
+                GameStateManager.MainMenu();
             }
         }
 
@@ -465,7 +465,8 @@ namespace Assets.Scripts.UI.Screens
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
                 DictionaryI18n ffgDict = new DictionaryI18n();
-                foreach (string file in Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt"))
+                var localizationFiles = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                foreach (string file in localizationFiles)
                 {
                     ffgDict.AddDataFromFile(file);
                 }
@@ -478,6 +479,13 @@ namespace Assets.Scripts.UI.Screens
                     cshDict.AddDataFromFile(file);
                 }
                 LocalizationRead.AddDictionary("csh", cshDict);
+
+                var game = Game.Get();
+                foreach (var packInfo in game.config.GetPackLanguages(game.gameType.TypeName())
+                    .Where(kv => !string.IsNullOrWhiteSpace(kv.Value)))
+                {
+                    LocalizationRead.SetGroupTranslationLanguage(packInfo.Key, packInfo.Value);
+                }
             }
         }
 
@@ -518,7 +526,7 @@ namespace Assets.Scripts.UI.Screens
                     bundle.Unload(false);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
             }

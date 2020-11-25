@@ -54,26 +54,26 @@ namespace Assets.Scripts.UI
         {
             Game game = Game.Get();
             aspect = 0;
-            if (game.cd.tokens.ContainsKey(key))
+            if (game.cd.TryGet(key, out TokenData tokenData))
             {
-                Vector2 texPos = new Vector2(game.cd.tokens[key].x, game.cd.tokens[key].y);
-                Vector2 texSize = new Vector2(game.cd.tokens[key].width, game.cd.tokens[key].height);
-                return ContentData.FileToTexture(game.cd.tokens[key].image, texPos, texSize);
+                Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+                Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+                return ContentData.FileToTexture(tokenData.image, texPos, texSize);
             }
-            else if (game.cd.puzzles.ContainsKey(key))
+            else if (game.cd.TryGet(key, out PuzzleData puzzleData))
             {
-                return ContentData.FileToTexture(game.cd.puzzles[key].image);
+                return ContentData.FileToTexture(puzzleData.image);
             }
-            else if (game.cd.images.ContainsKey(key))
+            else if (game.cd.TryGet(key, out ImageData imageData))
             {
-                Vector2 texPos = new Vector2(game.cd.images[key].x, game.cd.images[key].y);
-                Vector2 texSize = new Vector2(game.cd.images[key].width, game.cd.images[key].height);
-                return ContentData.FileToTexture(game.cd.images[key].image, texPos, texSize);
+                Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                return ContentData.FileToTexture(imageData.image, texPos, texSize);
             }
-            else if (game.cd.tileSides.ContainsKey(key))
+            else if (game.cd.TryGet<TileSideData>(key, out var tileSideData))
             {
-                aspect = game.cd.tileSides[key].aspect;
-                return ContentData.FileToTexture(game.cd.tileSides[key].image);
+                aspect = tileSideData.aspect;
+                return ContentData.FileToTexture(tileSideData.image);
             }
             else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + key))
             {
@@ -98,11 +98,12 @@ namespace Assets.Scripts.UI
             {
                 toDisplay.Reverse();
             }
+            toDisplay.InsertRange(0, alwaysOnTopTraitItems.Values);
 
             float offset = 0;
             float xOffset = 0;
             float yOffset = 4;
-            foreach (SelectionItemTraits item in toDisplay)
+            foreach (SelectionItemTraits item in allItems)
             {
                 bool display = true;
                 foreach (TraitGroup tg in traitData)

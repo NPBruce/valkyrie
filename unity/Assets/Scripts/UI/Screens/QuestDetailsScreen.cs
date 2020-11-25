@@ -1,7 +1,6 @@
-using UnityEngine;
-using System.Collections.Generic;
-using Assets.Scripts.Content;
 using System.IO;
+using Assets.Scripts.Content;
+using UnityEngine;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -159,19 +158,15 @@ namespace Assets.Scripts.UI.Screens
         {
             ValkyrieDebug.Log("INFO: Return to quest list from details screen");
 
-            Destroyer.Dialog();
-
             // Pull up the quest selection page
-            Game.Get().questSelectionScreen.Show();
+            GameStateManager.Quest.List();
         }
 
         // Select a quest
         public void Start(QuestData.Quest q)
         {
             ValkyrieDebug.Log("INFO: Start quest from details screen");
-
-            Destroyer.Dialog();
-            Game.Get().StartQuest(q);
+            GameStateManager.Quest.Start(q);
         }
     }
 }

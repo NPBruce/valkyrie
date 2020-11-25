@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Content;
+﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Content;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -9,6 +11,8 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
+        public static readonly HashSet<string> ENABLED_LANGS = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean".Split(','));
+        
         private static readonly string IMG_LOW_EDITOR_TRANSPARENCY    = "ImageLowEditorTransparency";
         private static readonly string IMG_MEDIUM_EDITOR_TRANSPARENCY = "ImageMediumEditorTransparency";
         private static readonly string IMG_HIGH_EDITOR_TRANSPARENCY   = "ImageHighEditorTransparency";
@@ -21,10 +25,10 @@ namespace Assets.Scripts.UI.Screens
 
         Game game = Game.Get();
 
-        public UnityEngine.UI.Slider musicSlide;
-        public UnityEngine.UI.Slider musicSlideRev;
-        public UnityEngine.UI.Slider effectSlide;
-        public UnityEngine.UI.Slider effectSlideRev;
+        public Slider musicSlide;
+        public Slider musicSlideRev;
+        public Slider effectSlide;
+        public Slider effectSlideRev;
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public OptionsScreen()
@@ -63,7 +67,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.MainMenu);
+            ui.SetButton(GameStateManager.MainMenu);
             new UIElementBorder(ui, Color.red);
         }
 
@@ -79,7 +83,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            Texture2D SampleTex = ContentData.FileToTexture(game.cd.images[IMG_LOW_EDITOR_TRANSPARENCY].image);
+            Texture2D SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_LOW_EDITOR_TRANSPARENCY).image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter()-3, 8, 6, 6);
@@ -88,7 +92,7 @@ namespace Assets.Scripts.UI.Screens
             if(game.editorTransparency == 0.2f)
                 new UIElementBorder(ui, Color.white);
 
-            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_MEDIUM_EDITOR_TRANSPARENCY].image);
+            SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_MEDIUM_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 15, 6, 6);
@@ -97,7 +101,7 @@ namespace Assets.Scripts.UI.Screens
             if (game.editorTransparency == 0.3f)
                 new UIElementBorder(ui, Color.white);
             
-            SampleTex = ContentData.FileToTexture(game.cd.images[IMG_HIGH_EDITOR_TRANSPARENCY].image);
+            SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_HIGH_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
             ui.SetLocation(UIScaler.GetHCenter() - 3, 22, 6, 6);
@@ -129,7 +133,7 @@ namespace Assets.Scripts.UI.Screens
             GameObject musicSlideObj = new GameObject("musicSlide");
             musicSlideObj.tag = Game.DIALOG;
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
-            musicSlide = musicSlideObj.AddComponent<UnityEngine.UI.Slider>();
+            musicSlide = musicSlideObj.AddComponent<Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
@@ -138,8 +142,8 @@ namespace Assets.Scripts.UI.Screens
             GameObject musicFill = new GameObject("musicfill");
             musicFill.tag = Game.DIALOG;
             musicFill.transform.SetParent(musicSlideObj.transform);
-            musicFill.AddComponent<UnityEngine.UI.Image>();
-            musicFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            musicFill.AddComponent<Image>();
+            musicFill.GetComponent<Image>().color = Color.white;
             musicSlide.fillRect = musicFill.GetComponent<RectTransform>();
             musicSlide.fillRect.offsetMin = Vector2.zero;
             musicSlide.fillRect.offsetMax = Vector2.zero;
@@ -148,18 +152,18 @@ namespace Assets.Scripts.UI.Screens
             GameObject musicSlideObjRev = new GameObject("musicSlideRev");
             musicSlideObjRev.tag = Game.DIALOG;
             musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
-            musicSlideRev = musicSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
+            musicSlideRev = musicSlideObjRev.AddComponent<Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
-            musicSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
+            musicSlideRev.direction = Slider.Direction.RightToLeft;
 
             GameObject musicFillRev = new GameObject("musicfillrev");
             musicFillRev.tag = Game.DIALOG;
             musicFillRev.transform.SetParent(musicSlideObjRev.transform);
-            musicFillRev.AddComponent<UnityEngine.UI.Image>();
-            musicFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
+            musicFillRev.AddComponent<Image>();
+            musicFillRev.GetComponent<Image>().color = Color.clear;
             musicSlideRev.fillRect = musicFillRev.GetComponent<RectTransform>();
             musicSlideRev.fillRect.offsetMin = Vector2.zero;
             musicSlideRev.fillRect.offsetMax = Vector2.zero;
@@ -187,7 +191,7 @@ namespace Assets.Scripts.UI.Screens
             GameObject effectSlideObj = new GameObject("effectSlide");
             effectSlideObj.tag = Game.DIALOG;
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
-            effectSlide = effectSlideObj.AddComponent<UnityEngine.UI.Slider>();
+            effectSlide = effectSlideObj.AddComponent<Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
@@ -200,8 +204,8 @@ namespace Assets.Scripts.UI.Screens
             GameObject effectFill = new GameObject("effectFill");
             effectFill.tag = Game.DIALOG;
             effectFill.transform.SetParent(effectSlideObj.transform);
-            effectFill.AddComponent<UnityEngine.UI.Image>();
-            effectFill.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            effectFill.AddComponent<Image>();
+            effectFill.GetComponent<Image>().color = Color.white;
             effectSlide.fillRect = effectFill.GetComponent<RectTransform>();
             effectSlide.fillRect.offsetMin = Vector2.zero;
             effectSlide.fillRect.offsetMax = Vector2.zero;
@@ -210,19 +214,19 @@ namespace Assets.Scripts.UI.Screens
             GameObject effectSlideObjRev = new GameObject("effectSlideRev");
             effectSlideObjRev.tag = Game.DIALOG;
             effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
-            effectSlideRev = effectSlideObjRev.AddComponent<UnityEngine.UI.Slider>();
+            effectSlideRev = effectSlideObjRev.AddComponent<Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
-            effectSlideRev.direction = UnityEngine.UI.Slider.Direction.RightToLeft;
+            effectSlideRev.direction = Slider.Direction.RightToLeft;
             effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
 
             GameObject effectFillRev = new GameObject("effectFillRev");
             effectFillRev.tag = Game.DIALOG;
             effectFillRev.transform.SetParent(effectSlideObjRev.transform);
-            effectFillRev.AddComponent<UnityEngine.UI.Image>();
-            effectFillRev.GetComponent<UnityEngine.UI.Image>().color = Color.clear;
+            effectFillRev.AddComponent<Image>();
+            effectFillRev.GetComponent<Image>().color = Color.clear;
             effectSlideRev.fillRect = effectFillRev.GetComponent<RectTransform>();
             effectSlideRev.fillRect.offsetMin = Vector2.zero;
             effectSlideRev.fillRect.offsetMax = Vector2.zero;
@@ -251,7 +255,7 @@ namespace Assets.Scripts.UI.Screens
 
             string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech".Split(','); // Japanese removed to fit into screen
             // For now, the languages below are available.
-            HashSet<string> enabled_langs = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean".Split(','));
+            HashSet<string> enabled_langs = ENABLED_LANGS;
 
             //The first button in the list of buttons should start in this vertical coordinate
             float verticalStart = UIScaler.GetVCenter(-2f) - langs.Length;
@@ -350,7 +354,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.Save();
             game.currentLang = newLang;
             LocalizationRead.changeCurrentLangTo(newLang);
-            ValkyrieDebug.Log("new current language stablished:" + newLang + System.Environment.NewLine);
+            ValkyrieDebug.Log("new current language stablished:" + newLang + Environment.NewLine);
 
             new OptionsScreen();
 

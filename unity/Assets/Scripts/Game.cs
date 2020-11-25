@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
-using Assets.Scripts.UI.Screens;
-using Assets.Scripts.UI;
-using Assets.Scripts;
-using ValkyrieTools;
-using Ionic.Zip;
+using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Assets.Scripts.Content;
+using Assets.Scripts.UI;
+using Assets.Scripts.UI.Screens;
+using Ionic.Zip;
+using UnityEngine;
+using ValkyrieTools;
 
 // General controller for the game
 // There is one object of this class and it is used to find most game components
@@ -36,7 +39,12 @@ public class Game : MonoBehaviour
 
     // These components are referenced here for easy of use
     // Data included in content packs
-    public ContentData cd;
+    public ContentData cd
+    {
+        get => _cd;
+        internal set { _cd = value; _contentLoader = new ContentLoader(value);}
+    }
+
     // Data for the current quest
     public Quest quest;
     // Canvas for UI components (fixed on screen)
@@ -90,6 +98,9 @@ public class Game : MonoBehaviour
     public GameObject go_questSelectionScreen = null;
     public QuestSelectionScreen questSelectionScreen = null;
 
+    private ContentLoader _contentLoader;
+    public ContentLoader ContentLoader => _contentLoader;
+
     // Current language
     public string currentLang;
 
@@ -100,7 +111,9 @@ public class Game : MonoBehaviour
     public bool debugTests = false;
 
     // main thread Id
-    public System.Threading.Thread mainThread = null;
+    public Thread mainThread = null;
+    private ContentData _cd;
+
 
     // This is used all over the place to find the game object.  Game then provides acces to common objects
     public static Game Get()
@@ -109,18 +122,28 @@ public class Game : MonoBehaviour
         {
             game = FindObjectOfType<Game>();
         }
+        
         return game;
+    }
+
+    internal string CurrentQuestPath()
+    {
+        return quest?.originalPath;
     }
 
     // Unity fires off this function
     void Awake()
     {
         // save main thread Id
-        mainThread = System.Threading.Thread.CurrentThread;
+        mainThread = Thread.CurrentThread;
 
         // used for float.TryParse
-        mainThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-        mainThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+        mainThread.CurrentCulture = CultureInfo.InvariantCulture;
+        mainThread.CurrentUICulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
         // Set specific configuration for Android 
         if (Application.platform == RuntimePlatform.Android)
@@ -133,13 +156,13 @@ public class Game : MonoBehaviour
         }
 
         // Find the common objects we use.  These are created by unity.
-        cc = GameObject.FindObjectOfType<CameraController>();
+        cc = FindObjectOfType<CameraController>();
         uICanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         boardCanvas = GameObject.Find("BoardCanvas").GetComponent<Canvas>();
         tokenCanvas = GameObject.Find("TokenCanvas").GetComponent<Canvas>();
-        tokenBoard = GameObject.FindObjectOfType<TokenBoard>();
-        heroCanvas = GameObject.FindObjectOfType<HeroCanvas>();
-        monsterCanvas = GameObject.FindObjectOfType<MonsterCanvas>();
+        tokenBoard = FindObjectOfType<TokenBoard>();
+        heroCanvas = FindObjectOfType<HeroCanvas>();
+        monsterCanvas = FindObjectOfType<MonsterCanvas>();
 
         // Create some things
         uiScaler = new UIScaler(uICanvas);
@@ -175,7 +198,7 @@ public class Game : MonoBehaviour
         // On android extract streaming assets for use
         if (Application.platform == RuntimePlatform.Android)
         {
-            System.IO.Directory.CreateDirectory(ContentData.ContentPath());
+            Directory.CreateDirectory(ContentData.ContentPath());
             using (ZipFile jar = ZipFile.Read(Application.dataPath))
             {
                 foreach (ZipEntry e in jar)
@@ -189,7 +212,8 @@ public class Game : MonoBehaviour
         }
 
         DictionaryI18n valDict = new DictionaryI18n();
-        foreach (string file in System.IO.Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt"))
+        var localizationFiles = Directory.GetFiles(ContentData.ContentPath() + "../text", "Localization*.txt");
+        foreach (string file in localizationFiles)
         {
             valDict.AddDataFromFile(file);
         }
@@ -201,7 +225,7 @@ public class Game : MonoBehaviour
         TextAsset versionFile = Resources.Load("version") as TextAsset;
         version = versionFile.text.Trim();
         // The newline at the end stops the stack trace appearing in the log
-        ValkyrieDebug.Log("Valkyrie Version: " + version + System.Environment.NewLine);
+        ValkyrieDebug.Log("Valkyrie Version: " + version + Environment.NewLine);
 
 #if UNITY_STANDALONE_WIN
         SetScreenOrientationToLandscape();
@@ -219,10 +243,10 @@ public class Game : MonoBehaviour
         {
             foreach (KeyValuePair<string, string> kv in packs)
             {
-                cd.LoadContentID(kv.Key);
+                _contentLoader.LoadContentID(kv.Key);
             }
         }
-
+            
         // Pull up the quest selection page
         if (questSelectionScreen == null)
         {
@@ -241,7 +265,7 @@ public class Game : MonoBehaviour
         // We load all packs for the editor, not just those selected
         foreach (string pack in cd.GetPacks())
         {
-            cd.LoadContent(pack);
+            _contentLoader.LoadContent(pack);
         }
 
         // Pull up the quest selection page
@@ -249,7 +273,7 @@ public class Game : MonoBehaviour
     }
 
     // This is called when a quest is selected
-    public void StartQuest(QuestData.Quest q)
+    internal void StartQuest(QuestData.Quest q)
     {
         if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
         {
@@ -264,7 +288,7 @@ public class Game : MonoBehaviour
         heroCanvas.SetupUI();
 
         // Add a finished button to start the quest
-        UIElement ui = new UIElement(Game.HEROSELECT);
+        UIElement ui = new UIElement(HEROSELECT);
         ui.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-2.5f), 8, 2);
         ui.SetText(CommonStringKeys.FINISHED, Color.green);
         ui.SetFont(gameType.GetHeaderFont());
@@ -273,7 +297,7 @@ public class Game : MonoBehaviour
         new UIElementBorder(ui, Color.green);
 
         // Add a title to the page
-        ui = new UIElement(Game.HEROSELECT);
+        ui = new UIElement(HEROSELECT);
         ui.SetLocation(8, 1, UIScaler.GetWidthUnits() - 16, 3);
         ui.SetText(new StringKey("val", "SELECT", gameType.HeroesName()));
         ui.SetFont(gameType.GetHeaderFont());
@@ -281,12 +305,12 @@ public class Game : MonoBehaviour
 
         heroCanvas.heroSelection = new HeroSelection();
 
-        ui = new UIElement(Game.HEROSELECT);
+        ui = new UIElement(HEROSELECT);
         ui.SetLocation(0.5f, UIScaler.GetBottom(-2.5f), 8, 2);
         ui.SetText(CommonStringKeys.BACK, Color.red);
         ui.SetFont(gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Destroyer.QuestSelect);
+        ui.SetButton(GameStateManager.Quest.Restart);
         new UIElementBorder(ui, Color.red);
     }
 
@@ -295,7 +319,7 @@ public class Game : MonoBehaviour
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Quest.Hero h in Game.Get().quest.heroes)
+        foreach (Quest.Hero h in Get().quest.heroes)
         {
             if (h.heroData != null) count++;
         }
@@ -333,7 +357,7 @@ public class Game : MonoBehaviour
         if (quest.defaultMusicOn)
         {
             // Start quest music
-            foreach (AudioData ad in cd.audio.Values)
+            foreach (AudioData ad in cd.Values<AudioData>())
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }
@@ -416,7 +440,7 @@ public class Game : MonoBehaviour
                 return appData;
             }
         }
-        return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "Valkyrie");
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Valkyrie");
     }
 
     public void AddUpdateListener(IUpdateListener obj)
@@ -425,7 +449,7 @@ public class Game : MonoBehaviour
     }
 
 #if UNITY_STANDALONE_WIN
-    [System.Runtime.InteropServices.DllImport("User32.dll")]
+    [DllImport("User32.dll")]
     private static extern bool SetDisplayAutoRotationPreferences(int value);
 
     private static void SetScreenOrientationToLandscape()
@@ -436,7 +460,7 @@ public class Game : MonoBehaviour
             (int)ORIENTATION_PREFERENCE.ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED);
         }
 
-        catch (System.EntryPointNotFoundException e)
+        catch (EntryPointNotFoundException e)
         {
             Debug.Log("Exception triggered and caught :" + e.GetType().Name);
             Debug.Log("message :" + e.Message);

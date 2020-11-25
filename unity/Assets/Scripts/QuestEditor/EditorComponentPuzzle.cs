@@ -109,7 +109,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
             ui.SetText(new StringKey("val", "X_COLON", IMAGE));
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 8, 1);
+            ui.SetLocation(5, offset, 14, 1);
             ui.SetText(puzzleComponent.imageType);
             ui.SetButton(delegate { Image(); });
             new UIElementBorder(ui);
@@ -279,9 +279,9 @@ public class EditorComponentPuzzle : EditorComponentEvent
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        foreach (KeyValuePair<string, PuzzleData> kv in Game.Get().cd.puzzles)
+        foreach (PuzzleData puzzleData in Game.Get().cd.Values<PuzzleData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(puzzleData);
         }
         select.ExcludeExpansions();
         select.Draw();

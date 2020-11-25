@@ -6,6 +6,7 @@ using ValkyrieTools;
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
+using System.Linq;
 
 // Class for managing quest events
 public class EventManager
@@ -64,9 +65,9 @@ public class EventManager
         }
 
         // Add game content perils as available events
-        foreach (KeyValuePair<string, PerilData> kv in game.cd.perils)
+        foreach (string perilKey in game.cd.Keys<PerilData>())
         {
-            events.Add(kv.Key, new Peril(kv.Key));
+            events.Add(perilKey, new Peril(perilKey));
         }
 
         if (data != null)
@@ -173,9 +174,9 @@ public class EventManager
         }
 
         // Play audio
-        if (game.cd.audio.ContainsKey(e.qEvent.audio))
+        if (game.cd.TryGet(e.qEvent.audio, out AudioData audioData))
         {
-            game.audioControl.Play(game.cd.audio[e.qEvent.audio].file);
+            game.audioControl.Play(audioData.file);
         }
         else if (e.qEvent.audio.Length > 0)
         {
@@ -188,9 +189,9 @@ public class EventManager
             List<string> music = new List<string>();
             foreach (string s in e.qEvent.music)
             {
-                if (game.cd.audio.ContainsKey(s))
+                if (game.cd.TryGet(s, out AudioData musicData))
                 {
-                    music.Add(game.cd.audio[s].file);
+                    music.Add(musicData.file);
                 }
                 else
                 {
@@ -335,7 +336,11 @@ public class EventManager
         else if (!e.qEvent.display)
         {
             // Only raise dialog if there is text, otherwise auto confirm
-            EndEvent();
+
+            var firstEnabledButtonIndex = e.qEvent.buttons
+                .TakeWhile(b => !IsButtonEnabled(b, game.quest.vars))
+                .Count();
+            EndEvent(firstEnabledButtonIndex);
         }
         else
         {
@@ -348,6 +353,11 @@ public class EventManager
             }
             new DialogWindow(e);
         }
+    }
+
+    private static bool IsButtonEnabled(QuestButtonData b, VarManager varManager)
+    {
+        return b.ConditionFailedAction == QuestButtonAction.NONE || !b.HasCondition || varManager.Test(b.Condition);
     }
 
     public void ResumeEvent()
@@ -399,9 +409,9 @@ public class EventManager
     {
         // Get list of next events
         List<string> eventList = new List<string>();
-        if (eventData.nextEvent.Count > state)
+        if (eventData.buttons.Count > state)
         {
-            eventList = eventData.nextEvent[state];
+            eventList = eventData.buttons[state].EventNames;
         }
 
         // Only take enabled events from list
@@ -442,7 +452,7 @@ public class EventManager
              || !Path.GetFileName(game.quest.originalPath).EndsWith(".valkyrie") )
             {
                 // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
-                Destroyer.MainMenu();
+                GameStateManager.MainMenu();
             }
             else
             {
@@ -626,7 +636,7 @@ public class EventManager
                     return game.quest.heroSelection[component.sectionName][0].heroData.name.Translate();
                 case "Tile":
                     // Replaced with the name of the Tile
-                    return game.cd.tileSides[((QuestData.Tile)component).tileSideName].name.Translate();
+                    return game.cd.Get<TileSideData>(((QuestData.Tile)component).tileSideName).name.Translate();
                 case "CustomMonster":
                     // Replaced with the custom nonster name
                     return ((QuestData.CustomMonster)component).monsterName.Translate();
@@ -639,8 +649,10 @@ public class EventManager
                     string monsterName = game.quest.monsterSelect[component.sectionName];
                     if (monsterName.StartsWith("Custom")) {
                         return ((QuestData.CustomMonster)game.quest.qd.components[monsterName]).monsterName.Translate();
-                    } else {
-                        return game.cd.monsters[game.quest.monsterSelect[component.sectionName]].name.Translate();
+                    } else
+                    {
+                        var monsterData = game.cd.Get<MonsterData>(game.quest.monsterSelect[component.sectionName]);
+                        return monsterData.name.Translate();
                     }
                 case "QItem":
                     if (!game.quest.itemSelect.ContainsKey(component.sectionName))
@@ -648,7 +660,8 @@ public class EventManager
                         return component.sectionName;
                     }
                     // Replaced with the first element in the list
-                    return game.cd.items[game.quest.itemSelect[component.sectionName]].name.Translate();
+                    var itemData = game.cd.Get<ItemData>(game.quest.itemSelect[component.sectionName]);
+                    return itemData.name.Translate();
                 default:
                     return component.sectionName;
             }
@@ -671,8 +684,15 @@ public class EventManager
 
             for (int i = 0; i < qEvent.buttons.Count; i++)
             {
-                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i], qEvent.buttonColors[i]));
+                buttons.Add(new DialogWindow.EventButton(qEvent.buttons[i]));
             }
+
+            // If there are no enabled buttons - add a default continue button
+            if (!buttons.Where(b => b.action == QuestButtonAction.NONE || Game.Get().quest.vars.Test(b.condition)).Any())
+            {
+                buttons.Add(new DialogWindow.EventButton(new QuestButtonData(CommonStringKeys.CONTINUE)));
+            }
+            
             return buttons;
         }
 
@@ -682,9 +702,9 @@ public class EventManager
             // If the event can't be canceled it must have buttons
             if (!qEvent.cancelable) return true;
             // Check if any of the next events are enabled
-            foreach (List<string> l in qEvent.nextEvent)
+            foreach (QuestButtonData l in qEvent.buttons)
             {
-                foreach (string s in l)
+                foreach (string s in l.EventNames)
                 {
                     // Check if the event doesn't exists - quest fault
                     if (!game.quest.eManager.events.ContainsKey(s))
@@ -767,7 +787,7 @@ public class EventManager
             }
             else
             {
-                cMonster = game.cd.monsters[t];
+                cMonster = game.cd.Get<MonsterData>(t);
             }
         }
 
@@ -798,8 +818,8 @@ public class EventManager
         public Peril(string name) : base(name)
         {
             // Event is pulled from content data not quest data
-            qEvent = game.cd.perils[name] as QuestData.Event;
-            cPeril = qEvent as PerilData;
+            cPeril = game.cd.Get<PerilData>(name);
+            qEvent = cPeril;
         }
     }
 

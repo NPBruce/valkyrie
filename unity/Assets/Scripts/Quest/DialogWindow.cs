@@ -80,7 +80,7 @@ public class DialogWindow {
         float hOffset = UIScaler.GetWidthUnits() - 19f;
         float hOffsetCancel = 11;
         float offsetCancel = offset;
-
+        
         List<DialogWindow.EventButton> buttons = eventData.GetButtons();
         foreach (EventButton eb in buttons)
         {
@@ -94,16 +94,35 @@ public class DialogWindow {
             }
         }
 
-        int num = 1;
+        
+        var varManager = Game.Get().quest.vars;
+        
+        int num = 0;
         foreach (EventButton eb in buttons)
         {
-            int numTmp = num++;
+            var numTmp = num++;
+            // Handle condition failure
+            var buttonConditionFailed = eb.condition != null && !varManager.Test(eb.condition);
+            if (buttonConditionFailed && eb.action == QuestButtonAction.HIDE)
+            {
+                continue;
+            }
             ui = new UIElement();
             ui.SetLocation(hOffset, offset, buttonWidth, 2);
-            ui.SetText(eb.GetLabel(), eb.colour);
-            ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate { onButton(numTmp); });
-            new UIElementBorder(ui, eb.colour);
+            if (buttonConditionFailed && eb.action == QuestButtonAction.DISABLE)
+            {
+                ui.SetText(eb.GetLabel(), Color.gray);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui, Color.gray);
+            }
+            else
+            {
+                ui.SetText(eb.GetLabel(), eb.colour);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui, eb.colour);
+                ui.SetButton(delegate { onButton(numTmp); });
+            }
+
             offset += 2.5f;
         }
 
@@ -207,7 +226,8 @@ public class DialogWindow {
 
         if (!game.quest.itemSelect.ContainsKey(item)) return;
 
-        Texture2D tex = ContentData.FileToTexture(game.cd.items[game.quest.itemSelect[item]].image);
+        var selectedItemData = game.cd.Get<ItemData>(game.quest.itemSelect[item]);
+        Texture2D tex = ContentData.FileToTexture(selectedItemData.image);
         Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
 
         UIElement ui = new UIElement();
@@ -216,7 +236,7 @@ public class DialogWindow {
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-22.5f), 6.5f, 9, 1);
-        ui.SetText(game.cd.items[game.quest.itemSelect[item]].name);
+        ui.SetText(selectedItemData.name);
     }
 
     public void quotaDec()
@@ -239,7 +259,7 @@ public class DialogWindow {
         if (eventData.qEvent.quotaVar.Length > 0)
         {
             game.quest.vars.SetValue(eventData.qEvent.quotaVar, quota);
-            onButton(1);
+            onButton(0);
             return;
         }
         
@@ -254,11 +274,11 @@ public class DialogWindow {
         if (game.quest.eventQuota[eventData.qEvent.sectionName] >= eventData.qEvent.quota)
         {
             game.quest.eventQuota.Remove(eventData.qEvent.sectionName);
-            onButton(1);
+            onButton(0);
         }
         else
         {
-            onButton(2);
+            onButton(1);
         }
     }
 
@@ -293,7 +313,7 @@ public class DialogWindow {
         game.quest.eventList.Add(eventData.qEvent.sectionName);
 
         // Event manager handles the aftermath
-        game.quest.eManager.EndEvent(num-1);
+        game.quest.eManager.EndEvent(num);
     }
 
     // Check that the correct number of heroes are selected
@@ -341,11 +361,13 @@ public class DialogWindow {
     {
         StringKey label = StringKey.NULL;
         public Color32 colour = Color.white;
+        public VarTests condition = null;
+        public QuestButtonAction action = QuestButtonAction.NONE;
 
-        public EventButton(StringKey newLabel,string newColour)
+        public EventButton(QuestButtonData buttonData)
         {
-            label = newLabel;
-            string colorRGB = ColorUtil.FromName(newColour);      
+            label = buttonData.Label;
+            string colorRGB = ColorUtil.FromName(buttonData.Color);      
 
             // Check format is valid
             if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
@@ -362,6 +384,9 @@ public class DialogWindow {
                 colour.a = (byte)System.Convert.ToByte(colorRGB.Substring(7, 2), 16);
             else
                 colour.a = 255; // opaque by default
+
+            this.condition = buttonData.Condition;
+            this.action = buttonData.ConditionFailedAction;
         }
 
         public StringKey GetLabel()

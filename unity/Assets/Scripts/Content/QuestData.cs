@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Assets.Scripts.Content;
 using ValkyrieTools;
@@ -240,11 +242,7 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             source = "tiles.ini";
-            foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
-            {
-                tileSideName = kv.Key;
-                break;
-            }
+            tileSideName = game.cd.Keys<TileSideData>().FirstOrDefault();
         }
 
         // Create tile from ini data
@@ -589,12 +587,8 @@ public class QuestData
             typeDynamic = type;
             Game game = Game.Get();
             mTypes = new string[1];
-            // This gets the first type available, because we need something
-            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
-            {
-                mTypes[0] = kv.Key;
-                break;
-            }
+            mTypes[0] = game.cd.Keys<MonsterData>().First();
+            
             mTraitsRequired = new string[0];
             mTraitsPool = new string[0];
 
@@ -760,10 +754,8 @@ public class QuestData
         new public static string type = "Event";
 
         public bool display = true;
-        public List<StringKey> buttons;
-        public List<string> buttonColors;
         public string trigger = "";
-        public List<List<string>> nextEvent;
+        public List<QuestButtonData> buttons;
         public string heroListName = "";
         public int minHeroes = 0;
         public int maxHeroes = 0;
@@ -789,9 +781,7 @@ public class QuestData
             source = "events.ini";
             display = false;
             typeDynamic = type;
-            nextEvent = new List<List<string>>();
-            buttons = new List<StringKey>();
-            buttonColors = new List<string>();
+            buttons = new List<QuestButtonData>();
             addComponents = new string[0];
             removeComponents = new string[0];
             operations = new List<VarOperation>();
@@ -817,9 +807,7 @@ public class QuestData
                 bool.TryParse(data["highlight"], out highlight);
             }
 
-            nextEvent = new List<List<string>>();
-            buttons = new List<StringKey>();
-            buttonColors = new List<string>();
+            buttons = new List<QuestButtonData>();
 
             int buttonCount = 0;
             if (data.ContainsKey("buttons"))
@@ -835,24 +823,7 @@ public class QuestData
 
             for (int buttonNum = 1; buttonNum <= buttonCount; buttonNum++)
             {
-                buttons.Add(genQuery("button" + buttonNum));
-                if (data.ContainsKey("event" + buttonNum) && (data["event" + buttonNum].Trim().Length > 0))
-                {
-                    nextEvent.Add(new List<string>(data["event" + buttonNum].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries)));
-                }
-                else
-                {
-                    nextEvent.Add(new List<string>());
-                }
-
-                if (data.ContainsKey("buttoncolor" + buttonNum) && display)
-                {
-                    buttonColors.Add(data["buttoncolor" + buttonNum]);
-                }
-                else
-                {
-                    buttonColors.Add("white");
-                }
+                buttons.Add(QuestButtonDataSerializer.FromData(data, buttonNum, sectionName));
             }
 
             // Heros from another event can be hilighted
@@ -949,7 +920,7 @@ public class QuestData
             {
                 for (int i = 1; i <= buttons.Count; i++)
                 {
-                    buttons[i - 1] = new StringKey("qst", newName + '.' + "button" + i);
+                    buttons[i - 1].Label = new StringKey("qst", newName + '.' + "button" + i);
                 }
             }
 
@@ -958,24 +929,27 @@ public class QuestData
             {
                 heroListName = newName;
             }
+
+            bool isRemoveOperation = newName == string.Empty;
             // a next event is changed
-            for (int i = 0; i < nextEvent.Count; i++)
+            for (int i = 0; i < buttons.Count; i++)
             {
-                for (int j = 0; j < nextEvent[i].Count; j++)
+                List<string> eventNames = buttons[i].EventNames;
+            
+                // Handle event removal
+                if (isRemoveOperation)
                 {
-                    if (nextEvent[i][j].Equals(oldName))
-                    {
-                        nextEvent[i][j] = newName;
-                    }
+                    eventNames.Remove(oldName);
+                    continue;
                 }
-            }
-            // If next event is deleted, trim array
-            for (int i = 0; i < nextEvent.Count; i++)
-            {
-                bool removed = true;
-                while (removed)
+                
+                // Handle event name change
+                for (int j = 0; j < eventNames.Count; j++)
                 {
-                    removed = nextEvent[i].Remove("");
+                    if (eventNames[j].Equals(oldName))
+                    {
+                        eventNames[j] = newName;
+                    }
                 }
             }
 
@@ -1030,29 +1004,9 @@ public class QuestData
 
             r += "buttons=" + buttons.Count + nl;
 
-            int buttonNum = 1;
-            foreach (List<string> l in nextEvent)
+            foreach (var i in buttons.Select((b, i) => new { index = i + 1, buttonData = b }))
             {
-                r += "event" + buttonNum++ + "=";
-                foreach (string s in l)
-                {
-                    r += s + " ";
-                }
-                if (l.Count > 0)
-                {
-                    r = r.Substring(0, r.Length - 1);
-                }
-                r += nl;
-            }
-
-            buttonNum = 1;
-            foreach (string s in buttonColors)
-            {
-                if (!s.Equals("white"))
-                {
-                    r += "buttoncolor" + buttonNum + "=\"" + s + "\"" + nl;
-                }
-                buttonNum++;
+                r += QuestButtonDataSerializer.ToEventString(i.index, i.buttonData);
             }
 
             if (!heroListName.Equals(""))
@@ -1201,9 +1155,7 @@ public class QuestData
         {
             source = "puzzles.ini";
             typeDynamic = type;
-            nextEvent.Add(new List<string>());
-            buttonColors.Add("white");
-            buttons.Add(genQuery("button1"));
+            buttons.Add(new QuestButtonData(genQuery("button1")));
             LocalizationRead.updateScenarioText(genKey("button1"),
                 new StringKey("val","PUZZLE_GUESS").Translate());
         }
@@ -1275,7 +1227,7 @@ public class QuestData
     }
 
     // Super class for all quest components
-    public class QuestComponent
+    public class QuestComponent: ITestable
     {
         // Source file
         public string source = "";
@@ -1295,6 +1247,8 @@ public class QuestData
         // Var tests and operations if required
         public VarTests tests = null;
         public List<VarOperation> operations = null;
+        public VarTests Tests => tests;
+        public List<VarOperation> Operations => operations;
 
         private static char DOT = '.';
         public string genKey(string element)
@@ -1899,7 +1853,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 13;
+        public static int currentFormat = 15;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;

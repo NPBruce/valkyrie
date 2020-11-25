@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
-using ValkyrieTools;
 
 // In quest game menu
 public class GameMenu {
@@ -103,19 +101,6 @@ public class GameMenu {
 
     public static void Editor()
     {
-        Game game = Game.Get();
-        string path = game.quest.questPath;
-        Destroyer.Destroy();
-
-        foreach (string pack in game.cd.GetPacks())
-        {
-            game.cd.LoadContent(pack);
-        }
-
-        // Stop music
-        game.audioControl.StopMusic();
-
-        ValkyrieDebug.Log("Starting Editor" + System.Environment.NewLine);
-        QuestEditor.Begin(path);
+        GameStateManager.Editor.EditCurrentQuest();
     }
 }

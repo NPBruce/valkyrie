@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -277,7 +276,7 @@ public class EditorComponentCustomMonster : EditorComponent
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(3, offset, 13.5f, 1);
+            ui.SetLocation(5, offset, 14, 1);
             ui.SetText(monsterComponent.imagePath);
             ui.SetButton(delegate { SetImage(); });
             new UIElementBorder(ui);
@@ -546,11 +545,11 @@ public class EditorComponentCustomMonster : EditorComponent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetBase, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
-        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monster in game.cd.Values<MonsterData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(monster);
         }
         select.ExcludeExpansions();
         select.Draw();
@@ -684,7 +683,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetActivation, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
         {
@@ -747,10 +746,9 @@ public class EditorComponentCustomMonster : EditorComponent
         Game game = Game.Get();
 
         HashSet<string> traits = new HashSet<string>();
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (MonsterData monster in game.cd.Values<MonsterData>())
         {
-
-            foreach (string s in kv.Value.traits)
+            foreach (string s in monster.traits)
             {
                 traits.Add(s);
             }
@@ -846,11 +844,9 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionList select = new UIWindowSelectionList(NewInvestigatorAttack, new StringKey("val", "SELECT", CommonStringKeys.TYPE));
 
-        HashSet<string> attackTypes = new HashSet<string>();
-        foreach (AttackData a in Game.Get().cd.investigatorAttacks.Values)
-        {
-            attackTypes.Add(a.attackType);
-        }
+        HashSet<string> attackTypes = Game.Get().cd.Values<AttackData>()
+            .Select(a => a.attackType)
+            .ToSet();
 
         foreach(string s in attackTypes)
         {
@@ -1008,7 +1004,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetEvade, new StringKey("val", "SELECT", new StringKey("val", "EVADE")));
         
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {
@@ -1041,7 +1037,7 @@ public class EditorComponentCustomMonster : EditorComponent
     {
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectSetHorror, new StringKey("val", "SELECT", new StringKey("val", "horror")));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
         {

@@ -1,21 +1,27 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
-using Assets.Scripts.UI;
-using ValkyrieTools;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.Screens
 {
     // Class for content (expansions) selection page
     public class ContentSelectScreen
     {
-        private StringKey SELECT_EXPANSION = new StringKey("val","SELECT_EXPANSION");
+        private const int LARGE_FONT_LIMIT = 32;
+
+        private StringKey SELECT_EXPANSION = new StringKey("val", "SELECT_EXPANSION");
 
         public Game game;
+
         // List of expansions selected by ID
         public List<string> selected;
 
         public Dictionary<string, List<UIElement>> buttons;
+        public Dictionary<string, UIElement> languageButtons;
+        private static readonly StringKey DEFAULT_LANGUAGE_KEY = CommonStringKeys.BASE;
 
         // Create page
         public ContentSelectScreen()
@@ -24,7 +30,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             game = Game.Get();
 
-            if (game.cd.packTypes.Count > 1)
+            if (game.cd.Count<PackTypeData>() > 1)
             {
                 DrawTypeList();
             }
@@ -50,7 +56,7 @@ namespace Assets.Scripts.UI.Screens
             float offset = 4.5f;
             bool left = true;
             // Note this is currently unordered
-            foreach (PackTypeData type in game.cd.packTypes.Values)
+            foreach (PackTypeData type in game.cd.Values<PackTypeData>())
             {
                 // Create a sprite with the category image
                 Texture2D tex = ContentData.FileToTexture(type.image);
@@ -66,6 +72,7 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetLocation(UIScaler.GetWidthUnits() - 9, offset, 6, 6);
                 }
+
                 ui.SetImage(tex);
                 ui.SetButton(delegate { DrawList(typeId); });
                 new UIElementBorder(ui);
@@ -79,6 +86,7 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                 }
+
                 ui.SetBGColor(Color.white);
                 ui.SetButton(delegate { DrawList(typeId); });
 
@@ -91,6 +99,7 @@ namespace Assets.Scripts.UI.Screens
                 {
                     ui.SetLocation(11, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                 }
+
                 ui.SetBGColor(Color.white);
                 ui.SetText(type.name, Color.black);
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -122,14 +131,9 @@ namespace Assets.Scripts.UI.Screens
             selected = new List<string>();
 
             // Fetch which packs are selected from the current config (items under [Packs])
-            Dictionary<string, string> setPacks = game.config.data.Get(game.gameType.TypeName() + "Packs");
-            if (setPacks != null)
+            foreach (var pack in game.config.GetPacks(game.gameType.TypeName()))
             {
-                foreach (KeyValuePair<string, string> kv in setPacks)
-                {
-                    // As packs are just a list, only the key is used, value is empty
-                    selected.Add(kv.Key);
-                }
+                selected.Add(pack);
             }
 
             // Draw a header
@@ -144,9 +148,11 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(scrollArea);
 
             buttons = new Dictionary<string, List<UIElement>>();
+            languageButtons = new Dictionary<string, UIElement>();
             // Start here
             float offset = 0.5f;
             bool left = true;
+            var packLanguages = game.config.GetPackLanguages(game.gameType.TypeName());
             // Note this is currently unordered
             foreach (ContentData.ContentPack cp in game.cd.allPacks)
             {
@@ -172,6 +178,7 @@ namespace Assets.Scripts.UI.Screens
                     {
                         ui.SetLocation(UIScaler.GetWidthUnits() - 10, offset, 6, 6);
                     }
+
                     ui.SetImage(tex);
                     ui.SetButton(delegate { Select(id); });
                     ui.SetBGColor(bgColor);
@@ -188,6 +195,7 @@ namespace Assets.Scripts.UI.Screens
                     {
                         ui.SetLocation(9, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                     }
+
                     ui.SetBGColor(bgColor);
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
@@ -203,36 +211,55 @@ namespace Assets.Scripts.UI.Screens
                     {
                         ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
                     }
+
                     ui.SetBGColor(bgColor);
                     ui.SetText(game.cd.GetContentName(id), Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                    ui.SetFont(game.gameType.GetHeaderFont());
+                    ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT
+                        ? UIScaler.GetSmallFont()
+                        : UIScaler.GetMediumFont());
                     ui.SetFontSize(text_font_size);
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
-                    float text_width = ui.GetStringWidth()+0.5f;
+                    float text_width = ui.GetStringWidth() + 0.5f;
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
                     {
-                        ui.SetLocation(8+ text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 19 - text_width, 3);
+                        ui.SetLocation(8 + text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 19 - text_width, 3);
                     }
                     else
                     {
                         ui.SetLocation(10 + text_width, offset + 1.5f, UIScaler.GetWidthUnits() - 20 - text_width, 3);
                     }
+
                     ui.SetBGColor(bgColor);
-                    ui.SetText("("+game.cd.GetContentAcronym(id)+")", Color.black);
+                    ui.SetText("(" + game.cd.GetContentAcronym(id) + ")", Color.black);
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetFont(game.gameType.GetSymbolFont());
                     ui.SetFontSize(text_font_size);
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
+
+                    packLanguages.TryGetValue(id, out string packLanguage);
+                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui.SetLocation(UIScaler.GetWidthUnits() - 17, offset + 2.5f, 5, 1);
+                    ui.SetBGColor(Color.black);
+                    ui.SetText(string.IsNullOrWhiteSpace(packLanguage) ? DEFAULT_LANGUAGE_KEY.Translate() : packLanguage, Color.white);
+                    ui.SetTextAlignment(TextAnchor.MiddleCenter);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(UIScaler.GetSmallFont());
+                    ui.SetButton(delegate { SelectLanguage(id, type); });
+                    new UIElementBorder(ui, Color.black, 0.1f);
+                    new UIElementBorder(ui, Color.white);
+                    languageButtons.Add(id, ui);
+
                     left = !left;
                     offset += 4f;
                 }
             }
+
             scrollArea.SetScrollSize(offset + 2.5f);
 
             // Button for back to main menu
@@ -242,7 +269,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
             new UIElementBorder(ui, Color.red);
-            if (game.cd.packTypes.Count > 1)
+            if (game.cd.Count<PackTypeData>() > 1)
             {
                 ui.SetButton(DrawTypeList);
             }
@@ -252,25 +279,49 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
+        private void SelectLanguage(string id, string type)
+        {
+            UIWindowSelectionList select = new UIWindowSelectionList(
+                delegate(string val) { UpdateLanguage(id, val, type); }, CommonStringKeys.CHOOSE_LANGUAGE, true);
+
+            select.AddItem(DEFAULT_LANGUAGE_KEY);
+            foreach (var s in OptionsScreen.ENABLED_LANGS)
+            {
+                select.AddItem(s);
+            }
+
+            select.Draw();
+        }
+
+        private void UpdateLanguage(string id, string val, string type)
+        {
+            if (val == DEFAULT_LANGUAGE_KEY.key)
+            {
+                val = "";
+            }
+
+            // Cancel button
+            if (val != null)
+            {
+                game.config.AddPack(game.gameType.TypeName(), id, val);
+            }
+
+            DrawList(type);
+        }
+
         public static void Quit()
         {
-            Game game = Game.Get();
-            // Clear content data in case something has changed
-            game.cd = new ContentData(game.gameType.DataDirectory());
-            // Load the base content - pack will be loaded later if required
-            game.cd.LoadContentID("");
-
-            Destroyer.MainMenu();
+            GameStateManager.MainMenu();
         }
 
         public void Update()
         {
+            var packs = game.config.GetPacks(game.gameType.TypeName());
             foreach (KeyValuePair<string, List<UIElement>> kv in buttons)
             {
                 foreach (UIElement ui in kv.Value)
                 {
-                    if (game.config.data.Get(game.gameType.TypeName() + "Packs") != null
-                        && game.config.data.Get(game.gameType.TypeName() + "Packs").ContainsKey(kv.Key))
+                    if (packs.Contains(kv.Key))
                     {
                         ui.SetBGColor(Color.white);
                     }
@@ -280,21 +331,29 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
             }
+
+            foreach (KeyValuePair<string, UIElement> kv in languageButtons)
+            {
+                if (!packs.Contains(kv.Key))
+                {
+                    kv.Value.SetText(DEFAULT_LANGUAGE_KEY);
+                }
+            }
         }
 
         // set a pack as selected by id
         public void Select(string id)
         {
-            if (game.config.data.Get(game.gameType.TypeName() + "Packs") != null
-                && game.config.data.Get(game.gameType.TypeName() + "Packs").ContainsKey(id))
+            var packs = game.config.GetPacks(game.gameType.TypeName()).ToSet();
+            if (packs.Contains(id))
             {
-                game.config.data.Remove(game.gameType.TypeName() + "Packs", id);
+                game.config.RemovePack(game.gameType.TypeName(), id);
             }
             else
             {
-                game.config.data.Add(game.gameType.TypeName() + "Packs", id, "");
+                game.config.AddPack(game.gameType.TypeName(), id);
             }
-            game.config.Save();
+
             Update();
         }
     }

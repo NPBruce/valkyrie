@@ -184,6 +184,8 @@ SELECT_ITEM,Gegenstand wählen
 SELECT_PACK,Paket wählen
 SELECT_TO_COPY,{0} zum Kopieren ausgewählt
 SELECT_TO_DELETE,{0} zur Löschung ausgewählt
+DISABLE,Deaktivieren
+HIDE,Verstecken
 HIDDEN,Versteckt
 ACTIVE,Aktiv
 SET,Setze

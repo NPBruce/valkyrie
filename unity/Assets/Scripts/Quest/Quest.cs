@@ -5,6 +5,7 @@ using Assets.Scripts.UI;
 using ValkyrieTools;
 using System.IO;
 using System.Linq;
+using UnityEngine.UI;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -275,7 +276,7 @@ public class Quest
                     return false;
                 }
                 // Item type might exist in content packs
-                else if (game.cd.items.ContainsKey(t))
+                else if (game.cd.ContainsKey<ItemData>(t))
                 {
                     itemSelect.Add(qItem.sectionName, t);
                     return true;
@@ -310,7 +311,7 @@ public class Quest
 
             // Start a list of matches
             List<string> list = new List<string>();
-            foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
+            foreach (KeyValuePair<string, ItemData> kv in game.cd.GetAll<ItemData>())
             {
                 bool next = false;
 
@@ -415,7 +416,7 @@ public class Quest
                     return true;
                 }
                 // Monster type might exist in content packs, 'Monster' is optional
-                else if (game.cd.monsters.ContainsKey(monster))
+                else if (game.cd.ContainsKey<MonsterData>(monster))
                 {
                     monsterSelect.Add(spawn.sectionName, monster);
                     return true;
@@ -464,7 +465,7 @@ public class Quest
 
             // Start a list of matches
             List<string> list = new List<string>();
-            foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+            foreach (KeyValuePair<string, MonsterData> kv in game.cd.GetAll<MonsterData>())
             {
                 bool allFound = true;
                 foreach (string t in spawn.mTraitsRequired)
@@ -506,12 +507,10 @@ public class Quest
                 QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
                 if (cm == null) continue;
 
-                MonsterData baseMonster = null;
                 string[] traits = cm.traits;
                 // Check for content data monster defined as base
-                if (game.cd.monsters.ContainsKey(cm.baseMonster))
+                if (game.cd.TryGet(cm.baseMonster, out MonsterData baseMonster))
                 {
-                    baseMonster = game.cd.monsters[cm.baseMonster];
                     if (traits.Length == 0)
                     {
                         traits = baseMonster.traits;
@@ -666,14 +665,18 @@ public class Quest
             if (h.heroData != null)
             {
                 heroCount++;
-                // Create variable to value 1 for each selected Hero
+                // Create variable to value 1 for each selected Hero and Class
                 game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                if (!string.IsNullOrEmpty(h.className))
+                {
+                    game.quest.vars.SetValue("#" + h.className, 1);
+                }
             }
         }
         game.quest.vars.SetValue("#heroes", heroCount);
 
         List<string> music = new List<string>();
-        foreach (AudioData ad in game.cd.audio.Values)
+        foreach (AudioData ad in game.cd.Values<AudioData>())
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
@@ -715,9 +718,9 @@ public class Quest
             List<string> toPlay = new List<string>();
             foreach (string s in music)
             {
-                if (game.cd.audio.ContainsKey(s))
+                if (game.cd.TryGet(s, out AudioData musicData))
                 {
-                    toPlay.Add(game.cd.audio[s].file);
+                    music.Add(musicData.file);
                 }
                 else
                 {
@@ -728,7 +731,7 @@ public class Quest
         }
         else
         {
-            foreach (AudioData ad in game.cd.audio.Values)
+            foreach (AudioData ad in game.cd.Values<AudioData>())
             {
                 if (ad.ContainsTrait("quest")) music.Add(ad.file);
             }
@@ -1416,15 +1419,12 @@ public class Quest
             qTile = questTile;
 
             // Search for tile in content
-            if (game.cd.tileSides.ContainsKey(qTile.tileSideName))
+            if (!game.cd.TryGet(qTile.tileSideName, out cTile))
             {
-                cTile = game.cd.tileSides[qTile.tileSideName];
+                game.cd.TryGet("TileSide" + qTile.tileSideName, out cTile);
             }
-            else if (game.cd.tileSides.ContainsKey("TileSide" + qTile.tileSideName))
-            {
-                cTile = game.cd.tileSides["TileSide" + qTile.tileSideName];
-            }
-            else
+
+            if (cTile == null)
             {
                 // Fatal if not found
                 ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName + "' in quest component: '" + qTile.sectionName + "'");
@@ -1433,12 +1433,11 @@ public class Quest
             }
 
             // Attempt to load image
-            var mTile = game.cd.tileSides[qTile.tileSideName];
-            Texture2D newTex = ContentData.FileToTexture(mTile.image);
+            Texture2D newTex = ContentData.FileToTexture(cTile.image);
             if (newTex == null)
             {
                 // Fatal if missing
-                ValkyrieDebug.Log("Error: cannot open image file for TileSide: '" + mTile.image + "' named: '" + qTile.tileSideName + "'");
+                ValkyrieDebug.Log("Error: cannot open image file for TileSide: '" + cTile.image + "' named: '" + qTile.tileSideName + "'");
                 Application.Quit();
                 return;
             }
@@ -1464,13 +1463,13 @@ public class Quest
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
-            float vPPS = mTile.pxPerSquare;
+            float vPPS = cTile.pxPerSquare;
             float hPPS = vPPS;
             // manual aspect control
             // We need this for the 3x2 MoM tiles because they don't have square pixels!!
-            if (mTile.aspect != 0)
+            if (cTile.aspect != 0)
             {
-                hPPS = (vPPS * newTex.width / newTex.height) / mTile.aspect;
+                hPPS = (vPPS * newTex.width / newTex.height) / cTile.aspect;
             }
 
             // Perform alignment move
@@ -1530,20 +1529,21 @@ public class Quest
 
             string tokenName = qToken.tokenName;
             // Check that token exists
-            if (!game.cd.tokens.ContainsKey(tokenName))
+            if (!game.cd.ContainsKey<TokenData>(tokenName))
             {
                 game.quest.log.Add(new Quest.LogEntry("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName, true));
                 // Catch for older quests with different types (0.4.0 or older)
-                if (game.cd.tokens.ContainsKey("TokenSearch"))
+                if (game.cd.ContainsKey<TokenData>("TokenSearch"))
                 {
                     tokenName = "TokenSearch";
                 }
             }
 
             // Get texture for token
-            Vector2 texPos = new Vector2(game.cd.tokens[tokenName].x, game.cd.tokens[tokenName].y);
-            Vector2 texSize = new Vector2(game.cd.tokens[tokenName].width, game.cd.tokens[tokenName].height);
-            Texture2D newTex = ContentData.FileToTexture(game.cd.tokens[tokenName].image, texPos, texSize);
+            var tokenData = game.cd.Get<TokenData>(tokenName);
+            Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+            Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+            Texture2D newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
             if(newTex==null)
             {
                 ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
@@ -1562,7 +1562,7 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
-            float PPS = game.cd.tokens[tokenName].pxPerSquare;
+            float PPS = tokenData.pxPerSquare;
             if (PPS == 0)
             {
                 PPS = (float)newTex.width;
@@ -1624,11 +1624,11 @@ public class Quest
             Texture2D newTex = null;
             if (qUI.imageName.Length > 0)
             {
-                if (game.cd.images.ContainsKey(qUI.imageName))
+                if (game.cd.TryGet(qUI.imageName, out ImageData imageData))
                 {
-                    Vector2 texPos = new Vector2(game.cd.images[qUI.imageName].x, game.cd.images[qUI.imageName].y);
-                    Vector2 texSize = new Vector2(game.cd.images[qUI.imageName].width, game.cd.images[qUI.imageName].height);
-                    newTex = ContentData.FileToTexture(game.cd.images[qUI.imageName].image, texPos, texSize);
+                    Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                    Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                    newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);
                 }
                 else
                 {
@@ -1994,11 +1994,11 @@ public class Quest
             // Saved content reference, look it up
             if (data.ContainsKey("type"))
             {
-                foreach (KeyValuePair<string, HeroData> hd in game.cd.heroes)
+                foreach (HeroData hd in game.cd.Values<HeroData>())
                 {
-                    if (hd.Value.sectionName.Equals(data["type"]))
+                    if (hd.sectionName.Equals(data["type"]))
                     {
-                        heroData = hd.Value;
+                        heroData = hd;
                     }
                 }
             }
@@ -2019,7 +2019,7 @@ public class Quest
             int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
             foreach (string s in skills)
             {
-                aXP -= game.cd.skills[s].xp;
+                aXP -= game.cd.Get<SkillData>(s).xp;
             }
             return aXP;
         }
@@ -2163,10 +2163,9 @@ public class Quest
 
             // Find base type
             Game game = Game.Get();
-            if (game.cd.monsters.ContainsKey(data["type"]))
-            {
-                monsterData = game.cd.monsters[data["type"]];
-            }
+            
+            game.cd.TryGet(data["type"], out monsterData);
+            
             // Check if type is a special quest specific type
             if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.CustomMonster)
             {
@@ -2176,11 +2175,7 @@ public class Quest
             // If we have already selected an activation find it
             if (data.ContainsKey("activation"))
             {
-                ActivationData saveActivation = null;
-                if (game.cd.activations.ContainsKey(data["activation"]))
-                {
-                    saveActivation = game.cd.activations[data["activation"]];
-                }
+                game.cd.TryGet(data["activation"], out ActivationData saveActivation);
                 // Activations can be specific to the quest
                 if (game.quest.qd.components.ContainsKey(data["activation"]))
                 {

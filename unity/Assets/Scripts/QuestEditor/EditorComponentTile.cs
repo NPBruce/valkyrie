@@ -33,7 +33,7 @@ public class EditorComponentTile : EditorComponent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(4.5f, offset, 15, 1);
+        ui.SetLocation(5, offset, 14, 1);
         ui.SetText(tileComponent.tileSideName);
         ui.SetButton(delegate { ChangeTileSide(); });
         new UIElementBorder(ui);
@@ -91,11 +91,11 @@ public class EditorComponentTile : EditorComponent
             if (t != null)
             {
                 usedSides.Add(t.tileSideName);
-                usedSides.Add(game.cd.tileSides[t.tileSideName].reverse);
+                usedSides.Add(game.cd.Get<TileSideData>(t.tileSideName).reverse);
             }
         }
 
-        foreach (KeyValuePair<string, TileSideData> kv in game.cd.tileSides)
+        foreach (KeyValuePair<string, TileSideData> kv in game.cd.GetAll<TileSideData>())
         {
             if (usedSides.Contains(kv.Key))
             {

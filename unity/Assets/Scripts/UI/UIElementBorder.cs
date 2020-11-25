@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI
@@ -12,9 +13,9 @@ namespace Assets.Scripts.UI
             CreateBorder(element.GetTransform(), element.GetRectTransform(), element.GetTag(), Color.white);
         }
 
-        public UIElementBorder(UIElement element, Color color)
+        public UIElementBorder(UIElement element, Color color, float thickness = 0.05f)
         {
-            CreateBorder(element.GetTransform(), element.GetRectTransform(), element.GetTag(), color);
+            CreateBorder(element.GetTransform(), element.GetRectTransform(), element.GetTag(), color, thickness);
         }
 
         public UIElementBorder(Transform transform, RectTransform rectTrans, string tag, Color color)
@@ -22,7 +23,7 @@ namespace Assets.Scripts.UI
             CreateBorder(transform, rectTrans, tag, color);
         }
 
-        private void CreateBorder(Transform transform, RectTransform rectTrans, string tag, Color color)
+        private void CreateBorder(Transform transform, RectTransform rectTrans, string tag, Color color, float thickness = 0.05f)
         {
             bLine = new GameObject[4];
 
@@ -36,19 +37,22 @@ namespace Assets.Scripts.UI
             }
 
             // Set the thickness of the lines
-            float thick = 0.05f * UIScaler.GetPixelsPerUnit();
+            float thick = thickness * UIScaler.GetPixelsPerUnit();
 
+            // Bottom line
             bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, thick);
             bLine[0].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, rectTrans.rect.width);
-
+            // Top line
             bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, thick);
             bLine[1].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, rectTrans.rect.width);
-
-            bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height);
+            
+            // Left line
+            bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height + thick);
             bLine[2].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -thick, thick);
-
-            bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height);
+            // Right line
+            bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -thick, rectTrans.rect.height + thick);
             bLine[3].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, thick);
+
         }
 
         /// <summary>

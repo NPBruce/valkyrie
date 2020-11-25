@@ -1,12 +1,13 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
-using Assets.Scripts.UI;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.UI.Screens
 {
     class ClassSelectionScreen
     {
+        private const int LARGE_FONT_LIMIT = 24;
         protected List<float> scrollOffset = new List<float>();
         protected List<UIElementScrollVertical> scrollArea = new List<UIElementScrollVertical>();
 
@@ -63,8 +64,18 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Destroyer.QuestSelect);
+            ui.SetButton(BackButtonAction());
             new UIElementBorder(ui, Color.red);
+        }
+
+        private static UnityAction BackButtonAction()
+        {
+            Game game = Game.Get();
+            if (game.testMode)
+            {
+                return GameStateManager.Editor.EditCurrentQuest;
+            }
+            return GameStateManager.Quest.RestartFromHeroSelection;
         }
 
         public void DrawHero(float xOffset, int hero)
@@ -83,15 +94,23 @@ namespace Assets.Scripts.UI.Screens
             UIElement ui = null;
             if (hybridClass.Length > 0)
             {
-                archetype = game.cd.classes[hybridClass].hybridArchetype;
+                ClassData classData = game.cd.Get<ClassData>(hybridClass);
+                archetype = classData.hybridArchetype;
                 ui = new UIElement(Game.HEROSELECT);
                 ui.SetLocation(xOffset + 0.25f, yStart, 8.5f, 5);
                 new UIElementBorder(ui);
 
                 ui = new UIElement(Game.HEROSELECT);
                 ui.SetLocation(xOffset + 1, yStart + 0.5f, 7, 4);
-                ui.SetText(game.cd.classes[hybridClass].name, Color.black);
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetText(classData.name, Color.black);
+                if (ui.GetText().Length > LARGE_FONT_LIMIT)
+                {
+                    ui.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                }
                 ui.SetButton(delegate { Select(hero, hybridClass); });
                 ui.SetBGColor(new Color(0, 0.7f, 0));
                 new UIElementBorder(ui, Color.black);
@@ -109,7 +128,7 @@ namespace Assets.Scripts.UI.Screens
 
             float yOffset = 1;
 
-            foreach (ClassData cd in game.cd.classes.Values)
+            foreach (ClassData cd in game.cd.Values<ClassData>())
             {
                 if (!cd.archetype.Equals(archetype)) continue;
                 if (cd.hybridArchetype.Length > 0 && hybridClass.Length > 0) continue;
@@ -150,7 +169,14 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
                 ui.SetText(cd.name, Color.black);
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                if (ui.GetText().Length > LARGE_FONT_LIMIT)
+                {
+                    ui.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    ui.SetFontSize(UIScaler.GetMediumFont());
+                }
 
                 yOffset += 5f;
             }
@@ -175,7 +201,7 @@ namespace Assets.Scripts.UI.Screens
         public void Select(int hero, string className)
         {
             Game game = Game.Get();
-            if (game.cd.classes[className].hybridArchetype.Length > 0)
+            if (game.cd.Get<ClassData>(className).hybridArchetype.Length > 0)
             {
                 game.quest.heroes[hero].className = "";
                 if (game.quest.heroes[hero].hybridClass.Length > 0)
@@ -206,13 +232,13 @@ namespace Assets.Scripts.UI.Screens
 
                 game.quest.vars.SetValue("#" + h.className, 1);
 
-                foreach (string s in game.cd.classes[h.className].items)
+                foreach (string s in game.cd.Get<ClassData>(h.className).items)
                 {
                     items.Add(s);
                 }
 
                 if (h.hybridClass.Length == 0) continue;
-                foreach (string s in game.cd.classes[h.hybridClass].items)
+                foreach (string s in game.cd.Get<ClassData>(h.hybridClass).items)
                 {
                     items.Add(s);
                 }

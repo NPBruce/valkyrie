@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Assets.Scripts.Content;
 using System.IO;
 
@@ -6,6 +7,9 @@ namespace Assets.Scripts.UI
 {
     public class UIWindowSelectionListAudio : UIWindowSelectionListTraits
     {
+        private static readonly Color AVAILABLE_COLOR = new Color(0.6f, 0.6f, 1f);
+        private static readonly Color UNAVAILABLE_COLOR = new Color(0.3f, 0.3f, 0.3f);
+
         public UIWindowSelectionListAudio(UnityEngine.Events.UnityAction<string> call, string title = "") : base(call, title)
         {
         }
@@ -19,21 +23,18 @@ namespace Assets.Scripts.UI
             string key = item.GetKey();
             UIElement ui = new UIElement(transform);
             ui.SetLocation(0, offset, 18.9f, 1);
-            if (key != null)
-            {
-                ui.SetButton(delegate { SelectItem(key); });
-            }
+            var audioFilePath = FindAudioPathIfExists(key);
+            ui.SetButton(delegate { SelectItem(key ?? ""); });
             ui.SetBGColor(item.GetColor());
             ui.SetText(item.GetDisplay(), Color.black);
 
             ui = new UIElement(transform);
             ui.SetLocation(19, offset, 1, 1);
-            if (key != null)
-            {
-                ui.SetButton(delegate { Play(key); });
-            }
-            ui.SetBGColor(new Color(0.6f, 0.6f, 1));
-            ui.SetText("►", Color.black);
+            ui.SetButton(delegate { Play(key); });
+            var rightButtonColor = !string.IsNullOrEmpty(audioFilePath) ? AVAILABLE_COLOR : UNAVAILABLE_COLOR;
+            ui.SetBGColor(rightButtonColor);
+            var buttonText = !string.IsNullOrEmpty(audioFilePath) ? "►" : "■";
+            ui.SetText(buttonText, Color.black);
             // this character is strange
             ui.SetFontSize(Mathf.RoundToInt((float)UIScaler.GetSmallFont() * 0.5f));
 
@@ -43,15 +44,44 @@ namespace Assets.Scripts.UI
         protected void Play(string key)
         {
             Game game = Game.Get();
-            if (game.cd.audio.ContainsKey(key))
+            game.audioControl.StopAudioEffect();
+            var audioPath = FindAudioPathIfExists(key);
+            
+            if (String.IsNullOrEmpty(audioPath))
             {
-                game.audioControl.Play(game.cd.audio[key].file);
+                return;
             }
-            else
+            game.audioControl.Play(audioPath);
+        }
+
+        private string FindAudioPathIfExists(string key)
+        {
+            if (key == null)
             {
-                string path = Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + key;
-                game.audioControl.Play(path);
+                return null;
             }
+
+            var audioPath = ConvertKeyToPath(key);
+            if (!File.Exists(audioPath))
+            {
+                return null;
+            }
+
+            return audioPath;
+        }
+
+        private string ConvertKeyToPath(string key)
+        {
+            var game = Game.Get();
+            
+            // FFG/Valkyrie audio
+            if (game.cd.TryGet(key, out AudioData audioData))
+            {
+                return audioData.file;
+            }
+            
+            // Custom Quest audio
+            return Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + key;
         }
     }
 }

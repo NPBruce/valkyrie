@@ -224,7 +224,7 @@ public class EditorComponentItem : EditorComponent
             }
         }
 
-        foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
+        foreach (KeyValuePair<string, ItemData> kv in game.cd.GetAll<ItemData>())
         {
             if (usedItems.Contains(kv.Key))
             {
@@ -284,9 +284,9 @@ public class EditorComponentItem : EditorComponent
         Game game = Game.Get();
         HashSet<string> traits = new HashSet<string>();
 
-        foreach (KeyValuePair<string, ItemData> kv in game.cd.items)
+        foreach (ItemData id in game.cd.Values<ItemData>())
         {
-            foreach (string s in kv.Value.traits)
+            foreach (string s in id.traits)
             {
                 traits.Add(s);
             }
@@ -369,7 +369,7 @@ public class EditorComponentItem : EditorComponent
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectInspectEvent, new StringKey("val", "SELECT", CommonStringKeys.SELECT_ITEM));
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)

@@ -179,6 +179,8 @@ SELECT_ITEM,Wybierz Przedmiot
 SELECT_PACK,Wybierz Pakiet
 SELECT_TO_COPY,Wybierz {0}e do Skopiowania
 SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
+HIDE,Ukryj
+DISABLE,Dezaktywuj
 HIDDEN,Ukryj
 ACTIVE,Aktywny
 SET,Ust.

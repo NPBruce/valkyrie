@@ -31,8 +31,15 @@ echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android bu
 exit /B
 )
 
+rem set unity editor location
+IF "%UNITY_EDITOR_HOME%"=="" SET UNITY_EDITOR_HOME=%ProgramFiles%\Unity\Editor
+IF NOT EXIST "%UNITY_EDITOR_HOME%" (
+echo [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor path in build.bat or create a similar environment variable[0m
+exit /B
+)
+
 rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
-SET PATH=%PATH%;%JDK_HOME%\bin;%ProgramFiles%\Unity\Editor;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
+SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
 @echo on
 
 rem cleanup
@@ -113,15 +120,17 @@ rem delete previous build
 del build\valkyrie-windows-%version%.exe
 del build\valkyrie-windows-%version%.zip
 del build\valkyrie-windows-%version%.7z
-del build\valkyrie-macos-%version%.zip
+del build\valkyrie-macos-%version%.tar.gz
 del build\valkyrie-linux-%version%.tar.gz
 
 rem create windows zip
 7z a "%~dp0build\valkyrie-windows-%version%.7z" "%~dp0build\batch\*" -r
 rem create windows 7z
 7z a "%~dp0build\valkyrie-windows-%version%.zip" "%~dp0build\batch\*" -r
-rem create macos zip
-7z a "%~dp0build\valkyrie-macos-%version%.zip" "%~dp0build\batchMac\*" -r
+rem create macos tar ball
+7z a "%~dp0build\batchMac\valkyrie-macos-%version%.tar" "%~dp0build\batchMac\*" -r
+7z a "%~dp0build\valkyrie-macos-%version%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+del "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
 rem create linux tar ball
 7z a "%~dp0build\batchLinux\valkyrie-linux-%version%.tar" "%~dp0build\batchLinux\*" -r
 7z a "%~dp0build\valkyrie-linux-%version%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"

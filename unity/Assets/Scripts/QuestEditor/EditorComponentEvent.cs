@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -394,13 +395,13 @@ public class EditorComponentEvent : EditorComponent
         int index = 0;
         float lastButtonOffset = 0;
         buttonUIE = new List<UIElementEditable>();
-        foreach (List<string> l in eventComponent.nextEvent)
+        foreach (QuestButtonData nextEvent in eventComponent.buttons)
         {
             lastButtonOffset = offset;
             int buttonTmp = button++;
 
-            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1];
-            string colorRGB = ColorUtil.FromName(eventComponent.buttonColors[buttonTmp - 1]);
+            StringKey buttonLabel = eventComponent.buttons[buttonTmp - 1].Label;
+            string colorRGB = ColorUtil.FromName(eventComponent.buttons[buttonTmp - 1].Color);
             Color32 c = Color.white;
             c.r = (byte)System.Convert.ToByte(colorRGB.Substring(1, 2), 16);
             c.g = (byte)System.Convert.ToByte(colorRGB.Substring(3, 2), 16);
@@ -425,7 +426,7 @@ public class EditorComponentEvent : EditorComponent
             buttonUIE.Add(buttonEdit);
 
             index = 0;
-            foreach (string s in l)
+            foreach (string s in nextEvent.EventNames)
             {
                 int i = index++;
                 string tmpName = s;
@@ -464,6 +465,27 @@ public class EditorComponentEvent : EditorComponent
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddEvent(tmp, buttonTmp); });
             new UIElementBorder(ui, Color.green);
+            
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(17.5f, lastButtonOffset, 1, 1);
+            ui.SetButton(delegate { EditCondition(nextEvent); });
+            if (!nextEvent.HasCondition || nextEvent.ConditionFailedAction == QuestButtonAction.NONE)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.white);
+                new UIElementBorder(ui, Color.white);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.DISABLE)
+            {
+                ui.SetText(CommonStringKeys.CONDITION, Color.yellow);
+                new UIElementBorder(ui, Color.yellow);
+            }
+            else if (nextEvent.ConditionFailedAction == QuestButtonAction.HIDE)
+            {
+                var orange = new Color(1f, 0.5215686f, 0.01568628f, 1f);
+                ui.SetText(CommonStringKeys.CONDITION, orange);
+                new UIElementBorder(ui, orange);
+            }
         }
 
         if (lastButtonOffset != 0)
@@ -478,6 +500,17 @@ public class EditorComponentEvent : EditorComponent
         return offset + 1;
     }
 
+    private void EditCondition(QuestButtonData nextEvent)
+    {
+        var editorWindowVarTestsEdit = new EditorWindowQuestButtonEdit(CommonStringKeys.TRIGGER.Translate() +  " - " + nextEvent.Label.Translate(), nextEvent, 
+            button =>
+        {
+            nextEvent.Condition = button.Condition;
+            nextEvent.RawConditionFailedAction = button.RawConditionFailedAction;
+            Update();
+        });
+        editorWindowVarTestsEdit.Draw();
+    }
 
 
     virtual public void Highlight()
@@ -543,9 +576,8 @@ public class EditorComponentEvent : EditorComponent
                 LocalizationRead.updateScenarioText(eventComponent.text_key, eventTextUIE.GetText());
                 if (eventComponent.buttons.Count == 0)
                 {
-                    eventComponent.buttons.Add(eventComponent.genQuery("button1"));
-                    eventComponent.nextEvent.Add(new List<string>());
-                    eventComponent.buttonColors.Add("white");
+                    var buttonLabel = eventComponent.genQuery("button1");
+                    eventComponent.buttons.Add(new QuestButtonData(buttonLabel));
                     LocalizationRead.updateScenarioText(eventComponent.genKey("button1"),
                         CONTINUE.Translate());
                 }
@@ -576,7 +608,7 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { new StringKey("val", "GENERAL").Translate() });
-        select.AddItem("{NONE}", "", traits);
+        select.AddItem("{NONE}", "", traits, true);
 
         bool startPresent = false;
         bool noMorale = false;
@@ -628,17 +660,23 @@ public class EditorComponentEvent : EditorComponent
            select.AddItem("Eliminated", traits);
         }
 
-        select.AddItem("Mythos", traits);
         select.AddItem("EndRound", traits);
         select.AddItem("StartRound", traits);
+        
+        if (game.gameType is MoMGameType)
+        {
+            select.AddItem("Mythos", traits);
+            select.AddItem("EndInvestigatorTurn", traits);
+            select.AddItem("BeforeMonsterActivation", traits);
+        }
 
         traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.MONSTER.Translate() });
+        traits.Add(CommonStringKeys.TYPE.Translate(), new[] { CommonStringKeys.MONSTER.Translate() });
 
-        foreach (KeyValuePair<string, MonsterData> kv in game.cd.monsters)
+        foreach (string monsterKey in game.cd.Keys<MonsterData>())
         {
-            select.AddItem("Defeated" + kv.Key, traits);
-            select.AddItem("DefeatedUnique" + kv.Key, traits);
+            select.AddItem("Defeated" + monsterKey, traits);
+            select.AddItem("DefeatedUnique" + monsterKey, traits);
         }
 
         HashSet<string> vars = new HashSet<string>();
@@ -647,7 +685,7 @@ public class EditorComponentEvent : EditorComponent
             if (kv.Value is QuestData.Event)
             {
                 QuestData.Event e = kv.Value as QuestData.Event;
-                foreach (string s in ExtractVarsFromEvent(e))
+                foreach (string s in EditorComponentVarTestsUtil.ExtractVarsFromEvent(e))
                 {
                     if (s[0] == '@')
                     {
@@ -716,7 +754,7 @@ public class EditorComponentEvent : EditorComponent
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
@@ -726,7 +764,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
-        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.GetAll<AudioData>())
         {
             traits = new Dictionary<string, IEnumerable<string>>();
             traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });
@@ -742,9 +780,9 @@ public class EditorComponentEvent : EditorComponent
     {
         Game game = Game.Get();
         eventComponent.audio = audio;
-        if (game.cd.audio.ContainsKey(eventComponent.audio))
+        if (game.cd.TryGet(eventComponent.audio, out AudioData audioData))
         {
-            game.audioControl.Play(game.cd.audio[eventComponent.audio].file);
+            game.audioControl.Play(audioData.file);
         }
         else
         {
@@ -766,7 +804,7 @@ public class EditorComponentEvent : EditorComponent
 
         string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
 
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
@@ -776,7 +814,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
 
-        foreach (KeyValuePair<string, AudioData> kv in game.cd.audio)
+        foreach (KeyValuePair<string, AudioData> kv in game.cd.GetAll<AudioData>())
         {
             traits = new Dictionary<string, IEnumerable<string>>();
             traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "FFG" });
@@ -810,9 +848,7 @@ public class EditorComponentEvent : EditorComponent
 
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(SelectEventHighlight, new StringKey("val", "SELECT", CommonStringKeys.EVENT));
 
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
-
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
         {
@@ -1085,9 +1121,9 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
-        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits);
+        select.AddItem("{" + CommonStringKeys.NEW.Translate() + "}", "{NEW}", traits, true);
 
-        AddQuestVars(select);
+        EditorComponentVarTestsUtil.AddQuestVars(select);
 
         select.Draw();
     }
@@ -1096,7 +1132,7 @@ public class EditorComponentEvent : EditorComponent
     {
         if (var.Equals("{NEW}"))
         {
-            varText = new QuestEditorTextEdit(VAR_NAME, "", delegate { NewQuotaVar(); });
+            varText = new QuestEditorTextEdit(VAR_NAME, "", s => NewQuotaVar());
             varText.EditText();
         }
         else
@@ -1132,20 +1168,17 @@ public class EditorComponentEvent : EditorComponent
 
     public void AddButton()
     {
-        int count = eventComponent.nextEvent.Count + 1;
-        eventComponent.nextEvent.Add(new List<string>());
-        eventComponent.buttons.Add(eventComponent.genQuery("button" + count));
-        eventComponent.buttonColors.Add("white");
+        int count = eventComponent.buttons.Count + 1;
+        var butonLabelKey = eventComponent.genQuery("button" + count);
+        eventComponent.buttons.Add(new QuestButtonData(butonLabelKey));
         LocalizationRead.updateScenarioText(eventComponent.genKey("button" + count), BUTTON.Translate() + count);
         Update();
     }
 
     public void RemoveButton()
     {
-        int count = eventComponent.nextEvent.Count;
-        eventComponent.nextEvent.RemoveAt(count - 1);
+        int count = eventComponent.buttons.Count;
         eventComponent.buttons.RemoveAt(count - 1);
-        eventComponent.buttonColors.RemoveAt(count - 1);
         LocalizationRead.dicts["qst"].Remove(eventComponent.genKey("button" + count));
         Update();
     }
@@ -1169,7 +1202,7 @@ public class EditorComponentEvent : EditorComponent
 
     public void SelectButtonColour(int number, string color)
     {
-        eventComponent.buttonColors[number - 1] = color;
+        eventComponent.buttons[number - 1].Color = color;
         Update();
     }
 
@@ -1253,18 +1286,18 @@ public class EditorComponentEvent : EditorComponent
 
         if (replace)
         {
-            eventComponent.nextEvent[button - 1][index] = toAdd;
+            eventComponent.buttons[button - 1].EventNames[index] = toAdd;
         }
         else
         {
-            eventComponent.nextEvent[button - 1].Insert(index, toAdd);
+            eventComponent.buttons[button - 1].EventNames.Insert(index, toAdd);
         }
         Update();
     }
 
     public void RemoveEvent(int index, int button)
     {
-        eventComponent.nextEvent[button - 1].RemoveAt(index);
+        eventComponent.buttons[button - 1].EventNames.RemoveAt(index);
         Update();
     }
 

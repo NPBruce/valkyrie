@@ -40,7 +40,7 @@ public class EditorComponentUI : EditorComponentEvent
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(4.5f, offset, 15, 1);
+        ui.SetLocation(5, offset, 14, 1);
         ui.SetText(uiComponent.imageName);
         ui.SetButton(delegate { SetImage(); });
         new UIElementBorder(ui);
@@ -294,7 +294,7 @@ public class EditorComponentUI : EditorComponentEvent
     public void SetImage()
     {
         UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectImage, SELECT_IMAGE.Translate());
-        select.AddItem("{NONE}", "");
+        select.AddItem("{NONE}", "", true);
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
@@ -307,9 +307,9 @@ public class EditorComponentUI : EditorComponentEvent
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
         }
-        foreach (KeyValuePair<string, ImageData> kv in Game.Get().cd.images)
+        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(imageData);
         }
         select.ExcludeExpansions();
         select.Draw();

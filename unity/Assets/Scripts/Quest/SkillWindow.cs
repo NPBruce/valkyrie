@@ -147,7 +147,7 @@ public class SkillWindow
         float yOffset = 4;
 
         availableXP = game.quest.heroes[hero].AvailableXP();
-        foreach (SkillData s in game.cd.skills.Values)
+        foreach (SkillData s in game.cd.Values<SkillData>())
         {
             if (s.xp == 0) continue;
             if (game.quest.heroes[hero].className.Length == 0) continue;
@@ -207,7 +207,7 @@ public class SkillWindow
         }
         else
         {
-            if (game.quest.heroes[hero].AvailableXP() < game.cd.skills[skill].xp) return;
+            if (game.quest.heroes[hero].AvailableXP() < game.cd.Get<SkillData>(skill).xp) return;
             skills.Add(skill);
         }
         Update(hero);

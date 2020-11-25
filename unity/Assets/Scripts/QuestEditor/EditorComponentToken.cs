@@ -57,9 +57,9 @@ public class EditorComponentToken : EditorComponentEvent
         return offset;
     }
 
-    override public float AddEventVarConditionComponents(float offset)
+    public override float AddEventVarConditionComponents(float yOffset)
     {
-        return offset;
+        return yOffset;
     }
 
     public void Rotate()
@@ -83,11 +83,11 @@ public class EditorComponentToken : EditorComponentEvent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListImage(SelectType, new StringKey("val", "SELECT", CommonStringKeys.TOKEN));
 
-        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}");
+        select.AddItem(CommonStringKeys.NONE.Translate(), "{NONE}", true);
 
-        foreach (KeyValuePair<string, TokenData> kv in game.cd.tokens)
+        foreach (TokenData kv in game.cd.Values<TokenData>())
         {
-            select.AddItem(kv.Value);
+            select.AddItem(kv);
         }
         select.ExcludeExpansions();
         select.Draw();

@@ -7,6 +7,8 @@ using Assets.Scripts.UI;
 // Window with starting Investigator items
 public class InvestigatorItems
 {
+    private const int LARGE_FONT_LIMIT = 16;
+
     private readonly StringKey STARTING_ITEMS = new StringKey("val", "STARTING_ITEMS");
 
     public InvestigatorItems()
@@ -18,7 +20,7 @@ public class InvestigatorItems
         {
             if (h.heroData != null)
             {
-                if (game.cd.items.ContainsKey(h.heroData.item))
+                if (game.cd.ContainsKey<ItemData>(h.heroData.item))
                 {
                     game.quest.items.Add(h.heroData.item);
                 }
@@ -64,7 +66,7 @@ public class InvestigatorItems
                 if (System.Char.IsUpper(item[charIndex++])) break;
             }
             string typeString = item.Substring(0, charIndex);
-            string translationString = game.cd.items[item].name.Translate();
+            string translationString = game.cd.Get<ItemData>(item).name.Translate();
 
             if (!itemSort.ContainsKey(typeString))
             {
@@ -86,7 +88,8 @@ public class InvestigatorItems
         {
             foreach (string item in itemSort[category].Values)
             {
-                Texture2D tex = ContentData.FileToTexture(game.cd.items[item].image);
+                var itemData = game.cd.Get<ItemData>(item);
+                Texture2D tex = ContentData.FileToTexture(itemData.image);
                 Sprite sprite = null;
                 if (tex != null)
                 {
@@ -102,8 +105,8 @@ public class InvestigatorItems
 
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetHCenter(8f * x) - 20, 11f + (9f * y), 8, 1);
-                ui.SetText(game.cd.items[item].name);
-
+                ui.SetText(itemData.name);
+                ui.SetFontSize(ui.GetText().Length > LARGE_FONT_LIMIT ? UIScaler.GetSmallerFont() : UIScaler.GetSmallFont());
                 x++;
                 if (x > 4)
                 {
