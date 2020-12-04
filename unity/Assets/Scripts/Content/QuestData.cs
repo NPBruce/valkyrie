@@ -402,6 +402,7 @@ public class QuestData
         new public static string type = "UI";
         public string imageName = "";
         public bool verticalUnits = false;
+        public bool richText = true;
         public int hAlign = 0;
         public int vAlign = 0;
         public float size = 1;
@@ -566,6 +567,7 @@ public class QuestData
         // Array of placements by hero count
         public string[][] placement;
         public bool unique = false;
+        public bool activated = true;
         public float uniqueHealthBase = 0;
         public float uniqueHealthHero = 0;
         public string[] mTypes;

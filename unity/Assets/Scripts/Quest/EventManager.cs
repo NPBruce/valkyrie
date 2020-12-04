@@ -242,7 +242,9 @@ public class EventManager
             // Add the new type
             if (!game.gameType.MonstersGrouped() || oldMonster == null)
             {
-                game.quest.monsters.Add(new Quest.Monster(qe));
+                var monster = new Quest.Monster(qe);
+                monster.activated = qe.qMonster.activated;
+                game.quest.monsters.Add(monster);
                 game.monsterCanvas.UpdateList();
                 // Update monster var
                 game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
