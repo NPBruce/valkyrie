@@ -57,6 +57,10 @@ public class EventManager
                 {
                     events.Add(kv.Key, new MonsterEvent(kv.Key));
                 }
+                else if (kv.Value is QuestData.Token)
+                {
+                    events.Add(kv.Key, new Token(kv.Key));
+                }
                 else
                 {
                     events.Add(kv.Key, new Event(kv.Key));
@@ -520,13 +524,14 @@ public class EventManager
     // Event control class
     public class Event
     {
+        private bool addsFallbackContinueButton;
         public Game game;
         public QuestData.Event qEvent;
-        public bool cancelable;
 
         // Create event from quest data
-        public Event(string name)
+        public Event(string name, bool addsFallbackContinueButton = true)
         {
+            this.addsFallbackContinueButton = addsFallbackContinueButton;
             game = Game.Get();
             if (game.quest.qd.components.ContainsKey(name))
             {
@@ -688,7 +693,9 @@ public class EventManager
             }
 
             // If there are no enabled buttons - add a default continue button
-            if (!buttons.Where(b => b.action == QuestButtonAction.NONE || Game.Get().quest.vars.Test(b.condition)).Any())
+            var atLeastOneButtonActive = buttons.Any(b => b.action == QuestButtonAction.NONE 
+                                                          || Game.Get().quest.vars.Test(b.condition));
+            if (addsFallbackContinueButton && !atLeastOneButtonActive)
             {
                 buttons.Add(new DialogWindow.EventButton(new QuestButtonData(CommonStringKeys.CONTINUE)));
             }
@@ -823,6 +830,14 @@ public class EventManager
         }
     }
 
+
+    // Token event extends event for handling tokens
+    public class Token : Event
+    {
+        public Token(string name) : base(name, false)
+        {
+        }
+    }
 
     public override string ToString()
     {
