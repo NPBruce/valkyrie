@@ -748,7 +748,7 @@ public class Quest
             {
                 if (game.cd.TryGet(s, out AudioData musicData))
                 {
-                    music.Add(musicData.file);
+                    toPlay.Add(musicData.file);
                 }
                 else
                 {
