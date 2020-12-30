@@ -566,6 +566,7 @@ public class QuestData
         new public static string type = "Spawn";
         // Array of placements by hero count
         public string[][] placement;
+        public bool activated = false;
         public bool unique = false;
         public bool activated = true;
         public float uniqueHealthBase = 0;
@@ -644,6 +645,10 @@ public class QuestData
             if (data.ContainsKey("unique"))
             {
                 bool.TryParse(data["unique"], out unique);
+            }
+            if (data.ContainsKey("activated"))
+            {
+                bool.TryParse(data["activated"], out activated);
             }
             if (data.ContainsKey("uniquehealth"))
             {
@@ -744,6 +749,11 @@ public class QuestData
             if(uniqueHealthHero != 0 && !unique)
             {
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
+            }
+
+            if (activated)
+            {
+                r += "activated=true" + nl;
             }
             return r;
         }

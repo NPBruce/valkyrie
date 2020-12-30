@@ -2214,6 +2214,7 @@ public class Quest
         {
             monsterData = monsterEvent.cMonster;
             spawnEventName = monsterEvent.qMonster.sectionName;
+            activated = monsterEvent.qMonster.activated;
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
