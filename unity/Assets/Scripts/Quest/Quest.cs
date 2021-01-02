@@ -1737,24 +1737,24 @@ public class Quest
                 unityObject_text.transform.SetParent(unityObject.transform);
                 rectTransform_text = unityObject_text.AddComponent<RectTransform>();
 
-                // if (qUI.richText)
-                // {
-                richText = unityObject_text.AddComponent<TextMeshProUGUI>();
-                richText.text = GetText();
-                richText.alignment = TextAlignmentOptions.MidlineGeoAligned;
-                richText.font = TMP_FontAsset.CreateFontAsset(game.gameType.GetFont());
-                richText.material = richText.material;
-                richText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
-                // }
-                // else
-                // {
-                // uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
-                // uiText.text = GetText();
-                // uiText.alignment = TextAnchor.MiddleCenter;
-                // uiText.font = game.gameType.GetFont();
-                // uiText.material = uiText.font.material;
-                // uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
-                // }
+                if (qUI.richText)
+                {
+                    richText = unityObject_text.AddComponent<TextMeshProUGUI>();
+                    richText.text = GetText();
+                    richText.alignment = TextAlignmentOptions.MidlineGeoAligned;
+                    richText.font = TMP_FontAsset.CreateFontAsset(game.gameType.GetFont());
+                    richText.material = richText.material;
+                    richText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                }
+                else
+                {
+                    uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
+                    uiText.text = GetText();
+                    uiText.alignment = TextAnchor.MiddleCenter;
+                    uiText.font = game.gameType.GetFont();
+                    uiText.material = uiText.font.material;
+                    uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                }
 
                 SetColor(qUI.textColor);
                 aspect = qUI.aspect;

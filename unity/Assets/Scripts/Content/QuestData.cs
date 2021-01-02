@@ -568,7 +568,6 @@ public class QuestData
         public string[][] placement;
         public bool activated = false;
         public bool unique = false;
-        public bool activated = true;
         public float uniqueHealthBase = 0;
         public float uniqueHealthHero = 0;
         public string[] mTypes;
