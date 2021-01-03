@@ -63,9 +63,9 @@ DELETE,Usuń
 UPDATE,Aktualizuj
 DIALOG,Wyświetlany tekst
 DOOR,Drzwi
-DOWNLOAD,Pobierz
-DOWNLOAD_LIST,Pobierz listy pakietów...
-DOWNLOAD_PACKAGE,Pobierz pakietu...
+DOWNLOAD,Pobieranie
+DOWNLOAD_LIST,Pobieranie listy pakietów...
+DOWNLOAD_PACKAGE,Pobieranie pakietu...
 E,E
 EFFECTS,Efekty
 END_TURN,Koniec Tury
@@ -89,10 +89,10 @@ ITEM,Przedmiot
 QITEM,Przedmiot Fabularny
 KO,KO
 LOAD_QUEST,Kontynuuj
-LOG,Log
+LOG,Dziennik
 SKILLS,Umiejętności
 ITEMS,Przedmioty
-ITEMS_SMALL, Małe przedmioty
+ITEMS_SMALL,Ekwipunek
 GOLD,Złoto
 MAIN_MENU,Menu Główne
 MAX,Max
@@ -166,7 +166,7 @@ REQ_TRAITS,Wymagane Atrybuty:
 RESET,Reset
 ROTATE_TO,Obróć: {0}
 ROTATION,Obrót
-SAVE,Zapisz
+SAVE,Zapis
 AUTOSAVE,Autozapis
 SELECT_SAVE,Wybierz Zapis
 SELECT,Wybierz {0}
@@ -181,9 +181,9 @@ SELECT_TO_COPY,Wybierz {0}e do Skopiowania
 SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDE,Ukryj
 DISABLE,Dezaktywuj
-HIDDEN,Ukryj
+HIDDEN,Ukryty
 ACTIVE,Aktywny
-SET,Ust.
+SET,Układ
 SET_EDITOR_ALPHA,Przeźroczystość Edytora
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności
