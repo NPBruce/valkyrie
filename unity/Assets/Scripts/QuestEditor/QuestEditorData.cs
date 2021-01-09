@@ -407,6 +407,7 @@ public class QuestEditorData {
         }
         QuestData.UI ui = new QuestData.UI("UI" + index);
         ui.verticalUnits = true;
+        ui.richText = true;
         game.quest.qd.components.Add("UI" + index, ui);
         SelectComponent("UI" + index);
     }
