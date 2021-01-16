@@ -262,12 +262,6 @@ public class Game : MonoBehaviour
     // This is called by editor on the main menu
     public void SelectEditQuest()
     {
-        // We load all packs for the editor, not just those selected
-        foreach (string pack in cd.GetPacks())
-        {
-            _contentLoader.LoadContent(pack);
-        }
-
         // Pull up the quest selection page
         new QuestEditSelection();
     }
