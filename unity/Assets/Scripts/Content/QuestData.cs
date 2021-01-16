@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Assets.Scripts.Content;
+using UnityEngine.UI;
 using ValkyrieTools;
+using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -402,13 +404,14 @@ public class QuestData
         new public static string type = "UI";
         public string imageName = "";
         public bool verticalUnits = false;
-        public bool richText = true;
         public int hAlign = 0;
         public int vAlign = 0;
         public float size = 1;
+        public bool richText = false;
         public float textSize = 1;
         public string textColor = "white";
         public string textBackgroundColor = "transparent";
+        public TextAlignment textAlignment = TextAlignment.CENTER;
         public float aspect = 1;
         public bool border = false;
 
@@ -493,6 +496,17 @@ public class QuestData
                 }
             }
 
+            if (data.TryGetValue("textAlignment", out string textAlignString))
+            {
+                textAlignment = TextAlignmentUtils.ParseAlignment(textAlignString);
+            }
+
+            if (data.TryGetValue("richText", out string richTextString) 
+                && bool.TryParse(richTextString, out bool richTextBool))
+            {
+                richText = richTextBool;
+            }
+
             if (data.ContainsKey("border"))
             {
                 bool.TryParse(data["border"], out border);
@@ -521,6 +535,16 @@ public class QuestData
             if (!textBackgroundColor.Equals("transparent"))
             {
                 r += "textbackgroundcolor=" + textBackgroundColor + nl;
+            }
+
+            if (richText)
+            {
+                r += $"richText={richText}{nl}";
+            }
+
+            if (textAlignment != TextAlignment.CENTER)
+            {
+                r += $"textAlignment={textAlignment.ToString()}{nl}";
             }
 
             if (verticalUnits)

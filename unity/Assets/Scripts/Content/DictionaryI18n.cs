@@ -121,8 +121,8 @@ namespace Assets.Scripts.Content
                 currentEntry.Add(rawLine);
 
                 // Contains triple quotes
-                bool hasTripleQuotes = rawLine.IndexOf(TRIPLE_ENCLOSING, StringComparison.InvariantCulture) != -1;
-                if (hasTripleQuotes && (isFirstLine || tripleQuoteMode))
+                bool startsNewLineWithTripleQuotes = isFirstLine && rawLine.IndexOf($",{TRIPLE_ENCLOSING}", StringComparison.InvariantCulture) != -1;
+                if (startsNewLineWithTripleQuotes || tripleQuoteMode)
                 {
                     tripleQuoteMode = !rawLine.TrimEnd().EndsWith(TRIPLE_ENCLOSING, StringComparison.InvariantCulture);
                     endOfLine = !tripleQuoteMode;
