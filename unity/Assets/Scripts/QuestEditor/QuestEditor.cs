@@ -12,6 +12,12 @@ public class QuestEditor {
     public static void Begin(string path)
     {
         Game game = Game.Get();
+        // We load all packs for the editor, not just those selected
+        foreach (string pack in game.cd.GetPacks())
+        {
+            game.ContentLoader.LoadContent(pack);
+        }
+        
         game.editMode = true;
 
         new MenuButton();

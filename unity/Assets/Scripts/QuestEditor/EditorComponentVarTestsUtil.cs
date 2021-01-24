@@ -339,6 +339,11 @@ public class EditorComponentVarTestsUtil
                 }
             }
         }
+
+        if (!string.IsNullOrEmpty(e.quotaVar) && e.quotaVar[0] != '#')
+        {
+            vars.Add(e.quotaVar);
+        }
         return vars;
     }
 
