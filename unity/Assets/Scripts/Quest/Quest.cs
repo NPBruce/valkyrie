@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
+using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -1741,7 +1742,7 @@ public class Quest
                 {
                     richText = unityObject_text.AddComponent<TextMeshProUGUI>();
                     richText.text = GetText();
-                    richText.alignment = TextAlignmentOptions.MidlineGeoAligned;
+                    richText.alignment = ConvertRichTextAlignment(qUI.textAlignment);
                     richText.font = TMP_FontAsset.CreateFontAsset(game.gameType.GetFont());
                     richText.material = richText.material;
                     richText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
@@ -1750,7 +1751,7 @@ public class Quest
                 {
                     uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
                     uiText.text = GetText();
-                    uiText.alignment = TextAnchor.MiddleCenter;
+                    uiText.alignment = ConvertStandardTextAlignment(qUI.textAlignment);
                     uiText.font = game.gameType.GetFont();
                     uiText.material = uiText.font.material;
                     uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
@@ -1834,6 +1835,30 @@ public class Quest
             }
 
             game.tokenBoard.Add(this);
+        }
+
+        private TextAlignmentOptions ConvertRichTextAlignment(TextAlignment qUITextAlignment)
+        {
+            switch (qUITextAlignment)
+            {
+                case TextAlignment.TOP:
+                    return TextAlignmentOptions.Top;
+                case TextAlignment.BOTTOM:
+                    return TextAlignmentOptions.Bottom;
+            }
+            return TextAlignmentOptions.Center;
+        }
+
+        private TextAnchor ConvertStandardTextAlignment(TextAlignment qUITextAlignment)
+        {
+            switch (qUITextAlignment)
+            {
+                case TextAlignment.TOP:
+                    return TextAnchor.UpperCenter;
+                case TextAlignment.BOTTOM:
+                    return TextAnchor.LowerCenter;
+            }
+            return TextAnchor.MiddleCenter;
         }
 
         // Tokens have an associated event to start on press
