@@ -183,7 +183,7 @@ HIDE,Ukryj
 DISABLE,Dezaktywuj
 HIDDEN,Ukryty
 ACTIVE,Aktywny
-SET,Układ
+SET,Ust.
 SET_EDITOR_ALPHA,Przeźroczystość Edytora
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności
