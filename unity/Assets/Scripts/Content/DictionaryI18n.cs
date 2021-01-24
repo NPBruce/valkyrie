@@ -33,7 +33,7 @@ namespace Assets.Scripts.Content
 
         // must be loaded to Dictionaries and not raw for edit
         protected bool loadedForEdit = false;
-        private static readonly string SINGLE_QUOTE = "\"";
+        private static readonly string DOUBLE_QUOTE = "\"";
         private static readonly string TRIPLE_ENCLOSING = "|||";
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Assets.Scripts.Content
                 {
                     string rawValue = entry.Value.Replace("\r\n", "\n")
                         .Replace("\r", "\n");
-                    if (rawValue.Contains(SINGLE_QUOTE) && !rawValue.Contains(TRIPLE_ENCLOSING))
+                    if (rawValue.Contains(DOUBLE_QUOTE) && !rawValue.Contains(TRIPLE_ENCLOSING))
                     {
                         var escapedLines = (entry.Key + ',' + TRIPLE_ENCLOSING + rawValue + TRIPLE_ENCLOSING).Split('\n');
                         foreach (var line in escapedLines)
@@ -481,10 +481,14 @@ namespace Assets.Scripts.Content
                             rawData[kv.Key].Add(line);
                         }
                     }
+                    else if (rawValue.Contains(DOUBLE_QUOTE) || rawValue.Contains(TRIPLE_ENCLOSING))
+                    {
+                        string quotedLine = DOUBLE_QUOTE + rawValue.Replace(DOUBLE_QUOTE, "\"\"") + DOUBLE_QUOTE;
+                        rawData[kv.Key].Add(entry.Key + ',' + quotedLine);
+                    }
                     else
                     {
-                        string quotedLine = SINGLE_QUOTE + rawValue.Replace(SINGLE_QUOTE, "\"\"") + SINGLE_QUOTE;
-                        rawData[kv.Key].Add(entry.Key + ',' + quotedLine);
+                        rawData[kv.Key].Add(entry.Key + ',' + rawValue);
                     }
                 }
             }
@@ -513,7 +517,7 @@ namespace Assets.Scripts.Content
                 // Trim leading and trailing quotes
                 parsedReturn = parsedReturn.Substring(1, parsedReturn.Length - 2);
                 // Handle escaped quotes
-                parsedReturn = parsedReturn.Replace("\"\"", SINGLE_QUOTE);
+                parsedReturn = parsedReturn.Replace("\"\"", DOUBLE_QUOTE);
             }
             return parsedReturn;
         }
