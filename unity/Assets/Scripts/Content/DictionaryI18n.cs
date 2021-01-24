@@ -481,7 +481,9 @@ namespace Assets.Scripts.Content
                             rawData[kv.Key].Add(line);
                         }
                     }
-                    else if (rawValue.Contains(DOUBLE_QUOTE) || rawValue.Contains(TRIPLE_ENCLOSING))
+                    else if (rawValue.Contains(DOUBLE_QUOTE) 
+                             || rawValue.Contains(TRIPLE_ENCLOSING)
+                             || rawValue.Contains("\n"))
                     {
                         string quotedLine = DOUBLE_QUOTE + rawValue.Replace(DOUBLE_QUOTE, "\"\"") + DOUBLE_QUOTE;
                         rawData[kv.Key].Add(entry.Key + ',' + quotedLine);
