@@ -150,10 +150,10 @@ PUZZLE_IMAGE_CLASS,obraz
 PUZZLE_CODE_CLASS,kod
 PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
-QUEST_NAME_DOWNLOAD,Pobieranie {0}y
-QUEST_NAME_EDITOR,Edytor {0}a
+QUEST_NAME_DOWNLOAD,Pobieranie
+QUEST_NAME_EDITOR,Edytor Scenariuszy
 EDITOR,Edytor
-QUEST_NAME_UPDATE,  [Aktualizacja] {0}a
+QUEST_NAME_UPDATE,  [Aktualizacja] {0}
 QUOTA,Wartość testu
 RECOVER,Wyzdrowieć
 
@@ -183,7 +183,7 @@ HIDE,Ukryj
 DISABLE,Dezaktywuj
 HIDDEN,Ukryty
 ACTIVE,Aktywny
-SET,Układ
+SET,Ust.
 SET_EDITOR_ALPHA,Przeźroczystość Edytora
 SKILL,Umiejętność
 SELECT_SKILLS,Wybierz Umiejętności

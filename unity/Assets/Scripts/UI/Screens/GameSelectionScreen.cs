@@ -371,7 +371,7 @@ namespace Assets.Scripts.UI.Screens
                 if (type.Equals("MoM")) app_filename = "Mansions of Madness";
 
 #if UNITY_STANDALONE_OSX
-                string extension = "app"
+                string extension = "app";
 #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
                 string extension = "exe";
 #else

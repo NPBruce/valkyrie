@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using UnityEngine;
 using ValkyrieTools;
 
 namespace Assets.Scripts.Content
@@ -30,6 +33,8 @@ namespace Assets.Scripts.Content
 
         // must be loaded to Dictionaries and not raw for edit
         protected bool loadedForEdit = false;
+        private static readonly string DOUBLE_QUOTE = "\"";
+        private static readonly string TRIPLE_ENCLOSING = "|||";
 
         /// <summary>
         /// Construct a new empty dictionary
@@ -103,56 +108,56 @@ namespace Assets.Scripts.Content
         /// <param name="languageData">Language data</param>
         public void AddData(string[] languageData)
         {
-            List<string> textToAdd = new List<string>();
-            string partialLine = "";
+            List<string> rawDataToAdd = new List<string>();
 
+            List<string> currentEntry = new List<string>();
+            bool endOfLine = false;
+            bool tripleQuoteMode = false;
             // Remove extra new lines
             foreach (string rawLine in languageData)
             {
                 int sections = rawLine.Split('\"').Length;
+                bool isFirstLine = !currentEntry.Any();
+                currentEntry.Add(rawLine);
+
+                // Contains triple quotes
+                bool startsNewLineWithTripleQuotes = isFirstLine && rawLine.IndexOf($",{TRIPLE_ENCLOSING}", StringComparison.InvariantCulture) != -1;
+                if (startsNewLineWithTripleQuotes || tripleQuoteMode)
+                {
+                    tripleQuoteMode = !rawLine.TrimEnd().EndsWith(TRIPLE_ENCLOSING, StringComparison.InvariantCulture);
+                    endOfLine = !tripleQuoteMode;
+                }
                 // Even number of " characters, self contained line
                 // Or middle of quote block
-                if ((sections % 2) == 1)
+                else if ((sections % 2) == 1)
                 {
-                    // No current block, self contained entry
-                    if (partialLine.Length == 0)
-                    {
-                        textToAdd.Add(rawLine);
-                    }
-                    // Current quote block, add line
-                    else
-                    {
-                        partialLine += "\\n" + rawLine;
-                    }
+                    // If first line - end the line (single line)
+                    // Otherwise it's the middle of the block
+                    endOfLine = isFirstLine && !tripleQuoteMode;
                 }
                 // Odd number of quotes *should* mean start or end of multi line block
-                else
+                else if (!isFirstLine || isOldFormat(rawLine))
                 {
-                    // Start of a new block
-                    if (partialLine.Length == 0)
-                    {
-                        // We need to support old data which may have " characters without a starting quote
-                        // These are always single line and do not have " as the first character
-                        string[] components = rawLine.Split(",".ToCharArray(), 2);
-                        // Text starts with ", it is a normal multi line block
-                        if (components.Length > 1 && components[1].Length > 0 && components[1][0] == '\"')
-                        {
-                            partialLine = rawLine;
-                        }
-                        else
-                        {
-                            // Text does not start with ", support for 1.6.1 and earlier which may have uneven single lines
-                            textToAdd.Add(rawLine);
-                        }
-                    }
-                    else
-                    // Block has started, this is the last line
-                    {
-                        partialLine += "\\n" + rawLine;
-                        textToAdd.Add(partialLine);
-                        partialLine = "";
-                    }
+                    // Single line or does not have triple quotes
+                    endOfLine = !tripleQuoteMode;
                 }
+
+                if (endOfLine)
+                {
+                    var combinedValue = string.Join("\n", currentEntry);
+                    rawDataToAdd.Add(combinedValue);
+
+                    currentEntry = new List<string>();
+                    endOfLine = false;
+                    tripleQuoteMode = false;
+                }
+            }
+
+            if (currentEntry.Any())
+            {
+                var combinedValue = string.Join("\\n", currentEntry);
+                Debug.Log("Failed to parse language data properly, remaining values: " + combinedValue);
+                rawDataToAdd.Add(combinedValue);
             }
 
             string newLanguage = languageData[0].Split(COMMA)[1].Trim('"');
@@ -161,7 +166,15 @@ namespace Assets.Scripts.Content
             {
                 rawData.Add(newLanguage, new List<string>());
             }
-            rawData[newLanguage].AddRange(textToAdd);
+            rawData[newLanguage].AddRange(rawDataToAdd);
+        }
+
+        private static bool isOldFormat(string rawLine)
+        {
+            string[] components = rawLine.Split(",".ToCharArray(), 2);
+            // Text starts with ", it is a normal multi line block
+            bool isNotOldFormat = components.Length > 1 && components[1].Length > 0 && components[1][0] == '\"';
+            return !isNotOldFormat;
         }
 
         /// <summary>
@@ -193,7 +206,11 @@ namespace Assets.Scripts.Content
                     // Only store the first occurance of a key
                     if (!data[kv.Key].ContainsKey(components[0]))
                     {
-                        data[kv.Key].Add(components[0], ParseEntry(components[1]));
+                        var entry = ParseEntry(components[1]);
+                        if (entry.Length > 0)
+                        {
+                            data[kv.Key].Add(components[0], entry);
+                        }
                     }
                 }
             }
@@ -367,7 +384,7 @@ namespace Assets.Scripts.Content
                     {
                         ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
                     }
-                    else
+                    else if (parsed_raw.Length > 0)
                     {
                         data[kv.Key].Add(key, parsed_raw);
                     }
@@ -454,13 +471,25 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    string entryDiskFormat = entry.Value.Replace("\r\n", "\n");
-                    entryDiskFormat = entryDiskFormat.Replace("\r", "\n").Replace("\n", "\\n");
-                    if (entryDiskFormat.Contains("\""))
+                    string rawValue = entry.Value
+                        .Replace("\r\n", "\n")
+                        .Replace("\r", "\n")
+                        .Replace("\n", "\\n");
+                    if (rawValue.Contains(DOUBLE_QUOTE) && !rawValue.Contains(TRIPLE_ENCLOSING))
                     {
-                        entryDiskFormat = "\"" + entryDiskFormat.Replace("\"", "\"\"") + "\"";
+                        rawData[kv.Key].Add(entry.Key + ',' + TRIPLE_ENCLOSING + rawValue + TRIPLE_ENCLOSING);
                     }
-                    rawData[kv.Key].Add(entry.Key + ',' + entryDiskFormat);
+                    else if (rawValue.Contains(DOUBLE_QUOTE) 
+                             || rawValue.Contains(TRIPLE_ENCLOSING)
+                             || rawValue.Contains("\\n"))
+                    {
+                        string quotedLine = DOUBLE_QUOTE + rawValue.Replace(DOUBLE_QUOTE, "\"\"") + DOUBLE_QUOTE;
+                        rawData[kv.Key].Add(entry.Key + ',' + quotedLine);
+                    }
+                    else
+                    {
+                        rawData[kv.Key].Add(entry.Key + ',' + rawValue);
+                    }
                 }
             }
 
@@ -475,13 +504,20 @@ namespace Assets.Scripts.Content
         protected string ParseEntry(in string entry)
         {
             string parsedReturn = entry.Replace("\\n", "\n");
+            // If entry is in triple quotes
+            if (parsedReturn.Length >= TRIPLE_ENCLOSING.Length*2 
+                && parsedReturn.StartsWith(TRIPLE_ENCLOSING) && parsedReturn.Trim().EndsWith(TRIPLE_ENCLOSING))
+            {
+                parsedReturn = parsedReturn.Substring(TRIPLE_ENCLOSING.Length, parsedReturn.Length - TRIPLE_ENCLOSING.Length*2);
+
+            }
             // If entry is in quotes
-            if (parsedReturn.Length > 2 && parsedReturn[0] == '\"')
+            if (parsedReturn.Length > 1 && parsedReturn[0] == '\"' && parsedReturn.Last() == '\"')
             {
                 // Trim leading and trailing quotes
                 parsedReturn = parsedReturn.Substring(1, parsedReturn.Length - 2);
                 // Handle escaped quotes
-                parsedReturn = parsedReturn.Replace("\"\"", "\"");
+                parsedReturn = parsedReturn.Replace("\"\"", DOUBLE_QUOTE);
             }
             return parsedReturn;
         }

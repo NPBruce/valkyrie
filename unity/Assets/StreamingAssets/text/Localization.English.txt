@@ -651,3 +651,9 @@ DOWNLOAD_ONGOING,Downloading...
 OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
 
 MISSING_EXPANSIONS,Missing expansions:
+
+RICH_TEXT,Rich text
+TEXT_ALIGNMENT,Align
+TOP,Top
+CENTER,Center
+BOTTOM,Bottom
