@@ -471,19 +471,17 @@ namespace Assets.Scripts.Content
                 rawData[kv.Key].Add(".," + kv.Key);
                 foreach (KeyValuePair<string, string> entry in kv.Value)
                 {
-                    string rawValue = entry.Value.Replace("\r\n", "\n")
-                        .Replace("\r", "\n");
+                    string rawValue = entry.Value
+                        .Replace("\r\n", "\n")
+                        .Replace("\r", "\n")
+                        .Replace("\n", "\\n");
                     if (rawValue.Contains(DOUBLE_QUOTE) && !rawValue.Contains(TRIPLE_ENCLOSING))
                     {
-                        var escapedLines = (entry.Key + ',' + TRIPLE_ENCLOSING + rawValue + TRIPLE_ENCLOSING).Split('\n');
-                        foreach (var line in escapedLines)
-                        {
-                            rawData[kv.Key].Add(line);
-                        }
+                        rawData[kv.Key].Add(entry.Key + ',' + TRIPLE_ENCLOSING + rawValue + TRIPLE_ENCLOSING);
                     }
                     else if (rawValue.Contains(DOUBLE_QUOTE) 
                              || rawValue.Contains(TRIPLE_ENCLOSING)
-                             || rawValue.Contains("\n"))
+                             || rawValue.Contains("\\n"))
                     {
                         string quotedLine = DOUBLE_QUOTE + rawValue.Replace(DOUBLE_QUOTE, "\"\"") + DOUBLE_QUOTE;
                         rawData[kv.Key].Add(entry.Key + ',' + quotedLine);
