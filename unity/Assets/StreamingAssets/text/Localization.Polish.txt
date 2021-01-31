@@ -431,7 +431,7 @@ FILTER_MISSING_EXPANSIONS_OFF,Ukryj scenariusze, do których nie posiadasz rozsz
 FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Odfiltrowano scenariuszy: {0}
 
 AUTHORS_SHORT,Krótka wiadomość od Autora (opcja "sortuj wg autora")
-AUTHORS_UNKNOWN,Autor nieznany (scenariusz wymagana aktualizacja przez autora)
+AUTHORS_UNKNOWN,Autor nieznany (scenariusz wymagana aktualizacji przez autora)
 
 SYNOPSYS,Streszczenie (maks. 100 znaków)
 
@@ -443,8 +443,8 @@ UPDATED_THIS_YEAR,Zaktualizowane w tym roku
 UPDATED_TWO_YEARS_AGO,Zaktualizowane dwa lata temu
 UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata
 
-GO_OFFLINE, Włączyć tryb Offline
-GO_ONLINE, Włączyć tryb Online
+GO_OFFLINE, Przejdź w tryb Offline
+GO_ONLINE, Przejdź w tryb Online
 DOWNLOAD_ONGOING,Pobieranie...
 OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
 

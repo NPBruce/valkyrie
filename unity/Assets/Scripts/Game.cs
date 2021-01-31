@@ -25,6 +25,7 @@ public class Game : MonoBehaviour
     public static readonly string UIPHASE = "uiphase";
     public static readonly string TRANSITION = "transition";
     public static readonly string DIALOG = "dialog";
+    public static readonly string SETWINDOW = "setwindow";
     public static readonly string ACTIVATION = "activation";
     public static readonly string SHOP = "shop";
     public static readonly string ENDGAME = "endgame";

@@ -88,6 +88,18 @@ public class Destroyer
         Resources.UnloadUnusedAssets();
     }
 
+    // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
+    public static void SetWindow()
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SETWINDOW))
+            Object.Destroy(go);
+
+        CameraController.panDisable = false;
+        Game.Get().logWindow = null;
+        Resources.UnloadUnusedAssets();
+    }
+
     // Remove transition screen between phases
     public static void Transition()
     {
