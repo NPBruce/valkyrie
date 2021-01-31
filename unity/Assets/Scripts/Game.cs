@@ -325,9 +325,8 @@ public class Game : MonoBehaviour
 
     public void QuestStartEvent()
     {
-        List<string> music = GetDefaultQuestMusic();
-        audioControl.PlayDefaultQuestMusic(music);
-        
+        PlayDefaultQuestMusic();
+
         Destroyer.Dialog();
         // Create the menu button
         new MenuButton();
@@ -342,6 +341,12 @@ public class Game : MonoBehaviour
         // Start the quest (top of stack)
         quest.eManager.EventTriggerType("EventStart", false);
         quest.eManager.TriggerEvent();
+    }
+
+    public void PlayDefaultQuestMusic()
+    {
+        List<string> music = GetDefaultQuestMusic();
+        audioControl.PlayDefaultQuestMusic(music);
     }
 
     private List<string> GetDefaultQuestMusic()

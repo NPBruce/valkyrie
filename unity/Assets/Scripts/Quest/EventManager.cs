@@ -203,7 +203,7 @@ public class EventManager
                 }
             }
             game.audioControl.PlayMusic(music);
-            if (music.Count > 1)
+            if (music.Count > 0)
             {
                 game.quest.music = new List<string>(e.qEvent.music);
             }

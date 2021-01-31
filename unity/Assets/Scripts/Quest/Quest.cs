@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -6,7 +7,10 @@ using ValkyrieTools;
 using System.IO;
 using System.Linq;
 using TMPro;
+using UnityEngine.Experimental.UIElements;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 // Class to manage all data for the current quest
@@ -738,37 +742,7 @@ public class Quest
 
         // Set static quest data
         qd = new QuestData(saveData.Get("Quest", "path"));
-
-        // Start quest music
-        List<string> music = new List<string>();
-        if (saveData.Get("Music") != null)
-        {
-            music = new List<string>(saveData.Get("Music").Values);
-            List<string> toPlay = new List<string>();
-            foreach (string s in music)
-            {
-                if (game.cd.TryGet(s, out AudioData musicData))
-                {
-                    toPlay.Add(musicData.file);
-                }
-                else
-                {
-                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
-                }
-            }
-
-            game.audioControl.PlayMusic(toPlay);
-        }
-        else
-        {
-            foreach (AudioData ad in game.cd.Values<AudioData>())
-            {
-                if (ad.ContainsTrait("quest")) music.Add(ad.file);
-            }
-
-            game.audioControl.PlayDefaultQuestMusic(music);
-        }
-
+        
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
         bool horror;
@@ -1036,6 +1010,30 @@ public class Quest
         game.stageUI = new NextStageButton();
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
+
+        var loadedDefaultOn = Boolean.TryParse(saveData.Get("Quest", "defaultmusicon"), out bool defaultOn);
+        defaultMusicOn = !loadedDefaultOn || defaultOn;
+        // Start quest music
+        game.PlayDefaultQuestMusic();
+        List<string> music = new List<string>();
+        if (saveData.Get("Music") != null)
+        {
+            music = new List<string>(saveData.Get("Music").Values);
+            List<string> toPlay = new List<string>();
+            foreach (string s in music)
+            {
+                if (game.cd.TryGet(s, out AudioData musicData))
+                {
+                    toPlay.Add(musicData.file);
+                }
+                else
+                {
+                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
+                }
+            }
+
+            game.audioControl.PlayMusic(toPlay);
+        }
     }
 
     // Save to the undo stack
