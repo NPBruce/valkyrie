@@ -273,6 +273,7 @@ public class RoundController {
 
         if (game.quest.vars.GetValue("#eliminatedprev") > 0)
         {
+            game.quest.vars.SetValue("#eliminatedcomplete", 1);
             game.quest.eManager.EventTriggerType("Eliminated", false);
         }
         if (game.quest.vars.GetValue("#eliminated") > 0)

@@ -40,6 +40,7 @@ public class SetWindow
         if (game.quest.vars.GetValue("#eliminated") > 0)
         {
             ui.SetText(INVESTIGATOR_ELIMINATED, Color.gray);
+            ui.SetButton(Uneliminate);
             new UIElementBorder(ui, Color.gray);
         }
         else
@@ -76,6 +77,19 @@ public class SetWindow
     {
         Game game = Game.Get();
         game.quest.vars.SetValue("#eliminated", 1);
+        new SetWindow();
+    }
+
+    public void Uneliminate()
+    {
+        Game game = Game.Get();
+        if (game.quest.vars.GetValue("#eliminatedcomplete") > 0.1f)
+        {
+            return;
+        }
+
+        game.quest.vars.SetValue("#eliminated", 0);
+        game.quest.vars.SetValue("#eliminatedprev", 0);
         new SetWindow();
     }
 }
