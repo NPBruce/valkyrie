@@ -1888,7 +1888,7 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 16;
+        public static int currentFormat = QuestFormat.CURRENT_VERSION;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
@@ -2013,42 +2013,44 @@ public class QuestData
                 type = iniData["type"];
             }
 
+            SortedSet<String> requiredPacks = new SortedSet<string>();
+            if (Game.game.gameType is MoMGameType &&
+                format < (int) QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT)
+            {
+                requiredPacks.Add("MoM1CK");
+            }
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 // Depreciated Format 5
-                List<string> newPacks = new List<string>();
                 foreach (string s in packs)
                 {
                     if (s.Equals("MoM1E"))
                     {
-                        newPacks.Add("MoM1ET");
-                        newPacks.Add("MoM1EI");
-                        newPacks.Add("MoM1EM");
+                        requiredPacks.Add("MoM1ET");
+                        requiredPacks.Add("MoM1EI");
+                        requiredPacks.Add("MoM1EM");
                     }
                     else if (s.Equals("FA"))
                     {
-                        newPacks.Add("FAT");
-                        newPacks.Add("FAI");
-                        newPacks.Add("FAM");
+                        requiredPacks.Add("FAT");
+                        requiredPacks.Add("FAI");
+                        requiredPacks.Add("FAM");
                     }
                     else if (s.Equals("CotW"))
                     {
-                        newPacks.Add("CotWT");
-                        newPacks.Add("CotWI");
-                        newPacks.Add("CotWM");
+                        requiredPacks.Add("CotWT");
+                        requiredPacks.Add("CotWI");
+                        requiredPacks.Add("CotWM");
                     }
                     else
                     {
-                        newPacks.Add(s);
+                        requiredPacks.Add(s);
                     }
                 }
-                packs = newPacks.ToArray();
             }
-            else
-            {
-                packs = new string[0];
-            }
+
+            packs = requiredPacks.ToArray();
 
             if (iniData.ContainsKey("defaultlanguage"))
             {
