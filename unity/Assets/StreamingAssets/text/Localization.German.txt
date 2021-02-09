@@ -1,8 +1,9 @@
 .,German
+// Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
-ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' Descent: Road to Legend inspiriertes Gamemaster-Tool. Die meisten Bildressources werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und Anderen. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' "Descent: Wege zum Ruhm" inspiriertes Gamemaster-Tool. Die meisten Bildressourcen werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen. Die Länderflaggen sind von Freepik www.flaticon.com.
 ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
@@ -150,15 +151,15 @@ IMAGE,Bild
 
 PUZZLE_LEVEL,Level
 PUZZLE_SELECT_SKILL,Fähigkeit wählen
-PUZZLE_IMAGE_CLASS,bild
-PUZZLE_CODE_CLASS,code
-PUZZLE_SLIDE_CLASS,schieberaetsel
+PUZZLE_IMAGE_CLASS,Bild
+PUZZLE_CODE_CLASS,Code
+PUZZLE_SLIDE_CLASS,Schieberätsel
 QUEST,Szenario
 QUEST_NAME_DOWNLOAD,Download {0}
 QUEST_NAME_EDITOR,{0}-Editor
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
-QUOTA,Quote
+QUOTA,Zitat
 RECOVER,Erholen
 INVESTIGATOR_ATTACKS,Emittler greifen an
 
@@ -183,7 +184,7 @@ SELECT_IMAGE,Bild wählen
 SELECT_ITEM,Gegenstand wählen
 SELECT_PACK,Paket wählen
 SELECT_TO_COPY,{0} zum Kopieren ausgewählt
-SELECT_TO_DELETE,{0} zur Löschung ausgewählt
+SELECT_TO_DELETE,{0} zum Löschen ausgewählt
 DISABLE,Deaktivieren
 HIDE,Verstecken
 HIDDEN,Versteckt
@@ -195,8 +196,8 @@ SELECT_SKILLS,Fähigkeiten wählen
 SPAWN,Spawn
 STARTING_ITEM,Startgegenstand
 STARTING_ITEMS,Startgegenstände
-START_QUEST,Neues spiel
-START,Starte
+START_QUEST,Neues Spiel
+START,Start
 
 TESTS,Tests
 TILE,Teil
@@ -254,7 +255,7 @@ spell,Zauber
 key,Schlüssel
 evidence,Beweis
 ally,Verbündeter
-spelldefence,Verteid-Zauber
+spelldefence,Verteid.-Zauber
 spellattack,Angriff-Zauber
 
 //Audio
@@ -380,7 +381,7 @@ navy,Marineblau
 //Puzzles
 image,Bild
 code,Code
-slide,Schieberaetsel
+slide,Schieberätsel
 tower,Turm
 SYMBOL,Symbol
 
@@ -414,7 +415,7 @@ ATTACK_WITH_UNARMED, Unbewaffnet angreifen
 
 ACTION_X, {0}
 
-STATS_WELCOME,Danke fürs Spielen. Bitte bewerte und sende uns deine Meinung für zukünftige Spieler. Deine Spielaktionen werden dabei mit den Autoren des Spiels geteilt, um ihm zu helfen dieses Szenario zu verbessern.
+STATS_WELCOME,Danke für's Spielen! Bitte bewerte das Szenario und sende uns deine Meinung für zukünftige Spieler. Deine Spielaktionen werden dabei mit den Autoren des Szenarios geteilt, um ihnen beim Verbessern dieses Szenarios zu helfen.
 STATS_ASK_VICTORY,Hast du das Spiel gewonnen?
 STATS_ASK_VICTORY_YES,JA!
 STATS_ASK_VICTORY_NO,Nein...
@@ -434,8 +435,8 @@ STATS_DOWNLOAD_ONGOING,Lade Statistiken und Bewertungen...\nBitte lade die Seite
 STATS_ERROR_HTTP,Fehler beim Abrufen der Spielstatistik. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
 STATS_ERROR_NETWORK,Fehler beim Abrufen der Spielstatistik, bitte überprüfe deine Internetverbindung
 
-ERROR_HTTP,Fehler beim Abrufen der datei. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
-ERROR_NETWORK,Fehler beim Abrufen der datei, bitte überprüfe deine Internetverbindung
+ERROR_HTTP,Fehler beim Abrufen der Datei. Wenn das Problem weiterhin besteht, melde es auf github Valkyrie\n{0}
+ERROR_NETWORK,Fehler beim Abrufen der Datei, bitte überprüfe deine Internetverbindung
 
 NEW_VERSION_AVAILABLE,Update verfügbar!
 
@@ -457,19 +458,19 @@ SORT_BY_DATE,Updatedatum
 
 FILTER_TITLE,Filter auswählen
 FILTER_SELECT_LANG,Bitte Sprachen wählen:
-FILTER_MISSING_EXPANSIONS_ON,Scenarien mit fehlenden Erweiterungen verstecken  ☑
-FILTER_MISSING_EXPANSIONS_OFF,Scenarien mit fehlenden Erweiterungen verstecken  ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Scenarien gefunden
+FILTER_MISSING_EXPANSIONS_ON,Szenarien mit fehlenden Erweiterungen verstecken  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Szenarien mit fehlenden Erweiterungen verstecken  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Szenarien gefunden
 
 AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
-AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor um dies zu hinterlegen)
+AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor, um dies zu hinterlegen)
 
 SYNOPSYS,Zusammenfassung (max. 100 Zeichen)
 
 UPDATED_THIS_WEEK,Innerhalb dieser Woche aktualisiert
 UPDATED_THIS_MONTH,Innerhalb dieses Monats aktualisiert
-UPDATED_THIS_TRIMESTER,Innerhalb diesers Quartals aktualisiert
-UPDATED_THIS_SEMESTER,Innerhalb dieses Semesters aktualisiert
+UPDATED_THIS_TRIMESTER,Innerhalb dieses Quartals aktualisiert
+UPDATED_THIS_SEMESTER,Innerhalb dieses Halbjahres aktualisiert
 UPDATED_THIS_YEAR,Innerhalb dieses Jahres aktualisiert
 UPDATED_TWO_YEARS_AGO,Vor zwei Jahren aktualisiert
 UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre

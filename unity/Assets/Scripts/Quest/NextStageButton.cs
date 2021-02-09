@@ -181,7 +181,7 @@ public class NextStageButton
 
     public void Set()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        if (GameObject.FindGameObjectWithTag(Game.SETWINDOW) != null)
         {
             return;
         }

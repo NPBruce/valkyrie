@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using System.IO;
+using System.Linq;
 
 namespace Assets.Scripts.UI
 {
@@ -105,13 +106,10 @@ namespace Assets.Scripts.UI
             float yOffset = 4;
             foreach (SelectionItemTraits item in allItems)
             {
-                bool display = true;
-                foreach (TraitGroup tg in traitData)
+                if (!traitGroups.All(tg => tg.ActiveItem(item)))
                 {
-                    display &= tg.ActiveItem(item);
+                    continue;
                 }
-
-                if (!display) continue;
 
                 if (spriteCache.ContainsKey(item.GetKey()))
                 {

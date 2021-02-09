@@ -25,6 +25,7 @@ public class Game : MonoBehaviour
     public static readonly string UIPHASE = "uiphase";
     public static readonly string TRANSITION = "transition";
     public static readonly string DIALOG = "dialog";
+    public static readonly string SETWINDOW = "setwindow";
     public static readonly string ACTIVATION = "activation";
     public static readonly string SHOP = "shop";
     public static readonly string ENDGAME = "endgame";
@@ -262,12 +263,6 @@ public class Game : MonoBehaviour
     // This is called by editor on the main menu
     public void SelectEditQuest()
     {
-        // We load all packs for the editor, not just those selected
-        foreach (string pack in cd.GetPacks())
-        {
-            _contentLoader.LoadContent(pack);
-        }
-
         // Pull up the quest selection page
         new QuestEditSelection();
     }
@@ -331,9 +326,8 @@ public class Game : MonoBehaviour
 
     public void QuestStartEvent()
     {
-        List<string> music = GetDefaultQuestMusic();
-        audioControl.PlayDefaultQuestMusic(music);
-        
+        PlayDefaultQuestMusic();
+
         Destroyer.Dialog();
         // Create the menu button
         new MenuButton();
@@ -348,6 +342,12 @@ public class Game : MonoBehaviour
         // Start the quest (top of stack)
         quest.eManager.EventTriggerType("EventStart", false);
         quest.eManager.TriggerEvent();
+    }
+
+    public void PlayDefaultQuestMusic()
+    {
+        List<string> music = GetDefaultQuestMusic();
+        audioControl.PlayDefaultQuestMusic(music);
     }
 
     private List<string> GetDefaultQuestMusic()

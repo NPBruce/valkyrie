@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using ValkyrieTools;
 
@@ -51,45 +52,12 @@ class SaveManager
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
 
-            Color[] screenColor = game.cc.screenShot.GetPixels(0);
-
             float scale = 4f / 30f;
-            Texture2D outTex = new Texture2D(Mathf.RoundToInt(screenSize.x * scale), Mathf.RoundToInt(screenSize.y * scale), TextureFormat.RGB24, false);
- 
-            Color[] outColor = new Color[outTex.width * outTex.height];
- 
-            for(int i = 0; i < outColor.Length; i++)
-            {
-                float xX = (float)i % (float)outTex.width;
-                float xY = Mathf.Floor((float)i / (float)outTex.width);
- 
-                Vector2 vCenter = new Vector2(xX, xY) / scale;
 
-                int xXFrom = (int)Mathf.Max(Mathf.Floor(vCenter.x - (0.5f / scale)), 0);
-                int xXTo = (int)Mathf.Min(Mathf.Ceil(vCenter.x + (0.5f / scale)), screenSize.x);
-                int xYFrom = (int)Mathf.Max(Mathf.Floor(vCenter.y - (0.5f / scale)), 0);
-                int xYTo = (int)Mathf.Min(Mathf.Ceil(vCenter.y + (0.5f / scale)), screenSize.y);
- 
-                Color oColorTemp = new Color();
-                float xGridCount = 0;
-                for(int iy = xYFrom; iy < xYTo; iy++)
-                {
-                    for(int ix = xXFrom; ix < xXTo; ix++)
-                    {
-                        int index = (int)(((float)iy * screenSize.x) + ix);
-                        if (index >= screenColor.Length || index < 0)
-                        {
-                            continue;
-                        }
-                        oColorTemp += screenColor[index];
-                        xGridCount++;
-                    }
-                }
-                outColor[i] = oColorTemp / (float)xGridCount;
-            }
-
-            outTex.SetPixels(outColor);
-            outTex.Apply();
+            var targetSizeX = Mathf.RoundToInt(screenSize.x * scale);
+            var targetSizeY = Mathf.RoundToInt(screenSize.y * scale);
+            var outTex = ResizeScreenShotTexture(game.cc.screenShot, targetSizeX, targetSizeY);
+            
             File.WriteAllBytes(Path.Combine(tempValkyriePath, "image.png"), outTex.EncodeToPNG());
 
             // Check if we should update the zip file or write a new one with quest content
@@ -127,6 +95,31 @@ class SaveManager
             ZipManager.Wait4PreviousSave();
             GameStateManager.MainMenu();
         }
+    }
+
+    private static Texture2D ResizeScreenShotTexture(Texture2D source, int targetSizeX, int targetSizeY)
+    {
+        var currentTarget = RenderTexture.active;
+        Texture2D result = new Texture2D(targetSizeX,targetSizeY);
+        try
+        {
+            RenderTexture helper = new RenderTexture(targetSizeX, targetSizeY, 24);
+            RenderTexture.active = helper;
+            Graphics.Blit(source, helper);
+            result.ReadPixels(new Rect(0, 0, targetSizeX, targetSizeY), 0, 0);
+            result.Apply();
+        }
+        catch (Exception e)
+        {
+            ValkyrieDebug.Log($"Failed to resize screenshot: {e.Message}");
+            ValkyrieDebug.Log(e.StackTrace);
+            
+        }
+        finally
+        {
+            RenderTexture.active = currentTarget;
+        }
+        return result;
     }
 
     // Check if a save game exists for the current game type

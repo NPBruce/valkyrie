@@ -13,14 +13,14 @@ public class SetWindow
     public SetWindow()
     {
         Game game = Game.Get();
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SETWINDOW))
             Object.Destroy(go);
 
-        UIElement ui = new UIElement();
+        UIElement ui = new UIElement(Game.SETWINDOW);
         ui.SetLocation(UIScaler.GetHCenter(-10), 10, 20, 10);
         new UIElementBorder(ui);
 
-        ui = new UIElement();
+        ui = new UIElement(Game.SETWINDOW);
         ui.SetLocation(UIScaler.GetHCenter(-8), 11, 16, 2);
         if (game.quest.vars.GetValue("$fire") > 0)
         {
@@ -35,11 +35,12 @@ public class SetWindow
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
 
-        ui = new UIElement();
+        ui = new UIElement(Game.SETWINDOW);
         ui.SetLocation(UIScaler.GetHCenter(-8), 14, 16, 2);
         if (game.quest.vars.GetValue("#eliminated") > 0)
         {
             ui.SetText(INVESTIGATOR_ELIMINATED, Color.gray);
+            ui.SetButton(Uneliminate);
             new UIElementBorder(ui, Color.gray);
         }
         else
@@ -50,11 +51,11 @@ public class SetWindow
         }
         ui.SetFontSize(UIScaler.GetMediumFont());
 
-        ui = new UIElement();
+        ui = new UIElement(Game.SETWINDOW);
         ui.SetLocation(UIScaler.GetHCenter(-3), 17, 6, 2);
         ui.SetText(CommonStringKeys.CLOSE);
         ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(Destroyer.Dialog);
+        ui.SetButton(Destroyer.SetWindow);
         new UIElementBorder(ui);
     }
 
@@ -76,6 +77,19 @@ public class SetWindow
     {
         Game game = Game.Get();
         game.quest.vars.SetValue("#eliminated", 1);
+        new SetWindow();
+    }
+
+    public void Uneliminate()
+    {
+        Game game = Game.Get();
+        if (game.quest.vars.GetValue("#eliminatedcomplete") > 0.1f)
+        {
+            return;
+        }
+
+        game.quest.vars.SetValue("#eliminated", 0);
+        game.quest.vars.SetValue("#eliminatedprev", 0);
         new SetWindow();
     }
 }

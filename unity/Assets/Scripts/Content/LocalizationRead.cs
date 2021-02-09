@@ -24,7 +24,7 @@ namespace Assets.Scripts.Content
             }
         }
 
-        private const int RECURSIVE_LIMIT = 10;
+        private const int RECURSIVE_LIMIT = 20;
 
         // Check for FFG text lookups and insert required text
         /// <summary>

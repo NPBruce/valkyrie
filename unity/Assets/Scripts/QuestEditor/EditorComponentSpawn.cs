@@ -12,6 +12,7 @@ public class EditorComponentSpawn : EditorComponentEvent
     private readonly StringKey POSITION_TYPE_UNUSED = new StringKey("val", "POSITION_TYPE_UNUSED");
     private readonly StringKey POSITION_TYPE_HIGHLIGHT = new StringKey("val", "POSITION_TYPE_HIGHLIGHT");
     private readonly StringKey MONSTER_UNIQUE = new StringKey("val", "MONSTER_UNIQUE");
+    private readonly StringKey ACTIVATED = new StringKey("val", "ACTIVATED");
 
     private readonly StringKey UNIQUE_TITLE = new StringKey("val", "UNIQUE_TITLE");
     private readonly StringKey UNIQUE_INFO = new StringKey("val", "UNIQUE_INFO");
@@ -55,7 +56,19 @@ public class EditorComponentSpawn : EditorComponentEvent
         spawnComponent = component as QuestData.Spawn;
 
         UIElement ui = null;
-
+        
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", ACTIVATED));
+        
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 3, 1);
+        var activatedText = spawnComponent.activated ? CommonStringKeys.TRUE : CommonStringKeys.FALSE;
+        ui.SetText(activatedText);
+        ui.SetButton(delegate { ActivatedToggle(); });
+        new UIElementBorder(ui);
+        offset += 2;
+        
         if (game.gameType is D2EGameType)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -307,6 +320,12 @@ public class EditorComponentSpawn : EditorComponentEvent
     override public void PositionTypeCycle()
     {
         spawnComponent.locationSpecified = !spawnComponent.locationSpecified;
+        Update();
+    }
+
+    public void ActivatedToggle()
+    {
+        spawnComponent.activated = !spawnComponent.activated;
         Update();
     }
 
