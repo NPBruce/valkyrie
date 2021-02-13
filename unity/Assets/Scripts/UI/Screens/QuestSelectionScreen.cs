@@ -1022,6 +1022,7 @@ namespace Assets.Scripts.UI.Screens
                 Color expansion_text_color = Color.black;
                 float expansion_x_offset = 5.8f;
                 float expansion_y_offset = offset + 1.7f;
+                float heroes_y_offset = offset + 1.1f;
                 int expansions_symbol_font_size = UIScaler.GetSmallFont();
                 if (game.gameType.TypeName() == "D2E")
                 {
@@ -1067,6 +1068,14 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetFont(game.gameType.GetSymbolFont());
                     ui.SetFontSize(expansions_symbol_font_size);
                 }
+
+                // Min/max heroes
+                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetLocation(UIScaler.GetRight(-10f) - 10f, heroes_y_offset, 10f, 1);
+                ui.SetText($"{q.minHero}-{q.maxHero} {game.gameType.HeroesName().Translate()}", Color.black);
+                ui.SetTextAlignment(TextAnchor.MiddleRight);
+                ui.SetBGColor(Color.clear);
+                ui.SetFontSize(expansions_symbol_font_size);
 
                 // Quest short description (synopsys)
                 if (synopsys_translation != null)
