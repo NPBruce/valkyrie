@@ -676,7 +676,10 @@ public class EditorComponentEvent : EditorComponent
         foreach (string monsterKey in game.cd.Keys<MonsterData>())
         {
             select.AddItem("Defeated" + monsterKey, traits);
-            select.AddItem("DefeatedUnique" + monsterKey, traits);
+            if (game.gameType is D2EGameType)
+            {
+                select.AddItem("DefeatedUnique" + monsterKey, traits);
+            }
         }
 
         HashSet<string> vars = new HashSet<string>();

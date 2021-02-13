@@ -78,7 +78,7 @@ public class QuestData
             ValkyrieDebug.Log("Error: Quest section missing from quest.ini");
             return;
         }
-        quest = new Quest(questIniData.Get("Quest"));
+        quest = new Quest(string.Empty, questIniData.Get("Quest"));
 
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
@@ -1893,6 +1893,7 @@ public class QuestData
         public bool hidden = false;
         public bool valid = false;
         public string path = "";
+        public string identifier = "";
         // quest type (MoM, D2E)
         public string type;
         // Content packs required for quest
@@ -1951,6 +1952,8 @@ public class QuestData
                 path = path.Substring(0, path.Length - 1);
             }
 
+            identifier = Path.GetFileNameWithoutExtension(path).ToLower();
+
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "Quest");
             if (iniData == null)
             {
@@ -1979,8 +1982,9 @@ public class QuestData
         }
 
         // Create from ini data
-        public Quest(Dictionary<string, string> iniData)
+        public Quest(string identifier, Dictionary<string, string> iniData)
         {
+            this.identifier = identifier.ToLower();
             if (LocalizationRead.dicts.ContainsKey("qst"))
             { 
                 localizationDict = LocalizationRead.dicts["qst"];
@@ -2015,7 +2019,8 @@ public class QuestData
 
             SortedSet<String> requiredPacks = new SortedSet<string>();
             if (Game.game.gameType is MoMGameType &&
-                format < (int) QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT)
+                format < (int) QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT &&
+                QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains(identifier))
             {
                 requiredPacks.Add("MoM1CK");
             }
