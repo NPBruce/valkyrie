@@ -18,12 +18,30 @@ namespace Assets.Scripts.Content
         /// <summary>
         /// Default initial language is English
         /// </summary>
-        public string defaultLanguage = "English";
+        public string defaultLanguage 
+        {
+            get => _defaultLanguage;
+            set
+            {
+                _defaultLanguage = value;
+                requiredLanguages.Add(value);
+            }
+        }
 
-        public string currentLanguage = "English";
-        
+
+        public string currentLanguage
+        {
+            get => _currentLanguage;
+            set
+            {
+                _currentLanguage = value;
+                requiredLanguages.Add(value);
+            }
+        }
+
         private Dictionary<string, string> keyToGroup = new Dictionary<string, string>();
         private Dictionary<string, string> groupToLanguage = new Dictionary<string, string>();
+        private HashSet<string> requiredLanguages = new HashSet<string> { "English" };
 
         // Each language has it's own dictionary
         private Dictionary<string, Dictionary<string, string>> data;
@@ -33,6 +51,8 @@ namespace Assets.Scripts.Content
 
         // must be loaded to Dictionaries and not raw for edit
         protected bool loadedForEdit = false;
+        private string _defaultLanguage = "English";
+        private string _currentLanguage = "English";
         private static readonly string DOUBLE_QUOTE = "\"";
         private static readonly string TRIPLE_ENCLOSING = "|||";
 
@@ -206,11 +226,7 @@ namespace Assets.Scripts.Content
                     // Only store the first occurance of a key
                     if (!data[kv.Key].ContainsKey(components[0]))
                     {
-                        var entry = ParseEntry(components[1]);
-                        if (entry.Length > 0)
-                        {
-                            data[kv.Key].Add(components[0], entry);
-                        }
+                        data[kv.Key].Add(components[0], ParseEntry(components[1]));
                     }
                 }
             }
@@ -334,9 +350,13 @@ namespace Assets.Scripts.Content
         public bool KeyExists(in string key)
         {
             // Check loaded Dictionary data
-            foreach (Dictionary<string, string> languageData in data.Values)
+            foreach (string language in requiredLanguages)
             {
-                if (languageData.ContainsKey(key)) return true;
+                if (data.TryGetValue(language, out Dictionary<string, string> languageData) 
+                    && languageData.ContainsKey(key))
+                {
+                    return true;
+                }
             }
 
             // If in edit mode don't check raw data, may be outdated
@@ -347,8 +367,9 @@ namespace Assets.Scripts.Content
             // Check all languages
             foreach (KeyValuePair<string, List<string>> kv in rawData)
             {
-                // Continue after found to ensure all languages are loaded
-                // todo: only loads current language
+                // skip languages that are not used
+                if (!requiredLanguages.Contains(kv.Key)) continue;
+                
                 found |= LookInOneLanguage(kv, key);
             }
 
@@ -365,29 +386,27 @@ namespace Assets.Scripts.Content
         /// <param name="key">key to check</param>
         private bool LookInOneLanguage(in KeyValuePair<string, List<string>> kv, in string key)
         {
+            // Add this language to Dictionary data
+            if (!data.ContainsKey(kv.Key))
+            {
+                data.Add(kv.Key, new Dictionary<string, string>(500));
+            }
+
+            if (data[kv.Key].ContainsKey(key))
+            {
+                ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
+                return true;
+            }
+
             string key_searched = key + ',';
-            // Check all lines
             foreach (string raw in kv.Value)
             {
                 if (raw.StartsWith(key_searched, false, null))
                 {
                     string parsed_raw = ParseEntry(raw.Substring(key.Length + 1));
 
-                    // Add this language to Dictionary data
-                    if (!data.ContainsKey(kv.Key))
-                    {
-                        data.Add(kv.Key, new Dictionary<string, string>(500));
-                    }
-
                     // If already present log warning
-                    if (data[kv.Key].ContainsKey(key))
-                    {
-                        ValkyrieDebug.Log("Duplicate Key in " + kv.Key + " Dictionary: " + key);
-                    }
-                    else if (parsed_raw.Length > 0)
-                    {
-                        data[kv.Key].Add(key, parsed_raw);
-                    }
+                    data[kv.Key].Add(key, parsed_raw);
 
                     // stop searching here, won't find duplicate
                     return true;
@@ -419,6 +438,10 @@ namespace Assets.Scripts.Content
             string secondLanguageValue = null;
             if (additionalLanguage != null && data.ContainsKey(additionalLanguage) && data[additionalLanguage].TryGetValue(key, out secondLanguageValue))
             {
+                if (secondLanguageValue.Length == 0)
+                {
+                    secondLanguageValue = null;
+                }
             }
 
             // Check current language first
@@ -567,6 +590,7 @@ namespace Assets.Scripts.Content
             }
 
             groupToLanguage[groupId] = language;
+            requiredLanguages.Add(language);
         }
     }
 }
