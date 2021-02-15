@@ -2290,10 +2290,12 @@ public class Quest
             int.TryParse(data["damage"], out damage);
             int.TryParse(data["duplicate"], out duplicate);
 
-            if (data.ContainsKey("healthmod"))
+            if (data.TryGetValue("healthmod", out string healthModString))
             {
-                int.TryParse(data["healthmod"], out healthMod);
+                int.TryParse(healthModString, out healthMod);
             }
+
+            data.TryGetValue("spawnEventName", out spawnEventName);
 
             uniqueText = new StringKey(data["uniqueText"]);
             uniqueTitle = new StringKey(data["uniqueTitle"]);
@@ -2417,6 +2419,7 @@ public class Quest
             r += "damage=" + damage + nl;
             r += "duplicate=" + duplicate + nl;
             r += "healthmod=" + healthMod + nl;
+            r += "spawnEventName=" + spawnEventName + nl;
             // Save the activation (currently doesn't save the effect string)
             if (currentActivation != null)
             {
