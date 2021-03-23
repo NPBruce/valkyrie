@@ -89,6 +89,10 @@ public class Game : MonoBehaviour
     // Quests manager
     public QuestsManager questsList;
 
+    public bool googleTtsEnabled = false;
+    public string googleTtsApiKey = "";
+    public string googleTtsVoice = "en-US-Wavenet-J";
+
     // List of things that want to know if the mouse is clicked
     protected List<IUpdateListener> updateList;
 
@@ -187,6 +191,18 @@ public class Game : MonoBehaviour
             editorTransparency = 0.3f;
         else
             float.TryParse(vSet, out editorTransparency);
+        
+        string googleTtsEnabledFromConfig = config.data.Get("UserConfig", "googleTtsEnabled");
+        if (googleTtsEnabledFromConfig == "")
+            googleTtsEnabled = false;
+        else
+            bool.TryParse(googleTtsEnabledFromConfig, out googleTtsEnabled);
+        
+        googleTtsApiKey = config.data.Get("UserConfig", "googleTtsApiKey");
+        
+        string googleTtsVoiceFromConfig = config.data.Get("UserConfig", "googleTtsVoice");
+        if (googleTtsVoiceFromConfig != "")
+            googleTtsVoice = googleTtsVoiceFromConfig;
 
         string s_debug_tests = config.data.Get("Debug", "tests");
         if (s_debug_tests != "")

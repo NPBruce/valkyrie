@@ -74,6 +74,18 @@ public class DialogWindow {
         ui.SetText(text);
         new UIElementBorder(ui);
         offset += 1f;
+        
+        if (Game.Get().googleTtsEnabled)
+        {
+            var ttsButton = new UIElement(Game.QUESTUI);
+            ttsButton.SetLocation(UIScaler.GetRight(-5.5f), 3.5f ,5, 2);
+            ttsButton.SetText("TTS");
+            new UIElementBorder(ttsButton);
+            ttsButton.SetButton(() =>
+            {
+                GoogleTTSClient.SpeakText(text);
+            });
+        }
 
         // Determine button size
         float buttonWidth = 8;

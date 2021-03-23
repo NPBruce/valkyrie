@@ -22,6 +22,13 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
         private readonly StringKey SET_EDITOR_ALPHA = new StringKey("val", "SET_EDITOR_ALPHA");
+        
+        private readonly StringKey GOOGLE_TTS_OPTIONS_TITLE = new StringKey("val", "GOOGLE_TTS_OPTIONS_TITLE");
+        private readonly StringKey GOOGLE_TTS_ON = new StringKey("val", "GOOGLE_TTS_ON");
+        private readonly StringKey GOOGLE_TTS_OFF = new StringKey("val", "GOOGLE_TTS_OFF");
+        private readonly StringKey GOOGLE_TTS_API_KEY = new StringKey("val", "GOOGLE_TTS_API_KEY");
+        private readonly StringKey GOOGLE_TTS_VOICE = new StringKey("val", "GOOGLE_TTS_VOICE");
+        private readonly StringKey GOOGLE_TTS_TEST = new StringKey("val", "GOOGLE_TTS_TEST");
 
         Game game = Game.Get();
 
@@ -60,6 +67,14 @@ namespace Assets.Scripts.UI.Screens
             CreateAudioElements();
 
             CreateEditorTransparencyElements();
+            
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 21, 10, 4);
+            ui.SetText(GOOGLE_TTS_OPTIONS_TITLE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(ShowTTSOptionScreen);
+            new UIElementBorder(ui);
 
             // Button for back to main menu
             ui = new UIElement();
@@ -289,6 +304,106 @@ namespace Assets.Scripts.UI.Screens
                 }
                 ui.SetFontSize(UIScaler.GetMediumFont());
             }
+        }
+
+        private void ShowTTSOptionScreen()
+        {
+            Destroyer.Destroy();
+            
+            UIElement ui = new UIElement();
+            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+            ui.SetText(GOOGLE_TTS_OPTIONS_TITLE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetLargeFont());
+
+            var googleTtsEnableToggle = new UIElement();
+            googleTtsEnableToggle.SetLocation(2, 8, 10, 2);
+            googleTtsEnableToggle.SetText(game.googleTtsEnabled ? GOOGLE_TTS_ON : GOOGLE_TTS_OFF);
+            googleTtsEnableToggle.SetFont(game.gameType.GetFont());
+            googleTtsEnableToggle.SetFontSize(UIScaler.GetMediumFont());
+            googleTtsEnableToggle.SetButton(() =>
+            {
+                game.googleTtsEnabled = !game.googleTtsEnabled;
+                game.config.data.Add("UserConfig", "googleTtsEnabled", game.googleTtsEnabled.ToString());
+                game.config.Save();
+                googleTtsEnableToggle.SetText(game.googleTtsEnabled ? GOOGLE_TTS_ON : GOOGLE_TTS_OFF);
+            });
+            
+            ui = new UIElement();
+            ui.SetLocation(2, 11, 10, 2);
+            ui.SetText(GOOGLE_TTS_API_KEY);
+            ui.SetFont(game.gameType.GetFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            var apiKeyInput = new UIElementEditable();
+            apiKeyInput.SetLocation((0.4f * UIScaler.GetWidthUnits()), 11, 20, 2);
+            apiKeyInput.SetText(game.googleTtsApiKey);
+            apiKeyInput.SetSingleLine();
+            apiKeyInput.SetMaxCharacters(39);
+            apiKeyInput.SetFont(game.gameType.GetHeaderFont());
+            apiKeyInput.SetFontSize(UIScaler.GetSmallFont());
+            new UIElementBorder(apiKeyInput);
+            apiKeyInput.SetButton(() =>
+            {
+                game.googleTtsApiKey = apiKeyInput.GetText();
+                game.config.data.Add("UserConfig", "googleTtsApiKey", game.googleTtsApiKey);
+                game.config.Save();
+            });
+            
+            ui = new UIElement();
+            ui.SetLocation(2, 14, 10, 2);
+            ui.SetText(GOOGLE_TTS_VOICE);
+            ui.SetFont(game.gameType.GetFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            var voiceInput = new UIElementEditable();
+            voiceInput.SetLocation((0.4f * UIScaler.GetWidthUnits()), 14, 20, 2);
+            voiceInput.SetText(game.googleTtsVoice);
+            voiceInput.SetSingleLine();
+            voiceInput.SetMaxCharacters(30);
+            voiceInput.SetFont(game.gameType.GetHeaderFont());
+            voiceInput.SetFontSize(UIScaler.GetSmallFont());
+            new UIElementBorder(voiceInput);
+            voiceInput.SetButton(() =>
+            {
+                game.googleTtsVoice = voiceInput.GetText();
+                game.config.data.Add("UserConfig", "googleTtsVoice", game.googleTtsVoice);
+                game.config.Save();
+            });
+            
+            ui = new UIElement();
+            ui.SetLocation(2, 17, 10, 2);
+            ui.SetText(GOOGLE_TTS_TEST);
+            ui.SetFont(game.gameType.GetFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui);
+
+            var testInput = new UIElementEditable();
+            testInput.SetLocation((0.4f * UIScaler.GetWidthUnits()), 17, 20, 2);
+            testInput.SetText(new StringKey("val", "ABOUT_FFG"));
+            testInput.SetSingleLine();
+            testInput.SetMaxCharacters(30);
+            testInput.SetFont(game.gameType.GetHeaderFont());
+            testInput.SetFontSize(UIScaler.GetSmallFont());
+            new UIElementBorder(testInput);
+            
+            ui.SetButton(() =>
+            {
+                GoogleTTSClient.SpeakText(testInput.GetText());
+            });
+            
+            // Button for back to options menu
+            ui = new UIElement();
+            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            ui.SetText(CommonStringKeys.BACK, Color.red);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(() =>
+            {
+                Destroyer.Destroy();
+                CreateElements();
+            });
+            new UIElementBorder(ui, Color.red);
         }
 
         private void UpdateEditorTransparency(float alpha)
