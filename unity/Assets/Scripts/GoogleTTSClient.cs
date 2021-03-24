@@ -2,12 +2,15 @@
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class GoogleTTSClient
 {
+    private static readonly string SYNTHESIZE_ENDPOINT = "https://texttospeech.googleapis.com/v1beta1/text:synthesize";
+    
     public static void SpeakText(string text)
     {
         var asyncResponse = GoogleTTSClient.Synthesize(text, false);
@@ -36,8 +39,7 @@ public class GoogleTTSClient
     {
         var game = Game.Get();
         var apiKey = game.googleTtsApiKey;
-        var ttsApiEndpoint = "https://texttospeech.googleapis.com/v1beta1/text:synthesize";
-        var url = ttsApiEndpoint + "?key=" + apiKey;
+        var url = SYNTHESIZE_ENDPOINT + "?key=" + apiKey;
         var request = new Request();
 
         if (isSSML)
@@ -46,7 +48,7 @@ public class GoogleTTSClient
         }
         else
         {
-            request.input.text = input;
+            request.input.text = stripTags(input);
         }
         request.audioConfig.pitch = -6;
         request.voice.name = game.googleTtsVoice;
@@ -91,6 +93,11 @@ public class GoogleTTSClient
         r.SetRequestHeader("Content-Type", "application/json");
 
         return r;
+    }
+
+    private static string stripTags(string text)
+    {
+        return Regex.Replace(text, @"</?[^<>]+>", "", RegexOptions.None);
     }
 
     [Serializable]
