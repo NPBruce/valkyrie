@@ -61,6 +61,9 @@ public class HorrorCheck {
         ui.SetLocation(UIScaler.GetHCenter(-14), 0.5f, 28, 8);
         ui.SetText(text);
         new UIElementBorder(ui);
+        
+        if (Game.Get().googleTtsEnabled)
+            new UITtsSpeakButton(ui);
 
         game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 

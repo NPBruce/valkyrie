@@ -38,6 +38,9 @@ public class ActivateDialogMoM : ActivateDialog
             ui.SetText(textKey);
             new UIElementBorder(ui);
             offset += 4.5f;
+            
+            if (Game.Get().googleTtsEnabled)
+                new UITtsSpeakButton(ui);
         }
 
         ui = new UIElement();
@@ -75,6 +78,9 @@ public class ActivateDialogMoM : ActivateDialog
         ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
         ui.SetText(monster.currentActivation.masterActions.Replace("\\n", "\n"));
         new UIElementBorder(ui);
+        
+        if (Game.Get().googleTtsEnabled)
+            new UITtsSpeakButton(ui);
 
         // Add this to the log
         Game.Get().quest.log.Add(new Quest.LogEntry(monster.currentActivation.masterActions.Replace("\n", "\\n")));
