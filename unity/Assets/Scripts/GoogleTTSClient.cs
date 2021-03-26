@@ -13,7 +13,7 @@ public class GoogleTTSClient
     
     public static void SpeakText(string text)
     {
-        var asyncResponse = GoogleTTSClient.Synthesize(text, false);
+        var asyncResponse = Synthesize(text, false);
         asyncResponse.completed += (asyncOperation =>
         {
             var webRequest = ((UnityWebRequestAsyncOperation) asyncOperation).webRequest;
@@ -30,7 +30,7 @@ public class GoogleTTSClient
                 var soundBytes = Convert.FromBase64String(response.audioContent);
                 
                 File.WriteAllBytes(tempFile, soundBytes);
-                Game.game.audioControl.Play(tempFile);
+                Game.game.audioControl.PlayTts(tempFile);
             }
         });
     }

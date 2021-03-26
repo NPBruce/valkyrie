@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using ValkyrieTools;
+using Random = UnityEngine.Random;
 
 public class Audio : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioSource audioSourceEffect;
+    public AudioSource ttsAudioSource;
     public GameObject effectsObject;
     public AudioClip eventClip;
     public List<AudioClip> music;
@@ -15,7 +19,13 @@ public class Audio : MonoBehaviour
     public int musicIndex = 0;
     public float effectVolume;
     public float musicVolume;
+    public float ttsVolume;
     public List<AudioClip> defaultQuestMusic;
+    public Action<AudioSource> ttsAudioSourceStartStopHandler; //need weak reference?
+    
+    private bool ttsPlaying;
+    private Queue<AudioClip> ttsQueue = new Queue<AudioClip>();
+    private bool fetchingTts;
 
     void Start()
     {
@@ -36,6 +46,12 @@ public class Audio : MonoBehaviour
         vSet = game.config.data.Get("UserConfig", "effects");
         float.TryParse(vSet, out effectVolume);
         if (vSet.Length == 0) effectVolume = 1;
+        
+        ttsAudioSource = gameObject.AddComponent<AudioSource>();
+        var volumeString = game.config.data.Get("UserConfig", "effects");
+        float.TryParse(volumeString, out ttsVolume);
+        if (volumeString.Length == 0) ttsVolume = 1;
+        ttsAudioSource.volume = ttsVolume;
     }
 
     private void FixedUpdate()
@@ -55,6 +71,19 @@ public class Audio : MonoBehaviour
             audioSource.volume = musicVolume;
             UpdateMusic();
         }
+
+        var ttsPlayingCurrent = ttsAudioSource.isPlaying;
+        if (!ttsPlayingCurrent && ttsQueue.Count > 0)
+        {
+            ttsAudioSource.clip = ttsQueue.Dequeue();
+            ttsAudioSource.Play();
+        }
+        if (ttsPlayingCurrent != ttsPlaying)
+        {
+            ttsAudioSourceStartStopHandler?.Invoke(ttsAudioSource);
+        }
+
+        ttsPlaying = ttsPlayingCurrent;
     }
 
     public void StopMusic()
@@ -162,5 +191,45 @@ public class Audio : MonoBehaviour
     {
         if(audioSourceEffect!=null)
             audioSourceEffect.Stop();
+    }
+
+    public void PlayTts(params string[] fileNames)
+    {
+        ttsQueue.Clear();
+        ttsAudioSource.Stop();
+        StartCoroutine(PlayTtsInternal(fileNames));
+    }
+
+    private IEnumerator PlayTtsInternal(string[] fileNames)
+    {
+        if (fetchingTts)
+        {
+            yield return null;
+        }
+        foreach (var fileName in fileNames)
+        {
+            var audioClipRequest = UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, AudioType.MPEG);
+            yield return audioClipRequest.SendWebRequest();
+            if (audioClipRequest.error != null)
+            {
+                ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + audioClipRequest.error);
+            }
+            else
+            {
+                ttsQueue.Enqueue(DownloadHandlerAudioClip.GetContent(audioClipRequest));
+            }
+        }
+
+        if (ttsQueue.Count > 0)
+        {
+            ttsAudioSource.clip = ttsQueue.Dequeue();
+            ttsAudioSource.Play();
+        }
+    }
+
+    public void StopTts()
+    {
+        ttsQueue.Clear();
+        ttsAudioSource.Stop();
     }
 }
