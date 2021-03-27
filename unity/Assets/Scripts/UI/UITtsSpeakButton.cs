@@ -6,8 +6,9 @@ namespace Assets.Scripts.UI
     {
         private static readonly string PLAY_LABEL = "\u25B6";
         private static readonly string STOP_LABEL = "\u25FC";
+        private static readonly string WAITING_LABEL = "\u25F4";
 
-        private bool playing;
+        private bool? playing = false;
         
         public UITtsSpeakButton(UIElement textElement) : base(textElement.GetTag(), textElement.GetTransform())
         {
@@ -33,20 +34,26 @@ namespace Assets.Scripts.UI
             };
             SetButton(() =>
             {
-                if (playing)
+                if (playing == null)
+                {
+                    //ignore press
+                } 
+                else if (playing != null && playing.Value)
                 {
                     Game.game.audioControl.StopTts();
                 }
                 else
                 {
-                    GoogleTTSClient.SpeakText(textElement.GetText());
+                    playing = null;
+                    GoogleTTSClient.SynthesizeText(textElement.GetText(), fileName => 
+                        Game.game.audioControl.PlayTts(fileName));
                 }
             });
         }
 
         private void UpdateButtonLabel()
         {
-            SetText(playing ? STOP_LABEL : PLAY_LABEL);
+            SetText(playing.HasValue ? playing.Value ? STOP_LABEL : PLAY_LABEL : WAITING_LABEL);
         }
     }
 }

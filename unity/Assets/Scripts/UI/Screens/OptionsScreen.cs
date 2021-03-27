@@ -389,7 +389,8 @@ namespace Assets.Scripts.UI.Screens
             
             ui.SetButton(() =>
             {
-                GoogleTTSClient.SpeakText(testInput.GetText());
+                GoogleTTSClient.SynthesizeText(testInput.GetText(), fileName => 
+                    Game.game.audioControl.PlayTts(fileName));
             });
             
             // Button for back to options menu

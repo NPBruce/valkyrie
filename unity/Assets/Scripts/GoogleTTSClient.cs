@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,38 +13,132 @@ using UnityEngine.Networking;
 
 public class GoogleTTSClient
 {
-    private static readonly string SYNTHESIZE_ENDPOINT = "https://texttospeech.googleapis.com/v1beta1/text:synthesize";
+    public static readonly AudioType AUDIO_TYPE = AudioType.MPEG;
+    public static readonly string FILE_EXTENSION = "mp3";
+    public static readonly string TEMP_FOLDER = "googleTts";
     
-    public static void SpeakText(string text)
-    {
-        var asyncResponse = Synthesize(text, false);
-        asyncResponse.completed += (asyncOperation =>
-        {
-            var webRequest = ((UnityWebRequestAsyncOperation) asyncOperation).webRequest;
+    private static readonly string SYNTHESIZE_ENDPOINT = "https://texttospeech.googleapis.com/v1beta1/text:synthesize";
+    private static readonly float PITCH = -6f;
+    private static readonly string CACHE_FILE = GetFullPath("index");
 
-            if (webRequest.isHttpError)
+    private static ConcurrentDictionary<string, string> MEM_CACHE = new ConcurrentDictionary<string, string>();
+
+    static GoogleTTSClient()
+    {
+        LoadCache();
+    }
+
+    public static void SynthesizeText(string text, Action<string> onAudioFileDownloaded)
+    {
+        var payload = CreateRequestPayload(text, false);
+        string cachedFileName;
+
+        if (MEM_CACHE.TryGetValue(payload, out cachedFileName) && !File.Exists(GetFullPath(cachedFileName)))
+        {
+            cachedFileName = null;
+            MEM_CACHE.TryRemove(payload, out var val);
+        }
+        if (cachedFileName != null)
+        {
+            onAudioFileDownloaded.Invoke(GetFullPath(cachedFileName));
+        }
+        else
+        {
+            var requestAsyncOperation = Synthesize(payload);
+            requestAsyncOperation.completed += asyncOperation =>
             {
-                Debug.Log("Error calling Google TTS API Endpoint.");
-            }
-            else
+                OnWebRequestCompleted((UnityWebRequestAsyncOperation) asyncOperation, fileName =>
+                {
+                    MEM_CACHE[payload] = fileName;
+                    onAudioFileDownloaded.Invoke(GetFullPath(fileName));
+                });
+            };
+        }
+    }
+
+    private static void LoadCache()
+    {
+        if (File.Exists(CACHE_FILE))
+        {
+            try
             {
-                var responseText = webRequest.downloadHandler.text;
-                var tempFile = Path.Combine(Application.temporaryCachePath, Path.GetRandomFileName() + ".mp3");
-                var response = JsonUtility.FromJson<GoogleTTSClient.Response>(responseText);
-                var soundBytes = Convert.FromBase64String(response.audioContent);
-                
-                File.WriteAllBytes(tempFile, soundBytes);
-                Game.game.audioControl.PlayTts(tempFile);
+                BinaryFormatter formatter = new BinaryFormatter();
+                MEM_CACHE = new ConcurrentDictionary<string, string>( 
+                    (KeyValuePair<string, string>[]) formatter.Deserialize(new FileStream(CACHE_FILE, FileMode.Open)));
             }
-        });
+            catch (SerializationException e)
+            {
+                Debug.Log("Cannot load cache index: " + e.Message);
+            }
+        }
+    }
+
+    public static void SaveCache()
+    {
+        try
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(new FileStream(CACHE_FILE, FileMode.Create), MEM_CACHE.ToArray());
+        }
+        catch (SerializationException e)
+        {
+            Debug.Log("Cannot save cache index: " + e.Message);
+        }
+    }
+
+    private static string GetFullPath(string fileName)
+    {
+        return Path.Combine(Application.temporaryCachePath, TEMP_FOLDER, fileName);
     }
     
-    public static UnityWebRequestAsyncOperation Synthesize(string input, bool isSSML)
+    private static UnityWebRequestAsyncOperation Synthesize(string payload)
     {
         var game = Game.Get();
         var apiKey = game.googleTtsApiKey;
         var url = SYNTHESIZE_ENDPOINT + "?key=" + apiKey;
+
+        var unityWebRequest = createPost(url, payload);
+        var unityAsyncWebRequestAsyncOperation = unityWebRequest.SendWebRequest();
+
+        return unityAsyncWebRequestAsyncOperation;
+    }
+
+    private static void OnWebRequestCompleted(UnityWebRequestAsyncOperation asyncOperation, Action<string> onAudioFileDownloaded)
+    {
+        var webRequest = asyncOperation.webRequest;
+
+        if (webRequest.isHttpError)
+        {
+            Debug.Log("Error calling Google TTS API Endpoint.");
+        }
+        else
+        {
+            var responseText = webRequest.downloadHandler.text;
+            var tempFile = Path.GetRandomFileName() + "." + FILE_EXTENSION;
+            var response = JsonUtility.FromJson<GoogleTTSClient.Response>(responseText);
+            var soundBytes = Convert.FromBase64String(response.audioContent);
+
+            Directory.CreateDirectory(Path.Combine(Application.temporaryCachePath, TEMP_FOLDER));
+            File.WriteAllBytes(GetFullPath(tempFile), soundBytes);
+            onAudioFileDownloaded.Invoke(tempFile);
+        }
+    }
+
+    private static string SerializeToJson<T>(T obj)
+    {
+        DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(T));
+        MemoryStream msObj = new MemoryStream();  
+        js.WriteObject(msObj, obj);  
+        msObj.Position = 0;  
+        StreamReader sr = new StreamReader(msObj);
+
+        return sr.ReadToEnd();
+    }
+
+    private static string CreateRequestPayload(string input, bool isSSML)
+    {
         var request = new Request();
+        var game = Game.Get();
 
         if (isSSML)
         {
@@ -50,26 +148,11 @@ public class GoogleTTSClient
         {
             request.input.text = stripTags(input);
         }
-        request.audioConfig.pitch = -6;
+        request.audioConfig.pitch = PITCH;
         request.voice.name = game.googleTtsVoice;
         request.voice.languageCode = parseLangCodeFromVoiceName(request.voice.name);
 
-        var payload = serializeToJson(request);
-        var unityWebRequest = createPost(url, payload);
-        var unityAsyncWebResponse = unityWebRequest.SendWebRequest();
-
-        return unityAsyncWebResponse;
-    }
-
-    private static string serializeToJson<T>(T obj)
-    {
-        DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(T));
-        MemoryStream msObj = new MemoryStream();  
-        js.WriteObject(msObj, obj);  
-        msObj.Position = 0;  
-        StreamReader sr = new StreamReader(msObj);
-
-        return sr.ReadToEnd();
+        return SerializeToJson(request);
     }
 
     private static string parseLangCodeFromVoiceName(string voiceName)

@@ -389,6 +389,8 @@ public class Game : MonoBehaviour
         Destroyer.Destroy();
         // Clean up temporary files
         QuestLoader.CleanTemp();
+        //Save Google TTS cache index
+        GoogleTTSClient.SaveCache();
     }
 
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor

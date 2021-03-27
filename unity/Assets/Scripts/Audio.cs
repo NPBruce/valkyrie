@@ -24,8 +24,6 @@ public class Audio : MonoBehaviour
     public Action<AudioSource> ttsAudioSourceStartStopHandler; //need weak reference?
     
     private bool ttsPlaying;
-    private Queue<AudioClip> ttsQueue = new Queue<AudioClip>();
-    private bool fetchingTts;
 
     void Start()
     {
@@ -73,11 +71,6 @@ public class Audio : MonoBehaviour
         }
 
         var ttsPlayingCurrent = ttsAudioSource.isPlaying;
-        if (!ttsPlayingCurrent && ttsQueue.Count > 0)
-        {
-            ttsAudioSource.clip = ttsQueue.Dequeue();
-            ttsAudioSource.Play();
-        }
         if (ttsPlayingCurrent != ttsPlaying)
         {
             ttsAudioSourceStartStopHandler?.Invoke(ttsAudioSource);
@@ -193,43 +186,30 @@ public class Audio : MonoBehaviour
             audioSourceEffect.Stop();
     }
 
-    public void PlayTts(params string[] fileNames)
+    public void PlayTts(string fileName)
     {
-        ttsQueue.Clear();
-        ttsAudioSource.Stop();
-        StartCoroutine(PlayTtsInternal(fileNames));
+        StopTts();
+        StartCoroutine(PlayTtsInternal(fileName));
     }
 
-    private IEnumerator PlayTtsInternal(string[] fileNames)
+    private IEnumerator PlayTtsInternal(string fileName)
     {
-        if (fetchingTts)
+        var audioClipRequest = UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, 
+            GoogleTTSClient.AUDIO_TYPE);
+        yield return audioClipRequest.SendWebRequest();
+        if (audioClipRequest.error != null)
         {
-            yield return null;
+            ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + audioClipRequest.error);
         }
-        foreach (var fileName in fileNames)
+        else
         {
-            var audioClipRequest = UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, AudioType.MPEG);
-            yield return audioClipRequest.SendWebRequest();
-            if (audioClipRequest.error != null)
-            {
-                ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + audioClipRequest.error);
-            }
-            else
-            {
-                ttsQueue.Enqueue(DownloadHandlerAudioClip.GetContent(audioClipRequest));
-            }
-        }
-
-        if (ttsQueue.Count > 0)
-        {
-            ttsAudioSource.clip = ttsQueue.Dequeue();
+            ttsAudioSource.clip = DownloadHandlerAudioClip.GetContent(audioClipRequest);
             ttsAudioSource.Play();
         }
     }
 
     public void StopTts()
     {
-        ttsQueue.Clear();
         ttsAudioSource.Stop();
     }
 }
