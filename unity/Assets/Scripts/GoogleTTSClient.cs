@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using System.Runtime.Serialization.Json;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
@@ -19,25 +18,14 @@ public class GoogleTTSClient
     
     private static readonly string SYNTHESIZE_ENDPOINT = "https://texttospeech.googleapis.com/v1beta1/text:synthesize";
     private static readonly float PITCH = -6f;
-    private static readonly string CACHE_FILE = GetFullPath("index");
 
-    private static ConcurrentDictionary<string, string> MEM_CACHE = new ConcurrentDictionary<string, string>();
-
-    static GoogleTTSClient()
-    {
-        LoadCache();
-    }
+    private static readonly Cache cache = new Cache(Path.Combine(Application.temporaryCachePath, TEMP_FOLDER));
 
     public static void SynthesizeText(string text, Action<string> onAudioFileDownloaded)
     {
         var payload = CreateRequestPayload(text, false);
-        string cachedFileName;
+        string cachedFileName = cache.GetFile(payload);
 
-        if (MEM_CACHE.TryGetValue(payload, out cachedFileName) && !File.Exists(GetFullPath(cachedFileName)))
-        {
-            cachedFileName = null;
-            MEM_CACHE.TryRemove(payload, out var val);
-        }
         if (cachedFileName != null)
         {
             onAudioFileDownloaded.Invoke(GetFullPath(cachedFileName));
@@ -49,40 +37,10 @@ public class GoogleTTSClient
             {
                 OnWebRequestCompleted((UnityWebRequestAsyncOperation) asyncOperation, fileName =>
                 {
-                    MEM_CACHE[payload] = fileName;
-                    onAudioFileDownloaded.Invoke(GetFullPath(fileName));
+                    var cached = cache.SaveFile(payload, GetFullPath(fileName));
+                    onAudioFileDownloaded.Invoke(GetFullPath(cached));
                 });
             };
-        }
-    }
-
-    private static void LoadCache()
-    {
-        if (File.Exists(CACHE_FILE))
-        {
-            try
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                MEM_CACHE = new ConcurrentDictionary<string, string>( 
-                    (KeyValuePair<string, string>[]) formatter.Deserialize(new FileStream(CACHE_FILE, FileMode.Open)));
-            }
-            catch (SerializationException e)
-            {
-                Debug.Log("Cannot load cache index: " + e.Message);
-            }
-        }
-    }
-
-    public static void SaveCache()
-    {
-        try
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(new FileStream(CACHE_FILE, FileMode.Create), MEM_CACHE.ToArray());
-        }
-        catch (SerializationException e)
-        {
-            Debug.Log("Cannot save cache index: " + e.Message);
         }
     }
 
@@ -311,5 +269,98 @@ public class GoogleTTSClient
     {
         public string markName; //Timepoint name as received from the client within tag.
         public float timeSeconds; //Time offset in seconds from the start of the synthesized audio.
+    }
+
+    private class Cache
+    {
+        private static ConcurrentDictionary<string, string> MEM_CACHE = new ConcurrentDictionary<string, string>();
+        private static string KEY_FILE_EXTENSION = "key";
+        private static string FILE_SUFFIX_SEPARATOR = "_";
+
+        private readonly string cacheFolder;
+
+        public Cache(string cacheFolder)
+        {
+            this.cacheFolder = cacheFolder;
+        }
+
+        public string GetFile(string key)
+        {
+            if (MEM_CACHE.TryGetValue(key, out var value) && File.Exists(GetFullPath(value)))
+            {
+                return value;
+            }
+
+            return FindFileNameByKey(key);
+        }
+
+        public string SaveFile(string key, string tempFile)
+        {
+            var fileName = GetUniqueFileName(key);
+            
+            File.Move(tempFile, GetFullPath(fileName));
+            File.WriteAllText(GetFullPath(GetKeyFileName(fileName)), key);
+            MEM_CACHE[key] = fileName;
+            
+            return fileName;
+        }
+
+        private string GetHash(string text)
+        {
+            var bytes = Encoding.Unicode.GetBytes(text);
+            var hashString = new SHA256Managed();
+            var hash = hashString.ComputeHash(bytes);
+            return hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
+        }
+
+        private string GetUniqueFileName(string key)
+        {
+            var index = 0;
+            var hash = GetHash(key);
+            var fileName = GetFilenameForIndex(hash, index);
+
+            while (File.Exists(GetFullPath(GetKeyFileName(fileName))))
+            {
+                fileName = GetFilenameForIndex(hash, ++index);
+            }
+
+            return fileName;
+        }
+
+        private string FindFileNameByKey(string key)
+        {
+            var hash = GetHash(key);
+            var index = 0;
+            var fileName = GetFilenameForIndex(hash, index);
+            var keyFilePath = GetFullPath(GetKeyFileName(fileName));
+
+            while (File.Exists(keyFilePath))
+            {
+                if (File.ReadAllText(keyFilePath) == key)
+                {
+                    return fileName;
+                }
+
+                fileName = GetFilenameForIndex(hash, ++index);
+                keyFilePath = GetFullPath(GetKeyFileName(fileName));
+            }
+
+            return null;
+        }
+
+        private string GetFilenameForIndex(string fileName, int index)
+        {
+            return fileName + FILE_SUFFIX_SEPARATOR + index;
+        }
+
+        private string GetFullPath(string fileName)
+        {
+            return Path.Combine(cacheFolder, fileName);
+        }
+
+        private string GetKeyFileName(string fileName)
+        {
+            return fileName + "." + KEY_FILE_EXTENSION;
+        }
     }
 }
