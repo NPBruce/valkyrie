@@ -6,7 +6,7 @@ namespace Assets.Scripts.Content
 {
     public class QuestFormat
     {
-        public const int CURRENT_VERSION = (int) Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT;
+        public const int CURRENT_VERSION = (int) Versions.RELEASE_2_5_4;
 
         public readonly static HashSet<string> SCENARIOS_THAT_REQUIRE_CONVERSION_KIT = new HashSet<string>
         {
@@ -36,6 +36,7 @@ namespace Assets.Scripts.Content
         {
             RICH_TEXT = 16,
             SPLIT_BASE_MOM_AND_CONVERSION_KIT = 17,
+            RELEASE_2_5_4 = 18,
         }
     }
 }
