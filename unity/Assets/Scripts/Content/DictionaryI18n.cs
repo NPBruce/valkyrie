@@ -23,8 +23,8 @@ namespace Assets.Scripts.Content
             get => _defaultLanguage;
             set
             {
+                AddRequiredLanguage(value);
                 _defaultLanguage = value;
-                requiredLanguages.Add(value);
             }
         }
 
@@ -34,8 +34,8 @@ namespace Assets.Scripts.Content
             get => _currentLanguage;
             set
             {
+                AddRequiredLanguage(value);
                 _currentLanguage = value;
-                requiredLanguages.Add(value);
             }
         }
 
@@ -204,6 +204,8 @@ namespace Assets.Scripts.Content
         {
             // Already loaded
             if (loadedForEdit) return;
+            
+            ForceLoadAllLanguages();
 
             // Remove all existing entries (helps maintain order)
             data = new Dictionary<string, Dictionary<string, string>>();
@@ -552,6 +554,8 @@ namespace Assets.Scripts.Content
         /// <returns>Dictionary of results for each language</returns>
         public Dictionary<string, string> ExtractAllMatches(string key)
         {
+            ForceLoadAllLanguages();
+            
             // Load into data
             KeyExists(key);
 
@@ -590,7 +594,21 @@ namespace Assets.Scripts.Content
             }
 
             groupToLanguage[groupId] = language;
-            requiredLanguages.Add(language);
+            AddRequiredLanguage(language);
+        }
+
+        protected void ForceLoadAllLanguages()
+        {
+            GetLanguagesList().ForEach(AddRequiredLanguage);
+        }
+        
+        private void AddRequiredLanguage(string value)
+        {
+            if (requiredLanguages.Add(value))
+            {
+                // reset loaded data - this won't happen when the data is editable as all languages are already loaded
+                data = new Dictionary<string, Dictionary<string, string>>();
+            }
         }
     }
 }
