@@ -577,7 +577,7 @@ namespace Assets.Scripts.Content
         /// <returns>List of all available languages</returns>
         public List<string> GetLanguagesList()
         {
-            return new List<string>(data.Keys);
+            return new List<string>(rawData.Keys);
         }
 
         public void SetKeyToGroup(string key, string groupId)
