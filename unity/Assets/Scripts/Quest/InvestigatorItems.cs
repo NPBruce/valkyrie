@@ -16,31 +16,31 @@ public class InvestigatorItems
         Game game = Game.Get();
 
         // Items from heroes
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.heroData != null)
             {
                 if (game.cd.ContainsKey<ItemData>(h.heroData.item))
                 {
-                    game.quest.items.Add(h.heroData.item);
+                    game.CurrentQuest.items.Add(h.heroData.item);
                 }
             }
         }
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             QuestData.QItem item = kv.Value as QuestData.QItem;
-            if (item != null && item.starting && game.quest.itemSelect.ContainsKey(kv.Key)
-                && item.tests != null && game.quest.vars.Test(item.tests))
+            if (item != null && item.starting && game.CurrentQuest.itemSelect.ContainsKey(kv.Key)
+                && item.tests != null && game.CurrentQuest.vars.Test(item.tests))
             {
-                game.quest.items.Add(game.quest.itemSelect[kv.Key]);
+                game.CurrentQuest.items.Add(game.CurrentQuest.itemSelect[kv.Key]);
                 if (item.inspect.Length > 0)
                 {
-                    if (game.quest.itemInspect.ContainsKey(game.quest.itemSelect[kv.Key]))
+                    if (game.CurrentQuest.itemInspect.ContainsKey(game.CurrentQuest.itemSelect[kv.Key]))
                     {
-                        game.quest.itemInspect.Remove(game.quest.itemSelect[kv.Key]);
+                        game.CurrentQuest.itemInspect.Remove(game.CurrentQuest.itemSelect[kv.Key]);
                     }
-                    game.quest.itemInspect.Add(game.quest.itemSelect[kv.Key], item.inspect);
+                    game.CurrentQuest.itemInspect.Add(game.CurrentQuest.itemSelect[kv.Key], item.inspect);
                 }
             }
         }
@@ -57,7 +57,7 @@ public class InvestigatorItems
 
         SortedList<string, SortedList<string, string>> itemSort = new SortedList<string, SortedList<string, string>>();
 
-        foreach (string item in game.quest.items)
+        foreach (string item in game.CurrentQuest.items)
         {
             // Ignore "ItemX", find next capital letter
             int charIndex = 5;

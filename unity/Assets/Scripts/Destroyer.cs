@@ -56,7 +56,7 @@ public class Destroyer
         game.cc.minLimit = false;
 
         // Clear up all data
-        game.quest = null;
+        game.CurrentQuest = null;
         game.qed = null;
         game.moraleDisplay = null;
         if (game.tokenBoard.tc != null)

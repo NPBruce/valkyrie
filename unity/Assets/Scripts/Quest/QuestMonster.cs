@@ -64,7 +64,7 @@ public class QuestMonster : MonsterData
         }
         else
         {
-            image = Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + image;
+            image = Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + image;
         }
 
         // Read placement image from quest data or base type
@@ -82,7 +82,7 @@ public class QuestMonster : MonsterData
         }
         else
         {
-            imagePlace = Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + imagePlace;
+            imagePlace = Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + imagePlace;
         }
 
         // Read activations  from quest data or base type

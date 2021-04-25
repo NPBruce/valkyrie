@@ -237,7 +237,7 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void DrawUIComponent()
     {
-        game.quest.ChangeAlpha(uiComponent.sectionName, 1f);
+        game.CurrentQuest.ChangeAlpha(uiComponent.sectionName, 1f);
 
         // Create a grey zone outside of the 16x9 boundary
         // Find quest UI panel
@@ -328,7 +328,7 @@ public class EditorComponentUI : EditorComponentEvent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
@@ -348,8 +348,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectImage(string image)
     {
         uiComponent.imageName = image;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         if (uiComponent.imageName.Length > 0)
         {
             LocalizationRead.dicts["qst"].Remove(uiComponent.uitext_key);
@@ -366,8 +366,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void ChangeUnits()
     {
         uiComponent.verticalUnits = !uiComponent.verticalUnits;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -375,8 +375,8 @@ public class EditorComponentUI : EditorComponentEvent
     {
         uiComponent.hAlign = x;
         uiComponent.vAlign = y;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -398,8 +398,8 @@ public class EditorComponentUI : EditorComponentEvent
         {
             float.TryParse(aspectUIE.GetText(), out uiComponent.aspect);
         }
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -411,24 +411,24 @@ public class EditorComponentUI : EditorComponentEvent
         {
             LocalizationRead.updateScenarioText(uiComponent.uitext_key, textUIE.GetText());
         }
-        game.quest.Remove(uiComponent.sectionName);
-        game.quest.Add(uiComponent.sectionName);
+        game.CurrentQuest.Remove(uiComponent.sectionName);
+        game.CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
     public void UpdateTextSize()
     {
         float.TryParse(textSizeUIE.GetText(), out uiComponent.textSize);
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
     private void SetRichText()
     {
         uiComponent.richText = !uiComponent.richText;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
     
@@ -450,8 +450,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectTextAlignment(string alignment)
     {
         uiComponent.textAlignment = TextAlignmentUtils.ParseAlignment(alignment);
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -473,8 +473,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectColour(string color)
     {
         uiComponent.textColor = color;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -496,8 +496,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectBackgroundColour(string color)
     {
         uiComponent.textBackgroundColor = color;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 

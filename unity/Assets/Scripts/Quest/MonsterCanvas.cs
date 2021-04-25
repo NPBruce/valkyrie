@@ -35,14 +35,14 @@ public class MonsterCanvas : MonoBehaviour
         Game game = Game.Get();
         int index = 0;
         // Create icons (not drawn)
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
             icons.Add(new MonsterIcon(m, index++));
         }
 
-        if (game.quest.monsters.Count - offset < 5)
+        if (game.CurrentQuest.monsters.Count - offset < 5)
         {
-            offset = game.quest.monsters.Count - 5;
+            offset = game.CurrentQuest.monsters.Count - 5;
             if (offset < 0)
             {
                 offset = 0;
@@ -65,7 +65,7 @@ public class MonsterCanvas : MonoBehaviour
     {
         Game game = Game.Get();
         // Check if scroll required
-        if (game.quest.monsters.Count < 6 && offset == 0)
+        if (game.CurrentQuest.monsters.Count < 6 && offset == 0)
         {
             return;
         }
@@ -92,14 +92,14 @@ public class MonsterCanvas : MonoBehaviour
     {
         Game game = Game.Get();
         // Check if scroll required
-        if (game.quest.monsters.Count < 6)
+        if (game.CurrentQuest.monsters.Count < 6)
         {
             return;
         }
         // If at buttom
         UIElement ui = new UIElement(Game.MONSTERS);
         ui.SetLocation(UIScaler.GetRight(-4.25f), 26.1f, 4, 1);
-        if (game.quest.monsters.Count - offset <  6)
+        if (game.CurrentQuest.monsters.Count - offset <  6)
         {
             ui.SetText(DOWN_ARROW, Color.gray);
             new UIElementBorder(ui, Color.gray);
@@ -240,7 +240,7 @@ public class MonsterCanvas : MonoBehaviour
             else
             {
                 // MoM
-                if(game.quest.phase == Quest.MoMPhase.investigator)
+                if(game.CurrentQuest.phase == Quest.MoMPhase.investigator)
                 {
                     DrawAwareness(top_position_y + ((index - offset) * offset_y));
                 }

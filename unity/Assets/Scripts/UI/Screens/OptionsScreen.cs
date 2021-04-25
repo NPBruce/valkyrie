@@ -353,7 +353,7 @@ namespace Assets.Scripts.UI.Screens
             game.config.data.Add("UserConfig", "currentLang", newLang);
             game.config.Save();
             game.currentLang = newLang;
-            LocalizationRead.changeCurrentLangTo(newLang);
+            LocalizationRead.ChangeCurrentLangTo(newLang);
             ValkyrieDebug.Log("new current language stablished:" + newLang + Environment.NewLine);
 
             new OptionsScreen();

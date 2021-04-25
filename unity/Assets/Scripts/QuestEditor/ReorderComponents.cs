@@ -14,7 +14,7 @@ public class ReorderComponents
         Game game = Game.Get();
 
         HashSet<string> sources = new HashSet<string>();
-        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in game.CurrentQuest.qd.components.Values)
         {
             if (!(c is PerilData)) sources.Add(c.source);
         }
@@ -57,7 +57,7 @@ public class ReorderComponents
         float offset = 0;
         names = new List<UIElement>();
         int index = 0;
-        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in game.CurrentQuest.qd.components.Values)
         {
             if (!c.source.Equals(source)) continue;
 
@@ -101,7 +101,7 @@ public class ReorderComponents
     public void Update()
     {
         int i = 0;
-        foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in Game.Get().CurrentQuest.qd.components.Values)
         {
             if (c.source.Equals(source))
             {
@@ -116,7 +116,7 @@ public class ReorderComponents
         Game game = Game.Get();
         Dictionary<string, QuestData.QuestComponent> preDict = new Dictionary<string, QuestData.QuestComponent>();
         List<QuestData.QuestComponent> postList = new List<QuestData.QuestComponent>();
-        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in game.CurrentQuest.qd.components.Values)
         {
             if (c.sectionName.Equals(name))
             {
@@ -124,7 +124,7 @@ public class ReorderComponents
             }
             else
             {
-                if (c.source.Equals(game.quest.qd.components[name].source))
+                if (c.source.Equals(game.CurrentQuest.qd.components[name].source))
                 {
                     foreach (QuestData.QuestComponent post in postList)
                     {
@@ -141,7 +141,7 @@ public class ReorderComponents
             preDict.Add(post.sectionName, post);
         }
 
-        game.quest.qd.components = preDict;
+        game.CurrentQuest.qd.components = preDict;
         Update();
     }
 }

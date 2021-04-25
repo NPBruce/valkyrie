@@ -11,7 +11,7 @@ public class EditorComponentItem : EditorComponent
     public EditorComponentItem(string nameIn) : base()
     {
         Game game = Game.Get();
-        itemComponent = game.quest.qd.components[nameIn] as QuestData.QItem;
+        itemComponent = game.CurrentQuest.qd.components[nameIn] as QuestData.QItem;
         component = itemComponent;
         name = component.sectionName;
         Update();
@@ -58,7 +58,7 @@ public class EditorComponentItem : EditorComponent
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetText(itemComponent.itemName[i]);
             ui.SetButton(delegate { SetItem(tmp); });
-            if (game.quest.qd.components.ContainsKey(itemComponent.itemName[tmp]))
+            if (game.CurrentQuest.qd.components.ContainsKey(itemComponent.itemName[tmp]))
             {
                 ui.SetLocation(0.5f, offset, 17, 1);
                 UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -211,7 +211,7 @@ public class EditorComponentItem : EditorComponent
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { "Quest" });
 
         HashSet<string> usedItems = new HashSet<string>();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             QuestData.QItem i = kv.Value as QuestData.QItem;
             if (i != null)
@@ -372,7 +372,7 @@ public class EditorComponentItem : EditorComponent
         select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if(kv.Value.typeDynamic.Equals("Event"))
             {
@@ -388,12 +388,12 @@ public class EditorComponentItem : EditorComponent
         if (eventName.Equals("{NEW:Event}"))
         {
             int i = 0;
-            while (game.quest.qd.components.ContainsKey("Event" + i))
+            while (game.CurrentQuest.qd.components.ContainsKey("Event" + i))
             {
                 i++;
             }
             toAdd = "Event" + i;
-            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+            Game.Get().CurrentQuest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
         }
 
         itemComponent.inspect = toAdd;

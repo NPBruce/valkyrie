@@ -23,9 +23,9 @@ public class PuzzleTowerWindow : IUpdateListener
         game.AddUpdateListener(this as IUpdateListener);
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            puzzle = game.quest.puzzle[questPuzzle.sectionName] as PuzzleTower;
+            puzzle = game.CurrentQuest.puzzle[questPuzzle.sectionName] as PuzzleTower;
             lastMoves = puzzle.moves;
         }
         else
@@ -133,29 +133,29 @@ public class PuzzleTowerWindow : IUpdateListener
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.sectionName);
+            game.CurrentQuest.puzzle.Remove(questPuzzle.sectionName);
         }
-        game.quest.puzzle.Add(questPuzzle.sectionName, puzzle);
+        game.CurrentQuest.puzzle.Add(questPuzzle.sectionName, puzzle);
 
-        game.quest.eManager.currentEvent = null;
-        game.quest.eManager.currentEvent = null;
+        game.CurrentQuest.eManager.currentEvent = null;
+        game.CurrentQuest.eManager.currentEvent = null;
 
         windowClosed = true;
-        game.quest.eManager.TriggerEvent();
+        game.CurrentQuest.eManager.TriggerEvent();
    }
 
     public void Finished()
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.sectionName);
+            game.CurrentQuest.puzzle.Remove(questPuzzle.sectionName);
         }
         windowClosed = true;
-        game.quest.eManager.EndEvent();
+        game.CurrentQuest.eManager.EndEvent();
     }
 
     /// <summary>

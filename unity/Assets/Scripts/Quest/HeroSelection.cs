@@ -103,14 +103,14 @@ public class HeroSelection {
                 break;
             }
         }
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (hData == h.heroData)
             {
                 return;
             }
         }
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.heroData == null)
             {
@@ -130,7 +130,7 @@ public class HeroSelection {
         foreach (KeyValuePair<string, List<UIElement>> kv in buttons)
         {
             Color c = Color.white;
-            foreach (Quest.Hero h in Game.Get().quest.heroes)
+            foreach (Quest.Hero h in Game.Get().CurrentQuest.heroes)
             {
                 if (h.heroData != null && h.heroData.sectionName.Equals(kv.Key))
                 {

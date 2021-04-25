@@ -81,7 +81,7 @@ namespace Assets.Scripts.UI
             }
             
             // Custom Quest audio
-            return Path.GetDirectoryName(Game.Get().quest.qd.questPath) + Path.DirectorySeparatorChar + key;
+            return Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + key;
         }
     }
 }

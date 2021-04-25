@@ -602,7 +602,7 @@ namespace Assets.Scripts.Content
             GetLanguagesList().ForEach(AddRequiredLanguage);
         }
         
-        private void AddRequiredLanguage(string value)
+        public void AddRequiredLanguage(string value)
         {
             if (requiredLanguages.Add(value))
             {

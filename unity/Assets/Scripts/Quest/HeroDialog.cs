@@ -65,17 +65,17 @@ public class HeroDialog{
         Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         hero.defeated = true;
         updateDisplay();
         // This can trigger events, delay events if activation present
         if (GameObject.FindGameObjectWithTag(Game.ACTIVATION) != null)
         {
-            game.quest.AdjustMorale(-1, true);
+            game.CurrentQuest.AdjustMorale(-1, true);
         }
         else
         {
-            game.quest.AdjustMorale(-1);
+            game.CurrentQuest.AdjustMorale(-1);
         }
     }
 
@@ -85,7 +85,7 @@ public class HeroDialog{
         Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         hero.defeated = false;
         updateDisplay();
     }
@@ -96,7 +96,7 @@ public class HeroDialog{
         Destroyer.Dialog();
         Game game = Game.Get();
         // Save state to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         hero.activated = true;
 
         // Let the game know that a hero has activated

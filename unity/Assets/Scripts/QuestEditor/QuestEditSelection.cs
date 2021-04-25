@@ -388,7 +388,7 @@ public class QuestEditSelection
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
-        if (game.quest!=null) game.quest.RemoveAll();
+        if (game.CurrentQuest!=null) game.CurrentQuest.RemoveAll();
 
         // Fetch all of the quest data
         ValkyrieDebug.Log("Selecting Quest: " + key + Environment.NewLine);
