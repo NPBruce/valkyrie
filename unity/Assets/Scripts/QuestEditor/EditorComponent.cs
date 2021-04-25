@@ -72,7 +72,7 @@ public class EditorComponent {
 
     protected virtual void RefreshReference()
     {
-        component = Game.Get().quest.qd.components[name];
+        component = Game.Get().CurrentQuest.qd.components[name];
     }
 
     protected virtual void AddTitle()
@@ -96,7 +96,7 @@ public class EditorComponent {
             Object.Destroy(go);
 
         // Dim all components, this component will be made solid later
-        Game.Get().quest.ChangeAlphaAll();
+        Game.Get().CurrentQuest.ChangeAlphaAll();
     }
 
     public void AddScrollArea()
@@ -267,8 +267,8 @@ public class EditorComponent {
         // Unlatch
         gettingPosition = false;
         // Redraw component
-        Game.Get().quest.Remove(component.sectionName);
-        Game.Get().quest.Add(component.sectionName);
+        Game.Get().CurrentQuest.Remove(component.sectionName);
+        Game.Get().CurrentQuest.Add(component.sectionName);
         // Update UI
         Update();
     }
@@ -304,13 +304,13 @@ public class EditorComponent {
         if (component.sectionName.Equals(baseName, System.StringComparison.Ordinal)) return;
         Game game = Game.Get();
         int i = 0;
-        while (game.quest.qd.components.ContainsKey(name))
+        while (game.CurrentQuest.qd.components.ContainsKey(name))
         {
             name = baseName + i++;
         }
 
         // Update all references to this component
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             kv.Value.ChangeReference(component.sectionName, name);
         }
@@ -322,12 +322,12 @@ public class EditorComponent {
         //LocalizationRead.dicts["qst"].ChangeReference(component.sectionName, name);
 
         // Remove component by old name
-        game.quest.qd.components.Remove(component.sectionName);
-        game.quest.Remove(component.sectionName);
+        game.CurrentQuest.qd.components.Remove(component.sectionName);
+        game.CurrentQuest.Remove(component.sectionName);
         component.sectionName = name;
         // Add component with new name
-        game.quest.qd.components.Add(component.sectionName, component);
-        game.quest.Add(component.sectionName);
+        game.CurrentQuest.qd.components.Add(component.sectionName, component);
+        game.CurrentQuest.Add(component.sectionName);
         // Reselect with new name
         QuestEditorData.SelectComponent(component.sectionName);
     }
@@ -337,7 +337,7 @@ public class EditorComponent {
         UIWindowSelectionList select = new UIWindowSelectionList(SelectSource, CommonStringKeys.SELECT_FILE);
 
         select.AddItem("{NEW:File}", true);
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
         foreach(string s in Directory.GetFiles(relativePath, "*.ini", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1));

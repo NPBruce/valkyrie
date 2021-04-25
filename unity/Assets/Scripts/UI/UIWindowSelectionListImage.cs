@@ -76,9 +76,9 @@ namespace Assets.Scripts.UI
                 aspect = tileSideData.aspect;
                 return ContentData.FileToTexture(tileSideData.image);
             }
-            else if (File.Exists(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + key))
+            else if (File.Exists(Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + key))
             {
-                return ContentData.FileToTexture(Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + key);
+                return ContentData.FileToTexture(Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + key);
             }
             return null;
         }

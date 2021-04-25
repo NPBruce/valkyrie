@@ -40,7 +40,7 @@ public class ToolsButton
         QuestEditor.Save();
 
         Game game = Game.Get();
-        string path = game.quest.questPath;
+        string path = game.CurrentQuest.questPath;
         Destroyer.Destroy();
 
         // All content data has been loaded by editor, cleanup everything
@@ -59,24 +59,24 @@ public class ToolsButton
 
         game.testMode = true;
         // Fetch all of the quest data and initialise the quest
-        game.quest = new Quest(new QuestData.Quest(path));
+        game.CurrentQuest = new Quest(new QuestData.Quest(path));
         game.heroCanvas.SetupUI();
 
-        int heroCount = Random.Range(game.quest.qd.quest.minHero, game.quest.qd.quest.maxHero + 1);
+        int heroCount = Random.Range(game.CurrentQuest.qd.quest.minHero, game.CurrentQuest.qd.quest.maxHero + 1);
 
         List<HeroData> hOptions = new List<HeroData>(game.cd.Values<HeroData>());
         for (int i = 0; i < heroCount; i++)
         {
-            game.quest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];
-            game.quest.vars.SetValue("#" + game.quest.heroes[i].heroData.sectionName, 1);
-            hOptions.Remove(game.quest.heroes[i].heroData);
+            game.CurrentQuest.heroes[i].heroData = hOptions[Random.Range(0, hOptions.Count)];
+            game.CurrentQuest.vars.SetValue("#" + game.CurrentQuest.heroes[i].heroData.sectionName, 1);
+            hOptions.Remove(game.CurrentQuest.heroes[i].heroData);
         }
 
         // Starting morale is number of heros
-        game.quest.vars.SetValue("$%morale", heroCount);
+        game.CurrentQuest.vars.SetValue("$%morale", heroCount);
         // Set quest flag based on hero count
-        game.quest.vars.SetValue("#heroes", heroCount);
-        game.quest.heroesSelected = true;
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
+        game.CurrentQuest.heroesSelected = true;
 
         // Clear off heros if not required
         if (!game.gameType.DisplayHeroes())

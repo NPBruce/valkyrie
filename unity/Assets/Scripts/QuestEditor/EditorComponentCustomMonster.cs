@@ -34,7 +34,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     {
         Game game = Game.Get();
-        monsterComponent = game.quest.qd.components[nameIn] as QuestData.CustomMonster;
+        monsterComponent = game.CurrentQuest.qd.components[nameIn] as QuestData.CustomMonster;
         component = monsterComponent;
         name = component.sectionName;
         Update();
@@ -425,7 +425,7 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             return DepreciatedMoMActivations(offset);
         }
-        if (monsterComponent.activations.Length == 1 && !game.quest.qd.components.ContainsKey(monsterComponent.activations[0]))
+        if (monsterComponent.activations.Length == 1 && !game.CurrentQuest.qd.components.ContainsKey(monsterComponent.activations[0]))
         {
             return DepreciatedMoMActivations(offset);
         }
@@ -637,7 +637,7 @@ public class EditorComponentCustomMonster : EditorComponent
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectAddActivation(index, s); }, new StringKey("val", "SELECT", CommonStringKeys.ACTIVATION));
 
         select.AddNewComponentItem("Activation");
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.Activation)
             {
@@ -653,12 +653,12 @@ public class EditorComponentCustomMonster : EditorComponent
         string toAdd = key;
         if (key.Equals("{NEW:Activation}"))
         {
-            while (game.quest.qd.components.ContainsKey("Activation" + i))
+            while (game.CurrentQuest.qd.components.ContainsKey("Activation" + i))
             {
                 i++;
             }
             toAdd = "Activation" + i;
-            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Activation(toAdd));
+            Game.Get().CurrentQuest.qd.components.Add(toAdd, new QuestData.Activation(toAdd));
         }
 
         if (index != -1)
@@ -685,7 +685,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
         select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
-        foreach (QuestData.QuestComponent c in Game.Get().quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in Game.Get().CurrentQuest.qd.components.Values)
         {
             if (c.typeDynamic.IndexOf("Event") == 0)
             {
@@ -707,12 +707,12 @@ public class EditorComponentCustomMonster : EditorComponent
             if (toAdd.Equals("{NEW:Event}"))
             {
                 int i = 0;
-                while (game.quest.qd.components.ContainsKey("Event" + i))
+                while (game.CurrentQuest.qd.components.ContainsKey("Event" + i))
                 {
                     i++;
                 }
                 toAdd = "Event" + i;
-                Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+                Game.Get().CurrentQuest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
             }
             monsterComponent.activations = new string[1];
             monsterComponent.activations[0] = toAdd;
@@ -943,7 +943,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectImage, SELECT_IMAGE);
 
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1));
@@ -976,7 +976,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectImagePlace, SELECT_IMAGE);
 
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1));
@@ -1006,7 +1006,7 @@ public class EditorComponentCustomMonster : EditorComponent
         
         select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().CurrentQuest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
             {
@@ -1022,12 +1022,12 @@ public class EditorComponentCustomMonster : EditorComponent
         if (toAdd.Equals("{NEW:Event}"))
         {
             int i = 0;
-            while (game.quest.qd.components.ContainsKey("Event" + i))
+            while (game.CurrentQuest.qd.components.ContainsKey("Event" + i))
             {
                 i++;
             }
             toAdd = "Event" + i;
-            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+            Game.Get().CurrentQuest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
         }
         monsterComponent.evadeEvent = toAdd;
         Update();
@@ -1039,7 +1039,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
         select.AddItem("{NONE}", "", true);
         select.AddNewComponentItem("Event");
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in Game.Get().CurrentQuest.qd.components)
         {
             if (kv.Value.typeDynamic.Equals("Event"))
             {
@@ -1055,12 +1055,12 @@ public class EditorComponentCustomMonster : EditorComponent
         if (toAdd.Equals("{NEW:Event}"))
         {
             int i = 0;
-            while (game.quest.qd.components.ContainsKey("Event" + i))
+            while (game.CurrentQuest.qd.components.ContainsKey("Event" + i))
             {
                 i++;
             }
             toAdd = "Event" + i;
-            Game.Get().quest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
+            Game.Get().CurrentQuest.qd.components.Add(toAdd, new QuestData.Event(toAdd));
         }
         monsterComponent.horrorEvent = toAdd;
         Update();

@@ -35,7 +35,7 @@ public class SkillWindow
         // Get all heros
         int heroCount = 0;
         // Count number of selected heroes
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.heroData != null) heroCount++;
         }
@@ -52,14 +52,14 @@ public class SkillWindow
             ui = new UIElement();
             ui.SetLocation(xOffset, 3.5f, 4, 4);
             ui.SetButton(delegate { Update(tmp); });
-            Texture2D heroTex = ContentData.FileToTexture(game.quest.heroes[i].heroData.image);
+            Texture2D heroTex = ContentData.FileToTexture(game.CurrentQuest.heroes[i].heroData.image);
             ui.SetImage(heroTex);
             if (i != hero)
             {
                 ui.SetBGColor(new Color(0.3f, 0.3f, 0.3f));
             }
 
-            availableXP = game.quest.heroes[i].AvailableXP();
+            availableXP = game.CurrentQuest.heroes[i].AvailableXP();
             if (availableXP != 0)
             {
                 ui = new UIElement();
@@ -94,7 +94,7 @@ public class SkillWindow
         ui.SetFontSize(UIScaler.GetLargeFont());
         new UIElementBorder(ui);
 
-        string hybridClass = game.quest.heroes[hero].hybridClass;
+        string hybridClass = game.CurrentQuest.heroes[hero].hybridClass;
         if (hybridClass.Length > 0)
         {
             ui = new UIElement();
@@ -146,14 +146,14 @@ public class SkillWindow
         xOffsetArray[3] = UIScaler.GetHCenter(-8);
         float yOffset = 4;
 
-        availableXP = game.quest.heroes[hero].AvailableXP();
+        availableXP = game.CurrentQuest.heroes[hero].AvailableXP();
         foreach (SkillData s in game.cd.Values<SkillData>())
         {
             if (s.xp == 0) continue;
-            if (game.quest.heroes[hero].className.Length == 0) continue;
+            if (game.CurrentQuest.heroes[hero].className.Length == 0) continue;
 
             Color buttonColor = new Color(0.4f, 0.4f, 0.4f);
-            if (game.quest.heroes[hero].skills.Contains(s.sectionName))
+            if (game.CurrentQuest.heroes[hero].skills.Contains(s.sectionName))
             {
                 buttonColor = Color.green;
             }
@@ -163,7 +163,7 @@ public class SkillWindow
             }
 
             string skill = s.sectionName;
-            if (s.sectionName.IndexOf("Skill" + game.quest.heroes[hero].className.Substring("Class".Length)) == 0)
+            if (s.sectionName.IndexOf("Skill" + game.CurrentQuest.heroes[hero].className.Substring("Class".Length)) == 0)
             {
                 if (hybridClass.Length > 0 && s.xp == 3) continue;
 
@@ -199,7 +199,7 @@ public class SkillWindow
     public void SelectSkill(int hero, string skill)
     {
         Game game = Game.Get();
-        List<string> skills = game.quest.heroes[hero].skills;
+        List<string> skills = game.CurrentQuest.heroes[hero].skills;
 
         if (skills.Contains(skill))
         {
@@ -207,7 +207,7 @@ public class SkillWindow
         }
         else
         {
-            if (game.quest.heroes[hero].AvailableXP() < game.cd.Get<SkillData>(skill).xp) return;
+            if (game.CurrentQuest.heroes[hero].AvailableXP() < game.cd.Get<SkillData>(skill).xp) return;
             skills.Add(skill);
         }
         Update(hero);

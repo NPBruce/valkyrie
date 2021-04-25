@@ -28,7 +28,7 @@ public class EditorComponentActivation : EditorComponent
     public EditorComponentActivation(string nameIn) : base()
     {
         Game game = Game.Get();
-        activationComponent = game.quest.qd.components[nameIn] as QuestData.Activation;
+        activationComponent = game.CurrentQuest.qd.components[nameIn] as QuestData.Activation;
         component = activationComponent;
         name = component.sectionName;
         Update();

@@ -16,11 +16,22 @@ namespace Assets.Scripts.Content
         /// Change all dictionary languages
         /// </summary>
         /// <param name="newLang">string for new language</param>
-        public static void changeCurrentLangTo(string newLang)
+        public static void ChangeCurrentLangTo(string newLang)
         {
             foreach (DictionaryI18n d in dicts.Values)
             {
                 d.currentLanguage = newLang;
+            }
+        }
+        /// <summary>
+        /// Add language that needs to be loaded
+        /// </summary>
+        /// <param name="newLang">force load a language</param>
+        public static void AddRequiredLanguage(string newLang)
+        {
+            foreach (DictionaryI18n d in dicts.Values)
+            {
+                d.AddRequiredLanguage(newLang);
             }
         }
 

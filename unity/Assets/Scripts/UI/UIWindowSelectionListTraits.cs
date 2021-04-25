@@ -503,7 +503,7 @@ namespace Assets.Scripts.UI
             {
                 bool packRequired = string.Empty == anyPack 
                     || anyPack.Equals("base", StringComparison.InvariantCultureIgnoreCase)
-                    || Game.Get().quest.qd.quest.packs.Any(s => anyPack.Equals(s));
+                    || Game.Get().CurrentQuest.qd.quest.packs.Any(s => anyPack.Equals(s));
                 
                 if (!packRequired)
                 {

@@ -48,7 +48,7 @@ class SaveManager
             {
                 Directory.CreateDirectory(tempValkyriePath);
             }
-            File.WriteAllText(Path.Combine(tempValkyriePath, "save.ini"), game.quest.ToString());
+            File.WriteAllText(Path.Combine(tempValkyriePath, "save.ini"), game.CurrentQuest.ToString());
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
 
@@ -63,24 +63,24 @@ class SaveManager
             // Check if we should update the zip file or write a new one with quest content
             // first autosave is a new zip file, following autosave just update the zip
             bool zip_update = false;
-            if (num==0 && game.quest.firstAutoSaveDone)
+            if (num==0 && game.CurrentQuest.firstAutoSaveDone)
             {
                 zip_update = true;
             }
             else if (num == 0)
             {
-                game.quest.firstAutoSaveDone = true;
+                game.CurrentQuest.firstAutoSaveDone = true;
             }
 
             // Quest content can be in original path, or savegame path
             string quest_content_path;
-            if(game.quest.fromSavegame)
+            if(game.CurrentQuest.fromSavegame)
             {
                 quest_content_path = ContentData.ValkyrieLoadQuestPath;
             }
             else
             {
-                quest_content_path = game.quest.originalPath;
+                quest_content_path = game.CurrentQuest.originalPath;
             }
 
             // zip in a separate thread
