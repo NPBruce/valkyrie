@@ -114,10 +114,10 @@ public class StatsManager
         gameStats.comments = comments;
 
         Game game = Game.Get();
-        Quest quest = game.quest;
+        Quest quest = game.CurrentQuest;
 
         // quest filename is the unique id
-        gameStats.scenario_name = Path.GetFileName(game.quest.originalPath);
+        gameStats.scenario_name = Path.GetFileName(game.CurrentQuest.originalPath);
 
         // language is required to see the quality of translations
         gameStats.language_selected = game.currentLang;
@@ -136,7 +136,7 @@ public class StatsManager
         // Get the list of events
         if (quest.eventList != null)
         {
-            foreach (string event_name in game.quest.eventList)
+            foreach (string event_name in game.CurrentQuest.eventList)
             {
                 gameStats.events_list += event_name + ";";
             }

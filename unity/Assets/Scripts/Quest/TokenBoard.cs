@@ -60,13 +60,13 @@ public class TokenBoard : MonoBehaviour {
             Game game = Game.Get();
 
             // If in horror phase ignore token, accept UI element (items)
-            if (c.GetEvent().typeDynamic=="Token"  &&  game.quest.phase != Quest.MoMPhase.investigator) return;
+            if (c.GetEvent().typeDynamic=="Token"  &&  game.CurrentQuest.phase != Quest.MoMPhase.investigator) return;
 
             // If a dialog is open ignore
             if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
                 return;
             // Spawn a window with the door/token info
-            game.quest.eManager.QueueEvent(c.GetEvent().sectionName);
+            game.CurrentQuest.eManager.QueueEvent(c.GetEvent().sectionName);
         }
 
     }
@@ -77,7 +77,7 @@ public class TokenBoard : MonoBehaviour {
         Game game = Game.Get();
         int count = 0;
         // Get number of heroes
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.heroData != null) count++;
         }
@@ -152,7 +152,7 @@ public class TokenBoard : MonoBehaviour {
         Sprite iconSprite;
 
         // Check that placement name exists
-        if (!game.quest.qd.components.ContainsKey(place) && place.Length > 0)
+        if (!game.CurrentQuest.qd.components.ContainsKey(place) && place.Length > 0)
         {
             ValkyrieDebug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
@@ -205,7 +205,7 @@ public class TokenBoard : MonoBehaviour {
 
         if (place.Length > 0)
         {
-            QuestData.MPlace mp = game.quest.qd.components[place] as QuestData.MPlace;
+            QuestData.MPlace mp = game.CurrentQuest.qd.components[place] as QuestData.MPlace;
             posX = mp.location.x;
             posY = mp.location.y;
             
@@ -288,7 +288,7 @@ public class TokenBoard : MonoBehaviour {
                 items++;
             }
         }
-        if (items != 1 || !Game.Get().quest.itemSelect.ContainsKey(item))
+        if (items != 1 || !Game.Get().CurrentQuest.itemSelect.ContainsKey(item))
         {
             AddHighlight(e.location);
         }
@@ -308,7 +308,7 @@ public class TokenBoard : MonoBehaviour {
         itemObject.transform.SetParent(game.tokenCanvas.transform);
 
         // Create the image
-        ItemData itemData = game.cd.Get<ItemData>(game.quest.itemSelect[item]);
+        ItemData itemData = game.cd.Get<ItemData>(game.CurrentQuest.itemSelect[item]);
         Texture2D newTex = ContentData.FileToTexture(itemData.image);
         UnityEngine.UI.Image image = itemObject.AddComponent<UnityEngine.UI.Image>();
         Sprite iconSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);

@@ -47,7 +47,7 @@ public class Game : MonoBehaviour
     }
 
     // Data for the current quest
-    public Quest quest;
+    private Quest quest;
     // Canvas for UI components (fixed on screen)
     public Canvas uICanvas;
     // Canvas for board tiles (tilted, in game space)
@@ -106,6 +106,19 @@ public class Game : MonoBehaviour
     private ContentLoader _contentLoader;
     public ContentLoader ContentLoader => _contentLoader;
 
+    public Quest CurrentQuest
+    {
+        get => quest;
+        set
+        {
+            quest = value;
+            if (quest?.qd?.quest?.defaultLanguage != null)
+            {
+                LocalizationRead.AddRequiredLanguage(quest.qd.quest.defaultLanguage);
+            }
+        }
+    }
+
     // Current language
     public string currentLang;
 
@@ -133,7 +146,7 @@ public class Game : MonoBehaviour
 
     internal string CurrentQuestPath()
     {
-        return quest?.originalPath;
+        return CurrentQuest?.originalPath;
     }
 
     // Unity fires off this function
@@ -293,7 +306,7 @@ public class Game : MonoBehaviour
         }
 
         // Fetch all of the quest data and initialise the quest
-        quest = new Quest(q);
+        CurrentQuest = new Quest(q);
 
         // Draw the hero icons, which are buttons for selection
         heroCanvas.SetupUI();
@@ -330,12 +343,12 @@ public class Game : MonoBehaviour
     {
         // Count up how many heros have been selected
         int count = 0;
-        foreach (Quest.Hero h in Get().quest.heroes)
+        foreach (Quest.Hero h in Get().CurrentQuest.heroes)
         {
             if (h.heroData != null) count++;
         }
         // Starting morale is number of heros
-        quest.vars.SetValue("$%morale", count);
+        CurrentQuest.vars.SetValue("$%morale", count);
         // This validates the selection then if OK starts first quest event
         heroCanvas.EndSection();
     }
@@ -354,10 +367,10 @@ public class Game : MonoBehaviour
         stageUI = new NextStageButton();
 
         // Start round events
-        quest.eManager.EventTriggerType("StartRound", false);
+        CurrentQuest.eManager.EventTriggerType("StartRound", false);
         // Start the quest (top of stack)
-        quest.eManager.EventTriggerType("EventStart", false);
-        quest.eManager.TriggerEvent();
+        CurrentQuest.eManager.EventTriggerType("EventStart", false);
+        CurrentQuest.eManager.TriggerEvent();
     }
 
     public void PlayDefaultQuestMusic()
@@ -370,7 +383,7 @@ public class Game : MonoBehaviour
     {
         List<string> music = new List<string>();
         //If default quest music  has been turned off do not add any audio files to the list
-        if (quest.defaultMusicOn)
+        if (CurrentQuest.defaultMusicOn)
         {
             // Start quest music
             foreach (AudioData ad in cd.Values<AudioData>())
@@ -427,9 +440,9 @@ public class Game : MonoBehaviour
             qed.RightClick();
         }
 
-        if (quest != null)
+        if (CurrentQuest != null)
         {
-            quest.Update();
+            CurrentQuest.Update();
         }
 
         if (Input.GetKey("right alt") || Input.GetKey("left alt"))

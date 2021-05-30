@@ -59,9 +59,9 @@ public class VarManager
     {
         if (!vars.ContainsKey(var))
         {
-            if (Game.Get().quest != null && Game.Get().quest.log != null)
+            if (Game.Get().CurrentQuest != null && Game.Get().CurrentQuest.log != null)
             {
-                Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var, true));
+                Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + var, true));
             }
             vars.Add(var, 0);
         }
@@ -81,7 +81,7 @@ public class VarManager
     {
         if (!vars.ContainsKey(op.var))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.var, true));
             vars.Add(op.var, 0);
         }
         float r = 0;
@@ -104,7 +104,7 @@ public class VarManager
         // value is var
         if (!vars.ContainsKey(op.value))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.value, true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Adding quest var: " + op.value, true));
             vars.Add(op.value, 0);
         }
         return vars[op.value];
@@ -122,37 +122,37 @@ public class VarManager
         if (op.operation.Equals("+"))
         {
             vars[op.var] += value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Adding: " + value + " to quest var: " + op.var + " result: " + vars[op.var], true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Adding: " + value + " to quest var: " + op.var + " result: " + vars[op.var], true));
         }
 
         if (op.operation.Equals("-"))
         {
             vars[op.var] -= value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Subtracting: " + value + " from quest var: " + op.var + " result: " + vars[op.var], true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Subtracting: " + value + " from quest var: " + op.var + " result: " + vars[op.var], true));
         }
 
         if (op.operation.Equals("*"))
         {
             vars[op.var] *= value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Multiplying: " + value + " with quest var: " + op.var + " result: " + vars[op.var], true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Multiplying: " + value + " with quest var: " + op.var + " result: " + vars[op.var], true));
         }
 
         if (op.operation.Equals("/"))
         {
             vars[op.var] /= value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Dividing quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Dividing quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
         }
 
         if (op.operation.Equals("%"))
         {
             vars[op.var] %= value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Modulus quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Modulus quest var: " + op.var + " by: " + value + " result: " + vars[op.var], true));
         }
 
         if (op.operation.Equals("="))
         {
             vars[op.var] = value;
-            Game.Get().quest.log.Add(new Quest.LogEntry("Notice: Setting: " + op.var + " to: " + value, true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Notice: Setting: " + op.var + " to: " + value, true));
         }
     }
 

@@ -103,7 +103,7 @@ public class GameStateManager
 
     private static bool GetCurrentQuestPath(Game game, out string currentQuestPath)
     {
-        currentQuestPath = game.quest?.originalPath;
+        currentQuestPath = game.CurrentQuest?.originalPath;
         if (currentQuestPath == null)
         {
             return false;

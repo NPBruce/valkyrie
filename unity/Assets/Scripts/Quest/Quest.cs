@@ -155,7 +155,7 @@ public class Quest
         game = Game.Get();
 
         // This happens anyway but we need it to be here before the following code is executed
-        game.quest = this;
+        game.CurrentQuest = this;
 
         // Static data from the quest file
         qd = new QuestData(q);
@@ -379,7 +379,7 @@ public class Quest
 
             if (list.Count == 0)
             {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName,
+                game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName,
                     true));
                 return false;
             }
@@ -435,7 +435,7 @@ public class Quest
                 }
 
                 // Monster type might be a unique for this quest
-                if (game.quest.qd.components.ContainsKey(monster))
+                if (game.CurrentQuest.qd.components.ContainsKey(monster))
                 {
                     monsterSelect.Add(spawn.sectionName, monster);
                     return true;
@@ -528,7 +528,7 @@ public class Quest
                 }
             }
 
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
             {
                 QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
                 if (cm == null) continue;
@@ -581,7 +581,7 @@ public class Quest
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
-                game.quest.log.Add(new Quest.LogEntry(
+                game.CurrentQuest.log.Add(new Quest.LogEntry(
                     "Error: Unable to find monster of traits specified in spawn event: " + spawn.sectionName, true));
                 return false;
             }
@@ -644,8 +644,8 @@ public class Quest
             path = path.Substring(1, path.Length - 1);
         }
 
-        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + path;
-        if (game.quest.fromSavegame)
+        string questToTransition = game.CurrentQuest.originalPath + Path.DirectorySeparatorChar + path;
+        if (game.CurrentQuest.fromSavegame)
         {
             questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + path;
         }
@@ -697,15 +697,15 @@ public class Quest
             {
                 heroCount++;
                 // Create variable to value 1 for each selected Hero and Class
-                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                game.CurrentQuest.vars.SetValue("#" + h.heroData.sectionName, 1);
                 if (!string.IsNullOrEmpty(h.className))
                 {
-                    game.quest.vars.SetValue("#" + h.className, 1);
+                    game.CurrentQuest.vars.SetValue("#" + h.className, 1);
                 }
             }
         }
 
-        game.quest.vars.SetValue("#heroes", heroCount);
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
 
         List<string> music = new List<string>();
         foreach (AudioData ad in game.cd.Values<AudioData>())
@@ -734,14 +734,14 @@ public class Quest
     public void LoadQuest(IniData saveData)
     {
         game = Game.Get();
-
-        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
-        game.quest = this;
-
+        
         fromSavegame = true;
 
         // Set static quest data
         qd = new QuestData(saveData.Get("Quest", "path"));
+
+        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
+        game.CurrentQuest = this;
         
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
@@ -929,7 +929,7 @@ public class Quest
             }
         }
 
-        game.quest.vars.SetValue("#heroes", heroCount);
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
 
         // Monsters must be after heros because some activations refer to heros
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
@@ -1048,7 +1048,7 @@ public class Quest
     {
         // Nothing to undo
         if (undo.Count == 0) return;
-        // Load the old state.  This will also set game.quest
+        // Load the old state.  This will also set game.CurrentQuest
         Quest oldQuest = new Quest(undo.Pop());
         // Transfer the undo stack to the loaded state
         oldQuest.undo = undo;
@@ -1124,14 +1124,14 @@ public class Quest
     public void Add(string name, bool shop = false)
     {
         // Check that the component is valid
-        if (!game.quest.qd.components.ContainsKey(name))
+        if (!game.CurrentQuest.qd.components.ContainsKey(name))
         {
             ValkyrieDebug.Log("Error: Unable to create missing quest component: " + name);
             Application.Quit();
         }
 
         // Add to active list
-        QuestData.QuestComponent qc = game.quest.qd.components[name];
+        QuestData.QuestComponent qc = game.CurrentQuest.qd.components[name];
 
         if (boardItems.ContainsKey(name)) return;
 
@@ -1167,12 +1167,12 @@ public class Quest
                 items.Add(itemSelect[name]);
                 if (((QuestData.QItem) qc).inspect.Length > 0)
                 {
-                    if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
+                    if (game.CurrentQuest.itemInspect.ContainsKey(itemSelect[name]))
                     {
-                        game.quest.itemInspect.Remove(itemSelect[name]);
+                        game.CurrentQuest.itemInspect.Remove(itemSelect[name]);
                     }
 
-                    game.quest.itemInspect.Add(itemSelect[name], ((QuestData.QItem) qc).inspect);
+                    game.CurrentQuest.itemInspect.Add(itemSelect[name], ((QuestData.QItem) qc).inspect);
                 }
             }
         }
@@ -1212,7 +1212,7 @@ public class Quest
             {
                 monsters.Remove(m);
                 game.monsterCanvas.UpdateList();
-                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+                game.CurrentQuest.vars.SetValue("#monsters", game.CurrentQuest.monsters.Count);
             }
         }
 
@@ -1229,7 +1229,7 @@ public class Quest
         {
             monsters.Clear();
             game.monsterCanvas.UpdateList();
-            game.quest.vars.SetValue("#monsters", 0);
+            game.CurrentQuest.vars.SetValue("#monsters", 0);
         }
 
         if (name.Equals("#boardcomponents"))
@@ -1564,9 +1564,9 @@ public class Quest
             unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
             image.color = new Color(1, 1, 1, 0);
 
-            if (!Game.Get().quest.firstTileDisplayed)
+            if (!Game.Get().CurrentQuest.firstTileDisplayed)
             {
-                Game.Get().quest.firstTileDisplayed = true;
+                Game.Get().CurrentQuest.firstTileDisplayed = true;
 
                 // We wait for the first tile displayed on MoM to display the 'NextStage' button bar
                 // Don't do anything if quest is being loaded and stageUI does not exist yet
@@ -1605,7 +1605,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.ContainsKey<TokenData>(tokenName))
             {
-                game.quest.log.Add(new Quest.LogEntry(
+                game.CurrentQuest.log.Add(new Quest.LogEntry(
                     "Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName,
                     true));
                 // Catch for older quests with different types (0.4.0 or older)
@@ -1712,7 +1712,7 @@ public class Quest
                 else
                 {
                     newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName,
-                        Path.GetDirectoryName(game.quest.qd.questPath)));
+                        Path.GetDirectoryName(game.CurrentQuest.qd.questPath)));
                 }
             }
 
@@ -2066,7 +2066,7 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                game.quest.log.Add(
+                game.CurrentQuest.log.Add(
                     new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
             }
 
@@ -2151,7 +2151,7 @@ public class Quest
         public int AvailableXP()
         {
             Game game = Game.Get();
-            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
+            int aXP = xp + Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%xp"));
             foreach (string s in skills)
             {
                 aXP -= game.cd.Get<SkillData>(s).xp;
@@ -2242,11 +2242,11 @@ public class Quest
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
             healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase +
-                                         (Game.Get().quest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
+                                         (Game.Get().CurrentQuest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
 
             Game game = Game.Get();
             HashSet<int> dupe = new HashSet<int>();
-            foreach (Monster m in game.quest.monsters)
+            foreach (Monster m in game.CurrentQuest.monsters)
             {
                 string active_monster = "";
                 string new_monster = "";
@@ -2290,10 +2290,12 @@ public class Quest
             int.TryParse(data["damage"], out damage);
             int.TryParse(data["duplicate"], out duplicate);
 
-            if (data.ContainsKey("healthmod"))
+            if (data.TryGetValue("healthmod", out string healthModString))
             {
-                int.TryParse(data["healthmod"], out healthMod);
+                int.TryParse(healthModString, out healthMod);
             }
+
+            data.TryGetValue("spawnEventName", out spawnEventName);
 
             uniqueText = new StringKey(data["uniqueText"]);
             uniqueTitle = new StringKey(data["uniqueTitle"]);
@@ -2310,10 +2312,10 @@ public class Quest
             game.cd.TryGet(data["type"], out monsterData);
 
             // Check if type is a special quest specific type
-            if (game.quest.qd.components.ContainsKey(data["type"]) &&
-                game.quest.qd.components[data["type"]] is QuestData.CustomMonster)
+            if (game.CurrentQuest.qd.components.ContainsKey(data["type"]) &&
+                game.CurrentQuest.qd.components[data["type"]] is QuestData.CustomMonster)
             {
-                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.CustomMonster);
+                monsterData = new QuestMonster(game.CurrentQuest.qd.components[data["type"]] as QuestData.CustomMonster);
             }
 
             // If we have already selected an activation find it
@@ -2321,10 +2323,10 @@ public class Quest
             {
                 game.cd.TryGet(data["activation"], out ActivationData saveActivation);
                 // Activations can be specific to the quest
-                if (game.quest.qd.components.ContainsKey(data["activation"]))
+                if (game.CurrentQuest.qd.components.ContainsKey(data["activation"]))
                 {
                     saveActivation =
-                        new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
+                        new QuestActivation(game.CurrentQuest.qd.components[data["activation"]] as QuestData.Activation);
                 }
 
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
@@ -2343,7 +2345,7 @@ public class Quest
             if (parts.Length != 2) return null;
             int d = 0;
             int.TryParse(parts[1], out d);
-            foreach (Monster m in game.quest.monsters)
+            foreach (Monster m in game.CurrentQuest.monsters)
             {
                 if (m.monsterData.sectionName.Equals(parts[0]) && m.duplicate == d)
                 {
@@ -2357,7 +2359,7 @@ public class Quest
         public int GetHealth()
         {
             return Mathf.RoundToInt(monsterData.healthBase +
-                                    (Game.Get().quest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
+                                    (Game.Get().CurrentQuest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
         }
 
         // Activation instance is requresd to track variables in the activation
@@ -2391,7 +2393,7 @@ public class Quest
                 else
                 {
                     effect = ad.ability.Translate()
-                        .Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name.Translate());
+                        .Replace("{0}", Game.Get().CurrentQuest.GetRandomHero().heroData.name.Translate());
                     effect = effect.Replace("{1}", monsterName);
                 }
 
@@ -2417,6 +2419,7 @@ public class Quest
             r += "damage=" + damage + nl;
             r += "duplicate=" + duplicate + nl;
             r += "healthmod=" + healthMod + nl;
+            r += "spawnEventName=" + spawnEventName + nl;
             // Save the activation (currently doesn't save the effect string)
             if (currentActivation != null)
             {

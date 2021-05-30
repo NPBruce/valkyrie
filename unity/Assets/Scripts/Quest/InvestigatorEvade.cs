@@ -16,10 +16,10 @@ public class InvestigatorEvade {
         Game game = Game.Get();
 
         QuestMonster qm = m.monsterData as QuestMonster;
-        if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.evadeEvent))
+        if (qm != null && game.CurrentQuest.qd.components.ContainsKey(qm.cMonster.evadeEvent))
         {
-            game.quest.eManager.monsterImage = m;
-            game.quest.eManager.QueueEvent(qm.cMonster.evadeEvent);
+            game.CurrentQuest.eManager.monsterImage = m;
+            game.CurrentQuest.eManager.QueueEvent(qm.cMonster.evadeEvent);
         }
         else
         {
@@ -46,7 +46,7 @@ public class InvestigatorEvade {
         {
             text = evades[Random.Range(0, evades.Count)].text.Translate().Replace("{0}", m.monsterData.name.Translate());
 
-            game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+            game.CurrentQuest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
             Draw();
         }

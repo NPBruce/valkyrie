@@ -44,7 +44,7 @@ public class LogWindow
         new UIElementBorder(scrollArea);
 
         float offset = 0.5f;
-        foreach (Quest.LogEntry e in game.quest.log)
+        foreach (Quest.LogEntry e in game.CurrentQuest.log)
         {
             string entry = e.GetEntry(developerToggle).Trim('\n');
             if (entry.Length == 0) continue;
@@ -80,7 +80,7 @@ public class LogWindow
         // List of vars
         float offset = 0.1f;
         valueUIE = new Dictionary<string, UIElementEditable>();
-        foreach (KeyValuePair<string, float> kv in Game.Get().quest.vars.vars)
+        foreach (KeyValuePair<string, float> kv in Game.Get().CurrentQuest.vars.vars)
         {
             string key = kv.Key;
 
@@ -109,7 +109,7 @@ public class LogWindow
     {
         float value;
         float.TryParse(valueUIE[key].GetText(), out value);
-        Game.Get().quest.vars.SetValue(key, value);
+        Game.Get().CurrentQuest.vars.SetValue(key, value);
         Destroyer.Dialog();
         Update();
     }

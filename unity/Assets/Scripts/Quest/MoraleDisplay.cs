@@ -11,7 +11,7 @@ public class MoraleDisplay {
     public MoraleDisplay()
     {
         Game game = Game.Get();
-        int morale = Mathf.RoundToInt(game.quest.vars.GetValue("$%morale"));
+        int morale = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%morale"));
         if (morale < 0)
         {
             morale = 0;
@@ -27,7 +27,7 @@ public class MoraleDisplay {
     public void Update()
     {
         Game game = Game.Get();
-        int morale = Mathf.RoundToInt(game.quest.vars.GetValue("$%morale"));
+        int morale = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%morale"));
         if (morale < 0)
         {
             morale = 0;

@@ -35,25 +35,25 @@ public class QuestEditor {
         Game game = Game.Get();
 
         // Remove all current components
-        if (game.quest != null)   game.quest.RemoveAll();
+        if (game.CurrentQuest != null)   game.CurrentQuest.RemoveAll();
 
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);
 
         // Read from file
-        game.quest = new Quest(new QuestData.Quest(path));
+        game.CurrentQuest = new Quest(new QuestData.Quest(path));
 
         // Is this needed?
-        game.quest.RemoveAll();
+        game.CurrentQuest.RemoveAll();
 
         // Add all components to the quest
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
-            game.quest.Add(kv.Key);
+            game.CurrentQuest.Add(kv.Key);
         }
         // Set all components to mostly transparent
-        game.quest.ChangeAlphaAll();
+        game.CurrentQuest.ChangeAlphaAll();
 
         // Create a new QED
         game.qed = new QuestEditorData(game.qed);
@@ -70,7 +70,7 @@ public class QuestEditor {
             .AppendLine(game.version);
 
         // Save quest meta content to a string
-        questData.AppendLine(game.quest.qd.quest.ToString());
+        questData.AppendLine(game.CurrentQuest.qd.quest.ToString());
 
         // Write to disk
         try
@@ -88,7 +88,7 @@ public class QuestEditor {
                 {
                     questData.AppendLine("Localization." + language + ".txt");
                     File.WriteAllText(
-                        Path.GetDirectoryName(game.quest.qd.questPath) + "/Localization." + language + ".txt",
+                        Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + "/Localization." + language + ".txt",
                         string.Join(System.Environment.NewLine, localization_files[language].ToArray()));
                 }
 
@@ -105,7 +105,7 @@ public class QuestEditor {
 
         Dictionary<string, StringBuilder> fileData = new Dictionary<string, StringBuilder>();
 
-        foreach (QuestData.QuestComponent qc in game.quest.qd.components.Values)
+        foreach (QuestData.QuestComponent qc in game.CurrentQuest.qd.components.Values)
         {
             string source = qc.source;
             if (source.Length == 0)
@@ -140,7 +140,7 @@ public class QuestEditor {
 
         foreach (KeyValuePair<string, StringBuilder> kv in fileData)
         {
-            string outFile = Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), kv.Key);
+            string outFile = Path.Combine(Path.GetDirectoryName(game.CurrentQuest.qd.questPath), kv.Key);
            // Write to disk
             try
             {

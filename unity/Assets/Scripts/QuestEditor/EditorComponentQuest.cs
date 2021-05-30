@@ -44,7 +44,7 @@ public class EditorComponentQuest : EditorComponent
 
         nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         nameUIE.SetLocation(0.5f, offset, 19, 1);
-        nameUIE.SetText(game.quest.qd.quest.name.Translate());
+        nameUIE.SetText(game.CurrentQuest.qd.quest.name.Translate());
         nameUIE.SetButton(delegate { UpdateQuestName(); });
         nameUIE.SetSingleLine();
         new UIElementBorder(nameUIE);
@@ -58,7 +58,7 @@ public class EditorComponentQuest : EditorComponent
         ui.SetLocation(5, offset, 3, 1);
         ui.SetButton(delegate { ToggleHidden(); });
         new UIElementBorder(ui);
-        if (game.quest.qd.quest.hidden)
+        if (game.CurrentQuest.qd.quest.hidden)
         {
             ui.SetText(CommonStringKeys.TRUE);
         }
@@ -75,7 +75,7 @@ public class EditorComponentQuest : EditorComponent
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 14, 1);
         ui.SetButton(delegate { Image(); });
-        ui.SetText(game.quest.qd.quest.image);
+        ui.SetText(game.CurrentQuest.qd.quest.image);
         new UIElementBorder(ui);
         offset += 2;
 
@@ -88,7 +88,7 @@ public class EditorComponentQuest : EditorComponent
         ui.SetLocation(8, offset, 3, 1);
         ui.SetButton(delegate { ToggleDefaultMusicOff(); });
         new UIElementBorder(ui);
-        if (game.quest.qd.quest.defaultMusicOn)
+        if (game.CurrentQuest.qd.quest.defaultMusicOn)
         {
             ui.SetText(CommonStringKeys.TRUE);
         }
@@ -106,7 +106,7 @@ public class EditorComponentQuest : EditorComponent
 
         descriptionUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         descriptionUIE.SetLocation(0.5f, offset, 19, 30);
-        descriptionUIE.SetText(game.quest.qd.quest.description.Translate(true));
+        descriptionUIE.SetText(game.CurrentQuest.qd.quest.description.Translate(true));
         offset += descriptionUIE.HeightToTextPadding(1);
         descriptionUIE.SetButton(delegate { UpdateQuestDesc(); });
         new UIElementBorder(descriptionUIE);
@@ -119,7 +119,7 @@ public class EditorComponentQuest : EditorComponent
 
         synopsysUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         synopsysUIE.SetLocation(0.5f, offset, 19, 4);
-        synopsysUIE.SetText(game.quest.qd.quest.synopsys.Translate(true));
+        synopsysUIE.SetText(game.CurrentQuest.qd.quest.synopsys.Translate(true));
         offset += synopsysUIE.HeightToTextPadding(1);
         synopsysUIE.SetButton(delegate { UpdateQuestSynopsys(); });
         synopsysUIE.SetMaxCharacters(100);
@@ -133,7 +133,7 @@ public class EditorComponentQuest : EditorComponent
 
         authorsUIE = new UIElementEditablePaneled(Game.EDITOR, scrollArea.GetScrollTransform());
         authorsUIE.SetLocation(0.5f, offset, 19, 16);
-        authorsUIE.SetText(game.quest.qd.quest.authors.Translate(true));
+        authorsUIE.SetText(game.CurrentQuest.qd.quest.authors.Translate(true));
         offset += authorsUIE.HeightToTextPadding(1);
         authorsUIE.SetButton(delegate { UpdateQuestAuth(); });
         new UIElementBorder(authorsUIE);
@@ -146,7 +146,7 @@ public class EditorComponentQuest : EditorComponent
 
         authors_shortUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         authors_shortUIE.SetLocation(0.5f, offset, 19, 1f);
-        authors_shortUIE.SetText(game.quest.qd.quest.authors_short.Translate(true));
+        authors_shortUIE.SetText(game.CurrentQuest.qd.quest.authors_short.Translate(true));
         offset += authors_shortUIE.HeightToTextPadding(0);
         authors_shortUIE.SetButton(delegate { UpdateQuestShortAuth(); });
         authors_shortUIE.SetSingleLine();
@@ -166,12 +166,12 @@ public class EditorComponentQuest : EditorComponent
 
         offset += 1;
         int index;
-        for (index = 0; index < game.quest.qd.quest.packs.Length; index++)
+        for (index = 0; index < game.CurrentQuest.qd.quest.packs.Length; index++)
         {
             int i = index;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0.5f, offset, 10, 1);
-            ui.SetText(new StringKey("val", game.quest.qd.quest.packs[index]));
+            ui.SetText(new StringKey("val", game.CurrentQuest.qd.quest.packs[index]));
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -189,7 +189,7 @@ public class EditorComponentQuest : EditorComponent
 
         minHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         minHeroUIE.SetLocation(7.5f, offset, 2, 1);
-        minHeroUIE.SetText(game.quest.qd.quest.minHero.ToString());
+        minHeroUIE.SetText(game.CurrentQuest.qd.quest.minHero.ToString());
         minHeroUIE.SetSingleLine();
         minHeroUIE.SetButton(delegate { UpdateMinHero(); });
         new UIElementBorder(minHeroUIE);
@@ -200,7 +200,7 @@ public class EditorComponentQuest : EditorComponent
 
         maxHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         maxHeroUIE.SetLocation(17, offset, 2, 1);
-        maxHeroUIE.SetText(game.quest.qd.quest.maxHero.ToString());
+        maxHeroUIE.SetText(game.CurrentQuest.qd.quest.maxHero.ToString());
         maxHeroUIE.SetSingleLine();
         maxHeroUIE.SetButton(delegate { UpdateMaxHero(); });
         new UIElementBorder(maxHeroUIE);
@@ -212,7 +212,7 @@ public class EditorComponentQuest : EditorComponent
 
         minLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         minLengthUIE.SetLocation(7.5f, offset, 2, 1);
-        minLengthUIE.SetText(game.quest.qd.quest.lengthMin.ToString());
+        minLengthUIE.SetText(game.CurrentQuest.qd.quest.lengthMin.ToString());
         minLengthUIE.SetSingleLine();
         minLengthUIE.SetButton(delegate { UpdateMinLength(); });
         new UIElementBorder(minLengthUIE);
@@ -223,7 +223,7 @@ public class EditorComponentQuest : EditorComponent
 
         maxLengthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         maxLengthUIE.SetLocation(17, offset, 2, 1);
-        maxLengthUIE.SetText(game.quest.qd.quest.lengthMax.ToString());
+        maxLengthUIE.SetText(game.CurrentQuest.qd.quest.lengthMax.ToString());
         maxLengthUIE.SetSingleLine();
         maxLengthUIE.SetButton(delegate { UpdateMaxLength(); });
         new UIElementBorder(maxLengthUIE);
@@ -235,7 +235,7 @@ public class EditorComponentQuest : EditorComponent
 
         difficultyUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
         difficultyUIE.SetLocation(7.5f, offset, 3, 1);
-        difficultyUIE.SetText(game.quest.qd.quest.difficulty.ToString());
+        difficultyUIE.SetText(game.CurrentQuest.qd.quest.difficulty.ToString());
         difficultyUIE.SetSingleLine();
         difficultyUIE.SetButton(delegate { UpdateDifficulty(); });
         new UIElementBorder(difficultyUIE);
@@ -273,7 +273,7 @@ public class EditorComponentQuest : EditorComponent
     {
         if (!nameUIE.Empty() && nameUIE.Changed())
         {
-            LocalizationRead.updateScenarioText(game.quest.qd.quest.name_key, nameUIE.GetText());
+            LocalizationRead.updateScenarioText(game.CurrentQuest.qd.quest.name_key, nameUIE.GetText());
         }
     }
 
@@ -288,7 +288,7 @@ public class EditorComponentQuest : EditorComponent
                 new string[] { CommonStringKeys.FILE.Translate() }
             }
         };
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath.Replace('\\', '/'))).FullName.Replace('\\', '/');
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath.Replace('\\', '/'))).FullName.Replace('\\', '/');
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             string file = s.Replace('\\', '/');
@@ -306,11 +306,11 @@ public class EditorComponentQuest : EditorComponent
     {
         if (image == null)
         {
-            game.quest.qd.quest.image = image;
+            game.CurrentQuest.qd.quest.image = image;
         }
         else
         {
-            game.quest.qd.quest.image = image.Replace('\\', '/');
+            game.CurrentQuest.qd.quest.image = image.Replace('\\', '/');
         }
         Update();
     }
@@ -321,11 +321,11 @@ public class EditorComponentQuest : EditorComponent
         {
             if (descriptionUIE.Empty())
             {
-                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.description_key);
+                LocalizationRead.dicts["qst"].Remove(game.CurrentQuest.qd.quest.description_key);
             }
             else
             {
-                LocalizationRead.updateScenarioText(game.quest.qd.quest.description_key, descriptionUIE.GetText());
+                LocalizationRead.updateScenarioText(game.CurrentQuest.qd.quest.description_key, descriptionUIE.GetText());
             }
             if (!descriptionUIE.HeightAtTextPadding(1))
             {
@@ -340,11 +340,11 @@ public class EditorComponentQuest : EditorComponent
         {
             if (synopsysUIE.Empty())
             {
-                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.synopsys_key);
+                LocalizationRead.dicts["qst"].Remove(game.CurrentQuest.qd.quest.synopsys_key);
             }
             else
             {
-                LocalizationRead.updateScenarioText(game.quest.qd.quest.synopsys_key, synopsysUIE.GetText());
+                LocalizationRead.updateScenarioText(game.CurrentQuest.qd.quest.synopsys_key, synopsysUIE.GetText());
             }
             if (!synopsysUIE.HeightAtTextPadding(1))
             {
@@ -360,11 +360,11 @@ public class EditorComponentQuest : EditorComponent
         {
             if (authorsUIE.Empty())
             {
-                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.authors_key);
+                LocalizationRead.dicts["qst"].Remove(game.CurrentQuest.qd.quest.authors_key);
             }
             else
             {
-                LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_key, authorsUIE.GetText());
+                LocalizationRead.updateScenarioText(game.CurrentQuest.qd.quest.authors_key, authorsUIE.GetText());
             }
             if (!authorsUIE.HeightAtTextPadding(1))
             {
@@ -379,11 +379,11 @@ public class EditorComponentQuest : EditorComponent
         {
             if (authors_shortUIE.Empty())
             {
-                LocalizationRead.dicts["qst"].Remove(game.quest.qd.quest.authors_short_key);
+                LocalizationRead.dicts["qst"].Remove(game.CurrentQuest.qd.quest.authors_short_key);
             }
             else
             {
-                LocalizationRead.updateScenarioText(game.quest.qd.quest.authors_short_key, authors_shortUIE.GetText());
+                LocalizationRead.updateScenarioText(game.CurrentQuest.qd.quest.authors_short_key, authors_shortUIE.GetText());
             }
             if (!authors_shortUIE.HeightAtTextPadding(0))
             {
@@ -394,13 +394,13 @@ public class EditorComponentQuest : EditorComponent
 
     public void ToggleDefaultMusicOff()
     {
-        game.quest.qd.quest.defaultMusicOn = !game.quest.qd.quest.defaultMusicOn;
+        game.CurrentQuest.qd.quest.defaultMusicOn = !game.CurrentQuest.qd.quest.defaultMusicOn;
         Update();
     }
 
     public void ToggleHidden()
     {
-        game.quest.qd.quest.hidden = !game.quest.qd.quest.hidden;
+        game.CurrentQuest.qd.quest.hidden = !game.CurrentQuest.qd.quest.hidden;
         Update();
     }
 
@@ -424,76 +424,76 @@ public class EditorComponentQuest : EditorComponent
 
     public void SelectQuestAddPack(string pack)
     {
-        string[] packs = new string[game.quest.qd.quest.packs.Length + 1];
+        string[] packs = new string[game.CurrentQuest.qd.quest.packs.Length + 1];
         int i;
-        for (i = 0; i < game.quest.qd.quest.packs.Length; i++)
+        for (i = 0; i < game.CurrentQuest.qd.quest.packs.Length; i++)
         {
-            packs[i] = game.quest.qd.quest.packs[i];
+            packs[i] = game.CurrentQuest.qd.quest.packs[i];
         }
         packs[i] = pack;
-        game.quest.qd.quest.packs = packs;
+        game.CurrentQuest.qd.quest.packs = packs;
         Update();
     }
 
     public void QuestRemovePack(int index)
     {
-        string[] packs = new string[game.quest.qd.quest.packs.Length - 1];
+        string[] packs = new string[game.CurrentQuest.qd.quest.packs.Length - 1];
 
         int j = 0;
-        for (int i = 0; i < game.quest.qd.quest.packs.Length; i++)
+        for (int i = 0; i < game.CurrentQuest.qd.quest.packs.Length; i++)
         {
             if (i != index || i != j)
             {
-                packs[j] = game.quest.qd.quest.packs[i];
+                packs[j] = game.CurrentQuest.qd.quest.packs[i];
                 j++;
             }
         }
-        game.quest.qd.quest.packs = packs;
+        game.CurrentQuest.qd.quest.packs = packs;
         Update();
     }
 
     public void UpdateMinHero()
     {
-        int.TryParse(minHeroUIE.GetText(), out game.quest.qd.quest.minHero);
-        if (game.quest.qd.quest.minHero < 1)
+        int.TryParse(minHeroUIE.GetText(), out game.CurrentQuest.qd.quest.minHero);
+        if (game.CurrentQuest.qd.quest.minHero < 1)
         {
-            game.quest.qd.quest.minHero = 1;
+            game.CurrentQuest.qd.quest.minHero = 1;
         }
         Update();
     }
 
     public void UpdateMaxHero()
     {
-        int.TryParse(maxHeroUIE.GetText(), out game.quest.qd.quest.maxHero);
-        if (game.quest.qd.quest.maxHero > game.gameType.MaxHeroes())
+        int.TryParse(maxHeroUIE.GetText(), out game.CurrentQuest.qd.quest.maxHero);
+        if (game.CurrentQuest.qd.quest.maxHero > game.gameType.MaxHeroes())
         {
-            game.quest.qd.quest.maxHero = game.gameType.MaxHeroes();
+            game.CurrentQuest.qd.quest.maxHero = game.gameType.MaxHeroes();
         }
         Update();
     }
 
     public void UpdateMinLength()
     {
-        int.TryParse(minLengthUIE.GetText(), out game.quest.qd.quest.lengthMin);
+        int.TryParse(minLengthUIE.GetText(), out game.CurrentQuest.qd.quest.lengthMin);
         Update();
     }
 
     public void UpdateMaxLength()
     {
-        int.TryParse(maxLengthUIE.GetText(), out game.quest.qd.quest.lengthMax);
+        int.TryParse(maxLengthUIE.GetText(), out game.CurrentQuest.qd.quest.lengthMax);
         Update();
     }
 
     public void UpdateDifficulty()
     {
-        float.TryParse(difficultyUIE.GetText(), out game.quest.qd.quest.difficulty);
-        if (game.quest.qd.quest.difficulty > 1)
+        float.TryParse(difficultyUIE.GetText(), out game.CurrentQuest.qd.quest.difficulty);
+        if (game.CurrentQuest.qd.quest.difficulty > 1)
         {
-            game.quest.qd.quest.difficulty = 1;
+            game.CurrentQuest.qd.quest.difficulty = 1;
         }
-        if (game.quest.qd.quest.difficulty < 0)
+        if (game.CurrentQuest.qd.quest.difficulty < 0)
         {
-            game.quest.qd.quest.difficulty = 0;
+            game.CurrentQuest.qd.quest.difficulty = 0;
         }
         Update();
     }

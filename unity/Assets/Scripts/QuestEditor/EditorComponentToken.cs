@@ -47,7 +47,7 @@ public class EditorComponentToken : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
-        game.quest.ChangeAlpha(tokenComponent.sectionName, 1f);
+        game.CurrentQuest.ChangeAlpha(tokenComponent.sectionName, 1f);
 
         return offset;
     }
@@ -69,8 +69,8 @@ public class EditorComponentToken : EditorComponentEvent
         {
             tokenComponent.rotation = 0;
         }
-        Game.Get().quest.Remove(tokenComponent.sectionName);
-        Game.Get().quest.Add(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
         Update();
     }
 
@@ -96,8 +96,8 @@ public class EditorComponentToken : EditorComponentEvent
     public void SelectType(string token)
     {
         tokenComponent.tokenName = token.Split(" ".ToCharArray())[0];
-        Game.Get().quest.Remove(tokenComponent.sectionName);
-        Game.Get().quest.Add(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
         Update();
     }
 }

@@ -95,6 +95,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
+                
                 ui.SetText(LOAD_QUEST, Color.grey);
                 new UIElementBorder(ui, BUTTON_BORDER_COLOR_INACTIVE);
             }

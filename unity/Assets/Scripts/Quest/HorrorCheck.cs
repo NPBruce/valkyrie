@@ -11,10 +11,10 @@ public class HorrorCheck {
         Game game = Game.Get();
 
         QuestMonster qm = m.monsterData as QuestMonster;
-        if (qm != null && game.quest.qd.components.ContainsKey(qm.cMonster.horrorEvent))
+        if (qm != null && game.CurrentQuest.qd.components.ContainsKey(qm.cMonster.horrorEvent))
         {
-            game.quest.eManager.monsterImage = m;
-            game.quest.eManager.QueueEvent(qm.cMonster.horrorEvent);
+            game.CurrentQuest.eManager.monsterImage = m;
+            game.CurrentQuest.eManager.QueueEvent(qm.cMonster.horrorEvent);
         }
         else
         {
@@ -65,7 +65,7 @@ public class HorrorCheck {
         if (Game.Get().googleTtsEnabled)
             new UITtsSpeakButton(ui);
 
-        game.quest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
+        game.CurrentQuest.log.Add(new Quest.LogEntry(text.Replace("\n", "\\n")));
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-6f), 9, 12, 2);

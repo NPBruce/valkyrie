@@ -172,7 +172,7 @@ public class EditorComponentSpawn : EditorComponentEvent
             }
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            if (game.quest.qd.components.ContainsKey(spawnComponent.mTypes[i]))
+            if (game.CurrentQuest.qd.components.ContainsKey(spawnComponent.mTypes[i]))
             {
                 ui.SetLocation(1.5f, offset, 16, 1);
                 UIElement link = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -386,7 +386,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate(string s) { SelectMonsterType(s, pos); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
@@ -415,7 +415,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         Game game = Game.Get();
         UIWindowSelectionListTraits select = new UIWindowSelectionListTraits(delegate (string s) { SelectMonsterType(s, pos, true); }, new StringKey("val", "SELECT", CommonStringKeys.MONSTER));
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.CustomMonster)
             {
@@ -619,7 +619,7 @@ public class EditorComponentSpawn : EditorComponentEvent
 
         select.AddNewComponentItem("MPlace");
 
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.MPlace)
             {
@@ -636,11 +636,11 @@ public class EditorComponentSpawn : EditorComponentEvent
             Game game = Game.Get();
             int index = 0;
 
-            while (game.quest.qd.components.ContainsKey("MPlace" + index))
+            while (game.CurrentQuest.qd.components.ContainsKey("MPlace" + index))
             {
                 index++;
             }
-            game.quest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
+            game.CurrentQuest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
             name = "MPlace" + index;
         }
 

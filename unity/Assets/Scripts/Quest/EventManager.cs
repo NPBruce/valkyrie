@@ -42,13 +42,13 @@ public class EventManager
         game = Game.Get();
 
         // This is filled out later but is required for loading saves
-        game.quest.eManager = this;
+        game.CurrentQuest.eManager = this;
 
         events = new Dictionary<string, Event>();
         eventStack = new Stack<Event>();
 
         // Find quest events
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
@@ -91,7 +91,7 @@ public class EventManager
             {
                 bool.TryParse(data["monsterhealth"], out monsterHealth);
             }
-            if (data.ContainsKey("currentevent") && game.quest.activeShop != data["currentevent"])
+            if (data.ContainsKey("currentevent") && game.CurrentQuest.activeShop != data["currentevent"])
             {
                 currentEvent = events[data["currentevent"]];
                 ResumeEvent();
@@ -117,8 +117,8 @@ public class EventManager
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
         {
-            string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + name;
-            if (game.quest.fromSavegame)
+            string questToTransition = game.CurrentQuest.originalPath + Path.DirectorySeparatorChar + name;
+            if (game.CurrentQuest.fromSavegame)
             {
                 questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + name;
             }
@@ -129,7 +129,7 @@ public class EventManager
             else
             {
                 ValkyrieDebug.Log("Warning: Missing event called: " + name);
-                game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
+                game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
                 return;
             }
         }
@@ -165,7 +165,7 @@ public class EventManager
         if (e is StartQuestEvent)
         {
             // This loads the game
-            game.quest.ChangeQuest((e as StartQuestEvent).name);
+            game.CurrentQuest.ChangeQuest((e as StartQuestEvent).name);
             return;
         }
 
@@ -184,7 +184,7 @@ public class EventManager
         }
         else if (e.qEvent.audio.Length > 0)
         {
-            game.audioControl.Play(Quest.FindLocalisedMultimediaFile(e.qEvent.audio, Path.GetDirectoryName(game.quest.qd.questPath)));
+            game.audioControl.Play(Quest.FindLocalisedMultimediaFile(e.qEvent.audio, Path.GetDirectoryName(game.CurrentQuest.qd.questPath)));
         }
 
         // Set Music
@@ -199,26 +199,26 @@ public class EventManager
                 }
                 else
                 {
-                    music.Add(Quest.FindLocalisedMultimediaFile(s, Path.GetDirectoryName(game.quest.qd.questPath)));
+                    music.Add(Quest.FindLocalisedMultimediaFile(s, Path.GetDirectoryName(game.CurrentQuest.qd.questPath)));
                 }
             }
             game.audioControl.PlayMusic(music);
             if (music.Count > 0)
             {
-                game.quest.music = new List<string>(e.qEvent.music);
+                game.CurrentQuest.music = new List<string>(e.qEvent.music);
             }
         }
 
         // Perform var operations
-        game.quest.vars.Perform(e.qEvent.operations);
+        game.CurrentQuest.vars.Perform(e.qEvent.operations);
         // Update morale change
         if (game.gameType is D2EGameType)
         {
-            game.quest.AdjustMorale(0);
+            game.CurrentQuest.AdjustMorale(0);
         }
-        if (game.quest.vars.GetValue("$restock") == 1)
+        if (game.CurrentQuest.vars.GetValue("$restock") == 1)
         {
-            game.quest.GenerateItemSelection();
+            game.CurrentQuest.GenerateItemSelection();
         }
 
         // If a dialog window is open we force it closed (this shouldn't happen)
@@ -234,7 +234,7 @@ public class EventManager
 
             // Is this type new?
             Quest.Monster oldMonster = null;
-            foreach (Quest.Monster m in game.quest.monsters)
+            foreach (Quest.Monster m in game.CurrentQuest.monsters)
             {
                 if (m.monsterData.sectionName.Equals(qe.cMonster.sectionName))
                 {
@@ -247,10 +247,10 @@ public class EventManager
             if (!game.gameType.MonstersGrouped() || oldMonster == null)
             {
                 var monster = new Quest.Monster(qe);
-                game.quest.monsters.Add(monster);
+                game.CurrentQuest.monsters.Add(monster);
                 game.monsterCanvas.UpdateList();
                 // Update monster var
-                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+                game.CurrentQuest.vars.SetValue("#monsters", game.CurrentQuest.monsters.Count);
             }
             // There is an existing group, but now it is unique
             else if (qe.qMonster.unique)
@@ -258,7 +258,7 @@ public class EventManager
                 oldMonster.unique = true;
                 oldMonster.uniqueText = qe.qMonster.uniqueText;
                 oldMonster.uniqueTitle = qe.GetUniqueTitle();
-                oldMonster.healthMod = Mathf.RoundToInt(qe.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * qe.qMonster.uniqueHealthHero));
+                oldMonster.healthMod = Mathf.RoundToInt(qe.qMonster.uniqueHealthBase + (Game.Get().CurrentQuest.GetHeroCount() * qe.qMonster.uniqueHealthHero));
             }
 
             // Display the location(s)
@@ -290,9 +290,9 @@ public class EventManager
             }
         }
         // Add board components
-        game.quest.Add(e.qEvent.addComponents, itemList.Count > 1);
+        game.CurrentQuest.Add(e.qEvent.addComponents, itemList.Count > 1);
         // Remove board components
-        game.quest.Remove(e.qEvent.removeComponents);
+        game.CurrentQuest.Remove(e.qEvent.removeComponents);
 
         // Move camera
         if (e.qEvent.locationSpecified && !(e.qEvent is QuestData.UI))
@@ -333,17 +333,17 @@ public class EventManager
         }
 
         // Is this a shop?
-        if (itemList.Count > 1 && !game.quest.boardItems.ContainsKey("#shop"))
+        if (itemList.Count > 1 && !game.CurrentQuest.boardItems.ContainsKey("#shop"))
         {
-            game.quest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
-            game.quest.ordered_boardItems.Add("#shop");
+            game.CurrentQuest.boardItems.Add("#shop", new ShopInterface(itemList, Game.Get(), e.qEvent.sectionName));
+            game.CurrentQuest.ordered_boardItems.Add("#shop");
         }
         else if (!e.qEvent.display)
         {
             // Only raise dialog if there is text, otherwise auto confirm
 
             var firstEnabledButtonIndex = e.qEvent.buttons
-                .TakeWhile(b => !IsButtonEnabled(b, game.quest.vars))
+                .TakeWhile(b => !IsButtonEnabled(b, game.CurrentQuest.vars))
                 .Count();
             EndEvent(firstEnabledButtonIndex);
         }
@@ -426,8 +426,8 @@ public class EventManager
             // Check if the event doesn't exists - quest fault
             if (!events.ContainsKey(s))
             {
-                string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + s;
-                if (game.quest.fromSavegame)
+                string questToTransition = game.CurrentQuest.originalPath + Path.DirectorySeparatorChar + s;
+                if (game.CurrentQuest.fromSavegame)
                 {
                     questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + s;
                 }
@@ -439,22 +439,22 @@ public class EventManager
                 else
                 {
                     ValkyrieDebug.Log("Warning: Missing event called: " + s);
-                    game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                    game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                 }
             }
-            else if (!game.quest.eManager.events[s].Disabled())
+            else if (!game.CurrentQuest.eManager.events[s].Disabled())
             {
                 enabledEvents.Add(s);
             }
         }
 
         // Has the quest ended?
-        if (game.quest.vars.GetValue("$end") != 0)
+        if (game.CurrentQuest.vars.GetValue("$end") != 0)
         {
-            game.quest.questHasEnded = true;
+            game.CurrentQuest.questHasEnded = true;
 
-            if( Path.GetFileName(game.quest.originalPath).StartsWith("EditorScenario") 
-             || !Path.GetFileName(game.quest.originalPath).EndsWith(".valkyrie") )
+            if( Path.GetFileName(game.CurrentQuest.originalPath).StartsWith("EditorScenario") 
+             || !Path.GetFileName(game.CurrentQuest.originalPath).EndsWith(".valkyrie") )
             {
                 // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
                 GameStateManager.MainMenu();
@@ -475,12 +475,12 @@ public class EventManager
             if (eventData.randomEvents)
             {
                 // Add a random event
-                game.quest.eManager.QueueEvent(enabledEvents[UnityEngine.Random.Range(0, enabledEvents.Count)], false);
+                game.CurrentQuest.eManager.QueueEvent(enabledEvents[UnityEngine.Random.Range(0, enabledEvents.Count)], false);
             }
             else
             {
                 // Add the first valid event
-                game.quest.eManager.QueueEvent(enabledEvents[0], false);
+                game.CurrentQuest.eManager.QueueEvent(enabledEvents[0], false);
             }
         }
 
@@ -491,7 +491,7 @@ public class EventManager
         {
             monsterImage = null;
             monsterHealth = false;
-            if (game.quest.phase == Quest.MoMPhase.monsters)
+            if (game.CurrentQuest.phase == Quest.MoMPhase.monsters)
             {
                 game.roundControl.MonsterActivated();
                 return;
@@ -504,19 +504,19 @@ public class EventManager
 
     public void AddCustomTriggers()
     {
-        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("@"))
+        foreach (KeyValuePair<string, float> kv in game.CurrentQuest.vars.GetPrefixVars("@"))
         {
             if (kv.Value > 0)
             {
-                game.quest.vars.SetValue(kv.Key, 0);
+                game.CurrentQuest.vars.SetValue(kv.Key, 0);
                 EventTriggerType("Var" + kv.Key.Substring(1), false);
             }
         }
-        foreach (KeyValuePair<string, float> kv in game.quest.vars.GetPrefixVars("$@"))
+        foreach (KeyValuePair<string, float> kv in game.CurrentQuest.vars.GetPrefixVars("$@"))
         {
             if (kv.Value > 0)
             {
-                game.quest.vars.SetValue(kv.Key, 0);
+                game.CurrentQuest.vars.SetValue(kv.Key, 0);
                 EventTriggerType("Var" + "$" + kv.Key.Substring(2), false);
             }
         }
@@ -534,9 +534,9 @@ public class EventManager
         {
             this.addsFallbackContinueButton = addsFallbackContinueButton;
             game = Game.Get();
-            if (game.quest.qd.components.ContainsKey(name))
+            if (game.CurrentQuest.qd.components.ContainsKey(name))
             {
-                qEvent = game.quest.qd.components[name] as QuestData.Event;
+                qEvent = game.CurrentQuest.qd.components[name] as QuestData.Event;
             }
         }
 
@@ -553,7 +553,7 @@ public class EventManager
             // Find and replace rnd:hero with a hero
             // replaces all occurances with the one hero
 
-            Quest.Hero h = game.quest.GetRandomHero();
+            Quest.Hero h = game.CurrentQuest.GetRandomHero();
             if (text.Contains("{rnd:hero"))
             {
                 h.selected = true;
@@ -614,7 +614,7 @@ public class EventManager
                     replaceFrom = oneVar.Value;                    
                     componentName = oneVar.Groups[1].Value;
                     QuestData.QuestComponent component;
-                    if (Game.Get().quest.qd.components.TryGetValue(componentName, out component))
+                    if (Game.Get().CurrentQuest.qd.components.TryGetValue(componentName, out component))
                     {
                         componentText = getComponentText(component);
                         toReturn = toReturn.Replace(replaceFrom, componentText);
@@ -635,11 +635,11 @@ public class EventManager
             switch (component.GetType().Name)
             {
                 case "Event":
-                    if(!game.quest.heroSelection.ContainsKey(component.sectionName) || game.quest.heroSelection[component.sectionName].Count == 0)
+                    if(!game.CurrentQuest.heroSelection.ContainsKey(component.sectionName) || game.CurrentQuest.heroSelection[component.sectionName].Count == 0)
                     {
                         return component.sectionName;
                     }
-                    return game.quest.heroSelection[component.sectionName][0].heroData.name.Translate();
+                    return game.CurrentQuest.heroSelection[component.sectionName][0].heroData.name.Translate();
                 case "Tile":
                     // Replaced with the name of the Tile
                     return game.cd.Get<TileSideData>(((QuestData.Tile)component).tileSideName).name.Translate();
@@ -647,26 +647,26 @@ public class EventManager
                     // Replaced with the custom nonster name
                     return ((QuestData.CustomMonster)component).monsterName.Translate();
                 case "Spawn":
-                    if (!game.quest.monsterSelect.ContainsKey(component.sectionName))
+                    if (!game.CurrentQuest.monsterSelect.ContainsKey(component.sectionName))
                     {
                         return component.sectionName;
                     }
                     // Replaced with the text shown in the spawn
-                    string monsterName = game.quest.monsterSelect[component.sectionName];
+                    string monsterName = game.CurrentQuest.monsterSelect[component.sectionName];
                     if (monsterName.StartsWith("Custom")) {
-                        return ((QuestData.CustomMonster)game.quest.qd.components[monsterName]).monsterName.Translate();
+                        return ((QuestData.CustomMonster)game.CurrentQuest.qd.components[monsterName]).monsterName.Translate();
                     } else
                     {
-                        var monsterData = game.cd.Get<MonsterData>(game.quest.monsterSelect[component.sectionName]);
+                        var monsterData = game.cd.Get<MonsterData>(game.CurrentQuest.monsterSelect[component.sectionName]);
                         return monsterData.name.Translate();
                     }
                 case "QItem":
-                    if (!game.quest.itemSelect.ContainsKey(component.sectionName))
+                    if (!game.CurrentQuest.itemSelect.ContainsKey(component.sectionName))
                     {
                         return component.sectionName;
                     }
                     // Replaced with the first element in the list
-                    var itemData = game.cd.Get<ItemData>(game.quest.itemSelect[component.sectionName]);
+                    var itemData = game.cd.Get<ItemData>(game.CurrentQuest.itemSelect[component.sectionName]);
                     return itemData.name.Translate();
                 default:
                     return component.sectionName;
@@ -695,7 +695,7 @@ public class EventManager
 
             // If there are no enabled buttons - add a default continue button
             var atLeastOneButtonActive = buttons.Any(b => b.action == QuestButtonAction.NONE 
-                                                          || Game.Get().quest.vars.Test(b.condition));
+                                                          || Game.Get().CurrentQuest.vars.Test(b.condition));
             if (addsFallbackContinueButton && !atLeastOneButtonActive)
             {
                 buttons.Add(new DialogWindow.EventButton(new QuestButtonData(CommonStringKeys.CONTINUE)));
@@ -715,26 +715,26 @@ public class EventManager
                 foreach (string s in l.EventNames)
                 {
                     // Check if the event doesn't exists - quest fault
-                    if (!game.quest.eManager.events.ContainsKey(s))
+                    if (!game.CurrentQuest.eManager.events.ContainsKey(s))
                     {
-                        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + s;
-                        if (game.quest.fromSavegame)
+                        string questToTransition = game.CurrentQuest.originalPath + Path.DirectorySeparatorChar + s;
+                        if (game.CurrentQuest.fromSavegame)
                         {
                             questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + s;
                         }
                         if (File.Exists(questToTransition))
                         {
-                            game.quest.eManager.events.Add(s, new StartQuestEvent(s));
+                            game.CurrentQuest.eManager.events.Add(s, new StartQuestEvent(s));
                             return true;
                         }
                         else
                         {
                             ValkyrieDebug.Log("Warning: Missing event called: " + s);
-                            game.quest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
+                            game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + s, true));
                             return false;
                         }
                     }
-                    if (!game.quest.eManager.events[s].Disabled()) return true;
+                    if (!game.CurrentQuest.eManager.events[s].Disabled()) return true;
                 }
             }
             // Nothing valid, no buttons
@@ -745,10 +745,10 @@ public class EventManager
         virtual public bool Disabled()
         {
             if (game.debugTests)
-                ValkyrieDebug.Log("Event test " + qEvent.sectionName + " result is : " + game.quest.vars.Test(qEvent.tests));
+                ValkyrieDebug.Log("Event test " + qEvent.sectionName + " result is : " + game.CurrentQuest.vars.Test(qEvent.tests));
 
             // check if condition is valid, and if there is something to do in this event (see #916)
-            return (!game.quest.vars.Test(qEvent.tests));
+            return (!game.CurrentQuest.vars.Test(qEvent.tests));
         }
     }
 
@@ -783,15 +783,15 @@ public class EventManager
 
         public void MonsterEventSelection()
         {
-            if (!game.quest.RuntimeMonsterSelection(qMonster.sectionName))
+            if (!game.CurrentQuest.RuntimeMonsterSelection(qMonster.sectionName))
             {
                 ValkyrieDebug.Log("Warning: Monster type unknown in event: " + qMonster.sectionName);
                 return;
             }
-            string t = game.quest.monsterSelect[qMonster.sectionName];
-            if (game.quest.qd.components.ContainsKey(t))
+            string t = game.CurrentQuest.monsterSelect[qMonster.sectionName];
+            if (game.CurrentQuest.qd.components.ContainsKey(t))
             {
-                cMonster = new QuestMonster(game.quest.qd.components[t] as QuestData.CustomMonster);
+                cMonster = new QuestMonster(game.CurrentQuest.qd.components[t] as QuestData.CustomMonster);
             }
             else
             {
@@ -888,14 +888,14 @@ public class EventManager
                 // find end of tag
                 string statement = output.Substring(index, output.IndexOf("}", index) + 1 - index);
                 // Replace with variable data
-                output = output.Replace(statement, game.quest.vars.GetValue(statement.Substring(5, statement.Length - 6)).ToString());
+                output = output.Replace(statement, game.CurrentQuest.vars.GetValue(statement.Substring(5, statement.Length - 6)).ToString());
                 //find next random tag
                 index = output.IndexOf("{var:");
             }
         }
         catch (System.Exception)
         {
-            game.quest.log.Add(new Quest.LogEntry("Warning: Invalid var clause in text: " + input, true));
+            game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Invalid var clause in text: " + input, true));
         }
 
         foreach (var conversion in GetCharacterMap(false, true))

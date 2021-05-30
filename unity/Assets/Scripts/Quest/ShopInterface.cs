@@ -16,19 +16,19 @@ public class ShopInterface : Quest.BoardComponent
     public ShopInterface(List<string> items, Game gameObject, string eventName) : base(gameObject)
     {
         game = gameObject;
-        if (!game.quest.shops.ContainsKey(eventName))
+        if (!game.CurrentQuest.shops.ContainsKey(eventName))
         {
             List<string> contentItems = new List<string>();
             foreach (string s in items)
             {
-                if (game.quest.itemSelect.ContainsKey(s))
+                if (game.CurrentQuest.itemSelect.ContainsKey(s))
                 {
-                    contentItems.Add(game.quest.itemSelect[s]);
+                    contentItems.Add(game.CurrentQuest.itemSelect[s]);
                 }
             }
-            game.quest.shops.Add(eventName, contentItems);
+            game.CurrentQuest.shops.Add(eventName, contentItems);
         }
-        eventData = game.quest.qd.components[eventName] as QuestData.Event;
+        eventData = game.CurrentQuest.qd.components[eventName] as QuestData.Event;
 
         Update();
     }
@@ -43,13 +43,13 @@ public class ShopInterface : Quest.BoardComponent
     {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SHOP))
             Object.Destroy(go);
-        game.quest.activeShop = "";
+        game.CurrentQuest.activeShop = "";
     }
 
     public void Update()
     {
         Remove();
-        game.quest.activeShop = eventData.sectionName;
+        game.CurrentQuest.activeShop = eventData.sectionName;
         DrawButtons();
         DrawShopItems();
         DrawPartyItems();
@@ -68,7 +68,7 @@ public class ShopInterface : Quest.BoardComponent
             // Check format is valid
             if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
             {
-                Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
+                Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Warning: Button color must be in #RRGGBB format or a known name", true));
             }
 
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
@@ -96,8 +96,8 @@ public class ShopInterface : Quest.BoardComponent
     public void OnButton(int i)
     {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
-        game.quest.Save();
-        game.quest.eManager.EndEvent(eventData, i);
+        game.CurrentQuest.Save();
+        game.CurrentQuest.eManager.EndEvent(eventData, i);
     }
 
     public void DrawShopItems()
@@ -115,7 +115,7 @@ public class ShopInterface : Quest.BoardComponent
 
         float vOffset = 0.5f;
 
-        foreach (string itemName in game.quest.shops[eventData.sectionName])
+        foreach (string itemName in game.CurrentQuest.shops[eventData.sectionName])
         {
             var itemData = game.cd.Get<ItemData>(itemName);
             ui = new UIElement(Game.SHOP, scrollArea.GetScrollTransform());
@@ -181,7 +181,7 @@ public class ShopInterface : Quest.BoardComponent
 
         float vOffset = 0.5f;
 
-        foreach (string itemName in game.quest.items)
+        foreach (string itemName in game.CurrentQuest.items)
         {
             var itemData = game.cd.Get<ItemData>(itemName);
             if (itemData.ContainsTrait("relic")) continue;
@@ -249,11 +249,11 @@ public class ShopInterface : Quest.BoardComponent
             return 25;
         }
 
-        if (game.quest.vars.GetValue("$%sellratio") == 0)
+        if (game.CurrentQuest.vars.GetValue("$%sellratio") == 0)
         {
             return GetPurchasePrice(item);
         }
-        return Mathf.RoundToInt(GetPurchasePrice(item) * game.quest.vars.GetValue("$%sellratio"));
+        return Mathf.RoundToInt(GetPurchasePrice(item) * game.CurrentQuest.vars.GetValue("$%sellratio"));
     }
 
     public void DrawGold()
@@ -267,7 +267,7 @@ public class ShopInterface : Quest.BoardComponent
 
         ui = new UIElement(Game.SHOP);
         ui.SetLocation(UIScaler.GetHCenter(-11), 24, 3, 2);
-        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")).ToString());
+        ui.SetText(Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%gold")).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
         new UIElementBorder(ui);
     }
@@ -277,11 +277,11 @@ public class ShopInterface : Quest.BoardComponent
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
         ItemData itemData = game.cd.Get<ItemData>(item);
-        if (game.quest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
+        if (game.CurrentQuest.vars.GetValue("$%gold") < GetPurchasePrice(itemData)) return;
 
-        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") - GetPurchasePrice(itemData));
-        game.quest.shops[eventData.sectionName].Remove(item);
-        game.quest.items.Add(item);
+        game.CurrentQuest.vars.SetValue("$%gold", game.CurrentQuest.vars.GetValue("$%gold") - GetPurchasePrice(itemData));
+        game.CurrentQuest.shops[eventData.sectionName].Remove(item);
+        game.CurrentQuest.items.Add(item);
         Update();
     }
 
@@ -290,9 +290,9 @@ public class ShopInterface : Quest.BoardComponent
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
 
         ItemData itemData = game.cd.Get<ItemData>(item);
-        game.quest.vars.SetValue("$%gold", game.quest.vars.GetValue("$%gold") + GetSellPrice(itemData));
-        game.quest.shops[eventData.sectionName].Add(item);
-        game.quest.items.Remove(item);
+        game.CurrentQuest.vars.SetValue("$%gold", game.CurrentQuest.vars.GetValue("$%gold") + GetSellPrice(itemData));
+        game.CurrentQuest.shops[eventData.sectionName].Add(item);
+        game.CurrentQuest.items.Remove(item);
         Update();
     }
 }

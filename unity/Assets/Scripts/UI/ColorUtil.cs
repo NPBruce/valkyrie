@@ -20,7 +20,7 @@ public class ColorUtil  {
         // Check format is valid
         if ((colorRGB.Length != 7 && colorRGB.Length != 9) || (colorRGB[0] != '#'))
         {
-            Game.Get().quest.log.Add(new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + name, true));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + name, true));
         }
 
         // State with white (used for alpha)
