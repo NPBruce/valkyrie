@@ -22,4 +22,26 @@ assignees: ''
 - [ ] Mansions of Madness
 - [ ] Descent
 
+### What expansions does the scenario require?
+- [ ] Conversion Kit (CK)
+- [ ] First Edition (MoM1E) - Also Recurring Nightmares
+- [ ] Fatal Alchemy (FA) - Also Suppressed Memories
+- [ ] Call of the Wild (CotW) - Also Suppressed Memories
+- [ ] Beyond the Threshold (BtT)
+- [ ] Streets of Arkham (SoA)
+- [ ] Sunctum of Twilight (SoT)
+- [ ] Horrific Journeys (HJ)
+- [ ] Path of the Serpent (PotS)
+
+### What expansions can the scenario optionally use?
+- [ ] Conversion Kit (CK)
+- [ ] First Edition (MoM1E) - Also Recurring Nightmares
+- [ ] Fatal Alchemy (FA) - Also Suppressed Memories
+- [ ] Call of the Wild (CotW) - Also Suppressed Memories
+- [ ] Beyond the Threshold (BtT)
+- [ ] Streets of Arkham (SoA)
+- [ ] Sunctum of Twilight (SoT)
+- [ ] Horrific Journeys (HJ)
+- [ ] Path of the Serpent (PotS)
+
 ### Please enter the GitHub Url to your scenario here
