@@ -26,9 +26,9 @@ public class MonsterDialog
         Game game = Game.Get();
         // Count the monster number
         int index = 0;
-        for (int i = 0; i < game.quest.monsters.Count; i++)
+        for (int i = 0; i < game.CurrentQuest.monsters.Count; i++)
         {
-            if (game.quest.monsters[i] == monster)
+            if (game.CurrentQuest.monsters[i] == monster)
             {
                 index = i;
             }
@@ -99,7 +99,7 @@ public class MonsterDialog
     {
         Game game = Game.Get();
         // Save to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         game.roundControl.ActivateMonster(monster);
     }
 
@@ -109,12 +109,12 @@ public class MonsterDialog
         Destroyer.Dialog();
         Game game = Game.Get();
         // Save to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         // Remove this monster group
-        game.quest.monsters.Remove(monster);
+        game.CurrentQuest.monsters.Remove(monster);
         updateDisplay();
 
-        game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+        game.CurrentQuest.vars.SetValue("#monsters", game.CurrentQuest.monsters.Count);
 
         game.audioControl.PlayTrait("defeated");
         
@@ -133,7 +133,7 @@ public class MonsterDialog
         Game game = Game.Get();
         Destroyer.Dialog();
         // Add to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         // Monster is no longer unique
         monster.unique = false;
         monster.healthMod = 0;
@@ -145,9 +145,9 @@ public class MonsterDialog
     private void TriggerDefeatedEvents(Game game, string eventType)
     {
         // Trigger defeated event by monster type
-        game.quest.eManager.EventTriggerType(eventType + monster.monsterData.sectionName);
+        game.CurrentQuest.eManager.EventTriggerType(eventType + monster.monsterData.sectionName);
         // Trigger defeated event by spawn name
-        game.quest.eManager.EventTriggerType(eventType + monster.spawnEventName);
+        game.CurrentQuest.eManager.EventTriggerType(eventType + monster.spawnEventName);
     }
 
     // Cancel cleans up

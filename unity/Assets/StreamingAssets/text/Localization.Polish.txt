@@ -63,9 +63,9 @@ DELETE,Usuń
 UPDATE,Aktualizuj
 DIALOG,Wyświetlany tekst
 DOOR,Drzwi
-DOWNLOAD,Pobierz
-DOWNLOAD_LIST,Pobierz listy pakietów...
-DOWNLOAD_PACKAGE,Pobierz pakietu...
+DOWNLOAD,Pobieranie
+DOWNLOAD_LIST,Pobieranie listy pakietów...
+DOWNLOAD_PACKAGE,Pobieranie pakietu...
 E,E
 EFFECTS,Efekty
 END_TURN,Koniec Tury
@@ -89,10 +89,10 @@ ITEM,Przedmiot
 QITEM,Przedmiot Fabularny
 KO,KO
 LOAD_QUEST,Kontynuuj
-LOG,Log
+LOG,Dziennik
 SKILLS,Umiejętności
 ITEMS,Przedmioty
-ITEMS_SMALL, Małe przedmioty
+ITEMS_SMALL,Ekwipunek
 GOLD,Złoto
 MAIN_MENU,Menu Główne
 MAX,Max
@@ -150,10 +150,10 @@ PUZZLE_IMAGE_CLASS,obraz
 PUZZLE_CODE_CLASS,kod
 PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
-QUEST_NAME_DOWNLOAD,Pobieranie {0}y
-QUEST_NAME_EDITOR,Edytor {0}a
+QUEST_NAME_DOWNLOAD,Pobieranie
+QUEST_NAME_EDITOR,Edytor Scenariuszy
 EDITOR,Edytor
-QUEST_NAME_UPDATE,  [Aktualizacja] {0}a
+QUEST_NAME_UPDATE,  [Aktualizacja] {0}
 QUOTA,Wartość testu
 RECOVER,Wyzdrowieć
 
@@ -166,7 +166,7 @@ REQ_TRAITS,Wymagane Atrybuty:
 RESET,Reset
 ROTATE_TO,Obróć: {0}
 ROTATION,Obrót
-SAVE,Zapisz
+SAVE,Zapis
 AUTOSAVE,Autozapis
 SELECT_SAVE,Wybierz Zapis
 SELECT,Wybierz {0}
@@ -181,7 +181,7 @@ SELECT_TO_COPY,Wybierz {0}e do Skopiowania
 SELECT_TO_DELETE,Wybierz {0}e do Usunięcia
 HIDE,Ukryj
 DISABLE,Dezaktywuj
-HIDDEN,Ukryj
+HIDDEN,Ukryty
 ACTIVE,Aktywny
 SET,Ust.
 SET_EDITOR_ALPHA,Przeźroczystość Edytora
@@ -431,7 +431,7 @@ FILTER_MISSING_EXPANSIONS_OFF,Ukryj scenariusze, do których nie posiadasz rozsz
 FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Odfiltrowano scenariuszy: {0}
 
 AUTHORS_SHORT,Krótka wiadomość od Autora (opcja "sortuj wg autora")
-AUTHORS_UNKNOWN,Autor nieznany (scenariusz wymagana aktualizacja przez autora)
+AUTHORS_UNKNOWN,Autor nieznany (scenariusz wymagana aktualizacji przez autora)
 
 SYNOPSYS,Streszczenie (maks. 100 znaków)
 
@@ -443,9 +443,15 @@ UPDATED_THIS_YEAR,Zaktualizowane w tym roku
 UPDATED_TWO_YEARS_AGO,Zaktualizowane dwa lata temu
 UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata
 
-GO_OFFLINE, Włączyć tryb Offline
-GO_ONLINE, Włączyć tryb Online
+GO_OFFLINE, Przejdź w tryb Offline
+GO_ONLINE, Przejdź w tryb Online
 DOWNLOAD_ONGOING,Pobieranie...
 OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
 
 MISSING_EXPANSIONS,Brakujące rozszerzenia:
+
+STATS_AVERAGE_WIN_RATIO,Średnia wygranych: {0}%
+STATS_NB_USER_REVIEWS,({0} ocen graczy)
+STATS_AVERAGE_DURATION,Średni czas trwania: {0} min
+STATS_NO_AVERAGE_DURATION,Średni czas trwania niedostępny
+STATS_NO_AVERAGE_WIN_RATIO,Średnia wygranych niedostępna

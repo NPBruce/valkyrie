@@ -34,7 +34,7 @@ public class InventoryWindowMoM
 
         float xOffset = 1;
 
-        foreach (string s in game.quest.itemInspect.Keys)
+        foreach (string s in game.CurrentQuest.itemInspect.Keys)
         {
             string tmp = s;
             var itemData = game.cd.Get<ItemData>(s);
@@ -67,7 +67,7 @@ public class InventoryWindowMoM
     public void Inspect(string item)
     {
         Destroyer.Dialog();
-        Game.Get().quest.Save();
-        Game.Get().quest.eManager.QueueEvent(Game.Get().quest.itemInspect[item]);
+        Game.Get().CurrentQuest.Save();
+        Game.Get().CurrentQuest.eManager.QueueEvent(Game.Get().CurrentQuest.itemInspect[item]);
     }
 }

@@ -21,7 +21,7 @@ public class HeroCanvas : MonoBehaviour {
         icon_frames = new Dictionary<int, UnityEngine.UI.Image>();
         offset = offsetStart;
         Game game = Game.Get();
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
             AddHero(h, game);
     }
 
@@ -84,9 +84,9 @@ public class HeroCanvas : MonoBehaviour {
         RectTransform trans = heroImg.AddComponent<RectTransform>();
 
         trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, (0.25f + offset) * UIScaler.GetPixelsPerUnit(), heroSize * UIScaler.GetPixelsPerUnit());
-        if (game.quest.heroes.Count > 5)
+        if (game.CurrentQuest.heroes.Count > 5)
         {
-            offset += 22f / game.quest.heroes.Count;
+            offset += 22f / game.CurrentQuest.heroes.Count;
         }
         else
         {
@@ -126,7 +126,7 @@ public class HeroCanvas : MonoBehaviour {
         if (icon_frames == null) return;
 
         Game game = Game.Get();
-        foreach(Quest.Hero h in game.quest.heroes)
+        foreach(Quest.Hero h in game.CurrentQuest.heroes)
         {
             // Start as white (normal)
             icons[h.id].color = Color.white;
@@ -164,7 +164,7 @@ public class HeroCanvas : MonoBehaviour {
 
         Game game = Game.Get();
 
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             Texture2D frameTex = Resources.Load("sprites/borders/grey_frame") as Texture2D;
             if (game.gameType is MoMGameType)
@@ -174,7 +174,7 @@ public class HeroCanvas : MonoBehaviour {
             icons[h.id].color = Color.clear;
             icon_frames[h.id].color = Color.clear;
 
-            if (!game.quest.heroesSelected)
+            if (!game.CurrentQuest.heroesSelected)
             {
                 icon_frames[h.id].color = Color.white;
             }
@@ -218,7 +218,7 @@ public class HeroCanvas : MonoBehaviour {
         Quest.Hero target = null;
 
         // Find the pressed hero
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.id == id)
             {
@@ -228,7 +228,7 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         // Game hasn't started, remove any selected hero
-        if (!game.quest.heroesSelected)
+        if (!game.CurrentQuest.heroesSelected)
         {
             target.heroData = null;
             UpdateImages();
@@ -240,7 +240,7 @@ public class HeroCanvas : MonoBehaviour {
         if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
         {
             // Check if we are in a hero selection dialog
-            if (game.quest.eManager.currentEvent != null && game.quest.eManager.currentEvent.qEvent.maxHeroes != 0)
+            if (game.CurrentQuest.eManager.currentEvent != null && game.CurrentQuest.eManager.currentEvent.qEvent.maxHeroes != 0)
             {
                 // Invert hero selection
                 target.selected = !target.selected;
@@ -251,9 +251,9 @@ public class HeroCanvas : MonoBehaviour {
         }
 
         // We are in game and a valid hero was selected
-        if (game.quest.heroesSelected && target.heroData != null)
+        if (game.CurrentQuest.heroesSelected && target.heroData != null)
         {
-            if (!game.quest.UIItemsPresent())
+            if (!game.CurrentQuest.UIItemsPresent())
             {
                 new HeroDialog(target);
             }
@@ -271,41 +271,41 @@ public class HeroCanvas : MonoBehaviour {
 
         // Count number of selected heroes
         Game game = Game.Get();
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (h.heroData != null)
             {
                 heroCount++;
                 // Create variable to value 1 for each selected Hero
-                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                game.CurrentQuest.vars.SetValue("#" + h.heroData.sectionName, 1);
                 
             }
         }
 
         // Check for validity
-        if (heroCount < game.quest.qd.quest.minHero) return;
+        if (heroCount < game.CurrentQuest.qd.quest.minHero) return;
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
             Object.Destroy(go);
         heroSelection = null;
 
         // Reorder heros so that selected heroes are first
-        for (int i = 0; i < game.quest.heroes.Count - 1; i++)
+        for (int i = 0; i < game.CurrentQuest.heroes.Count - 1; i++)
         {
             int j = i;
 
-            while (game.quest.heroes[i].heroData == null && j < game.quest.heroes.Count)
+            while (game.CurrentQuest.heroes[i].heroData == null && j < game.CurrentQuest.heroes.Count)
             {
-                game.quest.heroes[i].heroData = game.quest.heroes[j].heroData;
-                game.quest.heroes[j].heroData = null;
+                game.CurrentQuest.heroes[i].heroData = game.CurrentQuest.heroes[j].heroData;
+                game.CurrentQuest.heroes[j].heroData = null;
                 j++;
             }
         }
 
         // Set quest flag based on hero count
-        game.quest.vars.SetValue("#heroes", heroCount);
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
 
-        game.quest.heroesSelected = true;
+        game.CurrentQuest.heroesSelected = true;
 
         UpdateImages();
         UpdateStatus();

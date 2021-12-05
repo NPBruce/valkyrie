@@ -65,9 +65,9 @@ public class ChangePhaseWindow
         if (phase == Quest.MoMPhase.investigator)
         {
             // Draw pictures of investigators for investigator phase
-            float offset = (game.quest.GetHeroCount() - 1) * (-1 * offset_size / 2) - (offset_size / 2);
+            float offset = (game.CurrentQuest.GetHeroCount() - 1) * (-1 * offset_size / 2) - (offset_size / 2);
             UIElement ui = null;
-            foreach (Quest.Hero h in game.quest.heroes)
+            foreach (Quest.Hero h in game.CurrentQuest.heroes)
             {
                 if (h.heroData != null)
                 {

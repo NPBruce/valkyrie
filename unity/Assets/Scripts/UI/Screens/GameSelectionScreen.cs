@@ -370,7 +370,17 @@ namespace Assets.Scripts.UI.Screens
                 if (type.Equals("D2E")) app_filename = "Road to Legend";
                 if (type.Equals("MoM")) app_filename = "Mansions of Madness";
 
-                string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + ".exe", "", "exe", false);
+#if UNITY_STANDALONE_OSX
+                string extension = "app";
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+                string extension = "exe";
+#else
+                string extension = null;    
+#endif
+
+                var displaySuffix = extension != null ? $".{extension}" : "";
+                string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + displaySuffix,
+                    "", extension, false);
 
                 // return when pressing back
                 if (array_path.Length == 0)

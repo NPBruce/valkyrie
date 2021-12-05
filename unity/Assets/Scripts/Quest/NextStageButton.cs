@@ -22,11 +22,11 @@ public class NextStageButton
     public void Update()
     {
         // do not display the button bar when we reach the end of the game screen
-        if (Game.Get().quest.questHasEnded)
+        if (Game.Get().CurrentQuest.questHasEnded)
             return;
 
         // First tile has not been displayed, button bar is not required yet
-        if (!Game.Get().quest.firstTileDisplayed) 
+        if (!Game.Get().CurrentQuest.firstTileDisplayed) 
             return;
 
         // do not display the button bar when we are in the editor
@@ -39,15 +39,15 @@ public class NextStageButton
                 
         Color bgColor = new Color(0.05f, 0, 0, 0.9f);
         StringKey phase;
-        if (Game.Get().quest.phase == Quest.MoMPhase.horror)
+        if (Game.Get().CurrentQuest.phase == Quest.MoMPhase.horror)
         {
             phase = HORROR_STEP;
         }
-        else if (Game.Get().quest.phase == Quest.MoMPhase.mythos)
+        else if (Game.Get().CurrentQuest.phase == Quest.MoMPhase.mythos)
         {
             phase = PHASE_MYTHOS;
         }
-        else if (Game.Get().quest.phase == Quest.MoMPhase.monsters)
+        else if (Game.Get().CurrentQuest.phase == Quest.MoMPhase.monsters)
         {
             phase = MONSTER_STEP;
         }
@@ -140,25 +140,25 @@ public class NextStageButton
 
         Game game = Game.Get();
 
-        if (game.quest.UIItemsPresent()) return;
+        if (game.CurrentQuest.UIItemsPresent()) return;
 
         // Add to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
 
-        if (game.quest.phase == Quest.MoMPhase.monsters)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.monsters)
         {
             game.audioControl.PlayTrait("horror");
-            game.quest.phase = Quest.MoMPhase.horror;
+            game.CurrentQuest.phase = Quest.MoMPhase.horror;
             return;
         }
 
-        if (game.quest.phase == Quest.MoMPhase.horror)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.horror)
         {
             game.roundControl.EndRound();
         }
         else
         {
-            game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_MYTHOS").Translate()));
+            game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_MYTHOS").Translate()));
             game.roundControl.HeroActivated();
         }
     }
@@ -181,7 +181,7 @@ public class NextStageButton
 
     public void Set()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        if (GameObject.FindGameObjectWithTag(Game.SETWINDOW) != null)
         {
             return;
         }

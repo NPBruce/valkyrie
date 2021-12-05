@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
@@ -5,7 +6,12 @@ using Assets.Scripts.UI;
 using ValkyrieTools;
 using System.IO;
 using System.Linq;
+using TMPro;
+using UnityEngine.Experimental.UIElements;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
+using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -135,10 +141,11 @@ public class Quest
     /// </remarks>
     public static string FindLocalisedMultimediaFile(string name, string source)
     {
-        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang),name)))
+        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang), name)))
         {
             return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
         }
+
         return Path.Combine(source, name);
     }
 
@@ -148,7 +155,7 @@ public class Quest
         game = Game.Get();
 
         // This happens anyway but we need it to be here before the following code is executed
-        game.quest = this;
+        game.CurrentQuest = this;
 
         // Static data from the quest file
         qd = new QuestData(q);
@@ -194,16 +201,22 @@ public class Quest
                 vars.SetValue("#" + s, 1);
             }
         }
+
         // Depreciated support for quest formats < 6
-        if (game.cd.GetLoadedPackIDs().Contains("MoM1ET") && game.cd.GetLoadedPackIDs().Contains("MoM1EI") && game.cd.GetLoadedPackIDs().Contains("MoM1EM"))
+        if (game.cd.GetLoadedPackIDs().Contains("MoM1ET") && game.cd.GetLoadedPackIDs().Contains("MoM1EI") &&
+            game.cd.GetLoadedPackIDs().Contains("MoM1EM"))
         {
             vars.SetValue("#MoM1E", 1);
         }
-        if (game.cd.GetLoadedPackIDs().Contains("CotWT") && game.cd.GetLoadedPackIDs().Contains("CotWI") && game.cd.GetLoadedPackIDs().Contains("CotWM"))
+
+        if (game.cd.GetLoadedPackIDs().Contains("CotWT") && game.cd.GetLoadedPackIDs().Contains("CotWI") &&
+            game.cd.GetLoadedPackIDs().Contains("CotWM"))
         {
             vars.SetValue("#CotW", 1);
         }
-        if (game.cd.GetLoadedPackIDs().Contains("FAT") && game.cd.GetLoadedPackIDs().Contains("FAI") && game.cd.GetLoadedPackIDs().Contains("FAM"))
+
+        if (game.cd.GetLoadedPackIDs().Contains("FAT") && game.cd.GetLoadedPackIDs().Contains("FAI") &&
+            game.cd.GetLoadedPackIDs().Contains("FAM"))
         {
             vars.SetValue("#FA", 1);
         }
@@ -243,6 +256,7 @@ public class Quest
                     if (progress && force) force = false;
                 }
             }
+
             if (!progress && !force)
             {
                 force = true;
@@ -252,6 +266,7 @@ public class Quest
                 done = true;
             }
         }
+
         vars.SetValue("$restock", 0);
     }
 
@@ -262,6 +277,7 @@ public class Quest
         {
             return false;
         }
+
         if ((qItem.traitpool.Length + qItem.traits.Length) == 0)
         {
             foreach (string t in qItem.itemName)
@@ -271,6 +287,7 @@ public class Quest
                     itemSelect.Add(qItem.sectionName, itemSelect[t]);
                     return true;
                 }
+
                 if (t.IndexOf("QItem") == 0)
                 {
                     return false;
@@ -324,6 +341,7 @@ public class Quest
                         next = true;
                     }
                 }
+
                 if (next) continue;
 
                 foreach (string t in exclude)
@@ -331,6 +349,7 @@ public class Quest
                     if (t.Equals(kv.Key))
                         next = true;
                 }
+
                 if (next) continue;
 
 
@@ -360,7 +379,8 @@ public class Quest
 
             if (list.Count == 0)
             {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName, true));
+                game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName,
+                    true));
                 return false;
             }
 
@@ -368,14 +388,15 @@ public class Quest
             itemSelect.Add(qItem.sectionName, list[Random.Range(0, list.Count)]);
             return true;
         }
+
         return false;
     }
 
     public bool RuntimeMonsterSelection(string spawn_name)
     {
         // Determine monster types
-        if(qd.components.ContainsKey(spawn_name))
-        { 
+        if (qd.components.ContainsKey(spawn_name))
+        {
             QuestData.Spawn qs = qd.components[spawn_name] as QuestData.Spawn;
             return AttemptMonsterMatch(qs);
         }
@@ -391,6 +412,7 @@ public class Quest
         {
             return true;
         }
+
         if ((spawn.mTraitsPool.Length + spawn.mTraitsRequired.Length) == 0)
         {
             foreach (string t in spawn.mTypes)
@@ -400,17 +422,20 @@ public class Quest
                     monsterSelect.Add(spawn.sectionName, monsterSelect[t]);
                     return true;
                 }
+
                 if (t.IndexOf("Spawn") == 0)
                 {
                     return false;
                 }
+
                 string monster = t;
                 if (monster.IndexOf("Monster") != 0 && monster.IndexOf("CustomMonster") != 0)
                 {
                     monster = "Monster" + monster;
                 }
+
                 // Monster type might be a unique for this quest
-                if (game.quest.qd.components.ContainsKey(monster))
+                if (game.CurrentQuest.qd.components.ContainsKey(monster))
                 {
                     monsterSelect.Add(spawn.sectionName, monster);
                     return true;
@@ -453,6 +478,7 @@ public class Quest
                         exclude.Add(entry.Value);
                     }
                 }
+
                 // monster already present in the board
                 foreach (Monster entry in monsters)
                 {
@@ -502,7 +528,7 @@ public class Quest
                 }
             }
 
-            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+            foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
             {
                 QuestData.CustomMonster cm = kv.Value as QuestData.CustomMonster;
                 if (cm == null) continue;
@@ -555,7 +581,8 @@ public class Quest
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
-                game.quest.log.Add(new Quest.LogEntry("Error: Unable to find monster of traits specified in spawn event: " + spawn.sectionName, true));
+                game.CurrentQuest.log.Add(new Quest.LogEntry(
+                    "Error: Unable to find monster of traits specified in spawn event: " + spawn.sectionName, true));
                 return false;
             }
 
@@ -563,6 +590,7 @@ public class Quest
             monsterSelect.Add(spawn.sectionName, list[Random.Range(0, list.Count)]);
             return true;
         }
+
         return false;
     }
 
@@ -572,6 +600,7 @@ public class Quest
         {
             if (s.Equals(item)) return true;
         }
+
         return false;
     }
 
@@ -600,6 +629,7 @@ public class Quest
             if (go.name != "QuestUICanvas")
                 Object.Destroy(go);
         }
+
         game.tokenBoard.tc.Clear();
 
         phase = MoMPhase.investigator;
@@ -614,8 +644,8 @@ public class Quest
             path = path.Substring(1, path.Length - 1);
         }
 
-        string questToTransition = game.quest.originalPath + Path.DirectorySeparatorChar + path;
-        if (game.quest.fromSavegame)
+        string questToTransition = game.CurrentQuest.originalPath + Path.DirectorySeparatorChar + path;
+        if (game.CurrentQuest.fromSavegame)
         {
             questToTransition = ContentData.ValkyrieLoadQuestPath + Path.DirectorySeparatorChar + path;
         }
@@ -653,6 +683,7 @@ public class Quest
                 vars.SetValue("#" + s, 1);
             }
         }
+
         vars.SetValue("#round", 1);
 
         // Set quest flag based on hero count
@@ -666,20 +697,22 @@ public class Quest
             {
                 heroCount++;
                 // Create variable to value 1 for each selected Hero and Class
-                game.quest.vars.SetValue("#" + h.heroData.sectionName, 1);
+                game.CurrentQuest.vars.SetValue("#" + h.heroData.sectionName, 1);
                 if (!string.IsNullOrEmpty(h.className))
                 {
-                    game.quest.vars.SetValue("#" + h.className, 1);
+                    game.CurrentQuest.vars.SetValue("#" + h.className, 1);
                 }
             }
         }
-        game.quest.vars.SetValue("#heroes", heroCount);
+
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
 
         List<string> music = new List<string>();
         foreach (AudioData ad in game.cd.Values<AudioData>())
         {
             if (ad.ContainsTrait("quest")) music.Add(ad.file);
         }
+
         game.audioControl.PlayDefaultQuestMusic(music);
 
         // Update the screen
@@ -701,43 +734,15 @@ public class Quest
     public void LoadQuest(IniData saveData)
     {
         game = Game.Get();
-
-        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
-        game.quest = this;
-
+        
         fromSavegame = true;
 
         // Set static quest data
         qd = new QuestData(saveData.Get("Quest", "path"));
 
-        // Start quest music
-        List<string> music = new List<string>();
-        if (saveData.Get("Music") != null)
-        {
-            music = new List<string>(saveData.Get("Music").Values);
-            List<string> toPlay = new List<string>();
-            foreach (string s in music)
-            {
-                if (game.cd.TryGet(s, out AudioData musicData))
-                {
-                    music.Add(musicData.file);
-                }
-                else
-                {
-                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
-                }
-            }
-            game.audioControl.PlayMusic(toPlay);
-        }
-        else
-        {
-            foreach (AudioData ad in game.cd.Values<AudioData>())
-            {
-                if (ad.ContainsTrait("quest")) music.Add(ad.file);
-            }
-            game.audioControl.PlayDefaultQuestMusic(music);
-        }
-
+        // This happens anyway but we need it to be here before the following code is executed (also needed for loading saves)
+        game.CurrentQuest = this;
+        
         // Get state
         bool.TryParse(saveData.Get("Quest", "heroesSelected"), out heroesSelected);
         bool horror;
@@ -780,6 +785,7 @@ public class Quest
                 {
                     shopList.Add(s);
                 }
+
                 shops.Add(kv.Key, shopList);
             }
         }
@@ -802,7 +808,8 @@ public class Quest
 
         // Restore event list (do nothing if empty: '??' is here to avoid null exception)
         eventList = new List<string>();
-        foreach (KeyValuePair<string, string> kv in saveData.Get("EventList") ?? Enumerable.Empty<KeyValuePair<string, string>>())
+        foreach (KeyValuePair<string, string> kv in saveData.Get("EventList") ??
+                                                    Enumerable.Empty<KeyValuePair<string, string>>())
         {
             eventList.Add(kv.Value);
         }
@@ -867,30 +874,36 @@ public class Quest
             {
                 boardItem = boardItem.Substring(1);
             }
+
             if (!qd.components.ContainsKey(boardItem))
             {
                 ValkyrieDebug.Log("Missing component:" + boardItem + "Probably corrupted save");
             }
+
             if (boardItem.IndexOf("Door") == 0)
             {
                 boardItems.Add(boardItem, new Door(qd.components[boardItem] as QuestData.Door, game));
                 ordered_boardItems.Add(boardItem);
             }
+
             if (boardItem.IndexOf("Token") == 0)
             {
                 boardItems.Add(boardItem, new Token(qd.components[boardItem] as QuestData.Token, game));
                 ordered_boardItems.Add(boardItem);
             }
+
             if (boardItem.IndexOf("Tile") == 0)
             {
                 boardItems.Add(boardItem, new Tile(qd.components[boardItem] as QuestData.Tile, game));
                 ordered_boardItems.Add(boardItem);
             }
+
             if (boardItem.IndexOf("UI") == 0)
             {
                 boardItems.Add(boardItem, new UI(qd.components[boardItem] as QuestData.UI, game));
                 ordered_boardItems.Add(boardItem);
             }
+
             if (boardItem.IndexOf("#shop") == 0)
             {
                 boardItems.Add(boardItem, new ShopInterface(new List<string>(), Game.Get(), activeShop));
@@ -915,7 +928,8 @@ public class Quest
                 heroes.Add(new Hero(kv.Value));
             }
         }
-        game.quest.vars.SetValue("#heroes", heroCount);
+
+        game.CurrentQuest.vars.SetValue("#heroes", heroCount);
 
         // Monsters must be after heros because some activations refer to heros
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
@@ -948,6 +962,7 @@ public class Quest
                     }
                 }
             }
+
             // Add this selection
             heroSelection.Add(kv.Key, heroList);
         }
@@ -957,21 +972,29 @@ public class Quest
         {
             if (kv.Key.IndexOf("PuzzleSlide") == 0)
             {
-                puzzle.Add(kv.Key.Substring("PuzzleSlide".Length, kv.Key.Length - "PuzzleSlide".Length), new PuzzleSlide(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleSlide".Length, kv.Key.Length - "PuzzleSlide".Length),
+                    new PuzzleSlide(kv.Value));
             }
+
             if (kv.Key.IndexOf("PuzzleCode") == 0)
             {
-                puzzle.Add(kv.Key.Substring("PuzzleCode".Length, kv.Key.Length - "PuzzleCode".Length), new PuzzleCode(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleCode".Length, kv.Key.Length - "PuzzleCode".Length),
+                    new PuzzleCode(kv.Value));
             }
+
             if (kv.Key.IndexOf("PuzzleImage") == 0)
             {
-                puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length), new PuzzleImage(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleImage".Length, kv.Key.Length - "PuzzleImage".Length),
+                    new PuzzleImage(kv.Value));
             }
+
             if (kv.Key.IndexOf("PuzzleTower") == 0)
             {
-                puzzle.Add(kv.Key.Substring("PuzzleTower".Length, kv.Key.Length - "PuzzleTower".Length), new PuzzleTower(kv.Value));
+                puzzle.Add(kv.Key.Substring("PuzzleTower".Length, kv.Key.Length - "PuzzleTower".Length),
+                    new PuzzleTower(kv.Value));
             }
         }
+
         // Restore event quotas
         eventQuota = new Dictionary<string, int>();
         foreach (KeyValuePair<string, string> kv in saveData.Get("EventQuota"))
@@ -987,6 +1010,30 @@ public class Quest
         game.stageUI = new NextStageButton();
         game.monsterCanvas.UpdateList();
         game.heroCanvas.UpdateStatus();
+
+        var loadedDefaultOn = Boolean.TryParse(saveData.Get("Quest", "defaultmusicon"), out bool defaultOn);
+        defaultMusicOn = !loadedDefaultOn || defaultOn;
+        // Start quest music
+        game.PlayDefaultQuestMusic();
+        List<string> music = new List<string>();
+        if (saveData.Get("Music") != null)
+        {
+            music = new List<string>(saveData.Get("Music").Values);
+            List<string> toPlay = new List<string>();
+            foreach (string s in music)
+            {
+                if (game.cd.TryGet(s, out AudioData musicData))
+                {
+                    toPlay.Add(musicData.file);
+                }
+                else
+                {
+                    toPlay.Add(FindLocalisedMultimediaFile(s, Path.GetDirectoryName(qd.questPath)));
+                }
+            }
+
+            game.audioControl.PlayMusic(toPlay);
+        }
     }
 
     // Save to the undo stack
@@ -1001,7 +1048,7 @@ public class Quest
     {
         // Nothing to undo
         if (undo.Count == 0) return;
-        // Load the old state.  This will also set game.quest
+        // Load the old state.  This will also set game.CurrentQuest
         Quest oldQuest = new Quest(undo.Pop());
         // Transfer the undo stack to the loaded state
         oldQuest.undo = undo;
@@ -1027,8 +1074,10 @@ public class Quest
                 morale = -1;
                 return;
             }
+
             eManager.EventTriggerType("NoMorale");
         }
+
         game.moraleDisplay.Update();
     }
 
@@ -1044,6 +1093,7 @@ public class Quest
                 hList.Add(h);
             }
         }
+
         return hList[Random.Range(0, hList.Count)];
     }
 
@@ -1057,6 +1107,7 @@ public class Quest
                 count++;
             }
         }
+
         return count;
     }
 
@@ -1073,49 +1124,55 @@ public class Quest
     public void Add(string name, bool shop = false)
     {
         // Check that the component is valid
-        if (!game.quest.qd.components.ContainsKey(name))
+        if (!game.CurrentQuest.qd.components.ContainsKey(name))
         {
             ValkyrieDebug.Log("Error: Unable to create missing quest component: " + name);
             Application.Quit();
         }
+
         // Add to active list
-        QuestData.QuestComponent qc = game.quest.qd.components[name];
+        QuestData.QuestComponent qc = game.CurrentQuest.qd.components[name];
 
         if (boardItems.ContainsKey(name)) return;
 
         // Add to board
         if (qc is QuestData.Tile)
         {
-            boardItems.Add(name, new Tile((QuestData.Tile)qc, game));
+            boardItems.Add(name, new Tile((QuestData.Tile) qc, game));
             ordered_boardItems.Add(name);
         }
+
         if (qc is QuestData.Door)
         {
-            boardItems.Add(name, new Door((QuestData.Door)qc, game));
+            boardItems.Add(name, new Door((QuestData.Door) qc, game));
             ordered_boardItems.Add(name);
         }
+
         if (qc is QuestData.Token)
         {
-            boardItems.Add(name, new Token((QuestData.Token)qc, game));
+            boardItems.Add(name, new Token((QuestData.Token) qc, game));
             ordered_boardItems.Add(name);
         }
+
         if (qc is QuestData.UI)
         {
-            boardItems.Add(name, new UI((QuestData.UI)qc, game));
+            boardItems.Add(name, new UI((QuestData.UI) qc, game));
             ordered_boardItems.Add(name);
         }
+
         if (qc is QuestData.QItem && !shop)
         {
             if (itemSelect.ContainsKey(name))
             {
                 items.Add(itemSelect[name]);
-                if (((QuestData.QItem)qc).inspect.Length > 0)
+                if (((QuestData.QItem) qc).inspect.Length > 0)
                 {
-                    if (game.quest.itemInspect.ContainsKey(itemSelect[name]))
+                    if (game.CurrentQuest.itemInspect.ContainsKey(itemSelect[name]))
                     {
-                        game.quest.itemInspect.Remove(itemSelect[name]);
+                        game.CurrentQuest.itemInspect.Remove(itemSelect[name]);
                     }
-                    game.quest.itemInspect.Add(itemSelect[name], ((QuestData.QItem)qc).inspect);
+
+                    game.CurrentQuest.itemInspect.Add(itemSelect[name], ((QuestData.QItem) qc).inspect);
                 }
             }
         }
@@ -1139,6 +1196,7 @@ public class Quest
             boardItems.Remove(name);
             ordered_boardItems.Remove(name);
         }
+
         if (monsterSelect.ContainsKey(name))
         {
             List<Monster> toRemove = new List<Monster>();
@@ -1154,9 +1212,10 @@ public class Quest
             {
                 monsters.Remove(m);
                 game.monsterCanvas.UpdateList();
-                game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+                game.CurrentQuest.vars.SetValue("#monsters", game.CurrentQuest.monsters.Count);
             }
         }
+
         if (itemSelect.ContainsKey(name) && items.Contains(itemSelect[name]))
         {
             items.Remove(itemSelect[name]);
@@ -1165,18 +1224,21 @@ public class Quest
                 itemInspect.Remove(itemSelect[name]);
             }
         }
+
         if (name.Equals("#monsters"))
         {
             monsters.Clear();
             game.monsterCanvas.UpdateList();
-            game.quest.vars.SetValue("#monsters", 0);
+            game.CurrentQuest.vars.SetValue("#monsters", 0);
         }
+
         if (name.Equals("#boardcomponents"))
         {
             foreach (BoardComponent bc in boardItems.Values)
             {
                 bc.Remove();
             }
+
             boardItems.Clear();
             ordered_boardItems.Clear();
         }
@@ -1189,6 +1251,7 @@ public class Quest
             if (c is UI) return true;
             if (c is ShopInterface) return true;
         }
+
         return false;
     }
 
@@ -1243,7 +1306,7 @@ public class Quest
         if (duration >= 0)
         {
             System.TimeSpan current_duration = System.DateTime.UtcNow.Subtract(start_time);
-            r += "duration=" + (int)(this.duration + current_duration.TotalMinutes) + nl;
+            r += "duration=" + (int) (this.duration + current_duration.TotalMinutes) + nl;
         }
         else
         {
@@ -1266,6 +1329,7 @@ public class Quest
         {
             r += "horror=false" + nl;
         }
+
         r += "heroesSelected=" + heroesSelected + nl;
         r += "camx=" + game.cc.gameObject.transform.position.x + nl;
         r += "camy=" + game.cc.gameObject.transform.position.y + nl;
@@ -1275,6 +1339,7 @@ public class Quest
             r += "camxmin=" + game.cc.minPanX + nl;
             r += "camymin=" + game.cc.minPanY + nl;
         }
+
         if (game.cc.maxLimit)
         {
             r += "camxmax=" + game.cc.maxPanX + nl;
@@ -1313,6 +1378,7 @@ public class Quest
             {
                 r += h.id + " ";
             }
+
             r = r.Substring(0, r.Length - 1) + nl;
         }
 
@@ -1389,6 +1455,7 @@ public class Quest
             {
                 r += s + " ";
             }
+
             r = r.Substring(0, r.Length - 1) + nl;
         }
 
@@ -1399,6 +1466,7 @@ public class Quest
             {
                 r += "track" + j + "=" + music[j] + nl;
             }
+
             r += nl;
         }
 
@@ -1410,6 +1478,7 @@ public class Quest
     {
         // This is the quest information
         public QuestData.Tile qTile;
+
         // This is the component information
         public TileSideData cTile;
 
@@ -1427,7 +1496,8 @@ public class Quest
             if (cTile == null)
             {
                 // Fatal if not found
-                ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName + "' in quest component: '" + qTile.sectionName + "'");
+                ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName +
+                                  "' in quest component: '" + qTile.sectionName + "'");
                 Application.Quit();
                 return;
             }
@@ -1437,7 +1507,8 @@ public class Quest
             if (newTex == null)
             {
                 // Fatal if missing
-                ValkyrieDebug.Log("Error: cannot open image file for TileSide: '" + cTile.image + "' named: '" + qTile.tileSideName + "'");
+                ValkyrieDebug.Log("Error: cannot open image file for TileSide: '" + cTile.image + "' named: '" +
+                                  qTile.tileSideName + "'");
                 Application.Quit();
                 return;
             }
@@ -1454,12 +1525,14 @@ public class Quest
             if (game.gameType is MoMGameType)
             {
                 // This is faster
-                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+                tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0,
+                    SpriteMeshType.FullRect);
             }
             else
             {
                 tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             }
+
             // Set image sprite
             image.sprite = tileSprite;
             // Move to get the top left square corner at 0,0
@@ -1479,10 +1552,11 @@ public class Quest
             // We don't do this for MoM because it spaces differently
             if (game.gameType.TileOnGrid())
             {
-                unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+                unityObject.transform.Translate(new Vector3(-(float) 0.5, (float) 0.5, 0), Space.World);
             }
+
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / hPPS, (float)newTex.height / vPPS);
+            image.rectTransform.sizeDelta = new Vector2((float) newTex.width / hPPS, (float) newTex.height / vPPS);
 
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qTile.rotation);
@@ -1490,9 +1564,9 @@ public class Quest
             unityObject.transform.Translate(new Vector3(qTile.location.x, qTile.location.y, 0), Space.World);
             image.color = new Color(1, 1, 1, 0);
 
-            if (!Game.Get().quest.firstTileDisplayed)
+            if (!Game.Get().CurrentQuest.firstTileDisplayed)
             {
-                Game.Get().quest.firstTileDisplayed = true;
+                Game.Get().CurrentQuest.firstTileDisplayed = true;
 
                 // We wait for the first tile displayed on MoM to display the 'NextStage' button bar
                 // Don't do anything if quest is being loaded and stageUI does not exist yet
@@ -1531,7 +1605,9 @@ public class Quest
             // Check that token exists
             if (!game.cd.ContainsKey<TokenData>(tokenName))
             {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName, true));
+                game.CurrentQuest.log.Add(new Quest.LogEntry(
+                    "Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName,
+                    true));
                 // Catch for older quests with different types (0.4.0 or older)
                 if (game.cd.ContainsKey<TokenData>("TokenSearch"))
                 {
@@ -1544,7 +1620,7 @@ public class Quest
             Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
             Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
             Texture2D newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
-            if(newTex==null)
+            if (newTex == null)
             {
                 ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
                 return;
@@ -1565,11 +1641,11 @@ public class Quest
             float PPS = tokenData.pxPerSquare;
             if (PPS == 0)
             {
-                PPS = (float)newTex.width;
+                PPS = (float) newTex.width;
             }
 
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float)newTex.width / PPS, (float)newTex.height / PPS);
+            image.rectTransform.sizeDelta = new Vector2((float) newTex.width / PPS, (float) newTex.height / PPS);
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
             // Move to square
@@ -1600,6 +1676,7 @@ public class Quest
 
         GameObject unityObject_text = null;
         UnityEngine.UI.Text uiText;
+        TextMeshProUGUI richText;
         UnityEngine.UI.Image uiTextBG;
 
         // Construct with quest info and reference to Game
@@ -1617,8 +1694,10 @@ public class Quest
                 panel.transform.SetParent(game.uICanvas.transform);
                 panel.transform.SetAsFirstSibling();
                 panel.AddComponent<RectTransform>();
-                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
-                panel.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
+                panel.GetComponent<RectTransform>()
+                    .SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, Screen.height);
+                panel.GetComponent<RectTransform>()
+                    .SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, Screen.width);
             }
 
             Texture2D newTex = null;
@@ -1632,7 +1711,8 @@ public class Quest
                 }
                 else
                 {
-                    newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName, Path.GetDirectoryName(game.quest.qd.questPath)));
+                    newTex = ContentData.FileToTexture(FindLocalisedMultimediaFile(qUI.imageName,
+                        Path.GetDirectoryName(game.CurrentQuest.qd.questPath)));
                 }
             }
 
@@ -1656,12 +1736,25 @@ public class Quest
                 unityObject_text.transform.SetParent(unityObject.transform);
                 rectTransform_text = unityObject_text.AddComponent<RectTransform>();
 
-                uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
-                uiText.text = GetText();
-                uiText.alignment = TextAnchor.MiddleCenter;
-                uiText.font = game.gameType.GetFont();
-                uiText.material = uiText.font.material;
-                uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                if (qUI.richText)
+                {
+                    richText = unityObject_text.AddComponent<TextMeshProUGUI>();
+                    richText.text = GetText();
+                    richText.alignment = ConvertRichTextAlignment(qUI.textAlignment);
+                    richText.font = TMP_FontAsset.CreateFontAsset(game.gameType.GetFont());
+                    richText.material = richText.material;
+                    richText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                }
+                else
+                {
+                    uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
+                    uiText.text = GetText();
+                    uiText.alignment = ConvertStandardTextAlignment(qUI.textAlignment);
+                    uiText.font = game.gameType.GetFont();
+                    uiText.material = uiText.font.material;
+                    uiText.fontSize = Mathf.RoundToInt(UIScaler.GetPixelsPerUnit() * qUI.textSize);
+                }
+
                 SetColor(qUI.textColor);
                 aspect = qUI.aspect;
             }
@@ -1672,7 +1765,7 @@ public class Quest
                 Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
                 image.color = new Color(1, 1, 1, 0);
                 image.sprite = tileSprite;
-                aspect = (float)newTex.width / (float)newTex.height;
+                aspect = (float) newTex.width / (float) newTex.height;
             }
 
             float unitScale = Screen.width;
@@ -1704,7 +1797,8 @@ public class Quest
             }
             else
             {
-                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, hOffset + ((Screen.width - hSize) / 2f), hSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,
+                    hOffset + ((Screen.width - hSize) / 2f), hSize);
                 rectTransform.ForceUpdateRectTransforms();
                 if (rectTransform_text != null)
                     rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, hSize);
@@ -1726,7 +1820,8 @@ public class Quest
             }
             else
             {
-                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, vOffset + ((Screen.height - vSize) / 2f), vSize);
+                rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
+                    vOffset + ((Screen.height - vSize) / 2f), vSize);
                 rectTransform.ForceUpdateRectTransforms();
                 if (rectTransform_text != null)
                     rectTransform_text.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, vSize);
@@ -1734,10 +1829,34 @@ public class Quest
 
             if (qUI.border)
             {
-                border = new UIElementBorder(unityObject.transform, rectTransform, Game.BOARD, uiText.color);
+                border = new UIElementBorder(unityObject.transform, rectTransform, Game.BOARD, GetColor());
             }
 
             game.tokenBoard.Add(this);
+        }
+
+        private TextAlignmentOptions ConvertRichTextAlignment(TextAlignment qUITextAlignment)
+        {
+            switch (qUITextAlignment)
+            {
+                case TextAlignment.TOP:
+                    return TextAlignmentOptions.Top;
+                case TextAlignment.BOTTOM:
+                    return TextAlignmentOptions.Bottom;
+            }
+            return TextAlignmentOptions.Center;
+        }
+
+        private TextAnchor ConvertStandardTextAlignment(TextAlignment qUITextAlignment)
+        {
+            switch (qUITextAlignment)
+            {
+                case TextAlignment.TOP:
+                    return TextAnchor.UpperCenter;
+                case TextAlignment.BOTTOM:
+                    return TextAnchor.LowerCenter;
+            }
+            return TextAnchor.MiddleCenter;
         }
 
         // Tokens have an associated event to start on press
@@ -1754,6 +1873,13 @@ public class Quest
                 uiText.color = c;
                 uiText.canvasRenderer.SetAlpha(c.a);
             }
+
+            if (richText != null && richText.gameObject != null)
+            {
+                richText.color = c;
+                richText.canvasRenderer.SetAlpha(c.a);
+            }
+
             if (border != null) border.SetColor(c);
             // Text BG has its own color, only alpha is changing
             if (uiTextBG != null && uiTextBG.gameObject != null && qUI.textBackgroundColor != "transparent")
@@ -1768,6 +1894,7 @@ public class Quest
         {
             if (image != null) return image.color;
             if (uiText != null) return uiText.color;
+            if (richText != null) return richText.color;
             return Color.clear;
         }
 
@@ -1832,14 +1959,15 @@ public class Quest
 
             // Create the image
             image = unityObject.AddComponent<UnityEngine.UI.Image>();
-            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
+            Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0,
+                SpriteMeshType.FullRect);
             // Set door colour
             image.sprite = tileSprite;
             image.rectTransform.sizeDelta = new Vector2(0.4f, 1.6f);
             // Rotate as required
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qDoor.rotation);
             // Move to square
-            unityObject.transform.Translate(new Vector3(-(float)0.5, (float)0.5, 0), Space.World);
+            unityObject.transform.Translate(new Vector3(-(float) 0.5, (float) 0.5, 0), Space.World);
             unityObject.transform.Translate(new Vector3(qDoor.location.x, qDoor.location.y, 0), Space.World);
 
             // Set the texture colour from quest data
@@ -1911,6 +2039,7 @@ public class Quest
             {
                 alpha = targetAlpha;
             }
+
             SetColor(new Color(GetColor().r, GetColor().g, GetColor().b, alpha));
         }
 
@@ -1937,15 +2066,16 @@ public class Quest
             // Check format is valid
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
-                game.quest.log.Add(new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
+                game.CurrentQuest.log.Add(
+                    new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
             }
 
             // State with white (used for alpha)
             Color colour = Color.white;
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float)System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float)System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float)System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            colour[0] = (float) System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float) System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float) System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
             SetColor(colour);
         }
     }
@@ -1956,9 +2086,12 @@ public class Quest
         // This can be null if not selected
         public HeroData heroData;
         public bool activated = false;
+
         public bool defeated = false;
+
         //  Heros are in a list so they need ID... maybe at some point this can move to an array
         public int id = 0;
+
         // Used for events that can select or highlight heros
         public bool selected;
         public string className = "";
@@ -2002,11 +2135,13 @@ public class Quest
                     }
                 }
             }
+
             skills = new List<string>();
             if (data.ContainsKey("skills"))
             {
                 skills.AddRange(data["skills"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
             }
+
             if (data.ContainsKey("xp"))
             {
                 int.TryParse(data["xp"], out xp);
@@ -2016,11 +2151,12 @@ public class Quest
         public int AvailableXP()
         {
             Game game = Game.Get();
-            int aXP = xp + Mathf.RoundToInt(game.quest.vars.GetValue("$%xp"));
+            int aXP = xp + Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%xp"));
             foreach (string s in skills)
             {
                 aXP -= game.cd.Get<SkillData>(s).xp;
             }
+
             return aXP;
         }
 
@@ -2037,10 +2173,12 @@ public class Quest
             {
                 r += "class=" + className + " " + hybridClass + nl;
             }
+
             if (heroData != null)
             {
                 r += "type=" + heroData.sectionName + nl;
             }
+
             if (skills.Count > 0)
             {
                 r += "skills=";
@@ -2048,6 +2186,7 @@ public class Quest
                 {
                     r += s + ' ';
                 }
+
                 r += nl;
             }
 
@@ -2075,7 +2214,9 @@ public class Quest
         // State
         public bool activated = false;
         public bool minionStarted = false;
+
         public bool masterStarted = false;
+
         // Accumulated damage
         public int damage = 0;
 
@@ -2096,14 +2237,16 @@ public class Quest
         {
             monsterData = monsterEvent.cMonster;
             spawnEventName = monsterEvent.qMonster.sectionName;
+            activated = monsterEvent.qMonster.activated;
             unique = monsterEvent.qMonster.unique;
             uniqueTitle = monsterEvent.GetUniqueTitle();
             uniqueText = monsterEvent.qMonster.uniqueText;
-            healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase + (Game.Get().quest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
+            healthMod = Mathf.RoundToInt(monsterEvent.qMonster.uniqueHealthBase +
+                                         (Game.Get().CurrentQuest.GetHeroCount() * monsterEvent.qMonster.uniqueHealthHero));
 
             Game game = Game.Get();
             HashSet<int> dupe = new HashSet<int>();
-            foreach (Monster m in game.quest.monsters)
+            foreach (Monster m in game.CurrentQuest.monsters)
             {
                 string active_monster = "";
                 string new_monster = "";
@@ -2118,7 +2261,7 @@ public class Quest
                     new_monster = ((monsterData) as QuestMonster).derivedType;
                 else
                     new_monster = monsterData.sectionName;
-                
+
                 if (active_monster == new_monster || m.duplicate != 0)
                 {
                     dupe.Add(m.duplicate);
@@ -2147,10 +2290,12 @@ public class Quest
             int.TryParse(data["damage"], out damage);
             int.TryParse(data["duplicate"], out duplicate);
 
-            if (data.ContainsKey("healthmod"))
+            if (data.TryGetValue("healthmod", out string healthModString))
             {
-                int.TryParse(data["healthmod"], out healthMod);
+                int.TryParse(healthModString, out healthMod);
             }
+
+            data.TryGetValue("spawnEventName", out spawnEventName);
 
             uniqueText = new StringKey(data["uniqueText"]);
             uniqueTitle = new StringKey(data["uniqueTitle"]);
@@ -2163,13 +2308,14 @@ public class Quest
 
             // Find base type
             Game game = Game.Get();
-            
+
             game.cd.TryGet(data["type"], out monsterData);
-            
+
             // Check if type is a special quest specific type
-            if (game.quest.qd.components.ContainsKey(data["type"]) && game.quest.qd.components[data["type"]] is QuestData.CustomMonster)
+            if (game.CurrentQuest.qd.components.ContainsKey(data["type"]) &&
+                game.CurrentQuest.qd.components[data["type"]] is QuestData.CustomMonster)
             {
-                monsterData = new QuestMonster(game.quest.qd.components[data["type"]] as QuestData.CustomMonster);
+                monsterData = new QuestMonster(game.CurrentQuest.qd.components[data["type"]] as QuestData.CustomMonster);
             }
 
             // If we have already selected an activation find it
@@ -2177,10 +2323,12 @@ public class Quest
             {
                 game.cd.TryGet(data["activation"], out ActivationData saveActivation);
                 // Activations can be specific to the quest
-                if (game.quest.qd.components.ContainsKey(data["activation"]))
+                if (game.CurrentQuest.qd.components.ContainsKey(data["activation"]))
                 {
-                    saveActivation = new QuestActivation(game.quest.qd.components[data["activation"]] as QuestData.Activation);
+                    saveActivation =
+                        new QuestActivation(game.CurrentQuest.qd.components[data["activation"]] as QuestData.Activation);
                 }
+
                 currentActivation = new ActivationInstance(saveActivation, monsterData.name.Translate());
             }
         }
@@ -2197,25 +2345,28 @@ public class Quest
             if (parts.Length != 2) return null;
             int d = 0;
             int.TryParse(parts[1], out d);
-            foreach (Monster m in game.quest.monsters)
+            foreach (Monster m in game.CurrentQuest.monsters)
             {
                 if (m.monsterData.sectionName.Equals(parts[0]) && m.duplicate == d)
                 {
                     return m;
                 }
             }
+
             return null;
         }
 
         public int GetHealth()
         {
-            return Mathf.RoundToInt(monsterData.healthBase + (Game.Get().quest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
+            return Mathf.RoundToInt(monsterData.healthBase +
+                                    (Game.Get().CurrentQuest.GetHeroCount() * monsterData.healthPerHero)) + healthMod;
         }
 
         // Activation instance is requresd to track variables in the activation
         public class ActivationInstance
         {
             public ActivationData ad;
+
             // String is populated on creation of the activation
             public string effect;
             public string move;
@@ -2226,8 +2377,10 @@ public class Quest
             public ActivationInstance(ActivationData contentActivation, string monsterName)
             {
                 ad = contentActivation;
-                minionActions = EventManager.OutputSymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
-                masterActions = EventManager.OutputSymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
+                minionActions =
+                    EventManager.OutputSymbolReplace(ad.minionActions.Translate().Replace("{0}", monsterName));
+                masterActions =
+                    EventManager.OutputSymbolReplace(ad.masterActions.Translate().Replace("{0}", monsterName));
 
                 // Fill in hero, monster names
                 // Note: Random hero selection is NOT kept on load/undo FIXME
@@ -2239,9 +2392,11 @@ public class Quest
                 }
                 else
                 {
-                    effect = ad.ability.Translate().Replace("{0}", Game.Get().quest.GetRandomHero().heroData.name.Translate());
+                    effect = ad.ability.Translate()
+                        .Replace("{0}", Game.Get().CurrentQuest.GetRandomHero().heroData.name.Translate());
                     effect = effect.Replace("{1}", monsterName);
                 }
+
                 // Fix new lines
                 effect = EventManager.OutputSymbolReplace(effect).Replace("\\n", "\n");
             }
@@ -2264,11 +2419,13 @@ public class Quest
             r += "damage=" + damage + nl;
             r += "duplicate=" + duplicate + nl;
             r += "healthmod=" + healthMod + nl;
+            r += "spawnEventName=" + spawnEventName + nl;
             // Save the activation (currently doesn't save the effect string)
             if (currentActivation != null)
             {
                 r += "activation=" + currentActivation.ad.sectionName + nl;
             }
+
             return r;
         }
     }
@@ -2300,10 +2457,12 @@ public class Quest
             {
                 valkyrie = true;
             }
+
             if (type.IndexOf("editor") == 0)
             {
                 editor = true;
             }
+
             entry = e;
         }
 
@@ -2322,6 +2481,7 @@ public class Quest
             {
                 r += "quest" + id + "=";
             }
+
             r += entry.Replace("\n", "\\n") + System.Environment.NewLine;
             return r;
         }
@@ -2332,12 +2492,13 @@ public class Quest
             {
                 return "";
             }
+
             if (editor && !editorSet)
             {
                 return "";
             }
+
             return entry.Replace("\\n", "\n") + "\n\n";
         }
     }
 }
-

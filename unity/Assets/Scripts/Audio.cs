@@ -144,13 +144,17 @@ public class Audio : MonoBehaviour
         // if previous music has ended, play or restart default quest music
         if (musicIndex >= music.Count)
         {
-            music = defaultQuestMusic;
             musicIndex = 0;
+            if (defaultQuestMusic != null && defaultQuestMusic.Count > 0)
+            { 
+                music = defaultQuestMusic;
+            }
         }
 
         audioSource.clip = music[musicIndex];
         audioSource.Play();
         // Set next music
+
         musicIndex++;
     }
 

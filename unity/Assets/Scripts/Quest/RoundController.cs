@@ -16,7 +16,7 @@ public class RoundController {
         Game game = Game.Get();
         // Check if all heros have finished
         bool herosActivated = true;
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (!h.activated && h.heroData != null)
                 herosActivated = false;
@@ -53,7 +53,7 @@ public class RoundController {
         Game game = Game.Get();
 
         // Check for any partial monster activations
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
             if (m.minionStarted ^ m.masterStarted)
             {
@@ -74,7 +74,7 @@ public class RoundController {
 
         // Check if all heros have finished
         bool herosActivated = true;
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             if (!h.activated && h.heroData != null)
                 herosActivated = false;
@@ -87,14 +87,14 @@ public class RoundController {
             {
                 // Evenyone has finished, move to next round
                 activationsFinished = true;
-                game.quest.AdjustMorale(0);
+                game.CurrentQuest.AdjustMorale(0);
                 EndRound();
             }
         }
         else
         {
             // Trigger morale event if required
-            game.quest.AdjustMorale(0);
+            game.CurrentQuest.AdjustMorale(0);
         }
     }
 
@@ -105,9 +105,9 @@ public class RoundController {
 
         List<int> notActivated = new List<int>();
         // Get the index of all monsters that haven't activated
-        for (int i = 0; i < game.quest.monsters.Count; i++)
+        for (int i = 0; i < game.CurrentQuest.monsters.Count; i++)
         {
-            if (!game.quest.monsters[i].activated)
+            if (!game.CurrentQuest.monsters[i].activated)
                 notActivated.Add(i);
         }
 
@@ -116,7 +116,7 @@ public class RoundController {
             return true;
 
         // Find a random unactivated monster
-        Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+        Quest.Monster toActivate = game.CurrentQuest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
         return ActivateMonster(toActivate);
     }
@@ -153,11 +153,11 @@ public class RoundController {
                 foreach (string s in qm.activations)
                 {
                     // Find the activation in quest data
-                    if (game.quest.qd.components.ContainsKey("Activation" + s)
-                        && game.quest.vars.Test((game.quest.qd.components["Activation" + s] as QuestData.Activation).tests)
+                    if (game.CurrentQuest.qd.components.ContainsKey("Activation" + s)
+                        && game.CurrentQuest.vars.Test((game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation).tests)
                        )
                     {
-                        adList.Add(new QuestActivation(game.quest.qd.components["Activation" + s] as QuestData.Activation));
+                        adList.Add(new QuestActivation(game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation));
                     }
                     // Otherwise look for the activation in content data
                     else if (game.cd.TryGet("MonsterActivation" + s, out ActivationData activationData))
@@ -166,7 +166,7 @@ public class RoundController {
                     }
                     else // Invalid activation
                     {
-                        game.quest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
+                        game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
                     }
                 }
             }
@@ -266,22 +266,23 @@ public class RoundController {
         Game game = Game.Get();
 
         // Queue end of all round events
-        game.quest.eManager.EventTriggerType("EndRound", false);
+        game.CurrentQuest.eManager.EventTriggerType("EndRound", false);
         // Queue end of this round events (depriciated)
-        int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round"));
-        game.quest.eManager.EventTriggerType("EndRound" + round, false);
+        int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round"));
+        game.CurrentQuest.eManager.EventTriggerType("EndRound" + round, false);
 
-        if (game.quest.vars.GetValue("#eliminatedprev") > 0)
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0)
         {
-            game.quest.eManager.EventTriggerType("Eliminated", false);
+            game.CurrentQuest.vars.SetValue("#eliminatedcomplete", 1);
+            game.CurrentQuest.eManager.EventTriggerType("Eliminated", false);
         }
-        if (game.quest.vars.GetValue("#eliminated") > 0)
+        if (game.CurrentQuest.vars.GetValue("#eliminated") > 0)
         {
-            game.quest.vars.SetValue("#eliminatedprev", 1);
+            game.CurrentQuest.vars.SetValue("#eliminatedprev", 1);
         }
 
         // This will cause the end of the round if nothing was added
-        game.quest.eManager.TriggerEvent();
+        game.CurrentQuest.eManager.TriggerEvent();
     }
 
     // Check if ready for new round
@@ -291,11 +292,11 @@ public class RoundController {
         Game game = Game.Get();
 
         // Is there an active event?
-        if (game.quest.eManager.currentEvent != null)
+        if (game.CurrentQuest.eManager.currentEvent != null)
             return false;
 
         // Are there queued events?
-        if (game.quest.eManager.eventStack.Count > 0)
+        if (game.CurrentQuest.eManager.eventStack.Count > 0)
             return false;
 
         if (!activationsFinished) return false;
@@ -303,12 +304,12 @@ public class RoundController {
         // Clean up for next round
         activationsFinished = false;
         // Clear hero activations
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             h.activated = false;
         }
         // Clear monster activations
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
             m.activated = false;
             m.minionStarted = false;
@@ -317,10 +318,10 @@ public class RoundController {
         }
 
         // Increment the round
-        int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
-        game.quest.vars.SetValue("#round", round);
+        int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round")) + 1;
+        game.CurrentQuest.vars.SetValue("#round", round);
 
-        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round).Translate()));
+        game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round).Translate()));
 
         // Update monster and hero display
         game.monsterCanvas.UpdateStatus();
@@ -329,7 +330,7 @@ public class RoundController {
         game.audioControl.PlayTrait("newround");
 
         // Start of round events
-        game.quest.eManager.EventTriggerType("StartRound");
+        game.CurrentQuest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
         return true;
     }

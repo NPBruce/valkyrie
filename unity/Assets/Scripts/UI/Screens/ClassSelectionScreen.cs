@@ -35,7 +35,7 @@ namespace Assets.Scripts.UI.Screens
             // Get all heros
             int heroCount = 0;
             // Count number of selected heroes
-            foreach (Quest.Hero h in game.quest.heroes)
+            foreach (Quest.Hero h in game.CurrentQuest.heroes)
             {
                 if (h.heroData != null) heroCount++;
             }
@@ -87,8 +87,8 @@ namespace Assets.Scripts.UI.Screens
                 scrollOffset[hero] = scrollArea[hero].GetScrollPosition();
             }
 
-            string archetype = game.quest.heroes[hero].heroData.archetype;
-            string hybridClass = game.quest.heroes[hero].hybridClass;
+            string archetype = game.CurrentQuest.heroes[hero].heroData.archetype;
+            string hybridClass = game.CurrentQuest.heroes[hero].hybridClass;
             float yStart = 7f;
 
             UIElement ui = null;
@@ -137,9 +137,9 @@ namespace Assets.Scripts.UI.Screens
                 bool available = true;
                 bool pick = false;
 
-                for (int i = 0; i < game.quest.heroes.Count; i++)
+                for (int i = 0; i < game.CurrentQuest.heroes.Count; i++)
                 {
-                    if (game.quest.heroes[i].className.Equals(className))
+                    if (game.CurrentQuest.heroes[i].className.Equals(className))
                     {
                         available = false;
                         if (hero == i)
@@ -147,7 +147,7 @@ namespace Assets.Scripts.UI.Screens
                             pick = true;
                         }
                     }
-                    if (game.quest.heroes[i].hybridClass.Equals(className))
+                    if (game.CurrentQuest.heroes[i].hybridClass.Equals(className))
                     {
                         available = false;
                     }
@@ -191,7 +191,7 @@ namespace Assets.Scripts.UI.Screens
                 scrollOffset.Add(0);
             }
 
-            Texture2D heroTex = ContentData.FileToTexture(game.quest.heroes[hero].heroData.image);
+            Texture2D heroTex = ContentData.FileToTexture(game.CurrentQuest.heroes[hero].heroData.image);
             Sprite heroSprite = Sprite.Create(heroTex, new Rect(0, 0, heroTex.width, heroTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.HEROSELECT);
             ui.SetLocation(xOffset + 2.5f, 3.5f, 4, 4);
@@ -203,19 +203,19 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
             if (game.cd.Get<ClassData>(className).hybridArchetype.Length > 0)
             {
-                game.quest.heroes[hero].className = "";
-                if (game.quest.heroes[hero].hybridClass.Length > 0)
+                game.CurrentQuest.heroes[hero].className = "";
+                if (game.CurrentQuest.heroes[hero].hybridClass.Length > 0)
                 {
-                    game.quest.heroes[hero].hybridClass = "";
+                    game.CurrentQuest.heroes[hero].hybridClass = "";
                 }
                 else
                 {
-                    game.quest.heroes[hero].hybridClass = className;
+                    game.CurrentQuest.heroes[hero].hybridClass = className;
                 }
             }
             else
             {
-                game.quest.heroes[hero].className = className;
+                game.CurrentQuest.heroes[hero].className = className;
             }
             Draw();
         }
@@ -225,12 +225,12 @@ namespace Assets.Scripts.UI.Screens
             Game game = Game.Get();
 
             HashSet<string> items = new HashSet<string>();
-            foreach (Quest.Hero h in game.quest.heroes)
+            foreach (Quest.Hero h in game.CurrentQuest.heroes)
             {
                 if (h.heroData == null) continue;
                 if (h.className.Length == 0) return;
 
-                game.quest.vars.SetValue("#" + h.className, 1);
+                game.CurrentQuest.vars.SetValue("#" + h.className, 1);
 
                 foreach (string s in game.cd.Get<ClassData>(h.className).items)
                 {
@@ -243,7 +243,7 @@ namespace Assets.Scripts.UI.Screens
                     items.Add(s);
                 }
             }
-            game.quest.items.UnionWith(items);
+            game.CurrentQuest.items.UnionWith(items);
 
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.HEROSELECT))
                 Object.Destroy(go);

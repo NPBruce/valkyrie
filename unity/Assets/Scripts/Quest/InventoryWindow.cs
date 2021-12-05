@@ -34,7 +34,7 @@ public class InventoryWindow
 
         float xOffset = 1;
 
-        foreach (string s in game.quest.items)
+        foreach (string s in game.CurrentQuest.items)
         {
             var itemData = game.cd.Get<ItemData>(s);
             ui = new UIElement(scrollArea.GetScrollTransform());
@@ -64,7 +64,7 @@ public class InventoryWindow
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(1), 20, 3, 2);
-        ui.SetText(Mathf.RoundToInt(game.quest.vars.GetValue("$%gold")).ToString());
+        ui.SetText(Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("$%gold")).ToString());
         ui.SetFontSize(UIScaler.GetMediumFont());
 
         ui = new UIElement();

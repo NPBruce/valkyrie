@@ -32,7 +32,7 @@ public class ActivateDialogMoM : ActivateDialog
             // ability text
             string textKey = monster.currentActivation.effect.Replace("\\n", "\n");
             // Add this to the log
-            Game.Get().quest.log.Add(new Quest.LogEntry(textKey.Replace("\n", "\\n")));
+            Game.Get().CurrentQuest.log.Add(new Quest.LogEntry(textKey.Replace("\n", "\\n")));
             ui = new UIElement();
             ui.SetLocation(10, offset, UIScaler.GetWidthUnits() - 20, 4);
             ui.SetText(textKey);
@@ -77,7 +77,7 @@ public class ActivateDialogMoM : ActivateDialog
         new UIElementBorder(ui);
 
         // Add this to the log
-        Game.Get().quest.log.Add(new Quest.LogEntry(monster.currentActivation.masterActions.Replace("\n", "\\n")));
+        Game.Get().CurrentQuest.log.Add(new Quest.LogEntry(monster.currentActivation.masterActions.Replace("\n", "\\n")));
 
         offset += 4.5f;
 
@@ -113,7 +113,7 @@ public class ActivateDialogMoM : ActivateDialog
         new UIElementBorder(ui);
 
         // Add this to the log
-        Game.Get().quest.log.Add(new Quest.LogEntry(monster.currentActivation.move.Replace("\n", "\\n")));
+        Game.Get().CurrentQuest.log.Add(new Quest.LogEntry(monster.currentActivation.move.Replace("\n", "\\n")));
 
         offset += 4.5f;
 

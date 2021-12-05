@@ -25,9 +25,9 @@ public class PuzzleImageWindow
 
         questPuzzle = e.qEvent as QuestData.Puzzle;
 
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            puzzle = game.quest.puzzle[questPuzzle.sectionName] as PuzzleImage;
+            puzzle = game.CurrentQuest.puzzle[questPuzzle.sectionName] as PuzzleImage;
             previousMoves = puzzle.moves;
         }
         else
@@ -45,7 +45,7 @@ public class PuzzleImageWindow
         }
         else
         {
-            newTex = ContentData.FileToTexture(System.IO.Path.GetDirectoryName(game.quest.qd.questPath) + Path.DirectorySeparatorChar + questPuzzle.imageType);
+            newTex = ContentData.FileToTexture(System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + questPuzzle.imageType);
         }
         if (newTex.width > newTex.height)
         {
@@ -179,27 +179,27 @@ public class PuzzleImageWindow
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.sectionName);
+            game.CurrentQuest.puzzle.Remove(questPuzzle.sectionName);
         }
-        game.quest.puzzle.Add(questPuzzle.sectionName, puzzle);
+        game.CurrentQuest.puzzle.Add(questPuzzle.sectionName, puzzle);
 
-        game.quest.eManager.currentEvent = null;
-        game.quest.eManager.currentEvent = null;
-        game.quest.eManager.TriggerEvent();
+        game.CurrentQuest.eManager.currentEvent = null;
+        game.CurrentQuest.eManager.currentEvent = null;
+        game.CurrentQuest.eManager.TriggerEvent();
     }
 
     public void Finished()
     {
         Destroyer.Dialog();
         Game game = Game.Get();
-        if (game.quest.puzzle.ContainsKey(questPuzzle.sectionName))
+        if (game.CurrentQuest.puzzle.ContainsKey(questPuzzle.sectionName))
         {
-            game.quest.puzzle.Remove(questPuzzle.sectionName);
+            game.CurrentQuest.puzzle.Remove(questPuzzle.sectionName);
         }
 
-        game.quest.eManager.EndEvent();
+        game.CurrentQuest.eManager.EndEvent();
     }
 
     public class BlockSlider : MonoBehaviour

@@ -268,7 +268,7 @@ public class EditorComponentVarTestsUtil
         HashSet<string> dollarVars = new HashSet<string>();
 
         Game game = Game.Get();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             if (kv.Value is QuestData.Event)
             {
@@ -338,6 +338,11 @@ public class EditorComponentVarTestsUtil
                     vars.Add(op.value);
                 }
             }
+        }
+
+        if (!string.IsNullOrEmpty(e.quotaVar) && e.quotaVar[0] != '#')
+        {
+            vars.Add(e.quotaVar);
         }
         return vars;
     }

@@ -52,7 +52,7 @@ public class EditorComponentDoor : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
-        game.quest.ChangeAlpha(doorComponent.sectionName, 1f);
+        game.CurrentQuest.ChangeAlpha(doorComponent.sectionName, 1f);
 
         return offset;
     }
@@ -72,8 +72,8 @@ public class EditorComponentDoor : EditorComponentEvent
         {
             doorComponent.rotation = 0;
         }
-        Game.Get().quest.Remove(doorComponent.sectionName);
-        Game.Get().quest.Add(doorComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(doorComponent.sectionName);
+        Game.Get().CurrentQuest.Add(doorComponent.sectionName);
         Update();
     }
 
@@ -97,8 +97,8 @@ public class EditorComponentDoor : EditorComponentEvent
     public void SelectColour(string color)
     {
         doorComponent.colourName = color;
-        Game.Get().quest.Remove(doorComponent.sectionName);
-        Game.Get().quest.Add(doorComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(doorComponent.sectionName);
+        Game.Get().CurrentQuest.Add(doorComponent.sectionName);
         Update();
     }
 

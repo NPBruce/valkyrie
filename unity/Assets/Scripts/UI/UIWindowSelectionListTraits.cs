@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Assets.Scripts.Content;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.UI
 {
     public class UIWindowSelectionListTraits : UIWindowSelectionList
     {
-        protected List<TraitGroup> traitData = new List<TraitGroup>();
+        protected List<TraitGroup> traitGroups = new List<TraitGroup>();
 
         protected List<SelectionItemTraits> allItems = new List<SelectionItemTraits>();
         protected SortedList<string, SelectionItemTraits> alwaysOnTopTraitItems = new SortedList<string, SelectionItemTraits>();
@@ -23,6 +25,11 @@ namespace Assets.Scripts.UI
         string val_source_translated = null;
         string val_traits_translated = null;
         string val_type_translated = null;
+
+        private static readonly Color DISABLED_TRAIT_COLOR = new Color(0.5f, 0, 0);
+        private static readonly Color SELECTED_TRAIT_COLOR = Color.white;
+        private static readonly Color NOT_SELECTED_TRAIT_COLOR = Color.grey;
+
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false) : base(call, title, callAfterCancel)
         {
             val_base_translated = CommonStringKeys.BASE.Translate();
@@ -47,7 +54,7 @@ namespace Assets.Scripts.UI
                 foreach (string category in item.GetTraits().Keys)
                 {
                     bool found = false;
-                    foreach (TraitGroup tg in traitData)
+                    foreach (TraitGroup tg in traitGroups)
                     {
                         if (tg.GetName().Equals(category))
                         {
@@ -60,14 +67,14 @@ namespace Assets.Scripts.UI
                     {
                         TraitGroup tg = new TraitGroup(category);
                         tg.AddTraits(item);
-                        traitData.Add(tg);
+                        traitGroups.Add(tg);
                     }
                 }
             }
 
             foreach (SelectionItemTraits item in allItems)
             {
-                foreach (TraitGroup tg in traitData)
+                foreach (TraitGroup tg in traitGroups)
                 {
                     tg.AddItem(item);
                 }
@@ -159,7 +166,7 @@ namespace Assets.Scripts.UI
             new UIElementBorder(traitScrollArea);
 
             float offset = 0;
-            foreach (TraitGroup tg in traitData)
+            foreach (TraitGroup tg in traitGroups)
             {
                 ui = new UIElement(traitScrollArea.GetScrollTransform());
                 ui.SetLocation(0, offset, 12, 1);
@@ -168,57 +175,61 @@ namespace Assets.Scripts.UI
                 ui.SetBGColor(new Color(0.5f, 1, 0.5f));
                 offset += 1.05f;
 
-                bool noneSelected = tg.NoneSelected();
-
                 foreach (string s in tg.traits.Keys)
                 {
                     TraitGroup tmpGroup = tg;
                     string tmpTrait = s;
                     ui = new UIElement(traitScrollArea.GetScrollTransform());
                     ui.SetLocation(0, offset, 11, 1);
-                    if (tg.traits[s].selected)
+                    
+                    var isExcluded = tg.traits[s].excluded;
+                    var isSelected = tg.traits[s].selected;
+                    if (isSelected)
                     {
-                        ui.SetBGColor(Color.white);
-                        ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
+                        ui.SetBGColor(SELECTED_TRAIT_COLOR);
+                        ui.SetButton(delegate { ToggleTraitSelectState(tmpGroup, tmpTrait); });
+                    }
+                    else if (isExcluded)
+                    {
+                        ui.SetBGColor(DISABLED_TRAIT_COLOR);
                     }
                     else
                     {
                         int itemCount = 0;
                         foreach (SelectionItemTraits item in tg.traits[s].items)
                         {
-                            bool display = true;
-                            foreach (TraitGroup g in traitData)
+                            if (traitGroups.All(g => g.ActiveItem(item)))
                             {
-                                display &= g.ActiveItem(item);
+                                itemCount++;
                             }
-                            if (display) itemCount++;
                         }
-                        if (itemCount > 0)
+
+                        if (itemCount <= 0)
                         {
-                            if (noneSelected)
-                            {
-                                ui.SetBGColor(Color.white);
-                            }
-                            else
-                            {
-                                ui.SetBGColor(Color.grey);
-                            }
-                            ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
+                            ui.SetBGColor(DISABLED_TRAIT_COLOR);
                         }
                         else
                         {
-                            ui.SetBGColor(new Color(0.5f, 0, 0));
+                            ui.SetButton(delegate { ToggleTraitSelectState(tmpGroup, tmpTrait); });
+                            if (tg.NoneSelected())
+                            {
+                                ui.SetBGColor(SELECTED_TRAIT_COLOR);
+                            }
+                            else
+                            {
+                                ui.SetBGColor(NOT_SELECTED_TRAIT_COLOR);
+                            }
                         }
                     }
                     ui.SetText(s, Color.black);
 
                     // Strikethrough
-                    if (tg.traits[s].excluded)
+                    if (isExcluded)
                     {
                         ui = new UIElement(traitScrollArea.GetScrollTransform());
                         ui.SetLocation(0.2f, offset + 0.5f, 10.6f, 0.06f);
                         ui.SetBGColor(Color.black);
-                        ui.SetButton(delegate { SelectTrait(tmpGroup, tmpTrait); });
+                        ui.SetButton(delegate { ToggleTraitSelectState(tmpGroup, tmpTrait); });
                     }
 
                     // Exclude
@@ -279,7 +290,7 @@ namespace Assets.Scripts.UI
             foreach (SelectionItemTraits item in toDisplay)
             {
                 bool display = true;
-                foreach (TraitGroup tg in traitData)
+                foreach (TraitGroup tg in traitGroups)
                 {
                     display &= tg.ActiveItem(item);
                 }
@@ -306,7 +317,7 @@ namespace Assets.Scripts.UI
             return offset + 1.05f;
         }
 
-        protected void SelectTrait(TraitGroup group, string trait)
+        protected void ToggleTraitSelectState(TraitGroup group, string trait)
         {
             if (!group.traits.ContainsKey(trait)) return;
 
@@ -453,11 +464,11 @@ namespace Assets.Scripts.UI
 
         public void SelectTrait(string type, string trait)
         {
-            foreach (TraitGroup tg in traitData)
+            foreach (TraitGroup tg in traitGroups)
             {
                 if (tg.GetName().Equals(type))
                 {
-                    SelectTrait(tg, trait);
+                    ToggleTraitSelectState(tg, trait);
                     return;
                 }
             }
@@ -465,7 +476,7 @@ namespace Assets.Scripts.UI
 
         public void ExcludeTrait(string type, string trait)
         {
-            foreach (TraitGroup tg in traitData)
+            foreach (TraitGroup tg in traitGroups)
             {
                 if (tg.GetName().Equals(type))
                 {
@@ -490,16 +501,10 @@ namespace Assets.Scripts.UI
             enabled.Add(val_base_translated);
             foreach (string anyPack in Game.Get().cd.GetLoadedPackIDs())
             {
-                bool packRequired = false;
-                if (anyPack.Equals("") || anyPack.Equals("base")) packRequired = true;
-                foreach (string s in Game.Get().quest.qd.quest.packs)
-                {
-                    if (packRequired) break;
-                    if (anyPack.Equals(s))
-                    {
-                        packRequired = true;
-                    }
-                }
+                bool packRequired = string.Empty == anyPack 
+                    || anyPack.Equals("base", StringComparison.InvariantCultureIgnoreCase)
+                    || Game.Get().CurrentQuest.qd.quest.packs.Any(s => anyPack.Equals(s));
+                
                 if (!packRequired)
                 {
                     InitExcludeTrait(val_source_translated, new StringKey("val", anyPack).Translate());
@@ -529,16 +534,21 @@ namespace Assets.Scripts.UI
                 return _traits;
             }
         }
-
+        
         protected class TraitGroup
         {
             public Dictionary<string, Trait> traits = new Dictionary<string, Trait>();
             public List<SelectionItem> ungrouped = new List<SelectionItem>();
             public string _name = "";
+            protected TraitGroupFilterMode _filterMode = TraitGroupFilterMode.Strict;
 
             public TraitGroup(string name)
             {
                 _name = name;
+                if ("Source".Trim().Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _filterMode = TraitGroupFilterMode.AtLeastOneSelected;
+                }
             }
 
             public string GetName()
@@ -548,36 +558,42 @@ namespace Assets.Scripts.UI
 
             public bool NoneSelected()
             {
-                bool anySelected = false;
-                foreach (Trait t in traits.Values)
-                {
-                    anySelected |= t.selected;
-                }
-                return !anySelected;
+                return traits.Values.All(t => !t.selected);
             }
 
             public bool ActiveItem(SelectionItemTraits item)
             {
-                foreach (Trait t in traits.Values)
+                var itemTraits = traits
+                    .Where(t => t.Value.items.Contains(item)).ToList();
+                var itemTraitKeys = itemTraits.Select(t => t.Key).ToSet();
+                
+                bool hasAllSelectedTraits = traits
+                    .Where(st => st.Value.selected)
+                    .Select(st => st.Key)
+                    .All(selectedTrait => itemTraitKeys.Contains(selectedTrait));
+
+                if (!hasAllSelectedTraits)
                 {
-                    if (t.items.Contains(item))
+                    return false;
+                }
+
+                switch (_filterMode)
+                {
+                    case TraitGroupFilterMode.AtLeastOneSelected:
                     {
-                        if (t.excluded)
-                        {
-                            // item contains excluded trait
-                            return false;
-                        }
+                        var noneSelected = NoneSelected();
+                        bool atLeastOneNotExcludedSelected = itemTraits
+                            .Where(t => !t.Value.excluded)
+                            .Any(t => noneSelected || t.Value.selected);
+                        return atLeastOneNotExcludedSelected;
                     }
-                    else
+                    case TraitGroupFilterMode.Strict:
+                    default:
                     {
-                        if (t.selected && !NoneSelected())
-                        {
-                            // item does not contain selected trait
-                            return false;
-                        }
+                        bool noneExcluded = !itemTraits.Any(t => t.Value.excluded);
+                        return noneExcluded;
                     }
                 }
-                return true;
             }
 
             public void AddTraits(SelectionItemTraits item)
@@ -611,6 +627,14 @@ namespace Assets.Scripts.UI
                 public bool selected = false;
                 public bool excluded = false;
                 public List<SelectionItem> items = new List<SelectionItem>();
+            }
+            
+            protected enum TraitGroupFilterMode
+            {
+                // Old default. All traits must be selected and none of the traits need to be excluded.
+                Strict,
+                // All traits must be selected. Exclusion only works if no traits are selected.
+                AtLeastOneSelected,
             }
         }
     }

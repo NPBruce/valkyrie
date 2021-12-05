@@ -23,7 +23,7 @@ public class MonsterDialogMoM : MonsterDialog
         DrawMonster(monster);
 
         // In horror phase we do horror checks
-        if (game.quest.phase == Quest.MoMPhase.horror)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.horror)
         {
             UIElement ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-8f), 2, 16, 2);
@@ -178,23 +178,23 @@ public class MonsterDialogMoM : MonsterDialog
         Destroyer.Dialog();
         Game game = Game.Get();
         // Remove this monster group
-        game.quest.monsters.Remove(monster);
+        game.CurrentQuest.monsters.Remove(monster);
         game.monsterCanvas.UpdateList();
 
-        game.quest.vars.SetValue("#monsters", game.quest.monsters.Count);
+        game.CurrentQuest.vars.SetValue("#monsters", game.CurrentQuest.monsters.Count);
         
         game.audioControl.PlayTrait("defeated");
 
         // end this event (fix #1112)
-        Game.Get().quest.eManager.currentEvent = null;
+        Game.Get().CurrentQuest.eManager.currentEvent = null;
 
         // Trigger defeated event by monster type
-        game.quest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
+        game.CurrentQuest.eManager.EventTriggerType("Defeated" + monster.monsterData.sectionName);
         // Trigger defeated event by spawn name
-        game.quest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
+        game.CurrentQuest.eManager.EventTriggerType("Defeated" + monster.spawnEventName);
 
         // fix #982 and #1352
-        if (game.quest.phase == Quest.MoMPhase.monsters && Game.Get().quest.eManager.currentEvent == null)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.monsters && Game.Get().CurrentQuest.eManager.currentEvent == null)
         {
             Game.Get().roundControl.MonsterActivated();
         }
@@ -225,7 +225,7 @@ public class MonsterDialogMoM : MonsterDialog
     {
         Game game = Game.Get();
         // Save to undo stack
-        game.quest.Save();
+        game.CurrentQuest.Save();
         new InvestigatorAttack(monster);
     }
 

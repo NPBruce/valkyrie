@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 public class EditorComponentUI : EditorComponentEvent
 {
@@ -143,6 +145,34 @@ public class EditorComponentUI : EditorComponentEvent
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(0, offset, 7, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "RICH_TEXT")));
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(7, offset, 3, 1);
+            ui.SetButton(delegate { SetRichText(); });
+            if (uiComponent.richText)
+            {
+                ui.SetText(new StringKey("val", "TRUE"));
+            }
+            else
+            {
+                ui.SetText(new StringKey("val", "FALSE"));
+            }
+            new UIElementBorder(ui);
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(10, offset, 4.5f, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TEXT_ALIGNMENT")));
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(14.5f, offset, 5, 1);
+            ui.SetText(new StringKey("val", uiComponent.textAlignment.ToString()));
+            ui.SetButton(delegate { SetTextAlignment(); });
+            new UIElementBorder(ui);
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 7, 1);
             ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "TEXT_SIZE")));
 
             textSizeUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -207,7 +237,7 @@ public class EditorComponentUI : EditorComponentEvent
 
     public void DrawUIComponent()
     {
-        game.quest.ChangeAlpha(uiComponent.sectionName, 1f);
+        game.CurrentQuest.ChangeAlpha(uiComponent.sectionName, 1f);
 
         // Create a grey zone outside of the 16x9 boundary
         // Find quest UI panel
@@ -298,7 +328,7 @@ public class EditorComponentUI : EditorComponentEvent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().quest.qd.questPath)).FullName;
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
         foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
         {
             select.AddItem(s.Substring(relativePath.Length + 1), traits);
@@ -318,8 +348,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectImage(string image)
     {
         uiComponent.imageName = image;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         if (uiComponent.imageName.Length > 0)
         {
             LocalizationRead.dicts["qst"].Remove(uiComponent.uitext_key);
@@ -336,8 +366,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void ChangeUnits()
     {
         uiComponent.verticalUnits = !uiComponent.verticalUnits;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -345,8 +375,8 @@ public class EditorComponentUI : EditorComponentEvent
     {
         uiComponent.hAlign = x;
         uiComponent.vAlign = y;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -368,8 +398,8 @@ public class EditorComponentUI : EditorComponentEvent
         {
             float.TryParse(aspectUIE.GetText(), out uiComponent.aspect);
         }
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -381,16 +411,47 @@ public class EditorComponentUI : EditorComponentEvent
         {
             LocalizationRead.updateScenarioText(uiComponent.uitext_key, textUIE.GetText());
         }
-        game.quest.Remove(uiComponent.sectionName);
-        game.quest.Add(uiComponent.sectionName);
+        game.CurrentQuest.Remove(uiComponent.sectionName);
+        game.CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
     public void UpdateTextSize()
     {
         float.TryParse(textSizeUIE.GetText(), out uiComponent.textSize);
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
+        Update();
+    }
+
+    private void SetRichText()
+    {
+        uiComponent.richText = !uiComponent.richText;
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
+        Update();
+    }
+    
+    private void SetTextAlignment()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectTextAlignment, CommonStringKeys.SELECT_ITEM);
+        foreach (TextAlignment alignment in Enum.GetValues(typeof(TextAlignment)))
+        {
+            select.AddItem(new StringKey("val", alignment.ToString()));
+        }
+        select.Draw();
+    }
+
+    public void SelectTextAlignment(string alignment)
+    {
+        uiComponent.textAlignment = TextAlignmentUtils.ParseAlignment(alignment);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -412,8 +473,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectColour(string color)
     {
         uiComponent.textColor = color;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 
@@ -435,8 +496,8 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectBackgroundColour(string color)
     {
         uiComponent.textBackgroundColor = color;
-        Game.Get().quest.Remove(uiComponent.sectionName);
-        Game.Get().quest.Add(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Remove(uiComponent.sectionName);
+        Game.Get().CurrentQuest.Add(uiComponent.sectionName);
         Update();
     }
 

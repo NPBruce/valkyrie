@@ -84,7 +84,7 @@ public class GameMenu {
     {
         Game game = Game.Get();
         Destroyer.Dialog();
-        game.quest.Undo();
+        game.CurrentQuest.Undo();
     }
 
     public static void Save()

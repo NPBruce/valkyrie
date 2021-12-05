@@ -101,7 +101,7 @@ public class EditorTools
         // save content before creating the package
         QuestEditor.Save();
 
-        string packageName = Path.GetFileName(Path.GetDirectoryName(game.quest.qd.questPath));
+        string packageName = Path.GetFileName(Path.GetDirectoryName(game.CurrentQuest.qd.questPath));
         try
         {
             string desktopDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
@@ -117,7 +117,7 @@ public class EditorTools
 
             using (var zip = new ZipFile())
             {
-                zip.AddDirectory(Path.GetDirectoryName(game.quest.qd.questPath));
+                zip.AddDirectory(Path.GetDirectoryName(game.CurrentQuest.qd.questPath));
                 zip.Save(packageFile);
             }
 
@@ -125,22 +125,22 @@ public class EditorTools
             using (FileStream stream = File.OpenRead(packageFile))
             {
                 byte[] checksum = SHA256Managed.Create().ComputeHash(stream);
-                game.quest.qd.quest.version = System.BitConverter.ToString(checksum);
+                game.CurrentQuest.qd.quest.version = System.BitConverter.ToString(checksum);
             }
 
-            string icon = game.quest.qd.quest.image.Replace('\\', '/');
+            string icon = game.CurrentQuest.qd.quest.image.Replace('\\', '/');
             if (icon.Length > 0)
             {
                 string iconName = Path.GetFileName(icon);
                 // Temp hack to get ToString to output local file
-                game.quest.qd.quest.image = iconName;
-                string src = Path.Combine(Path.GetDirectoryName(game.quest.qd.questPath), icon);
+                game.CurrentQuest.qd.quest.image = iconName;
+                string src = Path.Combine(Path.GetDirectoryName(game.CurrentQuest.qd.questPath), icon);
                 string dest = Path.Combine(destination, iconName);
                 File.Copy(src, dest);
             }
-            string manifest = game.quest.qd.quest.ToString();
+            string manifest = game.CurrentQuest.qd.quest.ToString();
             // Restore icon
-            game.quest.qd.quest.image = icon;
+            game.CurrentQuest.qd.quest.image = icon;
 
             foreach (KeyValuePair<string, string> kv in LocalizationRead.selectDictionary("qst").ExtractAllMatches("quest.name"))
             {

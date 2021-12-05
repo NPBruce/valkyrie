@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Assets.Scripts.Content;
+using UnityEngine.UI;
 using ValkyrieTools;
+using TextAlignment = Assets.Scripts.Content.TextAlignment;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -76,7 +78,7 @@ public class QuestData
             ValkyrieDebug.Log("Error: Quest section missing from quest.ini");
             return;
         }
-        quest = new Quest(questIniData.Get("Quest"));
+        quest = new Quest(string.Empty, questIniData.Get("Quest"));
 
         // Find others (no addition files is not fatal)
         if (questIniData.Get("QuestData") != null)
@@ -405,9 +407,11 @@ public class QuestData
         public int hAlign = 0;
         public int vAlign = 0;
         public float size = 1;
+        public bool richText = false;
         public float textSize = 1;
         public string textColor = "white";
         public string textBackgroundColor = "transparent";
+        public TextAlignment textAlignment = TextAlignment.CENTER;
         public float aspect = 1;
         public bool border = false;
 
@@ -492,6 +496,17 @@ public class QuestData
                 }
             }
 
+            if (data.TryGetValue("textAlignment", out string textAlignString))
+            {
+                textAlignment = TextAlignmentUtils.ParseAlignment(textAlignString);
+            }
+
+            if (data.TryGetValue("richText", out string richTextString) 
+                && bool.TryParse(richTextString, out bool richTextBool))
+            {
+                richText = richTextBool;
+            }
+
             if (data.ContainsKey("border"))
             {
                 bool.TryParse(data["border"], out border);
@@ -520,6 +535,16 @@ public class QuestData
             if (!textBackgroundColor.Equals("transparent"))
             {
                 r += "textbackgroundcolor=" + textBackgroundColor + nl;
+            }
+
+            if (richText)
+            {
+                r += $"richText={richText}{nl}";
+            }
+
+            if (textAlignment != TextAlignment.CENTER)
+            {
+                r += $"textAlignment={textAlignment.ToString()}{nl}";
             }
 
             if (verticalUnits)
@@ -565,6 +590,7 @@ public class QuestData
         new public static string type = "Spawn";
         // Array of placements by hero count
         public string[][] placement;
+        public bool activated = false;
         public bool unique = false;
         public float uniqueHealthBase = 0;
         public float uniqueHealthHero = 0;
@@ -642,6 +668,10 @@ public class QuestData
             if (data.ContainsKey("unique"))
             {
                 bool.TryParse(data["unique"], out unique);
+            }
+            if (data.ContainsKey("activated"))
+            {
+                bool.TryParse(data["activated"], out activated);
             }
             if (data.ContainsKey("uniquehealth"))
             {
@@ -742,6 +772,11 @@ public class QuestData
             if(uniqueHealthHero != 0 && !unique)
             {
                 r += "uniquehealthhero=" + uniqueHealthHero + nl;
+            }
+
+            if (activated)
+            {
+                r += "activated=true" + nl;
             }
             return r;
         }
@@ -1853,11 +1888,12 @@ public class QuestData
     {
         public static int minumumFormat = 4;
         // Increment during changes, and again at release
-        public static int currentFormat = 15;
+        public static int currentFormat = QuestFormat.CURRENT_VERSION;
         public int format = 0;
         public bool hidden = false;
         public bool valid = false;
         public string path = "";
+        public string identifier = "";
         // quest type (MoM, D2E)
         public string type;
         // Content packs required for quest
@@ -1916,6 +1952,8 @@ public class QuestData
                 path = path.Substring(0, path.Length - 1);
             }
 
+            identifier = Path.GetFileNameWithoutExtension(path).ToLower();
+
             Dictionary<string, string> iniData = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "quest.ini", "Quest");
             if (iniData == null)
             {
@@ -1944,8 +1982,9 @@ public class QuestData
         }
 
         // Create from ini data
-        public Quest(Dictionary<string, string> iniData)
+        public Quest(string identifier, Dictionary<string, string> iniData)
         {
+            this.identifier = identifier.ToLower();
             if (LocalizationRead.dicts.ContainsKey("qst"))
             { 
                 localizationDict = LocalizationRead.dicts["qst"];
@@ -1978,42 +2017,45 @@ public class QuestData
                 type = iniData["type"];
             }
 
+            SortedSet<String> requiredPacks = new SortedSet<string>();
+            if (Game.game.gameType is MoMGameType &&
+                format < (int) QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT &&
+                QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains(identifier))
+            {
+                requiredPacks.Add("MoM1CK");
+            }
             if (iniData.ContainsKey("packs"))
             {
                 packs = iniData["packs"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
                 // Depreciated Format 5
-                List<string> newPacks = new List<string>();
                 foreach (string s in packs)
                 {
                     if (s.Equals("MoM1E"))
                     {
-                        newPacks.Add("MoM1ET");
-                        newPacks.Add("MoM1EI");
-                        newPacks.Add("MoM1EM");
+                        requiredPacks.Add("MoM1ET");
+                        requiredPacks.Add("MoM1EI");
+                        requiredPacks.Add("MoM1EM");
                     }
                     else if (s.Equals("FA"))
                     {
-                        newPacks.Add("FAT");
-                        newPacks.Add("FAI");
-                        newPacks.Add("FAM");
+                        requiredPacks.Add("FAT");
+                        requiredPacks.Add("FAI");
+                        requiredPacks.Add("FAM");
                     }
                     else if (s.Equals("CotW"))
                     {
-                        newPacks.Add("CotWT");
-                        newPacks.Add("CotWI");
-                        newPacks.Add("CotWM");
+                        requiredPacks.Add("CotWT");
+                        requiredPacks.Add("CotWI");
+                        requiredPacks.Add("CotWM");
                     }
                     else
                     {
-                        newPacks.Add(s);
+                        requiredPacks.Add(s);
                     }
                 }
-                packs = newPacks.ToArray();
             }
-            else
-            {
-                packs = new string[0];
-            }
+
+            packs = requiredPacks.ToArray();
 
             if (iniData.ContainsKey("defaultlanguage"))
             {

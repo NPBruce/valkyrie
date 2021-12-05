@@ -11,7 +11,7 @@ public class EditorComponentTile : EditorComponent
     public EditorComponentTile(string nameIn) : base()
     {
         Game game = Game.Get();
-        tileComponent = game.quest.qd.components[nameIn] as QuestData.Tile;
+        tileComponent = game.CurrentQuest.qd.components[nameIn] as QuestData.Tile;
         component = tileComponent;
         name = component.sectionName;
         Update();
@@ -69,7 +69,7 @@ public class EditorComponentTile : EditorComponent
 
         game.tokenBoard.AddHighlight(tileComponent.location, "TileAnchor", Game.EDITOR);
 
-        game.quest.ChangeAlpha(tileComponent.sectionName, 1f);
+        game.CurrentQuest.ChangeAlpha(tileComponent.sectionName, 1f);
 
         return offset;
     }
@@ -85,7 +85,7 @@ public class EditorComponentTile : EditorComponent
 
         // Work out what sides are used
         HashSet<string> usedSides = new HashSet<string>();
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             QuestData.Tile t = kv.Value as QuestData.Tile;
             if (t != null)
@@ -114,8 +114,8 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
         tileComponent.tileSideName = tile.Split(" ".ToCharArray())[0];
-        game.quest.Remove(tileComponent.sectionName);
-        game.quest.Add(tileComponent.sectionName);
+        game.CurrentQuest.Remove(tileComponent.sectionName);
+        game.CurrentQuest.Add(tileComponent.sectionName);
         Update();
     }
 
@@ -139,8 +139,8 @@ public class EditorComponentTile : EditorComponent
         }
 
         Game game = Game.Get();
-        game.quest.Remove(tileComponent.sectionName);
-        game.quest.Add(tileComponent.sectionName);
+        game.CurrentQuest.Remove(tileComponent.sectionName);
+        game.CurrentQuest.Add(tileComponent.sectionName);
 
         Update();
     }

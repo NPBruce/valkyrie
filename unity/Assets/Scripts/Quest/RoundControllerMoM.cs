@@ -14,19 +14,19 @@ public class RoundControllerMoM : RoundController
         Game game = Game.Get();
 
         // Mark all Investigators as finished
-        for (int i = 0; i < game.quest.heroes.Count; i++)
+        for (int i = 0; i < game.CurrentQuest.heroes.Count; i++)
         {
-            game.quest.heroes[i].activated = true;
+            game.CurrentQuest.heroes[i].activated = true;
         }
-        game.quest.phase = Quest.MoMPhase.mythos;
+        game.CurrentQuest.phase = Quest.MoMPhase.mythos;
         game.stageUI.Update();
         game.monsterCanvas.UpdateList();
 
-        game.quest.eManager.EventTriggerType("BeforeMonsterActivation", false);
-        game.quest.eManager.EventTriggerType("Mythos", false);
-        game.quest.eManager.EventTriggerType("EndInvestigatorTurn", false);
+        game.CurrentQuest.eManager.EventTriggerType("BeforeMonsterActivation", false);
+        game.CurrentQuest.eManager.EventTriggerType("Mythos", false);
+        game.CurrentQuest.eManager.EventTriggerType("EndInvestigatorTurn", false);
         // This will cause the next phase if nothing was added
-        game.quest.eManager.TriggerEvent();
+        game.CurrentQuest.eManager.TriggerEvent();
 
         // Display the transition dialog for investigator phase
         ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.mythos);
@@ -40,7 +40,7 @@ public class RoundControllerMoM : RoundController
         Game game = Game.Get();
 
         // Check for any partial monster activations
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
             if (m.minionStarted || m.masterStarted)
             {
@@ -63,16 +63,16 @@ public class RoundControllerMoM : RoundController
         // Search for unactivated monsters
         List<int> notActivated = new List<int>();
         // Get the index of all monsters that haven't activated
-        for (int i = 0; i < game.quest.monsters.Count; i++)
+        for (int i = 0; i < game.CurrentQuest.monsters.Count; i++)
         {
-            if (!game.quest.monsters[i].activated)
+            if (!game.CurrentQuest.monsters[i].activated)
             {
-                QuestMonster qm = game.quest.monsters[i].monsterData as QuestMonster;
+                QuestMonster qm = game.CurrentQuest.monsters[i].monsterData as QuestMonster;
                 if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0 
-                    && game.quest.eManager.events[qm.activations[0]].Disabled())
+                    && game.CurrentQuest.eManager.events[qm.activations[0]].Disabled())
                 {
                     // monster cannot be activated, mark as activated
-                    game.quest.monsters[i].activated = true;
+                    game.CurrentQuest.monsters[i].activated = true;
                 }
                 else
                 {
@@ -84,7 +84,7 @@ public class RoundControllerMoM : RoundController
         if (notActivated.Count > 0)
         {
             // Find a random unactivated monster
-            Quest.Monster toActivate = game.quest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
+            Quest.Monster toActivate = game.CurrentQuest.monsters[notActivated[Random.Range(0, notActivated.Count)]];
 
             // Find out of this monster is quest specific
             QuestMonster qm = toActivate.monsterData as QuestMonster;
@@ -92,8 +92,8 @@ public class RoundControllerMoM : RoundController
             {
                 toActivate.masterStarted = true;
                 toActivate.activated = true;
-                game.quest.eManager.monsterImage = toActivate;
-                game.quest.eManager.QueueEvent(qm.activations[0]);
+                game.CurrentQuest.eManager.monsterImage = toActivate;
+                game.CurrentQuest.eManager.QueueEvent(qm.activations[0]);
             }
             else
             {
@@ -119,56 +119,56 @@ public class RoundControllerMoM : RoundController
         Game game = Game.Get();
 
         // Return if there is an event open
-        if (game.quest.eManager.currentEvent != null)
+        if (game.CurrentQuest.eManager.currentEvent != null)
             return false;
 
         // Return if there is an event queued
-        if (game.quest.eManager.eventStack.Count > 0)
+        if (game.CurrentQuest.eManager.eventStack.Count > 0)
             return false;
 
-        if (game.quest.phase == Quest.MoMPhase.investigator)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.investigator)
         {
             return false;
         }
 
-        if (game.quest.phase == Quest.MoMPhase.mythos)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.mythos)
         {
-            if (game.quest.monsters.Count > 0)
+            if (game.CurrentQuest.monsters.Count > 0)
             {
                 if (ActivateMonster())
                 {
                     // no monster can be activated (activation conditions may prevent existing monster from doing anything), switch to horror phase
-                    game.quest.phase = Quest.MoMPhase.horror;
+                    game.CurrentQuest.phase = Quest.MoMPhase.horror;
                     game.stageUI.Update();
                     return false;
                 }
                 // this is a recursive call, so we don't want to bring back monsters, if we have reached the end of activations
-                else if (game.quest.phase != Quest.MoMPhase.horror)
+                else if (game.CurrentQuest.phase != Quest.MoMPhase.horror)
                 {
                     // going through monster activation: switch to phase monsters
-                    game.quest.phase = Quest.MoMPhase.monsters;
+                    game.CurrentQuest.phase = Quest.MoMPhase.monsters;
                     game.stageUI.Update();
-                    return game.quest.eManager.currentEvent != null;
+                    return game.CurrentQuest.eManager.currentEvent != null;
                 }
             }
             else
             {
-                game.quest.phase = Quest.MoMPhase.horror;
+                game.CurrentQuest.phase = Quest.MoMPhase.horror;
                 game.stageUI.Update();
                 EndRound();
-                return game.quest.eManager.currentEvent != null;
+                return game.CurrentQuest.eManager.currentEvent != null;
             }
         }
 
-        if (game.quest.phase == Quest.MoMPhase.monsters)
+        if (game.CurrentQuest.phase == Quest.MoMPhase.monsters)
         {
-            game.quest.phase = Quest.MoMPhase.horror;
+            game.CurrentQuest.phase = Quest.MoMPhase.horror;
             game.stageUI.Update();
             return false;
         }
 
         // we need this test to make sure user can do the horro test, as a random event would switch the game to investigator phase 
-        if (!endRoundRequested && game.quest.phase == Quest.MoMPhase.horror && game.quest.monsters.Count > 0)
+        if (!endRoundRequested && game.CurrentQuest.phase == Quest.MoMPhase.horror && game.CurrentQuest.monsters.Count > 0)
         {
             return false;
         }
@@ -179,13 +179,13 @@ public class RoundControllerMoM : RoundController
         endRoundRequested = false;
 
         // Clear all investigator activated
-        foreach (Quest.Hero h in game.quest.heroes)
+        foreach (Quest.Hero h in game.CurrentQuest.heroes)
         {
             h.activated = false;
         }
 
         //  Clear monster activations
-        foreach (Quest.Monster m in game.quest.monsters)
+        foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
             m.activated = false;
             m.minionStarted = false;
@@ -194,19 +194,19 @@ public class RoundControllerMoM : RoundController
         }
 
         // Advance to next round
-        int round = Mathf.RoundToInt(game.quest.vars.GetValue("#round")) + 1;
-        game.quest.vars.SetValue("#round", round);
+        int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round")) + 1;
+        game.CurrentQuest.vars.SetValue("#round", round);
 
-        game.quest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR").Translate()));
+        game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR").Translate()));
 
-        game.quest.phase = Quest.MoMPhase.investigator;
+        game.CurrentQuest.phase = Quest.MoMPhase.investigator;
         game.stageUI.Update();
         game.monsterCanvas.UpdateList();
 
         game.audioControl.PlayTrait("newround");
 
         // Start of round events
-        game.quest.eManager.EventTriggerType("StartRound");
+        game.CurrentQuest.eManager.EventTriggerType("StartRound");
         SaveManager.Save(0);
         
         // Display the transition dialog for investigator phase

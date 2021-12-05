@@ -72,7 +72,7 @@ public class QuestEditorData {
         {
             game.qed.selection.Update();
         }
-        else if (game.quest.qd.components.ContainsKey(game.qed.selection.name))
+        else if (game.CurrentQuest.qd.components.ContainsKey(game.qed.selection.name))
         {
             // Existing component
             game.qed.selection.Update();
@@ -117,7 +117,7 @@ public class QuestEditorData {
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
         select.AddItem(CommonStringKeys.QUEST.Translate(), "Quest", traits);
 
-        foreach (QuestData.QuestComponent c in game.quest.qd.components.Values)
+        foreach (QuestData.QuestComponent c in game.CurrentQuest.qd.components.Values)
         {
             if (!(c is PerilData))
             {
@@ -201,64 +201,64 @@ public class QuestEditorData {
             return;
         }
         // This may happen to due rename/delete
-        if (!game.quest.qd.components.ContainsKey(name))
+        if (!game.CurrentQuest.qd.components.ContainsKey(name))
         {
             SelectQuest();
         }
 
         // Determine the component type and select
-        if (game.quest.qd.components[name] is QuestData.Tile)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Tile)
         {
             SelectAsTile(name);
             return;
         }
 
-        if (game.quest.qd.components[name] is QuestData.Door)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Door)
         {
             SelectAsDoor(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Token)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Token)
         {
             SelectAsToken(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.UI)
+        if (game.CurrentQuest.qd.components[name] is QuestData.UI)
         {
             SelectAsUI(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Spawn)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Spawn)
         {
             SelectAsSpawn(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.MPlace)
+        if (game.CurrentQuest.qd.components[name] is QuestData.MPlace)
         {
             SelectAsMPlace(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Puzzle)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Puzzle)
         {
             SelectAsPuzzle(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.QItem)
+        if (game.CurrentQuest.qd.components[name] is QuestData.QItem)
         {
             SelectAsItem(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.CustomMonster)
+        if (game.CurrentQuest.qd.components[name] is QuestData.CustomMonster)
         {
             SelectAsCustomMonster(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Activation)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Activation)
         {
             SelectAsActivation(name);
             return;
         }
-        if (game.quest.qd.components[name] is QuestData.Event)
+        if (game.CurrentQuest.qd.components[name] is QuestData.Event)
         {
             SelectAsEvent(name);
             return;
@@ -341,18 +341,18 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Tile" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Tile" + index))
         {
             index++;
         }
         QuestData.Tile tile = new QuestData.Tile("Tile" + index);
-        game.quest.qd.components.Add("Tile" + index, tile);
+        game.CurrentQuest.qd.components.Add("Tile" + index, tile);
 
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         tile.location.x = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.TileRound());
         tile.location.y = game.gameType.TileRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.TileRound());
 
-        game.quest.Add("Tile" + index);
+        game.CurrentQuest.Add("Tile" + index);
         SelectComponent("Tile" + index);
     }
 
@@ -361,18 +361,18 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Door" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Door" + index))
         {
             index++;
         }
         QuestData.Door door = new QuestData.Door("Door" + index);
-        game.quest.qd.components.Add("Door" + index, door);
+        game.CurrentQuest.qd.components.Add("Door" + index, door);
 
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         door.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
         door.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
 
-        game.quest.Add("Door" + index);
+        game.CurrentQuest.Add("Door" + index);
         SelectComponent("Door" + index);
     }
 
@@ -381,18 +381,18 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Token" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Token" + index))
         {
             index++;
         }
         QuestData.Token token = new QuestData.Token("Token" + index);
-        game.quest.qd.components.Add("Token" + index, token);
+        game.CurrentQuest.qd.components.Add("Token" + index, token);
 
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         token.location.x = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.x / game.gameType.SelectionRound());
         token.location.y = game.gameType.SelectionRound() * Mathf.Round(cc.gameObject.transform.position.y / game.gameType.SelectionRound());
 
-        game.quest.Add("Token" + index);
+        game.CurrentQuest.Add("Token" + index);
         SelectComponent("Token" + index);
     }
 
@@ -401,12 +401,14 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("UI" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("UI" + index))
         {
             index++;
         }
         QuestData.UI ui = new QuestData.UI("UI" + index);
-        game.quest.qd.components.Add("UI" + index, ui);
+        ui.verticalUnits = true;
+        ui.richText = true;
+        game.CurrentQuest.qd.components.Add("UI" + index, ui);
         SelectComponent("UI" + index);
     }
 
@@ -415,11 +417,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Spawn" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Spawn" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Spawn" + index, new QuestData.Spawn("Spawn" + index));
+        game.CurrentQuest.qd.components.Add("Spawn" + index, new QuestData.Spawn("Spawn" + index));
         SelectComponent("Spawn" + index);
     }
 
@@ -428,11 +430,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("MPlace" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("MPlace" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
+        game.CurrentQuest.qd.components.Add("MPlace" + index, new QuestData.MPlace("MPlace" + index));
         SelectComponent("MPlace" + index);
     }
 
@@ -441,11 +443,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Event" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Event" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Event" + index, new QuestData.Event("Event" + index));
+        game.CurrentQuest.qd.components.Add("Event" + index, new QuestData.Event("Event" + index));
         SelectComponent("Event" + index);
     }
 
@@ -454,11 +456,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Puzzle" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Puzzle" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Puzzle" + index, new QuestData.Puzzle("Puzzle" + index));
+        game.CurrentQuest.qd.components.Add("Puzzle" + index, new QuestData.Puzzle("Puzzle" + index));
         SelectComponent("Puzzle" + index);
     }
     
@@ -467,11 +469,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("QItem" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("QItem" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("QItem" + index, new QuestData.QItem("QItem" + index));
+        game.CurrentQuest.qd.components.Add("QItem" + index, new QuestData.QItem("QItem" + index));
         SelectComponent("QItem" + index);
     }
 
@@ -480,11 +482,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("CustomMonster" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("CustomMonster" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("CustomMonster" + index, new QuestData.CustomMonster("CustomMonster" + index));
+        game.CurrentQuest.qd.components.Add("CustomMonster" + index, new QuestData.CustomMonster("CustomMonster" + index));
         SelectComponent("CustomMonster" + index);
     }
 
@@ -493,11 +495,11 @@ public class QuestEditorData {
         Game game = Game.Get();
         int index = 0;
 
-        while (game.quest.qd.components.ContainsKey("Activation" + index))
+        while (game.CurrentQuest.qd.components.ContainsKey("Activation" + index))
         {
             index++;
         }
-        game.quest.qd.components.Add("Activation" + index, new QuestData.Activation("Activation" + index));
+        game.CurrentQuest.qd.components.Add("Activation" + index, new QuestData.Activation("Activation" + index));
         SelectComponent("Activation" + index);
     }
 
@@ -511,21 +513,21 @@ public class QuestEditorData {
         if (name.Length == 0) return;
 
         // Remove all references to the deleted component
-        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.quest.qd.components)
+        foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             kv.Value.RemoveReference(name);
         }
 
         // Remove the component
-        if (game.quest.qd.components.ContainsKey(name))
+        if (game.CurrentQuest.qd.components.ContainsKey(name))
         {
-            game.quest.qd.components.Remove(name);
+            game.CurrentQuest.qd.components.Remove(name);
         }
 
         LocalizationRead.dicts["qst"].RemoveKeyPrefix(name + ".");
 
         // Clean up the current quest environment
-        game.quest.Remove(name);
+        game.CurrentQuest.Remove(name);
 
         Back();
     }
@@ -565,7 +567,7 @@ public class QuestEditorData {
         string last = "";
         foreach (RaycastResult hit in raycastResults)
         {
-            foreach (KeyValuePair<string, Quest.BoardComponent> kv in Game.Get().quest.boardItems)
+            foreach (KeyValuePair<string, Quest.BoardComponent> kv in Game.Get().CurrentQuest.boardItems)
             {
                 if (kv.Value.unityObject == hit.gameObject)
                 {
@@ -573,7 +575,7 @@ public class QuestEditorData {
                     {
                         last = kv.Key;
                         count++;
-                        select.AddItem(Game.Get().quest.qd.components[kv.Key]);
+                        select.AddItem(Game.Get().CurrentQuest.qd.components[kv.Key]);
                     }
                     break;
                 }

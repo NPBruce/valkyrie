@@ -56,7 +56,7 @@ public class Destroyer
         game.cc.minLimit = false;
 
         // Clear up all data
-        game.quest = null;
+        game.CurrentQuest = null;
         game.qed = null;
         game.moraleDisplay = null;
         if (game.tokenBoard.tc != null)
@@ -81,6 +81,18 @@ public class Destroyer
     {
         // Clean up everything marked as 'dialog'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+            Object.Destroy(go);
+
+        CameraController.panDisable = false;
+        Game.Get().logWindow = null;
+        Resources.UnloadUnusedAssets();
+    }
+
+    // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
+    public static void SetWindow()
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.SETWINDOW))
             Object.Destroy(go);
 
         CameraController.panDisable = false;

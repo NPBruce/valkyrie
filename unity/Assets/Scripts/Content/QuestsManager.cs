@@ -113,7 +113,7 @@ public class QuestsManager
         IniData remoteManifest = IniRead.ReadFromString(data);
         foreach (KeyValuePair<string, Dictionary<string, string>> quest_kv in remoteManifest.data)
         {
-            remote_quests_data.Add(quest_kv.Key, new QuestData.Quest(quest_kv.Value));
+            remote_quests_data.Add(quest_kv.Key, new QuestData.Quest(quest_kv.Key, quest_kv.Value));
         }
 
         if (remote_quests_data.Count == 0)
