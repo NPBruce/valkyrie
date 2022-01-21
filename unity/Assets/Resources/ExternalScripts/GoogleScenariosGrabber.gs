@@ -111,34 +111,42 @@ ScenariosGrabber.prototype._getContent = function _getContent() {
        // add URL in the data
        quest_parser.set("Quest", "url", url);
        
-       // This "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/ExoticMaterial/ExoticMaterial.ini"
-       // should become this : "https://api.github.com/repos/NPBruce/valkyrie-store/commits?path=MoM/ExoticMaterial/ExoticMaterial.valkyrie"
-       var regex = /https:\/\/raw.githubusercontent.com\/(.+?\/.+?)\/(.+?)\/(.+\/*.*).ini/;
-       var commit_info_url = ini_url.replace(regex, 'https://api.github.com/repos/$1/commits?sha=$2&path=$3.valkyrie')
-       
-       Logger.log("fetch commit package :" + commit_info_url);
-       
-       response = fetch_with_retry(commit_info_url);
+       if(ini_url.indexOf("raw.githubusercontent.com")>-1)
+       {
+          // This "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/ExoticMaterial/ExoticMaterial.ini"
+          // should become this : "https://api.github.com/repos/NPBruce/valkyrie-store/commits?path=MoM/ExoticMaterial/ExoticMaterial.valkyrie"
+          var regex = /https:\/\/raw.githubusercontent.com\/(.+?\/.+?)\/(.+?)\/(.+\/*.*).ini/;
+          var commit_info_url = ini_url.replace(regex, 'https://api.github.com/repos/$1/commits?sha=$2&path=$3.valkyrie')
+          
+          Logger.log("fetch commit package :" + commit_info_url);
+          
+          response = fetch_with_retry(commit_info_url);
 
-       if(response=="invalid")
-       {
-          throw "Invalid get request for package for "+commit_info_url+", stopping here";
-       }
-       
-       // Make request to API and get response before this point.
-       var commit_json = response.getContentText();
-       var commit_data = JSON.parse(commit_json);
-       
-       if(commit_data.length <= 0)
-       {
-          Logger.log("Latest commit date unavailable for request : " + commit_info_url);
+          if(response=="invalid")
+          {
+              throw "Invalid get request for package for "+commit_info_url+", stopping here";
+          }
+          
+          // Make request to API and get response before this point.
+          var commit_json = response.getContentText();
+          var commit_data = JSON.parse(commit_json);
+          
+          if(commit_data.length <= 0)
+          {
+              Logger.log("Latest commit date unavailable for request : " + commit_info_url);
+          }
+          else
+          {
+              Logger.log("Latest commit date is : " + commit_data[0].commit.committer.date);
+          
+              // add latest update date in the data
+              quest_parser.set("Quest", "latest_update", commit_data[0].commit.committer.date);
+          }
        }
        else
        {
-          Logger.log("Latest commit date is : " + commit_data[0].commit.committer.date);
-      
-          // add latest update date in the data
-          quest_parser.set("Quest", "latest_update", commit_data[0].commit.committer.date);
+         //not a github link, data should be hardcoded
+         quest_parser.set("Quest", "latest_update", "1970-01-01T12:28:29Z");
        }
        
        // rename [Quest] into [ScenarioName]
