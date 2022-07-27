@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
+using UnityEngine;
 
 // This round controller extends the standard controller for MoM specific round order
 public class RoundControllerMoM : RoundController
@@ -18,6 +17,14 @@ public class RoundControllerMoM : RoundController
         {
             game.CurrentQuest.heroes[i].activated = true;
         }
+
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0)
+        {
+            game.CurrentQuest.eManager.EventTriggerType("Eliminated", false);
+            game.CurrentQuest.eManager.TriggerEvent();
+            return;
+        }
+        
         game.CurrentQuest.phase = Quest.MoMPhase.mythos;
         game.stageUI.Update();
         game.monsterCanvas.UpdateList();
@@ -30,8 +37,6 @@ public class RoundControllerMoM : RoundController
 
         // Display the transition dialog for investigator phase
         ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.mythos);
-
-        return;
     }
 
     // Mark a monster as activated
@@ -196,6 +201,7 @@ public class RoundControllerMoM : RoundController
         // Advance to next round
         int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round")) + 1;
         game.CurrentQuest.vars.SetValue("#round", round);
+        game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round).Translate()));
 
         game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR").Translate()));
 
@@ -207,6 +213,13 @@ public class RoundControllerMoM : RoundController
 
         // Start of round events
         game.CurrentQuest.eManager.EventTriggerType("StartRound");
+
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0 &&
+            game.CurrentQuest.vars.GetValue("#eliminatedcomplete") <= 0)
+        {
+            game.CurrentQuest.eManager.EventTriggerType("StartFinalRound");
+        }
+
         SaveManager.Save(0);
         
         // Display the transition dialog for investigator phase
