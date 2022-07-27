@@ -115,6 +115,7 @@ public class QuestEditorData {
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Quest" });
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { "quest.ini" });
         select.AddItem(CommonStringKeys.QUEST.Translate(), "Quest", traits);
 
         foreach (QuestData.QuestComponent c in game.CurrentQuest.qd.components.Values)
