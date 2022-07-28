@@ -100,19 +100,22 @@ public class EventManager
     }
 
     // Queue all events by trigger, optionally start
-    public void EventTriggerType(string type, bool trigger=true)
+    public bool EventTriggerType(string type, bool trigger=true)
     {
+        bool queued = false;
         foreach (KeyValuePair<string, Event> kv in events)
         {
             if (kv.Value.qEvent != null && kv.Value.qEvent.trigger.Equals(type))
             {
-                QueueEvent(kv.Key, trigger);
+                queued |= QueueEvent(kv.Key, trigger);
             }
         }
+
+        return queued;
     }
 
     // Queue event, optionally trigger next event
-    public void QueueEvent(string name, bool trigger=true)
+    public bool QueueEvent(string name, bool trigger=true)
     {
         // Check if the event doesn't exists - quest fault
         if (!events.ContainsKey(name))
@@ -130,12 +133,12 @@ public class EventManager
             {
                 ValkyrieDebug.Log("Warning: Missing event called: " + name);
                 game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Missing event called: " + name, true));
-                return;
+                return false;
             }
         }
 
         // Don't queue disabled events
-        if (events[name].Disabled()) return;
+        if (events[name].Disabled()) return false;
 
         // Place this on top of the stack
         eventStack.Push(events[name]);
@@ -145,6 +148,8 @@ public class EventManager
         {
             TriggerEvent();
         }
+
+        return true;
     }
 
     // Trigger next event in stack
