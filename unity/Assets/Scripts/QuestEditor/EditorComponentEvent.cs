@@ -668,6 +668,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem("Mythos", traits);
             select.AddItem("EndInvestigatorTurn", traits);
             select.AddItem("BeforeMonsterActivation", traits);
+            select.AddItem("StartFinalRound", traits);
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();

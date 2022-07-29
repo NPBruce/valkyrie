@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using ValkyrieTools;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
+using UnityEngine;
+using ValkyrieTools;
 
 // This class controls the progression of activations and events
-public class RoundController {
-
+public class RoundController
+{
     // Latch activations finished incase more monsters come
     bool activationsFinished = false;
 
@@ -81,7 +80,7 @@ public class RoundController {
         }
 
         // If there no heros left activate another monster
-        if(herosActivated)
+        if (herosActivated)
         {
             if (ActivateMonster())
             {
@@ -139,6 +138,7 @@ public class RoundController {
             {
                 md = game.cd.Get<MonsterData>(qm.derivedType);
             }
+
             // Determine if the monster has quest specific activations
             customActivations = !qm.useMonsterTypeActivations;
         }
@@ -154,10 +154,12 @@ public class RoundController {
                 {
                     // Find the activation in quest data
                     if (game.CurrentQuest.qd.components.ContainsKey("Activation" + s)
-                        && game.CurrentQuest.vars.Test((game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation).tests)
+                        && game.CurrentQuest.vars.Test(
+                            (game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation).tests)
                        )
                     {
-                        adList.Add(new QuestActivation(game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation));
+                        adList.Add(new QuestActivation(
+                            game.CurrentQuest.qd.components["Activation" + s] as QuestData.Activation));
                     }
                     // Otherwise look for the activation in content data
                     else if (game.cd.TryGet("MonsterActivation" + s, out ActivationData activationData))
@@ -166,7 +168,9 @@ public class RoundController {
                     }
                     else // Invalid activation
                     {
-                        game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Unable to find activation: " + s + " for monster type: " + m.monsterData.sectionName, true));
+                        game.CurrentQuest.log.Add(new Quest.LogEntry(
+                            "Warning: Unable to find activation: " + s + " for monster type: " +
+                            m.monsterData.sectionName, true));
                     }
                 }
             }
@@ -182,6 +186,7 @@ public class RoundController {
                     adList.Add(kv.Value);
                 }
             }
+
             // Search for additional common activations
             foreach (string s in md.activations)
             {
@@ -191,7 +196,8 @@ public class RoundController {
                 }
                 else
                 {
-                    ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " + md.sectionName);
+                    ValkyrieDebug.Log("Warning: Unable to find activation: " + s + " for monster type: " +
+                                      md.sectionName);
                 }
             }
         }
@@ -241,10 +247,11 @@ public class RoundController {
         m.minionStarted = Random.Range(0, 2) == 0;
 
         // If order specificed then use that instead
-        if(m.currentActivation.ad.masterFirst)
+        if (m.currentActivation.ad.masterFirst)
         {
             m.minionStarted = false;
         }
+
         if (m.currentActivation.ad.minionFirst)
         {
             m.minionStarted = true;
@@ -276,6 +283,7 @@ public class RoundController {
             game.CurrentQuest.vars.SetValue("#eliminatedcomplete", 1);
             game.CurrentQuest.eManager.EventTriggerType("Eliminated", false);
         }
+
         if (game.CurrentQuest.vars.GetValue("#eliminated") > 0)
         {
             game.CurrentQuest.vars.SetValue("#eliminatedprev", 1);
@@ -288,7 +296,6 @@ public class RoundController {
     // Check if ready for new round
     public virtual bool CheckNewRound()
     {
-
         Game game = Game.Get();
 
         // Is there an active event?
@@ -308,6 +315,7 @@ public class RoundController {
         {
             h.activated = false;
         }
+
         // Clear monster activations
         foreach (Quest.Monster m in game.CurrentQuest.monsters)
         {
