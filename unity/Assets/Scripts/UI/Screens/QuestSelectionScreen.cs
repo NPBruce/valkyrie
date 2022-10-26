@@ -71,7 +71,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly Color dark_red_text_color = new Color(0.686f, 0.031f, 0.023f);
 
         // filters
-        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech,Korean".Split(',');
+        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech,Korean,Japanese".Split(',');
         Dictionary<string, bool> langs_selected = null;
         bool filter_missing_expansions = false;
 
