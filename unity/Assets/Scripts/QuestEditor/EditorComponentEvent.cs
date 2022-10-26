@@ -911,6 +911,7 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Special" });
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { "Special" });
 
         select.AddItem("#boardcomponents", traits);
         select.AddItem("#monsters", traits);
