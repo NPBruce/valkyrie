@@ -1,14 +1,13 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
-using Assets.Scripts.UI;
-using ValkyrieTools;
 using System.IO;
 using System.Linq;
+using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 using TMPro;
-using UnityEngine.Experimental.UIElements;
+using UnityEngine;
 using UnityEngine.UI;
+using ValkyrieTools;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 using TextAlignment = Assets.Scripts.Content.TextAlignment;
@@ -63,7 +62,7 @@ public class Quest
     public Dictionary<string, string> itemInspect;
 
     // A dictionary of heros that have been selected in events
-    public Dictionary<string, List<Quest.Hero>> heroSelection;
+    public Dictionary<string, List<Hero>> heroSelection;
 
     // A dictionary of puzzle state
     public Dictionary<string, Puzzle> puzzle;
@@ -88,7 +87,7 @@ public class Quest
     public Stack<string> undo;
 
     // Event Log
-    public List<LogEntry> log;
+    public QuestLog log;
 
     // Event list
     public List<string> eventList;
@@ -115,7 +114,7 @@ public class Quest
     public bool fromSavegame = false;
 
     // Quest start time (or load time)
-    public System.DateTime start_time;
+    public DateTime start_time;
 
     // Quest gameplay duration
     public int duration;
@@ -171,15 +170,15 @@ public class Quest
         itemSelect = new Dictionary<string, string>();
         itemInspect = new Dictionary<string, string>();
         monsters = new List<Monster>();
-        heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        heroSelection = new Dictionary<string, List<Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
         undo = new Stack<string>();
-        log = new List<LogEntry>();
+        log = new QuestLog();
         eventList = new List<string>();
         monsterSelect = new Dictionary<string, string>();
 
-        start_time = System.DateTime.UtcNow;
+        start_time = DateTime.UtcNow;
         duration = 0;
         defaultMusicOn = q.defaultMusicOn;
 
@@ -379,7 +378,7 @@ public class Quest
 
             if (list.Count == 0)
             {
-                game.CurrentQuest.log.Add(new Quest.LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName,
+                game.CurrentQuest.log.Add(new LogEntry("Warning: Unable to find an item for QItem: " + qItem.sectionName,
                     true));
                 return false;
             }
@@ -581,7 +580,7 @@ public class Quest
             if (list.Count == 0)
             {
                 ValkyrieDebug.Log("Error: Unable to find monster of traits specified in event: " + spawn.sectionName);
-                game.CurrentQuest.log.Add(new Quest.LogEntry(
+                game.CurrentQuest.log.Add(new LogEntry(
                     "Error: Unable to find monster of traits specified in spawn event: " + spawn.sectionName, true));
                 return false;
             }
@@ -662,7 +661,7 @@ public class Quest
         boardItems = new Dictionary<string, BoardComponent>();
         ordered_boardItems = new List<string>();
         monsters = new List<Monster>();
-        heroSelection = new Dictionary<string, List<Quest.Hero>>();
+        heroSelection = new Dictionary<string, List<Hero>>();
         puzzle = new Dictionary<string, Puzzle>();
         eventQuota = new Dictionary<string, int>();
         undo = new Stack<string>();
@@ -688,7 +687,7 @@ public class Quest
 
         // Set quest flag based on hero count
         int heroCount = 0;
-        foreach (Quest.Hero h in heroes)
+        foreach (Hero h in heroes)
         {
             h.activated = false;
             h.defeated = false;
@@ -781,7 +780,7 @@ public class Quest
             foreach (KeyValuePair<string, string> kv in saveData.Get("Shops"))
             {
                 List<string> shopList = new List<string>();
-                foreach (string s in kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries))
+                foreach (string s in kv.Value.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
                 {
                     shopList.Add(s);
                 }
@@ -800,7 +799,7 @@ public class Quest
         }
 
         // Restore event log
-        log = new List<LogEntry>();
+        log = new QuestLog();
         foreach (KeyValuePair<string, string> kv in saveData.Get("Log"))
         {
             log.Add(new LogEntry(kv.Key, kv.Value));
@@ -815,7 +814,7 @@ public class Quest
         }
 
         // Set start time to now
-        start_time = System.DateTime.UtcNow;
+        start_time = DateTime.UtcNow;
         // get previous duration, if not present, we are using an old savegame so do not use the duration
         if (!int.TryParse(saveData.Get("Quest", "duration"), out duration))
         {
@@ -946,7 +945,7 @@ public class Quest
         foreach (KeyValuePair<string, string> kv in saveSelection)
         {
             // List of selected heroes
-            string[] selectHeroes = kv.Value.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+            string[] selectHeroes = kv.Value.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             List<Hero> heroList = new List<Hero>();
 
             foreach (string s in selectHeroes)
@@ -1040,7 +1039,7 @@ public class Quest
     // This is called on user actions (such as defeated monsters, heros activated)
     public void Save()
     {
-        undo.Push(ToString());
+        undo.Push(ToString(false));
     }
 
     // Load from the undo stack
@@ -1049,9 +1048,12 @@ public class Quest
         // Nothing to undo
         if (undo.Count == 0) return;
         // Load the old state.  This will also set game.CurrentQuest
+        var currentLog = this.log;
+        currentLog.Add(new LogEntry("Notice: Undo", true));     
         Quest oldQuest = new Quest(undo.Pop());
         // Transfer the undo stack to the loaded state
         oldQuest.undo = undo;
+        oldQuest.log = currentLog;
     }
 
     // This function adjusts morale.  We don't write directly so that NoMorale can be triggered
@@ -1292,20 +1294,25 @@ public class Quest
         }
     }
 
-    // Save the quest state to a string for save games and undo
     override public string ToString()
     {
+        return ToString(true);
+    } 
+    
+    // Save the quest state to a string for save games and undo
+    public string ToString(bool includeLog)
+    {
         //Game game = Game.Get();
-        string nl = System.Environment.NewLine;
+        string nl = Environment.NewLine;
         // General quest state block
         string r = "[Quest]" + nl;
 
-        r += "time=" + System.DateTime.Now.ToString() + nl;
+        r += "time=" + DateTime.Now.ToString() + nl;
 
         // Current game duration + duration of previous game session before loading
         if (duration >= 0)
         {
-            System.TimeSpan current_duration = System.DateTime.UtcNow.Subtract(start_time);
+            TimeSpan current_duration = DateTime.UtcNow.Subtract(start_time);
             r += "duration=" + (int) (this.duration + current_duration.TotalMinutes) + nl;
         }
         else
@@ -1371,10 +1378,10 @@ public class Quest
 
         // Hero selection is a list of selections, each with space separated hero lists
         r += "[HeroSelection]" + nl;
-        foreach (KeyValuePair<string, List<Quest.Hero>> kv in heroSelection)
+        foreach (KeyValuePair<string, List<Hero>> kv in heroSelection)
         {
             r += kv.Key + "=";
-            foreach (Quest.Hero h in kv.Value)
+            foreach (Hero h in kv.Value)
             {
                 r += h.id + " ";
             }
@@ -1406,11 +1413,15 @@ public class Quest
             r += kv.Value.ToString(kv.Key);
         }
 
-        r += "[Log]" + nl;
         int i = 0;
-        foreach (LogEntry e in log)
+        r += "[Log]" + nl;
+        
+        if (includeLog)
         {
-            r += e.ToString(i++);
+            foreach (LogEntry e in log)
+            {
+                r += e.ToString(i++);
+            }
         }
 
         r += "[EventList]" + nl;
@@ -1519,7 +1530,7 @@ public class Quest
             unityObject.transform.SetParent(game.boardCanvas.transform);
 
             // Add image to object
-            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            image = unityObject.AddComponent<Image>();
             // Create sprite from texture
             Sprite tileSprite = null;
             if (game.gameType is MoMGameType)
@@ -1605,7 +1616,7 @@ public class Quest
             // Check that token exists
             if (!game.cd.ContainsKey<TokenData>(tokenName))
             {
-                game.CurrentQuest.log.Add(new Quest.LogEntry(
+                game.CurrentQuest.log.Add(new LogEntry(
                     "Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName,
                     true));
                 // Catch for older quests with different types (0.4.0 or older)
@@ -1633,7 +1644,7 @@ public class Quest
             unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
-            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            image = unityObject.AddComponent<Image>();
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
@@ -1675,9 +1686,9 @@ public class Quest
         public UIElementBorder border;
 
         GameObject unityObject_text = null;
-        UnityEngine.UI.Text uiText;
+        Text uiText;
         TextMeshProUGUI richText;
-        UnityEngine.UI.Image uiTextBG;
+        Image uiTextBG;
 
         // Construct with quest info and reference to Game
         public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
@@ -1728,7 +1739,7 @@ public class Quest
 
             if (qUI.imageName.Length == 0)
             {
-                uiTextBG = unityObject.AddComponent<UnityEngine.UI.Image>();
+                uiTextBG = unityObject.AddComponent<Image>();
                 uiTextBG.color = ColorUtil.ColorFromName(qUI.textBackgroundColor);
 
                 unityObject_text = new GameObject("Object" + qUI.sectionName + "text");
@@ -1747,7 +1758,7 @@ public class Quest
                 }
                 else
                 {
-                    uiText = unityObject_text.AddComponent<UnityEngine.UI.Text>();
+                    uiText = unityObject_text.AddComponent<Text>();
                     uiText.text = GetText();
                     uiText.alignment = ConvertStandardTextAlignment(qUI.textAlignment);
                     uiText.font = game.gameType.GetFont();
@@ -1761,7 +1772,7 @@ public class Quest
             else
             {
                 // Create the image
-                image = unityObject.AddComponent<UnityEngine.UI.Image>();
+                image = unityObject.AddComponent<Image>();
                 Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
                 image.color = new Color(1, 1, 1, 0);
                 image.sprite = tileSprite;
@@ -1958,7 +1969,7 @@ public class Quest
             unityObject.transform.SetParent(game.tokenCanvas.transform);
 
             // Create the image
-            image = unityObject.AddComponent<UnityEngine.UI.Image>();
+            image = unityObject.AddComponent<Image>();
             Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1, 0,
                 SpriteMeshType.FullRect);
             // Set door colour
@@ -1996,7 +2007,7 @@ public class Quest
     abstract public class BoardComponent
     {
         // image for display
-        public UnityEngine.UI.Image image;
+        public Image image;
 
         // Game object
         public Game game;
@@ -2067,15 +2078,15 @@ public class Quest
             if ((colorRGB.Length != 7) || (colorRGB[0] != '#'))
             {
                 game.CurrentQuest.log.Add(
-                    new Quest.LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
+                    new LogEntry("Warning: Color must be in #RRGGBB format or a known name: " + colorName, true));
             }
 
             // State with white (used for alpha)
             Color colour = Color.white;
             // Hexadecimal to float convert (0x00-0xFF -> 0.0-1.0)
-            colour[0] = (float) System.Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
-            colour[1] = (float) System.Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
-            colour[2] = (float) System.Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
+            colour[0] = (float) Convert.ToInt32(colorRGB.Substring(1, 2), 16) / 255f;
+            colour[1] = (float) Convert.ToInt32(colorRGB.Substring(3, 2), 16) / 255f;
+            colour[2] = (float) Convert.ToInt32(colorRGB.Substring(5, 2), 16) / 255f;
             SetColor(colour);
         }
     }
@@ -2115,7 +2126,7 @@ public class Quest
             int.TryParse(data["id"], out id);
             if (data.ContainsKey("class"))
             {
-                string[] classes = data["class"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+                string[] classes = data["class"].Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 className = classes[0];
                 if (classes.Length > 1)
                 {
@@ -2139,7 +2150,7 @@ public class Quest
             skills = new List<string>();
             if (data.ContainsKey("skills"))
             {
-                skills.AddRange(data["skills"].Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries));
+                skills.AddRange(data["skills"].Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             }
 
             if (data.ContainsKey("xp"))
@@ -2163,7 +2174,7 @@ public class Quest
         // Save hero to string for saves/undo
         override public string ToString()
         {
-            string nl = System.Environment.NewLine;
+            string nl = Environment.NewLine;
 
             string r = "[Hero" + id + "]" + nl;
             r += "id=" + id + nl;
@@ -2405,7 +2416,7 @@ public class Quest
         // Save monster data to string
         override public string ToString()
         {
-            string nl = System.Environment.NewLine;
+            string nl = Environment.NewLine;
 
             // Section name must be unique
             string r = "[Monster" + monsterData.sectionName + duplicate + "]" + nl;
@@ -2482,7 +2493,7 @@ public class Quest
                 r += "quest" + id + "=";
             }
 
-            r += entry.Replace("\n", "\\n") + System.Environment.NewLine;
+            r += entry.Replace("\n", "\\n") + Environment.NewLine;
             return r;
         }
 
