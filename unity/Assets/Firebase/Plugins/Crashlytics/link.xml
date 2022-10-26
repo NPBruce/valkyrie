@@ -1,0 +1,5 @@
+<linker>
+<assembly fullname="Firebase.Crashlytics" ignoreIfMissing="1">
+    <namespace fullname="Firebase.Crashlytics" preserve="all"/>
+</assembly>
+</linker>

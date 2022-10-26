@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 07bb35c2931347198d5c6ebfb8d48e14
+labels:
+- gvh
+- gvh_rename_to_disable
+- gvh_targets-editor
+- gvh_version-6.15.2
+- gvhp_exportpath-Firebase/Editor/Firebase.Crashlytics.Editor.dll.mdb
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
