@@ -267,7 +267,7 @@ namespace Assets.Scripts.UI.Screens
                 string currentLanguage = langs[i];
 
                 ui = new UIElement();
-                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (2f * position), 8, 1.8f);
+                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (1.8f * position), 8, 1.6f);
                 if (!enabled_langs.Contains(currentLanguage))
                 {
                     ui.SetText(currentLanguage, Color.red);

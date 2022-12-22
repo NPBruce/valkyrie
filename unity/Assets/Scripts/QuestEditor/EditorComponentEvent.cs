@@ -913,9 +913,12 @@ public class EditorComponentEvent : EditorComponent
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Special" });
         traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { "Special" });
 
-        select.AddItem("#boardcomponents", traits);
-        select.AddItem("#monsters", traits);
-        select.AddItem("#shop", traits);
+        if (!add)
+        {
+            select.AddItem("#boardcomponents", traits);
+            select.AddItem("#monsters", traits);
+            select.AddItem("#shop", traits);
+        }
 
         if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {
