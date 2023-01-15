@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ValkyrieTools;
+using Assets.Scripts;
 
 // Class for getting lists of quest with details
 public class QuestLoader {
@@ -73,7 +74,7 @@ public class QuestLoader {
         mkDir(dataLocation);
         mkDir(ContentData.DownloadPath());
 
-        string path = ContentData.DownloadPath() + Path.DirectorySeparatorChar + questName + ".valkyrie";
+        string path = ContentData.DownloadPath() + Path.DirectorySeparatorChar + questName + ValkyrieConstants.ScenarioDownloadContainerExtension;
         QuestLoader.ExtractSinglePackagePartial(path);
 
         // load quest

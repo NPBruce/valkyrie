@@ -9,7 +9,7 @@ using System.Linq;
 using UnityEngine;
 using ValkyrieTools;
 
-public class QuestsManager
+public class ContentPackManager
 {
     // Ini content for all remote quests
     //   key : quest name
@@ -48,7 +48,7 @@ public class QuestsManager
     public QuestListMode quest_list_mode = QuestListMode.LOCAL;
     bool force_local_quest = false;
 
-    public QuestsManager()
+    public ContentPackManager()
 	{
         remote_quests_data = new Dictionary<string, QuestData.Quest>();
 

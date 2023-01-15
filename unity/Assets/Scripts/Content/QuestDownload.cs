@@ -4,6 +4,7 @@ using System.IO;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.Content;
 using ValkyrieTools;
+using Assets.Scripts;
 
 // Class for quest selection window
 public class QuestDownload : MonoBehaviour
@@ -24,7 +25,7 @@ public class QuestDownload : MonoBehaviour
 
         QuestData.Quest q = game.questsList.GetQuestData(key);
 
-        string package = q.package_url + key + ".valkyrie";
+        string package = q.package_url + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
         StartCoroutine(Download(package, delegate { Save(key); }));
     }
 
@@ -48,7 +49,7 @@ public class QuestDownload : MonoBehaviour
 
         // Write to disk
         QuestLoader.mkDir(ContentData.DownloadPath());
-        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ".valkyrie", FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension, FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();

@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System;
 using System.Linq;
+using Assets.Scripts;
 
 // Class for managing quest events
 public class EventManager
@@ -459,7 +460,7 @@ public class EventManager
             game.CurrentQuest.questHasEnded = true;
 
             if( Path.GetFileName(game.CurrentQuest.originalPath).StartsWith("EditorScenario") 
-             || !Path.GetFileName(game.CurrentQuest.originalPath).EndsWith(".valkyrie") )
+             || !Path.GetFileName(game.CurrentQuest.originalPath).EndsWith(ValkyrieConstants.ScenarioDownloadContainerExtension) )
             {
                 // do not show score screen for scenario with a non customized name, or if the scenario is not a package (most probably a test)
                 GameStateManager.MainMenu();

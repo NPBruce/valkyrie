@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using UnityEngine;
@@ -233,7 +234,7 @@ public class QuestEditSelection
         string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
 
         // Fully extract this scenario before copy if this is a package
-        if (Path.GetExtension(Path.GetFileName(key)) == ".valkyrie")
+        if (Path.GetExtension(Path.GetFileName(key)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
         {
             // extract the full package
             QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(key));

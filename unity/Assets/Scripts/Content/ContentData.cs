@@ -5,10 +5,12 @@ using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
 using ValkyrieTools;
+using static UnityEngine.Experimental.UIElements.EventDispatcher;
 
 /// <summary>
 /// This class reads and stores all of the content for a base game and expansions.</summary>
-public class ContentData {
+public class ContentData
+{
 
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
@@ -35,19 +37,19 @@ public class ContentData {
     public bool TryGet<T>(string name, out T value) where T : IContent
     {
         var contains = ContentOfType<T>().TryGetValue(name, out IContent obj);
-        value = (T) obj;
+        value = (T)obj;
         return contains;
     }
-    
+
     public T Get<T>(string name) where T : IContent
     {
-        return (T) ContentOfType<T>()[name];
+        return (T)ContentOfType<T>()[name];
     }
     public IEnumerable<string> Keys<T>() where T : IContent
     {
         return ContentOfType<T>().Keys.AsEnumerable();
     }
-    
+
     public IEnumerable<T> Values<T>() where T : IContent
     {
         return ContentOfType<T>().Values.Cast<T>().AsEnumerable();
@@ -112,6 +114,11 @@ public class ContentData {
         return Game.AppData() + Path.DirectorySeparatorChar + "Download";
     }
 
+    public static string CustomContentPackPath()
+    {
+        return DownloadPath() + Path.DirectorySeparatorChar + "ContentPacks";
+    }
+
     public static string TempPath
     {
         get
@@ -136,7 +143,7 @@ public class ContentData {
     {
         get
         {
-            return Path.Combine(Game.AppData() , Game.Get().gameType.TypeName());
+            return Path.Combine(Game.AppData(), Game.Get().gameType.TypeName());
         }
     }
 
@@ -174,21 +181,38 @@ public class ContentData {
 
         // This is pack symbol list
         packSymbol = new Dictionary<string, StringKey>();
-    
+
         //This has the game game and all expansions, general info
         allPacks = new List<ContentPack>();
 
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
-        string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
+        string[] officialContentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
+        GetPacks(officialContentFiles, false);
+
+        // Search for custom content packs
+        string customExtensionPath = CustomContentPackPath();
+        string[] customContentFiles = Directory.GetFiles(customExtensionPath, "content_pack.ini", SearchOption.AllDirectories);
+        GetPacks(customContentFiles, false);
+    }
+
+    private void GetPacks(string[] contentFiles, bool checkGameType)
+    {
         foreach (string p in contentFiles)
         {
-            PopulatePackList(Path.GetDirectoryName(p));
+            string pathFromDirectory = Path.GetDirectoryName(p);
+
+            string gameTypeName = string.Empty;
+            if (checkGameType)
+            {
+                gameTypeName = Game.Get().gameType.TypeName();
+            }
+            PopulatePackList(pathFromDirectory, gameTypeName, checkGameType);
         }
     }
 
     // Read a content pack for list of files and meta data
-    public void PopulatePackList(string path)
+    public void PopulatePackList(string path, string gameTypeName, bool checkGameType)
     {
         // All packs must have a content_pack.ini, otherwise ignore
         if (File.Exists(path + Path.DirectorySeparatorChar + "content_pack.ini"))
@@ -197,6 +221,14 @@ public class ContentData {
 
             // Get all data from the file
             IniData d = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "content_pack.ini");
+
+            // Some packs have a type
+            pack.type = d.Get("ContentPack", "type");
+            if (checkGameType && !pack.type.StartsWith(gameTypeName))
+            {
+                return;
+            }
+            
             // Todo: better error handling
             if (d == null)
             {
@@ -226,9 +258,6 @@ public class ContentData {
 
             // Black description isn't fatal
             pack.description = d.Get("ContentPack", "description");
-
-            // Some packs have a type
-            pack.type = d.Get("ContentPack", "type");
 
             // Get cloned packs
             string cloneString = d.Get("ContentPack", "clone");
@@ -322,12 +351,12 @@ public class ContentData {
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey("val", cp.id+"_SYMBOL").Translate();
+                return new StringKey("val", cp.id + "_SYMBOL").Translate();
             }
         }
         return "";
     }
-    
+
     internal bool AddContent<T>(string name, T d) where T : IContent
     {
         bool added = false;
@@ -586,7 +615,7 @@ public class ContentData {
                 default:
                     ValkyrieDebug.Log("Warning: PVR unknown pixelformat: '" + pixelformat + "' in file: '" + file + "'");
                     break;
-            } 
+            }
             return texture;
         }
         catch (Exception ex)

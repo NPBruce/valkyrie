@@ -212,6 +212,7 @@ SELECT_CLASS,Select Class
 SELECTION,Selection
 SELECT_CONTENT,Select Content
 SELECT_EXPANSION,Select Expansion Content
+EXPANSION_CATEGORY_CUSTOM,Custom
 SELECT_IMAGE,Select Image
 SELECT_ITEM,Select Item
 SELECT_PACK,Select Pack

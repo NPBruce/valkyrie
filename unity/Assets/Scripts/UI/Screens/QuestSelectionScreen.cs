@@ -895,7 +895,7 @@ namespace Assets.Scripts.UI.Screens
                 }
 
                 // Statistics data preparation for this quest
-                string filename = key.ToLower() + ".valkyrie";
+                string filename = key.ToLower() + ValkyrieConstants.ScenarioDownloadContainerExtension;
                 bool has_stats = (game.stats != null && game.stats.scenarios_stats != null && game.stats.scenarios_stats.ContainsKey(filename));
                 int stats_play_count = 0;
                 int stats_win_ratio = 0;

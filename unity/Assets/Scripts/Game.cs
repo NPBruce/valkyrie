@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using Assets.Scripts.UI.Screens;
@@ -284,7 +285,7 @@ public class Game : MonoBehaviour
     // This is called when a quest is selected
     internal void StartQuest(QuestData.Quest q)
     {
-        if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+        if (Path.GetExtension(Path.GetFileName(q.path)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
         {
             // extract the full package
             QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));

@@ -412,7 +412,8 @@ public class EditorComponentQuest : EditorComponent
         }
 
         UIWindowSelectionList select = new UIWindowSelectionList(SelectQuestAddPack, SELECT_PACK);
-        foreach (ContentData.ContentPack pack in Game.Get().cd.allPacks)
+        var allPacks = Game.Get().cd.allPacks;
+        foreach (ContentData.ContentPack pack in allPacks)
         {
             if (pack.id.Length > 0)
             {
