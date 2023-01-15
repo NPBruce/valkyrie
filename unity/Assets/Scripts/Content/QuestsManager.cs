@@ -135,9 +135,9 @@ public class QuestsManager
 
     private void CheckLocalAvailability()
     {
-        // load information on local quests
-        IniData localManifest = IniRead.ReadFromIni(ContentData.DownloadPath() + "/manifest.ini");
-
+        string saveLocation = ContentData.DownloadPath();
+        ManifestManager manager = new ManifestManager(saveLocation);
+        IniData localManifest = manager.GetLocalManifestIniData();
         if (localManifest == null)
             return;
 
@@ -154,16 +154,11 @@ public class QuestsManager
     
     public void SetQuestAvailability(string key, bool isAvailable)
     {
-        // update list of local quest
-        IniData localManifest = IniRead.ReadFromString("");
         string saveLocation = ContentData.DownloadPath();
+        ManifestManager manager = new ManifestManager(saveLocation);
+        IniData localManifest = manager.GetLocalManifestIniData();
 
-        if (File.Exists(saveLocation + "/manifest.ini"))
-        {
-            localManifest = IniRead.ReadFromIni(saveLocation + "/manifest.ini");
-        }
-
-        if(isAvailable)
+        if (isAvailable)
         {
             IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
             localManifest.Remove(key);
@@ -177,11 +172,11 @@ public class QuestsManager
             UnloadLocalQuests();
         }
 
-        if (File.Exists(saveLocation + "/manifest.ini"))
+        if (File.Exists(saveLocation + ValkyrieConstants.ScenarioManifestPath))
         {
-            File.Delete(saveLocation + "/manifest.ini");
+            File.Delete(saveLocation + ValkyrieConstants.ScenarioManifestPath);
         }
-        File.WriteAllText(saveLocation + "/manifest.ini", localManifest.ToString());
+        File.WriteAllText(saveLocation + ValkyrieConstants.ScenarioManifestPath, localManifest.ToString());
 
         // update status quest
         remote_quests_data[key].downloaded = isAvailable;
@@ -374,7 +369,7 @@ public class QuestsManager
         if (local_quests_data != null)
         {
             // Clean up temporary files
-            QuestLoader.CleanTemp();
+            ExtractManager.CleanTemp();
             local_quests_data = null;
         }
     }

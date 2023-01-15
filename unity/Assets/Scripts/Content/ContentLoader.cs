@@ -38,7 +38,7 @@ public class ContentLoader
     // Duplicate content will be replaced by the higher priority value
     public void LoadContent(string name)
     {
-        foreach (ContentData.ContentPack cp in cd.allPacks)
+        foreach (ContentPack cp in cd.allPacks)
         {
             if (cp.name.Equals(name))
             {
@@ -51,7 +51,7 @@ public class ContentLoader
     // Duplicate content will be replaced by the higher priority value
     public void LoadContentID(string id)
     {
-        foreach (ContentData.ContentPack cp in cd.allPacks)
+        foreach (ContentPack cp in cd.allPacks)
         {
             if (cp.id.Equals(id))
             {
@@ -62,7 +62,7 @@ public class ContentLoader
 
     // This loads content from a pack by object
     // Duplicate content will be replaced by the higher priority value
-    void LoadContent(ContentData.ContentPack cp)
+    void LoadContent(ContentPack cp)
     {
         // Don't reload content
         if (cd.loadedPacks.Contains(cp.id)) return;

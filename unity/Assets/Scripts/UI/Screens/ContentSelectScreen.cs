@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI.Screens
         private const int LARGE_FONT_LIMIT = 32;
 
         private StringKey SELECT_EXPANSION = new StringKey("val", "SELECT_EXPANSION");
-        private static readonly StringKey SELECT_EXPANSION_CUSTOM = new StringKey("val", "EXPANSION_CATEGORY_CUSTOM");
+        private static readonly StringKey SELECT_EXPANSION_CUSTOM = new StringKey("val", "CONTENTPACK_CATEGORY_CUSTOM");
 
         public Game game;
 
@@ -68,10 +68,10 @@ namespace Assets.Scripts.UI.Screens
 
                 string typeName = type.name != null ? type.name.ToString() : null;
 
-                CreatePackType(ref offset, ref left, typeId, typeName, type.image);
+                CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image);
             }
 
-            CreatePackType(ref offset, ref left, typeIdCustom, string.Empty, string.Empty);
+            CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, string.Empty);
 
             DrawBackButtonTypeListPage();
         }
@@ -102,7 +102,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(uiBack);
         }
 
-        private void CreatePackType(ref float offset, ref bool left, string typeId, string typeName, string image)//, PackTypeData type)
+        private void CreatePackTypeCategory(ref float offset, ref bool left, string typeId, string typeName, string image)//, PackTypeData type)
         {
             UIElement ui;
             // Create a sprite with the category image
@@ -198,7 +198,7 @@ namespace Assets.Scripts.UI.Screens
             var packLanguages = game.config.GetPackLanguages(game.gameType.TypeName());
             // Note this is currently unordered
             var allPacks = game.cd.allPacks;
-            foreach (ContentData.ContentPack cp in allPacks)
+            foreach (ContentPack cp in allPacks)
             {
                 // If the id is "" this is base content and can be ignored
                 if (cp.id.Length > 0 && cp.type.Equals(type))

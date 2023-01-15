@@ -4,6 +4,7 @@ using System.IO;
 using Ionic.Zip;
 using ValkyrieTools;
 using System.Threading;
+using Assets.Scripts;
 
 public class ZipManager : MonoBehaviour
 {
@@ -111,7 +112,7 @@ public class ZipManager : MonoBehaviour
 
                 if(mode == Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC)
                 {
-                    Dictionary<string, string> iniData = IniRead.ReadFromIni(target_path + "/quest.ini", "Quest");
+                    Dictionary<string, string> iniData = IniRead.ReadFromIni(target_path + ValkyrieConstants.QuestIniFilePath, "Quest");
                     if (iniData.ContainsKey("image"))
                         zip.ExtractSelectedEntries("name = '" + iniData["image"] +"'", null, target_path, ExtractExistingFileAction.OverwriteSilently);
                 }

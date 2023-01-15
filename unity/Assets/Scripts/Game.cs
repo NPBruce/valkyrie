@@ -288,7 +288,7 @@ public class Game : MonoBehaviour
         if (Path.GetExtension(Path.GetFileName(q.path)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
         {
             // extract the full package
-            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));
+            ExtractManager.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));
         }
 
         // Fetch all of the quest data and initialise the quest
@@ -387,7 +387,7 @@ public class Game : MonoBehaviour
         // This exists for the editor, because quitting doesn't actually work.
         Destroyer.Destroy();
         // Clean up temporary files
-        QuestLoader.CleanTemp();
+        ExtractManager.CleanTemp();
     }
 
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor

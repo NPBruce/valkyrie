@@ -48,7 +48,7 @@ public class QuestDownload : MonoBehaviour
             return;
 
         // Write to disk
-        QuestLoader.mkDir(ContentData.DownloadPath());
+        ExtractManager.mkDir(ContentData.DownloadPath());
         using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension, FileMode.Create)))
         {
             writer.Write(download.bytes);

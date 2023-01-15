@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using UnityEngine;
 using ValkyrieTools;
@@ -131,7 +132,7 @@ public class ContentData
         }
     }
 
-    public static string TempValyriePath
+    public static string TempValkyriePath
     {
         get
         {
@@ -151,7 +152,7 @@ public class ContentData
     {
         get
         {
-            return Path.Combine(TempValyriePath, "Load");
+            return Path.Combine(TempValkyriePath, "Load");
         }
     }
 
@@ -159,7 +160,7 @@ public class ContentData
     {
         get
         {
-            return Path.Combine(TempValyriePath, "Preload");
+            return Path.Combine(TempValkyriePath, "Preload");
         }
     }
 
@@ -187,33 +188,67 @@ public class ContentData
 
 
         // Search each directory in the path (one should be base game, others expansion.  Names don't matter
+        GetBuildInContentPacks(path);
+        GetCustomContentPacks();
+    }
+    private void GetBuildInContentPacks(string path)
+    {
         string[] officialContentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
-        GetPacks(officialContentFiles, false);
-
-        // Search for custom content packs
-        string customExtensionPath = CustomContentPackPath();
-        string[] customContentFiles = Directory.GetFiles(customExtensionPath, "content_pack.ini", SearchOption.AllDirectories);
-        GetPacks(customContentFiles, false);
+        GetPacks(officialContentFiles, false, false);
     }
 
-    private void GetPacks(string[] contentFiles, bool checkGameType)
+    private void GetCustomContentPacks()
+    {
+        string customContentPackPath = CustomContentPackPath();
+        string[] files = GetDownloadedFilesFromManifest(customContentPackPath);
+        GetPacks(files, false, true);
+    }
+
+    private static string[] GetDownloadedFilesFromManifest(string customContentPackPath)
+    {
+        //Parse manifest
+        ManifestManager manager = new ManifestManager(customContentPackPath);
+        var manifestData = manager.GetLocalManifestIniData();
+
+        // Parse ini
+        Dictionary<string, QuestData.Quest> remote_quests_data = null;
+
+        //Get all keys from manifest and combine them with pack file extension
+        var downloadedPackFiles = manifestData.data.Select(s => Path.Combine(customContentPackPath,s.Key + ValkyrieConstants.ContentPackDownloadContainerExtension)).ToArray();
+        return downloadedPackFiles;
+    }
+
+    private void GetPacks(string[] contentFiles, bool checkGameType, bool packIsContainer)
     {
         foreach (string p in contentFiles)
         {
-            string pathFromDirectory = Path.GetDirectoryName(p);
-
             string gameTypeName = string.Empty;
             if (checkGameType)
             {
                 gameTypeName = Game.Get().gameType.TypeName();
             }
-            PopulatePackList(pathFromDirectory, gameTypeName, checkGameType);
+
+            string contentPackPath = p;
+            if (!packIsContainer)
+            {
+                contentPackPath = Path.GetDirectoryName(p);
+            }
+            
+            PopulatePackList(contentPackPath, gameTypeName, checkGameType, packIsContainer);
         }
     }
 
     // Read a content pack for list of files and meta data
-    public void PopulatePackList(string path, string gameTypeName, bool checkGameType)
+    public void PopulatePackList(string path, string gameTypeName, bool checkGameType, bool packIsContainer)
     {
+        if (packIsContainer)
+        {
+            //TODO Generalize Extract logic. Return file path for new temp path location in function.
+            string extractedPath = ExtractManager.ExtractSinglePackageFull(path);
+            path = extractedPath;
+
+        }
+
         // All packs must have a content_pack.ini, otherwise ignore
         if (File.Exists(path + Path.DirectorySeparatorChar + "content_pack.ini"))
         {
@@ -228,7 +263,7 @@ public class ContentData
             {
                 return;
             }
-            
+
             // Todo: better error handling
             if (d == null)
             {
@@ -375,19 +410,6 @@ public class ContentData
         }
 
         return false;
-    }
-
-    // Holding class for contentpack data
-    public class ContentPack
-    {
-        public string name;
-        public string image;
-        public string description;
-        public string id;
-        public string type;
-        public List<string> iniFiles;
-        public Dictionary<string, List<string>> localizationFiles;
-        public List<string> clone;
     }
 
     /// <summary>

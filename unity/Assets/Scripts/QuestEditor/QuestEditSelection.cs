@@ -226,53 +226,59 @@ public class QuestEditSelection
         }
 
         // Find a new unique directory name
-        int i = 1;
-        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i))
+        int uniqueDirectoryValue = 1;
+        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName().Translate() + uniqueDirectoryValue))
         {
-            i++;
+            uniqueDirectoryValue++;
         }
-        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
+        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + uniqueDirectoryValue;
 
         // Fully extract this scenario before copy if this is a package
         if (Path.GetExtension(Path.GetFileName(key)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
         {
             // extract the full package
-            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(key));
+            ExtractManager.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(key));
         }
 
         // Copy files
+        CopyFiles(key, targetLocation, uniqueDirectoryValue);
+
+        // Back to selection
+        new QuestEditSelection();
+    }
+
+    private void CopyFiles(string key, string targetLocation, int uniqueDirectoryValue)
+    {
         try
         {
             DirectoryCopy(key, targetLocation, true);
             // read new quest file
-            string[] questData = File.ReadAllLines(targetLocation + "/quest.ini");
+            string[] questData = File.ReadAllLines(targetLocation + ValkyrieConstants.QuestIniFilePath);
 
             // Search for quest section
             bool questFound = false;
-            for (i = 0; i < questData.Length; i++)
+            for (uniqueDirectoryValue = 0; uniqueDirectoryValue < questData.Length; uniqueDirectoryValue++)
             {
-                if (questData[i].Equals("[Quest]"))
+                if (questData[uniqueDirectoryValue].Equals("[Quest]"))
                 {
                     // Inside quest section
                     questFound = true;
                 }
-                if (questFound && questData[i].IndexOf("name=") == 0)
+                if (questFound && questData[uniqueDirectoryValue].IndexOf("name=") == 0)
                 {
                     // Add copy to name
                     questFound = false;
-                    questData[i] = questData[i] + " (Copy)";
+                    questData[uniqueDirectoryValue] = questData[uniqueDirectoryValue] + " (Copy)";
                 }
             }
             // Write back to ini file
-            File.WriteAllLines(targetLocation + "/quest.ini", questData);
+            File.WriteAllLines(targetLocation + ValkyrieConstants.QuestIniFilePath, questData);
         }
         catch (Exception)
         {
             ValkyrieDebug.Log("Error: Failed to copy quest.");
             Application.Quit();
         }
-        // Back to selection
-        new QuestEditSelection();
     }
 
     // Copy a directory
@@ -348,7 +354,7 @@ public class QuestEditSelection
             questData.Add("Localization."+ game.currentLang +".txt");
 
             // Write quest file
-            File.WriteAllLines(targetLocation + "/quest.ini", questData.ToArray());
+            File.WriteAllLines(targetLocation + ValkyrieConstants.QuestIniFilePath, questData.ToArray());
 
             // Create new dictionary
             DictionaryI18n newScenarioDict = new DictionaryI18n(new string[1] { ".," + game.currentLang }, game.currentLang);
