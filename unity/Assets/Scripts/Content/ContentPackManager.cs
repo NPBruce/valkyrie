@@ -54,7 +54,7 @@ public class ContentPackManager
 
         Game game = Game.Get();
 
-        // -- Download remote quests list INI file --
+        // -- Download remote content pack list INI file --
         if (game.gameType.TypeName() == "MoM")
         {
             HTTPManager.Get("https://drive.google.com/uc?id=19y6XlVOAfMJGQ3JMDr6uhvZyt2meVNHW&export=download", ContentPackDownload_callback);

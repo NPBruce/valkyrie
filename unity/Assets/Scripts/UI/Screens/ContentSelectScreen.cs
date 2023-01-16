@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -14,6 +15,7 @@ namespace Assets.Scripts.UI.Screens
 
         private StringKey SELECT_EXPANSION = new StringKey("val", "SELECT_EXPANSION");
         private static readonly StringKey SELECT_EXPANSION_CUSTOM = new StringKey("val", "CONTENTPACK_CATEGORY_CUSTOM");
+        private static readonly StringKey CONTENTPACK_DOWNLOAD = new StringKey("val", "CONTENTPACK_DOWNLOAD");
 
         public Game game;
 
@@ -74,6 +76,8 @@ namespace Assets.Scripts.UI.Screens
             CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, string.Empty);
 
             DrawBackButtonTypeListPage();
+
+            DrawDownloadButtonTypeListPage();
         }
 
         private void DrawTypeListHeader()
@@ -100,6 +104,20 @@ namespace Assets.Scripts.UI.Screens
             uiBack.SetFontSize(UIScaler.GetMediumFont());
             uiBack.SetButton(Quit);
             new UIElementBorder(uiBack);
+        }
+
+        private void DrawDownloadButtonTypeListPage()
+        {
+            float text_width = 0f;
+            UIElement uiDownloadCustomContentPack = null;
+            uiDownloadCustomContentPack = new UIElement();
+            uiDownloadCustomContentPack.SetText(CONTENTPACK_DOWNLOAD);
+            uiDownloadCustomContentPack.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-3), 8, 2);
+            uiDownloadCustomContentPack.SetFont(game.gameType.GetHeaderFont());
+            uiDownloadCustomContentPack.SetFontSize(UIScaler.GetSmallFont());
+            uiDownloadCustomContentPack.SetTextAlignment(TextAnchor.MiddleCenter);
+            uiDownloadCustomContentPack.SetButton(ContentSelectDownload);
+            new UIElementBorder(uiDownloadCustomContentPack);
         }
 
         private void CreatePackTypeCategory(ref float offset, ref bool left, string typeId, string typeName, string image)//, PackTypeData type)
@@ -363,6 +381,13 @@ namespace Assets.Scripts.UI.Screens
         public static void Quit()
         {
             GameStateManager.MainMenu();
+        }
+
+        public static void ContentSelectDownload()
+        {
+            ValkyrieDebug.Log("INFO: Accessing content select download screen");
+
+            new ContentSelectDownloadScreen();
         }
 
         public void Update()

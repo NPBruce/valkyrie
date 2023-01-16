@@ -243,10 +243,8 @@ public class ContentData
     {
         if (packIsContainer)
         {
-            //TODO Generalize Extract logic. Return file path for new temp path location in function.
             string extractedPath = ExtractManager.ExtractSinglePackageFull(path);
             path = extractedPath;
-
         }
 
         // All packs must have a content_pack.ini, otherwise ignore
