@@ -1,7 +1,11 @@
 fileFormatVersion: 2
-guid: 7af5114c2f9409242af65b800e887f9c
+guid: c338787e9056407f8331208ec039a8a3
+labels:
+- gvh
+- gvh_version-6.15.2
+- gvhp_exportpath-Plugins/Android/Firebase/project.properties
+timeCreated: 1480838400
 DefaultImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:

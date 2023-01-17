@@ -40,37 +40,43 @@ public class MonsterDialogMoM : MonsterDialog
             new UIElementBorder(ui);
         }
         else
-        { // In investigator phase we do attacks and evades
+        {
+            // In investigator phase we do attacks and evades
             DrawMonsterHealth(monster, delegate { CreateWindow(); });
+
+            var isAlive = monster.damage < monster.GetHealth();
 
             UIElement ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-8f), 2, 16, 2);
-            ui.SetText(new StringKey("val","ACTION_X",ATTACK));
+            ui.SetText(new StringKey("val", "ACTION_X", ATTACK), isAlive ? Color.white : Color.gray);
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Attack);
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, isAlive ? Color.white : Color.gray);
+            if (isAlive)
+            {
+                ui.SetButton(Attack);
+            }
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-8f), 4.5f, 16, 2);
-            ui.SetText(EVADE);
+            ui.SetText(EVADE, isAlive ? Color.white : Color.gray);
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Evade);
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, isAlive ? Color.white : Color.gray);
+            if (isAlive)
+            {
+                ui.SetButton(Evade);
+            }
+
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-5f), 7, 10, 2);
-            if (monster.damage == monster.GetHealth())
-            {
-                ui.SetText(CommonStringKeys.CANCEL, Color.gray);
-                new UIElementBorder(ui, Color.gray);
-            }
-            else
-            {
-                ui.SetText(CommonStringKeys.CANCEL);
-                ui.SetButton(OnCancel);
-                new UIElementBorder(ui);
-            }
+            ui.SetText(CommonStringKeys.CANCEL, isAlive ? Color.white : Color.gray);
             ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui, isAlive ? Color.white : Color.gray);
+            if (isAlive)
+            {
+                ui.SetButton(OnCancel);
+            }
+
         }
     }
 
@@ -157,7 +163,7 @@ public class MonsterDialogMoM : MonsterDialog
             ui.SetText(CommonStringKeys.PLUS, Color.grey);
             new UIElementBorder(ui, Color.grey);
 
-            UIElement defui = new UIElement();
+            UIElement defui = new UIElement(Game.DIALOG_PART);
             defui.SetLocation(2, 11.5f, 6, 2);
             defui.SetText(DEFEATED);
             defui.SetFontSize(UIScaler.GetMediumFont());
@@ -202,6 +208,7 @@ public class MonsterDialogMoM : MonsterDialog
 
     public static void MonsterDamageDec(Quest.Monster monster, UnityEngine.Events.UnityAction<Quest.Monster, bool> call)
     {
+        Destroyer.DialogParts();
         monster.damage -= 1;
         if (monster.damage < 0)
         {

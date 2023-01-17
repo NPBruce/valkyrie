@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 // This is a helper class because we often need to clean things up.
 public class Destroyer
@@ -76,6 +78,14 @@ public class Destroyer
             Object.Destroy(go);
     }
 
+    // Close logs
+    public static void Tag(String tag)
+    {
+        // Clean up everything marked as 'dialog'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(tag))
+            Object.Destroy(go);
+    }
+
     // All dialogs that are to be acknoledged/cancled are marked as 'dialog' and are often destroyed
     public static void Dialog()
     {
@@ -83,8 +93,20 @@ public class Destroyer
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
             Object.Destroy(go);
 
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG_PART))
+            Object.Destroy(go);
+
         CameraController.panDisable = false;
         Game.Get().logWindow = null;
+        Resources.UnloadUnusedAssets();
+    }
+
+    // Smaller part of dialogs that should be refreshed on their own 
+    public static void DialogParts()
+    {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG_PART))
+            Object.Destroy(go);
+
         Resources.UnloadUnusedAssets();
     }
 

@@ -8,7 +8,7 @@ public class DebugManager : MonoBehaviour
     {
         Firebase.FirebaseApp app = Firebase.FirebaseApp.Create();
 
-        System.Threading.Tasks.Task t = Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
