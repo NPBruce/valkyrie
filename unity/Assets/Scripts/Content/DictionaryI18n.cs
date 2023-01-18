@@ -41,7 +41,7 @@ namespace Assets.Scripts.Content
 
         private Dictionary<string, string> keyToGroup = new Dictionary<string, string>();
         private Dictionary<string, string> groupToLanguage = new Dictionary<string, string>();
-        private HashSet<string> requiredLanguages = new HashSet<string> { "English" };
+        private HashSet<string> requiredLanguages = new HashSet<string> { ValkyrieConstants.DefaultLanguage };
 
         // Each language has it's own dictionary
         private Dictionary<string, Dictionary<string, string>> data;
@@ -51,8 +51,8 @@ namespace Assets.Scripts.Content
 
         // must be loaded to Dictionaries and not raw for edit
         protected bool loadedForEdit = false;
-        private string _defaultLanguage = "English";
-        private string _currentLanguage = "English";
+        private string _defaultLanguage = ValkyrieConstants.DefaultLanguage;
+        private string _currentLanguage = ValkyrieConstants.DefaultLanguage;
         private static readonly string DOUBLE_QUOTE = "\"";
         private static readonly string TRIPLE_ENCLOSING = "|||";
 

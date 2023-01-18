@@ -137,7 +137,7 @@ public class QuestsManager
     {
         string saveLocation = ContentData.DownloadPath();
         ManifestManager manager = new ManifestManager(saveLocation);
-        IniData localManifest = manager.GetLocalManifestIniData();
+        IniData localManifest = manager.GetLocalQuestManifestIniData();
         if (localManifest == null)
             return;
 
@@ -156,7 +156,7 @@ public class QuestsManager
     {
         string saveLocation = ContentData.DownloadPath();
         ManifestManager manager = new ManifestManager(saveLocation);
-        IniData localManifest = manager.GetLocalManifestIniData();
+        IniData localManifest = manager.GetLocalQuestManifestIniData();
 
         if (isAvailable)
         {

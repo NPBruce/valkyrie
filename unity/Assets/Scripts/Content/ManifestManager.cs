@@ -13,7 +13,7 @@ namespace Assets.Scripts.Content
             Path = path;
         }
 
-        public IniData GetLocalManifestIniData()
+        public IniData GetLocalQuestManifestIniData()
         {
             if (string.IsNullOrWhiteSpace(Path))
             {
@@ -24,6 +24,22 @@ namespace Assets.Scripts.Content
             if(File.Exists(Path + ValkyrieConstants.ScenarioManifestPath))
             {
                 localManifest = IniRead.ReadFromIni(Path + ValkyrieConstants.ScenarioManifestPath);
+            }
+
+            return localManifest;
+        }
+
+        public IniData GetLocalContentPackManifestIniData()
+        {
+            if (string.IsNullOrWhiteSpace(Path))
+            {
+                throw new ArgumentNullException(nameof(Path));
+            }
+
+            IniData localManifest = IniRead.ReadFromString("");
+            if (File.Exists(Path + ValkyrieConstants.ContentPackManifestPath))
+            {
+                localManifest = IniRead.ReadFromIni(Path + ValkyrieConstants.ContentPackManifestPath);
             }
 
             return localManifest;

@@ -349,6 +349,7 @@ namespace Assets.Scripts.UI.Screens
 
                 // Download quests list
                 game.questsList = new QuestsManager();
+                game.remoteContentPackManager = new RemoteContentPackManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
 

@@ -90,6 +90,8 @@ public class Game : MonoBehaviour
     public StatsManager stats;
     // Quests manager
     public QuestsManager questsList;
+    // Content Pack manager
+    public RemoteContentPackManager remoteContentPackManager;
 
     // List of things that want to know if the mouse is clicked
     protected List<IUpdateListener> updateList;
@@ -192,7 +194,7 @@ public class Game : MonoBehaviour
         if (config.data.Get("UserConfig") == null)
         {
             // English is the default current language
-            config.data.Add("UserConfig", "currentLang", "English");
+            config.data.Add("UserConfig", "currentLang", ValkyrieConstants.DefaultLanguage);
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");

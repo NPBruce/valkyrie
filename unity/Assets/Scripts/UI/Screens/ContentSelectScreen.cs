@@ -55,7 +55,7 @@ namespace Assets.Scripts.UI.Screens
             float offset = 4.5f;
             bool left = true;
 
-            string typeIdCustom = GetCustomCategory();
+            string typeIdCustom = RemoteContentPackManager.GetCustomCategory();
 
             // Note this is currently unordered
             foreach (PackTypeData type in game.cd.Values<PackTypeData>())
@@ -87,11 +87,6 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(SELECT_EXPANSION);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-        }
-
-        private string GetCustomCategory()
-        {
-            return Game.Get().gameType.TypeName()  + ValkyrieConstants.customCategoryName;
         }
 
         private static void DrawBackButtonTypeListPage()

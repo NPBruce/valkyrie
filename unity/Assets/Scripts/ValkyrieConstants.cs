@@ -15,12 +15,14 @@ namespace Assets.Scripts
 
         public const string typeMom = "MoM";
         public const string typeDescent = "D2E";
+        public const string DefaultLanguage = "English";
         public const string customCategoryLabel = "Custom";
         public const string customCategoryName = "Custom";
         public const string ScenarioDownloadContainerExtension = ".valkyrie";
         public const string ContentPackDownloadContainerExtensionAllFileReference = "*" + ScenarioDownloadContainerExtension;
         public const string ContentPackDownloadContainerExtension = ".valkyriePack";
         public const string ScenarioManifestPath = "/manifest.ini";
+        public const string ContentPackManifestPath = "/manifest.ini";
         public const string QuestIniFilePath = "/quest.ini";
     }
 }

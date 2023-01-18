@@ -208,7 +208,7 @@ public class ContentData
     {
         //Parse manifest
         ManifestManager manager = new ManifestManager(customContentPackPath);
-        var manifestData = manager.GetLocalManifestIniData();
+        var manifestData = manager.GetLocalQuestManifestIniData();
 
         // Parse ini
         Dictionary<string, QuestData.Quest> remote_quests_data = null;

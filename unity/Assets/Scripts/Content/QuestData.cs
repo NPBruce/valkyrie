@@ -8,6 +8,7 @@ using Assets.Scripts.Content;
 using UnityEngine.UI;
 using ValkyrieTools;
 using TextAlignment = Assets.Scripts.Content.TextAlignment;
+using Assets.Scripts;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -1899,7 +1900,7 @@ public class QuestData
         // Content packs required for quest
         public string[] packs;
         // Default language for the text
-        public string defaultLanguage = "English";
+        public string defaultLanguage = ValkyrieConstants.DefaultLanguage;
         //Default music will be played when starting the quest
         public bool defaultMusicOn = false;
         // raw localization dictionary

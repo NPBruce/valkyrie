@@ -214,7 +214,7 @@ SELECT_CONTENT,Select Content
 SELECT_EXPANSION,Select Expansion Content
 CONTENTPACK_CATEGORY_CUSTOM,Custom Content Packs
 CONTENTPACK_DOWNLOAD,Download Custom Content
-CONTENTPACK_DOWNLOAD_HEADER,Custom content packs
+CONTENTPACK_DOWNLOAD_HEADER,Custom content packs download
 SELECT_IMAGE,Select Image
 SELECT_ITEM,Select Item
 SELECT_PACK,Select Pack
