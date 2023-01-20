@@ -33,14 +33,12 @@ namespace Assets.Scripts.UI.Screens
         private Texture2D button_update = null;
         private Texture2D button_play = null;
         private Texture2D button_no_entry = null;
-        private Texture2D button_hole = null;
         // Display coroutine
         Coroutine co_display = null;
 
         // Create page
         public ContentSelectDownloadScreen()
         {
-            button_hole = Resources.Load("sprites/scenario_list/button_hole") as Texture2D;
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
@@ -71,31 +69,21 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(scrollArea, Color.grey);
             }
 
-            foreach(var contentPack in game.remoteContentPackManager.remote_RemoteContentPack_data)
+            var localContentPackList = game.cd.Values<PackTypeData>();
+            foreach (var contentPack in game.remoteContentPackManager.remote_RemoteContentPack_data)
             {
-                ui = RenderContentPackNameAndDescription(offset, contentPack);
 
-                ui = RenderActionButton(offset, is_expansion_missing, contentPack);
+                ui = RenderContentPackNameAndDescription(offset, contentPack);
+                ui = RenderActionButton(offset, is_expansion_missing, contentPack, localContentPackList);
 
             }
 
             //yield return null;
         }
 
-        private UIElement RenderActionButton(float offset, bool is_expansion_missing, KeyValuePair<string, RemoteContentPack> contentPack)
+        private UIElement RenderActionButton(float offset, bool is_expansion_missing, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
         {
-            // Action Button
-            // - First burnt hole
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
-            ui.SetBGColor(Color.clear);
-            ui.SetLocation(UIScaler.GetRight(-10.5f), offset + 0.5f, 6, 4f);
-            ui.SetImage(button_hole);
-            //if (!is_expansion_missing)
-            //{
-            //    ui.SetButton(delegate { Selection(key); });
-            //}
-            // - then action button
-            ui = new UIElement(scrollArea.GetScrollTransform());
+            var ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
             ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
             if (is_expansion_missing)
@@ -104,61 +92,47 @@ namespace Assets.Scripts.UI.Screens
             }
 
             //TODO
-            //else if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
-            //{
-            //    ui.SetImage(button_play);
-            //    ui.SetButton(delegate { Selection(key); });
-            //}
-            //else if (contentPack.downloaded)
-            //{
-            //    if (contentPack.update_available)
-            //        ui.SetImage(button_update);
-            //    else
-            //        ui.SetImage(button_play);
-            //    ui.SetButton(delegate { Selection(key); });
-            //}
-            //else
-            //{
-            //    ui.SetImage(button_download);
-            //    ui.SetButton(delegate { Selection(key); });
-            //}
-            ui.SetImage(button_update);
+            if (contentPack.Value.downloaded)
+            {
+                if (contentPack.Value.update_available)
+                    ui.SetImage(button_update);
+                else
+                    ui.SetImage(button_play);
+                ui.SetButton(delegate { Download(contentPack.Value.identifier); });
+            }
+            else
+            {
+                ui.SetImage(button_download);
+                ui.SetButton(delegate { Download(contentPack.Value.identifier); });
+            }
 
             return ui;
         }
 
-        public void Selection(string key)
+        public void Download(string key)
         {
-            //ValkyrieDebug.Log("INFO: Select quest " + key);
+            ValkyrieDebug.Log("INFO: Select contentpack " + key);
 
-            //QuestData.Quest q = game.questsList.GetQuestData(key);
+            Destroyer.Dialog();
+            CleanContentPackList();
 
-            //Destroyer.Dialog();
-            //CleanQuestList();
 
-            //if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
-            //{
-            //    // Play
-            //    ValkyrieDebug.Log("INFO: ... and launch offline quest");
-            //    new QuestDetailsScreen(q);
-            //}
-            //else if (q.downloaded && !q.update_available)
-            //{
-            //    // Play
-            //    ValkyrieDebug.Log("INFO: ... and launch online quest");
-            //    new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
-            //}
-            //else
-            //{
-            //    // Download / Update
-            //    ValkyrieDebug.Log("INFO: ... and download quest");
-            //    GameObject download = new GameObject("downloadPage");
-            //    download.tag = Game.QUESTUI;
-            //    QuestDownload qd = download.AddComponent<QuestDownload>();
-            //    qd.Download(key);
-            //    // We need to refresh local quest list after download
-            //    game.questsList.UnloadLocalQuests();
-            //}
+            // Download / Update
+            ValkyrieDebug.Log("INFO: ... and download quest");
+            GameObject download = new GameObject("downloadPage");
+            download.tag = Game.QUESTUI;
+            QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
+            qd.Download(key, true);
+            // We need to refresh local content pack list after download
+            //TODO
+            //game.UnloadLocalQuests();
+
+        }
+
+        private void CleanContentPackList()
+        {
+            //TODO
+            //throw new NotImplementedException();
         }
 
         private UIElement RenderContentPackNameAndDescription(float offset, KeyValuePair<string, RemoteContentPack> contentPack)

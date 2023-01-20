@@ -1331,8 +1331,8 @@ namespace Assets.Scripts.UI.Screens
                 ValkyrieDebug.Log("INFO: ... and download quest");
                 GameObject download = new GameObject("downloadPage");
                 download.tag = Game.QUESTUI;
-                QuestDownload qd = download.AddComponent<QuestDownload>();
-                qd.Download(key);
+                QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
+                qd.Download(key, false);
                 // We need to refresh local quest list after download
                 game.questsList.UnloadLocalQuests();
             }

@@ -5,13 +5,15 @@ using Assets.Scripts.UI.Screens;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 using Assets.Scripts;
+using System.Linq;
 
 // Class for quest selection window
-public class QuestDownload : MonoBehaviour
+public class QuestAndContentPackDownload : MonoBehaviour
 {
     public WWW download;
     public Game game;
     string key = "";
+    bool isContentPack;
 
     void Start()
     {
@@ -23,33 +25,59 @@ public class QuestDownload : MonoBehaviour
             return;
         }
 
-        QuestData.Quest q = game.questsList.GetQuestData(key);
+        if(isContentPack)
+        {
+            var q = game.remoteContentPackManager.remote_RemoteContentPack_data.Values.FirstOrDefault(p => p.identifier.Equals(key));
+            if(q == null)
+            {
+                Debug.Log($"Could not find package {key} locally.");
+                return;
+            }
 
-        string package = q.package_url + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
-        StartCoroutine(Download(package, delegate { Save(key); }));
+            string package = q.package_url + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
+            StartCoroutine(Download(package, delegate { Save(key, isContentPack); }));
+        }
+        else
+        {
+            QuestData.Quest q = game.questsList.GetQuestData(key);
+
+            string package = q.package_url + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
+            StartCoroutine(Download(package, delegate { Save(key, isContentPack); }));
+        }        
     }
 
     /// <summary>
     /// Set download key so it's available when start is called (after following Unity cycle )
     /// </summary>
-    public void Download(string p_key)
+    public void Download(string p_key, bool p_isContainer)
     {
         key = p_key;
+        isContentPack = p_isContainer;
     }
 
     /// <summary>
     /// Called after download finished to save to disk
     /// </summary>
     /// <param name="key">Quest id</param>
-    public void Save(string key)
+    public void Save(string key, bool isContainer)
     {
         // in case of error during download, do nothing
         if (!string.IsNullOrEmpty(download.error) || download.bytesDownloaded <= 0)
             return;
 
         // Write to disk
-        ExtractManager.mkDir(ContentData.DownloadPath());
-        using (BinaryWriter writer = new BinaryWriter(File.Open(ContentData.DownloadPath() + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension, FileMode.Create)))
+        string path = ContentData.DownloadPath();
+        if(isContainer)
+        {
+            path = ContentData.CustomContentPackPath();
+        }
+        else
+        {
+            path = ContentData.DownloadPath();
+        }
+
+        ExtractManager.mkDir(path);
+        using (BinaryWriter writer = new BinaryWriter(File.Open(path + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension, FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();

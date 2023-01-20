@@ -351,7 +351,7 @@ public class RemoteContentPackManager
         return ret;
     }
 
-    public RemoteContentPack GetQuestData(string key)
+    public RemoteContentPack GetContentPackData(string key)
     {
         if (content_pack_list_Mode == RemoteContentPackListMode.ONLINE && !force_local_RemoteContentPack)
             return remote_RemoteContentPack_data[key];
