@@ -17,7 +17,7 @@ public class InventoryButton
         if (game.gameType is MoMGameType) return;
 
         UIElement ui = new UIElement(Game.QUESTUI);
-        ui.SetLocation(15.5f, UIScaler.GetBottom(-2.5f), 5, 2);
+        ui.SetLocation(17.5f, UIScaler.GetBottom(-2.5f), 6, 2);
         ui.SetText(ITEMS);
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());

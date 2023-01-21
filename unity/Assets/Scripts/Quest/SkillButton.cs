@@ -16,7 +16,7 @@ public class SkillButton
         if (game.gameType is MoMGameType) return;
 
         UIElement ui = new UIElement(Game.QUESTUI);
-        ui.SetLocation(10.5f, UIScaler.GetBottom(-2.5f), 5, 2);
+        ui.SetLocation(11.5f, UIScaler.GetBottom(-2.5f), 6, 2);
         ui.SetText(SKILLS);
         ui.SetFont(game.gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());

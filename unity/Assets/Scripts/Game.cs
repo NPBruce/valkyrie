@@ -31,6 +31,7 @@ public class Game : MonoBehaviour
     public static readonly string ENDGAME = "endgame";
     public static readonly string BG_TASKS = "bg_tasks";
     public static readonly string LOGS = "logs";
+    public static readonly string DIALOG_PART = "dialogPart";
 
     // This is populated at run time from the text asset
     public string version = "";
