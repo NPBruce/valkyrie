@@ -62,12 +62,12 @@ public class RemoteContentPackManager
         // -- Download remote content pack list INI file --
         if (game.gameType.TypeName() == "MoM")
         {
-            HTTPManager.Get("https://drive.google.com/uc?id=19y6XlVOAfMJGQ3JMDr6uhvZyt2meVNHW&export=download", RemoteContentPackDownload_callback);
+            HTTPManager.Get("https://drive.google.com/uc?id=1qGpXhwvQNsSOcT6CAd45RLB-zFI_cEou&export=download", RemoteContentPackDownload_callback);
             content_pack_list_Mode = RemoteContentPackListMode.DOWNLOADING;
         }
         else if (game.gameType.TypeName() == "D2E")
         {
-            HTTPManager.Get("https://drive.google.com/uc?id=19y6XlVOAfMJGQ3JMDr6uhvZyt2meVNHW&export=download", RemoteContentPackDownload_callback);
+            HTTPManager.Get("https://drive.google.com/uc?id=1qGpXhwvQNsSOcT6CAd45RLB-zFI_cEou&export=download", RemoteContentPackDownload_callback);
             content_pack_list_Mode = RemoteContentPackListMode.DOWNLOADING;
         }
         else

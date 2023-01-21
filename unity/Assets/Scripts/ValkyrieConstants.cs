@@ -20,7 +20,7 @@ namespace Assets.Scripts
         public const string customCategoryName = "Custom";
         public const string ScenarioDownloadContainerExtension = ".valkyrie";
         public const string ContentPackDownloadContainerExtensionAllFileReference = "*" + ScenarioDownloadContainerExtension;
-        public const string ContentPackDownloadContainerExtension = ".valkyriePack";
+        public const string ContentPackDownloadContainerExtension = ".valkyrieContentPack";
         public const string ScenarioManifestPath = "/manifest.ini";
         public const string ContentPackManifestPath = "/manifest.ini";
         public const string QuestIniFilePath = "/quest.ini";

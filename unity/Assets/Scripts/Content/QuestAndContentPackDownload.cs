@@ -34,7 +34,7 @@ public class QuestAndContentPackDownload : MonoBehaviour
                 return;
             }
 
-            string package = q.package_url + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
+            string package = q.package_url + key + ValkyrieConstants.ContentPackDownloadContainerExtension;
             StartCoroutine(Download(package, delegate { Save(key, isContentPack); }));
         }
         else
@@ -59,7 +59,7 @@ public class QuestAndContentPackDownload : MonoBehaviour
     /// Called after download finished to save to disk
     /// </summary>
     /// <param name="key">Quest id</param>
-    public void Save(string key, bool isContainer)
+    public void Save(string key, bool isContentPack)
     {
         // in case of error during download, do nothing
         if (!string.IsNullOrEmpty(download.error) || download.bytesDownloaded <= 0)
@@ -67,7 +67,7 @@ public class QuestAndContentPackDownload : MonoBehaviour
 
         // Write to disk
         string path = ContentData.DownloadPath();
-        if(isContainer)
+        if(isContentPack)
         {
             path = ContentData.CustomContentPackPath();
         }
@@ -77,7 +77,18 @@ public class QuestAndContentPackDownload : MonoBehaviour
         }
 
         ExtractManager.mkDir(path);
-        using (BinaryWriter writer = new BinaryWriter(File.Open(path + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension, FileMode.Create)))
+
+        string filePath;
+        if(isContentPack)
+        {
+            filePath = path + Path.DirectorySeparatorChar + key + ValkyrieConstants.ContentPackDownloadContainerExtension;
+        }
+        else
+        {
+            filePath = path + Path.DirectorySeparatorChar + key + ValkyrieConstants.ScenarioDownloadContainerExtension;
+        }
+
+        using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
         {
             writer.Write(download.bytes);
             writer.Close();
@@ -86,9 +97,16 @@ public class QuestAndContentPackDownload : MonoBehaviour
         // update local list of quest and current status 
         game.questsList.SetQuestAvailability(key, true);
 
-        // cleanup screen and go back to list of quests
+        // cleanup screen and go back to parent screen
         Destroyer.Dialog();
-        game.questSelectionScreen.Show();
+        if(isContentPack)
+        {
+            //TODO add logic for content pack download screen
+        }
+        else
+        {
+            game.questSelectionScreen.Show();
+        }
     }
 
     /// <summary>
