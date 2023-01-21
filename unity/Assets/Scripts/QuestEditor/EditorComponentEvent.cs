@@ -668,6 +668,7 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem("Mythos", traits);
             select.AddItem("EndInvestigatorTurn", traits);
             select.AddItem("BeforeMonsterActivation", traits);
+            select.AddItem("StartFinalRound", traits);
         }
 
         traits = new Dictionary<string, IEnumerable<string>>();
@@ -910,10 +911,14 @@ public class EditorComponentEvent : EditorComponent
 
         Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
         traits.Add(CommonStringKeys.TYPE.Translate(), new string[] { "Special" });
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { "Special" });
 
-        select.AddItem("#boardcomponents", traits);
-        select.AddItem("#monsters", traits);
-        select.AddItem("#shop", traits);
+        if (!add)
+        {
+            select.AddItem("#boardcomponents", traits);
+            select.AddItem("#monsters", traits);
+            select.AddItem("#shop", traits);
+        }
 
         if (game.gameType is D2EGameType || game.gameType is IAGameType)
         {

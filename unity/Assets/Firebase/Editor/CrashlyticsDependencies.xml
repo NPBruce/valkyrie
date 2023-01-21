@@ -1,0 +1,23 @@
+<!-- Copyright (C) 2018 Google Inc. All Rights Reserved.
+
+FirebaseCrashlytics iOS and Android Dependencies.
+-->
+
+<dependencies>
+  <iosPods>
+    <iosPod name="FirebaseCrashlytics" version="4.1.0" minTargetSdk="8.0">
+    </iosPod>
+  </iosPods>
+  <androidPackages>
+    <androidPackage spec="com.google.firebase:firebase-crashlytics:17.0.0">
+    </androidPackage>
+    <androidPackage spec="com.google.firebase:firebase-analytics:17.4.1">
+    </androidPackage>
+    <androidPackage spec="com.google.firebase:firebase-crashlytics-unity:6.15.2">
+      <repositories>
+        <repository>Assets/Firebase/m2repository</repository>
+      </repositories>
+    </androidPackage>
+  </androidPackages>
+</dependencies>
+

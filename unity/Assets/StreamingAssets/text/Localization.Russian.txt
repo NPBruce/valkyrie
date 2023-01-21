@@ -2,7 +2,7 @@
 
 // TEXTS
 ABILITY,Способность
-ABOUT,О Приложении
+ABOUT,О приложении
 ABOUT_FFG,Valkyrie - это GameMaster для игр Fantasy Flight Games, созданный по мотивам игры «Descent: Road to Legend». Большинство используемых изображений импортируются из приложений FFG, являются собственностью FFG и других правообладателей. Языковые флаги сделаны Freepik с www.flaticon.com.
 ABOUT_LIBS,Valkyrie использует DotNetZip-For-Unity, UnityStandaloneFileBrowser от gkngkc и код полученный из Unity Studio и .NET Ogg Vorbis Encoder.
 ACTIONS,Действия
@@ -67,7 +67,7 @@ DOWNLOAD,Загрузить
 DOWNLOAD_LIST,Загружается список сценариев
 DOWNLOAD_PACKAGE,Сценарий загружается
 EFFECTS,Эффекты
-END_TURN,Конец поворота
+END_TURN,Конец хода
 ROUND,Раунд {0}
 EVADE,Уклонение
 EVENT,Событие
@@ -99,7 +99,7 @@ SKILLS,Навыки
 ITEMS,Предметы
 ITEMS_SMALL,Предметы
 GOLD,Золото
-MAIN_MENU,Главное Меню
+MAIN_MENU,Главное меню
 MAX_X,{0} до
 MENU,Меню
 MIN_X,{0} от
@@ -151,7 +151,7 @@ PUZZLE_CODE_CLASS,код
 PUZZLE_SLIDE_CLASS,слайд
 QUEST,Задание
 QUEST_NAME_DOWNLOAD,Загрузить {0}
-QUEST_NAME_EDITOR,Редактор Сценариев
+QUEST_NAME_EDITOR,Редактор сценариев
 EDITOR,Редактор
 QUEST_NAME_UPDATE,  [Обновить] {0}
 QUOTA,Лимит
@@ -190,7 +190,7 @@ SELECT_SKILLS,Выберите навыки
 SPAWN,Генератор Монстров
 STARTING_ITEM,Начальный предмет
 STARTING_ITEMS,Начальные предметы
-START_QUEST,Новая Игра
+START_QUEST,Новая игра
 START,Начать
 
 TESTS,Проверки
@@ -218,7 +218,7 @@ BACKGROUND_COLOUR,Цвет фона
 ASPECT,Аспект
 BORDER,С границами
 NO_BORDER,Без границ
-UNDO,Отменить Ход
+UNDO,Отменить ход
 UNIQUE_DEFEATED,Уникальный\nПобежденный
 UNIQUE_INFO,Уникальная Информация
 UNIQUE_MONSTER,Уникальный Монстр

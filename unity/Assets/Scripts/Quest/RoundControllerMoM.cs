@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Content;
+using UnityEngine;
 
 // This round controller extends the standard controller for MoM specific round order
 public class RoundControllerMoM : RoundController
@@ -18,6 +17,18 @@ public class RoundControllerMoM : RoundController
         {
             game.CurrentQuest.heroes[i].activated = true;
         }
+
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0 &&
+            game.CurrentQuest.vars.GetValue("#eliminatedcomplete") <= 0)
+        {
+            game.CurrentQuest.vars.SetValue("#eliminatedcomplete", 1);
+            if (game.CurrentQuest.eManager.EventTriggerType("Eliminated", false))
+            {
+                game.CurrentQuest.eManager.TriggerEvent();
+                return;
+            }
+        }
+
         game.CurrentQuest.phase = Quest.MoMPhase.mythos;
         game.stageUI.Update();
         game.monsterCanvas.UpdateList();
@@ -30,8 +41,6 @@ public class RoundControllerMoM : RoundController
 
         // Display the transition dialog for investigator phase
         ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.mythos);
-
-        return;
     }
 
     // Mark a monster as activated
@@ -68,7 +77,8 @@ public class RoundControllerMoM : RoundController
             if (!game.CurrentQuest.monsters[i].activated)
             {
                 QuestMonster qm = game.CurrentQuest.monsters[i].monsterData as QuestMonster;
-                if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0 
+                if (qm != null && qm.activations != null && qm.activations.Length == 1 &&
+                    qm.activations[0].IndexOf("Event") == 0
                     && game.CurrentQuest.eManager.events[qm.activations[0]].Disabled())
                 {
                     // monster cannot be activated, mark as activated
@@ -88,7 +98,8 @@ public class RoundControllerMoM : RoundController
 
             // Find out of this monster is quest specific
             QuestMonster qm = toActivate.monsterData as QuestMonster;
-            if (qm != null && qm.activations != null && qm.activations.Length == 1 && qm.activations[0].IndexOf("Event") == 0)
+            if (qm != null && qm.activations != null && qm.activations.Length == 1 &&
+                qm.activations[0].IndexOf("Event") == 0)
             {
                 toActivate.masterStarted = true;
                 toActivate.activated = true;
@@ -99,9 +110,11 @@ public class RoundControllerMoM : RoundController
             {
                 ActivateMonster(toActivate);
             }
+
             // Return false as activations remain
             return false;
         }
+
         return true;
     }
 
@@ -115,7 +128,6 @@ public class RoundControllerMoM : RoundController
     // Check if there are events that are required at the end of the round
     public override bool CheckNewRound()
     {
-
         Game game = Game.Get();
 
         // Return if there is an event open
@@ -168,7 +180,8 @@ public class RoundControllerMoM : RoundController
         }
 
         // we need this test to make sure user can do the horro test, as a random event would switch the game to investigator phase 
-        if (!endRoundRequested && game.CurrentQuest.phase == Quest.MoMPhase.horror && game.CurrentQuest.monsters.Count > 0)
+        if (!endRoundRequested && game.CurrentQuest.phase == Quest.MoMPhase.horror &&
+            game.CurrentQuest.monsters.Count > 0)
         {
             return false;
         }
@@ -196,6 +209,7 @@ public class RoundControllerMoM : RoundController
         // Advance to next round
         int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round")) + 1;
         game.CurrentQuest.vars.SetValue("#round", round);
+        game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "ROUND", round).Translate()));
 
         game.CurrentQuest.log.Add(new Quest.LogEntry(new StringKey("val", "PHASE_INVESTIGATOR").Translate()));
 
@@ -206,9 +220,16 @@ public class RoundControllerMoM : RoundController
         game.audioControl.PlayTrait("newround");
 
         // Start of round events
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0 &&
+            game.CurrentQuest.vars.GetValue("#eliminatedcomplete") <= 0)
+        {
+            game.CurrentQuest.eManager.EventTriggerType("StartFinalRound");
+        }
+
         game.CurrentQuest.eManager.EventTriggerType("StartRound");
+
         SaveManager.Save(0);
-        
+
         // Display the transition dialog for investigator phase
         ChangePhaseWindow.DisplayTransitionWindow(Quest.MoMPhase.investigator);
 
