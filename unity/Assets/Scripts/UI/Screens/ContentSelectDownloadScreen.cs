@@ -39,6 +39,8 @@ namespace Assets.Scripts.UI.Screens
         // Create page
         public ContentSelectDownloadScreen()
         {
+            CleanUpDialogs();
+
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
@@ -50,6 +52,17 @@ namespace Assets.Scripts.UI.Screens
 
             DrawHeadingAndButtons();
             DrawContentPackList();
+        }
+
+        private static void CleanUpDialogs()
+        {
+            // If a dialog window is open we force it closed (this shouldn't happen)
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+                Destroy(go);
+
+            // Clean up downloader if present
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+                Destroy(go);
         }
 
         private void DrawContentPackList()
@@ -75,6 +88,7 @@ namespace Assets.Scripts.UI.Screens
 
                 ui = RenderContentPackNameAndDescription(offset, contentPack);
                 ui = RenderActionButton(offset, is_expansion_missing, contentPack, localContentPackList);
+                RenderDeleteButton(offset, is_expansion_missing, contentPack, localContentPackList);
 
             }
 
@@ -109,6 +123,52 @@ namespace Assets.Scripts.UI.Screens
             return ui;
         }
 
+        private void RenderDeleteButton(float offset, bool is_expansion_missing, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
+        {
+            if (contentPack.Value.downloaded)
+            {
+
+                var ui = new UIElement(scrollArea.GetScrollTransform());
+                ui.SetBGColor(Color.clear);
+                ui.SetLocation(UIScaler.GetRight(-6.0f), offset + 1.4f, 1.8f, 1.8f);
+                if (is_expansion_missing)
+                {
+                    ui.SetImage(button_no_entry);
+                }
+
+                //TODO
+                ui.SetImage(button_no_entry);
+                ui.SetButton(delegate { Delete(contentPack.Value.identifier); });
+            }
+        }
+
+        public void Delete(string key)
+        {
+            if(string.IsNullOrWhiteSpace(key))
+            {
+                ValkyrieDebug.Log("Could not delete content pack because of invalid key.");
+                return;
+            }
+
+            try
+            {
+                string filePath = ContentData.CustomContentPackPath() + Path.DirectorySeparatorChar + key + ValkyrieConstants.ContentPackDownloadContainerExtension;
+                if(File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Could not find file: " + key);
+                }
+            }
+            catch (Exception)
+            {
+                ValkyrieDebug.Log("Failed to delete content pack: " + key);
+            }
+            new ContentSelectDownloadScreen();
+        }
+
         public void Download(string key)
         {
             ValkyrieDebug.Log("INFO: Select contentpack " + key);
@@ -123,10 +183,8 @@ namespace Assets.Scripts.UI.Screens
             download.tag = Game.QUESTUI;
             QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
             qd.Download(key, true);
-            // We need to refresh local content pack list after download
-            //TODO
+            //TODO We need to refresh local content pack list after download
             //game.UnloadLocalQuests();
-
         }
 
         private void CleanContentPackList()
@@ -188,11 +246,11 @@ namespace Assets.Scripts.UI.Screens
             DrawOnlineModeButton();
         }
 
-        private static void DrawBackButton()
+        private void DrawBackButton()
         {
             UIElement DrawBackButton = new UIElement();
-            DrawBackButton.SetLocation(1, 0.5f, 8, 1.5f);
             DrawBackButton.SetText(CommonStringKeys.BACK, Color.red);
+            DrawBackButton.SetLocation(1, 0.5f, 6, 1.2f);
             DrawBackButton.SetFont(Game.Get().gameType.GetHeaderFont());
             DrawBackButton.SetFontSize(UIScaler.GetMediumFont());
             DrawBackButton.SetButton(delegate { Quit(); });

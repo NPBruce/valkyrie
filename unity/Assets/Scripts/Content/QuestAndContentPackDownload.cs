@@ -94,14 +94,14 @@ public class QuestAndContentPackDownload : MonoBehaviour
             writer.Close();
         }
 
-        // update local list of quest and current status 
-        game.questsList.SetQuestAvailability(key, true);
+        //TODO update local list of content packs and current status 
+        //game.questsList.SetQuestAvailability(key, true);
 
         // cleanup screen and go back to parent screen
         Destroyer.Dialog();
         if(isContentPack)
         {
-            //TODO add logic for content pack download screen
+            new ContentSelectDownloadScreen();
         }
         else
         {
