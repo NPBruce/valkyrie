@@ -95,12 +95,20 @@ public class QuestAndContentPackDownload : MonoBehaviour
         }
 
         //TODO update local list of content packs and current status 
-        //game.questsList.SetQuestAvailability(key, true);
+        if(isContentPack)
+        {
+            game.remoteContentPackManager.SetContentPackAvailability(key, true);
+        }
+        else
+        {
+            game.questsList.SetQuestAvailability(key, true);
+        }        
 
         // cleanup screen and go back to parent screen
         Destroyer.Dialog();
         if(isContentPack)
         {
+            ContentLoader.AddNewContentPack(game, filePath);
             new ContentSelectDownloadScreen();
         }
         else

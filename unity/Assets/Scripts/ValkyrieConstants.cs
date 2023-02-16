@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Content;
+using System;
 
 namespace Assets.Scripts
 {
@@ -24,5 +25,7 @@ namespace Assets.Scripts
         public const string ScenarioManifestPath = "/manifest.ini";
         public const string ContentPackManifestPath = "/manifest.ini";
         public const string QuestIniFilePath = "/quest.ini";
+        public const string RemoteContentPackIniType = "RemoteContentPack";
+        public const string ContentPackIniFile = "content_pack.ini";
     }
 }

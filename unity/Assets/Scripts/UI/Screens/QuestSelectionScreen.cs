@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
 using UnityEngine.Events;
@@ -511,23 +512,6 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui);
         }
 
-        //sorted_by_rating
-        //sorted_by_name
-        //sorted_by_difficulty
-        //sorted_by_duration
-        //sorted_by_date
-        public class SortOption
-        {
-            public string name;
-            public StringKey button_text;
-
-            public SortOption(string p_name, StringKey p_button_text)
-            {
-                name = p_name;
-                button_text = p_button_text;
-            }
-        }
-
 
         private void DrawSortCriteriaButtons()
         {
@@ -1035,13 +1019,22 @@ namespace Assets.Scripts.UI.Screens
                 string pack_symbol_missing = "";
                 foreach (string pack in q.packs)
                 {
-                    string pack_symbol = game.cd.packSymbol[pack].Translate(true);
-                    if (pack_symbol != "" && !(pack_symbol_available.Contains(pack_symbol) || pack_symbol_missing.Contains(pack_symbol)))
+                    if(game.cd.packSymbol.ContainsKey(pack))
                     {
-                        if (missing_packs.Contains(pack))
-                            pack_symbol_missing += pack_symbol;
-                        else
-                            pack_symbol_available += pack_symbol;
+                        string pack_symbol = game.cd.packSymbol[pack].Translate(true);
+                        if (pack_symbol != "" && !(pack_symbol_available.Contains(pack_symbol) || pack_symbol_missing.Contains(pack_symbol)))
+                        {
+                            if (missing_packs.Contains(pack))
+                                pack_symbol_missing += pack_symbol;
+                            else
+                                pack_symbol_available += pack_symbol;
+                        }
+                    }
+                    else
+                    {
+                        //TODO change q.Packs to ContentPackType instead of string to check if pack is a remote content pack and disable quest
+                        //is_expansion_missing = true;
+                        ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                     }
                 }
                 float symbols_available_width = 0;
@@ -1335,91 +1328,6 @@ namespace Assets.Scripts.UI.Screens
                 qd.Download(key, false);
                 // We need to refresh local quest list after download
                 game.questsList.UnloadLocalQuests();
-            }
-        }
-
-
-        private class ImgAsyncLoader
-        {
-            // URL and UI element
-            private Dictionary<string, UIElement> images_list = null;
-            // URL and Texture
-            private Dictionary<string, Texture2D> texture_list = null;
-
-            Texture2D default_quest_picture = null;
-
-            // Father class
-            QuestSelectionScreen questSelectionScreen = null;
-
-            public ImgAsyncLoader(QuestSelectionScreen qss)
-            {
-                questSelectionScreen = qss;
-                images_list = new Dictionary<string, UIElement>();
-                texture_list = new Dictionary<string, Texture2D>();
-                default_quest_picture = Resources.Load("sprites/scenario_list/default_quest_picture") as Texture2D;
-            }
-
-            public void Add(string url, UIElement uie)
-            {
-                images_list.Add(url, uie);
-            }
-
-            public void Clear()
-            {
-                images_list.Clear();
-                // do not clear Texture, we don't want to download pictures again
-            }
-
-            public void StartDownloadASync()
-            {
-                if (images_list.Count > 0)
-                {
-                    foreach (KeyValuePair<string, UIElement> kv in images_list)
-                    {
-                        HTTPManager.GetImage(kv.Key, ImageDownloaded_callback);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Parse the downloaded remote manifest and start download of individual quest files
-            /// </summary>
-            public void ImageDownloaded_callback(Texture2D texture, bool error, Uri uri)
-            {
-                if (error)
-                {
-                    Debug.Log("Error downloading picture : " + uri.ToString());
-
-                    // Display default picture
-                    if (images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                        questSelectionScreen.DrawScenarioPicture(null, images_list[uri.ToString()]);
-                }
-                else
-                {
-                    // we might have started two downloads of the same picture (changing sort options before end of download)
-                    if (!texture_list.ContainsKey(uri.ToString()))
-                    {
-                        // save texture
-                        texture_list.Add(uri.ToString(), texture);
-
-                        // Display pictures
-                        if(images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                            questSelectionScreen.DrawScenarioPicture(GetTexture(uri.ToString()),  images_list[uri.ToString()]);
-                    }
-                }
-            }
-
-            public bool IsImageAvailable(string package_url)
-            {
-                return texture_list.ContainsKey(package_url);
-            }
-
-            public Texture2D GetTexture(string package_url)
-            {
-                if (package_url == null)
-                    return default_quest_picture;
-                else
-                    return texture_list[package_url];
             }
         }
     }

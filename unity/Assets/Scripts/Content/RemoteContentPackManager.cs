@@ -120,7 +120,7 @@ public class RemoteContentPackManager
         foreach (KeyValuePair<string, Dictionary<string, string>> RemoteContentPack_kv in remoteManifest.data)
         {
             var remoteContentPack = new RemoteContentPack(RemoteContentPack_kv.Key, RemoteContentPack_kv.Value);
-            remote_RemoteContentPack_data.Add(RemoteContentPack_kv.Key, remoteContentPack);
+            remote_RemoteContentPack_data.Add(remoteContentPack.identifier, remoteContentPack);
         }
 
         if (remote_RemoteContentPack_data.Count == 0)
@@ -158,18 +158,24 @@ public class RemoteContentPackManager
         }
     }
 
-    public void SetContetPackAvailability(string key, bool isAvailable)
+    public void SetContentPackAvailability(string key, bool isAvailable)
     {
-        string saveLocation = ContentData.DownloadPath();
+        string saveLocation = ContentData.CustomContentPackPath();
 
         ManifestManager manager = new ManifestManager(saveLocation);
-        var localManifest = manager.GetLocalQuestManifestIniData();
+        var localManifest = manager.GetLocalContentPackManifestIniData();
 
         if (isAvailable)
         {
-            IniData downloaded_RemoteContentPack = IniRead.ReadFromString(remote_RemoteContentPack_data[key].ToString());
+            if(remote_RemoteContentPack_data[key] == null)
+            {
+                throw new ArgumentNullException($"Could not find key {key} in remote content pack data.");
+            }
+
+            string remoteContentPackString = remote_RemoteContentPack_data[key].ToString();
+            IniData downloaded_RemoteContentPack = IniRead.ReadFromString(remoteContentPackString);
             localManifest.Remove(key);
-            localManifest.Add(key, downloaded_RemoteContentPack.data["Quest"]);
+            localManifest.Add(key, downloaded_RemoteContentPack.data["RemoteContentPack"]);
         }
         else
         {
@@ -179,11 +185,11 @@ public class RemoteContentPackManager
             UnloadLocalRemoteContentPacks();
         }
 
-        if (File.Exists(saveLocation + ValkyrieConstants.ScenarioManifestPath))
+        if (File.Exists(saveLocation + ValkyrieConstants.ContentPackManifestPath))
         {
-            File.Delete(saveLocation + ValkyrieConstants.ScenarioManifestPath);
+            File.Delete(saveLocation + ValkyrieConstants.ContentPackManifestPath);
         }
-        File.WriteAllText(saveLocation + ValkyrieConstants.ScenarioManifestPath, localManifest.ToString());
+        File.WriteAllText(saveLocation + ValkyrieConstants.ContentPackManifestPath, localManifest.ToString());
 
         // update status quest
         remote_RemoteContentPack_data[key].downloaded = isAvailable;

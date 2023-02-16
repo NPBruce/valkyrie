@@ -110,6 +110,34 @@ namespace Assets.Scripts.Content
             return true;
         }
 
+        // Save to string (editor)
+        override public string ToString()
+        {
+            string nl = System.Environment.NewLine;
+            StringBuilder r = new StringBuilder();
+            r.AppendLine($"[{ValkyrieConstants.RemoteContentPackIniType}]");
+            r.Append("identifier=").AppendLine(identifier.ToString());
+            r.Append("type=").AppendLine(type.ToString());
+            r.Append("format=").AppendLine(currentFormat.ToString());
+            r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
+            r.Append("defaultlanguage=").AppendLine(defaultLanguage);
 
+            if (image.Length > 0)
+            {
+                r.Append("image=").AppendLine(image);
+            }
+
+            if (version != "")
+            {
+                r.Append("version=").AppendLine(version);
+            }
+
+            foreach (KeyValuePair<string, string> kv in languages_name)
+            {
+                r.Append("name." + kv.Key + "=").AppendLine(kv.Value);
+            }
+
+            return r.ToString();
+        }
     }
 }

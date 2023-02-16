@@ -12,7 +12,7 @@ public class GameStateManager
         
         Game game = Game.Get();
         // All content data has been loaded by editor, cleanup everything
-        game.cd = new ContentData(game.gameType.DataDirectory());
+        ContentLoader.GetContentData(game);
         // Load the base content - pack will be loaded later if required
         game.ContentLoader.LoadContentID("");
 

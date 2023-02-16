@@ -72,7 +72,6 @@ namespace Assets.Scripts.UI.Screens
             // Start here
             float offset = 0;
             int nb_filtered_out_quest = 0;
-            bool is_expansion_missing = false;
 
             if (scrollArea == null)
             {
@@ -87,31 +86,29 @@ namespace Assets.Scripts.UI.Screens
             {
 
                 ui = RenderContentPackNameAndDescription(offset, contentPack);
-                ui = RenderActionButton(offset, is_expansion_missing, contentPack, localContentPackList);
-                RenderDeleteButton(offset, is_expansion_missing, contentPack, localContentPackList);
+                ui = RenderImage(offset, contentPack);
+                RenderActionButton(offset, contentPack, localContentPackList);
+                RenderDeleteButton(offset, contentPack, localContentPackList);
 
             }
 
             //yield return null;
         }
 
-        private UIElement RenderActionButton(float offset, bool is_expansion_missing, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
+        private void RenderActionButton(float offset, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
         {
+            if (!contentPack.Value.update_available && contentPack.Value.downloaded)
+            {
+                return;
+            }
+
             var ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
             ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-            if (is_expansion_missing)
-            {
-                ui.SetImage(button_no_entry);
-            }
 
-            //TODO
             if (contentPack.Value.downloaded)
             {
-                if (contentPack.Value.update_available)
-                    ui.SetImage(button_update);
-                else
-                    ui.SetImage(button_play);
+                ui.SetImage(button_update);
                 ui.SetButton(delegate { Download(contentPack.Value.identifier); });
             }
             else
@@ -119,11 +116,9 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetImage(button_download);
                 ui.SetButton(delegate { Download(contentPack.Value.identifier); });
             }
-
-            return ui;
         }
 
-        private void RenderDeleteButton(float offset, bool is_expansion_missing, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
+        private void RenderDeleteButton(float offset, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
         {
             if (contentPack.Value.downloaded)
             {
@@ -131,12 +126,7 @@ namespace Assets.Scripts.UI.Screens
                 var ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-6.0f), offset + 1.4f, 1.8f, 1.8f);
-                if (is_expansion_missing)
-                {
-                    ui.SetImage(button_no_entry);
-                }
-
-                //TODO
+                //TODO Add new image for delete button
                 ui.SetImage(button_no_entry);
                 ui.SetButton(delegate { Delete(contentPack.Value.identifier); });
             }
@@ -144,7 +134,7 @@ namespace Assets.Scripts.UI.Screens
 
         public void Delete(string key)
         {
-            if(string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 ValkyrieDebug.Log("Could not delete content pack because of invalid key.");
                 return;
@@ -153,9 +143,11 @@ namespace Assets.Scripts.UI.Screens
             try
             {
                 string filePath = ContentData.CustomContentPackPath() + Path.DirectorySeparatorChar + key + ValkyrieConstants.ContentPackDownloadContainerExtension;
-                if(File.Exists(filePath))
+                if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
+                    game.remoteContentPackManager.SetContentPackAvailability(key, false);
+                    ContentLoader.RemoveContentPack(game, key);
                 }
                 else
                 {
@@ -166,6 +158,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 ValkyrieDebug.Log("Failed to delete content pack: " + key);
             }
+
             new ContentSelectDownloadScreen();
         }
 
@@ -183,8 +176,6 @@ namespace Assets.Scripts.UI.Screens
             download.tag = Game.QUESTUI;
             QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
             qd.Download(key, true);
-            //TODO We need to refresh local content pack list after download
-            //game.UnloadLocalQuests();
         }
 
         private void CleanContentPackList()
@@ -193,16 +184,15 @@ namespace Assets.Scripts.UI.Screens
             //throw new NotImplementedException();
         }
 
-        private UIElement RenderContentPackNameAndDescription(float offset, KeyValuePair<string, RemoteContentPack> contentPack)
+        private UIElement RenderContentPackNameAndDescription(float offset, KeyValuePair<string, RemoteContentPack> remoteContentPack)
         {
-
             // Content pack name
             UIElement ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
             ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
             ui.SetTextPadding(0.5f);
 
-            string name = contentPack.Value.languages_name.FirstOrDefault().Value;
+            string name = remoteContentPack.Value.languages_name.FirstOrDefault().Value;
 
             ui.SetText(name, Color.red);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -212,7 +202,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.28f));
             ui.SetFont(game.gameType.GetHeaderFont());
 
-            string description = contentPack.Value.languages_description.FirstOrDefault().Value;
+            string description = remoteContentPack.Value.languages_description.FirstOrDefault().Value;
 
             if (description != null)
             {
@@ -231,6 +221,15 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontStyle(FontStyle.Italic);
                 ui.SetFont(game.gameType.GetHeaderFont());
             }
+
+            return ui;
+        }
+        private UIElement RenderImage(float offset, KeyValuePair<string, RemoteContentPack> contentPack)
+        {
+            // Content pack name
+            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            //ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
+            //ui.SetImage(button_update);
 
             return ui;
         }
