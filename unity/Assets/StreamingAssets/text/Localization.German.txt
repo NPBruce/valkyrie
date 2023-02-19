@@ -1,6 +1,7 @@
 .,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,Die Android-Version Ihres Gerätes wird nicht unterstützt, da sie den Import von Inhalten aus den offiziellen Descent- oder Mansion of Madness-Apps nicht zulässt.
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
 ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' "Descent: Wege zum Ruhm" inspiriertes Gamemaster-Tool. Die meisten Bildressourcen werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen. Die Länderflaggen sind von Freepik www.flaticon.com.

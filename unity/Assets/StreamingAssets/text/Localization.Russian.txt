@@ -1,6 +1,7 @@
 .,Russian
 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,Версия Android вашего устройства не поддерживается, поскольку она не позволяет импортировать контент из официальных приложений Descent или Mansion of Madness.
 ABILITY,Способность
 ABOUT,О приложении
 ABOUT_FFG,Valkyrie - это GameMaster для игр Fantasy Flight Games, созданный по мотивам игры «Descent: Road to Legend». Большинство используемых изображений импортируются из приложений FFG, являются собственностью FFG и других правообладателей. Языковые флаги сделаны Freepik с www.flaticon.com.

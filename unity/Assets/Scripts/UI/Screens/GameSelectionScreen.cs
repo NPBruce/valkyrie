@@ -30,6 +30,8 @@ namespace Assets.Scripts.UI.Screens
 
         private static readonly StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
         private static readonly StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
+        
+        private static readonly StringKey ANDROID_VERSION_NOT_SUPPORTED = new StringKey("val", "ANDROID_VERSION_NOT_SUPPORTED");
 
         private static readonly StringKey CONTENT_IMPORT = new StringKey("val", "CONTENT_IMPORT");
         private static readonly StringKey CONTENT_REIMPORT = new StringKey("val", "CONTENT_REIMPORT");
@@ -76,6 +78,16 @@ namespace Assets.Scripts.UI.Screens
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
+                //Show warning if version is higher than android 12 and stop rendering any other buttons
+                //SDK Level overview https://developer.android.com/studio/releases/platforms
+                var sdkLevel = GetAndroidSdkLevel();
+                if (sdkLevel > 32)
+                {
+                    RenderAndroidNotSupportedText(sdkLevel);
+                    RenderExitButton();
+                    return;
+                }
+
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
 #if IA
@@ -140,10 +152,11 @@ namespace Assets.Scripts.UI.Screens
                 if (D2E_import_available)
                 {
                     message = D2E_NAME.Translate();
-                } else
+                }
+                else
                 {
                     message = D2E_NAME.Translate() + Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
-                    fontSize = (int) (UIScaler.GetMediumFont() / 1.05f);
+                    fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
                 }
                 ui.SetText(message, startColor);
             }
@@ -178,13 +191,13 @@ namespace Assets.Scripts.UI.Screens
                 {
                     // install and locate button for other systems
                     ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits()/ 2) - 13, offset + 3.2f, 12, 1.3f);
+                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 13, offset + 3.2f, 12, 1.3f);
                     ui.SetText(CONTENT_INSTALL_VIA_STEAM, Color.red);
                     ui.SetButton(delegate { GotoWebBrowser(D2E_APP_URL_STEAM); });
                     new UIElementBorder(ui, Color.red);
 
                     ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() /2) + 1, offset + 3.2f, 12, 1.3f);
+                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) + 1, offset + 3.2f, 12, 1.3f);
                     ui.SetText(CONTENT_LOCATE, Color.red);
                     ui.SetButton(delegate { Import("D2E", true); });
                     new UIElementBorder(ui, Color.red);
@@ -265,7 +278,7 @@ namespace Assets.Scripts.UI.Screens
                 }
             }
 
-            
+
 #if IA
             // Draw IA button
             startColor = Color.white;
@@ -310,16 +323,30 @@ namespace Assets.Scripts.UI.Screens
             }
 #endif
 
-            ui = new UIElement();
+            ui = RenderExitButton();
+
+            // will display a button if a new version is available
+            VersionManager.GetLatestVersionAsync(CheckForNewValkyrieVersion);
+        }
+
+        private static void RenderAndroidNotSupportedText(int sdkLevel)
+        {
+            UIElement uiAndroidNotSupported = new UIElement();
+            uiAndroidNotSupported.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 3.2f, 14, 2);
+            StringKey textAndroidVersionNotSupported = ANDROID_VERSION_NOT_SUPPORTED;
+            uiAndroidNotSupported.SetText(textAndroidVersionNotSupported + $"SDK Level {sdkLevel}");
+        }
+
+        private UIElement RenderExitButton()
+        {
+            UIElement ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
             ui.SetText(CommonStringKeys.EXIT, Color.red);
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(Exit);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, Color.red);
-
-            // will display a button if a new version is available
-            VersionManager.GetLatestVersionAsync(CheckForNewValkyrieVersion);
+            return ui;
         }
 
         // Start game as D2E
@@ -578,6 +605,14 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui, Color.green);
             }
+        }
+
+        private int GetAndroidSdkLevel()
+        {
+            var clazz = AndroidJNI.FindClass("android/os/Build$VERSION");
+            var fieldID = AndroidJNI.GetStaticFieldID(clazz, "SDK_INT", "I");
+            var sdkLevel = AndroidJNI.GetStaticIntField(clazz, fieldID);
+            return sdkLevel;
         }
 
     }

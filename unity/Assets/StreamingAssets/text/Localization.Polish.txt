@@ -1,5 +1,6 @@
 .,Polish
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,Wersja urządzenia z systemem Android nie jest obsługiwana, ponieważ nie pozwala na importowanie zawartości z oficjalnych aplikacji Descent lub Mansion of Madness.
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
 ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa. Languages flags are made by Freepik from www.flaticon.com.

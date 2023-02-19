@@ -23,6 +23,7 @@ ICON_PRODUCT_MAD27,
 ICON_PRODUCT_MAD28,
 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,The Android version of your device is not supported because it does not allow importing content from the official Descent or Mansion of Madness Apps.
 ABILITY,Ability
 ABOUT,About
 ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.

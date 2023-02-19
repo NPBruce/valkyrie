@@ -1,6 +1,7 @@
 .,Portuguese
 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,A versão Android do seu dispositivo não é suportada porque não permite a importação de conteúdos das aplicações oficiais de Descida ou Mansão da Loucura.
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie
 ABOUT_FFG,Valkyrie é um App de ajuda de criação de aventuras inspirado por Fantasy Flight Games' Descent: Road to Legend. A maioria das imagens utilizadas no App são da FFG e são de propriedade da FFG com todos os direitos reservados. Languages flags are made by Freepik from www.flaticon.com.

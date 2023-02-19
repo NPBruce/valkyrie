@@ -1,5 +1,6 @@
 .,Chinese
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,你的设备的安卓版本不被支持，因为它不允许从官方的Descent或Mansion of Madness Apps中导入内容。
 ABILITY,Ability
 ABOUT,關於
 ACTIONS,行動

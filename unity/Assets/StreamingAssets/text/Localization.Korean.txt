@@ -23,6 +23,7 @@ ICON_PRODUCT_MAD27,
 ICON_PRODUCT_MAD28,
 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,Android 버전 기기는 공식 데센트 또는 광기의 저택 앱에서 콘텐츠를 가져올 수 없기 때문에 지원되지 않습니다.
 ABILITY,능력
 ABOUT,만든이
 ABOUT_FFG,Valkyrie는 Fantasy Flight Games' Descent: Road to Legend에서 영감을 얻어 만들어진 던전마스터(핼퍼)툴 입니다. FFG applications에서 가져온 이미지(사진)들은 FFG와 저작권 소유자에 의해 보호받고 있습니다.

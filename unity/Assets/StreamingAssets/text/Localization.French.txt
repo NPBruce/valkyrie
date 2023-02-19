@@ -1,5 +1,6 @@
 .,French
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,La version Android de votre appareil n'est pas prise en charge car elle ne permet pas d'importer du contenu depuis les applications officielles de Descent ou de Mansion of Madness.
 ABILITY,Capacité
 ABOUT,À propos
 ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.

@@ -1,6 +1,5 @@
 .,Japanese
 //Heroes,
-
 ALYS_RAINE,アリス・レイン
 ANDIRA_RUNEHAND,ルーンの巧者アンディラ
 ARVEL_WORLDWALKER,世界を駆けるアーベル
@@ -96,6 +95,7 @@ ICON_PRODUCT_MAD27,
 ICON_PRODUCT_MAD28,
 
 // TEXTS
+ANDROID_VERSION_NOT_SUPPORTED,Android版では、「降臨」「狂気の館」公式アプリからのコンテンツの取り込みができないため、サポート対象外となります。
 ABILITY,Ability
 ABOUT,このアプリに関して
 ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
