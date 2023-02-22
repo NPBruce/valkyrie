@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using Assets.Scripts.Content;
 using UnityEngine;
-using UnityEngine.Events;
 using ValkyrieTools;
-
 
 namespace Assets.Scripts.UI.Screens
 {
