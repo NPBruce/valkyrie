@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Unity_Studio;
+using AssetStudio;
 using System;
 using System.Linq;
 using System.IO;
@@ -74,6 +74,7 @@ namespace FFGAppImport
         {
             // Read the import log
             logFile = Path.Combine(contentPath, "import.ini");
+            ValkyrieDebug.Log("Import log file: " + logFile);
             // If no import log, import is required
             if (!File.Exists(logFile))
             {
@@ -117,31 +118,43 @@ namespace FFGAppImport
                     return appVersion;
                 }
 
+                ValkyrieDebug.Log("Going to look in " + resourcesAssets);
                 // We assume that the version asset is in resources.assets
-                using (var fs = File.OpenRead(resourcesAssets))
+                //using (var fs = new AssetStudio.FileReader(resourcesAssets, File.OpenRead(resourcesAssets)))
                 {
-                    using (var endianStream = new EndianStream(fs, EndianType.BigEndian))
+                    ValkyrieDebug.Log("Opening " + resourcesAssets);
+                    //var endianStream = new SerializedFile(fs, new AssetsManager());
                     {
-                        var assetsFile = new AssetsFile(resourcesAssets, endianStream);
+                        //var assetsFile = new AssetsFile(resourcesAssets, endianStream);
+                        //var objectinfo = new ObjectInfo();
+                        //var assetsFile = new ObjectReader(fs, endianStream, objectinfo);
+                        ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
+                        ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
 
+                        var assetsManager = new AssetsManager();
+                        assetsManager.LoadFiles(new[] { resourcesAssets });
                         // Look through all listed assets
-                        foreach (var asset in assetsFile.preloadTable.Values)
+                        foreach (var assetsFile in assetsManager.assetsFileList)
                         {
-                            // Check all text assets
-                            if (asset.Type2 != 49) //TextAsset
+                            foreach (var asset in assetsFile.Objects)
                             {
-                                continue;
-                            }
-                            // Load as text
-                            var textAsset = new Unity_Studio.TextAsset(asset, false);
-                            // Check if called _version
-                            if (asset.Text.Equals("_version"))
-                            {
-                                // Read asset content
-                                textAsset = new Unity_Studio.TextAsset(asset, true);
-                                // Extract version
-                                appVersion = System.Text.Encoding.UTF8.GetString(textAsset.m_Script);
-                                break;
+                                //ValkyrieDebug.Log("Looking at " + asset + " Asset");
+                                // Check all text assets
+                                if (!(asset is AssetStudio.TextAsset)) //TextAsset
+                                {
+                                    continue;
+                                }
+
+                                // Check if called _version
+                                if (((NamedObject)asset).m_Name.Equals("_version"))
+                                {
+                                    // Read asset content
+                                    var textAsset = (AssetStudio.TextAsset)asset;
+                                    // Extract version
+
+                                    appVersion = System.Text.Encoding.UTF8.GetString(textAsset.m_Script);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -164,6 +177,7 @@ namespace FFGAppImport
         // Import from app
         public void Import(string path)
         {
+            ValkyrieDebug.Log("Importing for path: " + path);
             if (path != null)
             {
                 finder.location = path;
@@ -202,7 +216,7 @@ namespace FFGAppImport
         private IEnumerable<string> GetAssetFiles()
         {
             // List all assets files
-            var files = new List<string>(Directory.GetFiles(finder.location));
+            var files = new List<string>(Directory.GetFiles(finder.location,"*", SearchOption.AllDirectories));
 
             if (files.Count() < 1)
             {
@@ -219,7 +233,7 @@ namespace FFGAppImport
             assetFiles.AddRange(list); // load '*.assets'
 
             // get all random named files like 'd18b80b6f1c734d1eb70d521a2dbeda9' (found on Android)
-            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level"));
+            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level") && !x.EndsWith(".dll") && !x.EndsWith(".manifest"));
             assetFiles.AddRange(list);
 
             // get all level asset file, so that level2, level3 and level20 are in the right order
@@ -241,6 +255,10 @@ namespace FFGAppImport
                 levelFilesDict.ForEach(x => levelsToAdd.Add(x.Value));
                 assetFiles.AddRange(levelsToAdd);  // load 'level*' files last.
             }
+
+            // get all asset bundles.
+            list = files.Where(x => !x.EndsWith(".manifest") && x.Contains("AssetBundles"));
+            assetFiles.AddRange(list);
 
             return assetFiles;
         }
@@ -302,46 +320,50 @@ namespace FFGAppImport
 
             ValkyrieDebug.Log("Import asset from " + file);
 
-            using (FileStream fs = File.OpenRead(file))
+            //using (FileStream fs = File.OpenRead(file))
             {
-                using (var endianStream = new EndianStream(fs, EndianType.BigEndian))
+                //using (var endianStream = new EndianStream(fs, Unity_Studio.EndianType.BigEndian))
                 {
-                    var assetFile = new AssetsFile(file, endianStream);
+                    var assetsManager = new AssetsManager();
+                    assetsManager.LoadFiles(new[] { file });
+                    foreach (var assetFile in assetsManager.assetsFileList)
+                    {
 
-                    // All assets
-                    assetFile.preloadTable.Values.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
+                        // All assets
+                        assetFile.Objects.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
+                    }
                 }
             }
         }
 
-        private void ImportAssetPreloadData(AssetPreloadData assetPreloadData)
+        private void ImportAssetPreloadData(AssetStudio.Object assetPreloadData)
         {
             if (assetPreloadData == null) throw new ArgumentNullException("assetPreloadData");
 
-            switch (assetPreloadData.Type2)
+            switch (assetPreloadData)
             {
                 //case 1: //GameObject
                 //case 4: //Transform
                 //case 224: //RectTransform
                 //case 21: //Material
-                case 28: //Texture2D
+                case AssetStudio.Texture2D a1: //Texture2D
                     {
                         ExportTexture(assetPreloadData);
                         break;
                     }
                 //case 48: //Shader
-                case 49: //TextAsset
+                case AssetStudio.TextAsset a2: //TextAsset
                     {
                         ExportText(assetPreloadData);
                         break;
                     }
-                case 83: //AudioClip
+                case AssetStudio.AudioClip a3: //AudioClip
                     {
                         ExportAudioClip(assetPreloadData);
                         break;
                     }
                 //case 89: //CubeMap
-                case 128: //Font
+                case AssetStudio.Font a4: //Font
                     {
                         // There have been issues with android font exports in the past, failing the font export is not fatal.
                         try
@@ -355,38 +377,42 @@ namespace FFGAppImport
                         break;
                     }
                 //case 129: //PlayerSettings
-                case 0:
+                default:
                     break;
             }
         }
 
         // Save texture to disk
-        private void ExportTexture(AssetPreloadData asset)
+        private void ExportTexture(AssetStudio.Object asset)
         {
             if (asset == null)
                 throw new ArgumentNullException("asset");
-            Texture2D texture2D = new Texture2D(asset, false);
-            texture2D = new Texture2D(asset, true);
+            AssetStudio.Texture2D texture2D = (AssetStudio.Texture2D) asset;
+            //texture2D = new Unity_Studio.Texture2D(asset, true);
+            NamedObject namedAsset = ((NamedObject)asset);
             string imgPath = Path.Combine(contentPath, "img");
             Directory.CreateDirectory(imgPath);
             // Default file name
-            string fileCandidate = Path.Combine(imgPath, asset.Text);
-            // This should apends a postfix to the name to avoid collisions
-            string fileName = GetAvailableFileName(fileCandidate, asset.extension);
-            ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
+            string fileCandidate = Path.Combine(imgPath, namedAsset.m_Name);
             
+            
+
             switch (texture2D.m_TextureFormat)
             {
                 #region DDS
-                case 1: //Alpha8
-                case 2: //A4R4G4B4
-                case 3: //B8G8R8 //confirmed on X360, iOS //PS3 unsure
-                case 4: //G8R8A8B8 //confirmed on X360, iOS
-                case 5: //B8G8R8A8 //confirmed on X360, PS3, Web, iOS
-                case 7: //R5G6B5 //confirmed switched on X360; confirmed on iOS
-                case 10: //DXT1
-                case 12: //DXT5
-                case 13: //R4G4B4A4, iOS (only?)
+                case TextureFormat.Alpha8: //Alpha8
+                case TextureFormat.ARGB4444: //A4R4G4B4
+                case TextureFormat.BGR24: //B8G8R8 //confirmed on X360, iOS //PS3 unsure
+                //case 4: //G8R8A8B8 //confirmed on X360, iOS
+                case TextureFormat.BGRA32: //B8G8R8A8 //confirmed on X360, PS3, Web, iOS
+                case TextureFormat.RGB565: //R5G6B5 //confirmed switched on X360; confirmed on iOS
+                case TextureFormat.DXT1: //DXT1
+                case TextureFormat.DXT5: //DXT5
+                case TextureFormat.RGBA4444: //R4G4B4A4, iOS (only?)
+                    // This should append a postfix to the name to avoid collisions
+                    string fileName = GetAvailableFileName(fileCandidate, ".dds");
+                    ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
+
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
                         using (var writer = new BinaryWriter(fs))
@@ -414,20 +440,25 @@ namespace FFGAppImport
                             writer.Write(new byte[12]); //dwCaps3&4 & dwReserved2
 
                             // Write image data
-                            writer.Write(texture2D.image_data);
+                            writer.Write(texture2D.image_data_bytes);
                         }
                     }
                     break;
                 #endregion
                 #region PVR
-                case 30: //PVRTC_RGB2
-                case 31: //PVRTC_RGBA2
-                case 32: //PVRTC_RGB4
-                case 33: //PVRTC_RGBA4
-                case 34: //ETC_RGB4
-                case 47: //ETC2_RGBA8
-                    // We put the image data in a PVR container. See the specification for details
-                    // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
+                case TextureFormat.PVRTC_RGB2: //PVRTC_RGB2
+                case TextureFormat.PVRTC_RGBA2: //PVRTC_RGBA2
+                case TextureFormat.PVRTC_RGB4: //PVRTC_RGB4
+                case TextureFormat.PVRTC_RGBA4: //PVRTC_RGBA4
+                case TextureFormat.ETC_RGB4: //ETC_RGB4
+                case TextureFormat.ETC2_RGBA8: //ETC2_RGBA8
+                                               // We put the image data in a PVR container. See the specification for details
+                                               // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
+                    // This should append a postfix to the name to avoid collisions
+                    fileName = GetAvailableFileName(fileCandidate, ".pvr");
+                    ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
+
+
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
                         using (var writer = new BinaryWriter(fs))
@@ -447,56 +478,63 @@ namespace FFGAppImport
                             writer.Write(texture2D.pvrMetaDataSize);
 
                             // Write image data
-                            writer.Write(texture2D.image_data);
+                            writer.Write(texture2D.image_data_bytes);
                         }
                     }
                     break;
                 #endregion
-                case 28: //DXT1 Crunched
-                case 29: //DXT1 Crunched
+                case TextureFormat.DXT1Crunched: //DXT1 Crunched
+                case TextureFormat.DXT5Crunched: //DXT1 Crunched
                 default:
-                    File.WriteAllBytes(fileName, texture2D.image_data);
+                    // This should append a postfix to the name to avoid collisions
+                    fileName = GetAvailableFileName(fileCandidate, ".tex");
+                    ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
+
+                    File.WriteAllBytes(fileName, texture2D.image_data_bytes);
+
                     break;
             }
         }
 
         // Save audio to file
-        private void ExportAudioClip(Unity_Studio.AssetPreloadData asset)
+        private void ExportAudioClip(AssetStudio.Object asset)
         {
             if (asset == null) throw new ArgumentNullException("asset");
-            var audioClip = new Unity_Studio.AudioClip(asset, false);
+            NamedObject namedAsset = ((NamedObject)asset);
+            //var audioClip = new Unity_Studio.AudioClip(asset, false);
             string audioPath = Path.Combine(contentPath, "audio");
             Directory.CreateDirectory(audioPath);
 
-            string fileCandidate = Path.Combine(audioPath, asset.Text);
+            string fileCandidate = Path.Combine(audioPath, namedAsset.m_Name);
 
             // This should apends a postfix to the name to avoid collisions
             string fileName = GetAvailableFileName(fileCandidate, ".ogg");
 
             // Pass to FSB Export
-            audioClip = new Unity_Studio.AudioClip(asset, true);
-            FSBExport.Write(audioClip.m_AudioData, fileName);
+            AssetStudio.AudioClip audioClip = (AssetStudio.AudioClip)asset;
+            FSBExport.Write(audioClip.m_AudioData.GetData(), fileName);
         }
 
         // Save text to file
-        private void ExportText(Unity_Studio.AssetPreloadData asset)
+        private void ExportText(AssetStudio.Object asset)
         {
             if (asset == null) throw new ArgumentNullException("asset");
-            var textAsset = new Unity_Studio.TextAsset(asset, false);
+            NamedObject namedAsset = ((NamedObject)asset);
+            var textAsset = (AssetStudio.TextAsset)asset;
             string textPath = Path.Combine(contentPath, "text");
             Directory.CreateDirectory(textPath);
-            string fileCandidate = Path.Combine(textPath, asset.Text);
+            string fileCandidate = Path.Combine(textPath, namedAsset.m_Name);
             
-            textAsset = new Unity_Studio.TextAsset(asset, true);
+            //textAsset = new Unity_Studio.TextAsset(asset, true);
 
             // This should apends a postfix to the name to avoid collisions
-            string fileName = GetAvailableFileName(fileCandidate, asset.extension);
+            string fileName = GetAvailableFileName(fileCandidate, ".txt");
 
             // Write to disk, pass the Deobfuscate key to decrypt
             File.WriteAllBytes(fileName, textAsset.Deobfuscate(finder.ObfuscateKey()));
 
             // Need to trim new lines from old D2E format
-            if (asset.Text.Equals("Localization"))
+            if (namedAsset.m_Name.Equals("Localization"))
             {
                 string[] locFix = File.ReadAllLines(fileName);
                 var locOut = new List<string>();
@@ -532,19 +570,21 @@ namespace FFGAppImport
         }
 
         // Save TTF font to dist
-        private void ExportFont(Unity_Studio.AssetPreloadData asset)
+        private void ExportFont(AssetStudio.Object asset)
         {
             if (asset == null) throw new ArgumentNullException("asset");
-            var font = new Unity_Studio.unityFont(asset, false);
+            NamedObject namedAsset = ((NamedObject)asset);
+            //var font = new Unity_Studio.unityFont(asset, false);
+            AssetStudio.Font font = (AssetStudio.Font)asset;
             string fontsPath = Path.Combine(contentPath, "fonts");
             Directory.CreateDirectory(fontsPath);
-            string fileCandidate = Path.Combine(fontsPath, asset.Text);
+            string fileCandidate = Path.Combine(fontsPath, namedAsset.m_Name);
 
-            font = new Unity_Studio.unityFont(asset, true);
+            //font = new Unity_Studio.unityFont(asset, true);
 
             if (font.m_FontData == null)
             {
-                ValkyrieDebug.Log("ERROR ExportFont: '" + asset.Text);
+                ValkyrieDebug.Log("ERROR ExportFont: '" + namedAsset.m_Name);
                 return;
             }
 

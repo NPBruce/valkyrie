@@ -96,6 +96,7 @@ namespace Unity_Studio
                     }
                 default:
                     {
+                        ValkyrieDebug.Log("Unsupported Unity version! For assets file. " + fileGen);
                         //MessageBox.Show("Unsupported Unity version!", "Unity Studio Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
