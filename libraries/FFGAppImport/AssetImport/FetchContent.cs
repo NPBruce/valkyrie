@@ -403,7 +403,7 @@ namespace FFGAppImport
                 case TextureFormat.Alpha8: //Alpha8
                 case TextureFormat.ARGB4444: //A4R4G4B4
                 case TextureFormat.BGR24: //B8G8R8 //confirmed on X360, iOS //PS3 unsure
-                //case 4: //G8R8A8B8 //confirmed on X360, iOS
+                case TextureFormat.RGBA32: //G8R8A8B8 //confirmed on X360, iOS
                 case TextureFormat.BGRA32: //B8G8R8A8 //confirmed on X360, PS3, Web, iOS
                 case TextureFormat.RGB565: //R5G6B5 //confirmed switched on X360; confirmed on iOS
                 case TextureFormat.DXT1: //DXT1

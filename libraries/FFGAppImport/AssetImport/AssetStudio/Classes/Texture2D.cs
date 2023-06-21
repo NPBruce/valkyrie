@@ -237,14 +237,14 @@ namespace AssetStudio
                         dwABitMask = 0x0;
                         break;
                     }
-                /*case 4: //G8R8A8B8 //confirmed on X360, iOS
+                case TextureFormat.RGBA32: //G8R8A8B8 //confirmed on X360, iOS
                     {
                         for (int i = 0; i < (image_data_size / 4); i++)
                         {
-                            byte b0 = image_data[i * 4];
-                            image_data[i * 4] = image_data[i * 4 + 2];
+                            byte b0 = image_data_bytes[i * 4];
+                            image_data_bytes[i * 4] = image_data_bytes[i * 4 + 2];
                             //image_data[i * 4 + 1] stays the same
-                            image_data[i * 4 + 2] = b0;
+                            image_data_bytes[i * 4 + 2] = b0;
                             //image_data[i * 4 + 3] stays the same
 
                         }
@@ -256,7 +256,7 @@ namespace AssetStudio
                         dwBBitMask = 0xFF;
                         dwABitMask = -16777216;
                         break;
-                    }*/
+                    }
                 case TextureFormat.BGRA32: //B8G8R8A8 //confirmed on X360, PS3, Web, iOS
                     {
                         for (int i = 0; i < (image_data_size / 4); i++)
