@@ -69,18 +69,9 @@
   <ItemGroup>
     <Compile Include="AssetImport\AppFinder.cs" />
     <Compile Include="AssetImport\IAFinder.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AssetPreloadData.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AssetsFile.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AudioClip.cs" />
-    <Compile Include="AssetImport\Unity_Studio\BuildSettings.cs" />
-    <Compile Include="AssetImport\Unity_Studio\ClassIDReference.cs" />
-    <Compile Include="AssetImport\Unity_Studio\EndianStream.cs" />
     <Compile Include="AssetImport\ExtractDataTool.cs" />
     <Compile Include="AssetImport\FetchContent.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Font.cs" />
     <Compile Include="AssetImport\FSBExport.cs" />
-    <Compile Include="AssetImport\Unity_Studio\GameObject.cs" />
-    <Compile Include="AssetImport\Unity_Studio\helpers.cs" />
     <Compile Include="AssetImport\MoMFinder.cs" />
     <Compile Include="AssetImport\oggencoder\ArrayExtensions.cs" />
     <Compile Include="AssetImport\oggencoder\Block.cs" />
@@ -464,9 +455,6 @@
     <Compile Include="AssetImport\OggVorbisHeader.cs" />
     <Compile Include="AssetImport\Registry.cs" />
     <Compile Include="AssetImport\RtLFinder.cs" />
-    <Compile Include="AssetImport\Unity_Studio\TextAsset.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Texture2D.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Transform.cs" />
     <Compile Include="FFGAppImport.cs" />
     <Compile Include="AssetImport\AssetStudio\StreamFile.cs" />
     <Compile Include="AssetImport\AssetStudio\EndianBinaryReader.cs" />

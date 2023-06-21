@@ -260,7 +260,7 @@ namespace FFGAppImport
             list = files.Where(x => !x.EndsWith(".manifest") && x.Contains("AssetBundles"));
             assetFiles.AddRange(list);
 
-            return assetFiles;
+            return assetFiles.Distinct().ToList();
         }
 
         // Write log of import

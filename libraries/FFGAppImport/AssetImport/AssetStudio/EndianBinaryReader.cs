@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.IO;
+using System.Text;
 
 namespace AssetStudio
 {
@@ -14,6 +15,11 @@ namespace AssetStudio
         {
             Endian = endian;
             buffer = new byte[8];
+        }
+
+        public new void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
         }
 
         public long Position
@@ -102,6 +108,10 @@ namespace AssetStudio
                 return BitConverter.ToDouble(buffer, 0);
             }
             return base.ReadDouble();
+        }
+        public string ReadASCII(int length)
+        {
+            return ASCIIEncoding.ASCII.GetString(base.ReadBytes(length));
         }
     }
 }

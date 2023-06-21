@@ -87,7 +87,6 @@ namespace Assets.Scripts.Content
 
                 // Get key result
                 string result = DictQuery(dict,lookup);
-                ValkyrieDebug.Log("Localisation lookup: " + lookup + " " + dict + " " + result);
 
                 // We (unity) don't support underlines
                 // Unity uses <> not []
