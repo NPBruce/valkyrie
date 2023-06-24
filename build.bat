@@ -39,7 +39,7 @@ exit /B
 )
 
 rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
-SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
+SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
 @echo on
 
 rem cleanup
