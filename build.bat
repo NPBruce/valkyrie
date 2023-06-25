@@ -38,6 +38,8 @@ echo [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor
 exit /B
 )
 
+rem find visual studio installation path so we can find the msbuild executable. e.g. in C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
+rem this way we can find whatever year/version of vs is installed.
 FOR /D %%B in ("%ProgramFiles%\Microsoft Visual Studio\*") do (SET "VSPATH=%%B")
 
 echo using visual studio path: %VSPATH%
