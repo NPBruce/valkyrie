@@ -45,7 +45,7 @@ FOR /D %%B in ("%ProgramFiles%\Microsoft Visual Studio\*") do (SET "VSPATH=%%B")
 echo using visual studio path: %VSPATH%
 
 rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
-SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%VSPATH%\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
+SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%VSPATH%\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%;%localappdata%\NuGet
 
 rem cleanup
 rmdir /s /q build\android
@@ -77,6 +77,10 @@ mkdir build\linux
 
 rem Because reasons
 set Target=
+
+rem install any external packages required by the libraries
+winget install -q Microsoft.NuGet -l "%localappdata%\NuGet" --accept-source-agreements --accept-package-agreements
+nuget restore libraries/libraries.sln
 
 rem Build libraries
 msbuild libraries/libraries.sln /nologo /p:Configuration="Release" /p:NoWarn=0108
