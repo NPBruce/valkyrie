@@ -373,7 +373,7 @@ public class ContentData {
         }
 
         // Check all possible extensions
-        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg" })
+        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg",".tex" })
         {
             string file = name + extension;
             if (File.Exists(file))

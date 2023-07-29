@@ -475,7 +475,9 @@ namespace Assets.Scripts.UI.Screens
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
                 DictionaryI18n ffgDict = new DictionaryI18n();
-                var localizationFiles = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                var localizationFilesRaw = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                var localizationFiles = localizationFilesRaw.Where(x => !Path.GetFileName(x).Any(char.IsDigit));
+
                 foreach (string file in localizationFiles)
                 {
                     ffgDict.AddDataFromFile(file);
