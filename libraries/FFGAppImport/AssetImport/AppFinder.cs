@@ -20,10 +20,12 @@ namespace FFGAppImport
         public abstract string Executable();
         public abstract string RequiredFFGVersion();
         public abstract string ObbPath();
+        public abstract string DataPath();
         public string location = "";
         public string obbRoot = "";
         public string obbVersion = "";
         public string exeLocation;
+        public string apkPath;
         public abstract int ObfuscateKey();
 
         public Platform platform;
@@ -142,30 +144,55 @@ namespace FFGAppImport
             Directory.Delete(obbRoot, true);
         }
 
-        public void ExtractObb()
+        public void ExtractApk()
         {
             if (platform != Platform.Android) return;
+
+            ValkyrieDebug.Log("Extracting the file " + apkPath + " to " + obbRoot);
+            DeleteObb();
+            Directory.CreateDirectory(obbRoot);
+            using (var zip = ZipFile.Read(apkPath))
+            {
+                zip.ExtractAll(obbRoot);
+            }
+
+        }
+
+        public bool ExtractObb()
+        {
+            if (platform != Platform.Android) return true;
 
             //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
             //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
             string obbPath = ObbPath();
             ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
             DeleteObb();
-            Directory.CreateDirectory(obbRoot);
-            using (var zip = ZipFile.Read(obbPath))
+            try
             {
-                zip.ExtractAll(obbRoot);
-            }
+                Directory.CreateDirectory(obbRoot);
+                using (var zip = ZipFile.Read(obbPath))
+                {
+                    zip.ExtractAll(obbRoot);
+                }
 
-            ConvertObbStreamingAssets();
-            ConvertObbAssets();
+                ConvertObbStreamingAssets();
+                ConvertObbAssets();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log(e.ToString());
+                return false;
+            }
         }
 
         internal string ExtractObbVersion()
         {
             if (platform != Platform.Android) return "";
+
             if (!string.IsNullOrEmpty(obbVersion)) return obbVersion; // lookup version only once
             string obbPath = ObbPath();
+            if (obbPath == "") return "";
             ValkyrieDebug.Log("Extracting the version from " + obbPath + ".");
             using (var zip = ZipFile.Read(obbPath))
             {
@@ -285,6 +312,12 @@ namespace FFGAppImport
             string dirAssetBundlesWin = Path.Combine(dirStreamingAssets, "AssetBundles");
             ValkyrieDebug.Log("Moving StreamingAssets dir '" + dirAssetBundles + "' to '" + dirAssetBundlesWin + "'");
             Directory.Move(dirAssetBundles, dirAssetBundlesWin);
+        }
+
+        public string GetDataPath(string packageName)
+        {
+            
+            return Android.GetStorage() + "/Android/data/" + packageName;
         }
 
         protected string GetObbPath(string prefix, string suffix)

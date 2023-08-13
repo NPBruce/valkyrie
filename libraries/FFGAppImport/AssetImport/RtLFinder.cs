@@ -54,6 +54,11 @@ namespace FFGAppImport
             return 0;
         }
 
+        public override string DataPath()
+        {
+            return GetDataPath("com.fantasyflightgames.rtl");
+        }
+
         public override string ObbPath()
         {
             if (obbPath != null) // try this only once

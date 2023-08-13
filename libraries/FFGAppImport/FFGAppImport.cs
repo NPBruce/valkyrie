@@ -11,6 +11,8 @@ namespace FFGAppImport
         public GameType type;
         public Platform platform;
         public string path;
+        public string apkPath = "";
+        public string packageVersion = "";
         public bool editor;
         FetchContent fc;
 
@@ -43,6 +45,7 @@ namespace FFGAppImport
             fc.Import(import_path);
             return true;
         }
+
     }
 
     public enum GameType

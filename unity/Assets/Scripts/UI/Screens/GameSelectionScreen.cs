@@ -77,9 +77,17 @@ namespace Assets.Scripts.UI.Screens
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcD2E.apkPath = GetAndroidAPKPath("com.fantasyflightgames.rtl");
+                fcD2E.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.rtl");
+
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcMoM.apkPath = GetAndroidAPKPath("com.fantasyflightgames.mom");
+                fcMoM.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.mom");
+
 #if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                fcIA.apkPath = GetAndroidAPKPath("com.fantasyflightgames.iaca");
+                fcIA.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.iaca");
 #endif
             }
             else
@@ -509,6 +517,50 @@ namespace Assets.Scripts.UI.Screens
             ExtractBundles();
             // TODO: Delete Obb dir for Android build here
             Draw();
+        }
+
+        public string GetAndroidAPKPath(string packageName)
+        {
+            try
+            {
+                int ret = AndroidJNI.AttachCurrentThread();
+                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+
+                string apkPath = activity.Call<AndroidJavaObject>("getApplicationContext").Call<AndroidJavaObject>("getPackageManager").Call<AndroidJavaObject>("getPackageInfo", packageName, 0).Get<AndroidJavaObject>("applicationInfo").Get<string>("sourceDir");
+                if (ret != 0)
+                    AndroidJNI.DetachCurrentThread();
+                if (apkPath != null)
+                {
+                    return apkPath;
+                }
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log(e.ToString());
+            }
+            return "";
+        }
+
+        public string GetAndroidPackageVersion(string packageName)
+        {
+            try
+            {
+                int ret = AndroidJNI.AttachCurrentThread();
+                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+
+                string version = activity.Call<AndroidJavaObject>("getApplicationContext").Call<AndroidJavaObject>("getPackageManager").Call<AndroidJavaObject>("getPackageInfo", packageName, 0).Get<string>("versionName");
+                if (ret != 0)
+                    AndroidJNI.DetachCurrentThread();
+                if (version != null)
+                {
+                    return version;
+                }
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log(e.ToString());
+            }
+            return "";
         }
 
         /// <summary>

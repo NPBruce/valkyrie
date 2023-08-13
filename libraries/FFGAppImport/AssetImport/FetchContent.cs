@@ -66,6 +66,10 @@ namespace FFGAppImport
             if (importData.platform == Platform.Android)
             {
                 importAvailable = File.Exists(finder.ObbPath());
+                if(!importAvailable && import.apkPath.Length != 0)
+                {
+                    importAvailable = true;
+                }
             }
         }
 
@@ -109,7 +113,16 @@ namespace FFGAppImport
             {
                 if (importData.platform == Platform.Android)
                 {
-                    return finder.ExtractObbVersion();
+                    appVersion = finder.ExtractObbVersion();
+                    if (appVersion != "")
+                    {
+                        return appVersion;
+                    }
+                    else if(importData.packageVersion != "")
+                    {
+                        return importData.packageVersion;
+                    }
+
                 }
                 string resourcesAssets = Path.Combine(finder.location, "resources.assets");
                 if (!File.Exists(resourcesAssets))
@@ -184,8 +197,12 @@ namespace FFGAppImport
             }
             try
             {
+                finder.apkPath = importData.apkPath;
                 // Does nothing, if we aren't on Android
-                finder.ExtractObb();
+                if (!finder.ExtractObb())
+                {
+                    finder.ExtractApk();
+                }
 
                 // Attempt to clean up old import
                 if (!CleanImport()) return;
@@ -217,6 +234,10 @@ namespace FFGAppImport
         {
             // List all assets files
             var files = new List<string>(Directory.GetFiles(finder.location,"*", SearchOption.AllDirectories));
+            if(importData.platform == Platform.Android)
+            {
+                files.AddRange(Directory.GetFiles(finder.DataPath(), "*", SearchOption.AllDirectories));
+            }
 
             if (files.Count() < 1)
             {
