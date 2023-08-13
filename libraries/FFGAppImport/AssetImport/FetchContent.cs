@@ -234,6 +234,7 @@ namespace FFGAppImport
         {
             // List all assets files
             var files = new List<string>(Directory.GetFiles(finder.location,"*", SearchOption.AllDirectories));
+            
             if(importData.platform == Platform.Android)
             {
                 files.AddRange(Directory.GetFiles(finder.DataPath(), "*", SearchOption.AllDirectories));
