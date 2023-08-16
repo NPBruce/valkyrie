@@ -65,8 +65,15 @@ namespace FFGAppImport
 
             if (importData.platform == Platform.Android)
             {
-                importAvailable = File.Exists(finder.ObbPath());
-                if(!importAvailable && import.apkPath.Length != 0)
+                try
+                {
+                    importAvailable = File.Exists(finder.ObbPath());
+                }
+                catch (Exception ex)
+                {
+                    ValkyrieDebug.Log("FetchContent caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                }
+                if (!importAvailable && import.apkPath.Length != 0)
                 {
                     importAvailable = true;
                 }
@@ -237,7 +244,18 @@ namespace FFGAppImport
             
             if(importData.platform == Platform.Android)
             {
-                files.AddRange(Directory.GetFiles(finder.DataPath(), "*", SearchOption.AllDirectories));
+                try
+                {
+                    files.AddRange(Directory.GetFiles(finder.DataPath(), "*", SearchOption.AllDirectories));
+                }
+                catch (Exception ex)
+                {
+                    ValkyrieDebug.Log("GetAssetFiles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                }
+                if (Directory.Exists(finder.AuxDataPath()))
+                {
+                    files.AddRange(Directory.GetFiles(finder.AuxDataPath(), "*", SearchOption.AllDirectories));
+                }
             }
 
             if (files.Count() < 1)
@@ -432,6 +450,7 @@ namespace FFGAppImport
                 case TextureFormat.DXT5: //DXT5
                 case TextureFormat.RGBA4444: //R4G4B4A4, iOS (only?)
                     // This should append a postfix to the name to avoid collisions
+                    if (!IsAvailableFileName(fileCandidate, ".dds")) return;
                     string fileName = GetAvailableFileName(fileCandidate, ".dds");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -476,7 +495,8 @@ namespace FFGAppImport
                 case TextureFormat.ETC2_RGBA8: //ETC2_RGBA8
                                                // We put the image data in a PVR container. See the specification for details
                                                // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
-                    // This should append a postfix to the name to avoid collisions
+                                               // This should append a postfix to the name to avoid collisions
+                    if (!IsAvailableFileName(fileCandidate, ".pvr")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".pvr");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -509,6 +529,7 @@ namespace FFGAppImport
                 case TextureFormat.DXT5Crunched: //DXT1 Crunched
                 default:
                     // This should append a postfix to the name to avoid collisions
+                    if (!IsAvailableFileName(fileCandidate, ".tex")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".tex");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -530,6 +551,7 @@ namespace FFGAppImport
             string fileCandidate = Path.Combine(audioPath, namedAsset.m_Name);
 
             // This should apends a postfix to the name to avoid collisions
+            if (!IsAvailableFileName(fileCandidate, ".ogg")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ogg");
 
             // Pass to FSB Export
@@ -546,10 +568,11 @@ namespace FFGAppImport
             string textPath = Path.Combine(contentPath, "text");
             Directory.CreateDirectory(textPath);
             string fileCandidate = Path.Combine(textPath, namedAsset.m_Name);
-            
+
             //textAsset = new Unity_Studio.TextAsset(asset, true);
 
             // This should apends a postfix to the name to avoid collisions
+            if (!IsAvailableFileName(fileCandidate, ".txt")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".txt");
 
             // Write to disk, pass the Deobfuscate key to decrypt
@@ -611,6 +634,7 @@ namespace FFGAppImport
             }
 
             // This should apends a postfix to the name to avoid collisions
+            if (!IsAvailableFileName(fileCandidate, ".ttf")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ttf");
 
             // Write to disk
@@ -713,6 +737,14 @@ namespace FFGAppImport
             string bundlesFile = Path.Combine(contentPath, "bundles.txt");
             ValkyrieDebug.Log("Writing '" + bundlesFile + "' containing " + bundles.Count + " items");
             File.WriteAllLines(bundlesFile, bundles.ToArray());
+        }
+
+        private static bool IsAvailableFileName(string fileCandidate, string extension)
+        {
+            if (fileCandidate == null) throw new ArgumentNullException("fileCandidate");
+            if (extension == null) throw new ArgumentNullException("extension");
+            string fileName = fileCandidate + extension;
+            return !File.Exists(fileName);
         }
 
         /// <summary>
