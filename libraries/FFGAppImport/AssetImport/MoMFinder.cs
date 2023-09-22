@@ -60,6 +60,11 @@ namespace FFGAppImport
             return GetDataPath("com.fantasyflightgames.mom");
         }
 
+        public override string AuxDataPath()
+        {
+            return GetAuxDataPath("com.fantasyflightgames.mom");
+        }
+
         public override string ObbPath()
         {
             if (obbPath != null) // try this only once

@@ -1,0 +1,2 @@
+include ':fsaf', ':fsaf_test_app'
+rootProject.name='FSAF'

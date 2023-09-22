@@ -77,17 +77,43 @@ namespace Assets.Scripts.UI.Screens
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcD2E.apkPath = GetAndroidAPKPath("com.fantasyflightgames.rtl");
-                fcD2E.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.rtl");
+                try
+                {
+                    fcD2E.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.rtl");
+                    fcD2E.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.rtl");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find D2E app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
 
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcMoM.apkPath = GetAndroidAPKPath("com.fantasyflightgames.mom");
-                fcMoM.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.mom");
+
+                try
+                {
+                    fcMoM.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.mom");
+                    fcMoM.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.mom");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find MoM app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
 
 #if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcIA.apkPath = GetAndroidAPKPath("com.fantasyflightgames.iaca");
-                fcIA.packageVersion = GetAndroidPackageVersion("com.fantasyflightgames.iaca");
+                try
+                {
+                    fcIA.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.iaca");
+                    fcIA.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.iaca");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find IA app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
+
 #endif
             }
             else
@@ -371,6 +397,16 @@ namespace Assets.Scripts.UI.Screens
 
             ValkyrieDebug.Log("INFO: Import "+type);
 
+            if (Application.platform == RuntimePlatform.Android && type.Equals("MoM"))
+            {
+                //If we're running on Android 11+ ask for the users permission to copy the data out of the Official MoM apps data location.
+                if (Android.GetSDKLevel() > 29)
+                {
+                    ValkyrieDebug.Log("INFO: Asking for permission and copying MoM data.");
+                    Android.CopyMoMData();
+                }
+            }
+
 
             if (manual_path_selection)
             {
@@ -519,49 +555,6 @@ namespace Assets.Scripts.UI.Screens
             Draw();
         }
 
-        public string GetAndroidAPKPath(string packageName)
-        {
-            try
-            {
-                int ret = AndroidJNI.AttachCurrentThread();
-                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-
-                string apkPath = activity.Call<AndroidJavaObject>("getApplicationContext").Call<AndroidJavaObject>("getPackageManager").Call<AndroidJavaObject>("getPackageInfo", packageName, 0).Get<AndroidJavaObject>("applicationInfo").Get<string>("sourceDir");
-                if (ret != 0)
-                    AndroidJNI.DetachCurrentThread();
-                if (apkPath != null)
-                {
-                    return apkPath;
-                }
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-            }
-            return "";
-        }
-
-        public string GetAndroidPackageVersion(string packageName)
-        {
-            try
-            {
-                int ret = AndroidJNI.AttachCurrentThread();
-                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-
-                string version = activity.Call<AndroidJavaObject>("getApplicationContext").Call<AndroidJavaObject>("getPackageManager").Call<AndroidJavaObject>("getPackageInfo", packageName, 0).Get<string>("versionName");
-                if (ret != 0)
-                    AndroidJNI.DetachCurrentThread();
-                if (version != null)
-                {
-                    return version;
-                }
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-            }
-            return "";
-        }
 
         /// <summary>
         /// 

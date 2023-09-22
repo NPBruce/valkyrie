@@ -21,6 +21,7 @@ namespace FFGAppImport
         public abstract string RequiredFFGVersion();
         public abstract string ObbPath();
         public abstract string DataPath();
+        public abstract string AuxDataPath();
         public string location = "";
         public string obbRoot = "";
         public string obbVersion = "";
@@ -161,10 +162,10 @@ namespace FFGAppImport
         public bool ExtractObb()
         {
             if (platform != Platform.Android) return true;
-
             //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
             //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
             string obbPath = ObbPath();
+            if (obbPath == "") return false;
             ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
             DeleteObb();
             try
@@ -320,18 +321,32 @@ namespace FFGAppImport
             return Android.GetStorage() + "/Android/data/" + packageName;
         }
 
+        public string GetAuxDataPath(string packageName)
+        {
+
+            return Android.GetStorage() + "/Valkyrie/" + packageName;
+        }
+
         protected string GetObbPath(string prefix, string suffix)
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
             if (suffix == null) throw new ArgumentNullException("suffix");
-
-            string location = Path.Combine(Android.GetStorage(), prefix);
-            if (!Directory.Exists(location))
+            try
             {
+                string location = Path.Combine(Android.GetStorage(), prefix);
+
+                if (!Directory.Exists(location))
+                {
+                    return "";
+                }
+                var file = Directory.GetFiles(location).ToList().Find(x => x.EndsWith(suffix));
+                return file ?? "";
+            }
+            catch (Exception ex)
+            {
+                ValkyrieDebug.Log("GetObbPath caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
                 return "";
             }
-            var file = Directory.GetFiles(location).ToList().Find(x => x.EndsWith(suffix));
-            return file ?? "";
         }
     }
 }

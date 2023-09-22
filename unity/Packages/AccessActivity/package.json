@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0", 
+  "author": {
+    "name": "SeinSinnes" 
+  }, 
+  "displayName": "Access Activity", 
+  "unity": "2018.1", 
+  "dependencies": {
+  }, 
+  "name": "com.android.test.accessactivity", 
+  "description": "Ask for access on android."
+}

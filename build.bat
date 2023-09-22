@@ -11,7 +11,7 @@ exit /B
 
 rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
 IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
-IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
+IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\ojdkbuild\java-1.8.0-openjdk-1.8.0.212-1
 IF NOT EXIST "%JDK_HOME%" ( 
 echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
 exit /B
@@ -45,7 +45,7 @@ FOR /D %%B in ("%ProgramFiles%\Microsoft Visual Studio\*") do (SET "VSPATH=%%B")
 echo using visual studio path: %VSPATH%
 
 rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
-SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%VSPATH%\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%;%localappdata%\NuGet
+SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%VSPATH%\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%;%localappdata%\NuGet;%ProgramFiles%\Git\bin
 
 rem cleanup
 rmdir /s /q build\android
@@ -75,6 +75,12 @@ mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
 
+rem build Android Storage Access Framework library.
+cd FSAF
+call .\gradlew.bat build
+copy fsaf\build\outputs\aar\fsaf-release.aar ..\unity\Assets\Plugins\Android\
+cd ..
+
 rem Because reasons
 set Target=
 
@@ -90,7 +96,7 @@ SetVersion %~dp0
 
 rem build unity
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-windows.log 
+rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log ..\build\Editor_valkyrie-windows.log 
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-macos.log 
@@ -99,7 +105,7 @@ Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\b
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-android.log
+rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log Editor_valkyrie-android.log
 
 rem delete the META-INF from the apk
 7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
