@@ -11,7 +11,7 @@ exit /B
 
 rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
 IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
-IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\ojdkbuild\java-1.8.0-openjdk-1.8.0.212-1
+IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
 IF NOT EXIST "%JDK_HOME%" ( 
 echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
 exit /B
