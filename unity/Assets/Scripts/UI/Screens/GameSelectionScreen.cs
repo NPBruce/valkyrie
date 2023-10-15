@@ -402,8 +402,18 @@ namespace Assets.Scripts.UI.Screens
                 //If we're running on Android 11+ ask for the users permission to copy the data out of the Official MoM apps data location.
                 if (Android.GetSDKLevel() > 29)
                 {
-                    ValkyrieDebug.Log("INFO: Asking for permission and copying MoM data.");
-                    Android.CopyMoMData();
+                    ValkyrieDebug.Log("INFO: Asking for permission and copying of MoM data.");
+                    Android.CopyOfficialAppData("com.fantasyflightgames.mom");
+                }
+            }
+
+            if (Application.platform == RuntimePlatform.Android && type.Equals("D2E"))
+            {
+                //If we're running on Android 11+ ask for the users permission to copy the data out of the Official MoM apps data location.
+                if (Android.GetSDKLevel() > 29)
+                {
+                    ValkyrieDebug.Log("INFO: Asking for permission and copying of D2E data.");
+                    Android.CopyOfficialAppData("com.fantasyflightgames.rtl");
                 }
             }
 

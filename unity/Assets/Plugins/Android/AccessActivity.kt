@@ -38,19 +38,21 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
 
         const val DOCID_ANDROID_DATA = "primary:Android/data"
 
-        const val MOM_DATA_DIR_NAME = "com.fantasyflightgames.mom"
+        //const val MOM_DATA_DIR_NAME = "com.fantasyflightgames.mom"
 
         const val REQ_SAF_R_DATA = 2030
 
         const val TREE_URI = "tree_uri"
 	
 	@JvmStatic
-    	fun makeActivity(act: Activity, appContext: Context) {
-		Log.e(TAG, " running mack act")
-                Log.e(TAG, " appCon: $appContext")
+    	fun makeActivity(act: Activity, appContext: Context, targetPackageName : String) {
+		    Log.e(TAG, " running mack act")
+            Log.e(TAG, " appCon: $appContext")
        		val intent = Intent(act, AccessActivity::class.java)
-		Log.e(TAG, " done intent")
+            intent.putExtra("targetPackageName", targetPackageName)
+		    Log.e(TAG, " done intent")
        		act.startActivity(intent)
+            
     	}
     }
 
@@ -60,7 +62,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
         var docId = DOCID_ANDROID_DATA
         if (DocumentVM.atLeastR()) {
             if (Build.VERSION.SDK_INT > 31) {
-                docId += "/" + MOM_DATA_DIR_NAME
+                docId += "/" + getIntent().getExtras().getString("targetPackageName")
             }
             Log.e(TAG, " onSelected: $docId")
             Log.e(TAG, " askForPerm onSelected: $docId")
@@ -129,7 +131,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
                         if (data != null) {
                             goSAF(data)
 
-                            removeTreeUri()
+                            //removeTreeUri()
                             storeTreeUri(data)
 
                             try {
@@ -139,7 +141,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
                                 e.printStackTrace()
                             }
 
-                            copyMoMData()
+                            copyOfficialData()
                         }
                     } 
                 } else {
@@ -152,8 +154,18 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
         finish()
     }
 
+    private fun deleteDirectory( directoryToBeDeleted : File) : Boolean {
+        val allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (file in allContents) {
+                deleteDirectory(file)
+            }
+        }
+        return directoryToBeDeleted.delete()
+    }
 
-    private fun copyMoMData() {
+
+    private fun copyOfficialData() {
         try {
             val baseSAFDir = fileManager.newBaseDirectoryFile<AccessBaseDirectory>()
             if (baseSAFDir == null) {
@@ -161,22 +173,26 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
             }
 
             val baseFileApiDir = fileManager.fromRawFile(
-                File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie" , MOM_DATA_DIR_NAME)
+                File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie" , getIntent().getExtras().getString("targetPackageName"))
             )
-            val directory = File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie" , MOM_DATA_DIR_NAME)
+            val directory = File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie" , getIntent().getExtras().getString("targetPackageName"))
 
             if (!directory.exists()) {
-                directory.mkdir();
+                directory.mkdir()
+            }
+            else {
+                deleteDirectory(directory)
+                directory.mkdir()
             }
 
-            if (baseSAFDir.getFullPath().endsWith(MOM_DATA_DIR_NAME)) {
+            if (baseSAFDir.getFullPath().endsWith(getIntent().getExtras().getString("targetPackageName"))) {
                 fileManager.copyDirectoryWithContent(baseSAFDir, baseFileApiDir, true)
             }
             else {
                 val innerFiles = fileManager.listFiles(baseSAFDir)
             
                 innerFiles.forEach {
-                    if (it.getFullPath().endsWith(MOM_DATA_DIR_NAME)) {
+                    if (it.getFullPath().endsWith(getIntent().getExtras().getString("targetPackageName"))) {
                         Log.i(TAG, " from: $it to: $baseFileApiDir")
 
                         fileManager.copyDirectoryWithContent(it, baseFileApiDir, true)
@@ -203,8 +219,11 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
 
         check(fileManager.exists(dir)) { "Does not exist" }
         check(fileManager.isDirectory(dir)) { "Not a dir" }
-
-        fileManager.registerBaseDir<AccessBaseDirectory>(accessBaseDirectory)
+        try {
+            fileManager.registerBaseDir<AccessBaseDirectory>(accessBaseDirectory)
+        }  catch (error: Throwable) {
+	        Log.d(TAG, Log.getStackTraceString(error))
+        }
         sharedPreferences.edit().putString(TREE_URI, uri.toString()).apply()
         Log.d(TAG, "storeTreeUri: $uri")
     }

@@ -29,8 +29,9 @@ namespace ValkyrieTools
             return "";
         }
 
-        public static string CopyMoMData()
+        public static string CopyOfficialAppData(string packageName)
         {
+             
             try
             {
                 // we import in a thread, we have to attach JNI, otherwise we would crash
@@ -39,12 +40,12 @@ namespace ValkyrieTools
                 var appContext = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity").Call<AndroidJavaObject>("getApplicationContext");
                 AndroidJavaClass jc = new AndroidJavaClass("com.android.accessmomdata.AccessActivity");
 
-                jc.CallStatic("makeActivity", activity, appContext);
+                jc.CallStatic("makeActivity", activity, appContext, packageName);
                 if (ret != 0)
                     AndroidJNI.DetachCurrentThread();
 
                 //Block until android MoM data copy completed.
-                string doneIndicatorFilePath = GetStorage() + "/Valkyrie/com.fantasyflightgames.mom/done";
+                string doneIndicatorFilePath = GetStorage() + "/Valkyrie/" + packageName + "/done";
                 while (!File.Exists(doneIndicatorFilePath))
                 {
                     Thread.Sleep(1000);
