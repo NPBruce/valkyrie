@@ -36,7 +36,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
     companion object {
         private const val TAG = "MainActivity"
 
-        const val DOCID_ANDROID_DATA = "primary:Android/data"
+        const val DOCID_ANDROID_DATA = "primary:Android/"
 
         //const val MOM_DATA_DIR_NAME = "com.fantasyflightgames.mom"
 
@@ -45,11 +45,12 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
         const val TREE_URI = "tree_uri"
 	
 	@JvmStatic
-    	fun makeActivity(act: Activity, appContext: Context, targetPackageName : String) {
-		    Log.e(TAG, " running mack act")
+    	fun makeActivity(act: Activity, appContext: Context, targetPackageName : String, andriodDataDir : String) {
+		    Log.e(TAG, " running new activity to request access")
             Log.e(TAG, " appCon: $appContext")
        		val intent = Intent(act, AccessActivity::class.java)
             intent.putExtra("targetPackageName", targetPackageName)
+            intent.putExtra("andriodDataDir", andriodDataDir)
 		    Log.e(TAG, " done intent")
        		act.startActivity(intent)
             
@@ -59,7 +60,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
     var tv: TextView? = null
 
     fun doPermissionRequestAndCopy() {
-        var docId = DOCID_ANDROID_DATA
+        var docId = DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir")
         if (DocumentVM.atLeastR()) {
             if (Build.VERSION.SDK_INT > 31) {
                 docId += "/" + getIntent().getExtras().getString("targetPackageName")
@@ -116,7 +117,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
     }
 
     private fun goAndroidData(path: String?) {
-        val uri = DocumentVM.getFolderUri(DOCID_ANDROID_DATA, true)
+        val uri = DocumentVM.getFolderUri(DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir"), true)
         goSAF(uri, path)
     }
 
@@ -126,7 +127,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
         val data = intent?.data
         if (requestCode == REQ_SAF_R_DATA) {
             if (act != null) {
-                if (!DocumentVM.checkFolderPermission(act,DOCID_ANDROID_DATA)) {
+                if (!DocumentVM.checkFolderPermission(act,DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir"))) {
                     if (resultCode == Activity.RESULT_OK) {
                         if (data != null) {
                             goSAF(data)
@@ -201,7 +202,7 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
             }
 
 
-	       val copyCompleteIndicationFile = File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie/com.fantasyflightgames.mom/done");
+	       val copyCompleteIndicationFile = File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie/" + getIntent().getExtras().getString("targetPackageName") + "/done");
            if (!copyCompleteIndicationFile.exists()) {
                copyCompleteIndicationFile.createNewFile()
            }

@@ -66,9 +66,9 @@ namespace FFGAppImport
 
         public override string ObbPath()
         {
-            if (obbPath != null) // try this only once
+            if (obbPath != null && !obbPath.Equals("")) // try this only once
                 return obbPath;
-            obbPath = GetObbPath("Android/obb/com.fantasyflightgames.rtl", ".com.fantasyflightgames.rtl.obb");
+            obbPath = GetObbPath("Android/obb/com.fantasyflightgames.rtl", ".com.fantasyflightgames.rtl.obb", "Valkyrie/com.fantasyflightgames.rtl");
             return obbPath;
         }
     }

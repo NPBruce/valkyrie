@@ -273,7 +273,7 @@ namespace FFGAppImport
             assetFiles.AddRange(list); // load '*.assets'
 
             // get all random named files like 'd18b80b6f1c734d1eb70d521a2dbeda9' (found on Android)
-            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level") && !x.EndsWith(".dll") && !x.EndsWith(".manifest"));
+            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level") && !x.EndsWith(".dll") && !x.EndsWith(".obb") && !x.EndsWith(".manifest"));
             assetFiles.AddRange(list);
 
             // get all level asset file, so that level2, level3 and level20 are in the right order

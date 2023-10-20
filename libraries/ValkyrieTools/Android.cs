@@ -35,12 +35,18 @@ namespace ValkyrieTools
             try
             {
                 // we import in a thread, we have to attach JNI, otherwise we would crash
+                string andriodDataDir = "data";
                 int ret = AndroidJNI.AttachCurrentThread();
                 var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
                 var appContext = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity").Call<AndroidJavaObject>("getApplicationContext");
                 AndroidJavaClass jc = new AndroidJavaClass("com.android.accessmomdata.AccessActivity");
 
-                jc.CallStatic("makeActivity", activity, appContext, packageName);
+                if(packageName.Equals("com.fantasyflightgames.rtl"))
+                {
+                    andriodDataDir = "obb";
+                }
+
+                jc.CallStatic("makeActivity", activity, appContext, packageName, andriodDataDir);
                 if (ret != 0)
                     AndroidJNI.DetachCurrentThread();
 

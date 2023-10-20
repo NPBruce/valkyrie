@@ -327,7 +327,7 @@ namespace FFGAppImport
             return Android.GetStorage() + "/Valkyrie/" + packageName;
         }
 
-        protected string GetObbPath(string prefix, string suffix)
+        protected string GetObbPath(string prefix, string suffix, string altprefix = null)
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
             if (suffix == null) throw new ArgumentNullException("suffix");
@@ -345,8 +345,16 @@ namespace FFGAppImport
             catch (Exception ex)
             {
                 ValkyrieDebug.Log("GetObbPath caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
-                return "";
+                if(altprefix == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return GetObbPath(altprefix, suffix);
+                }
             }
+
         }
     }
 }
