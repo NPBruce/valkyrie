@@ -142,13 +142,15 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
                                 e.printStackTrace()
                             }
 
-                            copyOfficialData()
+                            //copyOfficialData()
                         }
                     } 
                 } else {
                     goAndroidData(null)
                 }
             }
+            //Lets try copying data no matter the outcome.
+            copyOfficialData()
         }
         Log.i(TAG, "End of onActivityResult")
         super.onActivityResult(requestCode, resultCode, intent)
@@ -185,20 +187,29 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
                 deleteDirectory(directory)
                 directory.mkdir()
             }
+            var packageDirFound = false
 
             if (baseSAFDir.getFullPath().endsWith(getIntent().getExtras().getString("targetPackageName"))) {
                 fileManager.copyDirectoryWithContent(baseSAFDir, baseFileApiDir, true)
+                packageDirFound = true
             }
             else {
                 val innerFiles = fileManager.listFiles(baseSAFDir)
+                
             
                 innerFiles.forEach {
                     if (it.getFullPath().endsWith(getIntent().getExtras().getString("targetPackageName"))) {
                         Log.i(TAG, " from: $it to: $baseFileApiDir")
 
                         fileManager.copyDirectoryWithContent(it, baseFileApiDir, true)
+                        packageDirFound = true
                     }
                 }
+            }
+
+            if(!packageDirFound)
+            {
+                throw NullPointerException("packageDirFound not found!")
             }
 
 
@@ -212,6 +223,10 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
 	        Log.d(TAG, message)
         } catch (error: Throwable) {
 	        Log.d(TAG, Log.getStackTraceString(error))
+           val copyFailedIndicationFile = File(Environment.getExternalStorageDirectory().absolutePath + "/Valkyrie/" + getIntent().getExtras().getString("targetPackageName") + "/failed");
+           if (!copyFailedIndicationFile.exists()) {
+               copyFailedIndicationFile.createNewFile()
+           }
         }
     }
 

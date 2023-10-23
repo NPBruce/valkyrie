@@ -29,11 +29,16 @@ namespace ValkyrieTools
             return "";
         }
 
-        public static string CopyOfficialAppData(string packageName)
+        public static bool CopyOfficialAppData(string packageName)
         {
              
             try
             {
+
+                if(Directory.Exists(GetStorage() + "/Valkyrie/" + packageName))
+                {
+                    Directory.Delete(GetStorage() + "/Valkyrie/" + packageName, true);
+                }
                 // we import in a thread, we have to attach JNI, otherwise we would crash
                 string andriodDataDir = "data";
                 int ret = AndroidJNI.AttachCurrentThread();
@@ -52,16 +57,29 @@ namespace ValkyrieTools
 
                 //Block until android MoM data copy completed.
                 string doneIndicatorFilePath = GetStorage() + "/Valkyrie/" + packageName + "/done";
-                while (!File.Exists(doneIndicatorFilePath))
+                string failedIndicatorFilePath = GetStorage() + "/Valkyrie/" + packageName + "/failed";
+                while (!File.Exists(doneIndicatorFilePath) && !File.Exists(failedIndicatorFilePath))
                 {
                     Thread.Sleep(1000);
+                }
+                if(File.Exists(failedIndicatorFilePath))
+                {
+                    ValkyrieDebug.Log("Failed copy with indicator");
+                    return false;
+                }
+
+                if (File.Exists(doneIndicatorFilePath))
+                {
+                    ValkyrieDebug.Log("Done copy with indicator");
                 }
             }
             catch (System.Exception e)
             {
                 ValkyrieDebug.Log(e.ToString());
+                ValkyrieDebug.Log("Exception in copy");
+                return false;
             }
-            return "";
+            return true;
         }
 
         public static int GetSDKLevel()

@@ -403,7 +403,10 @@ namespace Assets.Scripts.UI.Screens
                 if (Android.GetSDKLevel() > 29)
                 {
                     ValkyrieDebug.Log("INFO: Asking for permission and copying of MoM data.");
-                    Android.CopyOfficialAppData("com.fantasyflightgames.mom");
+                    if (!Android.CopyOfficialAppData("com.fantasyflightgames.mom"))
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -413,7 +416,10 @@ namespace Assets.Scripts.UI.Screens
                 if (Android.GetSDKLevel() > 29)
                 {
                     ValkyrieDebug.Log("INFO: Asking for permission and copying of D2E data.");
-                    Android.CopyOfficialAppData("com.fantasyflightgames.rtl");
+                    if(!Android.CopyOfficialAppData("com.fantasyflightgames.rtl"))
+                    {
+                        return;
+                    }
                 }
             }
 
