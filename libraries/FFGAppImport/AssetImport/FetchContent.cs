@@ -6,6 +6,7 @@ using System.IO;
 using ValkyrieTools;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace FFGAppImport
 {
@@ -19,6 +20,7 @@ namespace FFGAppImport
         AppFinder finder = null;
         public bool importAvailable;
         string logFile;
+        AssetsManager assetsManager;
 
         // Set up and check availability
         //public FetchContent(GameType type, string path)
@@ -26,6 +28,7 @@ namespace FFGAppImport
         {
             importData = import;
             contentPath = import.path;
+            assetsManager = new AssetsManager(this);
             if (import.type == GameType.D2E)
             {
                 finder = new RtLFinder(import.platform);
@@ -116,6 +119,7 @@ namespace FFGAppImport
         public string FetchAppVersion()
         {
             string appVersion = "";
+            var versionAssetsManager = new AssetsManager();
             try
             {
                 if (importData.platform == Platform.Android)
@@ -151,10 +155,10 @@ namespace FFGAppImport
                         ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
                         ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
 
-                        var assetsManager = new AssetsManager();
-                        assetsManager.LoadFiles(new[] { resourcesAssets });
+                        //var assetsManager = new AssetsManager();
+                        versionAssetsManager.LoadFiles(new[] { resourcesAssets });
                         // Look through all listed assets
-                        foreach (var assetsFile in assetsManager.assetsFileList)
+                        foreach (var assetsFile in versionAssetsManager.assetsFileList)
                         {
                             foreach (var asset in assetsFile.Objects)
                             {
@@ -215,10 +219,10 @@ namespace FFGAppImport
                 if (!CleanImport()) return;
 
                 // Get all assets 
-                IEnumerable<string> assetFiles = GetAssetFiles();
+                GetAssetFiles();
 
                 // Export all asset content
-                BuildAssetStructures(assetFiles);
+                //BuildAssetStructures();
 
                 // Write log
                 WriteImportLog();
@@ -237,16 +241,15 @@ namespace FFGAppImport
         /// </summary>
         /// <remarks>This is an expensive method, don't call it too often, use a reference.</remarks>
         /// <returns>All available assets in the right load order. Never <c>null</c>.</returns>
-        private IEnumerable<string> GetAssetFiles()
+        private void GetAssetFiles()
         {
-            // List all assets files
-            var files = new List<string>(Directory.GetFiles(finder.location,"*", SearchOption.AllDirectories));
-            
+            assetsManager.LoadFolder(finder.location);
+
             if(importData.platform == Platform.Android)
             {
                 try
                 {
-                    files.AddRange(Directory.GetFiles(finder.DataPath(), "*", SearchOption.AllDirectories));
+                                assetsManager.LoadFolder(finder.DataPath());
                 }
                 catch (Exception ex)
                 {
@@ -254,53 +257,10 @@ namespace FFGAppImport
                 }
                 if (Directory.Exists(finder.AuxDataPath()))
                 {
-                    files.AddRange(Directory.GetFiles(finder.AuxDataPath(), "*", SearchOption.AllDirectories));
+                     assetsManager.LoadFolder(finder.AuxDataPath());
                 }
             }
 
-            if (files.Count() < 1)
-            {
-                return new List<string>();
-            }
-
-            // sort it because Directory.GetFiles() is not guaranteed to return it sorted
-            files.Sort();
-            
-            var assetFiles = new List<string>();
-
-            // get all asset files
-            IEnumerable<string> list = files.Where(x => x.EndsWith(".assets"));
-            assetFiles.AddRange(list); // load '*.assets'
-
-            // get all random named files like 'd18b80b6f1c734d1eb70d521a2dbeda9' (found on Android)
-            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level") && !x.EndsWith(".dll") && !x.EndsWith(".obb") && !x.EndsWith(".manifest"));
-            assetFiles.AddRange(list);
-
-            // get all level asset file, so that level2, level3 and level20 are in the right order
-            list = files.Where(x => !x.EndsWith(".assets") && Path.GetFileName(x).StartsWith("level"));
-            if (list.Count() > 0)
-            {
-                string levelFilesStr = string.Join("\n", list.ToArray());
-                var regexObj = new Regex(@"^.*(?<num>\d+)$", RegexOptions.Multiline);
-                var levelFilesDict = new List<KeyValuePair<int, string>>();
-                Match matchResults = regexObj.Match(levelFilesStr);
-                while (matchResults.Success)
-                {
-                    int num = int.Parse(matchResults.Groups["num"].Value, CultureInfo.InvariantCulture);
-                    levelFilesDict.Add(new KeyValuePair<int, string>(num, matchResults.Value));
-                    matchResults = matchResults.NextMatch();
-                }
-                levelFilesDict.Sort((x, y) => x.Key.CompareTo(y.Key));
-                var levelsToAdd = new List<string>();
-                levelFilesDict.ForEach(x => levelsToAdd.Add(x.Value));
-                assetFiles.AddRange(levelsToAdd);  // load 'level*' files last.
-            }
-
-            // get all asset bundles.
-            list = files.Where(x => !x.EndsWith(".manifest") && x.Contains("AssetBundles"));
-            assetFiles.AddRange(list);
-
-            return assetFiles.Distinct().ToList();
         }
 
         // Write log of import
@@ -347,36 +307,17 @@ namespace FFGAppImport
         }
 
         // Import asset contents
-        private void BuildAssetStructures(IEnumerable<string> unityFiles)
+        private void BuildAssetStructures()
         {
-            if (unityFiles == null) throw new ArgumentNullException("unityFiles");
-            // All asset files connected to the one openned
-            unityFiles.ToList().ForEach(file => ImportAssetFile(file));
-        }
 
-        private void ImportAssetFile(string file)
-        {
-            if (file == null) throw new ArgumentNullException("file");
-
-            ValkyrieDebug.Log("Import asset from " + file);
-
-            //using (FileStream fs = File.OpenRead(file))
+            foreach (var assetFile in assetsManager.assetsFileList)
             {
-                //using (var endianStream = new EndianStream(fs, Unity_Studio.EndianType.BigEndian))
-                {
-                    var assetsManager = new AssetsManager();
-                    assetsManager.LoadFiles(new[] { file });
-                    foreach (var assetFile in assetsManager.assetsFileList)
-                    {
-
-                        // All assets
-                        assetFile.Objects.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
-                    }
-                }
+                assetFile.Objects.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
             }
+
         }
 
-        private void ImportAssetPreloadData(AssetStudio.Object assetPreloadData)
+        public void ImportAssetPreloadData(AssetStudio.Object assetPreloadData)
         {
             if (assetPreloadData == null) throw new ArgumentNullException("assetPreloadData");
 
@@ -434,8 +375,6 @@ namespace FFGAppImport
             Directory.CreateDirectory(imgPath);
             // Default file name
             string fileCandidate = Path.Combine(imgPath, namedAsset.m_Name);
-            
-            
 
             switch (texture2D.m_TextureFormat)
             {

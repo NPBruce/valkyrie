@@ -5,6 +5,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using static AssetStudio.ImportHelper;
+using ValkyrieTools;
+using FFGAppImport;
 
 namespace AssetStudio
 {
@@ -21,11 +23,23 @@ namespace AssetStudio
         private HashSet<string> noexistFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HashSet<string> assetsFileListHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        private FetchContent fc = null;
+
+        public AssetsManager(FetchContent fetchContent)
+        {
+            fc = fetchContent;
+        }
+
+        public AssetsManager()
+        {
+        }
+
         public void LoadFiles(params string[] files)
         {
             var path = Path.GetDirectoryName(Path.GetFullPath(files[0]));
             MergeSplitAssets(path);
             var toReadFile = ProcessingSplitFiles(files.ToList());
+            ValkyrieDebug.Log("AssetStudio loading file: " + toReadFile);
             Load(toReadFile);
         }
 
@@ -34,6 +48,7 @@ namespace AssetStudio
             MergeSplitAssets(path, true);
             var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).ToList();
             var toReadFile = ProcessingSplitFiles(files);
+
             Load(toReadFile);
         }
 
@@ -57,19 +72,23 @@ namespace AssetStudio
             importFilesHash.Clear();
             noexistFiles.Clear();
             assetsFileListHash.Clear();
-
+            ValkyrieDebug.Log("Loading file done.");
             ReadAssets();
+            ValkyrieDebug.Log("Read assets done.");
             ProcessAssets();
+            ValkyrieDebug.Log("Process assets done.");
         }
 
         private void LoadFile(string fullName)
         {
             var reader = new FileReader(fullName);
+            ValkyrieDebug.Log("Loadings file: " + fullName);
             LoadFile(reader);
         }
 
         private void LoadFile(FileReader reader)
         {
+            ValkyrieDebug.Log("AssetStudio loading file type: " + reader.FileType);
             switch (reader.FileType)
             {
                 case FileType.AssetsFile:
@@ -88,7 +107,8 @@ namespace AssetStudio
                     LoadFile(DecompressBrotli(reader));
                     break;
                 case FileType.ZipFile:
-                    LoadZipFile(reader);
+                    //Not supported.
+                    //LoadZipFile(reader);
                     break;
             }
         }
@@ -379,6 +399,7 @@ namespace AssetStudio
         private void ReadAssets()
         {
             Logger.Info("Read assets...");
+            ValkyrieDebug.Log("Read assets...");
 
             var progressCount = assetsFileList.Sum(x => x.m_Objects.Count);
             int i = 0;
@@ -388,26 +409,29 @@ namespace AssetStudio
                 foreach (var objectInfo in assetsFile.m_Objects)
                 {
                     var objectReader = new ObjectReader(assetsFile.reader, assetsFile, objectInfo);
+                    ValkyrieDebug.Log("Reading object type: " + objectReader.type);
                     try
                     {
+                        //For Valkyrie we already interested in Audio, Texture2D, Text and Fonts.
+                        //So no point wasting time and memory on any other asset types.
                         Object obj;
                         switch (objectReader.type)
                         {
                             case ClassIDType.Animation:
-                                obj = new Animation(objectReader);
-                                break;
+                                //obj = new Animation(objectReader);
+                                continue;
                             case ClassIDType.AnimationClip:
-                                obj = new AnimationClip(objectReader);
-                                break;
+                                //obj = new AnimationClip(objectReader);
+                                continue;
                             case ClassIDType.Animator:
-                                obj = new Animator(objectReader);
-                                break;
+                                //obj = new Animator(objectReader);
+                                continue;
                             case ClassIDType.AnimatorController:
-                                obj = new AnimatorController(objectReader);
-                                break;
+                                //obj = new AnimatorController(objectReader);
+                                continue;
                             case ClassIDType.AnimatorOverrideController:
-                                obj = new AnimatorOverrideController(objectReader);
-                                break;
+                                //obj = new AnimatorOverrideController(objectReader);
+                                continue;
                             case ClassIDType.AssetBundle:
                                 obj = new AssetBundle(objectReader);
                                 break;
@@ -415,53 +439,53 @@ namespace AssetStudio
                                 obj = new AudioClip(objectReader);
                                 break;
                             case ClassIDType.Avatar:
-                                obj = new Avatar(objectReader);
-                                break;
+                                //obj = new Avatar(objectReader);
+                                continue;
                             case ClassIDType.Font:
                                 obj = new Font(objectReader);
                                 break;
                             case ClassIDType.GameObject:
-                                obj = new GameObject(objectReader);
-                                break;
+                                //obj = new GameObject(objectReader);
+                                continue;
                             case ClassIDType.Material:
-                                obj = new Material(objectReader);
-                                break;
+                                //obj = new Material(objectReader);
+                                continue;
                             case ClassIDType.Mesh:
-                                obj = new Mesh(objectReader);
-                                break;
+                                //obj = new Mesh(objectReader);
+                                continue;
                             case ClassIDType.MeshFilter:
-                                obj = new MeshFilter(objectReader);
-                                break;
+                                //obj = new MeshFilter(objectReader);
+                                continue;
                             case ClassIDType.MeshRenderer:
-                                obj = new MeshRenderer(objectReader);
-                                break;
+                                //obj = new MeshRenderer(objectReader);
+                                continue;
                             case ClassIDType.MonoBehaviour:
-                                obj = new MonoBehaviour(objectReader);
-                                break;
+                                //obj = new MonoBehaviour(objectReader);
+                                continue;
                             case ClassIDType.MonoScript:
-                                obj = new MonoScript(objectReader);
-                                break;
+                                //obj = new MonoScript(objectReader);
+                                continue;
                             case ClassIDType.MovieTexture:
-                                obj = new MovieTexture(objectReader);
-                                break;
+                                //obj = new MovieTexture(objectReader);
+                                continue;
                             case ClassIDType.PlayerSettings:
-                                obj = new PlayerSettings(objectReader);
-                                break;
+                                //obj = new PlayerSettings(objectReader);
+                                continue;
                             case ClassIDType.RectTransform:
-                                obj = new RectTransform(objectReader);
-                                break;
+                                //obj = new RectTransform(objectReader);
+                                continue;
                             case ClassIDType.Shader:
-                                obj = new Shader(objectReader);
-                                break;
+                                //obj = new Shader(objectReader);
+                                continue;
                             case ClassIDType.SkinnedMeshRenderer:
-                                obj = new SkinnedMeshRenderer(objectReader);
-                                break;
+                                //obj = new SkinnedMeshRenderer(objectReader);
+                                continue;
                             case ClassIDType.Sprite:
-                                obj = new Sprite(objectReader);
-                                break;
+                                //obj = new Sprite(objectReader);
+                                continue;
                             case ClassIDType.SpriteAtlas:
-                                obj = new SpriteAtlas(objectReader);
-                                break;
+                                //obj = new SpriteAtlas(objectReader);
+                                continue;
                             case ClassIDType.TextAsset:
                                 obj = new TextAsset(objectReader);
                                 break;
@@ -469,19 +493,27 @@ namespace AssetStudio
                                 obj = new Texture2D(objectReader);
                                 break;
                             case ClassIDType.Transform:
-                                obj = new Transform(objectReader);
-                                break;
+                                //obj = new Transform(objectReader);
+                                continue;
                             case ClassIDType.VideoClip:
-                                obj = new VideoClip(objectReader);
-                                break;
+                                //obj = new VideoClip(objectReader);
+                                continue;
                             case ClassIDType.ResourceManager:
-                                obj = new ResourceManager(objectReader);
-                                break;
+                                //obj = new ResourceManager(objectReader);
+                                continue;
                             default:
-                                obj = new Object(objectReader);
-                                break;
+                                //obj = new Object(objectReader);
+                                continue;
                         }
-                        assetsFile.AddObject(obj);
+                     
+                        if (fc != null)
+                        {
+                            fc.ImportAssetPreloadData(obj);
+                        }
+                        else
+                        {
+                            assetsFile.AddObject(obj);
+                        }
                     }
                     catch (Exception e)
                     {

@@ -88,6 +88,7 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log(e.ToString());
                 }
 
+
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
 
                 try
@@ -483,6 +484,7 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcMoM.NeedImport())
             {
+
                 Game game = Game.Get();
                 game.gameType = new MoMGameType();
 
