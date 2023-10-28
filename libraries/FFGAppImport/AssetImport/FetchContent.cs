@@ -389,7 +389,7 @@ namespace FFGAppImport
                 case TextureFormat.DXT5: //DXT5
                 case TextureFormat.RGBA4444: //R4G4B4A4, iOS (only?)
                     // This should append a postfix to the name to avoid collisions
-                    if (!IsAvailableFileName(fileCandidate, ".dds")) return;
+                    //if (!IsAvailableFileName(fileCandidate, ".dds")) return;
                     string fileName = GetAvailableFileName(fileCandidate, ".dds");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -435,7 +435,7 @@ namespace FFGAppImport
                                                // We put the image data in a PVR container. See the specification for details
                                                // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
                                                // This should append a postfix to the name to avoid collisions
-                    if (!IsAvailableFileName(fileCandidate, ".pvr")) return;
+                    //if (!IsAvailableFileName(fileCandidate, ".pvr")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".pvr");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -468,7 +468,7 @@ namespace FFGAppImport
                 case TextureFormat.DXT5Crunched: //DXT1 Crunched
                 default:
                     // This should append a postfix to the name to avoid collisions
-                    if (!IsAvailableFileName(fileCandidate, ".tex")) return;
+                    //if (!IsAvailableFileName(fileCandidate, ".tex")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".tex");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -490,7 +490,7 @@ namespace FFGAppImport
             string fileCandidate = Path.Combine(audioPath, namedAsset.m_Name);
 
             // This should apends a postfix to the name to avoid collisions
-            if (!IsAvailableFileName(fileCandidate, ".ogg")) return;
+            //if (!IsAvailableFileName(fileCandidate, ".ogg")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ogg");
 
             // Pass to FSB Export
@@ -511,7 +511,7 @@ namespace FFGAppImport
             //textAsset = new Unity_Studio.TextAsset(asset, true);
 
             // This should apends a postfix to the name to avoid collisions
-            if (!IsAvailableFileName(fileCandidate, ".txt")) return;
+            //if (!IsAvailableFileName(fileCandidate, ".txt")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".txt");
 
             // Write to disk, pass the Deobfuscate key to decrypt
@@ -573,7 +573,7 @@ namespace FFGAppImport
             }
 
             // This should apends a postfix to the name to avoid collisions
-            if (!IsAvailableFileName(fileCandidate, ".ttf")) return;
+            //if (!IsAvailableFileName(fileCandidate, ".ttf")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ttf");
 
             // Write to disk
