@@ -218,6 +218,7 @@ namespace AssetStudio
                         dwABitMask = 0xF000;
                         break;
                     }
+                case TextureFormat.RGB24:
                 case TextureFormat.BGR24: //B8G8R8 //confirmed on X360, iOS //PS3 unsure
                     {
                         for (int i = 0; i < (image_data_size / 3); i++)
@@ -383,6 +384,7 @@ namespace AssetStudio
                         break;
                     }
                 case TextureFormat.ETC_RGB4: //ETC_RGB4
+                case TextureFormat.ETC2_RGB:
                     {
                         pvrPixelFormat = 0x16;
                         break;
