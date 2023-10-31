@@ -75,12 +75,6 @@ mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
 
-rem build Android Storage Access Framework library.
-cd FSAF
-call .\gradlew.bat build
-copy fsaf\build\outputs\aar\fsaf-release.aar ..\unity\Assets\Plugins\Android\
-cd ..
-
 rem Because reasons
 set Target=
 
