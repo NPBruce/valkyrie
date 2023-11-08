@@ -75,6 +75,9 @@ mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
 
+rem download the latest version of Android Storage Access Framework library.
+POWERSHELL -Command "Invoke-WebRequest -Uri https://github.com/seinsinnes/FSAF/releases/latest/download/fsaf-release.aar -OutFile .\unity\Assets\Plugins\Android\fsaf-release.aar"
+
 rem Because reasons
 set Target=
 
