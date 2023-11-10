@@ -19,6 +19,7 @@ namespace FFGAppImport
         AppFinder finder = null;
         public bool importAvailable;
         string logFile;
+        AssetsManager assetsManager;
 
         // Set up and check availability
         //public FetchContent(GameType type, string path)
@@ -26,6 +27,7 @@ namespace FFGAppImport
         {
             importData = import;
             contentPath = import.path;
+            assetsManager = new AssetsManager(this);
             if (import.type == GameType.D2E)
             {
                 finder = new RtLFinder(import.platform);
@@ -65,7 +67,18 @@ namespace FFGAppImport
 
             if (importData.platform == Platform.Android)
             {
-                importAvailable = File.Exists(finder.ObbPath());
+                try
+                {
+                    importAvailable = File.Exists(finder.ObbPath());
+                }
+                catch (Exception ex)
+                {
+                    ValkyrieDebug.Log("FetchContent caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                }
+                if (!importAvailable && import.apkPath.Length != 0)
+                {
+                    importAvailable = true;
+                }
             }
         }
 
@@ -105,11 +118,21 @@ namespace FFGAppImport
         public string FetchAppVersion()
         {
             string appVersion = "";
+            var versionAssetsManager = new AssetsManager();
             try
             {
                 if (importData.platform == Platform.Android)
                 {
-                    return finder.ExtractObbVersion();
+                    appVersion = finder.ExtractObbVersion();
+                    if (appVersion != "")
+                    {
+                        return appVersion;
+                    }
+                    else if(importData.packageVersion != "")
+                    {
+                        return importData.packageVersion;
+                    }
+
                 }
                 string resourcesAssets = Path.Combine(finder.location, "resources.assets");
                 if (!File.Exists(resourcesAssets))
@@ -131,10 +154,10 @@ namespace FFGAppImport
                         ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
                         ValkyrieDebug.Log("Opening assets file" + resourcesAssets);
 
-                        var assetsManager = new AssetsManager();
-                        assetsManager.LoadFiles(new[] { resourcesAssets });
+                        //var assetsManager = new AssetsManager();
+                        versionAssetsManager.LoadFiles(new[] { resourcesAssets });
                         // Look through all listed assets
-                        foreach (var assetsFile in assetsManager.assetsFileList)
+                        foreach (var assetsFile in versionAssetsManager.assetsFileList)
                         {
                             foreach (var asset in assetsFile.Objects)
                             {
@@ -184,17 +207,21 @@ namespace FFGAppImport
             }
             try
             {
+                finder.apkPath = importData.apkPath;
                 // Does nothing, if we aren't on Android
-                finder.ExtractObb();
+                if (!finder.ExtractObb())
+                {
+                    finder.ExtractApk();
+                }
 
                 // Attempt to clean up old import
                 if (!CleanImport()) return;
 
                 // Get all assets 
-                IEnumerable<string> assetFiles = GetAssetFiles();
+                GetAssetFiles();
 
                 // Export all asset content
-                BuildAssetStructures(assetFiles);
+                //BuildAssetStructures();
 
                 // Write log
                 WriteImportLog();
@@ -213,54 +240,26 @@ namespace FFGAppImport
         /// </summary>
         /// <remarks>This is an expensive method, don't call it too often, use a reference.</remarks>
         /// <returns>All available assets in the right load order. Never <c>null</c>.</returns>
-        private IEnumerable<string> GetAssetFiles()
+        private void GetAssetFiles()
         {
-            // List all assets files
-            var files = new List<string>(Directory.GetFiles(finder.location,"*", SearchOption.AllDirectories));
+            assetsManager.LoadFolder(finder.location);
 
-            if (files.Count() < 1)
+            if(importData.platform == Platform.Android)
             {
-                return new List<string>();
-            }
-
-            // sort it because Directory.GetFiles() is not guaranteed to return it sorted
-            files.Sort();
-            
-            var assetFiles = new List<string>();
-
-            // get all asset files
-            IEnumerable<string> list = files.Where(x => x.EndsWith(".assets"));
-            assetFiles.AddRange(list); // load '*.assets'
-
-            // get all random named files like 'd18b80b6f1c734d1eb70d521a2dbeda9' (found on Android)
-            list = files.Where(x => !x.EndsWith(".assets") && !Path.GetFileName(x).StartsWith("level") && !x.EndsWith(".dll") && !x.EndsWith(".manifest"));
-            assetFiles.AddRange(list);
-
-            // get all level asset file, so that level2, level3 and level20 are in the right order
-            list = files.Where(x => !x.EndsWith(".assets") && Path.GetFileName(x).StartsWith("level"));
-            if (list.Count() > 0)
-            {
-                string levelFilesStr = string.Join("\n", list.ToArray());
-                var regexObj = new Regex(@"^.*(?<num>\d+)$", RegexOptions.Multiline);
-                var levelFilesDict = new List<KeyValuePair<int, string>>();
-                Match matchResults = regexObj.Match(levelFilesStr);
-                while (matchResults.Success)
+                try
                 {
-                    int num = int.Parse(matchResults.Groups["num"].Value, CultureInfo.InvariantCulture);
-                    levelFilesDict.Add(new KeyValuePair<int, string>(num, matchResults.Value));
-                    matchResults = matchResults.NextMatch();
+                                assetsManager.LoadFolder(finder.DataPath());
                 }
-                levelFilesDict.Sort((x, y) => x.Key.CompareTo(y.Key));
-                var levelsToAdd = new List<string>();
-                levelFilesDict.ForEach(x => levelsToAdd.Add(x.Value));
-                assetFiles.AddRange(levelsToAdd);  // load 'level*' files last.
+                catch (Exception ex)
+                {
+                    ValkyrieDebug.Log("GetAssetFiles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                }
+                if (Directory.Exists(finder.AuxDataPath()))
+                {
+                     assetsManager.LoadFolder(finder.AuxDataPath());
+                }
             }
 
-            // get all asset bundles.
-            list = files.Where(x => !x.EndsWith(".manifest") && x.Contains("AssetBundles"));
-            assetFiles.AddRange(list);
-
-            return assetFiles.Distinct().ToList();
         }
 
         // Write log of import
@@ -306,37 +305,7 @@ namespace FFGAppImport
             return !Directory.Exists(contentPath);
         }
 
-        // Import asset contents
-        private void BuildAssetStructures(IEnumerable<string> unityFiles)
-        {
-            if (unityFiles == null) throw new ArgumentNullException("unityFiles");
-            // All asset files connected to the one openned
-            unityFiles.ToList().ForEach(file => ImportAssetFile(file));
-        }
-
-        private void ImportAssetFile(string file)
-        {
-            if (file == null) throw new ArgumentNullException("file");
-
-            ValkyrieDebug.Log("Import asset from " + file);
-
-            //using (FileStream fs = File.OpenRead(file))
-            {
-                //using (var endianStream = new EndianStream(fs, Unity_Studio.EndianType.BigEndian))
-                {
-                    var assetsManager = new AssetsManager();
-                    assetsManager.LoadFiles(new[] { file });
-                    foreach (var assetFile in assetsManager.assetsFileList)
-                    {
-
-                        // All assets
-                        assetFile.Objects.ToList().ForEach(assetPreloadData => ImportAssetPreloadData(assetPreloadData));
-                    }
-                }
-            }
-        }
-
-        private void ImportAssetPreloadData(AssetStudio.Object assetPreloadData)
+        public void ImportAssetPreloadData(AssetStudio.Object assetPreloadData)
         {
             if (assetPreloadData == null) throw new ArgumentNullException("assetPreloadData");
 
@@ -394,8 +363,6 @@ namespace FFGAppImport
             Directory.CreateDirectory(imgPath);
             // Default file name
             string fileCandidate = Path.Combine(imgPath, namedAsset.m_Name);
-            
-            
 
             switch (texture2D.m_TextureFormat)
             {
@@ -403,6 +370,7 @@ namespace FFGAppImport
                 case TextureFormat.Alpha8: //Alpha8
                 case TextureFormat.ARGB4444: //A4R4G4B4
                 case TextureFormat.BGR24: //B8G8R8 //confirmed on X360, iOS //PS3 unsure
+                case TextureFormat.RGB24:
                 case TextureFormat.RGBA32: //G8R8A8B8 //confirmed on X360, iOS
                 case TextureFormat.BGRA32: //B8G8R8A8 //confirmed on X360, PS3, Web, iOS
                 case TextureFormat.RGB565: //R5G6B5 //confirmed switched on X360; confirmed on iOS
@@ -410,9 +378,9 @@ namespace FFGAppImport
                 case TextureFormat.DXT5: //DXT5
                 case TextureFormat.RGBA4444: //R4G4B4A4, iOS (only?)
                     // This should append a postfix to the name to avoid collisions
+                    //if (!IsAvailableFileName(fileCandidate, ".dds")) return;
                     string fileName = GetAvailableFileName(fileCandidate, ".dds");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
-
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
                         using (var writer = new BinaryWriter(fs))
@@ -452,12 +420,13 @@ namespace FFGAppImport
                 case TextureFormat.PVRTC_RGBA4: //PVRTC_RGBA4
                 case TextureFormat.ETC_RGB4: //ETC_RGB4
                 case TextureFormat.ETC2_RGBA8: //ETC2_RGBA8
-                                               // We put the image data in a PVR container. See the specification for details
-                                               // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
+                case TextureFormat.ETC2_RGB:
+                    // We put the image data in a PVR container. See the specification for details
+                    // http://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
                     // This should append a postfix to the name to avoid collisions
+                    //if (!IsAvailableFileName(fileCandidate, ".pvr")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".pvr");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
-
 
                     using (var fs = File.Open(fileName, FileMode.Create))
                     {
@@ -487,6 +456,7 @@ namespace FFGAppImport
                 case TextureFormat.DXT5Crunched: //DXT1 Crunched
                 default:
                     // This should append a postfix to the name to avoid collisions
+                    //if (!IsAvailableFileName(fileCandidate, ".tex")) return;
                     fileName = GetAvailableFileName(fileCandidate, ".tex");
                     ValkyrieDebug.Log("ExportTexture: '" + fileName + "' format: '" + texture2D.m_TextureFormat + "'");
 
@@ -508,6 +478,7 @@ namespace FFGAppImport
             string fileCandidate = Path.Combine(audioPath, namedAsset.m_Name);
 
             // This should apends a postfix to the name to avoid collisions
+            //if (!IsAvailableFileName(fileCandidate, ".ogg")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ogg");
 
             // Pass to FSB Export
@@ -524,10 +495,11 @@ namespace FFGAppImport
             string textPath = Path.Combine(contentPath, "text");
             Directory.CreateDirectory(textPath);
             string fileCandidate = Path.Combine(textPath, namedAsset.m_Name);
-            
+
             //textAsset = new Unity_Studio.TextAsset(asset, true);
 
             // This should apends a postfix to the name to avoid collisions
+            //if (!IsAvailableFileName(fileCandidate, ".txt")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".txt");
 
             // Write to disk, pass the Deobfuscate key to decrypt
@@ -589,6 +561,7 @@ namespace FFGAppImport
             }
 
             // This should apends a postfix to the name to avoid collisions
+            //if (!IsAvailableFileName(fileCandidate, ".ttf")) return;
             string fileName = GetAvailableFileName(fileCandidate, ".ttf");
 
             // Write to disk
@@ -691,6 +664,14 @@ namespace FFGAppImport
             string bundlesFile = Path.Combine(contentPath, "bundles.txt");
             ValkyrieDebug.Log("Writing '" + bundlesFile + "' containing " + bundles.Count + " items");
             File.WriteAllLines(bundlesFile, bundles.ToArray());
+        }
+
+        private static bool IsAvailableFileName(string fileCandidate, string extension)
+        {
+            if (fileCandidate == null) throw new ArgumentNullException("fileCandidate");
+            if (extension == null) throw new ArgumentNullException("extension");
+            string fileName = fileCandidate + extension;
+            return !File.Exists(fileName);
         }
 
         /// <summary>

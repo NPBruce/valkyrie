@@ -20,10 +20,13 @@ namespace FFGAppImport
         public abstract string Executable();
         public abstract string RequiredFFGVersion();
         public abstract string ObbPath();
+        public abstract string DataPath();
+        public abstract string AuxDataPath();
         public string location = "";
         public string obbRoot = "";
         public string obbVersion = "";
         public string exeLocation;
+        public string apkPath;
         public abstract int ObfuscateKey();
 
         public Platform platform;
@@ -142,30 +145,55 @@ namespace FFGAppImport
             Directory.Delete(obbRoot, true);
         }
 
-        public void ExtractObb()
+        public void ExtractApk()
         {
             if (platform != Platform.Android) return;
 
-            //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
-            //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
-            string obbPath = ObbPath();
-            ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
+            ValkyrieDebug.Log("Extracting the file " + apkPath + " to " + obbRoot);
             DeleteObb();
             Directory.CreateDirectory(obbRoot);
-            using (var zip = ZipFile.Read(obbPath))
+            using (var zip = ZipFile.Read(apkPath))
             {
                 zip.ExtractAll(obbRoot);
             }
 
-            ConvertObbStreamingAssets();
-            ConvertObbAssets();
+        }
+
+        public bool ExtractObb()
+        {
+            if (platform != Platform.Android) return true;
+            //string obbFile = "C:/Users/Bruce/Desktop/Mansions of Madness_v1.3.5_apkpure.com/Android/obb/com.fantasyflightgames.mom/main.598.com.fantasyflightgames.mom.obb";
+            //string obbFile = "C:/Users/Bruce/Desktop/Road to Legend_v1.3.1_apkpure.com/Android/obb/com.fantasyflightgames.rtl/main.319.com.fantasyflightgames.rtl.obb";
+            string obbPath = ObbPath();
+            if (obbPath == "") return false;
+            ValkyrieDebug.Log("Extracting the file " + obbPath + " to " + obbRoot);
+            DeleteObb();
+            try
+            {
+                Directory.CreateDirectory(obbRoot);
+                using (var zip = ZipFile.Read(obbPath))
+                {
+                    zip.ExtractAll(obbRoot);
+                }
+
+                ConvertObbStreamingAssets();
+                ConvertObbAssets();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                ValkyrieDebug.Log(e.ToString());
+                return false;
+            }
         }
 
         internal string ExtractObbVersion()
         {
             if (platform != Platform.Android) return "";
+
             if (!string.IsNullOrEmpty(obbVersion)) return obbVersion; // lookup version only once
             string obbPath = ObbPath();
+            if (obbPath == "") return "";
             ValkyrieDebug.Log("Extracting the version from " + obbPath + ".");
             using (var zip = ZipFile.Read(obbPath))
             {
@@ -287,18 +315,46 @@ namespace FFGAppImport
             Directory.Move(dirAssetBundles, dirAssetBundlesWin);
         }
 
-        protected string GetObbPath(string prefix, string suffix)
+        public string GetDataPath(string packageName)
+        {
+            
+            return Android.GetStorage() + "/Android/data/" + packageName;
+        }
+
+        public string GetAuxDataPath(string packageName)
+        {
+
+            return Android.GetStorage() + "/Valkyrie/" + packageName;
+        }
+
+        protected string GetObbPath(string prefix, string suffix, string altprefix = null)
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
             if (suffix == null) throw new ArgumentNullException("suffix");
-
-            string location = Path.Combine(Android.GetStorage(), prefix);
-            if (!Directory.Exists(location))
+            try
             {
-                return "";
+                string location = Path.Combine(Android.GetStorage(), prefix);
+
+                if (!Directory.Exists(location))
+                {
+                    return "";
+                }
+                var file = Directory.GetFiles(location).ToList().Find(x => x.EndsWith(suffix));
+                return file ?? "";
             }
-            var file = Directory.GetFiles(location).ToList().Find(x => x.EndsWith(suffix));
-            return file ?? "";
+            catch (Exception ex)
+            {
+                ValkyrieDebug.Log("GetObbPath caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                if(altprefix == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return GetObbPath(altprefix, suffix);
+                }
+            }
+
         }
     }
 }
