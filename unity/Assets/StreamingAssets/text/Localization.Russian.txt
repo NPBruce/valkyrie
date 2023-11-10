@@ -93,6 +93,7 @@ INFORMATION,Информация
 INITIAL_MESSAGE,Исходное сообщение:
 ITEM,Предмет
 QITEM,Квестовый предмет
+KO,Сбит с ног
 LOAD_QUEST,Продолжить
 LOG,Журнал
 SKILLS,Навыки
