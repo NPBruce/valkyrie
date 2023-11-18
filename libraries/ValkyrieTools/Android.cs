@@ -35,10 +35,18 @@ namespace ValkyrieTools
             try
             {
 
-                if(Directory.Exists(GetStorage() + "/Valkyrie/" + packageName))
+                if (!Directory.Exists(GetStorage() + "/Valkyrie"))
+                {
+                    Directory.CreateDirectory(GetStorage() + "/Valkyrie");
+                }
+
+                if (Directory.Exists(GetStorage() + "/Valkyrie/" + packageName))
                 {
                     Directory.Delete(GetStorage() + "/Valkyrie/" + packageName, true);
                 }
+
+                Directory.CreateDirectory(GetStorage() + "/Valkyrie/" + packageName);
+                
                 // we import in a thread, we have to attach JNI, otherwise we would crash
                 string andriodDataDir = "data";
                 int ret = AndroidJNI.AttachCurrentThread();
