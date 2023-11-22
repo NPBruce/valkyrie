@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FFGAppImport</RootNamespace>
     <AssemblyName>FFGAppImport</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -42,27 +42,36 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Buffers">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Memory">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4">
+      <HintPath>..\packages\K4os.Compression.LZ4.1.3.5\lib\net462\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetImport\AppFinder.cs" />
     <Compile Include="AssetImport\IAFinder.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AssetPreloadData.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AssetsFile.cs" />
-    <Compile Include="AssetImport\Unity_Studio\AudioClip.cs" />
-    <Compile Include="AssetImport\Unity_Studio\BuildSettings.cs" />
-    <Compile Include="AssetImport\Unity_Studio\ClassIDReference.cs" />
-    <Compile Include="AssetImport\Unity_Studio\EndianStream.cs" />
     <Compile Include="AssetImport\ExtractDataTool.cs" />
     <Compile Include="AssetImport\FetchContent.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Font.cs" />
     <Compile Include="AssetImport\FSBExport.cs" />
-    <Compile Include="AssetImport\Unity_Studio\GameObject.cs" />
-    <Compile Include="AssetImport\Unity_Studio\helpers.cs" />
     <Compile Include="AssetImport\MoMFinder.cs" />
     <Compile Include="AssetImport\oggencoder\ArrayExtensions.cs" />
     <Compile Include="AssetImport\oggencoder\Block.cs" />
@@ -446,10 +455,117 @@
     <Compile Include="AssetImport\OggVorbisHeader.cs" />
     <Compile Include="AssetImport\Registry.cs" />
     <Compile Include="AssetImport\RtLFinder.cs" />
-    <Compile Include="AssetImport\Unity_Studio\TextAsset.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Texture2D.cs" />
-    <Compile Include="AssetImport\Unity_Studio\Transform.cs" />
     <Compile Include="FFGAppImport.cs" />
+    <Compile Include="AssetImport\AssetStudio\StreamFile.cs" />
+    <Compile Include="AssetImport\AssetStudio\EndianBinaryReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\FileType.cs" />
+    <Compile Include="AssetImport\AssetStudio\ILogger.cs" />
+    <Compile Include="AssetImport\AssetStudio\BuildType.cs" />
+    <Compile Include="AssetImport\AssetStudio\Logger.cs" />
+    <Compile Include="AssetImport\AssetStudio\TypeTreeHelper.cs" />
+    <Compile Include="AssetImport\AssetStudio\ClassIDType.cs" />
+    <Compile Include="AssetImport\AssetStudio\BundleFile.cs" />
+    <Compile Include="AssetImport\AssetStudio\SevenZipHelper.cs" />
+    <Compile Include="AssetImport\AssetStudio\LocalSerializedObjectIdentifier.cs" />
+    <Compile Include="AssetImport\AssetStudio\SerializedFile.cs" />
+    <Compile Include="AssetImport\AssetStudio\ObjectReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\ResourceReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\SerializedFileFormatVersion.cs" />
+    <Compile Include="AssetImport\AssetStudio\IImported.cs" />
+    <Compile Include="AssetImport\AssetStudio\EndianType.cs" />
+    <Compile Include="AssetImport\AssetStudio\FileReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\Progress.cs" />
+    <Compile Include="AssetImport\AssetStudio\WebFile.cs" />
+    <Compile Include="AssetImport\AssetStudio\BuildTarget.cs" />
+    <Compile Include="AssetImport\AssetStudio\CommonString.cs" />
+    <Compile Include="AssetImport\AssetStudio\SerializedType.cs" />
+    <Compile Include="AssetImport\AssetStudio\SerializedFileHeader.cs" />
+    <Compile Include="AssetImport\AssetStudio\ImportHelper.cs" />
+    <Compile Include="AssetImport\AssetStudio\FileIdentifier.cs" />
+    <Compile Include="AssetImport\AssetStudio\AssetsManager.cs" />
+    <Compile Include="AssetImport\AssetStudio\BigArrayPool.cs" />
+    <Compile Include="AssetImport\AssetStudio\TypeTreeNode.cs" />
+    <Compile Include="AssetImport\AssetStudio\TypeTree.cs" />
+    <Compile Include="AssetImport\AssetStudio\ObjectInfo.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Renderer.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\MonoBehaviour.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\AudioClip.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Font.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Mesh.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Avatar.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\RectTransform.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\SpriteAtlas.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\AssetBundle.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\MonoScript.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\AnimatorController.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\PlayerSettings.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Material.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Shader.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\RuntimeAnimatorController.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\ResourceManager.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Object.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\NamedObject.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Texture2D.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\MovieTexture.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Component.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\AnimatorOverrideController.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\BuildSettings.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\AnimationClip.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\TextAsset.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\EditorExtension.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\SkinnedMeshRenderer.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Animation.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\MeshRenderer.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Behaviour.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Sprite.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\MeshFilter.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Animator.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\PPtr.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Texture.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\Transform.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\GameObject.cs" />
+    <Compile Include="AssetImport\AssetStudio\Classes\VideoClip.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\BrotliInputStream.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\WordTransformType.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\HuffmanTreeGroup.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Huffman.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\IntReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Prefix.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\RunningState.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Dictionary.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Decode.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\State.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Utils.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\BrotliRuntimeException.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Context.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\BitReader.cs" />
+    <Compile Include="AssetImport\AssetStudio\Brotli\Transform.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Quaternion.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Vector2.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Vector3.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Half.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Matrix4x4.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Color.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\HalfHelper.cs" />
+    <Compile Include="AssetImport\AssetStudio\Math\Vector4.cs" />
+    <Compile Include="AssetImport\AssetStudio\Extensions\BinaryWriterExtensions.cs" />
+    <Compile Include="AssetImport\AssetStudio\Extensions\BinaryReaderExtensions.cs" />
+    <Compile Include="AssetImport\AssetStudio\Extensions\StreamExtensions.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\ICoder.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Common\CRC.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Common\OutBuffer.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Common\InBuffer.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Common\CommandLineParser.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\RangeCoder\RangeCoderBit.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\RangeCoder\RangeCoderBitTree.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\RangeCoder\RangeCoder.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZ\IMatchFinder.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZ\LzBinTree.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZ\LzOutWindow.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZ\LzInWindow.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZMA\LzmaDecoder.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZMA\LzmaEncoder.cs" />
+    <Compile Include="AssetImport\AssetStudio\7zip\Compress\LZMA\LzmaBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -459,6 +575,10 @@
       <Project>{e0926125-3544-4592-9f07-9d13ea7cdca6}</Project>
       <Name>ValkyrieTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AssetImport\AssetStudio\AssetStudio.csproj" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -38,9 +38,14 @@ echo [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor
 exit /B
 )
 
+rem find visual studio installation path so we can find the msbuild executable. e.g. in C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
+rem this way we can find whatever year/version of vs is installed.
+FOR /D %%B in ("%ProgramFiles%\Microsoft Visual Studio\*") do (SET "VSPATH=%%B")
+
+echo using visual studio path: %VSPATH%
+
 rem you can get NSIS from https://nsis.sourceforge.io/Main_Page
-SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%WinDir%/Microsoft.NET/Framework/v4.0.30319;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%
-@echo on
+SET PATH=%PATH%;%JDK_HOME%\bin;%UNITY_EDITOR_HOME%;%ProgramFiles%\7-Zip;%VSPATH%\Community\MSBuild\Current\Bin\;%ProgramFiles(x86)%\NSIS;%~dp0libraries\SetVersion\bin\Release;%ANDROID_BUILD_TOOLS%;%localappdata%\NuGet;%ProgramFiles%\Git\bin
 
 rem cleanup
 rmdir /s /q build\android
@@ -70,8 +75,15 @@ mkdir build\macos
 mkdir build\macos\Valkyrie.app
 mkdir build\linux
 
+rem download the latest version of Android Storage Access Framework library.
+POWERSHELL -Command "Invoke-WebRequest -Uri https://github.com/seinsinnes/FSAF/releases/latest/download/fsaf-release.aar -OutFile .\unity\Assets\Plugins\Android\fsaf-release.aar"
+
 rem Because reasons
 set Target=
+
+rem install any external packages required by the libraries
+winget install -q Microsoft.NuGet -l "%localappdata%\NuGet" --accept-source-agreements --accept-package-agreements
+nuget restore libraries/libraries.sln
 
 rem Build libraries
 msbuild libraries/libraries.sln /nologo /p:Configuration="Release" /p:NoWarn=0108
@@ -81,7 +93,7 @@ SetVersion %~dp0
 
 rem build unity
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-windows.log 
+rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log ..\build\Editor_valkyrie-windows.log 
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-macos.log 
@@ -90,7 +102,7 @@ Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\b
 rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-android.log
+rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log Editor_valkyrie-android.log
 
 rem delete the META-INF from the apk
 7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF

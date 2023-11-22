@@ -77,9 +77,44 @@ namespace Assets.Scripts.UI.Screens
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                try
+                {
+                    fcD2E.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.rtl");
+                    fcD2E.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.rtl");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find D2E app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
+
+
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+
+                try
+                {
+                    fcMoM.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.mom");
+                    fcMoM.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.mom");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find MoM app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
+
 #if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
+                try
+                {
+                    fcIA.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.iaca");
+                    fcIA.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.iaca");
+                }
+                catch (System.Exception e)
+                {
+                    ValkyrieDebug.Log("Didn't find IA app");
+                    ValkyrieDebug.Log(e.ToString());
+                }
+
 #endif
             }
             else
@@ -363,6 +398,32 @@ namespace Assets.Scripts.UI.Screens
 
             ValkyrieDebug.Log("INFO: Import "+type);
 
+            if (Application.platform == RuntimePlatform.Android && type.Equals("MoM"))
+            {
+                //If we're running on Android 11+ ask for the users permission to copy the data out of the Official MoM apps data location.
+                if (Android.GetSDKLevel() > 29)
+                {
+                    ValkyrieDebug.Log("INFO: Asking for permission and copying of MoM data.");
+                    if (!Android.CopyOfficialAppData("com.fantasyflightgames.mom"))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (Application.platform == RuntimePlatform.Android && type.Equals("D2E"))
+            {
+                //If we're running on Android 11+ ask for the users permission to copy the data out of the Official MoM apps data location.
+                if (Android.GetSDKLevel() > 29)
+                {
+                    ValkyrieDebug.Log("INFO: Asking for permission and copying of D2E data.");
+                    if(!Android.CopyOfficialAppData("com.fantasyflightgames.rtl"))
+                    {
+                        return;
+                    }
+                }
+            }
+
 
             if (manual_path_selection)
             {
@@ -423,6 +484,7 @@ namespace Assets.Scripts.UI.Screens
             // Check if import neeeded
             if (!fcMoM.NeedImport())
             {
+
                 Game game = Game.Get();
                 game.gameType = new MoMGameType();
 
@@ -475,7 +537,9 @@ namespace Assets.Scripts.UI.Screens
             if (LocalizationRead.selectDictionary("ffg") == null)
             {
                 DictionaryI18n ffgDict = new DictionaryI18n();
-                var localizationFiles = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                var localizationFilesRaw = Directory.GetFiles(ContentData.ImportPath() + "/text", "Localization_*.txt");
+                var localizationFiles = localizationFilesRaw.Where(x => !Path.GetFileName(x).Any(char.IsDigit));
+
                 foreach (string file in localizationFiles)
                 {
                     ffgDict.AddDataFromFile(file);
@@ -508,6 +572,7 @@ namespace Assets.Scripts.UI.Screens
             // TODO: Delete Obb dir for Android build here
             Draw();
         }
+
 
         /// <summary>
         /// 

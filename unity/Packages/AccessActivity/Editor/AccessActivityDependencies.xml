@@ -1,0 +1,6 @@
+<dependencies>
+    <androidPackages>
+	<androidPackage spec="androidx.multidex:multidex:2.0.1" />
+	<androidPackage spec="androidx.documentfile:documentfile:1.0.1" />
+    </androidPackages>
+</dependencies>

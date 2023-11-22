@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": "file:../GooglePackages/com.google.external-dependency-manager-1.2.156.tgz",
+    "com.google.firebase.app": "file:../GooglePackages/com.google.firebase.app-6.15.2.tgz",
+    "com.google.firebase.crashlytics": "file:../GooglePackages/com.google.firebase.crashlytics-6.15.2.tgz",
+    "com.android.test.accessactivity": "file:../Packages/AccessActivity/",
     "com.unity.package-manager-ui": "2.0.13",
     "com.unity.textmeshpro": "1.4.1",
     "com.unity.modules.ai": "1.0.0",
