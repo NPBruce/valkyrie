@@ -1,12 +1,11 @@
 name: Build
 run-name: Valkyrie build triggered by ${{ github.actor }}
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   Build:
     runs-on: windows-latest
     steps:
     
-      #Make sure to checkout with lfs otherwise large files won't be downloaded correctly.
       - uses: actions/checkout@v4
       
       #Get the version for build and store in environment variable for later use.
@@ -25,7 +24,7 @@ jobs:
       #Downloading and installing unity
       #It should be possible to install more than one module at a time
       #but it doesn't seem to work so the action has to be repeated for
-      #each module.
+      #each module. 
       - name: Setup Unity and Linux Module
         uses: kuler90/setup-unity@v1.1.0
         with:
@@ -59,7 +58,15 @@ jobs:
           unity-password: ${{ secrets.UNITY_PASSWORD }}
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
 
-      #Move unity to where the build script expects it to be installed.
+      #- name: Activate Unity
+      #  env:
+      #    UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      #  working-directory: "C:/Program Files/2018.4.20f1/Editor/"
+      #  run: |
+      #        Get-Item Env:UNITY_LICENSE | Out-File license.ulf
+      #        ./Unity.exe -batchmode -nographics -quit -logFile - -manualLicenseFile license.ulf
+ 
+      #Move unity to where the build script expects it to be installed. 
       - name: Move unity to expected location
         run: Rename-Item "C:/Program Files/2018.4.20f1" Unity
 
