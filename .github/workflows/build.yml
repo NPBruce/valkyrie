@@ -57,14 +57,6 @@ jobs:
           unity-username: ${{ secrets.UNITY_USERNAME }}
           unity-password: ${{ secrets.UNITY_PASSWORD }}
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
-
-      #- name: Activate Unity
-      #  env:
-      #    UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      #  working-directory: "C:/Program Files/2018.4.20f1/Editor/"
-      #  run: |
-      #        Get-Item Env:UNITY_LICENSE | Out-File license.ulf
-      #        ./Unity.exe -batchmode -nographics -quit -logFile - -manualLicenseFile license.ulf
  
       #Move unity to where the build script expects it to be installed. 
       - name: Move unity to expected location
