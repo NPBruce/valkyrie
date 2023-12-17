@@ -1,0 +1,135 @@
+name: Build
+run-name: Valkyrie build triggered by ${{ github.actor }}
+on: [push, workflow_dispatch]
+jobs:
+  Build:
+    runs-on: windows-latest
+    steps:
+    
+      - uses: actions/checkout@v4
+      
+      #Get the version for build and store in environment variable for later use.
+      - name: Get version
+        run: echo "Build_Version=${${{ github.workspace }}/unity/Assets/Resources/version.txt}" | Out-File -FilePath $env:GITHUB_ENV -Append
+      
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'corretto'
+      
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      
+      #Downloading and installing unity
+      #It should be possible to install more than one module at a time
+      #but it doesn't seem to work so the action has to be repeated for
+      #each module. 
+      - name: Setup Unity and Linux Module
+        uses: kuler90/setup-unity@v1.1.0
+        with:
+          unity-version: 2018.4.20f1
+          unity-modules: "linux"
+          install-path: "C:/Program Files"
+      - name: Setup Unity Mac Module
+        uses: kuler90/setup-unity@v1.1.0
+        with:
+          unity-version: 2018.4.20f1
+          unity-modules: "mac-mono"
+          install-path: "C:/Program Files"
+      - name: Setup Unity Android Module
+        uses: kuler90/setup-unity@v1.1.0
+        with:
+          unity-version: 2018.4.20f1
+          unity-modules: "android"
+          install-path: "C:/Program Files"
+      - name: Setup Unity IOS Module
+        uses: kuler90/setup-unity@v1.1.0
+        with:
+          unity-version: 2018.4.20f1
+          unity-modules: "ios"
+          install-path: "C:/Program Files"
+          
+      #Activate requires unity account creds for unity license checkout.
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+ 
+      #Move unity to where the build script expects it to be installed. 
+      - name: Move unity to expected location
+        run: Rename-Item "C:/Program Files/2018.4.20f1" Unity
+
+      #Remove all pre-installed android sdk build tool versions except 28.0.3
+      - name: Remove unwanted android sdk build tool versions
+        run: Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
+
+      #Remove all pre-installed android sdk platform versions except 29
+      - name: Remove unwanted android sdk platform versions
+        run: Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
+
+      #Run build script
+      - name: Run build batch script
+        run: ${{ github.workspace }}/build.bat
+
+      - name: Archive windows unity build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-unity-build-log
+          path: ${{ github.workspace }}/build/Editor_valkyrie-windows.log
+          
+      - name: Archive macos unity build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-unity-build-log
+          path: ${{ github.workspace }}/build/Editor_valkyrie-macos.log
+          
+      - name: Archive linux unity build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-unity-build-log
+          path: ${{ github.workspace }}/build/Editor_valkyrie-linux.log
+          
+      - name: Archive android unity build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-unity-build-log
+          path: ${{ github.workspace }}/build/Editor_valkyrie-android.log
+
+      - name: Archive windows zip build
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-unity-build
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.zip
+
+      - name: Archive windows 7zip build
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-unity-build
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.7z
+
+      - name: Archive windows installer exe build
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-unity-build
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.exe
+          
+      - name: Archive macos build
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-unity-build
+          path: ${{ github.workspace }}/build/valkyrie-macos-${{ env.Build_Version }}.tar.gz
+          
+      - name: Archive linux build
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-unity-build
+          path: ${{ github.workspace }}/build/valkyrie-linux-${{ env.Build_Version }}.tar.gz
+          
+      - name: Archive android build
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-unity-build
+          path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.Build_Version }}.apk

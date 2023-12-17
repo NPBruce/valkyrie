@@ -1,7 +1,9 @@
-*.o filter=lfs diff=lfs merge=lfs
-*.a filter=lfs diff=lfs merge=lfs
-*.exe filter=lfs diff=lfs merge=lfs
-*.srcaar filter=lfs diff=lfs merge=lfs
-*.bundle filter=lfs diff=lfs merge=lfs
-*.so filter=lfs diff=lfs merge=lfs
-*.dll filter=lfs diff=lfs merge=lfs
+*.o binary
+*.a binary
+*.exe binary
+*.srcaar binary
+*.bundle binary
+*.so binary
+*.dll binary
+*.aar binary
+*.jar binary

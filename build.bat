@@ -3,39 +3,42 @@ rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
 rem set steam path. You can get it from https://store.steampowered.com/
+rem is steam needed for building?
+goto comment
 IF "%steampath%"=="" SET steampath=%programfiles(x86)%\Steam
 IF NOT EXIST "%steampath%" ( 
 echo [31m--- ERROR --- Steam path not set : please set Steam path in build.bat [0m
-exit /B
+exit /B 1
 )
+:comment
 
 rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
 IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
 IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
 IF NOT EXIST "%JDK_HOME%" ( 
 echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
-exit /B
+exit /B 1
 )
 
 rem set android sdk path. You can get it from https://developer.android.com/studio/.
 IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
 IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
 echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
-exit /B
+exit /B 1
 )
 
 rem set android build tools. The come with the android sdk. Don't use the latest 29.0.0-rc3 as the unity build will fail (if the build tools folder for it exists, manually delete it).
 IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
 IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
 echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
-exit /B
+exit /B 1
 )
 
 rem set unity editor location
 IF "%UNITY_EDITOR_HOME%"=="" SET UNITY_EDITOR_HOME=%ProgramFiles%\Unity\Editor
 IF NOT EXIST "%UNITY_EDITOR_HOME%" (
 echo [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor path in build.bat or create a similar environment variable[0m
-exit /B
+exit /B 1
 )
 
 rem find visual studio installation path so we can find the msbuild executable. e.g. in C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\
@@ -91,18 +94,20 @@ msbuild libraries/libraries.sln /nologo /p:Configuration="Release" /p:NoWarn=010
 rem this will change the version information in the project settings
 SetVersion %~dp0
 
+del ".\unity\Assets\Plugins\UnityEngine.dll"
+
 rem build unity
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log ..\build\Editor_valkyrie-windows.log 
+copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-macos.log 
+copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\build\linux\valkyrie
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log %LOCALAPPDATA%\Unity\Editor\Editor_valkyrie-linux.log
+copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
-rem copy %LOCALAPPDATA%\Unity\Editor\Editor.log Editor_valkyrie-android.log
+copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
 
 rem delete the META-INF from the apk
 7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
