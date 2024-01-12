@@ -59,6 +59,9 @@ public class InvestigatorEvade {
         ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 8);
         ui.SetText(text);
         new UIElementBorder(ui);
+        
+        if (Game.Get().googleTtsEnabled)
+            new UITtsSpeakButton(ui);
 
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-6f), 9, 12, 2);
