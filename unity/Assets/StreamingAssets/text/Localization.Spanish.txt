@@ -239,6 +239,10 @@ ACT_1,Acto I
 ACT_2,Acto II
 
 //Items
+common,Común
+unique,Único
+spelldefence,Hechizo Defensivo
+spellattack,Hechizo Ofensivo
 weapon,Arma
 firearm,Arma de Fuego
 heavyweapon,Arma Contundente

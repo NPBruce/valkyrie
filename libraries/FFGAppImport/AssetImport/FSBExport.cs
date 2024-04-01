@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using AssetStudio;
 using OggVorbisEncoder;
 
 class FSBExport
 {
     public static void Write(byte[] data, string file)
     {
-        Unity_Studio.EndianStream stream = new Unity_Studio.EndianStream(new System.IO.MemoryStream(data), Unity_Studio.EndianType.LittleEndian);
+        EndianBinaryReader stream = new EndianBinaryReader(new System.IO.MemoryStream(data), EndianType.LittleEndian);
 
         // Because constructor is broken
-        stream.endian = Unity_Studio.EndianType.LittleEndian;
+        stream.Endian = EndianType.LittleEndian;
 
         string magic = stream.ReadASCII(4);
 
@@ -127,7 +128,7 @@ class FSBExport
         stream.Dispose(true);
     }
 
-    public static void WriteFile(Unity_Studio.EndianStream stream, string file, int offset, int size, Ogg ogg)
+    public static void WriteFile(EndianBinaryReader stream, string file, int offset, int size, Ogg ogg)
     {
         // Write to disk
         using (BinaryWriter writer = new BinaryWriter(File.Open(file, FileMode.Create)))
