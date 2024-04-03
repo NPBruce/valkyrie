@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 namespace Assets.Scripts.UI.Screens
 {
     // Class for quest selection window
-    public class QuestSelectionScreen: MonoBehaviour
+    public class QuestSelectionScreen: MonoBehaviour, IContentImageDrawer
     {
         // List of Quest.QuestData to display (either local or remote)
         List<string> questList = null;
@@ -407,7 +407,7 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        public void DrawScenarioPicture(Texture2D texture, UIElement ui_picture_shadow)
+        public void DrawPicture(Texture2D texture, UIElement ui_picture_shadow)
         {
             float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
             UnityAction buttonCall = ui_picture_shadow.GetAction();
@@ -938,11 +938,11 @@ namespace Assets.Scripts.UI.Screens
                 {
                     if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
                     {
-                        DrawScenarioPicture(ContentData.FileToTexture(Path.Combine(q.path, q.image)), ui); ;
+                        DrawPicture(ContentData.FileToTexture(Path.Combine(q.path, q.image)), ui); ;
                     }
                     else if (images_list.IsImageAvailable(q.package_url + q.image))
                     {
-                        DrawScenarioPicture(images_list.GetTexture(q.package_url + q.image), ui);
+                        DrawPicture(images_list.GetTexture(q.package_url + q.image), ui);
                     }
                     else 
                     {
@@ -952,7 +952,7 @@ namespace Assets.Scripts.UI.Screens
                 else
                 {
                     // Draw default Valkyrie picture
-                    DrawScenarioPicture(images_list.GetTexture(null), ui);
+                    DrawPicture(images_list.GetTexture(null), ui);
                 }
 
                 // languages flags

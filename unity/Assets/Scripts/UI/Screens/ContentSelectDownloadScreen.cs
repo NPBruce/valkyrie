@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Assets.Scripts.Content;
 using UnityEngine;
+using UnityEngine.Events;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
-    public class ContentSelectDownloadScreen : MonoBehaviour
+    public class ContentSelectDownloadScreen : MonoBehaviour, IContentImageDrawer
     {
         private const int LARGE_FONT_LIMIT = 32;
 
@@ -25,6 +27,12 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
         private readonly StringKey OFFLINE_DUE_TO_ERROR = new StringKey("val", "OFFLINE_DUE_TO_ERROR");
 
+        // Class to handle async images to display
+        ImgAsyncLoader images_list = null;
+
+        // textures
+        Texture2D picture_shadow = null;
+        Texture2D picture_pin = null;
         private Texture2D button_download = null;
         private Texture2D button_update = null;
         private Texture2D button_play = null;
@@ -37,6 +45,12 @@ namespace Assets.Scripts.UI.Screens
         {
             CleanUpDialogs();
 
+            // Initialize list of images for asynchronous loading
+            images_list = new ImgAsyncLoader(this);
+
+            //preload textures
+            picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
+            picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
@@ -86,9 +100,12 @@ namespace Assets.Scripts.UI.Screens
                 RenderActionButton(offset, contentPack, localContentPackList);
                 RenderDeleteButton(offset, contentPack, localContentPackList);
 
+                offset += 7.1f;
+
+                scrollArea.SetScrollSize(offset);
             }
 
-            //yield return null;
+            images_list.StartDownloadASync();
         }
 
         private void RenderActionButton(float offset, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)
@@ -185,7 +202,7 @@ namespace Assets.Scripts.UI.Screens
             // Content pack name
             UIElement ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
-            ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
+            ui.SetLocation(5.5f, offset + 0.9f, UIScaler.GetWidthUnits() - 8, 1.5f);
             ui.SetTextPadding(0.5f);
 
             string name = remoteContentPack.Value.languages_name.FirstOrDefault().Value;
@@ -222,10 +239,31 @@ namespace Assets.Scripts.UI.Screens
         }
         private UIElement RenderImage(float offset, KeyValuePair<string, RemoteContentPack> contentPack)
         {
-            // Content pack name
+            // prepare/draw list of Images
             UIElement ui = new UIElement(scrollArea.GetScrollTransform());
-            //ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-            //ui.SetImage(button_update);
+            ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f); // this is the location for the shadow (to be displayed first)
+            ui.SetBGColor(Color.clear);
+            if (contentPack.Value.image.Length > 0)
+            {
+                //if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+                //{
+                //    DrawPicture(ContentData.FileToTexture(Path.Combine(contentPack.Value., contentPack.Value.image)), ui); ;
+                //}
+                //else
+                if (images_list.IsImageAvailable(contentPack.Value.package_url + contentPack.Value.image))
+                {
+                    DrawPicture(images_list.GetTexture(contentPack.Value.package_url + contentPack.Value.image), ui);
+                }
+                else
+                {
+                    images_list.Add(contentPack.Value.package_url + contentPack.Value.image, ui);
+                }
+            }
+            else
+            {
+                // Draw default Valkyrie picture
+                DrawPicture(images_list.GetTexture(null), ui);
+            }
 
             return ui;
         }
@@ -344,6 +382,31 @@ namespace Assets.Scripts.UI.Screens
             ValkyrieDebug.Log("INFO: Accessing content selection screen");
 
             new ContentSelectScreen();
+        }
+
+        public void DrawPicture(Texture2D texture, UIElement ui_picture_shadow)
+        {
+            float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
+            UnityAction buttonCall = ui_picture_shadow.GetAction();
+
+            // draw picture shadow
+            ui_picture_shadow.SetImage(picture_shadow);
+
+            // draw image
+            UIElement picture = new UIElement(ui_picture_shadow.GetTransform());
+            picture.SetLocation(0.30f, 0.30f, width_heigth - 0.6f, width_heigth - 0.6f);
+            picture.SetBGColor(Color.clear);
+            picture.SetImage(texture);
+            picture.SetButton(buttonCall);
+
+            // draw pin
+            const float pin_width = 1.4f;
+            const float pin_height = 1.6f;
+            UIElement pin = new UIElement(picture.GetTransform());
+            pin.SetLocation((width_heigth / 2f) - (pin_width / 1.5f), (-pin_height / 2f), pin_width, pin_height);
+            pin.SetBGColor(Color.clear);
+            pin.SetImage(picture_pin);
+            pin.SetButton(buttonCall);
         }
     }
 }

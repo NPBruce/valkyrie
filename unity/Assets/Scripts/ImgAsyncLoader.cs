@@ -19,11 +19,11 @@ namespace Assets.Scripts
         Texture2D default_quest_picture = null;
 
         // Father class
-        QuestSelectionScreen questSelectionScreen = null;
+        IContentImageDrawer contentImageDrawer = null;
 
-        public ImgAsyncLoader(QuestSelectionScreen qss)
+        public ImgAsyncLoader(IContentImageDrawer contentImageDrawer)
         {
-            questSelectionScreen = qss;
+            this.contentImageDrawer = contentImageDrawer;
             images_list = new Dictionary<string, UIElement>();
             texture_list = new Dictionary<string, Texture2D>();
             default_quest_picture = Resources.Load("sprites/scenario_list/default_quest_picture") as Texture2D;
@@ -31,7 +31,11 @@ namespace Assets.Scripts
 
         public void Add(string url, UIElement uie)
         {
-            images_list.Add(url, uie);
+            if(!images_list.ContainsKey(url))
+            {
+                images_list.Add(url, uie);
+            }
+            
         }
 
         public void Clear()
@@ -62,7 +66,7 @@ namespace Assets.Scripts
 
                 // Display default picture
                 if (images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                    questSelectionScreen.DrawScenarioPicture(null, images_list[uri.ToString()]);
+                    contentImageDrawer.DrawPicture(null, images_list[uri.ToString()]);
             }
             else
             {
@@ -74,7 +78,7 @@ namespace Assets.Scripts
 
                     // Display pictures
                     if (images_list.ContainsKey(uri.ToString())) // this can be empty if we display another screen while pictures are downloading
-                        questSelectionScreen.DrawScenarioPicture(GetTexture(uri.ToString()), images_list[uri.ToString()]);
+                        contentImageDrawer.DrawPicture(GetTexture(uri.ToString()), images_list[uri.ToString()]);
                 }
             }
         }
