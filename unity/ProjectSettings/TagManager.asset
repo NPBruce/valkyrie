@@ -21,6 +21,8 @@ TagManager:
   - questlist
   - setwindow
   - dialogPart
+  - contentpackui
+  - contentpacklist
   layers:
   - Default
   - TransparentFX

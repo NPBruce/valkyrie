@@ -71,6 +71,11 @@ namespace Assets.Scripts.UI.Screens
             {
                 Destroy(go);
             }
+
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKLIST))
+            {
+                Destroy(go);
+            }
         }
 
         private void DrawContentPackList()
@@ -137,7 +142,6 @@ namespace Assets.Scripts.UI.Screens
                 var ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(UIScaler.GetRight(-6.0f), offset + 1.4f, 1.8f, 1.8f);
-                //TODO Add new image for delete button
                 ui.SetImage(button_no_entry);
                 ui.SetButton(delegate { Delete(contentPack.Value.identifier); });
             }
@@ -233,11 +237,6 @@ namespace Assets.Scripts.UI.Screens
             ui.SetBGColor(Color.clear);
             if (contentPack.Value.image.Length > 0)
             {
-                //if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
-                //{
-                //    DrawPicture(ContentData.FileToTexture(Path.Combine(contentPack.Value., contentPack.Value.image)), ui); ;
-                //}
-                //else
                 if (images_list.IsImageAvailable(contentPack.Value.package_url + contentPack.Value.image))
                 {
                     DrawPicture(images_list.GetTexture(contentPack.Value.package_url + contentPack.Value.image), ui);
