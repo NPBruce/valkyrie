@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using ValkyrieTools;
 
 namespace Assets.Scripts
 {
@@ -35,6 +36,10 @@ namespace Assets.Scripts
             {
                 images_list.Add(url, uie);
             }
+            else
+            {
+                ValkyrieDebug.Log($"Duplicate image found: {url}");
+            }
             
         }
 
@@ -50,7 +55,7 @@ namespace Assets.Scripts
             {
                 foreach (KeyValuePair<string, UIElement> kv in images_list)
                 {
-                    HTTPManager.GetImage(kv.Key, ImageDownloaded_callback);
+                        HTTPManager.GetImage(kv.Key, ImageDownloaded_callback);
                 }
             }
         }

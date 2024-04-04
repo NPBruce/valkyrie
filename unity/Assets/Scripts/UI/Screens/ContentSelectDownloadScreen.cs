@@ -68,11 +68,9 @@ namespace Assets.Scripts.UI.Screens
         {
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+            {
                 Destroy(go);
-
-            // Clean up downloader if present
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
-                Destroy(go);
+            }
         }
 
         private void DrawContentPackList()
@@ -86,7 +84,7 @@ namespace Assets.Scripts.UI.Screens
             if (scrollArea == null)
             {
                 // scroll area
-                scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
+                scrollArea = new UIElementScrollVertical(Game.CONTENTPACKLIST);
                 scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
                 new UIElementBorder(scrollArea, Color.grey);
             }
@@ -177,24 +175,14 @@ namespace Assets.Scripts.UI.Screens
 
         public void Download(string key)
         {
-            ValkyrieDebug.Log("INFO: Select contentpack " + key);
-
             Destroyer.Dialog();
-            CleanContentPackList();
-
 
             // Download / Update
             ValkyrieDebug.Log("INFO: ... and download quest");
             GameObject download = new GameObject("downloadPage");
-            download.tag = Game.QUESTUI;
+            download.tag = Game.CONTENTPACKUI;
             QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
             qd.Download(key, true);
-        }
-
-        private void CleanContentPackList()
-        {
-            //TODO
-            //throw new NotImplementedException();
         }
 
         private UIElement RenderContentPackNameAndDescription(float offset, KeyValuePair<string, RemoteContentPack> remoteContentPack)
