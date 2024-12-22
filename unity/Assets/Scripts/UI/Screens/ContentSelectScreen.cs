@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
+using UnityEngine.UI;
 using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
@@ -70,10 +71,14 @@ namespace Assets.Scripts.UI.Screens
 
                 string typeName = type.name != null ? type.name.ToString() : null;
 
-                CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image);
+                CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image, false);
             }
 
-            CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, string.Empty);
+            //bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
+
+            //string customContentPackImagePath = "E:\\Eigene Dokumente\\Max\\Programmierung\\Projekte\\valkyrie\\unity\\Assets\\Resources\\Sprites\\CustomContentPackIcon.jpg";
+            string customContentPackImagePath = "sprites/CustomContentPackIcon";
+            CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, customContentPackImagePath, true);
 
             DrawBackButtonTypeListPage();
 
@@ -115,11 +120,20 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(uiDownloadCustomContentPack);
         }
 
-        private void CreatePackTypeCategory(ref float offset, ref bool left, string typeId, string typeName, string image)//, PackTypeData type)
+        private void CreatePackTypeCategory(ref float offset, ref bool left, string typeId, string typeName, string image, bool isCustomContentPackCategory)
         {
             UIElement ui;
-            // Create a sprite with the category image
-            Texture2D tex = ContentData.FileToTexture(image);
+            Texture2D tex;
+
+            if (isCustomContentPackCategory)
+            {
+                tex = Resources.Load("sprites/CustomContentPackIcon") as Texture2D;
+            }
+            else
+            {
+                // Create a sprite with the category image
+                tex = ContentData.FileToTexture(image);
+            }
 
             ui = new UIElement();
             if (left)

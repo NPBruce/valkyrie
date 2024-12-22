@@ -180,9 +180,9 @@ SELECT_CLASS,Klasse wählen
 SELECTION,Auswahl
 SELECT_CONTENT,Inhalt wählen
 SELECT_EXPANSION,Erweiterungsinhalt wählen
-CONTENTPACK_CATEGORY_CUSTOM,Eigene Inhaltspacks
-CONTENTPACK_DOWNLOAD,Eigene Inhaltspacks herunterladen
-CONTENTPACK_DOWNLOAD_HEADER,Eigene Inhaltspacks herunterladen
+CONTENTPACK_CATEGORY_CUSTOM,Community Contentpacks
+CONTENTPACK_DOWNLOAD,Contentpacks herunterladen
+CONTENTPACK_DOWNLOAD_HEADER,Community Contentpacks herunterladen
 SELECT_IMAGE,Bild wählen
 SELECT_ITEM,Gegenstand wählen
 SELECT_PACK,Paket wählen
