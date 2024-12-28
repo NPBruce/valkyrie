@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using Assets.Scripts.Content;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,8 +11,6 @@ namespace Assets.Scripts.UI.Screens
 {
     public class ContentSelectDownloadScreen : MonoBehaviour, IContentImageDrawer
     {
-        private const int LARGE_FONT_LIMIT = 32;
-
         private static readonly StringKey CONTENTPACK_DOWNLOAD = new StringKey("val", "CONTENTPACK_DOWNLOAD_HEADER");
 
         public Game game;
@@ -21,7 +18,6 @@ namespace Assets.Scripts.UI.Screens
         // Persistent UI Element
         private UIElement text_connection_status = null;
         private UIElementScrollVertical scrollArea = null;
-        private RemoteContentPackManager manager;
         private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
         private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
@@ -35,7 +31,6 @@ namespace Assets.Scripts.UI.Screens
         Texture2D picture_pin = null;
         private Texture2D button_download = null;
         private Texture2D button_update = null;
-        private Texture2D button_play = null;
         private Texture2D button_no_entry = null;
         // Display coroutine
         Coroutine co_display = null;
@@ -53,7 +48,6 @@ namespace Assets.Scripts.UI.Screens
             picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
-            button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
             button_no_entry = Resources.Load("sprites/scenario_list/button_no_entry") as Texture2D;
 
             // Clean everything up
@@ -295,8 +289,6 @@ namespace Assets.Scripts.UI.Screens
 
             text_connection_status = new UIElement();
 
-
-            //TODO Continue here
             // Display connection status message
             if (game.remoteContentPackManager.content_pack_list_Mode == RemoteContentPackManager.RemoteContentPackListMode.ERROR_DOWNLOAD)
             {
@@ -307,20 +299,27 @@ namespace Assets.Scripts.UI.Screens
             {
                 // Download ongoing
                 text_connection_status.SetText(DOWNLOAD_ONGOING, Color.cyan);
-                manager.Register_cb_download(RemoteQuestsListDownload_cb);
+                game.remoteContentPackManager.Register_cb_download(RemoteQuestsListDownload_cb);
             }
             else if (game.remoteContentPackManager.content_pack_list_Mode == RemoteContentPackManager.RemoteContentPackListMode.ONLINE)
             {
                 // Download done, we are online
                 text_connection_status.SetText(GO_OFFLINE, Color.red);
-                text_connection_status.SetButton(delegate { SetOnlineMode(false); });
+                text_connection_status.SetButton(
+                    delegate {
+                        SetOnlineMode(false); 
+                    });
                 border = true;
             }
             else
             {
                 // Download done, user has switched offline modline
                 text_connection_status.SetText(GO_ONLINE, Color.green);
-                text_connection_status.SetButton(delegate { SetOnlineMode(true); });
+                text_connection_status.SetButton(
+                    delegate
+                    {
+                        SetOnlineMode(true);
+                    });
                 border = true;
             }
 
@@ -332,11 +331,12 @@ namespace Assets.Scripts.UI.Screens
             if (border)
                 new UIElementBorder(text_connection_status, text_connection_status.GetTextColor());
 
-            //TODO check routine logic
+            //TODO check how Coroutine  logic works
             //if (co_display != null)
             //    StopCoroutine(co_display);
             //co_display = StartCoroutine(DrawContentPackList());
 
+            //TODO when Coroutine logic works remove this line
             DrawContentPackList();
         }
 
@@ -346,17 +346,42 @@ namespace Assets.Scripts.UI.Screens
             {
                 ValkyrieDebug.Log("INFO: Set online mode for quests");
 
-                game.questsList.SetMode(QuestsManager.QuestListMode.ONLINE);
+                game.remoteContentPackManager.SetMode(RemoteContentPackManager.RemoteContentPackListMode.ONLINE);
             }
             else
             {
                 ValkyrieDebug.Log("INFO: Set offline mode for quests");
-                game.questsList.SetMode(QuestsManager.QuestListMode.LOCAL);
+                game.remoteContentPackManager.SetMode(RemoteContentPackManager.RemoteContentPackListMode.LOCAL);
             }
 
             DrawOnlineModeButton();
-            //TODO
-            //ReloadQuestList();
+            
+           ReloadContentPackList();
+        }
+
+        public void ReloadContentPackList()
+        {
+            CleanContentPackList();
+
+            //TODO check how Coroutine  logic works
+            //co_display = StartCoroutine(DrawContentPackList());
+            //TODO when Coroutine logic works remove this line
+            DrawContentPackList();
+        }
+
+        public void CleanContentPackList()
+        {
+            // Clean up everything marked as 'questlist'
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKLIST))
+                Destroy(go);
+
+            scrollArea = null;
+
+            // quest images
+            images_list.Clear();
+
+            if (co_display != null)
+                StopCoroutine(co_display);
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)

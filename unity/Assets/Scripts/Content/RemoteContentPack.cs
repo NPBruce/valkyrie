@@ -15,13 +15,9 @@ namespace Assets.Scripts.Content
         public string identifier;
         public string type;
         public string version;
-        public int format;
         public string package_url;
         public DateTime latest_update;
         public string defaultLanguage = ValkyrieConstants.DefaultLanguage;
-
-        public static int currentFormat = QuestFormat.CURRENT_VERSION;
-        public static int minimumFormat = 4;
 
         // is package available locally
         public bool downloaded = false;
@@ -72,16 +68,6 @@ namespace Assets.Scripts.Content
                 type = iniData["type"];
             }
 
-            if (iniData.ContainsKey("format"))
-            {
-                int.TryParse(iniData["format"], out format);
-            }
-
-            if (format > currentFormat || format < minimumFormat)
-            {
-                return false;
-            }
-
             if (iniData.ContainsKey("image"))
             {
                 string value = iniData["image"];
@@ -118,7 +104,6 @@ namespace Assets.Scripts.Content
             r.AppendLine($"[{ValkyrieConstants.RemoteContentPackIniType}]");
             r.Append("identifier=").AppendLine(identifier.ToString());
             r.Append("type=").AppendLine(type.ToString());
-            r.Append("format=").AppendLine(currentFormat.ToString());
             r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
 
