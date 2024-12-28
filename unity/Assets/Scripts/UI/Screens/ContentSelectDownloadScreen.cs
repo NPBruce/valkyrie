@@ -356,7 +356,7 @@ namespace Assets.Scripts.UI.Screens
 
             DrawOnlineModeButton();
             
-           ReloadContentPackList();
+            ReloadContentPackList();
         }
 
         public void ReloadContentPackList()
@@ -371,9 +371,11 @@ namespace Assets.Scripts.UI.Screens
 
         public void CleanContentPackList()
         {
-            // Clean up everything marked as 'questlist'
+            // Clean up everything marked as 'CONTENTPACKLIST'
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKLIST))
+            {
                 Destroy(go);
+            }
 
             scrollArea = null;
 
@@ -381,7 +383,9 @@ namespace Assets.Scripts.UI.Screens
             images_list.Clear();
 
             if (co_display != null)
+            {
                 StopCoroutine(co_display);
+            }
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)

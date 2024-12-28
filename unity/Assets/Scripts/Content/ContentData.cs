@@ -279,12 +279,23 @@ public class ContentData
 
         // Some packs have a type
         string type = d.Get("ContentPack", "type");
-        if (!checkGameType || type.StartsWith(gameTypeName))
+        if (
+            !checkGameType || 
+            (
+                !string.IsNullOrWhiteSpace(gameTypeName) 
+                && type.StartsWith(gameTypeName)
+            )
+        )
         {
             var pack = GetContentPack(path, d, type);
+            if(pack == null)
+            {
+                ValkyrieDebug.Log("Could not find content pack file: " + path + $"Please check if type=\"{gameTypeName}\" was set correctly in content_pack.ini file.");
+            }
             return pack;
         }
 
+        ValkyrieDebug.Log("Could not find content pack file: " + path);
         return null;
     }
 

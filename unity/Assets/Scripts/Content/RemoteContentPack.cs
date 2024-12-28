@@ -27,7 +27,7 @@ namespace Assets.Scripts.Content
 
         public RemoteContentPack(string identifier, Dictionary<string, string> iniData)
         {
-            this.identifier = identifier.ToLower();
+            this.identifier = identifier;
             valid = Populate(iniData);
         }
 
