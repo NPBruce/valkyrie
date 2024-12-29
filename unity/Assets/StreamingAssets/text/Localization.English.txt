@@ -212,9 +212,6 @@ SELECT_CLASS,Select Class
 SELECTION,Selection
 SELECT_CONTENT,Select Content
 SELECT_EXPANSION,Select Expansion Content
-CONTENTPACK_CATEGORY_CUSTOM,Community Content Packs
-CONTENTPACK_DOWNLOAD,Download content
-CONTENTPACK_DOWNLOAD_HEADER,Community content pack download
 SELECT_IMAGE,Select Image
 SELECT_ITEM,Select Item
 SELECT_PACK,Select Pack
@@ -656,7 +653,9 @@ ONLINE,Online
 OFFLINE,Offline
 DOWNLOAD_ONGOING,Downloading...
 OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
-
+CONTENTPACK_CATEGORY_CUSTOM,Community Content Packs
+CONTENTPACK_DOWNLOAD,Download content
+CONTENTPACK_DOWNLOAD_HEADER,Community content pack download
 MISSING_EXPANSIONS,Missing expansions:
 
 RICH_TEXT,Rich text

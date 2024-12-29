@@ -479,7 +479,18 @@ UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans
 
 GO_OFFLINE,PASSER EN HORS LIGNE
 GO_ONLINE,ALLER EN LIGNE
+ONLINE,EN LIGNE
+OFFLINE,HORS LIGNE
 DOWNLOAD_ONGOING,Téléchargement en cours...
 OFFLINE_DUE_TO_ERROR,MODE HORS LIGNE (erreur réseau)
 
-MISSING_EXPANSIONS,Extension manquante:
+CONTENTPACK_CATEGORY_CUSTOM,Packs de contenu communautaire
+CONTENTPACK_DOWNLOAD,Téléchargement de contenu
+CONTENTPACK_DOWNLOAD_HEADER,Téléchargement du pack de contenu communautaire
+MISSING_EXPANSIONS,Extensions manquantes :
+
+RICH_TEXT,Texte riche
+TEXT_ALIGNMENT,Aligner
+TOP,Haut
+CENTER,Centre
+BOTTOM,Bas

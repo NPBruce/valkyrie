@@ -304,13 +304,13 @@ namespace Assets.Scripts.UI.Screens
             else if (game.remoteContentPackManager.content_pack_list_Mode == RemoteContentPackManager.RemoteContentPackListMode.ONLINE)
             {
                 // Download done, we are online
-                text_connection_status.SetText(ONLINE, Color.red);
+                text_connection_status.SetText(ONLINE, Color.green);
                 
             }
             else
             {
                 // Download done, user has switched offline modline
-                text_connection_status.SetText(OFFLINE, Color.green);
+                text_connection_status.SetText(OFFLINE, Color.red);
             }
 
             text_width = text_connection_status.GetStringWidth(text_connection_status.GetText(), UIScaler.GetSmallFont(), game.gameType.GetHeaderFont());

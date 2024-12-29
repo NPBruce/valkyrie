@@ -413,3 +413,20 @@ UPDATED_THIS_SEMESTER,Aggiornati negli ultimi sei mesi
 UPDATED_THIS_YEAR,Aggiornati quest’anno
 UPDATED_TWO_YEARS_AGO,Aggiornati due anni fa
 UPDATE_OLDER_THAN_TWO_YEAR,Ultimo aggiornamento più di due anni fa
+
+GO_OFFLINE,ANDARE OFFLINE
+GO_ONLINE,ANDARE ONLINE
+ONLINE,Online
+OFFLINE,Offline
+DOWNLOAD_ONGOING, Download...
+OFFLINE_DUE_TO_ERROR,OFFLINE (errore di rete)
+CONTENTPACK_CATEGORIA_CUSTOM,Pacchetti di contenuti della comunità
+CONTENTPACK_DOWNLOAD,Scaricare contenuti
+CONTENTPACK_DOWNLOAD_HEADER,Download del pacchetto di contenuti della comunità
+MISSING_EXPANSIONS,Espansioni mancanti:
+
+RICH_TEXT, Testo ricco
+TEXT_ALIGNMENT, Allineamento
+TOP,In alto
+CENTER,Centro
+BOTTOM,In basso
