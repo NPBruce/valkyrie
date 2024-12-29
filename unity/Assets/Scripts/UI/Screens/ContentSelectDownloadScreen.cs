@@ -18,8 +18,8 @@ namespace Assets.Scripts.UI.Screens
         // Persistent UI Element
         private UIElement text_connection_status = null;
         private UIElementScrollVertical scrollArea = null;
-        private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
-        private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
+        private readonly StringKey OFFLINE = new StringKey("val", "OFFLINE");
+        private readonly StringKey ONLINE = new StringKey("val", "ONLINE");
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
         private readonly StringKey OFFLINE_DUE_TO_ERROR = new StringKey("val", "OFFLINE_DUE_TO_ERROR");
 
@@ -304,23 +304,13 @@ namespace Assets.Scripts.UI.Screens
             else if (game.remoteContentPackManager.content_pack_list_Mode == RemoteContentPackManager.RemoteContentPackListMode.ONLINE)
             {
                 // Download done, we are online
-                text_connection_status.SetText(GO_OFFLINE, Color.red);
-                text_connection_status.SetButton(
-                    delegate {
-                        SetOnlineMode(false); 
-                    });
-                border = true;
+                text_connection_status.SetText(ONLINE, Color.red);
+                
             }
             else
             {
                 // Download done, user has switched offline modline
-                text_connection_status.SetText(GO_ONLINE, Color.green);
-                text_connection_status.SetButton(
-                    delegate
-                    {
-                        SetOnlineMode(true);
-                    });
-                border = true;
+                text_connection_status.SetText(OFFLINE, Color.green);
             }
 
             text_width = text_connection_status.GetStringWidth(text_connection_status.GetText(), UIScaler.GetSmallFont(), game.gameType.GetHeaderFont());
@@ -338,54 +328,6 @@ namespace Assets.Scripts.UI.Screens
 
             //TODO when Coroutine logic works remove this line
             DrawContentPackList();
-        }
-
-        private void SetOnlineMode(bool go_online)
-        {
-            if (go_online)
-            {
-                ValkyrieDebug.Log("INFO: Set online mode for quests");
-
-                game.remoteContentPackManager.SetMode(RemoteContentPackManager.RemoteContentPackListMode.ONLINE);
-            }
-            else
-            {
-                ValkyrieDebug.Log("INFO: Set offline mode for quests");
-                game.remoteContentPackManager.SetMode(RemoteContentPackManager.RemoteContentPackListMode.LOCAL);
-            }
-
-            DrawOnlineModeButton();
-            
-            ReloadContentPackList();
-        }
-
-        public void ReloadContentPackList()
-        {
-            CleanContentPackList();
-
-            //TODO check how Coroutine  logic works
-            //co_display = StartCoroutine(DrawContentPackList());
-            //TODO when Coroutine logic works remove this line
-            DrawContentPackList();
-        }
-
-        public void CleanContentPackList()
-        {
-            // Clean up everything marked as 'CONTENTPACKLIST'
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKLIST))
-            {
-                Destroy(go);
-            }
-
-            scrollArea = null;
-
-            // quest images
-            images_list.Clear();
-
-            if (co_display != null)
-            {
-                StopCoroutine(co_display);
-            }
         }
 
         private void RemoteQuestsListDownload_cb(bool is_available)

@@ -652,6 +652,8 @@ UPDATE_OLDER_THAN_TWO_YEAR,Latest update older than two years
 
 GO_OFFLINE,GO OFFLINE
 GO_ONLINE,GO ONLINE
+ONLINE,Online
+OFFLINE,Offline
 DOWNLOAD_ONGOING,Downloading...
 OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
 
