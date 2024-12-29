@@ -24,6 +24,12 @@ jobs:
       #Download and install android build sdk
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 9477386
+
+      #Test only to check if android system variables are set correctly: Run build script (remove this later)
+      - name: Run build batch script
+        run: ${{ github.workspace }}/build.bat
 
       #Downloading and installing unity
       #It should be possible to install more than one module at a time
