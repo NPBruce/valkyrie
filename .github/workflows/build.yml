@@ -1,6 +1,6 @@
 name: Build
 run-name: Valkyrie build triggered by ${{ github.actor }}
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 jobs:
   Build:
     runs-on: windows-latest
