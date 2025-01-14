@@ -61,12 +61,24 @@ jobs:
         run: Rename-Item "C:/Program Files/2018.4.20f1" Unity
 
       #Remove all pre-installed android sdk build tool versions except 28.0.3
+      #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk build tool versions
-        run: Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
+        run: |
+              Move-Item -Path C:/Android/android-sdk/build-tools/* -Destination c:/windows/temp
+              Get-ChildItem -Path "C:/Android/android-sdk/build-tools"
 
       #Remove all pre-installed android sdk platform versions except 29
+      #Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk platform versions
-        run: Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
+        run: | 
+              Move-Item -Path C:/Android/android-sdk/platforms/* -Destination c:/windows/temp
+              Get-ChildItem -Path "C:/Android/android-sdk/platforms"
+              
+      #Download and extract android sdk platform and build tools
+      - name: Install android sdk platform and build tools
+        run: |
+              C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "platforms;android-29"
+              C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "build-tools;28.0.3" "build-tools;29.0.2" "cmdline-tools;latest" "tools"
 
       #Run build script
       - name: Run build batch script
