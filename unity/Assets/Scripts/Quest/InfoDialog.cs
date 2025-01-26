@@ -20,6 +20,9 @@ public class InfoDialog {
         ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 12);
         ui.SetText(m.monsterData.info);
         new UIElementBorder(ui);
+        
+        if (Game.Get().googleTtsEnabled)
+            new UITtsSpeakButton(ui);
 
         // Unique monsters have additional info
         if (m.unique && m.uniqueText.KeyExists())
@@ -35,6 +38,9 @@ public class InfoDialog {
             ui.SetLocation(10, 15, UIScaler.GetWidthUnits() - 20, 8);
             ui.SetText(uniqueText);
             new UIElementBorder(ui, Color.red);
+
+            if (Game.Get().googleTtsEnabled)
+                new UITtsSpeakButton(ui);
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetWidthUnits() - 21, 23.5f, 10, 2);
