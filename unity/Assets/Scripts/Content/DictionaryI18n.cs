@@ -145,7 +145,7 @@ namespace Assets.Scripts.Content
             // Remove extra new lines
             foreach (string rawLine in languageData)
             {
-                string rawLineTrimmed = rawLine.Trim('\r', '\n')
+                string rawLineTrimmed = rawLine.Trim('\r', '\n');
                 int sections = rawLineTrimmed.Split('\"').Length;
                 bool isFirstLine = !currentEntry.Any();
                 currentEntry.Add(rawLineTrimmed);
