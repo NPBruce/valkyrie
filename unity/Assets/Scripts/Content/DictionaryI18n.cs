@@ -109,11 +109,20 @@ namespace Assets.Scripts.Content
         public void AddDataFromFile(string file)
         {
             string[] lines;
+            string text;
 
             // Read the whole file
             try
             {
-                lines = File.ReadAllLines(file);
+                text = File.ReadAllText(file);
+                if(text.Contains('\r'))
+                {
+                    lines = text.Split('\r');
+                }
+                else
+                {
+                    lines = text.Split('\n');
+                }
                 AddData(lines);
             }
             catch (IOException e)
@@ -136,15 +145,16 @@ namespace Assets.Scripts.Content
             // Remove extra new lines
             foreach (string rawLine in languageData)
             {
-                int sections = rawLine.Split('\"').Length;
+                string rawLineTrimmed = rawLine.Trim('\r', '\n');
+                int sections = rawLineTrimmed.Split('\"').Length;
                 bool isFirstLine = !currentEntry.Any();
-                currentEntry.Add(rawLine);
+                currentEntry.Add(rawLineTrimmed);
 
                 // Contains triple quotes
-                bool startsNewLineWithTripleQuotes = isFirstLine && rawLine.IndexOf($",{TRIPLE_ENCLOSING}", StringComparison.InvariantCulture) != -1;
+                bool startsNewLineWithTripleQuotes = isFirstLine && rawLineTrimmed.IndexOf($",{TRIPLE_ENCLOSING}", StringComparison.InvariantCulture) != -1;
                 if (startsNewLineWithTripleQuotes || tripleQuoteMode)
                 {
-                    tripleQuoteMode = !rawLine.TrimEnd().EndsWith(TRIPLE_ENCLOSING, StringComparison.InvariantCulture);
+                    tripleQuoteMode = !rawLineTrimmed.TrimEnd().EndsWith(TRIPLE_ENCLOSING, StringComparison.InvariantCulture);
                     endOfLine = !tripleQuoteMode;
                 }
                 // Even number of " characters, self contained line
@@ -156,7 +166,7 @@ namespace Assets.Scripts.Content
                     endOfLine = isFirstLine && !tripleQuoteMode;
                 }
                 // Odd number of quotes *should* mean start or end of multi line block
-                else if (!isFirstLine || isOldFormat(rawLine))
+                else if (!isFirstLine || isOldFormat(rawLineTrimmed))
                 {
                     // Single line or does not have triple quotes
                     endOfLine = !tripleQuoteMode;
