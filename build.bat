@@ -1,4 +1,7 @@
 @echo off
+
+type %LOCALAPPDATA%\Unity\Editor\Editor.log
+
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
