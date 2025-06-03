@@ -68,7 +68,7 @@ jobs:
       #Activate requires unity account creds for unity license checkout.
       - name: Activate Unity
         run: |
-          "C:/Program Files/2018.4.20f1/Unity/Editor/Unity" -quit -batchmode -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD
+          "C:/Program Files/Unity/Editor/Unity" -quit -batchmode -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD
 
       #Remove all pre-installed android sdk build tool versions except 28.0.3
       #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
@@ -156,5 +156,5 @@ jobs:
 
       - name: Return Unity license.
         run: |
-          "C:/Program Files/2018.4.20f1/Unity/Editor/Unity" -quit -batchmode -returnlicense -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD
+          "C:/Program Files/Unity/Editor/Unity" -quit -batchmode -returnlicense -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD
 
