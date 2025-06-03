@@ -100,16 +100,16 @@ SetVersion %~dp0
 del ".\unity\Assets\Plugins\UnityEngine.dll"
 
 rem build unity
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
+Unity -batchmode -quit -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
 
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
+Unity -batchmode -quit -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
 
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\build\linux\valkyrie
+Unity -batchmode -quit -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\build\linux\valkyrie
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
 
-Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
+Unity -batchmode -quit -serial -username $env:UNITY_USERNAME -password $env:UNITY_PASSWORD -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
 
 rem delete the META-INF from the apk
