@@ -111,19 +111,19 @@ jobs:
       - name: Archive windows zip build
         uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.zip
 
       - name: Archive windows 7zip build
         uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-7zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.7z
 
       - name: Archive windows installer exe build
         uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-exe
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.exe
 
       - name: Archive macos build
