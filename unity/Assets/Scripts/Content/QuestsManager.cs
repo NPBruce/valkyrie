@@ -56,12 +56,12 @@ public class QuestsManager
         // -- Download remote quests list INI file --
         if (game.gameType.TypeName() == "MoM")
         {
-            HTTPManager.Get("https://raw.githubusercontent.com/Quantumrunner/valkyrie-store/master/MoM/manifestDownload.ini", QuestsDownload_callback);
+            HTTPManager.Get("https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/manifestDownload.ini", QuestsDownload_callback);
             quest_list_mode = QuestListMode.DOWNLOADING;
         }
         else if (game.gameType.TypeName() == "D2E")
         {
-            HTTPManager.Get("https://raw.githubusercontent.com/Quantumrunner/valkyrie-store/master/D2E/manifestDownload.ini", QuestsDownload_callback);
+            HTTPManager.Get("https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/D2E/manifestDownload.ini", QuestsDownload_callback);
             quest_list_mode = QuestListMode.DOWNLOADING;
         }
         else
