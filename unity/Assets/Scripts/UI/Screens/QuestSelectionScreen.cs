@@ -1021,9 +1021,9 @@ namespace Assets.Scripts.UI.Screens
                 bool packFound = false;
                 foreach (string pack in q.packs)
                 {
-                    if (game.cd.packSymbol.ContainsKey(pack))
+                    if (game.cd.packSymbolDict.ContainsKey(pack))
                     {
-                        string pack_symbol = game.cd.packSymbol[pack].Translate(true);
+                        string pack_symbol = game.cd.packSymbolDict[pack].Translate(true);
                         if (pack_symbol != "" && !(pack_symbol_available.Contains(pack_symbol) || pack_symbol_missing.Contains(pack_symbol)))
                         {
                             if (missing_packs.Contains(pack))

@@ -45,7 +45,7 @@ public class ContentLoader
     {
         var pack = game.cd.allPacks.FirstOrDefault(p => p.id.Equals(key));
         game.cd.allPacks.Remove(pack);
-        game.cd.packSymbol.Remove(key);
+        game.cd.packSymbolDict.Remove(key);
     }
 
     internal static void GetContentData(Game game)

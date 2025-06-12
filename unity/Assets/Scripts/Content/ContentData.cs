@@ -15,7 +15,7 @@ public class ContentData
 
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
-    public Dictionary<string, StringKey> packSymbol;
+    public Dictionary<string, StringKey> packSymbolDict;
 
     private Dictionary<Type, Dictionary<string, IContent>> Content = new Dictionary<Type, Dictionary<string, IContent>>();
 
@@ -28,7 +28,7 @@ public class ContentData
         loadedPacks = new HashSet<string>();
 
         // This is pack symbol list
-        packSymbol = new Dictionary<string, StringKey>();
+        packSymbolDict = new Dictionary<string, StringKey>();
 
         //This has the game game and all expansions, general info
         allPacks = new List<ContentPack>();
@@ -258,18 +258,18 @@ public class ContentData
         if (File.Exists(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
         {
             pack = GetPackData(path, gameTypeName, checkGameType);
-            AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbol);
+            AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
             // We finish without actually loading the content, this is done later (content optional)
         }
     }
 
-    private void AddPackToAllPacksAndPackSymbol(ContentPack pack, List<ContentPack> allPacksList, Dictionary<string, StringKey> packSymbolList)
+    private void AddPackToAllPacksAndPackSymbol(ContentPack pack, List<ContentPack> allPacksList, Dictionary<string, StringKey> packSymbolDict)
     {
         // Add content pack
         allPacksList.Add(pack);
 
         // Add symbol
-        packSymbolList.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
+        packSymbolDict.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
     }
 
     private static ContentPack GetPackData(string path, string gameTypeName, bool checkGameType)

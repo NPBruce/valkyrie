@@ -62,12 +62,12 @@ public class RemoteContentPackManager
         // -- Download remote content pack list INI file --
         if (game.gameType.TypeName() == "MoM")
         {
-            HTTPManager.Get("https://drive.google.com/uc?id=1qGpXhwvQNsSOcT6CAd45RLB-zFI_cEou&export=download", RemoteContentPackDownload_callback);
+            HTTPManager.Get("https://raw.githubusercontent.com/NPBruce/valkyrie-store/refs/heads/master/MoM/contentPacksManifestDownload.ini", RemoteContentPackDownload_callback);
             content_pack_list_Mode = RemoteContentPackListMode.DOWNLOADING;
         }
         else if (game.gameType.TypeName() == "D2E")
         {
-            HTTPManager.Get("https://drive.google.com/uc?id=1qGpXhwvQNsSOcT6CAd45RLB-zFI_cEou&export=download", RemoteContentPackDownload_callback);
+            HTTPManager.Get("https://raw.githubusercontent.com/NPBruce/valkyrie-store/refs/heads/master/D2E/contentPacksManifestDownload.ini", RemoteContentPackDownload_callback);
             content_pack_list_Mode = RemoteContentPackListMode.DOWNLOADING;
         }
         else
