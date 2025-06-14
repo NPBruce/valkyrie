@@ -215,11 +215,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./all_artifacts
+
+      - name: Prepare release artifacts (exclude *-build-log*)
+        run: |
+          mkdir -p ./release_artifacts
+          find ./all_artifacts -type f ! -name "*-build-log*" -exec cp {} ./release_artifacts/ \;
+
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v2
         with:
           files: ./release_artifacts/*
           tag_name: ${{ env.Build_Version }}
-          update_release: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
