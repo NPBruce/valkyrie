@@ -85,61 +85,61 @@ jobs:
         run: ${{ github.workspace }}/build.bat
 
       - name: Archive windows unity build log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-windows.log
 
       - name: Archive macos unity build log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-macos.log
 
       - name: Archive linux unity build log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-linux.log
 
       - name: Archive android unity build log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-android.log
 
       - name: Archive windows zip build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.zip
 
       - name: Archive windows 7zip build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-7zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.7z
 
       - name: Archive windows installer exe build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: windows-unity-build
+          name: windows-unity-build-exe
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.exe
 
       - name: Archive macos build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-unity-build
           path: ${{ github.workspace }}/build/valkyrie-macos-${{ env.Build_Version }}.tar.gz
 
       - name: Archive linux build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-unity-build
           path: ${{ github.workspace }}/build/valkyrie-linux-${{ env.Build_Version }}.tar.gz
 
       - name: Archive android build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-unity-build
           path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.Build_Version }}.apk
