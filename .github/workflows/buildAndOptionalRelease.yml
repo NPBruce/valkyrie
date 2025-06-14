@@ -11,6 +11,11 @@ on:
         required: false
         default: false
         type: boolean
+      DraftRelease:
+        description: 'Draft release'
+        required: false
+        default: false
+        type: boolean
 jobs:
   Build:
     runs-on: windows-latest
@@ -189,13 +194,27 @@ jobs:
       - name: Set build version env
         run: echo "Build_Version=$(cat build_version.txt)" >> $GITHUB_ENV
 
-      - name: Create GitHub Release
+      - name: Check if release exists
+        id: check_release
+        run: |
+          release_url=$(gh api -X GET /repos/${{ github.repository }}/releases/tags/${{ env.Build_Version }} --jq '.upload_url' 2>/dev/null || echo "")
+          if [ -n "$release_url" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "upload_url=$release_url" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release if not exists
+        if: steps.check_release.outputs.exists == 'false'
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.Build_Version }}
           name: ${{ env.Build_Version }}
-          draft: false
+          draft: ${{ github.event.inputs.DraftRelease}}
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -205,5 +224,6 @@ jobs:
         with:
           files: ./unzipped/unpacked/**
           tag_name: ${{ env.Build_Version }}
+          update_release: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
