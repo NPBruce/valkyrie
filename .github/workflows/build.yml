@@ -1,6 +1,13 @@
 name: Build
 run-name: Valkyrie build triggered by ${{ github.actor }}
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create release'
+        required: false
+        default: false
+        type: boolean
 jobs:
   Build:
     runs-on: windows-latest
@@ -70,10 +77,10 @@ jobs:
       #Remove all pre-installed android sdk platform versions except 29
       #Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk platform versions
-        run: | 
+        run: |
               Move-Item -Path C:/Android/android-sdk/platforms/* -Destination c:/windows/temp
               Get-ChildItem -Path "C:/Android/android-sdk/platforms"
-              
+
       #Download and extract android sdk platform and build tools
       - name: Install android sdk platform and build tools
         run: |
@@ -143,3 +150,50 @@ jobs:
         with:
           name: android-unity-build
           path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.Build_Version }}.apk
+  Release:
+    if: ${{ github.event.inputs.create_release == 'true' }}
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download windows zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-unity-build-zip
+          path: ./unzipped
+
+      - name: Unzip windows build
+        run: |
+          for file in ./unzipped/*.zip; do
+            unzip -o "$file" -d ./unzipped/unpacked/
+          done
+
+      - name: Get version from artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-unity-build-log
+          path: ./logs
+
+      - name: Read version from file
+        id: get_version
+        run: |
+          VERSION=$(cat ${{ github.workspace }}/unity/Assets/Resources/version.txt)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload unpacked files to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./unzipped/unpacked/**
+          tag_name: ${{ steps.get_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
