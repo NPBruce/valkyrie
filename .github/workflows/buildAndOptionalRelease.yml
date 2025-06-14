@@ -171,15 +171,6 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Download all zip build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ./unzipped
-
-      - name: Unzip all build zips
-        run: |
-          find ./unzipped -type f -name "*.zip" -exec unzip -o {} -d ./unzipped/unpacked/ \;
-
       - name: Get version from artifact
         uses: actions/download-artifact@v4
         with:
@@ -219,10 +210,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload unpacked files to release
+      - name: Upload release artifacts
         uses: softprops/action-gh-release@v2
         with:
-          files: ./unzipped/unpacked/**
+          files: ./release_artifacts/*
           tag_name: ${{ env.Build_Version }}
           update_release: true
         env:
