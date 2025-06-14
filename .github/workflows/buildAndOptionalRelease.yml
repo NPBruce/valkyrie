@@ -223,7 +223,7 @@ jobs:
       - name: Prepare release artifacts (exclude *-build-log*)
         run: |
           mkdir -p ./release_artifacts
-          find ./all_artifacts -type f ! -name "*-build-log*" -exec cp {} ./release_artifacts/ \;
+          find ./all_artifacts -type f ! -name "build_version.txt" ! -name "*.log" -exec cp {} ./release_artifacts/ \;
 
       - name: List release artifacts to upload
         run: |
