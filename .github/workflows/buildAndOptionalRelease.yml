@@ -24,7 +24,7 @@ jobs:
 
       ## Save build version as artifact to ensure it can be used in the release step.
       - name: Save build version as artifact
-        run: echo "${{ github.workspace }}/unity/Assets/Resources/version.txt" > build_version.txt
+        run: Get-Content "${{ github.workspace }}/unity/Assets/Resources/version.txt" | Set-Content build_version.txt
       - uses: actions/upload-artifact@v4
         with:
             name: build-version
