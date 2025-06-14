@@ -1,4 +1,7 @@
 name: Build and optionally release
+description: |
+  This workflow builds the Valkyrie project using Unity and optionally creates a release on GitHub.
+  The build artifacts are uploaded as artifacts and can be used in the release step if requested.
 run-name: Valkyrie build triggered by ${{ github.actor }}
 on:
   workflow_dispatch:
