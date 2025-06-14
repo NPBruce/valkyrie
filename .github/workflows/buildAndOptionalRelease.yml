@@ -16,6 +16,11 @@ on:
         required: false
         default: false
         type: boolean
+      PreRelease:
+        description: 'Pre release'
+        required: false
+        default: false
+        type: boolean
 jobs:
   Build:
     runs-on: windows-latest
@@ -205,8 +210,8 @@ jobs:
         with:
           tag_name: ${{ env.Build_Version }}
           name: ${{ env.Build_Version }}
-          draft: ${{ github.event.inputs.DraftRelease}}
-          prerelease: false
+          draft: ${{ github.event.inputs.DraftRelease }}
+          prerelease: ${{ github.event.inputs.PreRelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
