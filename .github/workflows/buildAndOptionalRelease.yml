@@ -1,4 +1,4 @@
-name: Build
+name: Build and optionally release
 run-name: Valkyrie build triggered by ${{ github.actor }}
 on:
   workflow_dispatch:
