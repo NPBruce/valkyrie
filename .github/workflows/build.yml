@@ -155,17 +155,14 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Download windows zip artifact
+      - name: Download all zip build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: windows-unity-build-zip
           path: ./unzipped
 
-      - name: Unzip windows build
+      - name: Unzip all build zips
         run: |
-          for file in ./unzipped/*.zip; do
-            unzip -o "$file" -d ./unzipped/unpacked/
-          done
+          find ./unzipped -type f -name "*.zip" -exec unzip -o {} -d ./unzipped/unpacked/ \;
 
       - name: Get version from artifact
         uses: actions/download-artifact@v4
