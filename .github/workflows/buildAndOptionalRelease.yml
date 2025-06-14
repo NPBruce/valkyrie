@@ -225,6 +225,11 @@ jobs:
           mkdir -p ./release_artifacts
           find ./all_artifacts -type f ! -name "*-build-log*" -exec cp {} ./release_artifacts/ \;
 
+      - name: List release artifacts to upload
+        run: |
+          echo "Files to be uploaded to the release:"
+          ls -lh ./release_artifacts
+
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v2
         with:
