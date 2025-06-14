@@ -1,6 +1,26 @@
-name: Build
+name: Build and optionally release
+description: |
+  This workflow builds the Valkyrie project using Unity and optionally creates a release on GitHub.
+  The build artifacts are uploaded as artifacts and can be used in the release step if requested.
 run-name: Valkyrie build triggered by ${{ github.actor }}
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create release'
+        required: false
+        default: false
+        type: boolean
+      DraftRelease:
+        description: 'Draft release'
+        required: false
+        default: false
+        type: boolean
+      PreRelease:
+        description: 'Pre release'
+        required: false
+        default: false
+        type: boolean
 jobs:
   Build:
     runs-on: windows-latest
@@ -11,6 +31,14 @@ jobs:
       #Get the version for build and store in environment variable for later use.
       - name: Get version
         run: echo "Build_Version=${${{ github.workspace }}/unity/Assets/Resources/version.txt}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      ## Save build version as artifact to ensure it can be used in the release step.
+      - name: Save build version as artifact
+        run: Get-Content "${{ github.workspace }}/unity/Assets/Resources/version.txt" | Set-Content build_version.txt
+      - uses: actions/upload-artifact@v4
+        with:
+            name: build-version
+            path: build_version.txt
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3
@@ -70,10 +98,10 @@ jobs:
       #Remove all pre-installed android sdk platform versions except 29
       #Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk platform versions
-        run: | 
+        run: |
               Move-Item -Path C:/Android/android-sdk/platforms/* -Destination c:/windows/temp
               Get-ChildItem -Path "C:/Android/android-sdk/platforms"
-              
+
       #Download and extract android sdk platform and build tools
       - name: Install android sdk platform and build tools
         run: |
@@ -143,3 +171,69 @@ jobs:
         with:
           name: android-unity-build
           path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.Build_Version }}.apk
+  Release:
+    if: ${{ github.event.inputs.create_release == 'true' }}
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get version from artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-unity-build-log
+          path: ./logs
+
+      - name: Download build version
+        uses: actions/download-artifact@v4
+        with:
+          name: build-version
+
+      - name: Set build version env
+        run: echo "Build_Version=$(cat build_version.txt)" >> $GITHUB_ENV
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          release_url=$(gh api -X GET /repos/${{ github.repository }}/releases/tags/${{ env.Build_Version }} --jq '.upload_url' 2>/dev/null || echo "")
+          if [ -n "$release_url" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "upload_url=$release_url" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release if not exists
+        if: steps.check_release.outputs.exists == 'false'
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.Build_Version }}
+          name: ${{ env.Build_Version }}
+          draft: ${{ github.event.inputs.DraftRelease }}
+          prerelease: ${{ github.event.inputs.PreRelease }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./all_artifacts
+
+      - name: Prepare release artifacts (exclude *-build-log*)
+        run: |
+          mkdir -p ./release_artifacts
+          find ./all_artifacts -type f ! -name "build_version.txt" ! -name "*.log" -exec cp {} ./release_artifacts/ \;
+
+      - name: List release artifacts to upload
+        run: |
+          echo "Files to be uploaded to the release:"
+          ls -lh ./release_artifacts
+
+      - name: Upload release artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release_artifacts/*
+          tag_name: ${{ env.Build_Version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
