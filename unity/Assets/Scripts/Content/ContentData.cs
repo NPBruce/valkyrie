@@ -201,7 +201,7 @@ public class ContentData
     {
         string customContentPackPath = CustomContentPackPath();
         string[] files = GetDownloadedFilesFromManifest(customContentPackPath);
-        GetPacks(files, false, true);
+        GetPacks(files, true, true);
     }
 
     private static string[] GetDownloadedFilesFromManifest(string customContentPackPath)
@@ -258,8 +258,11 @@ public class ContentData
         if (File.Exists(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
         {
             pack = GetPackData(path, gameTypeName, checkGameType);
-            AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
-            // We finish without actually loading the content, this is done later (content optional)
+            if(pack != null)
+            {
+                AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
+                // We finish without actually loading the content, this is done later (content optional)
+            }
         }
     }
 
