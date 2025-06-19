@@ -179,7 +179,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                ui.SetText(typeName, Color.black);
+                ui.SetText(new StringKey(typeName).Translate(), Color.black);
             }
             
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
