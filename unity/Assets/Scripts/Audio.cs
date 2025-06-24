@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using ValkyrieTools;
+using Random = UnityEngine.Random;
 
 public class Audio : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioSource audioSourceEffect;
+    public AudioSource ttsAudioSource;
     public GameObject effectsObject;
     public AudioClip eventClip;
     public List<AudioClip> music;
@@ -15,7 +19,11 @@ public class Audio : MonoBehaviour
     public int musicIndex = 0;
     public float effectVolume;
     public float musicVolume;
+    public float ttsVolume;
     public List<AudioClip> defaultQuestMusic;
+    public Action<AudioSource> ttsAudioSourceStartStopHandler; //need weak reference?
+    
+    private bool ttsPlaying;
 
     void Start()
     {
@@ -36,6 +44,12 @@ public class Audio : MonoBehaviour
         vSet = game.config.data.Get("UserConfig", "effects");
         float.TryParse(vSet, out effectVolume);
         if (vSet.Length == 0) effectVolume = 1;
+        
+        ttsAudioSource = gameObject.AddComponent<AudioSource>();
+        var volumeString = game.config.data.Get("UserConfig", "effects");
+        float.TryParse(volumeString, out ttsVolume);
+        if (volumeString.Length == 0) ttsVolume = 1;
+        ttsAudioSource.volume = ttsVolume;
     }
 
     private void FixedUpdate()
@@ -55,6 +69,14 @@ public class Audio : MonoBehaviour
             audioSource.volume = musicVolume;
             UpdateMusic();
         }
+
+        var ttsPlayingCurrent = ttsAudioSource.isPlaying;
+        if (ttsPlayingCurrent != ttsPlaying)
+        {
+            ttsAudioSourceStartStopHandler?.Invoke(ttsAudioSource);
+        }
+
+        ttsPlaying = ttsPlayingCurrent;
     }
 
     public void StopMusic()
@@ -162,5 +184,32 @@ public class Audio : MonoBehaviour
     {
         if(audioSourceEffect!=null)
             audioSourceEffect.Stop();
+    }
+
+    public void PlayTts(string fileName)
+    {
+        StopTts();
+        StartCoroutine(PlayTtsInternal(fileName));
+    }
+
+    private IEnumerator PlayTtsInternal(string fileName)
+    {
+        var audioClipRequest = UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, 
+            GoogleTTSClient.AUDIO_TYPE);
+        yield return audioClipRequest.SendWebRequest();
+        if (audioClipRequest.error != null)
+        {
+            ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + audioClipRequest.error);
+        }
+        else
+        {
+            ttsAudioSource.clip = DownloadHandlerAudioClip.GetContent(audioClipRequest);
+            ttsAudioSource.Play();
+        }
+    }
+
+    public void StopTts()
+    {
+        ttsAudioSource.Stop();
     }
 }
