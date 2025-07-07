@@ -30,6 +30,8 @@ namespace Assets.Scripts.UI
         private static readonly Color SELECTED_TRAIT_COLOR = Color.white;
         private static readonly Color NOT_SELECTED_TRAIT_COLOR = Color.grey;
 
+        private static readonly StringKey SOURCE = new StringKey("val", "SOURCE");
+
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false) : base(call, title, callAfterCancel)
         {
             val_base_translated = CommonStringKeys.BASE.Translate();
@@ -51,14 +53,17 @@ namespace Assets.Scripts.UI
         {
             foreach (SelectionItemTraits item in allItems)
             {
-                foreach (string category in item.GetTraits().Keys)
+                var itemTraits = item.GetTraits();
+                foreach (string category in itemTraits.Keys)
                 {
                     bool found = false;
                     foreach (TraitGroup tg in traitGroups)
                     {
-                        if (tg.GetName().Equals(category))
+                        var traitGroupName = tg.GetName();
+                        if (traitGroupName.Equals(category))
                         {
                             found = true;
+                            string key = item.GetKey();
                             tg.AddTraits(item);
                         }
                     }
@@ -545,7 +550,10 @@ namespace Assets.Scripts.UI
             public TraitGroup(string name)
             {
                 _name = name;
-                if ("Source".Trim().Equals(name, StringComparison.InvariantCultureIgnoreCase))
+
+                //If the trait group is of type "Source", we set the filter mode to AtLeastOneSelected
+                var sourceWording = SOURCE.Translate();
+                if (sourceWording.Trim().Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _filterMode = TraitGroupFilterMode.AtLeastOneSelected;
                 }

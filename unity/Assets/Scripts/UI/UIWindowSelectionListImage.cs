@@ -47,7 +47,8 @@ namespace Assets.Scripts.UI
                     spriteData.width = 20;
                     spriteData.height = spriteData.width * tex.height / tex.width;
                 }
-                spriteCache.Add(item.GetKey(), spriteData);
+                string key = item.GetKey();
+                spriteCache.Add(key, spriteData);
             }
         }
 
@@ -106,19 +107,21 @@ namespace Assets.Scripts.UI
             float yOffset = 4;
             foreach (SelectionItemTraits item in allItems)
             {
+                var itemKey = item.GetKey();
+
                 if (!traitGroups.All(tg => tg.ActiveItem(item)))
                 {
                     continue;
                 }
 
-                if (spriteCache.ContainsKey(item.GetKey()))
+                if (spriteCache.ContainsKey(itemKey))
                 {
-                    if (20 - xOffset < spriteCache[item.GetKey()].width)
+                    if (20 - xOffset < spriteCache[itemKey].width)
                     {
                         offset += yOffset;
                         xOffset = 0;
                     }
-                    xOffset = DrawItem(item.GetKey(), itemScrollArea.GetScrollTransform(), offset, xOffset, out yOffset);
+                    xOffset = DrawItem(itemKey, itemScrollArea.GetScrollTransform(), offset, xOffset, out yOffset);
                 }
                 else
                 {
