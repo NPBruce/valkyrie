@@ -30,8 +30,6 @@ namespace Assets.Scripts.UI
         private static readonly Color SELECTED_TRAIT_COLOR = Color.white;
         private static readonly Color NOT_SELECTED_TRAIT_COLOR = Color.grey;
 
-        private static readonly StringKey SOURCE = new StringKey("val", "SOURCE");
-
         public UIWindowSelectionListTraits(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false) : base(call, title, callAfterCancel)
         {
             val_base_translated = CommonStringKeys.BASE.Translate();
@@ -552,7 +550,7 @@ namespace Assets.Scripts.UI
                 _name = name;
 
                 //If the trait group is of type "Source", we set the filter mode to AtLeastOneSelected
-                var sourceWording = SOURCE.Translate();
+                var sourceWording = CommonStringKeys.SOURCE.Translate();
                 if (sourceWording.Trim().Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _filterMode = TraitGroupFilterMode.AtLeastOneSelected;
