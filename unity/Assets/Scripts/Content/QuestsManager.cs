@@ -269,6 +269,12 @@ public class QuestsManager
 
                 foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
                 {
+                    if(!quest_data.Value.valid)
+                    {
+                        ValkyrieDebug.Log($"Skipping quest {quest_data.Key} because of it was marked as invalid.");
+                        continue;
+                    }
+
                     string pkg_name = quest_data.Key.ToLower() + ValkyrieConstants.ScenarioDownloadContainerExtension;
                     if (game.stats.scenarios_stats.ContainsKey(pkg_name))
                     {

@@ -861,6 +861,13 @@ namespace Assets.Scripts.UI.Screens
             foreach (string key in questList)
             {
                 QuestData.Quest q = game.questsList.GetQuestData(key);
+
+                if(!q.valid)
+                {
+                    ValkyrieDebug.Log("Quest " + key + " is not valid, skipping it");
+                    continue;
+                }
+
                 UIElement frame = null;
                 is_expansion_missing = false;
 
@@ -918,7 +925,6 @@ namespace Assets.Scripts.UI.Screens
                     name_translation = q.name.Translate();
                     synopsys_translation = q.synopsys.Translate(true);
                 }
-
 
                 // Text information displayed depending on sort option
                 offset = DrawSortInfo(key, offset);

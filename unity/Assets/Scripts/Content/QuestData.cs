@@ -1966,6 +1966,7 @@ public class QuestData
             // do not parse the content of a quest from another game type
             if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
             {
+                ValkyrieDebug.Log("Quest " + identifier + " is not compatible with the current game type: " + Game.Get().gameType.TypeName() + ", it is for " + iniData["type"]);
                 valid = false;
                 return;
             }
@@ -2009,6 +2010,7 @@ public class QuestData
 
             if (format > currentFormat || format < minumumFormat)
             {
+                ValkyrieDebug.Log("Quest " + identifier + " has an unknown format: " + format + ", expected between " + minumumFormat + " and " + currentFormat);
                 return false;
             }
 
