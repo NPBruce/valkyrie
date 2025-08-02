@@ -862,7 +862,8 @@ namespace Assets.Scripts.UI.Screens
             {
                 QuestData.Quest q = game.questsList.GetQuestData(key);
 
-                if(!q.valid)
+                //skip the quest if it was marked as invalid
+                if (!q.valid)
                 {
                     ValkyrieDebug.Log("Quest " + key + " is not valid, skipping it");
                     continue;
