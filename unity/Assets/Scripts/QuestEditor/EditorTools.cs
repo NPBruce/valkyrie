@@ -6,6 +6,7 @@ using System.IO;
 using Ionic.Zip;
 using ValkyrieTools;
 using System.Collections.Generic;
+using Assets.Scripts;
 
 public class EditorTools
 {
@@ -113,7 +114,7 @@ public class EditorTools
             }
             Directory.CreateDirectory(destination);
 
-            string packageFile = Path.Combine(destination, packageName + ".valkyrie");
+            string packageFile = Path.Combine(destination, packageName + ValkyrieConstants.ScenarioDownloadContainerExtension);
 
             using (var zip = new ZipFile())
             {

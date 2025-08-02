@@ -37,6 +37,14 @@ public class Destroyer
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
             Object.Destroy(go);
 
+        // Clean up everything marked as 'contentpackui'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKUI))
+            Object.Destroy(go);
+
+        // Clean up everything marked as 'contentpacklist'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.CONTENTPACKLIST))
+            Object.Destroy(go);
+
         // Clean up everything marked as 'editor'
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.EDITOR))
             Object.Destroy(go);

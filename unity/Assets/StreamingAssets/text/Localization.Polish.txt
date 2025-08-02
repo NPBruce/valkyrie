@@ -445,10 +445,20 @@ UPDATE_OLDER_THAN_TWO_YEAR,Obecna wersja jest starsza niż dwa lata
 
 GO_OFFLINE, Przejdź w tryb Offline
 GO_ONLINE, Przejdź w tryb Online
+ONLINE,Online
+OFFLINE,Offline
 DOWNLOAD_ONGOING,Pobieranie...
 OFFLINE_DUE_TO_ERROR,OFFLINE (błąd poł. intern.)
-
+CONTENTPACK_CATEGORY_CUSTOM,Społecznościowe pakiety zawartości
+CONTENTPACK_DOWNLOAD,Pobieranie zawartości
+CONTENTPACK_DOWNLOAD_HEADER,Pobieranie pakietu zawartości dla społeczności
 MISSING_EXPANSIONS,Brakujące rozszerzenia:
+
+RICH_TEXT,Bogaty tekst
+TEXT_ALIGNMENT,Wyrównanie
+TOP,Top
+CENTER,Środek
+BOTTOM,Bottom
 
 STATS_AVERAGE_WIN_RATIO,Średnia wygranych: {0}%
 STATS_NB_USER_REVIEWS,({0} ocen graczy)

@@ -649,9 +649,13 @@ UPDATE_OLDER_THAN_TWO_YEAR,Latest update older than two years
 
 GO_OFFLINE,GO OFFLINE
 GO_ONLINE,GO ONLINE
+ONLINE,Online
+OFFLINE,Offline
 DOWNLOAD_ONGOING,Downloading...
 OFFLINE_DUE_TO_ERROR,OFFLINE (network error)
-
+CONTENTPACK_CATEGORY_CUSTOM,Community Content Packs
+CONTENTPACK_DOWNLOAD,Download content
+CONTENTPACK_DOWNLOAD_HEADER,Community content pack download
 MISSING_EXPANSIONS,Missing expansions:
 
 RICH_TEXT,Rich text

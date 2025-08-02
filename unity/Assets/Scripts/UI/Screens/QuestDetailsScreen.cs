@@ -91,7 +91,7 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // DELETE button (only for archive, directory might be edited by user)
-            if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+            if (Path.GetExtension(Path.GetFileName(q.path)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
             {
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetRight(-8.5f), 0.5f, 8, 2);
@@ -131,7 +131,7 @@ namespace Assets.Scripts.UI.Screens
 
             string toDelete = "";
 
-            if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+            if (Path.GetExtension(Path.GetFileName(q.path)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
             {
                 toDelete = ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path);
                 File.Delete(toDelete);

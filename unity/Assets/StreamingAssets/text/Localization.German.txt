@@ -460,7 +460,7 @@ FILTER_TITLE,Filter auswählen
 FILTER_SELECT_LANG,Bitte Sprachen wählen:
 FILTER_MISSING_EXPANSIONS_ON,Szenarien mit fehlenden Erweiterungen verstecken  ☑
 FILTER_MISSING_EXPANSIONS_OFF,Szenarien mit fehlenden Erweiterungen verstecken  ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Szenarien gefunden
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} Szenarien wurden herausgefiltert
 
 AUTHORS_SHORT,Textzeile "Autoren" (Für "Sortieren Nach"-Option):
 AUTHORS_UNKNOWN,Unbekannte Autoren (benötigt ein Update durch den Autor, um dies zu hinterlegen)
@@ -477,5 +477,16 @@ UPDATE_OLDER_THAN_TWO_YEAR,Letze Aktualisierung älter als zwei Jahre
 
 GO_OFFLINE,OFFLINE GEHEN
 GO_ONLINE,ONLINE GEHEN
+ONLINE,Online
+OFFLINE,Offline
 DOWNLOAD_ONGOING,Lade herunter...
 OFFLINE_DUE_TO_ERROR,OFFLINE (Netzwerkfehler)
+CONTENTPACK_CATEGORY_CUSTOM,Community Contentpacks
+CONTENTPACK_DOWNLOAD,Contentpacks herunterladen
+CONTENTPACK_DOWNLOAD_HEADER,Community Contentpacks herunterladen
+
+RICH_TEXT,Rich text
+TEXT_ALIGNMENT,Ausrichten
+TOP,Oben
+CENTER,Mitte
+BOTTOM,Unten

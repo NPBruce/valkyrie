@@ -482,3 +482,19 @@ UPDATED_THIS_SEMESTER,Atualizado esse semestre
 UPDATED_THIS_YEAR,Atualizado esse ano
 UPDATED_TWO_YEARS_AGO,Atualizado em até 2 anos
 UPDATE_OLDER_THAN_TWO_YEAR,Última atualização faz mais de 2 anos
+GO_OFFLINE,GO OFFLINE
+GO_ONLINE,GO ONLINE
+ONLINE,Online
+OFFLINE,Offline
+DOWNLOAD_ONGOING,Descarregar...
+OFFLINE_DUE_TO_ERROR,Fora de linha (erro de rede)
+CONTENTPACK_CATEGORY_CUSTOM,Pacotes de conteúdo da comunidade
+CONTENTPACK_DOWNLOAD,Descarregar conteúdo
+CONTENTPACK_DOWNLOAD_HEADER,Descarregamento de pacotes de conteúdos comunitários
+MISSING_EXPANSIONS,Expansões em falta:
+
+RICH_TEXT,Texto rico
+TEXT_ALIGNMENT,Alinhar
+TOP,Topo
+CENTER,Centro
+BOTTOM,Fundo

@@ -43,7 +43,7 @@ class SaveManager
             {
                 Directory.CreateDirectory(Path.Combine(ContentData.GameTypePath, "Save"));
             }
-            string tempValkyriePath = ContentData.TempValyriePath;
+            string tempValkyriePath = ContentData.TempValkyriePath;
             if (!Directory.Exists(tempValkyriePath))
             {
                 Directory.CreateDirectory(tempValkyriePath);
@@ -143,11 +143,11 @@ class SaveManager
         {
             if (File.Exists(SaveFile(num)))
             {
-                if (!Directory.Exists(ContentData.TempValyriePath))
+                if (!Directory.Exists(ContentData.TempValkyriePath))
                 {
-                    Directory.CreateDirectory(ContentData.TempValyriePath);
+                    Directory.CreateDirectory(ContentData.TempValkyriePath);
                 }
-                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Load");
+                string valkyrieLoadPath = Path.Combine(ContentData.TempValkyriePath, "Load");
 
                 if (!Directory.Exists(valkyrieLoadPath))
                 {
@@ -281,11 +281,11 @@ class SaveManager
             if (!File.Exists(SaveFile(num))) return;
             try
             {
-                if (!Directory.Exists(ContentData.TempValyriePath))
+                if (!Directory.Exists(ContentData.TempValkyriePath))
                 {
-                    Directory.CreateDirectory(ContentData.TempValyriePath);
+                    Directory.CreateDirectory(ContentData.TempValkyriePath);
                 }
-                string valkyrieLoadPath = Path.Combine(ContentData.TempValyriePath, "Preload");
+                string valkyrieLoadPath = Path.Combine(ContentData.TempValkyriePath, "Preload");
                 if (!Directory.Exists(valkyrieLoadPath))
                 {
                     Directory.CreateDirectory(valkyrieLoadPath);

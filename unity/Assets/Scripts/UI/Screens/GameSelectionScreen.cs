@@ -369,21 +369,16 @@ namespace Assets.Scripts.UI.Screens
 
                 game.gameType = new D2EGameType();
 
-               
+
                 // Load localization before content
                 loadLocalization();
 
                 // Loading list of content - doing this later is not required
-                game.cd = new ContentData(game.gameType.DataDirectory());
-                // Check if we found anything
-                if (game.cd.GetPacks().Count == 0)
-                {
-                    ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
-                    Application.Quit();
-                }
+                ContentLoader.GetContentData(game);
 
                 // Download quests list
                 game.questsList = new QuestsManager();
+                game.remoteContentPackManager = new RemoteContentPackManager();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
 
@@ -492,7 +487,7 @@ namespace Assets.Scripts.UI.Screens
                 loadLocalization();
 
                 // Loading list of content - doing this later is not required
-                game.cd = new ContentData(game.gameType.DataDirectory());
+                ContentLoader.GetContentData(game);
                 // Check if we found anything
                 if (game.cd.GetPacks().Count == 0)
                 {

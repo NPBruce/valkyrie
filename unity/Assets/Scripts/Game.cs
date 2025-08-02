@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using Assets.Scripts.UI.Screens;
@@ -20,7 +21,9 @@ public class Game : MonoBehaviour
     public static readonly string HEROSELECT = "heroselect";
     public static readonly string BOARD = "board";
     public static readonly string QUESTUI = "questui";
+    public static readonly string CONTENTPACKUI= "contentpackui";
     public static readonly string QUESTLIST = "questlist";
+    public static readonly string CONTENTPACKLIST = "contentpacklist";
     public static readonly string EDITOR = "editor";
     public static readonly string UIPHASE = "uiphase";
     public static readonly string TRANSITION = "transition";
@@ -89,6 +92,8 @@ public class Game : MonoBehaviour
     public StatsManager stats;
     // Quests manager
     public QuestsManager questsList;
+    // Content Pack manager
+    public RemoteContentPackManager remoteContentPackManager;
 
     // List of things that want to know if the mouse is clicked
     protected List<IUpdateListener> updateList;
@@ -191,7 +196,7 @@ public class Game : MonoBehaviour
         if (config.data.Get("UserConfig") == null)
         {
             // English is the default current language
-            config.data.Add("UserConfig", "currentLang", "English");
+            config.data.Add("UserConfig", "currentLang", ValkyrieConstants.DefaultLanguage);
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
@@ -284,10 +289,10 @@ public class Game : MonoBehaviour
     // This is called when a quest is selected
     internal void StartQuest(QuestData.Quest q)
     {
-        if (Path.GetExtension(Path.GetFileName(q.path)) == ".valkyrie")
+        if (Path.GetExtension(Path.GetFileName(q.path)) == ValkyrieConstants.ScenarioDownloadContainerExtension)
         {
             // extract the full package
-            QuestLoader.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));
+            ExtractManager.ExtractSinglePackageFull(ContentData.DownloadPath() + Path.DirectorySeparatorChar + Path.GetFileName(q.path));
         }
 
         // Fetch all of the quest data and initialise the quest
@@ -386,7 +391,7 @@ public class Game : MonoBehaviour
         // This exists for the editor, because quitting doesn't actually work.
         Destroyer.Destroy();
         // Clean up temporary files
-        QuestLoader.CleanTemp();
+        ExtractManager.CleanTemp();
     }
 
     //  This is here because the editor doesn't get an update, so we are passing through mouse clicks to the editor

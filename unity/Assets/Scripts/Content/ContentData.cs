@@ -2,19 +2,42 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using UnityEngine;
 using ValkyrieTools;
+using static UnityEngine.Experimental.UIElements.EventDispatcher;
 
 /// <summary>
 /// This class reads and stores all of the content for a base game and expansions.</summary>
-public class ContentData {
+public class ContentData
+{
 
     public HashSet<string> loadedPacks;
     public List<ContentPack> allPacks;
-    public Dictionary<string, StringKey> packSymbol;
+    public Dictionary<string, StringKey> packSymbolDict;
 
     private Dictionary<Type, Dictionary<string, IContent>> Content = new Dictionary<Type, Dictionary<string, IContent>>();
+
+    /// <summary>
+    /// Seach the provided path for all content packs and read meta data.</summary>
+    /// <param name="path">Path to search for content packs.</param>
+    public ContentData(string path)
+    {
+        // This is pack type for sorting packs
+        loadedPacks = new HashSet<string>();
+
+        // This is pack symbol list
+        packSymbolDict = new Dictionary<string, StringKey>();
+
+        //This has the game game and all expansions, general info
+        allPacks = new List<ContentPack>();
+
+
+        // Search each directory in the path (one should be base game, others expansion.  Names don't matter
+        GetBuildInContentPacks(path);
+        GetCustomContentPacks();
+    }
 
     protected Dictionary<string, IContent> ContentOfType<T>() where T : IContent
     {
@@ -35,19 +58,19 @@ public class ContentData {
     public bool TryGet<T>(string name, out T value) where T : IContent
     {
         var contains = ContentOfType<T>().TryGetValue(name, out IContent obj);
-        value = (T) obj;
+        value = (T)obj;
         return contains;
     }
-    
+
     public T Get<T>(string name) where T : IContent
     {
-        return (T) ContentOfType<T>()[name];
+        return (T)ContentOfType<T>()[name];
     }
     public IEnumerable<string> Keys<T>() where T : IContent
     {
         return ContentOfType<T>().Keys.AsEnumerable();
     }
-    
+
     public IEnumerable<T> Values<T>() where T : IContent
     {
         return ContentOfType<T>().Values.Cast<T>().AsEnumerable();
@@ -112,6 +135,11 @@ public class ContentData {
         return Game.AppData() + Path.DirectorySeparatorChar + "Download";
     }
 
+    public static string CustomContentPackPath()
+    {
+        return DownloadPath() + Path.DirectorySeparatorChar + "ContentPacks";
+    }
+
     public static string TempPath
     {
         get
@@ -124,7 +152,7 @@ public class ContentData {
         }
     }
 
-    public static string TempValyriePath
+    public static string TempValkyriePath
     {
         get
         {
@@ -136,7 +164,7 @@ public class ContentData {
     {
         get
         {
-            return Path.Combine(Game.AppData() , Game.Get().gameType.TypeName());
+            return Path.Combine(Game.AppData(), Game.Get().gameType.TypeName());
         }
     }
 
@@ -144,7 +172,7 @@ public class ContentData {
     {
         get
         {
-            return Path.Combine(TempValyriePath, "Load");
+            return Path.Combine(TempValkyriePath, "Load");
         }
     }
 
@@ -152,7 +180,7 @@ public class ContentData {
     {
         get
         {
-            return Path.Combine(TempValyriePath, "Preload");
+            return Path.Combine(TempValkyriePath, "Preload");
         }
     }
 
@@ -163,125 +191,195 @@ public class ContentData {
             return Path.Combine(ValkyrieLoadPath, "quest");
         }
     }
-
-    /// <summary>
-    /// Seach the provided path for all content packs and read meta data.</summary>
-    /// <param name="path">Path to search for content packs.</param>
-    public ContentData(string path)
+    private void GetBuildInContentPacks(string path)
     {
-        // This is pack type for sorting packs
-        loadedPacks = new HashSet<string>();
+        string[] officialContentFiles = Directory.GetFiles(path, ValkyrieConstants.ContentPackIniFile, SearchOption.AllDirectories);
+        GetPacks(officialContentFiles, false, false);
+    }
 
-        // This is pack symbol list
-        packSymbol = new Dictionary<string, StringKey>();
-    
-        //This has the game game and all expansions, general info
-        allPacks = new List<ContentPack>();
+    private void GetCustomContentPacks()
+    {
+        string customContentPackPath = CustomContentPackPath();
+        string[] files = GetDownloadedFilesFromManifest(customContentPackPath);
+        GetPacks(files, true, true);
+    }
 
+    private static string[] GetDownloadedFilesFromManifest(string customContentPackPath)
+    {
+        //Parse manifest
+        ManifestManager manager = new ManifestManager(customContentPackPath);
+        var manifestData = manager.GetLocalQuestManifestIniData();
 
-        // Search each directory in the path (one should be base game, others expansion.  Names don't matter
-        string[] contentFiles = Directory.GetFiles(path, "content_pack.ini", SearchOption.AllDirectories);
+        // Parse ini
+        Dictionary<string, QuestData.Quest> remote_quests_data = null;
+
+        //Get all keys from manifest and combine them with pack file extension
+        var downloadedPackFiles = manifestData.data.Select(s => Path.Combine(customContentPackPath, s.Key + ValkyrieConstants.ContentPackDownloadContainerExtension)).ToArray();
+        return downloadedPackFiles;
+    }
+
+    private void GetPacks(string[] contentFiles, bool checkGameType, bool packIsContainer)
+    {
         foreach (string p in contentFiles)
         {
-            PopulatePackList(Path.GetDirectoryName(p));
+            AddPackByGameType(checkGameType, packIsContainer, p);
         }
     }
 
-    // Read a content pack for list of files and meta data
-    public void PopulatePackList(string path)
+    public void AddPackByGameType(bool checkGameType, bool packIsContainer, string path)
     {
-        // All packs must have a content_pack.ini, otherwise ignore
-        if (File.Exists(path + Path.DirectorySeparatorChar + "content_pack.ini"))
+        string gameTypeName = string.Empty;
+        if (checkGameType)
         {
-            ContentPack pack = new ContentPack();
-
-            // Get all data from the file
-            IniData d = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + "content_pack.ini");
-            // Todo: better error handling
-            if (d == null)
-            {
-                ValkyrieDebug.Log("Failed to get any data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
-                Application.Quit();
-            }
-
-            pack.name = d.Get("ContentPack", "name");
-            if (pack.name.Equals(""))
-            {
-                ValkyrieDebug.Log("Failed to get name data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
-                Application.Quit();
-            }
-
-            // id can be empty/missing
-            pack.id = d.Get("ContentPack", "id");
-
-            // If this is invalid we will just handle it later, not fatal
-            if (d.Get("ContentPack", "image").IndexOf("{import}") == 0)
-            {
-                pack.image = ImportPath() + d.Get("ContentPack", "image").Substring(8);
-            }
-            else
-            {
-                pack.image = path + Path.DirectorySeparatorChar + d.Get("ContentPack", "image");
-            }
-
-            // Black description isn't fatal
-            pack.description = d.Get("ContentPack", "description");
-
-            // Some packs have a type
-            pack.type = d.Get("ContentPack", "type");
-
-            // Get cloned packs
-            string cloneString = d.Get("ContentPack", "clone");
-            pack.clone = new List<string>();
-            foreach (string s in cloneString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-            {
-                pack.clone.Add(s);
-            }
-
-            // Get all the other ini files in the pack
-            List<string> files = new List<string>();
-            // content_pack file is included
-            files.Add(path + Path.DirectorySeparatorChar + "content_pack.ini");
-
-            // No extra files is valid
-            if (d.Get("ContentPackData") != null)
-            {
-                foreach (string file in d.Get("ContentPackData").Keys)
-                {
-                    files.Add(path + Path.DirectorySeparatorChar + file);
-                }
-            }
-            // Save list of files
-            pack.iniFiles = files;
-
-            // Get all the other ini files in the pack
-            Dictionary<string, List<string>> dictFiles = new Dictionary<string, List<string>>();
-            // No extra files is valid
-            if (d.Get("LanguageData") != null)
-            {
-                foreach (string s in d.Get("LanguageData").Keys)
-                {
-                    int firstSpace = s.IndexOf(' ');
-                    string id = s.Substring(0, firstSpace);
-                    string file = s.Substring(firstSpace + 1);
-                    if (!dictFiles.ContainsKey(id))
-                    {
-                        dictFiles.Add(id, new List<string>());
-                    }
-                    dictFiles[id].Add(path + Path.DirectorySeparatorChar + file);
-                }
-            }
-            // Save list of files
-            pack.localizationFiles = dictFiles;
-
-            // Add content pack
-            allPacks.Add(pack);
-
-            // Add symbol
-            packSymbol.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
-
-            // We finish without actually loading the content, this is done later (content optional)
+            gameTypeName = Game.Get().gameType.TypeName();
         }
+
+        string contentPackPath = path;
+        if (!packIsContainer)
+        {
+            contentPackPath = Path.GetDirectoryName(path);
+        }
+
+        PopulatePackListByPath(contentPackPath, gameTypeName, checkGameType, packIsContainer);
+    }
+
+    // Read a content pack for list of files and meta data
+    private void PopulatePackListByPath(string path, string gameTypeName, bool checkGameType, bool packIsContainer)
+    {
+        if (packIsContainer)
+        {
+            string extractedPath = ExtractManager.ExtractSinglePackageFull(path);
+            path = extractedPath;
+        }
+
+        // All packs must have a content_pack.ini, otherwise ignore
+        ContentPack pack = null;
+
+        if (File.Exists(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
+        {
+            pack = GetPackData(path, gameTypeName, checkGameType);
+            if(pack != null)
+            {
+                AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
+                // We finish without actually loading the content, this is done later (content optional)
+            }
+        }
+    }
+
+    private void AddPackToAllPacksAndPackSymbol(ContentPack pack, List<ContentPack> allPacksList, Dictionary<string, StringKey> packSymbolDict)
+    {
+        // Add content pack
+        allPacksList.Add(pack);
+
+        // Add symbol
+        packSymbolDict.Add(pack.id, new StringKey("val", pack.id + "_SYMBOL"));
+    }
+
+    private static ContentPack GetPackData(string path, string gameTypeName, bool checkGameType)
+    {
+        // Get all data from the file
+        IniData d = IniRead.ReadFromIni(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile);
+
+        // Some packs have a type
+        string type = d.Get("ContentPack", "type");
+        if (
+            !checkGameType || 
+            (
+                !string.IsNullOrWhiteSpace(gameTypeName) 
+                && type.StartsWith(gameTypeName)
+            )
+        )
+        {
+            var pack = GetContentPack(path, d, type);
+            if(pack == null)
+            {
+                ValkyrieDebug.Log("Could not find content pack file: " + path + $"Please check if type=\"{gameTypeName}\" was set correctly in content_pack.ini file.");
+            }
+            return pack;
+        }
+
+        ValkyrieDebug.Log("Could not find content pack file: " + path);
+        return null;
+    }
+
+    private static ContentPack GetContentPack(string path, IniData d, string type)
+    {
+        ContentPack pack = new ContentPack();
+        pack.type = type;
+        // Todo: better error handling
+        if (d == null)
+        {
+            ValkyrieDebug.Log("Failed to get any data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
+            Application.Quit();
+        }
+
+        pack.name = d.Get("ContentPack", "name");
+        if (pack.name.Equals(""))
+        {
+            ValkyrieDebug.Log("Failed to get name data out of " + path + Path.DirectorySeparatorChar + "content_pack.ini!");
+            Application.Quit();
+        }
+
+        // id can be empty/missing
+        pack.id = d.Get("ContentPack", "id");
+
+        // If this is invalid we will just handle it later, not fatal
+        if (d.Get("ContentPack", "image").IndexOf("{import}") == 0)
+        {
+            pack.image = ImportPath() + d.Get("ContentPack", "image").Substring(8);
+        }
+        else
+        {
+            pack.image = path + Path.DirectorySeparatorChar + d.Get("ContentPack", "image");
+        }
+
+        // Black description isn't fatal
+        pack.description = d.Get("ContentPack", "description");
+
+        // Get cloned packs
+        string cloneString = d.Get("ContentPack", "clone");
+        pack.clone = new List<string>();
+        foreach (string s in cloneString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+        {
+            pack.clone.Add(s);
+        }
+
+        // Get all the other ini files in the pack
+        List<string> files = new List<string>();
+        // content_pack file is included
+        files.Add(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile);
+
+        // No extra files is valid
+        if (d.Get("ContentPackData") != null)
+        {
+            foreach (string file in d.Get("ContentPackData").Keys)
+            {
+                files.Add(path + Path.DirectorySeparatorChar + file);
+            }
+        }
+        // Save list of files
+        pack.iniFiles = files;
+
+        // Get all the other ini files in the pack
+        Dictionary<string, List<string>> dictFiles = new Dictionary<string, List<string>>();
+        // No extra files is valid
+        if (d.Get("LanguageData") != null)
+        {
+            foreach (string s in d.Get("LanguageData").Keys)
+            {
+                int firstSpace = s.IndexOf(' ');
+                string id = s.Substring(0, firstSpace);
+                string file = s.Substring(firstSpace + 1);
+                if (!dictFiles.ContainsKey(id))
+                {
+                    dictFiles.Add(id, new List<string>());
+                }
+                dictFiles[id].Add(path + Path.DirectorySeparatorChar + file);
+            }
+        }
+        // Save list of files
+        pack.localizationFiles = dictFiles;
+        return pack;
     }
 
     // Return a list of names for all found content packs
@@ -322,12 +420,12 @@ public class ContentData {
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey("val", cp.id+"_SYMBOL").Translate();
+                return new StringKey("val", cp.id + "_SYMBOL").Translate();
             }
         }
         return "";
     }
-    
+
     internal bool AddContent<T>(string name, T d) where T : IContent
     {
         bool added = false;
@@ -346,19 +444,6 @@ public class ContentData {
         }
 
         return false;
-    }
-
-    // Holding class for contentpack data
-    public class ContentPack
-    {
-        public string name;
-        public string image;
-        public string description;
-        public string id;
-        public string type;
-        public List<string> iniFiles;
-        public Dictionary<string, List<string>> localizationFiles;
-        public List<string> clone;
     }
 
     /// <summary>
@@ -586,7 +671,7 @@ public class ContentData {
                 default:
                     ValkyrieDebug.Log("Warning: PVR unknown pixelformat: '" + pixelformat + "' in file: '" + file + "'");
                     break;
-            } 
+            }
             return texture;
         }
         catch (Exception ex)

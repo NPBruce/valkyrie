@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Assets.Scripts.Content;
+using UnityEngine;
 using ValkyrieTools;
 
 public class ContentLoader
@@ -25,8 +27,8 @@ public class ContentLoader
         new ImageDataLoader(),
         new AudioDataLoader()
     };
-    
-       
+
+
     private readonly ContentData cd;
 
     public ContentLoader(ContentData cd)
@@ -34,11 +36,34 @@ public class ContentLoader
         this.cd = cd;
     }
 
+    internal static void AddNewContentPack(Game game, string path)
+    {
+        game.cd.AddPackByGameType(true, true, path);
+    }
+
+    internal static void RemoveContentPack(Game game, string key)
+    {
+        var pack = game.cd.allPacks.FirstOrDefault(p => p.id.Equals(key));
+        game.cd.allPacks.Remove(pack);
+        game.cd.packSymbolDict.Remove(key);
+    }
+
+    internal static void GetContentData(Game game)
+    {
+        game.cd = new ContentData(game.gameType.DataDirectory());
+        // Check if we found anything
+        if (game.cd.GetPacks().Count == 0)
+        {
+            ValkyrieDebug.Log("Error: Failed to find any content packs, please check that you have them present in: " + game.gameType.DataDirectory() + Environment.NewLine);
+            Application.Quit();
+        }
+    }
+
     // This loads content from a pack by name
     // Duplicate content will be replaced by the higher priority value
     public void LoadContent(string name)
     {
-        foreach (ContentData.ContentPack cp in cd.allPacks)
+        foreach (ContentPack cp in cd.allPacks)
         {
             if (cp.name.Equals(name))
             {
@@ -51,7 +76,7 @@ public class ContentLoader
     // Duplicate content will be replaced by the higher priority value
     public void LoadContentID(string id)
     {
-        foreach (ContentData.ContentPack cp in cd.allPacks)
+        foreach (ContentPack cp in cd.allPacks)
         {
             if (cp.id.Equals(id))
             {
@@ -62,7 +87,7 @@ public class ContentLoader
 
     // This loads content from a pack by object
     // Duplicate content will be replaced by the higher priority value
-    void LoadContent(ContentData.ContentPack cp)
+    void LoadContent(ContentPack cp)
     {
         // Don't reload content
         if (cd.loadedPacks.Contains(cp.id)) return;

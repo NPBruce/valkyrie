@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Content;
+﻿using Assets.Scripts;
+using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using System;
 using System.Collections;
@@ -134,9 +135,9 @@ public class QuestsManager
 
     private void CheckLocalAvailability()
     {
-        // load information on local quests
-        IniData localManifest = IniRead.ReadFromIni(ContentData.DownloadPath() + "/manifest.ini");
-
+        string saveLocation = ContentData.DownloadPath();
+        ManifestManager manager = new ManifestManager(saveLocation);
+        IniData localManifest = manager.GetLocalQuestManifestIniData();
         if (localManifest == null)
             return;
 
@@ -153,16 +154,11 @@ public class QuestsManager
     
     public void SetQuestAvailability(string key, bool isAvailable)
     {
-        // update list of local quest
-        IniData localManifest = IniRead.ReadFromString("");
         string saveLocation = ContentData.DownloadPath();
+        ManifestManager manager = new ManifestManager(saveLocation);
+        IniData localManifest = manager.GetLocalQuestManifestIniData();
 
-        if (File.Exists(saveLocation + "/manifest.ini"))
-        {
-            localManifest = IniRead.ReadFromIni(saveLocation + "/manifest.ini");
-        }
-
-        if(isAvailable)
+        if (isAvailable)
         {
             IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
             localManifest.Remove(key);
@@ -176,11 +172,11 @@ public class QuestsManager
             UnloadLocalQuests();
         }
 
-        if (File.Exists(saveLocation + "/manifest.ini"))
+        if (File.Exists(saveLocation + ValkyrieConstants.ScenarioManifestPath))
         {
-            File.Delete(saveLocation + "/manifest.ini");
+            File.Delete(saveLocation + ValkyrieConstants.ScenarioManifestPath);
         }
-        File.WriteAllText(saveLocation + "/manifest.ini", localManifest.ToString());
+        File.WriteAllText(saveLocation + ValkyrieConstants.ScenarioManifestPath, localManifest.ToString());
 
         // update status quest
         remote_quests_data[key].downloaded = isAvailable;
@@ -273,7 +269,13 @@ public class QuestsManager
 
                 foreach (KeyValuePair<string, QuestData.Quest> quest_data in remote_quests_data)
                 {
-                    string pkg_name = quest_data.Key.ToLower() + ".valkyrie";
+                    if(!quest_data.Value.valid)
+                    {
+                        ValkyrieDebug.Log($"Skipping quest {quest_data.Key} because of it was marked as invalid.");
+                        continue;
+                    }
+
+                    string pkg_name = quest_data.Key.ToLower() + ValkyrieConstants.ScenarioDownloadContainerExtension;
                     if (game.stats.scenarios_stats.ContainsKey(pkg_name))
                     {
                         quests_sorted_by_rating.Add(game.stats.scenarios_stats[pkg_name].scenario_avg_rating, quest_data.Key);
@@ -373,7 +375,7 @@ public class QuestsManager
         if (local_quests_data != null)
         {
             // Clean up temporary files
-            QuestLoader.CleanTemp();
+            ExtractManager.CleanTemp();
             local_quests_data = null;
         }
     }

@@ -8,6 +8,7 @@ using Assets.Scripts.Content;
 using UnityEngine.UI;
 using ValkyrieTools;
 using TextAlignment = Assets.Scripts.Content.TextAlignment;
+using Assets.Scripts;
 
 // Class to manage all static data for the current quest
 public class QuestData
@@ -1899,7 +1900,7 @@ public class QuestData
         // Content packs required for quest
         public string[] packs;
         // Default language for the text
-        public string defaultLanguage = "English";
+        public string defaultLanguage = ValkyrieConstants.DefaultLanguage;
         //Default music will be played when starting the quest
         public bool defaultMusicOn = false;
         // raw localization dictionary
@@ -1965,6 +1966,7 @@ public class QuestData
             // do not parse the content of a quest from another game type
             if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
             {
+                ValkyrieDebug.Log("Quest " + identifier + " is not compatible with the current game type: " + Game.Get().gameType.TypeName() + ", it is for " + iniData["type"]);
                 valid = false;
                 return;
             }
@@ -2008,6 +2010,7 @@ public class QuestData
 
             if (format > currentFormat || format < minumumFormat)
             {
+                ValkyrieDebug.Log("Quest " + identifier + " has an unknown format: " + format + ", expected between " + minumumFormat + " and " + currentFormat);
                 return false;
             }
 

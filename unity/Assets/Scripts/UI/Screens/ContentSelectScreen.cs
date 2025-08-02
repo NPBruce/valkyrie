@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
+using UnityEngine.UI;
+using ValkyrieTools;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -13,6 +15,8 @@ namespace Assets.Scripts.UI.Screens
         private const int LARGE_FONT_LIMIT = 32;
 
         private StringKey SELECT_EXPANSION = new StringKey("val", "SELECT_EXPANSION");
+        private static readonly StringKey SELECT_EXPANSION_CUSTOM = new StringKey("val", "CONTENTPACK_CATEGORY_CUSTOM");
+        private static readonly StringKey CONTENTPACK_DOWNLOAD = new StringKey("val", "CONTENTPACK_DOWNLOAD");
 
         public Game game;
 
@@ -46,79 +50,145 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Dialog();
 
             // Draw a header
+            DrawTypeListHeader();
+
+            // Start here
+            float offset = 4.5f;
+            bool left = true;
+
+            string typeIdCustom = RemoteContentPackManager.GetCustomCategory();
+
+            // Note this is currently unordered
+            foreach (PackTypeData type in game.cd.Values<PackTypeData>())
+            {
+                string typeId = type.sectionName.Substring("PackType".Length);
+
+                //skip custom category if it was added for some reason
+                if (typeId.Equals(typeIdCustom, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                string typeName = type.name != null ? type.name.ToString() : null;
+
+                CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image, false);
+            }
+
+            //bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
+
+            //string customContentPackImagePath = "E:\\Eigene Dokumente\\Max\\Programmierung\\Projekte\\valkyrie\\unity\\Assets\\Resources\\Sprites\\CustomContentPackIcon.jpg";
+            string customContentPackImagePath = "sprites/CustomContentPackIcon";
+            CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, customContentPackImagePath, true);
+
+            DrawBackButtonTypeListPage();
+
+            DrawDownloadButtonTypeListPage();
+        }
+
+        private void DrawTypeListHeader()
+        {
             UIElement ui = new UIElement();
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 2);
             ui.SetText(SELECT_EXPANSION);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
+        }
 
-            // Start here
-            float offset = 4.5f;
-            bool left = true;
-            // Note this is currently unordered
-            foreach (PackTypeData type in game.cd.Values<PackTypeData>())
+        private static void DrawBackButtonTypeListPage()
+        {
+            // Button for back to main menu
+            UIElement uiBack = new UIElement();
+            uiBack.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+            uiBack.SetText(CommonStringKeys.BACK);
+            uiBack.SetFont(Game.Get().gameType.GetHeaderFont());
+            uiBack.SetFontSize(UIScaler.GetMediumFont());
+            uiBack.SetButton(Quit);
+            new UIElementBorder(uiBack);
+        }
+
+        private void DrawDownloadButtonTypeListPage()
+        {
+            float text_width = 0f;
+            UIElement uiDownloadCustomContentPack = null;
+            uiDownloadCustomContentPack = new UIElement();
+            uiDownloadCustomContentPack.SetText(CONTENTPACK_DOWNLOAD);
+            uiDownloadCustomContentPack.SetLocation(UIScaler.GetRight(-8.5f), UIScaler.GetBottom(-3), 8, 2);
+            uiDownloadCustomContentPack.SetFont(game.gameType.GetHeaderFont());
+            uiDownloadCustomContentPack.SetFontSize(UIScaler.GetSmallFont());
+            uiDownloadCustomContentPack.SetTextAlignment(TextAnchor.MiddleCenter);
+            uiDownloadCustomContentPack.SetButton(ContentSelectDownload);
+            new UIElementBorder(uiDownloadCustomContentPack);
+        }
+
+        private void CreatePackTypeCategory(ref float offset, ref bool left, string typeId, string typeName, string image, bool isCustomContentPackCategory)
+        {
+            UIElement ui;
+            Texture2D tex;
+
+            if (isCustomContentPackCategory)
+            {
+                tex = Resources.Load("sprites/CustomContentPackIcon") as Texture2D;
+            }
+            else
             {
                 // Create a sprite with the category image
-                Texture2D tex = ContentData.FileToTexture(type.image);
-
-                string typeId = type.sectionName.Substring("PackType".Length);
-
-                ui = new UIElement();
-                if (left)
-                {
-                    ui.SetLocation(2, offset, 6, 6);
-                }
-                else
-                {
-                    ui.SetLocation(UIScaler.GetWidthUnits() - 9, offset, 6, 6);
-                }
-
-                ui.SetImage(tex);
-                ui.SetButton(delegate { DrawList(typeId); });
-                new UIElementBorder(ui);
-
-                ui = new UIElement();
-                if (left)
-                {
-                    ui.SetLocation(8, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
-                }
-                else
-                {
-                    ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
-                }
-
-                ui.SetBGColor(Color.white);
-                ui.SetButton(delegate { DrawList(typeId); });
-
-                ui = new UIElement();
-                if (left)
-                {
-                    ui.SetLocation(9, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
-                }
-                else
-                {
-                    ui.SetLocation(11, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
-                }
-
-                ui.SetBGColor(Color.white);
-                ui.SetText(type.name, Color.black);
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                ui.SetFont(game.gameType.GetHeaderFont());
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { DrawList(typeId); });
-
-                left = !left;
-                offset += 4f;
+                tex = ContentData.FileToTexture(image);
             }
 
-            // Button for back to main menu
             ui = new UIElement();
-            ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
-            ui.SetText(CommonStringKeys.BACK);
-            ui.SetFont(Game.Get().gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Quit);
+            if (left)
+            {
+                ui.SetLocation(2, offset, 6, 6);
+            }
+            else
+            {
+                ui.SetLocation(UIScaler.GetWidthUnits() - 9, offset, 6, 6);
+            }
+
+            ui.SetImage(tex);
+            ui.SetButton(delegate { DrawList(typeId); });
             new UIElementBorder(ui);
+
+            ui = new UIElement();
+            if (left)
+            {
+                ui.SetLocation(8, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
+            }
+            else
+            {
+                ui.SetLocation(10, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
+            }
+
+            ui.SetBGColor(Color.white);
+            ui.SetButton(delegate { DrawList(typeId); });
+
+            ui = new UIElement();
+            if (left)
+            {
+                ui.SetLocation(9, offset + 1.5f, UIScaler.GetWidthUnits() - 19, 3);
+            }
+            else
+            {
+                ui.SetLocation(11, offset + 1.5f, UIScaler.GetWidthUnits() - 20, 3);
+            }
+
+            ui.SetBGColor(Color.white);
+            if(string.IsNullOrWhiteSpace(typeName))
+            {
+                ui.SetText(SELECT_EXPANSION_CUSTOM, Color.black); 
+            }
+            else
+            {
+                ui.SetText(new StringKey(typeName).Translate(), Color.black);
+            }
+            
+            ui.SetTextAlignment(TextAnchor.MiddleLeft);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate { DrawList(typeId); });
+
+            left = !left;
+            offset += 4f;
         }
 
 
@@ -154,7 +224,8 @@ namespace Assets.Scripts.UI.Screens
             bool left = true;
             var packLanguages = game.config.GetPackLanguages(game.gameType.TypeName());
             // Note this is currently unordered
-            foreach (ContentData.ContentPack cp in game.cd.allPacks)
+            var allPacks = game.cd.allPacks;
+            foreach (ContentPack cp in allPacks)
             {
                 // If the id is "" this is base content and can be ignored
                 if (cp.id.Length > 0 && cp.type.Equals(type))
@@ -200,7 +271,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetButton(delegate { Select(id); });
                     buttons[id].Add(ui);
 
-                    int text_font_size = (int) (UIScaler.GetMediumFont() * 0.9f);
+                    int text_font_size = (int)(UIScaler.GetMediumFont() * 0.9f);
 
                     ui = new UIElement(scrollArea.GetScrollTransform());
                     if (left)
@@ -262,8 +333,13 @@ namespace Assets.Scripts.UI.Screens
 
             scrollArea.SetScrollSize(offset + 2.5f);
 
+            ui = DrawBackButtonContentListPage();
+        }
+
+        private UIElement DrawBackButtonContentListPage()
+        {
             // Button for back to main menu
-            ui = new UIElement();
+            UIElement ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
@@ -277,6 +353,8 @@ namespace Assets.Scripts.UI.Screens
             {
                 ui.SetButton(Quit);
             }
+
+            return ui;
         }
 
         private void SelectLanguage(string id, string type)
@@ -312,6 +390,13 @@ namespace Assets.Scripts.UI.Screens
         public static void Quit()
         {
             GameStateManager.MainMenu();
+        }
+
+        public static void ContentSelectDownload()
+        {
+            ValkyrieDebug.Log("INFO: Accessing content select download screen");
+
+            new ContentSelectDownloadScreen();
         }
 
         public void Update()
