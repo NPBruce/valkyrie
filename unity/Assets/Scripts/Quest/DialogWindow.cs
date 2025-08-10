@@ -74,6 +74,9 @@ public class DialogWindow {
         ui.SetText(text);
         new UIElementBorder(ui);
         offset += 1f;
+        
+        if (Game.Get().googleTtsEnabled)
+            new UITtsSpeakButton(ui);
 
         // Determine button size
         float buttonWidth = 8;
