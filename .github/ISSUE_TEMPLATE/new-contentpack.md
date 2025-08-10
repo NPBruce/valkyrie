@@ -1,6 +1,6 @@
 ---
 name: New custom content pack
-about: Request to for adding a new custom content pack to the Valykrie mission overview
+about: Request to for adding a new custom content pack to the Valykrie community content pack list
 title: "[ContentPack] YourContentPackName"
 labels: ''
 assignees: ''
