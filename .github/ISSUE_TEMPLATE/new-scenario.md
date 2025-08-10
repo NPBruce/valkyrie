@@ -1,6 +1,6 @@
 ---
 name: New Scenario
-about: Request to for adding a new scenario to the Valykrie mission overview
+about: Request to for adding a new scenario to the Valkyrie mission overview
 title: "[Scenario] YourScenarioName"
 labels: ''
 assignees: ''
