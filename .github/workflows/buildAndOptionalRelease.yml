@@ -3,6 +3,8 @@ description: |
   This workflow builds the Valkyrie project using Unity and optionally creates a release on GitHub.
   The build artifacts are uploaded as artifacts and can be used in the release step if requested.
 run-name: Valkyrie build triggered by ${{ github.actor }}
+env:
+  JAVA_HOME: C:\hostedtoolcache\windows\Java_Corretto_jdk\8.462.08-1\x64
 on:
   workflow_dispatch:
     inputs:
@@ -54,27 +56,27 @@ jobs:
       #but it doesn't seem to work so the action has to be repeated for
       #each module.
       - name: Setup Unity and Linux Module
-        uses: kuler90/setup-unity@v1.1.0
+        uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.20f1
+          unity-version: 2018.4.36f1
           unity-modules: "linux"
           install-path: "C:/Program Files"
       - name: Setup Unity Mac Module
-        uses: kuler90/setup-unity@v1.1.0
+        uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.20f1
+          unity-version: 2018.4.36f1
           unity-modules: "mac-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Android Module
-        uses: kuler90/setup-unity@v1.1.0
+        uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.20f1
+          unity-version: 2018.4.36f1
           unity-modules: "android"
           install-path: "C:/Program Files"
       - name: Setup Unity IOS Module
-        uses: kuler90/setup-unity@v1.1.0
+        uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.20f1
+          unity-version: 2018.4.36f1
           unity-modules: "ios"
           install-path: "C:/Program Files"
       #Activate requires unity account creds for unity license checkout.
@@ -86,7 +88,7 @@ jobs:
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
       #Move unity to where the build script expects it to be installed.
       - name: Move unity to expected location
-        run: Rename-Item "C:/Program Files/2018.4.20f1" Unity
+        run: Rename-Item "C:/Program Files/2018.4.36f1" Unity
 
       #Remove all pre-installed android sdk build tool versions except 28.0.3
       #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
@@ -101,7 +103,11 @@ jobs:
         run: |
               Move-Item -Path C:/Android/android-sdk/platforms/* -Destination c:/windows/temp
               Get-ChildItem -Path "C:/Android/android-sdk/platforms"
-
+      #Android managesdk requires java 17
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       #Download and extract android sdk platform and build tools
       - name: Install android sdk platform and build tools
         run: |
