@@ -442,11 +442,24 @@ namespace Assets.Scripts.UI.Screens
                 if (array_path.Length == 0)
                     return;
 
-                path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename + "_Data");
+                if (Application.platform == RuntimePlatform.OSXPlayer)
+                {
+                    path = Path.Combine(array_path[0], "Contents/Resources/Data");
+                    
+                }
+                else 
+                {
+                    path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename + "_Data");
+    
+                }
+                ValkyrieDebug.Log("Using path: " + path);
 
-                // return if wrong file is selected
                 if (!Directory.Exists(path))
                     return;
+                // return if wrong file is selected
+
+
+
             }
 
             Destroyer.Destroy();
@@ -641,4 +654,5 @@ namespace Assets.Scripts.UI.Screens
         }
 
     }
+
 }
