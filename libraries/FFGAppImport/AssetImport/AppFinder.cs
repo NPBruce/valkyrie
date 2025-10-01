@@ -34,7 +34,7 @@ namespace FFGAppImport
         public AppFinder(Platform p)
         {
             platform = p;
-            if (p == Platform.MacOS)
+                        if (p == Platform.MacOS)
             {
                 ValkyrieDebug.Log("Attempting to locate AppId " + AppId() + " on MacOS.");
                 System.Diagnostics.ProcessStartInfo processStartInfo;
@@ -79,13 +79,20 @@ namespace FFGAppImport
                 ValkyrieDebug.Log("Looking for: /" + Executable());
                 // Quick hack rather than doing XML properly
                 int foundAt = output.IndexOf("/" + Executable());
-                if (foundAt > 0)
+                while (foundAt > 0)
                 {
                     ValkyrieDebug.Log("Name Index: " + foundAt);
                     int startPos = output.LastIndexOf("<string>", foundAt) + 8;
                     ValkyrieDebug.Log("Start Index: " + startPos);
                     location = output.Substring(startPos, output.IndexOf("</string>", startPos) - startPos).Trim();
-                    ValkyrieDebug.Log("Using location: " + location);
+                    ValkyrieDebug.Log("Trying location: " + location);
+                    if (File.Exists(location + "/Contents/Resources/Data/resources.assets"))
+                    {
+                        break;
+                    }
+                    ValkyrieDebug.Log("Assets not found in location: " + location);
+                    foundAt = output.IndexOf("/" + Executable(), output.IndexOf("</string>", startPos));
+
                 }
             }
             else if (platform == Platform.Linux)
@@ -353,6 +360,7 @@ namespace FFGAppImport
                 {
                     return GetObbPath(altprefix, suffix);
                 }
+
             }
 
         }
