@@ -59,7 +59,7 @@ jobs:
         uses: seinsinnes/setup-unity@v1.1.0
         with:
           unity-version: 2019.4.41f1
-          unity-modules: "linux"
+          unity-modules: "linux-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Mac Module
         uses: seinsinnes/setup-unity@v1.1.0
