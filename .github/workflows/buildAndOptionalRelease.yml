@@ -58,25 +58,25 @@ jobs:
       - name: Setup Unity and Linux Module
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.36f1
+          unity-version: 2019.4.41f1
           unity-modules: "linux"
           install-path: "C:/Program Files"
       - name: Setup Unity Mac Module
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.36f1
+          unity-version: 2019.4.41f1
           unity-modules: "mac-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Android Module
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.36f1
+          unity-version: 2019.4.41f1
           unity-modules: "android"
           install-path: "C:/Program Files"
       - name: Setup Unity IOS Module
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2018.4.36f1
+          unity-version: 2019.4.41f1
           unity-modules: "ios"
           install-path: "C:/Program Files"
       #Activate requires unity account creds for unity license checkout.
@@ -88,7 +88,7 @@ jobs:
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
       #Move unity to where the build script expects it to be installed.
       - name: Move unity to expected location
-        run: Rename-Item "C:/Program Files/2018.4.36f1" Unity
+        run: Rename-Item "C:/Program Files/2019.4.41f1" Unity
 
       #Remove all pre-installed android sdk build tool versions except 28.0.3
       #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
