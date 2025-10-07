@@ -103,7 +103,7 @@ copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
 Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
 
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinuxUniversalPlayer ..\build\linux\valkyrie
+Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinux64Player ..\build\linux\valkyrie
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"

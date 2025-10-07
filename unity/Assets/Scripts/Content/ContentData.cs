@@ -6,7 +6,7 @@ using Assets.Scripts;
 using Assets.Scripts.Content;
 using UnityEngine;
 using ValkyrieTools;
-using static UnityEngine.Experimental.UIElements.EventDispatcher;
+//using static UnityEngine.Experimental.UIElements.EventDispatcher;
 
 /// <summary>
 /// This class reads and stores all of the content for a base game and expansions.</summary>
