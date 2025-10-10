@@ -1,5 +1,7 @@
 <dependencies>
   <packages>
+    <package>androidx.documentfile:documentfile:1.0.1</package>
+    <package>androidx.multidex:multidex:2.0.1</package>
     <package>com.google.firebase:firebase-analytics:17.4.1</package>
     <package>com.google.firebase:firebase-app-unity:6.15.2</package>
     <package>com.google.firebase:firebase-common:19.3.0</package>
@@ -16,7 +18,7 @@
     <file>Assets/Plugins/Android/androidx.core.core-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.cursoradapter.cursoradapter-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.customview.customview-1.0.0.aar</file>
-    <file>Assets/Plugins/Android/androidx.documentfile.documentfile-1.0.0.aar</file>
+    <file>Assets/Plugins/Android/androidx.documentfile.documentfile-1.0.1.aar</file>
     <file>Assets/Plugins/Android/androidx.drawerlayout.drawerlayout-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.fragment.fragment-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.interpolator.interpolator-1.0.0.aar</file>
@@ -29,6 +31,7 @@
     <file>Assets/Plugins/Android/androidx.lifecycle.lifecycle-viewmodel-2.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.loader.loader-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.localbroadcastmanager.localbroadcastmanager-1.0.0.aar</file>
+    <file>Assets/Plugins/Android/androidx.multidex.multidex-2.0.1.aar</file>
     <file>Assets/Plugins/Android/androidx.print.print-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.slidingpanelayout.slidingpanelayout-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.swiperefreshlayout.swiperefreshlayout-1.0.0.aar</file>
@@ -67,7 +70,7 @@
     <file>Assets/Plugins/Android/javax.inject.javax.inject-1.jar</file>
   </files>
   <settings>
-    <setting name="androidAbis" value="armeabi-v7a,x86" />
+    <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
     <setting name="bundleId" value="com.bruce.valkyrie" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
