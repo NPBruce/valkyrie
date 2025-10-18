@@ -657,8 +657,8 @@
 "Health","Lebenspunkte",,,,,,,,,,
 "Test {might}","Lege eine {might} Probe ab",,,,,,,,,,
 "Test {awareness}","Lege eine {awareness} Probe ab",,,,,,,,,,
-"Test {will}","Lege eine {will} Probe ab",,,,,,,,,,
-"Test {knowledge}","Lege eine {knowledge} Probe ab",,,,,,,,,,
+"Test {will}","Legt eine {will} Probe ab",,,,,,,,,,
+"Test {knowledge}","Legt eine {knowledge} Probe ab",,,,,,,,,,
 "with the least Health remaining","Mit den wenigsten verbleibenden Lebenspunkten",,,,,,,,,,
 "with the most Health remaining","Mit den meisten verbleibenden Lebenspunkten",,,,,,,,,,
 "Place","Platziert",,,,,,,,,,
@@ -680,6 +680,7 @@
 "Each attack gains +1 Range","Jeder Angriff erhält +1 Reichweite",,,,,,,,,,
 "Each attack gains +1 {surge}","Jeder Angriff erhält +1 {surge}",,,,,,,,,,
 "Attack a hero","Greife einen Helden an",,,,,,,,,,
+"Engage the hero within 4 spaces","Stürme auf den nächsten Helden innerhalb von 4 Feldern zu",,,,,,,,,,
 "Engage the closest hero","Stürme auf den nächsten Helden zu",,,,,,,,,,
 "to spot","sichten",,,,,,,,,,
 "Engage as many heroes as possible","Stürme auf so viele Helden wie möglich zu",,,,,,,,,,
@@ -1123,7 +1124,9 @@
 "Whisper","Flüstern",,,,,,,,,,
 "Wither","Verwelken",,,,,,,,,,
 "portcullis","Fallgitter",,,,,,,,,,
-Lieutenant,Hauptmann
-Lieutenants,Hauptmänner
-Lieutenant card,Hauptmannkarte
-Lieutenant cards,Hauptmannkarten
+Lieutenant,Hauptmann,,,,,,,,,,
+Lieutenants,Hauptmänner,,,,,,,,,,
+Lieutenant card,Hauptmannkarte,,,,,,,,,,
+Lieutenant cards,Hauptmannkarten,,,,,,,,,,
+Heroic feat,Heldentat,,,,,,,,,,
+Heroic feats,Heldentaten,,,,,,,,,,
