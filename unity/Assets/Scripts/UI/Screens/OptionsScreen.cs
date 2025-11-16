@@ -88,7 +88,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Header
             UIElement ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-8, 20, 18, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-8, 17, 18, 2);
             ui.SetText(new StringKey("val", "RESOLUTION"));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -100,7 +100,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Prev button
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()-6), 22, 3, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()-6), 19, 3, 2);
             ui.SetText("<");
             ui.SetButton(delegate
             {
@@ -117,7 +117,7 @@ namespace Assets.Scripts.UI.Screens
             // Current resolution display (center)
             var cur = resolutions[currentIndex];
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 3, 22, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 3, 19, 10, 2);
             ui.SetText($"{cur.width} x {cur.height}");
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(delegate
@@ -128,7 +128,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Next button
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()+7), 22, 3, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()+7), 19, 3, 2);
             ui.SetText(">");
             ui.SetButton(delegate
             {
@@ -143,7 +143,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Fullscreen toggle label
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-4, 25, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-4, 22, 10, 2);
             ui.SetText(new StringKey("val", "FULLSCREEN"));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -151,7 +151,7 @@ namespace Assets.Scripts.UI.Screens
             // Fullscreen toggle button (On / Off)
             bool isFs = Assets.Scripts.Content.ResolutionManager.IsFullscreen();
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-2, 27, 6, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-2, 25, 6, 2);
             ui.SetText(isFs ? "On" : "Off");
             ui.SetButton(delegate
             {
@@ -211,7 +211,7 @@ namespace Assets.Scripts.UI.Screens
         private void CreateAudioElements()
         {
             UIElement ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 8, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 5, 10, 2);
             ui.SetText(MUSIC);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -222,7 +222,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 11, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 8, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -231,7 +231,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
             musicSlide = musicSlideObj.AddComponent<Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
 
@@ -250,7 +250,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
             musicSlideRev = musicSlideObjRev.AddComponent<Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = Slider.Direction.RightToLeft;
@@ -269,7 +269,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - mVolume;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 14, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 11, 10, 2);
             ui.SetText(EFFECTS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -280,7 +280,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) eVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 17, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 14, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -289,7 +289,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
             effectSlide = effectSlideObj.AddComponent<Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
@@ -312,7 +312,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
             effectSlideRev = effectSlideObjRev.AddComponent<Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = Slider.Direction.RightToLeft;
