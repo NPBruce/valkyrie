@@ -59,6 +59,8 @@ namespace Assets.Scripts.UI.Screens
 
             CreateAudioElements();
 
+            CreateResolutionAndFullScreenOptions();
+
             CreateEditorTransparencyElements();
 
             // Button for back to main menu
@@ -69,6 +71,100 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(GameStateManager.MainMenu);
             new UIElementBorder(ui, Color.red);
+        }
+
+        private void CreateResolutionAndFullScreenOptions()
+        {
+            // Only render on Windows, Mac or Linux (player or editor)
+            var p = Application.platform;
+            bool isSupportedPlatform =
+                p == RuntimePlatform.WindowsPlayer || p == RuntimePlatform.OSXPlayer || p == RuntimePlatform.LinuxPlayer
+                || p == RuntimePlatform.WindowsEditor || p == RuntimePlatform.OSXEditor || p == RuntimePlatform.LinuxEditor;
+
+            if (!isSupportedPlatform)
+                return;
+
+            Game game = Game.Get();
+
+            // Header
+            UIElement ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-8, 20, 18, 2);
+            ui.SetText(new StringKey("val", "RESOLUTION"));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Prepare resolutions and find current index
+            var resolutions = Assets.Scripts.Content.ResolutionManager.GetAvailableResolutions();
+            int currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
+            if (currentIndex < 0) currentIndex = 0;
+
+            // Prev button
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()-6), 22, 3, 2);
+            ui.SetText("<");
+            ui.SetButton(delegate
+            {
+                int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
+                var r = resolutions[idx];
+                Assets.Scripts.Content.ResolutionManager.SetResolution(r.width, r.height, Assets.Scripts.Content.ResolutionManager.IsFullscreen());
+                // persist choice to config (optional)
+                game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+                game.config.Save();
+                new OptionsScreen();
+            });
+            new UIElementBorder(ui);
+
+            // Current resolution display (center)
+            var cur = resolutions[currentIndex];
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 3, 22, 10, 2);
+            ui.SetText($"{cur.width} x {cur.height}");
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate
+            {
+                // do nothing (placeholder) — changing via prev/next
+            });
+            new UIElementBorder(ui);
+
+            // Next button
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()+7), 22, 3, 2);
+            ui.SetText(">");
+            ui.SetButton(delegate
+            {
+                int idx = (currentIndex + 1) % resolutions.Count;
+                var r = resolutions[idx];
+                Assets.Scripts.Content.ResolutionManager.SetResolution(r.width, r.height, Assets.Scripts.Content.ResolutionManager.IsFullscreen());
+                game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+                game.config.Save();
+                new OptionsScreen();
+            });
+            new UIElementBorder(ui);
+
+            // Fullscreen toggle label
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-4, 25, 10, 2);
+            ui.SetText(new StringKey("val", "FULLSCREEN"));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Fullscreen toggle button (On / Off)
+            bool isFs = Assets.Scripts.Content.ResolutionManager.IsFullscreen();
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-2, 27, 6, 2);
+            ui.SetText(isFs ? "On" : "Off");
+            ui.SetButton(delegate
+            {
+                bool newFs = !Assets.Scripts.Content.ResolutionManager.IsFullscreen();
+                Assets.Scripts.Content.ResolutionManager.SetFullscreen(newFs);
+                game.config.data.Add("UserConfig", "fullscreen", newFs ? "1" : "0");
+                game.config.Save();
+                new OptionsScreen();
+            });
+            if (isFs)
+                new UIElementBorder(ui, Color.white);
+            else
+                new UIElementBorder(ui, Color.grey);
         }
 
         private void CreateEditorTransparencyElements()
