@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Scripts.Content
+namespace Assets.Scripts
 {
     internal static class ResolutionManager
     {
