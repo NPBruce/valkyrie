@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ValkyrieTools;
+using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -94,7 +94,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Prepare resolutions and find current index
-            var resolutions = Assets.Scripts.Content.ResolutionManager.GetAvailableResolutions();
+            var resolutions = ResolutionManager.GetAvailableResolutions();
             int currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
             if (currentIndex < 0) currentIndex = 0;
 
@@ -106,7 +106,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
                 var r = resolutions[idx];
-                Assets.Scripts.Content.ResolutionManager.SetResolution(r.width, r.height, Assets.Scripts.Content.ResolutionManager.IsFullscreen());
+                ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
                 // persist choice to config (optional)
                 game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
                 game.config.Save();
@@ -134,7 +134,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 int idx = (currentIndex + 1) % resolutions.Count;
                 var r = resolutions[idx];
-                Assets.Scripts.Content.ResolutionManager.SetResolution(r.width, r.height, Assets.Scripts.Content.ResolutionManager.IsFullscreen());
+                ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
                 game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
                 game.config.Save();
                 new OptionsScreen();
@@ -149,14 +149,14 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Fullscreen toggle button (On / Off)
-            bool isFs = Assets.Scripts.Content.ResolutionManager.IsFullscreen();
+            bool isFs = ResolutionManager.IsFullscreen();
             ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits())-2, 25, 6, 2);
             ui.SetText(isFs ? "On" : "Off");
             ui.SetButton(delegate
             {
-                bool newFs = !Assets.Scripts.Content.ResolutionManager.IsFullscreen();
-                Assets.Scripts.Content.ResolutionManager.SetFullscreen(newFs);
+                bool newFs = !ResolutionManager.IsFullscreen();
+                ResolutionManager.SetFullscreen(newFs);
                 game.config.data.Add("UserConfig", "fullscreen", newFs ? "1" : "0");
                 game.config.Save();
                 new OptionsScreen();
