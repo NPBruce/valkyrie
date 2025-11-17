@@ -1028,16 +1028,23 @@ namespace Assets.Scripts.UI.Screens
             if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
             {
                 // quest name is local language, or default language
-                if (q.languages_name != null &&
-                    !q.languages_name.TryGetValue(game.currentLang, out name_translation))
+                if (q.languages_name != null)
                 {
-                    q.languages_name.TryGetValue(q.defaultLanguage, out name_translation);
+                    bool valueFound = q.languages_name.TryGetValue(game.currentLang, out name_translation);
+
+                    if(!valueFound || string.IsNullOrWhiteSpace(name_translation))
+                    {
+                        q.languages_name.TryGetValue(q.defaultLanguage, out name_translation);
+                    }                    
                 }
                 // same thing for synopsys: local language, or default language
-                if (q.languages_synopsys != null &&
-                    !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation))
+                if (q.languages_synopsys != null)
                 {
-                    q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
+                    bool valueFound = !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
+                    if (!valueFound || string.IsNullOrWhiteSpace(synopsys_translation))
+                    {
+                        q.languages_synopsys.TryGetValue(q.defaultLanguage, out synopsys_translation);
+                    }
                 }
             }
             else
