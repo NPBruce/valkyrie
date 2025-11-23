@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -104,13 +105,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText("<");
             ui.SetButton(delegate
             {
-                int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
-                var r = resolutions[idx];
-                ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
-                // persist choice to config (optional)
-                game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
-                game.config.Save();
-                new OptionsScreen();
+                DecreaseResolution(game, resolutions, currentIndex);
             });
             new UIElementBorder(ui);
 
@@ -120,10 +115,6 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 3, 19, 10, 2);
             ui.SetText($"{cur.width} x {cur.height}");
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(delegate
-            {
-                // do nothing (placeholder) — changing via prev/next
-            });
             new UIElementBorder(ui);
 
             // Next button
@@ -132,12 +123,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(">");
             ui.SetButton(delegate
             {
-                int idx = (currentIndex + 1) % resolutions.Count;
-                var r = resolutions[idx];
-                ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
-                game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
-                game.config.Save();
-                new OptionsScreen();
+                IncreaseResolution(game, resolutions, currentIndex);
             });
             new UIElementBorder(ui);
 
@@ -165,6 +151,27 @@ namespace Assets.Scripts.UI.Screens
                 new UIElementBorder(ui, Color.white);
             else
                 new UIElementBorder(ui, Color.grey);
+        }
+
+        private static void IncreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
+        {
+            int idx = (currentIndex + 1) % resolutions.Count;
+            var r = resolutions[idx];
+            ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
+            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+            game.config.Save();
+            ScheduleOptionsScreenReload();
+        }
+
+        private static void DecreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
+        {
+            int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
+            var r = resolutions[idx];
+            ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
+            // persist choice to config (optional)
+            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+            game.config.Save();
+            ScheduleOptionsScreenReload();
         }
 
         private void CreateEditorTransparencyElements()
@@ -456,6 +463,17 @@ namespace Assets.Scripts.UI.Screens
 
             // clear list of local quests to make sure we take the latest changes
             Game.Get().questsList.UnloadLocalQuests();
+        }
+
+        private static void ScheduleOptionsScreenReload()
+        {
+            Game.Get().StartCoroutine(ReloadOptionsScreenNextFrame());
+        }
+
+        private static IEnumerator ReloadOptionsScreenNextFrame()
+        {
+            yield return null; // wait one frame
+            new OptionsScreen();
         }
     }
 }
