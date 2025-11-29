@@ -82,13 +82,45 @@ public class ZipManager : MonoBehaviour
     };
 
 
+    static private string local_target_path;
+    static private string local_archive_name;
+    static private Extract_mode local_extract_mode;
+
+    static private void _ExecuteExtract()
+    {
+        Extract(local_target_path, local_archive_name, local_extract_mode);
+    }
+
+    static public void ExtractZipAsync(string target_path, string archive_name, Extract_mode mode)
+    {
+        if (_job_started)
+        {
+            _jobHandle.Join();
+        }
+
+        local_target_path = target_path;
+        local_archive_name = archive_name;
+        local_extract_mode = mode;
+
+        _jobHandle = new Thread(_ExecuteExtract);
+        _jobHandle.Start();
+
+        _job_started = true;
+    }
+
     static public void Extract(string target_path, string archive_name, Extract_mode mode)
     {
         // make sure save is done, to not manipulate file being currently written
         if (_job_started)
         {
-            _jobHandle.Join();
-            _job_started = false;
+            // If we are on the same thread (which shouldn't happen for async calls but good for safety), we can't Join ourselves.
+            // But since _ExecuteExtract is called from the thread, this check is mainly for external sync calls.
+            // For the async wrapper, _jobHandle is the thread running this function.
+            if (Thread.CurrentThread != _jobHandle) 
+            {
+                 _jobHandle.Join();
+                 _job_started = false;
+            }
         }
 
         try
@@ -133,6 +165,32 @@ public class ZipManager : MonoBehaviour
         catch (System.Exception e)
         {
             ValkyrieDebug.Log("Warning: Unable to read file: " + archive_name + "\nException" + e.ToString());
+        }
+    }
+
+    public static void CopyDirectory(string sourceDir, string destinationDir)
+    {
+        DirectoryInfo dir = new DirectoryInfo(sourceDir);
+
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDir);
+        }
+
+        DirectoryInfo[] dirs = dir.GetDirectories();
+        Directory.CreateDirectory(destinationDir);
+
+        FileInfo[] files = dir.GetFiles();
+        foreach (FileInfo file in files)
+        {
+            string tempPath = Path.Combine(destinationDir, file.Name);
+            file.CopyTo(tempPath, true);
+        }
+
+        foreach (DirectoryInfo subdir in dirs)
+        {
+            string tempPath = Path.Combine(destinationDir, subdir.Name);
+            CopyDirectory(subdir.FullName, tempPath);
         }
     }
 
