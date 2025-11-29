@@ -226,7 +226,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(D2E_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
+                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeDescent); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -257,7 +257,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(CONTENT_IMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
+                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeDescent); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -328,7 +328,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(MoM_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
+                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeMom); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -359,7 +359,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(CONTENT_IMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
+                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeMom); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -559,12 +559,26 @@ namespace Assets.Scripts.UI.Screens
             importThread.Start();
         }
 
+        public void ImportZipAndroid(string type)
+        {
+            importType = type;
+            Android.PickFile();
+        }
+
+        public void ImportZipAndroidCallback(string zipPath)
+        {
+            ImportZipFromPath(zipPath, importType);
+        }
+
         public void ImportZip(string type)
         {
             string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select Import File (Zip/Obb)", "", "", false);
             if (array_path.Length == 0) return;
-            string zipPath = array_path[0];
+            ImportZipFromPath(array_path[0], type);
+        }
 
+        public void ImportZipFromPath(string zipPath, string type)
+        {
             Destroyer.Destroy();
             new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;

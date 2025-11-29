@@ -496,6 +496,14 @@ public class Game : MonoBehaviour
     }
 #endif
 
+    public void OnReceiveContent(string path)
+    {
+        ValkyrieDebug.Log("Received content path from Android: " + path);
+        if (gameSelect != null)
+        {
+            gameSelect.ImportZipAndroidCallback(path);
+        }
+    }
 }
 
 public interface IUpdateListener
