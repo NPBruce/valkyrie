@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using Assets.Scripts.Content;
 using FFGAppImport;
-using SFB;
 using UnityEngine;
 using UnityEngine.UI;
 using ValkyrieTools;
@@ -226,7 +225,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(D2E_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeDescent); });
+                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -257,7 +256,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(CONTENT_IMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeDescent); });
+                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -328,7 +327,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(MoM_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeMom); });
+                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -359,7 +358,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
                     ui.SetText(CONTENT_IMPORT_ZIP);
                     ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZipAndroid(ValkyrieConstants.typeMom); });
+                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
                     ui.SetBGColor(new Color(0, 0.03f, 0f));
                     new UIElementBorder(ui);
                 }
@@ -485,8 +484,6 @@ namespace Assets.Scripts.UI.Screens
         // Import content
         public void Import(string type, bool manual_path_selection=false)
         {
-            string path = null;
-
             ValkyrieDebug.Log("INFO: Import "+type);
 
             if (Application.platform == RuntimePlatform.Android)
@@ -509,34 +506,44 @@ namespace Assets.Scripts.UI.Screens
                 string extension = null;    
 #endif
 
-                var displaySuffix = extension != null ? $".{extension}" : "";
-                string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select file " + app_filename + displaySuffix,
-                    "", extension, false);
-
-                // return when pressing back
-                if (array_path.Length == 0)
-                    return;
-
-                if (Application.platform == RuntimePlatform.OSXPlayer)
+                NativeFilePicker.PickFile(delegate(string pickedPath)
                 {
-                    path = Path.Combine(array_path[0], "Contents/Resources/Data");
-                    
-                }
-                else 
-                {
-                    path = Path.Combine(Path.GetDirectoryName(array_path[0]), app_filename + "_Data");
-    
-                }
-                ValkyrieDebug.Log("Using path: " + path);
+                    if (string.IsNullOrEmpty(pickedPath)) return;
 
-                if (!Directory.Exists(path))
-                    return;
-                // return if wrong file is selected
+                    string path = null;
+                    if (Application.platform == RuntimePlatform.OSXPlayer)
+                    {
+                        path = Path.Combine(pickedPath, "Contents/Resources/Data");
+                    }
+                    else 
+                    {
+                        path = Path.Combine(Path.GetDirectoryName(pickedPath), app_filename + "_Data");
+                    }
+                    ValkyrieDebug.Log("Using path: " + path);
 
+                    if (!Directory.Exists(path)) return;
 
-
+                    StartImport(type, path);
+                }, extension);
             }
+            else
+            {
+                 // Logic for automatic import (if any) or if manual selection is false but not Android
+                 // The original code didn't seem to have an 'else' block for manual_path_selection=false that did anything significant 
+                 // other than fall through to the import execution which would fail with path=null.
+                 // However, looking at the original code, if manual_path_selection is false, it skips the file browser
+                 // and proceeds to import with path=null? 
+                 // Wait, looking at the original code:
+                 // if (manual_path_selection) { ... path = ... }
+                 // Destroyer.Destroy(); ... importThread = ... fcD2E.Import(path);
+                 // So if manual_path_selection is false, it calls Import(null).
+                 // Let's preserve this behavior.
+                 StartImport(type, null);
+            }
+        }
 
+        private void StartImport(string type, string path)
+        {
             Destroyer.Destroy();
 
             new LoadingScreen(CONTENT_IMPORTING.Translate());
@@ -559,84 +566,73 @@ namespace Assets.Scripts.UI.Screens
             importThread.Start();
         }
 
-        public void ImportZipAndroid(string type)
-        {
-            importType = type;
-            Android.PickFile();
-        }
-
-        public void ImportZipAndroidCallback(string zipPath)
-        {
-            ImportZipFromPath(zipPath, importType);
-        }
-
         public void ImportZip(string type)
         {
-            string[] array_path = StandaloneFileBrowser.OpenFilePanel("Select Import File (Zip/Obb)", "", "", false);
-            if (array_path.Length == 0) return;
-            ImportZipFromPath(array_path[0], type);
-        }
+            NativeFilePicker.PickFile(delegate (string path)
+            {
+                if (string.IsNullOrEmpty(path)) return;
+                string zipPath = path;
 
-        public void ImportZipFromPath(string zipPath, string type)
-        {
-            Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
-            importType = type;
+                Destroyer.Destroy();
+                new LoadingScreen(CONTENT_IMPORTING.Translate());
+                importType = type;
 
-            string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
-            if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
-            Directory.CreateDirectory(tempPath);
+                string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
+                if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
+                Directory.CreateDirectory(tempPath);
 
-            importThread = new Thread(new ThreadStart(delegate {
-                ZipManager.ExtractZipAsync(tempPath, zipPath, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
-                ZipManager.Wait4PreviousSave();
-
-                // Check for raw assets
-                string resourcesAssets = Path.Combine(tempPath, "resources.assets");
-                bool rawAssetsFound = File.Exists(resourcesAssets);
-                // Also check for OBB in subfolders if not found at root (simple check)
-                if (!rawAssetsFound)
+                importThread = new Thread(new ThreadStart(delegate
                 {
-                    rawAssetsFound = Directory.GetFiles(tempPath, "*.obb", SearchOption.AllDirectories).Length > 0;
-                }
+                    ZipManager.ExtractZipAsync(tempPath, zipPath, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
+                    ZipManager.Wait4PreviousSave();
 
-                if (type.Equals(ValkyrieConstants.typeDescent))
-                {
-                    if (rawAssetsFound) fcD2E.Import(tempPath);
-                    else
+                    // Check for raw assets
+                    string resourcesAssets = Path.Combine(tempPath, "resources.assets");
+                    bool rawAssetsFound = File.Exists(resourcesAssets);
+                    // Also check for OBB in subfolders if not found at root (simple check)
+                    if (!rawAssetsFound)
                     {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcD2E.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
+                        rawAssetsFound = Directory.GetFiles(tempPath, "*.obb", SearchOption.AllDirectories).Length > 0;
                     }
-                }
-                if (type.Equals(ValkyrieConstants.typeMom))
-                {
-                    if (rawAssetsFound) fcMoM.Import(tempPath);
-                    else
+
+                    if (type.Equals(ValkyrieConstants.typeDescent))
                     {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcMoM.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
+                        if (rawAssetsFound) fcD2E.Import(tempPath);
+                        else
+                        {
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
+                            string destPath = fcD2E.path;
+                            if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
+                            ZipManager.CopyDirectory(tempPath, destPath);
+                        }
                     }
-                }
+                    if (type.Equals(ValkyrieConstants.typeMom))
+                    {
+                        if (rawAssetsFound) fcMoM.Import(tempPath);
+                        else
+                        {
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
+                            string destPath = fcMoM.path;
+                            if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
+                            ZipManager.CopyDirectory(tempPath, destPath);
+                        }
+                    }
 #if IA
-                if (type.Equals("IA"))
-                {
-                    if (rawAssetsFound) fcIA.Import(tempPath);
-                    else
+                    if (type.Equals("IA"))
                     {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcIA.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
+                        if (rawAssetsFound) fcIA.Import(tempPath);
+                        else
+                        {
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
+                            string destPath = fcIA.path;
+                            if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
+                            ZipManager.CopyDirectory(tempPath, destPath);
+                        }
                     }
-                }
 #endif
-            }));
-            importThread.Start();
+                }));
+                importThread.Start();
+            }, null);
         }
 
         // Start game as MoM

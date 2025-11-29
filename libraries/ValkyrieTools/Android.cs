@@ -131,22 +131,6 @@ namespace ValkyrieTools
         }
 
 
-        public static void PickFile()
-        {
-            try
-            {
-                int ret = AndroidJNI.AttachCurrentThread();
-                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                AndroidJavaClass jc = new AndroidJavaClass("com.android.accessmomdata.AccessActivity");
-                jc.CallStatic("pickFile", activity);
-                if (ret != 0)
-                    AndroidJNI.DetachCurrentThread();
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-            }
-        }
     }
 
 

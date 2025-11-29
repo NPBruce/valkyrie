@@ -34,11 +34,72 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
     })
 
     companion object {
+        private const val TAG = "MainActivity"
+
+        const val DOCID_ANDROID_DATA = "primary:Android/"
+
+        //const val MOM_DATA_DIR_NAME = "com.fantasyflightgames.mom"
+
+        const val REQ_SAF_R_DATA = 2030
+
+        const val TREE_URI = "tree_uri"
+	
+	@JvmStatic
+    	fun makeActivity(act: Activity, appContext: Context, targetPackageName : String, andriodDataDir : String) {
+		    Log.e(TAG, " running new activity to request access")
+            Log.e(TAG, " appCon: $appContext")
+       		val intent = Intent(act, AccessActivity::class.java)
+            intent.putExtra("targetPackageName", targetPackageName)
+            intent.putExtra("andriodDataDir", andriodDataDir)
+		    Log.e(TAG, " done intent")
+       		act.startActivity(intent)
+            
+    	}
+    }
+
+    var tv: TextView? = null
+
+    fun doPermissionRequestAndCopy() {
+        var docId = DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir")
         if (DocumentVM.atLeastR()) {
             if (Build.VERSION.SDK_INT > 31) {
                 docId += "/" + getIntent().getExtras().getString("targetPackageName")
             }
             Log.e(TAG, " onSelected: $docId")
+            Log.e(TAG, " askForPerm onSelected: $docId")
+            DocumentVM.requestFolderPermission(this@AccessActivity, REQ_SAF_R_DATA, docId)
+
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+	    Log.e(TAG, " in onCreate")
+        super.onCreate(savedInstanceState)
+        //setContentView(R.layout.activity_main)
+
+        sharedPreferences = getSharedPreferences("test", MODE_PRIVATE)
+
+        fileManager = FileManager(applicationContext)
+        fileChooser = FileChooser(applicationContext)
+        //testSuite = TestSuite(fileManager, this)
+        //fileChooser.setCallbacks(this)
+
+        Log.e(TAG, "getTreeUri: ${getTreeUri()}")
+
+        if (getTreeUri() != null) {
+            fileManager.registerBaseDir(AccessBaseDirectory::class.java, accessBaseDirectory)
+        }
+
+	    doPermissionRequestAndCopy()
+
+
+
+    }
+
+    @Synchronized
+    private fun goSAF(uri: Uri, docId: String? = null, hide: Boolean? = false) {
+        // read and write Storage Access Framework https://developer.android.com/guide/topics/providers/document-provider
+        val root = DocumentFile.fromTreeUri(this, uri);
         // make a new dir
         //val dir = root?.createDirectory("test")
 
@@ -55,6 +116,51 @@ class AccessActivity : Activity(), FSAFActivityCallbacks {
         }
     }
 
+    private fun goAndroidData(path: String?) {
+        val uri = DocumentVM.getFolderUri(DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir"), true)
+        goSAF(uri, path)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        val act: Activity? = this
+        val data = intent?.data
+        if (requestCode == REQ_SAF_R_DATA) {
+            if (act != null) {
+                if (!DocumentVM.checkFolderPermission(act,DOCID_ANDROID_DATA + getIntent().getExtras().getString("andriodDataDir"))) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (data != null) {
+                            goSAF(data)
+
+                            //removeTreeUri()
+                            storeTreeUri(data)
+
+                            try {
+                                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                                contentResolver.takePersistableUriPermission(data, flags)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+
+                            //copyOfficialData()
+                        }
+                    } 
+                } else {
+                    goAndroidData(null)
+                }
+            }
+            //Lets try copying data no matter the outcome.
+            copyOfficialData()
+        }
+        Log.i(TAG, "End of onActivityResult")
+        super.onActivityResult(requestCode, resultCode, intent)
+        finish()
+    }
+
+    private fun deleteDirectory( directoryToBeDeleted : File) : Boolean {
+        val allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (file in allContents) {
                 deleteDirectory(file)
             }
         }
