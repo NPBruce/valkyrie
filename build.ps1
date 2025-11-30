@@ -101,6 +101,7 @@ function Build-Unity {
 
     #see speed up idea for unity process: https://stackoverflow.com/questions/65225251/unity-exe-takes-10-minutes-for-command-line-build-but-less-a-minute-from-editor
     # wait for all other sub-processes to complete
+    Write-Log "Waiting for subprocesses to complete..."
     while ((Get-CimInstance -Class Win32_Process | Where-Object { $_.ParentProcessID -eq $unity.Id -and $_.Name -ne 'VBCSCompiler.exe' }).count -gt 0) {
         Start-Sleep -Seconds 1.0
     }
@@ -108,6 +109,7 @@ function Build-Unity {
         Wait-Process -Id $unity.Id
     }
     exit $unity.ExitCode
+    Write-Log "Waiting for subprocesses to complete finished."
 
 
     if ($Process.ExitCode -ne 0) {
