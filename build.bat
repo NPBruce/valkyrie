@@ -2,6 +2,12 @@
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
+rem set default build flags if not set
+IF "%BUILD_WINDOWS%"=="" SET BUILD_WINDOWS=true
+IF "%BUILD_MAC%"=="" SET BUILD_MAC=true
+IF "%BUILD_LINUX%"=="" SET BUILD_LINUX=true
+IF "%BUILD_ANDROID%"=="" SET BUILD_ANDROID=true
+
 rem set steam path. You can get it from https://store.steampowered.com/
 rem is steam needed for building?
 goto comment
@@ -97,30 +103,38 @@ SetVersion %~dp0
 del ".\unity\Assets\Plugins\UnityEngine.dll"
 
 rem build unity
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
-copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
-
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
-copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
-
-Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinux64Player ..\build\linux\valkyrie
-copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
-
-Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
-set BUILD_STATUS=%ERRORLEVEL%
-copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
-if %BUILD_STATUS% NEQ 0 (
-    echo "Unity Build Failed"
-    exit /b 1
+if "%BUILD_WINDOWS%"=="true" (
+    Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
+    copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
 )
 
-rem delete the META-INF from the apk
-7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
-rem jarsigner comes form the JDK
-jarsigner -keystore "%~dp0unity\user.keystore" -storepass valkyrie -keypass valkyrie "%~dp0build\android\Valkyrie-android.apk" com.bruce.valkyrie
-jarsigner -verify -verbose -certs "%~dp0build\android\Valkyrie-android.apk"
-rem zipalign comes from the android build tools
-zipalign -v 4 "%~dp0build\android\Valkyrie-android.apk" "%~dp0build\Valkyrie-android-%version%.apk"
+if "%BUILD_MAC%"=="true" (
+    Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
+    copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
+)
+
+if "%BUILD_LINUX%"=="true" (
+    Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinux64Player ..\build\linux\valkyrie
+    copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
+)
+
+if "%BUILD_ANDROID%"=="true" (
+    Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
+    set BUILD_STATUS=%ERRORLEVEL%
+    copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
+    if %BUILD_STATUS% NEQ 0 (
+        echo "Unity Build Failed"
+        exit /b 1
+    )
+
+    rem delete the META-INF from the apk
+    7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
+    rem jarsigner comes form the JDK
+    jarsigner -keystore "%~dp0unity\user.keystore" -storepass valkyrie -keypass valkyrie "%~dp0build\android\Valkyrie-android.apk" com.bruce.valkyrie
+    jarsigner -verify -verbose -certs "%~dp0build\android\Valkyrie-android.apk"
+    rem zipalign comes from the android build tools
+    zipalign -v 4 "%~dp0build\android\Valkyrie-android.apk" "%~dp0build\Valkyrie-android-%version%.apk"
+)
 
 rem copy lience to win release
 copy LICENSE build\batch\LICENSE.txt
@@ -146,17 +160,23 @@ del build\valkyrie-macos-%version%.tar.gz
 del build\valkyrie-linux-%version%.tar.gz
 
 rem create windows zip
-7z a "%~dp0build\valkyrie-windows-%version%.7z" "%~dp0build\batch\*" -r
-rem create windows 7z
-7z a "%~dp0build\valkyrie-windows-%version%.zip" "%~dp0build\batch\*" -r
+if "%BUILD_WINDOWS%"=="true" (
+    7z a "%~dp0build\valkyrie-windows-%version%.7z" "%~dp0build\batch\*" -r
+    rem create windows 7z
+    7z a "%~dp0build\valkyrie-windows-%version%.zip" "%~dp0build\batch\*" -r
+)
 rem create macos tar ball
-7z a "%~dp0build\batchMac\valkyrie-macos-%version%.tar" "%~dp0build\batchMac\*" -r
-7z a "%~dp0build\valkyrie-macos-%version%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
-del "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+if "%BUILD_MAC%"=="true" (
+    7z a "%~dp0build\batchMac\valkyrie-macos-%version%.tar" "%~dp0build\batchMac\*" -r
+    7z a "%~dp0build\valkyrie-macos-%version%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+    del "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+)
 rem create linux tar ball
-7z a "%~dp0build\batchLinux\valkyrie-linux-%version%.tar" "%~dp0build\batchLinux\*" -r
-7z a "%~dp0build\valkyrie-linux-%version%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
-del "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
+if "%BUILD_LINUX%"=="true" (
+    7z a "%~dp0build\batchLinux\valkyrie-linux-%version%.tar" "%~dp0build\batchLinux\*" -r
+    7z a "%~dp0build\valkyrie-linux-%version%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
+    del "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
+)
 rem move apk
 IF EXIST android\test.apk move android\test.apk valkyrie-android-%version%.apk
 
