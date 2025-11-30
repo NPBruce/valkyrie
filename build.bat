@@ -107,7 +107,12 @@ Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinux64Player ..\build\li
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
 
 Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
+set BUILD_STATUS=%ERRORLEVEL%
 copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
+if %BUILD_STATUS% NEQ 0 (
+    echo "Unity Build Failed"
+    exit /b 1
+)
 
 rem delete the META-INF from the apk
 7z -tzip d "%~dp0build\android\Valkyrie-android.apk" META-INF
